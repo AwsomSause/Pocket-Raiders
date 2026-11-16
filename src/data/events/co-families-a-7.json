@@ -1,0 +1,2388 @@
+{
+ "catalogOverhaul": "families-a",
+ "override": true,
+ "remove": [
+  "ovc-treasure-map-s1",
+  "ovc-treasure-map-s2"
+ ],
+ "events": [
+  {
+   "id": "th-map-1",
+   "name": "Treasure Map: Torn Corner",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "map-piece-1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "map-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a1a",
+    "effect": "glint"
+   },
+   "intro": "A cliff path, the wind trying to take your hat. Wedged in a crack in the rock at shoulder height, something pale flutters: a scrap of old paper, the corner torn off something bigger. A few lines in faded brown ink: \"...not for the Ch...\" The rest is gone.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You work it out of the crack with two fingers and fold it into your pack. One piece of something.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "map-piece-1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "map-pieces",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it for someone else.",
+     "success": {
+      "text": "You leave it where it is, fluttering. Someone else might need a reason to look up. A region on, you will find it again in another crack, in another cliff, as if it has been following you.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "th-map-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "th-map-2",
+   "name": "Treasure Map: Faded Edge",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "map-piece-2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "map-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a1a",
+    "effect": "glint"
+   },
+   "intro": "Under a bridge, in the cool dark by the water. A Sneasel is crouched on a stone with a strip of old paper in its claws, the faded edge of a map. It sees you, and grins, and runs.",
+   "choices": [
+    {
+     "label": "Chase it.",
+     "success": {
+      "text": "You chase it along the bank and it turns at bay, all claws.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "sneasel"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "map-piece-2",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "map-pieces",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Trade it a Berry.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You hold out a Berry. It stops. It thinks about it, visibly. Then it drops the paper and snatches the Berry and is gone up the bridge supports.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "map-piece-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "map-pieces",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "It is gone up the bridge supports. Somewhere above you, it is reading the map, upside down.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "th-map-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "th-map-3",
+   "name": "Treasure Map: Inked Middle",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "map-piece-3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "map-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a1a",
+    "effect": "glint"
+   },
+   "intro": "A beach at low tide. A green bottle rolling in the shallows, corked, with paper inside. You fish it out. Through the glass you can see it is half a map, and on the outside of the folded paper, in big capitals, a message: TOO LONG TO WAIT.",
+   "choices": [
+    {
+     "label": "Uncork it.",
+     "success": {
+      "text": "The cork comes out with a sigh. The paper inside is dry, after who knows how long at sea. Half a map, the inked middle, with a coastline you almost recognise.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "map-piece-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "map-pieces",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw it back.",
+     "success": {
+      "text": "You throw it as far as you can. It bobs once, and is carried out. Later, on another beach, it washes up at your feet again, as if it has decided.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "th-map-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "th-map-4",
+   "name": "Treasure Map: Coastline Strip",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "map-piece-4",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "map-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a1a",
+    "effect": "glint"
+   },
+   "intro": "A cave, dripping. On the floor, the other half of a map, pinned flat under a rock. The rock is snoring. It is a Graveler, fast asleep, and the coastline strip of the map is sticking out from under its belly.",
+   "choices": [
+    {
+     "label": "Wake it.",
+     "success": {
+      "text": "It wakes up very grumpy.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "graveler"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "map-piece-4",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "map-pieces",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait. (a node)",
+     "success": {
+      "text": "You wait. And wait. Eventually, at its own pace, the Graveler rolls over and away down the cave, still asleep, and the map is lying there, flattened and safe.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "map-piece-4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "map-pieces",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "th-map-5",
+   "name": "Treasure Map: Compass Rose",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "map-piece-5",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "map-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a1a",
+    "effect": "glint"
+   },
+   "intro": "A statue of a Champion in a town square, bronze gone green, one hand held out as if offering something. Tucked into the bronze palm, folded small, is the last piece: a compass rose, drawn in a careful hand.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You reach up and take it. The bronze hand is warm from the sun.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "map-piece-5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "map-pieces",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the statue first.",
+     "success": {
+      "text": "You look up at the face. Young, tired, a little lonely around the eyes. The plaque says a name you half know: a Champion from long ago. This was their treasure. They left the last piece in their own hand. You take it, carefully, as if you were being handed it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "map-piece-5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "map-pieces",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "map-statue",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "th-treasure",
+   "name": "The Treasure at X",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "map-piece-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "map-piece-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "map-piece-3",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "map-piece-4",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "map-piece-5",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "map-claimed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a14",
+    "effect": "sparkle"
+   },
+   "intro": "All five pieces, laid out on a flat rock and weighed down with stones, fit together at last. The torn corner, the faded edge, the two halves, the compass rose. An X, in faded ink. You look up from it, and around, and realise the X is here: this exact spot. The ground is soft.",
+   "choices": [
+    {
+     "label": "Dig.",
+     "success": {
+      "text": "You dig. Your team digs. Something that digs better than you digs best of all. Two feet down: a carved stone, worn but readable. A mechanism.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "map-claimed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-treasure-dig-a"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-treasure-dig-a",
+   "name": "The Mechanism",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a14",
+    "effect": "sparkle"
+   },
+   "types": [],
+   "requires": [],
+   "intro": "Five symbols on five stone dials, worn smooth by hands or water. The compass rose on the fifth piece of the map shows an order.",
+   "choices": [
+    {
+     "label": "Set it by the compass.",
+     "success": {
+      "text": "You turn the dials one by one, in the compass rose's order. On the fifth, a deep click, and a breath of cold air from below. It opens.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-treasure-dig-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Force it.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fighting"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your strongest Fighting-type puts its shoulder to it and the stone cracks. So does the roof. A cave-in, a roar of dust; when it clears, the way is open and one of your team is bruised and coughing.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-treasure-dig-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at piece one again.",
+     "success": {
+      "text": "The torn corner. \"...not for the Ch...\" You turn it over. On the back, faint: \"Not for the Champion. For whoever comes after.\" You set the dials. It opens. And you know whose this is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "map-knew",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-treasure-dig-b"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-treasure-dig-b",
+   "name": "The Chest",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a14",
+    "effect": "sparkle"
+   },
+   "types": [],
+   "requires": [],
+   "intro": "A side room. A battered chest with iron corners. On top of it, under a stone, a note in a Champion's hand. \"I won. It was lonely. I put my best things here for whoever came looking, because whoever came looking is curious, and that's the best kind of trainer. Take what you need. Leave a note for the next one.\"",
+   "choices": [
+    {
+     "label": "Take everything.",
+     "success": {
+      "text": "Three things, wrapped in oilcloth, each one rare. You take them all.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "map-took-all",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-treasure-dig-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take one thing.",
+     "success": {
+      "text": "You take one thing, the one that seems most like yours, and close the lid on the rest. Someone else will come looking.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "map-took-one",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-treasure-dig-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a note.",
+     "success": {
+      "text": "You take one thing. Then you sit on the chest and write a note for whoever comes after you, the way they did. It takes a long time. You put it under the stone with theirs.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "map-note",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-treasure-dig-c"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-treasure-dig-c",
+   "name": "Daylight",
+   "group": "Treasure Hunt",
+   "stop": "treasure",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a14",
+    "effect": "sparkle"
+   },
+   "types": [],
+   "requires": [],
+   "intro": "Daylight again, and the way out open. At the cave mouth, sitting on a rock with their hands round their knees, is an old trainer. You know the face. You saw it in bronze, younger.",
+   "choices": [
+    {
+     "label": "It was yours?",
+     "success": {
+      "text": "Champion: \"Was.\" They smile. \"Now yours.\" They stand, stiffly, and shake your hand, and their grip is still strong.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "map-champion-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank you.",
+     "success": {
+      "text": "They nod, once, and look out at the view, and do not say anything. They do not need to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "map-champion-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why hide it?",
+     "success": {
+      "text": "Champion: \"So I'd have a reason to come back,\" they say, \"and see who found it.\" They look at you for a long moment. \"I'm glad it was you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "map-champion-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "foundry-entrance",
+   "name": "The Rusted Foundry",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "steel",
+    "electric"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a30",
+    "effect": "fog"
+   },
+   "intro": "A foundry abandoned mid-shift. The lights are on. Nobody is inside. The machines are still warm to the touch, and somewhere deep in the building something is ticking. By the door, a clocking-in board, forty cards in forty slots. Every card stamped in. None stamped out. The date on all of them is thirty years ago.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You go in. The door swings shut behind you, gently, like someone holding it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shift-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "foundry-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the cards.",
+     "success": {
+      "text": "Forty names. You read them all. The last card, the foreman's, says JORAH, and has a note pinned to it in pencil: \"Finish the Crestline order.\" You go in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shift-in",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "shift-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "foundry-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave. Behind you, the ticking goes on.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "colony",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "shift-colony",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The old foundry, dark now, and full of a soft metallic chiming. Klink, everywhere: on the beams, in the cold furnace, turning slowly in pairs on the conveyor. It is a nest. They watch you come in without fear.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Walk among them.",
+       "success": {
+        "text": "The biggest of them, a Klinklang, rolls down from the rafters to see what you want.",
+        "effects": [],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "klink",
+          "klang",
+          "klinklang"
+         ],
+         "types": [],
+         "levelBonus": 1,
+         "shinyMultiplier": 1,
+         "win": []
+        }
+       }
+      },
+      {
+       "label": "Leave them be.",
+       "success": {
+        "text": "You leave them their foundry.",
+        "effects": []
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "foundry-1",
+   "name": "The Rusted Foundry: The Assembly Line",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "steel",
+    "electric"
+   ],
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a30",
+    "effect": "fog"
+   },
+   "intro": "A conveyor running with nothing on it. Three stations along it, a press, a welder, a sorter, each clanking, hungry, waiting for a part that is not there. The whole line shivers, as if it is impatient.",
+   "choices": [
+    {
+     "label": "Feed the press with a Steel-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "steel"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Steel-type sets itself under the press and braces. The press comes down with a boom that shakes the floor, and stamps a part, perfect. The welder and the sorter catch up, and the line moves.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": {
+         "types": [
+          "steel"
+         ]
+        }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "foundry-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Power the welder with an Electric-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "electric"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Electric-type puts a paw to the welder's cable, and the welder roars blue. A part, welded. The press and the sorter shudder into time with it, and the line moves.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": {
+         "types": [
+          "electric"
+         ]
+        }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "foundry-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sort by hand. (a node)",
+     "success": {
+      "text": "Slow, hot work, a part at a time. It takes a node. The machines don't like it: one Klink comes spinning out of the sorter at your head.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "foundry-2"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "klink"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "foundry-2",
+   "name": "The Rusted Foundry: The Furnace Hall",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "steel",
+    "electric"
+   ],
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a30",
+    "effect": "fog"
+   },
+   "intro": "A furnace roaring in the dark, red light on the floor. In front of it stands a man in a flat cap and a leather apron, with his back to you. He turns round. You can see the furnace through him. Jorah: \"You're late. Everyone's late.\" He looks past you at the door, at nobody. \"Crestline order. Two hundred bells for the new tower. We were on the last one when the furnace cracked.\" He looks at his hands. \"The lads got out. I stayed to shut it down. Then I suppose I just stayed.\"",
+   "choices": [
+    {
+     "label": "We'll finish it.",
+     "success": {
+      "text": "Jorah: \"Good.\" He nods, and nods, as if he has been waiting thirty years to hear it. \"Control room. One button.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shift-finish",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "foundry-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your lads are fine.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "shift-read",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Jorah: \"...Are they? All forty?\" You tell him what you saw by the door: every card punched in, none punched out, because nobody came back to punch out. They all got out. Every one. Jorah sits down on an anvil, and puts his face in his hands, and his shoulders shake.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "shift-told",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "foundry-final"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Jorah: \"...Are they?\" His voice cracks. \"All forty?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shift-told",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "foundry-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shut it down.",
+     "success": {
+      "text": "Jorah: \"Then it's over.\" He takes his cap off and turns it in his hands. \"Fair enough.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shift-shut",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "foundry-final"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "foundry-final",
+   "name": "The Rusted Foundry: The Control Room",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "steel",
+    "electric"
+   ],
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a30",
+    "effect": "glint"
+   },
+   "intro": "A control room, all dials and dust. One button, lit, in the middle of the panel. The whole foundry is waiting. Jorah stands at your shoulder. Jorah: \"Press it and the last bell's cast.\" He looks at the button. \"Or don't, and I'll go anyway, I think. I'm tired.\"",
+   "choices": [
+    {
+     "label": "Finish the order.",
+     "success": {
+      "text": "You press it. Far below, the furnace roars once more, and the last bell is cast, and rings, once, through the whole building. Jorah walks to the door, and takes his card, and stamps it out. He tips his cap to you. Then he is gone. On the cooling floor below, there is a small bell, perfect, still warm: the Crestline Bell.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "crestline-bell",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "shift-rested",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You finished the last order, and the foreman stamped out after thirty years",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shut the plant for good.",
+     "success": {
+      "text": "You throw the main switch. The lights go out one row at a time. The furnace goes cold. Jorah tips his cap to you in the dark and fades. A few days later, Klink move in, and the foundry chimes again, softly, with a different kind of work.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shift-colony",
+        "amount": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "foundry-entrance"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "told",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "shift-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Jorah smiles before you touch anything. Jorah: \"All forty,\" he says. \"Good.\""
+    },
+    {
+     "id": "fog",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fog-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have seen a bell like the one on the drawings before: on a guide in the fog, on the belt of a man named Halden. It was a Crestline bell."
+    }
+   ]
+  },
+  {
+   "id": "ember-vent-entrance",
+   "name": "The Ember Vent",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "types": [
+    "fire",
+    "dragon"
+   ],
+   "minStage": 4,
+   "scene": {
+    "cast": [],
+    "tint": "#30180c",
+    "effect": "fog"
+   },
+   "intro": "A crack in the side of the mountain, glowing from within, the air above it shimmering. From somewhere deep inside, slow and huge, something is breathing. An old man sits on a camp stool by the crack with a notebook and a flask: a volcano watcher, Ignatz. Ignatz: \"The old songs say the mountain lays an egg once a century.\" He sips from the flask. \"The songs are mostly nonsense.\" Another sip. \"Mostly.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You step into the heat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ember-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ember-vent-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the songs.",
+     "success": {
+      "text": "Ignatz: \"The egg is the mountain's heart.\" He says it like a verse he has known all his life. \"Whoever takes it must keep it warm, or the mountain's heart goes cold in the egg.\" You go in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ember-in",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ember-song",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ember-vent-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Ignatz nods, and writes something in his notebook. Ignatz: \"It'll be here. It's been here a while.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-vent-1",
+   "name": "The Ember Vent: The Cinder Slope",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "types": [
+    "fire",
+    "dragon"
+   ],
+   "minStage": 4,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#30180c",
+    "effect": "fog"
+   },
+   "intro": "A long slope of ash and warm gravel, embers drifting up from it like slow sparks. Wild Slugma and Numel graze on the heat, unbothered.",
+   "choices": [
+    {
+     "label": "Climb carefully. (two nodes)",
+     "success": {
+      "text": "Step by step, testing every stone. It takes two nodes, and nobody so much as singes a paw.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ember-vent-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb fast. (a node)",
+     "success": {
+      "text": "You go straight up, fast, in a shower of hot gravel. It takes a node, and every one of your team that is not a Fire-type comes out of it with burned feet.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": [
+         "fire"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ember-vent-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ride a Numel.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fire"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type has a word with the nearest Numel, and the Numel kneels. It carries you up the slope at its own pace, which is slow, but sure, and very warm.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": {
+         "types": [
+          "fire"
+         ]
+        }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ember-vent-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-vent-2",
+   "name": "The Ember Vent: The Lava Bridge",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "types": [
+    "fire",
+    "dragon"
+   ],
+   "minStage": 4,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#30180c",
+    "effect": "fog"
+   },
+   "intro": "A bridge of stone over a river of lava, the air above it bending with heat. Someone has already been this way: boot prints in the ash, and, dropped on the bridge, a badge with {evil}'s mark. On the far side, a Grunt with a heat-proof case. Grunt: \"The boss wants the egg.\" He sets the case down. \"Back off.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "You fight on the bridge, with the lava below. Every miss sends something staggering to the edge.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ember-fought",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ember-vent-final"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Vent Grunt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "evil": "grunt",
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Cross behind him. (a node)",
+     "success": {
+      "text": "You wait for the heat-haze and slip past behind him, and it takes a node of creeping. But he is quicker than he looks: he reaches the egg first.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ember-race",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ember-vent-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Warn him about the mountain.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "ember-song",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You tell him the old song. The heart of the mountain. Keep it warm, or it goes cold. He looks at the lava, and at the case in his hand, and goes very pale, and leaves without another word.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ember-warned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ember-vent-final"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-vent-final",
+   "name": "The Ember Vent: The Heart of the Vent",
+   "group": "Landmarks",
+   "rarity": "rare",
+   "types": [
+    "fire",
+    "dragon"
+   ],
+   "minStage": 4,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#30180c",
+    "effect": "glint"
+   },
+   "intro": "A chamber at the mountain's heart. A pool of fire, still as water, and in the middle of it a single egg, smouldering, the shell cracked with orange light. Behind it, in the dark, a huge shape with red eyes: Heatran. It does not move. It is watching your hands.",
+   "choices": [
+    {
+     "label": "Take the egg.",
+     "success": {
+      "text": "You reach into the fire, and the fire does not burn you. The egg is heavy and very warm. Heatran watches you lift it out. Then it closes its eyes, and lets you go.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "larvesta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "ember-egg",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ember-egg",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Heatran let you carry the mountain's egg out of the fire",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You do not reach for it. Heatran blinks, slowly, the way a cat does to someone it trusts. The pool of fire flares, once, warm on your face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ember-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-heatran",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bow to Heatran.",
+     "success": {
+      "text": "You bow, low. Heatran rumbles, a sound you feel in your ribs. When you straighten, the egg has rolled to the edge of the pool, toward you. You lift it out.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "larvesta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "ember-egg",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ember-egg",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ember-bowed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-heatran",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You bowed to Heatran, and the mountain gave you its egg",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "race",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ember-race",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A chamber at the mountain's heart, a pool of fire, and the Grunt already standing in it up to his ankles, holding the egg against his chest. It is burning him. His face is white and wet, and he is not letting go. Behind him, in the dark, Heatran is watching.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Take it from him.",
+       "success": {
+        "text": "He will not give it up. He fights you one-handed with the egg in the other.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "name": "Vent Grunt",
+         "size": 2,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "egg",
+           "species": [
+            "larvesta"
+           ],
+           "types": [],
+           "levelBonus": 0,
+           "shinyMultiplier": 1,
+           "left": 3,
+           "unit": "stage"
+          },
+          {
+           "kind": "flag",
+           "key": "ember-egg",
+           "amount": 1,
+           "stamp": "region"
+          },
+          {
+           "kind": "flag",
+           "key": "ember-egg",
+           "amount": 1
+          }
+         ],
+         "evil": "grunt",
+         "friendly": true,
+         "lose": []
+        }
+       }
+      },
+      {
+       "label": "Help him put it down.",
+       "success": {
+        "text": "You talk to him, quietly, until his hands open. You take the egg; it does not burn you. He looks at his palms, and at you, and says \"thank you\" in a very small voice, and runs.",
+        "effects": [
+         {
+          "kind": "egg",
+          "species": [
+           "larvesta"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "stage"
+         },
+         {
+          "kind": "flag",
+          "key": "ember-egg",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "ember-egg",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ember-grunt-helped",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ember-egg-warm",
+   "name": "Keep It Warm",
+   "group": "Landmarks",
+   "stop": "rest",
+   "rarity": "rare",
+   "types": [
+    "fire",
+    "dragon"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#30180c",
+    "effect": "fog"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ember-egg",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ember-egg",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgoMost": 0
+    }
+   ],
+   "intro": "A rest stop. The mountain's egg is in your pack, and it is a little cooler than it was this morning. You remember the song.",
+   "choices": [
+    {
+     "label": "Warm it by your Fire-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fire"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type curls round the egg all night without being asked, and in the morning the shell is glowing again.",
+      "effects": [
+       {
+        "kind": "eggWarm",
+        "steps": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "ember-warm",
+        "amount": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "ember-egg-warm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Build a campfire.",
+     "success": {
+      "text": "You build the fire high and sit up with the egg by it, turning it now and then, until you fall asleep against your pack.",
+      "effects": [
+       {
+        "kind": "eggWarm",
+        "steps": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "ember-warm",
+        "amount": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "ember-egg-warm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "You are too tired. The egg sits cold in your pack all night, and in the morning it is very quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ember-cold",
+        "amount": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "ember-egg-warm"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hold-the-egg",
+   "name": "Hold This Egg",
+   "group": "NPC Stories",
+   "stop": "daycare",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "intro": "A crowded market, everyone shouting prices. A harried stranger pushes through the crowd straight at you and thrusts a warm egg into your arms. Stranger: \"Please! Five minutes! Hold it!\" They are gone into the crowd before you can say anything at all. Five minutes pass. Ten. Then two men in matching grey coats walk slowly through the market, looking at everyone's hands.",
+   "choices": [
+    {
+     "label": "Hide the egg.",
+     "success": {
+      "text": "You put the egg inside your jacket and buy a cabbage you do not want, very slowly. The men pass. One of them looks at you a moment too long. Then they are gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "courier-hid",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-egg",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "world-egg-delivery",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for the stranger.",
+     "success": {
+      "text": "You stand where you are. The men see the egg. Man: \"That's ours.\" They do not wait for an answer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "courier-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-egg",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "world-egg-delivery",
+        "nodes": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Ring Men",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Ask the men what they want.",
+     "success": {
+      "text": "Man: \"Lost property. Ours.\" They reach for it. You step back. They stop reaching and start fighting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "courier-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-egg",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "world-egg-delivery",
+        "nodes": 2
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Ring Men",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "world-egg-delivery",
+   "name": "Mysterious Egg Delivery",
+   "group": "World Events",
+   "rarity": "rare",
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3020",
+    "effect": "glint"
+   },
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "courier-egg",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "courier-choice",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A side street, quiet. The stranger from the market is there, out of breath, leaning on a wall. Sorrel-Jay: \"You kept it.\" They close their eyes. \"Thank you.\" Then, fast: \"I can't keep running with it. Please. Keep it safe. I have to run.\" They look at the egg. \"It's not mine. It's not theirs either. It was stolen from a lab. I was supposed to deliver it to the ring's buyer. I couldn't.\"",
+   "choices": [
+    {
+     "label": "I'll keep it.",
+     "success": {
+      "text": "Sorrel-Jay grips your hand, once, hard, and is gone. The egg is yours to keep safe now. So is the ring's attention.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "riolu",
+         "deino",
+         "larvitar",
+         "gible",
+         "axew",
+         "goomy",
+         "jangmo-o",
+         "dreepy",
+         "frigibax",
+         "bagon",
+         "beldum",
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 4,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "courier-choice",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-hunted",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "courier-ambush",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it to Officer Jenny.",
+     "success": {
+      "text": "Officer Jenny takes the egg in both hands like something precious, and writes a long report, and puts it in a locked incubator marked EVIDENCE. Sorrel-Jay is cleared. The hunt ends that afternoon. Jenny: \"It'll go back to its lab. You'll hear.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "courier-choice",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-jenny",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-jenny",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "evil",
+        "heat": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run with me.",
+     "success": {
+      "text": "Sorrel-Jay stares at you. Then laughs, shakily. Sorrel-Jay: \"Okay. Okay. Together.\" The two of you carry it between you, and the ring hunts you both.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "riolu",
+         "deino",
+         "larvitar",
+         "gible",
+         "axew",
+         "goomy",
+         "jangmo-o",
+         "dreepy",
+         "frigibax",
+         "bagon",
+         "beldum",
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 4,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "courier-choice",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-ran",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-hunted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-ran",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "courier-ambush",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "courier-ambush",
+   "name": "The Ring",
+   "group": "NPC Stories",
+   "stop": "daycare",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "courier-hunted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "courier-free",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "courier-ambushed",
+     "atLeast": 0,
+     "atMost": 2
+    }
+   ],
+   "intro": "Grey coats in the road ahead, and grey coats behind. The ring has found you again. Man: \"The egg.\"",
+   "choices": [
+    {
+     "label": "No.",
+     "success": {
+      "text": "It is a hard fight in a narrow place.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "courier-ambush-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ring Men",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "courier-ambushed",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "courier-ambush",
+         "nodes": 3
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    }
+   ],
+   "callback": true,
+   "remembers": [
+    {
+     "id": "last",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "courier-ambushed",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "The third time. You can see it in their faces: they are tired of this too.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "No.",
+       "success": {
+        "text": "One more fight. When it is over, the leader of them spits in the road and pulls his coat round him. Man: \"Keep it, then.\" They go, and do not come back.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "name": "Ring Men",
+         "classId": "roughneck",
+         "size": 2,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "courier-ambushed",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "courier-free",
+           "amount": 1
+          }
+         ],
+         "friendly": true,
+         "lose": []
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "ledger",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "heist-ledger-kept",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "courier-ambushed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The ring's buyer is named in the ledger you kept from the heist. When you say the name out loud, the men in grey coats stop and look at each other.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Say the name again.",
+       "success": {
+        "text": "They go, fast, without the egg. They will not be back.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "courier-free",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "ran",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "courier-ran",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Sorrel-Jay is at your shoulder, and takes the other side of the road.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Together.",
+       "success": {
+        "text": "Side by side, against both of them.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "format": "doubles",
+         "name": "Ring Men",
+         "classId": "roughneck",
+         "size": 2,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "courier-ambushed",
+           "amount": 1
+          },
+          {
+           "kind": "laterEvent",
+           "eventId": "courier-ambush",
+           "nodes": 3
+          }
+         ],
+         "friendly": true,
+         "lose": []
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "courier-goodbye",
+   "name": "Sorrel-Jay Turns Themselves In",
+   "group": "NPC Stories",
+   "stop": "daycare",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "courier-ran",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "courier-ran",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "courier-ran-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The end of the region, and a police station with a blue lamp over the door. Sorrel-Jay stops on the step. Sorrel-Jay: \"This is where I get off.\" They give you a Smoke Ball. \"For running. You won't need it. I did.\"",
+   "choices": [
+    {
+     "label": "I'll visit.",
+     "success": {
+      "text": "Sorrel-Jay: \"You'd better.\" They go in. Through the window you see Officer Jenny stand up, and take their hand, and not let go of it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "smoke-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-ran-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "courier-lab-gift",
+   "name": "A Letter from the Lab",
+   "group": "NPC Stories",
+   "stop": "daycare",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "courier-jenny",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "courier-jenny",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "courier-lab-thanks",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A letter catches up with you, forwarded twice. A lab's letterhead. \"The egg you gave Officer Jenny came home to us. Thank you. We have sent you another, from our own nest, to say so.\" In the parcel, wrapped in straw, a warm egg.",
+   "choices": [
+    {
+     "label": "Open the parcel.",
+     "success": {
+      "text": "The egg is warm, and moves a little when you hold it.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "courier-lab-thanks",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true,
+   "remembers": [
+    {
+     "id": "mabe",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "courier-lab",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "There is a second page, from Dr. Mabe, the scientist you untied. \"The hatchling is well. We named it after you. I hope you don't mind.\""
+    }
+   ]
+  },
+  {
+   "id": "vt-stolen-egg-lab",
+   "name": "Stolen Egg Lab",
+   "group": "Heists & Hideouts",
+   "stop": "lab",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#201828",
+    "effect": "sparkle"
+   },
+   "intro": "A lab full of incubators, half of them empty and dark. On a bench, one egg in a villain's case, tagged STOLEN in red. In the corner, a scientist tied to a chair, gagged, eyes wide. On the wall above her, pinned up like a shopping list: the Smuggling Ring's stolen list. Twelve species, eleven of them crossed out.",
+   "choices": [
+    {
+     "label": "Free the scientist.",
+     "success": {
+      "text": "You cut her loose. She pulls the gag off and does not waste a breath. Dr. Mabe: \"They took eleven. That one's the twelfth.\" She points at the case. \"Please.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "courier-lab",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the case.",
+     "success": {
+      "text": "You take the case. A second egg, warm and stolen, now yours to keep safe. If the ring is hunting you, it hunts you twice as hard now.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "riolu",
+         "deino",
+         "larvitar",
+         "gible",
+         "axew",
+         "goomy",
+         "jangmo-o",
+         "dreepy",
+         "frigibax",
+         "bagon",
+         "beldum",
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 4,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "courier-second",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-hunted",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "courier-ambush",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the list.",
+     "success": {
+      "text": "Riolu, Deino, Larvitar, Gible, Axew, Goomy, Jangmo-o, Dreepy, Frigibax, Bagon, Beldum, Dratini. Eleven crossed out. You know now what the courier's egg could hatch into, and you know how much someone wanted it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "courier-list",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -208,6 +208,13 @@
    ],
    "note": "Set by legends when AZ's flute is received in M6 (QUESTLINES_ALPHAS_AND_ANOMALIES); asked of legends 2026-11-15."
   },
+  "blessing-eternatus": {
+   "setBy": [],
+   "readBy": [
+    "readings-hill"
+   ],
+   "note": "Read-only state flag from legends (LEGENDS_PIECES section 3): that Legendary's blessing is the run's."
+  },
   "blessing-ho-oh": {
    "setBy": [],
    "readBy": [
@@ -368,6 +375,99 @@
    ],
    "readBy": [],
    "note": "SF13 Circuit record flags (which rung match, how it was played). Kept in the run log for the update notes and later scenes; the Circuit's own climb is the R1 board (circuit-rung)."
+  },
+  "coat-asked": {
+   "setBy": [
+    "hunt-lair"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
+  },
+  "coat-aurel-freed": {
+   "setBy": [
+    "hunt-why"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
+  },
+  "coat-beat-aurel": {
+   "setBy": [
+    "hunt-lair"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
+  },
+  "coat-caught-chance": {
+   "setBy": [
+    "hunt-bird"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
+  },
+  "coat-cleo": {
+   "setBy": [
+    "hunt-clue-witness"
+   ],
+   "readBy": [
+    "hunt-lair"
+   ]
+  },
+  "coat-clue-feather": {
+   "setBy": [
+    "hunt-clue-feather"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
+  },
+  "coat-clue-scorch": {
+   "setBy": [
+    "hunt-clue-scorch"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
+  },
+  "coat-clue-witness": {
+   "setBy": [
+    "hunt-clue-witness"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
+  },
+  "coat-crest": {
+   "setBy": [
+    "hunt-clue-scorch"
+   ],
+   "readBy": [
+    "hunt-lair"
+   ]
+  },
+  "coat-forgiven": {
+   "setBy": [
+    "hunt-bird"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
+  },
+  "coat-free": {
+   "setBy": [
+    "hunt-bird"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
+  },
+  "coat-kept": {
+   "setBy": [
+    "hunt-why"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
+  },
+  "coat-opened": {
+   "setBy": [
+    "hunt-lair"
+   ],
+   "readBy": [],
+   "note": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log."
   },
   "contest-cat-beauty": {
    "setBy": [
@@ -707,6 +807,201 @@
    "readBy": [
     "convoy-bye-tess"
    ]
+  },
+  "cook-contest": {
+   "setBy": [
+    "cooking-contest"
+   ],
+   "readBy": [],
+   "note": "SF22 Cooking Circuit record flags (how it went). Kept in the run log."
+  },
+  "cook-draft": {
+   "setBy": [
+    "cooking-draft"
+   ],
+   "readBy": [],
+   "note": "SF22 Cooking Circuit record flags (how it went). Kept in the run log."
+  },
+  "cook-final": {
+   "setBy": [
+    "cooking-final"
+   ],
+   "readBy": [
+    "cooking-final"
+   ]
+  },
+  "cook-ottilie": {
+   "setBy": [
+    "grandmas-recipe"
+   ],
+   "readBy": [],
+   "note": "SF22 Cooking Circuit record flags (how it went). Kept in the run log."
+  },
+  "cook-pie": {
+   "setBy": [
+    "pie-contest-judge"
+   ],
+   "readBy": [],
+   "note": "SF22 Cooking Circuit record flags (how it went). Kept in the run log."
+  },
+  "cook-ruggiero": {
+   "setBy": [
+    "chefs-cook-off-battle"
+   ],
+   "readBy": [],
+   "note": "SF22 Cooking Circuit record flags (how it went). Kept in the run log."
+  },
+  "cook-shared": {
+   "setBy": [
+    "grandmas-recipe"
+   ],
+   "readBy": [],
+   "note": "SF22 Cooking Circuit record flags (how it went). Kept in the run log."
+  },
+  "cook-tolu": {
+   "setBy": [
+    "chef-cook-together"
+   ],
+   "readBy": [],
+   "note": "SF22 Cooking Circuit record flags (how it went). Kept in the run log."
+  },
+  "cook-wins": {
+   "setBy": [
+    "chef-cook-together",
+    "chefs-cook-off-battle",
+    "cooking-contest",
+    "cooking-draft",
+    "grandmas-recipe",
+    "pie-contest-judge"
+   ],
+   "readBy": [
+    "cooking-final"
+   ]
+  },
+  "courier-ambush-seen": {
+   "setBy": [
+    "courier-ambush"
+   ],
+   "readBy": [],
+   "note": "SF26 Courier's Egg record flags (how it went). Kept in the run log."
+  },
+  "courier-ambushed": {
+   "setBy": [
+    "courier-ambush"
+   ],
+   "readBy": [
+    "courier-ambush"
+   ]
+  },
+  "courier-choice": {
+   "setBy": [
+    "world-egg-delivery"
+   ],
+   "readBy": [
+    "world-egg-delivery"
+   ]
+  },
+  "courier-egg": {
+   "setBy": [
+    "hold-the-egg"
+   ],
+   "readBy": [
+    "world-egg-delivery"
+   ]
+  },
+  "courier-free": {
+   "setBy": [
+    "courier-ambush",
+    "courier-goodbye"
+   ],
+   "readBy": [
+    "courier-ambush"
+   ]
+  },
+  "courier-hid": {
+   "setBy": [
+    "hold-the-egg"
+   ],
+   "readBy": [],
+   "note": "SF26 Courier's Egg record flags (how it went). Kept in the run log."
+  },
+  "courier-hunted": {
+   "setBy": [
+    "vt-stolen-egg-lab",
+    "world-egg-delivery"
+   ],
+   "readBy": [
+    "courier-ambush"
+   ]
+  },
+  "courier-jenny": {
+   "setBy": [
+    "world-egg-delivery"
+   ],
+   "readBy": [
+    "courier-lab-gift"
+   ]
+  },
+  "courier-kept": {
+   "setBy": [
+    "world-egg-delivery"
+   ],
+   "readBy": [],
+   "note": "SF26 Courier's Egg record flags (how it went). Kept in the run log."
+  },
+  "courier-lab": {
+   "setBy": [
+    "vt-stolen-egg-lab"
+   ],
+   "readBy": [
+    "courier-lab-gift"
+   ]
+  },
+  "courier-lab-thanks": {
+   "setBy": [
+    "courier-lab-gift"
+   ],
+   "readBy": [
+    "courier-lab-gift"
+   ]
+  },
+  "courier-list": {
+   "setBy": [
+    "vt-stolen-egg-lab"
+   ],
+   "readBy": [],
+   "note": "SF26 Courier's Egg record flags (how it went). Kept in the run log."
+  },
+  "courier-ran": {
+   "setBy": [
+    "world-egg-delivery"
+   ],
+   "readBy": [
+    "courier-ambush",
+    "courier-goodbye"
+   ]
+  },
+  "courier-ran-done": {
+   "setBy": [
+    "courier-goodbye"
+   ],
+   "readBy": [
+    "courier-goodbye"
+   ]
+  },
+  "courier-second": {
+   "setBy": [
+    "vt-stolen-egg-lab"
+   ],
+   "readBy": [],
+   "note": "SF26 Courier's Egg record flags (how it went). Kept in the run log."
+  },
+  "courier-seen": {
+   "setBy": [
+    "hold-the-egg"
+   ],
+   "readBy": [],
+   "note": "SF26 Courier's Egg record flags (how it went). Kept in the run log."
   },
   "coven-ball-found": {
    "setBy": [
@@ -1539,6 +1834,86 @@
     "elders-last-wish-3"
    ]
   },
+  "ember-bowed": {
+   "setBy": [
+    "ember-vent-final"
+   ],
+   "readBy": [],
+   "note": "SF25 Egg in the Fire record flags (how it went). Kept in the run log."
+  },
+  "ember-cold": {
+   "setBy": [
+    "ember-egg-warm"
+   ],
+   "readBy": [],
+   "note": "SF25 Egg in the Fire record flags (how it went). Kept in the run log."
+  },
+  "ember-egg": {
+   "setBy": [
+    "ember-vent-final"
+   ],
+   "readBy": [
+    "ember-egg-warm"
+   ]
+  },
+  "ember-fought": {
+   "setBy": [
+    "ember-vent-2"
+   ],
+   "readBy": [],
+   "note": "SF25 Egg in the Fire record flags (how it went). Kept in the run log."
+  },
+  "ember-grunt-helped": {
+   "setBy": [
+    "ember-vent-final"
+   ],
+   "readBy": [],
+   "note": "SF25 Egg in the Fire record flags (how it went). Kept in the run log."
+  },
+  "ember-in": {
+   "setBy": [
+    "ember-vent-entrance"
+   ],
+   "readBy": [],
+   "note": "SF25 Egg in the Fire record flags (how it went). Kept in the run log."
+  },
+  "ember-left": {
+   "setBy": [
+    "ember-vent-final"
+   ],
+   "readBy": [],
+   "note": "SF25 Egg in the Fire record flags (how it went). Kept in the run log."
+  },
+  "ember-race": {
+   "setBy": [
+    "ember-vent-2"
+   ],
+   "readBy": [
+    "ember-vent-final"
+   ]
+  },
+  "ember-song": {
+   "setBy": [
+    "ember-vent-entrance"
+   ],
+   "readBy": [
+    "ember-vent-2"
+   ]
+  },
+  "ember-warm": {
+   "setBy": [
+    "ember-egg-warm"
+   ],
+   "readBy": [],
+   "note": "SF25 Egg in the Fire record flags (how it went). Kept in the run log."
+  },
+  "ember-warned": {
+   "setBy": [
+    "ember-vent-2"
+   ],
+   "readBy": [],
+   "note": "SF25 Egg in the Fire record flags (how it went). Kept in the run log."
+  },
   "exhibit-bowed": {
    "setBy": [
     "story-tour-opening"
@@ -1653,7 +2028,8 @@
     "farmers-quest-3"
    ],
    "readBy": [
-    "farmers-quest-3"
+    "farmers-quest-3",
+    "starter-old-orchard"
    ]
   },
   "farmer-field": {
@@ -1826,6 +2202,106 @@
    "readBy": [],
    "note": "SF14.5 Grand Festival record flags (how it went)."
   },
+  "fog-asked": {
+   "setBy": [
+    "fog-guide"
+   ],
+   "readBy": [],
+   "note": "SF29 Bell in the Fog record flags (how it went). Kept in the run log."
+  },
+  "fog-cache": {
+   "setBy": [
+    "fog-guide"
+   ],
+   "readBy": [],
+   "note": "SF29 Bell in the Fog record flags (how it went). Kept in the run log."
+  },
+  "fog-called": {
+   "setBy": [
+    "r137-ghostly-fog-bank"
+   ],
+   "readBy": [
+    "fog-end"
+   ]
+  },
+  "fog-delivered": {
+   "setBy": [
+    "fog-letter"
+   ],
+   "readBy": [
+    "fog-letter"
+   ]
+  },
+  "fog-delivering": {
+   "setBy": [
+    "mr-spirit-cache"
+   ],
+   "readBy": [
+    "fog-letter"
+   ]
+  },
+  "fog-followed": {
+   "setBy": [
+    "fog-guide"
+   ],
+   "readBy": [],
+   "note": "SF29 Bell in the Fog record flags (how it went). Kept in the run log."
+  },
+  "fog-hiker": {
+   "setBy": [
+    "rescue-team"
+   ],
+   "readBy": [],
+   "note": "SF29 Bell in the Fog record flags (how it went). Kept in the run log."
+  },
+  "fog-hiker-late": {
+   "setBy": [
+    "rescue-team"
+   ],
+   "readBy": [],
+   "note": "SF29 Bell in the Fog record flags (how it went). Kept in the run log."
+  },
+  "fog-named": {
+   "setBy": [
+    "fog-end"
+   ],
+   "readBy": [
+    "fog-end",
+    "foundry-final"
+   ]
+  },
+  "fog-on": {
+   "setBy": [
+    "r137-ghostly-fog-bank"
+   ],
+   "readBy": [
+    "fog-end",
+    "rescue-team"
+   ]
+  },
+  "fog-read": {
+   "setBy": [
+    "mr-spirit-cache"
+   ],
+   "readBy": [],
+   "note": "SF29 Bell in the Fog record flags (how it went). Kept in the run log."
+  },
+  "fog-rescue-seen": {
+   "setBy": [
+    "rescue-team"
+   ],
+   "readBy": [
+    "rescue-team"
+   ]
+  },
+  "fog-thanked": {
+   "setBy": [
+    "fog-end"
+   ],
+   "readBy": [
+    "fog-end"
+   ]
+  },
   "freed-caged": {
    "setBy": [],
    "readBy": [
@@ -1854,6 +2330,14 @@
     "ranked-ladder-1"
    ],
    "note": "Set by GL7 The Stolen Badge (past champions and leaders questlines) when the player helps Pell; until that row sets it, the Pell notice in ranked-ladder-1 stays hidden."
+  },
+  "golden-spoon": {
+   "setBy": [
+    "cooking-final"
+   ],
+   "readBy": [
+    "cook-at-rest"
+   ]
   },
   "grunt-asked": {
    "setBy": [
@@ -1889,8 +2373,9 @@
    "setBy": [
     "vt-grunt-favor"
    ],
-   "readBy": [],
-   "note": "SF17 Grunt School record flags. grunt-school-active is read by the markets row and cleared (quest set 0) when Dilly's story ends."
+   "readBy": [
+    "rk-hidden-quest-payoff"
+   ]
   },
   "grunt-dilly-union": {
    "setBy": [
@@ -2119,6 +2604,13 @@
    "readBy": [],
    "note": "The Broken Habitat (SF11): who did it and how it was stopped, kept for the rival (habitat-rival-*) and the run's chronicle."
   },
+  "halden-bell": {
+   "setBy": [
+    "fog-end"
+   ],
+   "readBy": [],
+   "note": "SF29 Halden's Bell (key item: rings before every ambush). The ambush warning is not built; the bell is kept in the run log."
+  },
   "heist-asked": {
    "setBy": [
     "heist-plan"
@@ -2170,8 +2662,9 @@
    "setBy": [
     "heist-ledger"
    ],
-   "readBy": [],
-   "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
+   "readBy": [
+    "courier-ambush"
+   ]
   },
   "heist-ledger-lost": {
    "setBy": [
@@ -2463,6 +2956,110 @@
    "readBy": [],
    "note": "Pack flag kind.walked_past (MEMORY_AND_FORMAT 2.1): read by You Walked Past Us."
   },
+  "kubfu-chose": {
+   "setBy": [
+    "galar-kubfu-tower"
+   ],
+   "readBy": [],
+   "note": "SF27 Disciple record flags (how it went). Kept in the run log."
+  },
+  "kubfu-dark": {
+   "setBy": [
+    "kubfu-dark-2"
+   ],
+   "readBy": [],
+   "note": "SF27 Disciple record flags (how it went). Kept in the run log."
+  },
+  "kubfu-done": {
+   "setBy": [
+    "kubfu-dark-2",
+    "kubfu-water-2"
+   ],
+   "readBy": [
+    "galar-kubfu-tower",
+    "kubfu-not-yet"
+   ]
+  },
+  "kubfu-doubted": {
+   "setBy": [
+    "galar-kubfu-disciple"
+   ],
+   "readBy": [
+    "galar-kubfu-tower"
+   ]
+  },
+  "kubfu-on": {
+   "setBy": [
+    "galar-kubfu-disciple"
+   ],
+   "readBy": [
+    "galar-kubfu-tower",
+    "kubfu-not-yet",
+    "kubfu-test-promise",
+    "kubfu-test-refuse",
+    "kubfu-test-train"
+   ]
+  },
+  "kubfu-test-1": {
+   "setBy": [
+    "kubfu-test-promise"
+   ],
+   "readBy": [
+    "kubfu-test-promise"
+   ]
+  },
+  "kubfu-test-2": {
+   "setBy": [
+    "kubfu-test-refuse"
+   ],
+   "readBy": [
+    "kubfu-test-refuse"
+   ]
+  },
+  "kubfu-test-3": {
+   "setBy": [
+    "kubfu-test-train"
+   ],
+   "readBy": [
+    "kubfu-test-train"
+   ]
+  },
+  "kubfu-tests": {
+   "setBy": [
+    "kubfu-test-promise",
+    "kubfu-test-refuse",
+    "kubfu-test-train"
+   ],
+   "readBy": [
+    "galar-kubfu-tower",
+    "kubfu-not-yet"
+   ]
+  },
+  "kubfu-tried": {
+   "setBy": [
+    "kubfu-test-promise",
+    "kubfu-test-refuse",
+    "kubfu-test-train"
+   ],
+   "readBy": [
+    "kubfu-not-yet"
+   ]
+  },
+  "kubfu-wait": {
+   "setBy": [
+    "kubfu-not-yet"
+   ],
+   "readBy": [
+    "kubfu-not-yet"
+   ]
+  },
+  "kubfu-water": {
+   "setBy": [
+    "kubfu-water-2"
+   ],
+   "readBy": [],
+   "note": "SF27 Disciple record flags (how it went). Kept in the run log."
+  },
   "lantern-ask": {
    "setBy": [
     "spooky-pale-visitor"
@@ -2705,6 +3302,198 @@
    "readBy": [],
    "note": "SF16 Hollow Lantern record flags (how each beat went). Kept in the run log."
   },
+  "loop-all-stopped": {
+   "setBy": [
+    "time-loop-2"
+   ],
+   "readBy": [],
+   "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
+  },
+  "loop-baker-knows": {
+   "setBy": [
+    "time-loop-2"
+   ],
+   "readBy": [
+    "time-loop-3"
+   ]
+  },
+  "loop-basket": {
+   "setBy": [
+    "time-loop-village"
+   ],
+   "readBy": [],
+   "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
+  },
+  "loop-broken": {
+   "setBy": [
+    "time-loop-3",
+    "time-loop-celebi"
+   ],
+   "readBy": [],
+   "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
+  },
+  "loop-cart": {
+   "setBy": [
+    "time-loop-village"
+   ],
+   "readBy": [],
+   "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
+  },
+  "loop-celebi": {
+   "setBy": [
+    "time-loop-3"
+   ],
+   "readBy": [],
+   "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
+  },
+  "loop-day1": {
+   "setBy": [
+    "time-loop-village"
+   ],
+   "readBy": [],
+   "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
+  },
+  "loop-glimmer": {
+   "setBy": [
+    "time-loop-2"
+   ],
+   "readBy": [
+    "time-loop-3"
+   ]
+  },
+  "loop-hesk-chose": {
+   "setBy": [
+    "time-loop-celebi"
+   ],
+   "readBy": [],
+   "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
+  },
+  "loop-kept": {
+   "setBy": [
+    "time-loop-3"
+   ],
+   "readBy": [],
+   "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
+  },
+  "loop-left": {
+   "setBy": [
+    "time-loop-2",
+    "time-loop-village"
+   ],
+   "readBy": [],
+   "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
+  },
+  "map-champion-met": {
+   "setBy": [
+    "dg-treasure-dig-c"
+   ],
+   "readBy": [],
+   "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
+  },
+  "map-claimed": {
+   "setBy": [
+    "th-treasure"
+   ],
+   "readBy": [
+    "th-map-1",
+    "th-map-2",
+    "th-map-3",
+    "th-map-4",
+    "th-map-5",
+    "th-treasure"
+   ]
+  },
+  "map-knew": {
+   "setBy": [
+    "dg-treasure-dig-a"
+   ],
+   "readBy": [],
+   "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
+  },
+  "map-note": {
+   "setBy": [
+    "dg-treasure-dig-b"
+   ],
+   "readBy": [],
+   "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
+  },
+  "map-piece-1": {
+   "setBy": [
+    "th-map-1"
+   ],
+   "readBy": [
+    "th-map-1",
+    "th-treasure"
+   ]
+  },
+  "map-piece-2": {
+   "setBy": [
+    "th-map-2"
+   ],
+   "readBy": [
+    "th-map-2",
+    "th-treasure"
+   ]
+  },
+  "map-piece-3": {
+   "setBy": [
+    "th-map-3"
+   ],
+   "readBy": [
+    "th-map-3",
+    "th-treasure"
+   ]
+  },
+  "map-piece-4": {
+   "setBy": [
+    "th-map-4"
+   ],
+   "readBy": [
+    "th-map-4",
+    "th-treasure"
+   ]
+  },
+  "map-piece-5": {
+   "setBy": [
+    "th-map-5"
+   ],
+   "readBy": [
+    "th-map-5",
+    "th-treasure"
+   ]
+  },
+  "map-pieces": {
+   "setBy": [
+    "th-map-1",
+    "th-map-2",
+    "th-map-3",
+    "th-map-4",
+    "th-map-5"
+   ],
+   "readBy": [],
+   "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
+  },
+  "map-statue": {
+   "setBy": [
+    "th-map-5"
+   ],
+   "readBy": [],
+   "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
+  },
+  "map-took-all": {
+   "setBy": [
+    "dg-treasure-dig-b"
+   ],
+   "readBy": [],
+   "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
+  },
+  "map-took-one": {
+   "setBy": [
+    "dg-treasure-dig-b"
+   ],
+   "readBy": [],
+   "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
+  },
   "mara-asked": {
    "setBy": [
     "mara-gatekeeper"
@@ -2835,6 +3624,80 @@
    ],
    "readBy": [],
    "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
+  },
+  "nobody-caught": {
+   "setBy": [
+    "rk-hidden-quest-payoff"
+   ],
+   "readBy": [],
+   "note": "SF20 The Nobody record flags (how it went). Kept in the run log."
+  },
+  "nobody-confessed": {
+   "setBy": [
+    "rk-hidden-quest-payoff"
+   ],
+   "readBy": [],
+   "note": "SF20 The Nobody record flags (how it went). Kept in the run log."
+  },
+  "nobody-done": {
+   "setBy": [
+    "rk-hidden-quest-payoff"
+   ],
+   "readBy": [
+    "rk-hidden-quest-payoff"
+   ]
+  },
+  "nobody-escaped": {
+   "setBy": [
+    "rk-hidden-quest-payoff"
+   ],
+   "readBy": [],
+   "note": "SF20 The Nobody record flags (how it went). Kept in the run log."
+  },
+  "nobody-key": {
+   "setBy": [
+    "nobody-key"
+   ],
+   "readBy": [
+    "nobody-key",
+    "rk-hidden-quest-payoff"
+   ]
+  },
+  "nobody-on": {
+   "setBy": [
+    "rk-hidden-quest"
+   ],
+   "readBy": [
+    "nobody-key"
+   ]
+  },
+  "nobody-police": {
+   "setBy": [
+    "rk-hidden-quest-payoff"
+   ],
+   "readBy": [],
+   "note": "SF20 The Nobody record flags (how it went). Kept in the run log."
+  },
+  "nobody-refused": {
+   "setBy": [
+    "rk-hidden-quest"
+   ],
+   "readBy": [],
+   "note": "SF20 The Nobody record flags (how it went). Kept in the run log."
+  },
+  "nobody-told": {
+   "setBy": [],
+   "readBy": [
+    "rk-hidden-quest-payoff"
+   ],
+   "note": "SF20: set by any event that asks the player to share information and offers a line that mentions Nell (rival chats, Officer Jenny, the Pen Pal letter: other rows). Until one does, the dock is never an ambush."
+  },
+  "nobody-why": {
+   "setBy": [
+    "rk-hidden-quest"
+   ],
+   "readBy": [],
+   "note": "SF20 The Nobody record flags (how it went). Kept in the run log."
   },
   "penpal-1": {
    "setBy": [
@@ -3104,6 +3967,191 @@
    "readBy": [],
    "note": "SF13.12-13.15 Rival Circuit record flags; the bracket itself runs on the tournament round tracker."
   },
+  "readings-asked": {
+   "setBy": [
+    "galar-dynamax-investigator"
+   ],
+   "readBy": [],
+   "note": "SF28 Readings record flags (how it went). Kept in the run log."
+  },
+  "readings-capped": {
+   "setBy": [
+    "readings-stone"
+   ],
+   "readBy": [
+    "readings-erupt",
+    "readings-stone",
+    "readings-well"
+   ]
+  },
+  "readings-done": {
+   "setBy": [
+    "readings-hill"
+   ],
+   "readBy": [
+    "readings-hill",
+    "readings-well"
+   ]
+  },
+  "readings-erupted": {
+   "setBy": [
+    "readings-erupt"
+   ],
+   "readBy": [
+    "readings-erupt"
+   ]
+  },
+  "readings-erupts": {
+   "setBy": [
+    "galar-dynamax-investigator",
+    "readings-stone"
+   ],
+   "readBy": [
+    "readings-erupt",
+    "readings-stone",
+    "readings-well"
+   ]
+  },
+  "readings-on": {
+   "setBy": [
+    "galar-dynamax-investigator"
+   ],
+   "readBy": [
+    "readings-hill",
+    "readings-stone",
+    "readings-well"
+   ]
+  },
+  "readings-skipped": {
+   "setBy": [
+    "galar-dynamax-investigator"
+   ],
+   "readBy": [],
+   "note": "SF28 Readings record flags (how it went). Kept in the run log."
+  },
+  "recipe-draft-lum": {
+   "setBy": [
+    "cooking-draft"
+   ],
+   "readBy": [
+    "cook-at-rest",
+    "cook-at-rest-2"
+   ]
+  },
+  "recipe-draft-rawst": {
+   "setBy": [
+    "cooking-draft"
+   ],
+   "readBy": [
+    "cook-at-rest",
+    "cook-at-rest-2"
+   ]
+  },
+  "recipe-draft-sitrus": {
+   "setBy": [
+    "cooking-draft"
+   ],
+   "readBy": [
+    "cook-at-rest",
+    "cook-at-rest-2"
+   ]
+  },
+  "recipe-feast": {
+   "setBy": [
+    "chefs-cook-off-battle"
+   ],
+   "readBy": [
+    "cook-at-rest",
+    "cook-at-rest-2"
+   ]
+  },
+  "recipe-known": {
+   "setBy": [
+    "chef-cook-together",
+    "chefs-cook-off-battle",
+    "cooking-contest",
+    "cooking-draft",
+    "grandmas-recipe",
+    "pie-contest-judge"
+   ],
+   "readBy": [
+    "cook-at-rest"
+   ]
+  },
+  "recipe-oran": {
+   "setBy": [
+    "chef-cook-together"
+   ],
+   "readBy": [
+    "cook-at-rest",
+    "cook-at-rest-2"
+   ]
+  },
+  "recipe-ottilie": {
+   "setBy": [
+    "grandmas-recipe"
+   ],
+   "readBy": [
+    "cook-at-rest",
+    "cook-at-rest-2"
+   ]
+  },
+  "recipe-pie-oran": {
+   "setBy": [
+    "pie-contest-judge"
+   ],
+   "readBy": [],
+   "note": "SF22 recipes (cook-at-rest reads the ones that change a dish) record flags (how it went). Kept in the run log."
+  },
+  "recipe-pie-pecha": {
+   "setBy": [
+    "pie-contest-judge"
+   ],
+   "readBy": [],
+   "note": "SF22 recipes (cook-at-rest reads the ones that change a dish) record flags (how it went). Kept in the run log."
+  },
+  "recipe-pie-razz": {
+   "setBy": [
+    "pie-contest-judge"
+   ],
+   "readBy": [],
+   "note": "SF22 recipes (cook-at-rest reads the ones that change a dish) record flags (how it went). Kept in the run log."
+  },
+  "recipe-pie-sitrus": {
+   "setBy": [
+    "pie-contest-judge"
+   ],
+   "readBy": [],
+   "note": "SF22 recipes (cook-at-rest reads the ones that change a dish) record flags (how it went). Kept in the run log."
+  },
+  "recipe-special": {
+   "setBy": [
+    "chefs-cook-off-battle",
+    "cooking-draft",
+    "pie-contest-judge"
+   ],
+   "readBy": [
+    "cook-at-rest",
+    "cook-at-rest-2"
+   ]
+  },
+  "recipe-stew": {
+   "setBy": [
+    "cooking-contest",
+    "grandmas-recipe"
+   ],
+   "readBy": [
+    "cook-at-rest",
+    "cook-at-rest-2"
+   ]
+  },
+  "recipe-team-stew": {
+   "setBy": [
+    "cooking-contest"
+   ],
+   "readBy": [],
+   "note": "SF22 recipes (cook-at-rest reads the ones that change a dish) record flags (how it went). Kept in the run log."
+  },
   "released-count": {
    "setBy": [],
    "readBy": [
@@ -3212,6 +4260,106 @@
    "readBy": [],
    "note": "Pack flag rival.name_known (MEMORY_AND_FORMAT 2.3): read by the final rival battle line."
   },
+  "roots-home": {
+   "setBy": [
+    "starter-home"
+   ],
+   "readBy": [
+    "starter-home"
+   ]
+  },
+  "roots-home-choice": {
+   "setBy": [
+    "starter-home"
+   ],
+   "readBy": [],
+   "note": "SF21 Starter's Roots record flags (how it went). Kept in the run log."
+  },
+  "roots-home-onward": {
+   "setBy": [
+    "starter-home"
+   ],
+   "readBy": [],
+   "note": "SF21 Starter's Roots record flags (how it went). Kept in the run log."
+  },
+  "roots-home-visited": {
+   "setBy": [
+    "starter-home"
+   ],
+   "readBy": [],
+   "note": "SF21 Starter's Roots record flags (how it went). Kept in the run log."
+  },
+  "roots-nest": {
+   "setBy": [
+    "starter-first-pal"
+   ],
+   "readBy": [
+    "starter-first-pal",
+    "starter-home"
+   ]
+  },
+  "roots-orchard": {
+   "setBy": [
+    "starter-old-orchard"
+   ],
+   "readBy": [
+    "starter-home",
+    "starter-old-orchard"
+   ]
+  },
+  "roots-own": {
+   "setBy": [
+    "starter-ember-shrine",
+    "starter-first-pal",
+    "starter-old-orchard",
+    "starter-power-hum",
+    "starter-tide-pool"
+   ],
+   "readBy": [
+    "starter-home"
+   ]
+  },
+  "roots-planted": {
+   "setBy": [
+    "starter-old-orchard"
+   ],
+   "readBy": [],
+   "note": "SF21 Starter's Roots record flags (how it went). Kept in the run log."
+  },
+  "roots-pool": {
+   "setBy": [
+    "starter-tide-pool"
+   ],
+   "readBy": [
+    "starter-home",
+    "starter-tide-pool"
+   ]
+  },
+  "roots-pylon": {
+   "setBy": [
+    "starter-power-hum"
+   ],
+   "readBy": [
+    "starter-home",
+    "starter-power-hum"
+   ]
+  },
+  "roots-ribbon": {
+   "setBy": [
+    "starter-first-pal"
+   ],
+   "readBy": [],
+   "note": "SF21 Starter's Roots record flags (how it went). Kept in the run log."
+  },
+  "roots-shrine": {
+   "setBy": [
+    "starter-ember-shrine"
+   ],
+   "readBy": [
+    "starter-ember-shrine",
+    "starter-home"
+   ]
+  },
   "roster-axel-done": {
    "setBy": [],
    "readBy": [
@@ -3225,6 +4373,13 @@
     "surf-rescue"
    ],
    "note": "Set by Swimmer Finn's third meeting (people, ROAD_ROSTER)."
+  },
+  "roster-gina-done": {
+   "setBy": [],
+   "readBy": [
+    "pie-contest-judge"
+   ],
+   "note": "Set by the people row's Road Roster kits (people-roster-*.ts, rosterKit) when a roster trainer's arc is done."
   },
   "roster-selene-done": {
    "setBy": [],
@@ -3392,6 +4547,87 @@
     "sanct-trial-end"
    ]
   },
+  "shift-colony": {
+   "setBy": [
+    "foundry-final"
+   ],
+   "readBy": [
+    "foundry-entrance"
+   ]
+  },
+  "shift-finish": {
+   "setBy": [
+    "foundry-2"
+   ],
+   "readBy": [],
+   "note": "SF24 Last Shift record flags (how it went). Kept in the run log."
+  },
+  "shift-in": {
+   "setBy": [
+    "foundry-entrance"
+   ],
+   "readBy": [],
+   "note": "SF24 Last Shift record flags (how it went). Kept in the run log."
+  },
+  "shift-read": {
+   "setBy": [
+    "foundry-entrance"
+   ],
+   "readBy": [
+    "foundry-2"
+   ]
+  },
+  "shift-rested": {
+   "setBy": [
+    "foundry-final"
+   ],
+   "readBy": [
+    "fog-guide"
+   ]
+  },
+  "shift-shut": {
+   "setBy": [
+    "foundry-2"
+   ],
+   "readBy": [],
+   "note": "SF24 Last Shift record flags (how it went). Kept in the run log."
+  },
+  "shift-told": {
+   "setBy": [
+    "foundry-2"
+   ],
+   "readBy": [
+    "foundry-final"
+   ]
+  },
+  "sign-articuno": {
+   "setBy": [
+    "hunt-bird"
+   ],
+   "readBy": [],
+   "note": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run."
+  },
+  "sign-celebi": {
+   "setBy": [
+    "time-loop-celebi"
+   ],
+   "readBy": [],
+   "note": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run."
+  },
+  "sign-eternatus": {
+   "setBy": [
+    "readings-hill"
+   ],
+   "readBy": [],
+   "note": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run."
+  },
+  "sign-heatran": {
+   "setBy": [
+    "ember-vent-final"
+   ],
+   "readBy": [],
+   "note": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run."
+  },
   "sign-ho-oh": {
    "setBy": [
     "ranger-spire-view"
@@ -3401,6 +4637,7 @@
   },
   "sign-moltres": {
    "setBy": [
+    "hunt-bird",
     "ranger-spire-view"
    ],
    "readBy": [],
@@ -3409,6 +4646,13 @@
   "sign-own": {
    "setBy": [
     "legendary-blessing"
+   ],
+   "readBy": [],
+   "note": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run."
+  },
+  "sign-zapdos": {
+   "setBy": [
+    "hunt-bird"
    ],
    "readBy": [],
    "note": "Legends API (LEGENDS_PIECES section 2): a Sign; the legends hook turns it into Influence when that Legendary blesses the run."
@@ -3536,8 +4780,9 @@
    "setBy": [
     "vale-dam"
    ],
-   "readBy": [],
-   "note": "Hollow Vale freed (SF12): read by GL9's old man Harrow (people), who names the flood."
+   "readBy": [
+    "time-loop-3"
+   ]
   },
   "vale-hall": {
    "setBy": [

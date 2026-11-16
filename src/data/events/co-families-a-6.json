@@ -1,0 +1,3656 @@
+{
+ "catalogOverhaul": "families-a",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "time-loop-village",
+   "name": "The Village That Repeats",
+   "group": "Set Pieces",
+   "stop": "mirage",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c2a30",
+    "effect": "glint"
+   },
+   "intro": "A village square, bright and ordinary. The bell in the tower rings noon. A child drops a basket of apples. A cart loaded with barrels tips over at the corner with a crash that turns every head. In a doorway, a baker drops a tray of loaves. Apples roll to your feet. The child runs to pick them up. Nim: \"Sorry! Sorry. I always drop them.\" She stops, an apple in each hand. \"Always? I don't know why I said always.\" Then the bell rings noon again, and the apples are back in the basket, and Nim is at the top of the street, and it all happens again.",
+   "choices": [
+    {
+     "label": "Catch the basket. (a node)",
+     "success": {
+      "text": "You catch it. Nim stares at you, and at the basket, and at the apples all still in it. Then the cart tips anyway at the corner, barrels everywhere. The bell rings noon. The basket is gone from your hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loop-day1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "loop-basket",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "time-loop-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stop the cart. (a node)",
+     "success": {
+      "text": "You throw your weight against the cart and hold it, barely, your arms shaking. Behind you, a thud and a rolling: Nim has dropped the basket. The bell rings noon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loop-day1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "loop-cart",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "time-loop-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Talk to the baker. (a node)",
+     "success": {
+      "text": "Baker Hesk: \"Busy day,\" he says, bending for the loaves. \"Every day's a busy day.\" He does not look up at you. He does not look up at anything. The bell rings noon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loop-day1",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "time-loop-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the village.",
+     "success": {
+      "text": "You walk out past the last house. Behind you, the bell rings noon again, and you know without looking that the apples are back in the basket. The village will still be noon if you come back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loop-left",
+        "amount": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "time-loop-village"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "time-loop-2",
+   "name": "The Village That Repeats: Day Two",
+   "group": "Set Pieces",
+   "stop": "mirage",
+   "rarity": "rare",
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c2a30",
+    "effect": "none"
+   },
+   "intro": "Noon again. This time you know it before it happens: the cart will tip, the child will drop the basket, the baker will drop the tray. You can stop one of them. The other two will still happen. At the edge of the square, by the old oak, there is a green glimmer, like light through a leaf. When you look straight at it, it is gone.",
+   "choices": [
+    {
+     "label": "Stop all three at once. (a node)",
+     "success": {
+      "text": "You place your team: something strong of mind at the cart, something fast at the basket, anyone at all under the tray. On the stroke of noon they move together, and the barrels stay put, and the apples stay in, and the bread stays on the tray, and the whole square is still. Then the bell rings noon anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loop-all-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "time-loop-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the green glimmer. (a node)",
+     "success": {
+      "text": "You go to the oak. Nothing. Only, in the moss at its roots, a tiny footprint, the shape of a leaf. The bell rings noon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loop-glimmer",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "time-loop-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch who notices. (a node)",
+     "success": {
+      "text": "You watch faces instead of hands. Nim never notices. The carter never notices. But just before the bell, the baker's eyes flick up to the tower. Only his. The bell rings noon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loop-baker-knows",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "time-loop-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the village.",
+     "success": {
+      "text": "You walk out past the last house. Behind you, the bell rings noon again, and you know without looking that the apples are back in the basket. The village will still be noon if you come back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loop-left",
+        "amount": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "time-loop-village"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "time-loop-3",
+   "name": "The Village That Repeats: Day Three",
+   "group": "Set Pieces",
+   "stop": "mirage",
+   "rarity": "rare",
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c2a30",
+    "effect": "none"
+   },
+   "intro": "Noon. The baker looks up, and for the first time he meets your eyes, and holds them. Hesk: \"I've been waiting for you to ask.\" He sets the tray down on the step, very carefully. \"Eleven years ago this noon, the cart tipped and hit my daughter. She lived. She limped all her life. She's grown and gone now.\" He looks at the oak. \"I wished it hadn't happened. Out loud, by that oak. Something green heard me.\" He wipes his hands on his apron, over and over. \"It's been noon ever since. I stop the cart every time. It doesn't help. It never happened, so it can't un-happen.\"",
+   "choices": [
+    {
+     "label": "Let the cart tip.",
+     "success": {
+      "text": "You stand back. The cart tips, and the barrels roll, into an empty street. Nobody is there. Nobody was ever there; it was only ever a memory, going round. And then the bell rings one o'clock. The whole village breathes in, as if it has been holding its breath for eleven years. Hesk sits down on his step and puts his face in his hands. Later he bakes you bread with his own hands, and Nim gives you an apple, the best one, from the bottom of the basket.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "loop-broken",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You let the cart tip, and the village heard one o'clock for the first time in eleven years",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep stopping it.",
+     "success": {
+      "text": "You hold the cart again. Hesk watches you do it, and something in his face goes very tired and very grateful at once. Noon. The village stays where it is. You can leave, and come back, and it will be here.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loop-kept",
+        "amount": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "time-loop-village"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Talk to the green thing.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "loop-glimmer",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You go to the oak and kneel by the leaf-print and say, quietly, that you know it is there. The air goes green. Celebi comes out of nothing, very small, and floats in front of Hesk. It looks very young, and very sorry.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "loop-celebi",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "time-loop-celebi"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "knows",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "loop-baker-knows",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Hesk: \"You saw me look,\" he says. \"Nobody's ever seen me look.\""
+    },
+    {
+     "id": "vale",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "vale-freed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Hesk: \"A carter told me once about a drowned town that let its evening end,\" he says. \"If they could.\""
+    }
+   ]
+  },
+  {
+   "id": "time-loop-celebi",
+   "name": "The Green Thing",
+   "group": "Set Pieces",
+   "stop": "mirage",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c2a30",
+    "effect": "none"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "Celebi floats in front of Hesk, its little hands pressed together. Hesk looks at it for a long time. Hesk: \"You did what I asked,\" he says. \"That's all. You did what I asked.\"",
+   "choices": [
+    {
+     "label": "Ask it to undo the wish.",
+     "success": {
+      "text": "Celebi closes its eyes. The green goes out of the air like a held breath let go. The cart tips into the empty street. The bell rings one o'clock. Celebi turns to you and bows, very low, and is gone.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "loop-broken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-celebi",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Celebi undid a wish in a village of one noon, and bowed to you",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell Hesk to let go.",
+     "success": {
+      "text": "Hesk nods slowly. He picks up the tray of loaves, and holds it out in front of him, and opens his hands. The bread falls. The bell rings one o'clock. Celebi touches his cheek and is gone.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "loop-broken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-celebi",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Hesk let the tray fall, and it was one o'clock",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let Hesk decide.",
+     "success": {
+      "text": "Hesk walks to the corner and stands there, and watches the cart tip into the empty street. He says his daughter's name, once, out loud. The bell rings one o'clock. Celebi stays by him until it stops ringing.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "loop-broken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-celebi",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "loop-hesk-chose",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Hesk chose to let it tip, and said his daughter's name",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-hidden-quest",
+   "name": "A Nobody With a Secret",
+   "group": "Run-Wide Modifiers",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c1c",
+    "effect": "none"
+   },
+   "intro": "A roadside, late afternoon. A quiet person in plain clothes is sitting on a milestone, and when you pass, they lift one hand, small, as if they do not want anyone else to see. Nell: \"You look like you can keep a secret.\" Close up, their hands are rough and their eyes never stop moving. \"I need something found. A brass key with a bird on the bow. Somewhere in this region.\" Lower: \"Don't tell anyone you're looking. Not the police. Not your friends. Especially not anyone in a uniform.\"",
+   "choices": [
+    {
+     "label": "I'll find it.",
+     "success": {
+      "text": "Nell lets out a breath they seem to have been holding for weeks. Nell: \"Thank you.\" They are gone before you can ask anything else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nobody-on",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "nobody-key",
+        "nodes": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why the secret?",
+     "success": {
+      "text": "Nell: \"Because if the wrong person hears, I'm dead.\" A beat. \"Sorry. That's dramatic. But true.\" They try to smile. It does not take.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nobody-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "nobody-why",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "nobody-key",
+        "nodes": 4
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Nell nods, as if they expected it, and walks off down the road with their hands in their pockets. Later, on a team-held road, you hear a Grunt laughing to another: \"They caught the quiet one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nobody-refused",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "nobody-key",
+   "name": "The Brass Key",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c1c",
+    "effect": "none"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "nobody-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "nobody-key",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A back office in a team-held building, the door left open by someone in a hurry. A desk. In the top drawer, under a mess of forms, a brass key with a little bird on the bow. As your fingers close on it, a Grunt in the doorway behind you says, \"Hey.\"",
+   "choices": [
+    {
+     "label": "Battle the Grunt.",
+     "success": {
+      "text": "He is more surprised than you are, and fights like it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nobody-key",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Desk Grunt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "evil": "grunt",
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Bribe him. (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You hold out ₽100. He looks at it, and at the key, and at the empty corridor. He takes it. Grunt: \"I never saw you. I never see anything. It's the only good thing about this job.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "nobody-key",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run.",
+     "success": {
+      "text": "You run, with the key in your fist, down two corridors and out a fire door into the rain. Behind you, a whistle, and boots, and then nothing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nobody-key",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "rk-hidden-quest-payoff",
+   "name": "The Nobody Returns",
+   "group": "Run-Wide Modifiers",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "nobody-key",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "nobody-key",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "nobody-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c1c",
+    "effect": "glint"
+   },
+   "intro": "The next crossing. Nell is waiting, grinning like someone who has not grinned in a long time. Nell: \"You kept your eyes open. Here's what I promised.\" They take the key and unlock a small case: inside, folded, an Admin's uniform with {evil}'s mark on it, and a Poké Ball. Nell: \"I'm leaving them. That was my locker key. My Pokémon's in there. They took it as insurance.\" They hold the Ball against their chest. \"I've got a boat at midnight. I need one more thing: someone to stand at the dock and look like they're waiting for someone else.\"",
+   "choices": [
+    {
+     "label": "I'll stand at the dock.",
+     "success": {
+      "text": "A night on the dock, collar up, watching the water. At a quarter to twelve two Grunts come down the steps, looking at faces. You do not let them get as far as Nell.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nobody-escaped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "nobody-done",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "dark"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You stood on a dock at midnight so Nell could sail away",
+        "importance": 75
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Dock Grunts",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "evil": "grunt",
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Come to the police.",
+     "success": {
+      "text": "Nell: \"They'll put me in a cell and the team will reach me there.\" They look at you for a long time. \"...But you asked.\" In the morning, Nell walks into the station on their own. Officer Jenny comes out to meet them, and puts a coat round their shoulders.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nobody-police",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "nobody-done",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who were you, in there?",
+     "success": {
+      "text": "Nell: \"Third in command.\" They say it to the water. \"I planned {evil}'s operation in this region. I'm sorry.\" Then they give you the plan, every step of it, and the one place it is weak. At midnight two Grunts come down the dock steps, and you are waiting for them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nobody-escaped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "nobody-confessed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "nobody-done",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -2,
+        "mark": "plan-seen"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Dock Grunts",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "evil": "grunt",
+       "friendly": true,
+       "lose": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "told",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "nobody-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You told someone. Somewhere along the road, you told someone, and it got back. When you reach the dock at midnight, the Admin is already there.",
+     "hide": [
+      0,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Stand between them and Nell.",
+       "success": {
+        "text": "The Admin does not say anything at all. A hard fight, on wet boards, in the dark.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "nobody-done",
+          "amount": 1
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "name": "The Admin",
+         "classId": "ace-trainer",
+         "size": 4,
+         "types": [],
+         "levelBonus": 3,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "nobody-escaped",
+           "amount": 1
+          },
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [],
+           "types": [
+            "dark"
+           ],
+           "levelBonus": 0,
+           "shinyMultiplier": 1
+          }
+         ],
+         "evil": "executive",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "flag",
+           "key": "nobody-caught",
+           "amount": 1
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "dilly",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "grunt-dilly-out",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Nell: \"I heard someone helped a rookie out. A kid with a Wooper.\" They look at you sideways. \"I thought it might be you.\""
+    }
+   ]
+  },
+  {
+   "id": "starter-ember-shrine",
+   "name": "Ember Shrine",
+   "group": "Starter Stories",
+   "rarity": "uncommon",
+   "types": [
+    "fire"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "roots-shrine",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#301408",
+    "effect": "fire"
+   },
+   "intro": "A small stone shrine on a hill, the stone scorched black in long sweeping marks: the shapes of tails. Fire-types have prayed here a long time. When your starter steps onto the hilltop, the stone glows where it stands. The shrine keeper, an old woman called Ama, gets up off her stool. Ama: \"Not one of ours.\" She smiles. \"But it's welcome. Fire's for warming strangers too.\"",
+   "choices": [
+    {
+     "label": "Let it sit.",
+     "success": {
+      "text": "Your starter walks to the oldest tail-mark, the biggest, and sits in it. It fits. It stays there a long time with its eyes half closed.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "roots-shrine",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the scorch marks.",
+     "success": {
+      "text": "Ama: \"Each one's a starter that came home.\" She points. \"That big one's from three hundred years ago. Nobody remembers its trainer's name. Everybody remembers it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roots-shrine",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave an offering. (a Berry)",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You put a Berry on the warm stone. It is gone in a curl of smoke. Ama nods, satisfied, and puts a lump of Charcoal in your hand without a word.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "item",
+        "id": "charcoal",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roots-shrine",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fire",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "fire"
+      }
+     ],
+     "intro": "A small stone shrine on a hill, the stone scorched black in long sweeping marks: the shapes of tails. When your starter steps onto the hilltop, the stone glows where it stands, brighter than the sun. The keeper, an old woman called Ama, gets up off her stool slowly. Ama: \"Oh. You've brought one home.\" She looks at your starter. \"Every fire-born comes here once. Most don't know why. Let it sit.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it sit.",
+       "success": {
+        "text": "Your starter walks to the oldest tail-mark and sits in it. It fits as if it was made for it. It stays there with its eyes closed until the sun moves.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-shrine",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "fighting",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "fighting"
+      }
+     ],
+     "intro": "A small stone shrine on a hill, scorched in the shapes of tails. Ama the keeper looks at your starter. Ama: \"Fire in the heart, if not in the tail. That counts here. You've brought one home. Let it sit.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it sit.",
+       "success": {
+        "text": "Your starter sits in the oldest tail-mark. It fits better than it should.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-shrine",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "dark",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "dark"
+      }
+     ],
+     "intro": "A small stone shrine on a hill, scorched in the shapes of tails, warm even at dusk. Ama the keeper looks at your starter. Ama: \"Night-born. The night and the fire have always been friends. You've brought one home. Let it sit.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it sit.",
+       "success": {
+        "text": "Your starter sits in the oldest tail-mark, in its shadow. It fits.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-shrine",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "starter-first-pal",
+   "name": "An Old Friend's Nest",
+   "group": "Starter Stories",
+   "rarity": "uncommon",
+   "types": [
+    "normal"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "roots-nest",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "sparkle"
+   },
+   "intro": "A hollow under a hedge, lined with soft fur. Small toys lie in it, worn smooth: a stick, a pebble, a ribbon. Your starter sniffs the ribbon. A breeder passing with a basket stops. Hollen: \"That's where they're born round here. Normal-types, Eevee, the soft ones.\" She smiles at your starter. \"Not one of them, is it. It's welcome all the same.\"",
+   "choices": [
+    {
+     "label": "Sit with it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "mentor",
+         "id": "fenwick-eon"
+        }
+       ],
+       "text": "You sit by the nest, and Fenwick Eon sits down beside you without a word. Fenwick: \"My Eevee was born here.\" He reaches out and touches the ribbon. You rest there until the light changes.",
+       "effects": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "friendship",
+         "bond": 2,
+         "who": "starter"
+        },
+        {
+         "kind": "flag",
+         "key": "roots-nest",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You sit by the nest. Your starter curls up in it, too big, and does not care. You rest there until the light changes.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "roots-nest",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the ribbon.",
+     "success": {
+      "text": "Your starter takes the ribbon in its mouth and will not give it up. It wears it for the rest of the run, mostly on one ear.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "roots-nest",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roots-ribbon",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "You walk on. After a moment, your starter follows, looking back once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roots-nest",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "normal",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "normal"
+      }
+     ],
+     "intro": "A hollow under a hedge, lined with soft fur. A stick, a pebble, a ribbon. Your starter sniffs the ribbon, and then it sits down in the nest and will not get up. A breeder passing stops. Hollen: \"That's where they're born round here. Normal-types, Eevee, the soft ones.\" She sets down her basket. \"They always come back to the nest once.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Sit with it.",
+       "branches": [
+        {
+         "when": [
+          {
+           "kind": "mentor",
+           "id": "fenwick-eon"
+          }
+         ],
+         "text": "You sit by the nest, and Fenwick Eon sits down beside you. Fenwick: \"My Eevee was born here.\" You rest there until the light changes.",
+         "effects": [
+          {
+           "kind": "heal",
+           "share": 1
+          },
+          {
+           "kind": "friendship",
+           "bond": 2,
+           "who": "starter"
+          },
+          {
+           "kind": "flag",
+           "key": "roots-nest",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "roots-own",
+           "amount": 1,
+           "stamp": "region"
+          }
+         ]
+        }
+       ],
+       "success": {
+        "text": "You sit by the nest while your starter lies in it with its chin on the ribbon. You rest there until the light changes.",
+        "effects": [
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-nest",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "fairy",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "fairy"
+      }
+     ],
+     "intro": "A hollow under a hedge, lined with soft fur, with a stick, a pebble, a ribbon. Your starter sits down in it at once. Hollen the breeder stops. Hollen: \"The soft ones are born here. That one's soft right through.\" She smiles. \"They always come back once.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Sit with it.",
+       "success": {
+        "text": "You rest by the nest until the light changes.",
+        "effects": [
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-nest",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "psychic",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "psychic"
+      }
+     ],
+     "intro": "A hollow under a hedge, lined with soft fur. Your starter stops at the edge of it and stares, as if it can hear something you can't. Hollen the breeder stops. Hollen: \"Funny. The thinking ones always know this place too. Like they remember it from before.\" She smiles. \"They always come back once.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Sit with it.",
+       "success": {
+        "text": "You rest by the nest until the light changes.",
+        "effects": [
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-nest",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "starter-old-orchard",
+   "name": "The Old Orchard",
+   "group": "Starter Stories",
+   "rarity": "uncommon",
+   "types": [
+    "grass"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "roots-orchard",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#14301a",
+    "effect": "sparkle"
+   },
+   "intro": "An orchard of very old trees, gnarled and silver-barked, and as your starter walks between the rows, every tree leans a little toward it, the way leaves turn to the sun. The orchard keeper, Brae, leans on her rake. Brae: \"The trees know their own. That one's not, quite.\" She shrugs. \"They're polite to guests.\"",
+   "choices": [
+    {
+     "label": "Let it plant something.",
+     "success": {
+      "text": "Your starter digs a hole with great seriousness and puts a seed in it and pats the earth down. Brae marks the place with a stick. Brae: \"I'll water it.\" The trees rustle.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "roots-orchard",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roots-planted",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick a fruit.",
+     "success": {
+      "text": "Brae lets you pick two. They are Sitrus Berries, heavy and gold.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "roots-orchard",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Brae about the trees.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "farmer-end",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Brae: \"The oldest one's from a Bulbasaur that came here and never left.\" She squints at you. \"Old Abner's seeds came from here, you know. The farmer who forgets. I gave them to him myself, forty years ago.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "roots-orchard",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Brae: \"The oldest one's from a Bulbasaur that came here and never left.\" She pats the trunk of the biggest tree. \"It's still here, in a way.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roots-orchard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "grass",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "grass"
+      }
+     ],
+     "intro": "An orchard of very old trees, and as your starter walks between the rows, every tree turns to face it, all at once, every leaf. Brae the keeper leans on her rake and laughs. Brae: \"Grass-born. The trees know their own. They planted half of this.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it plant something.",
+       "success": {
+        "text": "Your starter plants a seed in a row of its own kind's trees, and pats the earth, and the trees bow over it.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-orchard",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-planted",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "ground",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "ground"
+      }
+     ],
+     "intro": "An old orchard. Your starter puts its feet in the earth between the roots and goes very still. Brae: \"Earth-born. The roots know you. Everything here grew out of ground like yours.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it plant something.",
+       "success": {
+        "text": "It plants a seed deep, the way only an earth-born would.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-orchard",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-planted",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "rock",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "rock"
+      }
+     ],
+     "intro": "An old orchard on stony ground. The trees lean toward your starter. Brae: \"Stone-born. Every one of these trees grew in a crack in a rock like you. You're home.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it plant something.",
+       "success": {
+        "text": "It plants a seed in a crack between two stones.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-orchard",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-planted",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "starter-power-hum",
+   "name": "The Power Hum",
+   "group": "Starter Stories",
+   "rarity": "uncommon",
+   "types": [
+    "electric"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "roots-pylon",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#302a08",
+    "effect": "sparkle"
+   },
+   "intro": "A pylon hums in a field, tall and old, its steel gone brown. Every wild Electric-type for a mile is standing in the grass, facing it, quite still. Your starter's fur, or skin, or leaves, lifts and sparks. A line worker on a ladder looks down. Odalys: \"They come once a year. Like a pilgrimage. It's the oldest pylon in the region.\" She pats the steel. \"It was a lightning tree first.\"",
+   "choices": [
+    {
+     "label": "Let it charge.",
+     "success": {
+      "text": "Your starter walks up to the pylon and touches it with its nose. A crack, a smell like rain. It comes back standing taller, and quicker on its feet.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "spe",
+        "percent": 5,
+        "who": "starter",
+        "until": "run"
+       },
+       {
+        "kind": "flag",
+        "key": "roots-pylon",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the tree.",
+     "success": {
+      "text": "Odalys: \"Struck forty times. Never fell.\" She climbs down. \"Then they built the pylon around it so it wouldn't have to stand on its own.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roots-pylon",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join the circle.",
+     "success": {
+      "text": "You and your starter step into the field. The wild Electric-types shift over to make room, and your starter stands among them facing the pylon, humming.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "roots-pylon",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "electric",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "electric"
+      }
+     ],
+     "intro": "A pylon hums in a field, tall and old. Every wild Electric-type for a mile stands facing it. When your starter comes over the rise, every one of them turns round to look at it. Odalys on her ladder: \"Oh,\" she says. \"One of theirs. They come once a year. It was a lightning tree first.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it charge.",
+       "success": {
+        "text": "Your starter walks up to the pylon and puts both hands on it, and lights up like a struck tree. For the rest of the region its electric moves hit harder.",
+        "effects": [
+         {
+          "kind": "tempEffect",
+          "label": "The pylon's charge: Electric moves +10% this region",
+          "effects": [
+           {
+            "kind": "statMultiplier",
+            "stat": "spa",
+            "type": "electric",
+            "value": 1.1
+           },
+           {
+            "kind": "statMultiplier",
+            "stat": "atk",
+            "type": "electric",
+            "value": 1.1
+           }
+          ],
+          "until": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-pylon",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "steel",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "steel"
+      }
+     ],
+     "intro": "A pylon hums in a field, tall and old, and your steel-born starter walks straight to it and leans its whole side against it, as if it is greeting family. Odalys on her ladder: \"Huh. The steel ones always do that. It was a lightning tree first, then steel. You're home.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it charge.",
+       "success": {
+        "text": "It stands against the pylon until it is humming too.",
+        "effects": [
+         {
+          "kind": "statBoost",
+          "stat": "spe",
+          "percent": 5,
+          "who": "starter",
+          "until": "run"
+         },
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-pylon",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "starter-tide-pool",
+   "name": "The Tide Pool",
+   "group": "Starter Stories",
+   "rarity": "uncommon",
+   "types": [
+    "water"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "roots-pool",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#0e2038",
+    "effect": "sparkle"
+   },
+   "intro": "A still pool by the sea, clear to the bottom. It reflects your starter perfectly. Something below the water is curious about it. A Wishiwashi rises, looks, and sinks. A diver sitting on the rocks with her mask pushed up: Marisol: \"It's a nursery. Everything water-born starts in a pool like this.\" She looks at your starter. \"Visitors welcome.\"",
+   "choices": [
+    {
+     "label": "Let it swim.",
+     "success": {
+      "text": "Your starter wades in and swims with the little one in slow circles until it is tired and happy.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "roots-pool",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "You lie on the warm rock and look. In every crack in the rocks below, eggs, hundreds of them, glowing faintly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roots-pool",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call the other one up.",
+     "success": {
+      "text": "It comes up, and looks at your starter, and decides to see what you are made of.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roots-pool",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wishiwashi"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "water",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "water"
+      }
+     ],
+     "intro": "A still pool by the sea. It reflects your starter, and then, below the reflection, another face rises: a wild one of your starter's own kind, small, looking up at it. Marisol the diver sits up on the rocks. Marisol: \"It's a nursery. Everything water-born starts in a pool like this.\" She smiles. \"Yours started in one too.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it swim.",
+       "success": {
+        "text": "Your starter dives in, and the two of them swim together, round and round, until the sun goes.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-pool",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "ice",
+     "when": [
+      {
+       "kind": "starter",
+       "type": "ice"
+      }
+     ],
+     "intro": "A cold still pool by the sea, a skin of ice at its edges. Your starter breathes on it and the ice spreads in ferns. Marisol the diver: \"The cold ones start here too, in the winter. You've come home.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let it swim.",
+       "success": {
+        "text": "It swims under the ice, a shadow, happy.",
+        "effects": [
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-pool",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "roots-own",
+          "amount": 1,
+          "stamp": "region"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "starter-home",
+   "name": "Home",
+   "group": "Starter Stories",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "fire"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#301408",
+    "effect": "fire"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "roots-own",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "roots-own",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "roots-home",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Your starter's home again, late in the run. This time others of its kind are there, a whole family of them, and they come out to see it. An old one, grey round the face, comes slowly to the front and touches noses with your starter, and stays there for a long moment. Then your starter looks at them. Then it looks at you.",
+   "choices": [
+    {
+     "label": "Stay a while. I'll wait.",
+     "success": {
+      "text": "You sit down and wait, all afternoon. Your starter goes with them, into the place it came from, and you hear it calling and being called back. When the light goes it comes back to you on its own, and leans against you, and sleeps.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 3,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "roots-home-visited",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You waited while your starter went home",
+        "importance": 80
+       },
+       {
+        "kind": "flag",
+        "key": "roots-home",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "You can stay, if you want.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "bondLevel",
+         "atLeast": 5,
+         "who": "starter"
+        }
+       ],
+       "text": "Your starter looks at its family, and at you. Then it walks back to your side without hesitating, and the old one nods, as if that is the right answer.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 2,
+         "who": "starter"
+        },
+        {
+         "kind": "flag",
+         "key": "roots-home-choice",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You told your starter it could stay home, and it came back to you",
+         "importance": 85
+        },
+        {
+         "kind": "flag",
+         "key": "roots-home",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your starter looks at its family, and at you, for a long time. Then it comes back to you. It was always going to.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 3,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "roots-home-choice",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You told your starter it could stay home, and it came back to you",
+        "importance": 85
+       },
+       {
+        "kind": "flag",
+        "key": "roots-home",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come on. We're not done.",
+     "success": {
+      "text": "It follows. At the top of the path, it looks back once, a long look, and then it does not look back again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roots-home-onward",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roots-home",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true,
+   "remembers": [
+    {
+     "id": "all",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roots-shrine",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "roots-nest",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "roots-orchard",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "roots-pylon",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "roots-pool",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The old one has been watching your starter's face, and sniffs it, long and slow, and you realise it can smell every place you have been: the shrine, the nest, the orchard, the pylon, the pool. It touches each of your starter's cheeks in turn. Your starter stands taller after, all over.",
+     "addChoices": [
+      {
+       "label": "Let it take the marks.",
+       "success": {
+        "text": "Five small marks, one for each place, that only you will ever notice. Your starter is a little stronger in every way.",
+        "effects": [
+         {
+          "kind": "statBoost",
+          "stat": "all",
+          "percent": 5,
+          "who": "starter",
+          "until": "run"
+         },
+         {
+          "kind": "flag",
+          "key": "roots-home",
+          "amount": 1
+         },
+         {
+          "kind": "friendship",
+          "bond": 2,
+          "who": "starter"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "chef-cook-together",
+   "name": "Cook Together",
+   "group": "NPC Stories",
+   "stop": "rest",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#322418",
+    "effect": "none"
+   },
+   "intro": "A street kitchen under a striped awning, everything hissing. A chef in a bright headscarf has two pans going and is holding out a third. Chef Tolu: \"Fast hands, steady heart. Can you keep up?\" She does not wait for an answer. \"Two pans, one dish. You fry, I sauce.\"",
+   "choices": [
+    {
+     "label": "Fry.",
+     "chance": 0.75,
+     "success": {
+      "text": "You fry. You burn the first lot and Tolu laughs and throws it to a Lickitung that has been waiting for exactly this. The second lot is perfect. Tolu teaches you Pan-Fried Oran.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-oran",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-tolu",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You fry. You burn it twice, and Tolu laughs, and sends you off with a full stomach and no recipe. Tolu: \"Come back with steadier hands.\"",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "cook-tolu",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sauce.",
+     "chance": 0.75,
+     "success": {
+      "text": "You stir. Tolu shouts times at you like a drill sergeant. It comes together all at once, glossy and bright, and she kisses her fingers. Tolu teaches you Pan-Fried Oran.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-oran",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-tolu",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The sauce splits. Tolu sighs and fixes it in two seconds with a whisk. Tolu: \"Next time, darling.\" You eat well. You learn nothing.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "cook-tolu",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let my Pokémon help.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fire"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type takes the heat under both pans and holds it exactly, without being told, the whole time. Tolu stares. Tolu: \"Can I hire it?\" She teaches you Pan-Fried Oran, and gives your Fire-type the burnt bits, which it loves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-oran",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-tolu",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": {
+         "types": [
+          "fire"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cooking-contest",
+   "name": "The Cooking Contest",
+   "group": "NPC Stories",
+   "stop": "contest",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#3a2a1c",
+    "effect": "sparkle"
+   },
+   "intro": "A big tent, long tables, a crowd. A judge in a very tall hat moves down the line tasting dishes with a tiny spoon. Judge Pomfrey: \"A trainer!\" He beams at you. \"Cook something your team would eat.\" He holds up a finger. \"Not something you'd eat. Something they would. Know your team.\"",
+   "choices": [
+    {
+     "label": "Spicy.",
+     "chance": 0.6,
+     "success": {
+      "text": "Spicy. Your team crowds round the bowl before it has even cooled. Pomfrey watches them and makes a note. Pomfrey: \"Team Stew,\" he says. \"You know your team. Here.\" He writes it down for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-stew",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-team-stew",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-contest",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Spicy. Two of your team love it. The others sniff it and walk off. Pomfrey pats your shoulder. Pomfrey: \"Close. Know them better.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "cook-contest",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sweet.",
+     "chance": 0.6,
+     "success": {
+      "text": "Sweet. Your team eats in a ring, very fast, then looks at you for more. Pomfrey: \"Team Stew,\" he says, delighted, and writes it down for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-stew",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-team-stew",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-contest",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Sweet. Some of your team love it. Some look at you as if you have never met them. Pomfrey: \"Close. Know them better.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "cook-contest",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bitter.",
+     "chance": 0.6,
+     "success": {
+      "text": "Bitter. Your team eats it slowly and seriously, the way you eat medicine you have decided to like. Pomfrey raises an eyebrow, and then both. Pomfrey: \"Team Stew. Brave choice.\" He writes it down for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-stew",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-team-stew",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-contest",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Bitter. One of your team eats it. One. Pomfrey: \"Brave,\" he says. \"Not right. Brave.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "cook-contest",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "grandmas-recipe",
+   "name": "Grandma's Recipe",
+   "group": "Helpers, gifts and kindness",
+   "stop": "rest",
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A cottage kitchen, low ceiling, everything copper. A grandmother with flour up to her elbows is already putting a chopping board in front of you. Gran Ottilie: \"It heals everything, dear.\" She pauses. \"Not everything. But most things that matter.\" She hands you a knife and a bag of onions. \"Chop the onions. I'll tell you about my husband while you do it.\"",
+   "choices": [
+    {
+     "label": "Chop and listen.",
+     "success": {
+      "text": "You chop, and your eyes stream, and she tells you about a man who could not cook and married her for it, and learned anyway, badly, every Sunday for fifty years. By the time the stew is done you are both crying, and only partly from the onions. Ottilie's Stew.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-stew",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-ottilie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-ottilie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just the recipe, please.",
+     "success": {
+      "text": "She does not mind at all. She writes it on a card in a hand like lace, and puts a kiss at the bottom. Ottilie's Stew.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-stew",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-ottilie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-ottilie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can I bring a friend?",
+     "success": {
+      "text": "Ottilie: \"Oh, bring them!\" You fetch someone you met on the road, and they come, and the three of you eat at the little table with the window open and the stew steaming, and nobody wants to leave. Ottilie's Stew, and a full heart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-stew",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-ottilie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-ottilie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-shared",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pie-contest-judge",
+   "name": "Berry Pie Contest Judge",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_pokemonbreeder"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "A village fair, bunting, a brass band playing slightly wrong. Four pies on a judging table: Oran, Sitrus, Razz, Pecha. Four bakers behind them, very nervous, wringing their aprons. The fair organiser grabs your arm. Organiser: \"Our judge fell ill. Taste them all. Pick a winner.\" The bakers all look at you at once.",
+   "choices": [
+    {
+     "label": "Oran.",
+     "success": {
+      "text": "Oran wins. Its baker bursts into tears and gives you the recipe. The other three give you a slice each, and only one of them sulks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-special",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-pie-oran",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-pie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sitrus.",
+     "success": {
+      "text": "Sitrus wins. Its baker shakes your hand for a full minute and gives you the recipe. Slices from the others, warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-special",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-pie-sitrus",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-pie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Razz.",
+     "success": {
+      "text": "Razz wins. Its baker, a teenager, punches the air and then remembers to be dignified. The recipe, and slices from the others.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-special",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-pie-razz",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-pie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pecha.",
+     "success": {
+      "text": "Pecha wins. Its baker, very old, nods once, as if she knew. The recipe, and slices from the others.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-special",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-pie-pecha",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-pie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gina",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-gina-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "One of the bakers is Picnicker Gina, in a borrowed apron, with flour on her nose. She is very carefully not looking at you. Whichever pie you pick, she will know."
+    }
+   ]
+  },
+  {
+   "id": "chefs-cook-off-battle",
+   "name": "Chef's Cook-Off Battle",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2e2418",
+    "effect": "none"
+   },
+   "intro": "A chef in whites flips a pan, mid-air, high enough to clear the awning, and catches it without looking. Chef Ruggiero: \"Beat me and my winning meal heals your whole team!\" He points the pan at you. \"Lose, and you wash up.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "His Slurpuff is fluffy and vicious. His Darmanitan is just vicious.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "slurpuff",
+        "darmanitan"
+       ],
+       "name": "Chef Ruggiero",
+       "classId": "veteran",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "flag",
+         "key": "cook-ruggiero",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "cook-wins",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "flag",
+         "key": "cook-ruggiero",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Cook-off instead.",
+     "chance": 0.6,
+     "success": {
+      "text": "Two stoves, ten minutes, one bell. You plate up as the bell goes, and Ruggiero tastes yours, and puts down his fork, and swears in a language you do not know. He feeds your whole team, and writes his Feast down for you, grumbling.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-special",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-feast",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-ruggiero",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Ten minutes, one bell. His is better. Much better. You wash up. Afterwards he feeds you anyway, laughing, because nobody leaves his kitchen hungry.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-ruggiero",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wash up anyway.",
+     "success": {
+      "text": "You roll up your sleeves and start on his pans. He laughs so hard he has to sit down. Then he feeds you, and your whole team, and will not hear a word about it.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-ruggiero",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cooking-draft",
+   "name": "Cooking Tournament: The Draft",
+   "group": "Set Pieces",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "A tournament table, long, with six baskets on it: Sitrus, Leppa, Lum, Chesto, Rawst, Aspear. Three other contestants stand ready. The host rings a bell. Host: \"You draft two, then cook. Choose with care!\"",
+   "choices": [
+    {
+     "label": "Lum and Chesto.",
+     "success": {
+      "text": "Lum and Chesto, bitter and clean. You cook a dish that keeps a team awake and clear-headed. The recipe is yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-special",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-draft-lum",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-draft",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sitrus and Leppa.",
+     "success": {
+      "text": "Sitrus and Leppa, sweet and sharp. A dish that keeps a team going long after it should have stopped. The recipe is yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-special",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-draft-sitrus",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-draft",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rawst and Aspear.",
+     "success": {
+      "text": "Rawst and Aspear, fire and ice in one bowl. A dish that steadies a team against burns and frost. The recipe is yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "recipe-special",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-draft-rawst",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "recipe-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-draft",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cook-wins",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rival",
+     "when": [
+      {
+       "kind": "rivalState",
+       "feeling": {
+        "key": "trust",
+        "atLeast": 2
+       }
+      }
+     ],
+     "notice": "{rival} is one of the other contestants. As you reach for your second basket, they snatch it from under your hand. {rival}: \"Should've picked faster.\" They grin. You pick another, and it works anyway."
+    }
+   ]
+  },
+  {
+   "id": "cooking-final",
+   "name": "Cooking Tournament: The Judges",
+   "group": "Set Pieces",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "room": false,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cook-wins",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "cook-final",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A hushed hall. Three judges at a long table in silence. You set your dish in front of them. The middle judge is wearing an apron over a tracksuit, and a cap pulled low, and you know her: she is this region's Gym Leader, on her day off. She leans toward you. Gym Leader: \"Don't tell anyone I'm here.\" Then all three of them taste. And put down their forks.",
+   "choices": [
+    {
+     "label": "Explain the dish.",
+     "success": {
+      "text": "You explain every recipe that went into it, and where you learned each one, and who taught you. The judges listen. They score it on every one. At the end the Gym Leader presents you with a Golden Spoon, and shakes your hand, hard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cook-final",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "golden-spoon",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. The Gym Leader looks at you over her fork. Gym Leader: \"Confident. I like that.\" The score goes up by one. The Golden Spoon is yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cook-final",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "golden-spoon",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what they think.",
+     "success": {
+      "text": "The Gym Leader takes another bite, and thinks about it properly. Gym Leader: \"It tastes like someone who looks after their team.\" She hands you the Golden Spoon herself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cook-final",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "golden-spoon",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cook-at-rest",
+   "name": "Cook a Recipe",
+   "group": "Helpers, gifts and kindness",
+   "stop": "rest",
+   "rarity": "common",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "hearts"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "recipe-known",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "A rest stop with a fire pit and a dented pot someone left for the next traveller. Your team gathers round, hopeful. You know a few recipes now.",
+   "choices": [
+    {
+     "label": "Pan-Fried Oran.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "recipe-oran",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Crisp outside, soft inside. Your team eats it standing up and goes into the next fight sturdier for it.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Pan-Fried Oran: +10% max HP",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "hp",
+          "value": 1.1
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "cook-at-rest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A stew.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "recipe-stew",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "recipe-ottilie",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ottilie's Stew, onions and all. Whatever was ailing your team, it isn't now.",
+       "effects": [
+        {
+         "kind": "cure"
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "cook-at-rest"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "A big pot of stew, and everyone gathered round it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "cook-at-rest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something special.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "recipe-special",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "recipe-feast",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ruggiero's Feast. Your whole team eats until it cannot move, and wakes whole.",
+       "effects": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "cook-at-rest"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "recipe-draft-lum",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Lum and Chesto dish: your team goes into the next fight wide awake and clear-headed.",
+       "effects": [
+        {
+         "kind": "tempEffect",
+         "label": "Lum and Chesto: +10% Special Defense",
+         "effects": [
+          {
+           "kind": "statMultiplier",
+           "stat": "spd",
+           "value": 1.1
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        },
+        {
+         "kind": "cure"
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "cook-at-rest"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "recipe-draft-sitrus",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Sitrus and Leppa dish: your team goes into the next fight with something left in reserve.",
+       "effects": [
+        {
+         "kind": "tempEffect",
+         "label": "Sitrus and Leppa: +10% max HP",
+         "effects": [
+          {
+           "kind": "statMultiplier",
+           "stat": "hp",
+           "value": 1.1
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        },
+        {
+         "kind": "restorePp"
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "cook-at-rest"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "recipe-draft-rawst",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Rawst and Aspear dish: fire and ice in one bowl, and a steadier team for it.",
+       "effects": [
+        {
+         "kind": "tempEffect",
+         "label": "Rawst and Aspear: +10% Defense",
+         "effects": [
+          {
+           "kind": "statMultiplier",
+           "stat": "def",
+           "value": 1.1
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        },
+        {
+         "kind": "cure"
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "cook-at-rest"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The pie, warm and golden. Your team is a little stronger for the next fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "A slice of pie: +10% Attack",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.1
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "cook-at-rest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just bread and a warm fire.",
+     "success": {
+      "text": "Bread and a warm fire. Nobody complains.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "cook-at-rest"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "spoon",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "golden-spoon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Golden Spoon is in your pack. With it, you can cook two dishes tonight.",
+     "hide": [
+      3
+     ],
+     "addChoices": [
+      {
+       "label": "Cook a second dish (Golden Spoon).",
+       "success": {
+        "text": "You polish the Golden Spoon on your sleeve and get the pot going again.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "cook-at-rest-2"
+         },
+         {
+          "kind": "seeAgain",
+          "eventId": "cook-at-rest"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cook-at-rest-2",
+   "name": "Cook a Second Dish",
+   "group": "Helpers, gifts and kindness",
+   "stop": "rest",
+   "rarity": "common",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "hearts"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "The Golden Spoon glints in the firelight. One more dish.",
+   "choices": [
+    {
+     "label": "Pan-Fried Oran.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "recipe-oran",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Crisp outside, soft inside. Your team eats it standing up and goes into the next fight sturdier for it.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Pan-Fried Oran: +10% max HP",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "hp",
+          "value": 1.1
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A stew.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "recipe-stew",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "recipe-ottilie",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ottilie's Stew, onions and all. Whatever was ailing your team, it isn't now.",
+       "effects": [
+        {
+         "kind": "cure"
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "party"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "A big pot of stew, and everyone gathered round it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something special.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "recipe-special",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "recipe-feast",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Ruggiero's Feast. Your whole team eats until it cannot move, and wakes whole.",
+       "effects": [
+        {
+         "kind": "heal",
+         "share": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "recipe-draft-lum",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Lum and Chesto dish: your team goes into the next fight wide awake and clear-headed.",
+       "effects": [
+        {
+         "kind": "tempEffect",
+         "label": "Lum and Chesto: +10% Special Defense",
+         "effects": [
+          {
+           "kind": "statMultiplier",
+           "stat": "spd",
+           "value": 1.1
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        },
+        {
+         "kind": "cure"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "recipe-draft-sitrus",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Sitrus and Leppa dish: your team goes into the next fight with something left in reserve.",
+       "effects": [
+        {
+         "kind": "tempEffect",
+         "label": "Sitrus and Leppa: +10% max HP",
+         "effects": [
+          {
+           "kind": "statMultiplier",
+           "stat": "hp",
+           "value": 1.1
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        },
+        {
+         "kind": "restorePp"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "recipe-draft-rawst",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The Rawst and Aspear dish: fire and ice in one bowl, and a steadier team for it.",
+       "effects": [
+        {
+         "kind": "tempEffect",
+         "label": "Rawst and Aspear: +10% Defense",
+         "effects": [
+          {
+           "kind": "statMultiplier",
+           "stat": "def",
+           "value": 1.1
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        },
+        {
+         "kind": "cure"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The pie, warm and golden. Your team is a little stronger for the next fight.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "A slice of pie: +10% Attack",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.1
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just bread and a warm fire.",
+     "success": {
+      "text": "Bread and a warm fire. Nobody complains.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

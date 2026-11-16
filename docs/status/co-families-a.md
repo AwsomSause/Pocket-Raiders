@@ -2,7 +2,7 @@
 
 Docs: `STORY_FAMILIES_1.md`, `_2`, `_3`, `_4`, `_7` in `/mnt/project-files/catalog_overhaul_pack/catalog_overhaul/` (227 catalog ids). Plan: `/mnt/project-files/plans/catalog-overhaul/PLAN.md`. Guide: `docs/catalog-overhaul.md`.
 
-- Content: `tools/events/co/families-a-<n>.ts` (helpers in `_fa.ts`) -> `npm run co:build -- families-a-<n>` -> `src/data/events/co-families-a-<n>.json`. Doc 1 = `-1` and `-2`, doc 2 = `-3`, doc 3 = `-4` and `-5`.
+- Content: `tools/events/co/families-a-<n>.ts` (helpers in `_fa.ts`) -> `npm run co:build -- families-a-<n>` -> `src/data/events/co-families-a-<n>.json`. Doc 1 = `-1` and `-2`, doc 2 = `-3`, doc 3 = `-4` and `-5`, doc 4 = `-6`, `-7`, `-8`.
 - After a build: `node tools/events/co/_fa-status.ts <date>` (status file and the table below), `node tools/events/co/_fa-flags.ts` (flag map `src/data/catalogOverhaul/flags/families-a.json`; notes for flags other categories read in `_fa-flag-notes.json`), then `npx vitest run tests/unit/coFamiliesA.test.ts tests/unit/catalogOverhaul.test.ts`.
 - Run memory is same-run only (Kice 2026-11-14). Every "past run" or "this save" in the docs is built as "earlier this run", or skipped (listed below).
 - Story fights never end the run (`friendly`); battles inside a chain pseudo-stage set `pseudo`.
@@ -11,8 +11,9 @@ Docs: `STORY_FAMILIES_1.md`, `_2`, `_3`, `_4`, `_7` in `/mnt/project-files/catal
 - Save: none.
 
 ## Where this stopped (resumed 2026-11-16, batch 3)
-- Done: docs 1, 2 and 3 (built, re-read, tested). Doc 3 is `families-a-4` (Circuit, Contests) and `-5` (Convoy, Hollow Lantern, Grunt School, Heist).
-- Still to do: docs 4, 7; placement file; update notes; browser test; `npm run check`; mark PR #1315 ready (the catalog lead combines the batch).
+- Done: docs 1 to 4 (built, re-read, tested). Doc 3 is `families-a-4` and `-5`; doc 4 is `-6` (Village, Nobody, Roots, Cooking), `-7` (Treasure Map, Last Shift, Egg in the Fire, Courier) and `-8` (Disciple, Readings, Fog Bell, Storm-Grey Coat).
+- `starter-fever-week` (listed under doc 4) is a game-event week in `gameEvents.json`, not an event: its rework (the weeks rule) is left pending for whoever reworks the weeks.
+- Still to do: doc 7; placement file; update notes; browser test; `npm run check`; mark PR #1315 ready (the catalog lead combines the batch).
 
 ## Known limits (honest list)
 Doc 1 (SF1 to SF6)
@@ -42,6 +43,20 @@ Doc 3 (SF13 to SF18)
 - Grunt School: "half its Grunts next stage" is team heat −1. The Grunt Jessa (RR45) line is not built. Dilly's basket is Berries and Sweet Berry Juice (no Potion: pack rule). The union route without signing is a 60% chance (else the stealth route).
 - Heist: the informant is fixed by region (Ruth: Kanto, Sinnoh, Kalos, Paldea, Frontier Isles, Cairnmoor; Kip: Johto, Unova, Alola, Torren, Grand, Orrery Basin; Vesna elsewhere). Keeping the ledger is a team mark (`ledger-kept`), not a preview of Admin teams. The cut is a fixed ₽1,000. The Zeraora's Promise line is not built.
 
+Doc 4 (SF19 to SF30)
+- Village That Repeats: each noon costs a node; leaving keeps it looping (it can be drawn again). Hesk's bread is a full heal now (no rest node "for the save"); Nim's apple is a Sitrus Berry. Celebi gives `sign-celebi`; counting it as a Telling is legends' to wire.
+- The Nobody: the key is a stop four nodes on. `nobody-told` is read but only other rows could set it (no share-a-secret line exists yet), so the dock ambush never happens yet. "Jenny's arc is good" is not checked: Nell always goes. "They caught the quiet one" is a line in the No outcome. Nell's second Pokémon is a Dark-type.
+- Starter's Roots: every place can be visited; the starter's own type (and the doc's closest types) gives the home version and stamps `roots-own`; the Home scene comes two regions later. "Stays home" is not built (no effect removes a chosen party Pokémon): the starter always comes back. The visit gifts that are cross-run (the orchard tree "in a later run") are flags. The pylon's charge for Electric starters is +10% to Electric moves for the region; others get +1 Speed point.
+- Cooking: recipes are cooked at a rest stop (`cook-at-rest`, drawn at rest stops once a recipe is known): one dish, two with the Golden Spoon. The timing and cook-off minigames are chance rolls (75% and 60%); "scored by flavour by nature" is a 60% roll. The pie and draft dishes are +10% to one stat for the next battle. The final needs three wins (`cook-wins`).
+- Treasure Map: pieces 3 and 4 absorb the Torn Treasure Map chain. "One Rare item of the player's choice" is a random rare held item. The Past Champion's questline beat is the flag `map-champion-met`. Cross-run chest notes are not built.
+- Last Shift: the three stations are one choice (a Steel-type, an Electric-type, or a node by hand and a Klink). The Crestline Bell is a held Covert Cloak (blocks moves' extra effects, flinching among them). The Baxter museum (cross-run) is not built.
+- Egg in the Fire: the egg (Larvesta) hatches after three stages. Keeping it warm is a rest-stop scene for the rest of that region (`eggWarm`: sooner hatch, more friendship); devoted/normal/resentful temperaments and Morning Sun are not built. Heatran's Sign is `sign-heatran`.
+- Courier's Egg: the egg is one of the twelve species (random). Three ambushes end the hunt (two with the heist ledger). Running with Sorrel-Jay ends at the next region with a Smoke Ball. Officer Jenny's lab sends a different egg a region later.
+- Disciple: the three tests are my own scenes (a promise, a refused easy win, training the weakest), not reads of other rows' promises. Each tower is three floors then two. Kubfu does not join until the top: the reward is Urshifu. With fewer than three tests the missed tests come round again once.
+- Readings: the three readings are stops a node apart. "Balm rules" is a Berry. The eruption is a strong wild battle next region. Sonnet's meter reveals the map's stops once.
+- Bell in the Fog: following is a small heal (no fog hazards exist to skip). Halden's Bell is a flag (`halden-bell`); the ambush warning is not built. "A free rest every run" is a full heal once.
+- Storm-Grey Coat: the bird is set by region (Articuno: Sinnoh, Kalos, Galar, Grand, Tidewrack Reaches; Zapdos: Kanto, Unova, Paldea, Torren, Frontier Isles, Orrery Basin; Moltres elsewhere); the L2 (Three Birds Trial) exclusion is not built. Signs are `sign-<bird>` +2. Aurel's coat is text only.
+
 ## Re-read table
 Every row was re-read against its doc section after building (date = the re-read).
 <!-- table:start -->
@@ -52,22 +67,22 @@ Every row was re-read against its doc section after building (date = the re-read
 | `crisis-report-flood` | STORY_FAMILIES_1 SF1.2 Report: The Flood | built, re-read 2026-11-15 |
 | `crisis-report-industry` | STORY_FAMILIES_1 SF1.3 Report: The Factory | built, re-read 2026-11-15 |
 | `crisis-report-outbreak` | STORY_FAMILIES_1 SF1.4 Report: The Fever | built, re-read 2026-11-15 |
-| `ember-vent-1` | STORY_FAMILIES_4 SF25.2 Ash and Gravel | pending |
-| `ember-vent-2` | STORY_FAMILIES_4 SF25.3 The Lava Bridge | pending |
-| `ember-vent-entrance` | STORY_FAMILIES_4 SF25.1 Something Breathing | pending |
-| `ember-vent-final` | STORY_FAMILIES_4 SF25.4 The Pool of Fire | pending |
-| `fog-guide` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
-| `foundry-1` | STORY_FAMILIES_4 SF24.2 Hungry Machines | pending |
-| `foundry-2` | STORY_FAMILIES_4 SF24.3 The Foreman | pending |
-| `foundry-entrance` | STORY_FAMILIES_4 SF24.1 Mid-Shift | pending |
-| `foundry-final` | STORY_FAMILIES_4 SF24.4 One Lit Button | pending |
-| `galar-dynamax-investigator` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
-| `galar-kubfu-disciple` | STORY_FAMILIES_4 SF27.1 The Cub | pending |
-| `galar-kubfu-tower` | STORY_FAMILIES_4 SF27.2 The Two Towers | pending |
+| `ember-vent-1` | STORY_FAMILIES_4 SF25.2 Ash and Gravel | built, re-read 2026-11-16 |
+| `ember-vent-2` | STORY_FAMILIES_4 SF25.3 The Lava Bridge | built, re-read 2026-11-16 |
+| `ember-vent-entrance` | STORY_FAMILIES_4 SF25.1 Something Breathing | built, re-read 2026-11-16 |
+| `ember-vent-final` | STORY_FAMILIES_4 SF25.4 The Pool of Fire | built, re-read 2026-11-16 |
+| `fog-guide` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | built, re-read 2026-11-16 |
+| `foundry-1` | STORY_FAMILIES_4 SF24.2 Hungry Machines | built, re-read 2026-11-16 |
+| `foundry-2` | STORY_FAMILIES_4 SF24.3 The Foreman | built, re-read 2026-11-16 |
+| `foundry-entrance` | STORY_FAMILIES_4 SF24.1 Mid-Shift | built, re-read 2026-11-16 |
+| `foundry-final` | STORY_FAMILIES_4 SF24.4 One Lit Button | built, re-read 2026-11-16 |
+| `galar-dynamax-investigator` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | built, re-read 2026-11-16 |
+| `galar-kubfu-disciple` | STORY_FAMILIES_4 SF27.1 The Cub | built, re-read 2026-11-16 |
+| `galar-kubfu-tower` | STORY_FAMILIES_4 SF27.2 The Two Towers | built, re-read 2026-11-16 |
 | `world-disaster-blizzard` | STORY_FAMILIES_1 SF1.5 The Fifth Strand: Wildfire / Quake / Blizzard | built, re-read 2026-11-15 |
 | `world-disaster-flood` | STORY_FAMILIES_1 SF1.2 Report: The Flood | merged into `crisis-report-flood`, re-read 2026-11-16 |
 | `world-disaster-quake` | STORY_FAMILIES_1 SF1.5 The Fifth Strand: Wildfire / Quake / Blizzard | built, re-read 2026-11-15 |
-| `world-egg-delivery` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
+| `world-egg-delivery` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | built, re-read 2026-11-16 |
 | `wx-ancient-lava-tube` | STORY_FAMILIES_7 The rule | pending |
 | `wx-black-ice-road` | STORY_FAMILIES_7 The rule | pending |
 | `wx-dust-devil` | STORY_FAMILIES_7 The rule | pending |
@@ -104,8 +119,8 @@ Every row was re-read against its doc section after building (date = the re-read
 | `camp-rival-trail` | STORY_FAMILIES_7 SF45.7 Its Rival ( | pending |
 | `camp-talk` | STORY_FAMILIES_7 SF45.8 Quiet Talk ( | pending |
 | `center-lady` | STORY_FAMILIES_7 SF43.2 The Center Lady ( | pending |
-| `chef-cook-together` | STORY_FAMILIES_4 SF22.1 Fast Hands | pending |
-| `cooking-contest` | STORY_FAMILIES_4 SF22.2 Cook for Your Team | pending |
+| `chef-cook-together` | STORY_FAMILIES_4 SF22.1 Fast Hands | built, re-read 2026-11-16 |
+| `cooking-contest` | STORY_FAMILIES_4 SF22.2 Cook for Your Team | built, re-read 2026-11-16 |
 | `dog-walker` | STORY_FAMILIES_7 SF46.1 Walk My Growlithe ( | pending |
 | `dog-walker-pays` | STORY_FAMILIES_7 SF46.2 Biscuit Comes Home ( | pending |
 | `elders-last-wish-1` | STORY_FAMILIES_1 SF4.1 Three Things | built, re-read 2026-11-15 |
@@ -120,9 +135,9 @@ Every row was re-read against its doc section after building (date = the re-read
 | `funeral-respects` | STORY_FAMILIES_7 SF49. A QUIET FUNERAL | pending |
 | `gift-from-mom` | STORY_FAMILIES_7 SF43.3 From Mom ( | pending |
 | `gift-the-keeper` | STORY_FAMILIES_7 SF50. THE EMPTY SHELF | pending |
-| `grandmas-recipe` | STORY_FAMILIES_4 SF22.3 Grandma's Stew | pending |
+| `grandmas-recipe` | STORY_FAMILIES_4 SF22.3 Grandma's Stew | built, re-read 2026-11-16 |
 | `gym-eve-tone` | STORY_FAMILIES_7 SF51. EVE OF THE GYM | pending |
-| `hold-the-egg` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
+| `hold-the-egg` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | built, re-read 2026-11-16 |
 | `kind-hiker` | STORY_FAMILIES_7 SF43.4 Trail Mix ( | pending |
 | `kind-ranger` | STORY_FAMILIES_7 SF43.5 Check-Up ( | pending |
 | `kind-rival-visit` | STORY_FAMILIES_7 SF43.6 Good Luck Out There ( | pending |
@@ -148,13 +163,13 @@ Every row was re-read against its doc section after building (date = the re-read
 | `peddler-3` | STORY_FAMILIES_1 SF5.6 The Last Delivery | built, re-read 2026-11-15 |
 | `pen-pal-letter` | STORY_FAMILIES_1 STORY FAMILIES, PART 1 | built, re-read 2026-11-15 |
 | `pen-pal-mailbox` | STORY_FAMILIES_1 STORY FAMILIES, PART 1 | built, re-read 2026-11-15 |
-| `pie-contest-judge` | STORY_FAMILIES_4 SF22.4 Four Pies | pending |
+| `pie-contest-judge` | STORY_FAMILIES_4 SF22.4 Four Pies | built, re-read 2026-11-16 |
 | `pokemon-hospice` | STORY_FAMILIES_7 SF54. THE HOSPICE | pending |
 | `quiet-hermit` | STORY_FAMILIES_7 SF44.5 The Hermit ( | pending |
 | `ranger-trust-1` | STORY_FAMILIES_2 SF8.1 Mind the Bear | built, re-read 2026-11-15 |
 | `ranger-trust-2` | STORY_FAMILIES_2 SF8.2 Tell Me About the Road | built, re-read 2026-11-15 |
 | `ranger-trust-3` | STORY_FAMILIES_2 SF8.3 A Spare Bedroll | built, re-read 2026-11-15 |
-| `rescue-team` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
+| `rescue-team` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | built, re-read 2026-11-16 |
 | `share-a-meal` | STORY_FAMILIES_7 SF44.6 Always Enough ( | pending |
 | `stray-kitten` | STORY_FAMILIES_7 SF47.5 The Stray ( | pending |
 | `stuck-pokemon` | STORY_FAMILIES_7 SF47.6 Stuck in the Fence ( | pending |
@@ -176,18 +191,18 @@ Every row was re-read against its doc section after building (date = the re-read
 | `legendary-blessing` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | built, re-read 2026-11-15 |
 | `lost-at-sea` | STORY_FAMILIES_1 STORY FAMILIES, PART 1 | built, re-read 2026-11-15 |
 | `mudslide-rescue` | STORY_FAMILIES_1 STORY FAMILIES, PART 1 | built, re-read 2026-11-15 |
-| `r137-ghostly-fog-bank` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
+| `r137-ghostly-fog-bank` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | built, re-read 2026-11-16 |
 | `sanctuary-attack` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | built, re-read 2026-11-15 |
 | `sanctuary-found` | STORY_FAMILIES_2 SF9 The Blissful Sanctuary | merged into `wanderer-arrives`, re-read 2026-11-16 |
 | `sanctuary-guardian` | STORY_FAMILIES_2 SF9 The Blissful Sanctuary | merged into `blessing-trial`, re-read 2026-11-16 |
 | `wanderer-arrives` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | built, re-read 2026-11-15 |
-| `mr-spirit-cache` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
-| `mr-spirit-guide` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
+| `mr-spirit-cache` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | built, re-read 2026-11-16 |
+| `mr-spirit-guide` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | merged into `fog-guide`, re-read 2026-11-16 |
 | `mr-vanished-village` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | merged into `ghost-town-gate`, re-read 2026-11-16 |
 | `battle-tower-floor` | STORY_FAMILIES_3 The rungs | built, re-read 2026-11-16 |
 | `beauty-pageant` | STORY_FAMILIES_3 SF14.2 Your Lead Is Entered! | built, re-read 2026-11-16 |
 | `champion-cup` | STORY_FAMILIES_3 The rungs | built, re-read 2026-11-16 |
-| `chefs-cook-off-battle` | STORY_FAMILIES_4 SF22.5 Beat Me and Eat | pending |
+| `chefs-cook-off-battle` | STORY_FAMILIES_4 SF22.5 Beat Me and Eat | built, re-read 2026-11-16 |
 | `contest-hall` | STORY_FAMILIES_3 SF14.1 Beauty, Cool or Cute? | built, re-read 2026-11-16 |
 | `contest-judges-challenge` | STORY_FAMILIES_3 SF14.3 Style, Not Just Strength | built, re-read 2026-11-16 |
 | `ev-trainer-tournament` | STORY_FAMILIES_3 The rungs | built, re-read 2026-11-16 |
@@ -213,10 +228,10 @@ Every row was re-read against its doc section after building (date = the re-read
 | `convoy-merchant-cart` | STORY_FAMILIES_3 SF15.3 The Merchant's Cart | built, re-read 2026-11-16 |
 | `convoy-shelter` | STORY_FAMILIES_3 SF15.5 The Shelter | built, re-read 2026-11-16 |
 | `convoy-wounded-ranger` | STORY_FAMILIES_3 SF15.4 A Wounded Ranger | built, re-read 2026-11-16 |
-| `hunt-clue-feather` | STORY_FAMILIES_4 SF30.1 A Feather That Hums | pending |
-| `hunt-clue-scorch` | STORY_FAMILIES_4 SF30.2 The Burned Ring | pending |
-| `hunt-clue-witness` | STORY_FAMILIES_4 SF30.3 The Witness | pending |
-| `hunt-lair` | STORY_FAMILIES_4 SF30.4 Where the Storm Rests | pending |
+| `hunt-clue-feather` | STORY_FAMILIES_4 SF30.1 A Feather That Hums | built, re-read 2026-11-16 |
+| `hunt-clue-scorch` | STORY_FAMILIES_4 SF30.2 The Burned Ring | built, re-read 2026-11-16 |
+| `hunt-clue-witness` | STORY_FAMILIES_4 SF30.3 The Witness | built, re-read 2026-11-16 |
+| `hunt-lair` | STORY_FAMILIES_4 SF30.4 Where the Storm Rests | built, re-read 2026-11-16 |
 | `spooky-costume-judge` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
 | `spooky-detour-battle` | STORY_FAMILIES_3 SF16.2 The Haunted Detour | built, re-read 2026-11-16 |
 | `spooky-hexed-keeper` | STORY_FAMILIES_3 SF16.11 The Hexed Keeper | built, re-read 2026-11-16 |
@@ -232,33 +247,33 @@ Every row was re-read against its doc section after building (date = the re-read
 | `vt-grunt-school` | STORY_FAMILIES_3 SF17.1 Villain Grunt School | built, re-read 2026-11-16 |
 | `vt-grunt-union-strike` | STORY_FAMILIES_3 SF17.2 Grunt Union Strike | built, re-read 2026-11-16 |
 | `vt-pyromaniac-sweep` | STORY_FAMILIES_1 STORY FAMILIES, PART 1 | built, re-read 2026-11-15 |
-| `vt-stolen-egg-lab` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
-| `th-map-1` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | pending |
-| `th-map-2` | STORY_FAMILIES_4 SF23 The Treasure Map | pending |
-| `th-map-3` | STORY_FAMILIES_4 SF23 The Treasure Map | pending |
-| `th-map-4` | STORY_FAMILIES_4 SF23 The Treasure Map | pending |
-| `th-map-5` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | pending |
-| `th-treasure` | STORY_FAMILIES_4 SF23.6 X Marks the Spot | pending |
+| `vt-stolen-egg-lab` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | built, re-read 2026-11-16 |
+| `th-map-1` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | built, re-read 2026-11-16 |
+| `th-map-2` | STORY_FAMILIES_4 SF23 The Treasure Map | built, re-read 2026-11-16 |
+| `th-map-3` | STORY_FAMILIES_4 SF23 The Treasure Map | built, re-read 2026-11-16 |
+| `th-map-4` | STORY_FAMILIES_4 SF23 The Treasure Map | built, re-read 2026-11-16 |
+| `th-map-5` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | built, re-read 2026-11-16 |
+| `th-treasure` | STORY_FAMILIES_4 SF23.6 X Marks the Spot | built, re-read 2026-11-16 |
 | `face-aspiring-rival` | STORY_FAMILIES_1 STORY FAMILIES, PART 1 | built, re-read 2026-11-15 |
-| `starter-ember-shrine` | STORY_FAMILIES_4 SF21.1 The Ember Shrine | pending |
-| `starter-first-pal` | STORY_FAMILIES_4 SF21.2 The First Pal's Nest | pending |
-| `starter-old-orchard` | STORY_FAMILIES_4 SF21.3 The Old Orchard | pending |
-| `starter-power-hum` | STORY_FAMILIES_4 SF21.4 The Hum | pending |
-| `starter-tide-pool` | STORY_FAMILIES_4 SF21.5 The Tide Pool | pending |
-| `rk-hidden-quest` | STORY_FAMILIES_4 SF20.1 A Secret Errand | pending |
-| `rk-hidden-quest-payoff` | STORY_FAMILIES_4 SF20.2 Kept Your Eyes Open | pending |
+| `starter-ember-shrine` | STORY_FAMILIES_4 SF21.1 The Ember Shrine | built, re-read 2026-11-16 |
+| `starter-first-pal` | STORY_FAMILIES_4 SF21.2 The First Pal's Nest | built, re-read 2026-11-16 |
+| `starter-old-orchard` | STORY_FAMILIES_4 SF21.3 The Old Orchard | built, re-read 2026-11-16 |
+| `starter-power-hum` | STORY_FAMILIES_4 SF21.4 The Hum | built, re-read 2026-11-16 |
+| `starter-tide-pool` | STORY_FAMILIES_4 SF21.5 The Tide Pool | built, re-read 2026-11-16 |
+| `rk-hidden-quest` | STORY_FAMILIES_4 SF20.1 A Secret Errand | built, re-read 2026-11-16 |
+| `rk-hidden-quest-payoff` | STORY_FAMILIES_4 SF20.2 Kept Your Eyes Open | built, re-read 2026-11-16 |
 | `rk-third-wheel` | STORY_FAMILIES_2 STORY FAMILIES, PART 2 | merged into `companion-meet`, re-read 2026-11-16 |
 | `charity-drive` | STORY_FAMILIES_7 SF43.12 The Orphanage Stall ( | pending |
 | `charity-favor` | STORY_FAMILIES_7 SF43.14 The Favour Returned ( | pending |
-| `cooking-draft` | STORY_FAMILIES_4 SF22.6 The Draft | pending |
-| `cooking-final` | STORY_FAMILIES_4 SF22.7 Three Silent Judges | pending |
+| `cooking-draft` | STORY_FAMILIES_4 SF22.6 The Draft | built, re-read 2026-11-16 |
+| `cooking-final` | STORY_FAMILIES_4 SF22.7 Three Silent Judges | built, re-read 2026-11-16 |
 | `graveyard-vigil` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
 | `heist-go` | STORY_FAMILIES_3 SF18.2 The Heist: Execution | built, re-read 2026-11-16 |
 | `heist-plan` | STORY_FAMILIES_3 SF18.1 The Heist Plan | built, re-read 2026-11-16 |
 | `surf-rescue` | STORY_FAMILIES_1 STORY FAMILIES, PART 1 | built, re-read 2026-11-15 |
-| `time-loop-2` | STORY_FAMILIES_4 SF19.2 Ready This Time | pending |
-| `time-loop-3` | STORY_FAMILIES_4 SF19.3 The Baker Remembers | pending |
-| `time-loop-village` | STORY_FAMILIES_4 SF19.1 Noon | pending |
+| `time-loop-2` | STORY_FAMILIES_4 SF19.2 Ready This Time | built, re-read 2026-11-16 |
+| `time-loop-3` | STORY_FAMILIES_4 SF19.3 The Baker Remembers | built, re-read 2026-11-16 |
+| `time-loop-village` | STORY_FAMILIES_4 SF19.1 Noon | built, re-read 2026-11-16 |
 | `umbrella-share` | STORY_FAMILIES_7 SF43.13 The Umbrella ( | pending |
 | `spooky-candle-vigil` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
 | `spooky-graveyard-dig` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
@@ -268,10 +283,10 @@ Every row was re-read against its doc section after building (date = the re-read
 | `spooky-pumpkin-king` | STORY_FAMILIES_3 SF16.12 The Pumpkin King and the Midnight Parade | built, re-read 2026-11-16 |
 | `spooky-pumpkin-patch` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
 | `spooky-trick-or-treat` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
-| `dg-treasure-dig-a` | STORY_FAMILIES_4 SF23.6 X Marks the Spot | pending |
-| `dg-treasure-dig-b` | STORY_FAMILIES_4 The Chest ( | pending |
-| `dg-treasure-dig-c` | STORY_FAMILIES_4 Daylight ( | pending |
-| `ovc-treasure-map-s1` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | pending |
-| `ovc-treasure-map-s2` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | pending |
+| `dg-treasure-dig-a` | STORY_FAMILIES_4 SF23.6 X Marks the Spot | built, re-read 2026-11-16 |
+| `dg-treasure-dig-b` | STORY_FAMILIES_4 The Chest ( | built, re-read 2026-11-16 |
+| `dg-treasure-dig-c` | STORY_FAMILIES_4 Daylight ( | built, re-read 2026-11-16 |
+| `ovc-treasure-map-s1` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | merged into `th-map-3`, re-read 2026-11-16 |
+| `ovc-treasure-map-s2` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | merged into `th-map-4`, re-read 2026-11-16 |
 | `starter-fever-week` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |
 <!-- table:end -->

@@ -6,7 +6,10 @@
   "sanctuary-found": "wanderer-arrives",
   "sanctuary-guardian": "blessing-trial",
   "blissful-encounter": "hurt-wanderer",
-  "blissful-awakening": "legendary-blessing"
+  "blissful-awakening": "legendary-blessing",
+  "ovc-treasure-map-s1": "th-map-3",
+  "ovc-treasure-map-s2": "th-map-4",
+  "mr-spirit-guide": "fog-guide"
  },
  "rule": {},
  "scrapped": []

@@ -1,0 +1,2580 @@
+{
+ "catalogOverhaul": "families-a",
+ "override": true,
+ "remove": [
+  "mr-spirit-guide"
+ ],
+ "events": [
+  {
+   "id": "galar-kubfu-disciple",
+   "name": "The Wandering Disciple",
+   "group": "Galar",
+   "rarity": "rare",
+   "tags": [
+    "Region",
+    "Pokémon",
+    "Story"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "intro": "An old martial-arts master sits cross-legged by the road, very straight, very still. Next to him, a small bear cub in exactly the same pose, trying very hard and wobbling. Master Hiro: \"This is Kubfu. It doesn't follow strength. It follows sincerity.\" The cub opens one eye and looks at you. Hiro: \"It's been watching you since the last town. If you want it, show it three things.\" He counts them on his fingers. \"Keep a promise. Refuse an easy win. Train with a Pokémon you never use.\"",
+   "choices": [
+    {
+     "label": "I'll try.",
+     "success": {
+      "text": "Hiro nods. Kubfu closes its eye again, but you notice it follows you down the road, a long way back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-on",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-promise",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why me?",
+     "success": {
+      "text": "Hiro: \"It didn't say.\" He shrugs. \"It doesn't say much.\" Kubfu is already following you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-on",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-promise",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'm not that kind of trainer.",
+     "success": {
+      "text": "Hiro: \"That's sincere, at least.\" He almost smiles. Kubfu gets up and follows you anyway, at a distance, scowling, as if it is going to prove you wrong.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-doubted",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-promise",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "kubfu-test-promise",
+   "name": "A Promise",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kubfu-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kubfu-test-1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A small boy at a crossroads with a Wooloo on a string, crying. He has lost his way home. You tell him you will walk him there, if he waits here while you clear the road. Kubfu, at the edge of the trees, is watching.",
+   "choices": [
+    {
+     "label": "Come back for him.",
+     "success": {
+      "text": "You clear the road, and you come back, though it is out of your way, and he is still there, and you walk him home. Kubfu has come a little closer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-tests",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-test-1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-refuse",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send someone else.",
+     "success": {
+      "text": "You flag down a passing ranger to take him. It is sensible. Kubfu turns its back.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-refuse",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "kubfu-test-refuse",
+   "name": "An Easy Win",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kubfu-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kubfu-test-2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A trainer's Pokémon slips on a wet stone at the start of your match, and turns its ankle, and the trainer looks at you, white. Trainer: \"You can take the win. It's fair. It's the rules.\" Kubfu is sitting on a fence post, watching.",
+   "choices": [
+    {
+     "label": "Refuse it. We'll play when it's healed.",
+     "success": {
+      "text": "You shake your head. You sit with them while their Pokémon is strapped up, and you play the match the next morning, properly. Kubfu jumps down off the fence post.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-tests",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-test-2",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-train",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the win.",
+     "success": {
+      "text": "You take it. It is fair. It is the rules. Kubfu stays on its fence post.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-train",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "kubfu-test-train",
+   "name": "The One You Never Use",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kubfu-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kubfu-test-3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A training ground by a river. Kubfu sits on the bank and looks, very pointedly, at the Pokémon of yours that never gets to lead.",
+   "choices": [
+    {
+     "label": "Train with it all day.",
+     "success": {
+      "text": "You put it at the front, and you train with it all day, through three practice battles and a lot of falling over. By the end it is standing differently. Kubfu walks over and sits down next to you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-tests",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-test-3",
+        "amount": 1
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "weakest"
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Not today. Kubfu looks at the one you never use, and then at you, and sighs like an old man.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "galar-kubfu-tower",
+   "name": "The Tower Choice",
+   "group": "Galar",
+   "rarity": "rare",
+   "tags": [
+    "Region",
+    "Pokémon",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kubfu-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kubfu-tests",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kubfu-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "room": false,
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#2a3a7a",
+    "effect": "float"
+   },
+   "callback": true,
+   "intro": "Two towers above the mist, one black as a closed eye, one with water pouring down every side of it like a waterfall standing up. Hiro stands between them. He will not choose. Hiro: \"Kubfu learns from the tower it climbs. Dark teaches it to strike once and end it. Water teaches it to keep coming.\" He looks at you. \"It'll climb the one you walk to. Don't think about what's stronger. Think about what you are.\"",
+   "choices": [
+    {
+     "label": "The Tower of Darkness.",
+     "success": {
+      "text": "You walk to the dark tower. Kubfu runs ahead of you to the door.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "kubfu-dark-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Tower of Waters.",
+     "success": {
+      "text": "You walk to the water tower. Kubfu runs ahead of you to the door.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "kubfu-water-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let Kubfu pick.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "meter",
+         "key": "goodEvil",
+         "side": "positive",
+         "atLeast": 1
+        }
+       ],
+       "text": "You stand still. Kubfu looks at you for a long time, as if it is reading everything you have done this run. Then it turns to the tower of waters: you have been kind, again and again, and it has noticed.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "kubfu-chose",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "kubfu-water-1"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You stand still. Kubfu looks at you for a long time, as if it is reading everything you have done this run. Then it turns to the dark tower: you have been decisive, and it has noticed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-chose",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "kubfu-dark-1"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "doubted",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kubfu-doubted",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Hiro laughs, suddenly, a big surprised laugh. Hiro: \"Not that kind of trainer.\" He shakes his head. \"Look at you.\""
+    }
+   ]
+  },
+  {
+   "id": "kubfu-dark-1",
+   "name": "The Tower of Darkness: The First Floors",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "The Tower of Darkness. Inside, it is quiet as a held breath, and every floor is one opponent waiting in the dark for the one blow that ends it. Kubfu goes up the first step with its fists closed.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "Three floors, one after another.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Tower Disciples",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [
+        "dark"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "kubfu-dark-2"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "seeAgain",
+         "eventId": "galar-kubfu-tower"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "kubfu-dark-2",
+   "name": "The Tower of Darkness: The Top",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "Two floors left. Kubfu is breathing hard. It looks up at you, and then up the stairs, and goes on without waiting to be told.",
+   "choices": [
+    {
+     "label": "Climb to the top.",
+     "success": {
+      "text": "The last two floors.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Tower Masters",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "dark"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "urshifu"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kubfu-dark",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kubfu-done",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Kubfu climbed the Tower of Darkness and came down as Urshifu, one strike and done",
+         "importance": 85
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "seeAgain",
+         "eventId": "galar-kubfu-tower"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "kubfu-water-1",
+   "name": "The Tower of Waters: The First Floors",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "The Tower of Waters. Water runs down every wall and across every floor, and never stops. Every opponent here is patient. Kubfu goes up the first step, and the water runs over its feet, and it keeps going.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "Three floors, one after another.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Tower Disciples",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "kubfu-water-2"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "seeAgain",
+         "eventId": "galar-kubfu-tower"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "kubfu-water-2",
+   "name": "The Tower of Waters: The Top",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "Two floors left. Kubfu is breathing hard. It looks up at you, and then up the stairs, and goes on without waiting to be told.",
+   "choices": [
+    {
+     "label": "Climb to the top.",
+     "success": {
+      "text": "The last two floors.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Tower Masters",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "urshifu-rapid-strike"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kubfu-water",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kubfu-done",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Kubfu climbed the Tower of Waters and came down as Urshifu, a river that keeps coming",
+         "importance": 85
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "seeAgain",
+         "eventId": "galar-kubfu-tower"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "kubfu-not-yet",
+   "name": "Not Yet",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kubfu-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kubfu-tried",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kubfu-tests",
+     "atLeast": 0,
+     "atMost": 2
+    },
+    {
+     "kind": "flag",
+     "key": "kubfu-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "kubfu-wait",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The two towers, above the mist. Kubfu walks to the foot of them, and stops, and sits down, and will not climb. Hiro puts a hand on its head. Hiro: \"Not yet. Come back.\"",
+   "choices": [
+    {
+     "label": "We'll come back.",
+     "success": {
+      "text": "The towers will be there next region. So will Kubfu, watching you on the road for the tests you missed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-wait",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-promise",
+        "nodes": 3
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-refuse",
+        "nodes": 5
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-train",
+        "nodes": 7
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "galar-dynamax-investigator",
+   "name": "The Dynamax Investigator",
+   "group": "Galar",
+   "rarity": "uncommon",
+   "tags": [
+    "Region",
+    "Mystery",
+    "Story"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.sonia"
+    ],
+    "tint": "#8a2a5a",
+    "effect": "glint"
+   },
+   "intro": "A field of long grass, and a researcher crouched in the middle of it over a humming meter, frowning at the needle. Dr. Sonnet: \"The Dynamax energy here is climbing and I can't explain why.\" She looks up at you over her glasses. \"Do you have a minute?\" She thinks. \"Three, really. Three places.\"",
+   "choices": [
+    {
+     "label": "Help.",
+     "success": {
+      "text": "Sonnet hands you the spare probe and a pencil. Sonnet: \"First place is a well. Come on.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-on",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-well",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's Dynamax energy?",
+     "success": {
+      "text": "Sonnet: \"What makes Pokémon giant.\" She taps the ground with the probe. \"It comes from underground. From something asleep.\" Then she hands you the spare probe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "readings-asked",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-well",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No time.",
+     "success": {
+      "text": "Sonnet nods, already looking at the meter again. You walk on. Behind you the needle climbs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-skipped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "readings-erupts",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "readings-well",
+   "name": "A Well",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.sonia"
+    ],
+    "tint": "#8a2a5a",
+    "effect": "glint"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "readings-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "readings-capped",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "readings-erupts",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "readings-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "An old stone well. Sonnet's meter spins the moment she holds it over the edge. Down in the dark water, a wild Pokémon looks up at you, and it is twice the size it should be.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You lower a bucket of berries and talk to it, softly, for a long time. Slowly it shrinks back to itself, and blinks up at you, puzzled.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-stone",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It comes up out of the well like a wave.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-stone",
+        "nodes": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "water"
+       ],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Just measure.",
+     "success": {
+      "text": "Sonnet writes down the number. She writes it again, as if it might change.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-stone",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "readings-stone",
+   "name": "A Stone Circle",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.sonia"
+    ],
+    "tint": "#8a2a5a",
+    "effect": "glint"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "readings-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "readings-capped",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "readings-erupts",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A ring of standing stones on a hill. Red light is seeping up through the cracks between them, slow as blood. Sonnet's meter is screaming. Sonnet: \"This is the vent.\"",
+   "choices": [
+    {
+     "label": "Cap it now.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "rock",
+        "steel"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Rock- or Steel-type puts itself across the widest crack and holds there while you heap stones on the rest. The red light goes out, one crack at a time. The meter falls silent.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-capped",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-hill",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Measure and go.",
+     "success": {
+      "text": "You measure, and go. Behind you the red light keeps seeping.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-erupts",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-hill",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "readings-hill",
+   "name": "A Hill",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.sonia"
+    ],
+    "tint": "#8a2a5a",
+    "effect": "glint"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "readings-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "readings-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The top of a hill, the last reading. Sonnet sets up the meter. And for one second, the whole sky goes red. Everyone in the valley below stops and looks up. Then it is blue again. Sonnet is very quiet. Sonnet: \"...That's not from here.\" She looks at the ground. \"That's from under everything.\"",
+   "choices": [
+    {
+     "label": "What's under everything?",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "blessing-eternatus",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Sonnet: \"Something that fell a long time ago.\" The red stays behind your eyes for a long time; whatever is under everything, it looked at you. Sonnet gives you her meter.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "readings-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-eternatus",
+         "amount": 2
+        },
+        {
+         "kind": "revealStops"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Sonnet: \"Something that fell a long time ago.\" She packs up the meter and then, after a moment, holds it out to you. Sonnet: \"Keep it. It'll show you where the energy pools.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-eternatus",
+        "amount": 1
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Record it.",
+     "success": {
+      "text": "You write it down: the time, the colour, the second it lasted. Sonnet signs it under you. Then she gives you her meter. Sonnet: \"You'll want it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-done",
+        "amount": 1
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "readings-erupt",
+   "name": "The Power Spot",
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.sonia"
+    ],
+    "tint": "#8a2a5a",
+    "effect": "glint"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "readings-erupts",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "readings-erupts",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "readings-erupted",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "readings-capped",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The ground splits on the road ahead with a sound like a door slamming in the earth, and red light pours up out of it, and something comes up with the light: a wild Pokémon, enormous, furious, Dynamax energy crackling off it in sheets.",
+   "choices": [
+    {
+     "label": "Stand your ground.",
+     "success": {
+      "text": "It is huge, and it does not want to be.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-erupted",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Go round. (a node)",
+     "success": {
+      "text": "You go the long way round, a node of it, and leave it roaring at the sky.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "readings-erupted",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "r137-ghostly-fog-bank",
+   "name": "Ghostly Fog Bank",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "gastly",
+    "tint": "#1c1428",
+    "effect": "fog"
+   },
+   "intro": "A fog bank rolls over the road, white and heavy, and swallows it. Shapes drift in it, at the edge of seeing: people, maybe, or Pokémon, or neither. They seem to want something. Your Ghost-types, if you have any, have gone very still. Then, somewhere ahead, a bell. Once.",
+   "choices": [
+    {
+     "label": "Follow the bell.",
+     "success": {
+      "text": "You walk toward the sound.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-on",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fog-guide"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for the fog to lift. (a node)",
+     "success": {
+      "text": "You wait. It takes a node. The fog lifts at last, all at once, and the road is empty. Far off, the bell rings once more, as if disappointed.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out.",
+     "success": {
+      "text": "You call out. The bell answers: twice. Then a light comes toward you through the white.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fog-called",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fog-guide"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fog-guide",
+   "name": "A Guide in the Fog",
+   "group": "Exploration",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#242a32",
+    "effect": "fog"
+   },
+   "intro": "A lantern bobs toward you through the fog, and under it a guide steps out: an old coat, a walking stick, a brass bell on their belt. Guide: \"I know this ground.\" Their voice is calm and kind. \"Keep to my left. There's a drop on the right you won't see until you're in it.\" They turn and walk on, and you notice their boots do not make a sound.",
+   "choices": [
+    {
+     "label": "Follow.",
+     "success": {
+      "text": "You follow. Three fog-bound stretches of road, and not one hazard, not one wrong step. The guide never looks back to check on you, and never needs to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-followed",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "rescue-team",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who are you?",
+     "success": {
+      "text": "Guide: \"Ask me at the end.\" They walk on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-asked",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "rescue-team",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Off the path?",
+     "success": {
+      "text": "The guide stops. For a long moment they do not say anything. Guide: \"There's something there I'd like found.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-cache",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mr-spirit-cache"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "crestline",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "shift-rested",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The bell on their belt catches the lantern light. Stamped on its rim: CRESTLINE."
+    }
+   ]
+  },
+  {
+   "id": "rescue-team",
+   "name": "Rescue Team Call",
+   "group": "Helpers, gifts and kindness",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "effect": "rain"
+   },
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fog-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "fog-rescue-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "In the fog, ropes and voices: a Rescue Team, three people roped together and an Arcanine with its nose to the ground. Their leader pushes her hood back. Moss: \"A hiker's lost in this. Two days.\" She is hoarse from calling. \"We can't find the path.\" Beside you, the guide says nothing at all. Moss does not seem to see them.",
+   "choices": [
+    {
+     "label": "Ask the guide.",
+     "success": {
+      "text": "You look at the guide. The guide points, without a word, down into the white. You go where they point, and in a hollow under a rock there is the hiker, alive, so cold she cannot speak, and Moss's team gets her out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-rescue-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fog-hiker",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "fog-end",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Search with the team. (two nodes)",
+     "success": {
+      "text": "You search with them, two nodes of shouting into the fog. You find her, in the end. She is worse than she would have been.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "fog-rescue-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fog-hiker-late",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "fog-end",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "You go on. Behind you, the team keeps calling a name into the fog.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-rescue-seen",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "fog-end",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-spirit-cache",
+   "name": "The Spirit's Hiding Spot",
+   "group": "Mysteries & Ruins",
+   "stop": "haunted",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1e30",
+    "effect": "glint"
+   },
+   "intro": "Off the path, where the fog is thickest. A flat stone. The guide stands back and lets you lift it. Under it, wrapped in oilcloth gone soft with age: a letter, sealed, never sent, and a child's drawing of two people and a Growlithe. Guide: \"That's mine.\" Very quietly. \"I was taking it home.\"",
+   "choices": [
+    {
+     "label": "I'll deliver it.",
+     "success": {
+      "text": "You put it inside your coat, against your chest. The guide does not say thank you. They do not have to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-delivering",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fog-delivering",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "rescue-team",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You open it, carefully. One line, in a big untidy hand: \"Home Thursday. Tell the dog.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-read",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "rescue-team",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You wrap it up again and lay the stone back over it. The guide nods.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "rescue-team",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fog-end",
+   "name": "At the End",
+   "group": "Wild Scenes",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gastly",
+    "tint": "#1c1428",
+    "effect": "fog"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fog-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "fog-named",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fog-thanked",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The fog thins. The road comes back, a field, a stile, ordinary light. The guide stops at the edge of the road, where the white ends. Guide: \"This is where I stop.\"",
+   "choices": [
+    {
+     "label": "Who are you?",
+     "success": {
+      "text": "The guide points with their stick to a grave at the roadside, half under the hedge. The stone says: HALDEN VEY, GUIDE. LOST IN THE FOG, BRINGING THE OTHERS HOME. Halden unhooks the bell from their belt and puts it in your hand. It is cold, and then warm. When you look up, there is nobody there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-named",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "halden-bell",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Halden Vey gave you their bell at the edge of the fog",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank you.",
+     "success": {
+      "text": "Halden tips the lantern to you, and turns, and walks back into the fog. Later, where the road comes out, there is a bench nobody remembers putting there, and you rest on it, and it is the best rest of the region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-thanked",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "Halden: \"Someone has to be here.\" They unhook the bell from their belt and give it to you anyway, and close your fingers over it. Then they walk back into the fog to wait for the next one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-named",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "halden-bell",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Halden Vey stayed in the fog, and gave you their bell",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true,
+   "remembers": [
+    {
+     "id": "called",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fog-called",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You called out to them, the first time, and they rang twice. You think the bell will always ring twice for you."
+    }
+   ]
+  },
+  {
+   "id": "fog-letter",
+   "name": "Home Thursday",
+   "group": "Mysteries & Ruins",
+   "stop": "haunted",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1e30",
+    "effect": "glint"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fog-delivering",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "fog-delivering",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "fog-delivered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A village in a new region, and a cottage at the end of a lane, and an old woman on the step shelling peas. You give her the letter. She reads it. She reads it again. Then she puts her hand over her mouth. Old woman: \"It's from my brother.\" Her voice is very small. \"He was coming home. Thursday. We waited at the window all day.\" She holds the drawing against her chest. \"That's me. And him. And the dog.\"",
+   "choices": [
+    {
+     "label": "He was bringing others home.",
+     "success": {
+      "text": "You tell her about the fog, and the guide, and the bell. She listens to every word. When you go, she is still on the step, holding the letter, looking at the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-delivered",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You brought Halden Vey's letter home, sixty years late",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "hunt-clue-feather",
+   "name": "A Feather That Hums",
+   "group": "Grand-Enemy Hunt",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "hunt",
+     "atLeast": 0,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a2630",
+    "effect": "fog"
+   },
+   "intro": "A single feather lies in the road, as long as your arm. It is warm to the touch, and the air around it shimmers. It hums. Every Pokémon you own turns to look at it. Around the quill, a metal band. A ring, like the ones they put on birds in cages.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You wrap it in a cloth and put it in your pack. It keeps humming, softly, like something asleep.",
+      "effects": [
+       {
+        "kind": "hunt"
+       },
+       {
+        "kind": "flag",
+        "key": "coat-clue-feather",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow where it points.",
+     "success": {
+      "text": "You hold it flat on your palm. It turns, slowly, like a compass needle, and points north.",
+      "effects": [
+       {
+        "kind": "hunt"
+       },
+       {
+        "kind": "flag",
+        "key": "coat-clue-feather",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it in the road. It stops humming as you walk away.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "articuno",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "sinnoh",
+        "kalos",
+        "galar",
+        "grand",
+        "tidewrack-reaches"
+       ]
+      }
+     ],
+     "intro": "A single feather lies in the road, as long as your arm, and it is frosted: the puddle it lies in has frozen solid around it. It hums. Every Pokémon you own turns to look at it. Around the quill, a metal band. A ring, like the ones they put on birds in cages."
+    },
+    {
+     "id": "zapdos",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "kanto",
+        "unova",
+        "paldea",
+        "torren",
+        "frontier-isles",
+        "orrery-basin"
+       ]
+      }
+     ],
+     "intro": "A single feather lies in the road, as long as your arm, crackling: the hair on your arms stands up as you bend to it. It hums. Every Pokémon you own turns to look at it. Around the quill, a metal band. A ring, like the ones they put on birds in cages."
+    }
+   ]
+  },
+  {
+   "id": "hunt-clue-scorch",
+   "name": "Scorch Marks in a Perfect Circle",
+   "group": "Grand-Enemy Hunt",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "hunt",
+     "atLeast": 0,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d18",
+    "effect": "fog"
+   },
+   "intro": "A ring in a field as wide as a house, burned, or frozen, or blasted, the grass gone strange in a perfect circle. Something very large landed here. Around the edge, chain marks in the mud. A farmer leans on his gate, watching you look. Farmer: \"Tuesday. A ship came down out of the clouds.\" He spits. \"A ship. Then it left.\"",
+   "choices": [
+    {
+     "label": "Measure it.",
+     "success": {
+      "text": "You pace it out. It is a wingspan. Something's wingspan, held open, held down.",
+      "effects": [
+       {
+        "kind": "hunt"
+       },
+       {
+        "kind": "flag",
+        "key": "coat-clue-scorch",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the chain marks.",
+     "success": {
+      "text": "You follow them round to where one link has snapped and been left in the mud. You pick it up. Stamped into it: a crest, a grey storm cloud.",
+      "effects": [
+       {
+        "kind": "hunt"
+       },
+       {
+        "kind": "flag",
+        "key": "coat-clue-scorch",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "coat-crest",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the ship.",
+     "success": {
+      "text": "Farmer: \"Grey,\" he says. \"With a cloud on it.\" He looks at the ring in his field. \"And something crying inside.\"",
+      "effects": [
+       {
+        "kind": "hunt"
+       },
+       {
+        "kind": "flag",
+        "key": "coat-clue-scorch",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hunt-clue-witness",
+   "name": "A Shaken Witness",
+   "group": "Grand-Enemy Hunt",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "hunt",
+     "atLeast": 0,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1d2230",
+    "effect": "fog"
+   },
+   "intro": "A ranger sitting on a stump with a blanket round her shoulders and a cold cup of tea in her hands, her Staraptor asleep at her feet with its head under its wing. Ranger Cleo: \"It was in the clouds. It looked at me.\" She turns the cup. \"It wasn't afraid of me. It was afraid of the man on the deck. Long grey coat. He waved, like he knew me.\" She looks at her Staraptor. \"I followed them three days. Then it wouldn't fly any further.\"",
+   "choices": [
+    {
+     "label": "Where did they go?",
+     "success": {
+      "text": "Cleo: \"The old weather station.\" She points at a peak. \"Up there.\"",
+      "effects": [
+       {
+        "kind": "hunt"
+       },
+       {
+        "kind": "flag",
+        "key": "coat-clue-witness",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Are you hurt?",
+     "success": {
+      "text": "Cleo: \"No.\" She looks down. \"Ashamed.\" Then she points at the peak. \"The old weather station. Up there.\"",
+      "effects": [
+       {
+        "kind": "hunt"
+       },
+       {
+        "kind": "flag",
+        "key": "coat-clue-witness",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "Cleo looks at you. Then she puts the cup down and stands up and folds the blanket, very neatly. Her Staraptor wakes up. Cleo: \"Yes.\"",
+      "effects": [
+       {
+        "kind": "hunt"
+       },
+       {
+        "kind": "flag",
+        "key": "coat-clue-witness",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "coat-cleo",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hunt-lair",
+   "name": "Where the Storm Rests",
+   "group": "Grand-Enemy Hunt",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "hunt",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#14141f",
+    "effect": "glint"
+   },
+   "intro": "The old weather station on the peak, its dome cracked, its instruments still turning in the wind. A grey airship moored to the mast, a storm cloud painted on its side. A figure in a long storm-grey coat steps down the gangway and bows. The Collector, Aurel: \"You've been looking for us.\" He straightens. \"Then show us what you know.\" He gestures behind him. \"I don't hurt it. I keep it. I'm the last person in the world who keeps one. Do you know how many people would hurt it if I didn't?\" Behind him, in a cage of steel and glass, the bird. It sees you. It does not make a sound.",
+   "choices": [
+    {
+     "label": "Open the cage.",
+     "success": {
+      "text": "His three bodyguards come down the gangway: a Corviknight, a Skarmory, an Aerodactyl.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "corviknight",
+        "skarmory",
+        "aerodactyl"
+       ],
+       "chain": 3,
+       "name": "Aurel's Bodyguards",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "coat-opened",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "hunt-bird"
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Battle you for it.",
+     "success": {
+      "text": "Aurel takes off his coat and folds it over the rail. Six Pokémon, each one for a different weather.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Aurel",
+       "classId": "veteran",
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "coat-beat-aurel",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "hunt-bird"
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Why do you keep it?",
+     "success": {
+      "text": "Aurel: \"My father caught it.\" He looks at the cage. \"He died. It was the only thing he loved.\" His voice does not change, but his hands do. \"If I let it go, I have nothing of him.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coat-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "hunt-why"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "crest",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "coat-crest",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know that crest on his coat: a grey storm cloud. You found it stamped on a broken chain. You know which way the guards will look, and which way they won't.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Open the cage, quietly.",
+       "success": {
+        "text": "While Aurel talks, you go round the back, the way the chain marks went, and nobody is watching it. The cage door is heavy. You open it.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "coat-opened",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "hunt-bird"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "cleo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "coat-cleo",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Cleo steps up beside you, and her Staraptor lands on the rail with a crack of wings.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Open the cage.",
+       "success": {
+        "text": "The bodyguards come down the gangway. Cleo: \"Go. I've got these.\" She does. You open the cage.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "coat-opened",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "hunt-bird"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "hunt-why",
+   "name": "Why He Keeps It",
+   "group": "Grand-Enemy Hunt",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#14141f",
+    "effect": "glint"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "Aurel stands with his back to the cage. The wind is very loud.",
+   "choices": [
+    {
+     "label": "Then let it be the thing you remember him by. Free.",
+     "success": {
+      "text": "Aurel looks at the cage a long time. Then he walks to it, and opens it, and stands aside. He is crying, and he does not wipe his face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coat-aurel-freed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "hunt-bird"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your father's dead. It isn't.",
+     "success": {
+      "text": "Aurel goes white, then red. He fights you with everything he has. When it is over, he opens the cage himself, without a word.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Aurel",
+       "classId": "veteran",
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "hunt-bird"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "hunt-bird"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Keep it, then.",
+     "success": {
+      "text": "He nods, slowly. He goes back up the gangway, and the airship slips its mooring, and drifts off into the cloud. You could find it again, later, if you came back to open the cage.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coat-kept",
+        "amount": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "hunt-lair"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hunt-bird",
+   "name": "The Bird, Freed",
+   "group": "Grand-Enemy Hunt",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#14141f",
+    "effect": "glint"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "The cage door stands open. The bird steps out onto the deck, and stretches, wing by wing, carefully, as if it is not sure they still work. It looks at you. Then it looks at Aurel. It is Moltres, and the air goes warm around it.",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "Moltres spreads its wings, all the way, for the first time in years. It looks at you. Then it goes up, and up, until it is a point of light and then nothing, and the whole sky feels bigger.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-moltres",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "coat-free",
+        "amount": 1
+       },
+       {
+        "kind": "hunt",
+        "finish": true
+       },
+       {
+        "kind": "moment",
+        "text": "You opened the cage and Moltres flew",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "Moltres looks at you for a long time. Then it comes down, and you understand: it will come with you if you are strong enough to ask.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coat-caught-chance",
+        "amount": 1
+       },
+       {
+        "kind": "hunt",
+        "finish": true
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "moltres"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Look at him, too.",
+     "success": {
+      "text": "Moltres turns its head toward Aurel. It lands beside him, and he flinches, and it touches his face with the edge of its wing, once, very gently. Then it flies. Aurel stands there a long time with his hand on his cheek. He gives you his coat. He says he will not need it where he is going. He means a ranger station.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-moltres",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "coat-forgiven",
+        "amount": 1
+       },
+       {
+        "kind": "hunt",
+        "finish": true
+       },
+       {
+        "kind": "moment",
+        "text": "Moltres forgave the man who kept it, and so did you",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "articuno",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "sinnoh",
+        "kalos",
+        "galar",
+        "grand",
+        "tidewrack-reaches"
+       ]
+      }
+     ],
+     "intro": "The cage door stands open. The bird steps out onto the deck, and stretches, wing by wing, carefully. Frost spreads across the deck where it stands. It is Articuno. It looks at you. Then it looks at Aurel.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Go.",
+       "success": {
+        "text": "Articuno spreads its wings, all the way, for the first time in years. It looks at you. Then it goes up, and up, until it is a point of light and then nothing, and the whole sky feels bigger.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-articuno",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "coat-free",
+          "amount": 1
+         },
+         {
+          "kind": "hunt",
+          "finish": true
+         },
+         {
+          "kind": "moment",
+          "text": "You opened the cage and Articuno flew",
+          "importance": 85
+         }
+        ]
+       }
+      },
+      {
+       "label": "Come with me.",
+       "success": {
+        "text": "Articuno looks at you for a long time. Then it comes down, and you understand: it will come with you if you are strong enough to ask.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "coat-caught-chance",
+          "amount": 1
+         },
+         {
+          "kind": "hunt",
+          "finish": true
+         }
+        ],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "articuno"
+         ],
+         "types": [],
+         "levelBonus": 3,
+         "shinyMultiplier": 1,
+         "win": []
+        }
+       }
+      },
+      {
+       "label": "Look at him, too.",
+       "success": {
+        "text": "Articuno turns its head toward Aurel. It lands beside him, and he flinches, and it touches his face with the edge of its wing, once, very gently. Then it flies. Aurel stands there a long time with his hand on his cheek. He gives you his coat. He says he will not need it where he is going. He means a ranger station.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-articuno",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "coat-forgiven",
+          "amount": 1
+         },
+         {
+          "kind": "hunt",
+          "finish": true
+         },
+         {
+          "kind": "moment",
+          "text": "Articuno forgave the man who kept it, and so did you",
+          "importance": 90
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "zapdos",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "kanto",
+        "unova",
+        "paldea",
+        "torren",
+        "frontier-isles",
+        "orrery-basin"
+       ]
+      }
+     ],
+     "intro": "The cage door stands open. The bird steps out onto the deck, and stretches, wing by wing, and the instruments on the station mast all spin at once. It is Zapdos. It looks at you. Then it looks at Aurel.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Go.",
+       "success": {
+        "text": "Zapdos spreads its wings, all the way, for the first time in years. It looks at you. Then it goes up, and up, until it is a point of light and then nothing, and the whole sky feels bigger.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-zapdos",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "coat-free",
+          "amount": 1
+         },
+         {
+          "kind": "hunt",
+          "finish": true
+         },
+         {
+          "kind": "moment",
+          "text": "You opened the cage and Zapdos flew",
+          "importance": 85
+         }
+        ]
+       }
+      },
+      {
+       "label": "Come with me.",
+       "success": {
+        "text": "Zapdos looks at you for a long time. Then it comes down, and you understand: it will come with you if you are strong enough to ask.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "coat-caught-chance",
+          "amount": 1
+         },
+         {
+          "kind": "hunt",
+          "finish": true
+         }
+        ],
+        "battle": {
+         "kind": "wild",
+         "species": [
+          "zapdos"
+         ],
+         "types": [],
+         "levelBonus": 3,
+         "shinyMultiplier": 1,
+         "win": []
+        }
+       }
+      },
+      {
+       "label": "Look at him, too.",
+       "success": {
+        "text": "Zapdos turns its head toward Aurel. It lands beside him, and he flinches, and it touches his face with the edge of its wing, once, very gently. Then it flies. Aurel stands there a long time with his hand on his cheek. He gives you his coat. He says he will not need it where he is going. He means a ranger station.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-zapdos",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "coat-forgiven",
+          "amount": 1
+         },
+         {
+          "kind": "hunt",
+          "finish": true
+         },
+         {
+          "kind": "moment",
+          "text": "Zapdos forgave the man who kept it, and so did you",
+          "importance": 90
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

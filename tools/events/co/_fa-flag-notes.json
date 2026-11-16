@@ -56,5 +56,20 @@
  "coven-*": "SF16 festival record flags (Hex Coven). Kept in the run log.",
  "dilly-cap": "SF17 Dilly's uniform cap (cosmetic): kept in the run log.",
  "pumpkin-trophy": "SF16 costume judge's pumpkin trophy (cosmetic): kept in the run log.",
- "sinistea-home": "SF16 lost spirit went home: kept in the run log."
+ "sinistea-home": "SF16 lost spirit went home: kept in the run log.",
+ "coat-*": "SF30 Storm-Grey Coat record flags (how it went). Kept in the run log.",
+ "cook-*": "SF22 Cooking Circuit record flags (how it went). Kept in the run log.",
+ "courier-*": "SF26 Courier's Egg record flags (how it went). Kept in the run log.",
+ "ember-*": "SF25 Egg in the Fire record flags (how it went). Kept in the run log.",
+ "fog-*": "SF29 Bell in the Fog record flags (how it went). Kept in the run log.",
+ "kubfu-*": "SF27 Disciple record flags (how it went). Kept in the run log.",
+ "loop-*": "SF19 Village That Repeats record flags (how it went). Kept in the run log.",
+ "map-*": "SF23 Treasure Map record flags (how it went). Kept in the run log.",
+ "nobody-*": "SF20 The Nobody record flags (how it went). Kept in the run log.",
+ "readings-*": "SF28 Readings record flags (how it went). Kept in the run log.",
+ "recipe-*": "SF22 recipes (cook-at-rest reads the ones that change a dish) record flags (how it went). Kept in the run log.",
+ "roots-*": "SF21 Starter's Roots record flags (how it went). Kept in the run log.",
+ "shift-*": "SF24 Last Shift record flags (how it went). Kept in the run log.",
+ "nobody-told": "SF20: set by any event that asks the player to share information and offers a line that mentions Nell (rival chats, Officer Jenny, the Pen Pal letter: other rows). Until one does, the dock is never an ambush.",
+ "halden-bell": "SF29 Halden's Bell (key item: rings before every ambush). The ambush warning is not built; the bell is kept in the run log."
 }
