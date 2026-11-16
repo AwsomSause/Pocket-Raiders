@@ -3626,6 +3626,8 @@ function countAttributeGrowth(content: Content, run: RunState, events: BattleEve
  */
 function awardExperience(content: Content, run: RunState, events: BattleEvent[]): RunEvent[] {
   const battle = run.battle!;
+  // gn.new.27: nobody earns experience in the Little Cup.
+  if (battle.eventRule?.gn === 'littlecup') return [];
   const effects = runAttributeEffects(content, run);
   const archetype = runArchetype(content, run);
   const bossBattle = isBossClass(battle.trainer?.classId);

@@ -1,0 +1,953 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-27-door",
+   "name": "The Little Cup",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "lc-at"
+    },
+    {
+     "kind": "gn",
+     "test": "lcEligible"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "*A banner across the gate, hand-painted: NO EVOLVED POKÉMON. NO EXCEPTIONS. YES, WE CHECK.*\n\n**Official, a very serious man with a clipboard, Mr. Prendergast:** \"Three entrants. First-stage. I will be weighing them.\"\n\n*The bracket on the fence: children, grandparents, Prendergast himself, and at the bottom, last year's champion.*\n\n**A girl with a Sunkern, Tansy-Jane:** \"It's never lost. I don't know why either.\"",
+   "choices": [
+    {
+     "label": "Enter.",
+     "success": {
+      "text": "Prendergast hands you a pen. It is, you notice, also on a string.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "lc-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-pick"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Through the fence, somebody small is already cheering. You hear it for a long time.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-pick",
+   "name": "The Little Cup: Your Three",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "Choose who you enter, one at a time. Up to three. Everyone is set to level 5. The rest wait on the bench and shout advice.",
+   "choices": [
+    {
+     "label": "Enter this one.",
+     "pick": {},
+     "success": {
+      "text": "You point. Prendergast looks it up and down, and checks something off.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lcBring"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lc-picked",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "bench"
+         },
+         {
+          "kind": "gn",
+          "op": "lcStart"
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-27-r1"
+         }
+        ],
+        "text": "Three. The others go to the bench, and everyone entered is set to level 5."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lc-picked",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-27-pick"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "That's enough.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "lc-picked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The others go to the bench. Everyone entered is set to level 5.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "bench"
+       },
+       {
+        "kind": "gn",
+        "op": "lcStart"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-r1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-r1",
+   "name": "The Little Cup: Round 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "Round one. A child barely taller than the table, holding a Caterpie in both hands like something that might spill.\n\nIt knows Tackle. Only Tackle. The child knows nothing else and does not seem to mind. \"It's going to win,\" they say, with total faith.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The Caterpie squares up, all of it trembling. You do not laugh. Not once.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "lcEnd",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-27-out"
+        }
+       ],
+       "rule": {
+        "gn": "littlecup",
+        "slot": 1
+       },
+       "name": "A Child with a Caterpie",
+       "classId": "youngster",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-27-b1"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-r2",
+   "name": "The Little Cup: Round 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "Round two. A grandmother in a cardigan, with a Wooper she has had for thirty years. It looks nothing like a thirty-year-old Pokémon.\n\n**The grandmother:** \"She's slow. So am I. We've never once been in a hurry, and we're still here.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The Wooper blinks at you, slowly. It has seen thousands of these. It still wants this one.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "lcEnd",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-27-out"
+        }
+       ],
+       "rule": {
+        "gn": "littlecup",
+        "slot": 2
+       },
+       "name": "A Grandmother with a Wooper",
+       "classId": "veteran",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-27-b2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-r3",
+   "name": "The Little Cup: Round 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "Round three. The Official himself, clipboard under one arm, with three perfectly bred, perfectly dull Pokémon in a perfect line.\n\n**Prendergast:** \"Not one of them has ever surprised me. That is the achievement. I'd like you to understand that it is an achievement.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He sets the clipboard down for the first time all day. It looks wrong, without it, in his hands.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "lcEnd",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-27-out"
+        }
+       ],
+       "rule": {
+        "gn": "littlecup",
+        "slot": 3
+       },
+       "name": "Mr. Prendergast",
+       "classId": "worker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-27-b3"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-r4",
+   "name": "The Little Cup: Round 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "The final. Tansy-Jane, last year's champion, and the Sunkern that has never lost. It sits in the sun that isn't there yet. It is very calm.\n\n**Tansy-Jane:** \"I don't know why it wins either. I've stopped asking. It just knows when to be bright.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The Sunkern looks up at the sky, and the sky, for reasons nobody can explain, listens.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "lcEnd",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-27-out"
+        }
+       ],
+       "rule": {
+        "gn": "littlecup",
+        "slot": 4
+       },
+       "name": "Tansy-Jane",
+       "classId": "youngster",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "lcEnd",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "item",
+         "id": "little-cup",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Won the Little Cup. Level 5, first-stage, and the biggest crowd of the year.",
+         "importance": 60
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-27-champion"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-b1",
+   "name": "The Little Cup: After Round 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "The bell. Round 1 is over, and the bench smells of orange slices. A small crowd has gathered along the rope, shouting names.",
+   "choices": [
+    {
+     "label": "Cancel it. Stay in.",
+     "success": {
+      "text": "It wanted to. It looked at you first. Then it looked at the rope, and the shouting, and sat back down. It chose this.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lcStay"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-b1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcEvolver"
+      }
+     ]
+    },
+    {
+     "label": "Evolve. Withdraw.",
+     "success": {
+      "text": "The light takes it, and gives it back larger. Prendergast writes a line on the clipboard, and, very quietly, does not look pleased about it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lcWithdraw"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-r2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcEvolver"
+      },
+      {
+       "kind": "gn",
+       "test": "lcMany"
+      }
+     ]
+    },
+    {
+     "label": "Evolve. Withdraw.",
+     "success": {
+      "text": "The light takes it, and gives it back larger. You were its only entry. Prendergast takes the clipboard back, kindly, and strikes your name off.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lcWithdraw"
+       },
+       {
+        "kind": "gn",
+        "op": "lcEnd",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "unbench"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-out"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcEvolver"
+      },
+      {
+       "kind": "gn",
+       "test": "lcAlone"
+      }
+     ]
+    },
+    {
+     "label": "On to the next round.",
+     "success": {
+      "text": "You rest. You rub its ears. Somebody hands you an orange slice you did not ask for.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-r2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcIdle"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-b2",
+   "name": "The Little Cup: After Round 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "The bell. Round 2 is over, and the bench smells of orange slices. A small crowd has gathered along the rope, shouting names.",
+   "choices": [
+    {
+     "label": "Cancel it. Stay in.",
+     "success": {
+      "text": "It wanted to. It looked at you first. Then it looked at the rope, and the shouting, and sat back down. It chose this.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lcStay"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-b2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcEvolver"
+      }
+     ]
+    },
+    {
+     "label": "Evolve. Withdraw.",
+     "success": {
+      "text": "The light takes it, and gives it back larger. Prendergast writes a line on the clipboard, and, very quietly, does not look pleased about it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lcWithdraw"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-r3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcEvolver"
+      },
+      {
+       "kind": "gn",
+       "test": "lcMany"
+      }
+     ]
+    },
+    {
+     "label": "Evolve. Withdraw.",
+     "success": {
+      "text": "The light takes it, and gives it back larger. You were its only entry. Prendergast takes the clipboard back, kindly, and strikes your name off.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lcWithdraw"
+       },
+       {
+        "kind": "gn",
+        "op": "lcEnd",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "unbench"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-out"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcEvolver"
+      },
+      {
+       "kind": "gn",
+       "test": "lcAlone"
+      }
+     ]
+    },
+    {
+     "label": "On to the next round.",
+     "success": {
+      "text": "You rest. You rub its ears. Somebody hands you an orange slice you did not ask for.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-r3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcIdle"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-b3",
+   "name": "The Little Cup: After Round 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "The bell. Round 3 is over, and the bench smells of orange slices. A small crowd has gathered along the rope, shouting names.",
+   "choices": [
+    {
+     "label": "Cancel it. Stay in.",
+     "success": {
+      "text": "It wanted to. It looked at you first. Then it looked at the rope, and the shouting, and sat back down. It chose this.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lcStay"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-b3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcEvolver"
+      }
+     ]
+    },
+    {
+     "label": "Evolve. Withdraw.",
+     "success": {
+      "text": "The light takes it, and gives it back larger. Prendergast writes a line on the clipboard, and, very quietly, does not look pleased about it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lcWithdraw"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-r4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcEvolver"
+      },
+      {
+       "kind": "gn",
+       "test": "lcMany"
+      }
+     ]
+    },
+    {
+     "label": "Evolve. Withdraw.",
+     "success": {
+      "text": "The light takes it, and gives it back larger. You were its only entry. Prendergast takes the clipboard back, kindly, and strikes your name off.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lcWithdraw"
+       },
+       {
+        "kind": "gn",
+        "op": "lcEnd",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "unbench"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-out"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcEvolver"
+      },
+      {
+       "kind": "gn",
+       "test": "lcAlone"
+      }
+     ]
+    },
+    {
+     "label": "On to the next round.",
+     "success": {
+      "text": "You rest. You rub its ears. Somebody hands you an orange slice you did not ask for.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-27-r4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lcIdle"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-out",
+   "name": "The Little Cup: Out",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "It is over. Your entrants are their real size again, and they sit very close, watching the next match start without you.\n\nPrendergast crosses a name off the bracket. He does not enjoy it as much as he said he would.",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "A child runs past with a Caterpie held high. You catch yourself clapping.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-champion",
+   "name": "The Little Cup: Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "The Sunkern is beaten. Nobody quite believes it, least of all Tansy-Jane, who stands very still for a moment and then, helplessly, laughs.\n\nPrendergast hands you the Little Cup himself. It is smaller than you expected. It is heavier than it looks.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "**Tansy-Jane:** \"It's a good cup. I'll want it back next year. I'm telling you now.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lc-won",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-27-letter",
+   "name": "A Letter from Tansy-Jane",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lc-result",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "lc-letter",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lc-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The letter begins with one word, underlined three times: *HOW.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b8f4a",
+    "effect": "none"
+   },
+   "intro": "*A letter, in a hand that slopes uphill. Tansy-Jane.*\n\nShe asks how you beat it. Then, because she is kind, she tells you how you could have: \"Keep the sun out. Or just be faster. Mostly be faster.\"\n\n\"Next year,\" it ends. \"Same time. Bring something small.\"",
+   "choices": [
+    {
+     "label": "Read it twice.",
+     "success": {
+      "text": "You read it again on the road. It reads better the second time. Some letters do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lc-letter",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write back.",
+     "success": {
+      "text": "You write four lines, and one of them is a joke. You hope she gets it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lc-letter",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

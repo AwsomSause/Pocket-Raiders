@@ -2759,5 +2759,53 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-27-door": {
+  "gn": "gn.new.27",
+  "shape": "Hub",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "town",
+  "level": "Everyone is set to level 5 (your three entrants, first-stage only; the foes too)",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Little Cup",
+   "elsewhere": "The Little Cup"
+  },
+  "note": "Must-see, once per region, step 15; fallback step 5 of the next stage. Four rounds on one node. No experience in the Cup. An entrant ready to evolve may cancel (Bond +2, sets littlecup-cancelled) or evolve and withdraw.",
+  "kinds": [
+   "Tournament Episode"
+  ],
+  "tags": []
+ },
+ "gn-new-27-letter": {
+  "gn": "gn.new.27",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 1,
+  "window": [
+   1,
+   2
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "A Letter",
+   "elsewhere": "A Letter"
+  },
+  "note": "Step 1 of the stage after the Cup: Tansy-Jane writes, how you beat it or how you could have.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
  }
 }

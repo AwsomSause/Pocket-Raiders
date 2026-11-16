@@ -4,7 +4,6 @@
  "external": {
   "abandoned-mon": "gn.new.03 The Ball That Wouldn't Open",
   "gn-new-06-won": "gn.new.06",
-  "littlecup-cancelled": "gn.new.27",
   "eevee-stayed": "gn.new.01",
   "dog-sat": "gn.new.02",
   "little-league-losing": "SF134.2 Little League",
@@ -30,6 +29,10 @@
   "bibarel-dam-broken": "gn.new.20 The Drought Ranch"
  },
  "flags": [
+  {
+   "key": "littlecup-cancelled",
+   "rule": "core/greenneedle/littlecup.ts (gn.new.27 The Little Cup: an entrant cancelled its evolution)"
+  },
   {
    "key": "safari-photo-best",
    "rule": "core/greenneedle/safariEnd.ts (gn.18 Safari Land)"

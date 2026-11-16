@@ -36,6 +36,7 @@ import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, 
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
+import { lcBring, lcEligible, lcEnd, lcEvolver, lcMany, lcStart, lcStartBattle, lcStay, lcWithdraw } from './littlecup';
 import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
 import { GAVEL, auctionArrive, auctionOpen, auctionReturn, auctionRound, lotToken } from './auction';
 import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench } from './frontier';
@@ -198,6 +199,11 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'aceHere') return aceHere(run, c.key!);
   if (c.test === 'leadInitiative') return leadInitiative(run);
   // gn.44: the 1v1 entrant is the Fighting Tournament's champion (gn.16); it is a Pokémon that came back (gn mark `came-back`).
+  if (c.test === 'lcEligible') return lcEligible(content, run);
+  if (c.test === 'lcEvolver') return lcEvolver(content, run);
+  if (c.test === 'lcMany') return lcMany(run);
+  if (c.test === 'lcIdle') return !lcEvolver(content, run);
+  if (c.test === 'lcAlone') return !lcMany(run);
   if (c.test === 'entrantChampion') return !!entrantOf(run)?.champion;
   if (c.test === 'entrantCameBack') return !!entrantOf(run)?.gn?.includes('came-back');
   // gn.45: a rival is well ahead of you (Lead +2 or more).
@@ -559,6 +565,17 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     }
     case 'auctionReturn':
       return auctionReturn(run);
+    // gn.new.27 The Little Cup (littlecup.ts).
+    case 'lcBring':
+      return lcBring(content, run, host.picked);
+    case 'lcStart':
+      return lcStart(content, run);
+    case 'lcEnd':
+      return lcEnd(content, run, e.n ?? 0);
+    case 'lcStay':
+      return lcStay(content, run);
+    case 'lcWithdraw':
+      return lcWithdraw(content, run);
     // gn.44 The 1v1 Championship (onevone.ts).
     case 'onevoneEnter':
       return onevoneEnter(content, run, host.picked, host.region);
@@ -769,6 +786,7 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (rule?.startsWith('brain-')) brainStart(content, run, battle, rule.slice('brain-'.length), makeFull(content));
   // gn.44: the 1v1 Championship's drawn opponent, at the entrant's level.
   if (rule === 'onevone' && battle.eventRule?.slot) onevoneStart(content, run, battle, battle.eventRule.slot, makeFull(content));
+  if (rule === 'littlecup' && battle.eventRule?.slot) lcStartBattle(content, battle, battle.eventRule.slot, makeFull(content));
   // gn.45: the region's Champion, with their own team.
   if (rule === 'champlesson' || rule === 'champexam') lessonStart(content, run, battle, makeFull(content));
   // gn.46: the All-Star bracket. Their teams, upgraded; the final: shaking hands, and a Pokémon that remembers wearing your colours.

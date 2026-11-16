@@ -418,5 +418,29 @@
       "kind": "ability",
       "mode": "hidden"
     }
+  },
+  {
+    "id": "little-cup",
+    "name": "Little Cup",
+    "family": "Held items",
+    "description": "Won at the Little Cup. A small gold cup: every stat but HP up 10% while its holder can still evolve.",
+    "rarity": "epic",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "library/commonstone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "stat",
+          "stat": "all",
+          "multiplier": 1.1,
+          "canEvolve": true
+        }
+      ]
+    }
   }
 ]
