@@ -77,12 +77,13 @@ export const EVENTS: Json[] = [
     answer: 'Ho-Oh circles the tower nine times and every bell answers it. It comes down shining, and stays.' }),
   ev('mysticticket-rock', 'MysticTicket: Navel Rock', G, {
     keyItem: 'mysticticket', rarity: 'epic', requires: [earned('mysticticket')], pokemon: 'lugia', tint: '#506080', effect: 'fog',
-    remembers: [{ id: 'both-with-you', when: [withYou('lugia'), withYou('ho-oh')], notice: 'Lugia and Ho-Oh are both with you. Navel Rock goes quiet for them.', hide: [0, 1], addChoices: [
+    remembers: [{ id: 'both-with-you', when: [withYou('lugia'), withYou('ho-oh')], notice: 'Lugia and Ho-Oh are both with you. Navel Rock goes quiet for them.', hide: [0, 1, 2], addChoices: [
       ch('Let them go up and down together.', out('One climbs, one dives. When they come back, they come back side by side, and the rock is warm from top to bottom.', sign('lugia', 2), sign('ho-oh', 2), heal(), fr(5), moment('Lugia and Ho-Oh met at Navel Rock because you brought them both.', 95))),
     ] }],
   },
     'The MysticTicket came after you had answered one of them. Now Navel Rock rises out of the sea in front of you.\n\nAt the top, a rainbow that does not fade. At the bottom, water deeper than any light.\n\nThe ticket says only: CHOOSE.',
     [
+      ch('Ring your bell and wait.', fight('The bell\'s note runs down the rock and out over the sea. The one it was made for answers.', legendFight(['ho-oh', 'lugia'], [flag('navel-bell-answered'), sign('lugia'), sign('ho-oh')], 5)), { requires: [{ kind: 'itemAny', ids: ['tidal-bell', 'clear-bell'] }] }),
       ch('Climb to the top.', fight('Ho-Oh is waiting at the summit, in the rainbow. It lifts its wings.', legendFight(['ho-oh'], [flag('ho-oh-key-met'), sign('ho-oh', 2)], 5)), { requires: [notWithYou('ho-oh')] }),
       ch('Go down into the deep.', fight('Lugia is waiting at the bottom, in the dark. The water starts to turn.', legendFight(['lugia'], [flag('lugia-key-met'), sign('lugia', 2)], 5)), { requires: [notWithYou('lugia')] }),
       ch('Leave the ticket on the rock.', out('You lay the ticket on the middle step. From above, a warm wind. From below, a cool one. Your team sleeps well that night.', heal(), sign('lugia'), sign('ho-oh'), fr(2))),

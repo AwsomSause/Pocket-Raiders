@@ -1087,7 +1087,8 @@
      "notice": "Lugia and Ho-Oh are both with you. Navel Rock goes quiet for them.",
      "hide": [
       0,
-      1
+      1,
+      2
      ],
      "addChoices": [
       {
@@ -1127,6 +1128,51 @@
    ],
    "intro": "The MysticTicket came after you had answered one of them. Now Navel Rock rises out of the sea in front of you.\n\nAt the top, a rainbow that does not fade. At the bottom, water deeper than any light.\n\nThe ticket says only: CHOOSE.",
    "choices": [
+    {
+     "label": "Ring your bell and wait.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "tidal-bell",
+        "clear-bell"
+       ]
+      }
+     ],
+     "success": {
+      "text": "The bell's note runs down the rock and out over the sea. The one it was made for answers.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ho-oh",
+        "lugia"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "navel-bell-answered",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-lugia",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-ho-oh",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
     {
      "label": "Climb to the top.",
      "requires": [
