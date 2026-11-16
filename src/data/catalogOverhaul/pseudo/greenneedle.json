@@ -217,6 +217,15 @@
    "tint": "#3b4060",
    "mood": "thunderstorm ridge",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_last_stop",
+   "name": "The Last Stop",
+   "entry": "gn-new-09-door",
+   "themeId": "psychic-ghost",
+   "tint": "#1c2236",
+   "mood": "night train",
+   "start": "opened"
   }
  ]
 }

@@ -1,0 +1,650 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-09-door",
+   "name": "The Last Stop",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Recovery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gn-new-09-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2236",
+    "effect": "float"
+   },
+   "intro": "*A platform that was not on any map. The clock above it has no hands. A Drifloon floats at the far end, holding a lantern as if it were a candle.*\n\n*A train arrives without a sound. The doors open.*\n\n**Conductor, a Dusknoir:** It holds out a hand for a ticket. You do not have one. It gives you one.",
+   "choices": [
+    {
+     "label": "Board.",
+     "success": {
+      "text": "The ticket is warm, like something that has just been held. You step on. The doors close behind you and the platform is gone from the window.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-new-09-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "last-stop-boarded",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "lsTicket"
+       },
+       {
+        "kind": "gn",
+        "op": "lsDeal"
+       },
+       {
+        "kind": "gn",
+        "op": "lsAddress"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-dining"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay on the platform.",
+     "success": {
+      "text": "The doors close without a sound. The train pulls away, and the platform goes with it. The lantern Drifloon watches you the whole time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-new-09-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-09-dining",
+   "name": "The Last Stop: The Dining Car",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gengar"
+    ],
+    "tint": "#1c2236",
+    "effect": "float"
+   },
+   "intro": "White cloths, one lamp, and a table laid for a guest who has not arrived. A **Gengar** shuffles along the aisle without quite touching the floor.\n\nIt taps **{cast:ls-stake}** on your lead's summary, very lightly, as if checking a pulse. Then it fans three cards on the cloth, face up.\n\n**{cast:ls-card-1}. {cast:ls-card-2}. {cast:ls-card-3}.** It grins and spreads its hands. Nothing hidden. It is not a gamble. It is a trade, with a straight face.",
+   "choices": [
+    {
+     "label": "Bet the move.",
+     "success": {
+      "text": "You nod. The Gengar slides the card for your move across the cloth, and it does not even look pleased. It looks fair.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-09-cards"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch. The Gengar deals the three cards to an empty chair, takes the empty chair's move, and shakes its own hand. Then it bows to you, and you go on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-sleeper"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-09-cards",
+   "name": "The Last Stop: The Cards",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2236",
+    "effect": "float"
+   },
+   "intro": "The three cards lie face up. **{cast:ls-stake}** goes into the middle of the cloth. One of the three comes back, and the other two go back in the deck.\n\n**{cast:ls-card-1}. {cast:ls-card-2}. {cast:ls-card-3}.**",
+   "choices": [
+    {
+     "label": "The left card.",
+     "success": {
+      "text": "The Gengar turns it over. It is exactly what it said. It tips an invisible hat, and you go on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lsTake",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-sleeper"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The middle card.",
+     "success": {
+      "text": "The Gengar turns it over. It is exactly what it said. It tips an invisible hat, and you go on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lsTake",
+        "n": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-sleeper"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The right card.",
+     "success": {
+      "text": "The Gengar turns it over. It is exactly what it said. It tips an invisible hat, and you go on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lsTake",
+        "n": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-sleeper"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-09-sleeper",
+   "name": "The Last Stop: The Sleeper",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2236",
+    "effect": "float"
+   },
+   "intro": "The corridor is narrow and the berths are curtained. Something is breathing slowly under every blanket. The lamps are turned down so nobody has to see.\n\nWhoever sleeps here has been sleeping a long time, and has no plans to stop.",
+   "choices": [
+    {
+     "label": "Lift one.",
+     "success": {
+      "text": "You lift the corner of the nearest blanket, the way you would for a child, and hold your breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "ls-lift",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ls-lift",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-09-litwick"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ls-lift",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-09-mask"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ls-lift",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-09-coat"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tiptoe.",
+     "success": {
+      "text": "You walk the length of the carriage on the sides of your feet. Nobody stirs. Behind you something sighs, relieved, in its sleep.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-mail"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-09-litwick",
+   "name": "The Last Stop: A Sleeping Litwick",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2236",
+    "effect": "float"
+   },
+   "intro": "A Litwick, curled around its own small flame, which burns very low. It has been asleep so long that the wax has pooled round it like a blanket.\n\nIts flame leans toward you as you breathe, the way a plant leans toward a window.",
+   "choices": [
+    {
+     "label": "Wake it gently.",
+     "success": {
+      "text": "You say its name, or the name you would give it. The flame stands up straight. It wakes, looks at you, and does not look afraid. It climbs into your arms as if it had been waiting for the stop.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "litwick"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "mark": "sleeper-litwick"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-mail"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it sleep.",
+     "success": {
+      "text": "You pull the blanket back up to its chin. The flame steadies, and a little warmth stays on your hands for a long time.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-mail"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-09-mask",
+   "name": "The Last Stop: A Yamask's Mask",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2236",
+    "effect": "float"
+   },
+   "intro": "Not a Yamask. Only its mask, set on the pillow, face up, where a face would go. It is thin and old, and the eyes have been worn smooth by looking.\n\nIt is warm. Someone put it down very carefully and meant to come back.",
+   "choices": [
+    {
+     "label": "Take the mask.",
+     "success": {
+      "text": "You slip it into your pocket. It weighs nothing. Somewhere down the carriage a Yamask turns over, and does not wake.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-mail"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You set it straight on the pillow, the way it was. Whoever is somewhere in the carriage lets out a breath it had been holding for years.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-mail"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-09-coat",
+   "name": "The Last Stop: Your Coat",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2236",
+    "effect": "float"
+   },
+   "intro": "Your coat. The one you left on a bench, or a chair, or the back of a door, somewhere, a long time ago. Folded in four, the way you never fold things.\n\nThere is nobody here who could have done that. It still smells like the road.",
+   "choices": [
+    {
+     "label": "Put it on.",
+     "success": {
+      "text": "It fits as it always did. A tiredness you did not know you were carrying slides off your shoulders and out the window, into the dark.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-mail"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it folded.",
+     "success": {
+      "text": "You smooth the top of it once, with the flat of your hand. It stays where it is. You are not sure it was yours. You go on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-09-mail"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-09-mail",
+   "name": "The Last Stop: The Mail Car",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2236",
+    "effect": "float"
+   },
+   "intro": "Sacks and sacks of letters, sorted by no system you can see. Stamps from places that have changed their names. Every one is marked: *undelivered.*\n\nOne has fallen out of its sack onto the boards, and it is addressed, in handwriting from before you, to **your {cast:ls-letter}**.\n\nThe envelope is old. Whoever wrote it pressed hard enough to mark the paper underneath.",
+   "choices": [
+    {
+     "label": "Read it aloud.",
+     "success": {
+      "text": "*\"I couldn't keep you. I hope whoever has you knows about the thing with your ear.\"*\n\nYou stop. It is quiet in the carriage. Your Pokémon does not say anything at all. It leans on your leg, hard, and stays there.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "leadBoost",
+        "type": "spe",
+        "n": -1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-09-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to them unread.",
+     "success": {
+      "text": "You hold it out. Your Pokémon takes it in both hands, in whatever it has for hands, and does not open it. It holds the letter all night, and it does not let go.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-09-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You set it back in the sack, address up, where somebody who knows how to deliver it will find it. You do not look back. You look back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-09-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-09-end",
+   "name": "The Last Stop: The End of the Line",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2236",
+    "effect": "float"
+   },
+   "intro": "The train slows. No whistle, no brakes. The conductor comes down the aisle, and the Dusknoir punches your ticket with a small, careful click, and gives it back.\n\n*The date on it has not happened yet.*\n\nThe Drifloon with the lantern floats beside the door. It looks at the ticket, and at you, and its light goes warm. It holds out its string.",
+   "choices": [
+    {
+     "label": "Take the string.",
+     "success": {
+      "text": "The Drifloon drifts down, holding the lantern high. The doors open on a road you know, in the morning, and the train is not behind you when you turn.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "last-stop-ticket",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "drifloon"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "moves": [
+         "last-stop"
+        ],
+        "mark": "lantern-drifloon"
+       },
+       {
+        "kind": "moment",
+        "text": "Rode the Last Stop, and came back with a lantern. The ticket's date has not happened yet.",
+        "importance": 70
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "last-stop-rode-here",
+        "n": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-09-return",
+   "name": "The Last Stop, Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Recovery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "last-stop-boarded",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "sameStage",
+     "key": "ls-date"
+    },
+    {
+     "kind": "flag",
+     "key": "gn-new-09-returned",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2236",
+    "effect": "float"
+   },
+   "intro": "*The platform is back. The clock above it has hands now. They show the day on your ticket, and the day is today.*\n\n**Conductor, a Dusknoir:** It looks at the ticket in your pocket, and at you, and tips its cap. Something about its face has been put right.",
+   "choices": [
+    {
+     "label": "Show the ticket.",
+     "success": {
+      "text": "The Dusknoir punches it a second time, with a click like a small door closing. Then it takes it, and folds it into its sleeve, and gives you a nod that cost it something.\n\nThe lantern Drifloon, if it is with you, glows all the way down the platform.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-new-09-returned",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "The Last Stop came back on the day on the ticket. The conductor kept it, and nodded.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it on the platform.",
+     "success": {
+      "text": "You walk past. Behind you the clock loses its hands and the train goes back into the dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-new-09-returned",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

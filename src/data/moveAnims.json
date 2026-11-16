@@ -23110,6 +23110,14 @@
       "hitStopMs": 87,
       "telegraph": "strong",
       "chargeAnim": "ice-burn-charging"
+    },
+    "last-stop": {
+      "anim": "shadow-ball",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 65,
+      "telegraph": "normal"
     }
   },
   "commonPack": {

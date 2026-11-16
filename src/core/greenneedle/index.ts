@@ -32,6 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
+import { lsAddress, lsDeal, lsTake, lsTicket } from './laststop';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -638,6 +639,17 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return kcJump(run, e.n ?? 5);
     case 'kcEvolve':
       return kcEvolve(run);
+    case 'lsDeal':
+      // gn.new.09: the dining car's three cards (core/greenneedle/laststop.ts).
+      return lsDeal(content, run, host.float);
+    case 'lsTake':
+      return lsTake(content, run, e.n ?? 1);
+    case 'lsTicket':
+      lsTicket(run, host.stage);
+      return '';
+    case 'lsAddress':
+      lsAddress(run);
+      return '';
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
     case 'exDraw':
