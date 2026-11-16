@@ -80,6 +80,8 @@ export const EGG_SHAPES = [
   'storm-hold', 'storm-brave', 'storm-front', 'door-yes', 'door-no', 'door-safe', 'clutch-no', 'clutch-bit', 'clutch-slow',
   // Bronwen's pairs, and a day-care egg's inherited habit.
   'nidoran-best', 'bronwen-best', 'habit-daycare',
+  // gn.new.33 The Old Courier: the Dratini egg from the lighthouse (Extreme Speed, Tailwind Heart).
+  'tailwind-heart',
 ] as const;
 export type EggShape = (typeof EGG_SHAPES)[number];
 
@@ -129,6 +131,11 @@ export function shapeHatchling(content: Content, run: RunState, egg: Egg, mon: P
       teach('earth-power');
       teach('megahorn');
     }
+    if (s === 'tailwind-heart') {
+      teach('extreme-speed');
+      mon.gn = [...(mon.gn ?? []), TAILWIND_HEART];
+      mark('Tailwind Heart: carried a parcel to a lighthouse before it was born');
+    }
     if (s === 'habit-daycare') mark('looks for the Old Dog in every town');
   }
   // A day-care egg remembers who it came from (Bronwen's "any Pokémon and its own parent").
@@ -137,6 +144,9 @@ export function shapeHatchling(content: Content, run: RunState, egg: Egg, mon: P
   // Afterstory: once you have visited, the village sends a card at every hatch, anywhere.
   if (Number(run.story.flags[flagKey('daycare-visits')] ?? 0) > 0) mark('a card came from the Day-Care Village, with a pawprint in ink');
 }
+
+/** gn mark (Tailwind Heart): when it switches in, the next ally to switch in this battle gains +1 Speed (once per battle). */
+export const TAILWIND_HEART = 'tailwind-heart';
 
 /** gn mark: can't be made to flinch in its first battle (it saw you weren't afraid). It becomes UNFLINCHING_NOW for that battle. */
 export const UNFLINCHING_FIRST = 'unflinching-first';
