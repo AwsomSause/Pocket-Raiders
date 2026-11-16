@@ -96,7 +96,7 @@ test('The Hall of Mirrors: looking at each mirror raises the whole team\'s frien
   expect(errors).toEqual([]);
 });
 
-test('Return to the Museum: "I\'ll look." leaves the relic lead and queues Lenora\'s case later in the run', async ({ page }) => {
+test('Return to the Museum: "I\'ll look." leaves the relic lead and the black-market lead', async ({ page }) => {
   const errors = watch(page);
   await toMap(page, 'co-places-museum');
   await openEvent(page, 'co-museum', 'museum-return');
@@ -104,8 +104,9 @@ test('Return to the Museum: "I\'ll look." leaves the relic lead and queues Lenor
   await playFirstChoice(page);
   const state = await page.evaluate(() => {
     const run = (window as any).__pkr.session.run;
-    return { lead: run.story.flags['ev:museum-relic-lead'] ?? 0, queued: JSON.stringify(run).includes('lenora-museum') };
+    return { lead: run.story.flags['ev:museum-relic-lead'] ?? 0, market: run.story.flags['ev:black-market-lead'] ?? 0 };
   });
-  expect(state).toEqual({ lead: 1, queued: true });
+  // Lenora's case is not queued from here any more (a later beat only opens rooms); the lead flag is what carries on.
+  expect(state).toEqual({ lead: 1, market: 1 });
   expect(errors).toEqual([]);
 });
