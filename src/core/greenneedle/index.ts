@@ -37,6 +37,7 @@ import { alleyStart } from './alley';
 import { leftFates, leftHas, leftTake, leftTokens } from './left';
 import { isLastStage, ltArrive, ltDawn, ltPage, ltSit, ltTokens } from './longtable';
 import { impClaim, impJoin, impersonatorStart } from './impersonator';
+import { shedNinjask, shedRest } from './shedinja';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -681,6 +682,10 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return impJoin(run, host);
     case 'impClaim':
       return impClaim(run);
+    case 'shedRest':
+      return shedRest(content, run, host, e.key ?? '');
+    case 'shedNinjask':
+      return shedNinjask(run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

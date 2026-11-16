@@ -701,6 +701,10 @@
   {
    "key": "lt-page",
    "rule": "core/greenneedle/longtable.ts (gn.new.38 The Long Table)"
+  },
+  {
+   "key": "shedinja-answered",
+   "rule": "core/greenneedle/shedinja.ts (gn.new.07: the Shedinja joined; read by gn.14)"
   }
  ]
 }
