@@ -13,3 +13,5 @@
 - The mock-up's "Draft rule" row has no rule behind it in the game (starters come from the Remembrance picks), so the desk shows Mode there.
 
 **Checked against the mock-ups and left as they are:** the Memories pages (Run Journal, Hall of Memories, Memory Lane, Fallen Trainers, Battle Replays, Heirlooms), Trainer Select, Run Setup, Modifiers, Seed & Codes, Starter Select, Campaign Briefing.
+
+**Tests:** the New UI browser spec is split into five files (no test changed) and CI runs 8 browser shards (was 6): after batch 2 two shards ran out of their 30 minutes while every test was passing.
