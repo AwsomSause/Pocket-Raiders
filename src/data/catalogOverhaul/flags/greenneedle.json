@@ -326,6 +326,162 @@
   {
    "key": "dome-picked",
    "rule": "core/greenneedle/frontier.ts bring (gn.42 Dome)"
+  },
+  {
+   "key": "auction-visits",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-quayle",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-stolen",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-odd",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-suspect",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-bought-stolen",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-paid-stolen",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-won",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-wins",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-done",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-lot",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-price",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-high",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-prev",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-prev-price",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-in-player",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-silent",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-silent-visit",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-snub",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-snubbed",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-quayle-gift",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-returned",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-1",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-2",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-3",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-4",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-5",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-fair-6",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-1",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-2",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-3",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-4",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-5",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-sold-6",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-in-2",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-in-3",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-in-4",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-in-5",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "auction-roundell-cap",
+   "rule": "core/greenneedle/auction.ts (gn.43)"
   }
  ]
 }

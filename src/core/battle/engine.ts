@@ -20,6 +20,7 @@ import { ownTypes } from '../co/typeShift';
 import { golemBlueType, golemColour } from '../greenneedle/crystals';
 import { unflinching } from '../greenneedle/daycare';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
+import { gavelFirst, gavelSpent } from '../greenneedle/auction';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
 import { CARE } from '../care/mods';
@@ -2840,7 +2841,9 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       return false;
     }
   }
-  if (user.flinched) {
+  // Greenneedle gn.43: the auctioneer's gavel. Its holder's first move in a battle can't be interrupted by flinching or confusion.
+  const gavel = user.side === 'player' && gavelFirst(user.mon);
+  if (user.flinched && !gavel) {
     events.push({ type: 'cant', side: user.side, reason: 'flinch' });
     if (ability === 'steadfast') {
       announce(user, ability, events);
@@ -2854,7 +2857,7 @@ function canAct(ctx: BattleContext, user: Combatant, events: BattleEvent[], move
       events.push({ type: 'confusionEnd', side: user.side });
     } else {
       events.push({ type: 'confusion', side: user.side });
-      if (rng.chance(confusionHitChance * (user.side === 'player' ? growthChargeHoldMultiplier(content.balance.overhaulGrowth, user.mon, user.vol.charging !== null) : 1))) {
+      if (rng.chance(confusionHitChance * (user.side === 'player' ? growthChargeHoldMultiplier(content.balance.overhaulGrowth, user.mon, user.vol.charging !== null) : 1)) && !gavel) {
         // It hits itself with a typeless 40-power physical attack (no critical hits).
         const stats = calcStats(content, user.mon);
         const damage = calcDamage(content.ruleset, {
@@ -3534,6 +3537,7 @@ function executeMove(
     }
   }
   events.push({ type: 'move', side: user.side, moveId: move.id });
+  if (user.side === 'player') gavelSpent(user.mon);
   // §29 an enraged Pokémon spends one of its first-strike moves.
   const rage = ctx.battle.enraged;
   if (rage && rage.left > 0 && user.side === 'player' && rage.uid === user.mon.uid) rage.left -= 1;

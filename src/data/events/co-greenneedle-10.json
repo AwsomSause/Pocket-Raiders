@@ -13359,6 +13359,3025 @@
      ]
     }
    ]
+  },
+  {
+   "id": "gn-43-door",
+   "name": "The Pokémon Auction",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "auction-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "*A hall. Rows of chairs. Numbered paddles. A catalogue on every seat.*\n\n**Auctioneer, Mr. Octavian Pryde:** \"Six lots. Bidding in hundreds. A nod is a bid; a sneeze, regrettably, is also a bid. Catalogues are accurate to the best of my knowledge, which is considerable.\"",
+   "choices": [
+    {
+     "label": "Take a seat.",
+     "success": {
+      "text": "Paddle forty-one. The chair creaks. Three rows ahead, a man is already holding his paddle up, and the auction hasn't started.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "auction-at"
+       },
+       {
+        "kind": "gn",
+        "op": "auctionArrive"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-catalogue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Through the doors, as they close: \"Lot one, ladies and gentlemen—\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-catalogue",
+   "name": "The Auction: The Catalogue",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "You open the catalogue. Each lot: what it is, a fair value, and where it came from.\n\n**Lot 1.** A held item: {cast:auction-lot-1}. Fair value {money:auction-fair-1}. {lot:1:prov}\n\n**Lot 2.** An Evolution Stone: {cast:auction-lot-2}. Fair value {money:auction-fair-2}. {lot:2:prov}\n\n**Lot 3.** A fossil: {cast:auction-lot-3}. Fair value {money:auction-fair-3}. {lot:3:prov}",
+   "choices": [
+    {
+     "label": "Turn the page.",
+     "success": {
+      "text": "Heavy paper. It smells of money.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-catalogue-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look again at the photographs.",
+     "success": {
+      "text": "You go back to the pictures, slowly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-photos"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it down. The bidding's starting.",
+     "success": {
+      "text": "Pryde taps the lectern twice. The room straightens.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-catalogue-2",
+   "name": "The Auction: The Catalogue, Continued",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "**Lot 4.** An egg; the breeder's card says: {cast:auction-lot-4}. Fair value {money:auction-fair-4}. {lot:4:prov}\n\n**Lot 5.** A regional variant: {cast:auction-lot-5}. Fair value {money:auction-fair-5}. {lot:5:prov}\n\n**Lot 6.** An unusual Pokémon: {cast:auction-lot-6}. Fair value {money:auction-fair-6}. {lot:6:prov}",
+   "choices": [
+    {
+     "label": "Back a page.",
+     "success": {
+      "text": "Back to lots one to three.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-catalogue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look again at the photographs.",
+     "success": {
+      "text": "You go back to the pictures, slowly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-photos-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it down. The bidding's starting.",
+     "success": {
+      "text": "Pryde taps the lectern twice. The room straightens.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-photos",
+   "name": "The Auction: The Photographs",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "A second look at the photographs of lots one to three. Which one shows something its description leaves out?\n\n**Lot 1:** {lot:1:photo} **Lot 2:** {lot:2:photo} **Lot 3:** {lot:3:photo}",
+   "choices": [
+    {
+     "label": "Lot one.",
+     "success": {
+      "text": "You hold the catalogue up to the light, at lot one.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "auction-spotted",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue"
+         }
+        ],
+        "text": "There. In the corner of the photograph, something the description doesn't mention. This one has been somebody's."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 2,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lot two.",
+     "success": {
+      "text": "You hold the catalogue up to the light, at lot two.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "auction-spotted",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue"
+         }
+        ],
+        "text": "There. In the corner of the photograph, something the description doesn't mention. This one has been somebody's."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 3,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lot three.",
+     "success": {
+      "text": "You hold the catalogue up to the light, at lot three.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "auction-spotted",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue"
+         }
+        ],
+        "text": "There. In the corner of the photograph, something the description doesn't mention. This one has been somebody's."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 4,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       }
+      ]
+     }
+    },
+    {
+     "label": "The next three.",
+     "success": {
+      "text": "You turn the page.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-photos-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-photos-2",
+   "name": "The Auction: The Photographs, Continued",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "Lots four to six, held up to the light.\n\n**Lot 4:** {lot:4:photo} **Lot 5:** {lot:5:photo} **Lot 6:** {lot:6:photo}",
+   "choices": [
+    {
+     "label": "Lot four.",
+     "success": {
+      "text": "You hold the catalogue up to the light, at lot four.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "auction-spotted",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue-2"
+         }
+        ],
+        "text": "There. In the corner of the photograph, something the description doesn't mention. This one has been somebody's."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 0,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue-2"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 5,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue-2"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lot five.",
+     "success": {
+      "text": "You hold the catalogue up to the light, at lot five.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "auction-spotted",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue-2"
+         }
+        ],
+        "text": "There. In the corner of the photograph, something the description doesn't mention. This one has been somebody's."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 0,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue-2"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 6,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue-2"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lot six.",
+     "success": {
+      "text": "You hold the catalogue up to the light, at lot six.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "auction-spotted",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue-2"
+         }
+        ],
+        "text": "There. In the corner of the photograph, something the description doesn't mention. This one has been somebody's."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 0,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue-2"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-stolen",
+        "min": 7,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-catalogue-2"
+         }
+        ],
+        "text": "Nothing. It's just a very good photograph."
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the first three.",
+     "success": {
+      "text": "You turn back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-photos"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-lot-1",
+   "name": "The Auction: Lot 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "eyes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else."
+    },
+    {
+     "id": "collector",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-quayle",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Mr. Quayle, the Collector, who hasn't moved all morning, uncrosses his legs. It is the lot that would suit your lead best."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "**Pryde:** \"Lot one.\" A porter carries it out on a velvet tray.\n\n**Lot 1.** A held item: {cast:auction-lot-1}. Fair value {money:auction-fair-1}. {lot:1:prov}\n\nPryde opens at {money:auction-price}.",
+   "choices": [
+    {
+     "label": "Buy it, and return it.",
+     "success": {
+      "text": "You look at the tag in the photograph again, and the name on it. You raise your paddle.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "auction-return-intent",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Stand up and say so.",
+     "success": {
+      "text": "**You:** \"That one's stolen.\" *Silence. Mr. Dabb lowers his paddle for the first time in his life.*\n\n**Pryde** reads the catalogue again, goes white, and stops the sale. The young woman is out of the door before he's finished the sentence.\n\nOn the floor by her chair: the note from her glove. Her limit, and a letter, in the mark of the evil team that works this region. A File.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-exposed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "stampRegion",
+          "key": "auction-exposed-at"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "auction-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "moment",
+        "text": "You stood up at the auction and said the lot was stolen. It was.",
+        "importance": 60
+       },
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You keep your paddle in your lap. The young woman bids once, twice. Nobody else does for long.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "silent"
+       },
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Watch the bidding open.",
+     "success": {
+      "text": "Paddles shift in the rows ahead.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-43-bid-1",
+   "name": "The Auction: Lot 1, Bidding",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "yours",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-high",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "The bid is with you. Pryde looks round the room for anyone who'll go higher."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "Lot 1: {cast:auction-lot-1}. The price: {money:auction-price}. Fair value: {money:auction-fair-1}.\n\nA step is a hundred.",
+   "choices": [
+    {
+     "label": "Bid.",
+     "success": {
+      "text": "Your paddle goes up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "bid"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-2"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold.",
+     "success": {
+      "text": "You keep still and let the room move.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "hold"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-2"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Out.",
+     "success": {
+      "text": "You put your paddle face down on your knee.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "out"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-2"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-lot-2",
+   "name": "The Auction: Lot 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "eyes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else."
+    },
+    {
+     "id": "collector",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-quayle",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "Mr. Quayle, the Collector, who hasn't moved all morning, uncrosses his legs. It is the lot that would suit your lead best."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "**Pryde:** \"Lot two.\" A porter carries it out on a velvet tray.\n\n**Lot 2.** An Evolution Stone: {cast:auction-lot-2}. Fair value {money:auction-fair-2}. {lot:2:prov}\n\nPryde opens at {money:auction-price}.",
+   "choices": [
+    {
+     "label": "Buy it, and return it.",
+     "success": {
+      "text": "You look at the tag in the photograph again, and the name on it. You raise your paddle.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "auction-return-intent",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Stand up and say so.",
+     "success": {
+      "text": "**You:** \"That one's stolen.\" *Silence. Mr. Dabb lowers his paddle for the first time in his life.*\n\n**Pryde** reads the catalogue again, goes white, and stops the sale. The young woman is out of the door before he's finished the sentence.\n\nOn the floor by her chair: the note from her glove. Her limit, and a letter, in the mark of the evil team that works this region. A File.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-exposed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "stampRegion",
+          "key": "auction-exposed-at"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "auction-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "moment",
+        "text": "You stood up at the auction and said the lot was stolen. It was.",
+        "importance": 60
+       },
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You keep your paddle in your lap. The young woman bids once, twice. Nobody else does for long.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "silent"
+       },
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Watch the bidding open.",
+     "success": {
+      "text": "Paddles shift in the rows ahead.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-43-bid-2",
+   "name": "The Auction: Lot 2, Bidding",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "yours",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-high",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "The bid is with you. Pryde looks round the room for anyone who'll go higher."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "Lot 2: {cast:auction-lot-2}. The price: {money:auction-price}. Fair value: {money:auction-fair-2}.\n\nA step is a hundred.",
+   "choices": [
+    {
+     "label": "Bid.",
+     "success": {
+      "text": "Your paddle goes up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "bid"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 3
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-3"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold.",
+     "success": {
+      "text": "You keep still and let the room move.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "hold"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 3
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-3"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Out.",
+     "success": {
+      "text": "You put your paddle face down on your knee.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "out"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 3
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-3"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-lot-3",
+   "name": "The Auction: Lot 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "eyes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else."
+    },
+    {
+     "id": "collector",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-quayle",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "Mr. Quayle, the Collector, who hasn't moved all morning, uncrosses his legs. It is the lot that would suit your lead best."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "**Pryde:** \"Lot three.\" A porter carries it out on a velvet tray.\n\n**Lot 3.** A fossil: {cast:auction-lot-3}. Fair value {money:auction-fair-3}. {lot:3:prov}\n\nPryde opens at {money:auction-price}.",
+   "choices": [
+    {
+     "label": "Buy it, and return it.",
+     "success": {
+      "text": "You look at the tag in the photograph again, and the name on it. You raise your paddle.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "auction-return-intent",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Stand up and say so.",
+     "success": {
+      "text": "**You:** \"That one's stolen.\" *Silence. Mr. Dabb lowers his paddle for the first time in his life.*\n\n**Pryde** reads the catalogue again, goes white, and stops the sale. The young woman is out of the door before he's finished the sentence.\n\nOn the floor by her chair: the note from her glove. Her limit, and a letter, in the mark of the evil team that works this region. A File.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-exposed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "stampRegion",
+          "key": "auction-exposed-at"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "auction-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "moment",
+        "text": "You stood up at the auction and said the lot was stolen. It was.",
+        "importance": 60
+       },
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You keep your paddle in your lap. The young woman bids once, twice. Nobody else does for long.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "silent"
+       },
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Watch the bidding open.",
+     "success": {
+      "text": "Paddles shift in the rows ahead.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-43-bid-3",
+   "name": "The Auction: Lot 3, Bidding",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "yours",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-high",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "The bid is with you. Pryde looks round the room for anyone who'll go higher."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "Lot 3: {cast:auction-lot-3}. The price: {money:auction-price}. Fair value: {money:auction-fair-3}.\n\nA step is a hundred.",
+   "choices": [
+    {
+     "label": "Bid.",
+     "success": {
+      "text": "Your paddle goes up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "bid"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 4
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-4"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold.",
+     "success": {
+      "text": "You keep still and let the room move.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "hold"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 4
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-4"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Out.",
+     "success": {
+      "text": "You put your paddle face down on your knee.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "out"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 4
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-4"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-lot-4",
+   "name": "The Auction: Lot 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "eyes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 4,
+       "atMost": 4
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else."
+    },
+    {
+     "id": "collector",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-quayle",
+       "atLeast": 4,
+       "atMost": 4
+      }
+     ],
+     "notice": "Mr. Quayle, the Collector, who hasn't moved all morning, uncrosses his legs. It is the lot that would suit your lead best."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "**Pryde:** \"Lot four.\" A porter carries it out on a velvet tray.\n\n**Lot 4.** An egg; the breeder's card says: {cast:auction-lot-4}. Fair value {money:auction-fair-4}. {lot:4:prov}\n\nPryde opens at {money:auction-price}.",
+   "choices": [
+    {
+     "label": "Buy it, and return it.",
+     "success": {
+      "text": "You look at the tag in the photograph again, and the name on it. You raise your paddle.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "auction-return-intent",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Stand up and say so.",
+     "success": {
+      "text": "**You:** \"That one's stolen.\" *Silence. Mr. Dabb lowers his paddle for the first time in his life.*\n\n**Pryde** reads the catalogue again, goes white, and stops the sale. The young woman is out of the door before he's finished the sentence.\n\nOn the floor by her chair: the note from her glove. Her limit, and a letter, in the mark of the evil team that works this region. A File.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-exposed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "stampRegion",
+          "key": "auction-exposed-at"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "auction-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "moment",
+        "text": "You stood up at the auction and said the lot was stolen. It was.",
+        "importance": 60
+       },
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You keep your paddle in your lap. The young woman bids once, twice. Nobody else does for long.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "silent"
+       },
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Watch the bidding open.",
+     "success": {
+      "text": "Paddles shift in the rows ahead.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-43-bid-4",
+   "name": "The Auction: Lot 4, Bidding",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "yours",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-high",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "The bid is with you. Pryde looks round the room for anyone who'll go higher."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "Lot 4: {cast:auction-lot-4}. The price: {money:auction-price}. Fair value: {money:auction-fair-4}.\n\nA step is a hundred.",
+   "choices": [
+    {
+     "label": "Bid.",
+     "success": {
+      "text": "Your paddle goes up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "bid"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-4"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 5
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-5"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold.",
+     "success": {
+      "text": "You keep still and let the room move.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "hold"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-4"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 5
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-5"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Out.",
+     "success": {
+      "text": "You put your paddle face down on your knee.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "out"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-4"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 5
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-5"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-lot-5",
+   "name": "The Auction: Lot 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "eyes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 5,
+       "atMost": 5
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else."
+    },
+    {
+     "id": "collector",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-quayle",
+       "atLeast": 5,
+       "atMost": 5
+      }
+     ],
+     "notice": "Mr. Quayle, the Collector, who hasn't moved all morning, uncrosses his legs. It is the lot that would suit your lead best."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "**Pryde:** \"Lot five.\" A porter carries it out on a velvet tray.\n\n**Lot 5.** A regional variant: {cast:auction-lot-5}. Fair value {money:auction-fair-5}. {lot:5:prov}\n\nPryde opens at {money:auction-price}.",
+   "choices": [
+    {
+     "label": "Buy it, and return it.",
+     "success": {
+      "text": "You look at the tag in the photograph again, and the name on it. You raise your paddle.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "auction-return-intent",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Stand up and say so.",
+     "success": {
+      "text": "**You:** \"That one's stolen.\" *Silence. Mr. Dabb lowers his paddle for the first time in his life.*\n\n**Pryde** reads the catalogue again, goes white, and stops the sale. The young woman is out of the door before he's finished the sentence.\n\nOn the floor by her chair: the note from her glove. Her limit, and a letter, in the mark of the evil team that works this region. A File.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-exposed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "stampRegion",
+          "key": "auction-exposed-at"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "auction-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "moment",
+        "text": "You stood up at the auction and said the lot was stolen. It was.",
+        "importance": 60
+       },
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-6"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You keep your paddle in your lap. The young woman bids once, twice. Nobody else does for long.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "silent"
+       },
+       {
+        "kind": "gn",
+        "op": "auctionOpen",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-lot-6"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Watch the bidding open.",
+     "success": {
+      "text": "Paddles shift in the rows ahead.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-43-bid-5",
+   "name": "The Auction: Lot 5, Bidding",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "yours",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-high",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "The bid is with you. Pryde looks round the room for anyone who'll go higher."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "Lot 5: {cast:auction-lot-5}. The price: {money:auction-price}. Fair value: {money:auction-fair-5}.\n\nA step is a hundred.",
+   "choices": [
+    {
+     "label": "Bid.",
+     "success": {
+      "text": "Your paddle goes up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "bid"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-5"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 6
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-6"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold.",
+     "success": {
+      "text": "You keep still and let the room move.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "hold"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-5"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 6
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-6"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Out.",
+     "success": {
+      "text": "You put your paddle face down on your knee.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "out"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-5"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "auctionOpen",
+          "n": 6
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-lot-6"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-lot-6",
+   "name": "The Auction: Lot 6",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "eyes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 6,
+       "atMost": 6
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else."
+    },
+    {
+     "id": "collector",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-quayle",
+       "atLeast": 6,
+       "atMost": 6
+      }
+     ],
+     "notice": "Mr. Quayle, the Collector, who hasn't moved all morning, uncrosses his legs. It is the lot that would suit your lead best."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "**Pryde:** \"Lot six.\" A porter carries it out on a velvet tray.\n\n**Lot 6.** An unusual Pokémon: {cast:auction-lot-6}. Fair value {money:auction-fair-6}. {lot:6:prov}\n\nPryde opens at {money:auction-price}.",
+   "choices": [
+    {
+     "label": "Buy it, and return it.",
+     "success": {
+      "text": "You look at the tag in the photograph again, and the name on it. You raise your paddle.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "auction-return-intent",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-6"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Stand up and say so.",
+     "success": {
+      "text": "**You:** \"That one's stolen.\" *Silence. Mr. Dabb lowers his paddle for the first time in his life.*\n\n**Pryde** reads the catalogue again, goes white, and stops the sale. The young woman is out of the door before he's finished the sentence.\n\nOn the floor by her chair: the note from her glove. Her limit, and a letter, in the mark of the evil team that works this region. A File.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-exposed",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "stampRegion",
+          "key": "auction-exposed-at"
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "auction-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "mark": "files"
+       },
+       {
+        "kind": "moment",
+        "text": "You stood up at the auction and said the lot was stolen. It was.",
+        "importance": 60
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-end"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You keep your paddle in your lap. The young woman bids once, twice. Nobody else does for long.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "silent"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-end"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Watch the bidding open.",
+     "success": {
+      "text": "Paddles shift in the rows ahead.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-bid-6"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-suspect",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-43-bid-6",
+   "name": "The Auction: Lot 6, Bidding",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "yours",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-high",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "The bid is with you. Pryde looks round the room for anyone who'll go higher."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "Lot 6: {cast:auction-lot-6}. The price: {money:auction-price}. Fair value: {money:auction-fair-6}.\n\nA step is a hundred.",
+   "choices": [
+    {
+     "label": "Bid.",
+     "success": {
+      "text": "Your paddle goes up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "bid"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-6"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-end"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold.",
+     "success": {
+      "text": "You keep still and let the room move.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "hold"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-6"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-end"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Out.",
+     "success": {
+      "text": "You put your paddle face down on your knee.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionRound",
+        "key": "out"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-bid-6"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-done",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "auctionWin"
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-43-end"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-end",
+   "name": "The Auction: After",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "dabb",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-visits",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "At the very end, a last lot nobody expected: a single Oran Berry. Mr. Dabb bids four hundred, and nobody else does. He wins a lot, at last. He is going to have it framed."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "The hall empties. Paddles in a basket by the door. Pryde, at the lectern, counting, and humming.",
+   "choices": [
+    {
+     "label": "Find the owner.",
+     "success": {
+      "text": "The tag gives a name. It takes an afternoon of asking. A small house, a garden, a person who sits down very suddenly when they see what you're holding.\n\nThey pay back what they can. It isn't all of it. You tell them that's fine, and it is.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "auctionReturn"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You bought a stolen lot at auction, and took it home to its owner.",
+        "importance": 60
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-end"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-bought-stolen",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "auction-return-intent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Pryde has a small box.",
+     "success": {
+      "text": "He waits for the last of the room to leave.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "auction-seven",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-43-seven"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "regionChanged",
+       "key": "auction-exposed-at"
+      },
+      {
+       "kind": "flag",
+       "key": "auction-secret-lot",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Pryde raises his gavel to you, as you go. He doesn't bring it down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "auction-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-43-seven",
+   "name": "The Auction: Lot Seven",
+   "group": "Greenneedle",
+   "tags": [
+    "Shop",
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "lapras",
+    "tint": "#5b3a29",
+    "effect": "none"
+   },
+   "intro": "*After the hall's cleared. Pryde, with a small box.*\n\n**Pryde:** \"Lot seven. Not in the catalogue. I've held it eleven years for someone I could be sure of. You stood up. That's the test, as it turns out.\"\n\nYou bid against nobody. He names the fair value, and that's the price.",
+   "choices": [
+    {
+     "label": "A Master Ball. Pay ₽3,000.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 3000
+      }
+     ],
+     "success": {
+      "text": "It sits in the box like an egg. \"It has never been thrown,\" says Pryde. \"I couldn't bear to.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -3000
+       },
+       {
+        "kind": "item",
+        "id": "master-ball",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "auction-secret-lot",
+        "n": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-seven",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "The Lapras with a full page of provenance. Pay ₽2,500.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2500
+      }
+     ],
+     "success": {
+      "text": "A page, in Pryde's hand, every word true. Where it was born, who raised it, and why it is his to sell. It hums at you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lapras"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "auction-secret-lot",
+        "n": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-seven",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "The gavel itself. Pay ₽2,000.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "He turns it over in his hands, once, and gives it to the Pokémon you point to. \"The first word is always theirs, now. Nobody interrupts it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "gn",
+        "op": "gavel"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "auction-secret-lot",
+        "n": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "auction-seven",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "**Pryde:** \"Then I shall hold it a while longer. I'm good at that.\"",
+      "effects": []
+     }
+    }
+   ]
   }
  ]
 }

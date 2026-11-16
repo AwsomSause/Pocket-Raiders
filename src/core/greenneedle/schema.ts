@@ -30,7 +30,7 @@ export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void =
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp', 'natureLast', 'markLead', 'crystal', 'crystalDrop', 'crystalMost', 'lightning', 'labCast', 'labForm', 'marketArrive', 'marketBuy', 'marketOffer', 'marketUndercut', 'daycareLeave', 'daycareReturn', 'eggShape', 'museumArrive', 'frontierClear', 'brainRecord', 'swapIn', 'bench', 'unbench', 'bagLeave', 'bagBack', 'rent', 'bring'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp', 'natureLast', 'markLead', 'crystal', 'crystalDrop', 'crystalMost', 'lightning', 'labCast', 'labForm', 'marketArrive', 'marketBuy', 'marketOffer', 'marketUndercut', 'daycareLeave', 'daycareReturn', 'eggShape', 'museumArrive', 'frontierClear', 'brainRecord', 'swapIn', 'bench', 'unbench', 'bagLeave', 'bagBack', 'rent', 'bring', 'auctionArrive', 'auctionOpen', 'auctionRound', 'auctionWin', 'auctionReturn', 'gavel'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -95,6 +95,8 @@ export const GnEffectSchema = z.object({
   // gn.35. lightning: `n` percent that a bolt strikes the lead and paralyses it (core/greenneedle/ridge.ts says what stops it).
   // gn.42: a Frontier building cleared (`key` the building, `n` the points); a Brain's result (`key`, `n` 1 won / 2 lost); a Factory swap or rental (`key` the species).
   .refine((e) => (e.op === 'frontierClear' || e.op === 'brainRecord' ? !!e.key && (e.n ?? 0) > 0 : e.op === 'swapIn' || e.op === 'rent' ? !!e.key : true), { message: 'a Frontier op needs `key` (and `n` for a clear or a Brain)' })
+  // gn.43: a lot opens (`n`, 1 to 6); a round is the player's bid, hold, out or silent (`key`).
+  .refine((e) => (e.op === 'auctionOpen' ? (e.n ?? 0) >= 1 && (e.n ?? 0) <= 6 : e.op === 'auctionRound' ? ['bid', 'hold', 'out', 'silent'].includes(e.key ?? '') : true), { message: 'an auctionOpen needs `n` (1 to 6); an auctionRound needs `key` bid, hold, out or silent' })
   .refine((e) => (e.op === 'lightning' ? e.n !== undefined && e.n >= 1 && e.n <= 100 : true), { message: 'a lightning needs `n` (1 to 100)' })
   .refine((e) => (e.op === 'clampFlag' ? !!e.key && e.min !== undefined && e.max !== undefined : true), { message: 'a clampFlag needs `key`, `min` and `max`' });
 export type GnEffect = z.infer<typeof GnEffectSchema>;

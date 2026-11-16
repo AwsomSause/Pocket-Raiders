@@ -133,6 +133,31 @@
   ],
   "tags": []
  },
+ "gn-43-door": {
+  "gn": "gn.43",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "No battles",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Pokémon Auction",
+   "elsewhere": "The Pokémon Auction"
+  },
+  "note": "Badge: a gavel. Once per region. SF125's pop-up and silent auction are small versions of this; the black-market auction is gn.52. Until towns exist it sits on step 15.",
+  "kinds": [
+   "Community Episode",
+   "Mystery Episode"
+  ],
+  "tags": []
+ },
  "pp-cold-open": {
   "gn": "gn.01",
   "shape": "Chain",

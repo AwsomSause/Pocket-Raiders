@@ -25,6 +25,7 @@ import { museumArrive } from './museum';
 import { daycareLeave, daycareReturn, eggShape, parentAndChild } from './daycare';
 import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
+import { GAVEL, auctionArrive, auctionOpen, auctionReturn, auctionRound, lotToken } from './auction';
 import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench } from './frontier';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
@@ -44,7 +45,13 @@ const PET_NAMES = ['Dumpling', 'Biscuit', 'Pickle', 'Button', 'Pebble', 'Sprout'
 export function gnTokens(content: Content, run: RunState, text: string): string {
   if (!text.includes('{')) return text;
   // {cast:<name>}: the species a story Pokémon was cast as (gn.42: the ace a Brain remembers).
-  text = text.replace(/\{cast:([a-z0-9-]+)\}/g, (_, name: string) => content.species.get(castOf(run, name) ?? '')?.name ?? 'that one');
+  text = text.replace(/\{cast:([a-z0-9-]+)\}/g, (_, name: string) => {
+    const id = castOf(run, name) ?? '';
+    return content.species.get(id)?.name ?? content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? 'that one';
+  });
+  // gn.43: the auction catalogue ({lot:<n>:prov}, {lot:<n>:photo}) and a sum of money ({money:<key>}).
+  text = text.replace(/\{lot:([1-6]):([a-z]+)\}/g, (_, n: string, part: string) => lotToken(run, Number(n), part));
+  text = text.replace(/\{money:([a-z0-9-]+)\}/g, (_, k: string) => `₽${gnFlag(run, k).toLocaleString('en-GB')}`);
   // {flag:<key>}: a run flag's number (gn.42: the marks the Arena's judge gave you).
   text = text.replace(/\{flag:([a-z0-9-]+)\}/g, (_, k: string) => String(gnFlag(run, k)));
   if (!text.includes('{')) return text;
@@ -184,6 +191,11 @@ const fossilsElsewhere = (region: string): string[] => {
 };
 
 /** One Greenneedle story step. Returns the line the outcome shows (may be empty). */
+/** gn.43: the auction's eggs, regional variants and unusual Pokémon (the lots are drawn from these). */
+const AUCTION_EGGS = ['eevee', 'riolu', 'larvitar', 'dratini', 'togepi', 'bagon', 'gible', 'beldum'];
+const AUCTION_VARIANTS = ['vulpix-alola', 'sandshrew-alola', 'meowth-galar', 'ponyta-galar', 'growlithe-hisui', 'zorua-hisui', 'wooper-paldea', 'slowpoke-galar', 'geodude-alola', 'corsola-galar'];
+const AUCTION_ODD = ['spinda', 'kecleon', 'castform', 'smeargle', 'chimecho', 'ditto'];
+
 /** A new Pokémon at full HP (the Frontier's rentals and its Brains' answers). */
 const makeFull = (content: Content) => (speciesId: string, level: number, uid: string): PokemonInstance => {
   const mon = createPokemon(content, speciesId, level, uid);
@@ -453,6 +465,50 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return bagLeave(run);
     case 'bagBack':
       return bagBack(run);
+    // gn.43 The Pokémon Auction (auction.ts).
+    case 'auctionArrive': {
+      const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
+      const pickOf = <T>(xs: readonly T[]): T => xs[Math.floor(host.float() * xs.length)]!;
+      const quayleLot = [1, 2, 4][gnFlag(run, 'auction-visits') % 3];
+      const leadSp = lead ? getSpecies(content, lead.speciesId) : undefined;
+      const has = (id: string) => content.items.has(id) || content.catalog.has(id);
+      const held = TYPE_HELD[leadSp?.types[0] ?? 'normal'] ?? 'silk-scarf';
+      const stoneOf = (m: PokemonInstance) => getSpecies(content, m.speciesId).evolutions.find((x) => x.item && /-stone$/.test(x.item) && has(x.item))?.item;
+      const stone = (lead && stoneOf(lead)) ?? run.party.map(stoneOf).find(Boolean) ?? 'moon-stone';
+      const fossils = fossilsOf(host.region).filter(has);
+      const eggs = AUCTION_EGGS.filter((sp) => content.species.has(sp));
+      const egg = quayleLot === 4 && lead ? familyId(content, lead.speciesId) : pickOf(eggs);
+      const variant = pickOf(AUCTION_VARIANTS.filter((sp) => content.species.has(sp)));
+      const odd = pickOf(AUCTION_ODD.filter((sp) => content.species.has(sp)));
+      return auctionArrive(run, [has(held) ? held : 'leftovers', stone, fossils.length ? pickOf(fossils) : 'helix-fossil', egg, variant, odd], host.float, 1 + Math.floor(host.float() * 3));
+    }
+    case 'auctionOpen':
+      return auctionOpen(run, e.n!);
+    case 'auctionRound':
+      return auctionRound(run, e.key!);
+    case 'auctionWin': {
+      // The lot you won comes to your seat (or, bought to return, stays in its box).
+      const n = gnFlag(run, 'auction-lot');
+      if (gnFlag(run, 'auction-won') === 0 || gnFlag(run, 'auction-done') === 0) return '';
+      if (gnFlag(run, 'auction-stolen') === n && gnFlag(run, 'auction-return-intent') > 0) return 'You don\'t open it. It isn\'t yours.';
+      const thing = castOf(run, `auction-lot-${n}`);
+      if (!thing) return '';
+      if (n <= 3) return host.apply({ kind: 'item', id: thing, count: 1 });
+      if (n === 4) return host.apply({ kind: 'egg', species: [thing], types: [], levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' });
+      const odd = n === 6 ? gnFlag(run, 'auction-odd') : 0;
+      return host.apply({ kind: 'join', recall: false, species: [thing], types: [], levelBonus: 0, shinyMultiplier: odd === 2 ? 1e9 : 1, shadow: false, blissful: false, hiddenAbility: odd === 1, moves: [], direct: false, alpha: false, starterType: false, asIs: true,
+        ...(odd === 3 ? { marks: ['sailed round the world twice with Captain Ferreira, and has the tattoo to prove it'] } : {}) });
+    }
+    case 'auctionReturn':
+      return auctionReturn(run);
+    case 'gavel': {
+      // The secret lot's gavel goes to the picked Pokémon (a held thing: its first move each battle can't be interrupted).
+      const mon = run.party.find((m) => m.uid === host.picked);
+      if (!mon) return '';
+      mon.gn = [...(mon.gn ?? []).filter((t) => t !== GAVEL), GAVEL];
+      mon.marks = [...(mon.marks ?? []), 'carries Mr. Pryde\'s gavel, and means it'].slice(-8);
+      return `${nameOf(content, mon)} takes the gavel. It holds it like it's always had one.`;
+    }
     case 'marketUndercut':
       return marketUndercut(run, e.key!, e.n!);
     case 'markLead': {

@@ -21,6 +21,7 @@ import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { gnAfterTurn, gnShape } from './greenneedle';
 import { ridgeCatch } from './greenneedle/ridge';
 import { unflinchingStart } from './greenneedle/daycare';
+import { gavelStart } from './greenneedle/auction';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
@@ -3141,6 +3142,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   coBattleBegin(content, run);
   // Greenneedle gn.40: a hatchling that saw you weren't afraid can't be made to flinch in its first battle.
   unflinchingStart(run);
+  gavelStart(run);
   kantoSweetAir(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   run.rng.battle = rng.state;

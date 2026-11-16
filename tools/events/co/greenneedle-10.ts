@@ -1,7 +1,8 @@
-// Greenneedle, part 10: gn.42 The Battle Frontier (doc GREENNEEDLE_REWORKED_PLACED_9.md).
+// Greenneedle, part 10: gn.42 The Battle Frontier, gn.43 The Pokémon Auction (doc GREENNEEDLE_REWORKED_PLACED_9.md).
 // Build: npm run co:build -- greenneedle-10   then   npm run co:gn
-import { br, ch, fight, flag, heal, hurt, item, out, trainer, type Json } from '../dsl.ts';
-import { chIf, exactly, gev, gn, is, moment, notThisRegion, pick, rm, roll, say, scene, setTo, stampRegion, teach, when, type Placement } from './_gn.ts';
+import { $, br, ch, fight, flag, heal, hurt, item, join, money, out, trainer, type Json } from '../dsl.ts';
+import { rep } from './_ne.ts';
+import { chIf, exactly, gev, gn, is, kindness, moment, not, notThisRegion, pick, rm, roll, say, scene, setTo, stampRegion, teach, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -377,7 +378,113 @@ const plaza: Json[] = [
 
 const gn42: Json[] = [...plaza, ...tower, ...factory, ...arena, ...pike, ...dome, ...palace, ...pyramid];
 
-export const EVENTS: Json[] = [...gn42];
+// =====================================================================================================================
+// gn.43  THE POKÉMON AUCTION  (Single at a Town node; until towns exist, step 15, optional; once per region, from A5).
+// Six lots, read in the catalogue first (what it is, the fair value, where it came from), then bid on live: "Bid." / "Hold." / "Out."
+// Four bidders with rules you can read (core/greenneedle/auction.ts). One lot is stolen; the clues are in the catalogue.
+// =====================================================================================================================
+const AUCTION_TINT = '#5b3a29';
+const salon = (o: Json = {}): Json => ({ tint: AUCTION_TINT, tags: ['Shop', 'Mystery', 'Story'], effect: 'none', ...o });
+const LOT_WORD = ['one', 'two', 'three', 'four', 'five', 'six'];
+const LOT_WHAT = ['A held item', 'An Evolution Stone', 'A fossil', 'An egg; the breeder\'s card says', 'A regional variant', 'An unusual Pokémon'];
+const lotLine = (n: number): string => `**Lot ${n}.** ${LOT_WHAT[n - 1]}: {cast:auction-lot-${n}}. Fair value {money:auction-fair-${n}}. {lot:${n}:prov}`;
+const nextLot = (n: number): Json[] => (n < 6 ? [gn('auctionOpen', { n: n + 1 }), scene(`gn-43-lot-${n + 1}`)] : [scene('gn-43-end')]);
+/** A round: the player's word, then the room's; the lot sold, the next comes up. */
+const round = (n: number, label: string, key: string, text: string): Json => ch(label, out(text,
+  gn('auctionRound', { key }),
+  // Still going: back to the paddle. (First, because the next lot opening resets `auction-done`.)
+  when('auction-done', { min: 0, max: 0 }, [scene(`gn-43-bid-${n}`)]),
+  when('auction-done', { min: 1 }, [gn('auctionWin'), ...nextLot(n)]),
+));
+/** The second look at the photographs: name the lot whose picture shows what its description leaves out. */
+const photoPick = (n: number, back: string): Json => ch(`Lot ${LOT_WORD[n - 1]}.`, out(`You hold the catalogue up to the light, at lot ${LOT_WORD[n - 1]}.`,
+  when('auction-stolen', { min: n, max: n }, [setTo('auction-spotted', 1), scene(back)], 'There. In the corner of the photograph, something the description doesn\'t mention. This one has been somebody\'s.'),
+  when('auction-stolen', { min: 0, max: n - 1 }, [scene(back)], 'Nothing. It\'s just a very good photograph.'),
+  when('auction-stolen', { min: n + 1, max: 9 }, [scene(back)], 'Nothing. It\'s just a very good photograph.'),
+));
+const gn43: Json[] = [
+  gev('gn-43-door', 'The Pokémon Auction', salon({ stop: 'event', rarity: 'common', requires: [once('auction-at')] }), say(
+    '*A hall. Rows of chairs. Numbered paddles. A catalogue on every seat.*',
+    '**Auctioneer, Mr. Octavian Pryde:** "Six lots. Bidding in hundreds. A nod is a bid; a sneeze, regrettably, is also a bid. Catalogues are accurate to the best of my knowledge, which is considerable."',
+  ), [
+    ch('Take a seat.', out('Paddle forty-one. The chair creaks. Three rows ahead, a man is already holding his paddle up, and the auction hasn\'t started.', stampRegion('auction-at'), gn('auctionArrive'), scene('gn-43-catalogue'))),
+    ch('Walk on.', out('Through the doors, as they close: "Lot one, ladies and gentlemen—"')),
+  ]),
+  rm('gn-43-catalogue', 'The Auction: The Catalogue', salon(), say(
+    'You open the catalogue. Each lot: what it is, a fair value, and where it came from.',
+    lotLine(1), lotLine(2), lotLine(3),
+  ), [
+    ch('Turn the page.', out('Heavy paper. It smells of money.', scene('gn-43-catalogue-2'))),
+    ch('Look again at the photographs.', out('You go back to the pictures, slowly.', scene('gn-43-photos'))),
+    ch('Put it down. The bidding\'s starting.', out('Pryde taps the lectern twice. The room straightens.', gn('auctionOpen', { n: 1 }), scene('gn-43-lot-1'))),
+  ]),
+  rm('gn-43-catalogue-2', 'The Auction: The Catalogue, Continued', salon(), say(lotLine(4), lotLine(5), lotLine(6)), [
+    ch('Back a page.', out('Back to lots one to three.', scene('gn-43-catalogue'))),
+    ch('Look again at the photographs.', out('You go back to the pictures, slowly.', scene('gn-43-photos-2'))),
+    ch('Put it down. The bidding\'s starting.', out('Pryde taps the lectern twice. The room straightens.', gn('auctionOpen', { n: 1 }), scene('gn-43-lot-1'))),
+  ]),
+  rm('gn-43-photos', 'The Auction: The Photographs', salon(), say(
+    'A second look at the photographs of lots one to three. Which one shows something its description leaves out?',
+    '**Lot 1:** {lot:1:photo} **Lot 2:** {lot:2:photo} **Lot 3:** {lot:3:photo}',
+  ), [photoPick(1, 'gn-43-catalogue'), photoPick(2, 'gn-43-catalogue'), photoPick(3, 'gn-43-catalogue'), ch('The next three.', out('You turn the page.', scene('gn-43-photos-2')))]),
+  rm('gn-43-photos-2', 'The Auction: The Photographs, Continued', salon(), say(
+    'Lots four to six, held up to the light.',
+    '**Lot 4:** {lot:4:photo} **Lot 5:** {lot:5:photo} **Lot 6:** {lot:6:photo}',
+  ), [photoPick(4, 'gn-43-catalogue-2'), photoPick(5, 'gn-43-catalogue-2'), photoPick(6, 'gn-43-catalogue-2'), ch('Back to the first three.', out('You turn back.', scene('gn-43-photos')))]),
+  ...[1, 2, 3, 4, 5, 6].flatMap((n) => [
+    rm(`gn-43-lot-${n}`, `The Auction: Lot ${n}`, salon({ remembers: [
+      { id: 'eyes', when: [exactly('auction-stolen', n)], notice: 'In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else.' },
+      { id: 'collector', when: [exactly('auction-quayle', n)], notice: 'Mr. Quayle, the Collector, who hasn\'t moved all morning, uncrosses his legs. It is the lot that would suit your lead best.' },
+    ] }), say(
+      `**Pryde:** "Lot ${LOT_WORD[n - 1]}." A porter carries it out on a velvet tray.`,
+      lotLine(n), 'Pryde opens at {money:auction-price}.',
+    ), [
+      chIf([is('auction-suspect')], 'Buy it, and return it.', out('You look at the tag in the photograph again, and the name on it. You raise your paddle.', setTo('auction-return-intent', 1), scene(`gn-43-bid-${n}`))),
+      chIf([is('auction-suspect')], 'Stand up and say so.', out(say(
+        '**You:** "That one\'s stolen." *Silence. Mr. Dabb lowers his paddle for the first time in his life.*',
+        '**Pryde** reads the catalogue again, goes white, and stops the sale. The young woman is out of the door before he\'s finished the sentence.',
+        'On the floor by her chair: the note from her glove. Her limit, and a letter, in the mark of the evil team that works this region. A File.',
+      ), when('auction-exposed', { min: 0, max: 0 }, [stampRegion('auction-exposed-at')]), flag('auction-exposed'), rep(2), { kind: 'evil', mark: 'files' },
+        moment('You stood up at the auction and said the lot was stolen. It was.', 60), ...nextLot(n))),
+      chIf([is('auction-suspect')], 'Say nothing.', out('You keep your paddle in your lap. The young woman bids once, twice. Nobody else does for long.',
+        gn('auctionRound', { key: 'silent' }), ...nextLot(n))),
+      chIf([not('auction-suspect')], 'Watch the bidding open.', out('Paddles shift in the rows ahead.', scene(`gn-43-bid-${n}`))),
+    ]),
+    rm(`gn-43-bid-${n}`, `The Auction: Lot ${n}, Bidding`, salon({ remembers: [{ id: 'yours', when: [exactly('auction-high', 1)], notice: 'The bid is with you. Pryde looks round the room for anyone who\'ll go higher.' }] }), say(
+      `Lot ${n}: {cast:auction-lot-${n}}. The price: {money:auction-price}. Fair value: {money:auction-fair-${n}}.`,
+      'A step is a hundred.',
+    ), [
+      round(n, 'Bid.', 'bid', 'Your paddle goes up.'),
+      round(n, 'Hold.', 'hold', 'You keep still and let the room move.'),
+      round(n, 'Out.', 'out', 'You put your paddle face down on your knee.'),
+    ]),
+  ]),
+  rm('gn-43-end', 'The Auction: After', salon({ remembers: [
+    { id: 'dabb', when: [exactly('auction-visits', 2)], notice: 'At the very end, a last lot nobody expected: a single Oran Berry. Mr. Dabb bids four hundred, and nobody else does. He wins a lot, at last. He is going to have it framed.' },
+  ] }), say(
+    'The hall empties. Paddles in a basket by the door. Pryde, at the lectern, counting, and humming.',
+  ), [
+    chIf([is('auction-bought-stolen'), is('auction-return-intent')], 'Find the owner.', out(say(
+      'The tag gives a name. It takes an afternoon of asking. A small house, a garden, a person who sits down very suddenly when they see what you\'re holding.',
+      'They pay back what they can. It isn\'t all of it. You tell them that\'s fine, and it is.',
+    ), gn('auctionReturn'), kindness(2), moment('You bought a stolen lot at auction, and took it home to its owner.', 60), scene('gn-43-end'))),
+    chIf([gnc('regionChanged', { key: 'auction-exposed-at' }), not('auction-secret-lot')], 'Pryde has a small box.', out('He waits for the last of the room to leave.', pick('auction-seven', 1, 1, 1), scene('gn-43-seven'))),
+    ch('Leave.', out('Pryde raises his gavel to you, as you go. He doesn\'t bring it down.', flag('auction-left'))),
+  ]),
+  rm('gn-43-seven', 'The Auction: Lot Seven', salon({ pokemon: 'lapras' }), say(
+    '*After the hall\'s cleared. Pryde, with a small box.*',
+    '**Pryde:** "Lot seven. Not in the catalogue. I\'ve held it eleven years for someone I could be sure of. You stood up. That\'s the test, as it turns out."',
+    'You bid against nobody. He names the fair value, and that\'s the price.',
+  ), [
+    chIf([exactly('auction-seven', 1)], 'A Master Ball. Pay ₽3,000.', out('It sits in the box like an egg. "It has never been thrown," says Pryde. "I couldn\'t bear to."', $(-3000), item('master-ball'), setTo('auction-secret-lot', 1)), { requires: [money(3000)] }),
+    chIf([exactly('auction-seven', 2)], 'The Lapras with a full page of provenance. Pay ₽2,500.', out('A page, in Pryde\'s hand, every word true. Where it was born, who raised it, and why it is his to sell. It hums at you.', $(-2500), join({ species: ['lapras'] }), setTo('auction-secret-lot', 1)), { requires: [money(2500)] }),
+    chIf([exactly('auction-seven', 3)], 'The gavel itself. Pay ₽2,000.', out('He turns it over in his hands, once, and gives it to the Pokémon you point to. "The first word is always theirs, now. Nobody interrupts it."', $(-2000), gn('gavel'), setTo('auction-secret-lot', 1)), { requires: [money(2000)], pick: {} }),
+    ch('Not today.', out('**Pryde:** "Then I shall hold it a while longer. I\'m good at that."')),
+  ]),
+];
+
+
+export const EVENTS: Json[] = [...gn42, ...gn43];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -386,6 +493,11 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'By rank: Brains bring 3 Pokémon at A+0 (Bronze), 4 at A+1 (Silver), 5 at A+1 with held items (Gold), 6 at A+2 (Platinum)', often: 'region', badge: 'own',
     dressing: { kanto: 'The Battle Frontier', elsewhere: 'The Battle Frontier' },
     note: 'Badge: a crossed-swords crest. Once per region, from the second region. SF114 (ps-battle-frontier-gate) is its front gate, with the same clerk. The rank and the Brains\' memory last the run (no memory across runs).',
+  },
+  'gn-43-door': {
+    gn: 'gn.43', shape: 'Single', earliest: 'A5', home: 15, window: [13, 17], sits: 'optional', attaches: 'town', tags: ['Community Episode', 'Mystery Episode'],
+    level: 'No battles', often: 'region', badge: 'own', dressing: { kanto: 'The Pokémon Auction', elsewhere: 'The Pokémon Auction' },
+    note: 'Badge: a gavel. Once per region. SF125\'s pop-up and silent auction are small versions of this; the black-market auction is gn.52. Until towns exist it sits on step 15.',
   },
 };
 

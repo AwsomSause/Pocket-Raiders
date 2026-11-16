@@ -291,3 +291,211 @@ describe('gn.42 The Pike, the Dome and the Pyramid', () => {
     expect(orb.requires.every((c) => conditionMet(content, run, c))).toBe(false);
   });
 });
+
+// ---------------------------------------------------------------------------------------------------------------------
+// gn.43 The Pokémon Auction (rules in src/core/greenneedle/auction.ts).
+import { auctionArrive, auctionOpen, auctionRound, gavelFirst, gavelSpent, gavelStart } from '../../src/core/greenneedle/auction';
+
+const LOTS = ['charcoal', 'fire-stone', 'helix-fossil', 'eevee', 'vulpix-alola', 'spinda'];
+/** A run at the auction, the catalogue fixed (`stolen` lot, the Collector's lot), lot `n` up. */
+function lot(seed: string, n: number, o: { stolen?: number; quayle?: number; money?: number } = {}): RunState {
+  const run = gnRun(seed);
+  run.money = o.money ?? 20000;
+  auctionArrive(run, LOTS, () => 0, 1);
+  setFlag(run, 'auction-stolen', o.stolen ?? 5);
+  setFlag(run, 'auction-quayle', o.quayle ?? 1);
+  auctionOpen(run, n);
+  return run;
+}
+/** Holds until the lot is sold; returns Pryde's words. */
+function holdOut(run: RunState): string {
+  let words = '';
+  for (let i = 0; i < 40 && flagOf(run, 'auction-done') === 0; i += 1) words += ` ${auctionRound(run, 'hold')}`;
+  return words;
+}
+/** To the door, a seat, and the catalogue. */
+function auction(seed: string, prep?: (run: RunState) => void): RunState {
+  const run = gnRun(seed);
+  run.money = 20000;
+  prep?.(run);
+  open(run, 'gn-43-door');
+  return choose(run, 'gn-43-door', 'Take a seat.').run;
+}
+
+describe('gn.43 The Pokémon Auction: the catalogue', () => {
+  it('six lots, each with what it is, a fair value and where it came from; the stolen one, "from a private collection"', () => {
+    const run = auction('t43-cat');
+    const stolen = flagOf(run, 'auction-stolen');
+    const pages = scene(run, 'gn-43-catalogue').intro + scene(run, 'gn-43-catalogue-2').intro;
+    for (let n = 1; n <= 6; n += 1) expect(pages).toContain(`**Lot ${n}.**`);
+    expect(pages).toMatch(/Fair value ₽1,200\./);
+    expect(pages.match(/From a private collection\./g)).toHaveLength(1);
+    expect(pages).toContain(`**Lot ${stolen}.**`);
+    expect(pages).not.toMatch(/\{(cast|lot|money):/);
+  });
+
+  it('a second look: naming the lot whose photograph shows a tag marks it spotted; the wrong one, nothing', () => {
+    let run = auction('t43-photo');
+    const stolen = flagOf(run, 'auction-stolen');
+    const page = stolen <= 3 ? 'gn-43-photos' : 'gn-43-photos-2';
+    run = choose(run, stolen <= 3 ? 'gn-43-catalogue' : 'gn-43-catalogue', 'Look again at the photographs.').run;
+    if (stolen > 3) run = choose(run, 'gn-43-photos', 'The next three.').run;
+    const wrong = stolen === 1 || stolen === 4 ? stolen + 1 : stolen - 1;
+    const missed = choose(run, page, `Lot ${['one', 'two', 'three', 'four', 'five', 'six'][wrong - 1]}.`);
+    expect(said(missed)).toMatch(/just a very good photograph/);
+    expect(flagOf(missed.run, 'auction-spotted')).toBe(0);
+    const hit = choose(run, page, `Lot ${['one', 'two', 'three', 'four', 'five', 'six'][stolen - 1]}.`);
+    expect(said(hit)).toMatch(/This one has been somebody's\./);
+    expect(flagOf(hit.run, 'auction-spotted')).toBe(1);
+  });
+});
+
+describe('gn.43 The bidders', () => {
+  it('Mrs. Roundell never goes past a round number; Mr. Dabb never wins (it goes back to the bid before his)', () => {
+    const run = lot('t43-dabb', 3);
+    // Fair 1,500: opens at 900. Roundell bids to 1,000 and stops there; Dabb goes on to 1,700 (115%).
+    expect(flagOf(run, 'auction-price')).toBe(900);
+    const words = holdOut(run);
+    expect(words).toMatch(/taps her paddle, once/);
+    expect(words).toMatch(/A round number\. She's done\./);
+    expect(words).toMatch(/Mr\. Dabb is examining the ceiling/);
+    expect(flagOf(run, 'auction-sold-3')).not.toBe(3);
+  });
+
+  it('you win at the price; it is paid, the lot comes to your seat, and you are told how far over the fair value you went', () => {
+    const run = lot('t43-win', 1);
+    // Bid every round: Dabb (Roundell is out at 1,000; the Collector wants lot 2 here) stops at 1,380.
+    setFlag(run, 'auction-quayle', 2);
+    auctionOpen(run, 1);
+    let words = '';
+    for (let i = 0; i < 40 && flagOf(run, 'auction-done') === 0; i += 1) words += ` ${auctionRound(run, flagOf(run, 'auction-high') === 1 ? 'hold' : 'bid')}`;
+    expect(flagOf(run, 'auction-sold-1')).toBe(1);
+    const paid = flagOf(run, 'auction-won');
+    expect(run.money).toBe(20000 - paid);
+    expect(words).toMatch(/Sold, to the trainer at the back/);
+    expect(words).toMatch(/over the fair value\./);
+  });
+
+  it('the Collector wants a single lot and overpays; he sits out the others', () => {
+    const run = lot('t43-quayle', 2, { quayle: 2 });
+    const words = holdOut(run);
+    expect(flagOf(run, 'auction-sold-2')).toBe(4);
+    expect(words).toMatch(/Mr\. Quayle sits very still\. And then he doesn't\./);
+    const other = lot('t43-quayle-2', 1, { quayle: 2 });
+    expect(holdOut(other)).not.toMatch(/Quayle/);
+  });
+
+  it('the young woman bids on the stolen lot only, with someone else\'s limit, and looks at the door at the end of it', () => {
+    const run = lot('t43-odalie', 5, { stolen: 5 });
+    const words = holdOut(run);
+    expect(words).toMatch(/checks a note inside her glove/);
+    expect(flagOf(run, 'auction-sold-5')).toBe(5);
+    expect(holdOut(lot('t43-odalie-2', 4, { stolen: 5 }))).not.toMatch(/glove/);
+  });
+
+  it('short of money, a bid is only counted out; out, the room bids on to the end', () => {
+    const run = lot('t43-poor', 1, { money: 100 });
+    expect(auctionRound(run, 'bid')).toMatch(/Not enough\./);
+    const r2 = lot('t43-out', 1);
+    auctionRound(r2, 'out');
+    expect(flagOf(r2, 'auction-done')).toBe(1);
+  });
+
+  it('refused three times on the S.S. Anne: the Collector outbids you once, on principle, then sends the lot over', () => {
+    const run = lot('t43-gift', 1, { quayle: 1, money: 3000 });
+    setFlag(run, 'ssanne-collector-refused', 3);
+    auctionOpen(run, 1);
+    for (let i = 0; i < 60 && flagOf(run, 'auction-done') === 0; i += 1) auctionRound(run, flagOf(run, 'auction-high') === 1 ? 'hold' : 'bid');
+    expect(flagOf(run, 'auction-sold-1')).toBe(4);
+    expect(flagOf(run, 'auction-won')).toBe(-1);
+    expect(flagOf(run, 'auction-quayle-gift')).toBe(1);
+  });
+});
+
+describe('gn.43 The stolen lot and lot seven', () => {
+  /** The auction with the stolen lot spotted, at its lot. */
+  function atStolen(seed: string): { run: RunState; n: number } {
+    let run = auction(seed);
+    const n = flagOf(run, 'auction-stolen');
+    setFlag(run, 'auction-spotted', 1);
+    for (let k = 1; k < n; k += 1) setFlag(run, `auction-sold-${k}`, 0);
+    run = choose(run, 'gn-43-catalogue', 'Put it down. The bidding\'s starting.').run;
+    for (let k = 1; k < n; k += 1) {
+      run = choose(run, `gn-43-lot-${k}`, 'Watch the bidding open.').run;
+      run = choose(run, `gn-43-bid-${k}`, 'Out.').run;
+    }
+    return { run, n };
+  }
+  it('spotted: the three choices, on that lot only; "Stand up and say so." stops the sale, drops the File, and the next lot comes up', () => {
+    const { run, n } = atStolen('t43-expose');
+    expect(scene(run, `gn-43-lot-${n}`).labels).toEqual(['Buy it, and return it.', 'Stand up and say so.', 'Say nothing.']);
+    expect(scene(run, `gn-43-lot-${n}`).intro).toMatch(/She checks a note inside her glove/);
+    const r = choose(run, `gn-43-lot-${n}`, 'Stand up and say so.');
+    expect(said(r)).toMatch(/Mr\. Dabb lowers his paddle for the first time in his life\./);
+    expect(flagOf(r.run, 'auction-exposed')).toBe(1);
+    expect(flagOf(r.run, 'rep')).toBe(2);
+    expect(opened(r.run, `gn-43-lot-${n + 1}`)).toBe(`gn-43-lot-${n + 1}`);
+    expect(scene(r.run, `gn-43-lot-${n + 1}`).labels).toEqual(['Watch the bidding open.']);
+  });
+
+  it('"Say nothing.": it sells to her; at the next auction, Pryde won\'t take your first bid', () => {
+    const { run, n } = atStolen('t43-silent');
+    const r = choose(run, `gn-43-lot-${n}`, 'Say nothing.');
+    expect(flagOf(r.run, 'auction-silent')).toBe(1);
+    expect(flagOf(r.run, `auction-sold-${n}`)).toBe(5);
+    const next = lot('t43-silent-2', 1);
+    setFlag(next, 'auction-silent', 1);
+    setFlag(next, 'auction-silent-visit', 1);
+    setFlag(next, 'auction-visits', 1);
+    auctionArrive(next, LOTS, () => 0, 1);
+    auctionOpen(next, 1);
+    expect(auctionRound(next, 'bid')).toMatch(/as if it were part of the wall/);
+    expect(flagOf(next, 'auction-high')).not.toBe(1);
+    expect(auctionRound(next, 'bid')).toMatch(/with the trainer at the back/);
+  });
+
+  it('"Buy it, and return it.": you pay, keep nothing, and the owner pays back what they can', () => {
+    const { run, n } = atStolen('t43-return');
+    let r = choose(run, `gn-43-lot-${n}`, 'Buy it, and return it.').run;
+    const money0 = r.money;
+    for (let i = 0; i < 60 && opened(r, `gn-43-bid-${n}`); i += 1) r = choose(r, `gn-43-bid-${n}`, flagOf(r, 'auction-high') === 1 ? 'Hold.' : 'Bid.').run;
+    const paid = flagOf(r, 'auction-paid-stolen');
+    expect(paid).toBeGreaterThan(0);
+    expect(r.money).toBe(money0 - paid);
+    expect(flagOf(r, 'auction-bought-stolen')).toBe(1);
+    r.story.flags['ev:auction-lot'] = n;
+    setFlag(r, 'auction-lot', 6);
+    open(r, 'gn-43-end');
+    const back = choose(r, 'gn-43-end', 'Find the owner.');
+    expect(back.run.money).toBe(r.money + Math.round((paid * 0.6) / 100) * 100);
+    expect(flagOf(back.run, 'auction-returned')).toBe(1);
+  });
+
+  it('lot seven: only after exposing a stolen lot at an earlier auction; one thing, at its fair value', () => {
+    const run = auction('t43-seven');
+    open(run, 'gn-43-end');
+    expect(scene(run, 'gn-43-end').labels).not.toContain('Pryde has a small box.');
+    setFlag(run, 'auction-exposed', 1);
+    setFlag(run, 'auction-exposed-at', run.regionIndex + 1);
+    expect(scene(run, 'gn-43-end').labels).not.toContain('Pryde has a small box.');
+    run.regionIndex += 1;
+    expect(scene(run, 'gn-43-end').labels).toContain('Pryde has a small box.');
+    const r = choose(run, 'gn-43-end', 'Pryde has a small box.');
+    const labels = scene(r.run, 'gn-43-seven').labels;
+    expect(labels).toHaveLength(2);
+    expect(labels[1]).toBe('Not today.');
+    expect(labels[0]).toMatch(/^(A Master Ball\. Pay ₽3,000\.|The Lapras with a full page of provenance\. Pay ₽2,500\.|The gavel itself\. Pay ₽2,000\.)$/);
+  });
+
+  it('the gavel: its holder\'s first move each battle can\'t be interrupted, and only the first', () => {
+    const run = gnRun('t43-gavel');
+    const m = run.party[0]!;
+    m.gn = ['gavel'];
+    gavelStart(run);
+    expect(gavelFirst(m)).toBe(true);
+    gavelSpent(m);
+    expect(gavelFirst(m)).toBe(false);
+    gavelStart(run);
+    expect(gavelFirst(m)).toBe(true);
+  });
+});
