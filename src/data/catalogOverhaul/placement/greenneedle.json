@@ -2774,7 +2774,7 @@
   "level": "No battles",
   "often": "region",
   "badge": "own",
-  "note": "Badge: a paper boat. At night on a water stage (the doc's fallback step 19 is the end of the window). Day of the Dead (SF158) opens it too. Once per region; every later visit has one more boat than the town can account for. Floating a boat sets lantern-boat (read by gn.33 and the gn-07 window).",
+  "note": "Badge: a paper boat. At night on a water stage (the doc's fallback step 19 is the end of the window). Day of the Dead (SF158) opens it too, by day or night, through gn-new-36-dotd (an afterstory-style callback on the flag `lantern-sea-open`). Once per region; every later visit has one more boat than the town can account for. Floating a boat sets lantern-boat (read by gn.33 and the gn-07 window).",
   "kinds": [
    "Community Episode"
   ],
