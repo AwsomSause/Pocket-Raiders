@@ -9,6 +9,8 @@ import type { Content } from '../contentSchema';
 import { calcStats } from '../pokemon';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import { emit, whereNow } from '../story/record';
+import { LATER as LATER_PREFIX } from '../events/questline';
+import { MOMENT_MON_FLAG } from '../co/who';
 import type { Rival } from '../story/schema';
 import { rivalBond, type Bond } from './bond';
 import type { BattleClass, DramaEvent } from './index';
@@ -155,7 +157,10 @@ export const CHECKS: Record<string, Check> = {
   veteransAdjustment: (c) => (c.turn >= 4 && enemyAlive(c) >= 1 && allAlive(c) && c.events.length > 0 ? { at: lastIdx(c) } : null),
   desperateSwitch: (c) => {
     const i = c.events.findIndex((e) => e.type === 'switchOut' && e.side === 'enemy');
-    return i >= 0 && !c.events.some((e) => e.type === 'faint' && e.side === 'enemy') ? { at: i } : null;
+    const out = c.events[i];
+    // SF161: the line names the Pokémon being recalled, not the one coming in.
+    const recalled = out?.type === 'switchOut' ? c.battle.enemyTeam.find((m) => m.uid === out.uid) : undefined;
+    return i >= 0 && !c.events.some((e) => e.type === 'faint' && e.side === 'enemy') ? { at: i, vars: { who: recalled ? (c.content.species.get(recalled.speciesId)?.name ?? 'Pokémon') : c.enemyName } } : null;
   },
   unfinishedGrudge: (c) => (c.rival && c.rival.encounters > 0 && c.rival.memory.lastBattle.result === 'win' && c.bond.strain >= 10 ? aceOut(c) : null),
   mercyMoment: (c) => {
@@ -183,7 +188,14 @@ export const CHECKS: Record<string, Check> = {
     return i >= 0 ? { at: i } : null;
   },
   unplannedCombination: (c) => {
-    const i = c.events.findIndex((e) => e.type === 'combo');
+    // SF161: a practised pair of yours (the doc's "Tell them they work well together").
+    const i = c.events.findIndex((e) => e.type === 'combo' && e.side === 'player');
+    const e = c.events[i];
+    return e && e.type === 'combo' ? { at: i, vars: { stat: e.stat === 'atk' ? 'Attack' : 'Sp. Atk' } } : null;
+  },
+  // The trainer's own practised pair (the commentary this moment had before SF161).
+  foeCombination: (c) => {
+    const i = c.events.findIndex((e) => e.type === 'combo' && e.side === 'enemy');
     return i >= 0 ? { at: i } : null;
   },
   newMove: (c) => {
@@ -192,7 +204,14 @@ export const CHECKS: Record<string, Check> = {
     return e && e.type === 'newMove' ? { at: i, vars: { foeMove: c.content.moves.get(e.moveId)?.name ?? 'a new move' } } : null;
   },
   emotionalTurningPoint: (c) => {
-    const i = c.events.findIndex((e) => e.type === 'turningPoint');
+    // SF161: one of yours found something ("Tell it you saw").
+    const i = c.events.findIndex((e) => e.type === 'turningPoint' && e.side === 'player');
+    const e = c.events[i];
+    return e && e.type === 'turningPoint' ? { at: i, vars: { foeMove: e.emotion } } : null;
+  },
+  // The trainer's Pokémon found something (the commentary and rival memory this moment had before SF161).
+  foeTurningPoint: (c) => {
+    const i = c.events.findIndex((e) => e.type === 'turningPoint' && e.side === 'enemy');
     const e = c.events[i];
     return e && e.type === 'turningPoint' ? { at: i, vars: { foeMove: e.emotion } } : null;
   },
@@ -247,10 +266,24 @@ export function libraryCandidates(c: PlanCtx): Candidate[] {
       def,
       vars: hit.vars,
       cue: { event: def.id },
-      speaker: def.id === 'rivalInterruption' && c.witness ? `${c.content.trainers.get(c.witness.classId)?.name ?? 'Trainer'} ${c.witness.name}` : undefined,
+      speaker: def.id === 'rivalInterruption' && c.witness ? `${c.content.trainers.get(c.witness.classId)?.name ?? 'Trainer'} ${c.witness.name}` : def.narrate === 'foe' ? c.foeName : def.narrate === 'name' ? (hit.vars?.who ?? c.enemyName) : undefined,
     });
   }
   return out;
+}
+
+/** The story flag a heated moment's after-battle scene waits on: `heated-last-second-resolve` for `lastSecondResolve`. */
+export const heatedFlag = (id: string): string => `heated-${id.replace(/[A-Z]/g, (ch) => `-${ch.toLowerCase()}`)}`;
+
+/** SF100: a heated moment happened in a big battle. Its after-battle scene is owed, at most once per region and three times per run. */
+export function noteHeatedMoment(run: RunState, id: string): boolean {
+  const flags = run.story.flags;
+  const total = Number(flags['ev:heated-total'] ?? 0);
+  if (total >= 3 || flags[`heated-region:${run.regionIndex}`]) return false;
+  flags[`heated-region:${run.regionIndex}`] = true;
+  flags['ev:heated-total'] = total + 1;
+  flags[`ev:${heatedFlag(id)}`] = 1;
+  return true;
 }
 
 /** Called when the director accepted a library event: cooldown, rival memory and Chronicle. */
@@ -261,12 +294,14 @@ export function recordLibraryEvent(c: PlanCtx, cand: Candidate): void {
   c.battle.drama.seen.push(`ev:${def.id}`);
   flags[flagCd(def.id)] = battleNo(c.run);
   if (def.aiShift) c.battle.ai = Math.max(0, Math.min(1, c.battle.ai + def.aiShift));
+  if (def.after) momentAfter(c, cand, def.after);
   if (def.traitShift && c.rival) {
     for (const [k, n] of Object.entries(def.traitShift)) {
       const key = k as keyof Rival['traits'];
       if (key in c.rival.traits) c.rival.traits[key] = Math.max(0, Math.min(100, c.rival.traits[key] + n));
     }
   }
+  if (def.heated) noteHeatedMoment(c.run, def.id);
   if (!def.records) return;
   if (c.rival && def.remember) flags[flagRival(c.rival.id, def.id)] = `${battleNo(c.run)}|${cand.vars?.foeMove ?? ''}`;
   emit(c.content, c.run, 'storyMoment', {
@@ -275,6 +310,15 @@ export function recordLibraryEvent(c: PlanCtx, cand: Candidate): void {
     data: { dramaEvent: def.id, trainer: c.battle.trainer?.name ?? '' },
     text: `${c.battle.trainer?.name ?? 'A trainer'}: ${def.name}${def.shiftText && c.rival ? ` (${def.shiftText})` : ''}`,
   });
+}
+
+/** SF161: the moment's Pokémon are remembered and its after-battle room opens beside the next node (as `laterEvent` 1). */
+function momentAfter(c: PlanCtx, cand: Candidate, eventId: string): void {
+  const e = c.events[cand.ev.at];
+  const uids = !e ? [] : e.type === 'combo' ? [e.from, e.to] : e.type === 'refused' || e.type === 'initiative' || e.type === 'turningPoint' ? [e.uid] : [];
+  if (uids.length === 0 && c.foeMon) uids.push(c.foeMon.uid);
+  c.run.story.flags[MOMENT_MON_FLAG] = uids.join('|');
+  c.run.itemCounters = { ...c.run.itemCounters, [`${LATER_PREFIX}${eventId}`]: 1 };
 }
 
 /** At a rival's next battle: it brings up the most recent thing it remembers from before (real flags only). */

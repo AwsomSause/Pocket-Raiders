@@ -270,7 +270,8 @@ describe('Events', () => {
     addFlag(run, 'sanctuary-sign');
     addFlag(run, 'kindness', 3);
     const now = ids(run);
-    for (const id of ['shadow-outbreak', 'shadow-stronghold', 'sanctuary-found', 'ancient-shrine']) expect(now.has(id), id).toBe(true);
+    // ancient-shrine became a Legendary Sign stop (Catalog Overhaul legends RULE ids) and is retired.
+    for (const id of ['shadow-outbreak', 'shadow-stronghold', 'sanctuary-found']) expect(now.has(id), id).toBe(true);
   });
   it('rescuing from a hideout gives a Shadow Pokémon, and a sanctuary rest blesses the party and opens the world', () => {
     const run = fresh('ev-rescue');

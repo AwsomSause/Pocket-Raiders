@@ -1,0 +1,151 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "moment-refusal",
+   "name": "After the Refusal",
+   "group": "Battle moments",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The battle is over. The Pokémon that would not follow your order sits a little apart from the others, watching you, waiting to see what you will do.",
+   "choices": [
+    {
+     "label": "Apologise to it.",
+     "success": {
+      "text": "You kneel down and tell it you are sorry: that was too much to ask. It looks at you for a long moment. Then it comes and sits beside you.",
+      "effects": [
+       {
+        "kind": "coTrust",
+        "amount": 10,
+        "who": "moment"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. It says nothing. After a while it gets up and walks on with the others, and the space between you stays where it is.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "moment-combo",
+   "name": "After the Hand-Over",
+   "group": "Battle moments",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The battle is over. The two that handed over to each other are side by side, still breathing hard, pretending not to look at each other.",
+   "choices": [
+    {
+     "label": "Tell them they work well together.",
+     "success": {
+      "text": "You tell them. They both look away at the same moment, in the same direction, and that makes it worse, and then they are both laughing.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "moment"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "moment-mercy",
+   "name": "After the Mercy",
+   "group": "Battle moments",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The battle is over. The trainer who told you that you could stop is packing up, not looking at you, as if it was nothing.",
+   "choices": [
+    {
+     "label": "Thank them.",
+     "success": {
+      "text": "You thank them. They shrug, and then they do not. \"Someone said it to me, once.\" They tell everyone on the road that you were worth the kindness.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "moment-initiative",
+   "name": "After the Initiative",
+   "group": "Battle moments",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The battle is over. The Pokémon that ignored your order, and was right, is looking up at you with its ears back, not sure if it is in trouble.",
+   "choices": [
+    {
+     "label": "Thank it.",
+     "success": {
+      "text": "You thank it. You were wrong, and it knew, and it trusted you to understand. It pushes its head into your hand.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "moment"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it to listen next time.",
+     "success": {
+      "text": "You tell it to listen next time. It looks at you for a long moment, then nods, slowly, the way you would to someone who has not quite understood yet.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "moment-turning",
+   "name": "After the Turning Point",
+   "group": "Battle moments",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The battle is over. One of your team is standing a little differently now. Something happened to it in there, and it is still deciding what.",
+   "choices": [
+    {
+     "label": "Tell it you saw.",
+     "success": {
+      "text": "You tell it you saw. It stands taller, and it does not stop.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "moment"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

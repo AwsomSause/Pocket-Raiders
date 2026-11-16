@@ -203,7 +203,11 @@ export function durationText(ms: number): string {
 
 /** The rules a run started during these editions plays by: every event's modifiers. */
 export function gameEventModifiers(content: Content, editions: readonly string[]): ArchetypeModifier[] {
-  return editions.flatMap((ed) => content.gameEvents.get(eventIdOf(ed))?.modifiers ?? []);
+  // A challenge week (`optIn`) adds nothing here: the player signs up for it at its challenge board.
+  return editions.flatMap((ed) => {
+    const event = content.gameEvents.get(eventIdOf(ed));
+    return event && !event.optIn ? event.modifiers : [];
+  });
 }
 
 /** The map events these editions feature (more likely) or own (only then). */

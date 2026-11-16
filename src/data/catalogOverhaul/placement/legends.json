@@ -1,0 +1,2230 @@
+{
+ "note": "Catalog Overhaul placement blocks for the legends category, from QUESTLINES_PLACED.md (A2-A6) and QUESTLINES_DEEPENED_1.md (A7-A11). Keyed by event id; shape: docs/catalog-overhaul.md.",
+ "story-alpha-black-tide": {
+  "shape": "Door",
+  "earliest": "A5",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "water",
+   "storm"
+  ],
+  "level": "A+2"
+ },
+ "story-alpha-frostbound": {
+  "shape": "Door",
+  "earliest": "A7",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "must-see",
+  "tags": [
+   "snow",
+   "high"
+  ],
+  "level": "A+2"
+ },
+ "story-alpha-hushed-one": {
+  "shape": "Door",
+  "earliest": "A3",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "eerie",
+   "high"
+  ],
+  "level": "A+0"
+ },
+ "story-alpha-orchard-warden": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "forest"
+  ],
+  "level": "A+0"
+ },
+ "story-alpha-quarry-king": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "sits": "must-see",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+0"
+ },
+ "story-alpha-rooftop-watcher": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "badge": "own",
+  "tags": [
+   "high",
+   "eerie"
+  ],
+  "level": "A+2"
+ },
+ "story-alpha-sleeper": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 9,
+  "window": [
+   7,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "level": "A+2"
+ },
+ "story-alpha-static-choir": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 13,
+  "window": [
+   10,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "tags": [
+   "city",
+   "storm"
+  ],
+  "level": "A+2"
+ },
+ "story-alpha-unwelcome-guest": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 16,
+  "window": [
+   13,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "tags": [
+   "eerie",
+   "city",
+   "night"
+  ],
+  "level": "A+2"
+ },
+ "story-alpha-weeping-lantern": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 14,
+  "window": [
+   11,
+   17
+  ],
+  "sits": "side-branch",
+  "attaches": "instead",
+  "tags": [
+   "eerie",
+   "night"
+  ],
+  "level": "A+2"
+ },
+ "co-m1-absol": {
+  "shape": "Companion",
+  "earliest": "A5",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "where": "Starts 11; the grave comes when you follow her",
+  "sits": "side-branch",
+  "tags": [
+   "snow"
+  ],
+  "level": "A+1"
+ },
+ "co-m2-harvest": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   2,
+   5,
+   8
+  ],
+  "where": "The farm on stage 2, the mine on stage 5, the seam on stage 8",
+  "level": "A+1"
+ },
+ "co-m2-mine": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   5
+  ],
+  "level": "A+1"
+ },
+ "co-m2-seam": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   8
+  ],
+  "level": "A+2"
+ },
+ "co-m3-twins": {
+  "shape": "Companion",
+  "earliest": "A6",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "where": "Starts 12; the stone-cutter is two nodes on",
+  "level": "A+1"
+ },
+ "co-m4-mirror": {
+  "shape": "Door",
+  "earliest": "A7",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "cave",
+   "ruin"
+  ],
+  "level": "A+2"
+ },
+ "co-m5-tatsugiri": {
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "tags": [
+   "water",
+   "beach"
+  ],
+  "level": "A+1"
+ },
+ "co-m6-flower": {
+  "shape": "Single",
+  "earliest": "A17",
+  "stages": [
+   11,
+   12,
+   13
+  ],
+  "tags": [
+   "forest"
+  ],
+  "level": "A+1"
+ },
+ "co-d1-linden": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "Each region Stage 3, the Town node",
+  "attaches": "town"
+ },
+ "co-d1-linden-again": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "Each later region Stage 3, the Town node",
+  "attaches": "town",
+  "often": "once per region"
+ },
+ "delta-clue-nest": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "After the Delta Journal: any + node",
+  "often": "once per region"
+ },
+ "delta-clue-scales": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "After the Delta Journal: any + node",
+  "often": "once per region"
+ },
+ "delta-clue-song": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "After the Delta Journal: any + node",
+  "often": "once per region"
+ },
+ "delta-research-battle": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "After three clues: a side branch",
+  "sits": "side-branch",
+  "level": "A+1"
+ },
+ "co-d2-valley": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "d2",
+  "beat": 1,
+  "tags": [
+   "hot",
+   "eerie"
+  ],
+  "level": "A+1"
+ },
+ "co-d2-ember": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "d2",
+  "beat": 2
+ },
+ "co-d2-out": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "d2",
+  "beat": 3
+ },
+ "co-d3-hill": {
+  "shape": "Run-Long",
+  "earliest": "A2",
+  "where": "The first + node of a stage"
+ },
+ "co-d3-visit": {
+  "shape": "Run-Long",
+  "earliest": "A2",
+  "where": "The first + node of a stage, once per season"
+ },
+ "co-d3-under": {
+  "shape": "Run-Long",
+  "earliest": "A2",
+  "where": "The first + node of a stage after four seasons",
+  "tags": [
+   "snow"
+  ],
+  "level": "A+1"
+ },
+ "co-d4-cove": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "chain": "d4",
+  "beat": 1,
+  "tags": [
+   "water"
+  ]
+ },
+ "co-d4-rest": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "chain": "d4",
+  "beat": 2
+ },
+ "co-d4-last": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "chain": "d4",
+  "beat": 3
+ },
+ "co-d5-dump": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "city"
+  ],
+  "level": "A+1"
+ },
+ "co-d6-marsh": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "tags": [
+   "snow",
+   "water"
+  ]
+ },
+ "co-d6-back": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   11
+  ],
+  "tags": [
+   "snow",
+   "water"
+  ]
+ },
+ "co-d7-crossing-1": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   3
+  ],
+  "where": "Stage 3, step 10",
+  "level": "A+1"
+ },
+ "co-d7-crossing-2": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   6
+  ],
+  "where": "Stage 6, step 10"
+ },
+ "co-d7-crossing-3": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   8
+  ],
+  "where": "Stage 8, step 10"
+ },
+ "co-d8-cloud": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "tags": [
+   "storm"
+  ]
+ },
+ "co-d8-rest-1": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "attaches": "rest"
+ },
+ "co-d8-rest-2": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "attaches": "rest"
+ },
+ "co-d8-rest-3": {
+  "shape": "Companion",
+  "earliest": "A3",
+  "attaches": "rest"
+ },
+ "island-trial-normal": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-fighting": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-flying": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-poison": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-ground": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-rock": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-bug": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-ghost": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-steel": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-fire": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-water": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-grass": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-electric": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-psychic": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-ice": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-dragon": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-dark": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "island-trial-fairy": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "Each region Stage 4, step 13; three Trials a run, drawn by the run type spread",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+1",
+  "often": "once per region"
+ },
+ "co-z1-grand": {
+  "shape": "Run-Long",
+  "earliest": "A4",
+  "where": "After three Trials: the next region Stage 4, step 13",
+  "home": 13,
+  "sits": "side-branch",
+  "level": "A+2"
+ },
+ "z-sigil-ruin": {
+  "shape": "Run-Long",
+  "earliest": "A6",
+  "where": "Any + node",
+  "tags": [
+   "ruin"
+  ]
+ },
+ "z-sigil-pool": {
+  "shape": "Run-Long",
+  "earliest": "A6",
+  "where": "The next stage after a lit sigil, any + node",
+  "tags": [
+   "water"
+  ]
+ },
+ "co-z3-cave": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "cave",
+   "snow"
+  ],
+  "level": "A+1"
+ },
+ "co-z4-night-1": {
+  "shape": "Stage-Three",
+  "earliest": "A6",
+  "chain": "z4",
+  "beat": 1,
+  "where": "A + node at Night; needs a Psychic-type",
+  "tags": [
+   "night"
+  ]
+ },
+ "co-z4-night-2": {
+  "shape": "Stage-Three",
+  "earliest": "A6",
+  "chain": "z4",
+  "beat": 2,
+  "tags": [
+   "night"
+  ]
+ },
+ "co-z4-night-3": {
+  "shape": "Stage-Three",
+  "earliest": "A6",
+  "chain": "z4",
+  "beat": 3,
+  "tags": [
+   "night"
+  ]
+ },
+ "co-z6-dojo": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "tags": [
+   "city"
+  ]
+ },
+ "co-z6-spar-2": {
+  "shape": "Region",
+  "earliest": "A6",
+  "where": "Three spars across the region: a later stage of the same region"
+ },
+ "co-z6-spar-3": {
+  "shape": "Region",
+  "earliest": "A6",
+  "where": "Three spars across the region: a later stage of the same region",
+  "level": "A+1"
+ },
+ "co-z6-alpha": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "where": "A region after leaving the dojo",
+  "level": "A+2"
+ },
+ "co-z7-hill": {
+  "shape": "Single",
+  "earliest": "A14",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "night"
+  ],
+  "level": "A+2"
+ },
+ "co-l2-cliff-1": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "chain": "l2",
+  "beat": 1,
+  "tags": [
+   "snow",
+   "storm",
+   "hot"
+  ]
+ },
+ "co-l2-cliff-2": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "chain": "l2",
+  "beat": 2,
+  "tags": [
+   "snow",
+   "storm",
+   "hot"
+  ]
+ },
+ "co-l2-cliff-3": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "chain": "l2",
+  "beat": 3,
+  "tags": [
+   "snow",
+   "storm",
+   "hot"
+  ],
+  "level": "A+2"
+ },
+ "co-l2-jealous-articuno": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "where": "After two birds: the next + node",
+  "level": "A+2"
+ },
+ "co-l2-jealous-zapdos": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "where": "After two birds: the next + node",
+  "level": "A+2"
+ },
+ "co-l2-jealous-moltres": {
+  "shape": "Trial",
+  "earliest": "A4",
+  "where": "After two birds: the next + node",
+  "level": "A+2"
+ },
+ "co-l3-feather": {
+  "shape": "Region",
+  "earliest": "A3",
+  "stages": [
+   2
+  ],
+  "level": "A+1"
+ },
+ "co-l3-place-1": {
+  "shape": "Region",
+  "earliest": "A3",
+  "stages": [
+   3,
+   4
+  ]
+ },
+ "co-l3-place-2": {
+  "shape": "Region",
+  "earliest": "A3",
+  "stages": [
+   5,
+   6
+  ]
+ },
+ "co-l3-place-3": {
+  "shape": "Region",
+  "earliest": "A3",
+  "stages": [
+   6,
+   7
+  ]
+ },
+ "co-l3-tower": {
+  "shape": "Region",
+  "earliest": "A3",
+  "stages": [
+   8
+  ],
+  "level": "A+1"
+ },
+ "co-l4-whirl": {
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "side-branch",
+  "tags": [
+   "water",
+   "storm"
+  ],
+  "needs": "L2",
+  "level": "A+2"
+ },
+ "co-l5-cave": {
+  "shape": "Door",
+  "earliest": "A12",
+  "where": "The door at Stage 6, Step 13; the finale at Stage 8, Step 17",
+  "stages": [
+   6
+  ],
+  "home": 13,
+  "level": "A+2"
+ },
+ "co-l6-towns": {
+  "shape": "World Event",
+  "earliest": "A9",
+  "stages": [
+   3
+  ],
+  "where": "Steps 5, 10, 15 of Stages 3, 6 and 8; the header alternates Drought and Deluge"
+ },
+ "co-l6-aqua": {
+  "shape": "World Event",
+  "earliest": "A9",
+  "stages": [
+   3,
+   6
+  ]
+ },
+ "co-l6-magma": {
+  "shape": "World Event",
+  "earliest": "A9",
+  "stages": [
+   3,
+   6
+  ]
+ },
+ "co-l6-pillar": {
+  "shape": "World Event",
+  "earliest": "A9",
+  "stages": [
+   6
+  ]
+ },
+ "co-l6-finale": {
+  "shape": "World Event",
+  "earliest": "A9",
+  "stages": [
+   8
+  ],
+  "level": "A+2"
+ },
+ "co-l7-shimmer": {
+  "shape": "Companion",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   7,
+   13
+  ],
+  "tags": [
+   "water",
+   "city"
+  ]
+ },
+ "co-l8-regirock": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "One door per region: Stage 5, Step 14",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l8-regice": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "One door per region: Stage 5, Step 14",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l8-registeel": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "One door per region: Stage 5, Step 14",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l8-regieleki": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "One door per region: Stage 5, Step 14",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l8-regidrago": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "One door per region: Stage 5, Step 14",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l8-meadow": {
+  "shape": "Run-Long",
+  "earliest": "A3",
+  "where": "After four keystones: the next region Stage 5, Step 14",
+  "home": 14,
+  "level": "A+2"
+ },
+ "co-l9-lake-1": {
+  "shape": "Trial",
+  "earliest": "A10",
+  "chain": "l9",
+  "beat": 1,
+  "tags": [
+   "water"
+  ]
+ },
+ "co-l9-lake-2": {
+  "shape": "Trial",
+  "earliest": "A10",
+  "chain": "l9",
+  "beat": 2,
+  "tags": [
+   "water"
+  ]
+ },
+ "co-l9-lake-3": {
+  "shape": "Trial",
+  "earliest": "A10",
+  "chain": "l9",
+  "beat": 3,
+  "tags": [
+   "water"
+  ],
+  "level": "A+2"
+ },
+ "co-l9-pillar": {
+  "shape": "Trial",
+  "earliest": "A10",
+  "stages": [
+   8
+  ],
+  "home": 17,
+  "level": "A+2"
+ },
+ "co-l10-stone": {
+  "shape": "Stage-Three",
+  "earliest": "A8",
+  "chain": "l10",
+  "beat": 1
+ },
+ "co-l10-town": {
+  "shape": "Stage-Three",
+  "earliest": "A8",
+  "chain": "l10",
+  "beat": 2
+ },
+ "co-l10-tower": {
+  "shape": "Stage-Three",
+  "earliest": "A8",
+  "chain": "l10",
+  "beat": 3,
+  "level": "A+2"
+ },
+ "co-l11-valley": {
+  "shape": "Region",
+  "earliest": "A12",
+  "stages": [
+   2,
+   5,
+   8
+  ],
+  "level": "A+2"
+ },
+ "co-l12-lillie": {
+  "shape": "Companion",
+  "earliest": "A4",
+  "where": "Starts at a + node"
+ },
+ "co-l12-attempt-1": {
+  "shape": "Companion",
+  "earliest": "A4"
+ },
+ "co-l12-attempt-2": {
+  "shape": "Companion",
+  "earliest": "A4"
+ },
+ "co-l12-attempt-3": {
+  "shape": "Companion",
+  "earliest": "A4"
+ },
+ "co-l12-altars": {
+  "shape": "Door",
+  "earliest": "A4",
+  "where": "Two regions on, Stage 6, Step 14",
+  "home": 14,
+  "level": "A+1"
+ },
+ "co-l13-dim": {
+  "shape": "World Event",
+  "earliest": "A14",
+  "where": "One stage; the header reads Dimmed; Steps 5, 10, 15",
+  "level": "A+2"
+ },
+ "co-l14-ruin": {
+  "shape": "Trial",
+  "earliest": "A8",
+  "chain": "l14",
+  "beat": 1
+ },
+ "co-l14-hum-1": {
+  "shape": "Trial",
+  "earliest": "A8",
+  "chain": "l14",
+  "beat": 2
+ },
+ "co-l14-hum-2": {
+  "shape": "Trial",
+  "earliest": "A8",
+  "chain": "l14",
+  "beat": 3,
+  "level": "A+1"
+ },
+ "co-l14-weald": {
+  "shape": "Trial",
+  "earliest": "A8",
+  "where": "After the third hum: the next stage, Step 16",
+  "level": "A+2"
+ },
+ "co-l15-shrine": {
+  "shape": "Run-Long",
+  "earliest": "A5",
+  "where": "One ward per region, four regions: Stage 6, Step 15",
+  "home": 15,
+  "sits": "side-branch",
+  "level": "A+2",
+  "often": "once per region"
+ },
+ "co-l15-tablets": {
+  "shape": "Run-Long",
+  "earliest": "A5",
+  "where": "A hidden node near the shrine",
+  "sits": "side-branch"
+ },
+ "co-my1-clearing": {
+  "shape": "Visit",
+  "earliest": "A3",
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-my2-shrine": {
+  "shape": "Region",
+  "earliest": "A4",
+  "stages": [
+   2
+  ],
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "where": "Region-shaped: Stages 2, 5, 8, each at a side branch, Step 11",
+  "badge": "?"
+ },
+ "co-my2-sapling-2": {
+  "shape": "Region",
+  "earliest": "A4",
+  "stages": [
+   5
+  ],
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "badge": "?"
+ },
+ "co-my2-sapling-3": {
+  "shape": "Region",
+  "earliest": "A4",
+  "stages": [
+   8
+  ],
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "badge": "?"
+ },
+ "co-my3-comet": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "tags": [
+   "night"
+  ],
+  "where": "A + node at Night (the first of the Seven Nights)"
+ },
+ "co-my4-crater": {
+  "shape": "Visit",
+  "earliest": "A9",
+  "tags": [
+   "high",
+   "city"
+  ],
+  "where": "A + node; if it goes quiet, a side branch two stages on"
+ },
+ "co-my4-again": {
+  "shape": "Visit",
+  "earliest": "A9",
+  "sits": "side-branch",
+  "tags": [
+   "high",
+   "city"
+  ]
+ },
+ "co-my5-tide": {
+  "shape": "Visit",
+  "earliest": "A4",
+  "tags": [
+   "water"
+  ],
+  "where": "A + node on a water stage (Manaphy's later-run half is cut)"
+ },
+ "co-my6-arena": {
+  "shape": "Visit",
+  "earliest": "A5",
+  "home": 12,
+  "sits": "side-branch",
+  "where": "Side branch, 12: a ruined arena"
+ },
+ "co-my7-field": {
+  "shape": "Visit",
+  "earliest": "A2",
+  "home": 9,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-my7-again": {
+  "shape": "Visit",
+  "earliest": "A2",
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ]
+ },
+ "co-my8-stall": {
+  "shape": "Visit",
+  "earliest": "A4",
+  "home": 9,
+  "where": "A roadside stall: 9, optional"
+ },
+ "co-my9-ring-1": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "my9",
+  "beat": 1,
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my9-ring-2": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "my9",
+  "beat": 2,
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my9-ring-3": {
+  "shape": "Trial",
+  "earliest": "A6",
+  "chain": "my9",
+  "beat": 3,
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my10-shadow": {
+  "shape": "Visit",
+  "earliest": "A7",
+  "home": 14,
+  "tags": [
+   "eerie"
+  ],
+  "where": "It steps out of your shadow at 14"
+ },
+ "co-my12-shrine": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "home": 10,
+  "where": "A roadside shrine: 10, optional. Its Honest Trade Card says: This one lies."
+ },
+ "co-my12-again": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "home": 10
+ },
+ "co-my13-camp": {
+  "shape": "Visit",
+  "earliest": "A5",
+  "tags": [
+   "night"
+  ],
+  "attaches": "rest",
+  "where": "A rest at Night; the header reads Moonless"
+ },
+ "co-my14-cave": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "home": 12,
+  "sits": "side-branch",
+  "tags": [
+   "water"
+  ],
+  "where": "Side branch, 12: a cave behind a waterfall"
+ },
+ "co-my15-lab": {
+  "shape": "Visit",
+  "earliest": "A9",
+  "home": 13,
+  "sits": "side-branch",
+  "tags": [
+   "city",
+   "cave"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-my16-wall": {
+  "shape": "Visit",
+  "earliest": "A4",
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "cave"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-my17-valley": {
+  "shape": "Visit",
+  "earliest": "A7",
+  "home": 14,
+  "sits": "side-branch",
+  "tags": [
+   "hot",
+   "water"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-my17-again": {
+  "shape": "Visit",
+  "earliest": "A7",
+  "sits": "side-branch",
+  "tags": [
+   "hot",
+   "water"
+  ]
+ },
+ "co-my18-hall": {
+  "shape": "Visit",
+  "earliest": "A5",
+  "home": 13,
+  "sits": "side-branch",
+  "tags": [
+   "city",
+   "eerie"
+  ],
+  "where": "Side branch, 13: a castle hall of stopped clocks"
+ },
+ "co-my19-bolt-1": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "my19",
+  "beat": 1,
+  "tags": [
+   "storm"
+  ],
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my19-bolt-2": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "my19",
+  "beat": 2,
+  "tags": [
+   "storm"
+  ],
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my19-cat": {
+  "shape": "Trial",
+  "earliest": "A7",
+  "chain": "my19",
+  "beat": 3,
+  "tags": [
+   "storm"
+  ],
+  "where": "Three stages: S, S+1, S+2",
+  "badge": "?"
+ },
+ "co-my20-camp": {
+  "shape": "Visit",
+  "earliest": "A2",
+  "attaches": "rest",
+  "where": "A + node: the campfire"
+ },
+ "co-my20-back": {
+  "shape": "Visit",
+  "earliest": "A2",
+  "attaches": "rest"
+ },
+ "co-my21-stack": {
+  "shape": "Visit",
+  "earliest": "A8",
+  "attaches": "rest",
+  "where": "Two stages after MY20, a + node"
+ },
+ "co-my22-vines": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "home": 11,
+  "sits": "side-branch",
+  "tags": [
+   "forest"
+  ],
+  "where": "A Visit: hidden; once believed; at most one Visit per region"
+ },
+ "co-z5-dream": {
+  "shape": "Visit",
+  "earliest": "A6",
+  "tags": [
+   "night"
+  ],
+  "where": "A + node at Night while Darkrai is the Guest",
+  "level": "A+2"
+ },
+ "co-u1-noodles": {
+  "shape": "Run-Long",
+  "earliest": "A5",
+  "attaches": "rest",
+  "where": "The first + node after your first Static; then each region Stage 3 Town node"
+ },
+ "co-u1-mission-1": {
+  "shape": "Run-Long",
+  "earliest": "A5",
+  "attaches": "rest",
+  "where": "One mission a stage, at a rest"
+ },
+ "co-u1-mission-2": {
+  "shape": "Run-Long",
+  "earliest": "A5",
+  "attaches": "rest"
+ },
+ "co-u1-mission-3": {
+  "shape": "Run-Long",
+  "earliest": "A5",
+  "attaches": "rest"
+ },
+ "co-u1-anabel": {
+  "shape": "Run-Long",
+  "earliest": "A5",
+  "attaches": "rest",
+  "where": "The last region"
+ },
+ "co-u2-lab": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   2
+  ],
+  "where": "The Aether Foundation Wormhole Research step: Stages 2, 5, 8"
+ },
+ "co-u2-cases": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   5
+  ]
+ },
+ "co-u2-tear": {
+  "shape": "Region",
+  "earliest": "A9",
+  "stages": [
+   8
+  ],
+  "level": "A+2"
+ },
+ "co-u2-older": {
+  "shape": "Single",
+  "earliest": "A9",
+  "where": "A later region, after Leave her"
+ },
+ "co-u3-beach": {
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "tags": [
+   "water"
+  ],
+  "where": "A beach",
+  "level": "A+1"
+ },
+ "co-u4-midway": {
+  "shape": "Door",
+  "earliest": "A9",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "side-branch",
+  "where": "Three acts, at Night",
+  "level": "A+1"
+ },
+ "co-u5-city": {
+  "shape": "Door",
+  "earliest": "A12",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "side-branch",
+  "where": "A home world",
+  "level": "A+2"
+ },
+ "co-u6-crane": {
+  "shape": "Companion",
+  "earliest": "A7",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ]
+ },
+ "co-u7-wall": {
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 12,
+  "window": [
+   9,
+   15
+  ],
+  "where": "Two nodes; a puzzle",
+  "level": "A+1"
+ },
+ "co-u8-cling": {
+  "shape": "Companion",
+  "earliest": "A5",
+  "where": "Starts where Poipole is met (NE21, or a + node)"
+ },
+ "co-u9-sky": {
+  "shape": "World Event",
+  "earliest": "A5",
+  "stages": [
+   7
+  ],
+  "where": "The last region, Stage 7: the header reads Incursion; Steps 5, 10, 15",
+  "level": "A+2"
+ },
+ "co-rule-landmark": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-rule-shrine": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-rule-ruin": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-rule-tale": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source",
+  "attaches": "rest"
+ },
+ "co-rule-sky": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-rule-dream": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-rule-echo": {
+  "shape": "Pool",
+  "earliest": "A1",
+  "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-wre-gg-1": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 1"
+ },
+ "co-wre-gg-2": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 2"
+ },
+ "co-wre-gg-3": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 3"
+ },
+ "co-wre-gg-4": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 4"
+ },
+ "co-wre-gg-5": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 5"
+ },
+ "co-wre-gg-6": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 6"
+ },
+ "co-wre-gg-7": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 7"
+ },
+ "co-wre-gg-8": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 8"
+ },
+ "co-wre-gg-9": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 9"
+ },
+ "co-wre-gg-10": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "where": "Whole Run Event beat 10: before the Champion, last region"
+ },
+ "co-wre-ww-1": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 1"
+ },
+ "co-wre-ww-2": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 2"
+ },
+ "co-wre-ww-3": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 3"
+ },
+ "co-wre-ww-4": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 4"
+ },
+ "co-wre-ww-5": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 5"
+ },
+ "co-wre-ww-6": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 6"
+ },
+ "co-wre-ww-7": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 7"
+ },
+ "co-wre-ww-8": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 8"
+ },
+ "co-wre-ww-9": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 9"
+ },
+ "co-wre-ww-10": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "where": "Whole Run Event beat 10: before the Champion, last region"
+ },
+ "co-wre-mo-1": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 1"
+ },
+ "co-wre-mo-2": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 2"
+ },
+ "co-wre-mo-3": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 3"
+ },
+ "co-wre-mo-4": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 4"
+ },
+ "co-wre-mo-5": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 5"
+ },
+ "co-wre-mo-6": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 6"
+ },
+ "co-wre-mo-7": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 7"
+ },
+ "co-wre-mo-8": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 8"
+ },
+ "co-wre-mo-9": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 9"
+ },
+ "co-wre-mo-10": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "where": "Whole Run Event beat 10: before the Champion, last region"
+ },
+ "co-wre-sd-1": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 1"
+ },
+ "co-wre-sd-2": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 2"
+ },
+ "co-wre-sd-3": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 3"
+ },
+ "co-wre-sd-4": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 4"
+ },
+ "co-wre-sd-5": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 5"
+ },
+ "co-wre-sd-6": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 6"
+ },
+ "co-wre-sd-7": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 7"
+ },
+ "co-wre-sd-8": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 8"
+ },
+ "co-wre-sd-9": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 9"
+ },
+ "co-wre-sd-10": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "where": "Whole Run Event beat 10: before the Champion, last region"
+ },
+ "co-wre-wf-1": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 1"
+ },
+ "co-wre-wf-2": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 2"
+ },
+ "co-wre-wf-3": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 3"
+ },
+ "co-wre-wf-4": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 4"
+ },
+ "co-wre-wf-5": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 5"
+ },
+ "co-wre-wf-6": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 6"
+ },
+ "co-wre-wf-7": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 7"
+ },
+ "co-wre-wf-8": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 8"
+ },
+ "co-wre-wf-9": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 9"
+ },
+ "co-wre-wf-10": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "where": "Whole Run Event beat 10: before the Champion, last region"
+ },
+ "co-my11-pedestals": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 18,
+  "window": [
+   16,
+   19
+  ],
+  "sits": "side-branch",
+  "attaches": "rest",
+  "tags": [],
+  "where": "MY11: the last rest before the League, last region"
+ },
+ "co-m7-glow": {
+  "shape": "Pool",
+  "earliest": "A4",
+  "where": "A rival episode: takes the stage's rival slot when it is free"
+ },
+ "co-m7-loose": {
+  "shape": "Pool",
+  "earliest": "A5",
+  "where": "Callback: a kept stoneless Mega at meter 5; takes the rival slot"
+ }
+}

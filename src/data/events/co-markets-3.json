@@ -1,0 +1,2606 @@
+{
+ "catalogOverhaul": "markets",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "counterfeit-items",
+   "name": "Counterfeit Leftovers",
+   "group": "Tricksters, villains and teams",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "effect": "glint"
+   },
+   "stop": "merchant",
+   "intro": "A folding table of half-eaten apples, glossy as toys. Jinty, the seller, grins wide. \"Genuine Leftovers, only ₽300!\" They shine like plastic. The hand-written label reads \"Lefttovers\".",
+   "choices": [
+    {
+     "label": "Buy one.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "You pay. Jinty wraps it in newspaper, very fast. At the next bend you unwrap it. It squeaks. It is a dog toy, painted red. Jinty and the table are gone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "con-counterfeit-items-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "stash",
+        "key": "hideout-vault",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the spelling.",
+     "success": {
+      "text": "\"Two Ts,\" you say, loud enough to carry. Jinty looks at the label. The crowd looks at the label. Jinty looks at the crowd, and runs. Somebody starts clapping, and then everybody is, and someone passes a hat for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-counterfeit-items-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Smell it.",
+     "success": {
+      "text": "You lean in and sniff. Real Leftovers smell of apple and a little of soil. These smell of nothing at all. Jinty sees your face change and starts, very casually, to pack up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-counterfeit-items-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "counterfeit-items"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "counterfeit-items-asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "con-counterfeit-items-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You already know these smell of nothing. Only one thing left to say, and the label is right there.",
+     "hide": [
+      0,
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fake-nurse",
+   "name": "The Fake Nurse",
+   "group": "Tricksters, villains and teams",
+   "scene": {
+    "cast": [],
+    "effect": "flicker"
+   },
+   "intro": "A man in a nurse's pink cap waves you over. \"Tired team? Hand me their Balls, I'll fix them right up!\" His smile is off. No Chansey, no Audino. His cap badge is printed paper.",
+   "choices": [
+    {
+     "label": "Hand over the Balls.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "He takes them behind a curtain. Real healing light flickers. He comes back with your team, healthy, and a bill for ₽500. A real Pokémon Center has never charged a coin. He is gone before you finish reading it.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "con-fake-nurse-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "stash",
+        "key": "hideout-vault",
+        "amount": 500
+       }
+      ]
+     }
+    },
+    {
+     "label": "Where's your Chansey?",
+     "success": {
+      "text": "He blinks. \"Day off.\" He blinks again. \"Sick. Day off for being sick.\" He straightens the paper badge on his cap, which only draws your eye to it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-fake-nurse-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fake-nurse"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the paper badge.",
+     "success": {
+      "text": "You flick the badge. It bends. He looks at it, then at you, and the whole act sags. \"It's my first week,\" he mutters. A grunt in training. He drops a Potion as he bolts, which is honestly very nurse-like of him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-fake-nurse-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fake-nurse-asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "con-fake-nurse-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Day off,\" he said. The paper badge on his cap is still curling at one corner.",
+     "hide": [
+      0,
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "pickpocket",
+   "name": "The Pickpocket",
+   "group": "Tricksters, villains and teams",
+   "scene": {
+    "cast": [],
+    "effect": "shake"
+   },
+   "intro": "A shoulder hits yours in the crowd. \"Sorry, sorry!\" A hand was in your bag, and now it is not, and neither is the best thing that was in there. A figure is already running.",
+   "choices": [
+    {
+     "label": "Chase.",
+     "success": {
+      "text": "You run. Through a market, over a wall, round three corners and into a dead end. The thief turns, panting, and hands it back without a word. It took the rest of the afternoon.",
+      "effects": [
+       {
+        "kind": "takeNode"
+       },
+       {
+        "kind": "flag",
+        "key": "con-pickpocket-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a fast Pokémon.",
+     "success": {
+      "text": "Your fastest Pokémon is gone before you finish pointing. It is back before the thief has finished running, carrying your things in its mouth, very proud.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-pickpocket-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You let it go. Things are only things. But you will remember the face, and somewhere, in some vault, your things will be waiting with a label on them.",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "stolen",
+        "key": "hideout-vault"
+       },
+       {
+        "kind": "flag",
+        "key": "con-pickpocket-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-disguised-merchant",
+   "name": "The Disguised Merchant",
+   "group": "Villain Teams",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "A friendly seller with prices a little too good. Three Great Balls for ₽300. A radio on his belt hisses softly. His boots are black, polished, and standard issue for a certain team.",
+   "choices": [
+    {
+     "label": "Buy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "The Balls are real, and cheap, and you know exactly where your money just went. Somewhere a plan you would rather stop moves a little faster.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "con-vt-disguised-merchant-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-funded",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the boots.",
+     "success": {
+      "text": "\"Nice boots,\" you say. \"Team issue?\" His smile drops like a shutter. The radio on his belt barks a name and a place before he can switch it off. You heard it. He knows you heard it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-vt-disguised-merchant-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Ask where the goods came from.",
+     "success": {
+      "text": "\"Here and there,\" he says, too quickly. His eyes go to his own boots, just for a second, the way people look at the thing they hope you will not.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-vt-disguised-merchant-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "vt-disguised-merchant"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "vt-disguised-merchant-asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "con-vt-disguised-merchant-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Here and there,\" he said. He keeps shifting his feet, as if the boots were too tight.",
+     "hide": [
+      0,
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "vt-pokeball-sting",
+   "name": "The Poké Ball Sting",
+   "group": "Villain Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A man in a trench coat sells \"special\" Poké Balls from the back of a van. No maker's mark on any of them. Three more men sit in the van. One Ball on the tray rattles by itself.",
+   "choices": [
+    {
+     "label": "Buy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "₽1,000 for a bag of shining Balls. The first one you throw cracks in half in the air. So does the second. The van, of course, is long gone.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "flag",
+        "key": "con-vt-pokeball-sting-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "stash",
+        "key": "hideout-vault",
+        "amount": 1000
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open the rattling one.",
+     "success": {
+      "text": "You pop it open before he can stop you. A tiny, frightened Pokémon tumbles out, someone's, with a name tag. The man runs. You carry it to the Lost and Found, and its trainer cries when they see it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-vt-pokeball-sting-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lost-and-found-returned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look in the van.",
+     "success": {
+      "text": "Crates. Dozens of them, stamped with ports you know, all rattling. This is no stall. It is a ring. The three men climb out, one at a time, cracking their knuckles.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-vt-pokeball-sting-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lead-smuggling-ring",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "chain": 3,
+       "name": "The Van Crew",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-rocket-bake-sale",
+   "name": "The Bake Sale",
+   "group": "Villain Teams",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1414",
+    "effect": "sparkle"
+   },
+   "intro": "A cheerful stall of cookies \"for sick Pokémon\". The cash box names no charity. The cashier's collar has a red R stitched on it. One cookie, under a little glass dome, is labelled \"Boss's\".",
+   "choices": [
+    {
+     "label": "Buy a cookie.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "₽200. It is, annoyingly, a very good cookie. Your lead gets half and perks right up. Somewhere, the money is counted in a back room by people in black.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "market",
+        "action": "mend",
+        "factor": 0.05,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "con-vt-rocket-bake-sale-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "stash",
+        "key": "hideout-vault",
+        "amount": 200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Which charity?",
+     "success": {
+      "text": "\"Um.\" The cashier looks at the cash box. \"The... Pokémon one.\" He tugs his collar up higher, which puts the R right under your nose.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-vt-rocket-bake-sale-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "vt-rocket-bake-sale"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the collar.",
+     "success": {
+      "text": "\"That's an R,\" you say. The cashier, Petey, bursts into tears. \"I just like baking!\" He gives you a cookie for free, and a recipe, and his whole sad story. You believe every word of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-vt-rocket-bake-sale-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "market",
+        "action": "mend",
+        "factor": 0.05,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bake-sale-dilly",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "grunt-school-active",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The other cashier looks very familiar. Dilly, from Grunt School, sees you and ducks under the table.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Point out the collar.",
+       "success": {
+        "text": "\"That's an R,\" you say. Petey bursts into tears. \"I just like baking!\" Under the table, Dilly whispers, \"Don't tell them I was here.\" Petey gives you a cookie for free.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "con-vt-rocket-bake-sale-exposed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "con-exposed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "rep",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "dilly-hid",
+          "amount": 1
+         },
+         {
+          "kind": "market",
+          "action": "mend",
+          "factor": 0.05,
+          "who": "lead"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "vt-rocket-bake-sale-asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "con-vt-rocket-bake-sale-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"The... Pokémon one,\" he said. The R on his collar has not gone anywhere.",
+     "hide": [
+      0,
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "vt-shady-surveyor",
+   "name": "The Shady Surveyor",
+   "group": "Villain Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "Four people at a market stall. One of them just lifted a wallet; you saw it, not clearly. One has dirt on his knees. One wears a team pin. One keeps a hand in a pocket. One is the victim.",
+   "choices": [
+    {
+     "label": "Accuse the one with a pin.",
+     "success": {
+      "text": "You point. The pin-wearer freezes, then empties his coat on the stall. The wallet falls out. Its owner hugs you, then hugs the stallholder, then tips you for your trouble.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-vt-shady-surveyor-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Accuse the one with a hand in their pocket.",
+     "success": {
+      "text": "She takes her hand out. It is empty and very cold. \"It's winter,\" she says, icily. The whole stall stares at you. You stare at the floor.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Accuse the one with dirt on their knees.",
+     "success": {
+      "text": "\"I'm a gardener,\" he says, wounded, and shows you a trowel. He has been kneeling in begonias all morning. He forgives you quickly, which somehow makes it worse.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Tell the victim to check their pocket.",
+     "success": {
+      "text": "The victim pats his coat. \"My wallet!\" The pin-wearer bolts at once, which answers everything. You give chase through the stalls, and he turns at the end of the row to fight.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "con-vt-shady-surveyor-exposed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "con-exposed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 150
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-galactic-disguise",
+   "name": "Galactic Energy Corp. Booth",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ]
+   },
+   "intro": "A friendly booth under a striped awning, a banner reading Galactic Energy Corp., a stack of glossy flyers. The smiling clerk wears a scarf, and under the scarf, just for a second, a pin you have seen before. \"Clean energy from space! Well. From a lake. Sign up for our newsletter?\" He asks which way you are headed.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You write your name, and, because he asks so nicely, your route. He beams. \"Wonderful! We'll be in touch.\" Behind the booth, a radio crackles once and goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-galactic-disguise-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print.",
+     "success": {
+      "text": "Under the glossy photos, in type so small it is nearly a line: \"Galactic Energy Corp., a wholly owned holding of\" and then a name nobody would ever look twice at. You will look twice. It is a thread, and threads lead somewhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "front-galactic-shell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-galactic-disguise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the pin.",
+     "success": {
+      "text": "\"Nice pin,\" you say. The smile stays on his face for one more second, out of habit. Then it drops, and so does the act. \"Should've worn a thicker scarf.\" He kicks the flyers aside and reaches for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-galactic-disguise-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "front-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "front-officer-jenny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Exposed the Galactic Energy Corp. booth. It folded before nightfall.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "evil-galactic-disguise-read-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-galactic-shell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Galactic Energy Corp., a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Clean energy from space! Well. From a lake. Sign up for our newsletter?\" He asks which way you are headed.",
+     "notice": "You have already read the small print. Galactic Energy Corp. is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-galactic-disguise-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-galactic-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have already read the small print. Galactic Energy Corp. is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-galactic-disguise-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Galactic Energy Corp., a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Clean energy from space! Well. From a lake. Sign up for our newsletter?\" He asks which way you are headed."
+    }
+   ]
+  },
+  {
+   "id": "evil-plasma-disguise",
+   "name": "Plasma Liberation League Booth",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ]
+   },
+   "intro": "A friendly booth under a striped awning, a banner reading Plasma Liberation League, a stack of glossy flyers. The smiling clerk wears a scarf, and under the scarf, just for a second, a pin you have seen before. \"Free the Pokémon! Starting with yours! Sign up for our newsletter?\" He asks which way you are headed.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You write your name, and, because he asks so nicely, your route. He beams. \"Wonderful! We'll be in touch.\" Behind the booth, a radio crackles once and goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-plasma-disguise-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print.",
+     "success": {
+      "text": "Under the glossy photos, in type so small it is nearly a line: \"Plasma Liberation League, a wholly owned holding of\" and then a name nobody would ever look twice at. You will look twice. It is a thread, and threads lead somewhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "front-plasma-shell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-plasma-disguise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the pin.",
+     "success": {
+      "text": "\"Nice pin,\" you say. The smile stays on his face for one more second, out of habit. Then it drops, and so does the act. \"Should've worn a thicker scarf.\" He kicks the flyers aside and reaches for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-plasma-disguise-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "front-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "front-officer-jenny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Exposed the Plasma Liberation League booth. It folded before nightfall.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "evil-plasma-disguise-read-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-plasma-shell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Plasma Liberation League, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Free the Pokémon! Starting with yours! Sign up for our newsletter?\" He asks which way you are headed.",
+     "notice": "You have already read the small print. Plasma Liberation League is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-plasma-disguise-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-plasma-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have already read the small print. Plasma Liberation League is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-plasma-disguise-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Plasma Liberation League, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Free the Pokémon! Starting with yours! Sign up for our newsletter?\" He asks which way you are headed."
+    }
+   ]
+  },
+  {
+   "id": "evil-flare-disguise",
+   "name": "Lysandre Labs Booth",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/flare_grunt_m"
+    ]
+   },
+   "intro": "A friendly booth under a striped awning, a banner reading Lysandre Labs, a stack of glossy flyers. The smiling clerk wears a scarf, and under the scarf, just for a second, a pin you have seen before. \"A beautiful future, for those who can pay. Sign up for our newsletter?\" He asks which way you are headed.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You write your name, and, because he asks so nicely, your route. He beams. \"Wonderful! We'll be in touch.\" Behind the booth, a radio crackles once and goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-flare-disguise-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print.",
+     "success": {
+      "text": "Under the glossy photos, in type so small it is nearly a line: \"Lysandre Labs, a wholly owned holding of\" and then a name nobody would ever look twice at. You will look twice. It is a thread, and threads lead somewhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "front-flare-shell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-flare-disguise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the pin.",
+     "success": {
+      "text": "\"Nice pin,\" you say. The smile stays on his face for one more second, out of habit. Then it drops, and so does the act. \"Should've worn a thicker scarf.\" He kicks the flyers aside and reaches for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-flare-disguise-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "front-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "front-officer-jenny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Exposed the Lysandre Labs booth. It folded before nightfall.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "evil-flare-disguise-read-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-flare-shell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Lysandre Labs, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"A beautiful future, for those who can pay. Sign up for our newsletter?\" He asks which way you are headed.",
+     "notice": "You have already read the small print. Lysandre Labs is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-flare-disguise-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-flare-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have already read the small print. Lysandre Labs is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-flare-disguise-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Lysandre Labs, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"A beautiful future, for those who can pay. Sign up for our newsletter?\" He asks which way you are headed."
+    }
+   ]
+  },
+  {
+   "id": "evil-aether-disguise",
+   "name": "Aether Paradise Conservation Booth",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_m"
+    ]
+   },
+   "intro": "A friendly booth under a striped awning, a banner reading Aether Paradise Conservation, a stack of glossy flyers. The smiling clerk wears a scarf, and under the scarf, just for a second, a pin you have seen before. \"We protect Pokémon. Mostly from their trainers. Sign up for our newsletter?\" He asks which way you are headed.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You write your name, and, because he asks so nicely, your route. He beams. \"Wonderful! We'll be in touch.\" Behind the booth, a radio crackles once and goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-aether-disguise-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print.",
+     "success": {
+      "text": "Under the glossy photos, in type so small it is nearly a line: \"Aether Paradise Conservation, a wholly owned holding of\" and then a name nobody would ever look twice at. You will look twice. It is a thread, and threads lead somewhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "front-aether-shell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-aether-disguise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the pin.",
+     "success": {
+      "text": "\"Nice pin,\" you say. The smile stays on his face for one more second, out of habit. Then it drops, and so does the act. \"Should've worn a thicker scarf.\" He kicks the flyers aside and reaches for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-aether-disguise-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "front-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "front-officer-jenny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Exposed the Aether Paradise Conservation booth. It folded before nightfall.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "evil-aether-disguise-read-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-aether-shell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Aether Paradise Conservation, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"We protect Pokémon. Mostly from their trainers. Sign up for our newsletter?\" He asks which way you are headed.",
+     "notice": "You have already read the small print. Aether Paradise Conservation is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-aether-disguise-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-aether-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have already read the small print. Aether Paradise Conservation is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-aether-disguise-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Aether Paradise Conservation, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"We protect Pokémon. Mostly from their trainers. Sign up for our newsletter?\" He asks which way you are headed."
+    }
+   ]
+  },
+  {
+   "id": "evil-star-disguise",
+   "name": "School Outdoor Club Booth",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ]
+   },
+   "intro": "A friendly booth under a striped awning, a banner reading School Outdoor Club, a stack of glossy flyers. The smiling clerk wears a scarf, and under the scarf, just for a second, a pin you have seen before. \"Fun hikes! No teachers! Totally normal club! Sign up for our newsletter?\" He asks which way you are headed.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You write your name, and, because he asks so nicely, your route. He beams. \"Wonderful! We'll be in touch.\" Behind the booth, a radio crackles once and goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-star-disguise-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print.",
+     "success": {
+      "text": "Under the glossy photos, in type so small it is nearly a line: \"School Outdoor Club, a wholly owned holding of\" and then a name nobody would ever look twice at. You will look twice. It is a thread, and threads lead somewhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "front-star-shell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-star-disguise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the pin.",
+     "success": {
+      "text": "\"Nice pin,\" you say. The smile stays on his face for one more second, out of habit. Then it drops, and so does the act. \"Should've worn a thicker scarf.\" He kicks the flyers aside and reaches for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-star-disguise-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "front-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "front-officer-jenny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Exposed the School Outdoor Club booth. It folded before nightfall.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "evil-star-disguise-read-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-star-shell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading School Outdoor Club, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Fun hikes! No teachers! Totally normal club! Sign up for our newsletter?\" He asks which way you are headed.",
+     "notice": "You have already read the small print. School Outdoor Club is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-star-disguise-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-star-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have already read the small print. School Outdoor Club is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-star-disguise-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading School Outdoor Club, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Fun hikes! No teachers! Totally normal club! Sign up for our newsletter?\" He asks which way you are headed."
+    }
+   ]
+  },
+  {
+   "id": "evil-marauders-disguise",
+   "name": "Halvard Heritage Trust Booth",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "marauders",
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/macro_grunt_m"
+    ]
+   },
+   "intro": "A friendly booth under a striped awning, a banner reading Halvard Heritage Trust, a stack of glossy flyers. The smiling clerk wears a scarf, and under the scarf, just for a second, a pin you have seen before. \"Preserving the old ways. And the old vaults. Sign up for our newsletter?\" He asks which way you are headed.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You write your name, and, because he asks so nicely, your route. He beams. \"Wonderful! We'll be in touch.\" Behind the booth, a radio crackles once and goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-marauders-disguise-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print.",
+     "success": {
+      "text": "Under the glossy photos, in type so small it is nearly a line: \"Halvard Heritage Trust, a wholly owned holding of\" and then a name nobody would ever look twice at. You will look twice. It is a thread, and threads lead somewhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "front-marauders-shell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-marauders-disguise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the pin.",
+     "success": {
+      "text": "\"Nice pin,\" you say. The smile stays on his face for one more second, out of habit. Then it drops, and so does the act. \"Should've worn a thicker scarf.\" He kicks the flyers aside and reaches for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-marauders-disguise-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "front-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "front-officer-jenny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Exposed the Halvard Heritage Trust booth. It folded before nightfall.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "evil-marauders-disguise-read-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-marauders-shell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Halvard Heritage Trust, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Preserving the old ways. And the old vaults. Sign up for our newsletter?\" He asks which way you are headed.",
+     "notice": "You have already read the small print. Halvard Heritage Trust is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-marauders-disguise-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-marauders-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have already read the small print. Halvard Heritage Trust is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-marauders-disguise-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Halvard Heritage Trust, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Preserving the old ways. And the old vaults. Sign up for our newsletter?\" He asks which way you are headed."
+    }
+   ]
+  },
+  {
+   "id": "evil-choir-disguise",
+   "name": "Hallow Marrow Bell Society Booth",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "choir",
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ]
+   },
+   "intro": "A friendly booth under a striped awning, a banner reading Hallow Marrow Bell Society, a stack of glossy flyers. The smiling clerk wears a scarf, and under the scarf, just for a second, a pin you have seen before. \"Sing with us. Everybody sings eventually. Sign up for our newsletter?\" He asks which way you are headed.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You write your name, and, because he asks so nicely, your route. He beams. \"Wonderful! We'll be in touch.\" Behind the booth, a radio crackles once and goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-choir-disguise-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print.",
+     "success": {
+      "text": "Under the glossy photos, in type so small it is nearly a line: \"Hallow Marrow Bell Society, a wholly owned holding of\" and then a name nobody would ever look twice at. You will look twice. It is a thread, and threads lead somewhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "front-choir-shell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-choir-disguise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the pin.",
+     "success": {
+      "text": "\"Nice pin,\" you say. The smile stays on his face for one more second, out of habit. Then it drops, and so does the act. \"Should've worn a thicker scarf.\" He kicks the flyers aside and reaches for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-choir-disguise-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "front-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "front-officer-jenny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Exposed the Hallow Marrow Bell Society booth. It folded before nightfall.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "evil-choir-disguise-read-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-choir-shell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Hallow Marrow Bell Society, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Sing with us. Everybody sings eventually. Sign up for our newsletter?\" He asks which way you are headed.",
+     "notice": "You have already read the small print. Hallow Marrow Bell Society is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-choir-disguise-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-choir-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have already read the small print. Hallow Marrow Bell Society is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-choir-disguise-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Hallow Marrow Bell Society, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Sing with us. Everybody sings eventually. Sign up for our newsletter?\" He asks which way you are headed."
+    }
+   ]
+  },
+  {
+   "id": "evil-ironvein-disguise",
+   "name": "Ironvein Energy Combine Booth",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "ironvein",
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ]
+   },
+   "intro": "A friendly booth under a striped awning, a banner reading Ironvein Energy Combine, a stack of glossy flyers. The smiling clerk wears a scarf, and under the scarf, just for a second, a pin you have seen before. \"Power for the people. Mined from under the people. Sign up for our newsletter?\" He asks which way you are headed.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You write your name, and, because he asks so nicely, your route. He beams. \"Wonderful! We'll be in touch.\" Behind the booth, a radio crackles once and goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-ironvein-disguise-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print.",
+     "success": {
+      "text": "Under the glossy photos, in type so small it is nearly a line: \"Ironvein Energy Combine, a wholly owned holding of\" and then a name nobody would ever look twice at. You will look twice. It is a thread, and threads lead somewhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "front-ironvein-shell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-ironvein-disguise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the pin.",
+     "success": {
+      "text": "\"Nice pin,\" you say. The smile stays on his face for one more second, out of habit. Then it drops, and so does the act. \"Should've worn a thicker scarf.\" He kicks the flyers aside and reaches for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-ironvein-disguise-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "front-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "front-officer-jenny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Exposed the Ironvein Energy Combine booth. It folded before nightfall.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "evil-ironvein-disguise-read-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-ironvein-shell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Ironvein Energy Combine, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Power for the people. Mined from under the people. Sign up for our newsletter?\" He asks which way you are headed.",
+     "notice": "You have already read the small print. Ironvein Energy Combine is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-ironvein-disguise-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-ironvein-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have already read the small print. Ironvein Energy Combine is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-ironvein-disguise-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Ironvein Energy Combine, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Power for the people. Mined from under the people. Sign up for our newsletter?\" He asks which way you are headed."
+    }
+   ]
+  },
+  {
+   "id": "evil-cartographers-disguise",
+   "name": "Unfound Survey Society Booth",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "cartographers",
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/backpacker_m"
+    ]
+   },
+   "intro": "A friendly booth under a striped awning, a banner reading Unfound Survey Society, a stack of glossy flyers. The smiling clerk wears a scarf, and under the scarf, just for a second, a pin you have seen before. \"We map what nobody's found. Then we take it. Sign up for our newsletter?\" He asks which way you are headed.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You write your name, and, because he asks so nicely, your route. He beams. \"Wonderful! We'll be in touch.\" Behind the booth, a radio crackles once and goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-cartographers-disguise-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print.",
+     "success": {
+      "text": "Under the glossy photos, in type so small it is nearly a line: \"Unfound Survey Society, a wholly owned holding of\" and then a name nobody would ever look twice at. You will look twice. It is a thread, and threads lead somewhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "front-cartographers-shell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-cartographers-disguise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the pin.",
+     "success": {
+      "text": "\"Nice pin,\" you say. The smile stays on his face for one more second, out of habit. Then it drops, and so does the act. \"Should've worn a thicker scarf.\" He kicks the flyers aside and reaches for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-cartographers-disguise-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "front-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "front-officer-jenny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Exposed the Unfound Survey Society booth. It folded before nightfall.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "evil-cartographers-disguise-read-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-cartographers-shell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Unfound Survey Society, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"We map what nobody's found. Then we take it. Sign up for our newsletter?\" He asks which way you are headed.",
+     "notice": "You have already read the small print. Unfound Survey Society is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-cartographers-disguise-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-cartographers-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have already read the small print. Unfound Survey Society is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-cartographers-disguise-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Unfound Survey Society, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"We map what nobody's found. Then we take it. Sign up for our newsletter?\" He asks which way you are headed."
+    }
+   ]
+  },
+  {
+   "id": "evil-gilt-disguise",
+   "name": "Meridian Laurel Club Booth",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "gilt",
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_m"
+    ]
+   },
+   "intro": "A friendly booth under a striped awning, a banner reading Meridian Laurel Club, a stack of glossy flyers. The smiling clerk wears a scarf, and under the scarf, just for a second, a pin you have seen before. \"Members only. Membership: everything. Sign up for our newsletter?\" He asks which way you are headed.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You write your name, and, because he asks so nicely, your route. He beams. \"Wonderful! We'll be in touch.\" Behind the booth, a radio crackles once and goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-gilt-disguise-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-ambush",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the small print.",
+     "success": {
+      "text": "Under the glossy photos, in type so small it is nearly a line: \"Meridian Laurel Club, a wholly owned holding of\" and then a name nobody would ever look twice at. You will look twice. It is a thread, and threads lead somewhere.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "front-gilt-shell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-gilt-disguise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the pin.",
+     "success": {
+      "text": "\"Nice pin,\" you say. The smile stays on his face for one more second, out of habit. Then it drops, and so does the act. \"Should've worn a thicker scarf.\" He kicks the flyers aside and reaches for a Poké Ball.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "con-evil-gilt-disguise-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "con-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "front-exposed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "front-officer-jenny"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Grunt",
+       "evil": "grunt",
+       "size": 2,
+       "friendly": true,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "Exposed the Meridian Laurel Club booth. It folded before nightfall.",
+         "importance": 50
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "evil-gilt-disguise-read-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-gilt-shell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Meridian Laurel Club, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Members only. Membership: everything. Sign up for our newsletter?\" He asks which way you are headed.",
+     "notice": "You have already read the small print. Meridian Laurel Club is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-gilt-disguise-read",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-gilt-shell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have already read the small print. Meridian Laurel Club is a front, and you know the name of the shell behind it.",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "evil-gilt-disguise-sleeve",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "A friendly booth under a striped awning, a banner reading Meridian Laurel Club, a stack of glossy flyers. The smiling clerk keeps his arms folded. When he reaches for a flyer, the inside of his sleeve flashes a pin you have seen before. They have learned to hide it. Not well enough. \"Members only. Membership: everything. Sign up for our newsletter?\" He asks which way you are headed."
+    }
+   ]
+  },
+  {
+   "id": "front-officer-jenny",
+   "name": "Officer Jenny",
+   "group": "Evil Teams",
+   "stop": "merchant",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/officer"
+    ]
+   },
+   "intro": "Officer Jenny arrives as the booth comes down, notebook already out. She takes your statement and the flyers, and nods at you like one professional to another. \"Good eye. Keep it open.\"",
+   "choices": [
+    {
+     "label": "Salute.",
+     "success": {
+      "text": "You salute. She salutes back, crisply, and climbs onto her motorbike. \"If you see another one,\" she calls, \"you know where I am.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "jenny-badge",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "front-exposed",
+       "atLeast": 3,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "detectives-badge",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Officer Jenny closes her notebook. \"Three fronts. Three.\" She unpins something from her own jacket. \"We give these out maybe twice a year.\"",
+     "addChoices": [
+      {
+       "label": "Take the badge.",
+       "success": {
+        "text": "A Detective's Badge, small and bright, still warm from her jacket. \"They'll change their tells now,\" she warns. \"Pins in sleeves, probably. Keep looking.\" You pin it on.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "detectives-badge",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Officer Jenny pinned a Detective's Badge on you after three front booths fell.",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

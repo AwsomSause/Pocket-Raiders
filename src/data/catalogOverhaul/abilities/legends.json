@@ -1,0 +1,5 @@
+[
+  {"id": "hush", "name": "Hush", "description": "On entry, the air goes silent: sound moves fail for three turns, on both sides."},
+  {"id": "three-faces", "name": "Three Faces", "description": "Its first move after it comes out is hidden from the foe, so that move goes first."},
+  {"id": "pack-call", "name": "Pack Call", "description": "On the first turn of a battle, the next ally to switch in gains +1 Attack."}
+]

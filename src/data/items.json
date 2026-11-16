@@ -2846,5 +2846,16 @@
     "usableOutside": false,
     "target": "enemy",
     "effect": { "kind": "escape" }
+  },
+  {
+    "id": "devon-ball",
+    "name": "Devon Prototype Ball",
+    "description": "A Devon prototype: never fails on a wild Pokémon at half HP or less. Otherwise a plain ball.",
+    "category": "ball",
+    "iconAssetId": "ball.premier",
+    "usableInBattle": true,
+    "usableOutside": false,
+    "target": "enemy",
+    "effect": { "kind": "catch", "multiplier": 255, "rule": "weakened" }
   }
 ]

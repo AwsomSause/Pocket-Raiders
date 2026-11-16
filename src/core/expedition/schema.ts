@@ -44,6 +44,8 @@ export const LegendaryEnvSchema = z.object({
 export const LegendaryBlockSchema = z.object({
   species: z.string(),
   epithet: z.string().min(1),
+  /** Catalog Overhaul (SF99): this Legendary's stage is now a story encounter (the map event of this id), so the expedition is never placed. */
+  replacedBy: z.string().min(1).optional(),
   /** Rarer events turn up less often (multiplies the gate chance). */
   rarity: z.enum(['uncommon', 'rare', 'veryRare']),
   /** Why the opportunity exists right now (shown when the event appears). */

@@ -10,6 +10,7 @@ import { getMode, pacifist } from './rules';
 import { getSpecies } from './pokemon';
 import type { RunRules, RunState } from './state';
 import { spendInsurance } from './npcShop';
+import { markLostVow } from './co/placesRules';
 
 export type NuzlockeLevel = 'standard' | 'hardcore';
 
@@ -54,6 +55,7 @@ export function buryFallen(content: Content, run: RunState, cause: string): stri
   for (const m of fallen) {
     nz.memorial.push({ uid: m.uid, speciesId: m.speciesId, level: m.level, shiny: m.shiny, ace: m.uid === run.log.starterUid || m.level === top || m.care?.ace === true, area: areaKey(run), cause });
   }
+  markLostVow(run, fallen);
   const gone = new Set(fallen.map((m) => m.uid));
   run.party = run.party.filter((m) => !gone.has(m.uid));
   return fallen.map((m) => getSpecies(content, m.speciesId).name);

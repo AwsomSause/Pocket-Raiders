@@ -168,7 +168,7 @@ export class BattleFx {
       case 'storyAnim':
         return this.flourish(cue.side, cue.anim);
       case 'momentScene':
-        return playMomentScene(this.scene, { speciesId: cue.speciesId, fadeMs: cue.fadeMs, staticMs: cue.staticMs, lines: cue.lines, clips: cue.clips, fast: this.skipping || this.settings.battleAnimations !== 'full' });
+        return playMomentScene(this.scene, { speciesId: cue.speciesId, fadeMs: cue.fadeMs, staticMs: cue.staticMs, lines: cue.lines, clips: cue.clips, sound: cue.sound, voice: cue.voice, theme: cue.theme, veil: cue.veil, glow: cue.glow, textColor: cue.textColor, fast: this.skipping || this.settings.battleAnimations !== 'full' });
     }
   }
 

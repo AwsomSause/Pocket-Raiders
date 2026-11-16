@@ -10,11 +10,12 @@ describe('Z-Trials', () => {
     expect(trials).toHaveLength(18);
     for (const e of trials) expect(e.group).toBe('Z-Trials');
   });
-  it('the fight needs a Z-Ring and pays a real Z-Crystal of the trial type', () => {
+  // Catalog Overhaul (legends Z1): the first Trial puts the Z-Ring on your wrist, so starting gives it instead of needing it.
+  it('starting the trial gives the Z-Ring and the Totem pays a real Z-Crystal of the trial type', () => {
     for (const e of trials) {
       const type = e.id.slice('island-trial-'.length);
       const take = e.choices[0]!;
-      expect(JSON.stringify(take.requires)).toContain('z-ring');
+      expect(JSON.stringify(take.success.effects)).toContain('"id":"z-ring"');
       const win = JSON.stringify(take);
       const crystal = /"id":"([a-z]+-z)"/.exec(win)?.[1];
       expect(crystal, e.id).toBeTruthy();

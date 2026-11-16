@@ -3,6 +3,7 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { evolveMoments, noteCocoon } from '../moments/runMoments';
 import { spendRivalSpoils } from '../nodeMenu/special';
 import { endRivalBrain } from '../rivals/brainSetup';
 import { recordRivalBattle, registerFromRival } from '../rivals/overhaul';
@@ -869,6 +870,7 @@ export function recordChanges(content: Content, before: RunState, run: RunState,
       openHistory(content, run, mon.uid, mon.speciesId, starter ? 'starter' : caught ? 'caught' : 'gift');
       // Species Mastery unlocks (egg moves, ability, an awakened move) for a Pokémon that just joined.
       applyMastery(content, run, mon);
+      noteCocoon(run, mon);
       if (starter) emit(content, run, 'starterChosen', { actors: [mon.uid], data: { speciesId: mon.speciesId }, text: 'Chosen as your starter' });
       else if (reunion?.kind === 'reunion') {
         advanceChains(content, run, 'reunion', mon.uid);
@@ -892,6 +894,8 @@ export function recordChanges(content: Content, before: RunState, run: RunState,
         data: { from: prev.speciesId, to: mon.speciesId, trigger: evolutionTrigger },
         text: `Evolved from ${name(content, prev.speciesId)} into ${name(content, mon.speciesId)}`,
       });
+      // Pack Pokémon Moments (PA6 The Slow Road, PA9 What It Becomes): told as a story moment.
+      for (const line of evolveMoments(content, run, mon, prev.speciesId)) emit(content, run, 'storyMoment', { actors: [mon.uid], data: { def: 'pokemon-moment', suppressed: false }, importance: 60, text: line });
       // Determination Evolution: the evolution rules are unchanged; an exceptional story (a boss beaten
       // after surviving a fatal hit) only earns it a named memory and its own record.
       graduateMentorships(content, run, mon.uid);
