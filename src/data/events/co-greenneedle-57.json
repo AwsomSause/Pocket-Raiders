@@ -1,0 +1,966 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-57-crowd",
+   "name": "The Pokémon Impersonator",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "impersonator-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "*A crowd. In the middle of it, a face from every poster in the region, signing things.*\n\n**\"The Champion\":** \"A trainer! Come, come. Let me look at your team. I've a moment. I always have a moment for the young.\"\n\nYour lead has gone stiff. It will not take the hand that is offered to it.",
+   "choices": [
+    {
+     "label": "Let it look at your team.",
+     "success": {
+      "text": "The Champion walks down your line, nodding, touching each head. Your lead flinches away from the hand, and does not stop watching it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "impersonator-met",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-advice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The Champion waves, warmly, and goes back to signing. Your lead only relaxes when the crowd is out of sight.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "impersonator-met",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-advice",
+   "name": "The Pokémon Impersonator: Advice",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "**\"The Champion\":** \"Water beats Fire, and Fire beats Grass, and Grass beats Rock. There. Everything I know, and it fits on a napkin.\"\n\n\"Always lead with your strongest. Show them your teeth. Never let them see you tired.\"\n\n\"And when you're cornered, make yourself look bigger. Puff up! Like so!\" The crowd laughs, and claps, and it all sounds nearly right.",
+   "choices": [
+    {
+     "label": "Keep listening.",
+     "success": {
+      "text": "Nearly right. Everything it says is nearly right. You can't quite say why that bothers you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-tell-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-tell-1",
+   "name": "The Pokémon Impersonator: The Ace",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "**\"The Champion\":** \"My ace, now. Everyone asks about my ace. Marvellous creature. A Poochyena, since you ask. Oh, no. No, of course not. A Garchomp. I've said Poochyena all my life, it's a nervous habit.\"\n\nIt does not blink. It does not stumble. The correction comes out smooth as oil.",
+   "choices": [
+    {
+     "label": "…wait.",
+     "success": {
+      "text": "The real Champion has never kept anything called a Poochyena. You'd have heard. Everybody would have heard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "impersonator-tells-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-tell-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nod along.",
+     "success": {
+      "text": "You nod. A slip of the tongue, that's all. Everybody has them.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-tell-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-tell-2",
+   "name": "The Pokémon Impersonator: The Sun",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "The clouds part. The square floods with light, and every one of the crowd throws a long dark shadow across the stones.\n\nFor one frame, the Champion throws none at all. Then the shadow is there again, exactly as long as it should be.",
+   "choices": [
+    {
+     "label": "…wait.",
+     "success": {
+      "text": "You saw it. A whole crowd of shadows, and one missing. You're almost sure. Your lead is certain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "impersonator-tells-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-tell-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nod along.",
+     "success": {
+      "text": "The light must have flickered. These old squares play tricks. You turn back to the face on the posters.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-tell-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You're not the Champion.",
+     "success": {
+      "text": "The crowd goes quiet, one head at a time, as the word travels back through it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "impersonator-exposed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-fight"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "impersonator-tells-seen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-57-tell-3",
+   "name": "The Pokémon Impersonator: The Reeds",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "**\"The Champion\":** *looks at your lead, and breathes in, and smiles.* \"That one was caught by the river, wasn't it? You can smell the reeds on it.\"\n\nYou never said. You never said a word about a river, or about where you found it.",
+   "choices": [
+    {
+     "label": "…wait.",
+     "success": {
+      "text": "Nobody smells reeds on a Pokémon in a city square. Not unless they live in them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "impersonator-tells-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-verdict"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nod along.",
+     "success": {
+      "text": "A good guess, you tell yourself. The Champion has seen ten thousand teams. You say nothing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-verdict"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You're not the Champion.",
+     "success": {
+      "text": "The face stays kind. The crowd does not.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "impersonator-exposed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-fight"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "impersonator-tells-seen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-57-verdict",
+   "name": "The Pokémon Impersonator: What You Say",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "The signing has stopped. The Champion is waiting, hands folded, smiling at you the way a poster smiles.\n\nThe crowd waits too. Your lead stands very close to your leg.",
+   "choices": [
+    {
+     "label": "You're not the Champion.",
+     "success": {
+      "text": "The face flickers. The crowd gasps. Something tall and dark and red-maned stands where the Champion was, looking hunted.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "impersonator-exposed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-fight"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank you. That's good advice.",
+     "success": {
+      "text": "It blinks. It was ready for a fight, or a scream, and not for this. For one moment it forgets which face it is wearing.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "impersonator-played",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-walk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can I ask you something only the Champion would know?",
+     "success": {
+      "text": "The smile holds. The silence does not.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-ask"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-ask",
+   "name": "The Pokémon Impersonator: A Question",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "**\"The Champion\":** \"Oh! Well, now. That would be. The, ah. Yes. A long, long time ago. It rained, I believe. Everyone was very brave.\"\n\nIt guesses. It guesses charmingly. Then it looks at you, and it knows that you know, and it waits to see what you will do.",
+   "choices": [
+    {
+     "label": "You're not the Champion.",
+     "success": {
+      "text": "You say it quietly. It nods, as if you had handed it something it had been carrying for a long time.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "impersonator-exposed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-fight"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Play along.",
+     "success": {
+      "text": "You smile back, and ask nothing else. It stares at you. Then, very slowly, it smiles.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "impersonator-played",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-57-walk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-fight",
+   "name": "The Pokémon Impersonator: Exposed",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "zoroark",
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "Something tall and dark and red-maned stands where the Champion was. It is thin, and cornered, and it has just made itself look much bigger.\n\nAnd behind it, as if nothing had happened, stands a copy of your own lead.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Its disguise is your own lead, down to the scuffs. Hit it, and the borrowed shape comes apart.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "zoroark"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "impClaim"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-57-beaten"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "impClaim"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-57-beaten"
+        }
+       ],
+       "exact": true,
+       "rule": {
+        "gn": "impersonator"
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-57-escaped"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-escaped",
+   "name": "The Pokémon Impersonator: Gone",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "zoroark",
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "It is faster than you are. A face drops, and another goes up, and by the time the dust clears it is a stranger in a hat, walking away.\n\nYour lead growls once at the stranger, and lets it go.",
+   "choices": [
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You let it go. Somewhere, a very thin red-maned something is still being kind to people who feed it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-beaten",
+   "name": "The Pokémon Impersonator: Beaten",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "zoroark",
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "The crowd is gone before the dust is. Whatever was the Champion looks at you, hunted and furious, and a little relieved.\n\nIt has been careful for a very long time. It has been so tired.",
+   "choices": [
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "You hold out your hand, and it takes it, because nobody has done that without wanting something.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Caught the Impersonator, who had been the Champion all along.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-walk",
+   "name": "The Pokémon Impersonator: Walking Together",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "It walks with you a while, still as the Champion, getting things a little more wrong. It sniffs a signpost, thoughtfully.\n\nIt is startled by a door that opens by itself. It tries to look dignified about it.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on together, the Champion and you, and the lead keeps a careful step apart, and watches.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Played along with a very bad Champion.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-fire",
+   "name": "The Pokémon Impersonator: By the Fire",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "impersonator-played",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "impersonator-joined",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "pokemon": "zoroark",
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "At the rest, it is still there, as the Champion, sitting by your fire, holding a mug the wrong way up.\n\n*Your lead finally walks over and sniffs it. It sniffs back. That is not how people say hello.*\n\n*It looks at you. The face comes off, slowly, like a coat. It is thin. It has been a person for a long time because people get fed.*",
+   "choices": [
+    {
+     "label": "You can stay. As you.",
+     "success": {
+      "text": "It looks at you for a long time. Then it laughs, once, startled, and sits down properly. Your lead lies down against its side.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "impJoin"
+       },
+       {
+        "kind": "moment",
+        "text": "Let the Impersonator stay, as itself.",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who taught you to do that?",
+     "success": {
+      "text": "It becomes a child for a second. Then an old woman. Then nobody. It was a lot of people. It was always going to be a lot of people. It stays.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "impJoin"
+       },
+       {
+        "kind": "moment",
+        "text": "The Impersonator stayed, and was a lot of people.",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on, then.",
+     "success": {
+      "text": "It stands, and nods, and goes into the dark, and for a while it is a boy, and then a gull, and then gone.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "impersonator-left",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-later",
+   "name": "The Pokémon Impersonator: Someone You Know",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "impersonator-joined",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "impersonator-later"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "At the edge of the light, someone you know is walking up with a hand raised. You are almost sure you know them.",
+   "choices": [
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "You do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "impersonator-later"
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "imp-real",
+        "n": 25
+       },
+       {
+        "kind": "gn",
+        "op": "pick",
+        "key": "imp-guise",
+        "weights": [
+         1,
+         1,
+         1
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "imp-guise",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-57-rival",
+          "gn-57-champion",
+          "gn-57-player"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-rival",
+   "name": "The Pokémon Impersonator: A Friendly Word",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "real",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "imp-real",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your lead is on its feet, hackles up, the way it always is around them."
+    },
+    {
+     "id": "fake",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "imp-real",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Your lead sits by your boot, perfectly relaxed. It has never once been relaxed around them."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "**The rival:** \"Hey. You're doing well. I always knew you would. I'm glad it's you.\"\n\nThey have never said a kind thing in their life without a joke wrapped round it.",
+   "choices": [
+    {
+     "label": "That's you, isn't it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "imp-real",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "It was the real rival. They stare at you, then at the ground. In your Ball, the Zoroark is audibly laughing.",
+       "effects": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": -1
+         }
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The face drops, delighted. The Zoroark claps its own hands. It had practised the voice for a whole week.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "impersonator-caught-out",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thanks. That means a lot.",
+     "success": {
+      "text": "They nod, pleased and puzzled. Your lead watches them go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-champion",
+   "name": "The Pokémon Impersonator: A Surprise Visit",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "lesson",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "champ-lesson",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**The Champion:** \"It did me? The Zoroark? Was it *good?* Was the *hair* right?\" The real one, hearing about it later, was delighted."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "**The Champion:** \"A surprise visit! My ace, a Garchomp. I got it right this time. I've been practising.\"\n\nThe sun comes out. The shadow is missing again. It is the only thing it has not practised.",
+   "choices": [
+    {
+     "label": "That's you, isn't it.",
+     "success": {
+      "text": "The face drops, delighted to be caught. \"Oh, you're *good*,\" says the Zoroark, and means it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "impersonator-caught-out",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What an honour.",
+     "success": {
+      "text": "\"Oh, the honour's mine,\" it says, and bows too low, and you are not at all sure who has been fooled.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-57-player",
+   "name": "The Pokémon Impersonator: At the Counter",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "twin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ditto-twin",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Then the Ditto arrives, as you as well. Two of you, both as you, at one rest. Your lead gets up, and leaves."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.ace-trainer"
+    ],
+    "tint": "#6d3b4a",
+    "effect": "none"
+   },
+   "intro": "At the shop, a second you is already at the counter, buying the thing you were about to buy. It has your coat. It has your hair.\n\nThe shopkeeper looks from one of you to the other. Your lead sits at your feet. Nobody is sitting at the other one's.",
+   "choices": [
+    {
+     "label": "That's you, isn't it.",
+     "success": {
+      "text": "Your own face grins at you, and drops. \"Oh, I wanted *so much* to see how it feels,\" says the Zoroark.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "impersonator-caught-out",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it buy it.",
+     "success": {
+      "text": "It buys it, and hands it to you, and bows. The shopkeeper looks very tired.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

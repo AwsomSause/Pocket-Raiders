@@ -2505,7 +2505,10 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
     }
     return;
   }
-  if (ability === 'illusion') {
+  // Greenneedle gn.57, Many Faces: Illusion on the first entry and one re-form when it switches back in (once per battle).
+  const faces = ability === 'many-faces' ? ctx.battle.storyEffects.filter((t) => t === `many-faces:${c.mon.uid}`).length : 0;
+  if (ability === 'illusion' || (ability === 'many-faces' && faces < 2)) {
+    if (ability === 'many-faces') ctx.battle.storyEffects.push(`many-faces:${c.mon.uid}`);
     const team = c.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
     const alive = team.filter((m) => m.hp > 0 && m.uid !== c.mon.uid && m.speciesId !== c.mon.speciesId);
     const as = alive[alive.length - 1];
@@ -5157,7 +5160,7 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
     else if (canGetStatus(ctx, target, user, 'par')) tryInflictStatus(ctx, target, user, 'par', undefined, events, false);
     swapForm(ctx, target, 'cramorant', events);
   }
-  if (holder === 'illusion' && target.vol.illusion && move.category !== 'status') {
+  if ((holder === 'illusion' || holder === 'many-faces') && target.vol.illusion && move.category !== 'status') {
     events.push({ type: 'transform', side: target.side, uid: target.mon.uid, kind: 'illusion', from: target.vol.illusion, to: target.mon.speciesId, itemId: null, broken: true });
     target.vol.illusion = null;
   }

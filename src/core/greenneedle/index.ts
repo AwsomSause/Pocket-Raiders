@@ -32,6 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
+import { impClaim, impJoin, impersonatorStart } from './impersonator';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -640,6 +641,10 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return kcEvolve(run);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
+    case 'impJoin':
+      return impJoin(run, host);
+    case 'impClaim':
+      return impClaim(run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
@@ -786,6 +791,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.54: the serious man's six Magikarp (seven, once he's been beaten).
   // gn.55: the Angry Bidoof, tripled.
   if (rule === 'bidoof') bidoofStart(content, run, battle);
+  // gn.57: the Impersonator's Illusion opens as the player's lead.
+  if (rule === 'impersonator') impersonatorStart(run, battle);
   if (rule === 'quillfeather') quillfeatherStart(content, run, battle, makeFull(content));
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {

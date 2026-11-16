@@ -1688,5 +1688,10 @@
   "id": "kindness",
   "name": "Kindness",
   "description": "When its bearer steps out of a fight, the Pokémon that comes in moves first with its first move. Twice per battle."
+ },
+ {
+  "id": "many-faces",
+  "name": "Many Faces",
+  "description": "Its Illusion forms when it enters, and re-forms once per battle when it switches back in."
  }
 ]
