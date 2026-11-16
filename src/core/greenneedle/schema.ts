@@ -123,7 +123,7 @@ export type GnCond = z.infer<typeof GnCondSchema>;
  *  - `damian`: Damian himself (gn.05). His last Pokémon is the ace he actually trained: `ace` levels higher, a held item that fits its type,
  *    and two moves that cover its weaknesses.
  */
-export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing', 'desert'] as const;
+export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing', 'desert', 'mansion'] as const;
 export const GnRuleSchema = z.enum(GN_RULES);
 export type GnRule = z.infer<typeof GnRuleSchema>;
 

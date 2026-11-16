@@ -1232,6 +1232,11 @@
         ]
        },
        {
+        "kind": "flag",
+        "key": "sock-puppet-shadow",
+        "amount": 1
+       },
+       {
         "kind": "attribute",
         "key": "goodEvil",
         "amount": 1

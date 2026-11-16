@@ -92,7 +92,7 @@ export function aaiDamageFactor(v: AaiView, move: Move): number {
     if ((a === 'filter' || a === 'solid-rock' || a === 'prism-armor') && superEffective(v, move)) f *= 0.75;
     if (a === 'deep-roots' && superEffective(v, move)) f *= 0.9;
     // Disguise / Ice Face: the first hit only breaks the costume.
-    if ((a === 'disguise' || (a === 'ice-face' && move.category === 'physical')) && !v.battle?.extra.brokenFace.includes(v.target.uid) && !move.effects.hits) f *= 0.3;
+    if ((a === 'disguise' || a === 'borrowed-face' || (a === 'ice-face' && move.category === 'physical')) && !v.battle?.extra.brokenFace.includes(v.target.uid) && !move.effects.hits) f *= 0.3;
     // Facade doubles while the user has a status problem.
     if (move.id === 'facade' && v.user.status) f *= 2;
   }

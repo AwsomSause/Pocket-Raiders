@@ -674,7 +674,6 @@
          ]
         }
        ],
-       "exact": true,
        "lose": [
         {
          "kind": "gn",
@@ -937,7 +936,6 @@
          ]
         }
        ],
-       "exact": true,
        "lose": [
         {
          "kind": "gn",
@@ -3227,7 +3225,6 @@
          "eventId": "gn-36-oasis-1"
         }
        ],
-       "exact": true,
        "lose": [
         {
          "kind": "gn",
@@ -4050,7 +4047,6 @@
          ]
         }
        ],
-       "exact": true,
        "lose": [
         {
          "kind": "gn",
@@ -5940,7 +5936,6 @@
          "key": "gn-36-pack"
         }
        ],
-       "exact": true,
        "lose": [
         {
          "kind": "gn",
@@ -7844,6 +7839,1905 @@
         "kind": "flag",
         "key": "desert-postcard",
         "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-door",
+   "name": "A Lit Window",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mansion-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "mansion-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "A big house, off the path, with every window dark but one. On the top floor, a lamp is lit.\n\nThe gate's been oiled. The path's been swept. Nobody's lived here in forty years.",
+   "choices": [
+    {
+     "label": "Go up to the door.",
+     "success": {
+      "text": "The door opens before you knock. Not wide. Just enough.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-lamps",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-humoured",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-battled",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-37-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "When you look back, the lit window is dark. Then, as you turn away, it's lit again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-hall",
+   "name": "The Haunted Mansion: The Hall",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "remembers": [
+    {
+     "id": "asleep",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mansion-hall-seen",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The portrait of the man in the long coat is asleep. His chin's on his chest. Someone's put a blanket over the frame.*"
+    },
+    {
+     "id": "left",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mansion-hall-seen",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "*The portrait has changed. The man in the long coat isn't looking at you any more. He's looking at something to your left.*"
+    },
+    {
+     "id": "moved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mansion-entered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*When you look back: a chair has turned to face the door.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gastly",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "A hall with three cold lamps on three tables, wicks black. Music from somewhere, a waltz on an old record.\n\nA portrait at the foot of the stairs: a man in a long coat, stern, as if you're late.\n\n*The music stops. Just for a few seconds. Your footsteps are very loud. Then it starts again, mid-bar.*",
+   "choices": [
+    {
+     "label": "Scream back at the portrait.",
+     "success": {
+      "text": "The portrait screams at you. You scream back, louder.\n\nA Gastly falls out of the frame laughing, and rolls about on the rug, and can't stop.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-humoured",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-humoured-gastly",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-ghost-1",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-hall-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-hall"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mansion-ghost-1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Battle the Gastly.",
+     "success": {
+      "text": "The pots rattle. The portraits' eyes light up. Something comes out of all of them at once.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "gastly"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mansion-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-fought-gastly",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-ghost-1",
+         "n": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mansion-hall-seen",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-hall"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "mansion-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-fought-gastly",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-ghost-1",
+         "n": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mansion-hall-seen",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-hall"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "mansion-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-fought-gastly",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-hall"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mansion-ghost-1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go into the kitchen.",
+     "success": {
+      "text": "A cold stove with a lamp on top. Pots, clattering by themselves.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-kitchen"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mansion-lamp-1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go upstairs.",
+     "success": {
+      "text": "The stairs creak in the right places. Like someone showing you which ones.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-37-library"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-kitchen",
+   "name": "The Haunted Mansion: The Kitchen",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "remembers": [
+    {
+     "id": "moved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mansion-entered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*When you look back: the table is laid for one more than before.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gastly",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "A kitchen, spotless, cold. On the stove, the first lamp. A pot lid lifts, and drops, and lifts.\n\nSomething in here wants feeding.",
+   "choices": [
+    {
+     "label": "Leave a Berry.",
+     "success": {
+      "text": "You put a Berry on the stove. It's gone when you look back. The first lamp lights, small and gold.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "payBerry"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-lamp-1",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamps",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Somewhere below, a heavy door unlocks, all by itself.*"
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-hall-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-hall"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ]
+    },
+    {
+     "label": "Leave it hungry.",
+     "success": {
+      "text": "You back out. The pot lid drops, disappointed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-hall-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-hall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-library",
+   "name": "The Haunted Mansion: The Library",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "remembers": [
+    {
+     "id": "moved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mansion-entered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*When you look back: a book you didn't touch is open on the reading desk, at the last page.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "shuppet",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "Books in the air, turning their own pages. The second lamp, on the top of a shelf.\n\nAlong a corridor, bedrooms. One door has a child's drawing pinned to it.\n\n*The music stops. In the quiet, something giggles under a bed.*",
+   "choices": [
+    {
+     "label": "Read the riddle shelf.",
+     "success": {
+      "text": "Carved on the shelf: WHICH NUMBER COMES AFTER ALL THE OTHERS?",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-riddle"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mansion-lamp-2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go into the child's room.",
+     "success": {
+      "text": "A toy box. A bed made with tight corners. Everything exactly where it was left.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-toybox",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-child"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mansion-ghost-2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Through the far door.",
+     "success": {
+      "text": "You open it, and step through.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-door-once",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "mansion-door-once",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-37-library"
+         }
+        ],
+        "text": "*It opens onto the library. The room you just left. The books turn to look at you.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-door-once",
+        "min": 2,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-37-gallery"
+         }
+        ],
+        "text": "Through it again, and this time it leads on: a narrow stair, going up."
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-door-once",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-riddle",
+   "name": "The Haunted Mansion: The Riddle Shelf",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "shuppet",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "WHICH NUMBER COMES AFTER ALL THE OTHERS?",
+   "choices": [
+    {
+     "label": "Infinity.",
+     "success": {
+      "text": "The books flap, unimpressed. The lamp stays cold.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-library"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Zero.",
+     "success": {
+      "text": "A book sighs. The lamp stays cold.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-library"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The last page.",
+     "success": {
+      "text": "The family's diary slides out from the end of the shelf: the last book. The second lamp lights.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-lamp-2",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamps",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Somewhere below, a heavy door unlocks, all by itself.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-library"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-child",
+   "name": "The Haunted Mansion: The Child's Room",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "remembers": [
+    {
+     "id": "moved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mansion-entered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*When you look back: the toy box lid is open a crack.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "shuppet",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "A child's room, kept exactly. A toy box. A bed made with tight corners, the way a grown-up makes a bed for a child who's coming home.\n\nSomething under the bed is very, very still.",
+   "choices": [
+    {
+     "label": "Check under the bed.",
+     "success": {
+      "text": "Two eyes, and a horn, and a grin. A Shuppet, holding its breath.\n\nYou straighten up and say, kindly, \"Nothing there.\" It giggles so hard the bed shakes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-humoured",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-humoured-shuppet",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-ghost-2",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-library"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the Shuppet.",
+     "success": {
+      "text": "It comes out from under the bed in a rush of dust.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "shuppet"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mansion-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-fought-shuppet",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-ghost-2",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-library"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "mansion-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-fought-shuppet",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-ghost-2",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-library"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "mansion-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-fought-shuppet",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-library"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-gallery",
+   "name": "The Haunted Mansion: The Gallery",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "remembers": [
+    {
+     "id": "mirror",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mansion-mirror",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*In the long mirror, behind you: something small, with a rag over its head. You turn. Nothing.*"
+    },
+    {
+     "id": "moved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mansion-entered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*When you look back: every portrait in the gallery has turned to face the stairs.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "banette",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "A gallery of portraits, all the same family, all the same Pokémon, growing older frame by frame.\n\nA ladder to the attic. A dumb waiter in the wall, its rope going down into the dark: the cellar stair.\n\n*The music stops. In the attic, something sits up.*",
+   "choices": [
+    {
+     "label": "Climb to the attic.",
+     "success": {
+      "text": "A chest, and something sitting on it, waiting. A Banette. Once a doll.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-mirror",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-attic"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mansion-ghost-3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Send the dumb waiter down.",
+     "success": {
+      "text": "It goes down, creaking, to the cellar stair. You can see the third lamp, behind loose boards.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-mirror",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-cellar"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mansion-lamp-3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go up to the study.",
+     "success": {
+      "text": "One more stair. Under the door at the top, firelight.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-mirror",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-37-study"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-attic",
+   "name": "The Haunted Mansion: The Attic",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "banette",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "The Banette doesn't move. Its zipper mouth twitches.",
+   "choices": [
+    {
+     "label": "Ask it who threw it away.",
+     "success": {
+      "text": "Its zipper mouth moves. \"She threw me away.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-doll"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "Its zipper mouth opens wide.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "banette"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mansion-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-fought-banette",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-ghost-3",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-gallery"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "mansion-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-fought-banette",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-ghost-3",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-gallery"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "mansion-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-fought-banette",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-gallery"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-doll",
+   "name": "The Haunted Mansion: The Cursed Doll",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "banette",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "\"She threw me away.\"",
+   "choices": [
+    {
+     "label": "I'm sorry.",
+     "success": {
+      "text": "It looks at you for a long time. \"Nobody ever said that.\" It climbs down off the chest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-humoured",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-humoured-banette",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-ghost-3",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-gallery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who?",
+     "success": {
+      "text": "\"The girl in the pictures. Grown up now. Far away.\" It points down, through the floor. \"His Mimikyu stayed. I didn't get to.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-humoured",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-humoured-banette",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-ghost-3",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-gallery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "It's in your arms before you finish the sentence, light as cloth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-humoured",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-humoured-banette",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-ghost-3",
+        "n": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "banette"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-gallery"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-cellar",
+   "name": "The Haunted Mansion: The Cellar Stair",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "banette",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "The third lamp, on the cellar stair, behind boards gone soft with forty years of damp.",
+   "choices": [
+    {
+     "label": "Test the boards.",
+     "success": {
+      "text": "You climb down the dumb waiter shaft and test each board before you trust it. One gives. You reach the lamp anyway, and it lights.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-lamp-3",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamps",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Somewhere below, a heavy door unlocks, all by itself.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-gallery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Ghost-type.",
+     "success": {
+      "text": "Your Ghost-type drifts down over the rotten boards without touching them, and breathes on the wick. It lights.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-lamp-3",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamps",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Somewhere below, a heavy door unlocks, all by itself.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-gallery"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "ghost"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-37-study",
+   "name": "The Haunted Mansion: The Study",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "remembers": [
+    {
+     "id": "known",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "mansion-mimikyu",
+        "sock-puppet-shadow"
+       ]
+      }
+     ],
+     "notice": "*You know this one. The Ruined Stage, the floppy hat. It's been practising being a person.*"
+    },
+    {
+     "id": "watched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mansion-humoured",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Behind you, in the doorway, the Ghost-types you humoured have followed you up. They watch. They don't come in.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "none"
+   },
+   "intro": "A fire, lit. A table laid for tea, for two. Steam off the pot.\n\n*A figure in a long coat stands at the window, with its back to the room. The coat's the one in the portrait.*\n\n*It turns round. The coat's far too big. Under the collar, a rag, with a face drawn on it in crayon. Crooked.*\n\n*It pulls out a chair.*",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It lets the coat fall back off its shoulders. Underneath, it's very small, and very fast.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "mimikyu"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "mansion-end",
+         "n": 3
+        },
+        {
+         "kind": "flag",
+         "key": "mansion-end-battled",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-won"
+        }
+       ],
+       "exact": true,
+       "foeMoves": [
+        "shadow-sneak",
+        "play-rough",
+        "shadow-claw",
+        "swords-dance"
+       ],
+       "rule": {
+        "gn": "mansion",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-37-shown-out"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "You sit. It pours. It can't reach the pot; it stands on the chair.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-tea-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Whose coat is that?",
+     "success": {
+      "text": "*It goes to the drawer. A dozen old Poké Balls, all empty, all polished. Each has a name scratched on the button. The newest is forty years old.*\n\n*It takes out the newest, and holds it up. A name on the button, and under it, smaller, scratched later, by something without thumbs: a small crooked face.*\n\n*It was his. It was the last one. It's waited.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-coat",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-study"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mansion-coat",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-37-tea-1",
+   "name": "The Haunted Mansion: Tea",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "It pushes a cup across the table with both paws. It doesn't spill a drop.",
+   "choices": [
+    {
+     "label": "Drink.",
+     "success": {
+      "text": "It's weak, and sweet, and still warm. It watches every sip.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-tea-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank it first.",
+     "success": {
+      "text": "You say thank you. Its rag straightens, all by itself, the crayon face a little less crooked.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-thanked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-tea-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-tea-2",
+   "name": "The Haunted Mansion: Tea",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "It points at the portrait over the fire. The same man, older, in the same coat.",
+   "choices": [
+    {
+     "label": "He looks kind.",
+     "success": {
+      "text": "It nods. A lot. The rag flaps.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-tea-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "He looks tired.",
+     "success": {
+      "text": "It nods, slowly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-tea-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-tea-3",
+   "name": "The Haunted Mansion: Tea",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "It brings out the toy box from the child's room, and sets out a board for draughts.",
+   "choices": [
+    {
+     "label": "Play.",
+     "success": {
+      "text": "It's very bad at draughts. It cheats. When you catch it, it pretends it didn't hear you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-tea-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Whose were these?",
+     "success": {
+      "text": "It points at itself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-tea-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-tea-4",
+   "name": "The Haunted Mansion: Tea",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "remembers": [
+    {
+     "id": "waited",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "cubone-close",
+        "cubone-joined",
+        "dog-station-sat"
+       ]
+      }
+     ],
+     "notice": "*Your lead sits down first, beside the chair, facing the window. It knows how this goes.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "It looks at the window. At the road. The way it's been looking for forty years.",
+   "choices": [
+    {
+     "label": "Wait with it.",
+     "success": {
+      "text": "The fire burns down. The house is quiet. Nothing moves in any room.\n\n*After a long time, it climbs down off the chair. It takes the coat off. It folds it, badly, and puts it over the back of his chair.*\n\n*It's very small without it.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-end",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-end-waited",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "In the house with one lit window, a Mimikyu took off a coat it had worn for forty years, and folded it, badly.",
+        "importance": 90
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-waited"
+       }
+      ]
+     }
+    },
+    {
+     "label": "He isn't coming.",
+     "success": {
+      "text": "*It looks at you for a long time. It knew.*\n\n*It nods. It doesn't take the coat off.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mansion-end",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-end-told",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-told"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-waited",
+   "name": "The Haunted Mansion: The Coat on the Chair",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "It walks to the door, and stops, and looks back at you. It's waiting for you now.",
+   "choices": [
+    {
+     "label": "Go together.",
+     "success": {
+      "text": "It follows you down the stairs. It doesn't look back at the coat. You do.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "mimikyu"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1,
+        "ability": "borrowed-face"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-37-vault"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "mansion-done",
+          "amount": 1
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-told",
+   "name": "The Haunted Mansion: It Stays",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "It goes back to the window. Then it comes to you, and takes your Pokémon's paw, or hand, or fin, and holds on.\n\nThe way the house holds on.",
+   "choices": [
+    {
+     "label": "Let it teach one of yours.",
+     "pick": {
+      "types": []
+     },
+     "success": {
+      "text": "It shows your Pokémon how to hold on to someone at the door. Welcome Home.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "welcome-home",
+        "who": "picked"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-37-vault"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "mansion-done",
+          "amount": 1
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-won",
+   "name": "The Haunted Mansion: The Coat",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "It goes down, and gets up, and goes to the coat on the floor, and puts it back on.\n\nThen it comes and stands by your feet. It's bringing the coat.",
+   "choices": [
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "It wears the coat into every fight from now on. It trips on the hem. It doesn't care.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "mimikyu"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1,
+        "ability": "borrowed-face",
+        "marks": [
+         "wears the owner's coat"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-37-vault"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "mansion-done",
+          "amount": 1
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-shown-out",
+   "name": "The Haunted Mansion: Shown Out",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "You wake on the front step. The door is shut. Someone's put a blanket over you.",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "Behind you, the top window's lit. The curtain moves.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-37-vault"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mansion-lamps",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "mansion-done",
+          "amount": 1
+         },
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-37-vault",
+   "name": "The Haunted Mansion: The Vault",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#3a2f45",
+    "effect": "flicker"
+   },
+   "intro": "The vault door stands open. Inside: the family's photograph album.\n\nEvery Pokémon in it is in the house tonight.",
+   "choices": [
+    {
+     "label": "Read the album.",
+     "success": {
+      "text": "You turn the pages. Every ghost in the mansion goes quiet, and then, all at once, cheers.\n\nFolded in the back, a Reaper Cloth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-album",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "reaper-cloth",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
        }
       ]
      }

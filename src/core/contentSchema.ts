@@ -249,6 +249,8 @@ export const MoveSchema = z.object({
       forceSwitch: z.literal(true).optional(),
       /** The target can't be switched out (Mean Look, Block). */
       trap: z.literal(true).optional(),
+      /** Greenneedle gn.37 Welcome Home: the target can't switch out next turn. */
+      trapNext: z.literal(true).optional(),
       /** The user is hurt for half its max HP if the move misses or has no effect (Jump Kick). */
       crashOnMiss: z.literal(true).optional(),
       /** Always a critical hit. */

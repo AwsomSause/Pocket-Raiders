@@ -1600,6 +1600,11 @@
   "description": "It can't be forced to switch out, and it takes 10% less damage from super-effective hits."
  },
  {
+  "id": "borrowed-face",
+  "name": "Borrowed Face",
+  "description": "A Disguise that takes the first hit. Once per battle, when it knocks out a foe, its disguise is restored."
+ },
+ {
   "id": "desert-guide",
   "name": "Desert Guide",
   "description": "Out of battle: while it's in the party, sandstorms don't hide the next node."

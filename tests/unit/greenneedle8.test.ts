@@ -370,3 +370,130 @@ describe('gn.36 The Great Desert', () => {
     expect(content.events.get('gn-36-postcard')!.intro).toMatch(/a pair of boots, side by side/);
   });
 });
+
+describe('gn.37 The Haunted Mansion', () => {
+  const inside_ = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
+    const run = gnRun(seed);
+    setup(run);
+    open(run, 'gn-37-door');
+    return choose(run, 'gn-37-door', 'Go up to the door.').run;
+  };
+  /** Humour every floor's Ghost-type, light the lamps that need no Berry, and climb to the study. */
+  const toStudy = (run0: RunState, battleGhosts = false): RunState => {
+    let run = run0;
+    run = battleGhosts ? win(choose(run, 'gn-37-hall', 'Battle the Gastly.').run) : choose(run, 'gn-37-hall', 'Scream back at the portrait.').run;
+    run = choose(run, 'gn-37-hall', 'Go upstairs.').run;
+    run = choose(choose(run, 'gn-37-library', 'Read the riddle shelf.').run, 'gn-37-riddle', 'The last page.').run;
+    run = choose(run, 'gn-37-library', 'Go into the child\'s room.').run;
+    run = battleGhosts ? win(choose(run, 'gn-37-child', 'Battle the Shuppet.').run) : choose(run, 'gn-37-child', 'Check under the bed.').run;
+    run = choose(choose(run, 'gn-37-library', 'Through the far door.').run, 'gn-37-library', 'Through the far door.').run;
+    run = choose(run, 'gn-37-gallery', 'Climb to the attic.').run;
+    run = battleGhosts ? win(choose(run, 'gn-37-attic', 'Battle it.').run) : choose(choose(run, 'gn-37-attic', 'Ask it who threw it away.').run, 'gn-37-doll', 'I\'m sorry.').run;
+    run = choose(choose(run, 'gn-37-gallery', 'Send the dumb waiter down.').run, 'gn-37-cellar', 'Test the boards.').run;
+    return choose(run, 'gn-37-gallery', 'Go up to the study.').run;
+  };
+  const tea = (run0: RunState, last: string): RunState => {
+    let run = choose(run0, 'gn-37-study', 'Sit down.').run;
+    run = choose(run, 'gn-37-tea-1', 'Thank it first.').run;
+    run = choose(run, 'gn-37-tea-2', 'He looks kind.').run;
+    run = choose(run, 'gn-37-tea-3', 'Play.').run;
+    return choose(run, 'gn-37-tea-4', last).run;
+  };
+
+  it('a side branch at step 14 needing eerie or night, A6; the hall\'s portrait changes between visits', () => {
+    expect(content.coPlacement!.get('gn-37-door')).toMatchObject({ home: 14, window: [12, 17], sits: 'optional', attaches: 'instead', earliest: 6, tags: ['eerie|night'] });
+    let run = inside_('t37-hall');
+    expect(scene(run, 'gn-37-hall').intro).toMatch(/stern/);
+    run = choose(run, 'gn-37-hall', 'Scream back at the portrait.').run;
+    expect(scene(run, 'gn-37-hall').intro).toMatch(/looking at something to your left/);
+    expect(flagOf(run, 'mansion-humoured')).toBe(1);
+    run = choose(choose(run, 'gn-37-hall', 'Go into the kitchen.').run, 'gn-37-kitchen', 'Leave it hungry.').run;
+    expect(scene(run, 'gn-37-hall').intro).toMatch(/asleep/);
+  });
+
+  it('a Berry lights the first lamp; the last page lights the second; the far door opens onto the room you just left, then leads on', () => {
+    let run = inside_('t37-lamps', (r) => (r.party[0]!.held = { 'oran-berry': 1 }));
+    run = choose(choose(run, 'gn-37-hall', 'Go into the kitchen.').run, 'gn-37-kitchen', 'Leave a Berry.').run;
+    expect(flagOf(run, 'mansion-lamps')).toBe(1);
+    run = choose(run, 'gn-37-hall', 'Go upstairs.').run;
+    expect(scene(choose(run, 'gn-37-library', 'Read the riddle shelf.').run, 'gn-37-riddle').labels).toEqual(['Infinity.', 'Zero.', 'The last page.']);
+    const once = choose(run, 'gn-37-library', 'Through the far door.');
+    expect(said(once)).toMatch(/The room you just left/);
+    expect(openSide(choose(once.run, 'gn-37-library', 'Through the far door.').run)!.eventId).toBe('gn-37-gallery');
+  });
+
+  it('the owner: the doc\'s three choices; whose coat is told by the drawer of Poké Balls', () => {
+    const run = toStudy(inside_('t37-study'));
+    expect(scene(run, 'gn-37-study').labels).toEqual(['Battle it.', 'Sit down.', 'Whose coat is that?']);
+    expect(scene(run, 'gn-37-study').intro).toMatch(/the Ghost-types you humoured have followed you up/);
+    expect(said(choose(run, 'gn-37-study', 'Whose coat is that?'))).toMatch(/by something without thumbs: a small crooked face/);
+  });
+
+  it('tea, and "Wait with it.": it folds the coat, and joins with Borrowed Face; three lamps open the vault (a Reaper Cloth)', () => {
+    const run = tea(toStudy(inside_('t37-wait')), 'Wait with it.');
+    expect(flagOf(run, 'mansion-end')).toBe(1);
+    const left = choose(run, 'gn-37-waited', 'Go together.');
+    const mimi = [...left.run.party, ...left.run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.fixedAbility === 'borrowed-face');
+    expect(mimi).toBeTruthy();
+    expect(flagOf(left.run, 'mansion-lamps')).toBe(2);
+    expect(flagOf(left.run, 'mansion-done')).toBe(1);
+  });
+
+  it('tea, and "He isn\'t coming.": it stays, and teaches Welcome Home to the Pokémon you pick', () => {
+    const run = tea(toStudy(inside_('t37-told')), 'He isn\'t coming.');
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    const side = here.sides.find((x) => x.kind === 'event' && !x.used && x.eventId === 'gn-37-told')!;
+    const uid = run.party[0]!.uid;
+    const r = chooseEvent(content, run, side.id, 0, uid);
+    expect(r.run.party.find((m) => m.uid === uid)!.moves.map((m) => m.id)).toContain('welcome-home');
+  });
+
+  it('every Ghost-type you battled joins the owner\'s side, one at a time; won, it brings the coat', () => {
+    const run = toStudy(inside_('t37-fight'), true);
+    expect(flagOf(run, 'mansion-battled')).toBe(3);
+    const fight = choose(run, 'gn-37-study', 'Battle it.').run;
+    expect(fight.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['mimikyu', 'gastly', 'shuppet', 'banette']);
+    expect(fight.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toEqual(['shadow-sneak', 'play-rough', 'shadow-claw', 'swords-dance']);
+    const after = win(fight);
+    expect(flagOf(after, 'mansion-end')).toBe(3);
+    const left = choose(after, 'gn-37-won', 'Take it with you.').run;
+    const mimi = [...left.party, ...left.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.fixedAbility === 'borrowed-face');
+    expect(mimi?.marks).toContain('wears the owner\'s coat');
+  });
+
+  it('remembers: the Ruined Stage Mimikyu; a lead that has waited with someone before sits first', () => {
+    expect(scene(toStudy(inside_('t37-stage', (r) => setFlag(r, 'mansion-mimikyu'))), 'gn-37-study').intro).toMatch(/practising being a person/);
+    const run = toStudy(inside_('t37-cubone', (r) => setFlag(r, 'cubone-close')));
+    let t = choose(run, 'gn-37-study', 'Sit down.').run;
+    for (const [id, l] of [['gn-37-tea-1', 'Drink.'], ['gn-37-tea-2', 'He looks tired.'], ['gn-37-tea-3', 'Whose were these?']] as const) t = choose(t, id, l).run;
+    expect(scene(t, 'gn-37-tea-4').intro).toMatch(/Your lead sits down first/);
+  });
+});
+
+describe('gn.37 Borrowed Face and Welcome Home', () => {
+  it('Borrowed Face takes the first hit like a Disguise, and a knockout puts it back once', () => {
+    const me = withMoves('mimikyu', 60, 'p', 'shadow-claw');
+    me.fixedAbility = 'borrowed-face';
+    const foe = withMoves('machop', 5, 'e', 'leer');
+    const battle = createBattle('wild', [foe, withMoves('machop', 5, 'e2', 'leer')], 0, me.uid);
+    battle.extra.brokenFace.push(me.uid);
+    const ctx: BattleContext = { content, battle, party: [me], inventory: {}, rng: new Rng(hashSeed('t37-face')), captureRng: new Rng(hashSeed('t37-face-c')), catchMultiplier: 1 };
+    foe.hp = 1;
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(battle.extra.brokenFace).not.toContain(me.uid);
+    expect(battle.storyEffects).toContain(`borrowed-face:${me.uid}`);
+  });
+
+  it('Welcome Home: Ghost, 70 power; the target can\'t switch out next turn, then can', () => {
+    expect(content.moves.get('welcome-home')).toMatchObject({ type: 'ghost', power: 70 });
+    const me = withMoves('mimikyu', 60, 'p', 'welcome-home');
+    const foe = withMoves('slowbro', 60, 'e', 'splash');
+    const battle = createBattle('wild', [foe], 0, me.uid);
+    const ctx: BattleContext = { content, battle, party: [me], inventory: {}, rng: new Rng(hashSeed('t37-home')), captureRng: new Rng(hashSeed('t37-home-c')), catchMultiplier: 1 };
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(battle.enemyVolatile.trapped).toBe(true);
+    me.moves = [{ id: 'splash', pp: 40 }];
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(battle.enemyVolatile.trapped).toBe(false);
+  });
+});

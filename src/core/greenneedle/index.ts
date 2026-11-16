@@ -501,6 +501,11 @@ export function gnBattleStart(content: Content, run: RunState): void {
   }
   // The Great Desert (gn.36): with the water gone, the party enters each battle at 90% HP.
   if (rule === 'desert' && gnFlag(run, 'desert-water') <= 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(m.hp, Math.max(1, Math.floor(maxHp(content, m) * 0.9)));
+  // The Haunted Mansion (gn.37): every Ghost-type you battled on the way up joins the owner's side, one at a time.
+  if (rule === 'mansion' && battle.enemyTeam[0]) {
+    const level = battle.enemyTeam[0].level;
+    for (const sp of ['gastly', 'shuppet', 'banette']) if (gnFlag(run, `mansion-fought-${sp}`) > 0 && content.species.has(sp)) battle.enemyTeam.push(createPokemon(content, sp, level, `e-mansion-${sp}`));
+  }
   // The Lush Jungle's Tsareena (gn.20): Trop Kick, High Jump Kick, U-turn.
   if (rule === 'tsareena' && battle.enemyTeam[0]) setMoves(content, battle.enemyTeam[0], ['trop-kick', 'high-jump-kick', 'u-turn']);
   // The Lush Jungle (gn.20): who was already down when the fight began (only a knockout in this fight pulls the ladder up, run.ts).

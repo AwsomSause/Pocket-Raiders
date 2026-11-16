@@ -171,7 +171,8 @@ const take = (colour: string, o: Json = {}): Json[] => [gn('crystal', { key: col
 const onPick = { pick: { types: [] } };
 const cw = (id: string): Json => ({ kind: 'addEvent', eventId: id });
 /** A cave fight: anything you meet in here is a wild one (A+1). */
-const caveFight = (species: string[], win: Json[], lose: Json[] = win): Json => inside({ ...wild({ species, lv: 1, win }), caught: win, exact: true, lose });
+/** `exact` only for one named foe: with a pool, it would always take the first. */
+const caveFight = (species: string[], win: Json[], lose: Json[] = win): Json => inside({ ...wild({ species, lv: 1, win }), caught: win, ...(species.length === 1 ? { exact: true } : {}), lose });
 /** The light-beam puzzle at the Hall of Beams: three mirrors (red, blue, green) turned into the beam or out of it; white opens the door. */
 const BEAM = ['nothing: the beam goes straight past', 'red', 'blue', 'violet', 'green', 'yellow', 'teal', 'white'];
 const mirror = (key: 'r' | 'b' | 'g', label: string): Json => ch(label, out('The turntable grinds round. The beam swings with it.',

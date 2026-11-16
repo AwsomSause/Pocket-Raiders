@@ -1569,7 +1569,6 @@
          "key": "gn-32-gallery"
         }
        ],
-       "exact": true,
        "lose": [
         {
          "kind": "itemFrom",
@@ -1681,7 +1680,6 @@
          "key": "gn-32-warm"
         }
        ],
-       "exact": true,
        "lose": [
         {
          "kind": "flag",
@@ -2811,7 +2809,6 @@
          "key": "gn-32-blue"
         }
        ],
-       "exact": true,
        "lose": [
         {
          "kind": "flag",
@@ -3320,7 +3317,6 @@
          "eventId": "gn-32-heart"
         }
        ],
-       "exact": true,
        "lose": [
         {
          "kind": "addEvent",

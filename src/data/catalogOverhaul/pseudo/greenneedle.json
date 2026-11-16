@@ -183,6 +183,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_mansion",
+   "name": "The Haunted Mansion",
+   "entry": "gn-37-door",
+   "themeId": "normal-ghost",
+   "tint": "#3a2f45",
+   "mood": "haunted house",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_desert",
    "name": "The Great Desert",
    "entry": "gn-36-door",

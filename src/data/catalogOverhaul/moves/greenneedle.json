@@ -1,0 +1,20 @@
+[
+ {
+  "id": "welcome-home",
+  "name": "Welcome Home",
+  "type": "ghost",
+  "category": "physical",
+  "power": 70,
+  "accuracy": 100,
+  "pp": 10,
+  "priority": 0,
+  "critStage": 0,
+  "target": "enemy",
+  "flags": [
+   "contact"
+  ],
+  "effects": {
+   "trapNext": true
+  }
+ }
+]

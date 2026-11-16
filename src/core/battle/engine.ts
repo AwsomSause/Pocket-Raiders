@@ -1107,6 +1107,12 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   }
   fadeMomentBoosts(ctx, events);
   battle.turn += 1;
+  // Welcome Home's hold lasts through the next turn only.
+  for (const tag of battle.storyEffects.filter((t) => t.startsWith('untrap:') && Number(t.split(':')[2]) < battle.turn)) {
+    const v = tag.split(':')[1] === 'player' ? battle.playerVolatile : battle.enemyVolatile;
+    if (v) v.trapped = false;
+    battle.storyEffects.splice(battle.storyEffects.indexOf(tag), 1);
+  }
   eventRuleEnd(battle, events, ctx.party, ctx.content);
   if (raidTimeout && !battle.outcome) battle.outcome = 'lose';
   // A narrative fight that drags on ends as the story loss (the rival cannot be beaten, so it must end).
@@ -4225,7 +4231,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   }
   // S7 Unmask the Illusion: the partner's hit ends a foe's Illusion or Disguise (the Disguise soaks nothing).
   if (targetsEnemy && user.side === 'player' && ctx.feat) {
-    const disguised = abilityIn(ctx, target) === 'disguise' && !ctx.battle.extra.brokenFace.includes(target.mon.uid);
+    const disguised = (abilityIn(ctx, target) === 'disguise' || abilityIn(ctx, target) === 'borrowed-face') && !ctx.battle.extra.brokenFace.includes(target.mon.uid);
     if ((target.vol.illusion || disguised) && tryFeat(ctx, user, 'unmask_the_illusion')) {
       if (target.vol.illusion) {
         events.push({ type: 'transform', side: target.side, uid: target.mon.uid, kind: 'illusion', from: target.vol.illusion, to: target.mon.speciesId, itemId: null, broken: true });
@@ -4525,11 +4531,12 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (sturdy) damage = target.mon.hp - 1;
 
     // Disguise and Ice Face take one hit for the Pokémon, then the form breaks.
-    if ((foeAbility === 'disguise' || (foeAbility === 'ice-face' && move.category === 'physical')) && !ctx.battle.extra.brokenFace.includes(target.mon.uid) && user !== target) {
+    // Greenneedle gn.37: Borrowed Face is a Disguise that comes back (below).
+    if ((foeAbility === 'disguise' || foeAbility === 'borrowed-face' || (foeAbility === 'ice-face' && move.category === 'physical')) && !ctx.battle.extra.brokenFace.includes(target.mon.uid) && user !== target) {
       ctx.battle.extra.brokenFace.push(target.mon.uid);
       announce(target, foeAbility, events);
       events.push({ type: 'noEffect', side: target.side });
-      if (foeAbility === 'disguise') {
+      if (foeAbility === 'disguise' || foeAbility === 'borrowed-face') {
         swapForm(ctx, target, 'mimikyu-busted', events);
         abilityHurt(ctx, target, Math.max(1, Math.floor(targetMax / 8)), events);
       } else swapForm(ctx, target, 'eiscue-noice', events);
@@ -4745,9 +4752,21 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     events.push({ type: 'statsReset', side: target.side });
   }
   if (target.mon.hp <= 0 && user.mon.hp > 0 && userAbility === 'battle-bond') swapForm(ctx, user, 'greninja-ash', events);
+  // Greenneedle gn.37: Borrowed Face. Once per battle, knocking out a foe puts its broken disguise back.
+  if (target.mon.hp <= 0 && user.mon.hp > 0 && userAbility === 'borrowed-face' && ctx.battle.extra.brokenFace.includes(user.mon.uid) && !ctx.battle.storyEffects.includes(`borrowed-face:${user.mon.uid}`)) {
+    ctx.battle.storyEffects.push(`borrowed-face:${user.mon.uid}`);
+    ctx.battle.extra.brokenFace = ctx.battle.extra.brokenFace.filter((uid) => uid !== user.mon.uid);
+    if (user.mon.speciesId === 'mimikyu-busted') swapForm(ctx, user, 'mimikyu', events);
+    events.push(say(user.side, 'arena', `${nameOf(ctx, user.mon)} straightens its rag. The face on it is back.`, user.mon.uid));
+  }
   if (fx.koBoost && target.mon.hp <= 0 && user.mon.hp > 0) applyStageChange(ctx, user, fx.koBoost.stat, fx.koBoost.stages, events);
   if (landed > 0 && fx.forceSwitch) forceOut(ctx, target, events);
   if (landed > 0 && fx.trap) target.vol.trapped = true;
+  // Greenneedle gn.37 Welcome Home: the target can't switch out next turn.
+  if (landed > 0 && fx.trapNext && target.mon.hp > 0 && !target.vol.trapped) {
+    target.vol.trapped = true;
+    ctx.battle.storyEffects.push(`untrap:${target.side}:${ctx.battle.turn + 1}`);
+  }
   if (landed > 0 && fx.disrupt) disrupt(ctx, user, target, fx.disrupt, events);
   postHitExtras(ctx, user, target, move, landed, movedFirst, events);
   // Hazard-setting and hazard-clearing attacks (Ceaseless Edge, Stone Axe, Rapid Spin).

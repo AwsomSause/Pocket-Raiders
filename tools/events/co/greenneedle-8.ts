@@ -1,7 +1,8 @@
-// Greenneedle, part 8: gn.35 Thunderstorm Ridge, gn.36 The Great Desert (doc GREENNEEDLE_REWORKED_PLACED_8.md).
+// Greenneedle, part 8: gn.35 Thunderstorm Ridge, gn.36 The Great Desert, gn.37 The Haunted Mansion (doc GREENNEEDLE_REWORKED_PLACED_8.md).
 // Build: npm run co:build -- greenneedle-8   then   npm run co:gn
 import { any, anyType, ch, fight, flag, heal, item, join, out, takeNode, wild, type Json } from '../dsl.ts';
-import { chIf, gev, gn, inside, is, laterStage, leavePseudo, moment, not, pick, regionChanged, rm, roll, route, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
+import { anyFlag } from './_ne.ts';
+import { chIf, gev, gn, inside, is, laterStage, teach, leavePseudo, moment, not, pick, regionChanged, rm, roll, route, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -41,7 +42,7 @@ const drop = (at: string): Json => chIf([is('ridge-crystals')], 'Drop a crystal.
   when('ridge-followers', { min: 1 }, [], '*Whatever was behind you stops at it. Sniffs it. Stays with it, for now.*'), ...ONE_LESS, scene(at)));
 const followFight = (local: boolean): Json => inside({
   ...wild(local ? { types: ['electric', 'flying'], lv: 1, win: BACK } : { species: POOL, lv: 1, win: BACK }),
-  caught: BACK, exact: true, lose: BACK, rule: { gn: 'ridge' },
+  caught: BACK, lose: BACK, rule: { gn: 'ridge' },
 });
 
 // The summit's two answers, shared by the Summit and (three crystals) the Shelter.
@@ -210,7 +211,7 @@ const WATER_SAYS: Json[] = [0, 1, 2, 3, 4, 5].map((n) => when(WATER, { min: n, m
 const DRINK: Json[] = [...[1, 2, 3, 4, 5].map((n) => when(WATER, { min: n, max: n }, [setTo(WATER, n - 1)])), ...WATER_SAYS];
 const REFILL: Json[] = [setTo(WATER, 4), when(WATER, { min: 4, max: 4 }, [], 'You fill every flask to the brim. Water: 4.')];
 const ON = (id: string): Json[] => [...DRINK, next(id)];
-const desertFight = (species: string[], win: Json[], lose: Json[] = win, lv = 1): Json => inside({ ...wild({ species, lv, win }), caught: win, exact: true, lose, rule: { gn: 'desert' } });
+const desertFight = (species: string[], win: Json[], lose: Json[] = win, lv = 1): Json => inside({ ...wild({ species, lv, win }), caught: win, ...(species.length === 1 ? { exact: true } : {}), lose, rule: { gn: 'desert' } });
 
 /** Mirages: what's seen (1 a pool, 2 a chest, 3 a figure), and whether it's real. The tell is there for anyone who looks. */
 const MIRAGE_AT = (n: number): Json[] => [setTo('desert-at', n), setTo('desert-looked', 0), setTo('desert-mirage-done', 0), pick('desert-seen', 1, 1, 1), roll('desert-real', 50)];
@@ -268,7 +269,7 @@ const gn36: Json[] = [
   sands('gn-36-chest', 'The Great Desert: A Chest on a Dune', { pokemon: 'sandile' }, 'A chest, half out of the sand on the crest of a dune, its lock rusted open.', [
     look('gn-36-chest', 'The sand round it\'s smooth. Nobody\'s been near it in years. The wind has.', 'Footprints lead up to it. None lead away.'),
     chIf([is('desert-real')], 'Go to it.', out('It\'s old, and real, and full of sand, and at the bottom something the sand kept safe.', any(...RUIN_ITEMS), ...MIRAGE_DONE)),
-    chIf([not('desert-real')], 'Go to it.', fight('The dune gives way. It was a pit all along, and the Sandile at the bottom have been waiting.', inside({ ...wild({ species: ['sandile', 'krokorok'], lv: 1, chain: 2, win: MIRAGE_DONE }), caught: MIRAGE_DONE, exact: true, lose: MIRAGE_DONE, rule: { gn: 'desert' } }))),
+    chIf([not('desert-real')], 'Go to it.', fight('The dune gives way. It was a pit all along, and the Sandile at the bottom have been waiting.', inside({ ...wild({ species: ['sandile', 'krokorok'], lv: 1, chain: 2, win: MIRAGE_DONE }), caught: MIRAGE_DONE, lose: MIRAGE_DONE, rule: { gn: 'desert' } }))),
     leaveIt,
   ]),
   sands('gn-36-figure', 'The Great Desert: A Figure, Waving', { pokemon: 'sigilyph' }, 'A figure on a far dune, waving to you. Both arms, over its head. Waving.', [
@@ -324,7 +325,7 @@ const gn36: Json[] = [
     'A hollow in the dune, very tidy. A pair of boots, side by side, the way you\'d leave them at a door.',
     'A family of Sandile is sitting on the pack. The biggest one looks at you over sunglasses it can\'t possibly own.',
   ), [
-    ch('Battle them for it.', fight('The family rises as one. Very organised.', inside({ ...wild({ species: ['sandile', 'krokorok', 'krookodile'], lv: 1, chain: 3, win: [scene('gn-36-pack')] }), caught: [scene('gn-36-pack')], exact: true, lose: [scene('gn-36-pack-lost')], rule: { gn: 'desert' } }))),
+    ch('Battle them for it.', fight('The family rises as one. Very organised.', inside({ ...wild({ species: ['sandile', 'krokorok', 'krookodile'], lv: 1, chain: 3, win: [scene('gn-36-pack')] }), caught: [scene('gn-36-pack')], lose: [scene('gn-36-pack-lost')], rule: { gn: 'desert' } }))),
     chIf([is(WATER)], 'Trade them some water.', out('You pour a flask into a hollow in the rock. They consider it. Then they get off the pack, one by one, and drink.', ...DRINK, scene('gn-36-pack'))),
   ]),
   sands('gn-36-pack', 'The Great Desert: The Pack', { pokemon: 'sandile' }, say(
@@ -404,7 +405,195 @@ const gn36: Json[] = [
   ), [ch('Keep it.', out('You put it somewhere you\'ll see it.', flag('desert-postcard')))]),
 ];
 
-export const EVENTS: Json[] = [...gn35, ...gn36];
+// =====================================================================================================================
+// gn.37  THE HAUNTED MANSION  (a side branch at step 14 needing eerie or night, then a Pseudo Stage of four floors; A6; once a run).
+// The owner is a Mimikyu in the owner's coat, keeping the house for someone who isn't coming back. Each floor's Ghost-type can be
+// battled or humoured (`mansion-battled`, `mansion-humoured`); three lamps (a Berry, the riddle, the cellar stair) open the vault.
+// The house moves furniture, stops its music, changes a portrait, and never hurts you.
+// =====================================================================================================================
+const MANSION_TINT = '#3a2f45';
+const house = (o: Json = {}): Json => ({ tint: MANSION_TINT, tags: ['Pokémon', 'Mystery', 'Exploration'], effect: 'flicker', ...o });
+const floor = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, house(o), intro, choices);
+/** Every room: the furniture has moved when you look back. */
+const MOVED = (text: string): Json => ({ id: 'moved', when: [is('mansion-entered')], notice: `*When you look back: ${text}*` });
+const HUMOUR = (sp: string): Json[] => [flag('mansion-humoured'), setTo(`mansion-humoured-${sp}`, 1)];
+const BATTLED = (sp: string): Json[] => [flag('mansion-battled'), setTo(`mansion-fought-${sp}`, 1)];
+const ghostFight = (sp: string, back: string): Json => inside({ ...wild({ species: [sp], lv: 0, win: [...BATTLED(sp), scene(back)] }), caught: [...BATTLED(sp), scene(back)], exact: true, lose: [...BATTLED(sp), scene(back)] });
+const LAMP: Json[] = [flag('mansion-lamps'), when('mansion-lamps', { min: 3, max: 3 }, [], '*Somewhere below, a heavy door unlocks, all by itself.*')];
+/** The hall's portrait changes between visits: stern, then looking to your left, then asleep. */
+const HALL_AGAIN: Json[] = [flag('mansion-hall-seen'), scene('gn-37-hall')];
+const MANSION_DONE: Json[] = [flag('mansion-done'), leavePseudo()];
+/** Leaving: the vault first, if all three lamps are lit. */
+const MANSION_LEAVE: Json[] = [when('mansion-lamps', { min: 3 }, [scene('gn-37-vault')]), when('mansion-lamps', { min: 0, max: 2 }, MANSION_DONE)];
+const WAITERS = anyFlag('cubone-close', 'cubone-joined', 'dog-station-sat');
+
+const gn37: Json[] = [
+  gev('gn-37-door', 'A Lit Window', house({ stop: 'event', rarity: 'rare', types: ['ghost'], pokemon: 'mimikyu', requires: [not('mansion-done'), not('mansion-entered')] }), say(
+    'A big house, off the path, with every window dark but one. On the top floor, a lamp is lit.',
+    'The gate\'s been oiled. The path\'s been swept. Nobody\'s lived here in forty years.',
+  ), [
+    ch('Go up to the door.', out('The door opens before you knock. Not wide. Just enough.', flag('mansion-entered'), setTo('mansion-lamps', 0), setTo('mansion-humoured', 0), setTo('mansion-battled', 0), next('gn-37-hall'))),
+    ch('Walk on.', out('When you look back, the lit window is dark. Then, as you turn away, it\'s lit again.')),
+  ]),
+  // ---- Floor 1. The Hall and Kitchen (Gastly, in the portraits and the pots) ----
+  floor('gn-37-hall', 'The Haunted Mansion: The Hall', {
+    pokemon: 'gastly',
+    remembers: [
+      { id: 'asleep', when: [is('mansion-hall-seen', 2)], notice: '*The portrait of the man in the long coat is asleep. His chin\'s on his chest. Someone\'s put a blanket over the frame.*' },
+      { id: 'left', when: [is('mansion-hall-seen', 1, 1)], notice: '*The portrait has changed. The man in the long coat isn\'t looking at you any more. He\'s looking at something to your left.*' },
+      MOVED('a chair has turned to face the door.'),
+    ],
+  }, say(
+    'A hall with three cold lamps on three tables, wicks black. Music from somewhere, a waltz on an old record.',
+    'A portrait at the foot of the stairs: a man in a long coat, stern, as if you\'re late.',
+    '*The music stops. Just for a few seconds. Your footsteps are very loud. Then it starts again, mid-bar.*',
+  ), [
+    chIf([not('mansion-ghost-1')], 'Scream back at the portrait.', out(say('The portrait screams at you. You scream back, louder.', 'A Gastly falls out of the frame laughing, and rolls about on the rug, and can\'t stop.'), ...HUMOUR('gastly'), setTo('mansion-ghost-1', 1), ...HALL_AGAIN)),
+    chIf([not('mansion-ghost-1')], 'Battle the Gastly.', fight('The pots rattle. The portraits\' eyes light up. Something comes out of all of them at once.', inside({ ...ghostFight('gastly', 'gn-37-hall'), win: [...BATTLED('gastly'), setTo('mansion-ghost-1', 1), ...HALL_AGAIN], caught: [...BATTLED('gastly'), setTo('mansion-ghost-1', 1), ...HALL_AGAIN] }))),
+    chIf([not('mansion-lamp-1')], 'Go into the kitchen.', out('A cold stove with a lamp on top. Pots, clattering by themselves.', scene('gn-37-kitchen'))),
+    ch('Go upstairs.', out('The stairs creak in the right places. Like someone showing you which ones.', next('gn-37-library'))),
+  ]),
+  floor('gn-37-kitchen', 'The Haunted Mansion: The Kitchen', { pokemon: 'gastly', remembers: [MOVED('the table is laid for one more than before.')] }, say(
+    'A kitchen, spotless, cold. On the stove, the first lamp. A pot lid lifts, and drops, and lifts.',
+    'Something in here wants feeding.',
+  ), [
+    chIf([{ kind: 'gn', test: 'holdsBerry' }], 'Leave a Berry.', out('You put a Berry on the stove. It\'s gone when you look back. The first lamp lights, small and gold.', gn('payBerry'), setTo('mansion-lamp-1', 1), ...LAMP, ...HALL_AGAIN)),
+    ch('Leave it hungry.', out('You back out. The pot lid drops, disappointed.', ...HALL_AGAIN)),
+  ]),
+  // ---- Floor 2. The Library and Bedrooms (Shuppet, under the beds) ----
+  floor('gn-37-library', 'The Haunted Mansion: The Library', { pokemon: 'shuppet', remembers: [MOVED('a book you didn\'t touch is open on the reading desk, at the last page.')] }, say(
+    'Books in the air, turning their own pages. The second lamp, on the top of a shelf.',
+    'Along a corridor, bedrooms. One door has a child\'s drawing pinned to it.',
+    '*The music stops. In the quiet, something giggles under a bed.*',
+  ), [
+    chIf([not('mansion-lamp-2')], 'Read the riddle shelf.', out('Carved on the shelf: WHICH NUMBER COMES AFTER ALL THE OTHERS?', scene('gn-37-riddle'))),
+    chIf([not('mansion-ghost-2')], 'Go into the child\'s room.', out('A toy box. A bed made with tight corners. Everything exactly where it was left.', flag('mansion-toybox'), scene('gn-37-child'))),
+    ch('Through the far door.', out('You open it, and step through.',
+      when('mansion-door-once', { min: 0, max: 0 }, [setTo('mansion-door-once', 1), scene('gn-37-library')], '*It opens onto the library. The room you just left. The books turn to look at you.*'),
+      when('mansion-door-once', { min: 2 }, [next('gn-37-gallery')], 'Through it again, and this time it leads on: a narrow stair, going up.'),
+      flag('mansion-door-once'))),
+  ]),
+  floor('gn-37-riddle', 'The Haunted Mansion: The Riddle Shelf', { pokemon: 'shuppet' }, 'WHICH NUMBER COMES AFTER ALL THE OTHERS?', [
+    ch('Infinity.', out('The books flap, unimpressed. The lamp stays cold.', scene('gn-37-library'))),
+    ch('Zero.', out('A book sighs. The lamp stays cold.', scene('gn-37-library'))),
+    ch('The last page.', out('The family\'s diary slides out from the end of the shelf: the last book. The second lamp lights.', setTo('mansion-lamp-2', 1), ...LAMP, scene('gn-37-library'))),
+  ]),
+  floor('gn-37-child', 'The Haunted Mansion: The Child\'s Room', { pokemon: 'shuppet', remembers: [MOVED('the toy box lid is open a crack.')] }, say(
+    'A child\'s room, kept exactly. A toy box. A bed made with tight corners, the way a grown-up makes a bed for a child who\'s coming home.',
+    'Something under the bed is very, very still.',
+  ), [
+    ch('Check under the bed.', out(say('Two eyes, and a horn, and a grin. A Shuppet, holding its breath.', 'You straighten up and say, kindly, "Nothing there." It giggles so hard the bed shakes.'), ...HUMOUR('shuppet'), setTo('mansion-ghost-2', 1), scene('gn-37-library'))),
+    ch('Battle the Shuppet.', fight('It comes out from under the bed in a rush of dust.', inside({ ...ghostFight('shuppet', 'gn-37-library'), win: [...BATTLED('shuppet'), setTo('mansion-ghost-2', 1), scene('gn-37-library')], caught: [...BATTLED('shuppet'), setTo('mansion-ghost-2', 1), scene('gn-37-library')] }))),
+  ]),
+  // ---- Floor 3. The Gallery and Attic (Banette, on a chest) ----
+  floor('gn-37-gallery', 'The Haunted Mansion: The Gallery', {
+    pokemon: 'banette',
+    remembers: [
+      { id: 'mirror', when: [not('mansion-mirror')], notice: '*In the long mirror, behind you: something small, with a rag over its head. You turn. Nothing.*' },
+      MOVED('every portrait in the gallery has turned to face the stairs.'),
+    ],
+  }, say(
+    'A gallery of portraits, all the same family, all the same Pokémon, growing older frame by frame.',
+    'A ladder to the attic. A dumb waiter in the wall, its rope going down into the dark: the cellar stair.',
+    '*The music stops. In the attic, something sits up.*',
+  ), [
+    chIf([not('mansion-ghost-3')], 'Climb to the attic.', out('A chest, and something sitting on it, waiting. A Banette. Once a doll.', flag('mansion-mirror'), scene('gn-37-attic'))),
+    chIf([not('mansion-lamp-3')], 'Send the dumb waiter down.', out('It goes down, creaking, to the cellar stair. You can see the third lamp, behind loose boards.', flag('mansion-mirror'), scene('gn-37-cellar'))),
+    ch('Go up to the study.', out('One more stair. Under the door at the top, firelight.', flag('mansion-mirror'), next('gn-37-study'))),
+  ]),
+  floor('gn-37-attic', 'The Haunted Mansion: The Attic', { pokemon: 'banette' }, 'The Banette doesn\'t move. Its zipper mouth twitches.', [
+    ch('Ask it who threw it away.', out('Its zipper mouth moves. "She threw me away."', scene('gn-37-doll'))),
+    ch('Battle it.', fight('Its zipper mouth opens wide.', inside({ ...ghostFight('banette', 'gn-37-gallery'), win: [...BATTLED('banette'), setTo('mansion-ghost-3', 1), scene('gn-37-gallery')], caught: [...BATTLED('banette'), setTo('mansion-ghost-3', 1), scene('gn-37-gallery')] }))),
+  ]),
+  floor('gn-37-doll', 'The Haunted Mansion: The Cursed Doll', { pokemon: 'banette' }, '"She threw me away."', [
+    ch('I\'m sorry.', out('It looks at you for a long time. "Nobody ever said that." It climbs down off the chest.', ...HUMOUR('banette'), setTo('mansion-ghost-3', 1), scene('gn-37-gallery'))),
+    ch('Who?', out('"The girl in the pictures. Grown up now. Far away." It points down, through the floor. "His Mimikyu stayed. I didn\'t get to."', ...HUMOUR('banette'), setTo('mansion-ghost-3', 1), scene('gn-37-gallery'))),
+    ch('Come with me.', out('It\'s in your arms before you finish the sentence, light as cloth.', ...HUMOUR('banette'), setTo('mansion-ghost-3', 1), join({ species: ['banette'] }), scene('gn-37-gallery'))),
+  ]),
+  floor('gn-37-cellar', 'The Haunted Mansion: The Cellar Stair', { pokemon: 'banette' }, 'The third lamp, on the cellar stair, behind boards gone soft with forty years of damp.', [
+    ch('Test the boards.', out('You climb down the dumb waiter shaft and test each board before you trust it. One gives. You reach the lamp anyway, and it lights.', setTo('mansion-lamp-3', 1), ...LAMP, scene('gn-37-gallery'))),
+    chIf([anyType('ghost')], 'Send a Ghost-type.', out('Your Ghost-type drifts down over the rotten boards without touching them, and breathes on the wick. It lights.', setTo('mansion-lamp-3', 1), ...LAMP, scene('gn-37-gallery'))),
+  ]),
+  // ---- Floor 4. The Study: the owner ----
+  floor('gn-37-study', 'The Haunted Mansion: The Study', {
+    pokemon: 'mimikyu', effect: 'none',
+    remembers: [
+      { id: 'known', when: [anyFlag('mansion-mimikyu', 'sock-puppet-shadow')], notice: '*You know this one. The Ruined Stage, the floppy hat. It\'s been practising being a person.*' },
+      { id: 'watched', when: [is('mansion-humoured')], notice: '*Behind you, in the doorway, the Ghost-types you humoured have followed you up. They watch. They don\'t come in.*' },
+    ],
+  }, say(
+    'A fire, lit. A table laid for tea, for two. Steam off the pot.',
+    '*A figure in a long coat stands at the window, with its back to the room. The coat\'s the one in the portrait.*',
+    '*It turns round. The coat\'s far too big. Under the collar, a rag, with a face drawn on it in crayon. Crooked.*',
+    '*It pulls out a chair.*',
+  ), [
+    ch('Battle it.', fight('It lets the coat fall back off its shoulders. Underneath, it\'s very small, and very fast.', inside({
+      ...wild({ species: ['mimikyu'], lv: 1, win: [setTo('mansion-end', 3), flag('mansion-end-battled'), scene('gn-37-won')] }),
+      exact: true, foeMoves: ['shadow-sneak', 'play-rough', 'shadow-claw', 'swords-dance'], rule: { gn: 'mansion', noCatch: true }, lose: [scene('gn-37-shown-out')],
+    }))),
+    ch('Sit down.', out('You sit. It pours. It can\'t reach the pot; it stands on the chair.', scene('gn-37-tea-1'))),
+    chIf([not('mansion-coat')], 'Whose coat is that?', out(say(
+      '*It goes to the drawer. A dozen old Poké Balls, all empty, all polished. Each has a name scratched on the button. The newest is forty years old.*',
+      '*It takes out the newest, and holds it up. A name on the button, and under it, smaller, scratched later, by something without thumbs: a small crooked face.*',
+      '*It was his. It was the last one. It\'s waited.*',
+    ), flag('mansion-coat'), scene('gn-37-study'))),
+  ]),
+  // ---- The tea: four small exchanges, no wrong answers ----
+  floor('gn-37-tea-1', 'The Haunted Mansion: Tea', { pokemon: 'mimikyu' }, 'It pushes a cup across the table with both paws. It doesn\'t spill a drop.', [
+    ch('Drink.', out('It\'s weak, and sweet, and still warm. It watches every sip.', scene('gn-37-tea-2'))),
+    ch('Thank it first.', out('You say thank you. Its rag straightens, all by itself, the crayon face a little less crooked.', flag('mansion-thanked'), scene('gn-37-tea-2'))),
+  ]),
+  floor('gn-37-tea-2', 'The Haunted Mansion: Tea', { pokemon: 'mimikyu' }, 'It points at the portrait over the fire. The same man, older, in the same coat.', [
+    ch('He looks kind.', out('It nods. A lot. The rag flaps.', scene('gn-37-tea-3'))),
+    ch('He looks tired.', out('It nods, slowly.', scene('gn-37-tea-3'))),
+  ]),
+  floor('gn-37-tea-3', 'The Haunted Mansion: Tea', { pokemon: 'mimikyu' }, 'It brings out the toy box from the child\'s room, and sets out a board for draughts.', [
+    ch('Play.', out('It\'s very bad at draughts. It cheats. When you catch it, it pretends it didn\'t hear you.', scene('gn-37-tea-4'))),
+    ch('Whose were these?', out('It points at itself.', scene('gn-37-tea-4'))),
+  ]),
+  floor('gn-37-tea-4', 'The Haunted Mansion: Tea', {
+    pokemon: 'mimikyu',
+    remembers: [{ id: 'waited', when: [WAITERS], notice: '*Your lead sits down first, beside the chair, facing the window. It knows how this goes.*' }],
+  }, 'It looks at the window. At the road. The way it\'s been looking for forty years.', [
+    ch('Wait with it.', out(say(
+      'The fire burns down. The house is quiet. Nothing moves in any room.',
+      '*After a long time, it climbs down off the chair. It takes the coat off. It folds it, badly, and puts it over the back of his chair.*',
+      '*It\'s very small without it.*',
+    ), setTo('mansion-end', 1), flag('mansion-end-waited'), moment('In the house with one lit window, a Mimikyu took off a coat it had worn for forty years, and folded it, badly.', 90), scene('gn-37-waited'))),
+    ch('He isn\'t coming.', out(say(
+      '*It looks at you for a long time. It knew.*',
+      '*It nods. It doesn\'t take the coat off.*',
+    ), setTo('mansion-end', 2), flag('mansion-end-told'), scene('gn-37-told'))),
+  ]),
+  // ---- Endings ----
+  floor('gn-37-waited', 'The Haunted Mansion: The Coat on the Chair', { pokemon: 'mimikyu' }, 'It walks to the door, and stops, and looks back at you. It\'s waiting for you now.', [
+    ch('Go together.', out('It follows you down the stairs. It doesn\'t look back at the coat. You do.', { ...join({ species: ['mimikyu'], lv: 1 }), ability: 'borrowed-face' }, ...MANSION_LEAVE)),
+  ]),
+  floor('gn-37-told', 'The Haunted Mansion: It Stays', { pokemon: 'mimikyu' }, say(
+    'It goes back to the window. Then it comes to you, and takes your Pokémon\'s paw, or hand, or fin, and holds on.',
+    'The way the house holds on.',
+  ), [
+    ch('Let it teach one of yours.', out('It shows your Pokémon how to hold on to someone at the door. Welcome Home.', teach('welcome-home', { who: 'picked' }), ...MANSION_LEAVE), { pick: { types: [] } }),
+  ]),
+  floor('gn-37-won', 'The Haunted Mansion: The Coat', { pokemon: 'mimikyu' }, say(
+    'It goes down, and gets up, and goes to the coat on the floor, and puts it back on.',
+    'Then it comes and stands by your feet. It\'s bringing the coat.',
+  ), [
+    ch('Take it with you.', out('It wears the coat into every fight from now on. It trips on the hem. It doesn\'t care.', { ...join({ species: ['mimikyu'], lv: 1 }), ability: 'borrowed-face', marks: ['wears the owner\'s coat'] }, ...MANSION_LEAVE)),
+  ]),
+  floor('gn-37-shown-out', 'The Haunted Mansion: Shown Out', { pokemon: 'mimikyu' }, 'You wake on the front step. The door is shut. Someone\'s put a blanket over you.', [
+    ch('Go.', out('Behind you, the top window\'s lit. The curtain moves.', ...MANSION_LEAVE)),
+  ]),
+  // ---- The vault: all three lamps ----
+  floor('gn-37-vault', 'The Haunted Mansion: The Vault', { pokemon: 'mimikyu' }, say(
+    'The vault door stands open. Inside: the family\'s photograph album.',
+    'Every Pokémon in it is in the house tonight.',
+  ), [
+    ch('Read the album.', out(say('You turn the pages. Every ghost in the mansion goes quiet, and then, all at once, cheers.', 'Folded in the back, a Reaper Cloth.'), flag('mansion-album'), item('reaper-cloth'), ...MANSION_DONE)),
+  ]),
+];
+
+export const EVENTS: Json[] = [...gn35, ...gn36, ...gn37];
 
 export const REMOVE: string[] = [];
 
@@ -419,9 +608,15 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'A+1; the Flygon A+2', often: 'run', badge: 'own', dressing: { kanto: 'The Great Desert', elsewhere: 'The Great Desert' },
     note: 'Badge: a dune. Eight nodes, three oases, and the traveller\'s story through it. Water 4, one less a node, refilled at oases; at none, fights start at 90% HP.',
   },
+  'gn-37-door': {
+    gn: 'gn.37', shape: 'Door', earliest: 'A6', home: 14, window: [12, 17], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery'], needs: ['eerie', 'night'],
+    level: 'A+0; the owner A+1', often: 'run', badge: 'own', dressing: { kanto: 'The Haunted Mansion', elsewhere: 'The Haunted Mansion' },
+    note: 'Badge: a lit window. A side branch: four floors. SF118\'s rooms are on these floors. "Once per save" is once per run (no memory across runs).',
+  },
 };
 
 export const CHAINS: Json[] = [
+  { id: 'ps_gn_mansion', name: 'The Haunted Mansion', entry: 'gn-37-door', themeId: 'normal-ghost', tint: MANSION_TINT, mood: 'haunted house', start: 'opened' },
   { id: 'ps_gn_desert', name: 'The Great Desert', entry: 'gn-36-door', themeId: 'fire-ground', tint: DESERT_TINT, mood: 'desert', start: 'opened' },
   { id: 'ps_gn_ridge', name: 'Thunderstorm Ridge', entry: 'gn-35-door', themeId: 'electric-flying', tint: RIDGE_TINT, mood: 'thunderstorm ridge', start: 'opened' },
 ];
