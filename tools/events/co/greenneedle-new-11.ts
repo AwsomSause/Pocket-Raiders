@@ -113,9 +113,9 @@ export const REMOVE: string[] = [];
 export const CHAINS: Json[] = [];
 export const PLACEMENT: Record<string, Placement> = {
   [DOOR]: {
-    gn: 'gn.new.11', shape: 'Single', earliest: 'A3', home: 15, window: [13, 17], sits: 'must-see', attaches: 'after', tags: ['World Event'],
+    gn: 'gn.new.11', shape: 'Single', earliest: 'A3', home: 15, window: [10, 17], sits: 'must-see', attaches: 'after', tags: ['World Event'],
     needs: ['night'], stages: [3, 4, 5, 6, 7], level: 'No battles', often: 'region', badge: 'own',
     dressing: { kanto: 'The Night Parade', elsewhere: 'The Night Parade' },
-    note: 'Badge: a lantern. Once per region, at night (fallback: step 10 at night, then the first night join of the next stage). Joining opens the Spirit Market (six lanterns); the last region opens the palanquin for a player who joined every parade.',
+    note: 'Badge: a lantern. Once per region, at night (the placer tries step 15, then 16–17, then 14 down to 10, the doc fallback; a stage that is not at night skips it, and it stays owed until the first night stage that fits, because its once-per-region stamp is set only when it is played). Joining opens the Spirit Market (six lanterns); the last region opens the palanquin for a player who joined every parade.',
   },
 };
