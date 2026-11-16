@@ -2008,6 +2008,7 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
     if (pivoted) battle.growthMarks.push(`pivotIn:${mon.uid}`);
   }
   battle.activeIndex = partyIndex;
+  const leftStages = battle.playerStages;
   battle.playerStages = battle.secondChance ? reapplyBoost(freshStages()) : freshStages();
   battle.playerVolatile = freshVolatile();
   if (!battle.participants.includes(mon.uid)) battle.participants.push(mon.uid);
@@ -2024,6 +2025,15 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
     battle.storyEffects.push('th-used');
     events.push({ type: 'raid', tone: 'info', text: `Tailwind Heart: the wind picks up behind ${nameOf(ctx, mon)}!` });
     applyStageChange(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'spe', 1, events);
+  }
+  // Greenneedle gn.new.08, Curtain Call: Mime Jr. steps out alive, and whoever steps in copies one stage of its best boost (once a battle).
+  if (outgoing && outgoing.hp > 0 && outgoing.uid !== mon.uid && abilityOf(ctx.content, outgoing) === 'curtain-call' && !battle.storyEffects.includes('curtain-call-used')) {
+    const best = (['atk', 'def', 'spa', 'spd', 'spe'] as const).reduce<'atk' | 'def' | 'spa' | 'spd' | 'spe' | null>((b, k) => (leftStages[k] > 0 && (!b || leftStages[k] > leftStages[b]) ? k : b), null);
+    if (best) {
+      battle.storyEffects.push('curtain-call-used');
+      events.push({ type: 'raid', tone: 'info', text: `Curtain Call: ${nameOf(ctx, outgoing)} bows out, and ${nameOf(ctx, mon)} takes the part!` });
+      applyStageChange(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, best, 1, events);
+    }
   }
   // Mentor lesson: after a turn-one knockout, the next Pokémon you send in enters faster (once per battle).
   const koSpeed = turnOneKoSpeedStages(ctx.perks);
