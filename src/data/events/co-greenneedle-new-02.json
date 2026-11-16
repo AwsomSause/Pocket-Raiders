@@ -1,0 +1,533 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-02-platform",
+   "name": "The Dog at the Station",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dog-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "tint": "#6b6558",
+    "effect": "none"
+   },
+   "intro": "*A small station, and a Growlithe on the platform, sitting very straight, facing the tracks.*\n\nA clerk sets down a bowl of water beside it without looking at it. The bowl is already worn smooth in the middle.\n\n**Clerk, Mr. Halloran:** \"Four years. Meets every train. I stopped telling it.\"\n\n*A train pulls in. The Growlithe stands. Everyone gets off. It sits back down.*",
+   "choices": [
+    {
+     "label": "Sit with it.",
+     "success": {
+      "text": "You sit on the cold platform beside it. It does not look at you.\n\nThen, for the length of one train, it leans. Slightly. Its whole warm weight against your arm.\n\nWhen the platform empties, it sits up again, and you stay a moment longer than you need to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dog-station-sat",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "dog-open",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "dog-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed it.",
+     "success": {
+      "text": "You open your pack. It eats, politely, with its eyes never leaving the track.\n\nIt finishes. It does not thank you. It does not need to. It is busy, and it has been busy for years.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dog-fed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "dog-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try to lead it away.",
+     "success": {
+      "text": "You tug the lead gently, and it comes. One whole node, patient, close at your heel.\n\nThen it stops. It looks back along the road once. And it runs, flat out, all the way home to the platform.\n\nYou find it there when you catch up, sitting down, as if it had never left.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dog-led",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "dog-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask around town.",
+     "success": {
+      "text": "**Halloran:** \"Ask who you like. Everyone here has a piece of it. None of them have the whole thing.\"\n\nYou go and find the porter, the landlady, and the clinic. Three people, each holding one corner of one story.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dog-asking",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "dog-open",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "dog-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-02-porter",
+   "name": "The Dog at the Station: The Porter",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dog-asking",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "dog-porter",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "sameStage",
+     "key": "dog-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "tint": "#6b6558",
+    "effect": "none"
+   },
+   "intro": "*A porter in a brown cap, leaning on a trolley, watching the Growlithe from the far end of the platform.*\n\nHe has the look of a man who has told this story so often he has stopped hearing it.\n\n**Porter:** \"Ran off with a circus. I'd swear to it.\"\n\n\"Left it a note, all grand. Said he'd be back in the spring. That was four springs ago.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "He tells it all: the red tents, the elephant, the way the trainer laughed at the gate.\n\nHe tells it quickly. You think he has been telling it quickly for years, so he never has to stop at the end.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dog-porter",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-02-landlady",
+   "name": "The Dog at the Station: The Landlady",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dog-asking",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "dog-landlady",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "dog-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "tint": "#6b6558",
+    "effect": "none"
+   },
+   "intro": "*A boarding house with a window box of dead geraniums. A woman in an apron, arms folded, on the step.*\n\n**Landlady:** \"Died at sea. Don't tell the dog.\"\n\nShe says it flatly, the way you say something to stop yourself from saying anything else.\n\n\"Telegram came in the autumn. I put it in the stove. Somebody had to keep the dog waiting.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "Her hands are knotted in the apron. She tells you his room is still made up, with the window open an inch.\n\nIt is not grief you hear. It is the effort of keeping a promise nobody asked her to make.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dog-landlady",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-02-clinic",
+   "name": "The Dog at the Station: The Clinic",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dog-asking",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "dog-clinic",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "dog-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "tint": "#6b6558",
+    "effect": "none"
+   },
+   "intro": "*A low white building at the end of a long garden. A nurse in the doorway, tired, kind, not surprised to see you.*\n\n**Clinic nurse:** \"He's in ward two. He's been ill a long time.\"\n\n\"He won't send for it. He says it deserves better than a sick man.\"",
+   "choices": [
+    {
+     "label": "Ask for his name.",
+     "success": {
+      "text": "**Nurse:** \"Emlyn. He talks about the dog most days. He asks what time the trains come in.\"\n\nShe looks at the garden, not at you. \"I tell him I don't know. I do know. I know every one of them.\"\n\nYou have your answer, and a way to make it end. It does not feel like a victory.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dog-clinic",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "dog-e3-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-02-last",
+   "name": "The Dog at the Station: The Last Visit",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dog-open",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "dog-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "dog-e3-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "tint": "#6b6558",
+    "effect": "none"
+   },
+   "intro": "*Ward two. White sheets, an open window, and the sound of a train in the distance that is not the right train.*\n\n**The trainer, Emlyn, in a clinic bed:** \"It still goes? Every day? ...Oh, you stupid, good dog.\"\n\nHe says it to the ceiling. His hand is open on the blanket, as if something should already be in it.",
+   "choices": [
+    {
+     "label": "Carry the letter.",
+     "success": {
+      "text": "He writes it slowly, four lines, crossing two out. You carry it back to the platform.\n\nThe clerk reads it aloud, in the voice he uses for announcements. The Growlithe listens to the name.\n\nIt stands. It does not wait for the train. It walks to the clinic by itself, and does not look back.\n\n**Mr. Halloran:** \"Four years,\" he says, to nobody. \"And it just needed someone to say where.\"\n\nAt the gate, the nurse presses a Fire Stone into your hand. It was on his windowsill. \"He said it was for whoever came.\"\n\n*In your Notebook, in your own hand: Some waiting ends when someone says where.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dog-reunited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-done",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Carried a letter to a Growlithe that had waited four years at a station.",
+        "importance": 85
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "dog-clinic",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Carry the Growlithe.",
+     "success": {
+      "text": "You lift it. It is heavier than you thought, and it is shaking, very slightly, all the way down the long garden.\n\nInto ward two. It does not bark. It puts its chin on the blanket and lets out one long breath.\n\nEmlyn's hand finds its ears. Neither of them says a word. You wait in the corridor for a long time.\n\nOn your way out, the nurse gives you a Fire Stone from his bedside table. \"He said you'd need it.\"\n\n*In your Notebook, in your own hand: Some waiting ends when someone says where.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dog-reunited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-done",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Carried a Growlithe into ward two, to the one it had waited for.",
+        "importance": 90
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "dog-clinic",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Sit one more time.",
+     "success": {
+      "text": "You sit on the platform. The train comes in. Everyone gets off. You do not hurry.\n\nThe Growlithe gets up. It walks to you, and looks back at the tracks once, a long look.\n\nThen it turns and settles against your leg, and this time it is you it is waiting with.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "growlithe"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "vigil",
+        "mark": "dog-vigil"
+       },
+       {
+        "kind": "flag",
+        "key": "dog-chose-player",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-done",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "Sat one more time. A Growlithe stopped waiting for the train, and chose you.",
+        "importance": 90
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "dog-station-sat",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "dog-clinic",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-02-holiday",
+   "name": "The Clerk, on Holiday",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dog-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "dog-at"
+    },
+    {
+     "kind": "flag",
+     "key": "dog-holiday",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "growlithe",
+    "tint": "#6b6558",
+    "effect": "none"
+   },
+   "intro": "*A town square, a long way from the last station. A man in a straw hat, on a bench, with an ice cream.*\n\nIt takes you a moment. It is Mr. Halloran, the clerk. He is out of uniform, and he looks ten years younger.\n\n**Halloran:** \"Holiday. First in six years. I didn't know what to do with my hands.\"",
+   "choices": [
+    {
+     "label": "Sit with him.",
+     "success": {
+      "text": "You sit. He tells you the station is quiet now. The platform is still swept every morning.\n\nThe bowl is still out. \"Habit,\" he says. \"And you never know who might come in.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dog-holiday",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -4525,6 +4525,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       final *= curseMultiplier(content, target.vol.curseTag, moveType);
       if (effectiveness > 1 && (foeAbility === 'filter' || foeAbility === 'solid-rock' || foeAbility === 'prism-armor')) final *= 0.75;
       if (effectiveness > 1 && foeAbility === 'deep-roots') final *= 0.9;
+      // Vigil (Greenneedle gn.new.02): out for three full turns, the next hit it takes this battle does 50% less (once a battle).
+      if (foeAbility === 'vigil' && target.vol.turnsOut >= 3 && !ctx.battle.storyEffects.includes(`vigil:${target.mon.uid}`)) final *= 0.5;
       // Greenneedle gn.32: a carried Red crystal (+10% to its own-type moves); the Golem read as Red (+10% to its attacks).
       if (user.side === 'player' && user.mon.crystal?.red && ownTypes(content, user.mon).includes(moveType)) final *= 1.1;
       if (user.side === 'enemy' && golemColour(ctx.battle) === 'red') final *= 1.1;
@@ -5226,6 +5228,11 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
       announce(target, holder, events);
       applyStageChange(ctx, target, 'atk', 1, events);
       applyStageChange(ctx, target, 'spe', 1, events);
+    }
+    // Vigil (gn.new.02): the halved hit is spent.
+    if (holder === 'vigil' && target.vol.turnsOut >= 3 && move.category !== 'status' && !ctx.battle.storyEffects.includes(`vigil:${target.mon.uid}`)) {
+      ctx.battle.storyEffects.push(`vigil:${target.mon.uid}`);
+      announce(target, holder, events);
     }
     // Headache (Greenneedle gn.29): a critical or super-effective hit: Sp. Atk +1, up to +2 a battle.
     if (holder === 'headache' && target.mon.hp > 0 && move.category !== 'status' && ctx.battle.storyEffects.filter((t) => t === `headache:${target.mon.uid}`).length < 2

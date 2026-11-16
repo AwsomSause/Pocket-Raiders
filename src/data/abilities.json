@@ -1590,6 +1590,11 @@
   "description": "When a critical hit or a super-effective move hits it, its Sp. Atk rises by one stage. Up to twice a battle."
  },
  {
+  "id": "vigil",
+  "name": "Vigil",
+  "description": "After three full turns on the field, the next hit it takes this battle does 50% less. Once a battle."
+ },
+ {
   "id": "old-growth",
   "name": "Old Growth",
   "description": "It restores 1/16 of its max HP at the end of each turn, in any weather."
