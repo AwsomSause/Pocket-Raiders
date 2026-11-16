@@ -3141,10 +3141,8 @@
      "id": "charmander",
      "when": [
       {
-       "kind": "flag",
-       "key": "aq05-charmander-met",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "eventSeen",
+       "id": "aq05-charmander-in-the-rain"
       },
       {
        "kind": "partyLine",

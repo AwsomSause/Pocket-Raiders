@@ -3883,7 +3883,7 @@
       "effects": [
        {
         "kind": "friendship",
-        "amount": 5,
+        "bond": 1,
         "who": {
          "types": [
           "water"
@@ -4029,7 +4029,7 @@
       "effects": [
        {
         "kind": "friendship",
-        "amount": 5,
+        "bond": 1,
         "who": {
          "types": [
           "water"

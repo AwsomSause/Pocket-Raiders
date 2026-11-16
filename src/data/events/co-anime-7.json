@@ -2443,6 +2443,10 @@
    "callback": true,
    "requires": [
     {
+     "kind": "rivalQuest",
+     "slotFree": true
+    },
+    {
      "kind": "flag",
      "key": "aq-chimchar-taken",
      "atLeast": 1,
@@ -2512,6 +2516,10 @@
            }
           ],
           "battles": 1
+         },
+         {
+          "kind": "rivalQuest",
+          "takeSlot": true
          }
         ],
         "battle": {
@@ -2596,6 +2604,10 @@
            }
           ],
           "battles": 1
+         },
+         {
+          "kind": "rivalQuest",
+          "takeSlot": true
          }
         ],
         "battle": {
@@ -2676,6 +2688,10 @@
         "kind": "formChange",
         "from": "monferno",
         "to": "infernape"
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
        }
       ],
       "battle": {
@@ -2726,6 +2742,10 @@
         "kind": "flag",
         "key": "aq23-walked-past",
         "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
        }
       ]
      }

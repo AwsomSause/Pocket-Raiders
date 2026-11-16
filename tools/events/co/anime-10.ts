@@ -49,7 +49,7 @@ export const LIMITS: Record<string, string[]> = {
     'Remembers "the Riolu on the Ledge (SF52) was saved" reads the run\'s record of A Stranded Riolu (event ledge-riolu, pick "rescued"); families-a owns that event and must keep the record if it rebuilds it.',
   ],
   AQ41: [
-    'Remembers "Haunter\'s Prank or Haunter\'s Mansion happened (Kanto)" reads Haunter\'s Mansion (event cs-kanto-route-haunter) only; Haunter\'s Prank is AQ13\'s Kanto meeting, not built yet, and can be added beside it when it is.',
+    'Remembers "Haunter\'s Prank or Haunter\'s Mansion happened (Kanto)" reads Haunter\'s Mansion (event cs-kanto-route-haunter) or Haunter\'s Prank (event cs-kanto-lavender-tower-prank, AQ13\'s Kanto meeting), one variant each.',
     'The game has no days of the week: "It can come home Sundays" is the turning point two stages after it joins, a visit home where the cup has tea in it.',
   ],
   AQ42: [
@@ -185,7 +185,7 @@ export const EVENTS: Json[] = [
 
   // ---------------- AQ41. The Ghost Left Behind ----------------
   ev('aq41-ghost-left-behind', 'The Ghost Left Behind', AQ, { rarity: 'rare', minStage: stageOf('A4'), types: EERIE, pokemon: 'gengar', tint: GHOST_DARK, effect: 'flicker',
-    remembers: [{ id: 'haunter-mansion', when: [seen('cs-kanto-route-haunter')], notice: 'Back up the road, a Haunter threw a party in a broken house and giggled at the door. This is what that Haunter might be in forty years, if somebody stays.' }] },
+    remembers: [{ id: 'haunter-mansion', when: [seen('cs-kanto-route-haunter')], notice: 'Back up the road, a Haunter threw a party in a broken house and giggled at the door. This is what that Haunter might be in forty years, if somebody stays.' }, { id: 'haunter-prank', when: [seen('cs-kanto-lavender-tower-prank')], notice: 'In the tower, a Haunter played tricks on you until you laughed. This is what that Haunter might be in forty years, if somebody stays.' }] },
     `An empty house at the end of the lane. The door opens before you touch it. A hat stand bows as you pass. Somewhere a piano is playing one finger at a time, wrong. It has kept the house exactly as its trainer left it: a coat on the hook, brushed; a cup on the table, washed, and set out again every morning for nine years. Two chairs by the fire. One has a dent in it. The other has a shadow in it, with a grin. Then your shoelaces are tied together. A Gengar laughs, delighted, and then looks at the door, to see who else laughed. Nobody.`,
     [
       ch('Find the trainer.', out(`You untie your laces and go back out through the door that opens by itself. The Gengar watches from the window as you knock on the neighbours' doors, one after another. The asking takes the rest of the day and the next. It does not leave the window.`, takeNode(2), flag('aq41-searched'), room('aq41-neighbour'))),

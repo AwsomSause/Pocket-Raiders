@@ -1152,6 +1152,16 @@
       }
      ],
      "notice": "Back up the road, a Haunter threw a party in a broken house and giggled at the door. This is what that Haunter might be in forty years, if somebody stays."
+    },
+    {
+     "id": "haunter-prank",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "cs-kanto-lavender-tower-prank"
+      }
+     ],
+     "notice": "In the tower, a Haunter played tricks on you until you laughed. This is what that Haunter might be in forty years, if somebody stays."
     }
    ],
    "scene": {

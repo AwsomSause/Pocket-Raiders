@@ -64,12 +64,12 @@ export const LIMITS: Record<string, string[]> = {
     'Remembers "the player\'s bag has a berry in it" checks an Oran, Sitrus or Lum Berry (an event holds three variants at most); the berry it ate is taken from the bag.',
   ],
   AQ37: [
-    'Remembers "completed AN6 (the Long-Lived Traveller)" reads flag an06-grave-visited, which the batch building AN6 must set at its finale.',
+    'Remembers "completed AN6 (the Long-Lived Traveller)" reads the last AN6 scene (seen an06-dogs-grave).',
   ],
   AQ38: [
     'With the sunset watched, the Dusk form comes in its "evening it evolves" scene (Bond 3, at Dusk): that scene makes it a Dusk Lycanroc. If it reaches level 25 first, the game evolves it by its usual rule and the scene then turns it Dusk.',
     'Without the sunset it evolves by the game\'s usual rule at level 25, where the branch (Midday or Midnight) is fixed for each Pokémon, not chosen by the hour; the evening scene follows.',
-    'Remembers "done AN6 (the Houndstone at the grave)" reads flag an06-grave-visited, which the batch building AN6 must set at its finale.',
+    'Remembers "done AN6 (the Houndstone at the grave)" reads the last AN6 scene (seen an06-dogs-grave).',
     'Elowen\'s letter "every region" is built as one letter scene in each of the next two regions.',
   ],
 };
@@ -330,7 +330,7 @@ export const EVENTS: Json[] = [
   // Escalation: the next stage. The Stoutland has died; the Litten waits for it to come back.
   ev('aq37-waiting', 'Waiting at the Door', AQ, { callback: true, requires: [flagIs('aq37-met'), age('aq37-met', 1)], types: CITY, cast: ['trainer.pr/pokefan_f'], pokemon: 'litten', tint: '#1c1820', effect: 'none',
     remembers: [
-      { id: 'traveller', when: [flagIs('an06-grave-visited')], notice: 'Footsteps behind you: the long-lived traveller, staff in hand. She says nothing. She sits down on the floor beside the Litten, the way someone sits who has done this many times, for many friends. She has.' },
+      { id: 'traveller', when: [seen('an06-dogs-grave')], notice: 'Footsteps behind you: the long-lived traveller, staff in hand. She says nothing. She sits down on the floor beside the Litten, the way someone sits who has done this many times, for many friends. She has.' },
       { id: 'alone', when: [flagIs('aq37-left')], notice: 'You walked past this door a stage ago. Nobody was here when it happened, nobody but the Litten. It does not know you. It does not need to.' },
       { id: 'the-food', when: [flagIs('aq37-helped')], notice: 'It remembers the food you carried in. It does not spit at you this time. It only looks.' },
     ] },
@@ -382,7 +382,7 @@ export const EVENTS: Json[] = [
       ch('Let it lean.', out('You stand still and let it lean, bruises and all. It leans harder. It is a small dog with a lot of rock on it and a great deal to say, and this is how it says it.', bondLine('rockruff', 5), flag('aq38-scene-1'))),
     ]),
   ev('aq38-wolf-evenings', 'Cross in the Evenings', AQ, { callback: true, requires: [seen('aq38-wolf-greeting'), line('rockruff', 2)], pokemon: 'rockruff', tint: '#2a1c18', effect: 'none',
-    remembers: [{ id: 'the-grave', when: [flagIs('an06-grave-visited')], notice: 'Tonight it goes further than usual. You find it on the hill, at the old grave where the long-lived traveller stood, howling. Something under the ground howls back, pleased.' }] },
+    remembers: [{ id: 'the-grave', when: [seen('an06-dogs-grave')], notice: 'Tonight it goes further than usual. You find it on the hill, at the old grave where the long-lived traveller stood, howling. Something under the ground howls back, pleased.' }] },
     'Evenings, it gets cross. No reason you can see. Its fur goes up, it snaps at nothing, and then it goes off alone for an hour, out past the firelight. It always comes back. It always comes back sorry, head low, and lies down with its chin on your boot.',
     [
       ch('Wait up for it.', out('You keep the fire going until it comes in. It looks surprised to find you awake, and then very relieved, and lies down a little closer than usual. You do not ask where it went. It would not be able to tell you.', bondLine('rockruff', 5), flag('aq38-scene-2'))),

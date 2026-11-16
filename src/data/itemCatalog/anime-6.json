@@ -1,29 +1,5 @@
 [
  {
-  "id": "twisted-spoon",
-  "name": "Twisted Spoon",
-  "family": "Questline rewards (anime)",
-  "description": "Bent by a Psychic Gym Leader as a girl, the day she stopped laughing. Psychic moves +20%",
-  "rarity": "uncommon",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "twistedspoon",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    {
-     "hook": "typePower",
-     "types": [
-      "psychic"
-     ],
-     "percent": 20
-    }
-   ]
-  }
- },
- {
   "id": "donphan-leaders-tusk",
   "name": "Donphan Leader’s Tusk",
   "family": "Questline rewards (anime)",

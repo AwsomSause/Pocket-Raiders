@@ -2704,10 +2704,8 @@
      "id": "traveller",
      "when": [
       {
-       "kind": "flag",
-       "key": "an06-grave-visited",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "eventSeen",
+       "id": "an06-dogs-grave"
       }
      ],
      "notice": "Footsteps behind you: the long-lived traveller, staff in hand. She says nothing. She sits down on the floor beside the Litten, the way someone sits who has done this many times, for many friends. She has."
@@ -3302,10 +3300,8 @@
      "id": "the-grave",
      "when": [
       {
-       "kind": "flag",
-       "key": "an06-grave-visited",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "eventSeen",
+       "id": "an06-dogs-grave"
       }
      ],
      "notice": "Tonight it goes further than usual. You find it on the hill, at the old grave where the long-lived traveller stood, howling. Something under the ground howls back, pleased."

@@ -63,7 +63,7 @@ export const LIMITS: Record<string, string[]> = {
     'The three-step routine (a pratfall, a disappearing trick, a tickle) is spread over the Companion beats: the Haunter joins you and rehearses one bit each time its Bond rises, then performs all three at the turning point, where the third works.',
     'The Haunter staying with her is your choice at the end (Companion rule: the player always chooses). If you keep it, she still gives the Twisted Spoon, but no Gastly.',
     'Remembers "the player completed Sabrina\'s Labyrinth (Part 8)" reads flag kanto-sabrina-labyrinth-done, set by the Kanto Canon Spaces labyrinth\'s last room.',
-    'The Twisted Spoon is a new item (src/data/itemCatalog/anime-6.json: Psychic moves +20%). Afterstory "her Gym is loud in later runs" is not built (nothing crosses runs).',
+    'Afterstory "her Gym is loud in later runs" is not built (nothing crosses runs).',
   ],
   AQ14: [
     'Remembers "the player completed Viridian Forest\'s Samurai duel" checks seen of cs-kanto-pewter-forest-n6 (Kanto Canon Spaces, Veridian Forest: The Samurai).',
@@ -299,8 +299,8 @@ export const EVENTS: Json[] = [
   ev('aq13-stay', 'Loud', AQ, { room: true, cast: ['boss.sabrina-lgpe'], pokemon: 'haunter', tint: '#3a2a4a', effect: 'confetti' },
     'The Gym is loud now. The trainers are laughing because she is laughing, and nobody is quite sure what at. The Leader wipes her eyes and looks at the Haunter at your shoulder. The Haunter looks at her, and at you, and back again. It wants to stay. It is not sure it is allowed.',
     [
-      ch('Let it stay with her.', out('It hugs you, cold as a cellar and very tight, and floats to her side. She gives you a Gastly from the Gym, a small giggling one that has been bored out of its mind for years, and then the spoon she has been holding all this time. "I bent it the day I stopped laughing," she says. "I don\'t need it now." Behind you, as you go, the Gym is the loudest place in town.', farewell('Haunter stays with the Leader', ['haunter', 'gengar']), gain('gastly', { bond: 10 }), item('twisted-spoon'), flag('aq13-haunter-stayed'), moment('A Haunter made a Gym Leader laugh for the first time since she was a child, and stayed to keep her laughing.', 70))),
-      ch('Ask it to come with you.', out('It looks at her for a long time. Then it comes back to your shoulder. She understands. "Come back and make me laugh," she says, and she gives you the bent spoon anyway. "I don\'t need it now." The Gym stays loud behind you all the way down the street.', bondLine('gastly', 10), item('twisted-spoon'), flag('aq13-haunter-kept'), moment('A Haunter made a Gym Leader laugh for the first time since she was a child.', 70))),
+      ch('Let it stay with her.', out('It hugs you, cold as a cellar and very tight, and floats to her side. She gives you a Gastly from the Gym, a small giggling one that has been bored out of its mind for years, and then the spoon she has been holding all this time. "I bent it the day I stopped laughing," she says. "I don\'t need it now." Behind you, as you go, the Gym is the loudest place in town.', farewell('Haunter stays with the Leader', ['haunter', 'gengar']), gain('gastly', { bond: 10 }), item('twistedspoon'), flag('aq13-haunter-stayed'), moment('A Haunter made a Gym Leader laugh for the first time since she was a child, and stayed to keep her laughing.', 70))),
+      ch('Ask it to come with you.', out('It looks at her for a long time. Then it comes back to your shoulder. She understands. "Come back and make me laugh," she says, and she gives you the bent spoon anyway. "I don\'t need it now." The Gym stays loud behind you all the way down the street.', bondLine('gastly', 10), item('twistedspoon'), flag('aq13-haunter-kept'), moment('A Haunter made a Gym Leader laugh for the first time since she was a child.', 70))),
     ]),
 
   // ---------------- AQ14. The Sap Thief ----------------

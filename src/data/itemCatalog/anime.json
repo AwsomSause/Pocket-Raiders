@@ -138,27 +138,6 @@
   }
  },
  {
-  "id": "leaders-tusk",
-  "name": "Donphan Leader’s Tusk",
-  "family": "Questline rewards (anime)",
-  "description": "Left at the ford. Accuracy +10%",
-  "rarity": "rare",
-  "stacksOn": "pokemon",
-  "max": 1,
-  "how": "held",
-  "icon": "wide-lens",
-  "status": "supported",
-  "effect": {
-   "kind": "held",
-   "hooks": [
-    {
-     "hook": "accuracy",
-     "percent": 10
-    }
-   ]
-  }
- },
- {
   "id": "grand-prix-belt",
   "name": "Grand Prix Belt",
   "family": "Questline rewards (anime)",

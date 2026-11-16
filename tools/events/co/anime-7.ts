@@ -7,7 +7,7 @@
 //   AQ23 The Abandoned Chimchar                (Companion, rival; script: QUESTLINES_ASH.md "AQ23")
 // Build: npm run co:build -- anime-7
 import { ch, ev, fight, flag, flagAgo, flagAt, flagIs, flagThisRegion, fr, heal, hurt, hurtLead, item, out, relic, room, type Json } from '../dsl.ts';
-import { AQ, age, bondLine, duel, evolve, gain, hasMon, later, line, moment, monDuel, notYet, seen, stageOf, tagTypes, temp, type Place } from './_animeKit.ts';
+import { AQ, age, slotFree, takeSlot, bondLine, duel, evolve, gain, hasMon, later, line, moment, monDuel, notYet, seen, stageOf, tagTypes, temp, type Place } from './_animeKit.ts';
 
 export { CATEGORY } from './_animeKit.ts';
 
@@ -76,7 +76,7 @@ const SEA = tagTypes('water');
 const SNOW = tagTypes('snow');
 
 /** AQ23's finale when its Blaze was calmed: the fight with its Blaze under control. */
-const CALM_FIGHT = fight('It steps forward, and its body grows round its fire as it walks: an Infernape, crown of flame and all. Its tail flame does not flare. It burns low and steady and waits to be asked.', duel('Paul', { cls: 'ace-trainer', size: 1, team: ['electivire'], rule: { leadType: 'fire' }, win: [flag('aq23-paul-beaten'), room('aq23-controlled')] }, { lose: [flag('aq23-paul-lost'), room('aq23-controlled')] }), evolve('chimchar', 'infernape'), evolve('monferno', 'infernape'), temp('Its Blaze, under control', [{ kind: 'lowHpDamageMultiplier', below: 0.5, value: 1.25 }], 1));
+const CALM_FIGHT = fight('It steps forward, and its body grows round its fire as it walks: an Infernape, crown of flame and all. Its tail flame does not flare. It burns low and steady and waits to be asked.', duel('Paul', { cls: 'ace-trainer', size: 1, team: ['electivire'], rule: { leadType: 'fire' }, win: [flag('aq23-paul-beaten'), room('aq23-controlled')] }, { lose: [flag('aq23-paul-lost'), room('aq23-controlled')] }), evolve('chimchar', 'infernape'), evolve('monferno', 'infernape'), temp('Its Blaze, under control', [{ kind: 'lowHpDamageMultiplier', below: 0.5, value: 1.25 }], 1), takeSlot());
 
 export const EVENTS: Json[] = [
   // ---------------- AQ18. Carried Home ----------------
@@ -307,7 +307,7 @@ export const EVENTS: Json[] = [
       ch('Let it burn out.', out('You pull your Pokémon back to the road and wait. The fire runs until it has nothing left to eat, and then it runs out of itself. When it is over the field is black, and your Pokémon is lying in the ash, empty, its tail flame no bigger than a match. It is not afraid now. It is too tired to be. It never did learn where the edge was.', bondLine('chimchar', 5), flag('aq23-blaze-burned'), moment('Its Blaze burned a whole field until there was nothing left to burn.', 55))),
     ]),
   // The finale: Paul again, two stages after the meeting.
-  ev('aq23-finale', 'Paul Again', AQ, { callback: true, requires: [flagIs('aq-chimchar-taken'), seen('aq23-blaze'), age('aq-chimchar-taken', 2), line('chimchar')], cast: ['trainer.pr/ace_trainer_m'], pokemon: 'electivire', tint: '#2a1a14', effect: 'flicker',
+  ev('aq23-finale', 'Paul Again', AQ, { callback: true, requires: [slotFree(), flagIs('aq-chimchar-taken'), seen('aq23-blaze'), age('aq-chimchar-taken', 2), line('chimchar')], cast: ['trainer.pr/ace_trainer_m'], pokemon: 'electivire', tint: '#2a1a14', effect: 'flicker',
     remembers: [
       { id: 'calmed-met', when: [flagIs('aq23-blaze-calmed'), flagIs('aq-paul-met')], notice: '"You," Paul says. "You argued for it." He looks at it for longer than he needs to. It is not shaking.', hide: [0], addChoices: [ch('Send it out.', CALM_FIGHT)] },
       { id: 'calmed', when: [flagIs('aq23-blaze-calmed')], notice: 'It stands in front of the Electivire with its tail flame low and steady. It is not shaking.', hide: [0], addChoices: [ch('Send it out.', CALM_FIGHT)] },
@@ -315,8 +315,8 @@ export const EVENTS: Json[] = [
     ] },
     'A gate at the edge of a town, and Paul is leaning on it, the way he leans on everything. Beside him stands an Electivire, huge and crackling, cables twitching. Paul looks at your party. He finds the one he gave away. It is not a Chimchar now: it is an Infernape, or it will be by the end of this. "One on one," he says. "Let\'s see if it still only works when it\'s losing."',
     [
-      ch('Send it out.', fight('It steps forward. Its body grows round its fire as it walks, and by the time it reaches the line it is an Infernape, crown of flame and all. The Electivire\'s cables rise. Paul folds his arms.', duel('Paul', { cls: 'ace-trainer', size: 1, team: ['electivire'], rule: { leadType: 'fire' }, win: [flag('aq23-paul-beaten'), room('aq23-after')] }, { lose: [flag('aq23-paul-lost'), room('aq23-after')] }), evolve('chimchar', 'infernape'), evolve('monferno', 'infernape'))),
-      ch('Walk past him.', out('You keep walking. Your Pokémon looks back at the Electivire, and at Paul, and then follows you. "Thought so," Paul says to nobody. That is the last you see of him. Whatever he wanted to know about it, he will have to go on not knowing.', flag('aq23-walked-past'))),
+      ch('Send it out.', fight('It steps forward. Its body grows round its fire as it walks, and by the time it reaches the line it is an Infernape, crown of flame and all. The Electivire\'s cables rise. Paul folds his arms.', duel('Paul', { cls: 'ace-trainer', size: 1, team: ['electivire'], rule: { leadType: 'fire' }, win: [flag('aq23-paul-beaten'), room('aq23-after')] }, { lose: [flag('aq23-paul-lost'), room('aq23-after')] }), evolve('chimchar', 'infernape'), evolve('monferno', 'infernape'), takeSlot())),
+      ch('Walk past him.', out('You keep walking. Your Pokémon looks back at the Electivire, and at Paul, and then follows you. "Thought so," Paul says to nobody. That is the last you see of him. Whatever he wanted to know about it, he will have to go on not knowing.', flag('aq23-walked-past'), takeSlot())),
     ]),
   ev('aq23-after', 'Only When It\'s Losing', AQ, { room: true, cast: ['trainer.pr/ace_trainer_m'], pokemon: 'infernape', tint: '#2a1a14', effect: 'fire' },
     'The Blaze came, in the end, when it was losing. It came the way it always does, all at once and too much, and it nearly took the gatepost with it. Paul watches it burn down. "Same as ever," he says, without much in it either way. He calls the Electivire back and goes. Your Infernape stands in the scorch marks, breathing hard, still a little afraid of what it is.',

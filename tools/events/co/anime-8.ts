@@ -65,7 +65,7 @@ export const LIMITS: Record<string, string[]> = {
   ],
   AQ28: [
     'The doc\'s short script has only the meeting; the small scenes and the turning point (its fight with the old trainer\'s new Pokémon, after which it evolves into Pignite) are written to the Companion rule and the doc\'s reward line.',
-    'Remembers "has done AQ5 (Charmander in the rain)" reads flag aq05-charmander-met, which the AQ5 thread must set, together with a Charmander-line Pokémon in the party.',
+    'Remembers "has done AQ5 (Charmander in the rain)" reads the AQ5 meeting (seen aq05-charmander-in-the-rain), together with a Charmander-line Pokémon in the party.',
     'In the turning-point fight your first Fire-type leads; if that is not the Tepig, the fight still counts as its own.',
   ],
   AQ29: [
@@ -376,7 +376,7 @@ export const EVENTS: Json[] = [
     ]),
   // ---------------- AQ28. The Tepig Who Waited ----------------
   ev('aq28-tepig-waited', 'The Tepig Who Waited', AQ, { rarity: 'uncommon', minStage: stageOf('A2'), types: [], cast: ['trainer.pr/school_kid_f'], pokemon: 'tepig', tint: '#2a1c14', effect: 'none',
-    remembers: [{ id: 'charmander', when: [flagIs('aq05-charmander-met'), line('charmander')], notice: 'Your Charmander walks up to the post without being asked and sits down beside it, tail flame held carefully away from the rope. Two Fire-types, side by side. Both of them were once left somewhere to wait.', addChoices: [
+    remembers: [{ id: 'charmander', when: [seen('aq05-charmander-in-the-rain'), line('charmander')], notice: 'Your Charmander walks up to the post without being asked and sits down beside it, tail flame held carefully away from the rope. Two Fire-types, side by side. Both of them were once left somewhere to wait.', addChoices: [
       ch('Let them sit together.', out('You let them. The Charmander leans, very slightly, until its shoulder touches the Tepig\'s. The Tepig goes stiff. Then it leans back. You undo the rope and the muzzle while they sit there, and it does not seem to notice, and when you stand up to go, both of them stand up too.',
         gain('tepig', { bond: 15 }), bondLine('charmander', 5), flag('aq28-met'), flag('aq28-sat-with-charmander'))),
     ] }] },

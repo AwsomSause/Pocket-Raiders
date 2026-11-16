@@ -10,6 +10,12 @@
    "rarity": "rare",
    "minStage": 2,
    "types": [],
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
    "remembers": [
     {
      "id": "couldnt-choose",
@@ -29,6 +35,10 @@
        "success": {
         "text": "You tell him all of it: the three stones, the circling, the way your Eevee kept looking back at you instead of at them. Gary does not write until you stop. Then he writes for a long time. \"It wasn't choosing a stone,\" he says quietly. \"It was checking on you.\" He lays your story beside three years of his notes, and his whole face changes.",
         "effects": [
+         {
+          "kind": "rivalQuest",
+          "takeSlot": true
+         },
          {
           "kind": "flag",
           "key": "aq54-research",
@@ -80,7 +90,12 @@
      "label": "Battle him.",
      "success": {
       "text": "Gary closes the notebook on his knee, carefully, and stands up. The Umbreon walks out ahead of him without being asked, rings burning bright in the dusk. \"Six on six. I want the whole picture of you.\"",
-      "effects": [],
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
       "battle": {
        "kind": "trainer",
        "team": [
@@ -143,6 +158,10 @@
       "text": "\"Really?\" He is already pulling a spare notebook from a crate and a pencil from behind his ear. \"Three wild Eevee live along this road. Watch one at dawn, one at noon, one at dusk. Write down what each one does, and who it does it next to.\" He presses the notebook into your hands. \"Everything. Even the boring parts. Especially the boring parts.\" The Umbreon walks you to the edge of the lamplight and sits down there, as if to say: from here, you go on your own.",
       "effects": [
        {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
         "kind": "flag",
         "key": "aq54-research",
         "amount": 1
@@ -173,6 +192,10 @@
       "text": "You tell him: where you met it, what it did on the first night, the way it looks at you before a hard fight. Gary does not open a notebook. He does not even reach for his pencil. He listens with his chin on his fist, and once he laughs out loud. When you finish, he is quiet. Then he grabs three notebooks at once and writes everything, fast, the pencil squeaking. \"Sorry. That was too good to keep in my head.\" He tears out one page for you: a drawing of your Eevee, and not a bad one. \"I'll send you something from the lab. Give me a few days.\"",
       "effects": [
        {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
         "kind": "flag",
         "key": "aq54-told",
         "amount": 1
@@ -181,11 +204,6 @@
         "kind": "flag",
         "key": "aq54-gary-met",
         "amount": 1
-       },
-       {
-        "kind": "friendshipLine",
-        "species": "eevee",
-        "amount": 5
        },
        {
         "kind": "laterEvent",
@@ -235,11 +253,6 @@
         "kind": "flag",
         "key": "aq54-notes",
         "amount": 1
-       },
-       {
-        "kind": "friendship",
-        "amount": 3,
-        "who": "party"
        },
        {
         "kind": "laterEvent",
@@ -379,6 +392,12 @@
    "name": "The Research Finding",
    "group": "Pokémon-anime questlines",
    "room": true,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
    "remembers": [
     {
      "id": "skipped",
@@ -409,6 +428,10 @@
       "text": "\"Then it goes out with your name next to mine.\" He writes them at the top of the first page, his and yours, and a title he crosses out three times before he likes it. \"Every trainer with an Eevee should read this. They'll look at it differently after.\" He shakes your hand like a colleague, firmly, and a little too long. \"The lab will send you something for your trouble. Watch the road.\"",
       "effects": [
        {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
         "kind": "flag",
         "key": "aq54-published",
         "amount": 1
@@ -431,6 +454,10 @@
      "success": {
       "text": "Gary looks at the pages for a long time. Then he folds them once and puts them inside his coat, not in a crate. \"Yeah. Some things shouldn't be proven.\" He whistles, and an Eevee comes out of the tent, small and very curious. \"She's from my lab. I was saving her for the paper.\" He sets her down in front of you. \"Don't pick for her. Just stand next to her, and need something.\" His Umbreon walks you both out to the road, rings glowing, and turns back only at the last lamp.",
       "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
        {
         "kind": "join",
         "shadow": false,
@@ -467,6 +494,12 @@
    "name": "From Gary's Lab",
    "group": "Pokémon-anime questlines",
    "room": true,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
    "remembers": [
     {
      "id": "published",
@@ -519,6 +552,10 @@
       "text": "She walks under your feet for the first mile, then beside them. The Umbreon watches until you are out of sight, then turns for home, rings brightening as the evening comes on. Somewhere behind you, a researcher is writing down what she does next.",
       "effects": [
        {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
         "kind": "join",
         "shadow": false,
         "species": [
@@ -546,7 +583,12 @@
      "label": "Send her back with the Umbreon.",
      "success": {
       "text": "You crouch and tell her that Gary needs her more, and she seems to understand: she climbs back into the basket. The Umbreon dips its head, takes the handle in its teeth, and carries her home. You hope the next note says she is fine. You suspect it will.",
-      "effects": []
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
      }
     }
    ]
@@ -556,6 +598,12 @@
    "name": "What the Team Needs",
    "group": "Pokémon-anime questlines",
    "room": true,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
    "scene": {
     "cast": [],
     "pokemon": "eevee",
@@ -581,14 +629,13 @@
       "text": "She goes down to the stream and does not come back for a long time. When she does, she is sleek and blue and finned, and she lies down beside the team in the space nobody was filling. You think of Gary, and the Water Stone in his pocket that he never used.",
       "effects": [
        {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
         "kind": "formChange",
         "from": "eevee",
         "to": "vaporeon"
-       },
-       {
-        "kind": "friendshipLine",
-        "species": "eevee",
-        "amount": 5
        },
        {
         "kind": "moment",
@@ -615,14 +662,13 @@
       "text": "She sits by the embers of the campfire until they flare up around her, and when the sparks settle she is wrapped in a thick ruff of flame-coloured fur. The camp is warm all night for the first time in weeks.",
       "effects": [
        {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
         "kind": "formChange",
         "from": "eevee",
         "to": "flareon"
-       },
-       {
-        "kind": "friendshipLine",
-        "species": "eevee",
-        "amount": 5
        },
        {
         "kind": "moment",
@@ -649,14 +695,13 @@
       "text": "A storm passes over in the night, and she runs out into it. You find her at dawn, spiky and crackling and very pleased with herself, standing guard over the team.",
       "effects": [
        {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
         "kind": "formChange",
         "from": "eevee",
         "to": "jolteon"
-       },
-       {
-        "kind": "friendshipLine",
-        "species": "eevee",
-        "amount": 5
        },
        {
         "kind": "moment",
@@ -672,19 +717,2859 @@
       "text": "She looks at the team, then at the dark beyond the fire, and she goes and sits facing it, upright, the way the Eevee at the watchman's side did. By the time the moon is high, there are rings on her coat, glowing. Just like his.",
       "effects": [
        {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
         "kind": "formChange",
         "from": "eevee",
         "to": "umbreon"
        },
        {
-        "kind": "friendshipLine",
-        "species": "eevee",
-        "amount": 5
-       },
-       {
         "kind": "moment",
         "text": "Gary's Eevee watched the dark for your team. It became an Umbreon.",
         "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq55-rival-who-changed",
+   "name": "The Rival Who Changed",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 6,
+   "types": [],
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "remembers": [
+    {
+     "id": "no-chimchar",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "chimchar",
+       "absent": true
+      }
+     ],
+     "intro": "A crossroads in cold weather, the signposts white with frost. A young man stands where the roads meet, arms folded, collar up, older and harder around the eyes than his voice. The frost on his shoulders says he has been here a while. Behind him a Torterra stands enormous and very calm. His eyes go over your belt, one Ball at a time, looking for something. It is not there. \"No Chimchar.\" He frowns, as if you have wasted his morning. \"Then why did you come?\"",
+     "hide": [
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "To see you.",
+       "success": {
+        "text": "He looks at you for a long moment, as if nobody has said that to him in years and he is not sure it is allowed. \"Hm.\" He reaches into his coat and takes out an egg, olive-green and warm from being carried close. He puts it in your hands. \"Somebody should raise this one properly.\" Then he turns up his collar and walks away down the cold road, the Torterra shaking the ground softly behind him.",
+        "effects": [
+         {
+          "kind": "rivalQuest",
+          "takeSlot": true
+         },
+         {
+          "kind": "egg",
+          "species": [
+           "turtwig"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "left": 3,
+          "unit": "battle"
+         },
+         {
+          "kind": "flag",
+          "key": "aq55-came-to-see",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq55-paul-respect",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Paul waited at a cold crossroads, and gave you an egg because you came to see him.",
+          "importance": 55
+         }
+        ]
+       }
+      },
+      {
+       "label": "Wrong crossroads.",
+       "success": {
+        "text": "\"Clearly.\" He does not move out of your way, and he does not look at you again. You walk round him and his Torterra, and the frost crunches under your feet, and he goes on waiting for somebody else.",
+        "effects": [
+         {
+          "kind": "rivalQuest",
+          "takeSlot": true
+         },
+         {
+          "kind": "flag",
+          "key": "aq55-wrong-crossroads",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "controlled-blaze",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq23-blaze-controlled",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "chimchar",
+       "bond": 0
+      }
+     ],
+     "notice": "Then his eyes find your Infernape, and stay there. He watches it breathe, watches the flame on its head burn low and steady and exactly as high as it chooses. Whatever he came to say, he does not say it. \"Good.\""
+    },
+    {
+     "id": "reggie",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "reggie-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Reggie said you'd come.\" He says his brother's name like a stone in his shoe. \"He was very pleased about it. He's always pleased about things.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "torterra",
+    "tint": "#1e2630",
+    "effect": "snow"
+   },
+   "intro": "A crossroads in cold weather, the signposts white with frost. A young man stands where the roads meet, arms folded, collar up, older than you expected and harder around the eyes. The frost on his shoulders says he has been here a while. Behind him a Torterra stands enormous and very calm, the little tree on its back dusted with snow. \"You took a Chimchar I gave up on and made it strong. I heard.\" His eyes go to your belt and stay there. \"I don't need you to explain how. I want to see.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He unfolds his arms. That is all the answer he gives. The Torterra steps forward and the frost cracks under it. All through the battle you notice where Paul is looking: not at his own Pokémon, which he trusts to know their work, but at yours. At the one that used to be his.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "torterra",
+        "electivire",
+        "ursaring"
+       ],
+       "name": "Paul",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq55-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq55-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq55-after"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq55-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq55-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask why it matters.",
+     "success": {
+      "text": "He takes a long time to answer, long enough that the Torterra shifts its weight and the ground creaks. \"Because I was wrong about it.\" He says it flatly, like reading out a score. \"I'm not wrong about much.\" Then he waits, arms folded, as if the rest of the answer is your job.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "flag",
+        "key": "aq55-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq55-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show him.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "chimchar",
+       "bond": 0
+      }
+     ],
+     "success": {
+      "text": "You call it out. Your old Chimchar, whatever shape it wears now, looks at Paul and does not look away. There is a boulder at the edge of the crossroads, waist-high and white with frost. It takes one breath, and puts everything it has into its strongest fire. The boulder glows, then cracks, then splits down the middle and steams in the cold. Paul watches the whole thing. He does not blink once.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "flag",
+        "key": "aq55-shown",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq55-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq55-after",
+   "name": "What Paul Doesn't Say",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "torterra",
+    "tint": "#1e2630",
+    "effect": "snow"
+   },
+   "intro": "Afterwards, nobody says anything. The wind moves the frost off the signposts. The Torterra shifts its weight, very slowly, and the ground creaks under it. Paul opens his mouth once, and closes it again. He looks at your Pokémon, then at his own hands, then at the road. \"...\"",
+   "choices": [
+    {
+     "label": "Say something.",
+     "success": {
+      "text": "You say his name, or start to. He cuts across it, quietly. \"It wasn't weak.\" He looks at your Pokémon, or at the field, or at nothing. \"I was impatient.\" That is all. He turns up his collar and walks off down the cold road, and the Torterra follows him, and the ground shakes softly with each step for a long time after they are gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq55-said",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq55-paul-respect",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Paul told you the Chimchar was never weak. He was impatient.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You wait. So does he. The cold gets into your fingers. At last he nods, once, a short hard nod like a door closing. He reaches into his coat and takes out an egg, olive-green and warm from being carried close, and puts it in your hands. Then he leaves, without a word, without looking back. The egg is very warm. He must have carried it a long way.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "turtwig"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "aq55-waited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq55-paul-respect",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Paul said nothing at all, and gave you an egg with a Turtwig in it.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq56-mega-ace",
+   "name": "The Mega Ace",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 9,
+   "types": [],
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mine-shut",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-mine-shut",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You tell him the mine is already shut: the drills, the seam, the stones pressed back into the rock. You tell him how. He goes very still. \"I know that seam,\" he says. \"I know exactly where it is.\" He does not need to see it.",
+     "addChoices": [
+      {
+       "label": "Tell him the mine is shut.",
+       "success": {
+        "text": "He hears it all without interrupting once. Then he takes off his glove and looks at the Key Stone set in it, a long time, the way you look at a photograph of someone who lied to you. \"Then I don't need a trip. I need a word with my sponsor.\" The Charizard lets its Mega form go in a rush of heat, and stands beside him, ordinary and black and loyal.",
+        "effects": [
+         {
+          "kind": "rivalQuest",
+          "takeSlot": true
+         },
+         {
+          "kind": "flag",
+          "key": "aq56-believed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq56-convinced",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "mairin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mairin-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A girl with a Chespin on her head runs up the ridge behind him, out of breath. \"Alain! Listen to them! Please. Just this once, listen before you fight.\" He sighs. He has clearly heard this before. But he lowers his arm.",
+     "addChoices": [
+      {
+       "label": "Let Mairin talk to him.",
+       "success": {
+        "text": "She does most of the talking, fast and fierce, with the Chespin nodding along. He argues, then argues less, then stops. \"Show me,\" he says at last, to both of you. It takes a single node to walk down to where you can see the valley clearly. He looks for a long time.",
+        "effects": [
+         {
+          "kind": "rivalQuest",
+          "takeSlot": true
+         },
+         {
+          "kind": "takeNode",
+          "nodes": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq56-mairin",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq56-convinced",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.alain"
+    ],
+    "pokemon": "charizard-mega-x",
+    "tint": "#1a1a24",
+    "effect": "fire"
+   },
+   "intro": "A ridge above an industrial valley, the air tasting of metal. Down below, drills chew at a hillside under floodlights. A young man in a long dark coat stands at the edge, and the black Charizard beside him turns its head to you and Mega Evolves on the spot, in a blaze of blue fire, as if you were a threat it had been told about. \"Mega Evolution is how I protect what matters.\" His voice is quiet and very sure. \"You've been asking about the energy I use. You think it's stolen.\" He turns. \"Prove it. Or battle me, and I'll stop listening.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He does not even nod. The Mega Charizard X drops off the ridge edge and comes back up in a spiral of blue flame, and the heat of it presses you back a step. One against one, and Alain is very, very good.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "charizard-mega-x"
+       ],
+       "name": "Alain",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq56-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq56-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq56-listens"
+        }
+       ],
+       "friendly": true,
+       "sprite": "alain",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq56-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq56-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq56-stops-listening"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Show him the mine.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "flare-mine-running",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You lead him down off the ridge and along the valley floor, the long way, out of sight of the floodlights. It takes two nodes of hard walking. Then you stop at a fence and point. In the field beyond the mine a Pokémon staggers, its Mega form flickering on and off, on and off, like a bad bulb. Its trainer is crying. Alain watches it for a long time, and the Charizard at his side makes a low, unhappy sound.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-shown",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-convinced",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help him find out.",
+     "success": {
+      "text": "\"Fine. Show me with paper.\" For three nodes you follow his sponsor's shipments together: a crate number in a depot, a driver who will not meet your eye, a ledger in a site office with one page torn out and the next page still pressed with its writing. Alain reads every line twice. By the end he has stopped arguing. He is only reading.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 3
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-traced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-convinced",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq56-listens",
+   "name": "He Listens Anyway",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.alain"
+    ],
+    "pokemon": "charizard",
+    "tint": "#1a1a24",
+    "effect": "none"
+   },
+   "intro": "The Charizard lets go of its Mega form all at once, panting, and Alain kneels to put a hand on its neck. When he stands up, he does not look at you. \"I said I would stop listening.\" A pause, as long as a held breath. \"I didn't say I would stop thinking.\" He folds his arms, grudging. \"So. Show me.\"",
+   "choices": [
+    {
+     "label": "Show him the mine.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "flare-mine-running",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Two nodes down off the ridge and along the valley floor. At the fence, you point. In the field a Pokémon staggers, its Mega form flickering on and off like a bad bulb, and its trainer is crying. Alain watches it for a long time without a word.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-shown",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-convinced",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help him find out.",
+     "success": {
+      "text": "Three nodes of following paper: a crate number, a nervous driver, a ledger with a page torn out and the next page still holding the dent of the writing. Alain reads every line twice. He beat nobody to get here, and he knows it. By the end he is only reading.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 3
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-traced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-convinced",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq56-stops-listening",
+   "name": "He Stops Listening",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.alain"
+    ],
+    "pokemon": "charizard-mega-x",
+    "tint": "#1a1a24",
+    "effect": "none"
+   },
+   "intro": "The Mega Charizard X stands over your fallen Pokémon, blue flame guttering at its jaws, and does not press the attack. Alain looks at you as if you have confirmed something he hoped was not true. \"Then it was only talk.\" He turns back to the valley, and the floodlights, and the drills.",
+   "choices": [
+    {
+     "label": "Let him go.",
+     "success": {
+      "text": "You do. As you leave, you look back once. He is still standing at the edge of the ridge, looking down at the mine, and he has not moved. Maybe he stopped listening. He has not stopped looking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq56-walked-away",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq56-the-truth",
+   "name": "The Truth",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 10,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    },
+    {
+     "kind": "flag",
+     "key": "aq56-convinced",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq56-convinced",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "stones-taken",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-stones-taken",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "His eyes go to your bag. He knows the glow. \"And you kept some.\" It is not an accusation, quite. \"We're not so different.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Then we both stop.",
+       "success": {
+        "text": "You take one of the stones you took from that seam out of your bag and put it in his hand. He looks at it, and then at you, and something in his face loosens. He unclips his sponsor's Key Stone, weighs the two together, and throws them both off the ridge as far as he can. The one on the cord round his neck, his own, from before all this, he keeps. Then he takes a Charizardite from his coat. \"This one's from my teacher. Clean. Better with you than in a drawer.\"",
+        "effects": [
+         {
+          "kind": "rivalQuest",
+          "takeSlot": true
+         },
+         {
+          "kind": "item",
+          "id": "charizardite-x",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq56-truth",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq56-stopped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq56-sponsor-stone-thrown",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq56-stone-given-back",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You and Alain both gave back what the mine had given you.",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "mairin-there",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq56-mairin",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mairin stands a step behind him, the Chespin very quiet on her head. She has one hand on his sleeve. He lets it stay there."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.alain"
+    ],
+    "pokemon": "charizard",
+    "tint": "#20141a",
+    "effect": "none"
+   },
+   "intro": "A stage on, the same ridge, or one very like it. Alain is waiting, coat collar up. His Charizard sits beside him in its ordinary form, quiet, its tail-flame low. He looks as if he has not slept. \"It's the same mine. They told me it was a natural seam.\" He holds up his hand, the Key Stone in his glove catching the grey light. \"I've been using it for a year.\" For a moment he looks much younger than his coat. \"Every battle. Every time I said it was to protect something.\"",
+   "choices": [
+    {
+     "label": "Then stop.",
+     "success": {
+      "text": "He looks at the stone for a long moment. Then he unclips his sponsor's Key Stone from the glove and throws it off the ridge, as far as he can. It flashes once and is gone into the valley. The stone on the cord round his neck, his own, from before all this, he keeps. He takes a Charizardite from his coat and puts it in your hand. \"This one's from my teacher. Clean. Better with you than in a drawer.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "item",
+        "id": "charizardite-x",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-truth",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-sponsor-stone-thrown",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Alain threw his sponsor's Key Stone off a ridge, and kept his own.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use it against them.",
+     "success": {
+      "text": "He looks down at the floodlights for a long time. \"They taught me that power protects what matters.\" His hand closes on the Key Stone. \"Fine. Then it protects that valley.\" He takes a Charizardite from his coat and gives it to you, a clean one, from his teacher. \"So you're not fighting them with their own stones. Next stage, at the mine. I'll be there.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "item",
+        "id": "charizardite-x",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-truth",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-alain-joins",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Alain turned the power his sponsor gave him against the mine that made it.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's not your fault.",
+     "success": {
+      "text": "\"Maybe not.\" He pulls his glove back on. \"But it's mine to fix.\" He gives you a Charizardite from his coat, a clean one, from his teacher, as if paying a debt. Then he walks down off the ridge alone, toward the floodlights, his Charizard beside him, and does not ask you to come.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "item",
+        "id": "charizardite-x",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-truth",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq56-alone",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Alain went down to the mine alone. Long after, he was still there, working, putting back what had been taken.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq56-mine-together",
+   "name": "At the Mine, Together",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 11,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    },
+    {
+     "kind": "flag",
+     "key": "aq56-alain-joins",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq56-alain-joins",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.alain",
+     "trainer.pr/flare_grunt_m"
+    ],
+    "pokemon": "charizard-mega-x",
+    "tint": "#2a1414",
+    "effect": "fire"
+   },
+   "intro": "The mine at night. Red uniforms at the gate, floodlights, the drills still chewing the hillside. Alain is already there, leaning on the fence as if he has been waiting all day. \"You came.\" His Charizard Mega Evolves in a roar of blue fire, and for once it does not look like a threat. It looks like a promise. The guards see you both, and reach for their Balls.",
+   "choices": [
+    {
+     "label": "Go down together.",
+     "success": {
+      "text": "You go through the gate side by side. Alain says only one thing, without looking at you: \"Left one's mine.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Mine Guards",
+       "classId": "worker",
+       "size": 2,
+       "types": [
+        "fire",
+        "dark"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq56-mine-fought",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You and Alain took the gate of the mine together, his Mega Charizard X beside you.",
+         "importance": 70
+        }
+       ],
+       "friendly": true,
+       "ally": "charizard-mega-x",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq56-mine-fought",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq56-mine-lost",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq57-took-off-its-mask",
+   "name": "The Beast Who Took Off Its Mask",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 8,
+   "types": [],
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lillie",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "l12-altars-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He looks at you again, properly this time, and his shoulders drop a little. \"I know who you are. You helped my mother. And Lillie.\" He says it to the ground. \"I owe you.\""
+    },
+    {
+     "id": "mother",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "u2-lusamine-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He looks at you again, properly this time, and his shoulders drop a little. \"I know who you are. You helped my mother. And Lillie.\" He says it to the ground. \"I owe you.\""
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.gladion-stance"
+    ],
+    "pokemon": "type-null",
+    "tint": "#1c1420",
+    "effect": "none"
+   },
+   "intro": "A ruined lab on a cliff at night, half its roof gone, the sea loud below. A boy in a torn hoodie sits on a fallen beam. Beside him crouches a heavy Pokémon in an iron helmet, the mask chained shut across its face. \"Don't come closer. It doesn't like people.\" He does not look up. \"They built it to kill gods. Tested it. It went wild, so they locked it up and forgot it.\" His hand rests on the chain. \"I took it. It's mine to fix.\" The Type: Null makes a low sound, deep in its chest. Through the slits in the mask, it is looking at you.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He stands, and the Type: Null stands with him, chains clanking. \"Fine. You'll see what it is.\" He fights hard, harder than he needs to, as if he is fighting something else.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "type-null",
+        "zoroark",
+        "lucario"
+       ],
+       "name": "Gladion",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq57-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq57-cracked",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq57-mask-ready",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq57-the-crack"
+        }
+       ],
+       "friendly": true,
+       "sprite": "gladion",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq57-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq57-not-yet"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "You do not go closer. You sit down on the broken floor where you are, in front of it, and talk: about the road, about your team, about nothing much. Gladion says \"Don't\" once, and then says nothing. It does not attack. It watches you for a long time through the slits. The sea comes in and goes out. Then, very slowly, the Type: Null lowers its heavy head until the iron touches the ground in front of you.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "flag",
+        "key": "aq57-talked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq57-mask-ready",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about his sister.",
+     "success": {
+      "text": "\"Lillie?\" He looks up at last, startled. \"She's better than me. She's not afraid of anything she can see.\" He looks away, at the sea, for a long moment. Then he stands, too fast. \"That's enough talking.\" The Type: Null rises with him.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "type-null",
+        "zoroark",
+        "lucario"
+       ],
+       "name": "Gladion",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq57-asked",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq57-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq57-cracked",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq57-mask-ready",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq57-the-crack"
+        }
+       ],
+       "friendly": true,
+       "sprite": "gladion",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq57-asked",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq57-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq57-not-yet"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq57-the-crack",
+   "name": "A Crack in the Iron",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.gladion-stance"
+    ],
+    "pokemon": "type-null",
+    "tint": "#1c1420",
+    "effect": "shake"
+   },
+   "intro": "The last blow lands on the mask itself. There is a sound like ice on a pond, and a thin bright line runs across the iron, from one eye-slit to the other. The Type: Null goes completely still. So does Gladion. Neither of them breathes. Then the Type: Null shakes its head, slowly, as if something that has been pressing on it for years weighs a little less.",
+   "choices": [
+    {
+     "label": "Let it breathe.",
+     "success": {
+      "text": "You step back and give it room. Gladion kneels beside it and puts his hand flat on the crack, very gently, as if checking a wound. \"It's never cracked,\" he whispers. \"Not once. Not for me.\" When he looks up at you, he does not tell you to stay back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq57-crack-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq57-not-yet",
+   "name": "Not Ready",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.gladion-stance"
+    ],
+    "pokemon": "type-null",
+    "tint": "#1c1420",
+    "effect": "none"
+   },
+   "intro": "The Type: Null stands over your last Pokémon, chains swinging, the mask whole and blank. Gladion calls it back with one word, and it comes, which seems to surprise him a little. \"It isn't ready.\" He sits back down on the beam. \"Neither am I.\"",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave them there, the boy and the masked beast, sitting side by side on a broken beam while the sea comes in below. At the door you look back. He has his hand on the chain again. Not holding it. Just resting there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq57-left-alone",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq57-the-mask",
+   "name": "The Mask",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 9,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    },
+    {
+     "kind": "flag",
+     "key": "aq57-mask-ready",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq57-mask-ready",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "blessing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-silvally",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The air around the Type: Null hums faintly, the way the air hums near a shrine. The Memory that blessed your run is close, and it knows this creature.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Take the mask off together.",
+       "success": {
+        "text": "You take one side of the chain; Gladion takes the other. It is heavier than it looks. Together you lift, and the old locks give, and the chains fall away ringing onto the stone, and the mask comes off in your hands. Underneath is a face nobody has seen. Then the light comes, every colour at once, and where the Type: Null stood a Silvally shakes out a crest like a flag. The hum in the air rises to a chord. This is a Rite, and you were part of it. Gladion has to sit down.",
+        "effects": [
+         {
+          "kind": "rivalQuest",
+          "takeSlot": true
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "normal-memory",
+           "fighting-memory",
+           "flying-memory",
+           "poison-memory",
+           "ground-memory",
+           "rock-memory",
+           "bug-memory",
+           "ghost-memory",
+           "steel-memory",
+           "fire-memory",
+           "water-memory",
+           "grass-memory",
+           "electric-memory",
+           "psychic-memory",
+           "ice-memory",
+           "dragon-memory",
+           "dark-memory",
+           "fairy-memory"
+          ]
+         },
+         {
+          "kind": "friendship",
+          "bond": 1,
+          "who": "party"
+         },
+         {
+          "kind": "flag",
+          "key": "aq57-together",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "aq57-rite",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You and Gladion took off the mask together, and it became a Silvally. The Memory blessing sang.",
+          "importance": 80
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "shadow",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq57-talked",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "shadow-purified",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before Gladion can speak, the Type: Null walks past you both, to one of your Pokémon: the one that was once a Shadow. They stand nose to mask a long time. Something passes between them that nobody else can hear."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.gladion-stance"
+    ],
+    "pokemon": "type-null",
+    "tint": "#1c1420",
+    "effect": "glint"
+   },
+   "intro": "A stage on, the ruined lab again, at night. Gladion is waiting, and so is the Type: Null, and this time it gets up when it sees you. It walks three steps toward you, chains dragging, and stops, and lowers its head for you to touch the iron. Gladion watches it go to you. His voice is rough. \"It trusts you.\" He laughs, short and unhappy. \"It took me a year.\"",
+   "choices": [
+    {
+     "label": "Take the mask off together.",
+     "success": {
+      "text": "You take one side of the chain; Gladion takes the other. It is heavier than it looks. Together you lift, and the old locks give, and the chains fall away ringing onto the stone, and the mask comes off in your hands. Underneath is a face nobody has ever seen. Then the light comes, every colour at once, and where the Type: Null stood a Silvally shakes out a crest like a flag. Gladion has to sit down. He puts a disc in your hand without looking at it. \"For you. For this.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "normal-memory",
+         "fighting-memory",
+         "flying-memory",
+         "poison-memory",
+         "ground-memory",
+         "rock-memory",
+         "bug-memory",
+         "ghost-memory",
+         "steel-memory",
+         "fire-memory",
+         "water-memory",
+         "grass-memory",
+         "electric-memory",
+         "psychic-memory",
+         "ice-memory",
+         "dragon-memory",
+         "dark-memory",
+         "fairy-memory"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "aq57-together",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You and Gladion took off the mask together, and it became a Silvally in front of you both.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it on.",
+     "success": {
+      "text": "Gladion breathes out, and it sounds like relief. \"Yeah. Not yet.\" He rests his hand on the mask, and the Type: Null leans into it. \"When it's ready. Not when I am.\" He gives you a disc from his pocket, one of the Memories he has been carrying for the day it can use them. \"Thanks. For not pushing.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "normal-memory",
+         "fighting-memory",
+         "flying-memory",
+         "poison-memory",
+         "ground-memory",
+         "rock-memory",
+         "bug-memory",
+         "ghost-memory",
+         "steel-memory",
+         "fire-memory",
+         "water-memory",
+         "grass-memory",
+         "electric-memory",
+         "psychic-memory",
+         "ice-memory",
+         "dragon-memory",
+         "dark-memory",
+         "fairy-memory"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "aq57-left-on",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "That's your job.",
+     "success": {
+      "text": "He looks at you for a long moment. Then he nods, slowly, as if you have given him something heavier than the chain. \"Yeah. It is.\" He presses a disc into your hand, a Memory, for later. \"Thanks.\" When you go, he is sitting beside it, working at the first lock with his bare fingers.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "normal-memory",
+         "fighting-memory",
+         "flying-memory",
+         "poison-memory",
+         "ground-memory",
+         "rock-memory",
+         "bug-memory",
+         "ghost-memory",
+         "steel-memory",
+         "fire-memory",
+         "water-memory",
+         "grass-memory",
+         "electric-memory",
+         "psychic-memory",
+         "ice-memory",
+         "dragon-memory",
+         "dark-memory",
+         "fairy-memory"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "aq57-his-job",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Long after you left, Gladion took the mask off himself. The last anyone saw of them, it was a Silvally, and it walked beside him.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq58-ones-they-let-go",
+   "name": "The Ones They Let Go",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 5,
+   "types": [],
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    },
+    {
+     "kind": "flag",
+     "key": "trio-rep",
+     "atLeast": 10,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "pokemon": "arbok",
+    "tint": "#1e2a1a",
+    "effect": "none"
+   },
+   "intro": "A forest edge. Jessie and James, two very familiar faces, out of uniform for once, in brand-new hiking gear with the price tags still on. An Arbok and a Weezing are coiled around a nest of Seviper eggs, and down the track, engines idle: poachers' trucks, waiting. \"Don't look at us like that,\" the woman snaps. \"We're not stealing them.\" The man's voice is softer. \"We left them in the wild. Arbok and Weezing. Years ago. To protect a nest just like this one.\" He swallows. \"We came back to see if they'd remember us. They did. And there were the trucks.\" The woman squares up. \"So. Help, or get out of the way.\"",
+   "choices": [
+    {
+     "label": "Help.",
+     "success": {
+      "text": "Jessie stares at you. James's mouth falls open. Then the first truck door bangs and there is no time to be surprised. You take your place beside them, your Pokémon next to Arbok, the Weezing hovering over the nest like a storm cloud. \"Don't you dare get the eggs scratched!\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Poachers, First Wave",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [
+        "dark",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq58-helped",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq58-wave-1",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq58-second-wave",
+         "nodes": 5
+        }
+       ],
+       "friendly": true,
+       "ally": "arbok",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq58-helped",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq58-wave-1",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq58-wave-lost",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq58-second-wave",
+         "nodes": 5
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Arrest them.",
+     "success": {
+      "text": "The moment you say it, they are gone: into the trees, the way only two people with a great deal of practice can be gone. The Arbok and the Weezing do not follow them. They stay exactly where they are, coiled round the eggs, watching their trainers run. Down the track the truck doors are opening. The poachers have seen that the people have left, and only the Pokémon are left to stop them.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-arrested",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq58-alone-at-the-nest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You step back off the track. They look at you as if you have done something nobody has ever done for them. \"You're... just letting us?\" Jessie says. \"Thank you,\" James says, very fast, before she can spoil it. Then the trucks come, and they hold the nest themselves: the Arbok's hood flared, the Weezing's smoke rolling across the path, the two of them shouting orders over each other. It is loud and messy and brave. When it is over, two of the eggs are gone.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-left",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq58-after-the-poachers"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq58-alone-at-the-nest",
+   "name": "The Two Who Stayed",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "weezing",
+    "tint": "#1e2a1a",
+    "effect": "fog"
+   },
+   "intro": "The poachers walk up the track, unhurried, nets over their shoulders. Arbok flares its hood. Weezing pours smoke over the eggs to hide them. They are not young any more, either of them, and there are a lot of poachers. Somewhere in the trees, two people are watching and not coming back. The Arbok glances at you, once.",
+   "choices": [
+    {
+     "label": "Help Arbok and Weezing.",
+     "success": {
+      "text": "You step in beside the Arbok. It hisses at you, then decides you are on its side, and turns its hood to the trucks.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Poachers",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [
+        "dark",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq58-nest-saved",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq58-after-the-poachers"
+        }
+       ],
+       "friendly": true,
+       "ally": "arbok",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq58-eggs-taken",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq58-empty-nest"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch from the track.",
+     "success": {
+      "text": "You do not move. The Arbok and the Weezing fight for a long time, and they are very brave, and there are too many poachers. The nets come down. When the trucks pull away, the nest is empty, and the two old Pokémon lie beside it, breathing hard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq58-eggs-taken",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq58-empty-nest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq58-second-wave",
+   "name": "The Second Truck",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "pokemon": "weezing",
+    "tint": "#1e2a1a",
+    "effect": "none"
+   },
+   "intro": "Back at the forest edge, the trucks have come back, and there are more of them. Jessie and James have not left the nest since you did; they have the look of people who have slept sitting up. \"They brought a net gun,\" James whispers. \"Who brings a net gun to a nest?\" Jessie does not whisper. \"You came back. Good. Get in line.\"",
+   "choices": [
+    {
+     "label": "Hold the line.",
+     "success": {
+      "text": "The net gun coughs. The Weezing gets in front of it and takes the net full in the face, and does not move from the nest.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Poachers, Second Wave",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [
+        "dark",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq58-wave-2",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq58-third-wave",
+         "nodes": 5
+        }
+       ],
+       "friendly": true,
+       "ally": "arbok",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq58-wave-2",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq58-wave-lost",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq58-third-wave",
+         "nodes": 5
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq58-third-wave",
+   "name": "The Last Wave",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket",
+     "trainer.roughneck"
+    ],
+    "pokemon": "arbok",
+    "tint": "#241a14",
+    "effect": "none"
+   },
+   "intro": "The last of them come up the track at dusk: every truck, and the man who owns them, in a clean coat, looking bored. \"Three days for one nest. Do you know what eggs like these fetch?\" Jessie steps in front of the nest. \"Do you know what WE fetch?\" James stands next to her. His knees are shaking. He does not move either.",
+   "choices": [
+    {
+     "label": "Finish it.",
+     "success": {
+      "text": "Arbok, Weezing, your team, and two people in hiking gear who are trying very hard to be brave. It is enough. It has to be.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "The Poachers' Boss",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [
+        "dark",
+        "steel",
+        "poison"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq58-wave-3",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq58-after-the-poachers"
+        }
+       ],
+       "friendly": true,
+       "ally": "arbok",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq58-wave-3",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq58-wave-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq58-after-the-poachers"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq58-after-the-poachers",
+   "name": "After the Poachers",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "ambushes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-ambush-beaten",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "James looks at you and laughs, a little helplessly. \"We're always losing to you. Every time. Three times!\" He wipes his face. \"This was better.\""
+    },
+    {
+     "id": "arrested",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq58-arrested",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Two people creep out of the trees, ashamed, scratched by brambles. They ran. Their Pokémon did not. They cannot look at you, and they cannot look at the nest, so they look at their boots."
+    },
+    {
+     "id": "left",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq58-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "There are two hollows in the nest where eggs used to be. Jessie keeps touching the edge of one of them."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "pokemon": "arbok",
+    "tint": "#1e2a1a",
+    "effect": "sparkle"
+   },
+   "intro": "The trucks are gone. The forest is quiet, the way a place is quiet after shouting. Arbok and Weezing lie curled around the nest, tired and scuffed and very pleased with themselves. Jessie sits down hard on a log. \"That's twice they've saved something.\" Her voice cracks on it. \"That's more than us.\" James kneels in front of them. \"Do you want to come home?\" Arbok and Weezing look at the nest. Then they look at their trainers.",
+   "choices": [
+    {
+     "label": "Let them choose.",
+     "success": {
+      "text": "They choose. Arbok lays its head in Jessie's lap, just for a moment, and then goes back to the nest and coils round it. Weezing bumps James gently in the chest and floats back to its post. They stay. Jessie cries, loudly and without any dignity. James pretends he isn't crying, and fails. Before they go, Jessie presses a warm egg into your hands: one of the nest's own, an Ekans. \"From them. Not from us. Don't make it weird.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "ekans"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-let-choose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-trio-friends",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Jessie and James let Arbok and Weezing choose. They chose the nest.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "They belong here.",
+     "success": {
+      "text": "\"We know,\" Jessie says, a little angrily, as if you have said something she has been not-saying for years. \"We KNOW.\" James puts his hand on her arm. Arbok and Weezing go back to the nest, and stay. Before the two of them leave, James gives you a warm egg from the nest: an Ekans. \"They'd want it to see the world. Like they did.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "ekans"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-belong-here",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-trio-friends",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Jessie and James left Arbok and Weezing where they belonged. Again.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take them home.",
+     "success": {
+      "text": "Jessie stands up so fast the log rolls. \"No.\" She looks at the nest, at the eggs, at her old Arbok curled round them. \"Not if it means the nest goes.\" James nods, miserable and certain. Arbok and Weezing stay. Jessie hands you a warm egg, an Ekans, without a word, and walks off into the trees with her chin very high.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "ekans"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-take-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-trio-friends",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Jessie and James would not take their Pokémon home if it cost the nest.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq58-empty-nest",
+   "name": "The Empty Nest",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "pokemon": "arbok",
+    "tint": "#1a1a1a",
+    "effect": "rain"
+   },
+   "intro": "The trucks are gone, and the eggs with them. Two people come slowly out of the trees and stop at the edge of the empty nest. Arbok and Weezing are lying beside it, beaten and tired, still guarding nothing. Jessie sits down hard on a log. \"They stayed. We ran, and they stayed.\" James kneels in front of them. \"Do you want to come home?\" Arbok and Weezing look at the empty nest. Then they look at their trainers.",
+   "choices": [
+    {
+     "label": "Let them choose.",
+     "success": {
+      "text": "For a long time nobody moves. Then Arbok uncoils, slowly, lays its head in Jessie's lap for one moment, and goes back to the empty nest and curls round it again. Weezing bumps James in the chest and floats back to its post. There will be another clutch in spring, and somebody has to be here. They stay. Jessie cries, loudly. James pretends he isn't, and fails completely.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq58-let-choose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-trio-friends",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The eggs were taken, and still Arbok and Weezing chose to stay and guard the forest.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "They belong here.",
+     "success": {
+      "text": "\"We know,\" Jessie says, a little angrily, as if you have said something she has spent years not saying. \"We KNOW.\" Arbok and Weezing coil round the empty nest as if the next clutch might come tonight. James leaves them half his sandwich. The two of them walk away without looking back, which is how you know how much they want to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq58-belong-here",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-trio-friends",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take them home.",
+     "success": {
+      "text": "Jessie looks at the empty nest for a long time. \"No.\" Her voice shakes. \"Not if it means the next nest goes too.\" James nods, miserable and certain. Arbok and Weezing stay. Jessie walks off into the trees with her chin very high, and James follows, and neither of them says a word for a long way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq58-take-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq58-trio-friends",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq59-meowth-learned-to-talk",
+   "name": "The Meowth Who Learned to Talk",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "types": [],
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "johto",
+      "hoenn",
+      "sinnoh",
+      "unova",
+      "kalos",
+      "alola",
+      "galar",
+      "paldea",
+      "torren",
+      "frontier-isles",
+      "trial-archipelago",
+      "grand",
+      "cairnmoor",
+      "tidewrack-reaches",
+      "orrery-basin"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "aq58-arrested",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "helped",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq58-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It squints at you. Then its whole face changes. \"Hang on. I know you. You helped my two idiots with the eggs.\" It sniffs. \"You're alright. For a twerp.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#1a1c28",
+    "effect": "none"
+   },
+   "intro": "An alley at night, one lamp buzzing. A Meowth sits on a bin with its back to the street, its tail hanging down. It is talking, quite clearly, in words, to nobody. \"Learned to walk on two legs for a girl. Learned to talk for her too.\" It picks at the lid of the bin. \"She said it was weird. Said a Meowth talking was creepy.\" A long pause. \"Now I can't stop. That's the joke, see. Ain't it funny.\" It looks over its shoulder at you, and it is not laughing.",
+   "choices": [
+    {
+     "label": "That's sad.",
+     "success": {
+      "text": "\"Don't.\" It holds up a paw. \"Don't, or I'll start.\" It does start: big ugly sobs, its whiskers shaking, its face in both paws, for a whole minute. Then, in the middle of a sob, it hears itself, and snorts, and starts laughing at itself instead, and cannot stop that either. \"Look at me. Cryin' on a bin. Some tough guy.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq59-sad",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq59-gotta-go"
+       }
+      ]
+     }
+    },
+    {
+     "label": "That's amazing.",
+     "success": {
+      "text": "It puffs up to twice its size. \"It IS, ain't it?\" It counts on its claws. \"Three things a Meowth knows that people don't. One: the warm spot on a roof moves, and you gotta move with it. Two: every kitchen drops somethin' at closing time. Three.\" It hesitates. \"Three: if they don't wanna hear you, talkin' louder don't help.\" It deflates a little. Then it puffs up again, on purpose.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq59-amazed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq59-gotta-go"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Teach me something.",
+     "success": {
+      "text": "It hops down and walks round your team, very serious. \"Tail. Always the tail. Mouth can lie. Tail can't.\" It shows you: a twitch at the tip is thinking, a puffed tail is scared, a slow sweep is getting ready to pounce, and a tail held straight up with a little hook at the end is happy. \"That one's rare. Treasure it.\" From now on you watch tails. You start to see things.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq59-taught",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq59-gotta-go"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq59-gotta-go",
+   "name": "My Lot",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#1a1c28",
+    "effect": "none"
+   },
+   "intro": "The Meowth hops down off the bin and brushes off its fur. Somewhere a few streets over, there is a crash, and a voice that is definitely a woman shouting at a man. Its ears go flat. \"I gotta go. My lot get into trouble if I'm not there.\" It says it like a complaint, but it is already walking toward the noise.",
+   "choices": [
+    {
+     "label": "Your lot?",
+     "success": {
+      "text": "\"Two humans. Couple of idiots. They've been in trouble since the day I met 'em.\" It stops at the mouth of the alley. \"They're my family. Ain't sorry about it, either.\" It flicks something at you over its shoulder: a gold coin, worn smooth. \"For listenin'.\" Then it is gone, running on two legs toward the shouting.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "amulet-coin",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq59-your-lot",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq59-meowth-friend",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me instead.",
+     "success": {
+      "text": "It actually stops and thinks about it, which surprises both of you. \"Nah.\" It shakes its head slowly. \"They need me more.\" It digs in its fur and comes up with a gold coin, old and shiny, and presses it into your hand. \"Here. For luck. Don't spend it on nothin' stupid.\" It runs off toward the noise before you can thank it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "amulet-coin",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq59-come-with-me",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq59-meowth-friend",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Good luck.",
+     "success": {
+      "text": "It nods, once, like a person, and goes. At the end of the alley it turns back, flips you a coin with a flick of its tail, gold and spinning under the lamp, and then it is gone into the dark. The coin lands in your palm, warm.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "amulet-coin",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq59-good-luck",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq59-meowth-friend",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq59-tag-partner",
+   "name": "Meowth, Tag Partner",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq59-meowth-friend",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq58-helped",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#1a1c28",
+    "effect": "none"
+   },
+   "intro": "Two road toughs block the path, grinning, and before you can call your first Pokémon a Meowth drops off a wall and lands beside you on two feet. \"Told ya. You helped my two idiots, so you get me for one scrap.\" It cracks its claws. \"Don't tell 'em. They get jealous.\"",
+   "choices": [
+    {
+     "label": "Fight together.",
+     "success": {
+      "text": "The Meowth goes in claws first, all Fury Swipes and no plan, and spends the rest of the fight complaining about it: the dirt, the noise, the size of the other guy.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Road Toughs",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [
+        "normal",
+        "dark"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq59-tagged",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "ally": "meowth",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq59-tagged",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it go home.",
+     "success": {
+      "text": "\"Suit yourself.\" It looks a bit hurt, then hides it. It sends the toughs running with one hiss anyway, and walks off with its tail held straight up, with a little hook at the end.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq59-sent-home",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq59-empty-alley",
+   "name": "The Empty Alley",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq58-arrested",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "johto",
+      "hoenn",
+      "sinnoh",
+      "unova",
+      "kalos",
+      "alola",
+      "galar",
+      "paldea",
+      "torren",
+      "frontier-isles",
+      "trial-archipelago",
+      "grand",
+      "cairnmoor",
+      "tidewrack-reaches",
+      "orrery-basin"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a1c28",
+    "effect": "none"
+   },
+   "intro": "An alley at night, one lamp buzzing. There is a bin with a dent on the lid the shape of something that used to sit there a lot. Claw marks on the wall. A little pile of bottle caps, sorted by colour. Whoever lives here is out, or does not want to be found by you. Somewhere a few streets over, nobody is shouting.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. At the end of the alley you look back, and for a moment there is a shape on the wall: two pointed ears, a curling tail. It does not say anything. It does not need to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq59-alley-empty",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq60-sparky",
+   "name": "Sparky",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [],
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pikachu",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "pikachu"
+      }
+     ],
+     "notice": "Your Pikachu hops down too. The two of them walk round each other once, very seriously, cheeks sparking. Then they turn and touch tails, tip to tip, and something small and bright jumps between them."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_m"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#2a2a1a",
+    "effect": "none"
+   },
+   "intro": "A tournament grounds after the crowds have gone home. Paper cups roll across the empty bleachers, and somebody has left a flag tied to the railing. A trainer about your age sits up near the top with his elbows on his knees, and next to him sits a Pikachu with a tuft of hair sticking up on its head like a little flame. \"You remind me of someone.\" He grins down at you. \"Had a cap like yours. Got to the quarter-finals, then lost to me.\" He looks out over the empty field. \"Best battle I ever had. We didn't even mind who won.\" The Pikachu hops down the bleachers, one row at a time, and looks your party over with great interest.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Really? Yes!\" He is down the bleachers in three jumps. \"Sparky, Butterfree, Charizard, Lapras, everybody up!\" He is cheerful the whole time: cheering your good moves as loudly as his own, laughing when Sparky gets knocked flat, shouting \"Again!\" when it gets back up.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "pikachu",
+        "butterfree",
+        "charizard",
+        "lapras"
+       ],
+       "name": "Ritchie",
+       "classId": "ace-trainer",
+       "size": 4,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq60-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq60-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq60-after"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq60-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq60-after"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Trade stories.",
+     "success": {
+      "text": "He makes room for you on the bench. The sun goes down. Your Pokémon fall asleep in a heap on the warm boards, Sparky on top, and nobody goes anywhere for a long time. It is as good as a night at a Center, and better company.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "flag",
+        "key": "aq60-stories",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq60-stories"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Train together.",
+     "success": {
+      "text": "\"Oh, yes. Sparky loves a training partner.\" He jumps up. \"Same road as you for a bit. We'll work on it as we go: speed first, then the good stuff.\" Sparky does three laps of the field to show you what speed means, and comes back looking smug.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "flag",
+        "key": "aq60-trained",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq60-training-speed",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq60-stories",
+   "name": "The Quarter-Final",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_m"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#2a2a1a",
+    "effect": "none"
+   },
+   "intro": "He tells you about the quarter-final: the boy in the cap, the Pikachu that would not quit, the rain that started halfway through so that nobody could tell who was crying. \"I won. Barely. Then I lost the next round, because I was still thinking about that one.\" He laughs. \"Worth it.\" He turns to you. \"Your turn. What's the story of your road so far?\"",
+   "choices": [
+    {
+     "label": "Tell him about {starter}.",
+     "success": {
+      "text": "You tell him about the very first day: the first Ball, the first battle, the first night on the road, and {starter} beside you through all of it. He listens like it is the best story he has ever heard. Sparky has climbed into your lap by the end. \"That's the good stuff,\" Ritchie says quietly. \"Don't ever forget that bit.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq60-told-starter",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You told Ritchie the story of your first day on the road.",
+        "importance": 50
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq60-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him about your rival.",
+     "requires": [
+      {
+       "kind": "rivalMet",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "You tell him about the trainer who keeps turning up on your road: every battle, every sharp word, every time they were right. He nods all the way through. \"You've got one too, then.\" He looks out at the empty field. \"Hang on to them. They're how you find out how far you've come.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq60-told-rival",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You told Ritchie about your rival, and he understood.",
+        "importance": 50
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq60-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him about the one you lost.",
+     "requires": [
+      {
+       "kind": "memorial",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "You tell him about the one who is not on your team any more. It is hard to start, and then hard to stop. Ritchie does not say anything clever. He just sits close, and Sparky puts its small warm paw on your hand and leaves it there until you have finished.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq60-told-loss",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You told Ritchie about the Pokémon you lost, and he listened all the way to the end.",
+        "importance": 60
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq60-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq60-training-speed",
+   "name": "Sparky's Training: Speed",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_m"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#2a2a1a",
+    "effect": "none"
+   },
+   "intro": "Ritchie has been on your road for days now, and Sparky has been on your shoulder for most of it. Today he stops in a field and stretches. \"Right. Speed. The only way to learn it is to try to catch something faster than you.\" Sparky bounces on its toes, sparks popping off its tuft. \"One on one. Sparky against your lead. Don't go easy; it hates that.\"",
+   "choices": [
+    {
+     "label": "Spar with Sparky.",
+     "success": {
+      "text": "Sparky is gone before your lead has finished moving. It is everywhere at once, a yellow streak with a tuft on top. Ritchie shouts encouragement at both sides.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Sparky",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq60-spar-won",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq60-training-move",
+         "nodes": 5
+        }
+       ],
+       "lineup": [
+        "pikachu"
+       ],
+       "spritePokemon": "pikachu",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq60-spar-lost",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "aq60-training-move",
+         "nodes": 5
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq60-training-move",
+   "name": "Sparky's Training: The Good Stuff",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_m"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#2a2a1a",
+    "effect": "sparkle"
+   },
+   "intro": "The last day on the road together. Ritchie sits your lead down in front of Sparky like a teacher with a very small, very bossy assistant. \"Sparky's got three moves it's proud of. It'll teach one. Pick.\" Sparky stands up straight and waits, cheeks crackling.",
+   "choices": [
+    {
+     "label": "Learn Thunder.",
+     "success": {
+      "text": "Sparky takes your lead out under the open sky and shows it how to call the lightning down instead of throwing it. It takes all afternoon and one singed tree. Then the sky answers.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "teachMove",
+        "move": "thunder"
+       },
+       {
+        "kind": "flag",
+        "key": "aq60-learned-thunder",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq60-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Learn Agility.",
+     "success": {
+      "text": "Sparky makes your lead run until it stops thinking about running, and then it is suddenly, gloriously fast, faster than it has ever been. Sparky nods, satisfied, like a coach.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "teachMove",
+        "move": "agility"
+       },
+       {
+        "kind": "flag",
+        "key": "aq60-learned-agility",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq60-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Learn Quick Attack.",
+     "success": {
+      "text": "\"First move it ever learned,\" Ritchie says, and Sparky shows it over and over: the push-off, the dart, the hit before anyone has seen it go. By evening your lead is doing it too.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "teachMove",
+        "move": "quick-attack"
+       },
+       {
+        "kind": "flag",
+        "key": "aq60-learned-quick-attack",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq60-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq60-after",
+   "name": "Same Place, Next Year",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/camper_m"
+    ],
+    "pokemon": "pikachu",
+    "tint": "#2a2a1a",
+    "effect": "sparkle"
+   },
+   "intro": "Ritchie stands up and stretches, and Sparky climbs to his shoulder, tuft first. He looks at you, then at the empty grounds, the flag still tied to the railing. \"We should do this again.\" He says it like it has only just occurred to him and it is the best idea he has ever had. \"Same place. Next year.\"",
+   "choices": [
+    {
+     "label": "Deal.",
+     "success": {
+      "text": "\"Deal!\" He shakes your hand hard enough to rattle your Balls. Sparky slaps your palm with its tail, which seems to be its version. \"Same bleachers. I'll save you a seat.\" He walks off whistling, and you are fairly sure he will be here a year from now, whatever happens, waiting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq60-promise",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq60-ritchie-friend",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You and Ritchie promised to meet at the same grounds next year.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "I might not be here.",
+     "success": {
+      "text": "He looks at you for a second, properly. Then he grins anyway. \"Then I'll come find you.\" He says it like a fact, like the weather. \"Sparky never forgets a face. Neither do I.\" He waves all the way to the gate.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "reunion-guest-ritchie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq60-ritchie-friend",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Ritchie said that if you were not there, he would come and find you.",
+        "importance": 65
        }
       ]
      }
