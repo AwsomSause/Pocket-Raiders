@@ -3,7 +3,6 @@
  "note": "Catalog row 15 (Greenneedle). `external`: flags a Greenneedle event reads that another set (or a Greenneedle event not built yet) will write; remove each as its writer lands. `flags` with `rule`: flags code writes, not an event effect.",
  "external": {
   "abandoned-mon": "gn.new.03 The Ball That Wouldn't Open",
-  "gn-new-06-won": "gn.new.06",
   "littlecup-cancelled": "gn.new.27",
   "eevee-stayed": "gn.new.01",
   "dog-sat": "gn.new.02",
@@ -645,6 +644,30 @@
   {
    "key": "kc-star",
    "rule": "core/greenneedle/karpcon.ts (gn.54 The Magikarp Convention)"
+  },
+  {
+   "key": "gn-new-06-won",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "duelist-wins",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "duelist-late",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "duelist-last",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "duelist-at",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
+  },
+  {
+   "key": "duelist-joined",
+   "rule": "core/greenneedle/duelist.ts (gn.new.06 The Duelist)"
   }
  ]
 }

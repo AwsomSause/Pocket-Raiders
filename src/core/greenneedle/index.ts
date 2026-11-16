@@ -30,6 +30,7 @@ import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWa
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
 import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
+import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
@@ -63,6 +64,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   });
   // gn.43: the auction catalogue ({lot:<n>:prov}, {lot:<n>:photo}) and a sum of money ({money:<key>}).
   text = text.replace(/\{lot:([1-6]):([a-z]+)\}/g, (_, n: string, part: string) => lotToken(run, Number(n), part));
+  text = text.replaceAll('{duelist}', duelName(content, run));
   text = text.replace(/\{money:([a-z0-9-]+)\}/g, (_, k: string) => `₽${gnFlag(run, k).toLocaleString('en-GB')}`);
   // gn.44: the reigning 1v1 champion, a different trainer each region.
   // gn.48: the Draft's table.
@@ -174,6 +176,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'cutter') return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return !!mv && mv.category !== 'status' && (mv.flags.includes('slicing') || s.id.includes('claw')); }));
   if (c.test === 'moveType') return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return !!mv && mv.category !== 'status' && c.types!.includes(mv.type); }));
   if (c.test === 'noMoveType') return !run.party.some((m) => m.moves.some((s) => c.types!.includes(content.moves.get(s.id)?.type ?? '')));
+  if (c.test === 'duelDue') return duelDue(run, c.n ?? 1, stage);
+  if (c.test === 'duelistLeft') return gnFlag(run, 'duelist-left') > 0;
   const stamped = gnFlag(run, c.key!);
   if (c.test === 'laterStage') return stamped > 0 && stamped < stage;
   if (c.test === 'sameStage') return stamped === stage;
@@ -515,6 +519,18 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     }
     case 'bring':
       return bring(content, run, host.picked);
+    case 'duelEnter':
+      return duelEnter(run);
+    case 'duelWin':
+    case 'duelLoss':
+      return duelEnd(run, e.n ?? 1, e.op === 'duelWin', host.stage);
+    case 'duelPass':
+      for (const id of [`gn-new-06-d${e.n}`, `gn-new-06-d${e.n}n`, `gn-new-06-d${e.n}-late`]) if (run.itemCounters) delete run.itemCounters[`event-seen:${id}`];
+      setGnFlag(run, 'duelist-late', 1);
+      setGnFlag(run, 'duelist-last', host.stage);
+      return '';
+    case 'duelWorthy':
+      return duelWorthy(run);
     case 'bench':
       return bench(run);
     case 'unbench':
@@ -786,6 +802,9 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.54: the serious man's six Magikarp (seven, once he's been beaten).
   // gn.55: the Angry Bidoof, tripled.
   if (rule === 'bidoof') bidoofStart(content, run, battle);
+  // gn.new.06: the Duelist, and the chosen one's Worthy Opponent.
+  if (rule === 'duelist') duelistStart(content, run, battle, FOE_WAITS, makeFull(content));
+  worthyStart(run, battle);
   if (rule === 'quillfeather') quillfeatherStart(content, run, battle, makeFull(content));
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {

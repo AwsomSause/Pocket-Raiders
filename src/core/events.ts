@@ -684,7 +684,7 @@ function coPut(run: RunState, placed: { id: string; nodeIds: string[]; hidden: b
  * A story whose beats share one stage (Stage-Three, World Event): the moment a later beat is earned it is placed ahead of the player,
  * on its own step where that is still ahead, else on the next step that is. Nothing is rolled: the pick is seeded by the event id.
  */
-function placeEarnedCoBeats(content: Content, run: RunState): void {
+export function placeEarnedCoBeats(content: Content, run: RunState): void {
   const stage = run.stage;
   if (!stage || stage.kind !== 'stage' || stage.pseudo || !stage.current || !content.coPlacement?.size) return;
   const onMap = new Set(stage.map.nodes.flatMap((n) => n.sides.map((x) => x.eventId)));
