@@ -60,9 +60,16 @@ export function toBattle(run: RunState, c: Content = content, depth = 0): RunSta
   }
   const choices = mapChoices(c, run);
   // A chain pseudo-stage (the Kanto lines, R23's race, a Greenneedle event line) walks room to room: a room still waiting here is played, not walked past.
+  // Same with an empty party (the Pokémon Prison's cell): the events here are the way out, so play one before walking on.
   if (choices.length === 0 && run.stage?.current != null) {
     const room = run.stage.map.nodes.find((n) => n.id === run.stage!.current)?.sides.find((x) => x.kind === 'event' && !x.used && x.eventId);
     if (room) return chooseEvent(c, run, room.id, roomPick(c, run, room.id, room.eventId!), undefined, retryGrade(run, room.eventId!)).run;
+  }
+  // With an empty party (the Pokémon Prison's cell) the events here are the way out: play the first one that takes a player with no Pokémon.
+  if (!run.party.some((p) => p.hp > 0) && run.stage?.current != null) {
+    for (const room of run.stage.map.nodes.find((n) => n.id === run.stage!.current)?.sides.filter((x) => x.kind === 'event' && !x.used && x.eventId) ?? []) {
+      try { return chooseEvent(c, run, room.id, roomPick(c, run, room.id, room.eventId!), undefined, retryGrade(run, room.eventId!)).run; } catch { /* needs a Pokémon: try the next */ }
+    }
   }
   const node = choices.find((n) => !n.harder) ?? choices[0]!;
   const next = chooseNode(c, run, node.id);
