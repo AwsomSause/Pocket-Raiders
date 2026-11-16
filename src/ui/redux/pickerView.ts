@@ -6,7 +6,7 @@ import Phaser from 'phaser';
 import type { AssetManifest } from '../../assets/catalog';
 import { rxFileOf } from './assets';
 import { mountRedux, type ReduxCtx, type ReduxView } from './stage';
-import { act, type Area, esc, H, isArtPlaceholder, TX, W } from './kit';
+import { act, type Area, chipsLeft, esc, H, isArtPlaceholder, TX, W } from './kit';
 import { areaOf, pickerBand, pickerKind, type PickerKind } from './pickerNames';
 import { boardProgress, type BoardRow, boardView, gridStart, gridView, menuView, scrollStart, tabsBar } from './templates';
 import { bagCols, bagUseNote, bagView } from './screens/bag';
@@ -28,7 +28,7 @@ export interface PickerBridge {
   /** A board row said outright (Bonds): its line, bar and tag are not read off the canvas row. */
   board?: (i: number) => { title: string; sub: string; pct: number | null; tag: string } | undefined;
   /** A menu row said outright (Camp): the words at its right, the detail card's text and picture. */
-  menu?: (i: number) => { label: string; note: string; detail: string; sprite?: string | null } | undefined;
+  menu?: (i: number) => { label: string; note: string; detail: string; sprite?: string | null; facts?: readonly (readonly [string, string])[] } | undefined;
   /** A grid cell said outright (the Pokédex): its picture, and the detail card's title and line. */
   cell?: (i: number) => { file: string | null; title: string; body: string; off?: boolean; sil?: boolean } | undefined;
   /** The item a row stands for, if any (Bag). */
@@ -40,6 +40,8 @@ export interface PickerBridge {
   backLabel?: string;
   /** The room's own page, drawn in place of the rows (the Trainer Card). Its `back` clicks close the room. */
   page?: (c: ReduxCtx, index: number) => string;
+  /** The header band's colour, when the title alone would pick the wrong one. */
+  area?: Area;
   /** Columns the cursor moves across on the room's own page (1 unless said). */
   pageCols?: number;
   /** The battle window's top edge, when it is not the usual one. */
@@ -124,8 +126,8 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
   }
   // "Bank · 0 credits · 0 candies": the name goes in the band, the rest becomes chips beside it.
   const { name, chips: extra } = pickerBand(p.title);
-  const n = p.rows, index = p.index(), area = areaOf(name);
-  const chips = extra.length ? `<div class="abs row" style="left:350px;top:13px;gap:6px;z-index:4">${extra.map((x, k) => `<span class="tg${k ? ' no' : ''}">${esc(x)}</span>`).join('')}</div>` : '';
+  const n = p.rows, index = p.index(), area = p.area ?? areaOf(name);
+  const chips = extra.length ? `<div class="abs row" style="left:${chipsLeft(name)}px;top:13px;gap:6px;z-index:4">${extra.map((x, k) => `<span class="tg${k ? ' no' : ''}">${esc(x)}</span>`).join('')}</div>` : '';
   const hints: [string, string][] = [['Enter', 'choose'], ...(p.tabs ? [['←→', 'tab'] as [string, string]] : []), ...(p.canBack ? [['Esc', p.backLabel ?? 'back'] as [string, string]] : [])];
   const row = (i: number): Scraped => {
     const r = scrapeRow(scene, p.box(i)), id = r.art ? undefined : p.art?.(i);
@@ -175,7 +177,7 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
       return { label: r.label, note: v === 0 ? r.tag : [r.note, r.tag].filter(Boolean).join(' · '), disabled: p.problem(i) !== null };
     });
     const saidRow = p.menu?.(index), cur = saidRow ? null : row(index);
-    const detail = saidRow ? { title: saidRow.label, body: saidRow.detail, sprite: saidRow.sprite ?? undefined } : { title: cur!.label, body: [cur!.note, cur!.tag].filter(Boolean).join(' · ') || p.hint(index), sprite: cur!.art?.atlas ? cur!.art.file : undefined };
+    const detail = saidRow ? { title: saidRow.label, body: saidRow.detail, sprite: saidRow.sprite ?? undefined, facts: saidRow.facts } : { title: cur!.label, body: [cur!.note, cur!.tag].filter(Boolean).join(' · ') || p.hint(index), sprite: cur!.art?.atlas ? cur!.art.file : undefined };
     body = menuView(c, { title: name, area, hints, items, index, detail, text });
   }
   return body + chips + tabs + back + over;

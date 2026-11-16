@@ -2,7 +2,7 @@
 // branch, bought nodes plain, the cursor's node lit, the ones not open yet dimmed; the card on the right says what the
 // lit node does, what it costs and what you have, over the Unlock button. Pure drawing: the Picker steers it.
 
-import { act, type Area, B, esc, facts, H, TX, W } from '../kit';
+import { act, type Area, B, chipsLeft, esc, facts, H, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
 
 export type TreeCellState = 'owned' | 'open' | 'locked' | 'none';
@@ -21,7 +21,7 @@ export interface TreeModel {
 }
 
 export function treeView(_c: ReduxCtx, d: TreeModel): string {
-  const chips = d.chips.length ? `<div class="abs row" style="left:350px;top:13px;gap:6px;z-index:4">${d.chips.map((x, k) => `<span class="tg${k ? ' no' : ''}">${esc(x)}</span>`).join('')}</div>` : '';
+  const chips = d.chips.length ? `<div class="abs row" style="left:${chipsLeft(d.title)}px;top:13px;gap:6px;z-index:4">${d.chips.map((x, k) => `<span class="tg${k ? ' no' : ''}">${esc(x)}</span>`).join('')}</div>` : '';
   const rows = d.rows.map((r, ri) => `<div class="row" style="gap:12px"><span class="sm" style="width:84px;line-height:16px">${esc(r.name)}</span>${Array.from({ length: d.cols }, (_, ci) => {
     const k = ri * d.cols + ci, cell = r.cells[ci];
     if (!cell || cell.state === 'none') return '<div style="flex:1 1 0"></div>';

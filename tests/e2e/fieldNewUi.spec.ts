@@ -205,7 +205,7 @@ test('New UI: Stand With Them shows the recruiter and what joining is worth, the
   const map = view(page, 'Map').filter({ hasText: 'attempts left' });
   await expect(map).toHaveCount(1);
   await expect(map.locator('[data-act="pick"]')).toHaveCount(4);
-  for (const bit of ['Easy', 'Normal (your setting)', 'Hard', 'Master', '×1 money', 'Bronze', 'Best so far: None yet']) await expect(map).toContainText(bit);
+  for (const bit of ['Easy', 'Normal (your setting)', 'Hard', 'Master', '×1 money', 'Bronze', 'Kind', 'memory', 'Tiers', 'Easy, Normal, Hard, Master', 'None yet']) await expect(map).toContainText(bit);
   await page.screenshot({ path: 'test-results/newui-minigame-tiers.png' });
   expect(errors).toEqual([]);
 });

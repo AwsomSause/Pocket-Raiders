@@ -30,7 +30,8 @@ import { paintBackdrop, type Skin as DSkin } from './dSkins';
 const DEPTH = 100;
 
 import { reduxOn, type ReduxCtx } from './redux/stage';
-import { mountPickerView, type PickerView } from './redux/pickerView';
+import { mountPickerView, type PickerKind, type PickerView } from './redux/pickerView';
+import type { Area } from './redux/kit';
 
 export interface PickerRow {
   /** Draws the row's contents inside a w×h box at (0, 0) of `container`. */
@@ -46,7 +47,7 @@ export interface PickerRow {
   /** A board row said outright (the New UI's Bond screen): the line under the name, a bar (0 to 100) and a tag. */
   board?: { title: string; sub: string; pct: number | null; tag: string };
   /** A menu row said outright (the New UI's Camp): the words at the row's right, the detail card's text and its picture (atlas file). */
-  menu?: { label: string; note: string; detail: string; sprite?: string | null };
+  menu?: { label: string; note: string; detail: string; sprite?: string | null; facts?: readonly (readonly [string, string])[] };
   /** A grid cell said outright (the New UI's Pokédex): its picture (atlas file) and the detail card's title and line. `off` is a "?" cell, `sil` a shadow. */
   cell?: { file: string | null; title: string; body: string; off?: boolean; sil?: boolean };
   /** The row's picture by asset id, for a row that draws none (the New UI's grid cells show it). */
@@ -58,6 +59,9 @@ export interface PickerConfig {
   page?: (c: ReduxCtx, index: number) => string;
   /** New UI: how many columns the cursor moves across on the room's own page (1 unless said). */
   pageCols?: number;
+  /** New UI: the template and header colour when the title alone would pick the wrong ones (a minigame called "Memory" is not a board). */
+  kind?: PickerKind;
+  area?: Area;
   /** Draw depth; scenes with lively layers (the Plaza crowd) put the menu above them. */
   depth?: number;
   title: string;
@@ -300,11 +304,12 @@ export class Picker implements PickerLike {
         backLabel: config.backLabel,
         page: config.page,
         pageCols: config.pageCols,
+        area: config.area,
         summary: () => (this.summary && config.inspect ? config.inspect(this.index) : null),
         pick: (i) => { if (this.closed) return; this.focus(i); this.confirm(); },
         hover: (i) => { if (!this.closed && !this.summary && i !== this.index && !config.rows[i]?.problem) this.focus(i, false); },
         back: () => this.handle('back'),
-      }, win ? 'window' : undefined);
+      }, win ? 'window' : config.kind);
     }
   }
 

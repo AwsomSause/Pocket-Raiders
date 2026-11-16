@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bestMedalWord, gameView, type GameModel } from '../../src/ui/redux/screens/minigame';
+import { bestMedalWord, gameView, type GameModel, hudStat } from '../../src/ui/redux/screens/minigame';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // New UI minigame screen (the mock-ups' `game` page): its windows across the top, "Best" last.
@@ -25,5 +25,11 @@ describe('New UI minigame windows', () => {
     expect(bestMedalWord('bronze')).toBe('Bronze');
     expect(bestMedalWord('none')).toBe('None yet');
     expect(bestMedalWord(undefined)).toBe('None yet');
+  });
+  it('a score line splits into its label and value window; a said line splits at its colon', () => {
+    expect(hudStat('Score: 12')).toEqual(['Score', '12']);
+    expect(hudStat('Round 2/5')).toEqual(['Round', '2/5']);
+    expect(hudStat('Wanted: Spicy 2, Dry 0, Sour 1')).toEqual(['Wanted', 'Spicy 2, Dry 0, Sour 1']);
+    expect(hudStat('Bumper!')).toEqual(['Bumper!', '']);
   });
 });

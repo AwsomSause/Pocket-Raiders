@@ -1875,15 +1875,26 @@ export class MapScene extends Phaser.Scene {
   private openMinigame(sideId: string): void {
     const { session } = services();
     const pv = minigamePreview(session.content, session.run!, sideId, session.settings.expansion.minigamesDifficulty);
+    // New look: the card's picture is your lead Pokémon, as the mock-up puts one beside the tier.
+    const lead = session.run!.party[0];
     const picker: Picker = new Picker(this, {
-      title: `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
+      // New look: the game's name in the band and the attempts as a chip; the tier list is a menu on the run's teal (a game called "Memory" is not a board).
+      title: reduxOn() ? `${pv.name} · ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left` : `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
+      kind: 'menu',
+      area: 'run',
       columns: 1,
       rowHeight: 120,
       rows: pv.tiers.map((t) => ({
         problem: pv.attemptsLeft > 0 ? null : 'No attempts left',
-        hint: `${pv.instructions} ${pv.scoring}`,
+        hint: reduxOn() ? pv.blurb : `${pv.instructions} ${pv.scoring}`,
         // New look: the mock-up's tier list (the tier, what it pays) with the medals and the best on the card.
-        menu: { label: `${t.label}${t.index === pv.recommendedTier ? ' (your setting)' : ''}`, note: `×${t.money} money`, detail: `${pv.medals}. ${t.items ? 'A medal here can also pay an item.' : 'Money only at this tier.'} Best so far: ${bestMedalWord(pv.best)}.` },
+        menu: {
+          label: `${t.label}${t.index === pv.recommendedTier ? ' (your setting)' : ''}`,
+          note: `×${t.money} money`,
+          detail: `${pv.instructions} ${pv.scoring}`,
+          sprite: lead ? monFile(this, lead.speciesId, 'front', lead.shiny) : null,
+          facts: [['Kind', pv.category], ['Tiers', pv.tiers.map((x) => x.label).join(', ')], ['Pays', `×${t.money} money${t.items ? ' and maybe an item' : ''}`], ['Medals', pv.medals], ['Best', bestMedalWord(pv.best)]],
+        },
         draw: (scene, box, w) => {
           box.add(scene.add.text(16, 8, `${pv.name}  ·  ${t.label}${t.index === pv.recommendedTier ? '  (your setting)' : ''}`, textStyle(22)));
           box.add(scene.add.text(16, 40, `${pv.instructions} ${pv.scoring}`, textStyle(15, '#ffd0a0', { wordWrap: { width: w - 32 } })));
