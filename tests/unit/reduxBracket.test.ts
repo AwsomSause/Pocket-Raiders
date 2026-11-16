@@ -99,6 +99,9 @@ describe("New UI bracket for Galar's Champion Tournament", () => {
     expect(tree.wins).toBe(2);
     expect(tree.lines.map((l) => l.length)).toEqual([32, 16, 8]);
     for (const line of tree.lines) expect(line[0]).toMatchObject({ you: true, name: 'You' });
+    // The player's slot shows their lead Pokémon; everyone else their best-known one.
+    expect(tree.lines[0]![0]!.ace).toBe(league(2).party[0]!.speciesId);
+    expect(tree.lines[0]!.slice(1).some((e) => e.ace !== null)).toBe(true);
     expect(new Set(tree.lines[0]!.map((e) => e.id)).size).toBe(32);
     expect(bracketTree(content, league(5)).lines.map((l) => l.length)).toEqual([32, 16, 8, 4, 2, 1]);
   });

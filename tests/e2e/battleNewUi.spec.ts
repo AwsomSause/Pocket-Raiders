@@ -386,6 +386,7 @@ test('New UI: notifications, an achievement toast and the interaction log show o
   await expect(notices.first().locator('b.acc')).toHaveText('Egg');
   await expect(notices.nth(1)).toContainText('Notice');
   await expect(notices.nth(1)).toContainText('Saved the game');
+  await page.screenshot({ path: 'test-results/newui-notices.png' });
   // The title screen under it still takes its own clicks and keys.
   await expect(view(page, 'MainMenu')).toBeVisible();
   // A tap sends one away.

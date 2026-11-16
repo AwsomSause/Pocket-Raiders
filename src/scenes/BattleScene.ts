@@ -2925,6 +2925,15 @@ export class BattleScene extends Phaser.Scene {
       await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID BOSS', this.speciesName(battle.enemyTeam[0]!), false, { cast: this.rxMe(), role: 'Raid Boss', line: 'The den glows red.' });
       return;
     }
+    if (battle.totem) {
+      // New UI: a Totem Pokémon is revealed on the cutscene card (the mock-up's Totem boss card), with its aura as the line.
+      if (this.rx) {
+        const tdef = content.totems.totems.find((x) => x.id === battle.totem!.id);
+        const calls = tdef?.ally ? ' It calls for help.' : '';
+        await this.bigMoment(bossIntroMoment({ role: 'raid' }), `totem.${battle.totem.id}`, 'TOTEM POKÉMON', tdef?.name ?? `Totem ${this.speciesName(battle.enemyTeam[0]!)}`, false, { cast: this.rxMe(), role: 'Totem Pokémon', line: `${(tdef?.aura?.text ?? 'Its aura flares.').split(/(?<=\.)\s/)[0]}${calls}` });
+      }
+      return;
+    }
     if (!battle.trainer) {
       // New UI: a wild Legendary or Mythical Pokémon is revealed on the cutscene card.
       const foe = battle.enemyTeam[0];

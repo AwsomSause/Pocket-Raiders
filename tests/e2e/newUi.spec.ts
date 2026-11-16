@@ -109,6 +109,7 @@ test('New UI: a tournament event shows its rounds, and B opens the bracket (grou
   await expect(ev).toContainText('16 still in');
   // Group A is the player's group; the finals are not decided yet, so that page shows no names.
   await expect(ev.locator('[data-act="bracketPage"]')).toHaveCount(5);
+  await page.screenshot({ path: 'test-results/newui-bracket.png' });
   await expect(ev).toContainText('★');
   await ev.locator('[data-act="bracketPage"]').nth(4).click();
   await expect(ev).toContainText('Champion');

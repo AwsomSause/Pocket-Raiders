@@ -39,6 +39,8 @@ export function pickerKind(title: string): PickerKind {
 /** Header colour by title, as the mock-up catalogue bands each page: run menus teal, party green, shops orange, story pages purple, the rest hub blue. */
 export function areaOf(title: string): Area {
   if (/^bag$/i.test(title)) return 'shop';
+  // A raid den's and a Totem's pages are about a battle: the battle's red band, as the mock-up's raid prep page.
+  if (/^(raid|totem) - |^before you go in/i.test(title)) return 'battle';
   // The Memories pages are story pages; the replays are battles (the mock-up catalogue's own bands).
   if (/^memories/i.test(title)) return /battle replays/i.test(title) ? 'battle' : 'story';
   // The story's own archives (Tales & News) and the Moment Codex wear the story's purple.

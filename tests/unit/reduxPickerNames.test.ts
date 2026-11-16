@@ -58,6 +58,8 @@ describe('New UI list band colour', () => {
     expect(pickerKind('PC')).toBe('grid');
     expect(areaOf('Field Notebook')).toBe('run');
     expect(pickerKind('Field Notebook')).toBe('menu');
+    // A raid den's and a Totem's pages wear the battle's band.
+    for (const t of ['Raid - Tier 1: Sleeping Giant', 'Totem - Totem Marowak', 'Before you go in: Sleeping Giant']) expect(areaOf(t)).toBe('battle');
     expect(areaOf('Strange Merchant')).toBe('shop');
     expect(areaOf('Bag')).toBe('shop');
     expect(areaOf('Pokédex')).toBe('party');
