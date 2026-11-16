@@ -200,6 +200,13 @@ export const PROMPTS: readonly PromptDef[] = [
   { id: 'orchestra-chirps', kind: 'rhythm', label: 'Bring in the chirps', hint: 'Press on each beat to bring in the chirps.', beatsMs: [600, 1200, 1800, 2400], windowsMs: W(95, 175, 310) },
   { id: 'orchestra-trills', kind: 'rhythm', label: 'Bring in the trills', hint: 'Press on each beat to bring in the trills.', beatsMs: [500, 1000, 1500, 2000, 2500], windowsMs: W(90, 170, 300) },
   { id: 'orchestra-tutti', kind: 'rhythm', label: 'All together', hint: 'Press on each beat to bring in the whole meadow.', beatsMs: [450, 900, 1350, 1800, 2250, 2700], windowsMs: W(80, 160, 280) },
+  // Greenneedle gn.06 (the Hidden Village's starters): the Treecko elder's rooftop race (three taps, one a roof), the Rowlet's night patrol, the Grookey's drum.
+  { id: 'roof-leap', kind: 'timing', label: 'Jump!', hint: 'Press as the ring closes: jump as the elder jumps.', landMs: 1100, windowsMs: W(80, 160, 280) },
+  { id: 'night-tiptoe', kind: 'hold', label: 'Tiptoe past', hint: 'Hold, and let go when the ring is full: one slow step at a time.', targetMs: 1300, windowsMs: W(100, 200, 340) },
+  { id: 'stump-drum', kind: 'rhythm', label: 'Play it back', hint: 'Long, short, short, long. Press on each beat.', beatsMs: [600, 1500, 1950, 2400], windowsMs: W(80, 160, 280) },
+  // Greenneedle gn.14 (Sabrina's Labyrinth): the mirror walk and the floating floor.
+  { id: 'mirror-walk', kind: 'drag', label: 'Walk the mirror', hint: 'Left is right here. Drag along the path to the lantern.', from: [80, 75], to: [20, 30], windowsPx: W(7, 14, 24), maxMs: 4000 },
+  { id: 'floating-tiles', kind: 'drag', label: 'Keep your balance', hint: 'Drag along the tiles to the far side, and do not rush.', from: [15, 70], to: [85, 35], windowsPx: W(7, 14, 24), maxMs: 4500 },
 ];
 
 export const promptById = (id: string): PromptDef => {

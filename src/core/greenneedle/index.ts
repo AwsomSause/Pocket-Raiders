@@ -219,7 +219,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'hurtLead') { const lead = run.party.find((m) => m.hp > 0); return !!lead && lead.hp * 2 <= maxHp(content, lead); }
   if (c.test === 'lookAtLevel') return run.party.some((m) => !!m.look && c.types!.includes(m.look) && m.level >= gnFlag(run, c.key!));
   if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');
-  if (c.test === 'holdsBerry') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && id.endsWith('-berry')));
+  if (c.test === 'holdsBerry') return Object.entries(run.inventory).some(([id, n]) => n > 0 && id.endsWith('-berry')) || run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && id.endsWith('-berry')));
+  if (c.test === 'leadFit') { const lead = run.party[0]; return !!lead && lead.hp >= maxHp(content, lead) && !lead.status; }
   // gn.19: a large Pokémon (100 kg or more) in the party, standing, to give the Hippowdon shade.
   if (c.test === 'heavy') return run.party.some((m) => m.hp > 0 && (content.species.get(m.speciesId)?.weight ?? 50) >= 100);
   if (c.test === 'cutter') return run.party.some((m) => m.hp > 0 && m.moves.some((s) => { const mv = content.moves.get(s.id); return !!mv && mv.category !== 'status' && (mv.flags.includes('slicing') || s.id.includes('claw')); }));
@@ -449,7 +450,13 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return '';
     }
     case 'payBerry': {
-      // gn.12: one held Berry is handed over (the first party Pokémon holding one, the first Berry by name).
+      // gn.12, gn.06: one Berry is handed over: from the bag first (the first by name), else the first party Pokémon holding one.
+      const bagged = Object.keys(run.inventory).sort().find((k) => k.endsWith('-berry') && (run.inventory[k] ?? 0) > 0);
+      if (bagged) {
+        addItem(run.inventory, bagged, -1);
+        if ((run.inventory[bagged] ?? 0) <= 0) delete run.inventory[bagged];
+        return `Paid a ${content.catalog.get(bagged)?.name ?? bagged}`;
+      }
       for (const m of run.party) {
         const id = Object.keys(m.held ?? {}).sort().find((k) => k.endsWith('-berry') && (m.held![k] ?? 0) > 0);
         if (!id) continue;
@@ -458,6 +465,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
         return `Paid a ${content.catalog.get(id)?.name ?? id}`;
       }
       return '';
+    }
+    case 'eggNotes': {
+      // gn.09: Bill's Egg Notes are information: the egg moves each party Pokémon's family can learn (nothing is taught).
+      const lines = run.party.map((m) => {
+        const moves = eggMoveOptions(content, familyId(content, m.speciesId)).filter((o) => o.active).map((o) => content.moves.get(o.id)?.name ?? o.id);
+        return `${content.species.get(m.speciesId)?.name ?? m.speciesId}: ${moves.length ? moves.join(', ') : 'no egg moves'}`;
+      });
+      return `Bill's Egg Notes · ${lines.join(' · ')}`;
     }
     case 'minigame': {
       const here = run.stage?.map.nodes.find((n) => n.id === run.stage!.current);
