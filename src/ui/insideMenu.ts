@@ -81,6 +81,8 @@ export function openTeamHub(host: FieldMenuHost): void {
     );
     const pay = route?.pay?.[rank - 1] ?? 0;
     rows.push({ title: 'Pay', right: `₽${pay} a stage`, hint: 'Paid at the start of each stage while you wear the uniform.' });
+    const muted = flag('hoenn-radio-muted') > 0;
+    rows.push({ title: 'Radio', right: muted ? 'muted (noted)' : 'on', hint: 'Team chatter while you travel in uniform. Muting it is noted.', run: () => { host.changed(services().session.toggleRadio()); openTeamHub(host); } });
     rows.push({ title: 'HAND IN UNIFORM', right: '', hint: 'Leave the team. A confirm step says what is lost.', run: () => confirmHandIn(host) });
   }
   list(host, `${team.name}: Team Hub`, rows, () => host.setPicker(null));

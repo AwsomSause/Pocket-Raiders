@@ -963,6 +963,17 @@ export class GameSession {
     return `You hand in ${team.name}'s uniform.`;
   }
 
+  /** The team Radio (HOENN_TEAMS 7.5): mute or unmute it. The run keeps the note that it was muted. */
+  toggleRadio(): string {
+    const run = structuredClone(this.requireRun());
+    const muted = Number(run.story.flags['ev:hoenn-radio-muted'] ?? 0) > 0;
+    run.story.flags['ev:hoenn-radio-muted'] = muted ? 0 : 1;
+    if (!muted) run.story.flags['ev:hoenn-radio-was-muted'] = 1;
+    this.run = run;
+    this.persistRun();
+    return muted ? 'The Radio crackles back on.' : 'You turn the Radio off. Somebody notices the silence.';
+  }
+
   /** Team Sky's screens (core/evil/teamSky): one action, saved; the message says what happened. */
   skyAct(action: SkyAction): string {
     const run = structuredClone(this.requireRun());

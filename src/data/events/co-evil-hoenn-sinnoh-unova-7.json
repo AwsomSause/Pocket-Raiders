@@ -2448,6 +2448,207 @@
    ]
   },
   {
+   "id": "mg-table",
+   "name": "The Leader's Table",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "magma",
+     "inside": true,
+     "after": 5,
+     "rank": 5,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "mg-table",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.tabitha"
+    ],
+    "tint": "#c03018",
+    "effect": "none"
+   },
+   "intro": "A table with a map of Hoenn on it. Maxie at the head, Tabitha on one side, Courtney on the other, and an empty chair for you. Plans are pins. Maxie: \"Next week's work. Speak if you must. One change.\"",
+   "choices": [
+    {
+     "label": "Move The Ash Round's pin off Fallarbor's ash, out to the empty hills. (30% chance it's noticed)",
+     "chance": 0.7,
+     "success": {
+      "text": "The pin goes where nobody lives. The Ash Round will run there, and harm nothing but grass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-ash-round",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mg-table",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Maxie: \"Interesting choice.\" He leaves the pin where you put it, and watches you for the rest of the meeting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-ash-round",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mg-table",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move The Ferry Dues's pin off Slateport's boats, out to the empty hills. (30% chance it's noticed)",
+     "chance": 0.7,
+     "success": {
+      "text": "The pin goes where nobody lives. The Ferry Dues will run there, and harm nothing but grass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-ferry-dues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mg-table",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Maxie: \"Interesting choice.\" He leaves the pin where you put it, and watches you for the rest of the meeting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-ferry-dues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mg-table",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move The Recruiting Drive's pin off Lilycove's bored, out to the empty hills. (30% chance it's noticed)",
+     "chance": 0.7,
+     "success": {
+      "text": "The pin goes where nobody lives. The Recruiting Drive will run there, and harm nothing but grass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-recruiting",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mg-table",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Maxie: \"Interesting choice.\" He leaves the pin where you put it, and watches you for the rest of the meeting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-recruiting",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mg-table",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the pins where they are.",
+     "success": {
+      "text": "Maxie: \"Good.\" The plan stands.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "flag",
+        "key": "mg-table",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "aq-act1",
    "name": "Initiation",
    "group": "Evil Teams",
@@ -4394,6 +4595,207 @@
    ]
   },
   {
+   "id": "aq-table",
+   "name": "The Leader's Table",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aqua",
+     "inside": true,
+     "after": 5,
+     "rank": 5,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "aq-table",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.shelly"
+    ],
+    "tint": "#1060c0",
+    "effect": "none"
+   },
+   "intro": "A table with a map of Hoenn on it. Archie at the head, Shelly on one side, Matt on the other, and an empty chair for you. Plans are pins. Archie: \"Next week's work. Speak if you must. One change.\"",
+   "choices": [
+    {
+     "label": "Move The Ash Round's pin off Fallarbor's ash, out to the empty hills. (30% chance it's noticed)",
+     "chance": 0.7,
+     "success": {
+      "text": "The pin goes where nobody lives. The Ash Round will run there, and harm nothing but grass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-ash-round",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-table",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Archie: \"Interesting choice.\" He leaves the pin where you put it, and watches you for the rest of the meeting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-ash-round",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-table",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move The Ferry Dues's pin off Slateport's boats, out to the empty hills. (30% chance it's noticed)",
+     "chance": 0.7,
+     "success": {
+      "text": "The pin goes where nobody lives. The Ferry Dues will run there, and harm nothing but grass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-ferry-dues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-table",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Archie: \"Interesting choice.\" He leaves the pin where you put it, and watches you for the rest of the meeting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-ferry-dues",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-table",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Move The Recruiting Drive's pin off Lilycove's bored, out to the empty hills. (30% chance it's noticed)",
+     "chance": 0.7,
+     "success": {
+      "text": "The pin goes where nobody lives. The Recruiting Drive will run there, and harm nothing but grass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-recruiting",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-table",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Archie: \"Interesting choice.\" He leaves the pin where you put it, and watches you for the rest of the meeting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-pin-recruiting",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-table",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "suspicion": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the pins where they are.",
+     "success": {
+      "text": "Archie: \"Good.\" The plan stands.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "flag",
+        "key": "aq-table",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "mg-op-weather-vane",
    "name": "Operation: The Weather Vane",
    "group": "Evil Teams",
@@ -4852,6 +5254,59 @@
    ],
    "remembers": [
     {
+     "id": "pin-tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-ash-round",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives. A fourth way, in Team Aqua's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Aqua).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Aqua is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-magma",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
      "id": "tip",
      "when": [
       {
@@ -4897,6 +5352,18 @@
        }
       }
      ]
+    },
+    {
+     "id": "pin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-ash-round",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives."
     }
    ]
   },
@@ -5021,6 +5488,59 @@
    ],
    "remembers": [
     {
+     "id": "pin-tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-ferry-dues",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives. A fourth way, in Team Aqua's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Aqua).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Aqua is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-magma",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
      "id": "tip",
      "when": [
       {
@@ -5066,6 +5586,18 @@
        }
       }
      ]
+    },
+    {
+     "id": "pin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-ferry-dues",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives."
     }
    ]
   },
@@ -5358,6 +5890,59 @@
    ],
    "remembers": [
     {
+     "id": "pin-tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-recruiting",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives. A fourth way, in Team Aqua's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Aqua).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Aqua is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-magma",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
      "id": "tip",
      "when": [
       {
@@ -5403,6 +5988,18 @@
        }
       }
      ]
+    },
+    {
+     "id": "pin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-recruiting",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives."
     }
    ]
   },
@@ -5865,6 +6462,59 @@
    ],
    "remembers": [
     {
+     "id": "pin-tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-ash-round",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives. A fourth way, in Team Magma's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Magma).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Magma is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-aqua",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
      "id": "tip",
      "when": [
       {
@@ -5910,6 +6560,18 @@
        }
       }
      ]
+    },
+    {
+     "id": "pin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-ash-round",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives."
     }
    ]
   },
@@ -6034,6 +6696,59 @@
    ],
    "remembers": [
     {
+     "id": "pin-tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-ferry-dues",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives. A fourth way, in Team Magma's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Magma).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Magma is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-aqua",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
      "id": "tip",
      "when": [
       {
@@ -6079,6 +6794,18 @@
        }
       }
      ]
+    },
+    {
+     "id": "pin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-ferry-dues",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives."
     }
    ]
   },
@@ -6371,6 +7098,59 @@
    ],
    "remembers": [
     {
+     "id": "pin-tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-recruiting",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives. A fourth way, in Team Magma's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Magma).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Magma is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-aqua",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
      "id": "tip",
      "when": [
       {
@@ -6416,6 +7196,18 @@
        }
       }
      ]
+    },
+    {
+     "id": "pin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-pin-recruiting",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives."
     }
    ]
   }

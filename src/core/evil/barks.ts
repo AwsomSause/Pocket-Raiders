@@ -48,7 +48,8 @@ export function barkPool(content: Content, run: RunState, moment: BarkMoment): s
         out.push(`${sq.a}: "${sb[0]}"`, `${sq.b}: "${sb[1]}"`);
       }
     }
-    if (BARKS.radio.teams.includes(team.id)) {
+    // 7.5: the Radio can be muted (the run notes it: `hoenn-radio-muted`).
+    if (BARKS.radio.teams.includes(team.id) && !flag(run, 'hoenn-radio-muted')) {
       out.push(...(BARKS.radio.chatter[team.id] ?? []).map((c) => `Radio: ${c}`));
       for (const [id, name] of Object.entries(BARKS.radio.ops)) if (flag(run, `hoenn-refused-${id}`)) out.push(BARKS.radio.refused.replace('{op}', name));
     }

@@ -228,11 +228,26 @@ function teamEvents(t: T): Json[] {
         ch('Keep it on.', out(`You put it back on.`, flag(`${P}-hand-in`))),
       ]),
   ];
-  return [...act1, ...act2, ...act3, ...act4, ...tests];
+  // 7.6 The Leader's Table (rank 5 and up): one pin moved per meeting changes where an Operation runs. Toward an empty
+  // place is a Quiet act; the leader notices sometimes, and says so.
+  const PINS: [string, string, string][] = [['ash-round', 'The Ash Round', `Fallarbor's ash`], ['ferry-dues', 'The Ferry Dues', `Slateport's boats`], ['recruiting', 'The Recruiting Drive', `Lilycove's bored`]];
+  const table = E('table', "The Leader's Table", { requires: [...inside(t, { after: 5, rank: 5, ends: ['none'] }), once(`${P}-table`)], cast: [t.LEADER, t.LT] },
+    `A table with a map of Hoenn on it. ${t.leader} at the head, ${t.lt} on one side, ${t.admin} on the other, and an empty chair for you. Plans are pins. ${say(t.leader, `Next week's work. Speak if you must. One change.`)}`,
+    [
+      ...PINS.map(([id, name, where]) => ch(`Move ${name}'s pin off ${where}, out to the empty hills. (30% chance it's noticed)`, out(`The pin goes where nobody lives. ${name} will run there, and harm nothing but grass.`, flag(`hoenn-pin-${id}`), flag(`${P}-table`), ...kind(1)), { chance: 0.7, fail: out(`${say(t.leader, `Interesting choice.`)} He leaves the pin where you put it, and watches you for the rest of the meeting.`, flag(`hoenn-pin-${id}`), flag(`${P}-table`), meters(0, 1)) })),
+      ch('Leave the pins where they are.', out(`${say(t.leader, `Good.`)} The plan stands.`, meters(2), flag(`${P}-table`))),
+    ]);
+  return [...act1, ...act2, ...act3, ...act4, ...tests, table];
 }
 
 // ---------- Volume III C: six new Operations (one per Hoenn stage from 3, optional; both teams) ----------
 function opsFor(t: T): Json[] {
+  // 3.9 / 7.3: a double agent gets a fourth way, in the other team's colour. 7.6: a pin moved at the Leader's Table.
+  const TIP = `A fourth way, in ${t.otherName}'s colour: tip them off.`;
+  /** The Operations the Leader's Table can move (its three pins). */
+  const PINNED = ['ash-round', 'ferry-dues', 'recruiting'];
+  const PIN = `You moved its pin at the Leader's Table: it runs out in the empty hills, where nobody lives.`;
+  const tipOff = ch(`Tip Them Off (to ${t.otherName}).`, out(`A note under a door, in the wrong colour. ${t.otherName} is there first; the job falls through, and nobody can say why. Yet.`, meters(1, 2), ...kind(1), flag('hoenn-tipped'), flag(`hoenn-saw-${t.id}`)));
   const op = (id: string, name: string, after: number, intro: string, book: string, quiet: string, o: Json = {}): Json =>
     Object.assign(ev(`${t.p}-op-${id}`, `Operation: ${name}`, 'Evil Teams', { requires: inside(t, { after, ends: ['none'] }), cast: [t.GRUNT], tint: t.tint, ...o }, intro, [
       ch(`By the Book: ${book}`, out(`It's done the team's way.`, meters(3, -1), flag(`hoenn-saw-${t.id}`))),
@@ -240,9 +255,14 @@ function opsFor(t: T): Json[] {
       ch('Refuse.', out(`You say no. Somebody else will do it.`, meters(-2), flag(`hoenn-refused-${id}`))),
     ]), {
       // 3.9 / 7.3: a double agent gets a fourth way, in the other team's colour.
-      remembers: [{ id: 'tip', when: [flagIs('hoenn-double-agent')], notice: `A fourth way, in ${t.otherName}'s colour: tip them off.`, addChoices: [
-        ch(`Tip Them Off (to ${t.otherName}).`, out(`A note under a door, in the wrong colour. ${t.otherName} is there first; the job falls through, and nobody can say why. Yet.`, meters(1, 2), ...kind(1), flag('hoenn-tipped'), flag(`hoenn-saw-${t.id}`))),
-      ] }],
+      // One variant plays (the first that fits): a pinned Operation tells you so, and a double agent still gets the fourth way.
+      remembers: PINNED.includes(id)
+        ? [
+            { id: 'pin-tip', when: [flagIs(`hoenn-pin-${id}`), flagIs('hoenn-double-agent')], notice: `${PIN} ${TIP}`, addChoices: [tipOff] },
+            { id: 'tip', when: [flagIs('hoenn-double-agent')], notice: TIP, addChoices: [tipOff] },
+            { id: 'pin', when: [flagIs(`hoenn-pin-${id}`)], notice: PIN },
+          ]
+        : [{ id: 'tip', when: [flagIs('hoenn-double-agent')], notice: TIP, addChoices: [tipOff] }],
     }) as Json;
   return [
     op('weather-vane', 'The Weather Vane', 2, `The order: misreport a forecast, so a town doesn't batten down.`, 'misreport it.', 'correct it.', { pokemon: 'castform' }),

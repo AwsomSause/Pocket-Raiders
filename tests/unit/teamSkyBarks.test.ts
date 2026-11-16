@@ -193,3 +193,59 @@ describe('Hoenn effects made real', () => {
     expect(wrong.chance).toBeCloseTo(0.6);
   });
 });
+
+describe('HOENN_TEAMS 7: the screens say what to draw', () => {
+  it('the Final Choice: the orb, four sayings, a ring of faces that react; Team Sky has the sky and its own team', async () => {
+    const { evilLook } = await import('../../src/core/evil/screens');
+    const run = inTeam('magma', 'hoenn');
+    const look = evilLook(content, run, 'mg-final-choice')!;
+    expect(look.kind).toBe('final');
+    if (look.kind !== 'final') return;
+    expect(look.centre).toBe('red');
+    expect(look.says).toEqual(['"Wake it."', '"No."', '"Give it to them."', '"Neither of you."']);
+    expect(look.faces.find((f) => f.name === 'Ottoway')!.react[0]).toBe('down'); // the bunkmate looks down at "Carry out the plan"
+    expect(look.faces.find((f) => f.name === 'Quince')!.react[3]).toBe('lean');
+    const sky = founded('sky-final');
+    const s = evilLook(content, sky, 'sky-climax')!;
+    expect(s.kind === 'final' && s.centre).toBe('sky');
+    expect(s.kind === 'final' && s.faces[0]!.react[1]).toBe('away'); // Zinnia turns away at "Call it for us"
+    expect(s.kind === 'final' && s.faces.length).toBe(4);
+  });
+
+  it('a Briefing lists every number under its column before you pick; the Result has a human line', async () => {
+    const { evilLook, resultLook } = await import('../../src/core/evil/screens');
+    const run = inTeam('magma', 'hoenn');
+    const b = evilLook(content, run, 'mg-op-ash-round')!;
+    expect(b.kind).toBe('briefing');
+    if (b.kind !== 'briefing') return;
+    expect(b.numbers[0]).toEqual(['Standing +3', 'Suspicion −1']);
+    expect(b.numbers[1]).toContain('Noticed? 25%');
+    expect(b.tip).toBeNull();
+    set(run, 'hoenn-double-agent');
+    const b2 = evilLook(content, run, 'mg-op-ash-round')!;
+    expect(b2.kind === 'briefing' && b2.tip).toBe(3);
+    expect(resultLook(content, 'mg-op-ash-round', 1, 'Quietly: sweep it for the glassblower.', ['Standing +2'], '')!.voice).toMatch(/glassblower/);
+    expect(resultLook(content, 'sky-climax', 0, 'x', [], '')).toBeNull();
+  });
+
+  it("the Rank-Up reads the rank from the changes; the Leader's Table moves one pin", async () => {
+    const { evilLook, rankUpLook } = await import('../../src/core/evil/screens');
+    const run = inTeam('aqua', 'hoenn');
+    const up = rankUpLook(content, run, ['Standing +6 (25/60)', 'you are Admin now (Rank 5)'])!;
+    expect(up.rank).toBe(5);
+    expect(up.byLeader).toBe(true);
+    expect(up.unlocks).toHaveLength(3);
+    expect(rankUpLook(content, run, ['Standing +1 (2/60)'])).toBeNull();
+    expect(evilLook(content, run, 'aq-table')!.kind).toBe('table');
+    const table = content.events.get('aq-table')!;
+    expect(table.choices).toHaveLength(4);
+    expect(table.choices[0]!.chance).toBeCloseTo(0.7);
+  });
+
+  it('the Radio can be muted', () => {
+    const run = inTeam('magma', 'hoenn');
+    expect(barkPool(content, run, 'rest').some((l) => l.startsWith('Radio:'))).toBe(true);
+    set(run, 'hoenn-radio-muted');
+    expect(barkPool(content, run, 'rest').some((l) => l.startsWith('Radio:'))).toBe(false);
+  });
+});
