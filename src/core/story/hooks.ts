@@ -741,7 +741,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
     recordPackMarks(content, run, rivalBack.id, packFacts(rivalBack));
     spendRivalSpoils(run, rivalBack.id);
     endRivalBrain(run, rivalBack.id);
-    rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), foes: fought };
+    rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), levels: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.level), moves: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.moves.map((x) => x.id)), foes: fought };
     recordSeenMoves(content, rivalBack, battle.playerMovesSeen, ended.id);
     // W2: everything else it watched (setup, switches, your lead, a sweep, a legend...) for its adaptation triggers.
     const leadUid = run.story.events.find((e) => e.type === 'battleStarted' && e.where.battle === index)?.actors[0];
