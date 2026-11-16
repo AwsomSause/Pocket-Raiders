@@ -4615,6 +4615,14 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     // Sturdy: a hit at full HP leaves it with at least 1 HP.
     const sturdy = foeAbility === 'sturdy' && target.mon.hp >= targetMax && target.mon.hp > 1 && damage >= target.mon.hp;
     if (sturdy) damage = target.mon.hp - 1;
+    // Greenneedle gn.new.07: Second Self survives the first knockout of a battle, and the move that did it is revealed.
+    const second = foeAbility === 'second-self' && user !== target && damage >= target.mon.hp && !ctx.battle.storyEffects.includes(`second-self:${target.mon.uid}`);
+    if (second) {
+      ctx.battle.storyEffects.push(`second-self:${target.mon.uid}`);
+      damage = Math.max(0, target.mon.hp - 1);
+      announce(target, 'second-self', events);
+      events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, target.mon.speciesId).name} was already somewhere else. The move was ${move.name}.` });
+    }
 
     // Disguise and Ice Face take one hit for the Pokémon, then the form breaks.
     // Greenneedle gn.37: Borrowed Face is a Disguise that comes back (below).

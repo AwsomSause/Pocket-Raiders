@@ -645,6 +645,10 @@
   {
    "key": "kc-star",
    "rule": "core/greenneedle/karpcon.ts (gn.54 The Magikarp Convention)"
+  },
+  {
+   "key": "shedinja-answered",
+   "rule": "core/greenneedle/shedinja.ts (gn.new.07: the Shedinja joined; read by gn.14)"
   }
  ]
 }

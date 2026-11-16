@@ -1688,5 +1688,10 @@
   "id": "kindness",
   "name": "Kindness",
   "description": "When its bearer steps out of a fight, the Pokémon that comes in moves first with its first move. Twice per battle."
+ },
+ {
+  "id": "second-self",
+  "name": "Second Self",
+  "description": "The first time it would be knocked out in a battle, it survives with 1 HP, and the attacker's move is revealed for the rest of the battle. Once per battle."
  }
 ]

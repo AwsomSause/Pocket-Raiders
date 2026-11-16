@@ -1,0 +1,412 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-n07-open",
+   "name": "The Shedinja Question",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shed-begun",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "shedinja",
+    "tint": "#8a8f7a",
+    "effect": "float"
+   },
+   "intro": "In the grass ahead, a wild Nincada splits its back, climbs out as a Ninjask, and buzzes away over the trees.\n\nIts shell stays where it was. Hollow, light, perfectly still. Then the shell gets up.\n\n*It turns. Nothing else is here. It follows the player because the player is something.*",
+   "choices": [
+    {
+     "label": "Let it follow.",
+     "success": {
+      "text": "It floats a little behind you, close enough that you can hear nothing at all. You walk on, and it comes, and neither of you says why.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "shed-begun",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "shed-rests",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "shed-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n07-rest",
+   "name": "The Shedinja Question: The Rest",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "rest",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shed-end",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "shed-begun",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "shed-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "shed-hold",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "shed-rests",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*It is waiting at the edge of the light, exactly where it hovered last time. It hasn't forgotten the question.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "shedinja",
+    "tint": "#8a8f7a",
+    "effect": "float"
+   },
+   "intro": "The fire is low. The shell drifts in from the dark, and hovers in front of one of the party. And holds still.\n\n*It's waiting to be told what it is.*",
+   "choices": [
+    {
+     "label": "Let one of them answer.",
+     "success": {
+      "text": "You look at your team. One of them lifts its head.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "shedRest",
+        "key": "mon"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "shed-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shed-end",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*It settles into the party as if it had always been there. Nobody asks it what it is. It seems to like that.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shed-end",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*One morning the light is only light. The shell is not at the edge of it. The grass where it hovered is pressed flat, and slowly, it stands up again.*"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Answer it myself.",
+     "success": {
+      "text": "You sit up. It turns, slowly, to face you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "shed-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-n07-answer"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nobody answers.",
+     "success": {
+      "text": "Nobody does. The shell stays a long moment, then drifts back to the edge of the light.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "shedRest",
+        "key": "none"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "shed-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shed-end",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*It settles into the party as if it had always been there. Nobody asks it what it is. It seems to like that.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shed-end",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*One morning the light is only light. The shell is not at the edge of it. The grass where it hovered is pressed flat, and slowly, it stands up again.*"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the Ninjask.",
+     "success": {
+      "text": "You think of the one that flew. You tell it you will look. The shell turns, towards the dark, and waits.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "shedRest",
+        "key": "seek"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "shed-stage"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "shed-rests",
+       "atLeast": 1,
+       "atMost": 1
+      },
+      {
+       "kind": "flag",
+       "key": "shed-ninjask",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-n07-answer",
+   "name": "The Shedinja Question: Your Answer",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "shedinja",
+    "tint": "#8a8f7a",
+    "effect": "float"
+   },
+   "intro": "It hasn't moved. You are the one it is hovering in front of. The fire pops. The shell does not.\n\nWhatever you say, it will believe.",
+   "choices": [
+    {
+     "label": "\"You're one of us.\"",
+     "success": {
+      "text": "Something in the way it hangs changes. It drifts closer, until it is nearly touching your sleeve.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "shedRest",
+        "key": "yes"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shed-end",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*It settles into the party as if it had always been there. Nobody asks it what it is. It seems to like that.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shed-end",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*One morning the light is only light. The shell is not at the edge of it. The grass where it hovered is pressed flat, and slowly, it stands up again.*"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You're a shell.\"",
+     "success": {
+      "text": "It is quiet. It stays exactly as it was, because it has no other way to stay.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "shedRest",
+        "key": "no"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shed-end",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*It settles into the party as if it had always been there. Nobody asks it what it is. It seems to like that.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shed-end",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*One morning the light is only light. The shell is not at the edge of it. The grass where it hovered is pressed flat, and slowly, it stands up again.*"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't know either.\"",
+     "success": {
+      "text": "You say it to the fire, and then to it. It tips towards you, very slightly. Nobody knew anything, and now two of you don't.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "shedRest",
+        "key": "yes"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shed-end",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*It settles into the party as if it had always been there. Nobody asks it what it is. It seems to like that.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "shed-end",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*One morning the light is only light. The shell is not at the edge of it. The grass where it hovered is pressed flat, and slowly, it stands up again.*"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-n07-ninjask",
+   "name": "The Shedinja Question: The Ninjask",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shed-hold",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "shed-end",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "shed-stage"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ninjask",
+    "tint": "#8a8f7a",
+    "effect": "float"
+   },
+   "intro": "A Ninjask hums over the grass, fast, bright, and gone before you can see it properly.\n\n*The Ninjask zips past it twice. Neither knows the other. The Shedinja watches it go, and turns back to the player.*",
+   "choices": [
+    {
+     "label": "Walk on, together.",
+     "success": {
+      "text": "It watches the sky a moment longer. Then it comes back to your side. It chose, in its way.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "shedNinjask"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "shed-stage"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
