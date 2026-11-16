@@ -26,6 +26,7 @@ import { firstStrikeBonus } from '../trainerEvolution';
 import { compareTurnOrder } from './damage';
 import { setAnnounceContent, doublesSteps as S, forcedMoveId, hasUsableMove, type BattleContext, type BattleEvent, type Combatant, type PlayerAction, type Side, type SlotCommand } from './engine';
 import { comboName } from './battleFlair';
+import { jetSpreads } from './jetAbilities';
 import * as Held from './held';
 import { applyTransformations, battleMove, endDynamax, tickDynamax, zMoveFor, type TransformStepEvent } from './transform';
 import { alliesAdjacent, canReach, centringMoves, foesAdjacent, lanesOn, shiftProblem } from './triples';
@@ -678,9 +679,16 @@ function runEntries(ctx: BattleContext, field: Field, entering: Combatant[], eve
     const foes = field.nearFoes(c);
     if (foes.length === 0) continue;
     field.on(foes[0]!, events);
+    S.jetOnEnter(ctx, c, foes, events);
     S.entryAbility(ctx, c, foes[0]!, events);
     // Intimidate (and the like) reach every adjacent foe.
     const ability = S.abilityIn(ctx, c);
+    if (ability === 'terror-hood' || ability === 'deep-glow' || ability === 'command-bark') {
+      for (const other of foes.slice(1)) {
+        field.on(other, events);
+        S.jetEntryFoe(ctx, c, other, events);
+      }
+    }
     for (const other of foes.slice(1)) {
       if (ability !== 'intimidate' && ability !== 'supersweet-syrup') break;
       field.on(other, events);
@@ -845,7 +853,8 @@ function runPlanned(ctx: BattleContext, field: Field, turn: TurnState, p: Planne
   doubles.spread = false;
   // Dancer: other dancers copy a dance move that worked.
   const used = events.slice(mark).some((e) => e.type === 'move' && e.side === user.side && e.moveId === move.id);
-  if (used && DANCES.has(move.id)) dancers(ctx, field, turn, user, move, events);
+  // Petal Waltz: its dances can't be copied by Dancer.
+  if (used && DANCES.has(move.id) && S.abilityIn(ctx, user) !== 'petal-waltz') dancers(ctx, field, turn, user, move, events);
   // Call and Response (gn.new.30): a status move from one of the pair gives the other +1 priority next turn.
   if (used && user.side === 'player') callNote(ctx.battle, user.mon, field.alive('player').find((c) => c !== user)?.mon, move.category === 'status');
   symbiosis(ctx, field, heldBefore, events);
@@ -887,6 +896,8 @@ function aim(ctx: BattleContext, field: Field, turn: TurnState, user: Combatant,
       }
       if (target && ctx.battle.doubles!.commanding!.includes(target.mon.uid)) target = field.ally(target) ?? null;
       if (!target) return [];
+      // Requiem (sound) and Full Broadside (pulse): the move reaches every foe.
+      if (target.side !== user.side && jetSpreads(S.abilityIn(ctx, user), move) && foes.length > 1) return foes;
       return [redirect(ctx, field, turn, user, move, target)];
     }
   }
@@ -902,6 +913,11 @@ function redirect(ctx: BattleContext, field: Field, turn: TurnState, user: Comba
     const c = field.alive(target.side).find((x) => x.mon.uid === center.uid);
     const powderProof = getSpecies(ctx.content, user.mon.speciesId).types.includes('grass') || own === 'overcoat';
     if (c && !(center.powder && powderProof) && field.reaches(user, c, move)) return c;
+  }
+  // Lantern Lure draws every single-target move aimed at its side.
+  if (S.targetAbility(ctx, user, target) !== 'lantern-lure') {
+    const lure = field.alive(target.side).find((o) => o !== target && S.targetAbility(ctx, user, o) === 'lantern-lure' && field.reaches(user, o, move));
+    if (lure) return lure;
   }
   const rod = move.type === 'electric' ? 'lightning-rod' : move.type === 'water' ? 'storm-drain' : null;
   if (rod && S.targetAbility(ctx, user, target) !== rod) {

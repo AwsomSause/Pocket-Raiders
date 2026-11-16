@@ -9,7 +9,7 @@ const fakeRun = (seed = 's') => ({ seed, regionIndex: 0, story: { flags: {} as R
 
 describe('W1 approved rival pool', () => {
   it('main draws only primary characters; special needs approval and never fills the main slot', () => {
-    expect(poolFor('major')).toEqual(['Bede', 'Blue', 'Gladion', 'Hop', 'Hugh', 'Nemona', 'Silver', 'Wally']);
+    expect(poolFor('major')).toEqual(['Alain', 'Bede', 'Blue', 'Dawn', 'Ethan', 'Gladion', 'Green', 'Hilbert', 'Hop', 'Hugh', 'Kris', 'Lucas', 'Lyra', 'Manga Gold', 'Manga Red', 'Marnie', 'Nemona', 'Red', 'Rosa', 'Serena', 'Silver', 'Tracey Sketchit', 'Wally']);
     expect(poolFor('additional')).not.toContain('N');
     expect(poolFor('friendly')).toContain('Gary');
     expect(isMainEligible('N')).toBe(false);
@@ -36,7 +36,7 @@ describe('W1 approved rival pool', () => {
     expect(pickMainRival('seed-1', 'story', [a!])).not.toBe(a);
   });
   it('every character has a valid pool of species and a personality/style', () => {
-    expect(Object.keys(MAJOR.characters)).toHaveLength(19);
+    expect(Object.keys(MAJOR.characters)).toHaveLength(34);
   });
 });
 

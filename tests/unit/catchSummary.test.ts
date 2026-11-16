@@ -21,7 +21,7 @@ describe('catch summary', () => {
   });
 
   it('says so when a Pokémon does not evolve', () => {
-    expect(catchSummary(content, createPokemon(content, 'tauros', 20, 'c')).join('\n')).toContain('Does not evolve');
+    expect(catchSummary(content, createPokemon(content, 'ditto', 20, 'c')).join('\n')).toContain('Does not evolve');
   });
   it('shows weaknesses, hidden ability, move details, source and first discovery', () => {
     const text = catchSummary(content, createPokemon(content, 'bulbasaur', 10, 'a'), undefined, { source: 'Hatched from an Egg', firstDiscovery: true }).join('\n');

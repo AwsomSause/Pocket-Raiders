@@ -137,7 +137,7 @@ function passiveItemModifiers(content: Content, passives: Record<string, number>
   return out;
 }
 
-/** The starting trainers (Beta 0.5): Red, Blue, Green, Hilda and Nate. Every other archetype stays in the data for old saves and stats, but cannot be picked. */
+/** The starting trainers: Red, Blue, Green, Hilda and Nate. Every other trainer is earned (challenge, boss battle or run event) and can then be picked. */
 export const PLAYER_TRAINER_IDS = ['red', 'blue', 'green', 'hilda', 'nate'] as const;
 /** A starting trainer, or that trainer's Trainer Evolution ("evolved-red"). */
 export const isPlayerTrainer = (id: string): boolean => (PLAYER_TRAINER_IDS as readonly string[]).includes(id.startsWith('evolved-') ? id.slice('evolved-'.length) : id);

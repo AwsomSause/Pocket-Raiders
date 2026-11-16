@@ -287,7 +287,7 @@ test('New UI: the prologue plays on the mock-up pages: talk pages with Prof. Van
   const pro = view(page, 'Prologue');
   const session = () => page.evaluate(() => (window as any).__pkr.session.profile.story.protagonist);
   // The Look: two choices beside the Look's portrait; pointing at one shows it.
-  await expect(pro.locator('[data-act="pick"]')).toHaveText(['Look A', 'Look B']);
+  await expect(pro.locator('[data-act="pick"]')).toHaveText(['Hilda', 'Nate']);
   expect(await pro.innerHTML()).toContain('packs/mc/look_a/portrait.png');
   await pro.locator('[data-act="pick"]').nth(1).hover();
   await expect.poll(() => pro.innerHTML()).toContain('packs/mc/look_b/portrait.png');
