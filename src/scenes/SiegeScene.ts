@@ -8,8 +8,10 @@ import { chooseOption, closeFormat, formatOver } from '../core/formats/registry'
 import { siegeView, type DistrictStatus, type SiegeState } from '../core/formats/siege';
 import { currentFormat } from '../core/formats/store';
 import { services } from '../game/services';
-import { onInputAction } from '../ui/input';
+import { onInputAction, type InputAction } from '../ui/input';
 import { fitBlock } from '../ui/fitText';
+import { siegeMapView, type SiegeMapModel } from '../ui/redux/screens/ops';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
 
@@ -31,6 +33,10 @@ export class SiegeScene extends Phaser.Scene {
   private data0!: SiegeSceneData;
   private layer: Phaser.GameObjects.GameObject[] = [];
   private menu: Menu | null = null;
+  /** New UI: the mock-ups' Siege page over the canvas, the district under the cursor and the columns the page draws. */
+  private rx: ReduxView | null = null;
+  private at = 0;
+  private cols = 3;
 
   constructor() {
     super('Siege');
@@ -42,6 +48,28 @@ export class SiegeScene extends Phaser.Scene {
 
   create(): void {
     this.cameras.main.setBackgroundColor('#141414');
+    this.rx = null;
+    if (reduxOn()) {
+      const s = this.state();
+      if (!s) return this.finish();
+      // The cursor starts on the gate gone through, else a free gate, else the first gate.
+      const first = [s.districts.findIndex((d) => d.id === s.entered), s.districts.findIndex((d) => d.gate && d.status === 'held'), s.districts.findIndex((d) => d.gate)].find((k) => k >= 0);
+      this.at = first ?? 0;
+      this.rx = mountRedux(this, {
+        render: (c) => {
+          this.cols = c.v(2) ? 1 : 3;
+          return siegeMapView(c, this.model());
+        },
+        acts: {
+          // A click (or a tap) on a district only moves the cursor there; the button goes in, so a battle is never one slip away.
+          district: (k) => this.focus(Number(k)),
+          enter: () => this.enter(),
+        },
+        overs: { over: (k) => this.focus(Number(k)) },
+      });
+      onInputAction(this, (a) => this.key(a));
+      return;
+    }
     onInputAction(this, (a) => this.menu?.handle(a));
     this.render();
   }
@@ -62,6 +90,69 @@ export class SiegeScene extends Phaser.Scene {
     const slot = currentFormat(this.ctx().run);
     return slot?.id === 'siege' ? (slot.state as unknown as SiegeState) : null;
   }
+
+  // ---- New UI ----
+
+  private over(s: SiegeState): boolean {
+    return s.entered !== null || formatOver(this.ctx());
+  }
+
+  private model(): SiegeMapModel {
+    const s = this.state();
+    if (!s) return { header: 'Siege', title: '', rows: [], index: 0, entered: null, tries: 0, button: 'Continue', ready: true, text: '' };
+    const v = siegeView(s), over = this.over(s), cur = v.rows[this.at];
+    // The ledger's title is written in capitals for the old page; the mock-up page writes it as a name.
+    const named = (t: string): string => t.toLowerCase().replace(/(^|[\s·])\p{L}/gu, (m) => m.toUpperCase());
+    const entered = v.rows.findIndex((r) => r.id === s.entered);
+    return {
+      header: `Siege · ${named(v.title.split(' · ')[0] ?? '')}`,
+      title: named(v.title),
+      rows: v.rows.map((r) => ({ name: r.name, status: r.status, gate: r.gate, heldBy: r.heldBy, ifLost: r.ifLost })),
+      index: this.at,
+      entered: entered < 0 ? null : entered,
+      tries: v.tries,
+      button: over ? 'Begin Phase 1: The Streets' : cur?.gate ? `Enter by ${cur.name}` : 'No gate here',
+      ready: over || !!cur?.gate,
+      text: over && entered >= 0
+        ? `You went in by the ${v.rows[entered]!.name}. Lost districts apply their effects.`
+        : 'Each district is Held, Contested or Lost. Held gates are free. The rest cost one battle. Lost districts apply their effects.',
+    };
+  }
+
+  private focus(k: number): void {
+    const n = this.state()?.districts.length ?? 0;
+    if (!(k >= 0 && k < n) || k === this.at) return;
+    this.at = k;
+    this.rx?.refresh();
+  }
+
+  private key(a: InputAction): void {
+    if (a === 'confirm') return this.enter();
+    const step = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -this.cols : a === 'down' ? this.cols : 0;
+    if (!step) return;
+    const n = this.state()?.districts.length ?? 0, to = this.at + step;
+    // Down from above a short last row lands on that row's last district.
+    const short = a === 'down' && to >= n && Math.floor(this.at / this.cols) < Math.floor((n - 1) / this.cols);
+    this.focus(short ? n - 1 : to);
+  }
+
+  private enter(): void {
+    const s = this.state();
+    if (!s || this.over(s)) return this.finish();
+    const d = s.districts[this.at];
+    if (!d?.gate) return;
+    const ctx = this.ctx();
+    chooseOption(ctx, d.id);
+    services().session.saveRunNow();
+    if (ctx.run.phase === 'battle') {
+      this.scene.stop(this.data0.from);
+      this.scene.start('Battle');
+      return;
+    }
+    this.rx?.refresh();
+  }
+
+  // ---- Old UI ----
 
   private render(): void {
     this.clear();

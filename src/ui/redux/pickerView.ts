@@ -60,9 +60,13 @@ export function pickerKind(title: string): PickerKind {
   return 'menu';
 }
 
-/** Header colour by title: run menus teal, party green, shop orange, the rest hub blue. */
+/** Header colour by title: run menus teal, party green, shop orange, Memories purple, the rest hub blue. */
 function areaOf(title: string): Area {
   if (/^bag$/i.test(title)) return 'shop';
+  // The Memories pages are story pages; the replays are battles (the mock-up catalogue's own bands).
+  if (/^memories/i.test(title)) return /battle replays/i.test(title) ? 'battle' : 'story';
+  // The Legacy Gallery keeps finished runs: the run end's gold band, as in the catalogue.
+  if (/^legacy gallery/i.test(title)) return 'end';
   if (/party|pok[eé]mon|team|summary|bond/i.test(title)) return 'party';
   if (/shop|mart|merchant|exchange|bank/i.test(title)) return 'shop';
   if (/bag|item|camp|map|route|journal|notes/i.test(title)) return 'run';

@@ -45,6 +45,14 @@ describe('New UI Party', () => {
     expect(html).toContain('30 / 40');
   });
 
+  it('a Pokémon whose HP is not on record (a Hall of Fame team) shows its line instead of numbers, never as HTML', () => {
+    const html = partyView(ctx(0), party({ title: 'Hall of Fame', area: 'end', mons: [card('Charizard', { hp: 1, maxHp: 1, line: 'Fire · Flying' }), card('Gengar', { hp: 1, maxHp: 1, line: '<b>x</b>' })] }));
+    expect(html).toContain('Fire · Flying');
+    expect(html).not.toContain('1 / 1');
+    expect(html).not.toContain('<b>x</b>');
+    expect(partyView(ctx(0), party())).toContain('30 / 40');
+  });
+
   it('moves the cursor three across only in the grid layout', () => {
     expect([0, 1, 2].map((l) => partyCols(ctx(l)))).toEqual([1, 3, 1]);
   });

@@ -26,6 +26,8 @@ export interface PartyCard {
   moves: { name: string; type: string }[];
   /** It cannot be chosen right now (a pick with a reason against it). */
   off: boolean;
+  /** Words in place of the HP numbers, for a Pokémon whose HP is not on record (a Hall of Fame team). */
+  line?: string;
 }
 export interface PartyModel { title: string; mons: PartyCard[]; index: number; text: string; hints: Hints; /** Header colour; the party's green unless the page belongs to another part of the game (the run end's final team). */ area?: Area }
 
@@ -50,7 +52,7 @@ export function partyView(c: ReduxCtx, d: PartyModel): string {
     return head + `<div class="abs col" style="left:24px;top:72px;width:400px;gap:8px">${d.mons.map((m, k) => `<div class="btn${k === d.index ? ' on' : ''}" style="height:44px${m.hp > 0 && !m.off ? '' : ';opacity:.55'}"${pick(k)}>${m.file ? mini(m.file, 36) : ''}<span class="grow" style="min-width:0;${one}">${esc(m.name)}</span>${hpb(pct(m), 80)}<small>Lv ${m.level}</small></div>`).join('')}</div><div class="abs" style="left:456px;right:26px;top:76px">${W(`<div class="row" style="align-items:flex-start;gap:14px"><div class="cell" style="width:150px;height:150px;flex:none">${p.file ? mini(p.file, 140) : ''}</div><div class="col grow" style="gap:6px;min-width:0"><b class="acc" style="font-size:22px;${one}">${esc(p.name)}</b><div class="row" style="gap:5px">${p.types.map(ty).join('')}</div>${facts([['Ability', p.ability], ['Item', p.held || 'None'], ['Nature', p.nature]])}</div></div><div class="row" style="flex-wrap:wrap;gap:6px">${p.moves.map((m) => `<span class="ty" style="--tc:${typeColor(m.type)};font-size:13px;padding:5px 9px">${esc(m.name)}</span>`).join('')}</div>`, 'display:flex;flex-direction:column;gap:12px')}</div>` + TX(esc(d.text));
   }
   const row = (p: PartyCard, k: number, big: boolean): string =>
-    W(`<div class="row" style="gap:10px">${p.file ? mini(p.file, big ? 110 : 52) : ''}<div class="col grow" style="gap:5px;min-width:0"><div class="row"><b class="grow" style="font-size:${big ? 22 : 16}px;min-width:0;${one}">${esc(p.name)}</b>${big ? '' : tag(p)}<span class="sm">Lv ${p.level}</span></div>${hpb(pct(p))}<div class="row sm" style="gap:6px"><span class="grow">${p.hp > 0 ? `${p.hp} / ${p.maxHp}` : 'Fainted'}</span>${big ? tag(p) : ''}${p.held ? `<span style="max-width:62%;${one}">◆ ${esc(p.held)}</span>` : ''}</div></div></div>`, `padding:${big ? '18px 16px' : '7px 12px'}`, cls(p, k), pick(k));
+    W(`<div class="row" style="gap:10px">${p.file ? mini(p.file, big ? 110 : 52) : ''}<div class="col grow" style="gap:5px;min-width:0"><div class="row"><b class="grow" style="font-size:${big ? 22 : 16}px;min-width:0;${one}">${esc(p.name)}</b>${big ? '' : tag(p)}<span class="sm">Lv ${p.level}</span></div>${hpb(pct(p))}<div class="row sm" style="gap:6px"><span class="grow">${p.line !== undefined ? esc(p.line) : p.hp > 0 ? `${p.hp} / ${p.maxHp}` : 'Fainted'}</span>${big ? tag(p) : ''}${p.held ? `<span style="max-width:62%;${one}">◆ ${esc(p.held)}</span>` : ''}</div></div></div>`, `padding:${big ? '18px 16px' : '7px 12px'}`, cls(p, k), pick(k));
   return head + `<div class="abs" style="left:24px;top:76px;width:330px">${row(d.mons[0]!, 0, true)}</div><div class="abs col" style="left:384px;right:24px;top:72px;gap:10px">${d.mons.slice(1).map((p, k) => row(p, k + 1, false)).join('')}</div>` + TX(esc(d.text));
 }
 
