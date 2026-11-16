@@ -330,7 +330,7 @@ test('New UI: a Galar gym battle opens on the versus card, and the stadium repor
   expect(errors).toEqual([]);
 });
 
-test('New UI: the map menus follow the mock-ups: Camp opens on its five-row front page, the Album is a wall of pictures that Enter adds a team photo to, the Story Journal is a board, and L opens only the Legend', async ({ page }) => {
+test('New UI: the map menus follow the mock-ups: Camp opens on its five-row front page, the Album is a wall of pictures that Enter adds a team photo to, the Story Journal is a board, L opens only the Legend, and a shout prompt is the microphone prompt', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=newui-mapmenus');
   await toMap(page);
@@ -426,6 +426,17 @@ test('New UI: the map menus follow the mock-ups: Camp opens on its five-row fron
   await expect(log).toContainText('Interaction log');
   await page.keyboard.press('Shift+L');
   await expect(log).toHaveCount(0);
+
+  // A shout prompt is the mock-up's microphone prompt: the dimmed screen, twelve level bars, and Enter shouts.
+  await page.evaluate(() => { (window as any).__shout = null; void (window as any).__pkr.prompt('snorlax-shout').then((r: unknown) => { (window as any).__shout = r; }); });
+  const mic = page.locator('#rx .stage', { has: page.locator('.shade') }).filter({ hasText: 'Wake the Snorlax!' });
+  await expect(mic).toBeVisible();
+  await expect(mic.locator('.win .row i')).toHaveCount(12);
+  await expect(mic).toContainText('Press Enter to shout.');
+  await page.screenshot({ path: 'test-results/newui-mic-prompt.png' });
+  await page.keyboard.press('Enter');
+  await expect.poll(() => page.evaluate(() => (window as any).__shout?.grade ?? null), { timeout: 10_000 }).toBe('good');
+  await expect(mic).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 
