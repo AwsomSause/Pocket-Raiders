@@ -33,7 +33,7 @@ function hazard(h: Hazard): Json {
   const key = h.id.replace(/^wx-/, '');
   const use = (u: Use): Json => {
     const fx = [...answered(key, u.types), ...(u.fx ?? [])];
-    return ch(`${u.label} (${u.types.map((t) => t[0].toUpperCase() + t.slice(1)).join(' or ')})`, out(u.text, ...fx), {
+    return ch(`${u.label} (${u.types.map((t) => t.charAt(0).toUpperCase() + t.slice(1)).join(' or ')})`, out(u.text, ...fx), {
       requires: [anyType(...u.types)],
       branches: [br([is('hazard-answered', 9), not('pathfinder')], `${u.text} On the far side, someone you have never met stops you with a hand on your arm. "That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it." They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.`, ...fx, PATHFINDER, flag('pathfinder'), moment('Your lead earned the Pathfinder ribbon: ten hazards answered, and everyone walked through', 70))],
     });
