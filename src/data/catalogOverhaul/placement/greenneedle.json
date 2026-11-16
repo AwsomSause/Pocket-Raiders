@@ -4739,5 +4739,71 @@
   "stages": [
    1
   ]
+ },
+ "gn-new-20-ranch": {
+  "gn": "gn.new.20",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 6,
+  "window": [
+   4,
+   11
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+0 if the dam is broken (a Bibarel and three Bidoof)",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Drought Ranch",
+   "elsewhere": "The Drought Ranch"
+  },
+  "note": "Badge: a water drop. Home step 6, fallback step 11. \"Move the colony\" spends the next node, \"Dig a channel\" the next two (a Ground- or Water-type needed). Dug: a Fresh Milk at every rest this region. Broken: sets bibarel-dam-broken (gn.55 reads it).",
+  "kinds": [
+   "Moral Choice"
+  ],
+  "tags": [
+   "forest"
+  ]
+ },
+ "gn-new-20-road": {
+  "gn": "gn.new.20",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 9,
+  "window": [
+   7,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: three thin Bidoof on the road a stage later, only if the dam was broken.",
+  "kinds": [
+   "Moral Choice"
+  ],
+  "tags": []
+ },
+ "gn-new-20-later": {
+  "gn": "gn.new.20",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 6,
+  "window": [
+   2,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: a Bibarel building by a road in a later region of the same run; broken: it stops and watches.",
+  "kinds": [
+   "Moral Choice"
+  ],
+  "tags": []
  }
 }

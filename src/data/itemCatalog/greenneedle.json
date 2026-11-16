@@ -418,5 +418,25 @@
       "kind": "ability",
       "mode": "hidden"
     }
+  },
+  {
+    "id": "fresh-milk",
+    "name": "Fresh Milk",
+    "family": "Healing and status items",
+    "description": "Heals 60 HP, +1 Love. From the ranch you gave water to",
+    "rarity": "uncommon",
+    "stacksOn": "pokemon",
+    "max": null,
+    "how": "use",
+    "icon": "moomoo-milk",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "care",
+      "heal": 60,
+      "changes": {
+        "love": 1
+      }
+    }
   }
 ]
