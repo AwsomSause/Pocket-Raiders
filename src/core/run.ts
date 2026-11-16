@@ -243,6 +243,7 @@ import { allyLevel, applyTotemHp, describeAlly, describeTotemRewards, freshTotem
 import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { lastChanceRevive } from './lastChance';
+import { reverseSideProblem, useReverseSide } from './legends/reverseSide';
 import { assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor, syncCommunion } from './blessings';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
 import { closeNodeMenu, freshNodeMenuState, menuBlocker, nodeMenusAllowed } from './nodeMenu/flow';
@@ -3289,6 +3290,13 @@ function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng,
   const problem = itemProblem(battleContext(content, run, rng, captureRng, hyperRng), itemId);
   if (problem) throw new Error(problem);
   consumeItem(run.inventory, itemId);
+  slipOutOfBattle(content, run, battle);
+  const events: RunEvent[] = [{ type: 'spectacle', kind: 'arena', side: 'player', text: 'You used a Poké Doll and slipped away!' } as RunEvent];
+  return { run, events, end: null, defeated: false, cues: [], drama: [], escaped: true };
+}
+
+/** Leaves a battle with nothing earned or lost and back on the map (the Poké Doll, the Renegade's Reverse Side). Mutates `run`. */
+function slipOutOfBattle(content: Content, run: RunState, battle: BattleState): void {
   revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
   coFled(run);
   for (const mon of run.party) endHeldBattle(mon);
@@ -3297,8 +3305,26 @@ function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng,
   endHyperMoves(run, false);
   run.battle = null;
   run.phase = 'map';
-  const events: RunEvent[] = [{ type: 'spectacle', kind: 'arena', side: 'player', text: 'You used a Poké Doll and slipped away!' } as RunEvent];
-  return { run, events, end: null, defeated: false, cues: [], drama: [], escaped: true };
+}
+
+/**
+ * The Renegade's blessing (legends row B): step out of a battle that is not a boss's, once per stage. The battle ends with nothing won
+ * or lost and the node opens again from its other side: a Distortion pseudo-stage's gate beside it (core/legends/reverseSide.ts).
+ * Null when it can't be used here.
+ */
+export function stepToReverseSide(content: Content, current: RunState): { run: RunState; message: string } | null {
+  if (reverseSideProblem(current) !== null) return null;
+  const run = structuredClone(current);
+  slipOutOfBattle(content, run, run.battle!);
+  const gate = useReverseSide(run);
+  const stage = run.stage;
+  if (gate && stage && stage.current !== null && content.events.has(gate)) {
+    const here = findNode(stage.map, stage.current);
+    here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: gate });
+    if (run.itemCounters) delete run.itemCounters[`event-seen:${gate}`];
+    return { run, message: 'You step sideways out of the fight. The node is still here, but from the other side, and something else waits in it.' };
+  }
+  return { run, message: 'You step sideways out of the fight, and back onto the path.' };
 }
 
 export function takeTurn(content: Content, current: RunState, action: PlayerAction, dialogue: DialogueFrequency = 'normal'): TurnResult {

@@ -690,6 +690,15 @@ export class GameSession {
     return true;
   }
 
+  /** The Renegade's blessing: steps out of this battle to the node's other side (core/legends/reverseSide.ts). The message, or null when it can't be used. */
+  reverseSide(): string | null {
+    const result = Run.stepToReverseSide(this.content, this.requireRun());
+    if (!result) return null;
+    this.run = result.run;
+    this.persistRun();
+    return result.message;
+  }
+
   /** Beta 0.7 Legendary Blessings: uses the run's Rite (Tapu Lele's heal, Dialga's stage rewind). Returns the message, or null when it can't be used. */
   useBlessingRite(): string | null {
     const result = useBlessingRite(this.content, this.requireRun());

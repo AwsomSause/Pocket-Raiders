@@ -253,7 +253,36 @@
         "classId": "psychic",
         "name": "Distortion Shade",
         "size": 4
-      }
+      },
+      "rare": [
+        "giratina"
+      ],
+      "remembers": [
+        {
+          "id": "guidance",
+          "when": [
+            {
+              "kind": "flag",
+              "key": "wre-giratina",
+              "atLeast": 1,
+              "atMost": 99
+            }
+          ],
+          "notice": "Ash handprints on the stones at the edge, each one the size of a hand held open. The Distortion Division has been here. This is one of their rifts, and it is still open."
+        },
+        {
+          "id": "renegade",
+          "when": [
+            {
+              "kind": "flag",
+              "key": "blessing-giratina",
+              "atLeast": 1,
+              "atMost": 99
+            }
+          ],
+          "notice": "The cracked mirror in your bag shows this same place, from the other side. It has been waiting for you."
+        }
+      ]
     },
     {
       "id": "ps_evil_hideout",
@@ -332,9 +361,9 @@
       "wild": [
         "drowzee",
         "munna",
-        "cresselia",
         "gothita",
-        "spoink"
+        "spoink",
+        "hypno"
       ],
       "nodes": [
         {
@@ -380,7 +409,77 @@
       "countsAsStage": false,
       "status": "limited",
       "trainerClass": "veteran",
-      "intro": "Everything is soft and slightly the wrong size."
+      "intro": "Everything is soft and slightly the wrong size.",
+      "extras": [
+        {
+          "node": "d",
+          "choice": {
+            "label": "Follow the crescent light",
+            "success": {
+              "text": "A shape like a crescent moon drifts between the clouds. It turns to look at you, and the dream goes quiet and clear.",
+              "effects": [],
+              "battle": {
+                "kind": "wild",
+                "pseudo": true,
+                "species": [
+                  "cresselia"
+                ],
+                "types": [],
+                "levelBonus": 4,
+                "shinyMultiplier": 2,
+                "win": [
+                  {
+                    "kind": "flag",
+                    "key": "sign-cresselia",
+                    "amount": 1
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "node": "d",
+          "choice": {
+            "label": "Turn toward the nightmare",
+            "success": {
+              "text": "The clouds go black at the edges. A shadow with one blue eye stands where the path ends, and the dream turns cold.",
+              "effects": [],
+              "battle": {
+                "kind": "wild",
+                "pseudo": true,
+                "species": [
+                  "darkrai"
+                ],
+                "types": [],
+                "levelBonus": 4,
+                "shinyMultiplier": 2,
+                "win": [
+                  {
+                    "kind": "flag",
+                    "key": "telling-darkrai",
+                    "amount": 1
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "remembers": [
+        {
+          "id": "moon",
+          "when": [
+            {
+              "kind": "flag",
+              "key": "telling-darkrai",
+              "atLeast": 1,
+              "atMost": 99
+            }
+          ],
+          "notice": "You have heard of the one who brings bad dreams. Tonight, you think, it has heard of you."
+        }
+      ]
     },
     {
       "id": "ps_distortion_world",
@@ -453,7 +552,36 @@
         "classId": "hex-maniac",
         "name": "Reverse Keeper",
         "size": 5
-      }
+      },
+      "rare": [
+        "giratina"
+      ],
+      "remembers": [
+        {
+          "id": "guidance",
+          "when": [
+            {
+              "kind": "flag",
+              "key": "wre-giratina",
+              "atLeast": 1,
+              "atMost": 99
+            }
+          ],
+          "notice": "Someone has painted the old man's words on the rock in grey ash: O PRAISE BE THE DISTORTION. The paint runs upward. This is the Division's rift, and the place behind the world is just past it."
+        },
+        {
+          "id": "renegade",
+          "when": [
+            {
+              "kind": "flag",
+              "key": "blessing-giratina",
+              "atLeast": 1,
+              "atMost": 99
+            }
+          ],
+          "notice": "This is the Reverse Side. You know the way in, because it showed you. Something very large turns over in its sleep."
+        }
+      ]
     },
     {
       "id": "ps_ancient_wilds",
@@ -465,11 +593,15 @@
       "themeId": "grass-rock",
       "entry": "event: Ancient Discovery",
       "wild": [
+        "great-tusk",
+        "scream-tail",
+        "brute-bonnet",
+        "flutter-mane",
+        "slither-wing",
+        "sandy-shocks",
+        "roaring-moon",
         "tyrunt",
-        "amaura",
-        "kabuto",
-        "omanyte",
-        "aron"
+        "amaura"
       ],
       "nodes": [
         {
@@ -514,7 +646,24 @@
       "countsAsStage": false,
       "status": "limited",
       "trainerClass": "veteran",
-      "intro": "Ferns taller than houses. Something very old watches."
+      "intro": "Ferns taller than houses. Something very old watches.",
+      "rare": [
+        "koraidon"
+      ],
+      "remembers": [
+        {
+          "id": "paldea",
+          "when": [
+            {
+              "kind": "region",
+              "ids": [
+                "paldea"
+              ]
+            }
+          ],
+          "notice": "Below the rim, the crater of Area Zero falls away into green. Something down there roars, and it is not any Pokémon in the Pokédex."
+        }
+      ]
     },
     {
       "id": "ps_celestial_expanse",
@@ -529,7 +678,10 @@
         "minior",
         "clefairy",
         "elgyem",
-        "munna"
+        "munna",
+        "beldum",
+        "lunatone",
+        "solrock"
       ],
       "nodes": [
         {
@@ -567,7 +719,48 @@
       "countsAsStage": false,
       "status": "limited",
       "trainerClass": "veteran",
-      "intro": "A stair of light across a sky with no ground."
+      "intro": "A stair of light across a sky with no ground.",
+      "rare": [
+        "rayquaza",
+        "deoxys"
+      ],
+      "extras": [
+        {
+          "node": "c",
+          "choice": {
+            "label": "Climb past the last star",
+            "requires": [
+              {
+                "kind": "flag",
+                "key": "faller-rank",
+                "atLeast": 3,
+                "atMost": 99
+              }
+            ],
+            "success": {
+              "text": "The stair keeps going where the stars stop. At the top, the sky tears like paper, and on the other side is somebody else's world.",
+              "effects": [
+                {
+                  "kind": "addEventFrom",
+                  "ids": [
+                    "ultra-home-ub-symbiont",
+                    "ultra-home-ub-absorption",
+                    "ultra-home-ub-beauty",
+                    "ultra-home-ub-lighting",
+                    "ultra-home-ub-blaster",
+                    "ultra-home-ub-blade",
+                    "ultra-home-ub-glutton",
+                    "ultra-home-ub-assembly",
+                    "ultra-home-ub-burst",
+                    "ultra-home-ub-adhesive",
+                    "ultra-home-ub-stinger"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
     },
     {
       "id": "ps_lost_island",
