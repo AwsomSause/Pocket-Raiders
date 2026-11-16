@@ -7611,6 +7611,380 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-29-town",
+   "name": "The Psyduck Migration",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Region"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "psyduck-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bridge",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kanto-bridge-fell",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Mrs. Quimby:** \"The bridge is out. Some fool went through it last week.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "psyduck",
+    "tint": "#d9b84a",
+    "effect": "none"
+   },
+   "intro": "*Psyduck in the road. Psyduck in the fountain. A Psyduck on a roof, with no clear idea how.*\n\n*A bench slides three feet to the left by itself. A lamp post bends, politely.*\n\n**Mayor, Mrs. Quimby:** \"They come through every year, on the way to the lake. They've always gone *round.* This year the bridge is out, so they've come *through,* and they've all got headaches.\"\n\n**Mrs. Quimby:** \"They'll follow anything that walks in a straight line. We haven't got anyone who can.\"",
+   "choices": [
+    {
+     "label": "I'll lead them.",
+     "success": {
+      "text": "Mrs. Quimby claps her hands once. \"Splendid. Mind the flower pots.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "psyduck-at"
+       },
+       {
+        "kind": "flag",
+        "key": "psyduck-led",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-psyduck"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why do they have headaches?",
+     "success": {
+      "text": "**Mrs. Quimby:** \"They always have headaches, dear. It's what they *are.*\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "psyduck-why",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-29-town"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "psyduck-why",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Not my ducks.",
+     "success": {
+      "text": "You walk on. Behind you, a lamp post bends to let a Psyduck past.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "psyduck-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-29-lake",
+   "name": "The Lake",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Region"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "psyduck",
+    "tint": "#d9b84a",
+    "effect": "none"
+   },
+   "intro": "*The line reaches the water. One by one, they walk in. The headaches go.*\n\n*Thirty Psyduck float, perfectly still, facing the same way.*\n\n*One doesn't go in. It's the one that was at the very back. It's looking at you, and holding its head.*",
+   "choices": [
+    {
+     "label": "Kneel down to it.",
+     "success": {
+      "text": "It walks into your arms and leans its whole head against you. It still hurts. It doesn't seem to mind so much now.\n\nMrs. Quimby presses a bottle of Ibuprofen into your hand. \"For the little one. It isn't medicine, dear. It's a *gesture.*\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "psyduck"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "headache",
+        "mark": "psyduck-headache"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "psyduck-joined",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "psyduck-ibuprofen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-knocked",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "psyduck-hat",
+          "amount": 1
+         }
+        ],
+        "text": "Nothing knocked over. Mrs. Quimby gives you a Rare item from the town hall, and her own hat. It doesn't fit. She insists."
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "psyduck-few",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "psyduck-knocked",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "psyduck-cake",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-few",
+        "min": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         }
+        ],
+        "text": "A few things knocked over. The town gives you a Berry bundle anyway, a little stiffly."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-cake",
+        "min": 1,
+        "then": [],
+        "text": "The wedding cake. Nothing extra. The couple are laughing about it, eventually."
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "psyduck-rounds",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Let it find its own way in.",
+     "success": {
+      "text": "It looks at the water. It looks at you. In the end, it walks in backwards, still holding its head.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-knocked",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "psyduck-hat",
+          "amount": 1
+         }
+        ],
+        "text": "Nothing knocked over. Mrs. Quimby gives you a Rare item from the town hall, and her own hat. It doesn't fit. She insists."
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "psyduck-few",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "psyduck-knocked",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "psyduck-cake",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-few",
+        "min": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "persim-berry"
+          ]
+         }
+        ],
+        "text": "A few things knocked over. The town gives you a Berry bundle anyway, a little stiffly."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "psyduck-cake",
+        "min": 1,
+        "then": [],
+        "text": "The wedding cake. Nothing extra. The couple are laughing about it, eventually."
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "psyduck-rounds",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Leave them at the edge of town.",
+     "success": {
+      "text": "They sit down where you left them. The town walks them the rest of the way, slowly, one Psyduck at a time.",
+      "effects": []
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "psyduck-rounds",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    }
+   ]
   }
  ]
 }

@@ -1743,6 +1743,27 @@
   ],
   "tags": []
  },
+ "gn-29-town": {
+  "gn": "gn.29",
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "No battle",
+  "often": "region",
+  "badge": "own",
+  "note": "Badge: a small duck. At the town; until towns exist, step 5. Snake in three rounds (core/greenneedle/snake.ts).",
+  "kinds": [
+   "Hub Destination",
+   "Minigame"
+  ],
+  "tags": []
+ },
  "gn-27-gate": {
   "gn": "gn.27",
   "shape": "Single",

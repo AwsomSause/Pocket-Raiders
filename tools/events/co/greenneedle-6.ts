@@ -549,8 +549,53 @@ function exec(extra: Json[]): Json {
   return { ...foe('executive', '{lt}', 3, { pseudo: true, lv: 2, win: [flag('hideout-exec-beaten'), ...extra, { kind: 'addEvent', eventId: 'gn-28-reward' }] }), lose: THROWN_OUT };
 }
 
+// =====================================================================================================================
+// gn.29  THE PSYDUCK MIGRATION  (a town stop, step 5 until towns exist, optional, instead of the battle; A2; once a region).
+// Snake: the minigame `gn-psyduck` (core/greenneedle/snake.ts); the lake opens when it ends (snakeEnd.ts).
+// =====================================================================================================================
+const DUCK_TINT = '#d9b84a';
+const duckTown = (o: Json = {}): Json => ({ tint: DUCK_TINT, tags: ['Pokémon', 'Region'], effect: 'none', pokemon: 'psyduck', ...o });
+const BERRY_BUNDLE: Json[] = [{ kind: 'itemFrom', ids: ['oran-berry', 'sitrus-berry', 'lum-berry', 'persim-berry'] }, { kind: 'itemFrom', ids: ['oran-berry', 'sitrus-berry', 'lum-berry', 'persim-berry'] }, { kind: 'itemFrom', ids: ['oran-berry', 'sitrus-berry', 'lum-berry', 'persim-berry'] }];
+/** What the town gives: nothing knocked over, a Rare item (and the mayor's hat); a few, a Berry bundle; the wedding cake, nothing extra. */
+const THANKS: Json[] = [
+  when('psyduck-knocked', { min: 0, max: 0 }, [{ kind: 'itemFrom', ids: RARE_HELD }, flag('psyduck-hat')], 'Nothing knocked over. Mrs. Quimby gives you a Rare item from the town hall, and her own hat. It doesn\'t fit. She insists.'),
+  gn('check', { key: 'psyduck-few', if: [is('psyduck-knocked', 1), not('psyduck-cake')] }),
+  when('psyduck-few', { min: 1 }, BERRY_BUNDLE, 'A few things knocked over. The town gives you a Berry bundle anyway, a little stiffly.'),
+  when('psyduck-cake', { min: 1 }, [], 'The wedding cake. Nothing extra. The couple are laughing about it, eventually.'),
+];
+/** Ibuprofen is a one-of-a-kind keepsake: cut with the Keepsakes (Kice, Nov 13). The text keeps it. */
+const IBUPROFEN = 'Mrs. Quimby presses a bottle of Ibuprofen into your hand. "For the little one. It isn\'t medicine, dear. It\'s a *gesture.*"';
 
-export const EVENTS: Json[] = [...gn26, ...gn27, ...gn28];
+const gn29: Json[] = [
+  gev('gn-29-town', 'The Psyduck Migration', duckTown({
+    stop: 'event', rarity: 'uncommon', requires: [notThisRegion('psyduck-at')],
+    remembers: [{ id: 'bridge', when: [is('kanto-bridge-fell')], notice: '**Mrs. Quimby:** "The bridge is out. Some fool went through it last week."' }],
+  }), say(
+    '*Psyduck in the road. Psyduck in the fountain. A Psyduck on a roof, with no clear idea how.*',
+    '*A bench slides three feet to the left by itself. A lamp post bends, politely.*',
+    '**Mayor, Mrs. Quimby:** "They come through every year, on the way to the lake. They\'ve always gone *round.* This year the bridge is out, so they\'ve come *through,* and they\'ve all got headaches."',
+    '**Mrs. Quimby:** "They\'ll follow anything that walks in a straight line. We haven\'t got anyone who can."',
+  ), [
+    ch('I\'ll lead them.', out('Mrs. Quimby claps her hands once. "Splendid. Mind the flower pots."', stampRegion('psyduck-at'), flag('psyduck-led'), gn('minigame', { key: 'gn-psyduck' }))),
+    chIf([not('psyduck-why')], 'Why do they have headaches?', out('**Mrs. Quimby:** "They always have headaches, dear. It\'s what they *are.*"', flag('psyduck-why'), scene('gn-29-town'))),
+    ch('Not my ducks.', out('You walk on. Behind you, a lamp post bends to let a Psyduck past.', stampRegion('psyduck-at'))),
+  ]),
+  gev('gn-29-lake', 'The Lake', duckTown({ room: true, tags: ['Pokémon', 'Region'] }), say(
+    '*The line reaches the water. One by one, they walk in. The headaches go.*',
+    '*Thirty Psyduck float, perfectly still, facing the same way.*',
+    '*One doesn\'t go in. It\'s the one that was at the very back. It\'s looking at you, and holding its head.*',
+  ), [
+    chIf([is('psyduck-rounds', 3)], 'Kneel down to it.', out(say(
+      'It walks into your arms and leans its whole head against you. It still hurts. It doesn\'t seem to mind so much now.',
+      IBUPROFEN,
+    ), { ...join({ species: ['psyduck'] }), ability: 'headache', mark: 'psyduck-headache' }, setTo('psyduck-joined', 1), flag('psyduck-ibuprofen'), ...THANKS)),
+    chIf([is('psyduck-rounds', 3)], 'Let it find its own way in.', out('It looks at the water. It looks at you. In the end, it walks in backwards, still holding its head.', ...THANKS)),
+    chIf([is('psyduck-rounds', 0, 2)], 'Leave them at the edge of town.', out('They sit down where you left them. The town walks them the rest of the way, slowly, one Psyduck at a time.')),
+  ]),
+];
+
+
+export const EVENTS: Json[] = [...gn26, ...gn27, ...gn28, ...gn29];
 
 export const REMOVE: string[] = [];
 
@@ -564,6 +609,10 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.28', shape: 'Door', earliest: 'A6', home: 14, window: [12, 17], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Evil Team'],
     level: 'Grunts A+0; the Executive A+2', often: 'run', badge: 'own', dressing: { kanto: 'Under the Celadon Game Corner: the Rocket Hideout', elsewhere: 'The {team} Hideout' },
     note: 'Badge: a red R (a "?" until the team is known). Four floors: Offices, Labs, Holding, the Vault. The Hideout of the evil-team story (step 7), written out as a stage of its own.',
+  },
+  'gn-29-town': {
+    gn: 'gn.29', shape: 'Single', earliest: 'A2', home: 5, window: [3, 8], sits: 'optional', attaches: 'instead', tags: ['Hub Destination', 'Minigame'], level: 'No battle', often: 'region', badge: 'own',
+    note: 'Badge: a small duck. At the town; until towns exist, step 5. Snake in three rounds (core/greenneedle/snake.ts).',
   },
   'gn-27-gate': {
     gn: 'gn.27', shape: 'Single', earliest: 'A4', home: 10, window: [8, 13], sits: 'optional', attaches: 'town', tags: ['Hub Destination'], level: 'The arena and the owner A+0', often: 'region', badge: 'own',

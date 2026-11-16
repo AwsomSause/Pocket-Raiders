@@ -4952,6 +4952,13 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
       applyStageChange(ctx, target, 'atk', 1, events);
       applyStageChange(ctx, target, 'spe', 1, events);
     }
+    // Headache (Greenneedle gn.29): a critical or super-effective hit: Sp. Atk +1, up to +2 a battle.
+    if (holder === 'headache' && target.mon.hp > 0 && move.category !== 'status' && ctx.battle.storyEffects.filter((t) => t === `headache:${target.mon.uid}`).length < 2
+      && (crit || typeEffectiveness(ctx.content.typeChart, moveType, battleTypes(ctx.content, ctx.battle, target.mon)) > 1)) {
+      ctx.battle.storyEffects.push(`headache:${target.mon.uid}`);
+      announce(target, holder, events);
+      applyStageChange(ctx, target, 'spa', 1, events);
+    }
     if (holder === 'anger-point' && crit && target.stages.atk < 6) {
       announce(target, holder, events);
       applyStageChange(ctx, target, 'atk', 12, events);

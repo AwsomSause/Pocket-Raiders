@@ -9,6 +9,7 @@ import { FRONTIER_GAMES } from './frontier';
 import { MINIGAMES_2 } from './games2';
 import { MINIGAMES_3 } from './games3';
 import { SAFARI_GAMES } from '../greenneedle/safari';
+import { SNAKE_GAMES } from '../greenneedle/snake';
 
 export interface Cell {
   id: string;
@@ -852,6 +853,7 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   ...MINIGAMES_3,
   ...FRONTIER_GAMES,
   ...SAFARI_GAMES,
+  ...SNAKE_GAMES,
 };
 
 export function gameModule(id: string): MinigameModule<BaseState> {

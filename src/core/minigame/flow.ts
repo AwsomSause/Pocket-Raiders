@@ -11,6 +11,8 @@ import { gameModule, type MinigameView } from './games';
 import type { Medal, MinigameDef } from './schema';
 import { SAFARI_ID, type SafariState } from '../greenneedle/safari';
 import { safariBegin, safariFinish } from '../greenneedle/safariEnd';
+import { SNAKE_ID, type SnakeState } from '../greenneedle/snake';
+import { psyduckBegin, psyduckFinish } from '../greenneedle/snakeEnd';
 
 export function getMinigame(content: Content, id: string): MinigameDef {
   const g = content.minigames.games.find((m) => m.id === id);
@@ -59,6 +61,7 @@ export function beginMinigame(content: Content, current: RunState, sideId: strin
   const rs = new Rng(hashSeed(`${run.seed}::minigame::${stage.index}:${sideId}:${used}:${tier}`)).state;
   run.minigame = { id: def.id, sideId, tier, state: gameModule(def.id).start(content, { ...def.difficultyTiers[tier]!.params, ...conditionParams(run) }, rs), outcome: null };
   if (def.id === SAFARI_ID) safariBegin(content, run, run.minigame.state as SafariState);
+  if (def.id === SNAKE_ID) psyduckBegin(run, run.minigame.state as SnakeState);
   run.phase = 'minigame';
   return run;
 }
@@ -117,6 +120,7 @@ function settle(content: Content, run: RunState): RunState {
   const { score, max } = mod.result(s.state as never);
   s.outcome = payout(content, run, getMinigame(content, s.id), s.tier, score, max);
   if (s.id === SAFARI_ID) s.outcome.lines.push(...safariFinish(content, run, s.state as SafariState));
+  if (s.id === SNAKE_ID) s.outcome.lines.push(...psyduckFinish(content, run, s.state as SnakeState));
   if (s.id === 'berry-blending') {
     const line = poffinConditions(run, s.state as never, s.outcome.medal);
     if (line) s.outcome.lines.push(line);

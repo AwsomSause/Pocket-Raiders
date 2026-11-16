@@ -1585,6 +1585,11 @@
   "description": "When sent out, a random stat rises by two stages (never the same stat twice running, and never more than +4 in total per battle). Its first attack after entering goes first."
  },
  {
+  "id": "headache",
+  "name": "Headache",
+  "description": "When a critical hit or a super-effective move hits it, its Sp. Atk rises by one stage. Up to twice a battle."
+ },
+ {
   "id": "truce",
   "name": "Truce",
   "description": "Paired: works while its partner with Truce is next to it in the party. In a double battle, each takes 25% less damage from moves that hit both. In a single battle, when one faints, the other gains Attack +1 and Speed +1 when it comes in. Once per battle."
