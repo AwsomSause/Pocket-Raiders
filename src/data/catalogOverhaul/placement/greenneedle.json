@@ -1862,5 +1862,32 @@
   "tags": [
    "cave|snow"
   ]
+ },
+ "gn-33-door": {
+  "gn": "gn.33",
+  "shape": "Door",
+  "earliest": "A9",
+  "home": 12,
+  "window": [
+   10,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+1; the Relicanth A+2",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "Off the Seafoam coast: the Sunken City",
+   "elsewhere": "The Sunken City"
+  },
+  "note": "Badge: a drowned tower. Three districts in any order, then the archive. A causeway at low tide, a dive at high. \"Once per save\" is once per run (no memory across runs).",
+  "kinds": [
+   "Pseudo Stage",
+   "Mystery"
+  ],
+  "tags": [
+   "water"
+  ]
  }
 }

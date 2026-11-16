@@ -17,6 +17,7 @@ import { bondLevel, firstCatch } from '../co/who';
 import { NATURE_IDS } from '../natures';
 import { fnv1a } from '../expansion/hash';
 import { crystalOp, golemStart } from './crystals';
+import { tideOf } from '../clock';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -107,6 +108,9 @@ export interface GnHost {
 /** A Greenneedle condition. */
 export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage: number): boolean {
   // gn.16: the fighter won from behind (the first Pokémon able to fight is at half its HP or less).
+  // gn.33: the tide is low (the Sunken City's causeway is out of the water).
+  if (c.test === 'lowTide') return tideOf(content, run) === 'low';
+  if (c.test === 'highTide') return tideOf(content, run) === 'high';
   if (c.test === 'hurtLead') { const lead = run.party.find((m) => m.hp > 0); return !!lead && lead.hp * 2 <= maxHp(content, lead); }
   if (c.test === 'lookAtLevel') return run.party.some((m) => !!m.look && c.types!.includes(m.look) && m.level >= gnFlag(run, c.key!));
   if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');

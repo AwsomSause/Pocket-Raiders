@@ -1,7 +1,7 @@
 // Greenneedle, part 7: gn.31 The Forgotten Forest (doc GREENNEEDLE_REWORKED_PLACED_7.md).
 // Build: npm run co:build -- greenneedle-7   then   npm run co:gn
-import { anyType, ch, fight, flag, item, join, out, wild, type Json } from '../dsl.ts';
-import { chIf, exactly, gev, gn, inside, is, leavePseudo, moment, not, pick, rm, roll, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
+import { anyType, ch, fight, flag, item, join, out, takeNode, wild, type Json } from '../dsl.ts';
+import { chIf, exactly, gev, gn, inside, is, laterStage, leavePseudo, moment, not, pick, rm, roll, say, scene, setTo, stampRegion, stampStage, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -346,7 +346,184 @@ const gn32: Json[] = [
   ] }] }, 'Daylight, at last. Behind you, the hum goes on.', [ch('Step out.', out('The crystals in your bag go quiet the moment the sun touches them.', ...CRYSTAL_DONE))]),
 ];
 
-export const EVENTS: Json[] = [...gn31, ...gn32];
+// =====================================================================================================================
+// gn.33  THE SUNKEN CITY  (a door at step 12 needing water: a causeway at low tide, a dive at high; A9; then a Pseudo Stage:
+// three districts in any order, then the archive). Nobody drowned. The water rose for a hundred years and they left in good
+// order, and left one thing behind on purpose. The game never says it in words. Bronze wheels drain or flood a room. Water-types
+// swim the flooded stairs; without one, each crossing takes a node going round. The Relicanth guards every name.
+// =====================================================================================================================
+const SUNK_TINT = '#2d6e7a';
+const sea = (o: Json = {}): Json => ({ tint: SUNK_TINT, tags: ['Pokémon', 'Exploration', 'Mystery'], effect: 'none', ...o });
+const street = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, sea(o), intro, choices);
+const LOW_TIDE: Json = { kind: 'gn', test: 'lowTide' };
+const HIGH_TIDE: Json = { kind: 'gn', test: 'highTide' };
+/** Crossing the flooded stairs: free with a Water-type (or the flooded lower houses' shortcut); else a node going round. */
+const CROSS: Json[] = [
+  gn('check', { key: 'sunken-swim', if: [anyType('water')] }), setTo('sunken-cost', 1),
+  when('sunken-swim', { min: 1 }, [setTo('sunken-cost', 0)]), when('sunken-shortcut', { min: 1 }, [setTo('sunken-cost', 0)]),
+  when('sunken-cost', { min: 1 }, [takeNode(1)], 'No Water-type to swim the flooded stairs. You go the long way round, over the roofs. It takes a while.'),
+];
+/** A district seen. All three: one Notebook line, and only one. */
+const visit = (key: string): Json[] => [
+  when(key, { min: 0, max: 0 }, [flag('sunken-districts')]), setTo(key, 1),
+  gn('check', { key: 'sunken-notebook', if: [is('sunken-districts', 3), not('sunken-had-time')] }),
+  when('sunken-notebook', { min: 1 }, [flag('sunken-had-time'), moment('They had time.', 80)], '*In your Notebook, in your own hand: They had time.*'),
+];
+const go = (label: string, key: string, room: string, text: string): Json => ch(label, out(text, ...CROSS, ...visit(key), scene(room)));
+const STAIRS = (text = 'Back up the stairs.'): Json => ch('Back to the stairs.', out(text, scene('gn-33-stairs')));
+/** Put an object back where it belongs. The Relicanth watches each one. */
+const putBack = (key: string, label: string, text: string): Json => chIf([is(`sunken-${key}`), not(`sunken-${key}-back`)], label, out(text, flag(`sunken-${key}-back`), flag('sunken-returned'), scene(`gn-33-${key === 'weight' ? 'market' : key === 'boat' ? 'houses' : 'archive'}`)));
+const BOAT_LIGHT = { id: 'lantern', when: [is('lantern-boat')], notice: '*Once, at the Lantern Sea, you floated a boat. Below the windowsill, in the dark water, something is waiting to light the way.*' };
+const SUNKEN_DONE: Json[] = [flag('sunken-done'), stampStage('sunken-at'), leavePseudo()];
+
+const gn33: Json[] = [
+  gev('gn-33-door', 'The Sunken City', sea({ stop: 'event', rarity: 'rare', types: ['water'], pokemon: 'relicanth', requires: [not('sunken-done'), not('sunken-entered')] }), say(
+    'Off the shore, the tops of towers. A whole city, under clear water, laid out like a map of itself.',
+    'The fishermen don\'t go near it. "It isn\'t haunted," one says. "It\'s just *somebody\'s.*"',
+  ), [
+    chIf([LOW_TIDE], 'Walk the causeway.', out('At low tide the old causeway is out of the water, stone by stone. You walk out to the towers.', flag('sunken-entered'), setTo('sunken-districts', 0), setTo('sunken-returned', 0), cw('gn-33-stairs'))),
+    chIf([HIGH_TIDE, anyType('water')], 'Dive.', out('The tide is in. You go down with your Water-type, past the tops of the towers, into the streets.', flag('sunken-entered'), setTo('sunken-districts', 0), setTo('sunken-returned', 0), cw('gn-33-stairs'))),
+    chIf([HIGH_TIDE], 'Wait for low tide.', out('You sit on the rocks and wait. The sea goes out slowly. The causeway comes up stone by stone.', takeNode(1), flag('sunken-entered'), setTo('sunken-districts', 0), setTo('sunken-returned', 0), cw('gn-33-stairs'))),
+    ch('Walk on.', out('The towers go under as the tide turns.')),
+  ]),
+  // ---- The flooded stairs, where the three districts meet ----
+  street('gn-33-stairs', 'The Sunken City: The Stairs', { pokemon: 'relicanth' }, say(
+    'A wide stair, going down into green water, where three districts meet.',
+    'There is no narrator here, and nobody to ask. Just the streets.',
+  ), [
+    go('The Market.', 'sunken-market', 'gn-33-market', 'You go down toward the stalls.'),
+    go('The Houses.', 'sunken-houses', 'gn-33-houses', 'You go along a street of doorways.'),
+    go('The Temple.', 'sunken-temple', 'gn-33-temple', 'You go toward the dome.'),
+    chIf([{ kind: 'anyFlag', keys: ['sunken-key', 'sunken-bell'] }], 'Down to the archive.', out('Below the temple, a round door.', cw('gn-33-archive'))),
+  ]),
+  // ---- The Market ----
+  street('gn-33-market', 'The Sunken City: The Market', { pokemon: 'corsola' }, say(
+    '*Stalls, under four fathoms of clear water. Weights on the scales. Baskets stacked. A broom leaning where someone left it.*',
+    'It\'s laid out as if for tomorrow. Nothing is overturned. Nothing was dropped.',
+    'A Corsola sits behind one counter, a Krabby behind another, like shopkeepers waiting to open.',
+  ), [
+    ch('Look round the stalls.', fight('The shopkeepers don\'t like browsers.', inside({ ...wild({ species: ['corsola', 'krabby', 'staryu'], lv: 1, win: [scene('gn-33-market')] }), caught: [scene('gn-33-market')], exact: true, lose: [scene('gn-33-market')] }))),
+    ch('Turn the Market\'s bronze wheel.', out('It\'s stiff, but it moves. Something below the stalls clanks awake.', scene('gn-33-wheel-m'))),
+    putBack('weight', 'Put the weight back on the scale.', 'It sits in its pan as if it had never moved. The scale settles, level. Somewhere below, something old turns to watch.'),
+    STAIRS(),
+  ]),
+  street('gn-33-wheel-m', 'The Market: The Wheel', { pokemon: 'krabby' }, 'Two ways to turn it: drain the cellar under the stalls, or flood the square.', [
+    chIf([not('sunken-drain-m')], 'Drain the cellar.', out('The water goes out of the cellar with a long sigh. On the floor, in the silt: a scale-weight, stamped with a fish.', setTo('sunken-drain-m', 1), scene('gn-33-cellar'))),
+    chIf([not('sunken-flood-m')], 'Flood the square.', out('Clean water pours over the square. Your Water-types roll in it like it\'s home.', setTo('sunken-flood-m', 1), { kind: 'heal', share: 1, types: ['water'] }, scene('gn-33-market'))),
+    ch('Leave it.', out('You leave the wheel where it is.', scene('gn-33-market'))),
+  ]),
+  street('gn-33-cellar', 'The Market: The Cellar', { pokemon: 'krabby' }, 'A scale-weight, stamped with a fish. Somebody weighed things fairly here, every day, for a long time.', [
+    ch('Pick it up.', out('It\'s heavier than it looks.', setTo('sunken-weight', 1), scene('gn-33-market'))),
+    ch('Leave it.', out('You leave it in the silt.', scene('gn-33-market'))),
+  ]),
+  // ---- The Houses ----
+  street('gn-33-houses', 'The Sunken City: The Houses', { pokemon: 'staryu' }, say(
+    '*A street of doorways. Beside each door, at shoulder height, marks cut in the stone. A line. A date. Above it, another line. Another date.*',
+    'In one house, a table set for a meal. Under each plate, a sandbag.',
+    'On a windowsill, a child\'s clay boat, pointing out to sea.',
+  ), [
+    ch('Read the marks.', out(say(
+      'High-water marks, carved and dated, each a little higher. The lowest are at the ankle.',
+      'They go up slowly: a hand\'s width in a lifetime.',
+    ), when('sunken-drain-h', { min: 1 }, [setTo('sunken-marks-top', 1)], 'With the street drained you can read them to the top: over the lintel. The last date is very neat.'),
+      when('aqua-flooded', { min: 1 }, [], 'At the very top, one new line. Very recent. Cut by nobody.'), scene('gn-33-houses'))),
+    ch('Turn the Houses\' bronze wheel.', out('It turns. Water moves somewhere behind the walls.', scene('gn-33-wheel-h'))),
+    ch('Go to the windowsill.', out('The clay boat, pointing out to sea.', scene('gn-33-sill'))),
+    STAIRS(),
+  ]),
+  street('gn-33-sill', 'The Houses: The Windowsill', { pokemon: 'staryu', remembers: [BOAT_LIGHT] }, 'A child\'s clay boat on the sill, pointing out to sea. Outside the window, open water.', [
+    chIf([not('sunken-boat')], 'Take the clay boat from the sill.', out('It fits in one hand. Somebody small made it, and pressed their thumb into the bow.', setTo('sunken-boat', 1), scene('gn-33-houses'))),
+    chIf([is('sunken-boat'), not('sunken-boat-back')], 'Set the boat on the water outside the window.', out(say('It floats.', 'It turns, slowly, until it points out to sea, the way it was.'),
+      when('lantern-boat', { min: 1 }, [], 'It goes out through the gate on its own. Something below lights its way.'),
+      flag('sunken-boat-back'), flag('sunken-returned'), scene('gn-33-houses'))),
+    ch('Leave it be.', out('You leave the sill as it is.', scene('gn-33-houses'))),
+  ]),
+  street('gn-33-wheel-h', 'The Houses: The Wheel', { pokemon: 'staryu' }, 'Two ways to turn it: drain the street, or flood the lower houses.', [
+    chIf([not('sunken-drain-h')], 'Drain the street.', out('The street drains. The marks go all the way up, over the lintels, clear and dry.', setTo('sunken-drain-h', 1), scene('gn-33-houses'))),
+    chIf([not('sunken-flood-h')], 'Flood the lower houses.', out('The lower houses fill. Now there\'s a way through them, by swimming, straight to the stairs.', setTo('sunken-flood-h', 1), setTo('sunken-shortcut', 1), scene('gn-33-houses'))),
+    ch('Leave it.', out('You leave it.', scene('gn-33-houses'))),
+    STAIRS('Back along the street.'),
+  ]),
+  // ---- The Temple ----
+  street('gn-33-temple', 'The Sunken City: The Temple', { pokemon: 'relicanth', remembers: [{ id: 'flooded', when: [is('sunken-dome-flooded')], notice: '*The dome is full of water now. The mural shows through it, bright as the day it was painted.*' }] }, say(
+    '*A dome, still whole. Inside, dry air, and a mural that runs all the way round.*',
+  ), [
+    ch('Look at the mural.', out(say(
+      'The mural has the sea drawn inside the walls, and the people walking out. In a line. Carrying things. Children on shoulders. Pokémon beside them.',
+      'Nobody\'s running.',
+      'At the end, the last figure is looking back. It\'s holding something small in both hands. It puts it down.',
+    ), setTo('sunken-mural', 1), scene('gn-33-temple'))),
+    ch('Turn the Temple\'s bronze wheel.', out('It\'s the heaviest of the three.', scene('gn-33-wheel-t'))),
+    STAIRS(),
+  ]),
+  street('gn-33-wheel-t', 'The Temple: The Wheel', { pokemon: 'relicanth' }, 'Two ways to turn it: drain the crypt below, or flood the dome.', [
+    chIf([not('sunken-drain-t')], 'Drain the crypt.', out('The crypt drains. On a hook by the stair, a bronze key, shaped like a coelacanth.', setTo('sunken-drain-t', 1), scene('gn-33-crypt'))),
+    chIf([not('sunken-dome-flooded')], 'Flood the dome.', out('You put your hands on the wheel.', scene('gn-33-flood-1'))),
+    ch('Leave it.', out('You leave it.', scene('gn-33-temple'))),
+  ]),
+  // The game asks twice.
+  street('gn-33-flood-1', 'The Temple: Flood the Dome?', { pokemon: 'relicanth' }, 'The dome is the only dry room in the city. The mural is in it. Flood it?', [
+    ch('Flood it.', out('You lean on the wheel.', scene('gn-33-flood-2'))),
+    ch('No.', out('You take your hands off the wheel.', scene('gn-33-temple'))),
+  ]),
+  street('gn-33-flood-2', 'The Temple: Are You Sure?', { pokemon: 'relicanth' }, 'Somebody painted every one of those people. Are you sure?', [
+    ch('Yes. Flood it.', out(say('The water comes in from the floor up. You watch the paint.', 'It holds. Somebody, a long time ago, made sure it would.'), setTo('sunken-dome-flooded', 1), scene('gn-33-temple'))),
+    ch('No. Leave it dry.', out('You let the wheel go back. The dome stays dry.', scene('gn-33-temple'))),
+  ]),
+  street('gn-33-crypt', 'The Temple: The Crypt', { pokemon: 'relicanth' }, 'A bronze key, shaped like a coelacanth, on its hook. Below the temple, a round door with a slot shaped like a bell.', [
+    ch('Take the key.', out('It\'s cold. The coelacanth\'s eye is a tiny hole, worn smooth by a thumb.', setTo('sunken-key', 1), scene('gn-33-temple'))),
+    ch('Leave it.', out('You leave it on its hook.', scene('gn-33-temple'))),
+  ]),
+  // ---- The archive ----
+  street('gn-33-archive', 'The Sunken City: The Archive', {
+    pokemon: 'relicanth',
+    remembers: [{ id: 'bell', when: [is('sunken-bell'), not('sunken-key')], notice: '*The bell fits the slot exactly. You ring it once, and the door rolls aside.*' }],
+  }, say(
+    '*Shelves cut in the rock. On them, clay tablets, thousands, stacked like plates.*',
+    '*Something very old turns in the water in front of them.*',
+    'An ancient Relicanth. It isn\'t guarding treasure. It\'s guarding the last record of who lived here: every name.',
+  ), [
+    putBack('key', 'Hang the key back on its hook.', 'The key goes back on its hook by the door. The Relicanth watches it settle.'),
+    ch('Wait in front of it.', out('It looks at what you\'ve put back, and what you haven\'t.',
+      gn('check', { key: 'sunken-all-back', if: [is('sunken-returned', 3)] }),
+      when('sunken-all-back', { min: 1 }, [setTo('sunken-relicanth', 1), flag('sunken-relicanth-passed'), scene('gn-33-tablet')], 'After the third, it moves aside.'),
+      when('sunken-all-back', { min: 0, max: 0 }, [setTo('sunken-relicanth', 2), flag('sunken-relicanth-looked'), scene('gn-33-looked')]))),
+    chIf([{ kind: 'anyFlag', keys: ['sunken-weight', 'sunken-boat', 'sunken-key'] }], 'Fight it, with what you took.', fight('It doesn\'t leave the shelves. It doesn\'t need to.', inside({
+      ...wild({ species: ['relicanth'], lv: 2, win: [setTo('sunken-relicanth', 3), flag('sunken-relicanth-fought'), scene('gn-33-sank')] }),
+      exact: true, foeMoves: ['ancient-power', 'head-smash', 'aqua-tail', 'rest'], rule: { noCatch: true },
+      lose: [setTo('sunken-relicanth', 3), flag('sunken-relicanth-fought'), ...SUNKEN_DONE],
+    }))),
+  ]),
+  street('gn-33-tablet', 'The Archive: The Small Tablet', { pokemon: 'relicanth' }, say(
+    '*One tablet\'s been set apart from the others, on a cushion of weed. It\'s small. It fits in both hands.*',
+    '*It\'s the thing the last figure in the mural put down.*',
+  ), [
+    chIf([{ kind: 'item', id: 'relic-crown', absent: true }], 'Take it.', out(say('It\'s cold. It has marks on it that aren\'t writing, yet.', 'Beside it, a little crown, a child\'s, made for a festival that never came again.'),
+      setTo('sunken-tablet', 1), stampStage('sunken-tablet-at'), item('relic-crown'), ...SUNKEN_DONE)),
+    chIf([{ kind: 'item', id: 'relic-crown' }], 'Take it.', out('It\'s cold. It has marks on it that aren\'t writing, yet. You already have the crown that was beside it, once.', setTo('sunken-tablet', 1), stampStage('sunken-tablet-at'), item('relic-vase'), ...SUNKEN_DONE)),
+  ]),
+  street('gn-33-looked', 'The Archive: Look, Don\'t Touch', { pokemon: 'relicanth' }, say(
+    'It lets you look. Not touch.',
+    'Thousands of names. You read a few. They\'re ordinary names.',
+  ), [ch('Go back up.', out('It turns in the water as you go.',
+    when('sunken-returned', { min: 1, max: 1 }, [item('pearl-string')], 'On the stair, as if somebody left it for you: a Pearl String.'),
+    when('sunken-returned', { min: 2, max: 2 }, [item('relic-vase')], 'On the stair, as if somebody left it for you: a Relic Vase.'),
+    ...SUNKEN_DONE))]),
+  street('gn-33-sank', 'The Archive: In the Way', { pokemon: 'relicanth' }, say(
+    'It sinks in front of the shelves. Even now, it\'s in the way.',
+    'You reach past it. The small tablet on its cushion of weed comes away in your hand.',
+  ), [ch('Take it, and go.', out('Nothing stops you. That\'s the worst part.', setTo('sunken-tablet', 1), stampStage('sunken-tablet-at'), ...SUNKEN_DONE))]),
+  // ---- Afterstory: a potter in a later coastal town ----
+  gev('gn-33-potter', 'A Potter\'s Stall', sea({ stop: 'event', rarity: 'uncommon', callback: true, types: ['water'], cast: ['trainer.lady'], requires: [is('sunken-done'), laterStage('sunken-at'), not('sunken-potter')] }), say(
+    'In a coastal town, a potter sells little clay boats to tourists. Each has a thumbprint pressed into the bow.',
+    'She doesn\'t know where the shape comes from. "My grandmother made them," she says. "Her grandmother, too, I think."',
+  ), [
+    ch('Ask where the shape comes from.', out('"From the sea, Gran said. From before." She shrugs, and smiles, and presses her thumb into the next one.', flag('sunken-potter'))),
+    ch('Walk on.', out('You walk on. The boats on her table all point the same way: out to sea.', flag('sunken-potter'))),
+  ]),
+];
+
+export const EVENTS: Json[] = [...gn31, ...gn32, ...gn33];
 
 export const REMOVE: string[] = [];
 
@@ -361,9 +538,15 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'A+1; the Golem A+2', often: 'run', badge: 'own', dressing: { kanto: 'Under Cerulean Cave: the Crystal Caverns', elsewhere: 'The Crystal Caverns' },
     note: 'Badge: a crystal. Six nodes. The Crystal Hollow (SF93) is its front chamber: singing into it opens the Hall of Beams\' door.',
   },
+  'gn-33-door': {
+    gn: 'gn.33', shape: 'Door', earliest: 'A9', home: 12, window: [10, 15], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Mystery'], needs: ['water'],
+    level: 'A+1; the Relicanth A+2', often: 'run', badge: 'own', dressing: { kanto: 'Off the Seafoam coast: the Sunken City', elsewhere: 'The Sunken City' },
+    note: 'Badge: a drowned tower. Three districts in any order, then the archive. A causeway at low tide, a dive at high. "Once per save" is once per run (no memory across runs).',
+  },
 };
 
 export const CHAINS: Json[] = [
+  { id: 'ps_gn_sunken', name: 'The Sunken City', entry: 'gn-33-door', themeId: 'water-ghost', tint: SUNK_TINT, mood: 'sunken city', start: 'opened' },
   { id: 'ps_gn_crystal', name: 'The Crystal Caverns', entry: 'gn-32-door', themeId: 'rock-fairy', tint: CRYSTAL_TINT, mood: 'crystal cave', start: 'opened' },
   { id: 'ps_gn_forest', name: 'The Forgotten Forest', entry: 'gn-31-door', themeId: 'grass-bug', tint: FOREST_TINT, mood: 'ancient forest', start: 'opened' },
 ];

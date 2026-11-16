@@ -8,6 +8,7 @@ import { chooseEvent } from '../../src/core/events';
 import { leavePseudoStage } from '../../src/core/dungeon/pseudo';
 import { ownTypes } from '../../src/core/co/typeShift';
 import { battleTypes } from '../../src/core/battle/transform';
+import { tideOf } from '../../src/core/clock';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { choose, flagOf, gnRun, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
@@ -383,5 +384,133 @@ describe('the kept cavern crystals (gn.32)', () => {
       expect(it.giftOnly).toBe(true);
       expect(it.effect?.kind).toBe('held');
     }
+  });
+});
+
+describe('gn.33 The Sunken City', () => {
+  /** Sets the clock to the tide wanted. */
+  const tide = (run: RunState, want: 'low' | 'high'): void => {
+    for (let tick = 0; tick < 40 && tideOf(content, run) !== want; tick++) run.clock.tick = tick;
+  };
+  const entered = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
+    const run = gnRun(seed);
+    tide(run, 'low');
+    setup(run);
+    open(run, 'gn-33-door');
+    return choose(run, 'gn-33-door', 'Walk the causeway.').run;
+  };
+  const water = (run: RunState): void => {
+    run.party.push(createPokemon(content, 'psyduck', 20, 'p-swim'));
+  };
+
+  it('a door at step 12 needing water (A9): a causeway at low tide, a dive at high (with a Water-type), or wait', () => {
+    expect(content.coPlacement!.get('gn-33-door')).toMatchObject({ home: 12, window: [10, 15], sits: 'optional', attaches: 'instead', earliest: 9, tags: ['water'] });
+    const low = gnRun('t33-low');
+    tide(low, 'low');
+    open(low, 'gn-33-door');
+    expect(scene(low, 'gn-33-door').labels).toEqual(['Walk the causeway.', 'Walk on.']);
+    const high = gnRun('t33-high');
+    tide(high, 'high');
+    open(high, 'gn-33-door');
+    expect(scene(high, 'gn-33-door').labels).toEqual(['Wait for low tide.', 'Walk on.']);
+    water(high);
+    expect(scene(high, 'gn-33-door').labels).toEqual(['Dive.', 'Wait for low tide.', 'Walk on.']);
+    expect(openSide(choose(high, 'gn-33-door', 'Dive.').run)!.eventId).toBe('gn-33-stairs');
+  });
+
+  it('three districts in any order; without a Water-type each crossing takes a node going round; all three: "They had time."', () => {
+    let run = entered('t33-walk');
+    expect(scene(run, 'gn-33-stairs').labels).toEqual(['The Market.', 'The Houses.', 'The Temple.']);
+    const r1 = choose(run, 'gn-33-stairs', 'The Temple.');
+    expect(said(r1)).toMatch(/long way round/);
+    run = choose(r1.run, 'gn-33-temple', 'Back to the stairs.').run;
+    run = choose(choose(run, 'gn-33-stairs', 'The Market.').run, 'gn-33-market', 'Back to the stairs.').run;
+    const last = choose(run, 'gn-33-stairs', 'The Houses.');
+    expect(flagOf(last.run, 'sunken-districts')).toBe(3);
+    expect(said(last)).toMatch(/They had time\./);
+    const swim = entered('t33-swim', water);
+    expect(said(choose(swim, 'gn-33-stairs', 'The Market.'))).not.toMatch(/long way round/);
+  });
+
+  it('the wheels: drain the Market cellar for the weight; flood the square to heal Water-types; flooding the dome asks twice', () => {
+    let run = entered('t33-wheels', water);
+    run = choose(run, 'gn-33-stairs', 'The Market.').run;
+    run = choose(run, 'gn-33-market', 'Turn the Market\'s bronze wheel.').run;
+    const swimmer = run.party.find((m) => m.uid === 'p-swim')!;
+    swimmer.hp = 1;
+    const flood = choose(run, 'gn-33-wheel-m', 'Flood the square.').run;
+    expect(flood.party.find((m) => m.uid === 'p-swim')!.hp).toBe(maxHp(content, swimmer));
+    run = choose(choose(flood, 'gn-33-market', 'Turn the Market\'s bronze wheel.').run, 'gn-33-wheel-m', 'Drain the cellar.').run;
+    run = choose(run, 'gn-33-cellar', 'Pick it up.').run;
+    expect(flagOf(run, 'sunken-weight')).toBe(1);
+    run = choose(choose(run, 'gn-33-market', 'Back to the stairs.').run, 'gn-33-stairs', 'The Temple.').run;
+    run = choose(choose(run, 'gn-33-temple', 'Turn the Temple\'s bronze wheel.').run, 'gn-33-wheel-t', 'Flood the dome.').run;
+    run = choose(run, 'gn-33-flood-1', 'Flood it.').run;
+    expect(flagOf(run, 'sunken-dome-flooded')).toBe(0);
+    run = choose(run, 'gn-33-flood-2', 'Yes. Flood it.').run;
+    expect(flagOf(run, 'sunken-dome-flooded')).toBe(1);
+    expect(scene(run, 'gn-33-temple').intro).toMatch(/bright as the day it was painted/);
+  });
+
+  /** Gathers all three objects (the weight, the boat, the key). */
+  const gathered = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
+    let run = entered(seed, (r) => { water(r); setup(r); });
+    run = choose(run, 'gn-33-stairs', 'The Market.').run;
+    run = choose(choose(run, 'gn-33-market', 'Turn the Market\'s bronze wheel.').run, 'gn-33-wheel-m', 'Drain the cellar.').run;
+    run = choose(choose(run, 'gn-33-cellar', 'Pick it up.').run, 'gn-33-market', 'Back to the stairs.').run;
+    run = choose(choose(run, 'gn-33-stairs', 'The Houses.').run, 'gn-33-houses', 'Go to the windowsill.').run;
+    run = choose(choose(run, 'gn-33-sill', 'Take the clay boat from the sill.').run, 'gn-33-houses', 'Back to the stairs.').run;
+    run = choose(run, 'gn-33-stairs', 'The Temple.').run;
+    run = choose(choose(run, 'gn-33-temple', 'Turn the Temple\'s bronze wheel.').run, 'gn-33-wheel-t', 'Drain the crypt.').run;
+    return choose(choose(run, 'gn-33-crypt', 'Take the key.').run, 'gn-33-temple', 'Back to the stairs.').run;
+  };
+
+  it('return all three objects and the Relicanth moves aside: the Small Tablet and a Relic Crown', () => {
+    let run = gathered('t33-all');
+    run = choose(choose(run, 'gn-33-stairs', 'The Market.').run, 'gn-33-market', 'Put the weight back on the scale.').run;
+    run = choose(run, 'gn-33-market', 'Back to the stairs.').run;
+    run = choose(choose(run, 'gn-33-stairs', 'The Houses.').run, 'gn-33-houses', 'Go to the windowsill.').run;
+    run = choose(run, 'gn-33-sill', 'Set the boat on the water outside the window.').run;
+    run = choose(choose(run, 'gn-33-houses', 'Back to the stairs.').run, 'gn-33-stairs', 'Down to the archive.').run;
+    run = choose(run, 'gn-33-archive', 'Hang the key back on its hook.').run;
+    expect(flagOf(run, 'sunken-returned')).toBe(3);
+    const passed = choose(run, 'gn-33-archive', 'Wait in front of it.');
+    expect(said(passed)).toMatch(/moves aside/);
+    const done = choose(passed.run, 'gn-33-tablet', 'Take it.').run;
+    expect(flagOf(done, 'sunken-tablet')).toBe(1);
+    expect(JSON.stringify(done)).toMatch(/relic-crown/);
+    expect(done.stage!.pseudo).toBeFalsy();
+  });
+
+  it('return one: look, don\'t touch, and a Pearl String; take them all down and fight: it sinks, still in the way', () => {
+    let run = gathered('t33-one');
+    run = choose(choose(run, 'gn-33-stairs', 'The Market.').run, 'gn-33-market', 'Put the weight back on the scale.').run;
+    run = choose(choose(run, 'gn-33-market', 'Back to the stairs.').run, 'gn-33-stairs', 'Down to the archive.').run;
+    const looked = choose(choose(run, 'gn-33-archive', 'Wait in front of it.').run, 'gn-33-looked', 'Go back up.').run;
+    expect(flagOf(looked, 'sunken-relicanth-looked')).toBe(1);
+    expect(JSON.stringify(looked)).toMatch(/pearl-string/);
+    expect(flagOf(looked, 'sunken-tablet')).toBe(0);
+    const thief = choose(gathered('t33-fight'), 'gn-33-stairs', 'Down to the archive.').run;
+    const fight = choose(thief, 'gn-33-archive', 'Fight it, with what you took.').run;
+    expect(fight.battle!.enemyTeam[0]!.moves.map((m) => m.id).sort()).toEqual(['ancient-power', 'aqua-tail', 'head-smash', 'rest']);
+    const sank = choose(win(fight), 'gn-33-sank', 'Take it, and go.').run;
+    expect(flagOf(sank, 'sunken-relicanth-fought')).toBe(1);
+    expect(flagOf(sank, 'sunken-tablet')).toBe(1);
+  });
+
+  it('remembers: a Lantern Sea boat lights its way out; Aqua\'s flood leaves a new line', () => {
+    const run = entered('t33-remember', (r) => { setFlag(r, 'lantern-boat'); setFlag(r, 'aqua-flooded'); });
+    const marks = choose(choose(run, 'gn-33-stairs', 'The Houses.').run, 'gn-33-houses', 'Read the marks.');
+    expect(said(marks)).toMatch(/Cut by nobody/);
+    setFlag(marks.run, 'sunken-boat');
+    open(marks.run, 'gn-33-sill');
+    expect(said(choose(marks.run, 'gn-33-sill', 'Set the boat on the water outside the window.'))).toMatch(/Something below lights its way/);
+  });
+
+  it('afterstory: a potter in a later stage sells clay boats', () => {
+    const run = gnRun('t33-potter');
+    setFlag(run, 'sunken-done');
+    setFlag(run, 'sunken-at', 0);
+    expect(content.events.get('gn-33-potter')!.requires.length).toBeGreaterThan(1);
   });
 });

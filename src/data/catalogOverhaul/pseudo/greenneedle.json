@@ -147,6 +147,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_sunken",
+   "name": "The Sunken City",
+   "entry": "gn-33-door",
+   "themeId": "water-ghost",
+   "tint": "#2d6e7a",
+   "mood": "sunken city",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_crystal",
    "name": "The Crystal Caverns",
    "entry": "gn-32-door",

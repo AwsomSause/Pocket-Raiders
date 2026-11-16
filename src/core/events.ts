@@ -1597,6 +1597,10 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'flightNorth':
       return flightNorthEffect(run, e);
     case 'heal': {
+      if (e.types?.length) {
+        for (const m of run.party) if (m.hp > 0 && getSpecies(content, m.speciesId).types.some((t) => e.types!.includes(t))) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share));
+        return `${e.types.join('/')}-types healed`;
+      }
       if (e.who === 'picked') for (const m of whoOf(content, run, 'picked', pickedUid)) { if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share)); }
       else if (e.who === 'others') for (const m of run.party.slice(1)) { if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * e.share)); }
       else if (e.share >= 1) healParty(content, run);
@@ -2194,7 +2198,9 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       enemy.statBoosts = { ...enemy.statBoosts, hp: (enemy.statBoosts?.hp ?? 0) + (100 - ALPHA_MARK_HP) };
       enemy.hp = maxHp(content, enemy);
     }
-    for (const [i, id] of (b.foeMoves ?? []).entries()) if (content.moves.has(id) && !enemy.moves.some((m) => m.id === id)) enemy.moves[Math.max(0, enemy.moves.length - 1 - i)] = { id, pp: content.moves.get(id)!.pp };
+    // Four foe moves (gn.31's Trevenant, gn.33's Relicanth): exactly that moveset.
+    if ((b.foeMoves?.length ?? 0) >= 4) enemy.moves = b.foeMoves!.filter((id) => content.moves.has(id)).map((id) => ({ id, pp: content.moves.get(id)!.pp }));
+    else for (const [i, id] of (b.foeMoves ?? []).entries()) if (content.moves.has(id) && !enemy.moves.some((m) => m.id === id)) enemy.moves[Math.max(0, enemy.moves.length - 1 - i)] = { id, pp: content.moves.get(id)!.pp };
     if (b.look) enemy.look = b.look;
     if (b.held && content.catalog.has(b.held)) enemy.held = { [b.held]: 1 };
     if (b.shadow) makeShadow(enemy, rollShadowHeart(content, new Rng(hashSeed(`${run.seed}::shadow-foe::${enemy.uid}`))));

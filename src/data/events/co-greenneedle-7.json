@@ -5490,6 +5490,2030 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-33-door",
+   "name": "The Sunken City",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sunken-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "sunken-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "Off the shore, the tops of towers. A whole city, under clear water, laid out like a map of itself.\n\nThe fishermen don't go near it. \"It isn't haunted,\" one says. \"It's just *somebody's.*\"",
+   "choices": [
+    {
+     "label": "Walk the causeway.",
+     "success": {
+      "text": "At low tide the old causeway is out of the water, stone by stone. You walk out to the towers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunken-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-districts",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-returned",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-33-stairs"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "lowTide"
+      }
+     ]
+    },
+    {
+     "label": "Dive.",
+     "success": {
+      "text": "The tide is in. You go down with your Water-type, past the tops of the towers, into the streets.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunken-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-districts",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-returned",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-33-stairs"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "highTide"
+      },
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Wait for low tide.",
+     "success": {
+      "text": "You sit on the rocks and wait. The sea goes out slowly. The causeway comes up stone by stone.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunken-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-districts",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-returned",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-33-stairs"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "highTide"
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The towers go under as the tide turns.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-stairs",
+   "name": "The Sunken City: The Stairs",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "A wide stair, going down into green water, where three districts meet.\n\nThere is no narrator here, and nobody to ask. Just the streets.",
+   "choices": [
+    {
+     "label": "The Market.",
+     "success": {
+      "text": "You go down toward the stalls.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "sunken-swim",
+        "if": [
+         {
+          "kind": "partyTypes",
+          "types": [
+           "water"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-cost",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-swim",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "sunken-cost",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-shortcut",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "sunken-cost",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-cost",
+        "min": 1,
+        "then": [
+         {
+          "kind": "takeNode",
+          "nodes": 1
+         }
+        ],
+        "text": "No Water-type to swim the flooded stairs. You go the long way round, over the roofs. It takes a while."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-market",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "sunken-districts",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-market",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "sunken-notebook",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "sunken-districts",
+          "atLeast": 3,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "sunken-had-time",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-notebook",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "sunken-had-time",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "They had time.",
+          "importance": 80
+         }
+        ],
+        "text": "*In your Notebook, in your own hand: They had time.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-market"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Houses.",
+     "success": {
+      "text": "You go along a street of doorways.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "sunken-swim",
+        "if": [
+         {
+          "kind": "partyTypes",
+          "types": [
+           "water"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-cost",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-swim",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "sunken-cost",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-shortcut",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "sunken-cost",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-cost",
+        "min": 1,
+        "then": [
+         {
+          "kind": "takeNode",
+          "nodes": 1
+         }
+        ],
+        "text": "No Water-type to swim the flooded stairs. You go the long way round, over the roofs. It takes a while."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-houses",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "sunken-districts",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-houses",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "sunken-notebook",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "sunken-districts",
+          "atLeast": 3,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "sunken-had-time",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-notebook",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "sunken-had-time",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "They had time.",
+          "importance": 80
+         }
+        ],
+        "text": "*In your Notebook, in your own hand: They had time.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-houses"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Temple.",
+     "success": {
+      "text": "You go toward the dome.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "sunken-swim",
+        "if": [
+         {
+          "kind": "partyTypes",
+          "types": [
+           "water"
+          ]
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-cost",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-swim",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "sunken-cost",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-shortcut",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "sunken-cost",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-cost",
+        "min": 1,
+        "then": [
+         {
+          "kind": "takeNode",
+          "nodes": 1
+         }
+        ],
+        "text": "No Water-type to swim the flooded stairs. You go the long way round, over the roofs. It takes a while."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-temple",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "sunken-districts",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-temple",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "sunken-notebook",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "sunken-districts",
+          "atLeast": 3,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "sunken-had-time",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-notebook",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "sunken-had-time",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "They had time.",
+          "importance": 80
+         }
+        ],
+        "text": "*In your Notebook, in your own hand: They had time.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-temple"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Down to the archive.",
+     "success": {
+      "text": "Below the temple, a round door.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-33-archive"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "sunken-key",
+        "sunken-bell"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-33-market",
+   "name": "The Sunken City: The Market",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "corsola",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "*Stalls, under four fathoms of clear water. Weights on the scales. Baskets stacked. A broom leaning where someone left it.*\n\nIt's laid out as if for tomorrow. Nothing is overturned. Nothing was dropped.\n\nA Corsola sits behind one counter, a Krabby behind another, like shopkeepers waiting to open.",
+   "choices": [
+    {
+     "label": "Look round the stalls.",
+     "success": {
+      "text": "The shopkeepers don't like browsers.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "corsola",
+        "krabby",
+        "staryu"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-33-market"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-33-market"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-33-market"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Turn the Market's bronze wheel.",
+     "success": {
+      "text": "It's stiff, but it moves. Something below the stalls clanks awake.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-wheel-m"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put the weight back on the scale.",
+     "success": {
+      "text": "It sits in its pan as if it had never moved. The scale settles, level. Somewhere below, something old turns to watch.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunken-weight-back",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunken-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-market"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-weight",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sunken-weight-back",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the stairs.",
+     "success": {
+      "text": "Back up the stairs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-stairs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-wheel-m",
+   "name": "The Market: The Wheel",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "krabby",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "Two ways to turn it: drain the cellar under the stalls, or flood the square.",
+   "choices": [
+    {
+     "label": "Drain the cellar.",
+     "success": {
+      "text": "The water goes out of the cellar with a long sigh. On the floor, in the silt: a scale-weight, stamped with a fish.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-drain-m",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-cellar"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-drain-m",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Flood the square.",
+     "success": {
+      "text": "Clean water pours over the square. Your Water-types roll in it like it's home.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-flood-m",
+        "n": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1,
+        "types": [
+         "water"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-market"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-flood-m",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the wheel where it is.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-market"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-cellar",
+   "name": "The Market: The Cellar",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "krabby",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "A scale-weight, stamped with a fish. Somebody weighed things fairly here, every day, for a long time.",
+   "choices": [
+    {
+     "label": "Pick it up.",
+     "success": {
+      "text": "It's heavier than it looks.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-weight",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-market"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it in the silt.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-market"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-houses",
+   "name": "The Sunken City: The Houses",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "staryu",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "*A street of doorways. Beside each door, at shoulder height, marks cut in the stone. A line. A date. Above it, another line. Another date.*\n\nIn one house, a table set for a meal. Under each plate, a sandbag.\n\nOn a windowsill, a child's clay boat, pointing out to sea.",
+   "choices": [
+    {
+     "label": "Read the marks.",
+     "success": {
+      "text": "High-water marks, carved and dated, each a little higher. The lowest are at the ankle.\n\nThey go up slowly: a hand's width in a lifetime.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-drain-h",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "sunken-marks-top",
+          "n": 1
+         }
+        ],
+        "text": "With the street drained you can read them to the top: over the lintel. The last date is very neat."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "aqua-flooded",
+        "min": 1,
+        "then": [],
+        "text": "At the very top, one new line. Very recent. Cut by nobody."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-houses"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn the Houses' bronze wheel.",
+     "success": {
+      "text": "It turns. Water moves somewhere behind the walls.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-wheel-h"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the windowsill.",
+     "success": {
+      "text": "The clay boat, pointing out to sea.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-sill"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the stairs.",
+     "success": {
+      "text": "Back up the stairs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-stairs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-sill",
+   "name": "The Houses: The Windowsill",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "lantern",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lantern-boat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Once, at the Lantern Sea, you floated a boat. Below the windowsill, in the dark water, something is waiting to light the way.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "staryu",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "A child's clay boat on the sill, pointing out to sea. Outside the window, open water.",
+   "choices": [
+    {
+     "label": "Take the clay boat from the sill.",
+     "success": {
+      "text": "It fits in one hand. Somebody small made it, and pressed their thumb into the bow.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-boat",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-houses"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-boat",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Set the boat on the water outside the window.",
+     "success": {
+      "text": "It floats.\n\nIt turns, slowly, until it points out to sea, the way it was.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lantern-boat",
+        "min": 1,
+        "then": [],
+        "text": "It goes out through the gate on its own. Something below lights its way."
+       },
+       {
+        "kind": "flag",
+        "key": "sunken-boat-back",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunken-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-houses"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-boat",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sunken-boat-back",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "You leave the sill as it is.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-houses"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-wheel-h",
+   "name": "The Houses: The Wheel",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "staryu",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "Two ways to turn it: drain the street, or flood the lower houses.",
+   "choices": [
+    {
+     "label": "Drain the street.",
+     "success": {
+      "text": "The street drains. The marks go all the way up, over the lintels, clear and dry.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-drain-h",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-houses"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-drain-h",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Flood the lower houses.",
+     "success": {
+      "text": "The lower houses fill. Now there's a way through them, by swimming, straight to the stairs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-flood-h",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-shortcut",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-houses"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-flood-h",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-houses"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the stairs.",
+     "success": {
+      "text": "Back along the street.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-stairs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-temple",
+   "name": "The Sunken City: The Temple",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "flooded",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-dome-flooded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The dome is full of water now. The mural shows through it, bright as the day it was painted.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "*A dome, still whole. Inside, dry air, and a mural that runs all the way round.*",
+   "choices": [
+    {
+     "label": "Look at the mural.",
+     "success": {
+      "text": "The mural has the sea drawn inside the walls, and the people walking out. In a line. Carrying things. Children on shoulders. Pokémon beside them.\n\nNobody's running.\n\nAt the end, the last figure is looking back. It's holding something small in both hands. It puts it down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-mural",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-temple"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn the Temple's bronze wheel.",
+     "success": {
+      "text": "It's the heaviest of the three.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-wheel-t"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the stairs.",
+     "success": {
+      "text": "Back up the stairs.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-stairs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-wheel-t",
+   "name": "The Temple: The Wheel",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "Two ways to turn it: drain the crypt below, or flood the dome.",
+   "choices": [
+    {
+     "label": "Drain the crypt.",
+     "success": {
+      "text": "The crypt drains. On a hook by the stair, a bronze key, shaped like a coelacanth.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-drain-t",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-crypt"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-drain-t",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Flood the dome.",
+     "success": {
+      "text": "You put your hands on the wheel.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-flood-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-dome-flooded",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-temple"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-flood-1",
+   "name": "The Temple: Flood the Dome?",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "The dome is the only dry room in the city. The mural is in it. Flood it?",
+   "choices": [
+    {
+     "label": "Flood it.",
+     "success": {
+      "text": "You lean on the wheel.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-flood-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You take your hands off the wheel.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-temple"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-flood-2",
+   "name": "The Temple: Are You Sure?",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "Somebody painted every one of those people. Are you sure?",
+   "choices": [
+    {
+     "label": "Yes. Flood it.",
+     "success": {
+      "text": "The water comes in from the floor up. You watch the paint.\n\nIt holds. Somebody, a long time ago, made sure it would.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-dome-flooded",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-temple"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No. Leave it dry.",
+     "success": {
+      "text": "You let the wheel go back. The dome stays dry.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-temple"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-crypt",
+   "name": "The Temple: The Crypt",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "A bronze key, shaped like a coelacanth, on its hook. Below the temple, a round door with a slot shaped like a bell.",
+   "choices": [
+    {
+     "label": "Take the key.",
+     "success": {
+      "text": "It's cold. The coelacanth's eye is a tiny hole, worn smooth by a thumb.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-key",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-temple"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it on its hook.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-temple"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-archive",
+   "name": "The Sunken City: The Archive",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "bell",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sunken-bell",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sunken-key",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*The bell fits the slot exactly. You ring it once, and the door rolls aside.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "*Shelves cut in the rock. On them, clay tablets, thousands, stacked like plates.*\n\n*Something very old turns in the water in front of them.*\n\nAn ancient Relicanth. It isn't guarding treasure. It's guarding the last record of who lived here: every name.",
+   "choices": [
+    {
+     "label": "Hang the key back on its hook.",
+     "success": {
+      "text": "The key goes back on its hook by the door. The Relicanth watches it settle.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunken-key-back",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunken-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-33-archive"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "sunken-key",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sunken-key-back",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Wait in front of it.",
+     "success": {
+      "text": "It looks at what you've put back, and what you haven't.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "sunken-all-back",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "sunken-returned",
+          "atLeast": 3,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-all-back",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "sunken-relicanth",
+          "n": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sunken-relicanth-passed",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-33-tablet"
+         }
+        ],
+        "text": "After the third, it moves aside."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-all-back",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "sunken-relicanth",
+          "n": 2
+         },
+         {
+          "kind": "flag",
+          "key": "sunken-relicanth-looked",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-33-looked"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight it, with what you took.",
+     "success": {
+      "text": "It doesn't leave the shelves. It doesn't need to.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "relicanth"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "sunken-relicanth",
+         "n": 3
+        },
+        {
+         "kind": "flag",
+         "key": "sunken-relicanth-fought",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-33-sank"
+        }
+       ],
+       "exact": true,
+       "foeMoves": [
+        "ancient-power",
+        "head-smash",
+        "aqua-tail",
+        "rest"
+       ],
+       "rule": {
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "sunken-relicanth",
+         "n": 3
+        },
+        {
+         "kind": "flag",
+         "key": "sunken-relicanth-fought",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sunken-done",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampStage",
+         "key": "sunken-at"
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "sunken-weight",
+        "sunken-boat",
+        "sunken-key"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-33-tablet",
+   "name": "The Archive: The Small Tablet",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "*One tablet's been set apart from the others, on a cushion of weed. It's small. It fits in both hands.*\n\n*It's the thing the last figure in the mural put down.*",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It's cold. It has marks on it that aren't writing, yet.\n\nBeside it, a little crown, a child's, made for a festival that never came again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-tablet",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sunken-tablet-at"
+       },
+       {
+        "kind": "item",
+        "id": "relic-crown",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunken-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sunken-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "item",
+       "id": "relic-crown",
+       "absent": true
+      }
+     ]
+    },
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It's cold. It has marks on it that aren't writing, yet. You already have the crown that was beside it, once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-tablet",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sunken-tablet-at"
+       },
+       {
+        "kind": "item",
+        "id": "relic-vase",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sunken-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sunken-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "item",
+       "id": "relic-crown"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-33-looked",
+   "name": "The Archive: Look, Don't Touch",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "It lets you look. Not touch.\n\nThousands of names. You read a few. They're ordinary names.",
+   "choices": [
+    {
+     "label": "Go back up.",
+     "success": {
+      "text": "It turns in the water as you go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-returned",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "item",
+          "id": "pearl-string",
+          "count": 1
+         }
+        ],
+        "text": "On the stair, as if somebody left it for you: a Pearl String."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "sunken-returned",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "item",
+          "id": "relic-vase",
+          "count": 1
+         }
+        ],
+        "text": "On the stair, as if somebody left it for you: a Relic Vase."
+       },
+       {
+        "kind": "flag",
+        "key": "sunken-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sunken-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-sank",
+   "name": "The Archive: In the Way",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "relicanth",
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "It sinks in front of the shelves. Even now, it's in the way.\n\nYou reach past it. The small tablet on its cushion of weed comes away in your hand.",
+   "choices": [
+    {
+     "label": "Take it, and go.",
+     "success": {
+      "text": "Nothing stops you. That's the worst part.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sunken-tablet",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sunken-tablet-at"
+       },
+       {
+        "kind": "flag",
+        "key": "sunken-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sunken-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-33-potter",
+   "name": "A Potter's Stall",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sunken-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "sunken-at"
+    },
+    {
+     "kind": "flag",
+     "key": "sunken-potter",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.lady"
+    ],
+    "tint": "#2d6e7a",
+    "effect": "none"
+   },
+   "intro": "In a coastal town, a potter sells little clay boats to tourists. Each has a thumbprint pressed into the bow.\n\nShe doesn't know where the shape comes from. \"My grandmother made them,\" she says. \"Her grandmother, too, I think.\"",
+   "choices": [
+    {
+     "label": "Ask where the shape comes from.",
+     "success": {
+      "text": "\"From the sea, Gran said. From before.\" She shrugs, and smiles, and presses her thumb into the next one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunken-potter",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. The boats on her table all point the same way: out to sea.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunken-potter",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

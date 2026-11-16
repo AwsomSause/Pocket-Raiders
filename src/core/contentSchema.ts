@@ -3206,7 +3206,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('express') }),
   /** Ideas W4 time rift: the map shows the battle waiting at each next node for the rest of the stage. */
   z.object({ kind: z.literal('riftPreview') }),
-  z.object({ kind: z.literal('heal'), share: z.number().min(0).max(1), /** 'picked': only the Pokémon a pick choice named. 'others': everyone but the lead (a bad night for the lead). */ who: z.enum(['party', 'picked', 'others']).default('party') }),
+  z.object({ kind: z.literal('heal'), share: z.number().min(0).max(1), /** 'picked': only the Pokémon a pick choice named. 'others': everyone but the lead (a bad night for the lead). */ who: z.enum(['party', 'picked', 'others']).default('party'), /** Greenneedle gn.33: only party Pokémon of these types (the flooded square heals Water-types). */ types: z.array(TypeNameSchema).optional() }),
   /** Camp: time together. Every pair of party Pokémon gains chemistry and loses tension; optionally old grudges are let go. */
   z.object({ kind: z.literal('campBond'), chemistry: z.number().int().min(0).max(30), calm: z.number().int().min(0).max(30), settle: z.boolean().default(false) }),
   /** The run clock: sleep until the next morning (a new day begins). */
