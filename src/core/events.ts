@@ -9,7 +9,7 @@
 // one seeded by the stop. No existing stream is touched, so adding events
 // changes no other roll, and choosing again after a reload gives the same result.
 
-import { applyGnEffect, gnBattleStart, gnConditionMet, resolveCast } from './greenneedle';
+import { applyGnEffect, gnBattleStart, gnConditionMet, gnTokens, resolveCast } from './greenneedle';
 import { applySinglesEffect, singlesEffectWords } from './events/coSingles';
 import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, fillCoText, restoreMachine } from './events/coToolkit';
 import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
@@ -1160,7 +1160,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   const base = success ? choice.success : choice.failure!;
   const branch = success ? choice.branches.find((b) => b.when.every((c) => conditionMet(content, run, c))) : undefined;
   const outcome = branch ? { ...base, text: branch.text, effects: branch.effects } : base;
-  const outcomeText = questText(content, run, event.id, fillCoText(content, current, fillEventText(content, current, outcome.text)));
+  const outcomeText = questText(content, run, event.id, gnTokens(content, current, fillCoText(content, current, fillEventText(content, current, outcome.text))));
   // The Event Director remembers important choices (and whether you took a risk).
   const risky = chance !== null || choice.prompt !== undefined;
   run.story.flags[risky ? 'choices:risky' : 'choices:safe'] = Number(run.story.flags[risky ? 'choices:risky' : 'choices:safe'] ?? 0) + 1;

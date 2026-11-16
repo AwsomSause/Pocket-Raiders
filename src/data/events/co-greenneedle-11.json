@@ -1,0 +1,1117 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-44-door",
+   "name": "The 1v1 Championship",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "onevone-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gideon",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "onevone-visits",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "On the board by the door, last year's results: *Gideon Tolland, round five.* Underneath, in his handwriting: *I liked my ceiling.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "*A long hall with a single star painted over the door. One ring, eight names on a board, and a desk with a form on it.*\n\n**Desk clerk, Ms. Oluwaseun Brady:** \"One name on the form, please. Not yours. Its.\"",
+   "choices": [
+    {
+     "label": "Go to the desk.",
+     "success": {
+      "text": "The form has one line on it. It is a very long line.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "onevone-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-desk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Through the window, someone in a knitted hat is losing in round four, cheerfully.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-desk",
+   "name": "The 1v1 Championship: The Desk",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "One Pokémon. You pick it here, and you can't change it. Eight opponents, one Pokémon each, all at its level. No items between rounds: a little rest, and that's all.\n\nLose once and it's over. Prizes won so far are kept.",
+   "choices": [
+    {
+     "label": "Write its name.",
+     "pick": {},
+     "success": {
+      "text": "Ms. Brady reads it back to you, and then to it. The others go to the bench to watch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "onevoneEnter"
+       },
+       {
+        "kind": "gn",
+        "op": "bench"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-round-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "**Ms. Brady:** \"The form will keep.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-round-1",
+   "name": "The 1v1 Championship: Round 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "Round one. A newcomer, shaking so hard their Poké Ball rattles. Their first tournament.\n\n\"I read the rules four times,\" they tell you. \"I still don't know where to stand.\"\n\nTheir one: {cast:onevone-foe-1}.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "You show them where to stand. Then you go to yours.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "onevoneEnd",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-out"
+        }
+       ],
+       "rule": {
+        "gn": "onevone",
+        "slot": 1
+       },
+       "name": "Newcomer Pip",
+       "classId": "youngster",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "heal",
+         "share": 0.3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-round-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-round-2",
+   "name": "The 1v1 Championship: Round 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "Round two. A trainer off the road, boots still muddy.\n\n\"We've met. On the road, a while back. You won. I've thought about it since.\" They say it like a fact, not a grudge.\n\nTheir one: {cast:onevone-foe-2}.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Different this time,\" they say. \"I hope.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "onevoneEnd",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-out"
+        }
+       ],
+       "rule": {
+        "gn": "onevone",
+        "slot": 2
+       },
+       "name": "Road Trainer Halvard",
+       "classId": "hiker",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "heal",
+         "share": 0.3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-break-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-round-3",
+   "name": "The 1v1 Championship: Round 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "belts",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "entrantChampion"
+      }
+     ],
+     "notice": "Your entrant wears the Fighting Tournament's belt. Gideon sees it, takes off his hat, and bows."
+    },
+    {
+     "id": "same",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "onevone-met",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "onevone-same",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Gideon:** \"The {cast:onevone-entrant} again! Good. I've had a year to think about that {cast:onevone-entrant}. I've thought of nothing. Let's see.\""
+    },
+    {
+     "id": "different",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "onevone-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Gideon:** \"New one this year? Smart. I was going to be *so* ready for the other.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "Round three. A dock worker in a knitted hat, grinning, with a {cast:onevone-foe-3} beside him.\n\n**Gideon:** \"Gideon. Don't mind me, I'm scenery. Fourth round's my ceiling. I've made my peace.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He shakes your hand, then your Pokémon's, very seriously.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "onevoneEnd",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-out"
+        }
+       ],
+       "rule": {
+        "gn": "onevone",
+        "slot": 3
+       },
+       "name": "Gideon Tolland",
+       "classId": "worker",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1100
+        },
+        {
+         "kind": "heal",
+         "share": 0.3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-round-4"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-round-4",
+   "name": "The 1v1 Championship: Round 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "Round four. A specialist, and the draw isn't kind: their {cast:onevone-foe-4} is exactly what your entrant doesn't want to see.\n\nThey look almost apologetic about it. Almost.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Your entrant looks at their Pokémon, then at you. You nod. It goes in anyway.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "onevoneEnd",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-out"
+        }
+       ],
+       "rule": {
+        "gn": "onevone",
+        "slot": 4
+       },
+       "name": "Specialist Ingrid",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "onevonePrize"
+        },
+        {
+         "kind": "heal",
+         "share": 0.3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-break-4"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-round-5",
+   "name": "The 1v1 Championship: Round 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "Round five. A specialist whose type your entrant beats, on paper. Their {cast:onevone-foe-5}.\n\n\"I know,\" they say, before you can. \"I've planned for it. You'll see.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "They have planned for it. You can see it in how they stand.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "onevoneEnd",
+         "n": 4
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-out"
+        }
+       ],
+       "rule": {
+        "gn": "onevone",
+        "slot": 5
+       },
+       "name": "Specialist Tobiah",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "onevonePrize"
+        },
+        {
+         "kind": "heal",
+         "share": 0.3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-round-6"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-round-6",
+   "name": "The 1v1 Championship: Round 6",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "back",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "entrantCameBack"
+      }
+     ],
+     "notice": "Dolores looks at your entrant for a long time. \"That one's been somewhere. Hasn't it.\""
+    },
+    {
+     "id": "same",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "onevone-met",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "onevone-same",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Dolores:** \"The same one. You came back with the same one. *Good.* Most of them swap, the minute it loses. You don't swap a friend.\""
+    },
+    {
+     "id": "different",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "onevone-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**Dolores:** \"A different one. Hm. And what did the last one think about that?\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "Round six. A woman of eighty, very upright, with a {cast:onevone-foe-6} that has been with her for fifty years. She has won this four times.\n\n**Dolores:** \"Sit up straight. Not you. That one. Good. It listens. That's half of it.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Her Xatu doesn't move until she does. She doesn't move until she's ready.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "onevoneEnd",
+         "n": 5
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-out"
+        }
+       ],
+       "rule": {
+        "gn": "onevone",
+        "slot": 6
+       },
+       "name": "Señora Dolores Vantongeren",
+       "classId": "veteran",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "onevonePrize"
+        },
+        {
+         "kind": "heal",
+         "share": 0.3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-break-6"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-round-7",
+   "name": "The 1v1 Championship: Round 7",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "Round seven. Last year's finalist, with a {cast:onevone-foe-7}. He isn't looking at you at all. He's looking past you, at the champion's chair.\n\n\"Nothing personal,\" he says. \"You're in my way, that's all.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He bows to the chair before he bows to you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "onevoneEnd",
+         "n": 6
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-out"
+        }
+       ],
+       "rule": {
+        "gn": "onevone",
+        "slot": 7
+       },
+       "name": "Finalist Corwin",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "onevonePrize"
+        },
+        {
+         "kind": "heal",
+         "share": 0.3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-round-8"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-round-8",
+   "name": "The 1v1 Championship: Round 8",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "onevone-met",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "onevone-same",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**The champion:** \"They said you'd bring it again. Dolores said. She said you're the kind that does.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "The final. The reigning champion, {onevone-champion}, comes down from the chair, with one Pokémon, a {cast:onevone-foe-8}, a little stronger than yours. It holds something that fits it.\n\n\"Eight,\" she says. \"You've earned the eighth. Not many do.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The hall goes quiet. One Pokémon each. It was always going to come to this.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "onevoneEnd",
+         "n": 7
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-out"
+        }
+       ],
+       "rule": {
+        "gn": "onevone",
+        "slot": 8
+       },
+       "name": "The Reigning Champion",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "onevone-belts",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "entrantChampion"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "onevoneChampion"
+        },
+        {
+         "kind": "gn",
+         "op": "onevoneEnd",
+         "n": 8
+        },
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "moment",
+         "text": "Won the 1v1 Championship. One Pokémon, eight opponents.",
+         "importance": 80
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-44-champion"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-break-2",
+   "name": "The 1v1 Championship: After Round 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "A bench in the corridor. Ten minutes before the next round. Your entrant leans on your knee.",
+   "choices": [
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "You tell it what you saw it do out there. All of it. It listens to every word, and leans harder.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "onevone-talked",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-round-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "onevone-talked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Let it rest.",
+     "success": {
+      "text": "It sleeps for nine of the ten minutes. It wakes up ready.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-round-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch the next opponent.",
+     "success": {
+      "text": "You watch them warm up through the door. A {cast:onevone-foe-3}, {held:3}.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-round-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-break-4",
+   "name": "The 1v1 Championship: After Round 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "A bench in the corridor. Ten minutes before the next round. Your entrant leans on your knee.",
+   "choices": [
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "You tell it what you saw it do out there. All of it. It listens to every word, and leans harder.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "onevone-talked",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-round-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "onevone-talked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Let it rest.",
+     "success": {
+      "text": "It sleeps for nine of the ten minutes. It wakes up ready.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-round-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch the next opponent.",
+     "success": {
+      "text": "You watch them warm up through the door. A {cast:onevone-foe-5}, {held:5}.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-round-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-break-6",
+   "name": "The 1v1 Championship: After Round 6",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "A bench in the corridor. Ten minutes before the next round. Your entrant leans on your knee.",
+   "choices": [
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "You tell it what you saw it do out there. All of it. It listens to every word, and leans harder.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "onevone-talked",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-round-7"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "onevone-talked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Let it rest.",
+     "success": {
+      "text": "It sleeps for nine of the ten minutes. It wakes up ready.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-round-7"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch the next opponent.",
+     "success": {
+      "text": "You watch them warm up through the door. A {cast:onevone-foe-7}, {held:7}.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-44-round-7"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-out",
+   "name": "The 1v1 Championship: Out",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "It's over. Your entrant sits beside you on the bench, very close, while the next match starts. You keep what you won.",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Gideon waves from somewhere. \"Next year!\" he shouts. He always shouts that.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-44-champion",
+   "name": "The 1v1 Championship: Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "belts",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "onevone-belts",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It wears both belts now. Gideon, in the front row, stands up and bows, and won't sit down until it notices."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d6b",
+    "effect": "none"
+   },
+   "intro": "The board changes. One name at the top, and it isn't yours. It's its.\n\nDolores, in the front row, nods once. From her, that is a standing ovation.",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Ms. Brady hands you the form back, framed. \"For its wall,\" she says.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

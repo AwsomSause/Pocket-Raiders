@@ -21,6 +21,7 @@ import { golemBlueType, golemColour } from '../greenneedle/crystals';
 import { unflinching } from '../greenneedle/daycare';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
+import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
 import { CARE } from '../care/mods';
@@ -2263,7 +2264,19 @@ function resolveEntries(ctx: BattleContext, events: BattleEvent[]): void {
     recordFaints(ctx, player, enemy, events);
     settleFaints(ctx, events);
   }
-  for (const { c, other } of sides) if (c.mon.hp > 0) entryAbility(ctx, c, other, events);
+  for (const { c, other } of sides) {
+    if (c.mon.hp <= 0) continue;
+    entryAbility(ctx, c, other, events);
+    // Greenneedle gn.44: a 1v1 Champion's starred entry ability triggers a second time the first time it comes back in, each battle.
+    if (c.side === 'player' && starEntry(ctx.content, c.mon)) {
+      const tag = `star-in:${c.mon.uid}`;
+      if (!ctx.battle.storyEffects.includes(tag)) ctx.battle.storyEffects.push(tag);
+      else if (!ctx.battle.storyEffects.includes(`star-again:${c.mon.uid}`)) {
+        ctx.battle.storyEffects.push(`star-again:${c.mon.uid}`);
+        entryAbility(ctx, c, other, events);
+      }
+    }
+  }
 }
 
 /** Sets the weather unless a primal weather (Desolate Land, Primordial Sea) is holding it. */
@@ -4433,7 +4446,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (!physical && userAbility === 'solar-power' && weather === 'sun') attackMult *= 1.5;
       if (physical && userAbility === 'slow-start' && user.vol.turnsOut < 5) attackMult *= 0.5;
       if (userAbility === 'defeatist' && user.mon.hp * 2 <= userStats.hp) attackMult *= 0.5;
-      if (userAbility && PINCH[userAbility] === moveType && user.mon.hp * 3 <= userStats.hp) attackMult *= 1.5;
+      if (userAbility && PINCH[userAbility] === moveType && user.mon.hp * (user.side === 'player' && starPinch(ctx.content, user.mon) ? 2 : 3) <= userStats.hp) attackMult *= 1.5;
       if (user.vol.flashFire && moveType === 'fire') attackMult *= 1.5;
       if (foeAbility === 'thick-fat' && (moveType === 'fire' || moveType === 'ice')) attackMult *= 0.5;
       if (attackMult !== 1) attack = Math.max(1, pokeRound(attack, attackMult));
@@ -6743,6 +6756,12 @@ function veilBlock(ctx: BattleContext, source: Combatant, target: Combatant, sta
  * a status it can carry becomes its own, anything else it shrugs off. No roll: it always steps in while unused.
  */
 function stopgapTakes(ctx: BattleContext, target: Combatant, status: StatusId | null, move: Move | undefined, events: BattleEvent[]): boolean {
+  // Greenneedle gn.44: a 1v1 Champion's starred guarding ability also blocks one secondary effect per battle.
+  if (target.side === 'player' && target.mon.hp > 0 && starGuard(ctx.content, target.mon) && !ctx.battle.storyEffects.includes(`star-guard:${target.mon.uid}`)) {
+    ctx.battle.storyEffects.push(`star-guard:${target.mon.uid}`);
+    events.push({ type: 'raid', tone: 'info', text: `The star beside ${getSpecies(ctx.content, target.mon.speciesId).name}'s ability glints. The effect doesn't take.` });
+    return true;
+  }
   const team = target.side === 'player' ? ctx.party : ctx.battle.enemyTeam;
   const holder = team.find((m) => m !== target.mon && m.hp > 0 && abilityOf(ctx.content, m) === 'stopgap' && !ctx.battle.storyEffects.includes(`stopgap:${m.uid}`));
   if (!holder) return false;

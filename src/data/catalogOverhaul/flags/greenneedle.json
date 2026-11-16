@@ -482,6 +482,30 @@
   {
    "key": "auction-roundell-cap",
    "rule": "core/greenneedle/auction.ts (gn.43)"
+  },
+  {
+   "key": "onevone-visits",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "onevone-met",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "onevone-same",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "onevone-again",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "onevone-round",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
+  },
+  {
+   "key": "onevone-champion-at",
+   "rule": "core/greenneedle/onevone.ts (gn.44)"
   }
  ]
 }
