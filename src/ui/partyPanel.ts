@@ -29,7 +29,7 @@ import { paintBackdrop, type Skin as DSkin } from './dSkins';
 
 const DEPTH = 100;
 
-import { reduxOn } from './redux/stage';
+import { reduxOn, type ReduxCtx } from './redux/stage';
 import { mountPickerView, type PickerView } from './redux/pickerView';
 
 export interface PickerRow {
@@ -48,6 +48,8 @@ export interface PickerRow {
 }
 
 export interface PickerConfig {
+  /** New UI: the room's own page, drawn in place of the rows (the Old look still draws the rows). */
+  page?: (c: ReduxCtx) => string;
   /** Draw depth; scenes with lively layers (the Plaza crowd) put the menu above them. */
   depth?: number;
   title: string;
@@ -283,6 +285,7 @@ export class Picker implements PickerLike {
         tabs: config.tabs,
         canBack: Boolean(config.onBack),
         backLabel: config.backLabel,
+        page: config.page,
         summary: () => (this.summary && config.inspect ? config.inspect(this.index) : null),
         pick: (i) => { if (this.closed) return; this.focus(i); this.confirm(); },
         hover: (i) => { if (!this.closed && !this.summary && i !== this.index && !config.rows[i]?.problem) this.focus(i, false); },

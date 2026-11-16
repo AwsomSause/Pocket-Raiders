@@ -171,3 +171,18 @@ describe('New UI cutscene card', () => {
     expect(cutBeat(0, 0)).toBe(4);
   });
 });
+
+describe('the card page as the hub Trainer Card', () => {
+  it('takes the hub band and cannot be saved: no save click, the click beside it still goes back', () => {
+    const html = runCardView(ctx(0), card({ title: 'Trainer Card', area: 'hub', save: false }));
+    expect(html).toContain('--c:#3d8bea');
+    expect(html).not.toContain('data-act="save"');
+    expect(html).toContain('data-act="back"');
+    expect(html).toContain('Trainer Card');
+  });
+  it('the run card keeps its gold band and its save click', () => {
+    const html = runCardView(ctx(0), card());
+    expect(html).toContain('--c:#b8862a');
+    expect(html).toContain('data-act="save"');
+  });
+});

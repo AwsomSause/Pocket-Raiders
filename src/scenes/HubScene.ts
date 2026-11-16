@@ -57,7 +57,9 @@ import { legacyRotation, type RotationEntry } from '../core/legacyRuns';
 import { HUB_TOWN, type HubPlace } from '../core/hubTown/schema';
 import { chooseHubPokemon, hubPokemon, hubPokemonChoices, placeById } from '../core/hubTown/world';
 import { pokemonHeightM } from '../core/heights';
-import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { runCardView } from '../ui/redux/screens/over';
+import { playerPortrait } from '../ui/redux/templates';
 import { dockView, type DockFigure } from '../ui/redux/screens/hub';
 import { monFile } from '../ui/redux/game';
 import { boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../core/hubTown/merchant';
@@ -2041,7 +2043,21 @@ export class HubScene extends Phaser.Scene {
         },
       },
     ];
-    this.openPicker({ title: 'Trainer Card', rows, columns: 1, rowHeight: 340, onSelect: () => undefined, onBack: () => this.closePicker() });
+    // New UI: the mock-ups' card page (picture, name and rank, the record, the badge discs).
+    const look = p.story?.protagonist?.look === 'look_b' ? 'b' : 'a';
+    const stars = showcaseOf(p).map((id) => ['★', session.content.achievements.get(id)?.name ?? id] as const);
+    const page = (c: ReduxCtx): string => runCardView(c, {
+      title: 'Trainer Card', area: 'hub', save: false,
+      name: p.story?.protagonist?.name || 'Trainer',
+      rank: `Rank ${prestigeRank(p)}`,
+      facts: [['Title', p.activeTitle ?? 'Trainer'], ['Runs', String(p.stats.runsEnded)], ['Battles won', String(p.stats.battlesWon)], ['Best run', `${p.stats.bestEncounters} encounters`], ['Pokémon caught', String(p.speciesCaught.length)], ...stars],
+      trainer: playerPortrait(look),
+      badges: Math.min(8, p.best.badges ?? 0),
+      team: [],
+      text: `Frame: ${frame.name}. Change title and frame in the Wardrobe.`,
+      hints: [['Esc', 'back']],
+    });
+    this.openPicker({ title: 'Trainer Card', rows, columns: 1, rowHeight: 340, onSelect: () => undefined, onBack: () => this.closePicker(), page });
   }
 
   /** Hyper moment codex: every story moment, found ones named with how often you saw them, the rest hidden. */

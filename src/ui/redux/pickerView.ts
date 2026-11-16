@@ -6,7 +6,7 @@ import Phaser from 'phaser';
 import type { AssetManifest } from '../../assets/catalog';
 import { rxFileOf } from './assets';
 import { mountRedux, type ReduxCtx, type ReduxView } from './stage';
-import { act, type Area, esc, H, TX, W } from './kit';
+import { act, type Area, esc, H, isArtPlaceholder, TX, W } from './kit';
 import { boardProgress, type BoardRow, boardView, gridStart, gridView, menuView, scrollStart, tabsBar } from './templates';
 import { bagCols, bagUseNote, bagView } from './screens/bag';
 import { battleListView, windowTitle } from './screens/battle';
@@ -31,6 +31,8 @@ export interface PickerBridge {
   tabs?: { labels: readonly string[]; index: number; onChange: (index: number) => void };
   canBack: boolean;
   backLabel?: string;
+  /** The room's own page, drawn in place of the rows (the Trainer Card). Its `back` clicks close the room. */
+  page?: (c: ReduxCtx) => string;
   /** The battle window's top edge, when it is not the usual one. */
   top?: number;
   /** The quick-summary text while it is open (I), else null. */
@@ -95,7 +97,7 @@ export function scrapeRow(scene: Phaser.Scene, box: Phaser.GameObjects.Container
     for (const o of c.list) {
       if (o instanceof Phaser.GameObjects.Container) walk(o);
       else if (o instanceof Phaser.GameObjects.Text) {
-        if (o.visible && o.text.trim()) texts.push({ t: o.text.trim(), size: parseInt(String(o.style.fontSize), 10) || 16, right: o.originX === 1 });
+        if (o.visible && o.text.trim() && !isArtPlaceholder(o.text)) texts.push({ t: o.text.trim(), size: parseInt(String(o.style.fontSize), 10) || 16, right: o.originX === 1 });
       } else if (!art && (o instanceof Phaser.GameObjects.Image || o instanceof Phaser.GameObjects.Sprite) && o.visible) art = fileOf(scene, o.texture.key);
     }
   };
@@ -188,7 +190,7 @@ export function mountPickerView(scene: Phaser.Scene, p: PickerBridge, kind: Pick
   const view = mountRedux(scene, {
     render: (c) => {
       cols = pickerCols(kind, c);
-      return render(c, scene, p, kind);
+      return p.page ? p.page(c) : render(c, scene, p, kind);
     },
     acts: { pick: (i) => p.pick(Number(i)), tab: (k) => p.tabs && Number(k) !== p.tabs.index && p.tabs.onChange(Number(k)), back: () => p.back() },
     overs: { over: (i) => p.hover(Number(i)) },

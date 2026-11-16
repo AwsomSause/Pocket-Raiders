@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
-import { boardProgress, boardSize, boardView, gridStart, menuView, type BoardModel, type BoardRow } from '../../src/ui/redux/templates';
+import { isArtPlaceholder } from '../../src/ui/redux/kit';
+import { boardProgress, boardSize, boardView, gridStart, gridView, menuView, type BoardModel, type BoardRow } from '../../src/ui/redux/templates';
 
 // The mock-ups' board (quests, chains, tasks): rows with a progress bar and a state tag, in two layouts.
 
@@ -127,5 +128,26 @@ describe('New UI board with a long text box', () => {
 
   it('the two-column layout keeps its six cards (they end well above the text box)', () => {
     expect(shown(boardView(at(1), { title: 'Bonds', area: 'party', rows: rows6, index: 0, text: long }))).toBe(6);
+  });
+});
+
+describe('New UI grid page and row reading', () => {
+  const grid = (n: number, text = 'One line.') => gridView(ctx(0), { title: 'Trainer Archive', n, index: 0, cell: (i) => ({ label: `T${i}` }), detail: { title: 'Red', art: null }, found: n, total: n, text });
+  it('a grid longer than a page shows its range under the cells, clear of the text box', () => {
+    const html = grid(287);
+    expect(html).toContain('1–18 of 287');
+    expect(html).toContain('right:28px;top:392px');
+    expect(html).not.toContain('top:438px');
+  });
+  it('a grid that fits on one page shows no range', () => {
+    expect(grid(18)).not.toContain(' of 18');
+    expect(grid(1)).not.toContain(' of 1 ');
+  });
+  it('the stand-in words of a picture that is still loading are not row text', () => {
+    expect(isArtPlaceholder('Red\n(art missing)')).toBe(true);
+    expect(isArtPlaceholder('(art missing)')).toBe(true);
+    expect(isArtPlaceholder('Red The Balanced Trainer')).toBe(false);
+    expect(isArtPlaceholder('The art missing from the hall')).toBe(false);
+    expect(isArtPlaceholder('')).toBe(false);
   });
 });

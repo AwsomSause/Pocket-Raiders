@@ -2249,3 +2249,33 @@ test('New UI: losing an Extended Cut climax battle shows the Second Shot box ove
   await expect.poll(async () => page.evaluate(() => { const pkr = (window as any).__pkr; return pkr.session.run.phase !== 'over' && !pkr.game.scene.isActive('GameOver') && pkr.session.run.party.some((m: any) => m.hp > 0); }), { timeout: 20_000 }).toBe(true);
   expect(errors).toEqual([]);
 });
+
+test('New UI: the hub Trainer Card is the mock-up card page (picture, name and rank, the record, eight badge discs), and Esc goes back to the hub', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-card');
+  await open(page, 'Hub');
+  await page.waitForTimeout(500);
+  await page.evaluate(() => {
+    const p = (window as any).__pkr.session.profile;
+    p.stats.runsEnded = 12; p.stats.battlesWon = 340; p.stats.bestEncounters = 77; p.best.badges = 3;
+    (window as any).__pkr.game.scene.getScene('Hub').enter('card');
+  });
+  const hub = view(page, 'Hub').last();
+  await expect(hub.locator('.hd')).toContainText('Trainer Card');
+  const card = hub.locator('.win').first();
+  await expect(card).toContainText('Rank');
+  for (const t of ['Title', 'Runs', '12', 'Battles won', '340', 'Best run', '77 encounters', 'Pokémon caught']) await expect(card).toContainText(t);
+  // Eight discs, three of them won.
+  await expect(card.locator('i[style*="border-radius:50%"]')).toHaveCount(8);
+  await expect(card.locator('i[style*="background:var(--p2)"]')).toHaveCount(5);
+  // The player's picture, and the frame line in the text box; the old canvas card is not what shows.
+  await expect(card.locator('.cell')).toBeVisible();
+  await expect(hub.locator('.txt')).toContainText('Change title and frame in the Wardrobe.');
+  await expect(card.locator('[data-act="save"]')).toHaveCount(0);
+  await page.screenshot({ path: 'test-results/newui-trainer-card.png' });
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#rx .hd', { hasText: 'Trainer Card' })).toHaveCount(0);
+  await expect(view(page, 'Hub').first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
