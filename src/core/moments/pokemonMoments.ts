@@ -389,6 +389,14 @@ export function partyStarOf(requires: readonly { kind: string; group?: string; s
   }
   return null;
 }
+/** The group of the camp rest events; each is about one of the team, never named. */
+export const CAMP_REST_GROUP = 'Rests, camp and bond';
+/** The Pokémon a camp rest's picture shows: the second one still standing (the lead travels with you), else the first standing, else the lead. */
+export function campStarOf(group: string, party: readonly { speciesId: string; hp: number }[]): string | null {
+  if (group !== CAMP_REST_GROUP || !party.length) return null;
+  const up = party.filter((m) => m.hp > 0);
+  return (up[1] ?? up[0] ?? party[0])!.speciesId;
+}
 /** PA12: a Paradox Pokémon and the modern species it mirrors. */
 /** PA17 to PA31: the last-stand statuses by id. */
 export const REVIVAL_STATUSES: Readonly<Record<string, RevivalStatus>> = file.revivalStatuses;

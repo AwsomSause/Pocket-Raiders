@@ -279,7 +279,6 @@ test('New UI: Esc on the map opens the mock-up pause menu; its buttons open the 
   await expect(buttons()).toHaveText(['Resume', 'Party', 'Bag', 'Settings', 'Save', 'End run']);
   await expect(map().locator('.btn.on[data-act="pause"]')).toHaveText('Resume');
   await page.screenshot({ path: 'test-results/newui-pause.png' });
-  await page.screenshot({ path: 'test-results/newui-pause.png' });
   // While paused the map does not travel: Enter is "Resume", not the stop under the cursor.
   await page.keyboard.press('Enter');
   await paused(false);

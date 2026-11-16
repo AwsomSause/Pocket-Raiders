@@ -30,6 +30,7 @@ import Phaser from 'phaser';
 import { wildBehavior } from '../core/wildBehavior';
 import { enemyIntent, foePreviewIntent, trainerTaunt } from '../core/battle/intent';
 import { nextSwitchLine } from '../core/rivals/questlines';
+import { winConditionLine } from '../core/rivals/tier5';
 import { explainMoment, explanationText, FAMILY_NAMES, unseenKeys } from '../core/story/hyperRules';
 import { bondScoreOf, momentumMax, rallyProblem } from '../core/battle/spectacle';
 import { armFeat, featCharged } from '../core/story2/feats';
@@ -126,7 +127,7 @@ import { artOf, monFile } from '../ui/redux/game';
 import { moveTipOf, ownAbilityCard, seenFact } from '../ui/redux/tips';
 import { versusView, type VersusModel } from '../ui/redux/screens/versus';
 import { eventView } from '../ui/redux/screens/event';
-import type { CutModel } from '../ui/redux/screens/cut';
+import { shortestSentence, type CutModel } from '../ui/redux/screens/cut';
 import type { Art } from '../ui/redux/templates';
 import { playCutMoment } from '../ui/redux/moment';
 import { rxFileOf } from '../ui/redux/assets';
@@ -2745,7 +2746,8 @@ export class BattleScene extends Phaser.Scene {
     }
     const model: VersusModel = {
       name: boss && !standIn ? boss.name : trainer.name,
-      role: boss ? boss.title.replace(boss.name, '').trim() : battle.rivalId || battle.rival ? 'Rival' : cls?.name ?? '',
+      // A tier-5 rival names its win condition before the fight (the mock-up's "Rival · plans to sweep").
+      role: boss ? boss.title.replace(boss.name, '').trim() : battle.rivalId || battle.rival ? (battle.rivalBrain ? `Rival · ${winConditionLine(battle.rivalBrain.winCondition)}` : 'Rival') : cls?.name ?? '',
       cast: artOf(this, this.trainerArt()?.assetId),
       line,
       evil: !!team && Object.values(team.ranks).some((r) => r.name === trainer.name),
@@ -2922,6 +2924,14 @@ export class BattleScene extends Phaser.Scene {
     const battle = this.run.battle!;
     const { content } = services().session;
     if (battle.raid) {
+      // A Colossus raid (`ss-<team>-<apex>`) is an Apex: the team's leader stands with it on the card, as on the mock-up's Apex record.
+      const apexTeam = battle.raid.id.startsWith('ss-') ? content.evilTeams.teams.find((t) => t.id === battle.raid!.id.split('-')[1]) : undefined;
+      const apexDef = apexTeam ? content.raids.raids.find((r) => r.id === battle.raid!.id) : undefined;
+      if (apexTeam && apexDef) {
+        const leader = artOf(this, apexTeam.ranks.leader.sprite);
+        await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'APEX', apexDef.name, false, { cast: leader ?? this.rxMe(), role: `Apex · ${apexTeam.name}`, line: shortestSentence(apexDef.blurb), evil: true });
+        return;
+      }
       await this.bigMoment(bossIntroMoment({ role: 'raid' }), `raid.${battle.enemyTeam[0]?.speciesId ?? 'boss'}`, 'RAID BOSS', this.speciesName(battle.enemyTeam[0]!), false, { cast: this.rxMe(), role: 'Raid Boss', line: 'The den glows red.' });
       return;
     }

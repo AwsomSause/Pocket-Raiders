@@ -57,6 +57,8 @@ export interface RunCardModel {
   area?: Area;
   /** False for a card that cannot be saved as a picture: a click on it does nothing. */
   save?: boolean;
+  /** What a click beside the card does (default: back). */
+  tap?: string;
 }
 
 const BADGE_COLORS = ['#e8622a', '#3d8bea', '#3fae5a', '#d8a810', '#7a5ad8', '#d8483a', '#2aa6a0', '#c85aa8'] as const;
@@ -67,7 +69,7 @@ export function runCardView(c: ReduxCtx, d: RunCardModel): string {
   const discs = `<div class="row" style="gap:6px;margin-top:4px">${Array.from({ length: 8 }, (_, k) => `<i style="width:26px;height:26px;border-radius:50%;background:${k < lit ? BADGE_COLORS[k] : 'var(--p2)'};box-shadow:0 0 0 2px var(--l)"></i>`).join('')}</div>`;
   const team = v ? `<div class="col" style="gap:6px">${d.team.slice(0, 3).map((f) => (f ? mini(f, 60) : '')).join('')}</div>` : '';
   const card = W(`<div class="row" style="gap:22px;align-items:flex-start"><div class="cell" style="width:${cell}px;height:${cell}px;flex:none;overflow:hidden">${figure(d.trainer, Math.round(cell * 0.85))}</div><div class="col grow" style="gap:9px"><div class="row"><b class="acc" style="font-size:26px">${esc(d.name)}</b><span class="tg">${esc(d.rank)}</span></div>${facts(d.facts)}${discs}</div>${team}</div>`, d.save === false ? 'padding:20px 24px' : 'padding:20px 24px;cursor:pointer', '', d.save === false ? '' : act('save'));
-  return `<div class="fill"${act('back')}></div>` + H(d.title, d.area ?? 'end', d.hints) + `<div class="abs" style="left:${side}px;right:${side}px;top:78px">${card}</div>` + TX(esc(d.text));
+  return `<div class="fill"${act(d.tap ?? 'back')}></div>` + H(d.title, d.area ?? 'end', d.hints) + `<div class="abs" style="left:${side}px;right:${side}px;top:78px">${card}</div>` + TX(esc(d.text));
 }
 
 /** A short line that ends with a colon heads the lines under it ("Run timeline:"). */

@@ -18,7 +18,8 @@ export function getMinigame(content: Content, id: string): MinigameDef {
 
 export interface MinigamePreview {
   id: string; name: string; blurb: string; instructions: string; scoring: string; failure: string; replay: string;
-  attemptsLeft: number; recommendedTier: number; tiers: { label: string; index: number }[]; best: Medal; medals: string;
+  attemptsLeft: number; recommendedTier: number; /** Each tier: its money multiplier and whether a medal there can pay an item. */
+  tiers: { label: string; index: number; money: number; items: boolean }[]; best: Medal; medals: string;
 }
 
 export function minigamePreview(content: Content, run: RunState, sideId: string, difficulty: 'easy' | 'normal' | 'hard' = 'normal'): MinigamePreview {
@@ -28,7 +29,7 @@ export function minigamePreview(content: Content, run: RunState, sideId: string,
   const m = def.medals;
   return {
     id: def.id, name: def.name, blurb: def.blurb, instructions: def.instructions, scoring: def.scoringRules, failure: def.failureOutcome, replay: def.replayRules,
-    attemptsLeft: Math.max(0, def.attemptLimit - used), recommendedTier: Math.min(def.difficultyTiers.length - 1, { easy: 0, normal: 1, hard: 3 }[difficulty]), tiers: def.difficultyTiers.map((t, index) => ({ label: t.label, index })), best: run.minigames.best[def.id] ?? 'none',
+    attemptsLeft: Math.max(0, def.attemptLimit - used), recommendedTier: Math.min(def.difficultyTiers.length - 1, { easy: 0, normal: 1, hard: 3 }[difficulty]), tiers: def.difficultyTiers.map((t, index) => ({ label: t.label, index, money: content.minigames.economy.tierMultipliers[index] ?? 1, items: index + 1 >= content.minigames.economy.itemMinTier })), best: run.minigames.best[def.id] ?? 'none',
     medals: `Bronze ${Math.round(m.bronze * 100)}% · Silver ${Math.round(m.silver * 100)}% · Gold ${Math.round(m.gold * 100)}%`,
   };
 }

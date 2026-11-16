@@ -1,4 +1,4 @@
-# New UI: last pass against the mock-ups, part 5 (Galar broadcast, the stage map's menus and cards, stops, battle)
+# New UI: last pass against the mock-ups, part 5 (Galar broadcast, the stage map's menus and cards, stops, battle, Beta 0.6 pieces)
 
 **Player gets:** (New look)
 - **Galar stadium:** the reporter, the interview and the round introductions are the mock-up's talk page over the field (a name plate, the line, Go on).
@@ -17,6 +17,11 @@
 - **Fishing:** a bite opens the mock-up's small "! A bite !" window in the middle of the water, with each Pokémon's picture and level.
 - **Minigames:** the windows across the top end with "Best", your best medal in this game so far.
 - **Choosing a target (double and triple battles):** the list ends with Back, which returns to the moves.
+- **Camp rests:** the scene shows one of your Pokémon by the fire (the second one still standing; the lead when you have one).
+- **Stand With Them:** the job offer shows the team's leader and the chip "Reputation +30 if you join". Joining shows the mock-up's code-name card (your code name, team, reputation, uniform and standing) while the welcome line is read.
+- **Rival battles:** a rival with a plan says it on the versus card ("Rival · plans to sweep", "set the weather" or "stall").
+- **Minigame stops:** the difficulty list is the mock-up's tier list: each tier with the money it pays, and a card with the medals, whether an item can drop, and your best.
+- **Apex raids (the Colossus):** the raid opens on the Apex card: the team's leader beside the Apex, its name and one line.
 
 **Save:** none.
 
@@ -25,6 +30,7 @@
 - The Album has no fixed number of pages; it shows 18 and grows by rows of six.
 - The Rivals board has a bar only for a rival with a quest; the mock-up draws one on every row.
 - The battle has no Run command (the game has no running away); the cut cards show your trainer's front picture (there are no back pictures); the shop shows no stock count; the reward draft keeps Party and Bag where the mock-up has Reroll and Skip; the fishing bar is decoration (the game's fishing is a pick of bites). These follow the game's rules.
+- Story raids are told as event pages, so there is no separate "story raid card"; a Pokémon Moment in battle is told in the text box (the director's full-screen moment scene stays as it is); Ein and the other Grand Arc figures appear on the event page.
 - The Old look keeps its Camp tabs, Scrapbook list, Story list, PC list, Rival Notebook and Relationships pages, and L still opens the log there.
 
-**Tests:** unit tests for the page names and bands, a person's role, the bracket's player slot; browser tests in `tests/e2e/worldNewUi.spec.ts` (Galar interview; Camp, Album, Story Journal, Legend and the microphone prompt; PC, Rivals, People and Notes on a story run; the Totem card), `tests/e2e/fieldNewUi.spec.ts` (Buy 5 and fishing; a Pokémon Moment and the minigame Best window; the triple battle's target Back). Many New UI browser tests now also save a screenshot for the mock-up check. Unit tests for the moment's star, the shop's words, the fishing window and the Best window. The Tools browser test is split in two because one long test ran out of time on a slow test machine.
+**Tests:** unit tests for the page names and bands, a person's role, the bracket's player slot; browser tests in `tests/e2e/worldNewUi.spec.ts` (Galar interview; Camp, Album, Story Journal, Legend and the microphone prompt; PC, Rivals, People and Notes on a story run; the Totem card), `tests/e2e/fieldNewUi.spec.ts` (Buy 5 and fishing; a Pokémon Moment and the minigame Best window; the triple battle's target Back; Stand With Them's code-name card, a camp rest and the minigame tier list). Many New UI browser tests now also save a screenshot for the mock-up check. Unit tests for the code-name card, the camp rest Pokémon, the tier pay, the rival's plan words, the Apex line, the moment's star, the shop's words, the fishing window and the Best window. The Tools browser test is split in two because one long test ran out of time on a slow test machine.

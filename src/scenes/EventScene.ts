@@ -14,7 +14,8 @@ import { stopArtFor } from '../ui/stopArt';
 import Phaser from 'phaser';
 import { clockLabel, periodOf, PERIOD_LOOK, seasonOf, specialDateToday } from '../core/clock';
 import { eventView, tradeCard as eventTradeCard, type ChoiceView, type EventResult, type TradePick } from '../core/events';
-import { partyStarOf } from '../core/moments/pokemonMoments';
+import { campStarOf, partyStarOf } from '../core/moments/pokemonMoments';
+import { codeNameCard, codeNameFor, STAND, standWithOf } from '../core/arc/standWithExtended';
 import type { CardSide, HonestCard } from '../core/co/tradeCard';
 import { promptById, type Grade } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
@@ -198,7 +199,18 @@ export class EventScene extends Phaser.Scene {
       const youArt = artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId);
       // A Pokémon Moment (an event about a party Pokémon) that names no art: that Pokémon stands with the player, as on the mock-up's moment page.
       const partyStar = !champion && !ctx.species && !ctx.castIds.length ? partyStarOf(view.event.requires, run.party) : null;
-      const cast = partyStar ? youArt : artOf(this, ctx.castIds[0]);
+      // A camp rest is about one of the team (the mock-up's camp page shows it by the fire, with no trainer).
+      const campStar = !champion && !ctx.species && !ctx.castIds.length && !partyStar ? campStarOf(view.event.group, run.party) : null;
+      const mine = partyStar ?? campStar;
+      // Stand With Them: the one who offers the job and names you (the team's leader) stands in the picture.
+      const standTeam = view.event.id.startsWith('stand-with-') ? (standWithOf(run)?.team ?? run.story.evil?.teamId ?? null) : null;
+      const bossArt = (name: string | undefined): typeof youArt => {
+        if (!name) return null;
+        const rank = Object.values(content.evilTeams.teams.find((t) => t.id === standTeam)?.ranks ?? {}).find((r) => r.name.includes(name));
+        return artOf(this, rank?.sprite) ?? artOf(this, content.bosses.get(name.toLowerCase())?.sprites.default);
+      };
+      const giverArt = standTeam ? bossArt(codeNameFor(standTeam)?.givenBy) : null;
+      const cast = partyStar ? youArt : (artOf(this, ctx.castIds[0]) ?? giverArt);
       // The person speaking stands in the picture when the event's cast has them (matched by name).
       const castOf = (who: string | null): typeof cast => {
         const key = who?.toLowerCase().split(/\s+/).filter((w) => w.length > 2).pop();
@@ -207,7 +219,7 @@ export class EventScene extends Phaser.Scene {
       };
       this.rxPages = scriptPages(view.event.intro);
       this.rxAt = ctx.introSeen ? this.rxPages.length - 1 : 0;
-      const star = champion ? monFile(this, champion) : ctx.species ? monFile(this, ctx.species.id) : partyStar ? monFile(this, partyStar, 'front', run.party.find((m) => m.speciesId === partyStar)?.shiny ?? false) : null;
+      const star = champion ? monFile(this, champion) : ctx.species ? monFile(this, ctx.species.id) : mine ? monFile(this, mine, 'front', run.party.find((m) => m.speciesId === mine)?.shiny ?? false) : null;
       const rounds = tv ? tourneyRounds(tv) : null;
       // A swap shows both sides before the player commits: the Pokémon that goes, and the one that comes back when the trade says so.
       const tradeCard = (p: TradePick | undefined): { give: { name: string; file: string | null }; get: { name: string; file: string | null } | null } | null => {
@@ -245,7 +257,9 @@ export class EventScene extends Phaser.Scene {
         };
         this.input.keyboard?.on('keydown-T', this.toggleCard);
       }
-      const tag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
+      // The job offer's chip says what joining is worth, as on the mock-up.
+      const groupTag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
+      const tag = view.event.id === 'stand-with-recruiter' && !standWithOf(run) ? `Reputation +${STAND.joinRep} if you join` : groupTag;
       // A department store floor: the directory, and who each good on the shelf helps (a stone that evolves it, medicine for the hurt).
       const store = storeOf(view.event.id);
       const helps = (live: typeof run): string[][] => view.event.choices.map((ch) => {
@@ -265,7 +279,8 @@ export class EventScene extends Phaser.Scene {
           const speaker = pageSpeaker(pages[at]!);
           return rxEventView(c, {
             name: view.event.name,
-            tag,
+            // Once the choice is made the offer's chip has said its piece.
+            tag: out ? groupTag : tag,
             lines: pages[at]!,
             speaker,
             page: { at, of: pages.length },
@@ -284,6 +299,13 @@ export class EventScene extends Phaser.Scene {
             standing: view.standing ?? null,
             rounds,
             honest: honest(),
+            codeCard: (() => {
+              // Joining shows the code-name card while the welcome line is read.
+              if (view.event.id !== 'stand-with-recruiter' || !r?.success) return null;
+              const joined = standWithOf(r.run);
+              const card = joined ? codeNameCard(r.run, content.evilTeams.teams.find((t) => t.id === joined.team)?.name ?? joined.team, content.regions.get(joined.region)?.name ?? joined.region) : null;
+              return card ? { name: card.alias, rank: card.rank, facts: card.facts, trainer: bossArt(card.givenBy), badges: r.run.badges.length } : null;
+            })(),
             cardHint: eventCard !== null && this.phase === 'choose' && !out,
             bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
             title: champion ? 'CHAMPION' : null,

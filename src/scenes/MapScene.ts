@@ -120,6 +120,7 @@ import { askText } from '../ui/redux/ask';
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
+import { bestMedalWord } from '../ui/redux/screens/minigame';
 import { confirmBox } from '../ui/redux/screens/saves';
 import { bookRows, bookView, dossierView, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
@@ -1881,6 +1882,8 @@ export class MapScene extends Phaser.Scene {
       rows: pv.tiers.map((t) => ({
         problem: pv.attemptsLeft > 0 ? null : 'No attempts left',
         hint: `${pv.instructions} ${pv.scoring}`,
+        // New look: the mock-up's tier list (the tier, what it pays) with the medals and the best on the card.
+        menu: { label: `${t.label}${t.index === pv.recommendedTier ? ' (your setting)' : ''}`, note: `×${t.money} money`, detail: `${pv.medals}. ${t.items ? 'A medal here can also pay an item.' : 'Money only at this tier.'} Best so far: ${bestMedalWord(pv.best)}.` },
         draw: (scene, box, w) => {
           box.add(scene.add.text(16, 8, `${pv.name}  ·  ${t.label}${t.index === pv.recommendedTier ? '  (your setting)' : ''}`, textStyle(22)));
           box.add(scene.add.text(16, 40, `${pv.instructions} ${pv.scoring}`, textStyle(15, '#ffd0a0', { wordWrap: { width: w - 32 } })));

@@ -9,6 +9,8 @@ export type PickerKind = 'menu' | 'grid' | 'board' | 'bag' | 'window';
 /** Which template a list uses, by its title: the mock-ups' own rule for hub rooms (redux-07.js `kind`). */
 const KIND_BY_NAME: [RegExp, PickerKind][] = [
   [/^bag$/i, 'bag'],
+  // A minigame stop's tier list ("Pokémon Memory - 2 attempts left"): a menu whatever the game is called.
+  [/ - \d+ attempts? left$/i, 'menu'],
   [/^bonds?$/i, 'board'],
   // The mock-up catalogue names these screens outright (redux-explorer.js SETS); the rule below covers the rest.
   [/^(lore|story|remembrance) archive|^tales|^run history|^trainer quests|^event hall|^content status|^seed board|run journal|memory lane|fallen trainers|battle replays|leaderboard|^bonds|story journal|^rival|^people|relationships|field notes|^notes/i, 'board'],
@@ -39,6 +41,8 @@ export function pickerKind(title: string): PickerKind {
 /** Header colour by title, as the mock-up catalogue bands each page: run menus teal, party green, shops orange, story pages purple, the rest hub blue. */
 export function areaOf(title: string): Area {
   if (/^bag$/i.test(title)) return 'shop';
+  // A minigame stop's tier list is a map stop: the run's teal, whatever the game's name says.
+  if (/ - \d+ attempts? left$/i.test(title)) return 'run';
   // A raid den's and a Totem's pages are about a battle: the battle's red band, as the mock-up's raid prep page.
   if (/^(raid|totem) - |^before you go in/i.test(title)) return 'battle';
   // The Memories pages are story pages; the replays are battles (the mock-up catalogue's own bands).

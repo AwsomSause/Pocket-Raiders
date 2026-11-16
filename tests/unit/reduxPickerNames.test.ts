@@ -29,6 +29,10 @@ describe('New UI list template by name', () => {
     expect(pickerKind('Character Database')).toBe('grid');
     expect(pickerKind('Moment Codex')).toBe('grid');
     expect(pickerKind('Lore Archive')).toBe('board');
+    // A minigame's tier list is a menu even when the game's name reads like a board (Memory).
+    expect(pickerKind('Pokémon Memory - 2 attempts left')).toBe('menu');
+    expect(pickerKind('Voltorb Flip - 1 attempt left')).toBe('menu');
+    expect(areaOf('Pokémon Memory - 2 attempts left')).toBe('run');
     expect(pickerKind('Mentors')).toBe('menu');
     expect(pickerKind('Bag')).toBe('bag');
     expect(pickerKind('Something else')).toBe('menu');

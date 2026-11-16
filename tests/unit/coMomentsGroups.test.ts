@@ -3,7 +3,7 @@ import { createBattle, resolveTurn, type BattleContext, type BattleEvent } from 
 import { hasStarterTrio, momentRuinExtra, momentStatPcts, momentTypeGuard } from '../../src/core/battle/pokemonMoments';
 import { conditionMet } from '../../src/core/events';
 import { fillCoText } from '../../src/core/events/coToolkit';
-import { MOMENT_GROUPS, partyStarOf, pokemonMoment, type MomentHooks } from '../../src/core/moments/pokemonMoments';
+import { CAMP_REST_GROUP, campStarOf, MOMENT_GROUPS, partyStarOf, pokemonMoment, type MomentHooks } from '../../src/core/moments/pokemonMoments';
 import { restMoments } from '../../src/core/moments/runMoments';
 import { calcStats, createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
@@ -171,5 +171,21 @@ describe('partyStarOf (who stands in a Pokémon Moment event)', () => {
     expect(partyStarOf([{ kind: 'partyGroup', group: 'pg2-eevee' }], [{ speciesId: 'not-a-pokemon' }])).toBeNull();
     expect(partyStarOf([{ kind: 'partyGroup', group: 'no-such-group' }], [{ speciesId: eevee[0]! }])).toBeNull();
     expect(partyStarOf([], [{ speciesId: eevee[0]! }])).toBeNull();
+  });
+});
+
+describe('campStarOf (who sits by the fire in a camp rest)', () => {
+  const mon = (speciesId: string, hp = 10) => ({ speciesId, hp });
+  it('is the second Pokémon still standing; the lead travels with you', () => {
+    expect(campStarOf(CAMP_REST_GROUP, [mon('charizard'), mon('lucario'), mon('gengar')])).toBe('lucario');
+    expect(campStarOf(CAMP_REST_GROUP, [mon('charizard'), mon('lucario', 0), mon('gengar')])).toBe('gengar');
+  });
+  it('falls back to the one standing, then to the lead when everyone is down', () => {
+    expect(campStarOf(CAMP_REST_GROUP, [mon('charizard')])).toBe('charizard');
+    expect(campStarOf(CAMP_REST_GROUP, [mon('charizard', 0), mon('lucario', 0)])).toBe('charizard');
+  });
+  it('is null for any other event group or an empty party', () => {
+    expect(campStarOf('Biome Hazards', [mon('charizard'), mon('lucario')])).toBeNull();
+    expect(campStarOf(CAMP_REST_GROUP, [])).toBeNull();
   });
 });
