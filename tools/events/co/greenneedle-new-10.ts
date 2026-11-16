@@ -16,7 +16,7 @@ const gnc = (test: string): Json => ({ kind: 'gn', test });
 const late = (): Json[] => [when('mirror-late', { min: 1, max: 1 }, [setTo('mirror-late', 2)]), when('mirror-late', { min: 0, max: 0 }, [setTo('mirror-late', 1)]), stampStage('mirror-stage')];
 
 const EVENTS_10: Json[] = [
-  gev('gn-new-10-lake', 'The Mirror Lake', lake({ stop: 'event', rarity: 'rare', requires: [gnc('mirrorReady'), not('mirror-seen')] }), say(
+  ...[['gn-new-10-lake', 'rare'], ['gn-new-10-lake-b', 'uncommon']].map(([id, rarity]) => gev(id!, 'The Mirror Lake', lake({ stop: 'event', rarity: rarity as 'rare', requires: [gnc('mirrorReady'), not('mirror-seen')] }), say(
     '*A lake so still it looks painted. You lean over the edge, and your reflection leans over to meet you. It is a half second late.*',
     'You wave. The reflection waves back, after you have stopped. Then it does not stop waving.',
     '*The water shivers. Shapes climb out of it, dripping nothing: the team from the fight you would rather forget.*',
@@ -27,7 +27,7 @@ const EVENTS_10: Json[] = [
     }), setTo('mirror-seen', 1), setTo('mirror-fought', 1))),
     ch('Skip stones instead.', out('You pick up a flat stone and send it skipping. The ripples run out and break them up, one by one, until only one is left. It sits on the bank, and watches you.', setTo('mirror-seen', 1), setTo('mirror-watcher', 1), stampStage('mirror-stage'))),
     ch('Leave.', out('You step back from the edge. Nothing follows you. Behind you, the water settles, and goes on being painted.', setTo('mirror-seen', 1))),
-  ]),
+  ])),
   rm('gn-new-10-bow', 'The Mirror Lake: The Bow', lake(), say(
     'The last reflection falls. They look at you for a moment, and at your team. Nobody says anything.',
     'Then they bow, all of them, together, the way you wish you had that day.',
@@ -54,7 +54,13 @@ export const PLACEMENT: Record<string, Placement> = {
   'gn-new-10-lake': {
     gn: 'gn.new.10', shape: 'Single', earliest: 'A5', home: 8, window: [6, 10], sits: 'side-branch', attaches: 'instead', tags: ['Miniature Episode'], needs: ['water'],
     level: 'The reflections are the player\'s own team as it was in the lost (or nearly lost) battle', often: 'run', badge: 'own',
-    note: 'Badge: a ripple. A side branch at step 8 that needs water; the doc\'s fallback is step 13, optional (the placer widens the window). Needs a fight lost, or all but one Pokémon lost, this run: run.ts finishBattle keeps the latest such team. Once per run. Win: a Reflection Glass (the doc\'s "Reflection Shard" is cut with the Shards).',
+    note: 'Badge: a ripple. A side branch at step 8 that needs water; the doc\'s fallback is step 13, optional (the fallback is gn-new-10-lake-b). Needs a fight lost, or all but one Pokémon lost, this run: run.ts finishBattle keeps the latest such team. Once per run. Win: a Reflection Glass (the doc\'s "Reflection Shard" is cut with the Shards).',
+  },
+  // The doc's fallback: step 13, optional. The same lake under its own id; both need `mirror-seen` unset, so one lake a run.
+  'gn-new-10-lake-b': {
+    gn: 'gn.new.10', shape: 'Single', earliest: 'A5', home: 13, window: [11, 15], sits: 'optional', attaches: 'instead', tags: ['Miniature Episode'], needs: ['water'],
+    level: 'The reflections are the player\'s own team as it was in the lost (or nearly lost) battle', often: 'run', badge: 'own',
+    note: 'The doc\'s fallback home: step 13, optional, needs water. The same lake as gn-new-10-lake (same rooms); whichever is met first sets `mirror-seen`, so it is once per run.',
   },
   'gn-new-10-late': { gn: 'gn.new.10', shape: 'Single', earliest: 'A5', home: 8, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Miniature Episode'], needs: ['water'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: if a reflection watched from the bank, twice more this run at water nodes one is a half second late.' },
 };

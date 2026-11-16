@@ -123,6 +123,125 @@
    ]
   },
   {
+   "id": "gn-new-10-lake-b",
+   "name": "The Mirror Lake",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Mystery"
+   ],
+   "types": [
+    "water"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "mirrorReady"
+    },
+    {
+     "kind": "flag",
+     "key": "mirror-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5f7f96",
+    "effect": "none"
+   },
+   "intro": "*A lake so still it looks painted. You lean over the edge, and your reflection leans over to meet you. It is a half second late.*\n\nYou wave. The reflection waves back, after you have stopped. Then it does not stop waving.\n\n*The water shivers. Shapes climb out of it, dripping nothing: the team from the fight you would rather forget.*",
+   "choices": [
+    {
+     "label": "Fight them.",
+     "success": {
+      "text": "Your own team stands on the shore, exactly as it stood that day. They have the same moves. They know how you play.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-seen",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-fought",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-10-under"
+        }
+       ],
+       "rule": {
+        "gn": "mirror"
+       },
+       "name": "The Reflections",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-10-bow"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Skip stones instead.",
+     "success": {
+      "text": "You pick up a flat stone and send it skipping. The ripples run out and break them up, one by one, until only one is left. It sits on the bank, and watches you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-seen",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-watcher",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "mirror-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You step back from the edge. Nothing follows you. Behind you, the water settles, and goes on being painted.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "mirror-seen",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "gn-new-10-bow",
    "name": "The Mirror Lake: The Bow",
    "group": "Greenneedle",

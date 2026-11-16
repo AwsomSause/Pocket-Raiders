@@ -2774,7 +2774,29 @@
   "level": "The reflections are the player's own team as it was in the lost (or nearly lost) battle",
   "often": "run",
   "badge": "own",
-  "note": "Badge: a ripple. A side branch at step 8 that needs water; the doc's fallback is step 13, optional (the placer widens the window). Needs a fight lost, or all but one Pokémon lost, this run: run.ts finishBattle keeps the latest such team. Once per run. Win: a Reflection Glass (the doc's \"Reflection Shard\" is cut with the Shards).",
+  "note": "Badge: a ripple. A side branch at step 8 that needs water; the doc's fallback is step 13, optional (the fallback is gn-new-10-lake-b). Needs a fight lost, or all but one Pokémon lost, this run: run.ts finishBattle keeps the latest such team. Once per run. Win: a Reflection Glass (the doc's \"Reflection Shard\" is cut with the Shards).",
+  "kinds": [
+   "Miniature Episode"
+  ],
+  "tags": [
+   "water"
+  ]
+ },
+ "gn-new-10-lake-b": {
+  "gn": "gn.new.10",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "The reflections are the player's own team as it was in the lost (or nearly lost) battle",
+  "often": "run",
+  "badge": "own",
+  "note": "The doc's fallback home: step 13, optional, needs water. The same lake as gn-new-10-lake (same rooms); whichever is met first sets `mirror-seen`, so it is once per run.",
   "kinds": [
    "Miniature Episode"
   ],

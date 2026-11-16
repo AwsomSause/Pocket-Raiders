@@ -41,6 +41,14 @@ describe('gn.new.10 The Mirror Lake', () => {
     expect(JSON.stringify(mirrorTeam(run))).toBe(before);
   });
 
+  it('the step 13 fallback is the same lake: same choices, once a run', () => {
+    const run = lake('mirror-b', (r) => { r.stage!.map.nodes.find((n) => n.id === r.stage!.current)!.sides.length = 0; });
+    open(run, 'gn-new-10-lake-b');
+    expect(scene(run, 'gn-new-10-lake-b').labels).toEqual(['Fight them.', 'Skip stones instead.', 'Leave.']);
+    expect(flagOf(choose(run, 'gn-new-10-lake-b', 'Leave.').run, 'mirror-seen')).toBe(1);
+    expect(content.events.get('gn-new-10-lake-b')!.requires?.length).toBe(content.events.get('gn-new-10-lake')!.requires?.length);
+  });
+
   it('the doc\'s three choices', () => {
     expect(scene(lake('mirror-labels'), 'gn-new-10-lake').labels).toEqual(['Fight them.', 'Skip stones instead.', 'Leave.']);
   });
