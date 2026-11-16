@@ -2759,5 +2759,49 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-new-08-door": {
+  "gn": "gn.new.08",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   18
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Badge: a curtain. At night; falls back to step 5 of the next stage. Once per run. Mime Jr. joins with Curtain Call (engine.ts switchIn). The star's bow tie is Bond +2 and a flag; there is no bow tie item. gn-new-08-poster is the afterstory in a later region.",
+  "kinds": [
+   "Single",
+   "Pokémon",
+   "Relationship"
+  ],
+  "tags": [
+   "night"
+  ]
+ },
+ "gn-new-08-poster": {
+  "gn": "gn.new.08",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 5,
+  "window": [
+   2,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: the poster in the next region's step 5 town; the face depends on the ending.",
+  "kinds": [
+   "Story"
+  ],
+  "tags": []
  }
 }
