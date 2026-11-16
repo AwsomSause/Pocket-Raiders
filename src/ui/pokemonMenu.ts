@@ -45,6 +45,7 @@ import { storyIcon } from './storyIcon';
 import { storyIconId } from '../assets/storyIcons';
 import { arenaFor, getTheme } from '../core/themes';
 import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from './redux/stage';
+import { askText } from './redux/ask';
 import { hoverTips, moveTipOf } from './redux/tips';
 import { artOf, monFile } from './redux/game';
 import { partyCols, partyView, summaryView, type SummaryBody } from './redux/screens/party';
@@ -497,10 +498,14 @@ class PokemonScreen implements PickerLike {
     const moveId = nextNameable(this.run, this.mon.uid);
     if (!moveId) return;
     const current = signatureDisplay(this.run, moveId) ?? moveId;
-    const answer = typeof window !== 'undefined' && typeof window.prompt === 'function' ? window.prompt(`Name ${current} (3 to 20 letters; Cancel keeps it):`, current) : null;
-    this.flash = services().session.nameSignatureMove(moveId, answer);
-    this.notice = this.flash;
-    this.render();
+    const named = (answer: string | null): void => {
+      this.flash = services().session.nameSignatureMove(moveId, answer);
+      this.notice = this.flash;
+      this.render();
+    };
+    // The New look asks on the mock-ups' entry page; the Old look in the browser's own box.
+    if (reduxOn()) void askText(this.host.scene, { title: 'Signature move', area: 'party', heading: `Name ${current}`, text: '3 to 20 letters. Esc keeps the name it has.', value: current }).then(named);
+    else named(typeof window !== 'undefined' && typeof window.prompt === 'function' ? window.prompt(`Name ${current} (3 to 20 letters; Cancel keeps it):`, current) : null);
   }
 
   private doCare(id: CareAction, forced?: string): void {
@@ -515,7 +520,12 @@ class PokemonScreen implements PickerLike {
       if (id === 'cry') arg = String(CRY_LEVELS[this.cryIdx]);
       if (id === 'whistle') arg = WHISTLES[this.whistleIdx];
       if (id === 'dress') arg = ACCESSORY_CHOICES[this.accIdx] ?? '';
-      if (id === 'nickname') {
+      if (id === 'nickname' && forced === undefined) {
+        if (reduxOn()) {
+          // The New look asks on the mock-ups' entry page, then comes back here with the answer.
+          void askText(this.host.scene, { title: 'Nickname', area: 'party', heading: `Nickname for ${this.nameOf(this.mon)}`, text: 'Up to 12 letters. Leave it empty to clear the nickname.', value: this.mon.care?.nickname ?? '' }).then((answer) => { if (answer !== null) { this.doCare(id, answer); this.render(); } });
+          return;
+        }
         const answer = typeof window !== 'undefined' && typeof window.prompt === 'function' ? window.prompt('Nickname (up to 12 letters, empty clears):', this.mon.care?.nickname ?? '') : null;
         if (answer === null) return;
         arg = answer;

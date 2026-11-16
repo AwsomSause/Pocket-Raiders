@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bookRows, bookView, dossierView, DOSSIER_ROWS, leadLine, listWindow, pauseView, pyramidFace, reportView, rollView, trackView, type BookModel, type DossierModel, type ReportModel, type RollCard, type RollModel, type TrackModel } from '../../src/ui/redux/screens/popups';
+import { bookRows, bookView, dossierView, DOSSIER_ROWS, leadLine, listWindow, pauseView, pyramidFace, reportView, rollView, trackView, type BookModel, type DossierModel, type ReportModel, type RollCard, type RollModel, type TrackModel, nodeMenuView } from '../../src/ui/redux/screens/popups';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
 // The New UI map pop-ups (Dossier, Field Notes, Notebook track page, Rival Report), drawn from the mock-ups' Beta 0.6
@@ -241,5 +241,38 @@ describe('Pause menu', () => {
   it('never injects text as HTML', () => {
     const html = pauseView({ options: [{ label: '<b>x</b>' }], index: 0, note: '<i>n</i>' });
     for (const bit of ['<b>x</b>', '<i>n</i>']) expect(html).not.toContain(bit);
+  });
+});
+
+describe('Node event menu', () => {
+  const card = (name: string, more: Partial<{ kind: string; color: string; text: string; status: string; off: boolean; must: boolean }> = {}) => ({ kind: 'Shop', color: '#2f8fd0', name, text: 'Buy and sell.', status: 'Optional', off: false, must: false, ...more });
+  it('dims the map and shows one card per stop, the cursor on one, with its kind, line and standing', () => {
+    const html = nodeMenuView({ header: 'Bug Catcher Rick', cards: [card('Poké Mart'), card('Old Well', { kind: 'Explore', color: '#1aa59a', text: 'Look down the well.' }), card('Gate Guard', { kind: 'Battle', status: 'Required', must: true })], index: 1 });
+    expect(html).toContain('class="shade hit"');
+    expect(html).toContain('What to do here?');
+    expect(html).toContain('Bug Catcher Rick: done');
+    for (const t of ['Poké Mart', 'Old Well', 'Gate Guard', 'Look down the well.', 'Explore', 'Required', 'Optional']) expect(html).toContain(t);
+    expect(count(html, 'data-over="menuOver"')).toBe(3);
+    expect(count(html, 'data-act="menu"')).toBe(4);
+    expect(count(html, 'data-arg="-1"')).toBe(1);
+    expect(count(html, ' sel"')).toBe(1);
+    expect(html).toContain('background:#1aa59a');
+  });
+  it('a done or locked stop is dimmed; a node without a battle has no "done" line', () => {
+    const html = nodeMenuView({ header: '', cards: [card('Poké Mart', { status: 'Done', off: true }), card('Old Well', { status: 'Locked', off: true }), card('Rest')], index: 2 });
+    expect(count(html, 'filter:brightness(.62)')).toBe(2);
+    expect(html).not.toContain(': done');
+  });
+  it('two to six cards all fit across the page', () => {
+    for (const n of [2, 5, 6]) {
+      const html = nodeMenuView({ header: '', cards: Array.from({ length: n }, (_, k) => card(`Stop ${k}`)), index: 0 });
+      const w = Number(/width:(\d+)px;height:230px/.exec(html)![1]);
+      expect(w * n + 12 * (n - 1)).toBeLessThanOrEqual(912);
+      expect(w).toBeLessThanOrEqual(200);
+    }
+  });
+  it('never injects text as HTML', () => {
+    const html = nodeMenuView({ header: '<i>h</i>', cards: [card('<b>x</b>', { text: '<u>t</u>', kind: '<s>k</s>', status: '<em>s</em>' })], index: 0 });
+    for (const bit of ['<i>h</i>', '<b>x</b>', '<u>t</u>', '<s>k</s>', '<em>s</em>']) expect(html).not.toContain(bit);
   });
 });

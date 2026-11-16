@@ -49,25 +49,27 @@ export const presetSlotCount = (content: Content, profile: Pick<Profile, 'bankTi
 
 export type ExchangeDirection = 'toPoints' | 'toCredits';
 
-export function exchangeProblem(content: Content, profile: Profile, dir: ExchangeDirection): string | null {
+/** Why this many lots can't be exchanged (null = fine). Several lots are all or nothing. */
+export function exchangeProblem(content: Content, profile: Profile, dir: ExchangeDirection, lots = 1): string | null {
   if (bankTier(profile) < 3) return 'The Exchange Counter opens at Bank tier 3.';
+  if (!Number.isInteger(lots) || lots < 1) return 'Pick a whole number of lots.';
   const x = content.balance.bank.exchange;
-  if (dir === 'toPoints') return profile.bankCredits < x.credits ? `You need ${x.credits} Bank Credits (you have ${profile.bankCredits}).` : null;
-  return profile.researchPoints < x.backPoints ? `You need ${x.backPoints} Research Points (you have ${profile.researchPoints}).` : null;
+  if (dir === 'toPoints') return profile.bankCredits < x.credits * lots ? `You need ${x.credits * lots} Bank Credits (you have ${profile.bankCredits}).` : null;
+  return profile.researchPoints < x.backPoints * lots ? `You need ${x.backPoints * lots} Research Points (you have ${profile.researchPoints}).` : null;
 }
 
-/** One lot at the Exchange Counter. Returns a new profile. Credits gained this way do not count toward milestones. */
-export function exchange(content: Content, current: Profile, dir: ExchangeDirection): Profile {
-  const problem = exchangeProblem(content, current, dir);
+/** One lot (or several at once) at the Exchange Counter. Returns a new profile. Credits gained this way do not count toward milestones. */
+export function exchange(content: Content, current: Profile, dir: ExchangeDirection, lots = 1): Profile {
+  const problem = exchangeProblem(content, current, dir, lots);
   if (problem) throw new Error(problem);
   const x = content.balance.bank.exchange;
   const profile = structuredClone(current);
   if (dir === 'toPoints') {
-    profile.bankCredits -= x.credits;
-    profile.researchPoints += x.points;
+    profile.bankCredits -= x.credits * lots;
+    profile.researchPoints += x.points * lots;
   } else {
-    profile.researchPoints -= x.backPoints;
-    profile.bankCredits += x.backCredits;
+    profile.researchPoints -= x.backPoints * lots;
+    profile.bankCredits += x.backCredits * lots;
   }
   return profile;
 }

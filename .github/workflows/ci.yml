@@ -65,7 +65,11 @@ jobs:
         env:
           NODE_OPTIONS: --max-old-space-size=6144
 
-  # Browser tests run in 6 parallel shards (the slowest part of CI used to be one long serial job).
+  # Browser tests run in 8 parallel shards (the slowest part of CI used to be one long serial job). Six became too few on
+  # 2026-11-15: with the catalog overhaul's specs two shards ran out of their 30 minutes while every test was passing.
+  # A spec file runs in one worker from start to end, so a very long file cannot be shared out: split it instead.
+  # Shards take the files in name order, so the New UI specs (*NewUi.spec.ts, the heaviest tests) have names spread over
+  # the alphabet: four of them side by side in one shard ran two at a time and timed out on a slow runner.
   e2e:
     needs: changes
     if: needs.changes.outputs.code == 'true'
@@ -74,7 +78,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -93,10 +97,10 @@ jobs:
       - run: npx playwright install-deps chromium
         if: steps.pw.outputs.cache-hit == 'true'
       # The perf project depends on main, which makes Playwright keep everything in one shard (shard 1 ran all 254 tests,
-      # shards 2-4 ran none). Shard the main project alone, and run the frame-time budget (perf) once, alone, after shard 6.
-      - run: npx playwright test --project=main --shard=${{ matrix.shard }}/6 --trace off --reporter=list
+      # shards 2-4 ran none). Shard the main project alone, and run the frame-time budget (perf) once, alone, after shard 8.
+      - run: npx playwright test --project=main --shard=${{ matrix.shard }}/8 --trace off --reporter=list
       - run: npx playwright test --project=perf --no-deps --trace off --reporter=list
-        if: matrix.shard == 6
+        if: matrix.shard == 8
       - uses: actions/upload-artifact@v4
         if: failure()
         with:

@@ -388,3 +388,88 @@ describe('New UI battle tooltips and the pinned card', () => {
     expect(html).toContain('>Lucario</span>');
   });
 });
+
+describe('New UI battle: the Beta 0.6 pieces over the field', () => {
+  const count = (html: string, bit: string): number => html.split(bit).length - 1;
+  it('draws none of them when the battle has none in play', () => {
+    const html = battleView(ctx(0), model());
+    for (const bit of ['Item budget', 'RALLY', 'Foresight Tax', 'variant-line', 'Signature trait', 'Shadow ·']) expect(html).not.toContain(bit);
+    expect(battleView(ctx(0), model({ fx: null }))).toBe(html);
+  });
+  it('item budget: both meters with used / most, and the run header gives up its corner', () => {
+    const html = battleView(ctx(0), model({ header: 'Stage 3', fx: { budget: { heals: [10, 10], revives: [2, 6] } } }));
+    for (const bit of ['Item budget', 'this battle', 'Heals', '10 / 10', 'Revives', '2 / 6', 'No healing items are left for this battle.', 'Bosses and rivals get the same budget.']) expect(html).toContain(bit);
+    expect(html).toContain('width:100%');
+    expect(html).toContain('width:33%');
+    expect(html).not.toContain('Stage 3');
+    const fresh = battleView(ctx(0), model({ fx: { budget: { heals: [0, 10], revives: [0, 6] } } }));
+    expect(fresh).toContain('0 / 10');
+    expect(fresh).toContain('Healing item 11 is refused.');
+    expect(count(fresh, 'width:0%')).toBe(2);
+  });
+  it('a budget with no cap never divides by zero', () => {
+    expect(battleView(ctx(0), model({ fx: { budget: { heals: [3, 0], revives: [0, 0] } } }))).not.toContain('NaN');
+  });
+  it('Rally: the yellow line over the field', () => {
+    const html = battleView(ctx(0), model({ menu: null, fx: { rally: 'RALLY · the foe braces: Def and Sp. Def +1' } }));
+    expect(html).toContain('class="abs btn on"');
+    expect(html).toContain('RALLY · the foe braces: Def and Sp. Def +1');
+  });
+  it('Foresight Tax: the eye, the name and what it does, at the top', () => {
+    const html = battleView(ctx(0), model({ fx: { rule: { name: 'Foresight Tax', text: 'Sabrina sees the first move you choose this turn.' } } }));
+    expect(html).toContain('<b style="white-space:nowrap">Foresight Tax</b>');
+    expect(html).toContain('Sabrina sees the first move you choose this turn.');
+    expect(html).toContain('background:#c070ff');
+  });
+  it('variant ring: the hint names the key that reads its rule; the budget window wins the corner', () => {
+    const html = battleView(ctx(0), model({ header: 'Stage 3', fx: { variant: true } }));
+    expect(html).toContain('A ring marks a variant-line Pokémon. Press <kbd>I</kbd> to read its rule.');
+    expect(html).not.toContain('Stage 3');
+    expect(battleView(ctx(0), model({ fx: { variant: true, budget: { heals: [0, 10], revives: [0, 6] } } }))).not.toContain('variant-line');
+  });
+  it('signature trait: the small line, the trait name and the sentence', () => {
+    const html = battleView(ctx(0), model({ menu: null, fx: { trait: { file: '', name: 'Seat at the Table', text: 'The foe’s boosts are swept away.' } } }));
+    expect(html).toContain('Signature trait · Seat at the Table');
+    expect(html).toContain('<b class="acc">The foe’s boosts are swept away.</b>');
+  });
+  it('Shadow line: the purple window over the text box, with the plan on its own line when there is one', () => {
+    const html = battleView(ctx(0), model({ shadow: true, fx: { shadow: { head: 'Shadow · Fallen (tier 4) · Sealed 100/100', plan: 'The shadow tightens: it will use Shadow Rush.' } } }));
+    expect(html).toContain('<b>Shadow · Fallen (tier 4) · Sealed 100/100</b><br>The shadow tightens: it will use Shadow Rush.');
+    expect(html).toContain('background:#1c0a2c');
+    expect(html).toContain('bottom:150px');
+    expect(battleView(ctx(0), model({ fx: { shadow: { head: 'Shadow · Veiled (tier 1) · Opening 20/100', plan: '' } } }))).not.toContain('<br>');
+  });
+  it('none of them takes a click, and none shows under the level-up window', () => {
+    const fx = { budget: { heals: [1, 10], revives: [0, 6] }, rally: 'RALLY', rule: { name: 'Foresight Tax', text: 'x' }, trait: { file: '', name: 'Payout', text: 'y' }, shadow: { head: 'Shadow', plan: '' } } as const;
+    const html = battleView(ctx(0), model({ fx }));
+    expect(count(html, 'pointer-events:none')).toBeGreaterThanOrEqual(5);
+    const level = { name: 'Lucario', file: '', from: 9, to: 10, stats: [] };
+    const under = battleView(ctx(0), model({ menu: null, fx, level: level as never }));
+    for (const bit of ['Item budget', 'RALLY', 'Foresight Tax', 'Signature trait']) expect(under).not.toContain(bit);
+  });
+  it('never injects text as HTML', () => {
+    const html = battleView(ctx(0), model({ fx: { rally: '<b>r</b>', rule: { name: '<i>n</i>', text: '<u>t</u>' }, trait: { file: '', name: '<p>a</p>', text: '<s>b</s>' }, shadow: { head: '<em>h</em>', plan: '<q>p</q>' } } }));
+    for (const bit of ['<b>r</b>', '<i>n</i>', '<u>t</u>', '<p>a</p>', '<s>b</s>', '<em>h</em>', '<q>p</q>']) expect(html).not.toContain(bit);
+  });
+});
+
+describe('New UI battle: a notice that waits for an input (the Second Shot)', () => {
+  const notice = { title: 'Second Shot', body: 'You go back to the last save point.', button: 'Try again' };
+  it('is the confirm box over the field: a shade, the title, the words and one lit button', () => {
+    for (const layout of [0, 1, 2, 3]) {
+      const html = battleView(ctx(layout), model({ notice, menu: null, text: 'The match is over.' }));
+      expect(html).toContain('class="shade"');
+      expect(html).toContain('>Second Shot<');
+      expect(html).toContain('You go back to the last save point.');
+      expect(html.split('data-act="confirm"').length - 1).toBe(1);
+      expect(html).toContain('class="btn on"');
+      expect(html).toContain('Try again');
+    }
+  });
+  it('is not there without a notice, and its text is never HTML', () => {
+    expect(battleView(ctx(0), model())).not.toContain('data-act="confirm"');
+    expect(battleView(ctx(0), model({ notice: null }))).toBe(battleView(ctx(0), model()));
+    const html = battleView(ctx(0), model({ notice: { title: '<b>t</b>', body: '<i>b</i>', button: '<u>k</u>' } }));
+    for (const bit of ['<b>t</b>', '<i>b</i>', '<u>k</u>']) expect(html).not.toContain(bit);
+  });
+});
