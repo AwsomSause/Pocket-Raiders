@@ -109,6 +109,11 @@ const ROUTES: Record<string, { region: string; ranks: string[] }[]> = {
     { region: 'kanto', ranks: ['Recruit', 'Grunt', 'Field Agent', 'Section Chief', 'Executive', `The Boss's Right Hand`] },
     { region: 'johto', ranks: ['Hopeful', 'Grunt', 'Operative', 'Cell Leader', 'Executive (the fifth)', 'The Voice'] },
   ],
+  // Row 9 (evil-hoenn-sinnoh-unova): Volume III A and B, HOENN_TEAMS 2.1 to 2.5.
+  galactic: [{ region: 'sinnoh', ranks: ['Applicant', 'Grunt', 'Technician', 'Adjutant', 'Commander (the fifth)', 'Witness'] }],
+  plasma: [{ region: 'unova', ranks: ['Listener', 'Knight', 'Liberator', "Sage's Hand", "Keeper of the King's Room", "The King's Friend"] }],
+  magma: [{ region: 'hoenn', ranks: ['Recruit', 'Grunt', 'Surveyor', 'Foreman', 'Admin', 'The Right Hand'], steps: [3, 8, 15, 25], max: 60, test: 6, out: 9 }],
+  aqua: [{ region: 'hoenn', ranks: ['Deckhand', 'Grunt', 'Diver', 'Bosun', 'Admin', 'The First Mate'], steps: [3, 8, 15, 25], max: 60, test: 6, out: 9 }],
 };
 
 const COUNTERS: Record<string, string> = {
@@ -172,8 +177,8 @@ const pseudoFile = join(import.meta.dirname, '../../../src/data/catalogOverhaul/
 chains.push({ id: 'ps_plasma_camp', name: 'The Plasma Holding Camp', entry: 'plasma-substage-gate', themeId: 'ghost-dark', tint: '#1a2230', mood: 'quiet, crates breathing in the dark' } as never);
 // Volume III, Kanto: Act 3's door of four rooms, the four endings (each opened by its own Final Choice answer) and Team
 // Ledger's freighter and Read-Out. The player stands on the room the choice opened.
-const inside = (id: string, name: string, entry: string, layout: string[][], mood: string, tint = '#1e2230'): void =>
-  void chains.push({ id, name, entry, themeId: 'ghost-dark', tint, mood, team: 'rocket', start: 'opened', layout } as never);
+const inside = (id: string, name: string, entry: string, layout: string[][], mood: string, tint = '#1e2230', team = 'rocket'): void =>
+  void chains.push({ id, name, entry, themeId: 'ghost-dark', tint, mood, team, start: 'opened', layout } as never);
 inside('ps_rk_tower', 'Pokémon Tower, at Night', 'rk-act3', [['rk-tower-graves'], ['rk-tower-stair'], ['rk-tower-third'], ['rk-tower-down']], 'cold, and quiet on a Thursday', '#22142e');
 inside('ps_rk_plan', 'Silph Co.: Under New Management', 'rk-final-choice', [['rk-plan-hold'], ['rk-plan-gate'], ['rk-plan-rival'], ['rk-plan-defender'], ['rk-plan-roof'], ['rk-plan-verdict']], 'sealed, humming, raining on the roof');
 inside('ps_rk_turn', 'Silph Co.: The Long Ledger, From the Top', 'rk-final-choice', [['rk-turn-11'], ['rk-turn-10'], ['rk-turn-9'], ['rk-turn-7'], ['rk-turn-6'], ['rk-turn-b'], ['rk-turn-roof'], ['rk-turn-door']], 'floor by floor, downward');

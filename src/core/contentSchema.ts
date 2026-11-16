@@ -3035,7 +3035,7 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     /** Volume III (core/evil/inside.ts): on the inside route or not; a rank, Standing or Suspicion at least this; Suspicion below this. */
     inside: z.boolean().optional(),
     rank: z.number().int().min(1).max(6).optional(),
-    standing: z.number().int().min(0).max(10).optional(),
+    standing: z.number().int().min(0).max(60).optional(),
     suspicion: z.number().int().min(0).max(10).optional(),
     suspicionBelow: z.number().int().min(1).max(10).optional(),
     /** Volume III: a scene for any player, inside the team or out of it (`after`/`beat` still count; the inside route doesn't hide it). */
@@ -3476,9 +3476,9 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     /** SF130: run modifiers that last only while the run is in this region (like an Operation's lasting effect), with the words that say so. */
     mods: z.array(ArchetypeModifierSchema).min(1).max(3).optional(),
     modsText: z.string().min(1).optional(),
-    /** Volume III inside route: Standing and Suspicion change (0 to 10 each), and a rank the player now holds at least. */
-    standing: z.number().int().min(-3).max(3).optional(),
-    suspicion: z.number().int().min(-3).max(4).optional(),
+    /** Volume III inside route: Standing and Suspicion change (0 to 10 each; Hoenn's Standing runs to 60), and a rank the player now holds at least. */
+    standing: z.number().int().min(-5).max(6).optional(),
+    suspicion: z.number().int().min(-5).max(10).optional(),
     rank: z.number().int().min(1).max(6).optional(),
   }),
   /** Run events G (core/trainingEffects.ts): changes the lead's build: Nature, ability slot, weakest stat, or learns a move (of `type`). */

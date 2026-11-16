@@ -26,7 +26,7 @@ import { evilConfig, HIDEOUT_AT_LEAGUE } from '../campaign/circuit';
 import { recordChoice } from './choices';
 import { beatTeamLeaders } from '../expansion/cast/dossier';
 import { trackOnClimax, trackOnOperation } from '../expansion/trackRun';
-import { applyInside, clearInside, insideLine, insideMet, insideOn, replacedByInside } from './inside';
+import { applyInside, clearInside, insideLine, insideMet, insideOn, replacedByInside, routeOf } from './inside';
 import { freshEvil, type EvilRank, type EvilState, type EvilTeam, type VillainRecord } from './schema';
 
 type EvilCondition = Extract<EventCondition, { kind: 'evil' }>;
@@ -177,7 +177,7 @@ export function evilConditionMet(content: Content, run: RunState, c: EvilConditi
   if (!s?.teamId) return false;
   if (c.team !== undefined && s.teamId !== c.team) return false;
   // Volume III: on the inside route the outside story steps aside (core/evil/inside.ts).
-  if (replacedByInside(run, s.teamId, c) || !insideMet(run, s.teamId, c)) return false;
+  if (replacedByInside(run, s.teamId, c) || !insideMet(run, s.teamId, c, routeOf(content.evilTeams.teams.find((t) => t.id === s.teamId), run.regionOrder[run.regionIndex]))) return false;
   if (c.beat !== undefined && (s.beat !== c.beat || s.stages < s.nextAt || s.end !== 'none')) return false;
   if (c.after !== undefined && s.beat < c.after) return false;
   if (c.op !== undefined && !s.ops.some((o) => o.id === c.op && o.region === run.regionIndex && o.outcome === 'running')) return false;

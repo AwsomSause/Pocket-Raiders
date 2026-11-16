@@ -1,0 +1,201 @@
+{
+ "category": "evil-hoenn-sinnoh-unova",
+ "note": "Evil Teams Volume III inside routes for Galactic, Plasma, Magma, Aqua and Team Sky: Act doors, the endings and the third options. Written by tools/events/co/_evil-hsu-maps.ts.",
+ "chains": [
+  {
+   "id": "ps_gx_lab",
+   "name": "The Lab Under Veilstone",
+   "entry": "gx-act3",
+   "themeId": "ghost-dark",
+   "tint": "#3a2418",
+   "mood": "warm, and three lights in the dark",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "gx-act3-glass"
+    ],
+    [
+     "gx-act3-readout"
+    ],
+    [
+     "gx-act3-saturn",
+     "gx-act3-warden"
+    ]
+   ]
+  },
+  {
+   "id": "ps_gx_plan",
+   "name": "Spear Pillar: It's Very Quiet",
+   "entry": "gx-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2e3e",
+   "mood": "snow going sideways, then nothing at all",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "gx-plan-looker"
+    ],
+    [
+     "gx-plan-rival"
+    ],
+    [
+     "gx-plan-cynthia"
+    ],
+    [
+     "gx-plan-load"
+    ],
+    [
+     "gx-plan-fold"
+    ],
+    [
+     "gx-plan-nothing"
+    ],
+    [
+     "gx-plan-door"
+    ],
+    [
+     "gx-plan-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_gx_turn",
+   "name": "Spear Pillar: Let Go",
+   "entry": "gx-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2e3e",
+   "mood": "two lines in the sky like kite strings",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "gx-turn-slack"
+    ],
+    [
+     "gx-turn-cyrus"
+    ],
+    [
+     "gx-turn-tear"
+    ],
+    [
+     "gx-turn-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_gx_charon",
+   "name": "Spear Pillar: The Licence",
+   "entry": "gx-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2e3e",
+   "mood": "a board meeting in a blizzard",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "gx-charon-meeting"
+    ],
+    [
+     "gx-charon-repo"
+    ],
+    [
+     "gx-charon-bought"
+    ],
+    [
+     "gx-charon-confirm",
+     "gx-charon-unpaid"
+    ]
+   ]
+  },
+  {
+   "id": "ps_gx_own",
+   "name": "Spear Pillar: Mind This One",
+   "entry": "gx-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2e3e",
+   "mood": "five hundred people on a stair, looking up",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "gx-own-mars"
+    ],
+    [
+     "gx-own-mars-down"
+    ],
+    [
+     "gx-own-lines"
+    ],
+    [
+     "gx-own-d1"
+    ],
+    [
+     "gx-own-d2"
+    ],
+    [
+     "gx-own-d3"
+    ],
+    [
+     "gx-own-d4"
+    ],
+    [
+     "gx-own-title"
+    ]
+   ]
+  },
+  {
+   "id": "ps_lantern_families",
+   "name": "Round 1: The Families",
+   "entry": "lantern-round-1",
+   "themeId": "ghost-dark",
+   "tint": "#3a2e1a",
+   "mood": "a lamp, and three doors",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "lantern-door-1"
+    ],
+    [
+     "lantern-door-2"
+    ],
+    [
+     "lantern-door-3"
+    ]
+   ]
+  },
+  {
+   "id": "ps_lantern_climax",
+   "name": "Three Hundred Lanterns",
+   "entry": "lantern-climax",
+   "themeId": "ghost-dark",
+   "tint": "#3a2e1a",
+   "mood": "a string of bulbs into the cloud",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "lantern-ridge"
+    ],
+    [
+     "lantern-saddle"
+    ],
+    [
+     "lantern-col"
+    ],
+    [
+     "lantern-summit"
+    ],
+    [
+     "lantern-dais"
+    ],
+    [
+     "lantern-question",
+     "lantern-cold"
+    ]
+   ]
+  }
+ ]
+}

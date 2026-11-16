@@ -1,0 +1,2586 @@
+{
+ "catalogOverhaul": "evil-hoenn-sinnoh-unova",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gx-final-choice",
+   "name": "The Final Choice",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "The summit. Snow going sideways. Two tears in the sky. Two shapes that don't fit in it, held by four red lines. All four lines come down to one man's forearm. Cyrus: \"Ceres. You're on time. Stand at my left. You'll see better.\" Below, on the stair: lights. Somebody's coming up. Several somebodies. Cyrus: \"They're climbing. They always do. It's the defect in operation: they think arriving will change the arithmetic.\" He looks at the lines on his arm. Two are slack. Two are taut. He's one man. Cyrus: \"I've miscalculated the load. It requires two hands and I've need of one for the mechanism. Take these.\" He holds out two of the four. Cyrus: \"Hold them. That's all. You needn't believe in it. You need only not let go.\" You hesitate. Cyrus: \"You're still feeling something. I can see it from here. Hold the chain regardless.\"",
+   "choices": [
+    {
+     "label": "Take the two lines. Hold.",
+     "success": {
+      "text": "You take them. They're heavier than a world. Below, the first of them reach the last landing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-final-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-plan-looker"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the two lines. Let go.",
+     "success": {
+      "text": "You open your hands. Two lines go up into the sky like kite strings. One of the shapes turns its head, slowly, toward the dais. It's got room to. Cyrus: \"...You let go.\" Cyrus: \"I'd calculated for betrayal. I'd put it at four per cent. I'd not calculated for it being you. I'd thought you were the one result I'd got right.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-turn-slack"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't take them. Raise a hand to the ridge.",
+     "success": {
+      "text": "On the ridge, a man in a lab coat is waiting with a clipboard. He sees your hand, and starts down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-final-charon",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-charon-meeting"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give them to me. Not two. All of them.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "rank": 5,
+       "has": "confided"
+      }
+     ],
+     "success": {
+      "text": "Cyrus: \"You can't hold four. I couldn't.\" \"You don't want a new world. You want to be let alone. Go and be let alone. I'll mind this one.\" He looks at you. For the first time, he's surprised; it shows as a very small delay. Cyrus: \"...You'd take them? All of them? The five hundred. The cards. With the wanting?\" Cyrus: \"I've no contest to offer. Contesting is wanting. I find I don't.\" He hands over the lines like a man putting down shopping.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-final-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-mars"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "eleven",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-eleven",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Eleven minutes.\" He knows what it means. Saturn logged it."
+    },
+    {
+     "id": "wanted",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-wanted-to",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Cyrus: \"\"I wanted to.\" I've thought about that. I couldn't find the fault in it. I've been looking.\""
+    },
+    {
+     "id": "cards",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-cards-said",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Nobody asked for all of it.\" He hears it again, from you, and doesn't answer it this time either."
+    }
+   ]
+  },
+  {
+   "id": "gx-plan-looker",
+   "name": "Phase 1: The Stair",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "You hold two lines and can't leave the dais. Your party fights from where it stands. Three come up. The first, in his own coat: Looker: \"I shared a canteen with you! I vouched, in my report! One sentence, and you were in it!\"",
+   "choices": [
+    {
+     "label": "Hold the lines. Fight.",
+     "success": {
+      "text": "Looker's Croagunk comes up the last step first.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Looker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gx-plan-rival"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "all",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-told-all",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The stair below's quiet. The gauntlet isn't holding. He hasn't noticed yet."
+    }
+   ]
+  },
+  {
+   "id": "gx-plan-rival",
+   "name": "Phase 1: The Stair",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "Your rival, out of breath, with snow in their hair. They don't understand. They're not meant to. \"What are you doing up there? Come down. Come down and tell me.\"",
+   "choices": [
+    {
+     "label": "Hold the lines. Fight.",
+     "success": {
+      "text": "They don't wait for an answer.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gx-plan-cynthia"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-plan-cynthia",
+   "name": "Phase 1: The Stair",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cynthia-gen7"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "Cynthia: \"I'm not going to tell you it's wrong. You know. I'm going to ask you what you think is on the other side.\"",
+   "choices": [
+    {
+     "label": "Hold the lines. Fight.",
+     "success": {
+      "text": "Her Garchomp lands on the last step and the dais shakes.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.cynthia-gen7",
+       "team": [
+        "garchomp",
+        "spiritomb",
+        "lucario",
+        "milotic",
+        "roserade",
+        "togekiss"
+       ],
+       "name": "Cynthia",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gx-plan-load"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-plan-load",
+   "name": "Phase 2: The Load",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "Cynthia, beaten, sitting down in the snow: \"Then I'll watch. Somebody ought to. He wanted a witness; he's getting two.\" The two shapes pull. Your lines go taut and slack. Hold when it's taut; give when it's slack. Each guardian that's free pulls the other way.",
+   "choices": [
+    {
+     "label": "Hold it by feel.",
+     "prompt": {
+      "id": "gauge-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Cyrus, not looking round: \"Steady. You're doing it by feel. I'd have used a gauge. ...It's working. I'll note that.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-plan-fold"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You miss the slack, and the party takes the strain. Nobody faints from it. Cyrus: \"Steady. ...It's working. I'll note that.\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-plan-fold"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-plan-fold",
+   "name": "Phase 3: The Fold",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#e8e8f0",
+    "effect": "none"
+   },
+   "intro": "The sky doesn't break. It closes, like a book. The mountain's inside it for a moment. Then nothing is.",
+   "choices": [
+    {
+     "label": "...",
+     "success": {
+      "text": "White.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-plan-nothing"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-plan-nothing",
+   "name": "A World With Nothing in It",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#e8e8f0",
+    "effect": "none"
+   },
+   "intro": "White. No floor that's a floor. No sound. Two people. A long time. There's no clock, so it's only long. Cyrus: \"...It's quiet.\" More of it. Cyrus: \"It's very quiet.\" He's looking about. There's nothing to look at. He turns, at last, and looks at you. It's the only thing in the world to look at. Cyrus: \"It's finished. It's been seen. That's— that concludes it.\" He doesn't move. He'd like you to say something. He doesn't know that's what it is.",
+   "choices": [
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "He nods. He waits. He goes on waiting. It's what he built: a place where nobody says anything. After a while he sits down. Cyrus: \"You may go. I find I'd assumed you'd stay. I don't know what I based that on.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-plan-door"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"How are you?\"",
+     "success": {
+      "text": "The four minutes start. There's no clock. He takes them anyway. Cyrus: \"...I've no instrument for that. I switched it off. I'm going to say \"tired.\" I can't verify it. It's the word that was there.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyrus-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-plan-door"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What now?\"",
+     "success": {
+      "text": "Cyrus: \"There's no \"now.\" I removed it. I see that makes the question difficult. I hadn't provided for a question.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-plan-door"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "letter",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-letter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The letter's still in your coat.",
+     "addChoices": [
+      {
+       "label": "(Hand him the letter.)",
+       "success": {
+        "text": "He takes it. He opens it. It's the only made thing in the world. He reads it. It's about a crossword. He reads it again. Cyrus: \"He's saved me four hundred and sixty-eight crosswords. They'll be out of date.\" A pause. Cyrus: \"Nine across won't have changed.\"",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "gx-plan-door"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "name",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-x-grandfather",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know his grandfather's name.",
+     "addChoices": [
+      {
+       "label": "(Say his name.)",
+       "success": {
+        "text": "He looks up as if at a sound from another room.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "gx-plan-door"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gx-plan-door",
+   "name": "The Way Out",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#e8e8f0",
+    "effect": "none"
+   },
+   "intro": "Behind you, where there's no behind: a tear, the size of a door. Two dragons don't unmake that easily. They've left one. Cyrus: \"It's for you. I've no requirement to go back. I've what I designed.\"",
+   "choices": [
+    {
+     "label": "\"Come with me.\"",
+     "success": {
+      "text": "Cyrus: \"No. But ask again. Not now; there isn't one. Ask again when there is.\" You walk out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyrus-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-plan-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Goodbye, Cyrus.\"",
+     "success": {
+      "text": "He nods. You walk out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyrus-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-plan-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Leave the letter. Go.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-letter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You leave it on the white, by his hand. You walk out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyrus-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-plan-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-plan-after",
+   "name": "Afterwards",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "The mountain's there. The snow's there. Sinnoh's as it was: the dragons undid it the moment the line went slack. It lasted, outside, about four minutes. Five hundred Grunts on the stair, who weren't coming. They're looking at the one who came back. Saturn: \"He isn't with you.\" Saturn: \"The Observations say a thing's not finished till it's been seen. You saw it. Is it finished?\" Whatever you say, he writes it down. It's the first entry in a new log. The team has no leader, and looks to the Witness.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "\"Mind This One,\" entered late, with Cyrus gone. Saturn opens a fresh page. Saturn starts a new log. Mars waits on the Pillar. Jupiter's gone, with the petty cash. Charon tries to patent the tear. Sird keeps her Thursdays. Greer says \"Una\" in the empty world, and it echoes. Lior was right; nobody knows. Cadet Io hums it in the dark, to keep count. Wynn labels the last door: OUT. Padraig fishes a lake with nothing in it, for four minutes. Mrs. Holmgren asks the empty hall; there's no answer. The old man still writes. The three were free the moment it folded. The building's empty, and the lights are on.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sinnoh-four-minutes",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-plan-took-it",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them to go home.",
+     "success": {
+      "text": "They go home. Five hundred people walk down a mountain with their helmets under their arms. Saturn starts a new log. Mars waits on the Pillar. Jupiter's gone, with the petty cash. Charon tries to patent the tear. Sird keeps her Thursdays. Greer says \"Una\" in the empty world, and it echoes. Lior was right; nobody knows. Cadet Io hums it in the dark, to keep count. Wynn labels the last door: OUT. Padraig fishes a lake with nothing in it, for four minutes. Mrs. Holmgren asks the empty hall; there's no answer. The old man still writes. The three were free the moment it folded. The building's empty, and the lights are on.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sinnoh-four-minutes",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-turn-slack",
+   "name": "Phase 1: Slack",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "The lines are loose in the sky. He looks at you as if at a reading he can't account for.",
+   "choices": [
+    {
+     "label": "\"Eleven minutes.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-eleven",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Cyrus: \"The fish. Yes. I see. I should've weighted that.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-turn-cyrus"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "He takes off his gloves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-turn-cyrus"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "all",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-told-all",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "There's nobody on the stair to hold off."
+    },
+    {
+     "id": "name",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-x-grandfather",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You say his grandfather's name. His ace's first move will be a turn late."
+    }
+   ]
+  },
+  {
+   "id": "gx-turn-cyrus",
+   "name": "Phase 2: Cyrus",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "Cold Calculus. At a quarter of his ace's health he'll finish the subtraction on himself: his orders stop, his side uses its strongest move and never switches, and you can read every turn. Cyrus: \"I am finishing it now. On myself. You'll observe I don't hesitate.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Cyrus, flat, to nobody: \"Honchkrow. Night Slash. Honchkrow. Night Slash.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.cyrus",
+       "team": [
+        "honchkrow",
+        "weavile",
+        "gyarados",
+        "crobat"
+       ],
+       "name": "Cyrus",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gx-turn-tear"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "saturn",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "saturn-heard",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Saturn's voice, by radio, from the basement: \"It's done. I logged it under my own name.\" He's opened the tanks himself. Each free guardian slackens a line."
+    },
+    {
+     "id": "three",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-told-three",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Greer and Lior are on the stair, holding off Mars and Jupiter. Greer: \"I'm not angry at you, Commander. I'm just in the way.\""
+    },
+    {
+     "id": "mars",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mars-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mars comes up at the end. She doesn't fight you. She goes to him."
+    }
+   ]
+  },
+  {
+   "id": "gx-turn-tear",
+   "name": "Phase 3: The Third Tear",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "pokemon": "giratina",
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "The last line parts. The two tears don't close. A third opens, under him, black, and something with too many wings looks out. Cyrus, with the only expression he's worn all region; it's relief: \"Ah. There is somewhere else.\"",
+   "choices": [
+    {
+     "label": "(Let him step in.)",
+     "success": {
+      "text": "He steps in. It was always an exit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyrus-gone",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-turn-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Throw the box after him.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-box",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You heave it. Four hundred and sixty-eight letters go into the dark after him, and the lid comes off, and they fall like snow that isn't cold. It's the only post that'll ever be delivered there. He'll have a great deal of time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyrus-box",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-turn-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Hold out the letter.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-letter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He's half in. He looks at it. He takes it. He steps in holding it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyrus-letter",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-turn-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Cyrus. Supper.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-card-his",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He stops. One foot in the dark. Cyrus: \"...Where did you read that.\" \"Your card.\" Cyrus: \"I wrote that to test the form.\" \"You wrote what you'd like to stop. You wrote 'supper.'\" Cyrus: \"Being called down to it. Yes. I—\" A long time. Cyrus: \"I'd like it to stop. I'd not said I'd like there to be no supper. I see that's a distinction.\" He doesn't step in. He sits down on the edge of it. Cynthia arrives, late, out of breath, and takes in the scene. Cynthia: \"Oh, good. I was going to have to go in after you. I'd much rather make tea.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cyrus-supper",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-turn-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-turn-after",
+   "name": "Afterwards",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "The mountain, emptying.",
+   "choices": [
+    {
+     "label": "Walk down.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "galactic-grandfather-kept",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "flag",
+         "key": "cyrus-supper",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "At the foot of the mountain: an old man with a folded newspaper. Nobody says anything. He holds it out. It's open at the crossword. Cyrus takes the pencil. Galactic dissolves into the Veilstone Institute. Lior runs it. The charter's one line again. Greer does birthdays. Saturn winds the firm up properly, and corrects his two false entries, with a note: \"Deliberate.\" Mars goes looking for him. Jupiter's gone, with the petty cash. Charon's in Looker's custody. Sird's gone before the snow settles. Greer does birthdays, badly; everyone loves them. Lior runs the Institute. Cadet Io opens the doors, and leaves them open. Wynn starts a new drawer: FEELINGS (SOME). Padraig fishes. Mrs. Holmgren chairs the Institute. The old man is at the foot of the mountain. The three are free. The building's the Veilstone Institute.",
+       "effects": [
+        {
+         "kind": "evil",
+         "beat": true
+        },
+        {
+         "kind": "evil",
+         "end": "defeated"
+        },
+        {
+         "kind": "flag",
+         "key": "galactic-ending-turn",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Galactic dissolves into the Veilstone Institute. Lior runs it. The charter's one line again. Greer does birthdays. Saturn winds the firm up properly, and corrects his two false entries, with a note: \"Deliberate.\" Mars goes looking for him. Jupiter's gone, with the petty cash. Charon's in Looker's custody. Sird's gone before the snow settles. Greer does birthdays, badly; everyone loves them. Lior runs the Institute. Cadet Io opens the doors, and leaves them open. Wynn starts a new drawer: FEELINGS (SOME). Padraig fishes. Mrs. Holmgren chairs the Institute. The old man is at the foot of the mountain. The three are free. The building's the Veilstone Institute.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-ending-turn",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-charon-meeting",
+   "name": "Phase 1: The Extraordinary General Meeting",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist",
+     "boss.npc_lady"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "The man on the ridge comes down. Lab coat. Clipboard. Behind him: eleven people in good overcoats, very cold, very cross, and a twelfth in a wool hat who's brought a flask. Charon: \"Cyrus, old thing. Don't let go on my account. I've convened the board. It's quorate. We'd no venue; I said, well, he's up there.\" Cyrus: \"This is not a meeting room.\" Charon: \"Clause nine. \"Any place the shareholders are assembled.\" You drafted it.\" Charon: \"Motion: that the Chief Executive, having committed the company's entire capital to a project with no revenue on the far side, be relieved. All in favour.\" Eleven gloved hands. Charon: \"Against.\" One. In a mitten. Mrs. Holmgren: \"I always vote against. I'm not starting to agree with people at my age.\" Cyrus has been removed by the firm he rewrote, eleven to one. It's the same vote that passed his charter. Cyrus: \"You can't outvote a law of nature.\" Charon: \"No. But I can outvote you, and you were the only one who wanted to use it. Ceres has kindly brought me the forge drawings. I'll not unmake anything. I'll license.\"",
+   "choices": [
+    {
+     "label": "Stand beside Charon.",
+     "success": {
+      "text": "He holds out a hand to the Rotom on his shoulder.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-charon-repo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-charon-repo",
+   "name": "Phase 2: Repossession",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus",
+     "boss.npc_scientist"
+    ],
+    "pokemon": "rotom",
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "A double: you and Charon against Cyrus. Charon's Rotom, the Poltergeist Engine, changes form each turn. It doesn't want to be there. Cyrus, mid-battle, to you: \"You've sold it. I'd have understood stopping me. I don't understand this.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He loses, in the end. The lines are taken off his arm by a man from Legal.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.cyrus",
+       "team": [
+        "honchkrow",
+        "weavile",
+        "gyarados",
+        "crobat"
+       ],
+       "format": "doubles",
+       "name": "Cyrus",
+       "ally": "rotom",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gx-charon-bought"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-charon-bought",
+   "name": "Phase 3: What's Been Bought",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist",
+     "boss.npc_lady"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "Charon: \"Now. Lake Acuity: memory. There's a market. Exam season alone. Lake Verity: I'll bottle calm; the clinics already have the storefronts. Lake Valor: will. D'you know what a gym'd pay?\" Mrs. Holmgren, to you, screwing the top on her flask: \"I've asked one question at that meeting for four years. \"Are the lights on?\" I'll have to think of a new one. You can think what it should be.\" The Honest Trade Card, at the Pillar: you're paid ₽60,000 and a seat on the board. The three guardians stay in tanks. Sinnoh keeps its feelings and rents them back. This can't be undone this run.",
+   "choices": [
+    {
+     "label": "Confirm.",
+     "success": {
+      "text": "The card asks again. It means it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-charon-confirm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this.",
+     "success": {
+      "text": "You hand the card back. Charon shrugs: the motion's carried either way; it's only whether you profit. The lines go to Legal. Cyrus goes down the mountain with a box.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-charon-unpaid"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-charon-confirm",
+   "name": "The Licence",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "Confirm a second time: ₽60,000 and a board seat; the three in tanks; Sinnoh's feelings licensed. It can't be undone this run.",
+   "choices": [
+    {
+     "label": "Confirm again.",
+     "success": {
+      "text": "It's worse, and it's legal. Memory, feeling and will each cost ₽500 a stage to switch back on, at any clinic. Cyrus isn't arrested. There's no charge. He's given a severance and a box to put his desk in. He's already got a box. Saturn resigns: \"I'll not invoice a lake.\" Mars works for Charon a week, and breaks his clipboard. Jupiter stays: \"It's a job.\" Charon's Chief Executive. Sird's on the board. Greer posts her helmet to Charon, with a bill. Lior's hired, and resigns in a week. Cadet Io's fined for humming on licensed premises. Wynn labels a lake PROPERTY, and takes the tab off that night. Padraig's charged for a licence, and doesn't pay. Mrs. Holmgren votes against. The old man lives two streets from a man who won't walk them. The three are in tanks, licensed. The building's Galactic plc.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 60000
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-ending-charon",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sinnoh-licensed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "board-seat",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You put the pen down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-charon-unpaid"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-charon-unpaid",
+   "name": "The Licence",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "The lakes are Charon's now, with or without your signature.",
+   "choices": [
+    {
+     "label": "Walk down.",
+     "success": {
+      "text": "It's worse, and it's legal, and you weren't paid for it. Saturn resigns: \"I'll not invoice a lake.\" Mars works for Charon a week, and breaks his clipboard. Jupiter stays: \"It's a job.\" Charon's Chief Executive. Sird's on the board. Greer posts her helmet to Charon, with a bill. Lior's hired, and resigns in a week. Cadet Io's fined for humming on licensed premises. Wynn labels a lake PROPERTY, and takes the tab off that night. Padraig's charged for a licence, and doesn't pay. Mrs. Holmgren votes against. The old man lives two streets from a man who won't walk them. The three are in tanks, licensed. The building's Galactic plc.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-ending-charon",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sinnoh-licensed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-own-mars",
+   "name": "Phase 2: Mars",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f"
+    ],
+    "pokemon": "purugly",
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "He doesn't fight. She does. Mars, coming up the last step, Purugly ahead of her: \"No. No. He doesn't get to put it down. I've carried it for four years. He hasn't said my name once and I've carried it, and you don't get to just— take the bags.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Fierce Loyalty, twice.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.npc_psychic_f",
+       "team": [
+        "purugly",
+        "crobat",
+        "houndoom",
+        "skuntank",
+        "honchkrow"
+       ],
+       "name": "Commander Mars",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gx-own-mars-down"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-own-mars-down",
+   "name": "Phase 2: Mars",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "Mars, beaten, in the snow: \"...He's not even looking.\"",
+   "choices": [
+    {
+     "label": "(Say her name.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "mars-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "She looks up. It's the first time it's been said on this mountain. Mars: \"...Yes. That's— yes. Present.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-mars-stays",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-lines"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Leave her be.)",
+     "success": {
+      "text": "She doesn't get up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-lines"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-own-lines",
+   "name": "Phase 3: The Four Lines",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "pokemon": "dialga",
+    "tint": "#2a2e3e",
+    "effect": "snow"
+   },
+   "intro": "You're holding two dragons. That's what this is, plainly. What do you do with them?",
+   "choices": [
+    {
+     "label": "Let all four go.",
+     "success": {
+      "text": "They leave. The tears close. The team's yours; the gods aren't. It's the clean start. Cyrus walks down the mountain. Nobody stops him. He's got his hands in his pockets. He's never had them free before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chain-released",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the lines.",
+     "success": {
+      "text": "The Red Chain, in your hands. Cynthia, quietly: \"Then I'll be seeing you again. I'd hoped I wouldn't mean it like that.\" Cyrus walks down the mountain. Nobody stops him. He's got his hands in his pockets. He's never had them free before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chain-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-own-d1",
+   "name": "The First Hour: The Observations",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "none"
+   },
+   "intro": "Five hundred people on a stair, looking up. Four decisions, each one line, said aloud. First: the Observations.",
+   "choices": [
+    {
+     "label": "Keep the three.",
+     "success": {
+      "text": "The Observations stay as written.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-creed-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Strike the first. (\"Ask.\")",
+     "success": {
+      "text": "Observation one is struck through. In its place, one word: ASK.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-creed-ask",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Replace all three with one of your own.",
+     "success": {
+      "text": "You say it. Saturn writes it down, exactly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-creed-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-own-d2",
+   "name": "The First Hour: The Cards",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "none"
+   },
+   "intro": "The cards. Five hundred and six of them, in a locked cabinet.",
+   "choices": [
+    {
+     "label": "Keep the cabinet locked.",
+     "success": {
+      "text": "The key goes on your ring.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-cards-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand each card back to whoever wrote it.",
+     "success": {
+      "text": "Five hundred and six people are handed back one line each. Every one of them has a thing they want stopped, and now somebody knows it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-cards-returned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Burn them.",
+     "success": {
+      "text": "They burn quickly. Nobody watches.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-cards-burned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-own-d3",
+   "name": "The First Hour: The Charter",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "none"
+   },
+   "intro": "The charter. One line.",
+   "choices": [
+    {
+     "label": "\"To complete the world.\"",
+     "success": {
+      "text": "It stays as he wrote it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-charter-complete",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"To keep the lights on.\"",
+     "success": {
+      "text": "Somewhere below, Mrs. Holmgren unscrews her flask.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-charter-lights",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your own line.",
+     "success": {
+      "text": "You say it. Saturn writes it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-charter-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-d4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-own-d4",
+   "name": "The First Hour: The Three in the Tanks",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "none"
+   },
+   "intro": "The three in the tanks.",
+   "choices": [
+    {
+     "label": "Free them.",
+     "success": {
+      "text": "Sinnoh's rules lift. The basement's cold by morning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-three-freed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-title"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold them.",
+     "success": {
+      "text": "They stay in the warm room. Charon's pleased. Nobody else is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-three-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-own-title"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-own-title",
+   "name": "The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#2a2e3e",
+    "effect": "none"
+   },
+   "intro": "Saturn, with a fresh clipboard: \"I'll need a title for you. For the log.\"",
+   "choices": [
+    {
+     "label": "\"Boss.\"",
+     "success": {
+      "text": "Saturn: \"Noted.\" Team Galactic's yours. Saturn's your Second. Mars stays, if named: \"Present.\" Jupiter stays: \"It's a job. The hat's better.\" Charon renegotiates; he's kept, and he's watched. Sird reports to you on Mondays, and somewhere else on Thursdays. Greer has the Mess: she asks, and waits. Lior has the Workshop: \"Something that doesn't end everything. As a change.\" Cadet Io leads the canteen. Wynn relabels the building, room by room, by asking who's in it. Lake Valor's a holding you never have to take. Mrs. Holmgren votes against, the first time. Then for. The old man gets a visitor, in time. The building's your headquarters.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-galactic",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Chair.\"",
+     "success": {
+      "text": "Saturn: \"Noted.\" Somewhere below, Mrs. Holmgren votes against. Team Galactic's yours. Saturn's your Second. Mars stays, if named: \"Present.\" Jupiter stays: \"It's a job. The hat's better.\" Charon renegotiates; he's kept, and he's watched. Sird reports to you on Mondays, and somewhere else on Thursdays. Greer has the Mess: she asks, and waits. Lior has the Workshop: \"Something that doesn't end everything. As a change.\" Cadet Io leads the canteen. Wynn relabels the building, room by room, by asking who's in it. Lake Valor's a holding you never have to take. Mrs. Holmgren votes against, the first time. Then for. The old man gets a visitor, in time. The building's your headquarters.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-galactic",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ceres'll do.\"",
+     "success": {
+      "text": "Saturn: \"Provisional.\" He almost smiles. It costs him nothing. He's surprised. Saturn: \"Noted.\" Team Galactic's yours. Saturn's your Second. Mars stays, if named: \"Present.\" Jupiter stays: \"It's a job. The hat's better.\" Charon renegotiates; he's kept, and he's watched. Sird reports to you on Mondays, and somewhere else on Thursdays. Greer has the Mess: she asks, and waits. Lior has the Workshop: \"Something that doesn't end everything. As a change.\" Cadet Io leads the canteen. Wynn relabels the building, room by room, by asking who's in it. Lake Valor's a holding you never have to take. Mrs. Holmgren votes against, the first time. Then for. The old man gets a visitor, in time. The building's your headquarters.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-galactic",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-founding",
+   "name": "Team Lantern",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 4,
+     "ends": [
+      "none"
+     ],
+     "inside": false
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galactic-offer-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "galactic-charon-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "galactic-fish",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "sparkle"
+   },
+   "intro": "A boathouse at Lake Valor. A paraffin lamp in the window, in daylight. Old Padraig Lachlan: \"It's you. Fish-first. Come in. I've company; mind your head.\" Thirty people on upturned boats, in silver suits with the G picked off. Helmets in a heap by the door. Half of them without the hair they came with. Padraig: \"They came down the valley three nights ago. Walked. I said: are you lost? This one said—\" A former Grunt: \"I said, \"Nobody's asked us that.\"\" Padraig: \"So I asked the next one. And the next. Took till morning. I've not had a night like it since the wife.\" Padraig: \"He wants no spirit in the world, your man on the mountain. I say there's too little. Let's go round and put some in.\" The creed, chalked on a boat: SOMEBODY SHOULD ASK. He hands you the lamp. Padraig: \"You knock. You say: \"How are you?\" Then— this is the hard part, I'll not pretend it isn't— you wait. However long. You don't fill it. That's the whole trade.\"",
+   "choices": [
+    {
+     "label": "Take the lamp.",
+     "success": {
+      "text": "It's warm. Team Lantern has a roll of thirty-one: the Thirty, who know every door in the Veilstone building and who's behind each; Padraig, with the lamp and sixty years of waiting for a bite; and you. Mrs. Holmgren sends word she'll lend her one share and a flask.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-founded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-roll",
+        "amount": 30
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who else?\"",
+     "success": {
+      "text": "Padraig: \"The Thirty. Mrs. Holmgren's share, and her flask. A band of sixty-year-olds, if you can find them. The young cadet with the tune, if she's doubting. A girl with a Buneary, who has a sock she says is a flag. The old man in Sunyshore won't join; he'll lend his bench. And Volkner, if somebody turns him: \"I can light a mountain. Ask me something hard.\"\" He hands you the lamp anyway.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-founded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-roll",
+        "amount": 30
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-round-1",
+   "name": "Round 1: The Families",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "lantern-round1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "sparkle"
+   },
+   "intro": "Three hundred and forty of the Grunts have someone, somewhere. The Thirty know the addresses. A Round's a door-knocking. At each door: you ask, and then you wait.",
+   "choices": [
+    {
+     "label": "Knock on the first door.",
+     "success": {
+      "text": "A terraced house. A light in the back.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-door-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-door-1",
+   "name": "Door 1",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "sparkle"
+   },
+   "intro": "A mother. Her son joined a year ago. The mother: \"He writes. \"All is in order.\" Every month. The same five words.\" You ask her how she is.",
+   "choices": [
+    {
+     "label": "(Wait.)",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The mother: \"...I'm not all right. I've been saying I am to the neighbours for a year.\" She comes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-roll",
+        "amount": 30
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-door-2"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You fill the quiet. She says she's fine. She shuts the door gently.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-door-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-door-2",
+   "name": "Door 2",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "sparkle"
+   },
+   "intro": "A husband. The husband: \"She said she needed quiet. I said I'd be quiet. She said: not your quiet.\" You ask him how he is.",
+   "choices": [
+    {
+     "label": "(Wait.)",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The husband: \"I talk too much. I know. I'm doing it now.\" He stops. He waits, too. He comes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-roll",
+        "amount": 30
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-door-3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You say something to help. He thanks you, and goes on talking, and doesn't come.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-door-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-door-3",
+   "name": "Door 3",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_lass"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "sparkle"
+   },
+   "intro": "A girl of nine, and a grandmother behind her. The girl: \"Is this about Una's sister?\" It's Greer's house.",
+   "choices": [
+    {
+     "label": "(Wait.)",
+     "success": {
+      "text": "The grandmother: \"We've a place laid. We've had a place laid for a year.\" They come. They bring the plate. Lantern's roll is a hundred and twenty.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-roll",
+        "amount": 30
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-round1",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-round-2",
+   "name": "Round 2: The Queue",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "lantern-round1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "lantern-round2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "pokemon": "chansey",
+    "tint": "#3a2e1a",
+    "effect": "sparkle"
+   },
+   "intro": "Outside a Galactic Wellness storefront: a queue of people with Pokémon that look at nothing. Orderly Vance, in the doorway, soothing: \"You're upsetting the patients.\" Padraig: \"We've not said a word to them. We're only asking you, son. How are you?\" Vance: \"I'm well. Stress responses are down ninety per cent.\"",
+   "choices": [
+    {
+     "label": "(Wait.) The longest wait in the game.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Vance: \"...I had a Chansey that sang. Before the trial. I volunteered her. She's very calm now.\" A pause. Vance: \"I've been telling people that's a wonderful result.\" He hands over the keys. He doesn't fight. The clinics become Lantern Rooms: rests that heal in full, where one Pokémon's bond goes up a step. The roll's two hundred and twenty.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-roll",
+        "amount": 100
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-round2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-rooms",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You can't wait it out. He squares up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-queue-fight"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-queue-fight",
+   "name": "Round 2: The Queue",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "sparkle"
+   },
+   "intro": "Orderly Vance: \"Then I'll have to ask you to leave.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He fights calmly, as if from a script.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "chansey",
+        "bronzor",
+        "chingling"
+       ],
+       "name": "Orderly Vance",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lantern-roll",
+         "amount": 100
+        },
+        {
+         "kind": "flag",
+         "key": "lantern-round2",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "lantern-rooms",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-round-3",
+   "name": "Round 3: The Lights",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "lantern-round2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "lantern-round3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_engineer",
+     "boss.npc_lady"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "sparkle"
+   },
+   "intro": "The Windworks, at night. The old line crews: a dozen men and women in their sixties, in boiler suits with a G that means Grid. A lineman: \"Sixty years we've had one job. He never changed that part; he just changed what it was for.\" Mrs. Holmgren: \"Then let's do the job. There's a stair up that mountain with no lamps on it. I don't know about the world. I know about that.\" They'll run cable up Mt. Coronet in a night: three ridges, one drum of wire.",
+   "choices": [
+    {
+     "label": "Route the cable.",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "By dawn there's a string of bulbs from the valley to the cloud. The roll's three hundred. The Ascent's lit: no whiteout, no accuracy loss, at the climax.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-roll",
+        "amount": 80
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-round3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-ascent-lit",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "One ridge is wired wrong, and has to be done twice. By dawn it's lit anyway. The roll's three hundred.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-roll",
+        "amount": 80
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-round3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-ascent-lit",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-climax",
+   "name": "Three Hundred Lanterns",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "beat": 6,
+     "has": "third",
+     "inside": false
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "snow"
+   },
+   "intro": "The foot of the stair, at dusk. A string of bulbs going up into the cloud. Three hundred people, each with a lamp. A band, tuning. It's dreadful. It's sixty. There's no gauntlet. At each landing there's a Galactic post. At each post, somebody from the roll steps out of the line.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "At the foot, two Grunts. A mother steps out of the line. \"All is in order, is it? Come here.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-ridge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-ridge",
+   "name": "The Ridge",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "snow"
+   },
+   "intro": "The ridge: researchers. A lineman steps out of the line. The lineman: \"I'll show you my maths if you'll show me yours.\" They put their clipboards down.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "Higher. The snow comes sideways.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-saddle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-saddle",
+   "name": "The Saddle",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f"
+    ],
+    "pokemon": "purugly",
+    "tint": "#3a2e1a",
+    "effect": "snow"
+   },
+   "intro": "The saddle: Mars. Nobody she knows steps out. That's the scene. Three hundred people, and not one's come for her.",
+   "choices": [
+    {
+     "label": "\"What's your name?\"",
+     "success": {
+      "text": "She tells you. It's not Mars. Somebody puts a lamp in her hand. She's on the roll.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-mars-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-col"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle her.",
+     "success": {
+      "text": "She doesn't want to be asked. Or she does, and nobody has.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.npc_psychic_f",
+       "team": [
+        "purugly",
+        "crobat",
+        "houndoom",
+        "skuntank",
+        "honchkrow"
+       ],
+       "name": "Commander Mars",
+       "size": 5,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "lantern-col"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-col",
+   "name": "The Col",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_beauty"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "snow"
+   },
+   "intro": "The col: Jupiter. The Garage Band steps out of the line. Jupiter: \"Oh, for—\" She listens to eight bars. Jupiter: \"That's the worst thing I've ever heard. I'm off. I'm taking the hat.\"",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "The band plays on, uphill.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-summit"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-summit",
+   "name": "The Summit Stair",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m",
+     "boss.npc_fisherman"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "snow"
+   },
+   "intro": "The summit stair: Saturn. Padraig steps out of the line. Padraig: \"Mind the spines, son.\" Saturn steps aside. He takes a lamp. He's not sure how to hold it.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "The dais.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-dais"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-dais",
+   "name": "The Dais",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus",
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "snow"
+   },
+   "intro": "Cyrus, the four lines on his arm. He hears it before he sees it: a brass band, in a blizzard, playing a company march he abolished. He looks down. A line of light, all the way to the valley. It's the only time anyone's seen the whole of Mt. Coronet lit. Cyrus: \"...What is that.\" Saturn, behind him, holding a lamp wrong: \"Three hundred people, sir. I counted. They've come up.\" Cyrus: \"To stop me.\" Saturn: \"No, sir. I asked. They've come to see you. They've a question.\" Nobody's ever come for him before.",
+   "choices": [
+    {
+     "label": "Let the question be asked.",
+     "success": {
+      "text": "The youngest goes first, because nobody else will.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-question"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-question",
+   "name": "The Question",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus",
+     "boss.npc_lady"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "snow"
+   },
+   "intro": "Cadet Io, at the front: \"Mr. Cyrus. How are you?\" Cyrus: \"That question costs four minutes.\" Padraig: \"We've four minutes.\" They wait. Three hundred people, in snow. You're holding a lamp, and can't press anything. The band stops. The wind doesn't. One of the shapes in the sky has turned its head to listen.",
+   "choices": [
+    {
+     "label": "(Wait.)",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "galactic-box",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The box is passed up the line, hand to hand, three hundred hands. It arrives with snow on it. Cyrus, at the end of the wait: \"...Tired.\" Mrs. Holmgren: \"Well, of course you are. Put it down, dear. Are the lights on?\" Cyrus: \"...Yes.\" Mrs. Holmgren: \"Then that's the job done. Sit.\" He lets go of the lines. Because his arm's tired, and somebody's noticed. Team Lantern doesn't disband: on any night in Sinnoh, a lamp in a window is a free rest. Cyrus lives two streets from the sea. Saturn carries a lamp wrong, for good. Mars is on the roll: somebody asked. Jupiter's gone, with the hat. Charon sends Lantern a bill for the cable; Mrs. Holmgren pays it in person, slowly, in coins. Sird took a lamp; nobody saw her light it. Greer's home; there's a place laid. Lior teaches at Canalave and sets one exam question: \"Why not?\" Cadet Io went first. Wynn labels three hundred lamps with three hundred names. Padraig: \"Mind the spines.\" The old man lent the bench. The three are free; one of them listened. The doors are open.",
+       "effects": [
+        {
+         "kind": "evil",
+         "beat": true
+        },
+        {
+         "kind": "evil",
+         "end": "defeated"
+        },
+        {
+         "kind": "flag",
+         "key": "galactic-ending-lantern",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "cyrus-asked",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 2
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Cyrus, at the end of it: \"...Tired.\" Cyrus: \"I can't verify that. It's the word that was there.\" Mrs. Holmgren: \"Well, of course you are. You've been holding that up on your own. Put it down, dear. Are the lights on?\" He looks down the mountain. Cyrus: \"...Yes.\" Mrs. Holmgren: \"Then that's the job done. Sit.\" He lets go of the lines. Not because he's beaten. Because his arm's tired, and somebody's noticed. Team Lantern doesn't disband: on any night in Sinnoh, a lamp in a window is a free rest. Cyrus lives two streets from a breakwater. He does the crossword in pencil. He doesn't come down for supper every night. Some. Cyrus lives two streets from the sea. Saturn carries a lamp wrong, for good. Mars is on the roll: somebody asked. Jupiter's gone, with the hat. Charon sends Lantern a bill for the cable; Mrs. Holmgren pays it in person, slowly, in coins. Sird took a lamp; nobody saw her light it. Greer's home; there's a place laid. Lior teaches at Canalave and sets one exam question: \"Why not?\" Cadet Io went first. Wynn labels three hundred lamps with three hundred names. Padraig: \"Mind the spines.\" The old man lent the bench. The three are free; one of them listened. The doors are open.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-ending-lantern",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cyrus-asked",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     },
+     "failure": {
+      "text": "You press. Cyrus: \"As I calculated.\" He turns to fight.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "lantern-cold"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lantern-cold",
+   "name": "Three Hundred Lanterns",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#3a2e1a",
+    "effect": "snow"
+   },
+   "intro": "The base fight, a little colder.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Three hundred lamps light the snow you fight in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-cold",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "evil",
+         "beat": true
+        },
+        {
+         "kind": "evil",
+         "end": "defeated"
+        },
+        {
+         "kind": "flag",
+         "key": "galactic-ending-lantern",
+         "amount": 1
+        }
+       ],
+       "sprite": "boss.cyrus",
+       "team": [
+        "honchkrow",
+        "weavile",
+        "gyarados",
+        "crobat"
+       ],
+       "name": "Cyrus",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "evil",
+         "beat": true
+        },
+        {
+         "kind": "evil",
+         "end": "defeated"
+        },
+        {
+         "kind": "flag",
+         "key": "galactic-ending-lantern",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cold",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lantern-mars-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mars is on the roll now. She holds her lamp up so you can see."
+    }
+   ]
+  }
+ ]
+}
