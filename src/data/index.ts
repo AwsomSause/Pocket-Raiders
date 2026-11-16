@@ -428,9 +428,17 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const unlockFile = raw.trainerUnlocks === undefined ? { unlocks: [] } : parse(TrainerUnlocksFileSchema, raw.trainerUnlocks, 'trainerUnlocks.json', problems);
   const unlockById = new Map((unlockFile?.unlocks ?? []).map((u) => [u.trainerId, u]));
   // A trainer's own challenge replaces the generic unlock (and the matching "<Name>'s Team" starter set follows it).
+  const bossIds = new Set(((raw.bosses ?? []) as { id?: string }[]).map((b) => b.id));
   const archetypes = baseArchetypes?.map((a) => {
     const u = unlockById.get(a.id);
-    return u && !a.unlockedByDefault && !a.evolvedFrom ? { ...a, unlock: u.requirement, unlockText: u.text, unlockCost: u.cost, unlockTier: u.tier, unlockFlavor: u.flavor, unlockStatus: u.status } : a;
+    const own = u && !a.unlockedByDefault && !a.evolvedFrom ? { ...a, unlock: u.requirement, unlockText: u.text, unlockTier: u.tier, unlockFlavor: u.flavor, unlockStatus: u.status } : a;
+    // Streamlined unlocks: no Bank Credit claim step. Gym Leaders, Elite Four and Champions also join when beaten as a boss;
+    // npc-* trainers also join when helped in their run event ("recruit" effect). Either way the challenge still works.
+    if (a.unlockedByDefault) return { ...own, unlockCost: 0, unlockRoute: 'start' as const };
+    if (a.evolvedFrom) return { ...own, unlockCost: 0, unlockRoute: 'evolution' as const };
+    const route = bossIds.has(a.id) ? 'battle' as const : a.id.startsWith('npc-') ? 'event' as const : 'challenge' as const;
+    const lead = route === 'battle' ? `Beat ${a.name} in a boss battle during a run. Or: ` : route === 'event' ? `Help ${a.name} when you meet them in a run event. Or: ` : '';
+    return { ...own, unlockCost: 0, unlockRoute: route, unlockText: lead && own.unlockText ? `${lead}${own.unlockText}` : own.unlockText };
   });
   const achievements = parse(z.array(AchievementSchema), raw.achievements, 'achievements.json', problems);
   const quests = parse(TrainerQuestsFileSchema, raw.trainerQuests, 'trainerQuests.json', problems);

@@ -25,6 +25,7 @@ import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
 import { ofAssist, ofGuestLeaves, ofShadow, recordRelease } from './greenneedle/oldfriend';
 import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenneedle/ferris';
+import { noteFinalLoss } from './co/roadHome';
 import { followedRest, followedRival, followedRoad, followedShop, followedStage, followedStep, longJourney } from './greenneedle/followed';
 import { ballBattle, ballRest } from './greenneedle/ball';
 import { ridgeCatch } from './greenneedle/ridge';
@@ -113,6 +114,7 @@ import {
   planEliteFour,
   planGymLeader,
   planFirstRival,
+  rivalNamesExcluded,
   planTrainer,
   planWild,
   type TrainerPlan,
@@ -1495,6 +1497,9 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
       return effect?.kind === 'perk' && effect.perks.some((p) => p.perk === 'preview' && p.what === what);
     }) ?? null;
   const out: Record<string, NodePreview> = {};
+  // A stop that must be played first (a required menu entry, or an event placed before this node's battle) holds the map:
+  // walking on is not possible yet, so there is no next battle to preview (and walking a copy there would throw).
+  const held = menuBlocker(run) !== null || attachBlocker(content, run) !== null;
   const archetype = runArchetype(content, run);
   // An item's preview wins over the trainer's (it names the item); either shows the same battle.
   const source = (what: 'wild' | 'trainers' | 'gymTeam', itemId: string | null): { itemId: string | null; source: string } | null =>
@@ -1505,7 +1510,7 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
   const notebook = wildMovesItem(content, run);
   const wildFrom = source('wild', perks('wild')) ?? rift ?? (notebook ? { itemId: notebook, source: content.catalog.get(notebook)?.name ?? notebook } : null);
   const trainerFrom = source('trainers', perks('trainers')) ?? rift;
-  for (const node of mapChoices(content, run)) {
+  for (const node of held ? [] : mapChoices(content, run)) {
     const from = node.kind === 'wild' ? wildFrom : node.kind === 'trainer' ? trainerFrom : null;
     if (!from) continue;
     // A preview never stops the map: with no Pokémon able to battle there is nothing to show.
@@ -1518,7 +1523,7 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
     out[node.id] = { ...from, team: battle.enemyTeam.map((m) => ({ speciesId: m.speciesId, level: m.level, ...(withMoves ? { moves: m.moves.map((s) => s.id) } : {}) })), trainerName: battle.trainer?.name ?? null };
   }
   // R6 The Post-Mortem, "Thanks": the next trainer of the class you lost to shows its lead (the rival's notes).
-  for (const node of mapChoices(content, run)) {
+  for (const node of held ? [] : mapChoices(content, run)) {
     if (node.kind !== 'trainer' || out[node.id] || !run.party.some((p) => p.hp > 0)) continue;
     const battle = moveToNode(content, run, node.id, () => undefined).battle;
     if (!battle?.trainer || !scoutedLead(run, battle.trainer.classId)) continue;
@@ -2305,7 +2310,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
     // The first rival: the first ordinary trainer of balance.rival.stage is scripted (one starter-line Pokémon).
     const firstRival = node.kind === 'trainer' && !rematch && stageNumber === content.balance.rival.stage && node.column >= content.balance.rival.column && run.story.flags[FIRST_RIVAL_FLAG] === undefined;
     if (firstRival) {
-      plan = planFirstRival(content, run.seed, Math.min(runLevelCap(content, run), Math.max(content.balance.rival.level, ...run.party.map((m) => m.level))));
+      plan = planFirstRival(content, run.seed, Math.min(runLevelCap(content, run), Math.max(content.balance.rival.level, ...run.party.map((m) => m.level))), rivalNamesExcluded(content, run.archetypeId));
       plan = storyFirstRivalPlan(content, run, plan) ?? plan;
       run.story.flags[FIRST_RIVAL_FLAG] = 'fighting';
     }
@@ -3633,6 +3638,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     }
     freeHandedOverRival(run);
     followedRoad(content, run);
+    // NE100: losing the final battle still walks the Road Home at the run end.
+    noteFinalLoss(run, battle, regionEndsAtGym(content, run));
     run.phase = 'over';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: true, cues, drama };
@@ -4156,6 +4163,9 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       count(run, role);
       recordBossDefeat(content, run, battle);
       beatBoss(run, battle.trainer?.leaderId);
+      // Streamlined trainer unlocks: a Gym Leader, Elite Four member or Champion you beat joins your roster when the run ends.
+      const beaten = battle.trainer?.leaderId ? content.archetypes.get(battle.trainer.leaderId) : undefined;
+      if (beaten?.unlockRoute === 'battle') run.itemCounters = { ...run.itemCounters, [`recruit:${beaten.id}`]: 1 };
       onFrontRunnerBattle(content, run, battle, 'win');
       const lead = run.party[battle.activeIndex];
       for (const type of lead ? getSpecies(content, lead.speciesId).types : []) count(run, `bossWinsLead.${type}`);

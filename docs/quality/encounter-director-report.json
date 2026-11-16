@@ -402,7 +402,7 @@
      "15": 3330,
      "16": 3313
     },
-    "species": 329,
+    "species": 330,
     "topSpecies": [
      [
       "scraggy",
@@ -410,15 +410,15 @@
      ],
      [
       "numel",
-      78
+      80
      ],
      [
       "dwebble",
-      78
+      76
      ],
      [
       "nincada",
-      74
+      75
      ],
      [
       "litleo",
@@ -430,23 +430,23 @@
      ],
      [
       "sandile",
-      69
+      68
      ],
      [
-      "geodude",
+      "swablu",
       68
      ]
     ],
     "rarity": {
-     "common": 5968,
-     "rare": 857,
-     "veryRare": 680,
-     "uncommon": 2495
+     "common": 5959,
+     "veryRare": 688,
+     "uncommon": 2501,
+     "rare": 852
     },
     "evolutionStage": {
      "1": 10000
     },
-    "threatAvg": 62.972,
+    "threatAvg": 63.067,
     "threatMax": 105,
     "budgetAvg": 103.993,
     "rejectionRate": 0.01,
@@ -458,11 +458,11 @@
    "trainer": {
     "samples": 6000,
     "levels": {
-     "15": 2011,
+     "15": 2010,
      "16": 2021,
-     "17": 1968
+     "17": 1969
     },
-    "species": 297,
+    "species": 298,
     "topSpecies": [
      [
       "aron",
@@ -470,11 +470,15 @@
      ],
      [
       "marill",
-      62
+      63
      ],
      [
       "jigglypuff",
       58
+     ],
+     [
+      "litleo",
+      57
      ],
      [
       "numel",
@@ -489,29 +493,25 @@
       55
      ],
      [
-      "helioptile",
-      54
-     ],
-     [
-      "litleo",
+      "cufant",
       54
      ]
     ],
     "rarity": {
-     "common": 2889,
-     "rare": 741,
-     "veryRare": 500,
-     "uncommon": 1870
+     "common": 2887,
+     "veryRare": 504,
+     "uncommon": 1865,
+     "rare": 744
     },
     "evolutionStage": {
-     "1": 5714,
-     "2": 235,
+     "1": 5716,
+     "2": 233,
      "3": 51
     },
-    "threatAvg": 67.158,
+    "threatAvg": 67.232,
     "threatMax": 114,
-    "budgetAvg": 131.581,
-    "rejectionRate": 0.01,
+    "budgetAvg": 131.582,
+    "rejectionRate": 0.011,
     "fallbacks": 0,
     "invalid": 0,
     "lockedPicks": 0,

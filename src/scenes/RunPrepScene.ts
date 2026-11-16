@@ -106,6 +106,7 @@ function fitLabel(text: string, max = 38): string {
 import { mountRedux, reduxOn } from '../ui/redux/stage';
 import { menuView } from '../ui/redux/templates';
 import { DESK_ROWS, deskItems } from '../ui/redux/screens/run';
+import { ownsTrainer } from '../core/progress';
 
 export class RunPrepScene extends Phaser.Scene {
   private menu!: Menu;
@@ -383,7 +384,7 @@ export class RunPrepScene extends Phaser.Scene {
     const next = <T>(list: T[], current: T): T => list[(list.indexOf(current) + step + list.length) % list.length]!;
     switch (row) {
       case 'trainer': {
-        const ids = [...content.archetypes.values()].filter((a) => a.available && (a.unlockedByDefault || profile.unlockedArchetypes.includes(a.id))).map((a) => a.id);
+        const ids = [...content.archetypes.values()].filter((a) => a.available && ownsTrainer(profile, a)).map((a) => a.id);
         this.archetypeId = next(ids, this.archetypeId);
         return this.refresh();
       }

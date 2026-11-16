@@ -1008,6 +1008,8 @@ export const ArchetypeSchema = z.object({
   unlockTier: z.number().int().min(1).max(5).optional(),
   /** A line of the trainer's voice shown with the challenge. */
   unlockFlavor: z.string().optional(),
+  /** How the trainer joins: a starting trainer, a challenge, beating them as a boss in a run (or the challenge), helping them in a run event (or the challenge), or a Trainer Evolution. Set in data/index.ts. */
+  unlockRoute: z.enum(['start', 'challenge', 'battle', 'event', 'evolution']).default('challenge'),
   /** "supported" = the exact feat runs; "limited" = approximated with the closest counter (see the file's note). */
   unlockStatus: z.enum(['supported', 'limited']).optional(),
   /** False for trainers whose passives need systems that don't exist yet; shown as "coming later". */

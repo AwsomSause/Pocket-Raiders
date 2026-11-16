@@ -16,6 +16,8 @@
     "Wally": { "species": "ralts", "firstFightOnly": false },
     "Gladion": { "species": "type-null", "firstFightOnly": false },
     "Lillie": { "species": "cosmog", "firstFightOnly": false },
+    "Red": { "species": "pikachu", "firstFightOnly": false },
+    "Tracey Sketchit": { "species": "scyther", "firstFightOnly": false },
     "Hop": { "species": "wooloo", "firstFightOnly": true }
   }
 }

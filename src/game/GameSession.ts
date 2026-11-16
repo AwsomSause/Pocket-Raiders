@@ -6,6 +6,7 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
 import * as NodeMenu from '../core/nodeMenu/flow';
@@ -31,7 +32,7 @@ import { finalizeRun, recordRunStarted } from '../core/profile';
 import { activeScene, finishScene, type StoryScene } from '../core/story2/module';
 import { finishRivalScene, rivalStoryScene } from '../core/story2/rivalStory';
 import { fieldTrialDue, finishFieldTrial } from '../core/story2/fieldTrial';
-import { awardLiveAchievements, claimTrainer, setActiveTitle, type RunEndSummary } from '../core/progress';
+import { awardLiveAchievements, claimTrainer, ownsTrainer, setActiveTitle, type RunEndSummary } from '../core/progress';
 import { setCardFrame, setCryTheme, setMenuArena } from '../core/wardrobe';
 import { buyNote } from '../core/researchNotes';
 import { makeRandomSeed } from '../core/rng';
@@ -274,7 +275,9 @@ export class GameSession {
    * `prep` carries the Preparation Desk's choices (and its campaign) and is remembered for next time.
    */
   newRun(requestedArchetypeId: string, seed: string = makeRandomSeed(), campaignId?: string, prep?: RunPrep, rules?: RulesChoice, starterOverride?: string[]): RunState {
-    const archetypeId = this.content.archetypes.has(requestedArchetypeId) ? playerTrainerFor(requestedArchetypeId) : requestedArchetypeId;
+    // Any trainer the player owns can lead a run; an unowned id (old saves, shared codes) becomes one of the five starters.
+    const requested = this.content.archetypes.get(requestedArchetypeId);
+    const archetypeId = requested && !ownsTrainer(this.profile, requested) ? playerTrainerFor(requestedArchetypeId) : requestedArchetypeId;
     // A saved preset can name a loan or Vault item the profile no longer has.
     if (prep) prep = { ...prep, loan: prep.loan && !loanProblem(this.content, this.profile), vaultItem: prep.vaultItem && this.profile.vault.includes(prep.vaultItem) ? prep.vaultItem : null, mentorId: availableMentors(this.profile).some((m) => m.id === prep!.mentorId) ? prep.mentorId : null };
     // Story Run: the prologue's identity, and the backstory and Starter line picked in Beats 7-8 or the Short Intake (used once).
@@ -442,8 +445,20 @@ export class GameSession {
   chooseEvent(sideId: string, choiceIndex: number, tradeUid?: string, promptGrade?: Grade): EventResult {
     const result = chooseEvent(this.content, this.requireRun(), sideId, choiceIndex, tradeUid, promptGrade);
     this.run = result.run;
-    this.persistRun();
+    if (this.run.phase !== 'over') this.persistRun(); // a finished run's save is already cleared (NE100 The Road Home plays after it)
     return result;
+  }
+
+  /** NE100 The Road Home: true when the run end should open it first (the run ended at its final battle). Reads state only. */
+  roadHomeDue(): boolean {
+    return this.run ? roadHomeDue(this.content, this.run) : false;
+  }
+
+  /** NE100: puts The Road Home on the node the run ended on and returns its stop's id. Not saved: the finished run's save is gone. */
+  openRoadHome(): string {
+    const { run, sideId } = openRoadHome(this.requireRun());
+    this.run = run;
+    return sideId;
   }
 
   /** Starts the fight with a Totem. */

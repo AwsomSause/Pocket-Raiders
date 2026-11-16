@@ -9,6 +9,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseMove, type PackMove } from './jetMoveText.ts';
+import { JET_ABILITIES } from '../../src/core/battle/jetAbilities.ts';
 
 const here = import.meta.dirname;
 const dataDir = join(here, '..', '..', 'src', 'data');
@@ -185,14 +186,10 @@ const BASED_3: Record<string, string> = { pinchit: 'pinsir', pincero: 'pinsir', 
 const G_EFFECTS: Record<string, object> = { 'g-max-toxitide': { status: 'psn' }, 'g-max-overgrowth': { bind: true } };
 const patches: { id: string; evolvesFrom: string; evolutionStage?: number }[] = [];
 const footprintBase: Record<string, string> = {};
-// An existing species that now follows a new one moves up a stage (Fearow: Spearow, Skyrake, Fearow).
-const addPatch = (target: string, from: string, fromStage: number, first = true) => {
-  const t = byId.get(target)!;
-  const stage = Math.max(t.evolutionStage, fromStage + 1);
-  t.evolutionStage = stage;
-  patches.push({ id: target, evolvesFrom: first ? from : t.evolvesFrom, evolutionStage: stage });
-  for (const ev of t.evolutions ?? []) if (byId.has(ev.to) && byId.get(ev.to).evolutionStage <= stage) addPatch(ev.to, target, stage, false);
-};
+// An existing species that now follows a new one (Fearow after Skyrake) is NOT changed: its stage, parent and wild-pool place stay as they were,
+// so old seeds and wild pools do not move. The link is listed in intoExisting for the Pokédex audit (src/quality/speciesAudit.ts).
+const intoExisting: { from: string; to: string }[] = [];
+const addPatch = (target: string, from: string, _fromStage: number) => { intoExisting.push({ from, to: target }); };
 const megaMoves: Record<string, string> = {};
 const moveLimits: Record<string, string[]> = {};
 const droppedLearn: Record<string, string[]> = {};
@@ -301,7 +298,7 @@ for (const pass of [1, 2]) {
       } else if (fromId) conditionEvolutions.push(routeOf(p, fromId, sid));
       // "X evolves into T at Lv. N" in the pack's notes: T is an existing species that now comes after X.
       const nm = /evolves into ([^.]+?) at Lv\. (\d+)/.exec(e.notes ?? '');
-      if (nm && byId.has(nameId(nm[1]!))) { sp.evolutions.push({ to: nameId(nm[1]!), level: Number(nm[2]) }); addPatch(nameId(nm[1]!), sid, stage); }
+      if (nm && byId.has(nameId(nm[1]!))) { sp.evolutions.push({ to: nameId(nm[1]!), level: Number(nm[2]) }); addPatch(nameId(nm[1]!), sid, stage); if (byId.get(nameId(nm[1]!))?.evolvesFrom) patches.push({ id: nameId(nm[1]!), evolvesFrom: sid }); }
       // A new first stage that evolves into an existing species ("into").
       if (intoId && !fromId && !packById.has(intoId)) {
         addPatch(intoId, sid, stage);
@@ -347,7 +344,7 @@ for (const line of readFileSync(join(here, 'source', 'signature_moves.csv'), 'ut
 descriptions['cataclysm-cannon-attack'] = descriptions['cataclysm-cannon-defence'] = descriptions['cataclysm-cannon']!;
 descriptions['hypnospot-mega'] = descriptions['hypnospot']!;
 for (const m of newMoves) if (!descriptions[m.id]) throw new Error(`no description for ${m.id}`);
-writeFileSync(join(dataDir, 'jetSpecies.json'), JSON.stringify({ species: out, evolutions: external, moves: newMoves, abilities, learnables, items, rewards, descriptions, conditionEvolutions, patches, megaMoves, footprintBase, pendingAbilities: abilities.slice(abilitiesBefore).map((a) => a.id) }) + '\n');
+writeFileSync(join(dataDir, 'jetSpecies.json'), JSON.stringify({ species: out, evolutions: external, moves: newMoves, abilities, learnables, items, rewards, descriptions, conditionEvolutions, patches, intoExisting, megaMoves, footprintBase, pendingAbilities: abilities.slice(abilitiesBefore).map((a) => a.id).filter((id) => !JET_ABILITIES.includes(id)) }) + '\n');
 // Gigantamax moves of the three Dynamax forms join the G-Max table (presentation of Max moves is the engine's).
 const maxPath = join(dataDir, 'maxMoves.json');
 const maxData = JSON.parse(readFileSync(maxPath, 'utf8'));
