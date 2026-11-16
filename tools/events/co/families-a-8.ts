@@ -1,7 +1,7 @@
 // Catalog Overhaul Pack: STORY_FAMILIES_4.md, part three. SF27 The Disciple, SF28 The Readings, SF29 The Bell in the Fog,
 // SF30 The Storm-Grey Coat. Build: npm run co:build -- families-a-8. Run memory is same-run only (Kice 2026-11-14).
 import { br, ch, fight, flag, flagAt, fr, heal, isGood, join, lose, lv, out, reveal, room, takeNode, trainer, wild, anyType, type Json } from '../dsl.ts';
-import { is, later, moment, not, safe, sub, v } from './_fa.ts';
+import { is, later, moment, not, safe, sub, v, withRooms } from './_fa.ts';
 
 export const CATEGORY = 'families-a';
 /** The spirit guide is the fog guide (see _fa-retired.json). */
@@ -235,4 +235,4 @@ const COAT: Json[] = [
   }),
 ];
 
-export const EVENTS: Json[] = [...DISCIPLE, ...READINGS, ...FOG, ...COAT];
+export const EVENTS: Json[] = withRooms([...DISCIPLE, ...READINGS, ...FOG, ...COAT]);

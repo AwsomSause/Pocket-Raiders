@@ -1,7 +1,7 @@
 // Catalog Overhaul Pack: STORY_FAMILIES_7.md, part one. SF42 The Hazard System, SF43 The Kindness Ledger,
 // SF44 Strangers Worth Stopping For, SF45 The Camp. Build: npm run co:build -- families-a-9. Run memory is same-run only (Kice 2026-11-14).
-import { $, any, anyType, at, bondUp, br, ch, cure, fight, flag, flagAt, flagThisRegion, fr, gym, heal, hurt, hurtExcept, item, lose, out, relic, room, scout, statusLead, takeNode, wild, type Json } from '../dsl.ts';
-import { crisis, crisisAt, feel, is, kind, later, moment, not, sub, temp, trust, v } from './_fa.ts';
+import { $, any, anyType, at, bond, bondUp, br, celebrate, ch, convoyHeal, cure, fight, flag, flagAt, flagThisRegion, fr, gym, heal, hurt, hurtExcept, item, lose, lv, out, milestone, relic, rest, room, rp, scout, statusLead, takeNode, wild, TREASURE, VITAMINS, type Json } from '../dsl.ts';
+import { crisis, crisisAt, feel, is, kind, later, moment, not, sub, temp, trust, v, withRooms } from './_fa.ts';
 
 export const CATEGORY = 'families-a';
 
@@ -9,6 +9,8 @@ const money = (atLeast: number): Json => ({ kind: 'money', atLeast });
 const hasItem = (id: string, count = 1): Json => ({ kind: 'item', id, count });
 const useItem = (id: string, count = 1): Json => ({ kind: 'loseItem', id, count });
 const mentor = (o: Json = {}): Json => ({ kind: 'mentor', ...o });
+const mentorFx = (trust: number, loyalty: number, start = false): Json => ({ kind: 'mentor', trust, loyalty, rivalry: 0, disagree: false, ...(start ? { mission: 'start' } : {}) });
+const monRival = (state: 'open' | 'carried' | 'sacrificed'): Json => ({ kind: 'monRival', state });
 const until = (label: string, effects: Json[], u: 'boss' | 'battle', battles = 1): Json => ({ kind: 'tempEffect', label, effects, battles, until: u });
 
 // =====================================================================================================================
@@ -486,15 +488,12 @@ const STRANGERS: Json[] = [
 const CAMP: Json[] = [
   {
     id: 'camp-checkpoint',
-    intro: 'A tidy camp set up for travellers: a ring of stones round a firepit, a tent pitched square, a kettle on a hook. A camp warden in a wide hat checks you in with a clipboard. Camp warden: "One hour, then I need the pitch." She looks at your team, already spreading out to sniff everything. "What\'ll it be?"',
+    intro: 'A tidy camp set up for travellers: a ring of stones round a firepit, a tent pitched square, a kettle on a hook. A camp warden in a wide hat checks you in with a clipboard. Camp warden: "One hour, then I need the pitch." She looks at your team, already spreading out to sniff everything, and softens. "Or the whole night, if you need it. What\'ll it be?"',
     choices: [
-      ch('Prepare. (morning)', out('You spread your gear out on the grass in the early light.', room('camp-prepare')), { requires: [at('morning', 'afternoon')] }),
-      ch('Council. (morning)', out('You sit down in the middle of your team and wait for them to tell you.', room('camp-council')), { requires: [at('morning', 'afternoon')] }),
-      ch('Talk about the road. (evening or night)', out('The fire pops. Somebody brings up your rival, and the night settles in around the conversation.', room('camp-rival')), {
-        requires: [at('evening', 'night')],
-        branches: [br([at('evening'), mentor()], 'Your mentor is sitting on the far side of the fire, waiting for you to ask.', room('camp-mentor'))],
-      }),
-      ch('Sit by the fire.', out('You just rest. You lie back on the grass and close your eyes, and your team lies down round you, and for an hour nobody needs anything. Later, when the others are asleep, one of them stays up with you.', heal(0.25), room('camp-talk'))),
+      ch('Make camp for the night.', out('You make camp. Nobody says much. Your team lies down round you by the fire, one by one, and sleeps the deep sleep of the safe, and so does anyone travelling in your care. In the morning everyone is whole again.', heal(1), cure(), convoyHeal(4), fr(3, 'party'), rest())),
+      ch('Prepare for the road.', out('You spread your gear out on the grass.', room('camp-prepare'))),
+      ch('Hold council. (morning or afternoon)', out('You sit down in the middle of your team and wait for them to tell you.', room('camp-council')), { requires: [at('morning', 'afternoon')] }),
+      ch('Talk by the fire. (evening or night)', out('The fire burns low. You take one of them a little way off, where it is quiet.', room('camp-talk')), { requires: [at('evening', 'night')] }),
     ],
   },
   {
@@ -510,28 +509,29 @@ const CAMP: Json[] = [
     id: 'camp-mentor', requires: [mentor()],
     intro: 'Your mentor talks best at night, when the road is quiet and the fire is low and there is nobody else to hear. They sit with their hands round a tin cup and do not look at you. Mentor: "Ask me anything. Once." A long pause. "I\'ll answer straight."',
     choices: [
-      ch('What should I fear next?', out('Your mentor thinks for a long time. Then they tell you, plainly, about what is waiting at the end of this road: what it fights with, what it holds back, where it is weak. It is a true answer. You can tell by how much they did not want to give it.', gym())),
-      ch('What did you get wrong?', out('A long silence. Then your mentor tells you. Not all of it. One thing, from a long time ago, that they have not told anyone. When they are done, they finish their cup and go to bed without another word, and the next morning they are a little easier with you.', mentor({ trust: 5 }), flag('camp-mentor-story'))),
-      ch('Am I doing well?', out('Mentor: "Yes." They look at you, finally. "Don\'t let it slow you."', mentor({ trust: 2 }))),
+      ch('What should I fear next?', out('Your mentor thinks for a long time. Then they tell you, plainly, about what is waiting at the end of this road: what it fights with, what it holds back, where it is weak. It is a true answer. You can tell by how much they did not want to give it.', gym(), mentorFx(2, 1), rp(20))),
+      ch('What did you get wrong?', out('A long silence. Then your mentor tells you. Not all of it. One thing, from a long time ago, that they have not told anyone. When they are done, they finish their cup and go to bed without another word, and the next morning they are a little easier with you.', mentorFx(5, 3), flag('camp-mentor-story'), rp(15))),
+      ch('Am I doing well?', out('Mentor: "Yes." They look at you, finally. "Don\'t let it slow you."', mentorFx(2, 1))),
+      ch('Ask about the mission.', out('Your mentor looks at you for a long moment over the cup, then nods. Mentor: "You\'re ready."', mentorFx(1, 1, true), rp(10)), { requires: [mentor({ mission: 'none' })] }),
     ],
   },
   {
     id: 'camp-party',
     intro: 'An hour off, and your Pokémon drift toward each other the way they do. Two are squabbling over the warm rock. Three are playing some game with rules only they understand. And one is off by itself at the edge of the firelight, watching the others, not joining in.',
     choices: [
-      ch('Break up the argument.', out('You sit down between the two and do not take sides, and after a while they are sharing the rock, and after a while longer they are asleep on it, curled round each other.', fr(5, 'party'))),
-      ch('Join the game.', out('You join the game. You do not understand the rules. You lose, badly, every round, and every single one of them thinks it is the funniest thing that has ever happened.', bondUp(1, 'party'))),
-      ch('Sit with the one alone.', out('You go and sit with the one at the edge. You do not say anything. After a while it leans against you, just a little, and you stay like that until the fire goes down.', bondUp(2, 'newest'))),
+      ch('Break up the argument.', out('You sit down between the two and do not take sides, and after a while they are sharing the rock, and after a while longer they are asleep on it, curled round each other. Whatever was between them is gone.', fr(5, 'party'), bond(6, 4, true), rp(15))),
+      ch('Join the game.', out('You join the game. You do not understand the rules. You lose, badly, every round, and every single one of them thinks it is the funniest thing that has ever happened.', bondUp(1, 'party'), bond(8, 4), rp(20))),
+      ch('Sit with the one alone.', out('You go and sit with the one at the edge. You do not say anything. After a while it leans against you, just a little, and you stay like that until the fire goes down.', bondUp(2, 'newest'), bond(3, 2), rp(10))),
     ],
   },
   {
     id: 'camp-prepare',
     intro: 'A quiet road ahead, an hour to spare, and your gear spread out on a groundsheet. What you can usefully do with an hour changes as the day wears on.',
     choices: [
-      ch('Scout ahead. (morning)', out('You leave the team at camp and walk the road ahead in the morning light, and come back with the next stretch drawn on the back of your hand.', scout(2)), { requires: [at('morning')] }),
+      ch('Scout ahead.', out('You leave the team at camp and walk the road ahead, and come back with the next stretch drawn on the back of your hand.', scout(2), rp(15))),
       ch('Sort the bag. (afternoon)', out('You tip the bag out and sort it, properly, for the first time in weeks. At the bottom, squashed but whole, is something you forgot you had.', any('sitrus-berry', 'lum-berry', 'great-ball')), { requires: [at('afternoon')] }),
-      ch('Mend gear. (evening)', out('You mend what can be mended by the light of the fire, and your team rests and gathers itself. Everyone will go into the next fight fresh.', { kind: 'restorePp' }), { requires: [at('evening', 'night')] }),
-      ch('Just sit.', out('You just sit with your gear around you and do nothing at all for an hour. It is underrated.', heal(0.1))),
+      ch('Mend gear. (evening or night)', out('You mend what can be mended by the light of the fire, and your team rests and gathers itself. Everyone will go into the next fight fresh.', { kind: 'restorePp' }), { requires: [at('evening', 'night')] }),
+      ch('Celebrate the day.', out('Today is a day worth marking, and you mark it. The whole team feasts by the fire, and in the morning a stranger has left a small gift by the ashes.', celebrate(), fr(10, 'party'), heal(1), any(...TREASURE), any(...VITAMINS), rp(60)), { requires: [milestone] }),
     ],
   },
   {
@@ -547,20 +547,22 @@ const CAMP: Json[] = [
     id: 'camp-rival-trail',
     intro: 'A quiet clearing. One of your team stops in the middle of the path and will not move. It has been like this since the last time it faced that one Pokémon of your rival\'s, the one it always ends up facing. It scratches a shape in the dirt with one claw: the other Pokémon\'s shape. Then it looks up at you.',
     choices: [
-      ch('Train for it.', out('You train for it. Every move that one makes, you make, and your Pokémon answers it, over and over, until the answers come without thinking. When you leave the clearing it is walking taller, and its eyes are fixed on the road ahead.', temp('Trained for its rival: hits harder next fight', [{ kind: 'damageMultiplier', value: 1.1 }], 1))),
+      ch('Train for it.', out('You train for it. Every move that one makes, you make, and your Pokémon answers it, over and over, until the answers come without thinking. When you leave the clearing it is walking taller, and its eyes are fixed on the road ahead.', temp('Trained for its rival: hits harder next fight', [{ kind: 'damageMultiplier', value: 1.1 }], 1), lv(1, 'lead'), rp(20)), { requires: [monRival('open')] }),
       ch('Talk to it.', out('You sit down by the shape in the dirt and talk to it, about losing and about trying again, and about how you do not care who wins, not really. It listens. Then it rubs the shape out with its tail.', bondUp(2, 'lead'))),
-      ch('Let it think.', out('You sit on a log and let it think. It takes a long time. Then, all at once, it gets up and comes to you, ready. Next time it sees that Pokémon, it will not wait to be sent.', flag('trail-first'), bondUp(1, 'lead'))),
+      ch('Let it think.', out('You sit on a log and let it think. It is remembering the one that took the blow meant for it, and did not get up. It takes a long time. Then, all at once, it gets up and comes to you, ready, and the whole team gathers round it.', flag('trail-first'), bondUp(1, 'lead'), fr(10, 'party'), heal(0.3), rp(40)), { requires: [monRival('sacrificed')] }),
+      ch('Ask about the one that left.', out('Its rival joined a trainer, and it has not known what to do with that. You tell it that it is allowed to miss an enemy. It sits with you for a while, and something in it settles.', fr(6, 'party'), rp(20)), { requires: [monRival('carried')] }),
     ],
   },
   {
     id: 'camp-talk',
     intro: 'Away from the others, the night is long enough for a real conversation. You sit with one of them on a rock at the edge of camp, the fire behind you and the stars in front, and it is the kind of quiet where you can say things.',
     choices: [
-      ch('Ask about where they came from.', out('You ask, and it shows you, the only way it can: the way it looks at the dark, the direction it faces, the sound it makes very softly in its throat. You remember the day you found it, and you understand that it remembers too, from the other side. You have never felt so much that it chose you.', bondUp(2, 'lead'))),
-      ch('Tell them about home.', out('You tell it about home. Your room. The window. The tree in the yard. The sound the kettle makes. It does not understand a word, and listens to every one, its head on your knee.', bondUp(2, 'lead'))),
-      ch('Say nothing, just sit.', out('You say nothing. You just sit. One by one, the others come over from the fire and sit too, until the whole team is on the rock, and nobody says anything, and it is perfect.', bondUp(1, 'party'))),
+      ch('Ask about where they came from.', out('You ask, and it shows you, the only way it can: the way it looks at the dark, the direction it faces, the sound it makes very softly in its throat. You remember the day you found it, and you understand that it remembers too, from the other side. You have never felt so much that it chose you.', bondUp(2, 'lead'), bond(3, 2), rp(10))),
+      ch('Tell them about home.', out('You tell it about home. Your room. The window. The tree in the yard. The sound the kettle makes. It does not understand a word, and listens to every one, its head on your knee. One by one the others come over from the fire and listen too.', bondUp(2, 'lead'), bondUp(1, 'party'))),
+      ch('Talk about {rival}.', out('The fire pops. You find you are thinking about {rival}.', room('camp-rival')), { requires: [{ kind: 'rivalMet', atLeast: 1 }] }),
+      ch('Talk with your mentor.', out('Your mentor has been watching the fire too.', room('camp-mentor')), { requires: [mentor()] }),
     ],
   },
 ];
 
-export const EVENTS: Json[] = [...HAZARDS, ...KINDNESS, ...STRANGERS, ...CAMP];
+export const EVENTS: Json[] = withRooms([...HAZARDS, ...KINDNESS, ...STRANGERS, ...CAMP]);

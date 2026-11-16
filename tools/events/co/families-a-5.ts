@@ -2,7 +2,7 @@
 // SF18 The Heist. Build: npm run co:build -- families-a-5. Run memory is same-run only (Kice 2026-11-14): the lantern bears the
 // name of a Pokémon released earlier in this run ({released}); Keepsakes are cut (Nov 13), so the lantern is not one.
 import { any, anyType, br, ch, convoy, convoyHeal, fight, flag, fr, heal, item, join, lose, out, $, reveal, room, season, stopHere, takeNode, trainer, wild, BERRIES, type Json } from '../dsl.ts';
-import { grunt, is, later, moment, not, safe, sub, v } from './_fa.ts';
+import { grunt, is, later, moment, not, safe, sub, v, withRooms } from './_fa.ts';
 import { quest } from './_rivals.ts';
 
 export const CATEGORY = 'families-a';
@@ -167,8 +167,10 @@ const CONVOY: Json[] = [
 // =====================================================================================================================
 const RELEASED = is('released-count');
 const CARRIED = [is('lantern-on'), not('lantern-done')];
-const COVEN = (name: string, o: { size?: number; lv?: number; chain?: number; win?: Json[] } = {}): Json =>
-  safe(trainer(name, { cls: 'hex-maniac', size: o.size ?? 2, types: ['ghost'], lv: o.lv ?? 0, ...(o.chain ? { chain: o.chain } : {}), win: o.win ?? [] }));
+const COVEN = (name: string, o: { size?: number; lv?: number; chain?: number; win?: Json[]; team?: string[] } = {}): Json =>
+  safe(trainer(name, { cls: 'hex-maniac', size: o.size ?? 2, types: ['ghost'], lv: o.lv ?? 0, ...(o.chain ? { chain: o.chain } : {}), ...(o.team ? { team: o.team } : {}), win: o.win ?? [] }));
+/** The Spooky-form family (core/specialForms): beating the Coven's Spooky team opens Spooky forms to eggs and trades (`spooky-met`). */
+const SPOOKY_FORMS = ['litwick-spooky', 'timburr-spooky', 'emolga-spooky', 'snorunt-spooky', 'ponyta-spooky', 'sinistea-spooky', 'tangela-spooky'];
 
 const LANTERN: Json[] = [
   {
@@ -184,7 +186,7 @@ const LANTERN: Json[] = [
     id: 'spooky-detour-battle', callback: true, requires: [is('lantern-on'), not('lantern-coven1')],
     intro: 'The light leads you off the path to a clearing, and stops. Something is waiting in the clearing in a long spooky coat with the hood up, and two shapes beside it in the dark. The thing in the coat turns out to be a young woman from the Hex Coven, with purple lipstick and a cold. Coven member: "You\'re following the light? Bad idea. Bad, bad idea." She sniffs. "Battle me, and I\'ll tell you why."',
     choices: [
-      ch('Battle.', fight('She has a Gengar and a Mimikyu, and she is better than her cold.', COVEN('Coven Member', { size: 2, lv: 1, win: [flag('lantern-coven1')] }), flag('lantern-coven1'), soon('spooky-light-two', 1))),
+      ch('Battle.', fight('Her team comes up out of the dark in lantern colours: Pokémon you know, in shapes you don\'t, orange-eyed and grinning. Spooky forms. She is better than her cold.', COVEN('Coven Member', { size: 2, lv: 1, team: SPOOKY_FORMS, win: [flag('lantern-coven1'), flag('spooky-met')] }), flag('lantern-coven1'), soon('spooky-light-two', 1))),
       ch('Tell me now.', out('Coven member: "Fine. Spoil it." She pulls her hood down. "It\'s looking for someone. Maybe you." She looks at the light, and something in her face goes soft. "The light\'s got a name. Ask the Medium."', flag('lantern-coven1'), soon('spooky-light-two', 1))),
       ch('Go back.', out('You go back to the road. The light comes out of the trees after you and waits on the verge, patiently, like a dog that knows you will come round.', soon('spooky-light-two', 2))),
     ],
@@ -199,7 +201,7 @@ const LANTERN: Json[] = [
     ],
   },
   {
-    id: 'spooky-hollow-lantern', callback: true, requires: [is('lantern-held'), not('lantern-named')],
+    id: 'spooky-hollow-lantern', mode: null, callback: true, requires: [is('lantern-held'), not('lantern-named')],
     intro: 'The lantern in your hands. A name is scratched on the glass, small and careful, the way you would write on something you meant to keep. The name is {released}. The flame inside is the colour of a {releasedType}-type, and it turns towards you when you breathe.',
     choices: [
       ch('I know that name.', out('You say it. {released}. The flame steadies, all at once, like someone sitting down after a long time standing.', flag('lantern-named'), flag('lantern-known'), soon('spooky-lantern-festival', 2))),
@@ -214,7 +216,7 @@ const LANTERN: Json[] = [
     ],
   },
   {
-    id: 'spooky-lantern-festival', callback: true, requires: [is('lantern-named'), not('lantern-festival')],
+    id: 'spooky-lantern-festival', mode: null, callback: true, requires: [is('lantern-named'), not('lantern-festival')],
     intro: 'Autumn in a village. Lanterns hung all along the path, hundreds of them, every colour, and people walking slowly under them, talking quietly or not at all. A woman in a fringed shawl is lighting them one by one from a taper. The Medium, Orla: "The veil is thin tonight. Light one for someone you\'ve lost." Then she sees the lantern in your hands, and stops. Orla: "Oh." She lowers the taper. "Someone\'s already lit one for you."',
     choices: [
       ch('Light another.', out('Orla gives you the taper. You light one for a Pokémon of yours that fell this run and got up again, and one for the ones that did not get up, wherever they were. She hangs them on the path among the others.', flag('lantern-festival'), flag('lantern-lit'), fr(3, 'party'), soon('spooky-medium', 1))),
@@ -223,7 +225,7 @@ const LANTERN: Json[] = [
     ],
   },
   {
-    id: 'spooky-medium', callback: true, requires: [is('lantern-festival'), not('lantern-asked')],
+    id: 'spooky-medium', mode: null, callback: true, requires: [is('lantern-festival'), not('lantern-asked')],
     intro: 'A small round table behind a single candle, in a room that smells of beeswax and rain. Orla is sitting there already, with her shawl round her shoulders and two cups of tea poured. She has been expecting you, or someone like you. Orla: "It\'s not angry. Most of them aren\'t." She turns the lantern so the name faces you. "It wants to know if you were sorry. Or if you were right." A pause. "Sometimes those are the same."',
     choices: [
       ch('I was sorry.', out('The lantern warms in your hands, all the way through, like a cup of tea.', flag('lantern-asked'), flag('lantern-sorry'), soon('spooky-hollow-mirror', 1))),
@@ -232,7 +234,7 @@ const LANTERN: Json[] = [
     ],
   },
   {
-    id: 'spooky-hollow-mirror', callback: true, requires: [is('lantern-asked'), not('lantern-mirror')],
+    id: 'spooky-hollow-mirror', mode: null, callback: true, requires: [is('lantern-asked'), not('lantern-mirror')],
     intro: 'A mirror in a ruined house, the frame gone green, the glass still perfect. It shows your team behind you, exactly as they are. And one more shape behind them, at the back, where nobody is standing. It is {released}. It looks the way it did the day you let it go. Then, while you watch, it looks the way it would now: older, bigger, steadier, with a scar you have never seen.',
     choices: [
       ch('Touch the glass.', out('The glass is warm under your hand, warm as a living side. On the other side of it, the shape leans into your palm.', flag('lantern-mirror'), soon('spooky-whispering-grave', 1))),
@@ -241,7 +243,7 @@ const LANTERN: Json[] = [
     ],
   },
   {
-    id: 'spooky-whispering-grave', callback: true, requires: [is('lantern-mirror'), not('lantern-grave')],
+    id: 'spooky-whispering-grave', mode: null, callback: true, requires: [is('lantern-mirror'), not('lantern-grave')],
     intro: 'A grave in the long grass, so old the mound has nearly gone, and it is whispering: almost too soft to hear. You kneel. The cry of the Pokémon on the lantern comes up out of the earth, once, small and clear. The headstone is blank.',
     choices: [
       ch('Carve the name.', out('You carve the name you wrote on the lantern into the stone, slowly, with whatever you have. The whispering stops, like a child that has finally been answered.', flag('lantern-grave'), flag('lantern-carved'), soon('spooky-pale-visitor', 1))),
@@ -257,7 +259,7 @@ const LANTERN: Json[] = [
     ],
   },
   {
-    id: 'spooky-pale-visitor', callback: true, requires: [is('lantern-grave'), not('lantern-visited')],
+    id: 'spooky-pale-visitor', mode: null, callback: true, requires: [is('lantern-grave'), not('lantern-visited')],
     intro: 'A pale figure at a roadside table set for two, under a tree with no leaves. White cloth, two plates, two cups, two of everything. The Pale Visitor: "Sit. I\'ve laid two places." A long hand, smoothing the cloth. "Always two." Then: "I sit with travellers carrying lanterns. I ask one thing." The Visitor looks at the lantern, and then at you. "If you could have it back, would you?"',
     choices: [
       ch('Yes.', out('The Visitor: "Then it\'s not done with you either." The Visitor pours tea into the second cup, the empty place, and pushes it gently across the table to nobody. "The Keeper will offer it. Go to the end of the lane."', flag('lantern-visited'), flag('lantern-want'), soon('spooky-hexed-keeper', 1))),
@@ -266,7 +268,7 @@ const LANTERN: Json[] = [
     ],
   },
   {
-    id: 'spooky-hexed-keeper', callback: true, requires: [is('lantern-visited'), not('lantern-done')],
+    id: 'spooky-hexed-keeper', mode: null, callback: true, requires: [is('lantern-visited'), not('lantern-done')],
     intro: 'The end of the lane. The Keeper stands there under the last lamp: an old man in a long coat, with keys at his belt that do not open anything you can see. He is not sorry. He is only tired. The Keeper: "I keep the ones who were let go. Until someone comes for them." He looks at the lantern. "Most never do. You did." He steps aside, and behind him, at the mouth of a den under an old oak, {released} is standing in the lamplight, with a family of its own peering out from the dark behind it. It has seen you. It is not coming closer yet. The Keeper: "It\'s here. It\'s up to you, and it\'s up to it."',
     choices: [
       ch('Come back.', out('You say it. {released} looks back at the den, once, for a long time. Then it walks out into the lamplight and puts its head against your chest, exactly where it used to, and does not move for a long while.', { kind: 'rejoinReleased' }, flag('lantern-done'), flag('lantern-came-back'), moment('The one you let go came back to you, out of the lamplight', 85)), { requires: [is('lantern-want')] }),
@@ -290,7 +292,7 @@ const LANTERN: Json[] = [
   },
   // ---------- SF16.10 The festival stops (drawn while the lantern is carried) ----------
   {
-    id: 'spooky-costume-judge', requires: [...CARRIED],
+    id: 'spooky-costume-judge', requires: [...CARRIED, season('Autumn')],
     intro: 'A stage made of hay bales, a crowd in masks, and a judge in a tattered cloak with a scorecard and a very serious face. Judge: "Best costume wins the prize!" Somewhere in the crowd a Pikachu dressed as a Mimikyu dressed as a Pikachu is causing a lot of confusion.',
     choices: [
       ch('Dress my lead as a Ghost.', out('A sheet with eyeholes, a bit of chain, a lot of dignity. Your lead takes it very seriously. The judge takes it very seriously too, and gives it the prize: a Spell Tag, tied on with black ribbon.', item('spell-tag'), fr(3, 'lead'))),
@@ -379,8 +381,8 @@ const LANTERN: Json[] = [
     id: 'spooky-midnight-finale', requires: [...CARRIED],
     intro: 'Midnight. Down the road comes the Hex Coven, leading the last parade of the season: robes, drums, a hundred lanterns, and Ghost-types drifting above it all like smoke. At the front walks their leader, tall, grey-haired, with a Mismagius at her shoulder. Morwen: "Walk with us. Bring your lantern." She looks at it. "Everyone who walks tonight walks with someone."',
     choices: [
-      ch('Walk.', out('You walk. Halfway down the street the parade passes the name on your lantern, and every Ghost-type in it turns, and bows to it, one after another, all the way down the line.', fr(5, 'party'), moment('The midnight parade bowed to the name on your lantern', 70))),
       ch('Battle Morwen.', fight('Morwen laughs and hands her lantern to someone. Her whole Coven team comes up out of the dark.', COVEN('Morwen', { size: 4, lv: 2, win: [item('reaper-cloth'), flag('coven-sash')] }))),
+      ch('Walk.', out('You walk. Halfway down the street the parade passes the name on your lantern, and every Ghost-type in it turns, and bows to it, one after another, all the way down the line.', fr(5, 'party'), moment('The midnight parade bowed to the name on your lantern', 70))),
       ch('Watch.', out('You sit on a wall and watch the whole parade go by, every lantern, until the road is dark again. You feel rested, the way you do after a long cry.', heal(1))),
     ],
   },
@@ -441,15 +443,19 @@ const approach = (...tag: Json[]): Json[] => [
   ch('Loud. A distraction.', fight('You start a fight at the front gate with a pair of Grunts, loud enough that the whole building comes to watch.', safe(grunt('Gate Grunts', { size: 2, lv: 0, chain: 2 })), flag('heist-loud'), ...tag, room('heist-go'))),
   ch('Inside. One of us poses as a Grunt.', out('Kip borrows a uniform, two sizes too big, and walks in through the front door, whistling.', flag('heist-inside'), ...tag, room('heist-go'))),
 ];
+// The three roles, offered again after you ask about the vault (heist-plan-again).
+const HEIST_ROLES = [
+      ch('I\'ll be the lookout.', out('You will watch the corridors: three guard patrols to spot and send the wrong way.', flag('heist-role-look'), room('heist-approach'))),
+      ch('I\'ll crack the safe.', out('Ruth hands you her stethoscope like it is a sacred object. A dial lock, and a Psychic-type or a Steel-type of yours to feel the tumblers.', flag('heist-role-safe'), room('heist-approach')), { requires: [anyType('psychic', 'steel')] }),
+      ch('I\'ll drive.', out('Kip throws you the keys, reluctantly. After the job, there will be a chase, and fast Pokémon and flying ones will be worth their weight.', flag('heist-role-drive'), room('heist-approach'))),
+];
 const HEIST: Json[] = [
   {
     id: 'heist-plan',
     intro: 'A back room under a bar, one bulb, a table covered in a blueprint held down at the corners with glasses. A crew of three. The boss, a woman with a scar through one eyebrow and a calm voice: Vesna: "We need a lookout, a safecracker and a driver. You pick the plan. We execute." She taps the vault on the blueprint. "The vault\'s {evil}\'s. Everything in it was stolen first. We\'re just stealing it back." The safecracker, an older woman cleaning her glasses: Ruth: "Mostly back. A cut for us." The driver, young, jiggling one knee: Kip: "And for me. I have expenses." The cut is on the blueprint in pencil, for honesty: a quarter of the cash, yours.',
     choices: [
-      ch('I\'ll be the lookout.', out('You will watch the corridors: three guard patrols to spot and send the wrong way.', flag('heist-role-look'), room('heist-approach'))),
-      ch('I\'ll crack the safe.', out('Ruth hands you her stethoscope like it is a sacred object. A dial lock, and a Psychic-type or a Steel-type of yours to feel the tumblers.', flag('heist-role-safe'), room('heist-approach')), { requires: [anyType('psychic', 'steel')] }),
-      ch('I\'ll drive.', out('Kip throws you the keys, reluctantly. After the job, there will be a chase, and fast Pokémon and flying ones will be worth their weight.', flag('heist-role-drive'), room('heist-approach'))),
-      ch('Who\'s in the vault?', out('Vesna: "Stolen Poké Balls. Cash. And a ledger." She looks at you, very steady. "The ledger\'s mine. Non-negotiable."', flag('heist-asked'), room('heist-plan'))),
+      ...HEIST_ROLES,
+      ch('Who\'s in the vault?', out('Vesna: "Stolen Poké Balls. Cash. And a ledger." She looks at you, very steady. "The ledger\'s mine. Non-negotiable."', flag('heist-asked'), room('heist-plan-again'))),
     ],
     remembers: [
       v('ruth', [RUTH], { notice: 'Ruth checks her watch. Then again. Then again, as if the time might have changed its mind.' }),
@@ -457,6 +463,7 @@ const HEIST: Json[] = [
       v('vesna', [not('heist-informant-ruth'), not('heist-informant-kip')], { notice: 'Every time anyone says the word "ledger", Vesna\'s hand goes still on the table. She wants it very badly.' }),
     ],
   },
+  sub('heist-plan', 'heist-plan-again', 'The Heist: Your Part', 'Vesna lets the word ledger sit on the table a moment longer. Then she smooths the blueprint flat again with both hands. Vesna: "So. Which part is yours?"', HEIST_ROLES),
   sub('heist-plan', 'heist-approach', 'The Heist: The Approach', 'The crew looks at you. Vesna: "And the approach?"', approach(), {
     remembers: [v('ruth', [RUTH], { hide: [0, 1, 2], add: approach(flag('heist-informant-ruth')) }), v('kip', [KIP], { hide: [0, 1, 2], add: approach(flag('heist-informant-kip')) })],
   }),
@@ -503,4 +510,44 @@ const HEIST: Json[] = [
   }),
 ];
 
-export const EVENTS: Json[] = [...CONVOY, ...LANTERN, ...SCHOOL, ...HEIST];
+// ---------- Spooky Mode and the Spooky Season: the lantern finds you (no Autumn needed) ----------
+const LANTERN_FINDS = (id: string, o: Json): Json => sub('spooky-hollow-lantern', id, 'The Lantern Finds You', 'Dusk, and the road is quiet in the way roads are only in the season of ghosts. A light comes down the verge towards you, low, bobbing, unhurried: an old paper lantern with nobody holding it. It stops a step away and waits, the way a dog waits to be noticed. There is a name scratched on the glass.', [
+  ch('Take it.', out('You take the handle. It is warm, as if someone was holding it a moment ago. The flame inside turns towards you.', flag('lantern-on'), flag('lantern-held'), room('spooky-hollow-lantern'))),
+  ch('Let it follow you.', out('You walk on. It follows at your shoulder, patient, all the way to the next node, and when you stop there it settles into your hand by itself.', flag('lantern-on'), flag('lantern-held'), room('spooky-hollow-lantern'))),
+], { room: false, callback: false, requires: [not('lantern-on')], ...o });
+LANTERN.push(LANTERN_FINDS('spooky-lantern-finds-you', { mode: 'spooky', modeStop: true }), LANTERN_FINDS('spooky-season-lantern', { gameEvent: 'spooky-season', mode: null }));
+
+// ---------- Spooky objectives (Spooky Mode and the Spooky Season count clues, a boss and a finale) ----------
+const clue = (amount = 1): Json => ({ kind: 'count', counter: 'eventClues', amount });
+const BOSS: Json = { kind: 'count', counter: 'eventBossesWon', amount: 1 };
+const FINALE: Json = { kind: 'count', counter: 'eventFinalesWon', amount: 1 };
+const COUNTS: Record<string, (Json | null)[]> = {
+  'spooky-hollow-lantern': [clue(), clue(), clue()],
+  'spooky-lantern-festival': [clue(), clue(), clue()],
+  'spooky-medium': [clue(), clue(), clue()],
+  'spooky-whispering-grave': [clue(), clue(), clue()],
+  'spooky-pale-visitor': [clue(), clue(), clue()],
+  'spooky-hexed-keeper': [BOSS, BOSS, BOSS],
+  'spooky-hollow-mirror': [FINALE, FINALE, FINALE],
+  'spooky-haunted-mansion': [clue(), clue(), null],
+  'spooky-pumpkin-patch': [clue(), clue(), null],
+  'spooky-candle-vigil': [clue(), clue(), clue(2)],
+  'spooky-lost-spirit': [clue(2), clue(), null],
+  'spooky-trick-or-treat': [clue(), clue(), null],
+  'spooky-graveyard-dig': [clue(), clue(), null],
+  'spooky-pumpkin-king': [BOSS, clue(), clue()],
+  'spooky-midnight-finale': [FINALE, clue(), clue()],
+};
+for (const e of LANTERN) {
+  const adds = COUNTS[e.id as string];
+  if (!adds) continue;
+  const addTo = (c: Json, fx: Json) => {
+    const out = (c.success ?? {}) as Json;
+    if (out.battle) ((out.battle as Json).win as Json[]).push(fx);
+    else (out.effects as Json[]).push(fx);
+  };
+  (e.choices as Json[]).forEach((c, i) => { const fx = adds[i]; if (fx) addTo(c, fx); });
+  for (const r of (e.remembers as Json[] | undefined) ?? []) for (const c of ((r.addChoices as Json[] | undefined) ?? [])) addTo(c, adds[0]!);
+}
+
+export const EVENTS: Json[] = withRooms([...CONVOY, ...LANTERN, ...SCHOOL, ...HEIST]);

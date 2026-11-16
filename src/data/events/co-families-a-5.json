@@ -277,7 +277,7 @@
       "effects": [
        {
         "kind": "laterEvent",
-        "eventId": "convoy-finch-robbed",
+        "eventId": "convoy-finch-robbed-room",
         "nodes": 3
        }
       ]
@@ -356,7 +356,7 @@
         "effects": [
          {
           "kind": "laterEvent",
-          "eventId": "convoy-finch-robbed",
+          "eventId": "convoy-finch-robbed-room",
           "nodes": 3
          }
         ]
@@ -1757,7 +1757,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-detour-battle",
+        "eventId": "spooky-detour-battle-room",
         "nodes": 1
        }
       ]
@@ -1775,7 +1775,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-detour-battle",
+        "eventId": "spooky-detour-battle-room",
         "nodes": 2
        }
       ]
@@ -1793,7 +1793,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-detour-battle",
+        "eventId": "spooky-detour-battle-room",
         "nodes": 2
        }
       ]
@@ -1832,7 +1832,7 @@
     {
      "label": "Battle.",
      "success": {
-      "text": "She has a Gengar and a Mimikyu, and she is better than her cold.",
+      "text": "Her team comes up out of the dark in lantern colours: Pokémon you know, in shapes you don't, orange-eyed and grinning. Spooky forms. She is better than her cold.",
       "effects": [
        {
         "kind": "flag",
@@ -1841,12 +1841,21 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-light-two",
+        "eventId": "spooky-light-two-room",
         "nodes": 1
        }
       ],
       "battle": {
        "kind": "trainer",
+       "team": [
+        "litwick-spooky",
+        "timburr-spooky",
+        "emolga-spooky",
+        "snorunt-spooky",
+        "ponyta-spooky",
+        "sinistea-spooky",
+        "tangela-spooky"
+       ],
        "name": "Coven Member",
        "classId": "hex-maniac",
        "size": 2,
@@ -1858,6 +1867,11 @@
         {
          "kind": "flag",
          "key": "lantern-coven1",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "spooky-met",
          "amount": 1
         }
        ],
@@ -1878,7 +1892,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-light-two",
+        "eventId": "spooky-light-two-room",
         "nodes": 1
        }
       ]
@@ -1891,7 +1905,7 @@
       "effects": [
        {
         "kind": "laterEvent",
-        "eventId": "spooky-light-two",
+        "eventId": "spooky-light-two-room",
         "nodes": 2
        }
       ]
@@ -1939,7 +1953,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "spooky-hollow-lantern"
+        "eventId": "spooky-hollow-lantern-room"
        }
       ]
      }
@@ -1956,7 +1970,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "spooky-hollow-lantern"
+        "eventId": "spooky-hollow-lantern-room"
        }
       ]
      }
@@ -1973,7 +1987,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-hollow-lantern",
+        "eventId": "spooky-hollow-lantern-room",
         "nodes": 1
        }
       ]
@@ -1989,7 +2003,7 @@
    "types": [
     "ghost"
    ],
-   "mode": "spooky",
+   "mode": null,
    "scene": {
     "cast": [],
     "tint": "#1c1830",
@@ -2029,8 +2043,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-lantern-festival",
+        "eventId": "spooky-lantern-festival-room",
         "nodes": 2
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2052,8 +2071,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-lantern-festival",
+        "eventId": "spooky-lantern-festival-room",
         "nodes": 2
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2070,8 +2094,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-lantern-festival",
+        "eventId": "spooky-lantern-festival-room",
         "nodes": 2
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2115,8 +2144,13 @@
          },
          {
           "kind": "laterEvent",
-          "eventId": "spooky-lantern-festival",
+          "eventId": "spooky-lantern-festival-room",
           "nodes": 2
+         },
+         {
+          "kind": "count",
+          "counter": "eventClues",
+          "amount": 1
          }
         ]
        }
@@ -2147,7 +2181,7 @@
      "atMost": 0
     }
    ],
-   "mode": "spooky",
+   "mode": null,
    "scene": {
     "cast": [
      "boss.npc_channeler"
@@ -2180,8 +2214,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-medium",
+        "eventId": "spooky-medium-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2203,8 +2242,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-medium",
+        "eventId": "spooky-medium-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2221,8 +2265,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-medium",
+        "eventId": "spooky-medium-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2238,7 +2287,7 @@
     "ghost"
    ],
    "minStage": 2,
-   "mode": "spooky",
+   "mode": null,
    "scene": {
     "cast": [
      "boss.npc_channeler"
@@ -2280,8 +2329,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-hollow-mirror",
+        "eventId": "spooky-hollow-mirror-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2303,8 +2357,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-hollow-mirror",
+        "eventId": "spooky-hollow-mirror-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2326,8 +2385,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-hollow-mirror",
+        "eventId": "spooky-hollow-mirror-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2357,7 +2421,7 @@
      "atMost": 0
     }
    ],
-   "mode": "spooky",
+   "mode": null,
    "modeStop": true,
    "scene": {
     "cast": [
@@ -2381,8 +2445,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-whispering-grave",
+        "eventId": "spooky-whispering-grave-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventFinalesWon",
+        "amount": 1
        }
       ]
      }
@@ -2399,8 +2468,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-whispering-grave",
+        "eventId": "spooky-whispering-grave-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventFinalesWon",
+        "amount": 1
        }
       ]
      }
@@ -2417,8 +2491,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-whispering-grave",
+        "eventId": "spooky-whispering-grave-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventFinalesWon",
+        "amount": 1
        }
       ]
      }
@@ -2434,7 +2513,7 @@
     "ghost"
    ],
    "minStage": 2,
-   "mode": "spooky",
+   "mode": null,
    "scene": {
     "cast": [
      "boss.npc_channeler"
@@ -2476,8 +2555,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-pale-visitor",
+        "eventId": "spooky-pale-visitor-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2494,8 +2578,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-pale-visitor",
+        "eventId": "spooky-pale-visitor-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2517,8 +2606,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-pale-visitor",
+        "eventId": "spooky-pale-visitor-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2559,8 +2653,13 @@
          },
          {
           "kind": "laterEvent",
-          "eventId": "spooky-pale-visitor",
+          "eventId": "spooky-pale-visitor-room",
           "nodes": 1
+         },
+         {
+          "kind": "count",
+          "counter": "eventClues",
+          "amount": 1
          }
         ]
        }
@@ -2578,7 +2677,7 @@
     "ghost"
    ],
    "minStage": 3,
-   "mode": "spooky",
+   "mode": null,
    "scene": {
     "cast": [
      "boss.npc_lady"
@@ -2620,8 +2719,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-hexed-keeper",
+        "eventId": "spooky-hexed-keeper-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2643,8 +2747,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-hexed-keeper",
+        "eventId": "spooky-hexed-keeper-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2666,8 +2775,13 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "spooky-hexed-keeper",
+        "eventId": "spooky-hexed-keeper-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -2697,7 +2811,7 @@
      "atMost": 0
     }
    ],
-   "mode": "spooky",
+   "mode": null,
    "modeStop": true,
    "scene": {
     "cast": [
@@ -2739,6 +2853,11 @@
         "kind": "moment",
         "text": "The one you let go came back to you, out of the lamplight",
         "importance": 85
+       },
+       {
+        "kind": "count",
+        "counter": "eventBossesWon",
+        "amount": 1
        }
       ]
      }
@@ -2770,6 +2889,11 @@
         "kind": "moment",
         "text": "You let the one you let go stay with its family",
         "importance": 75
+       },
+       {
+        "kind": "count",
+        "counter": "eventBossesWon",
+        "amount": 1
        }
       ]
      }
@@ -2793,6 +2917,11 @@
         "kind": "moment",
         "text": "The one you let go is free, and you told it so",
         "importance": 75
+       },
+       {
+        "kind": "count",
+        "counter": "eventBossesWon",
+        "amount": 1
        }
       ]
      }
@@ -2952,6 +3081,11 @@
            "kind": "flag",
            "key": "lantern-came-back",
            "amount": 1
+          },
+          {
+           "kind": "count",
+           "counter": "eventBossesWon",
+           "amount": 1
           }
          ],
          "friendly": true,
@@ -3017,6 +3151,12 @@
      "key": "lantern-done",
      "atLeast": 0,
      "atMost": 0
+    },
+    {
+     "kind": "season",
+     "in": [
+      "Autumn"
+     ]
     }
    ],
    "mode": "spooky",
@@ -3117,7 +3257,13 @@
        "types": [],
        "levelBonus": 0,
        "shinyMultiplier": 1,
-       "win": []
+       "win": [
+        {
+         "kind": "count",
+         "counter": "eventClues",
+         "amount": 1
+        }
+       ]
       }
      }
     },
@@ -3128,8 +3274,13 @@
       "effects": [
        {
         "kind": "laterEvent",
-        "eventId": "spooky-pumpkin-patch",
+        "eventId": "spooky-pumpkin-patch-room",
         "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -3201,6 +3352,11 @@
         "kind": "item",
         "id": "rare-candy",
         "count": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -3226,6 +3382,11 @@
           "ghost"
          ]
         }
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -3287,6 +3448,11 @@
        {
         "kind": "heal",
         "share": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -3311,6 +3477,11 @@
          "kind": "item",
          "id": "reaper-cloth",
          "count": 1
+        },
+        {
+         "kind": "count",
+         "counter": "eventClues",
+         "amount": 1
         }
        ],
        "friendly": true,
@@ -3372,6 +3543,11 @@
         "kind": "flag",
         "key": "coven-ball-found",
         "amount": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -3380,7 +3556,13 @@
      "label": "Stop her.",
      "success": {
       "text": "She runs before you can say anything else. The Ball stays where it is, under the earth.",
-      "effects": []
+      "effects": [
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
      }
     },
     {
@@ -3515,6 +3697,11 @@
         "types": [],
         "levelBonus": 0,
         "shinyMultiplier": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -3523,7 +3710,13 @@
      "label": "Blow it out.",
      "success": {
       "text": "You blow it out. It relights itself immediately, very offended, and glares at you until you leave.",
-      "effects": []
+      "effects": [
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
      }
     },
     {
@@ -3535,6 +3728,11 @@
         "kind": "friendship",
         "amount": 4,
         "who": "party"
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 2
        }
       ]
      }
@@ -3579,6 +3777,11 @@
        {
         "kind": "addEvent",
         "eventId": "spooky-lost-spirit-home"
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 2
        }
       ]
      }
@@ -3597,6 +3800,11 @@
         "types": [],
         "levelBonus": 0,
         "shinyMultiplier": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -3719,6 +3927,11 @@
          "kind": "item",
          "id": "rare-candy",
          "count": 1
+        },
+        {
+         "kind": "count",
+         "counter": "eventBossesWon",
+         "amount": 1
         }
        ]
       }
@@ -3728,7 +3941,13 @@
      "label": "Show it the lantern.",
      "success": {
       "text": "You hold it up. The Pumpkin King looks at the name for a long time. Then it bows, very low, and steps aside.",
-      "effects": []
+      "effects": [
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
      }
     },
     {
@@ -3740,6 +3959,11 @@
         "kind": "friendship",
         "amount": 4,
         "who": "party"
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
@@ -3780,24 +4004,6 @@
    "intro": "Midnight. Down the road comes the Hex Coven, leading the last parade of the season: robes, drums, a hundred lanterns, and Ghost-types drifting above it all like smoke. At the front walks their leader, tall, grey-haired, with a Mismagius at her shoulder. Morwen: \"Walk with us. Bring your lantern.\" She looks at it. \"Everyone who walks tonight walks with someone.\"",
    "choices": [
     {
-     "label": "Walk.",
-     "success": {
-      "text": "You walk. Halfway down the street the parade passes the name on your lantern, and every Ghost-type in it turns, and bows to it, one after another, all the way down the line.",
-      "effects": [
-       {
-        "kind": "friendship",
-        "amount": 5,
-        "who": "party"
-       },
-       {
-        "kind": "moment",
-        "text": "The midnight parade bowed to the name on your lantern",
-        "importance": 70
-       }
-      ]
-     }
-    },
-    {
      "label": "Battle Morwen.",
      "success": {
       "text": "Morwen laughs and hands her lantern to someone. Her whole Coven team comes up out of the dark.",
@@ -3821,11 +4027,39 @@
          "kind": "flag",
          "key": "coven-sash",
          "amount": 1
+        },
+        {
+         "kind": "count",
+         "counter": "eventFinalesWon",
+         "amount": 1
         }
        ],
        "friendly": true,
        "lose": []
       }
+     }
+    },
+    {
+     "label": "Walk.",
+     "success": {
+      "text": "You walk. Halfway down the street the parade passes the name on your lantern, and every Ghost-type in it turns, and bows to it, one after another, all the way down the line.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "The midnight parade bowed to the name on your lantern",
+        "importance": 70
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
      }
     },
     {
@@ -3836,11 +4070,164 @@
        {
         "kind": "heal",
         "share": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
        }
       ]
      }
     }
    ]
+  },
+  {
+   "id": "spooky-lantern-finds-you",
+   "name": "The Lantern Finds You",
+   "group": "Spooky Mode",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1830",
+    "effect": "sparkle"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lantern-on",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Dusk, and the road is quiet in the way roads are only in the season of ghosts. A light comes down the verge towards you, low, bobbing, unhurried: an old paper lantern with nobody holding it. It stops a step away and waits, the way a dog waits to be noticed. There is a name scratched on the glass.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You take the handle. It is warm, as if someone was holding it a moment ago. The flame inside turns towards you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "spooky-hollow-lantern-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it follow you.",
+     "success": {
+      "text": "You walk on. It follows at your shoulder, patient, all the way to the next node, and when you stop there it settles into your hand by itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "spooky-hollow-lantern-room"
+       }
+      ]
+     }
+    }
+   ],
+   "callback": false,
+   "mode": "spooky",
+   "modeStop": true
+  },
+  {
+   "id": "spooky-season-lantern",
+   "name": "The Lantern Finds You",
+   "group": "Spooky Mode",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1830",
+    "effect": "sparkle"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lantern-on",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Dusk, and the road is quiet in the way roads are only in the season of ghosts. A light comes down the verge towards you, low, bobbing, unhurried: an old paper lantern with nobody holding it. It stops a step away and waits, the way a dog waits to be noticed. There is a name scratched on the glass.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You take the handle. It is warm, as if someone was holding it a moment ago. The flame inside turns towards you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "spooky-hollow-lantern-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it follow you.",
+     "success": {
+      "text": "You walk on. It follows at your shoulder, patient, all the way to the next node, and when you stop there it settles into your hand by itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "spooky-hollow-lantern-room"
+       }
+      ]
+     }
+    }
+   ],
+   "callback": false,
+   "gameEvent": "spooky-season",
+   "mode": null
   },
   {
    "id": "vt-grunt-school",
@@ -4444,7 +4831,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "heist-plan"
+        "eventId": "heist-plan-again"
        }
       ]
      }
@@ -4502,6 +4889,86 @@
       }
      ],
      "notice": "Every time anyone says the word \"ledger\", Vesna's hand goes still on the table. She wants it very badly."
+    }
+   ]
+  },
+  {
+   "id": "heist-plan-again",
+   "name": "The Heist: Your Part",
+   "group": "Set Pieces",
+   "stop": "hideout",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#1c1c20",
+    "effect": "none"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "Vesna lets the word ledger sit on the table a moment longer. Then she smooths the blueprint flat again with both hands. Vesna: \"So. Which part is yours?\"",
+   "choices": [
+    {
+     "label": "I'll be the lookout.",
+     "success": {
+      "text": "You will watch the corridors: three guard patrols to spot and send the wrong way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "heist-role-look",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "heist-approach"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'll crack the safe.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "psychic",
+        "steel"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Ruth hands you her stethoscope like it is a sacred object. A dial lock, and a Psychic-type or a Steel-type of yours to feel the tumblers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "heist-role-safe",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "heist-approach"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'll drive.",
+     "success": {
+      "text": "Kip throws you the keys, reluctantly. After the job, there will be a chase, and fast Pokémon and flying ones will be worth their weight.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "heist-role-drive",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "heist-approach"
+       }
+      ]
+     }
     }
    ]
   },
@@ -5424,6 +5891,1344 @@
      "notice": "You remember Vesna's \"non-negotiable.\" You knew about the ledger before any of this. That was a clue too."
     }
    ]
+  },
+  {
+   "group": "Convoy",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1c2430",
+    "effect": "none"
+   },
+   "name": "Found on the Road",
+   "id": "convoy-finch-robbed-room",
+   "room": true,
+   "intro": "Finch, the researcher you could not take, is sitting in a ditch with her pack slit open and her notebooks in the mud. Someone took the case. She is picking up pages one by one and wiping them on her coat. She does not look up.",
+   "choices": [
+    {
+     "label": "Help her pick them up.",
+     "success": {
+      "text": "You kneel in the mud and pick up pages until there are none left. She looks at you, finally. Finch: \"Thank you.\" She presses one dry page into your hand: a migration map, beautifully drawn.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "flag",
+        "key": "convoy-finch-helped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, the sound of pages being wiped, one at a time.",
+      "effects": []
+     }
+    }
+   ],
+   "requires": []
+  },
+  {
+   "group": "Haunted Detour",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#241f30",
+    "effect": "glint"
+   },
+   "name": "The Haunted Detour",
+   "id": "spooky-detour-battle-room",
+   "intro": "The light leads you off the path to a clearing, and stops. Something is waiting in the clearing in a long spooky coat with the hood up, and two shapes beside it in the dark. The thing in the coat turns out to be a young woman from the Hex Coven, with purple lipstick and a cold. Coven member: \"You're following the light? Bad idea. Bad, bad idea.\" She sniffs. \"Battle me, and I'll tell you why.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Her team comes up out of the dark in lantern colours: Pokémon you know, in shapes you don't, orange-eyed and grinning. Spooky forms. She is better than her cold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-coven1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-light-two-room",
+        "nodes": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "litwick-spooky",
+        "timburr-spooky",
+        "emolga-spooky",
+        "snorunt-spooky",
+        "ponyta-spooky",
+        "sinistea-spooky",
+        "tangela-spooky"
+       ],
+       "name": "Coven Member",
+       "classId": "hex-maniac",
+       "size": 2,
+       "types": [
+        "ghost"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lantern-coven1",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "spooky-met",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Tell me now.",
+     "success": {
+      "text": "Coven member: \"Fine. Spoil it.\" She pulls her hood down. \"It's looking for someone. Maybe you.\" She looks at the light, and something in her face goes soft. \"The light's got a name. Ask the Medium.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-coven1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-light-two-room",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back.",
+     "success": {
+      "text": "You go back to the road. The light comes out of the trees after you and waits on the verge, patiently, like a dog that knows you will come round.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-light-two-room",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Haunted Detour",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1f1f2a",
+    "effect": "sparkle"
+   },
+   "name": "The Light Returns",
+   "id": "spooky-light-two-room",
+   "intro": "The light is back, nearer now, close enough that the air goes cold around it and your breath shows. Close up, it is a lantern: an old iron one, with glass sides. It hangs in the air with no hand holding it, swaying slightly, as if somebody invisible is walking with it.",
+   "choices": [
+    {
+     "label": "Reach for it.",
+     "success": {
+      "text": "You reach out. The lantern drifts into your hands, and the handle is warm, as if someone was holding it a moment ago.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "spooky-hollow-lantern-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for it.",
+     "success": {
+      "text": "You wait. It comes to you, slowly, the last little way, and settles into your hands like a bird.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "spooky-hollow-lantern-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You back away. It follows you, all the way to the next node, keeping exactly the same distance. When you stop there, it comes the rest of the way on its own.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-held",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-hollow-lantern-room",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Spooky Mode",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1830",
+    "effect": "sparkle"
+   },
+   "name": "The Hollow Lantern",
+   "id": "spooky-hollow-lantern-room",
+   "mode": null,
+   "intro": "The lantern in your hands. A name is scratched on the glass, small and careful, the way you would write on something you meant to keep. The name is {released}. The flame inside is the colour of a {releasedType}-type, and it turns towards you when you breathe.",
+   "choices": [
+    {
+     "label": "I know that name.",
+     "success": {
+      "text": "You say it. {released}. The flame steadies, all at once, like someone sitting down after a long time standing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-named",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-known",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-lantern-festival-room",
+        "nodes": 2
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I don't remember.",
+     "success": {
+      "text": "The flame flickers, low and hurt. You did not mean it to. It does not go out. It just burns smaller, as if it is trying not to take up room.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-named",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-forgot",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-lantern-festival-room",
+        "nodes": 2
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it down.",
+     "success": {
+      "text": "You set it on the ground. It floats back up to the height of your hand and follows you, as it did before, as if putting it down was a thing you said and not a thing you meant.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-named",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-lantern-festival-room",
+        "nodes": 2
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "blank",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "released-count",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "The lantern in your hands. There is a place on the glass where a name should be, scratched smooth, as if someone tried to write one and could not. The flame inside is pale, no colour at all, and it turns towards you when you breathe.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Write a name.",
+       "success": {
+        "text": "You scratch a name into the glass with the edge of a coin. It is a name you have never said out loud. The flame takes it, and steadies, and turns the colour of evening.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "lantern-named",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "lantern-known",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "lantern-written",
+          "amount": 1
+         },
+         {
+          "kind": "laterEvent",
+          "eventId": "spooky-lantern-festival-room",
+          "nodes": 2
+         },
+         {
+          "kind": "count",
+          "counter": "eventClues",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Spooky Mode",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "tint": "#281008",
+    "effect": "fire"
+   },
+   "name": "The Lantern Festival",
+   "id": "spooky-lantern-festival-room",
+   "mode": null,
+   "intro": "Autumn in a village. Lanterns hung all along the path, hundreds of them, every colour, and people walking slowly under them, talking quietly or not at all. A woman in a fringed shawl is lighting them one by one from a taper. The Medium, Orla: \"The veil is thin tonight. Light one for someone you've lost.\" Then she sees the lantern in your hands, and stops. Orla: \"Oh.\" She lowers the taper. \"Someone's already lit one for you.\"",
+   "choices": [
+    {
+     "label": "Light another.",
+     "success": {
+      "text": "Orla gives you the taper. You light one for a Pokémon of yours that fell this run and got up again, and one for the ones that did not get up, wherever they were. She hangs them on the path among the others.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-festival",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-lit",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-medium-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who lit this one?",
+     "success": {
+      "text": "Orla: \"They did.\" She touches the glass, very gently, by the name. \"The one whose name is on it. They lit it, and they came looking for you with it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-festival",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-who",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-medium-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hang this one up.",
+     "success": {
+      "text": "You lift it towards a hook. Orla puts her hand on your wrist and shakes her head. Orla: \"It's not done with you.\" She lets go. \"Come and see me. I've a table.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-festival",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-medium-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Spooky Mode",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "tint": "#1c1830",
+    "effect": "sparkle"
+   },
+   "name": "The Medium's Table",
+   "id": "spooky-medium-room",
+   "mode": null,
+   "intro": "A small round table behind a single candle, in a room that smells of beeswax and rain. Orla is sitting there already, with her shawl round her shoulders and two cups of tea poured. She has been expecting you, or someone like you. Orla: \"It's not angry. Most of them aren't.\" She turns the lantern so the name faces you. \"It wants to know if you were sorry. Or if you were right.\" A pause. \"Sometimes those are the same.\"",
+   "choices": [
+    {
+     "label": "I was sorry.",
+     "success": {
+      "text": "The lantern warms in your hands, all the way through, like a cup of tea.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-sorry",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-hollow-mirror-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I was right.",
+     "success": {
+      "text": "The lantern brightens. Orla nods slowly. Orla: \"That's allowed.\" She drinks her tea. \"That's allowed too.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-right",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-hollow-mirror-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I don't know.",
+     "success": {
+      "text": "Orla: \"Then go to the mirror.\" She says it gently. \"Most people don't know. The mirror does.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-unsure",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-hollow-mirror-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Spooky Mode",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f"
+    ],
+    "tint": "#0c0814",
+    "effect": "sparkle"
+   },
+   "name": "The Hollow Mirror",
+   "id": "spooky-hollow-mirror-room",
+   "mode": null,
+   "intro": "A mirror in a ruined house, the frame gone green, the glass still perfect. It shows your team behind you, exactly as they are. And one more shape behind them, at the back, where nobody is standing. It is {released}. It looks the way it did the day you let it go. Then, while you watch, it looks the way it would now: older, bigger, steadier, with a scar you have never seen.",
+   "choices": [
+    {
+     "label": "Touch the glass.",
+     "success": {
+      "text": "The glass is warm under your hand, warm as a living side. On the other side of it, the shape leans into your palm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-mirror",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-whispering-grave-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventFinalesWon",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say its name.",
+     "success": {
+      "text": "You say it. {released}. In the mirror the shape turns its head and looks straight at you, and you know it knows you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-mirror",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-whispering-grave-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventFinalesWon",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn around.",
+     "success": {
+      "text": "You turn round. Nobody there. Only your team, looking at you, puzzled. When you look down, the lantern is brighter than it has ever been.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-mirror",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-whispering-grave-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventFinalesWon",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Spooky Mode",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_channeler"
+    ],
+    "tint": "#1c1830",
+    "effect": "sparkle"
+   },
+   "name": "The Whispering Grave",
+   "id": "spooky-whispering-grave-room",
+   "mode": null,
+   "intro": "A grave in the long grass, so old the mound has nearly gone, and it is whispering: almost too soft to hear. You kneel. The cry of the Pokémon on the lantern comes up out of the earth, once, small and clear. The headstone is blank.",
+   "choices": [
+    {
+     "label": "Carve the name.",
+     "success": {
+      "text": "You carve the name you wrote on the lantern into the stone, slowly, with whatever you have. The whispering stops, like a child that has finally been answered.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-grave",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-carved",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-pale-visitor-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it blank.",
+     "success": {
+      "text": "You leave it. It keeps whispering behind you all the way to the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-grave",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-pale-visitor-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen longer.",
+     "success": {
+      "text": "You stay. It cries again, once. Then it is quiet. The lantern dims, all the way down to nearly nothing, and then glows back up, brighter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-grave",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-listened",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-pale-visitor-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "alive",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "released-count",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Where the light leads you, there is no grave. Only a soft patch of mud by a stream, and in it a fresh print. A {releasedType}-type's print, the size of {released} if {released} had kept growing. The lantern flares. It is alive. Of course it is alive. You let it go; you did not lose it.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Follow the prints.",
+       "success": {
+        "text": "You follow the prints along the stream, and up a bank, and into the trees, until you can see where they go: a den under the roots of an old oak, with the earth worn smooth at the door by a lot of coming and going.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "lantern-grave",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "lantern-den",
+          "amount": 1
+         },
+         {
+          "kind": "laterEvent",
+          "eventId": "spooky-pale-visitor-room",
+          "nodes": 1
+         },
+         {
+          "kind": "count",
+          "counter": "eventClues",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Spooky Mode",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#1c1830",
+    "effect": "sparkle"
+   },
+   "name": "The Pale Visitor",
+   "id": "spooky-pale-visitor-room",
+   "mode": null,
+   "intro": "A pale figure at a roadside table set for two, under a tree with no leaves. White cloth, two plates, two cups, two of everything. The Pale Visitor: \"Sit. I've laid two places.\" A long hand, smoothing the cloth. \"Always two.\" Then: \"I sit with travellers carrying lanterns. I ask one thing.\" The Visitor looks at the lantern, and then at you. \"If you could have it back, would you?\"",
+   "choices": [
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "The Visitor: \"Then it's not done with you either.\" The Visitor pours tea into the second cup, the empty place, and pushes it gently across the table to nobody. \"The Keeper will offer it. Go to the end of the lane.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-visited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-want",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-hexed-keeper-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No. It's free.",
+     "success": {
+      "text": "The Visitor: \"Then it can rest.\" The Visitor turns the second cup upside down on its saucer, very carefully. \"Go to the end of the lane, and say so.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-visited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-release",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-hexed-keeper-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only if it wants to.",
+     "success": {
+      "text": "The Visitor smiles, for the first time. It is not a frightening smile at all. The Visitor: \"That's the answer.\" The Visitor leaves the second cup as it is. \"Go to the end of the lane. Ask it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-visited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-ask",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-hexed-keeper-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Spooky Mode",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_ruinmaniac"
+    ],
+    "tint": "#120d1c",
+    "effect": "fire"
+   },
+   "name": "The Hexed Keeper",
+   "id": "spooky-hexed-keeper-room",
+   "mode": null,
+   "intro": "The end of the lane. The Keeper stands there under the last lamp: an old man in a long coat, with keys at his belt that do not open anything you can see. He is not sorry. He is only tired. The Keeper: \"I keep the ones who were let go. Until someone comes for them.\" He looks at the lantern. \"Most never do. You did.\" He steps aside, and behind him, at the mouth of a den under an old oak, {released} is standing in the lamplight, with a family of its own peering out from the dark behind it. It has seen you. It is not coming closer yet. The Keeper: \"It's here. It's up to you, and it's up to it.\"",
+   "choices": [
+    {
+     "label": "Come back.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "lantern-want",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You say it. {released} looks back at the den, once, for a long time. Then it walks out into the lamplight and puts its head against your chest, exactly where it used to, and does not move for a long while.",
+      "effects": [
+       {
+        "kind": "rejoinReleased"
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-came-back",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The one you let go came back to you, out of the lamplight",
+        "importance": 85
+       },
+       {
+        "kind": "count",
+        "counter": "eventBossesWon",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Never mind. Stay.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "lantern-want",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You do not say it. {released} looks at you, and you look at it, and then it goes back to its den and lies down across the door with its family, and the lantern goes out softly in your hands, warm to the last.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-rested",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You let the one you let go stay with its family",
+        "importance": 75
+       },
+       {
+        "kind": "count",
+        "counter": "eventBossesWon",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rest.",
+     "success": {
+      "text": "You say it: rest. {released} looks at you for a long moment. Then it lies down across the door of its den, with its family around it, and closes its eyes. The lantern goes out softly in your hands, the glass cold and clean.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-rested",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The one you let go is free, and you told it so",
+        "importance": 75
+       },
+       {
+        "kind": "count",
+        "counter": "eventBossesWon",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do you want to come?",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "lantern-ask",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "lantern-sorry",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You ask it. {released} looks at you, and at its family, and at you, and then it walks out of the lamplight to your side. Its family watches it go, and does not seem sad. They seem to have known.",
+       "effects": [
+        {
+         "kind": "rejoinReleased"
+        },
+        {
+         "kind": "flag",
+         "key": "lantern-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "lantern-came-back",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You asked the one you let go if it wanted to come back. It did.",
+         "importance": 90
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "lantern-known",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You ask it. {released} hears its name in your voice, the way you used to say it, and it comes to you, slowly, and then all at once.",
+       "effects": [
+        {
+         "kind": "rejoinReleased"
+        },
+        {
+         "kind": "flag",
+         "key": "lantern-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "lantern-came-back",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You asked the one you let go if it wanted to come back. It did.",
+         "importance": 90
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You ask it. {released} looks at you, and at its family, and at you. Then it stays. It is wild and happy, and you can see it is happy, and the Keeper says it will visit. It does: twice before you leave the region, a shape at the edge of the camp light, watching you sleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lantern-visits",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "blank",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "released-count",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "The end of the lane. The Keeper stands under the last lamp, an old man in a long coat with keys at his belt. He is not sorry, only tired. The Keeper: \"I keep the ones who were let go. Until someone comes for them. Most never do.\" He looks at the name you wrote on the glass. \"This one was nobody's. You gave it a name. That's a kind of coming for it.\" Behind him, a small pale Ghost-type is hiding behind his coat.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Come back.",
+       "requires": [
+        {
+         "kind": "flag",
+         "key": "lantern-want",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "success": {
+        "text": "The Keeper sighs and takes off his coat. He is tired; he fights like someone who would like to lose, and if you are kind about it, he does.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "lantern-done",
+          "amount": 1
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "name": "The Keeper",
+         "classId": "hex-maniac",
+         "size": 2,
+         "types": [
+          "ghost"
+         ],
+         "levelBonus": 0,
+         "win": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [],
+           "types": [
+            "ghost"
+           ],
+           "levelBonus": 0,
+           "shinyMultiplier": 1
+          },
+          {
+           "kind": "flag",
+           "key": "lantern-came-back",
+           "amount": 1
+          },
+          {
+           "kind": "count",
+           "counter": "eventBossesWon",
+           "amount": 1
+          }
+         ],
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "join",
+           "shadow": false,
+           "species": [],
+           "types": [
+            "ghost"
+           ],
+           "levelBonus": 0,
+           "shinyMultiplier": 1
+          },
+          {
+           "kind": "flag",
+           "key": "lantern-came-back",
+           "amount": 1
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "forgot-right",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lantern-forgot",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "lantern-right",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Keeper, as you pass him: \"You didn't remember it, and you weren't sorry.\" He jingles his keys. \"It still came to you. Think about that.\""
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Holiday events",
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "ghost",
+    "grass"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1408",
+    "effect": "fire"
+   },
+   "name": "The Pumpkin Patch",
+   "id": "spooky-pumpkin-patch-room",
+   "intro": "Rows and rows of carved pumpkins on a hillside, all of them lit, all of them grinning. You are halfway along the second row when one of them blinks.",
+   "choices": [
+    {
+     "label": "Pick the blinking one.",
+     "success": {
+      "text": "You reach for it, and it hops back, and grins wider, and is a Pumpkaboo.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pumpkaboo"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "count",
+         "counter": "eventClues",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it. At the next stop, there is a pumpkin sitting on the path that was not there before. It blinks.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "spooky-pumpkin-patch-room",
+        "nodes": 1
+       },
+       {
+        "kind": "count",
+        "counter": "eventClues",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carve one.",
+     "success": {
+      "text": "You sit down in the patch with a knife and carve the name from your lantern into the biggest pumpkin you can find. When you light it, the blinking pumpkin hops over and climbs inside it and sits there, glowing, perfectly content. It is a Pumpkaboo. It does not want to leave the name. You carry them both.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "pumpkaboo"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "requires": []
   }
  ]
 }

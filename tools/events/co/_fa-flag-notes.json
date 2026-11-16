@@ -94,5 +94,7 @@
  "hospice-*": "SF54 The Hospice (hospice-stayed, hospice-sea).",
  "lost-pet-*": "SF47.1 the returned pet.",
  "rep-lost": "Shared board: Reputation -1 (families-c owns Reputation and reads it).",
- "shop-loyalty": "Set by the older shopkeeper-loyalty events (eventsW5.json; core/npcShop.ts reads it for discounts). The Empty Shelf keeps its old placement: Mrs. Arden opens up to a loyal customer."
+ "shop-loyalty": "Set by the older shopkeeper-loyalty events (eventsW5.json; core/npcShop.ts reads it for discounts). The Empty Shelf keeps its old placement: Mrs. Arden opens up to a loyal customer.",
+ "spooky-met": "Read by code: services/flow.ts FORM_FAMILY_FLAGS opens Spooky forms to eggs and trades.",
+ "th-*": "Treasure Hunt Season flags: the season engine folds th-piece-N and th-claimed (existing S150 feature)."
 }

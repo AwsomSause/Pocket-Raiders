@@ -1,7 +1,7 @@
 // Catalog Overhaul Pack: STORY_FAMILIES_4.md, part one. SF19 The Village That Repeats, SF20 The Nobody, SF21 The Starter's
 // Roots, SF22 The Cooking Circuit. Build: npm run co:build -- families-a-6. Run memory is same-run only (Kice 2026-11-14).
 import { br, ch, cure, fight, flag, flagAt, fr, heal, item, join, lose, out, $, room, stat, takeNode, trainer, wild, anyType, bondUp, type Json } from '../dsl.ts';
-import { grunt, is, later, moment, not, safe, sub, temp, v } from './_fa.ts';
+import { grunt, is, later, moment, not, safe, sub, temp, v, withRooms } from './_fa.ts';
 
 export const CATEGORY = 'families-a';
 export const REMOVE: string[] = [];
@@ -286,5 +286,5 @@ function cookChoices(recur = true): Json[] {
   ];
 }
 
-export const EVENTS: Json[] = [...LOOP, ...NOBODY, ...ROOTS, ...RECIPES];
+export const EVENTS: Json[] = withRooms([...LOOP, ...NOBODY, ...ROOTS, ...RECIPES]);
 

@@ -474,7 +474,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "nobody-key",
+        "eventId": "nobody-key-room",
         "nodes": 4
        }
       ]
@@ -497,7 +497,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "nobody-key",
+        "eventId": "nobody-key-room",
         "nodes": 4
        }
       ]
@@ -3651,6 +3651,84 @@
      }
     }
    ]
+  },
+  {
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c1c",
+    "effect": "none"
+   },
+   "name": "The Brass Key",
+   "id": "nobody-key-room",
+   "room": true,
+   "intro": "A back office in a team-held building, the door left open by someone in a hurry. A desk. In the top drawer, under a mess of forms, a brass key with a little bird on the bow. As your fingers close on it, a Grunt in the doorway behind you says, \"Hey.\"",
+   "choices": [
+    {
+     "label": "Battle the Grunt.",
+     "success": {
+      "text": "He is more surprised than you are, and fights like it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nobody-key",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Desk Grunt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "evil": "grunt",
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Bribe him. (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You hold out ₽100. He looks at it, and at the key, and at the empty corridor. He takes it. Grunt: \"I never saw you. I never see anything. It's the only good thing about this job.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "nobody-key",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run.",
+     "success": {
+      "text": "You run, with the key in your fist, down two corridors and out a fire door into the rain. Behind you, a whistle, and boots, and then nothing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nobody-key",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "requires": []
   }
  ]
 }

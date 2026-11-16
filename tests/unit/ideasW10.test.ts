@@ -27,7 +27,8 @@ describe('W10 map events', () => {
         Object.values(r).forEach(walk);
       }
     };
-    walk(W10_EVENTS);
+    // Walk the events the game loads: a W10 event the Catalog Overhaul rebuilt (cooking-draft) no longer opens what its W10 source did.
+    walk(ids.map((id) => content.events.get(id)));
     for (const id of opened) {
       expect(content.events.has(id), `room ${id}`).toBe(true);
       expect(content.events.get(id)!.room, `${id} must be a room`).toBe(true);

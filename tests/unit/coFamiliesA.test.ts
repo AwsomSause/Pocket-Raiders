@@ -4,7 +4,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { getContent } from '../../src/data';
-import { collect } from '../../tools/events/co/_fa-flags';
+import { asList, collect } from '../../tools/events/co/_fa-flags';
 
 type Json = Record<string, unknown>;
 const root = join(__dirname, '../..');
@@ -122,7 +122,7 @@ describe('families-a events', () => {
       if (f.setBy.length === 0) expect(f.note, `flag ${key} is read by ${f.readBy.join(', ')} and never set: note who sets it`).toBeTruthy();
     }
     const file = JSON.parse(readFileSync(join(root, 'src/data/catalogOverhaul/flags/families-a.json'), 'utf8')) as { flags: unknown };
-    expect(file.flags, 'run node tools/events/co/_fa-flags.ts').toEqual(flags);
+    expect(file.flags, 'run node tools/events/co/_fa-flags.ts').toEqual(asList(flags));
   });
 
   it('no line names a past run (same-run memory only)', () => {

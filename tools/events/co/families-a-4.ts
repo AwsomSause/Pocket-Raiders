@@ -2,7 +2,7 @@
 // Build: npm run co:build -- families-a-4. The Circuit's frame is the rivals row's R1 (rivals-1.ts): the board, `circuit-rung`,
 // `{rung}`, one match per stage (`circuit-at`). These rung events climb the same board. Run memory is same-run only (Kice).
 import { again, ch, fight, flag, fr, heal, item, out, $, room, relic, stat, stopHere, trainer, bondUp, type Json } from '../dsl.ts';
-import { is, not, safe, sub, v } from './_fa.ts';
+import { is, not, safe, sub, v, withRooms } from './_fa.ts';
 import { feel, foe, mark, quest, rival, rq, say } from './_rivals.ts';
 
 export const CATEGORY = 'families-a';
@@ -139,7 +139,7 @@ const CIRCUIT: Json[] = [
   }),
   sub('story-tour-registration', 'story-tour-final', 'Of Course It\'s You', 'The lights are back, and steady. One name left on the board across from yours. {rival} walks out of the far tunnel and stops on the line. {rival}: "Of course it\'s you." Then: {rival}: "{say champion||bitter-challenger::Exhibition my foot. This counts.||protector::Let\'s give them a show.||enthusiast::Let\'s give them a show!||strategist::I\'ve prepared for this specific outcome.||champion-chaser::Smile for the cameras.}"', [
     ch('Give them a show.', fight('You both play it high and bright. Every move is a little bigger than it needs to be, and the crowd comes up out of its seats.', rival({ lv: 1, size: 6, win: [UP, flag('exhibit-final'), flag('exhibit-trophy'), flag('rep'), flag('rep')], lose: [flag('exhibit-final'), flag('rep')] }))),
-    ch('This counts.', fight('Full strength. No show. {rival} hears it in your voice and their face goes very still, and then very glad.', rival({ lv: 2, size: 6, win: [UP, flag('exhibit-final'), flag('exhibit-trophy'), mark('exhibition')], lose: [flag('exhibit-final')] }))),
+    ch('This counts.', fight('Full strength. No show. {rival} hears it in your voice and their face goes very still, and then very glad.', rival({ lv: 2, size: 6, win: [UP, flag('exhibit-final'), flag('exhibit-trophy'), mark('outplayed-by-you')], lose: [flag('exhibit-final')] }))),
     ch('Exhibition. No pressure.', fight('{rival} laughs out loud. They relax, and play odd, fun choices they would never risk in a real match, and so do you, and halfway through you are both grinning like children.', rival({ lv: 0, size: 6, win: [UP, flag('exhibit-final'), flag('exhibit-trophy'), feel({ friendship: 1 })], lose: [flag('exhibit-final'), feel({ friendship: 1 })] }))),
   ], {
     requires: [{ kind: 'storyRun' }],
@@ -313,4 +313,4 @@ function pseudoAll(o: unknown): void {
 }
 for (const e of CIRCUIT) if (['story-tour-opening', 'story-tour-semi', 'story-tour-final'].includes(e.id as string)) pseudoAll(e);
 
-export const EVENTS: Json[] = [...CIRCUIT, ...CONTESTS];
+export const EVENTS: Json[] = withRooms([...CIRCUIT, ...CONTESTS]);

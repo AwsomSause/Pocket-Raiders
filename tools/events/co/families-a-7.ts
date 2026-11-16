@@ -1,7 +1,7 @@
 // Catalog Overhaul Pack: STORY_FAMILIES_4.md, part two. SF23 The Treasure Map, SF24 The Last Shift, SF25 The Egg in the Fire,
 // SF26 The Courier's Egg. Build: npm run co:build -- families-a-7. Run memory is same-run only (Kice 2026-11-14).
 import { any, ch, egg, fight, flag, flagAt, flagThisRegion, fr, hurt, item, lose, out, room, takeNode, trainer, wild, anyType, RARE_HELD, type Json } from '../dsl.ts';
-import { grunt, is, later, moment, not, safe, sub, v } from './_fa.ts';
+import { grunt, is, later, moment, not, safe, sub, v, withRooms } from './_fa.ts';
 
 export const CATEGORY = 'families-a';
 /** The Torn Treasure Map chain is the map's pieces 3 and 4 (see _fa-retired.json). */
@@ -13,10 +13,10 @@ const again = (eventId: string): Json => ({ kind: 'seeAgain', eventId });
 // =====================================================================================================================
 // SF23. THE TREASURE MAP. Five pieces, any order; all five open X Marks the Spot, whose three rooms are the dig.
 // =====================================================================================================================
-const piece = (n: number): Json[] => [flag(`map-piece-${n}`), flag('map-pieces')];
+const piece = (n: number): Json[] => [flag(`th-piece-${n}`), flag('map-pieces')];
 const MAP: Json[] = [
   {
-    id: 'th-map-1', requires: [not('map-piece-1'), not('map-claimed')],
+    id: 'th-map-1', requires: [not('th-piece-1'), not('th-claimed')],
     intro: 'A cliff path, the wind trying to take your hat. Wedged in a crack in the rock at shoulder height, something pale flutters: a scrap of old paper, the corner torn off something bigger. A few lines in faded brown ink: "...not for the Ch..." The rest is gone.',
     choices: [
       ch('Take it.', out('You work it out of the crack with two fingers and fold it into your pack. One piece of something.', ...piece(1))),
@@ -24,7 +24,7 @@ const MAP: Json[] = [
     ],
   },
   {
-    id: 'th-map-2', requires: [not('map-piece-2'), not('map-claimed')],
+    id: 'th-map-2', requires: [not('th-piece-2'), not('th-claimed')],
     intro: 'Under a bridge, in the cool dark by the water. A Sneasel is crouched on a stone with a strip of old paper in its claws, the faded edge of a map. It sees you, and grins, and runs.',
     choices: [
       ch('Chase it.', fight('You chase it along the bank and it turns at bay, all claws.', wild({ species: ['sneasel'], lv: 1, win: piece(2) }))),
@@ -33,7 +33,7 @@ const MAP: Json[] = [
     ],
   },
   {
-    id: 'th-map-3', requires: [not('map-piece-3'), not('map-claimed')],
+    id: 'th-map-3', requires: [not('th-piece-3'), not('th-claimed')],
     intro: 'A beach at low tide. A green bottle rolling in the shallows, corked, with paper inside. You fish it out. Through the glass you can see it is half a map, and on the outside of the folded paper, in big capitals, a message: TOO LONG TO WAIT.',
     choices: [
       ch('Uncork it.', out('The cork comes out with a sigh. The paper inside is dry, after who knows how long at sea. Half a map, the inked middle, with a coastline you almost recognise.', ...piece(3))),
@@ -41,7 +41,7 @@ const MAP: Json[] = [
     ],
   },
   {
-    id: 'th-map-4', requires: [not('map-piece-4'), not('map-claimed')],
+    id: 'th-map-4', requires: [not('th-piece-4'), not('th-claimed')],
     intro: 'A cave, dripping. On the floor, the other half of a map, pinned flat under a rock. The rock is snoring. It is a Graveler, fast asleep, and the coastline strip of the map is sticking out from under its belly.',
     choices: [
       ch('Wake it.', fight('It wakes up very grumpy.', wild({ species: ['graveler'], lv: 1, win: piece(4) }))),
@@ -49,7 +49,7 @@ const MAP: Json[] = [
     ],
   },
   {
-    id: 'th-map-5', requires: [not('map-piece-5'), not('map-claimed')],
+    id: 'th-map-5', requires: [not('th-piece-5'), not('th-claimed')],
     intro: 'A statue of a Champion in a town square, bronze gone green, one hand held out as if offering something. Tucked into the bronze palm, folded small, is the last piece: a compass rose, drawn in a careful hand.',
     choices: [
       ch('Take it.', out('You reach up and take it. The bronze hand is warm from the sun.', ...piece(5))),
@@ -57,10 +57,10 @@ const MAP: Json[] = [
     ],
   },
   {
-    id: 'th-treasure', requires: [is('map-piece-1'), is('map-piece-2'), is('map-piece-3'), is('map-piece-4'), is('map-piece-5'), not('map-claimed')],
+    id: 'th-treasure', requires: [is('th-piece-1'), is('th-piece-2'), is('th-piece-3'), is('th-piece-4'), is('th-piece-5'), not('th-claimed')],
     intro: 'All five pieces, laid out on a flat rock and weighed down with stones, fit together at last. The torn corner, the faded edge, the two halves, the compass rose. An X, in faded ink. You look up from it, and around, and realise the X is here: this exact spot. The ground is soft.',
     choices: [
-      ch('Dig.', out('You dig. Your team digs. Something that digs better than you digs best of all. Two feet down: a carved stone, worn but readable. A mechanism.', flag('map-claimed'), room('dg-treasure-dig-a'))),
+      ch('Dig.', out('You dig. Your team digs. Something that digs better than you digs best of all. Two feet down: a carved stone, worn but readable. A mechanism.', flag('th-claimed'), room('dg-treasure-dig-a'))),
     ],
   },
   sub('th-treasure', 'dg-treasure-dig-a', 'The Mechanism', 'Five symbols on five stone dials, worn smooth by hands or water. The compass rose on the fifth piece of the map shows an order.', [
@@ -243,4 +243,4 @@ const COURIER: Json[] = [
   },
 ];
 
-export const EVENTS: Json[] = [...MAP, ...FOUNDRY, ...EMBER, ...COURIER];
+export const EVENTS: Json[] = withRooms([...MAP, ...FOUNDRY, ...EMBER, ...COURIER]);

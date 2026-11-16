@@ -48,6 +48,28 @@ export function sub(parent: string, id: string, name: string, intro: string, cho
   if (!p) throw new Error(`sub: ${parent} is not an old event`);
   return { id, name, group: p.group, stop: p.stop ?? 'event', rarity: p.rarity ?? 'common', types: p.types ?? [], scene: p.scene ?? { cast: [], effect: 'none' }, room: o.callback !== true, requires: [], intro, choices, ...o };
 }
+/**
+ * Rooms are never drawn on their own, so an event never opens a stop that is also drawn (or itself, for "ask first, then choose").
+ * Each such `room(id)` (or N-nodes-on `laterEvent`) opens `<id>-room` instead: a room copy of that event with no requires. Applied to each file's EVENTS.
+ */
+export function withRooms(list: Json[]): Json[] {
+  const drawn = new Set(list.filter((e) => (e.room ?? OLD[String(e.id)]?.room) !== true).map((e) => String(e.id)));
+  const used = new Set<string>();
+  const fix = (x: unknown): unknown => {
+    if (Array.isArray(x)) return x.map(fix);
+    if (!x || typeof x !== 'object') return x;
+    const o = x as Json;
+    if ((o.kind === 'addEvent' || o.kind === 'laterEvent') && drawn.has(String(o.eventId))) { used.add(String(o.eventId)); return { ...o, eventId: `${String(o.eventId)}-room` }; }
+    return Object.fromEntries(Object.entries(o).map(([k, y]) => [k, fix(y)]));
+  };
+  const out = list.map((e) => fix(e) as Json);
+  for (const e of out.filter((x) => used.has(String(x.id)))) {
+    const p = OLD[String(e.id)] ?? e;
+    const { callback: _c, requires: _r, ...rest } = e;
+    out.push({ group: p.group, stop: p.stop ?? 'event', rarity: p.rarity ?? 'common', types: p.types ?? [], scene: p.scene ?? { cast: [], effect: 'none' }, name: p.name, ...rest, id: `${String(e.id)}-room`, room: true, requires: [] });
+  }
+  return out;
+}
 /** A remembers variant. */
 export const v = (id: string, when: Json[], o: { intro?: string; notice?: string; hide?: number[]; add?: Json[] }): Json => ({ id, when, ...(o.intro ? { intro: o.intro } : {}), ...(o.notice ? { notice: o.notice } : {}), ...(o.hide ? { hide: o.hide } : {}), ...(o.add ? { addChoices: o.add } : {}) });
 /** A fair-price purchase that reopens the stall (`back`), counting what was spent in hundreds under `spent`. */

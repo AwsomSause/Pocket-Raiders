@@ -1,7 +1,7 @@
 // Catalog Overhaul Pack: STORY_FAMILIES_1.md, SF2 The Apprentice, SF3 The Farmer Who Forgets, SF4 The Elder's Last Wish,
 // SF5 Wicker's Cart (with the Wandering Merchant), SF6 The Pen Pal. Build: npm run co:build -- families-a-2.
 import { $, any, ch, companion, fight, flag, flagAgo, flagAt, fr, isEvil, isGood, item, join, lv, money, out, room, tail, trainer, wild, BERRIES, HELD, takeNode, type Json } from '../dsl.ts';
-import { buy, is, kind, later, moment, not, region, safe, sly, sub, trust, v } from './_fa.ts';
+import { buy, is, kind, later, moment, not, region, safe, sly, sub, trust, v, withRooms } from './_fa.ts';
 
 export const CATEGORY = 'families-a';
 
@@ -105,8 +105,8 @@ const FARMER: Json[] = [
   },
   sub('farmers-quest-1', 'farmers-field', 'The Field Three Towns On', 'The field, three towns on. A wooden stake, weathered silver. Carved into it, deep, by a hand that took its time: BRAMBLE. Around the stake a ring of flowers is half dead for want of company. At the far edge of the grass a Skiddo is grazing. It lifts its head when it sees you, and shies away.', [
     ch('Plant the seed.', out('You press it into the earth beside the stake with your thumb. It does not wait. A green thread comes up through the soil while you are still kneeling, uncurls two leaves, and stops, as if to see what you make of it. The Skiddo has stopped chewing. It watches the little shoot with its whole body.', flag('farmer-planted'), flag('farmer-seed1', -1), fr(3, 'party'), ...kind())),
-    ch('Look around.', out('In the long grass near the stake your foot turns something up. A leather collar, stiff with weather, buckle rusted shut. On the brass tag, worn nearly smooth: BRAMBLE. It is far too small for a Gogoat. It would fit a Skiddo. You set it back down where it was.', flag('farmer-looked'), room('farmers-field'))),
-    ch('Call the Skiddo.', out('You crouch and hold out a hand and make the sort of noise you would make. It comes. Halfway. Then it stops, legs braced, nostrils wide, wanting to and not able to. It stands there for as long as you do.', flag('farmer-called'), room('farmers-field'))),
+    ch('Look around.', out('In the long grass near the stake your foot turns something up. A leather collar, stiff with weather, buckle rusted shut. On the brass tag, worn nearly smooth: BRAMBLE. It is far too small for a Gogoat. It would fit a Skiddo. You set it back down where it was.', flag('farmer-looked'))),
+    ch('Call the Skiddo.', out('You crouch and hold out a hand and make the sort of noise you would make. It comes. Halfway. Then it stops, legs braced, nostrils wide, wanting to and not able to. It stands there for as long as you do.', flag('farmer-called'))),
   ], {
     callback: true, requires: [is('farmer-seed1'), later('farmer-seed1', { stages: 1 }), not('farmer-planted')],
     remembers: [
@@ -399,7 +399,7 @@ const PENPAL: Json[] = [
   }),
 ];
 
-export const EVENTS: Json[] = [...APPRENTICE, ...FARMER, ...ELDER, ...WICKER, ...PENPAL];
+export const EVENTS: Json[] = withRooms([...APPRENTICE, ...FARMER, ...ELDER, ...WICKER, ...PENPAL]);
 export const REMOVE: string[] = [];
 
 void lv; void join; void sly; void later;

@@ -46,7 +46,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "kubfu-test-promise",
+        "eventId": "kubfu-test-promise-room",
         "nodes": 2
        }
       ]
@@ -64,7 +64,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "kubfu-test-promise",
+        "eventId": "kubfu-test-promise-room",
         "nodes": 2
        }
       ]
@@ -87,7 +87,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "kubfu-test-promise",
+        "eventId": "kubfu-test-promise-room",
         "nodes": 2
        }
       ]
@@ -144,7 +144,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "kubfu-test-refuse",
+        "eventId": "kubfu-test-refuse-room",
         "nodes": 2
        },
        {
@@ -162,7 +162,7 @@
       "effects": [
        {
         "kind": "laterEvent",
-        "eventId": "kubfu-test-refuse",
+        "eventId": "kubfu-test-refuse-room",
         "nodes": 2
        },
        {
@@ -225,7 +225,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "kubfu-test-train",
+        "eventId": "kubfu-test-train-room",
         "nodes": 2
        },
        {
@@ -243,7 +243,7 @@
       "effects": [
        {
         "kind": "laterEvent",
-        "eventId": "kubfu-test-train",
+        "eventId": "kubfu-test-train-room",
         "nodes": 2
        },
        {
@@ -768,17 +768,17 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "kubfu-test-promise",
+        "eventId": "kubfu-test-promise-room",
         "nodes": 3
        },
        {
         "kind": "laterEvent",
-        "eventId": "kubfu-test-refuse",
+        "eventId": "kubfu-test-refuse-room",
         "nodes": 5
        },
        {
         "kind": "laterEvent",
-        "eventId": "kubfu-test-train",
+        "eventId": "kubfu-test-train-room",
         "nodes": 7
        }
       ]
@@ -827,7 +827,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "readings-well",
+        "eventId": "readings-well-room",
         "nodes": 1
        }
       ]
@@ -850,7 +850,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "readings-well",
+        "eventId": "readings-well-room",
         "nodes": 1
        }
       ]
@@ -942,7 +942,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "readings-stone",
+        "eventId": "readings-stone-room",
         "nodes": 1
        }
       ]
@@ -955,7 +955,7 @@
       "effects": [
        {
         "kind": "laterEvent",
-        "eventId": "readings-stone",
+        "eventId": "readings-stone-room",
         "nodes": 1
        }
       ],
@@ -978,7 +978,7 @@
       "effects": [
        {
         "kind": "laterEvent",
-        "eventId": "readings-stone",
+        "eventId": "readings-stone-room",
         "nodes": 1
        }
       ]
@@ -1045,7 +1045,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "readings-hill",
+        "eventId": "readings-hill-room",
         "nodes": 1
        }
       ]
@@ -1064,7 +1064,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "readings-hill",
+        "eventId": "readings-hill-room",
         "nodes": 1
        }
       ]
@@ -1286,7 +1286,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "fog-guide"
+        "eventId": "fog-guide-room"
        }
       ]
      }
@@ -1320,7 +1320,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "fog-guide"
+        "eventId": "fog-guide-room"
        }
       ]
      }
@@ -1356,7 +1356,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "rescue-team",
+        "eventId": "rescue-team-room",
         "nodes": 1
        }
       ]
@@ -1374,7 +1374,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "rescue-team",
+        "eventId": "rescue-team-room",
         "nodes": 1
        }
       ]
@@ -1459,7 +1459,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "fog-end",
+        "eventId": "fog-end-room",
         "nodes": 1
        }
       ]
@@ -1486,7 +1486,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "fog-end",
+        "eventId": "fog-end-room",
         "nodes": 1
        }
       ]
@@ -1504,7 +1504,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "fog-end",
+        "eventId": "fog-end-room",
         "nodes": 1
        }
       ]
@@ -1547,7 +1547,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "rescue-team",
+        "eventId": "rescue-team-room",
         "nodes": 1
        }
       ]
@@ -1565,7 +1565,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "rescue-team",
+        "eventId": "rescue-team-room",
         "nodes": 1
        }
       ]
@@ -1578,7 +1578,7 @@
       "effects": [
        {
         "kind": "laterEvent",
-        "eventId": "rescue-team",
+        "eventId": "rescue-team-room",
         "nodes": 1
        }
       ]
@@ -2575,6 +2575,713 @@
      ]
     }
    ]
+  },
+  {
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "name": "A Promise",
+   "id": "kubfu-test-promise-room",
+   "room": true,
+   "intro": "A small boy at a crossroads with a Wooloo on a string, crying. He has lost his way home. You tell him you will walk him there, if he waits here while you clear the road. Kubfu, at the edge of the trees, is watching.",
+   "choices": [
+    {
+     "label": "Come back for him.",
+     "success": {
+      "text": "You clear the road, and you come back, though it is out of your way, and he is still there, and you walk him home. Kubfu has come a little closer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-tests",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-test-1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-refuse-room",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send someone else.",
+     "success": {
+      "text": "You flag down a passing ranger to take him. It is sensible. Kubfu turns its back.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-refuse-room",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "requires": []
+  },
+  {
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "name": "An Easy Win",
+   "id": "kubfu-test-refuse-room",
+   "room": true,
+   "intro": "A trainer's Pokémon slips on a wet stone at the start of your match, and turns its ankle, and the trainer looks at you, white. Trainer: \"You can take the win. It's fair. It's the rules.\" Kubfu is sitting on a fence post, watching.",
+   "choices": [
+    {
+     "label": "Refuse it. We'll play when it's healed.",
+     "success": {
+      "text": "You shake your head. You sit with them while their Pokémon is strapped up, and you play the match the next morning, properly. Kubfu jumps down off the fence post.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-tests",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-test-2",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-train-room",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the win.",
+     "success": {
+      "text": "You take it. It is fair. It is the rules. Kubfu stays on its fence post.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "kubfu-test-train-room",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "requires": []
+  },
+  {
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.mustard"
+    ],
+    "pokemon": "kubfu",
+    "tint": "#7a3a2a",
+    "effect": "glint"
+   },
+   "name": "The One You Never Use",
+   "id": "kubfu-test-train-room",
+   "room": true,
+   "intro": "A training ground by a river. Kubfu sits on the bank and looks, very pointedly, at the Pokémon of yours that never gets to lead.",
+   "choices": [
+    {
+     "label": "Train with it all day.",
+     "success": {
+      "text": "You put it at the front, and you train with it all day, through three practice battles and a lot of falling over. By the end it is standing differently. Kubfu walks over and sits down next to you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-tests",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-test-3",
+        "amount": 1
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "weakest"
+       },
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "Not today. Kubfu looks at the one you never use, and then at you, and sighs like an old man.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kubfu-tried",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "requires": []
+  },
+  {
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.sonia"
+    ],
+    "tint": "#8a2a5a",
+    "effect": "glint"
+   },
+   "name": "A Well",
+   "id": "readings-well-room",
+   "room": true,
+   "intro": "An old stone well. Sonnet's meter spins the moment she holds it over the edge. Down in the dark water, a wild Pokémon looks up at you, and it is twice the size it should be.",
+   "choices": [
+    {
+     "label": "Calm it.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You lower a bucket of berries and talk to it, softly, for a long time. Slowly it shrinks back to itself, and blinks up at you, puzzled.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-stone-room",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It comes up out of the well like a wave.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-stone-room",
+        "nodes": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "water"
+       ],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "Just measure.",
+     "success": {
+      "text": "Sonnet writes down the number. She writes it again, as if it might change.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-stone-room",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ],
+   "requires": []
+  },
+  {
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.sonia"
+    ],
+    "tint": "#8a2a5a",
+    "effect": "glint"
+   },
+   "name": "A Stone Circle",
+   "id": "readings-stone-room",
+   "room": true,
+   "intro": "A ring of standing stones on a hill. Red light is seeping up through the cracks between them, slow as blood. Sonnet's meter is screaming. Sonnet: \"This is the vent.\"",
+   "choices": [
+    {
+     "label": "Cap it now.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "rock",
+        "steel"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Rock- or Steel-type puts itself across the widest crack and holds there while you heap stones on the rest. The red light goes out, one crack at a time. The meter falls silent.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-capped",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-hill-room",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Measure and go.",
+     "success": {
+      "text": "You measure, and go. Behind you the red light keeps seeping.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-erupts",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "readings-hill-room",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ],
+   "requires": []
+  },
+  {
+   "group": "Galar",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.sonia"
+    ],
+    "tint": "#8a2a5a",
+    "effect": "glint"
+   },
+   "name": "A Hill",
+   "id": "readings-hill-room",
+   "room": true,
+   "intro": "The top of a hill, the last reading. Sonnet sets up the meter. And for one second, the whole sky goes red. Everyone in the valley below stops and looks up. Then it is blue again. Sonnet is very quiet. Sonnet: \"...That's not from here.\" She looks at the ground. \"That's from under everything.\"",
+   "choices": [
+    {
+     "label": "What's under everything?",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "blessing-eternatus",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Sonnet: \"Something that fell a long time ago.\" The red stays behind your eyes for a long time; whatever is under everything, it looked at you. Sonnet gives you her meter.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "readings-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-eternatus",
+         "amount": 2
+        },
+        {
+         "kind": "revealStops"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Sonnet: \"Something that fell a long time ago.\" She packs up the meter and then, after a moment, holds it out to you. Sonnet: \"Keep it. It'll show you where the energy pools.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-eternatus",
+        "amount": 1
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Record it.",
+     "success": {
+      "text": "You write it down: the time, the colour, the second it lasted. Sonnet signs it under you. Then she gives you her meter. Sonnet: \"You'll want it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "readings-done",
+        "amount": 1
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    }
+   ],
+   "requires": []
+  },
+  {
+   "group": "Exploration",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#242a32",
+    "effect": "fog"
+   },
+   "name": "A Guide in the Fog",
+   "id": "fog-guide-room",
+   "intro": "A lantern bobs toward you through the fog, and under it a guide steps out: an old coat, a walking stick, a brass bell on their belt. Guide: \"I know this ground.\" Their voice is calm and kind. \"Keep to my left. There's a drop on the right you won't see until you're in it.\" They turn and walk on, and you notice their boots do not make a sound.",
+   "choices": [
+    {
+     "label": "Follow.",
+     "success": {
+      "text": "You follow. Three fog-bound stretches of road, and not one hazard, not one wrong step. The guide never looks back to check on you, and never needs to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-followed",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "rescue-team-room",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who are you?",
+     "success": {
+      "text": "Guide: \"Ask me at the end.\" They walk on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-asked",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "rescue-team-room",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Off the path?",
+     "success": {
+      "text": "The guide stops. For a long moment they do not say anything. Guide: \"There's something there I'd like found.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-cache",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mr-spirit-cache"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "crestline",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "shift-rested",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The bell on their belt catches the lantern light. Stamped on its rim: CRESTLINE."
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "effect": "rain"
+   },
+   "name": "Rescue Team Call",
+   "id": "rescue-team-room",
+   "intro": "In the fog, ropes and voices: a Rescue Team, three people roped together and an Arcanine with its nose to the ground. Their leader pushes her hood back. Moss: \"A hiker's lost in this. Two days.\" She is hoarse from calling. \"We can't find the path.\" Beside you, the guide says nothing at all. Moss does not seem to see them.",
+   "choices": [
+    {
+     "label": "Ask the guide.",
+     "success": {
+      "text": "You look at the guide. The guide points, without a word, down into the white. You go where they point, and in a hollow under a rock there is the hiker, alive, so cold she cannot speak, and Moss's team gets her out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-rescue-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fog-hiker",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "fog-end-room",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Search with the team. (two nodes)",
+     "success": {
+      "text": "You search with them, two nodes of shouting into the fog. You find her, in the end. She is worse than she would have been.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "fog-rescue-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fog-hiker-late",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "fog-end-room",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "You go on. Behind you, the team keeps calling a name into the fog.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-rescue-seen",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "fog-end-room",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Wild Scenes",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gastly",
+    "tint": "#1c1428",
+    "effect": "fog"
+   },
+   "name": "At the End",
+   "id": "fog-end-room",
+   "room": true,
+   "intro": "The fog thins. The road comes back, a field, a stile, ordinary light. The guide stops at the edge of the road, where the white ends. Guide: \"This is where I stop.\"",
+   "choices": [
+    {
+     "label": "Who are you?",
+     "success": {
+      "text": "The guide points with their stick to a grave at the roadside, half under the hedge. The stone says: HALDEN VEY, GUIDE. LOST IN THE FOG, BRINGING THE OTHERS HOME. Halden unhooks the bell from their belt and puts it in your hand. It is cold, and then warm. When you look up, there is nobody there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-named",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "halden-bell",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Halden Vey gave you their bell at the edge of the fog",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Thank you.",
+     "success": {
+      "text": "Halden tips the lantern to you, and turns, and walks back into the fog. Later, where the road comes out, there is a bench nobody remembers putting there, and you rest on it, and it is the best rest of the region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-thanked",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "Halden: \"Someone has to be here.\" They unhook the bell from their belt and give it to you anyway, and close your fingers over it. Then they walk back into the fog to wait for the next one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-named",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "halden-bell",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Halden Vey stayed in the fog, and gave you their bell",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "called",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fog-called",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You called out to them, the first time, and they rang twice. You think the bell will always ring twice for you."
+    }
+   ],
+   "requires": []
   }
  ]
 }

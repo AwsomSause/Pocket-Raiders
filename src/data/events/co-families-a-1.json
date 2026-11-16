@@ -23,6 +23,11 @@
      "key": "crisis-blackout-on",
      "atLeast": 0,
      "atMost": 0
+    },
+    {
+     "kind": "crisis",
+     "atLeast": 1,
+     "atMost": 5
     }
    ],
    "scene": {
@@ -1225,6 +1230,11 @@
      "key": "crisis-flood-on",
      "atLeast": 0,
      "atMost": 0
+    },
+    {
+     "kind": "crisis",
+     "atLeast": 1,
+     "atMost": 5
     }
    ],
    "scene": {
@@ -2665,6 +2675,11 @@
      "key": "crisis-factory-on",
      "atLeast": 0,
      "atMost": 0
+    },
+    {
+     "kind": "crisis",
+     "atLeast": 1,
+     "atMost": 5
     }
    ],
    "scene": {
@@ -4085,6 +4100,11 @@
      "key": "crisis-fever-on",
      "atLeast": 0,
      "atMost": 0
+    },
+    {
+     "kind": "crisis",
+     "atLeast": 1,
+     "atMost": 5
     }
    ],
    "scene": {
@@ -4124,10 +4144,6 @@
         "kind": "flag",
         "key": "crisis-fever-water",
         "amount": 1
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "crisis-report-outbreak"
        }
       ]
      }
@@ -4160,10 +4176,6 @@
         "kind": "flag",
         "key": "crisis-fever-carrier",
         "amount": 1
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "crisis-report-outbreak"
        }
       ]
      }

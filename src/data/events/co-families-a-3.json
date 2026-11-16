@@ -1694,7 +1694,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "wanderer-arrives",
+        "eventId": "wanderer-arrives-room",
         "nodes": 3
        },
        {
@@ -1764,7 +1764,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "wanderer-arrives",
+        "eventId": "wanderer-arrives-room",
         "nodes": 4
        },
        {
@@ -3386,7 +3386,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "companion-two"
+        "eventId": "companion-two-room"
        }
       ]
      }
@@ -4313,7 +4313,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "habitat-rebuild"
+        "eventId": "habitat-rebuild-room"
        }
       ]
      }
@@ -4352,7 +4352,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "habitat-rebuild"
+        "eventId": "habitat-rebuild-room"
        }
       ]
      }
@@ -4391,7 +4391,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "habitat-rebuild"
+        "eventId": "habitat-rebuild-room"
        }
       ]
      }
@@ -4728,7 +4728,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "ghost-town-gate"
+        "eventId": "ghost-town-gate-room"
        }
       ]
      }
@@ -4750,7 +4750,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "ghost-town-gate"
+        "eventId": "ghost-town-gate-room"
        }
       ]
      }
@@ -4777,7 +4777,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "ghost-town-gate"
+        "eventId": "ghost-town-gate-room"
        }
       ]
      }
@@ -4819,7 +4819,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "ghost-town-gate"
+        "eventId": "ghost-town-gate-room"
        }
       ]
      }
@@ -4846,7 +4846,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "ghost-town-gate"
+        "eventId": "ghost-town-gate-room"
        }
       ]
      }
@@ -4873,7 +4873,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "ghost-town-gate"
+        "eventId": "ghost-town-gate-room"
        }
       ]
      }
@@ -5127,6 +5127,639 @@
     }
    ],
    "callback": true
+  },
+  {
+   "group": "Blissful Pokémon",
+   "stop": "shrine",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#1a3a2a",
+    "effect": "sparkle"
+   },
+   "name": "The Wanderer Arrives",
+   "id": "wanderer-arrives-room",
+   "intro": "The ridge road ends at a quiet glade with a pool in it, so still it holds the whole sky. The wanderer is steady on its feet now. A keeper in grey robes hurries out of the trees. Keeper Lisle: \"You brought it.\" She kneels and puts her forehead to its neck. \"It hasn't missed a year in thirty.\" She stands. Lisle: \"This is a sanctuary. Nobody fights here. The light here is very old.\" She looks at the pool. \"It gathers on those who've been gentle a long time.\"",
+   "choices": [
+    {
+     "label": "Can I stay?",
+     "success": {
+      "text": "Lisle: \"Of course.\" Your Pokémon lie down in the long grass by the pool and sleep more deeply than they have slept in weeks. When they wake, every one of them is whole.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sanct-found",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What light?",
+     "success": {
+      "text": "Lisle points at the pool. You look, and keep looking, and then you see it: a faint glow, far down, like a lamp left on in a house at the bottom of a lake.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sanct-found",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'll go.",
+     "success": {
+      "text": "Lisle: \"Go gently, then.\" The glade stays where it is, a little green mark on your map that you know how to find again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sanct-found",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "healed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sanct-healed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A stage later, the ridge road ends at a quiet glade with a still pool in it. The wanderer is there. It arrived alone, a whole stage after you sent it on, thinner, the bandage still on its leg. A keeper in grey robes is sitting with it. Keeper Lisle: \"It made it.\" She strokes its neck. \"Just.\" She stands. Lisle: \"This is a sanctuary. Nobody fights here. The light here is very old. It gathers on those who've been gentle a long time.\""
+    },
+    {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sanct-followed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The ridge road ends at a quiet glade with a pool in it, so still it holds the whole sky. The wanderer is steady now. A keeper in grey robes hurries out. Keeper Lisle: \"You brought it.\" She looks at you, and at the dust on your boots. Lisle: \"You walked at its pace. That's rarer than you'd think.\" She stands. \"This is a sanctuary. Nobody fights here. The light here is very old. It gathers on those who've been gentle a long time.\""
+    },
+    {
+     "id": "carried",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sanct-carried",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The ridge road ends at a quiet glade with a pool in it, so still it holds the whole sky. The wanderer slides down off your Pokémon's back and stands on its own four feet. A keeper in grey robes hurries out. Keeper Lisle: \"You brought it. You carried it.\" She puts her forehead to its neck. \"It hasn't missed a year in thirty.\" Lisle: \"This is a sanctuary. Nobody fights here. The light here is very old. It gathers on those who've been gentle a long time.\""
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Emergent Stories",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#22222c",
+    "effect": "none"
+   },
+   "name": "A Stranger Who Knows Things",
+   "id": "companion-two-room",
+   "intro": "A fork in the road. The traveller takes the right-hand way without looking, and then stops and waits for you to catch up. Traveller: \"It's not my first time here.\" They look down the left-hand road for a moment. \"I came this way once with a team like yours. The other fork goes to a bad place.\" The hood turns to you. \"Do you trust me?\"",
+   "choices": [
+    {
+     "label": "Yes.",
+     "success": {
+      "text": "Traveller: \"Good.\" The right-hand road is narrow and steep and saves you a whole stretch of trouble you will never even see.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "flag",
+        "key": "hood-fork",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hood-trusted",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No, I'll take the other.",
+     "success": {
+      "text": "The other road goes into a cutting, and there is an ambush in it, exactly where an ambush should be. Grunts, three of them, fresh and waiting. And then footsteps behind you, running: the traveller, who came anyway, and whose Dragonite drops out of the sky beside yours.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Grunt",
+       "ally": "dragonite",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "hood-fork",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hood-doubted",
+         "amount": 1
+        }
+       ],
+       "evil": "grunt",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "hood-fork",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "hood-doubted",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "What's down the other?",
+     "success": {
+      "text": "Traveller: \"A place I lost someone.\" They don't say any more. They don't move either. The choice is still yours.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hood-m3",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "companion-two-room"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hood-m3",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The fork. The traveller stands at the mouth of the right-hand road, not looking down the left. A place they lost someone. Traveller: \"Do you trust me?\"",
+     "hide": [
+      2
+     ]
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Wild Pokémon scenes",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#201810",
+    "effect": "fog"
+   },
+   "name": "Then Rebuild",
+   "id": "habitat-rebuild-room",
+   "room": true,
+   "intro": "The broken place again, quiet now. Nobody is coming back to hurt it. The work is what is left. You could spend up to three nodes here. Each one is something: replant, re-nest, or clear the water.",
+   "choices": [
+    {
+     "label": "Replant. (a node)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "habitat-replant",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You and your team spend a whole node on your knees, setting seedlings into the scraped ground. Somewhere in the turned earth something small and green hums, and comes up into your hand: a Zygarde Cell.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "habitat-replant",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "habitat-built",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zygarde-cells",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "habitat-rebuild-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Re-nest. (a node)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "habitat-renest",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Nests, one after another, back in the forks of trees and the hollows of banks. By the end, things are watching you work from the branches. Somewhere in a hollow something small and green hums: a Zygarde Cell.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "habitat-renest",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "habitat-built",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zygarde-cells",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "habitat-rebuild-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clear the water. (a node)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "habitat-clear",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You drag the rubbish out of the water by hand: drums, cable, the broken half of a crate. By evening it runs clear again. At the bottom of the clean water, something small and green is humming: a Zygarde Cell.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "habitat-clear",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "habitat-built",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zygarde-cells",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "habitat-rebuild-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "That's enough.",
+     "success": {
+      "text": "You stand up, and look at what you have done. It is not what it was. It will be. The wild ones are coming back to it already, and there is a soft hollow at the heart of it where a traveller could rest.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "habitat-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "full-chicks",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "habitat-built",
+       "atLeast": 3,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "habitat-nests",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "You straighten up from the last of it. The whole place has been replanted, re-nested and cleared. And over your head, wobbling, shrieking, absurdly proud of themselves: the Pidgey's chicks, flying, with their parent wheeling round them. Something under the ground hums, deep, as if it has noticed.",
+     "hide": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "addChoices": [
+      {
+       "label": "Rest here a while.",
+       "success": {
+        "text": "You rest. The habitat is whole. It will keep a soft hollow for travellers now.",
+        "effects": [
+         {
+          "kind": "addStop",
+          "stop": "heal"
+         },
+         {
+          "kind": "flag",
+          "key": "habitat-done",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "habitat-full",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You rebuilt a broken habitat and watched the Pidgey's chicks fly",
+          "importance": 70
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "full",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "habitat-built",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "intro": "You straighten up from the last of it. The whole place has been replanted, re-nested and cleared. Something under the ground hums, deep, as if it has noticed.",
+     "hide": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "addChoices": [
+      {
+       "label": "Rest here a while.",
+       "success": {
+        "text": "You rest. The habitat is whole. It will keep a soft hollow for travellers now.",
+        "effects": [
+         {
+          "kind": "addStop",
+          "stop": "heal"
+         },
+         {
+          "kind": "flag",
+          "key": "habitat-done",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "habitat-full",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You rebuilt a broken habitat, all of it",
+          "importance": 65
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "rival",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "habitat-rival-help",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The broken place again. Your rival is already there, sleeves rolled, waiting for you. They do the work beside you and are quiet all the way through. You could spend up to three nodes here. Each one is something: replant, re-nest, or clear the water."
+    }
+   ],
+   "requires": []
+  },
+  {
+   "group": "Emergent Stories",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#101822",
+    "effect": "fog"
+   },
+   "name": "The Ghost Town of Hollow Vale",
+   "id": "ghost-town-gate-room",
+   "intro": "The road bends through a town that is not on any map. Lights are on in every window. Tables are set, doors open. You call out. No one answers. A clock in the square says 7:40. It ticks. It doesn't move. A child runs past you, laughing, and through a wall. On the notice board by the well, in fresh paint: \"TOWN MEETING TONIGHT. DAM REPORT. ALL WELCOME.\"",
+   "choices": [
+    {
+     "label": "Go to the market.",
+     "success": {
+      "text": "You follow the smell of bread down a lane of open stalls.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vale-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ghost-town-market"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to the hall.",
+     "success": {
+      "text": "The hall doors are open and the lamps are lit. You go in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vale-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ghost-town-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You turn back the way you came. The road unbends behind you. When you look round, the town is gone, and there is only a valley full of still water, very deep, with the evening on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "vale-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "both",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "vale-hall",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "vale-market",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The square again. The clock says 7:40, and then, for the first time, it doesn't: it says 7:58. Up the valley, above the roofs, the dam stands against the last of the light. Somebody is up there, alone.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Go to the dam.",
+       "success": {
+        "text": "You climb the path to the dam.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "vale-dam"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "hall",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "vale-hall",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The square again. The clock says 7:40, and then, for the first time, it doesn't: it says 7:58. Up the valley, above the roofs, the dam stands against the last of the light. Somebody is up there, alone.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Go to the dam.",
+       "success": {
+        "text": "You climb the path to the dam.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "vale-dam"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "market",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "vale-market",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The square again. The clock in the square says 7:40. It ticks. It doesn't move. The hall doors are open, and the lamps are lit, and you can hear chairs scraping as people sit down for the meeting.",
+     "hide": [
+      0
+     ]
+    }
+   ],
+   "room": true,
+   "requires": []
   }
  ]
 }

@@ -2,13 +2,14 @@
 // Build: npm run co:build -- families-a-1. Flags follow the pack (crisis.blackout.on -> crisis-blackout-on).
 // Severity is the region's crisis meter (core/story/crisis.ts): it rises one a stage; a strand node that "holds it" takes one back.
 import { ch, fight, flag, flagAt, fr, front, heal, hurt, item, join, leave, lv, out, room, rp, wild, $, takeNode, type Json } from '../dsl.ts';
-import { aid, crisis, crisisAt, disaster, grunt, hasType, is, kind, knows, later, moment, not, region, safe, sub, temp, trust, trusts, v } from './_fa.ts';
+import { aid, crisis, crisisAt, disaster, grunt, hasType, is, kind, knows, later, moment, not, region, safe, sub, temp, trust, trusts, v, withRooms } from './_fa.ts';
 
 export const CATEGORY = 'families-a';
 
 const start = (s: string): Json[] => [flag(`crisis-${s}-on`), flag('crisis-strand-open'), flag('crisis-beat')];
 const end = (s: string, first: string): Json[] => [flagAt(`crisis-${s}-first-${first}`), flag(`crisis-${s}-ended`), flag('crisis-strand-open', -9), flag('crisis-ally-asked', -9), flag('crisis-ally-split', -9), flag('crisis-ally-together', -9), flag('crisis-beat', -9), crisis(-5)];
-const reportNeeds = (s: string): Json[] => [not('crisis-strand-open'), not(`crisis-${s}-on`)];
+/** A report comes once the region's crisis meter has started to climb (core/story/crisis.ts grows it from the second stage). */
+const reportNeeds = (s: string): Json[] => [not('crisis-strand-open'), not(`crisis-${s}-on`), crisisAt(1)];
 const holds = crisis(-1);
 
 interface Site { label: string; key: string; text: string; together: string }
@@ -163,8 +164,8 @@ const FEVER: Json[] = [
     id: 'crisis-report-outbreak', requires: reportNeeds('fever'),
     intro: 'A ranger station with its door propped open. Inside, a ranger is asleep face-down on her desk with a pen still in her hand. On blankets along the wall lie three sick Pokémon, breathing fast and shallow. One of them, a Skitty, lifts its head when you come in and cannot hold it up. The ranger jerks awake. Ines: "Sorry. Sorry. Haven\'t slept." She rubs her face with both hands. "Same fever everywhere. Wild and owned. Starts as a cough. Then they won\'t eat." She looks at the blankets. "I think it\'s in the water. Or a Pokémon carrying it. I can\'t tell which and I can\'t test both."',
     choices: [
-      ch('Test the water. (two nodes)', out('Ines hands you three stoppered jars and a map with three streams circled. You fill one at each: the spring, the ford, the pond where everything drinks. Back at the station she holds each to the lamp and adds her drops, and waits, and all three stay clear. "Clean." She breathes out. "It isn\'t the water. That\'s half the question gone."', takeNode(2), ...start('fever'), flag('crisis-fever-water'), room('crisis-report-outbreak'))),
-      ch('Find the carrier. (two nodes)', out('You follow the cough. A sick Rattata here, a wheezing Pidgey a mile on, each a little fresher than the last, a trail of small miseries pointing north. It ends at a stand of bare trees white with Swablu, a whole migrating flock, hundreds, and every one of them coughing like a tiny door creaking. They carried it in on the wind. They did not know. They look as sorry as anything you have ever seen.', takeNode(2), ...start('fever'), flag('crisis-fever-carrier'), room('crisis-report-outbreak'))),
+      ch('Test the water. (two nodes)', out('Ines hands you three stoppered jars and a map with three streams circled. You fill one at each: the spring, the ford, the pond where everything drinks. Back at the station she holds each to the lamp and adds her drops, and waits, and all three stay clear. "Clean." She breathes out. "It isn\'t the water. That\'s half the question gone."', takeNode(2), ...start('fever'), flag('crisis-fever-water'))),
+      ch('Find the carrier. (two nodes)', out('You follow the cough. A sick Rattata here, a wheezing Pidgey a mile on, each a little fresher than the last, a trail of small miseries pointing north. It ends at a stand of bare trees white with Swablu, a whole migrating flock, hundreds, and every one of them coughing like a tiny door creaking. They carried it in on the wind. They did not know. They look as sorry as anything you have ever seen.', takeNode(2), ...start('fever'), flag('crisis-fever-carrier'))),
       ch('Help with the sick ones.', out('You take the night shift so that Ines can sleep in a real bed. Cool cloths. Water from a spoon. The Skitty will not drink for her, but it drinks for you, a drop at a time, with one paw resting on your wrist as if to keep you there. By morning its breathing has slowed. It watches you pack with enormous eyes. It will know you again, anywhere.', ...start('fever'), holds, fr(10, 'party'), flag('crisis-fever-skitty'), { kind: 'rest' }, ...kind())),
     ],
     remembers: [
@@ -361,7 +362,7 @@ const ALLY: Json[] = [
   },
 ];
 
-export const EVENTS: Json[] = [...BLACKOUT, ...FLOOD, ...FACTORY, ...FEVER, ...FIFTH, ...RESCUES, ...ALLY];
+export const EVENTS: Json[] = withRooms([...BLACKOUT, ...FLOOD, ...FACTORY, ...FEVER, ...FIFTH, ...RESCUES, ...ALLY]);
 
 // `world-disaster-flood` is folded into the Flood report (SF1.2).
 export const REMOVE: string[] = ['world-disaster-flood'];

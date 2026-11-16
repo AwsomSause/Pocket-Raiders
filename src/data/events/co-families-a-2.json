@@ -1750,10 +1750,6 @@
         "kind": "flag",
         "key": "farmer-looked",
         "amount": 1
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "farmers-field"
        }
       ]
      }
@@ -1767,10 +1763,6 @@
         "kind": "flag",
         "key": "farmer-called",
         "amount": 1
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "farmers-field"
        }
       ]
      }
@@ -2488,7 +2480,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "elders-last-wish-2"
+        "eventId": "elders-last-wish-2-room"
        }
       ]
      }
@@ -2505,7 +2497,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "elders-last-wish-2"
+        "eventId": "elders-last-wish-2-room"
        }
       ]
      }
@@ -3799,7 +3791,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "wm-3"
+        "eventId": "wm-3-room"
        }
       ]
      }
@@ -5450,6 +5442,277 @@
      ]
     }
    ]
+  },
+  {
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "effect": "none"
+   },
+   "name": "The Star Was Real",
+   "id": "elders-last-wish-2-room",
+   "intro": "The old mill, its wheel still turning though there is nothing left to grind. A woman with white hair is standing by the race with the letter open in her hands. She has read it already. She is reading it again. Her hands shake. Sabine: \"Forty years. He could have walked here.\" She laughs, and it breaks in the middle. \"We saw a falling star. He said it was a satellite. I said it was a star. We didn't speak for forty years over a star.\" She folds the page along its old creases. Sabine: \"Tell him the star was real. And bring him a bowl of Berries from the east grove. He used to pick them for me.\"",
+   "choices": [
+    {
+     "label": "I'll bring them. (two nodes)",
+     "success": {
+      "text": "The east grove is two fields over, gone half wild. The best bushes are in the middle, and something has made its home under them that does not see why it should share.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "grass",
+        "bug"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "takeNode",
+         "nodes": 2
+        },
+        {
+         "kind": "flag",
+         "key": "elder-berries",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "oran-berry",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "pecha-berry",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You picked a bowl of Berries in the east grove for a man who used to pick them for someone else",
+         "importance": 55
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Come with me and tell him.",
+     "success": {
+      "text": "She looks down the lane as if it were a mountain. Sabine: \"My legs won't.\" She is quiet for a moment. Then she goes inside, and you hear a drawer, and a pen scratching for a long time. When she comes out she has a second letter. She does not seal it. \"He always said my handwriting was a punishment. Let him be punished.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "elder-letter2",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "elders-last-wish-2-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Was it real?",
+     "success": {
+      "text": "She glances up the lane toward the cottage, as though he might hear across forty years and two miles. Sabine: \"It was a meteor. Tiny.\" From her apron pocket she takes a black stone the size of a plum, pitted and heavy, and sets it in your hand. \"I found it the next day. I never told him.\" She closes your fingers on it. \"I wanted to be right more than I wanted him to know. Take it. One of us should stop.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "elder-stone",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "elders-last-wish-2-room"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "both-asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "elder-letter2",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "elder-stone",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Sabine stands by the mill race with nothing left in her hands. The second letter is in your pocket. The black stone is in your other pocket. Sabine: \"The Berries. From the east grove. He used to pick them for me.\" She looks at the wheel going round. \"Hurry, if you would.\"",
+     "hide": [
+      1,
+      2
+     ]
+    },
+    {
+     "id": "letter-written",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "elder-letter2",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Sabine stands by the mill race. Her second letter is in your pocket, unsealed. Sabine: \"And the Berries. From the east grove. He used to pick them for me.\"",
+     "hide": [
+      1
+     ]
+    },
+    {
+     "id": "stone-given",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "elder-stone",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Sabine stands by the mill race. The black stone is heavy in your pocket. Sabine: \"And the Berries. From the east grove. He used to pick them for me.\"",
+     "hide": [
+      2
+     ]
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Wandering Merchant",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a14",
+    "effect": "glint"
+   },
+   "name": "The Rare Box",
+   "id": "wm-3-room",
+   "intro": "Tam is at a crossroads, and for once he is the one waving. Tam: \"Third time. I keep a rare box for friends.\" It is a plain wooden box with a brass catch, the only thing on the cart he has not put a tag on.",
+   "choices": [
+    {
+     "label": "Open it. (₽1000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "He takes your money, and then he opens the catch for you himself, slowly, because he likes this part. Whatever is inside, it is worth every coin you paid and then some. Tam does not sell a friend a bad box.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tam-third",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "life-orb",
+         "choice-band",
+         "choice-scarf",
+         "choice-specs",
+         "expert-belt",
+         "shell-bell",
+         "rocky-helmet"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Save it for Wicker.",
+     "success": {
+      "text": "He looks at you for a while from under the hat. Then he puts the box back on the cart, right at the front where he can see it. Tam: \"She's got a box of her own, for the end. I'll put this in beside it.\" He clears his throat. \"She'll want to know who.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tam-third",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tam-box-saved",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's in it?",
+     "success": {
+      "text": "Tam: \"Something someone didn't come back for.\" He rests a hand on the lid. It is clear he thinks that is the saddest and the best thing a box can hold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tam-asked-box",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "wm-3-room"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tam-asked-box",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The plain wooden box sits between you on the cart. Something someone did not come back for. Tam waits, in no hurry at all.",
+     "hide": [
+      2
+     ]
+    }
+   ],
+   "room": true,
+   "requires": []
   }
  ]
 }

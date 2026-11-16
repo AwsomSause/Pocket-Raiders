@@ -2,7 +2,7 @@
 // SF10 The Hooded Traveller, SF11 The Broken Habitat, SF12 Hollow Vale. Build: npm run co:build -- families-a-3.
 // Run memory is same-run only (Kice 2026-11-14): Mara's "past runs" become what happened earlier in this run.
 import { again, anyType, ch, fight, flag, flagAgo, flagAt, fr, ferry, gym, has, heal, hurt, item, lose, money, out, $, room, stopHere, takeNode, trainer, wild, isEvil, type Json } from '../dsl.ts';
-import { disaster, grunt, is, kind, later, moment, not, region, safe, sub, temp, trust, v } from './_fa.ts';
+import { disaster, grunt, is, kind, later, moment, not, region, safe, sub, temp, trust, v, withRooms } from './_fa.ts';
 
 export const CATEGORY = 'families-a';
 /** Ids this doc folds into others (see _fa-retired.json). */
@@ -477,4 +477,4 @@ const VALE: Json[] = [
   ], { callback: true, requires: [is('vale-held'), later('vale-held', { stages: 1 }), not('vale-done'), not('vale-again-seen')] }),
 ];
 
-export const EVENTS: Json[] = [...MARA, ...RANGER, ...SANCTUARY, ...HOODED, ...HABITAT, ...VALE];
+export const EVENTS: Json[] = withRooms([...MARA, ...RANGER, ...SANCTUARY, ...HOODED, ...HABITAT, ...VALE]);

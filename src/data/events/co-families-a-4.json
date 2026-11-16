@@ -387,7 +387,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "battle-tower-floor"
+        "eventId": "battle-tower-floor-room"
        }
       ]
      }
@@ -1936,7 +1936,7 @@
          "kind": "rivalChange",
          "feelings": {},
          "lead": 0,
-         "mark": "exhibition"
+         "mark": "outplayed-by-you"
         }
        ],
        "lose": [
@@ -3267,7 +3267,7 @@
          },
          {
           "kind": "addEvent",
-          "eventId": "contest-pass-hall"
+          "eventId": "contest-pass-hall-room"
          }
         ]
        }
@@ -4055,6 +4055,319 @@
      }
     }
    ]
+  },
+  {
+   "group": "Trainers and challenges",
+   "stop": "tower",
+   "rarity": "common",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.ingo",
+     "boss.emmet"
+    ],
+    "effect": "sparkle"
+   },
+   "name": "Battle Tower Floor",
+   "id": "battle-tower-floor-room",
+   "intro": "A tower of glass, so clean the clouds go up the side of it. At the foot of it two conductors in matching caps stand at a lift door, one tall and one short, both with the same moustache. Conductor Ike: \"All aboard for the next floor!\" Conductor Ume: \"Seven floors. One battle each. You may stop between floors.\" Ike: \"But if you get off, you start again.\" Ume: \"From the bottom.\" Ike: \"From the very bottom.\"",
+   "choices": [
+    {
+     "label": "Ride all seven.",
+     "success": {
+      "text": "The doors close. The lift hums. Seven floors, seven trainers, and no nurse between them: your team gets what you can give it on the stairs and nothing else. The first three go by in a blur.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "chainHeal": 0,
+       "chain": 3,
+       "name": "Tower Trainers",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "circuit": "win"
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "tower-upper"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "seeAgain",
+         "eventId": "battle-tower-floor"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stop at three.",
+     "success": {
+      "text": "Three floors. Three trainers. You get off at the third, and Ike looks sad about it, and Ume looks as if she expected it.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "stamp": "circuit-at"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "chainHeal": 0,
+       "chain": 3,
+       "name": "Tower Trainers",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "circuit": "win"
+        },
+        {
+         "kind": "flag",
+         "key": "circuit-tower3",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "addStop",
+         "stop": "shop"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "seeAgain",
+         "eventId": "battle-tower-floor"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "What's at the top?",
+     "success": {
+      "text": "Ike: \"A view.\" Ume: \"And a Tower Pass.\" Ike: \"Mostly the view.\" They both look up the long glass side of the tower at the same moment, and for a second they look very young.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circuit-tower-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "battle-tower-floor-room"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "three-again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "circuit-tower3",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The glass tower again, a region on, and the same two conductors at the same lift door. Ume sees you and raises one eyebrow under her cap. Ume: \"Three again?\" Ike: \"Or seven this time?\" Ume: \"Seven floors. One battle each. You know the rules.\" Ike: \"From the very bottom.\""
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "Key items and tickets",
+   "stop": "contest",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#402040",
+    "effect": "glint"
+   },
+   "name": "Contest Pass: Super Contest",
+   "id": "contest-pass-hall-room",
+   "intro": "Your Contest Pass gets you through a gold door onto the biggest stage you have seen, and the crowd is already there, waiting, in the hush before something. Vivienne sweeps out in a new set of sequins. Vivienne: \"Super Contest! An appeal round, then a battle round where nobody faints, darling. We only score.\"",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "Two rounds: appeal, then battle. Your partner leads both.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "contest-super",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "contest": 4
+       },
+       "name": "Super Contest",
+       "classId": "aroma-lady",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "contest-ribbons",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Calm my partner first.",
+     "success": {
+      "text": "You crouch down in the wings and put your forehead to your partner's, and stay there until you are both breathing the same. The appeal round goes better for it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "contest-super",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "contest": 4
+       },
+       "name": "Super Contest",
+       "classId": "aroma-lady",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "contest-ribbons",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Look for a familiar face.",
+     "success": {
+      "text": "You scan the crowd. If Beauty Bianca came, she is out there somewhere in the dark, watching you; if her story is done, she is at the judges' table, and she winks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "contest-super",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "contest": 4
+       },
+       "name": "Super Contest",
+       "classId": "aroma-lady",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "contest-ribbons",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "organiser",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "contest-organiser-hurt",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "contest-sorry",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "At the judges' table, in the third seat, is the organiser from the pageant. She sees you and her pen goes very still. She is going to score you one lower. She probably doesn't even know she is going to.",
+     "addChoices": [
+      {
+       "label": "I'm sorry about the pageant.",
+       "success": {
+        "text": "You go to the table before it starts. She looks at you for a long time. Then she laughs, wetly, and blows her nose. Organiser: \"I was so excited,\" she says. \"I get so excited.\" She scores you fairly. She scores you, actually, a little high.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "contest-sorry",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "contest-pass-hall-room"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "requires": []
   }
  ]
 }

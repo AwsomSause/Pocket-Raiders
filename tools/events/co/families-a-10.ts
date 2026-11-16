@@ -2,7 +2,7 @@
 // SF49 A Quiet Funeral, SF50 The Empty Shelf, SF51 Eve of the Gym, SF52 The Riolu on the Ledge, SF53 Honesty Tests,
 // SF54 The Hospice. Build: npm run co:build -- families-a-10. Run memory is same-run only (Kice 2026-11-14).
 import { $, any, anyType, bondUp, br, ch, fight, flag, flagAt, fr, gym, heal, hurt, item, join, moveFlag, out, room, takeNode, trainer, type Json } from '../dsl.ts';
-import { grunt, is, kind, later, moment, not, region, safe, sly, sub, v } from './_fa.ts';
+import { grunt, is, kind, later, moment, not, region, safe, sly, sub, v, withRooms } from './_fa.ts';
 
 export const CATEGORY = 'families-a';
 
@@ -313,4 +313,4 @@ const HOSPICE: Json[] = [
   ], { remembers: [v('lapras-answers', [line('lapras')], { notice: 'From your belt, a Poké Ball shakes. Your own Lapras comes out on its own, and looks at the old one, and lifts its head, and sings back. Two notes over the bay, one old, one young.' })] }),
 ];
 
-export const EVENTS: Json[] = [...DOG, ...LOST, ...CARDS, ...FUNERAL, ...SHELF, ...GYM_EVE, ...RIOLU, ...HONEST, ...HOSPICE];
+export const EVENTS: Json[] = withRooms([...DOG, ...LOST, ...CARDS, ...FUNERAL, ...SHELF, ...GYM_EVE, ...RIOLU, ...HONEST, ...HOSPICE]);

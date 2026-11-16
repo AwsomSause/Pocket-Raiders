@@ -15,13 +15,13 @@
    "requires": [
     {
      "kind": "flag",
-     "key": "map-piece-1",
+     "key": "th-piece-1",
      "atLeast": 0,
      "atMost": 0
     },
     {
      "kind": "flag",
-     "key": "map-claimed",
+     "key": "th-claimed",
      "atLeast": 0,
      "atMost": 0
     }
@@ -40,7 +40,7 @@
       "effects": [
        {
         "kind": "flag",
-        "key": "map-piece-1",
+        "key": "th-piece-1",
         "amount": 1
        },
        {
@@ -74,13 +74,13 @@
    "requires": [
     {
      "kind": "flag",
-     "key": "map-piece-2",
+     "key": "th-piece-2",
      "atLeast": 0,
      "atMost": 0
     },
     {
      "kind": "flag",
-     "key": "map-claimed",
+     "key": "th-claimed",
      "atLeast": 0,
      "atMost": 0
     }
@@ -108,7 +108,7 @@
        "win": [
         {
          "kind": "flag",
-         "key": "map-piece-2",
+         "key": "th-piece-2",
          "amount": 1
         },
         {
@@ -137,7 +137,7 @@
        },
        {
         "kind": "flag",
-        "key": "map-piece-2",
+        "key": "th-piece-2",
         "amount": 1
        },
        {
@@ -171,13 +171,13 @@
    "requires": [
     {
      "kind": "flag",
-     "key": "map-piece-3",
+     "key": "th-piece-3",
      "atLeast": 0,
      "atMost": 0
     },
     {
      "kind": "flag",
-     "key": "map-claimed",
+     "key": "th-claimed",
      "atLeast": 0,
      "atMost": 0
     }
@@ -196,7 +196,7 @@
       "effects": [
        {
         "kind": "flag",
-        "key": "map-piece-3",
+        "key": "th-piece-3",
         "amount": 1
        },
        {
@@ -230,13 +230,13 @@
    "requires": [
     {
      "kind": "flag",
-     "key": "map-piece-4",
+     "key": "th-piece-4",
      "atLeast": 0,
      "atMost": 0
     },
     {
      "kind": "flag",
-     "key": "map-claimed",
+     "key": "th-claimed",
      "atLeast": 0,
      "atMost": 0
     }
@@ -264,7 +264,7 @@
        "win": [
         {
          "kind": "flag",
-         "key": "map-piece-4",
+         "key": "th-piece-4",
          "amount": 1
         },
         {
@@ -287,7 +287,7 @@
        },
        {
         "kind": "flag",
-        "key": "map-piece-4",
+        "key": "th-piece-4",
         "amount": 1
        },
        {
@@ -309,13 +309,13 @@
    "requires": [
     {
      "kind": "flag",
-     "key": "map-piece-5",
+     "key": "th-piece-5",
      "atLeast": 0,
      "atMost": 0
     },
     {
      "kind": "flag",
-     "key": "map-claimed",
+     "key": "th-claimed",
      "atLeast": 0,
      "atMost": 0
     }
@@ -334,7 +334,7 @@
       "effects": [
        {
         "kind": "flag",
-        "key": "map-piece-5",
+        "key": "th-piece-5",
         "amount": 1
        },
        {
@@ -352,7 +352,7 @@
       "effects": [
        {
         "kind": "flag",
-        "key": "map-piece-5",
+        "key": "th-piece-5",
         "amount": 1
        },
        {
@@ -379,37 +379,37 @@
    "requires": [
     {
      "kind": "flag",
-     "key": "map-piece-1",
+     "key": "th-piece-1",
      "atLeast": 1,
      "atMost": 99
     },
     {
      "kind": "flag",
-     "key": "map-piece-2",
+     "key": "th-piece-2",
      "atLeast": 1,
      "atMost": 99
     },
     {
      "kind": "flag",
-     "key": "map-piece-3",
+     "key": "th-piece-3",
      "atLeast": 1,
      "atMost": 99
     },
     {
      "kind": "flag",
-     "key": "map-piece-4",
+     "key": "th-piece-4",
      "atLeast": 1,
      "atMost": 99
     },
     {
      "kind": "flag",
-     "key": "map-piece-5",
+     "key": "th-piece-5",
      "atLeast": 1,
      "atMost": 99
     },
     {
      "kind": "flag",
-     "key": "map-claimed",
+     "key": "th-claimed",
      "atLeast": 0,
      "atMost": 0
     }
@@ -428,7 +428,7 @@
       "effects": [
        {
         "kind": "flag",
-        "key": "map-claimed",
+        "key": "th-claimed",
         "amount": 1
        },
        {
@@ -1708,7 +1708,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "world-egg-delivery",
+        "eventId": "world-egg-delivery-room",
         "nodes": 2
        }
       ]
@@ -1731,7 +1731,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "world-egg-delivery",
+        "eventId": "world-egg-delivery-room",
         "nodes": 2
        }
       ],
@@ -1766,7 +1766,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "world-egg-delivery",
+        "eventId": "world-egg-delivery-room",
         "nodes": 2
        }
       ],
@@ -1860,7 +1860,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "courier-ambush",
+        "eventId": "courier-ambush-room",
         "nodes": 2
        }
       ]
@@ -1944,7 +1944,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "courier-ambush",
+        "eventId": "courier-ambush-room",
         "nodes": 2
        }
       ]
@@ -2013,7 +2013,7 @@
         },
         {
          "kind": "laterEvent",
-         "eventId": "courier-ambush",
+         "eventId": "courier-ambush-room",
          "nodes": 3
         }
        ],
@@ -2143,7 +2143,7 @@
           },
           {
            "kind": "laterEvent",
-           "eventId": "courier-ambush",
+           "eventId": "courier-ambush-room",
            "nodes": 3
           }
          ],
@@ -2363,7 +2363,7 @@
        },
        {
         "kind": "laterEvent",
-        "eventId": "courier-ambush",
+        "eventId": "courier-ambush-room",
         "nodes": 2
        }
       ]
@@ -2383,6 +2383,344 @@
      }
     }
    ]
+  },
+  {
+   "group": "World Events",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "normal"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3020",
+    "effect": "glint"
+   },
+   "name": "Mysterious Egg Delivery",
+   "id": "world-egg-delivery-room",
+   "intro": "A side street, quiet. The stranger from the market is there, out of breath, leaning on a wall. Sorrel-Jay: \"You kept it.\" They close their eyes. \"Thank you.\" Then, fast: \"I can't keep running with it. Please. Keep it safe. I have to run.\" They look at the egg. \"It's not mine. It's not theirs either. It was stolen from a lab. I was supposed to deliver it to the ring's buyer. I couldn't.\"",
+   "choices": [
+    {
+     "label": "I'll keep it.",
+     "success": {
+      "text": "Sorrel-Jay grips your hand, once, hard, and is gone. The egg is yours to keep safe now. So is the ring's attention.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "riolu",
+         "deino",
+         "larvitar",
+         "gible",
+         "axew",
+         "goomy",
+         "jangmo-o",
+         "dreepy",
+         "frigibax",
+         "bagon",
+         "beldum",
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 4,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "courier-choice",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-hunted",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "courier-ambush-room",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it to Officer Jenny.",
+     "success": {
+      "text": "Officer Jenny takes the egg in both hands like something precious, and writes a long report, and puts it in a locked incubator marked EVIDENCE. Sorrel-Jay is cleared. The hunt ends that afternoon. Jenny: \"It'll go back to its lab. You'll hear.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "courier-choice",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-jenny",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-jenny",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "evil",
+        "heat": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run with me.",
+     "success": {
+      "text": "Sorrel-Jay stares at you. Then laughs, shakily. Sorrel-Jay: \"Okay. Okay. Together.\" The two of you carry it between you, and the ring hunts you both.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "riolu",
+         "deino",
+         "larvitar",
+         "gible",
+         "axew",
+         "goomy",
+         "jangmo-o",
+         "dreepy",
+         "frigibax",
+         "bagon",
+         "beldum",
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 4,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "courier-choice",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-ran",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-hunted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "courier-ran",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "courier-ambush-room",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ],
+   "room": true,
+   "requires": []
+  },
+  {
+   "group": "NPC Stories",
+   "stop": "daycare",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2e2a22",
+    "effect": "none"
+   },
+   "name": "The Ring",
+   "id": "courier-ambush-room",
+   "room": true,
+   "intro": "Grey coats in the road ahead, and grey coats behind. The ring has found you again. Man: \"The egg.\"",
+   "choices": [
+    {
+     "label": "No.",
+     "success": {
+      "text": "It is a hard fight in a narrow place.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "courier-ambush-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ring Men",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "courier-ambushed",
+         "amount": 1
+        },
+        {
+         "kind": "laterEvent",
+         "eventId": "courier-ambush-room",
+         "nodes": 3
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "last",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "courier-ambushed",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "The third time. You can see it in their faces: they are tired of this too.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "No.",
+       "success": {
+        "text": "One more fight. When it is over, the leader of them spits in the road and pulls his coat round him. Man: \"Keep it, then.\" They go, and do not come back.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "name": "Ring Men",
+         "classId": "roughneck",
+         "size": 2,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "courier-ambushed",
+           "amount": 1
+          },
+          {
+           "kind": "flag",
+           "key": "courier-free",
+           "amount": 1
+          }
+         ],
+         "friendly": true,
+         "lose": []
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "ledger",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "heist-ledger-kept",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "courier-ambushed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The ring's buyer is named in the ledger you kept from the heist. When you say the name out loud, the men in grey coats stop and look at each other.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Say the name again.",
+       "success": {
+        "text": "They go, fast, without the egg. They will not be back.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "courier-free",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "ran",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "courier-ran",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Sorrel-Jay is at your shoulder, and takes the other side of the road.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Together.",
+       "success": {
+        "text": "Side by side, against both of them.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "format": "doubles",
+         "name": "Ring Men",
+         "classId": "roughneck",
+         "size": 2,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "flag",
+           "key": "courier-ambushed",
+           "amount": 1
+          },
+          {
+           "kind": "laterEvent",
+           "eventId": "courier-ambush-room",
+           "nodes": 3
+          }
+         ],
+         "friendly": true,
+         "lose": []
+        }
+       }
+      }
+     ]
+    }
+   ],
+   "requires": []
   }
  ]
 }
