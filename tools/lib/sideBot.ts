@@ -87,8 +87,16 @@ export function sideBot(m: SideMods, content: Content, seen: Set<string>, findin
             run = drive(m.exp.beginExpedition(content, run, side.id), (r) => r.phase === 'map');
             break;
           case 'event': {
-            const choice = Math.max(0, m.events.eventView(content, run, side.id).choices.findIndex((c) => c.locked === null));
-            const res = m.events.chooseEvent(content, run, side.id, choice);
+            // The first open choice; at a hub room seen three times on this node already (a market square whose first choice leads
+            // back to itself, a puzzle's floor plan), a seeded open choice instead, so the bot can't circle the hub for ever.
+            const choices = m.events.eventView(content, run, side.id).choices;
+            const open = choices.map((c, i) => (c.locked === null ? i : -1)).filter((i) => i >= 0);
+            const before = node.sides.filter((x) => x.used && x.eventId === side.eventId).length;
+            let h = 2166136261;
+            for (const c of `${side.eventId}:${before}`) h = Math.imul(h ^ c.charCodeAt(0), 16777619) >>> 0;
+            const choice = before >= 3 && open.length > 1 ? open[h % open.length]! : Math.max(0, open[0] ?? 0);
+            // A skill prompt the bot keeps retrying (Thunderstorm Ridge's lightning gap) is a miss until the fourth try, then perfect.
+            const res = m.events.chooseEvent(content, run, side.id, choice, undefined, before >= 3 ? 'perfect' : undefined);
             run = res.run;
             if (run.phase !== 'map') run = drive(run, (r) => r.phase === 'map');
             break;

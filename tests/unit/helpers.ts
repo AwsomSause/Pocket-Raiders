@@ -12,6 +12,32 @@ export function scaleAt(stageIndex: number, column: number, regionIndex = 0, c: 
   return levelScale(c, c.campaigns.get('full')!, regionIndex, stageIndex, column);
 }
 
+/**
+ * The choice the bot takes in a pseudo-stage room: the first open one, except at a hub it keeps coming back to (a market square
+ * whose first choice leads back to itself, the Weather Station's floor plan whose rooms must be taken in the right order). From the
+ * fourth visit of the same room on this node it takes a seeded open choice instead, so the hub's way out or the puzzle's order turns up.
+ */
+function roomPick(c: Content, run: RunState, sideId: string, eventId: string): number {
+  const choices = eventView(c, run, sideId).choices;
+  const first = Math.max(0, choices.findIndex((ch) => !ch.locked));
+  const open = choices.map((ch, i) => (ch.locked ? -1 : i)).filter((i) => i >= 0);
+  const before = playedHere(run, eventId);
+  if (before < 3 || open.length < 2) return first;
+  let h = 2166136261;
+  for (const ch of `${eventId}:${before}`) h = Math.imul(h ^ ch.charCodeAt(0), 16777619) >>> 0;
+  return open[h % open.length]!;
+}
+
+/** How many times this event's room was already played on the current node. */
+function playedHere(run: RunState, eventId: string): number {
+  return run.stage?.map.nodes.find((n) => n.id === run.stage!.current)?.sides.filter((x) => x.used && x.eventId === eventId).length ?? 0;
+}
+
+/** A skill prompt the bot keeps retrying (Thunderstorm Ridge's lightning gap): it misses, until the fourth try, when it gets it right. */
+function retryGrade(run: RunState, eventId: string): 'perfect' | undefined {
+  return playedHere(run, eventId) >= 3 ? 'perfect' : undefined;
+}
+
 /** On the map, walks into the first normal (not harder) next node; otherwise returns the run unchanged. */
 export function toBattle(run: RunState, c: Content = content, depth = 0): RunState {
   if (run.phase !== 'map') return run;
@@ -19,8 +45,8 @@ export function toBattle(run: RunState, c: Content = content, depth = 0): RunSta
   // Back on the map with no battle (the event was the node, or called the fight off): walk on, so a call still ends in a battle.
   const waiting = waitingStop(c, run) ?? requiredMenuEvent(run);
   if (waiting) {
-    const pick = eventView(c, run, waiting).choices.findIndex((ch) => !ch.locked);
-    const played = chooseEvent(c, run, waiting, Math.max(0, pick)).run;
+    const side = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)?.sides.find((x) => x.id === waiting);
+    const played = chooseEvent(c, run, waiting, roomPick(c, run, waiting, side?.eventId ?? waiting), undefined, retryGrade(run, side?.eventId ?? waiting)).run;
     return played.phase === 'map' && !played.battle && depth < 6 ? toBattle(played, c, depth + 1) : played;
   }
   // Node menus: a required entry (a must-see event on this node) is played before moving on.
@@ -36,10 +62,7 @@ export function toBattle(run: RunState, c: Content = content, depth = 0): RunSta
   // A chain pseudo-stage (the Kanto lines, R23's race, a Greenneedle event line) walks room to room: a room still waiting here is played, not walked past.
   if (choices.length === 0 && run.stage?.current != null) {
     const room = run.stage.map.nodes.find((n) => n.id === run.stage!.current)?.sides.find((x) => x.kind === 'event' && !x.used && x.eventId);
-    if (room) {
-      const pick = eventView(c, run, room.id).choices.findIndex((ch) => !ch.locked);
-      return chooseEvent(c, run, room.id, Math.max(0, pick)).run;
-    }
+    if (room) return chooseEvent(c, run, room.id, roomPick(c, run, room.id, room.eventId!), undefined, retryGrade(run, room.eventId!)).run;
   }
   const node = choices.find((n) => !n.harder) ?? choices[0]!;
   const next = chooseNode(c, run, node.id);
