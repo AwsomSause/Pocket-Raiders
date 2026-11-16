@@ -56,6 +56,7 @@ import { bondFriendship } from './co/who';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { syncLegendFlags, weekInfluence } from './legends/signs';
+import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { drawWholeRun } from './legends/wholeRun';
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
@@ -810,6 +811,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   advanceShadowWorld(content, run);
   // Rods, and Wave, Tropic and Harbor Mail, add stops to the new map; then the event ("?") stops.
   addItemStops(content, run);
+  syncLegendKeys(content, run); // Catalog Overhaul row A: keys earned at Trials and Visits, Communion upgrades (their stops open below)
   addEventStops(content, run);
   addCanonStops(content, run);
   addOpeningCanonStops(content, run);
@@ -3840,6 +3842,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (share > 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * share));
   }
   noteSwapFaint(run);
+  noteSpirits(content, run, battle); // Catalog Overhaul row A: Ghost-type foes knocked out feed the Odd Keystone
   // Pack Pokémon Moments (PA4 The Little Ones): a scared baby that landed a move gains Bond, win or lose, and counts it.
   for (const tag of battle.storyEffects.filter((t) => t.startsWith(BRAVE_HIT))) {
     const [uid, bond] = tag.slice(BRAVE_HIT.length).split(':') as [string, string];
