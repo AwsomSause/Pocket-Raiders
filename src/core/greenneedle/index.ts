@@ -41,6 +41,7 @@ import { isLastStage, ltArrive, ltDawn, ltPage, ltSit, ltTokens } from './longta
 import { impClaim, impJoin, impersonatorStart } from './impersonator';
 import { shedNinjask, shedRest } from './shedinja';
 import { lsAddress, lsDeal, lsTake, lsTicket } from './laststop';
+import { tyrEven, tyrEvolve, tyrLead, tyrResult, tyrTally, tyrogueJoin, tyrogueMon } from './tyrogue';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -253,6 +254,10 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'partyBond') return run.party.length > 0 && run.party.every((m) => Math.floor(m.friendship / content.balance.co.bondLevelStep) >= (c.n ?? 1));
   if (c.test === 'hasAbility') return run.party.some((m) => m.fixedAbility === c.key || abilityOf(content, m) === c.key);
   if (c.test === 'holdsItem') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && !id.endsWith('-berry')));
+  // gn.new.04: the Tyrogue is with you; one school is clearly ahead; none is.
+  if (c.test === 'tyrWith') return !!tyrogueMon(run);
+  if (c.test === 'tyrLead') return tyrLead(run, c.key!);
+  if (c.test === 'tyrEven') return tyrEven(run);
   if (c.test === 'hasMark') return run.party.some((m) => m.gn?.includes(c.key!));
   if (c.test === 'markDown') return !run.party.some((m) => m.gn?.includes(c.key!) && m.hp > 0);
   return stamped > 0 && stamped < run.regionIndex + 1;
@@ -700,6 +705,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return stAssign(content, run, e.n ?? 0);
     case 'stEnd':
       return stEnd(run);
+    case 'tyrJoin':
+      return tyrogueJoin(run, e.n ?? 1, host.stage, host);
+    case 'tyrTally':
+      return tyrTally(run, e.key!, e.n ?? 1);
+    case 'tyrResult':
+      return tyrResult(run);
+    case 'tyrEvolve':
+      return tyrEvolve(content, run, e.key!);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
     case 'leftTake':
