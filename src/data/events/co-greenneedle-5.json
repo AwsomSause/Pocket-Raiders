@@ -2777,6 +2777,11 @@
       "effects": [
        {
         "kind": "gn",
+        "op": "ofSpecial",
+        "key": "cubone"
+       },
+       {
+        "kind": "gn",
         "op": "dropMarked",
         "key": "cubone-guest"
        },
@@ -2866,6 +2871,11 @@
         "kind": "flag",
         "key": "cubone-gone",
         "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "cubone"
        }
       ]
      }
@@ -2943,6 +2953,11 @@
         "kind": "flag",
         "key": "cubone-gone",
         "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "cubone"
        }
       ]
      }

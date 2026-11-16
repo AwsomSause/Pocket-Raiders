@@ -21,7 +21,7 @@ import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
 import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
-import { ofAssist, ofGuestLeaves, recordRelease } from './greenneedle/oldfriend';
+import { ofAssist, ofGuestLeaves, ofShadow, recordRelease } from './greenneedle/oldfriend';
 import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenneedle/ferris';
 import { followedRest, followedRival, followedRoad, followedShop, followedStage, followedStep, longJourney } from './greenneedle/followed';
 import { ballBattle, ballRest } from './greenneedle/ball';
@@ -3212,7 +3212,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   // Greenneedle gn.new.15: the Weather Station's hand-written forecast, pinned up at step 1 of each later stage.
   const pinned = pinLine(content, run);
   // Greenneedle gn.58: a friend let go for its own good steps in for one turn.
-  const friendHelp = ofAssist(content, run, run.battle!);
+  const friendHelp = [ofAssist(content, run, run.battle!), ofShadow(run, run.battle!)].filter(Boolean).join(' ');
   kantoSweetAir(content, run);
   // Greenneedle gn.55: after the Angry Bidoof's bow, no wild Bidoof or Bibarel attacks first.
   bidoofPeace(run, FOE_WAITS);

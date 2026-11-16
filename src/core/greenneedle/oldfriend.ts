@@ -6,7 +6,8 @@
 import type { Content } from '../contentSchema';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import { getTheme } from '../themes';
-import { getSpecies, maxHp } from '../pokemon';
+import { calcStats, createPokemon, getSpecies } from '../pokemon';
+import { calcDamage, typeEffectiveness } from '../battle/damage';
 import { careOf } from '../care';
 import { BENCH, BRING } from './frontier';
 
@@ -26,8 +27,6 @@ const FOLLOWERS = 3;
 /** Stages that must pass after a release, and the stage count after which any place will do. */
 const MIN_AWAY = 2;
 const ANY_PLACE = 4;
-/** The helper's one turn: this share of the hard fight's first foe, never the last of its HP. */
-export const HELP_SHARE = 0.25;
 export const GUEST = 'of-guest';
 export const CAME_BACK = 'came-back';
 
@@ -198,24 +197,83 @@ export function ofGuestLeaves(content: Content, run: RunState): string {
   return `${name} stops at the Gym door. It looks at you once, and goes back the way it came.`;
 }
 
-/** A hard fight (a Gym, the Elite Four, a Champion) after a friend let go "for its own good" came back to help: it appears for one turn, uses its best move, and goes. Once. */
+const HARD = ['gym-leader', 'elite-four', 'champion'];
+const isHard = (battle: BattleState): boolean => HARD.includes(battle.trainer?.classId ?? '');
+/** The stage as one number (region and stage), for "that stage" checks that do not need the campaign. */
+export const stageKeyOf = (run: Pick<RunState, 'regionIndex' | 'stage'>): number => run.regionIndex * 100 + (run.stage?.index ?? 0) + 1;
+
+/**
+ * A hard fight (a Gym, the Elite Four, a Champion) after a friend let go "for its own good" came back to help: it appears for one turn,
+ * uses its best move for real (the game's damage formula, the foe's type and stats, an average roll), and goes. Once.
+ */
 export function ofAssist(content: Content, run: RunState, battle: BattleState): string {
-  if (flag(run, 'of-help') < 1 || flag(run, 'of-help-used') > 0) return '';
-  const id = battle.trainer?.classId;
-  if (id !== 'gym-leader' && id !== 'elite-four' && id !== 'champion') return '';
+  if (flag(run, 'of-help') < 1 || flag(run, 'of-help-used') > 0 || !isHard(battle)) return '';
   const sp = castNow(run);
   const foe = battle.enemyTeam[battle.enemyIndex];
   if (!sp || !foe) return '';
-  const species = getSpecies(content, sp);
   const rec = releases(run)[flag(run, 'of-index') - 1];
-  const best = (species.learnset ?? [])
-    .map((l: { move: string }) => content.moves.get(l.move))
+  const avg = Math.round(run.party.reduce((n, m) => n + m.level, 0) / Math.max(1, run.party.length));
+  const level = Math.max(rec?.l ?? 1, avg);
+  const helper = createPokemon(content, sp, level, 'of-helper');
+  const mine = calcStats(content, helper);
+  const theirs = calcStats(content, foe);
+  const foeTypes = getSpecies(content, foe.speciesId).types;
+  const hits = helper.moves
+    .map((m) => content.moves.get(m.id))
     .filter((m): m is NonNullable<typeof m> => !!m && m.category !== 'status' && (m.power ?? 0) > 0)
-    .sort((a, b) => (b.power ?? 0) - (a.power ?? 0) || a.id.localeCompare(b.id))[0];
+    .map((move) => {
+      const physical = move.category === 'physical';
+      const effectiveness = typeEffectiveness(content.typeChart, move.type, foeTypes);
+      const damage = calcDamage(content.ruleset, {
+        level, power: move.power ?? 0, attack: physical ? mine.atk : mine.spa, defense: physical ? theirs.def : theirs.spd, attackStage: 0,
+        defenseStage: battle.enemyStages[physical ? 'def' : 'spd'] ?? 0, stab: getSpecies(content, sp).types.includes(move.type), effectiveness, crit: false, burned: false, physical, randomFactor: 100,
+      });
+      return { move, damage, effectiveness };
+    })
+    .sort((a, b) => b.damage - a.damage || a.move.id.localeCompare(b.move.id));
+  const best = hits[0];
+  if (!best) return '';
   put(run, 'of-help-used', 1);
-  foe.hp = Math.max(1, foe.hp - Math.floor(maxHp(content, foe) * HELP_SHARE));
-  const name = rec?.n || species.name;
-  return `A shape crosses the field. It's ${name}. It uses ${best?.name ?? 'its best move'}, once, hard, and is gone before anyone can say its name.`;
+  foe.hp = Math.max(1, foe.hp - best.damage);
+  const name = rec?.n || getSpecies(content, sp).name;
+  const how = best.effectiveness > 1 ? ' It is super effective.' : best.effectiveness === 0 ? ' It does nothing at all.' : best.effectiveness < 1 ? ' It is not very effective.' : '';
+  return `A shape crosses the field. It's ${name}. It uses ${best.move.name}, once, hard, and is gone before anyone can say its name.${how}`;
 }
+
+/** gn.02: Pidgeot or Fearow, let go, passes overhead in a hard battle that same stage: a shadow crosses the field, and the foe's accuracy drops for a turn. */
+export function ofShadowMark(run: RunState): void {
+  put(run, 'of-shadow', stageKeyOf(run));
+}
+export const SHADOW = 'of-shadow';
+export function ofShadow(run: RunState, battle: BattleState): string {
+  if (flag(run, 'of-shadow') !== stageKeyOf(run) || flag(run, 'of-shadow-used') === stageKeyOf(run) || !isHard(battle)) return '';
+  put(run, 'of-shadow-used', stageKeyOf(run));
+  battle.enemyStages.acc = Math.max(-6, (battle.enemyStages.acc ?? 0) - 1);
+  battle.storyEffects.push(SHADOW);
+  return 'A shadow crosses the field, wings wide. The bird that left is overhead. The foe flinches from the light, and its aim goes wide, for a turn.';
+}
+
+/** The stories whose Pokémon is let go for good. Each has its own return scene (gn-58-sky is gn.02's own Overhead, which marks the shadow). */
+export const SPECIALS = ['bug', 'cubone', 'mimikyu', 'made'] as const;
+/**
+ * gn op `ofSpecial`: the release hook for the stories that let a Pokémon go inside their own events (gn.13's bug, gn.22's Cubone, gn.37's Mimikyu,
+ * gn.38's made Pokémon). With `n` 0 it records that the Pokémon was let go (the stage, once); with `n` 1 its return has been seen
+ * (it counts for the Final Reunion). Within the run.
+ */
+export function ofSpecial(run: RunState, key: string, seen: boolean, stage: number): string {
+  if (!seen) {
+    if (flag(run, `of-sp-${key}`) === 0) put(run, `of-sp-${key}`, stage);
+    return '';
+  }
+  put(run, `of-sp-${key}-seen`, 1);
+  put(run, 'oldfriend-met', flag(run, 'oldfriend-met') + 1);
+  run.story.flags[`oldfriend.met.${key}`] = 1;
+  return '';
+}
+/** Whether a story's Pokémon was let go two or more stages ago and has not yet been met again. */
+export const specialDue = (run: Pick<RunState, 'story'>, key: string, stage: number): boolean => {
+  const at = flag(run, `of-sp-${key}`);
+  return at > 0 && flag(run, `of-sp-${key}-seen`) === 0 && stage - at >= MIN_AWAY;
+};
 
 export const BENCH_MARK = BENCH;

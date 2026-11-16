@@ -673,6 +673,383 @@
      ]
     }
    ]
+  },
+  {
+   "id": "gn-58-bug",
+   "name": "Old Friend Returns: A Silhouette",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "ofSp",
+     "key": "bug"
+    },
+    {
+     "kind": "flag",
+     "key": "of-sp-bug-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "butterfree",
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*On the ridge, against the pale sky, a small shape. Wings folded. Perfectly still. It is watching the road.*\n\n*You know that outline. You have not forgotten it once since the night it carried a whole team north.*\n\n*It does not come closer. It does not need to.*",
+   "choices": [
+    {
+     "label": "Look up.",
+     "success": {
+      "text": "You look up, and it knows you did. It opens its wings, once, wide, so the light comes through.\n\nThen the cry. Two notes. High, then lower. The call you were told to remember. It is saying: *still here.*",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "bug",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A small Bug-type that once flew north looked back, and called twice.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on with your head down, because looking would be too much. Behind you, high up, something folds its wings and lets you go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "bug",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-cubone",
+   "name": "Old Friend Returns: The Flat Stone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "ofSp",
+     "key": "cubone"
+    },
+    {
+     "kind": "flag",
+     "key": "of-sp-cubone-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "types": [
+    "ghost",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*A graveyard by the road. Between the old stones, one small kneeling figure, club laid down beside it.*\n\n*It is setting a flat stone on a mound. The mound is not its mother's. It has never met whoever lies here.*\n\n*It has started doing this for others. Nobody told it to. It looks up, and it is not afraid of you.*",
+   "choices": [
+    {
+     "label": "Help it set the stone.",
+     "success": {
+      "text": "You hold the stone steady while it settles it with both paws. It nods at the mound, then at you. Neither of you says a word.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "cubone",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Cubone set a flat stone on a stranger's grave, and let you help.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You stand at the gate and watch until it has finished. When it picks up its club and goes to the next mound, you let it go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "cubone",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-mimikyu",
+   "name": "Old Friend Returns: The Table Is Laid",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "ofSp",
+     "key": "mimikyu"
+    },
+    {
+     "kind": "flag",
+     "key": "of-sp-mimikyu-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*The mansion, with one window lit. In the doorway, a small shape in a coat far too big for it. The coat is on again.*\n\n*Behind it, through the door, a table. Tea laid out for three now. Not two. Three.*\n\n*It pulls out a chair, and this time it does not wait forty years for you to sit.*",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "The tea is weak, and sweet, and warm. It pours without spilling. It cheats at draughts. You let it win, and it knows, and it does not mind.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "mimikyu",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Mimikyu laid the table for three, and you sat at it.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to its house.",
+     "success": {
+      "text": "You nod to the lit window. The coat nods back. A house with someone in it is a different house. You walk on, and it is warm behind you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "mimikyu",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-made",
+   "name": "Old Friend Returns: Something You Made",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "ofSp",
+     "key": "made"
+    },
+    {
+     "kind": "flag",
+     "key": "of-sp-made-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*On a country road, in a place you would never think to look, something very large and very strong is doing something very small.*\n\n*It is the one you shut the facility for. {cast:lab-subject}. It has not noticed you yet. It is busy being gentle.*",
+   "choices": [
+    {
+     "label": "Go closer.",
+     "success": {
+      "text": "It turns, and sees you, and stops, mid-gesture, as if caught. Then it remembers it has nothing to hide.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "of-made-kite",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-made-kite",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-made-kite"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-made-kite",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-made-farm"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-made-farm",
+   "name": "Old Friend Returns: The Farmer",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*A farmer has a cart stuck to the axle in the mud. {cast:lab-subject} has the back of it in both hands, and is lifting.*\n\n**The farmer:** \"Don't ask me where it came from. Showed up in March. Won't take payment. Eats one apple a day and sits on the fence.\"\n\n*It sets the cart down, and looks at you, and lifts one hand. A wave.*",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "You wave back. It goes to the farmer's side, and stands there, easy, like it has been standing there for years. It never had that before.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "made",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Something made in a lab was helping a farmer, and was glad.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-made-kite",
+   "name": "Old Friend Returns: The Kite",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*A small child is running along the dyke, shrieking, with a kite on a string, and not enough wind.*\n\n*{cast:lab-subject} is carrying the kite. Held high in both hands, as carefully as an egg, jogging beside the child.*\n\n*It lets go. The wind catches. The child screams with joy. It looks, for a moment, exactly like what it is: something that is allowed to be here.*",
+   "choices": [
+    {
+     "label": "Let it be.",
+     "success": {
+      "text": "It looks up at the kite for a long time. Then at you. It nods once. That is all you wanted to know, and more.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "made",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A made Pokémon carried a child's kite, and the wind caught it.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

@@ -321,7 +321,7 @@ const gn22: Json[] = [
       'Then it takes the new one in its other hand. Both, now.',
     ), lose('thick-club'), ...joinCubone({ held: 'thick-club' }), ...DONE22), { requires: [{ kind: 'item', id: 'thick-club' }] }),
     ch('Come with me?', out('It comes. It walks closer than it did this morning.', ...joinCubone(), ...DONE22)),
-    ch('Stay here, if you like.', out('It sits down by the mound. When you look back from the road, it raises its club. Goodbye, or come back.', ...DONE22)),
+    ch('Stay here, if you like.', out('It sits down by the mound. When you look back from the road, it raises its club. Goodbye, or come back.', gn('ofSpecial', { key: 'cubone' }), ...DONE22)),
   ]),
   // ---- Fainted: once more, the next region, more wary ----
   gev('gn-22-wary', 'The Lonely Cubone', bone({ stop: 'event', rarity: 'rare', callback: true, minStage: 2, requires: [is('cubone-fainted'), regionChanged('cubone-ran-at'), not('cubone-done'), not('cubone-wary')] }), say(
@@ -329,11 +329,11 @@ const gn22: Json[] = [
     'It\'s more careful now.',
   ), [
     ch('Leave something at its feet.', out('You put a Berry down. It looks at it. It doesn\'t take it. Not yet.', scene('gn-22-wary-2'))),
-    ch('Walk away.', out('It watches you go.', flag('cubone-wary'), flag('cubone-gone'))),
+    ch('Walk away.', out('It watches you go.', flag('cubone-wary'), flag('cubone-gone'), gn('ofSpecial', { key: 'cubone' }))),
   ]),
   broom('gn-22-wary-2', 'The Lonely Cubone', {}, say('The Berry is still there. So is the Cubone. So are you.'), [
     ch('Leave another.', out(say('You put a second Berry beside the first.', 'It looks for a long time. Then it picks up both.'), flag('cubone-wary'), ...ENTER)),
-    ch('Walk away.', out('It watches you go.', flag('cubone-wary'), flag('cubone-gone'))),
+    ch('Walk away.', out('It watches you go.', flag('cubone-wary'), flag('cubone-gone'), gn('ofSpecial', { key: 'cubone' }))),
   ]),
   // ---- Afterstory: the graveyard ----
   gev('gn-22-graveyard', 'A Graveyard', bone({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: [is('cubone-joined'), { kind: 'gn', test: 'hasMark', key: 'cubone-friend' }, regionChanged('cubone-at'), notThisRegion('cubone-graveyard-at')] }), say(

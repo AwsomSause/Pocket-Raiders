@@ -8023,5 +8023,85 @@
    "Finale"
   ],
   "tags": []
+ },
+ "gn-58-bug": {
+  "gn": "gn.58",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 1,
+  "window": [
+   1,
+   3
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "The Flight North bug (gn.13), let go: its silhouette at step 1, two or more stages later. Looking up gives the two-note cry. Once.",
+  "kinds": [
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
+ "gn-58-cubone": {
+  "gn": "gn.58",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "The Cubone (gn.22), left at the grave: at a graveyard (ghost theme) it sets a flat stone on a mound that is not its mother's.",
+  "kinds": [
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
+ "gn-58-mimikyu": {
+  "gn": "gn.58",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "The Mimikyu (gn.37), who stayed: back at the mansion (ghost theme), in the coat, with the table laid for three.",
+  "kinds": [
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
+ "gn-58-made": {
+  "gn": "gn.58",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 8,
+  "window": [
+   4,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "The made Pokémon (gn.38), shut down and free: met where you would least expect, helping a farmer or carrying a child's kite.",
+  "kinds": [
+   "Reunion Episode"
+  ],
+  "tags": []
  }
 }

@@ -490,7 +490,7 @@ const gn13: Json[] = [
     '*It looks at the shiny one. It looks at you.*',
     '*It does its victory hop, one more time. It doesn\'t fall over.*',
     '*They go.*',
-  ), { kind: 'restoreParty' }, heal(1), flag('kanto-flight-gratitude'), flag('flight-done'), moment('A small Bug-type saved your whole team, then flew north.', 85), leavePseudo()))]),
+  ), { kind: 'restoreParty' }, heal(1), flag('kanto-flight-gratitude'), flag('flight-done'), gn('ofSpecial', { key: 'bug' }), moment('A small Bug-type saved your whole team, then flew north.', 85), leavePseudo()))]),
 ];
 const KANTO_FLIGHT: Json = { ...gev('cs-kanto-vermilion-flight', 'Flight North', north({ stop: 'event', rarity: 'common', types: ['normal', 'flying'], pokemon: 'meowth', requires: [not('flight-checked')] }), (gn13[0] as { intro: string }).intro, FLIGHT_CHECK), canon: 'cs.kanto.vermilion.flightnorth' };
 

@@ -50,7 +50,7 @@ import { tyrEven, tyrEvolve, tyrLead, tyrResult, tyrTally, tyrogueJoin, tyrogueM
 import { muralJoin, muralPick } from './mural';
 import { cheerJoin } from './cheer';
 import { mirrorReady, mirrorStart } from './mirror';
-import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, oldfriendTokens, releases } from './oldfriend';
+import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, ofSpecial, oldfriendTokens, releases, specialDue } from './oldfriend';
 import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
 import { followedJoin } from './followed';
 import { ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
@@ -263,6 +263,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'entrantCameBack') return !!entrantOf(run)?.gn?.includes('came-back');
   // gn.58: a released Pokémon is due to turn up; a great many were let go.
   if (c.test === 'ofDue') return dueFriend(content, run, stage) >= 0;
+  if (c.test === 'ofSp') return specialDue(run, c.key!, stage);
   if (c.test === 'ofMany') return releases(run).length >= MANY;
   // gn.45: a rival is well ahead of you (Lead +2 or more).
   if (c.test === 'allstarReady') return allstarReady(run);
@@ -877,6 +878,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     // gn.new.31 The Fox at the Shrine (fox.ts).
     case 'giveDearest':
       return giveDearest(content, run, e.key!);
+    case 'ofSpecial':
+      return ofSpecial(run, e.key!, e.n === 1, host.stage);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
