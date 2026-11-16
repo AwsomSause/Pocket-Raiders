@@ -1553,5 +1553,678 @@
   "shape": "Pool",
   "earliest": "A1",
   "where": "Drawn like any stop: a Sign or Telling source"
+ },
+ "co-wre-gg-1": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 1"
+ },
+ "co-wre-gg-2": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 2"
+ },
+ "co-wre-gg-3": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 3"
+ },
+ "co-wre-gg-4": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 4"
+ },
+ "co-wre-gg-5": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 5"
+ },
+ "co-wre-gg-6": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 6"
+ },
+ "co-wre-gg-7": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 7"
+ },
+ "co-wre-gg-8": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 8"
+ },
+ "co-wre-gg-9": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 9"
+ },
+ "co-wre-gg-10": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "where": "Whole Run Event beat 10: before the Champion, last region"
+ },
+ "co-wre-ww-1": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 1"
+ },
+ "co-wre-ww-2": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 2"
+ },
+ "co-wre-ww-3": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 3"
+ },
+ "co-wre-ww-4": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 4"
+ },
+ "co-wre-ww-5": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 5"
+ },
+ "co-wre-ww-6": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 6"
+ },
+ "co-wre-ww-7": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 7"
+ },
+ "co-wre-ww-8": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 8"
+ },
+ "co-wre-ww-9": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 9"
+ },
+ "co-wre-ww-10": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "where": "Whole Run Event beat 10: before the Champion, last region"
+ },
+ "co-wre-mo-1": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 1"
+ },
+ "co-wre-mo-2": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 2"
+ },
+ "co-wre-mo-3": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 3"
+ },
+ "co-wre-mo-4": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 4"
+ },
+ "co-wre-mo-5": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 5"
+ },
+ "co-wre-mo-6": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 6"
+ },
+ "co-wre-mo-7": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 7"
+ },
+ "co-wre-mo-8": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 8"
+ },
+ "co-wre-mo-9": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 9"
+ },
+ "co-wre-mo-10": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "where": "Whole Run Event beat 10: before the Champion, last region"
+ },
+ "co-wre-sd-1": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 1"
+ },
+ "co-wre-sd-2": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 2"
+ },
+ "co-wre-sd-3": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 3"
+ },
+ "co-wre-sd-4": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 4"
+ },
+ "co-wre-sd-5": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 5"
+ },
+ "co-wre-sd-6": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 6"
+ },
+ "co-wre-sd-7": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 7"
+ },
+ "co-wre-sd-8": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 8"
+ },
+ "co-wre-sd-9": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 9"
+ },
+ "co-wre-sd-10": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "where": "Whole Run Event beat 10: before the Champion, last region"
+ },
+ "co-wre-wf-1": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   2,
+   4
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 1"
+ },
+ "co-wre-wf-2": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 2"
+ },
+ "co-wre-wf-3": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 3"
+ },
+ "co-wre-wf-4": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 4"
+ },
+ "co-wre-wf-5": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 5"
+ },
+ "co-wre-wf-6": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 6"
+ },
+ "co-wre-wf-7": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 5,
+  "window": [
+   3,
+   7
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 7"
+ },
+ "co-wre-wf-8": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 10,
+  "window": [
+   8,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 8"
+ },
+ "co-wre-wf-9": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "tags": [],
+  "where": "Whole Run Event beat 9"
+ },
+ "co-wre-wf-10": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 19,
+  "window": [
+   17,
+   19
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "tags": [],
+  "where": "Whole Run Event beat 10: before the Champion, last region"
+ },
+ "co-my11-pedestals": {
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 18,
+  "window": [
+   16,
+   19
+  ],
+  "sits": "side-branch",
+  "attaches": "rest",
+  "tags": [],
+  "where": "MY11: the last rest before the League, last region"
+ },
+ "co-m7-glow": {
+  "shape": "Pool",
+  "earliest": "A4",
+  "where": "A rival episode: takes the stage's rival slot when it is free"
+ },
+ "co-m7-loose": {
+  "shape": "Pool",
+  "earliest": "A5",
+  "where": "Callback: a kept stoneless Mega at meter 5; takes the rival slot"
  }
 }

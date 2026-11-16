@@ -1955,6 +1955,758 @@
      }
     }
    ]
+  },
+  {
+   "id": "co-m7-glow",
+   "name": "Mega Without a Stone",
+   "group": "Story: Mega Anomalies",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    },
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rival-mega-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "rival-mega-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charizard-mega-x",
+    "tint": "#c06030",
+    "effect": "glint"
+   },
+   "intro": "A rival battle, mid-fight. {rival}'s ace is down to its last hits. Then it glows. No Key Stone. No Mega Stone. It Megas anyway.\n\n{rival}: \"{say event||bitter-challenger::WHAT. What did... did you do that? Did I do that?||champion-chaser::WHAT. What did... did you do that? Did I do that?||strategist::That's impossible. That's not in any paper.||protector::Stop! Stop the fight! Is it hurting?||idealist::Stop! Stop the fight! Is it hurting?||prodigy::...Okay, I'm going to pretend I meant that.||enthusiast::...Okay, I'm going to pretend I meant that.}\"",
+   "choices": [
+    {
+     "label": "Finish the fight.",
+     "success": {
+      "text": "You finish it. The glow does not.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "flag",
+        "key": "rival-mega-seen",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-m7-ace"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-m7-ace"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Call the fight off.",
+     "success": {
+      "text": "You put your hand up. {rival} has already run onto the field.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "flag",
+        "key": "rival-mega-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m7-ace"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m7-ace",
+   "name": "Mega Without a Stone: Is It Hurt?",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#c06030",
+    "effect": "none"
+   },
+   "intro": "The battle ends. The ace drops back to normal and lies down in the grass, breathing hard.\n\n{rival}: \"I don't... it's never done that. Is it hurt?\"",
+   "choices": [
+    {
+     "label": "\"Let's find out together.\"",
+     "success": {
+      "text": "{rival} nods too many times. \"Okay. Okay. Together.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-mega-helped",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1,
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m7-sample"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"That's amazing.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "rivalQuest",
+         "personality": [
+          "prodigy",
+          "enthusiast"
+         ]
+        }
+       ],
+       "text": "{rival}: \"It WAS amazing, wasn't it?\" They brighten all at once.",
+       "effects": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": 1
+         },
+         "lead": 0
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-m7-finding"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "rivalQuest",
+         "personality": [
+          "strategist",
+          "protector",
+          "idealist"
+         ]
+        }
+       ],
+       "text": "{rival}: \"...Yeah. Maybe.\" They do not look at you.",
+       "effects": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": -1
+         },
+         "lead": 0
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-m7-finding"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "{rival}: \"...Yeah. Maybe.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-m7-finding"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go see the Professor.\"",
+     "success": {
+      "text": "{rival} goes alone. For two stages the Rival Report has them at the lab, sleeping in a chair beside their ace.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-mega-lab",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-m7-alone"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m7-sample",
+   "name": "Mega Without a Stone: Three Readings",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#c06030",
+    "effect": "glint"
+   },
+   "intro": "A research errand. You and {rival} take a borrowed meter to three points around the region: a cliff, a lake, a stone circle. At each one the needle swings further than the last.",
+   "choices": [
+    {
+     "label": "Take the readings to the Professor.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "mega-meter",
+         "atLeast": 4,
+         "atMost": 99
+        }
+       ],
+       "text": "The meter is very high; the needle sits against the pin. The region is close to something. {rival}'s bond with their ace did the rest.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-m7-finding"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The meter is high: the whole region is humming. And {rival}'s bond with their ace did the rest.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-m7-finding"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m7-finding",
+   "name": "Mega Without a Stone: The Finding",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "mine",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-mine-shut",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Professor: \"The meter has been falling since that mine was shut. Whatever they choose matters a little less than it would have.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#c06030",
+    "effect": "none"
+   },
+   "intro": "Professor: \"I can seal it. Or not. It's theirs to decide.\"\n\n{rival}: \"What do you think?\"",
+   "choices": [
+    {
+     "label": "\"Seal it.\"",
+     "requires": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "who": "main",
+        "key": "trust",
+        "atLeast": 4
+       }
+      }
+     ],
+     "success": {
+      "text": "The Professor seals it. {rival} breathes out, and presses their spare Key Stone into your hand. \"You keep this one. I don't need it now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-mega-sealed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-mega-done",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "mega-ring",
+        "count": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Keep it.\"",
+     "requires": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "who": "main",
+        "key": "trust",
+        "atLeast": 4
+       }
+      }
+     ],
+     "success": {
+      "text": "{rival} keeps it. Their ace will Mega without a stone in every battle against you from now on. It is stronger. It is also dangerous.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-mega-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-mega-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "admiration": 1
+        },
+        "lead": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's your choice.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "rivalQuest",
+         "personality": [
+          "protector",
+          "idealist"
+         ]
+        }
+       ],
+       "text": "{rival} does not even hesitate. \"Seal it. It was hurting.\" Afterwards they press their spare Key Stone into your hand.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "rival-mega-sealed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rival-mega-chose",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rival-mega-done",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "mega-ring",
+         "count": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": 1
+         },
+         "lead": 0
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "rivalQuest",
+         "personality": [
+          "bitter-challenger",
+          "champion-chaser"
+         ]
+        }
+       ],
+       "text": "{rival}: \"Keep it. Obviously keep it.\" Their ace will Mega without a stone in every battle against you now.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "rival-mega-kept",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rival-mega-chose",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rival-mega-done",
+         "amount": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "admiration": 1
+         },
+         "lead": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "rivalQuest",
+         "feeling": {
+          "who": "main",
+          "key": "trust",
+          "atLeast": 2
+         }
+        }
+       ],
+       "text": "{rival} looks at you, and at their ace, and decides to trust the Professor. They seal it, and give you their spare Key Stone.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "rival-mega-sealed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rival-mega-chose",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rival-mega-done",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "mega-ring",
+         "count": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": 1
+         },
+         "lead": 0
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "{rival} thinks about it for a long time. Then they keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-mega-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-mega-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "admiration": 1
+        },
+        "lead": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m7-alone",
+   "name": "Mega Without a Stone: At the Lab",
+   "group": "Story: Mega Anomalies",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#c06030",
+    "effect": "none"
+   },
+   "intro": "Two stages later, a letter from {rival}, from the lab. They decided on their own.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "rivalQuest",
+         "personality": [
+          "protector",
+          "idealist"
+         ]
+        }
+       ],
+       "text": "\"We sealed it. It was hurting.\" There is a spare Key Stone folded into the letter.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "rival-mega-sealed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rival-mega-done",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "mega-ring",
+         "count": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {},
+         "lead": 0
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "rivalQuest",
+         "personality": [
+          "strategist",
+          "underdog",
+          "prodigy",
+          "enthusiast"
+         ]
+        },
+        {
+         "kind": "rivalQuest",
+         "feeling": {
+          "who": "main",
+          "key": "trust",
+          "atLeast": 2
+         }
+        }
+       ],
+       "text": "\"We sealed it. The Professor showed me the numbers.\" There is a spare Key Stone folded into the letter.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "rival-mega-sealed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rival-mega-done",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "mega-ring",
+         "count": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {},
+         "lead": 0
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "\"We kept it. I know. Don't say anything.\" Their ace will Mega without a stone in every battle against you now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-mega-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rival-mega-done",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "admiration": 1
+        },
+        "lead": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-m7-loose",
+   "name": "Mega Without a Stone: Out of Control",
+   "group": "Story: Mega Anomalies",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    },
+    {
+     "kind": "flag",
+     "key": "rival-mega-kept",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mega-meter",
+     "atLeast": 5,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "rival-mega-calmed",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "charizard-mega-x",
+    "tint": "#a02020",
+    "effect": "shake"
+   },
+   "intro": "The meter is at five. {rival}'s ace Megas before the battle has even started, and it does not stop. It does not know them.\n\n{rival}: \"Help me. Please. We have to calm it down together.\"",
+   "choices": [
+    {
+     "label": "Calm it together.",
+     "success": {
+      "text": "You and {rival} stand side by side and hold it until the glow goes out.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 1,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rival-mega-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": 2,
+          "friendship": 1
+         },
+         "lead": 0
+        },
+        {
+         "kind": "moment",
+         "text": "You and your rival calmed their ace when its stoneless Mega ran out of control.",
+         "importance": 70
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "rival-mega-calmed",
+         "amount": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": 1
+         },
+         "lead": 0
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stand back.",
+     "success": {
+      "text": "{rival} does it alone. It takes a long time, and they do not look at you afterwards.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       },
+       {
+        "kind": "flag",
+        "key": "rival-mega-calmed",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

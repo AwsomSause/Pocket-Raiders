@@ -1,0 +1,2945 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "co-wre-gg-1",
+   "name": "The Old Man at the Crossroads",
+   "group": "Whole Run: Guidance of Giratina",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-giratina",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gg-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "gg-beat",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "renegade",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-giratina",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He stops and looks at you properly. \"Oh. Oh, it has already touched you. I can smell the far side on you.\" He knows your name. You never told him."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#000000",
+    "effect": "fog"
+   },
+   "intro": "THE OLD MAN AT THE CROSSROADS\n\nThis story is a dark one. You can switch Whole Run Events off in Settings.\n\nAn old man steps into the road. He asks whether you have heard of the Distorted One. He does not wait for an answer. He never names a Pokémon.\n\n\"In the beginning there was the First, and the First made three. One to keep the hours. One to keep the distances. And one to keep what the other two could not bear to look at.\nThe third was strong, and it was honest, and for its honesty they called it violent and put it out of the world. They built this,\" he taps the road with his stick, \"on top of the door.\nIt is not dead, child. It is underneath. It has been listening to us walk about on its ceiling for a very long time.\"",
+   "choices": [
+    {
+     "label": "LISTEN",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "blessing-giratina",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "He tells you why he loves it, and you find you already knew. He presses a grey stone into your hand like a man returning something. \"O praise be the Distortion. They will be so glad you came.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "gg-b1",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "flag",
+         "key": "gg-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-faith",
+         "amount": 4
+        },
+        {
+         "kind": "flag",
+         "key": "gg-stone",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The old man at the crossroads knew your name before you said it.",
+         "importance": 90
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "He tells you why he loves it. He lost someone. The priests of the other three told him she had gone far, and it would be a long time. Only the Distorted One, he says, promises a place with no far and no after.\n\nHe presses a grey stone into your hand. \"O praise be the Distortion.\" He walks away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-b1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-faith",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "gg-stone",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "An old man at a crossroads gave you a grey stone and told you about something underneath the road.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "LEAVE",
+     "success": {
+      "text": "His hand closes on your shoulder, much stronger than it should be.\n\n\"Heretic. You walk on its roof and will not hear its name. Then hear mine for you. May what you love go first. May your road be long and lead back here. May you be the last of your company standing, and may you understand, then, what I was offering.\"\n\nHe lets go. For the rest of the region, small things go slightly wrong.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-b1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-curse",
+        "amount": 2
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The old man's curse",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 0.9
+         },
+         {
+          "kind": "healingMultiplier",
+          "value": 0.95
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "An old man at a crossroads cursed you.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-2",
+   "name": "The Marked Doors",
+   "group": "Whole Run: Guidance of Giratina",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-giratina",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gg-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "gg-beat",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ghost",
+     "when": [
+      {
+       "kind": "partyType",
+       "type": "ghost"
+      }
+     ],
+     "notice": "People in grey robes nod to your Ghost-type in the street, as if it were family."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#000000",
+    "effect": "fog"
+   },
+   "intro": "THE MARKED DOORS\n\nA town where half the doors carry a grey handprint. Marked houses are left alone. Unmarked houses are visited at night for a tithe: one Pokémon. A house with no Pokémon and a child loses the child to the Choir.\n\nA family asks you to mark their door for them. They cannot bring themselves to do it.",
+   "choices": [
+    {
+     "label": "Mark it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "ghost"
+        }
+       ],
+       "text": "You press your hand into the ash and then onto the wood. A woman in grey sees your Ghost-type and smiles at you like a sister. They are safe tonight.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "gg-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-faith",
+         "amount": 2
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You press your hand into the ash and then onto the wood. They are safe tonight. Your hand stays grey for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-faith",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wipe the marks off every door.",
+     "success": {
+      "text": "You go down the street with a wet cloth. By midnight the Division has come for all of it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-wiped",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-tithe",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You wiped the marks off a street. You could not hold it. The tithe was doubled.",
+         "importance": 90
+        }
+       ],
+       "team": [
+        "dusknoir",
+        "banette",
+        "mismagius"
+       ],
+       "name": "The Faithful",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "gg-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-wiped",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You wiped the grey marks off a whole street and held it through the night.",
+         "importance": 90
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Stand guard at one unmarked door.",
+     "success": {
+      "text": "A Deacon comes alone, near dawn. He is tired. You ask his name. He gives it, Brother Aldous, and looks startled to have been asked. He goes away without knocking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-guarded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-deacon-name",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-names",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-doubt",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-3",
+   "name": "The Offering",
+   "group": "Whole Run: Guidance of Giratina",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-giratina",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gg-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "gg-beat",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "named",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "gg-deacon-name",
+        "gg-stone"
+       ]
+      }
+     ],
+     "notice": "You know something they did not expect you to know: a name, or the weight of a grey stone in your pocket.",
+     "addChoices": [
+      {
+       "label": "NEITHER.",
+       "success": {
+        "text": "The Deacon hesitates. The rift, offered nothing, does not close. It stays in the hillside, and the land around it begins to sicken. Nobody dies today. The Division takes the Deacon away for failing.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "gg-beat",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-spared",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-rift",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-doubt",
+          "amount": 2
+         },
+         {
+          "kind": "tempEffect",
+          "label": "The open rift",
+          "effects": [
+           {
+            "kind": "healingMultiplier",
+            "value": 0.9
+           }
+          ],
+          "until": "region"
+         },
+         {
+          "kind": "moment",
+          "text": "At the rift you would give it neither your Pokémon nor the Deacon. It stayed open.",
+          "importance": 90
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "doubt",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gg-doubt",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have asked too many questions for them to be sure of you. The Deacon is not sure of anything now.",
+     "addChoices": [
+      {
+       "label": "NEITHER.",
+       "success": {
+        "text": "The Deacon hesitates. The rift, offered nothing, does not close. It stays in the hillside, and the land around it begins to sicken. Nobody dies today. The Division takes the Deacon away for failing.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "gg-beat",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-spared",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-rift",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-doubt",
+          "amount": 2
+         },
+         {
+          "kind": "tempEffect",
+          "label": "The open rift",
+          "effects": [
+           {
+            "kind": "healingMultiplier",
+            "value": 0.9
+           }
+          ],
+          "until": "region"
+         },
+         {
+          "kind": "moment",
+          "text": "At the rift you would give it neither your Pokémon nor the Deacon. It stayed open.",
+          "importance": 90
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "THE OFFERING\n\nA rift has opened in a hillside: a wound in the air, with the wrong sky behind it. A Deacon stands before it. Bound at the edge is one of your Pokémon.\n\n\"It must be given a life. Yours is not asked for; you are a guest. So choose. The one who came to you last. Or me.\"\n\nThe Deacon means it. They are not afraid. They believe they are going home.",
+   "choices": [
+    {
+     "label": "THE POKÉMON.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "It is taken. It looks at you the whole way. It is gone from your party, and its name is the one you will hear in every beat from now on. Your rival, when they hear, does not speak to you for a long time.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "a Pokémon"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-lost",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": -20,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "You gave one of your Pokémon to the rift. The Division calls it the Lost.",
+        "importance": 95
+       }
+      ]
+     }
+    },
+    {
+     "label": "THE DEACON.",
+     "success": {
+      "text": "They thank you, turn, and walk into the rift.\n\nThe rift does not take them the way a door takes someone. It takes them the way a hand closes. Their feet leave the ground; down has moved, for them alone, and they fall sideways into the air and stop there, held. For a moment they are smiling. Then the space they are in begins to be smaller than they are. The last thing through is the hand, open, palm out. The ash print on it is the same size as the one on the door in the town.\n\nThen the air is flat and clean, and something on the far side of it, very large, makes a noise of contentment.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-faith",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "gg-curse",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-martyr",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A Deacon walked into the rift instead of your Pokémon. Someone who loved them is hunting you now.",
+        "importance": 95
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-4",
+   "name": "The Investigator",
+   "group": "Whole Run: Guidance of Giratina",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-giratina",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gg-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "gg-beat",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "flag",
+     "key": "gg-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "THE INVESTIGATOR\n\nLooker has been following disappearances across three regions and has a wall of string to show for it. He has a photograph of you on it.\n\nLooker: \"Grey handprints. Missing children who sing. You have seen them. Tell me what you saw, and wear this into the next one.\" He holds up a wire.",
+   "choices": [
+    {
+     "label": "Tell him everything, and wear the wire.",
+     "success": {
+      "text": "He listens without writing anything down. He tapes the wire under your collar himself, very gently.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w-looker",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-wire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-4-rowan"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him some of it.",
+     "success": {
+      "text": "He nods. He knows what you left out. \"Some is not nothing.\" He does not offer the wire again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w-looker",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-4-rowan"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I have never seen them.\"",
+     "success": {
+      "text": "Looker looks at the photograph of you on his wall, then at you. \"Of course.\" He lets you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-lied",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-4-rowan"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-4-rowan",
+   "name": "The Investigator: The Professor",
+   "group": "Whole Run: Guidance of Giratina",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [
+     "boss.rowan"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "Professor Rowan has been sent the Division's scripture, and he does not like how much of it is accurate.\n\nRowan: \"This is real history, written by someone who wanted it to be a prophecy. Bring me what they gave you, if they gave you anything.\"",
+   "choices": [
+    {
+     "label": "Give him the grey stone.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-stone",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He turns it over under the lamp for a long time. \"I will keep it safe. You will have it back before the end.\" He becomes a Witness.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-w-rowan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-stone",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-stone-rowan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-4-cynthia"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask him what it is for.",
+     "success": {
+      "text": "\"For?\" He closes the scripture. \"It is for being afraid of correctly. Come back to me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-w-rowan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-4-cynthia"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep your counsel.",
+     "success": {
+      "text": "He does not press you. He has met young people with secrets before.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-4-cynthia"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-4-cynthia",
+   "name": "The Investigator: The Inscription",
+   "group": "Whole Run: Guidance of Giratina",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [
+     "boss.cynthia-gen7"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "Cynthia is at a ruin nearby, reading an inscription over and over. She recognises the handwriting in the Division's oldest text, and will not yet say whose.\n\nCynthia: \"Let me come with you. I need to see the end of this. I think I owe it that.\"",
+   "choices": [
+    {
+     "label": "\"Come with me.\"",
+     "success": {
+      "text": "She closes her notebook. \"Thank you.\" She walks beside you as far as the next town and then is simply always nearby.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-w-cynthia",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Cynthia said she would hold the line with you.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"This is mine to do.\"",
+     "success": {
+      "text": "\"Then I will be close.\" She means it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-5",
+   "name": "The Baptism",
+   "group": "Whole Run: Guidance of Giratina",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-giratina",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gg-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "gg-beat",
+     "atLeast": 4,
+     "atMost": 4
+    },
+    {
+     "kind": "flag",
+     "key": "gg-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.n",
+     "boss.ghetsis"
+    ],
+    "tint": "#000000",
+    "effect": "rain"
+   },
+   "intro": "THE BAPTISM\n\nA lake town. The water has turned over: it reflects a sky that is not above it. The Division is leading people into it in rows. Those who go under come out quiet: calm, smiling, hollow. The Choir sings from the bank. \"What was cast out shall be called home. What was divided shall be folded. There is no far. There is no after. O praise be the Distortion.\"\n\nRemnants of Team Galactic watch from the trees. Team Plasma has split: Ghetsis thinks the Division is a tool he can pick up, and is already offering you a hand. N is on his knees at the waterline with his hands over his ears.",
+   "choices": [
+    {
+     "label": "Break it up by force.",
+     "success": {
+      "text": "You go in hard. People panic; some run into the water. Fewer are saved than you hoped.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-curse",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-faith",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You tried to stop the Baptism and could not.",
+         "importance": 90
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-5-ghetsis"
+        }
+       ],
+       "team": [
+        "banette",
+        "mismagius",
+        "sableye",
+        "drifblim"
+       ],
+       "format": "doubles",
+       "name": "Deacons of the Division",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "gg-beat",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-curse",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You broke up the Baptism by force. Not everyone was saved.",
+         "importance": 90
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-5-ghetsis"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Go under.",
+     "success": {
+      "text": "You walk in to pull one person out: the father from the town of marked doors. Underwater there is no battle, only the litany and a choice of which hand to take. You come out with one person, and with something of the lake in your eyes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-faith",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-doubt",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-5-ghetsis"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call them by name.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-names",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You say the names you have learned, out loud, across the water. Each name turns one of the quiet around. They wade back to the bank, blinking, as if waking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-doubt",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "gg-names",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-5-ghetsis"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help N.",
+     "success": {
+      "text": "He takes his hands from his ears long enough to tell you what the Pokémon under the water are saying. It is one word, over and over, and it is not \"home\". It is \"no\".\n\nN stays with you after that. Ghetsis watches you both, and smiles.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w-n",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-doubt",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "N told you what the Pokémon under the lake were saying.",
+        "importance": 90
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-5-ghetsis"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-5-ghetsis",
+   "name": "The Baptism: A Hand Offered",
+   "group": "Whole Run: Guidance of Giratina",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "Ghetsis finds you on the bank afterwards. He is not wet. He has not been near the water.\n\nGhetsis: \"They are fools with a door. I have a use for a door. Stand with me, and when it opens, we will be the ones holding the handle.\"",
+   "choices": [
+    {
+     "label": "Take his help.",
+     "success": {
+      "text": "His grip is dry and certain. \"Sensible.\" He knows where the Synod meets. He will want something for it later.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-ghetsis",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-faith",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "\"A pity.\" He walks away along the bank, already looking for someone else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-doubt",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-6",
+   "name": "The Kiss",
+   "group": "Whole Run: Guidance of Giratina",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-giratina",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gg-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "gg-beat",
+     "atLeast": 5,
+     "atMost": 5
+    },
+    {
+     "kind": "flag",
+     "key": "gg-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ghetsis",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gg-ghetsis",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "THE KISS\n\nGhetsis gives you up, for a seat at the Synod. He does not look at you while he does it.\n\nYou are brought before the Synod: seven veiled chairs in a hall with no visible walls. Six voices discuss you as if reading minutes. The seventh chair leans forward. It is the first time the Avatar speaks.\n\n\"Leave them. I would like to see what it does.\""
+    },
+    {
+     "id": "wire",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gg-faith",
+       "atLeast": 6,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gg-wire",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "THE KISS\n\nLooker's wire is found. The Division thinks you are theirs, so it is you they ask to hand Looker over.\n\nYou are brought before the Synod: seven veiled chairs in a hall with no visible walls. Six voices discuss you as if reading minutes. The seventh chair leans forward. It is the first time the Avatar speaks.\n\n\"Leave them. I would like to see what it does.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Hand Looker over.",
+       "success": {
+        "text": "You say his name to them. He looks at you once, without surprise. The chairs approve.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "gg-beat",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-faith",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "gg-w-looker",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-w",
+          "amount": -1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-lied",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Refuse.",
+       "success": {
+        "text": "\"Interesting,\" says the seventh chair. They let you both go, because it is more interesting.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "gg-beat",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-doubt",
+          "amount": 2
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "spared",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gg-spared",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "THE KISS\n\nThe Deacon you would not sacrifice finds you on the road. They have betrayed the Division instead, and they bring you the Synod's meeting place.\n\nYou are brought before the Synod: seven veiled chairs in a hall with no visible walls. Six voices discuss you as if reading minutes. The seventh chair leans forward. It is the first time the Avatar speaks.\n\n\"Leave them. I would like to see what it does.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Go there and listen.",
+       "success": {
+        "text": "You learn the names of six chairs, and that the seventh has none.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "gg-beat",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-doubt",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "gg-names",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.will"
+    ],
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "THE KISS\n\nSomeone you trusted gives you up. A Witness, under threat to someone they love. They cannot look at you.\n\nYou are brought before the Synod: seven veiled chairs in a hall with no visible walls. Six voices discuss you as if reading minutes. The seventh chair leans forward. It is the first time the Avatar speaks.\n\n\"Leave them. I would like to see what it does.\"",
+   "choices": [
+    {
+     "label": "Forgive them.",
+     "success": {
+      "text": "You tell them you understand. They do not believe you, and they stay anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-doubt",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them go.",
+     "success": {
+      "text": "They go. You are one Witness fewer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-7",
+   "name": "The Wilderness",
+   "group": "Whole Run: Guidance of Giratina",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-giratina",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gg-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "gg-beat",
+     "atLeast": 6,
+     "atMost": 6
+    },
+    {
+     "kind": "flag",
+     "key": "gg-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.will"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "THE WILDERNESS\n\nThe Avatar comes to you alone, on an empty stretch of road, with no guard. He is courteous. He has clearly looked forward to this. He sits with his hands folded in front of his mouth. He never uses your name.\n\nHe offers three things, one at a time, and each is real.",
+   "choices": [
+    {
+     "label": "\"Command that it be returned.\"",
+     "success": {
+      "text": "He inclines his head. \"It is already on its way.\" Something is coming back to you through the Distortion. It will be at the top of the steps, and it will not be on your side until you call it by name.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-faith",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"All of this could be yours.\"",
+     "success": {
+      "text": "He offers you the Champion's seat, without the battle. You take his hand. It is cold, and he is delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-usurper",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-faith",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "You accepted the Avatar's second offer: the Champion's seat, without the battle.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Step off. It will bear you up.\"",
+     "success": {
+      "text": "From now on your Pokémon sometimes hang on at the edge of fainting, held up by something. Each time it happens they are a little quieter afterwards.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-faith",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": -15,
+        "who": "party"
+       },
+       {
+        "kind": "relic",
+        "id": "gg-borne-up",
+        "name": "Borne Up",
+        "effects": [
+         {
+          "kind": "survivalChance",
+          "chance": 0.3
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse all three.",
+     "success": {
+      "text": "He is not angry. He is interested.\n\n\"Mere mortals always imagine that refusing is the brave thing. It is only the slow thing. You will come to the same door. I will hold it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-doubt",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-8",
+   "name": "The Reveal",
+   "group": "Whole Run: Guidance of Giratina",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-giratina",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gg-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "gg-beat",
+     "atLeast": 7,
+     "atMost": 7
+    },
+    {
+     "kind": "flag",
+     "key": "gg-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "carried",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "giratina"
+      }
+     ],
+     "notice": "The Giratina in your party turns its head and looks at you, and for one second its eyes are not its own."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cynthia-gen7"
+    ],
+    "pokemon": "giratina",
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "THE REVEAL\n\nAt a spring where the water stands in a column, a Giratina is waiting. It can be fought. It can be caught.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partySpecies",
+         "species": "giratina"
+        }
+       ],
+       "text": "It will not fight the one you carry. It simply looks at it.\n\nCynthia explains what the Division's oldest text says, and whose hand wrote it. A man named Volo, long ago, who spent his life trying to reach the First through the Distorted One, and failed, and wrote down everything he learned so that someone else would not. The Avatar found the text and believes he is Volo, returned. He is not.\n\nAnd the last page: every Giratina anyone has ever seen, fought or caught is an avatar. A finger pushed through a curtain. The true one sank into the place it was sealed in. The true Giratina is the Distortion World itself, shaped like nothing, wanting in.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "gg-beat",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It comes out of the column of water as if out of a door.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "giratina"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "gg-beat",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You faced a Giratina at the standing spring. Cynthia told you it was only a finger.",
+         "importance": 90
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-beat",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Listen to Cynthia first.",
+     "success": {
+      "text": "Cynthia explains what the Division's oldest text says, and whose hand wrote it. A man named Volo, long ago, who spent his life trying to reach the First through the Distorted One, and failed, and wrote down everything he learned so that someone else would not. The Avatar found the text and believes he is Volo, returned. He is not.\n\nAnd the last page: every Giratina anyone has ever seen, fought or caught is an avatar. A finger pushed through a curtain. The true one sank into the place it was sealed in. The true Giratina is the Distortion World itself, shaped like nothing, wanting in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-doubt",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "At the standing spring you learned what the true Giratina is.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-9",
+   "name": "The Night Before",
+   "group": "Whole Run: Guidance of Giratina",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-giratina",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gg-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "gg-beat",
+     "atLeast": 8,
+     "atMost": 8
+    },
+    {
+     "kind": "flag",
+     "key": "gg-b1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gg-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Its place by the fire is left open. The others left it open."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker",
+     "boss.cynthia-gen7"
+    ],
+    "tint": "#100808",
+    "effect": "fire"
+   },
+   "intro": "THE NIGHT BEFORE\n\nA camp below the League. Whoever you gathered is here. Each of them offers one thing for tomorrow and asks one question tonight.",
+   "choices": [
+    {
+     "label": "Sit with your Witnesses.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-w",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Looker asks if you are afraid. He is. Cynthia tells you who Volo was to her family, and says she will hold the line. N asks whether a Pokémon can forgive. Rowan hands you back the grey stone; he has carved a second word under the first: \"Home.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-stone",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk to the edge of the light.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-lied",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "A man in a grey coat is standing just outside the firelight. Cyrus.\n\n\"I went to the place they want to open. I went there wanting a world without spirit. It is not empty. That is the problem with it.\"\n\nHe stays. He does not say why.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w-cyrus",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-w",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Cyrus came out of the dark the night before the League, and stayed.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with your party.",
+     "success": {
+      "text": "The last conversation is with the party. Nobody says anything much. Nobody needs to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-beat",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 20,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-10",
+   "name": "The Raising",
+   "group": "Whole Run: Guidance of Giratina",
+   "rarity": "epic",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wre-giratina",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "gg-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "gg-b1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "regionsLeft",
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "usurper",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gg-usurper",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The seventh chair is waiting for you at the top of the steps. It has been waiting since the wilderness.",
+     "hide": [
+      0,
+      1,
+      2,
+      3
+     ],
+     "addChoices": [
+      {
+       "label": "Take the seventh chair.",
+       "success": {
+        "text": "You sit. The Avatar kneels, delighted. Six veiled figures turn to face you. The Champion will still meet you, because nothing here ends a run; but the people in the stands are wearing grey.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "gg-done",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "gg-end-usurper",
+          "amount": 1
+         },
+         {
+          "kind": "tempEffect",
+          "label": "The Usurper",
+          "effects": [
+           {
+            "kind": "bossDamageMultiplier",
+            "value": 1.25
+           },
+           {
+            "kind": "friendshipMultiplier",
+            "value": 0.5
+           }
+          ],
+          "until": "region"
+         },
+         {
+          "kind": "moment",
+          "text": "You took the seventh chair of the Synod. The Usurper.",
+          "importance": 100
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.will"
+    ],
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "THE RAISING\n\nAt the top of the League's steps the sky has been opened like the hillside was, and far larger. \"What was cast out shall be called home. What was divided shall be folded. There is no far. There is no after. O praise be the Distortion.\"",
+   "choices": [
+    {
+     "label": "Climb.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-doubt",
+       "atLeast": 0,
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "The Inquisitor and the Synod's Deacons are waiting on the steps. Not one of them steps aside.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-end-raised",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "Raised: the world turned over",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.15
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "It came through. Not all of it. Enough. The Champion is trying not to look up.",
+         "importance": 100
+        }
+       ],
+       "team": [
+        "dusknoir",
+        "banette",
+        "mismagius",
+        "sableye",
+        "drifblim",
+        "golurk"
+       ],
+       "name": "The Inquisitor",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-10-avatar"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Climb.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-doubt",
+       "atLeast": 2,
+       "atMost": 4
+      }
+     ],
+     "success": {
+      "text": "The Inquisitor and the Synod's Deacons are waiting on the steps. Some of them lower their Poké Balls and step aside before it starts. They have heard you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-end-raised",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "Raised: the world turned over",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.15
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "It came through. Not all of it. Enough. The Champion is trying not to look up.",
+         "importance": 100
+        }
+       ],
+       "team": [
+        "dusknoir",
+        "banette",
+        "mismagius",
+        "sableye"
+       ],
+       "name": "The Inquisitor",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-10-avatar"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Climb.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-doubt",
+       "atLeast": 5,
+       "atMost": 7
+      }
+     ],
+     "success": {
+      "text": "The Inquisitor and the Synod's Deacons are waiting on the steps. Some of them lower their Poké Balls and step aside before it starts. They have heard you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-end-raised",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "Raised: the world turned over",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.15
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "It came through. Not all of it. Enough. The Champion is trying not to look up.",
+         "importance": 100
+        }
+       ],
+       "team": [
+        "dusknoir",
+        "banette"
+       ],
+       "name": "The Inquisitor",
+       "size": 2,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-10-avatar"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Climb. Nobody stops you.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-doubt",
+       "atLeast": 8,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Every one of the Faithful on the steps lowers their Poké Ball and steps aside. There is no fight. There is only the man at the top.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-avatar"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-10-avatar",
+   "name": "The Raising: The Avatar",
+   "group": "Whole Run: Guidance of Giratina",
+   "room": true,
+   "rarity": "epic",
+   "remembers": [
+    {
+     "id": "returned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gg-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Beside him, hollow-eyed, is the one you asked to have returned. It does not know you yet. You will have to say its name."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.will"
+    ],
+    "pokemon": "giratina",
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "The Avatar of Distant Death stands at the top of the steps with his hands folded. His team is Ghost and Dragon, led by a Giratina he calls his own body.\n\n\"Mere mortal. I am so glad it is you.\"",
+   "choices": [
+    {
+     "label": "Fight him.",
+     "success": {
+      "text": "He sacrifices his own Pokémon without a flicker.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-end-raised",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "Raised: the world turned over",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.15
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "It came through. Not all of it. Enough. The Champion is trying not to look up.",
+         "importance": 100
+        }
+       ],
+       "team": [
+        "giratina",
+        "dusknoir",
+        "hydreigon",
+        "gengar",
+        "dragapult",
+        "spiritomb"
+       ],
+       "format": "doubles",
+       "name": "The Avatar of Distant Death",
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-10-hand"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-10-hand",
+   "name": "The Raising: Strike or Lower Your Hand",
+   "group": "Whole Run: Guidance of Giratina",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [
+     "trainer.will"
+    ],
+    "tint": "#000000",
+    "effect": "none"
+   },
+   "intro": "His last Pokémon falls. He is on one knee on the top step, and he is looking at you with enormous interest. You are asked one thing.",
+   "choices": [
+    {
+     "label": "STRIKE.",
+     "success": {
+      "text": "You strike. Behind him the sky is still open, and the floor is starting to become the wall.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-doors"
+       }
+      ]
+     }
+    },
+    {
+     "label": "LOWER YOUR HAND.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "gg-doubt",
+         "atLeast": 8,
+         "atMost": 99
+        }
+       ],
+       "text": "You lower your hand. Behind you, on the steps, the Faithful see you do it. Behind him the sky is still open.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "gg-lowered",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-mercy",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-10-doors"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You lower your hand. He does not understand it. Behind him the sky is still open.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-lowered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-doors"
+       }
+      ]
+     }
+    },
+    {
+     "label": "COMPLETE THE RITE.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-faith",
+       "atLeast": 8,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You raise it. Every Pokémon in your party changes: stronger, and quiet. The Champion is the last person in the region who is not, and the fight is for that.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-end-convert",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Convert",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.15
+         },
+         {
+          "kind": "friendshipMultiplier",
+          "value": 0.5
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You completed the rite. The Convert.",
+        "importance": 100
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-10-doors",
+   "name": "The Raising: Close the Doors",
+   "group": "Whole Run: Guidance of Giratina",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "The Distorted One is not a Pokémon on the field. It is the arena. The floor becomes the wall. In the walls, there are doors.",
+   "choices": [
+    {
+     "label": "Close the doors.",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "gg-wiped",
+        "gg-guarded"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You close them, one after another, the way you held a street once. They stay shut.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-act",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-quiet"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You cannot.",
+     "success": {
+      "text": "Nothing you did long ago reaches this far. The turn goes on without it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-quiet"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-10-quiet",
+   "name": "The Raising: Call the Quiet",
+   "group": "Whole Run: Guidance of Giratina",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "The quiet ones from the lake are standing in the air, facing the wrong way.",
+   "choices": [
+    {
+     "label": "Call them by name.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-names",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You call them by name. One by one they turn around.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-act",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call to them.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-doubt",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You do not know their names, but they know your voice: you have argued with every one of them. They turn around.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-act",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You cannot.",
+     "success": {
+      "text": "Nothing you did long ago reaches this far. The turn goes on without it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-give"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-10-give",
+   "name": "The Raising: Give Back What Was Offered",
+   "group": "Whole Run: Guidance of Giratina",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#000000",
+    "effect": "flicker"
+   },
+   "intro": "Something on the far side is holding out its hand, palm up, waiting for what it was promised.",
+   "choices": [
+    {
+     "label": "Give back the stone.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-stone",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You hold out the grey stone. Something on the far side takes it, and closes its hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-act",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-endure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call the returned one by name.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You say its name. It stops, halfway across the step, and comes back to your side. What was offered is given back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-act",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-endure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Seal the hillside wound.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-rift",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gg-w",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "With a Witness's hand on yours, you press the wound in the hillside shut from here. What was offered is given back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-act",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-endure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You cannot.",
+     "success": {
+      "text": "Nothing you did long ago reaches this far. The turn goes on without it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-wre-gg-10-endure"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-10-endure",
+   "name": "The Raising: The Distorted One",
+   "group": "Whole Run: Guidance of Giratina",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#000000",
+    "effect": "shake"
+   },
+   "intro": "There is nothing to knock out. The room keeps making shapes and sending them at you. Type matchups invert, right themselves, invert. You must last.",
+   "choices": [
+    {
+     "label": "Endure ten turns.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-act",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Nothing you did reaches this far. Hold on.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spiritomb",
+        "dusknoir",
+        "banette"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-end"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "surviveTurns": 10,
+        "contrary": true,
+        "breakingFloor": true
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-end-raised",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "Raised: the world turned over",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.15
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "It came through. Not all of it. Enough. The Champion is trying not to look up.",
+         "importance": 100
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Endure seven turns.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-act",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "success": {
+      "text": "One door is shut. Hold on.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spiritomb",
+        "dusknoir",
+        "banette"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-end"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "surviveTurns": 7,
+        "contrary": true,
+        "breakingFloor": true
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-end-raised",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "Raised: the world turned over",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.15
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "It came through. Not all of it. Enough. The Champion is trying not to look up.",
+         "importance": 100
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Endure four turns.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-act",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "success": {
+      "text": "Two acts done. Hold on.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spiritomb",
+        "dusknoir",
+        "banette"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-end"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "surviveTurns": 4,
+        "contrary": true,
+        "breakingFloor": true
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-end-raised",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "Raised: the world turned over",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.15
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "It came through. Not all of it. Enough. The Champion is trying not to look up.",
+         "importance": 100
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Endure one turn.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-act",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Three acts done. One more turn.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "spiritomb",
+        "dusknoir",
+        "banette"
+       ],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-wre-gg-end"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "surviveTurns": 1,
+        "contrary": true,
+        "breakingFloor": true
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "gg-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "gg-end-raised",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "Raised: the world turned over",
+         "effects": [
+          {
+           "kind": "bossDamageTakenMultiplier",
+           "value": 1.15
+          }
+         ],
+         "until": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "It came through. Not all of it. Enough. The Champion is trying not to look up.",
+         "importance": 100
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-wre-gg-end",
+   "name": "Guidance of Giratina: The End",
+   "group": "Whole Run: Guidance of Giratina",
+   "room": true,
+   "rarity": "epic",
+   "scene": {
+    "cast": [
+     "trainer.will"
+    ],
+    "tint": "#101010",
+    "effect": "none"
+   },
+   "intro": "The tenth turn ends. The room is a room again.",
+   "choices": [
+    {
+     "label": "The sky closes.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-act",
+       "atLeast": 3,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gg-mercy",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The sky has closed. His Giratina has gone back into its Ball by itself. He is standing alone at the top of the steps and nothing is happening. This is the first time his voice rises.\n\n\"No. No. Look again. You have not understood what you are looking at. I am not a man who failed. I am the will of a god, and a god does not fail: the world fails Him. I was chosen. I gave it everything. I gave it everyone. You are dust that learned to stand upright. You are an afternoon. I was going to make you eternal and you chose to stay small. And you look at me. You dare. With pity.\nI am not one of you. I am not one of you. I am not\"\n\nHe stops, because he has heard his own voice echo off the stone, and it is only a voice.\n\nThe last of the rift, a crack no wider than a coin, takes him by the hand. He has time to understand that he is not being welcomed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-end-sealed",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Sealed: the Champion has heard",
+        "effects": [
+         {
+          "kind": "bossDamageMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Guidance of Giratina: Sealed. The sky closed.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "The sky closes, and nothing takes him.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-act",
+       "atLeast": 3,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gg-mercy",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The sky has closed. His Giratina has gone back into its Ball by itself. He is standing alone at the top of the steps and nothing is happening. This is the first time his voice rises.\n\n\"No. No. Look again. You have not understood what you are looking at. I am not a man who failed. I am the will of a god, and a god does not fail: the world fails Him. I was chosen. I gave it everything. I gave it everyone. You are dust that learned to stand upright. You are an afternoon. I was going to make you eternal and you chose to stay small. And you look at me. You dare. With pity.\nI am not one of you. I am not one of you. I am not\"\n\nHe stops, because he has heard his own voice echo off the stone, and it is only a voice.\n\nNothing takes him. He is left standing there, ordinary, in the morning. Looker puts a coat round his shoulders. That is worse, and it is the better ending.\n\nThe Division walks away in ones and twos. Later, the old man is at the crossroads. He asks if you will listen now. This time he tells you his wife's name.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-end-mercy",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Mercy: hoods down in the stands",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 1.2
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Guidance of Giratina: Mercy. The old man told you his wife's name.",
+        "importance": 100
+       }
+      ]
+     }
+    },
+    {
+     "label": "The door will not shut from this side.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gg-act",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ],
+     "success": {
+      "text": "Someone has to hold it from within. The Witness who loves you most steps through without being asked. If there is nobody, it is the Pokémon who loves you most. The door shuts behind them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gg-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gg-end-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": -30,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The One Who Stayed: one empty slot, in respect",
+        "effects": [
+         {
+          "kind": "bossDamageTakenMultiplier",
+          "value": 0.9
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Guidance of Giratina: someone stayed behind to hold the door.",
+        "importance": 100
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

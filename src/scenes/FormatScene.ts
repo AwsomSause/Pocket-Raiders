@@ -7,7 +7,10 @@ import { cardOf, chooseOption, closeFormat, formatOver } from '../core/formats/r
 import { services } from '../game/services';
 import { drawGlass } from '../ui/aero';
 import { fitBlock } from '../ui/fitText';
-import { onInputAction } from '../ui/input';
+import { onInputAction, type InputAction } from '../ui/input';
+import { wideView } from '../ui/redux/screens/wide';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { widePage } from '../ui/redux/wideModel';
 import { GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu } from '../ui/widgets';
 
@@ -20,6 +23,9 @@ export class FormatScene extends Phaser.Scene {
   private data0!: FormatSceneData;
   private layer: Phaser.GameObjects.GameObject[] = [];
   private menu: Menu | null = null;
+  /** New UI: the format's mock-up page over the canvas, and the choice under the cursor. */
+  private rx: ReduxView | null = null;
+  private at = 0;
 
   constructor() {
     super('Format');
@@ -31,6 +37,26 @@ export class FormatScene extends Phaser.Scene {
 
   create(): void {
     this.cameras.main.setBackgroundColor('#0b1a2a');
+    this.rx = null;
+    if (reduxOn()) {
+      if (!cardOf(this.ctx())) return this.finish();
+      this.at = this.firstOpen();
+      this.rx = mountRedux(this, {
+        render: (c) => {
+          const page = widePage(this, this.ctx(), this.at);
+          return page ? wideView(c, page.model) : '';
+        },
+        acts: {
+          pick: (k) => {
+            this.focus(Number(k));
+            this.choose();
+          },
+        },
+        overs: { over: (k) => this.focus(Number(k)) },
+      });
+      onInputAction(this, (a) => this.key(a));
+      return;
+    }
     onInputAction(this, (a) => this.menu?.handle(a));
     this.render();
   }
@@ -46,6 +72,46 @@ export class FormatScene extends Phaser.Scene {
     for (const o of this.layer) o.destroy();
     this.layer = [];
   }
+
+  // ---- New UI ----
+
+  private firstOpen(): number {
+    return Math.max(0, widePage(this, this.ctx(), 0)?.open.indexOf(true) ?? 0);
+  }
+
+  private focus(k: number): void {
+    const n = widePage(this, this.ctx(), this.at)?.open.length ?? 0;
+    if (!(k >= 0 && k < n) || k === this.at) return;
+    this.at = k;
+    this.rx?.refresh();
+  }
+
+  private key(a: InputAction): void {
+    if (a === 'confirm') return this.choose();
+    const n = widePage(this, this.ctx(), this.at)?.open.length ?? 0;
+    if (!n || a === 'back') return;
+    this.focus((this.at + (a === 'up' || a === 'left' ? n - 1 : 1)) % n);
+  }
+
+  private choose(): void {
+    const ctx = this.ctx();
+    const page = widePage(this, ctx, this.at);
+    if (!page || !page.ids.length) return this.finish();
+    const id = page.ids[this.at];
+    if (id === undefined || !page.open[this.at]) return;
+    chooseOption(ctx, id);
+    services().session.saveRunNow();
+    // A format fight was launched: the battle screen takes over, and the map shows this screen again afterwards.
+    if (ctx.run.phase === 'battle') {
+      this.scene.stop(this.data0.from);
+      this.scene.start('Battle');
+      return;
+    }
+    this.at = this.firstOpen();
+    this.rx?.refresh();
+  }
+
+  // ---- Old UI ----
 
   private render(): void {
     this.clear();

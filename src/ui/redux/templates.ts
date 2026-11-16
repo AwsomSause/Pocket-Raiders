@@ -72,14 +72,30 @@ export function settingsView(c: ReduxCtx, d: SettingsModel): string {
 }
 
 /** A picture for a cell or a window: an animated atlas (no extension) or a plain image file, under assets/images. */
-export interface Art { file: string; atlas: boolean }
+export interface Art { file: string; atlas: boolean; /** A plain picture that is a sheet of frames: the one frame to show, [x, y, w, h]. */ crop?: readonly [number, number, number, number]; /** Drawn this many times the usual height (a big story portrait beside the usual Trainer pictures). */ k?: number }
 /** A person or a picture standing `px` tall: a trainer atlas plays its pose, a plain picture is scaled. */
-export function figure(a: Art | null | undefined, px: number): string {
+export function figure(a: Art | null | undefined, size: number): string {
   if (!a) return '';
+  const px = Math.round(size * (a.k ?? 1));
   if (a.atlas) return tall(a.file, px);
   const dim = rxImage(a.file);
+  if (dim && a.crop) {
+    const [x, y, w, h] = a.crop, k = px / h;
+    return `<i class="im" style="display:block;width:${Math.round(w * k)}px;height:${px}px;background:url(${rxUrl(a.file)}) ${-Math.round(x * k)}px ${-Math.round(y * k)}px/${Math.round(dim[0] * k)}px ${Math.round(dim[1] * k)}px;image-rendering:pixelated"></i>`;
+  }
   return dim ? `<i class="im" style="display:block;width:${Math.round((dim[0] * px) / dim[1])}px;height:${px}px;background:url(${rxUrl(a.file)}) 0 0/100% 100%;image-rendering:pixelated"></i>` : '';
 }
+/**
+ * A big story portrait, drawn from one frame of its sheet at the mock-ups' scale: `unit` of the page's figure scale
+ * (3.4 on a talk page beside a figure 240 tall). `sunk`: a cutscene card stands its figure this many pixels under the
+ * card's bottom edge, so those rows of the frame are left off.
+ */
+export function portrait(file: string, frame: number, unit: number, scale = 3.4, sunk = 0, base = 240): Art {
+  const rows = frame - sunk / (scale * unit);
+  return { file, atlas: false, crop: [0, 0, frame, rows], k: (rows * scale * unit) / base };
+}
+/** The player as the mock-ups draw them (0.8 of the figure scale): Look A's or Look B's ready pose. */
+export const playerPortrait = (look: 'a' | 'b', scale = 3.4, sunk = 0, base = 240): Art => portrait(`packs/mc/look_${look}/${look === 'a' ? 'command' : 'throw'}.png`, 128, 0.8, scale, sunk, base);
 export const pic = (a: Art | null | undefined, size: number, cls = ''): string => (a ? (a.atlas ? mini(a.file, size, cls) : icon(a.file, size)) : '');
 
 export interface GridCell { art?: Art | null; label: string; off?: boolean; sil?: boolean }

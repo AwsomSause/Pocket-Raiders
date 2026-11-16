@@ -374,6 +374,13 @@
   "U6": "co-u6-crane",
   "U7": "co-u7-wall",
   "U8": "co-u8-cling",
-  "U9": "co-u9-sky"
+  "U9": "co-u9-sky",
+  "MY11": "co-my11-pedestals",
+  "W1": "co-wre-gg-1",
+  "W2": "co-wre-ww-1",
+  "W3": "co-wre-mo-1",
+  "W4": "co-wre-sd-1",
+  "W5": "co-wre-wf-1",
+  "M7": "co-m7-glow"
  }
 }

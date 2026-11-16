@@ -102,6 +102,8 @@ import { mentorHudLine } from '../core/mentors';
 import { ensureNarration } from '../core/overhaul/partyNarration';
 import { personalityLabel, rivalReport } from '../core/rivals/report';
 import { FEELING_KEYS } from '../core/rivals/overhaulSchema';
+import { canonEventFor } from '../core/expansion/canonRun';
+import { townRollPages } from '../core/expansion/townRoll';
 import { trackPage } from '../core/expansion/trackView';
 import { FIELD_TABS, FIELD_TAB_NAMES, fieldNotesView } from '../core/expansion/fieldNotes';
 import { drawFieldNotes, type FieldNotesPage } from '../ui/fieldNotesPage';
@@ -117,7 +119,8 @@ import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
-import { bookRows, bookView, dossierView, reportView, trackView } from '../ui/redux/screens/popups';
+import { confirmBox } from '../ui/redux/screens/saves';
+import { bookRows, bookView, dossierView, pauseView, reportView, rollView, trackView } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
 import { artOf, monFile, rivalArt } from '../ui/redux/game';
 import { nodeStyle } from '../ui/redux/kit';
@@ -173,6 +176,9 @@ const HIDDEN_STYLE = { color: 0x6b5a73, glyph: '?' };
 
 const serviceReusable = (side: SideStop): boolean => SERVICES.services.find((x) => x.id === side.serviceId)?.reusable === true;
 
+/** Town Roll: what kind of place a space is, in a word. */
+const ROLL_KIND: Record<string, string> = { PS: 'Pseudo-stage', MC: 'Challenge', EV: 'Event', HUB: 'Town hub', SHOP: 'Shop', CUT: 'Scene' };
+
 /** Something the cursor can land on. */
 /** A New UI pop-up over the map and where its cursor is. */
 type MapPop =
@@ -180,6 +186,7 @@ type MapPop =
   | { kind: 'dossier'; tab: number; pick: number }
   | { kind: 'notes'; tab: number; sel: number[] }
   | { kind: 'track' }
+  | { kind: 'roll'; town: number; pick: number }
   | { kind: 'bracket'; page: number };
 
 type Option =
@@ -235,6 +242,8 @@ export class MapScene extends Phaser.Scene {
 
   /** New UI: the pop-up that is open over the map (R, T, D, F, B), drawn by the layer instead of the canvas. */
   private rxPop: MapPop | null = null;
+  /** New UI: the pause menu (Esc on the map) and its cursor; `ask` is the cursor of the "End this run?" box while it is open. */
+  private rxPause: { index: number; ask: number | null } | null = null;
   /** New UI: a tournament match is being watched (drawn on the canvas, so the layer steps aside). */
   private rxWatching = false;
   /** New UI: when a pop-up last opened or closed. Its key can also be a direction (D is "right"), and that same press must not move anything. */
@@ -252,6 +261,7 @@ export class MapScene extends Phaser.Scene {
     else if (kind === 'dossier') pop = dossierFolders(run).length ? { kind, tab: 0, pick: 0 } : null;
     else if (kind === 'track') pop = trackPage(session.content, run) ? { kind } : null;
     else if (kind === 'notes') pop = { kind, tab: 0, sel: [0, 0, 0, 0] };
+    else if (kind === 'roll') pop = townRollPages(session.content, run).length ? { kind, town: 0, pick: 0 } : null;
     else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
     if (!pop) return;
     this.rxPop = pop;
@@ -259,6 +269,91 @@ export class MapScene extends Phaser.Scene {
     this.rxCard = null;
     this.busy = true;
     this.rxView?.refresh();
+  }
+
+  // ---- New UI: the pause menu (the mock-ups' "Paused" overlay) ----
+
+  private static readonly PAUSE = ['Resume', 'Party', 'Bag', 'Settings', 'Save', 'End run'] as const;
+
+  private pauseOpen(): void {
+    if (!this.rxView || this.rxPause || this.busy || this.picker || this.legend) return;
+    this.rxPause = { index: 0, ask: null };
+    this.rxCard = null;
+    this.busy = true;
+    this.rxView.refresh();
+  }
+
+  private pauseClose(): void {
+    this.rxPause = null;
+    this.busy = false;
+    this.rxView?.refresh();
+  }
+
+  private pauseInput(action: InputAction): void {
+    const p = this.rxPause;
+    if (!p) return;
+    if (p.ask !== null) {
+      // The "End this run?" box: Esc keeps playing, the arrows change sides.
+      if (action === 'back') return this.pauseAsk(0);
+      if (action === 'confirm') return this.pauseAsk(p.ask);
+      p.ask = 1 - p.ask;
+      this.rxView?.refresh();
+      return;
+    }
+    if (action === 'back') return this.pauseClose();
+    if (action === 'confirm') return this.pausePick(p.index);
+    const n = MapScene.PAUSE.length;
+    p.index = (p.index + (action === 'up' || action === 'left' ? n - 1 : 1)) % n;
+    this.rxView?.refresh();
+  }
+
+  /** A button of the pause menu (or -1: a click beside them, which resumes). Each one is the map's own action. */
+  private pausePick(k: number): void {
+    const p = this.rxPause;
+    if (!p) return;
+    if (p.ask !== null) return;
+    const name = MapScene.PAUSE[k];
+    if (!name || name === 'Resume') return this.pauseClose();
+    if (name === 'End run') {
+      // Only an Adventure run can be given up from the map (core/run.ts endRunEarly); the mock-up's box asks first, on "Keep playing".
+      p.index = k;
+      if (wipeStatus(services().session.run!)) p.ask = 0;
+      this.rxView?.refresh();
+      return;
+    }
+    if (name === 'Settings') {
+      this.scene.start('Settings', { from: 'Map' });
+      return;
+    }
+    this.pauseClose();
+    if (name === 'Party') openPokemonMenu(this.fieldHost());
+    else if (name === 'Bag') openBagMenu(this.fieldHost());
+    else openSaveMenu(this.fieldHost(), (to) => {
+      this.busy = true;
+      this.scene.start(to);
+    });
+  }
+
+  /** An answer in the "End this run?" box: 1 ends the run; 0 goes back to the pause menu. */
+  private pauseAsk(k: number): void {
+    const p = this.rxPause;
+    if (!p || p.ask === null) return;
+    if (k !== 1) {
+      p.ask = null;
+      this.rxView?.refresh();
+      return;
+    }
+    services().session.endRunEarly();
+    this.scene.start('GameOver');
+  }
+
+  private pauseHtml(): string {
+    const p = this.rxPause;
+    if (!p) return '';
+    const can = !!wipeStatus(services().session.run!);
+    const note = MapScene.PAUSE[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
+    if (p.ask === null) return pauseView({ options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note });
+    return confirmBox({ title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask }).replace('class="shade"', 'class="shade hit"');
   }
 
   private popClose(): void {
@@ -295,6 +390,16 @@ export class MapScene extends Phaser.Scene {
         const n = fieldNotesView(session.content, run).tabs[FIELD_TABS[p.tab]!].length;
         if (n) p.sel[p.tab] = Math.max(0, Math.min(n - 1, (p.sel[p.tab] ?? 0) + d));
       }
+    } else if (p.kind === 'roll') {
+      // The arrows walk the cards in order (the ones on the map, then the ones left out) and on into the next town.
+      const pages = townRollPages(session.content, run);
+      const n = pages[p.town]?.cards.length ?? 0;
+      const k = p.pick + d;
+      if (k >= 0 && k < n) p.pick = k;
+      else if (pages.length > 1) {
+        p.town = (p.town + d + pages.length) % pages.length;
+        p.pick = d > 0 ? 0 : Math.max(0, (pages[p.town]?.cards.length ?? 1) - 1);
+      }
     } else if (p.kind === 'bracket' && side) p.page = (p.page + d + 5) % 5;
     this.rxView?.refresh();
   }
@@ -311,7 +416,10 @@ export class MapScene extends Phaser.Scene {
     } else if (p.kind === 'notes') {
       if (what === 'tab') p.tab = Math.max(0, Math.min(FIELD_TABS.length - 1, i));
       else p.sel[p.tab] = i;
-    } else if (p.kind === 'report' && what === 'pick') p.pick = i;
+    } else if ((p.kind === 'report' || p.kind === 'roll') && what === 'pick') {
+      if (p.pick === i) return;
+      p.pick = i;
+    }
     this.rxView?.refresh();
   }
 
@@ -371,6 +479,25 @@ export class MapScene extends Phaser.Scene {
         shadow: tab === 'shadow',
         help: view.help[tab],
         empty: tab === 'rom' && !view.grandArcOn ? 'The Grand Arc is off for this run, so there are no Data ROMs to find.' : 'Nothing here yet. Entries appear as you meet them.',
+      });
+    }
+    if (p.kind === 'roll') {
+      const pages = townRollPages(content, run);
+      const page = pages[Math.min(p.town, pages.length - 1)];
+      if (!page) return '';
+      const pick = Math.max(0, Math.min(page.cards.length - 1, p.pick));
+      const cur = page.cards[pick];
+      const event = cur && cur.state !== 'off' ? canonEventFor(content, cur.id, page.slot) : undefined;
+      return rollView(c, {
+        town: page.town,
+        cards: page.cards.map((x) => ({ name: x.name, state: x.state === 'always' ? 'star' : x.state === 'rolled' ? 'dice' : x.state === 'unlocked' ? 'open' : 'off', note: `${ROLL_KIND[x.kind]}${x.done ? ' · Done' : ''}` })),
+        index: pick,
+        rolled: page.rolled,
+        optional: page.optional,
+        page: pages.length > 1 ? [pages.indexOf(page) + 1, pages.length] : null,
+        text: cur?.state === 'off' ? `${cur.name} is not here this run. Another run may roll it.`
+          : cur && cur.state !== 'always' && event?.intro ? `${cur.name}: ${event.intro}`
+          : 'Each Kanto town rolls which optional spaces appear this run. Starred ones are always there.',
       });
     }
     if (p.kind === 'track') {
@@ -1065,6 +1192,7 @@ export class MapScene extends Phaser.Scene {
     this.rxBanner = null;
     this.rxLegend = null;
     this.rxPop = null;
+    this.rxPause = null;
     this.rxWatching = false;
     if (reduxOn() && !mapSkin) {
       const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
@@ -1086,22 +1214,24 @@ export class MapScene extends Phaser.Scene {
         keys: [['C', 'cry'], ['H', 'paw'], ['N', 'name']],
         hints: [['L', 'legend'], ['Enter', 'go']],
       };
-      const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes() };
+      const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll') };
       this.rxView = mountRedux(this, {
-        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }),
+        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }) + this.pauseHtml(),
         acts: {
           pick: (i) => { if (this.busy || this.picker) return; if (Number(i) !== this.index) this.focus(Number(i)); this.activate(Number(i)); },
           go: () => { if (!this.busy && !this.picker) this.activate(this.index); },
           key: (k) => { if (!this.busy && !this.picker) keyActs[k]?.(); },
           legend: () => this.toggleLegend(),
           pop: () => this.popClose(),
+          pause: (k) => this.pausePick(Number(k)),
+          confirm: (k) => this.pauseAsk(Number(k)),
           popTab: (i) => this.popPick('tab', Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
           bracket: () => this.popClose(),
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
         },
-        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); } },
+        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });
@@ -1115,6 +1245,7 @@ export class MapScene extends Phaser.Scene {
 
     onInputAction(this, (action) => {
       if (this.rxView && this.time.now === this.rxPopAt && action !== 'back' && action !== 'confirm') return;
+      if (this.rxPause) return this.pauseInput(action);
       if (this.rxPop) {
         if (!this.rxWatching) this.popInput(action);
         return;
@@ -1140,6 +1271,8 @@ export class MapScene extends Phaser.Scene {
         return;
       }
       if (this.busy) return;
+      // New UI: Esc on the free map opens the pause menu.
+      if (action === 'back') return this.pauseOpen();
       const n = this.options.length;
       if (action === 'up' || action === 'left') this.focus((this.index - 1 + n) % n);
       if (action === 'down' || action === 'right') this.focus((this.index + 1) % n);
@@ -1189,6 +1322,11 @@ export class MapScene extends Phaser.Scene {
       // New UI: the pop-up keys this map has (the old tags down the right edge).
       const tagKeys: [string, readonly [string, string]][] = [['rival-report-tag', ['R', 'rivals']], ['track-tag', ['T', 'track']], ['dossier-tag', ['D', 'dossier']], ['field-notes-tag', ['F', 'notes']]];
       this.rxModel.keys = [...tagKeys.filter(([name]) => this.children.getByName(name)).map(([, key]) => key), ...this.rxModel.keys];
+      // Kanto Canon: the Town Roll page (which of this town's spaces the run placed). It exists in New only.
+      if (townRollPages(content, run).length) {
+        this.rxModel.keys = [['O', 'town'], ...this.rxModel.keys];
+        this.input.keyboard?.on('keydown-O', () => this.popToggle('roll'));
+      }
       if (this.children.getByName('bracket-tag')) this.rxModel.hints = [['L', 'legend'], ['B', 'bracket'], ['Enter', 'go']];
       this.rxView?.refresh();
     }

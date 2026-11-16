@@ -4,7 +4,7 @@
 
 import type Phaser from 'phaser';
 import { agoWord, noticeOf, overlayView, type LogRow, type NoticeRow, type ToastRow } from './screens/overlay';
-import { mountOverlay } from './stage';
+import { mountOverlay, reduxCardUp } from './stage';
 
 interface Toast extends ToastRow { timer: ReturnType<typeof setTimeout> | null }
 
@@ -17,7 +17,8 @@ let captionTimer: ReturnType<typeof setTimeout> | null = null;
 
 function layer(game: Phaser.Game): { refresh(): void } {
   view ??= mountOverlay(game, {
-    render: (c) => overlayView(c, { notices: state.notices, toasts: state.toasts, log: state.log, caption: state.caption }),
+    // A versus or cutscene card fills the screen: notices and toasts wait behind it and show again when it leaves.
+    render: (c) => overlayView(c, { notices: reduxCardUp() ? [] : state.notices, toasts: reduxCardUp() ? [] : state.toasts, log: state.log, caption: state.caption }),
     acts: {
       // A tap sends a notice away.
       notice: (id) => onNotice(Number(id)),

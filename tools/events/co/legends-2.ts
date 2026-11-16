@@ -1,7 +1,7 @@
 // Catalog Overhaul Pack, legends: the Mega Anomalies M1 to M6 (QUESTLINES_ALPHAS_AND_ANOMALIES.md part two).
 // These are pack questlines, not catalog ids: the status file lists them under `extra`.
 // The region's Anomaly meter is the run flag `mega-meter` (0 to 5, started at 0 in each region by core/legends/signs.ts);
-// each resolved Anomaly adds 1 to `mega-resolved`. M7 (Mega Without a Stone) waits on the rivals thread's rival slot.
+// each resolved Anomaly adds 1 to `mega-resolved`. M7 (Mega Without a Stone) uses the rivals row's rival slot.
 import { any, ch, ev, ferry, fight, flag, flagAgo, flagIs, fr, good, has, hurt, item, leave, lose, out, room, takeNode, trainer, wild, type Json } from '../dsl.ts';
 import { alpha, calmedAlpha, gift, joinAlpha, sign } from './_legendsKit.ts';
 
@@ -181,5 +181,68 @@ const m6: Json[] = [
     ]),
 ];
 
-export const EVENTS: Json[] = [...m1, ...m2, ...m3, ...m4, ...m5, ...m6];
+// ---------------------------------------------------------------- M7. Mega Without a Stone (a rival episode)
+// Uses the stage's one rival slot (rivals row: condition `slotFree`, effect `takeSlot`). The rival's opinion of you counts only at
+// Trust 4+; under that, the rival decides by personality (Hothead keeps, Gentle seals, the rest by Trust). Pack personalities map to
+// the rival bank's: Hothead = bitter-challenger, champion-chaser; Calculator = strategist; Gentle = protector, idealist;
+// Show-off = prodigy, enthusiast.
+const slot = (): Json => ({ kind: 'rivalQuest', takeSlot: true });
+const rq = (o: Json): Json => ({ kind: 'rivalQuest', ...o });
+const trust = (atLeast?: number, atMost?: number): Json => rq({ feeling: { who: 'main', key: 'trust', ...(atLeast !== undefined ? { atLeast } : {}), ...(atMost !== undefined ? { atMost } : {}) } });
+const feel = (feelings: Json, o: { lead?: number; mark?: string } = {}): Json => ({ kind: 'rivalChange', feelings, lead: o.lead ?? 0, ...(o.mark ? { mark: o.mark } : {}) });
+const HOT = ['bitter-challenger', 'champion-chaser'];
+const GENTLE = ['protector', 'idealist'];
+const SHOW = ['prodigy', 'enthusiast'];
+const sealed = (text: string): Json => out(text, flag('rival-mega-sealed'), flag('rival-mega-done'), item('mega-ring'), feel({ trust: 1 }));
+const kept = (text: string): Json => out(text, flag('rival-mega-kept'), flag('rival-mega-done'), feel({ admiration: 1 }, { lead: 1 }));
+const rivalFight = (win: Json[]): Json => ({ kind: 'trainer', name: 'Rival', rival: true, size: 3, types: [], levelBonus: 1, win, lose: win });
+const m7: Json[] = [
+  ev('co-m7-glow', 'Mega Without a Stone', G, { rarity: 'rare', minStage: 4, requires: [rq({ slotFree: true }), { kind: 'rivalMet', atLeast: 1 }, flagIs('rival-mega-done', 0, 0), flagIs('rival-mega-seen', 0, 0)], pokemon: 'charizard-mega-x', tint: '#c06030', effect: 'glint' },
+    'A rival battle, mid-fight. {rival}\'s ace is down to its last hits. Then it glows. No Key Stone. No Mega Stone. It Megas anyway.\n\n{rival}: "{say event||bitter-challenger::WHAT. What did... did you do that? Did I do that?||champion-chaser::WHAT. What did... did you do that? Did I do that?||strategist::That\'s impossible. That\'s not in any paper.||protector::Stop! Stop the fight! Is it hurting?||idealist::Stop! Stop the fight! Is it hurting?||prodigy::...Okay, I\'m going to pretend I meant that.||enthusiast::...Okay, I\'m going to pretend I meant that.}"',
+    [
+      ch('Finish the fight.', fight('You finish it. The glow does not.', rivalFight([room('co-m7-ace')]), slot(), flag('rival-mega-seen'))),
+      ch('Call the fight off.', out('You put your hand up. {rival} has already run onto the field.', slot(), flag('rival-mega-seen'), room('co-m7-ace'))),
+    ]),
+  ev('co-m7-ace', 'Mega Without a Stone: Is It Hurt?', G, { ...R, tint: '#c06030' },
+    'The battle ends. The ace drops back to normal and lies down in the grass, breathing hard.\n\n{rival}: "I don\'t... it\'s never done that. Is it hurt?"',
+    [
+      ch('"Let\'s find out together."', out('{rival} nods too many times. "Okay. Okay. Together."', flag('rival-mega-helped'), feel({ trust: 1, friendship: 1 }), room('co-m7-sample'))),
+      ch('"That\'s amazing."', out('{rival}: "...Yeah. Maybe."', room('co-m7-finding')),
+        { branches: [
+          { when: [rq({ personality: SHOW })], text: '{rival}: "It WAS amazing, wasn\'t it?" They brighten all at once.', effects: [feel({ trust: 1 }), room('co-m7-finding')] },
+          { when: [rq({ personality: ['strategist', ...GENTLE] })], text: '{rival}: "...Yeah. Maybe." They do not look at you.', effects: [feel({ trust: -1 }), room('co-m7-finding')] },
+        ] }),
+      ch('"Go see the Professor."', out('{rival} goes alone. For two stages the Rival Report has them at the lab, sleeping in a chair beside their ace.', flag('rival-mega-lab'), room('co-m7-alone'))),
+    ]),
+  ev('co-m7-sample', 'Mega Without a Stone: Three Readings', G, { ...R, tint: '#c06030', effect: 'glint' },
+    'A research errand. You and {rival} take a borrowed meter to three points around the region: a cliff, a lake, a stone circle. At each one the needle swings further than the last.',
+    [ch('Take the readings to the Professor.', out('The meter is high: the whole region is humming. And {rival}\'s bond with their ace did the rest.', room('co-m7-finding')),
+      { branches: [{ when: [flagIs('mega-meter', 4)], text: 'The meter is very high; the needle sits against the pin. The region is close to something. {rival}\'s bond with their ace did the rest.', effects: [room('co-m7-finding')] }] })]),
+  ev('co-m7-finding', 'Mega Without a Stone: The Finding', G, { ...R, tint: '#c06030',
+    remembers: [{ id: 'mine', when: [flagIs('flare-mine-shut')], notice: 'Professor: "The meter has been falling since that mine was shut. Whatever they choose matters a little less than it would have."' }] },
+    'Professor: "I can seal it. Or not. It\'s theirs to decide."\n\n{rival}: "What do you think?"',
+    [
+      ch('"Seal it."', sealed('The Professor seals it. {rival} breathes out, and presses their spare Key Stone into your hand. "You keep this one. I don\'t need it now."'), { requires: [trust(4)] }),
+      ch('"Keep it."', kept('{rival} keeps it. Their ace will Mega without a stone in every battle against you from now on. It is stronger. It is also dangerous.'), { requires: [trust(4)] }),
+      ch('"It\'s your choice."', kept('{rival} thinks about it for a long time. Then they keep it.'), { branches: [
+        { when: [rq({ personality: GENTLE })], text: '{rival} does not even hesitate. "Seal it. It was hurting." Afterwards they press their spare Key Stone into your hand.', effects: [flag('rival-mega-sealed'), flag('rival-mega-chose'), flag('rival-mega-done'), item('mega-ring'), feel({ trust: 1 })] },
+        { when: [rq({ personality: HOT })], text: '{rival}: "Keep it. Obviously keep it." Their ace will Mega without a stone in every battle against you now.', effects: [flag('rival-mega-kept'), flag('rival-mega-chose'), flag('rival-mega-done'), feel({ admiration: 1 }, { lead: 1 })] },
+        { when: [trust(2)], text: '{rival} looks at you, and at their ace, and decides to trust the Professor. They seal it, and give you their spare Key Stone.', effects: [flag('rival-mega-sealed'), flag('rival-mega-chose'), flag('rival-mega-done'), item('mega-ring'), feel({ trust: 1 })] },
+      ] }),
+    ]),
+  ev('co-m7-alone', 'Mega Without a Stone: At the Lab', G, { ...R, tint: '#c06030' },
+    'Two stages later, a letter from {rival}, from the lab. They decided on their own.',
+    [ch('Open it.', kept('"We kept it. I know. Don\'t say anything." Their ace will Mega without a stone in every battle against you now.'), { branches: [
+      { when: [rq({ personality: GENTLE })], text: '"We sealed it. It was hurting." There is a spare Key Stone folded into the letter.', effects: [flag('rival-mega-sealed'), flag('rival-mega-done'), item('mega-ring'), feel({})] },
+      { when: [rq({ personality: ['strategist', 'underdog', ...SHOW] }), trust(2)], text: '"We sealed it. The Professor showed me the numbers." There is a spare Key Stone folded into the letter.', effects: [flag('rival-mega-sealed'), flag('rival-mega-done'), item('mega-ring'), feel({})] },
+    ] })]),
+  ev('co-m7-loose', 'Mega Without a Stone: Out of Control', G, { rarity: 'rare', callback: true, requires: [rq({ slotFree: true }), flagIs('rival-mega-kept'), flagIs('mega-meter', 5), flagIs('rival-mega-calmed', 0, 0)], pokemon: 'charizard-mega-x', tint: '#a02020', effect: 'shake' },
+    'The meter is at five. {rival}\'s ace Megas before the battle has even started, and it does not stop. It does not know them.\n\n{rival}: "Help me. Please. We have to calm it down together."',
+    [
+      ch('Calm it together.', fight('You and {rival} stand side by side and hold it until the glow goes out.', { kind: 'trainer', name: 'Rival', rival: true, size: 1, types: [], levelBonus: 3, win: [flag('rival-mega-calmed'), feel({ trust: 2, friendship: 1 }), moment('You and your rival calmed their ace when its stoneless Mega ran out of control.')], lose: [flag('rival-mega-calmed'), feel({ trust: 1 })] }, slot())),
+      ch('Stand back.', out('{rival} does it alone. It takes a long time, and they do not look at you afterwards.', slot(), flag('rival-mega-calmed'), feel({ trust: -2 }))),
+    ]),
+];
+
+export const EVENTS: Json[] = [...m1, ...m2, ...m3, ...m4, ...m5, ...m6, ...m7];
 export const REMOVE: string[] = [];
