@@ -634,7 +634,36 @@
     "op": "submarine-theft",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "hoenn",
+     "ranks": [
+      "Deckhand",
+      "Grunt",
+      "Diver",
+      "Bosun",
+      "Admin",
+      "The First Mate"
+     ],
+     "steps": [
+      3,
+      8,
+      15,
+      25
+     ],
+     "max": 60,
+     "test": 6,
+     "out": 9,
+     "pay": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600
+     ]
+    }
+   ]
   },
   {
    "id": "magma",
@@ -800,7 +829,36 @@
     "op": "magma-survey",
     "half": true
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "hoenn",
+     "ranks": [
+      "Recruit",
+      "Grunt",
+      "Surveyor",
+      "Foreman",
+      "Admin",
+      "The Right Hand"
+     ],
+     "steps": [
+      3,
+      8,
+      15,
+      25
+     ],
+     "max": 60,
+     "test": 6,
+     "out": 9,
+     "pay": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600
+     ]
+    }
+   ]
   },
   {
    "id": "galactic",
@@ -969,7 +1027,19 @@
     "op": "spirit-lab",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "sinnoh",
+     "ranks": [
+      "Applicant",
+      "Grunt",
+      "Technician",
+      "Adjutant",
+      "Commander (the fifth)",
+      "Witness"
+     ]
+    }
+   ]
   },
   {
    "id": "plasma",
@@ -1134,7 +1204,19 @@
     "op": "frigate-build",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "unova",
+     "ranks": [
+      "Listener",
+      "Knight",
+      "Liberator",
+      "The Seventh Seat",
+      "Keeper of the King's Room",
+      "The King's Friend"
+     ]
+    }
+   ]
   },
   {
    "id": "flare",

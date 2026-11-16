@@ -18,22 +18,33 @@ export const INSIDE_MARKS = ['inside', 'inside-man', 'standing', 'suspicion', 'r
 export const insideOn = (run: RunState, teamId: string): boolean => read(run, key(teamId, 'inside')) > 0;
 export const standingOf = (run: RunState, teamId: string): number => read(run, key(teamId, 'standing'));
 export const suspicionOf = (run: RunState, teamId: string): number => read(run, key(teamId, 'suspicion'));
-/** Rank 1 on the day of the Offer; Standing 2, 4, 6, 8 and 10 raise it; Act scenes may raise it further. Never above 6. */
-export const rankOf = (run: RunState, teamId: string): number => Math.min(6, Math.max(1 + Math.floor(standingOf(run, teamId) / 2), read(run, key(teamId, 'rank'))));
+type Route = EvilTeam['routes'][number];
+const STEPS = [2, 4, 6, 8, 10];
+/** The team's inside route in this region (its rank titles, Standing steps and Suspicion marks), if one is written. */
+export const routeOf = (team: EvilTeam | undefined, region: string | undefined): Route | undefined => team?.routes.find((r) => r.region === region);
+/** Rank 1 on the day of the Offer; each Standing step (2, 4, 6, 8 and 10 unless the route says otherwise) raises it; Act scenes may raise it further. Never above 6. */
+export const rankOf = (run: RunState, teamId: string, route?: Route): number => {
+  const standing = standingOf(run, teamId);
+  return Math.min(6, Math.max(1 + (route?.steps ?? STEPS).filter((n) => standing >= n).length, read(run, key(teamId, 'rank'))));
+};
 
 /** The rank titles for the team in this region (evilTeams.json `routes`), or numbers when the team has none written. */
 export function rankTitle(team: EvilTeam, region: string | undefined, rank: number): string {
-  return team.routes.find((r) => r.region === region)?.ranks[rank - 1] ?? `Rank ${rank}`;
+  return routeOf(team, region)?.ranks[rank - 1] ?? `Rank ${rank}`;
 }
 
 /** Applies the inside route's meters. Returns the change in words. */
 export function applyInside(run: RunState, team: EvilTeam, region: string | undefined, e: { standing?: number; suspicion?: number; rank?: number }): string[] {
   const words: string[] = [];
-  const before = rankOf(run, team.id);
+  const route = routeOf(team, region);
+  const max = route?.max ?? 10;
+  const test = route?.test ?? 7;
+  const out = route?.out ?? 10;
+  const before = rankOf(run, team.id, route);
   if (e.standing) {
-    const now = Math.max(0, Math.min(10, standingOf(run, team.id) + e.standing));
+    const now = Math.max(0, Math.min(max, standingOf(run, team.id) + e.standing));
     run.story.flags[key(team.id, 'standing')] = now;
-    words.push(`Standing ${e.standing > 0 ? '+' : ''}${e.standing} (${now}/10)`);
+    words.push(`Standing ${e.standing > 0 ? '+' : ''}${e.standing} (${now}/${max})`);
   }
   if (e.suspicion) {
     // The Inside Man meets a handler: every rise is one more.
@@ -42,10 +53,10 @@ export function applyInside(run: RunState, team: EvilTeam, region: string | unde
     if (by > 0 && read(run, key(team.id, 'careful')) > 0) { by -= 1; delete run.story.flags[key(team.id, 'careful')]; }
     const now = Math.max(0, Math.min(10, suspicionOf(run, team.id) + by));
     run.story.flags[key(team.id, 'suspicion')] = now;
-    if (by !== 0) words.push(`Suspicion ${by > 0 ? '+' : ''}${by} (${now}/10)${now >= 10 ? ': you have been found out' : now >= 7 ? ': they mean to test you' : ''}`);
+    if (by !== 0) words.push(`Suspicion ${by > 0 ? '+' : ''}${by} (${now}/10)${now >= out ? ': you have been found out' : now >= test ? ': they mean to test you' : ''}`);
   }
   if (e.rank) run.story.flags[key(team.id, 'rank')] = Math.max(read(run, key(team.id, 'rank')), e.rank);
-  const after = rankOf(run, team.id);
+  const after = rankOf(run, team.id, route);
   if (after > before) words.push(`you are ${rankTitle(team, region, after)} now (Rank ${after})`);
   return words;
 }
@@ -53,9 +64,27 @@ export function applyInside(run: RunState, team: EvilTeam, region: string | unde
 /** The Story screen's line for the inside route. */
 export function insideLine(run: RunState, team: EvilTeam, region: string | undefined): string | null {
   if (!insideOn(run, team.id)) return null;
-  const rank = rankOf(run, team.id);
+  const route = routeOf(team, region);
+  const rank = rankOf(run, team.id, route);
   const man = read(run, key(team.id, 'inside-man')) > 0 ? ' You report to a handler outside.' : '';
-  return `Inside ${team.name}: ${rankTitle(team, region, rank)} (Rank ${rank}). Standing ${standingOf(run, team.id)}/10, Suspicion ${suspicionOf(run, team.id)}/10.${man}`;
+  return `Inside ${team.name}: ${rankTitle(team, region, rank)} (Rank ${rank}). Standing ${standingOf(run, team.id)}/${route?.max ?? 10}, Suspicion ${suspicionOf(run, team.id)}/10.${man}`;
+}
+
+/**
+ * Hoenn (HOENN_TEAMS 1.1, 3.9): the player joins the region's other team. At the Offer nothing is carried; at the
+ * Counter-Offer (`demote`) the inside route crosses with them one rank lower, with Standing at that rank's step and no
+ * Suspicion yet. The old team's marks are cleared.
+ */
+export function crossInside(run: RunState, from: EvilTeam, to: EvilTeam, region: string | undefined, demote: boolean): void {
+  if (demote && insideOn(run, from.id)) {
+    const rank = Math.max(1, rankOf(run, from.id, routeOf(from, region)) - 1);
+    const steps = routeOf(to, region)?.steps ?? STEPS;
+    run.story.flags[key(to.id, 'inside')] = 1;
+    run.story.flags[key(to.id, 'rank')] = rank;
+    run.story.flags[key(to.id, 'standing')] = rank > 1 ? steps[rank - 2]! : 0;
+    for (const m of ['third', 'confided'] as const) if (read(run, key(from.id, m)) > 0) run.story.flags[key(to.id, m)] = 1;
+  }
+  clearInside(run, from.id);
 }
 
 /** The region's story is over: the inside route's meters and marks go with it. */
@@ -75,9 +104,9 @@ export function replacedByInside(run: RunState, teamId: string, c: { beat?: numb
 }
 
 /** The inside route's conditions (all must hold). */
-export function insideMet(run: RunState, teamId: string, c: { inside?: boolean; rank?: number; standing?: number; suspicion?: number; suspicionBelow?: number }): boolean {
+export function insideMet(run: RunState, teamId: string, c: { inside?: boolean; rank?: number; standing?: number; suspicion?: number; suspicionBelow?: number }, route?: Route): boolean {
   if (c.inside !== undefined && insideOn(run, teamId) !== c.inside) return false;
-  if (c.rank !== undefined && rankOf(run, teamId) < c.rank) return false;
+  if (c.rank !== undefined && rankOf(run, teamId, route) < c.rank) return false;
   if (c.standing !== undefined && standingOf(run, teamId) < c.standing) return false;
   if (c.suspicion !== undefined && suspicionOf(run, teamId) < c.suspicion) return false;
   if (c.suspicionBelow !== undefined && suspicionOf(run, teamId) >= c.suspicionBelow) return false;

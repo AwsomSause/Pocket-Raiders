@@ -1,0 +1,2109 @@
+{
+ "catalogOverhaul": "evil-hoenn-sinnoh-unova",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "evil-plasma-offer-unova",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.n"
+    ],
+    "tint": "#3050a0",
+    "effect": "glint"
+   },
+   "intro": "N, speaking fast, not quite looking at you: \"Your Pokémon just said something. Did you hear? No. Nobody does. It said it wasn't afraid of you. That's rare. I've listened to four hundred. Eleven said that.\" N: \"I can't go back in. They'd kneel. I'd say \"get up\" and they'd take it for a blessing. But I need to know what they're for, now. What he's made of them. Would you go? You'd be my ears. It's the only part of me that was ever any use.\" N: \"If you come out thinking I was wrong to leave, I'll listen. I always listen.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "N: \"Then listen. That's all. Don't decide anything for me.\" He's gone before you can ask where to. You're going into Team Plasma, on the inside, as N's ears, and nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "N: \"That's an answer. I'll write it down. People don't often give me one.\" Team Plasma's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did the other three hundred and eighty-nine say?\"",
+     "success": {
+      "text": "He stops. N: \"...Mostly: \"I'm hungry.\" Some: \"Don't.\" I think about the \"don't\"s.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-dont",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-plasma-offer-unova-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-plasma-offer-unova-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.n"
+    ],
+    "tint": "#3050a0",
+    "effect": "glint"
+   },
+   "intro": "N: \"Would you go?\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "N: \"Then listen. That's all. Don't decide anything for me.\" He's gone before you can ask where to. You're going into Team Plasma, on the inside, as N's ears, and nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "N: \"That's an answer. I'll write it down. People don't often give me one.\" Team Plasma's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act1",
+   "name": "A Dog at a Fence",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "pokemon": "chandelure",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "intro": "A hillside with a castle coming out of it. Scaffolding. Wet stone. Six hundred people in white, with candles, digging by hand. A Knight, at the gate, holding out an open hand, flat and low: \"Welcome, Listener. That's what you're called till you've heard something. It's not a rank. It's a state.\" A Chandelure overhead, burning steadily: the Vigil's Votive. It's never gone out. Somebody's always awake to see it doesn't. The oath is one line, and you say it: \"I'll not hold what hasn't chosen me.\" The Knight: \"You'll be asked to prove it. Not today. We don't ask it of Listeners. But you'll see it done, at dusk, and you'll know what you're walking toward.\"",
+   "choices": [
+    {
+     "label": "(Go down to the dormitory.)",
+     "success": {
+      "text": "A vaulted room. Two hundred pallets. A window at ground level that looks out at boots.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-act1-dorm"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act1-dorm",
+   "name": "The Lower Dormitory",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "intro": "Yara Fairchild, twenty, folding a tabard with great care: \"You're beside me. I'm Yara. I'm a Knight; I did mine in spring.\" Yara: \"A Lillipup. I'd had her from an egg. He said: \"Did she choose you, or were you just there first?\" And I couldn't say. So I knelt.\" Yara: \"It was the right thing. He said. She's free now. I go on Sundays. She comes to the fence. She thinks I'm coming back for her.\" She's very steady about it. Yara: \"She's free. That's what free looks like. It looks like a dog at a fence.\"",
+   "choices": [
+    {
+     "label": "\"Do you miss her?\"",
+     "success": {
+      "text": "Yara: \"That's not the question. The question's whether she's better. I'm not supposed to count.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-yara",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act1-dusk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Has anyone asked her?\"",
+     "success": {
+      "text": "Yara: \"The king could've. He's away. They say when he's back he'll walk every field and tell us what they said.\" A pause. Yara: \"I think about what she'll have said.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-yara",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act1-dusk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You could bring her home.\"",
+     "success": {
+      "text": "She folds the tabard again. It was already folded. Yara: \"Then I'd be someone who took it back. I'd have done it for nothing. Don't say that to me again, please.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-yara",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-yara-home",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act1-dusk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act1-dusk",
+   "name": "The Release",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "pokemon": "tepig",
+    "tint": "#5a3a28",
+    "effect": "none"
+   },
+   "intro": "Dusk. You watch from the fence line. A boy of sixteen, a Tepig. Sage Gorm, sonorous: \"It was never yours.\" The boy: \"I'll not hold what hasn't chosen me.\" He stands. He turns. He walks. He doesn't look back; that's the rule. The Tepig trots after him. It gets to the fence. It puts its nose through. You're the only one facing that way.",
+   "choices": [
+    {
+     "label": "(Watch it.)",
+     "success": {
+      "text": "The Tepig sits. It watches the boy to the top of the hill.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-saw-fence",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act1-night"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Look away, like the others.)",
+     "success": {
+      "text": "That's what a Knight does.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act1-night"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Hold out an open hand. Flat. Low.)",
+     "success": {
+      "text": "The old gesture. The Tepig looks at it. It comes over. It sniffs. It looks back at the hill. It stays with you till the candle's lit. Sister Ianthe, behind: \"Where did you learn that? That's the old way. That's what it was for.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-oldway",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-saw-fence",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act1-night"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act1-night",
+   "name": "The Lower Dormitory",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "Night. A lamp at the far end. An old woman in the old white, mending. Sister Ianthe Moncrieff: \"I tend the king's room. It's being dug out; they've found the door. I was his nurse. I'm told that's an honour. I'll tell you what it was, when I know you.\" End of Act 1: a white hood. A candle. A collecting tin, with your name on it.",
+   "choices": [
+    {
+     "label": "(Take the hood.)",
+     "success": {
+      "text": "It's warm from the last person. Somebody's always awake.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-tin",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act2",
+   "name": "The Wrong House",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#4a5a48",
+    "effect": "none"
+   },
+   "intro": "A lane in Striaton. Washing on a line. A white-hooded man of forty checking an address against a paper, twice. Emil Hawksmoor: \"You're the Listener. Emil. I was nineteen years an orderly at a Center. D'you know what an orderly does? He patches them up and hands them back. To the same people. \"He fell.\" \"She's clumsy.\" I've handed back a Herdier three times to a man who called it clumsy.\" Emil: \"I'm done handing them back. So. A visit. The order says: neglected Pansage. Number nine.\"",
+   "choices": [
+    {
+     "label": "(Number nine.)",
+     "success": {
+      "text": "A front garden. A gate with a child's wellingtons beside it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-emil",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act2-nine"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act2-nine",
+   "name": "Number Nine",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "pokemon": "pansage",
+    "tint": "#4a5a48",
+    "effect": "none"
+   },
+   "intro": "On the windowsill, in the sun: a Pansage. Fat. Asleep. It's got a ribbon on. Taped to the glass above it: a drawing, in crayon, of a green thing with a ribbon on. BEST FREND. Emil: \"...This isn't the house. It can't be. Check the address.\" It's the address. Yara: \"It could be— appearances. He says we can't tell from outside.\" Emil: \"I've nineteen years of telling from outside. That's a Pokémon that's never missed a meal or been shouted at. Look at its ears.\" You have the order. \"Liberation Order 114. Pansage, juvenile, unusual colouring. PRIORITY. — Z.\"",
+   "choices": [
+    {
+     "label": "\"Take it. Orders.\"",
+     "success": {
+      "text": "A child's face at the window. The screen cuts to the lane, and Emil standing in it with a carrier, not moving. Emil doesn't speak for the rest of the stage.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-pansage-taken",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act2-van"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave it. Tell them the house was empty.\"",
+     "success": {
+      "text": "\"The house was empty.\" Emil, to the windowsill: \"Stay fat.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-pansage-left",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act2-van"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Whose signature is that?\"",
+     "success": {
+      "text": "Emil: \"\"Z.\" Zinzolin.\" He takes a folded bundle from inside his tabard. He's been keeping them. Emil: \"That's the fourth this month. A Vanillite with a gold sheen. An Axew, \"unusually large.\" An Eevee.\" A pause. Emil: \"None of them said \"neglected.\" I read \"neglected.\" I read it because it's what I came here to read.\" It's the first thread.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-orders-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act2-nine-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act2-nine-2",
+   "name": "Number Nine",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "pokemon": "pansage",
+    "tint": "#4a5a48",
+    "effect": "none"
+   },
+   "intro": "The Pansage sleeps on. The order's still in your hand.",
+   "choices": [
+    {
+     "label": "\"Take it. Orders.\"",
+     "success": {
+      "text": "A child's face at the window. The screen cuts to the lane, and Emil standing in it with a carrier, not moving. Emil doesn't speak for the rest of the stage.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-pansage-taken",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act2-van"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave it. Tell them the house was empty.\"",
+     "success": {
+      "text": "\"The house was empty.\" Emil, to the windowsill: \"Stay fat.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-pansage-left",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act2-van"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act2-van",
+   "name": "The Van",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#2a2a30",
+    "effect": "none"
+   },
+   "intro": "As you leave: a black van at the end of the lane. Two of the Crew, leaning on it. A Crew Grunt, to the white hoods, amused: \"All right, candles? Got it?\" Emil: \"Who are you?\" The Crew Grunt: \"Collections. You lot do the crying, we do the lifting. It's a system.\" He looks at your empty hands. The Crew Grunt: \"No? Never mind. We'll come back when you've gone. We've a key.\" Yara: \"A key to what?\"",
+   "choices": [
+    {
+     "label": "(Stand in the gate.)",
+     "success": {
+      "text": "Two of the Crew, and they don't expect a white hood to stand anywhere.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "plasma-two-uniforms",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-inside-act2",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "rank": 2
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ],
+       "sprite": "trainer.pr/plasma_grunt_m",
+       "team": [
+        "liepard",
+        "scrafty",
+        "watchog"
+       ],
+       "format": "doubles",
+       "name": "Crew Grunts",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "plasma-two-uniforms",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-van-fought",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-inside-act2",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "rank": 2
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "\"On whose order?\"",
+     "success": {
+      "text": "The Crew Grunt: \"Commander Aldith's. Who's yours? A candle?\" He laughs. He gets back in the van. It doesn't leave.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-two-uniforms",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "rank": 2
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Walk on.)",
+     "success": {
+      "text": "Behind you, the van door slides. Emil doesn't look back. It's the rule.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-two-uniforms",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "rank": 2
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "aldith",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-van-fought",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Commander Aldith, by radio, after: \"Who was that? White hoods? Fighting us? Put it in the report as weather.\""
+    }
+   ]
+  },
+  {
+   "id": "px-act3",
+   "name": "A Red Collar",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "pokemon": "munna",
+    "tint": "#5a3a50",
+    "effect": "fog"
+   },
+   "intro": "The Dreamyard. A ruined factory. A sign, new: RESETTLEMENT. NO ADMITTANCE TO KNIGHTS. Pink mist at ankle height. A Munna, watching. Yara: \"\"Resettlement.\" That's where they go after the fields. It's a good word. It means there's a place.\" Emil: \"It means there's a sign.\"",
+   "choices": [
+    {
+     "label": "(The floor.)",
+     "success": {
+      "text": "Past the sign.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-act3-floor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act3-floor",
+   "name": "The Floor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage"
+    ],
+    "pokemon": "lillipup",
+    "tint": "#5a3a50",
+    "effect": "none"
+   },
+   "intro": "Not a field. Not a forest. Crates. Stacked four high, in rows, with air holes. A stencil on each: a type, a level, a number. A Sage at a desk with a ledger. He's got a thick neck and a candle he hasn't lit. Sage Giallo, not looking up: \"Knights aren't permitted. It says so on the sign. I had the sign made.\" Yara: \"That's— those are ours. The ones we freed. That's a Lillipup. That's—\" She's stopped. Yara: \"That's a Lillipup with a red collar.\" It's seen her. Its whole back end's going. It's been in a crate since Monday, and its person's come, as it always knew she would. Nothing's hurt here, and nothing has been. They're fed. They're kept. They're being held for one man's army.",
+   "choices": [
+    {
+     "label": "(The ledger.)",
+     "success": {
+      "text": "It's on the desk. Giallo's stood up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-act3-ledger"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act3-ledger",
+   "name": "The Ledger",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage"
+    ],
+    "tint": "#5a3a50",
+    "effect": "none"
+   },
+   "intro": "Columns. Date. Field. Species. \"Released by.\" \"Collected.\" \"Assigned.\" Under \"Assigned,\" in every row, the same word: Hold. The Frigate's hold.",
+   "choices": [
+    {
+     "label": "\"Open them. All of them.\"",
+     "success": {
+      "text": "Emil's beside you. It's the first time he's ever sent a Pokémon at a person.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-act3-giallo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take hers. Only hers. Quietly.\"",
+     "success": {
+      "text": "Emil knocks over the candle. Giallo turns. Yara's got the crate open and shut in the time it takes. She carries it under her tunic for the rest of the region. It doesn't make a sound. It's good at this. It's been waiting quietly since spring.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-dreamyard-hers",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-lillipup",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act3-mist"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go to N. Now.\"",
+     "success": {
+      "text": "Nothing's opened. You walk out. Act 4 comes early, and angrier. Yara looks back the whole way. It's the rule that she mustn't. She does.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-dreamyard-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-act4-early",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act3-mist"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act3-giallo",
+   "name": "Room Four",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage"
+    ],
+    "tint": "#5a3a50",
+    "effect": "glint"
+   },
+   "intro": "Sage Giallo: \"I guard. It's all I've ever done. Step away from the crates.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Sage Giallo doesn't light the candle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "plasma-dreamyard-left",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-ledger",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-inside-act3",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "rank": 3
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ],
+       "sprite": "boss.cast-sage",
+       "team": [
+        "conkeldurr",
+        "garbodor",
+        "bisharp"
+       ],
+       "name": "Sage Giallo",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "evil",
+         "suspicion": 4
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-dreamyard-opened",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-lillipup",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-ledger",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "plasma-inside-act3",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "rank": 3
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gone",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-yara",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Yara's gone with the Lillipup before it ends. Win, and sixty Pokémon go into the Dreamyard, and the Munna's mist comes up to cover them going."
+    }
+   ]
+  },
+  {
+   "id": "px-act3-mist",
+   "name": "The Mist",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "munna",
+    "tint": "#5a3a50",
+    "effect": "fog"
+   },
+   "intro": "In the mist, going out, the Munna shows you one thing: a tall man with a cane, standing over a crate, saying nothing. It's what it shows everyone here. It's the only thing it's seen for a year. You take the ledger: the Dreamyard Ledger. Sixty rows. Sixty towns.",
+   "choices": [
+    {
+     "label": "(Go out.)",
+     "success": {
+      "text": "The sign says NO ADMITTANCE TO KNIGHTS on the way out, too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-ledger",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "rank": 3
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-act4",
+   "name": "Not Admitted",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "beat": 5,
+     "rank": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.n"
+    ],
+    "tint": "#2a2440",
+    "effect": "none"
+   },
+   "intro": "A half-dug doorway. A child's room, untouched. A toy train going round. A basketball hoop, too low now. A music box. N, on the floor, knees up, watching the train: \"You came. I flew in under the cloud; nobody saw. I shouldn't be here. If they find me they'll put a crown on me, and I'll have to be polite about it.\" N: \"This is where I grew up. He brought them here. The ones people had hurt. A Darumaka with a burn. A Zorua that wouldn't let anyone touch its tail. I thought that's what people did. I was eleven before I met a Pokémon that was happy. I thought it was lying.\" N: \"I've done the sum. If every trainer's like the ones who hurt my friends, I'm right. If they aren't— how many would it take? To make me wrong? I keep meeting ones that aren't afraid. I've a list. You're on it. Your team is on it.\" N: \"Tell me about the Dreamyard. Don't make it kind.\"",
+   "choices": [
+    {
+     "label": "(Tell him all of it.)",
+     "success": {
+      "text": "The train goes round three times while you talk. He doesn't interrupt. At \"Hold,\" he puts his hand flat on the floor, as if something had moved under it. Sister Ianthe's in the doorway. She's brought the daybook. She's had it under her mattress for eleven years. Sister Ianthe: \"N. I've something to give you that I should've given you when you were six. I'd like you to read the right-hand column.\" He reads. \"Not admitted.\" A Herdier. Content. A Pidove that sang. He turns a page. And another. The right-hand column's five times the length of the left. N: \"...Two thousand.\" Sister Ianthe: \"Two thousand, one hundred and nineteen. He stood at the door with me. He'd look, and he'd say: \"Not that one.\"\" N: \"They came to see me. Two thousand happy ones came to my door, and I never—\" He picks up the Zorua's old ball. He turns it over. N: \"I never asked why they were all like that. A scientist would have asked.\" Sister Ianthe: \"You were five.\" N: \"I was fourteen at the end. I'd have asked at fourteen, if anyone'd ever shown me that asking got you something.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-told-n-all",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act4-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask Ghetsis.\"",
+     "success": {
+      "text": "N: \"I've never once asked him a question he didn't answer beautifully.\" Sister Ianthe's in the doorway. She's brought the daybook. She's had it under her mattress for eleven years. Sister Ianthe: \"N. I've something to give you that I should've given you when you were six. I'd like you to read the right-hand column.\" He reads. \"Not admitted.\" A Herdier. Content. A Pidove that sang. He turns a page. And another. The right-hand column's five times the length of the left. N: \"...Two thousand.\" Sister Ianthe: \"Two thousand, one hundred and nineteen. He stood at the door with me. He'd look, and he'd say: \"Not that one.\"\" N: \"They came to see me. Two thousand happy ones came to my door, and I never—\" He picks up the Zorua's old ball. He turns it over. N: \"I never asked why they were all like that. A scientist would have asked.\" Sister Ianthe: \"You were five.\" N: \"I was fourteen at the end. I'd have asked at fourteen, if anyone'd ever shown me that asking got you something.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-act4-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You were only shown the hurt ones. On purpose.\"",
+     "success": {
+      "text": "He's quiet a long time. Sister Ianthe's in the doorway. She's brought the daybook. She's had it under her mattress for eleven years. Sister Ianthe: \"N. I've something to give you that I should've given you when you were six. I'd like you to read the right-hand column.\" He reads. \"Not admitted.\" A Herdier. Content. A Pidove that sang. He turns a page. And another. The right-hand column's five times the length of the left. N: \"...Two thousand.\" Sister Ianthe: \"Two thousand, one hundred and nineteen. He stood at the door with me. He'd look, and he'd say: \"Not that one.\"\" N: \"They came to see me. Two thousand happy ones came to my door, and I never—\" He picks up the Zorua's old ball. He turns it over. N: \"I never asked why they were all like that. A scientist would have asked.\" Sister Ianthe: \"You were five.\" N: \"I was fourteen at the end. I'd have asked at fourteen, if anyone'd ever shown me that asking got you something.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-told-n-all",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act4-after"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "early",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-act4-early",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You came straight from the Dreamyard. You've the ledger in your hand, and you're angrier than he is."
+    }
+   ]
+  },
+  {
+   "id": "px-act4-after",
+   "name": "Not Admitted",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.n",
+     "boss.npc_lady"
+    ],
+    "tint": "#2a2440",
+    "effect": "none"
+   },
+   "intro": "The train goes round. The daybook's open on the floor between you.",
+   "choices": [
+    {
+     "label": "\"It isn't your fault.\"",
+     "success": {
+      "text": "N: \"It was my door.\" Sister Ianthe gives you the key: Rank 5, Keeper of the King's Room.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-daybook",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What will you do?\"",
+     "success": {
+      "text": "N: \"Ask. Properly. The whole region; every one that'll speak to me. Not \"did you choose this.\" That's his question; it's built to have one answer. I'll ask: \"What do you want?\" And I'll have to hear it. Even if it's \"supper.\"\" Sister Ianthe gives you the key: Rank 5, Keeper of the King's Room.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-daybook",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "unova-asked",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"One of them's still here. On a balcony. Wearing your face.\"",
+     "success": {
+      "text": "He's very still. N: \"...I can hear him from here. I thought I was imagining. He's saying the same thing, over and over, in a voice only we use.\" He doesn't say what. Sister Ianthe gives you the key: Rank 5, Keeper of the King's Room.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-daybook",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-n-knows-likeness",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "friend",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-told-n-all",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He looks at you as if you were on his list twice. Nobody in the Vigil knows it's a rank: the King's Friend. N does.",
+     "addChoices": [
+      {
+       "label": "(Sit with him till the train stops.)",
+       "success": {
+        "text": "It runs down on its own. Neither of you winds it. Rank 6: the King's Friend. Sister Ianthe gives you the key as well.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "plasma-daybook",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "plasma-inside-act4",
+          "amount": 1
+         },
+         {
+          "kind": "evil",
+          "rank": 5
+         },
+         {
+          "kind": "evil",
+          "rank": 6
+         },
+         {
+          "kind": "evil",
+          "mark": "confided"
+         },
+         {
+          "kind": "flag",
+          "key": "plasma-n-confided",
+          "amount": 1
+         },
+         {
+          "kind": "evil",
+          "beat": true
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "px-act5",
+   "name": "The Seventh Chair",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#2a2a40",
+    "effect": "glint"
+   },
+   "intro": "The Hall of Sages. Seven chairs. Six with dust. A man with a cane, standing behind the seventh, with a cloth in his hand. Ghetsis: \"Ah. The Listener. You've seen the Dreamyard. Good. I dislike explaining.\" Ghetsis: \"Sit. No, not that one. This one. I dusted it myself. Do you know how long it's been since I did a thing with my own hands that wasn't a lie?\" Ghetsis: \"The boy was a key I cut myself. Fourteen years. He opened every door in Unova and then walked out of the last one, which I hadn't foreseen: I'd made him to listen, and he did. You're cleverer than he is. You've seen the crates and you're still in the hood. Tomorrow a king's crowned on that balcony. Stand beside the throne and look moved.\"",
+   "choices": [
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "You stay standing. Ghetsis: \"A Sage who stands. How original.\" He goes. In the corner, three shapes that were there the whole time. One of the Shadow Triad: \"He gave us names. Then he took them back.\" Another: \"The King gave things names. A train. A ball.\" The third: \"Ask him for three more. We'd take any.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-seat-stood",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act5-dorm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What does the Vigil know?\"",
+     "success": {
+      "text": "Ghetsis: \"What it needs. That he's coming back. They've dug out a castle with their hands on the strength of it. I find that affecting. I mean that. I'm affected by it the way one's affected by a very good lock.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-act5-chair"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"How long did it take, to make him?\"",
+     "success": {
+      "text": "Ghetsis: \"Fourteen years. I'm a patient man. It's my only virtue, and I've made it do the work of all the others.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-act5-chair"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Sit.)",
+     "success": {
+      "text": "The chair's warm. He's been sitting in it. He doesn't sit at the table; he's said so for two years. Ghetsis: \"It suits you. I'd wondered if it'd suit anyone.\" Rank 4 is confirmed: the Seventh Seat. He goes. In the corner, three shapes that were there the whole time. One of the Shadow Triad: \"He gave us names. Then he took them back.\" Another: \"The King gave things names. A train. A ball.\" The third: \"Ask him for three more. We'd take any.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3,
+        "rank": 4
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-seat-sat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "seventh-ring",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act5-dorm"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ring",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-seat-refused",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ghetsis: \"You refused the seat once. I'm offering it again. I'm a patient man.\""
+    }
+   ]
+  },
+  {
+   "id": "px-act5-chair",
+   "name": "The Seventh Chair",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#2a2a40",
+    "effect": "none"
+   },
+   "intro": "He holds the cloth out. The seventh chair waits.",
+   "choices": [
+    {
+     "label": "(Sit.)",
+     "success": {
+      "text": "The chair's warm. He's been sitting in it. Ghetsis: \"It suits you. I'd wondered if it'd suit anyone.\" Rank 4 is confirmed: the Seventh Seat. He goes. In the corner, three shapes that were there the whole time. One of the Shadow Triad: \"He gave us names. Then he took them back.\" Another: \"The King gave things names. A train. A ball.\" The third: \"Ask him for three more. We'd take any.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3,
+        "rank": 4
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-seat-sat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "seventh-ring",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act5-dorm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Stand.)",
+     "success": {
+      "text": "You stay standing. Ghetsis: \"A Sage who stands. How original.\" He goes. In the corner, three shapes that were there the whole time. One of the Shadow Triad: \"He gave us names. Then he took them back.\" Another: \"The King gave things names. A train. A ball.\" The third: \"Ask him for three more. We'd take any.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-seat-stood",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-act5-dorm"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "triad",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-n-confided",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The three in the corner have heard you talk about the King's Room.",
+     "addChoices": [
+      {
+       "label": "(Turn to the corner.) \"What names?\"",
+       "success": {
+        "text": "The first: \"You'd have to ask him.\" The third: \"Or you could give some. You've the right; you're the Seventh.\" It's the first time anyone's asked.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "plasma-triad-asked",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "px-act5-chair"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "px-act5-dorm",
+   "name": "The Night Before",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "pokemon": "chandelure",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "intro": "The lower dormitory. The night before. Six hundred candles. The Votive overhead. The word's gone round. A Knight, shining: \"He's back. They've seen him. He's in the king's room; the Sister's seen a light.\" Another: \"He'll walk the fields. He'll tell us what they said.\" Yara's on her pallet, on her side, facing the wall, with one arm under her tunic. Something under there sighs. Yara, very low: \"I've a dog in my shirt and a king coming in the morning to tell me I was right to let her go. I don't know which of those I'm going to have to give up.\" Emil, on the next pallet, on his back, hands locked on his chest: \"If he's lied to that boy the way they lied to me at the Center, I'll— I don't know what I'll do. I'm a nurse. I've only ever been angry at things.\" Your last choice of the night: who's told about the balcony.",
+   "choices": [
+    {
+     "label": "Tell nobody.",
+     "success": {
+      "text": "The Vigil kneels in the morning, whole.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-told-none",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell Yara and Emil.",
+     "success": {
+      "text": "They know. In every ending, they act on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-told-two",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the dormitory.",
+     "success": {
+      "text": "You stand under the Votive and say it. Nobody believes it. Not one. These people aren't tired. They've faith. A Knight: \"You've been listening to the black coats.\" You're found out, and put out of the gate. You're on the hill in the morning, with N, looking in.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 10
+       },
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-told-all",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-final-choice"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-triad-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the corner, the three shapes are still there. One of them says, to nobody: \"Ask him for three more.\""
+    }
+   ]
+  },
+  {
+   "id": "px-alone-zinzolin",
+   "name": "Zinzolin, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "after": 4,
+     "rank": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cast-sage"
+    ],
+    "tint": "#1a2030",
+    "effect": "none"
+   },
+   "intro": "A cold room. He's in furs. Zinzolin: \"I feel the cold more than other men. It's the only thing I feel. Ghetsis keeps me close because I've no warmth to betray him with.\"",
+   "choices": [
+    {
+     "label": "\"Whose shopping list was it?\"",
+     "success": {
+      "text": "Zinzolin: \"Mine. In my hand. His words. \"Priority.\" I've never once wanted a gold Vanillite. I'm cold enough.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come nearer the fire.\"",
+     "success": {
+      "text": "He does, a little. He holds his hands out to it as if it were a thing he'd read about.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What do you want?\"",
+     "success": {
+      "text": "Zinzolin: \"To be cold with company.\" He names the Dreamyard's other sites, one by one, as if they were rooms in a house he'd lived in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "zinzolin-heard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-alone-colress",
+   "name": "Colress, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "after": 4,
+     "rank": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.colress"
+    ],
+    "pokemon": "klinklang",
+    "tint": "#1a2030",
+    "effect": "none"
+   },
+   "intro": "A lab. He's delighted to see anyone. Colress: \"I don't care about liberation! I care what brings out a Pokémon's strength. Ghetsis says force. The King says freedom. I say: test it. You're a splendid data point. Yours fight harder than either theory predicts.\"",
+   "choices": [
+    {
+     "label": "\"It's Bond.\"",
+     "success": {
+      "text": "Colress: \"Is it! Can you show me? Under controlled conditions?\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-alone-colress-spar"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"And if the answer's inconvenient?\"",
+     "success": {
+      "text": "Colress: \"Then it's the best kind! An inconvenient answer is one nobody's paid for yet.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Who funds you?\"",
+     "success": {
+      "text": "Colress: \"A man with a cane. I don't ask what he funds next door. That's a lie. I ask. He answers beautifully.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-alone-colress-spar",
+   "name": "Controlled Conditions",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.colress"
+    ],
+    "tint": "#1a2030",
+    "effect": "glint"
+   },
+   "intro": "A sparring match, under controlled conditions. He's got a clipboard and a grin.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Colress: \"Splendid! Again! No, don't hold back for the data's sake.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [],
+       "sprite": "boss.colress",
+       "team": [
+        "magneton",
+        "klinklang",
+        "metang",
+        "beheeyem"
+       ],
+       "name": "Colress",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "colress-published",
+         "amount": 1
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-alone-triad",
+   "name": "The Shadow Triad",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "after": 4,
+     "rank": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#1a2030",
+    "effect": "none"
+   },
+   "intro": "They're simply there. One of them: \"He found us. He named us. He took the names back when we were useful. Ask the King to give us one. We'd take any.\"",
+   "choices": [
+    {
+     "label": "(Give them one each.)",
+     "success": {
+      "text": "You pick three. They don't thank you. They say them over, once each, under their breath. They're gone from Ghetsis's side in the throne room.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "triad-names-true",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-triad-named",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask him yourselves.\"",
+     "success": {
+      "text": "The second: \"We don't ask. We were made not to.\" The third: \"...We'll think about it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-triad-asked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What were they before?\"",
+     "success": {
+      "text": "A long pause. The first: \"We don't remember. That was the point of taking them.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "names",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-three-names",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You've the harbourmaster's entry, copied out.",
+     "addChoices": [
+      {
+       "label": "\"You had them already.\"",
+       "success": {
+        "text": "You read them out. One of the Triad: \"...Wick.\" Another: \"That's—\" The third, who was always cold: \"Tallow. I was— there was soup.\" They don't thank you. They're gone. In every ending, they aren't at his shoulder.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "triad-names-true",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "plasma-triad-named",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "px-alone-ghetsis",
+   "name": "Ghetsis, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "after": 4,
+     "rank": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#1a2030",
+    "effect": "none"
+   },
+   "intro": "He comes to you. Ghetsis: \"You've seen the Dreamyard. Good. I dislike explaining. The boy's a key I cut myself. You're cleverer than he is. Stand beside the throne and look moved.\"",
+   "choices": [
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Ghetsis: \"No. How refreshing. I'll ask again tomorrow, and you'll be tireder.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What does he know?\"",
+     "success": {
+      "text": "Ghetsis: \"What he needs. That they love him. It's even true. I find that's the most useful kind of lie: the kind that is.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"How long did it take, to make him?\"",
+     "success": {
+      "text": "Ghetsis: \"Fourteen years. I'm a patient man. It's my only virtue, and I've made it do the work of all the others.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-loyalty-test",
+   "name": "The Loyalty Test",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "suspicion": 7,
+     "suspicionBelow": 10,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cast-sage"
+    ],
+    "tint": "#e8e4d8",
+    "effect": "none"
+   },
+   "intro": "A Sage: \"Release your lead. Here. Now. As we all did.\" Your lead Pokémon looks up at you.",
+   "choices": [
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "The Sage writes something down. He doesn't ask again.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask it.\"",
+     "success": {
+      "text": "The Sage looks at you as if you'd said it in another language. Then, slowly, he looks at your Pokémon. Nobody's ever asked him to.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Let it go; see what it does.)",
+     "success": {
+      "text": "It walks ten paces. It sits down. It looks at you. It comes back. N's in the doorway. He's seen. He adds a name to his list.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -4
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-released-came-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-found-out",
+   "name": "Found Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "inside": true,
+     "suspicion": 10,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cast-sage",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "The Votive gutters. Six Knights round your pallet, and a Sage behind them. A Knight: \"You've been listening to the black coats.\" You've been found out, and you're to be put out of the gate.",
+   "choices": [
+    {
+     "label": "Fight your way out.",
+     "success": {
+      "text": "The Sage doesn't light his candle.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-found-out",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Sage Giallo",
+       "size": 3,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "yara",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-yara",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Yara's at the gate when you're put out of it. She doesn't look at you. Something under her tunic sneezes, once, and every Knight looks at her instead."
+    }
+   ]
+  }
+ ]
+}

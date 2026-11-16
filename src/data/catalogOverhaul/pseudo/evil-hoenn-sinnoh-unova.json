@@ -1,0 +1,583 @@
+{
+ "category": "evil-hoenn-sinnoh-unova",
+ "note": "Evil Teams Volume III inside routes for Galactic, Plasma, Magma, Aqua and Team Sky: Act doors, the endings and the third options. Written by tools/events/co/_evil-hsu-maps.ts.",
+ "chains": [
+  {
+   "id": "ps_gx_lab",
+   "name": "The Lab Under Veilstone",
+   "entry": "gx-act3",
+   "themeId": "ghost-dark",
+   "tint": "#3a2418",
+   "mood": "warm, and three lights in the dark",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "gx-act3-glass"
+    ],
+    [
+     "gx-act3-readout"
+    ],
+    [
+     "gx-act3-saturn",
+     "gx-act3-warden"
+    ]
+   ]
+  },
+  {
+   "id": "ps_gx_plan",
+   "name": "Spear Pillar: It's Very Quiet",
+   "entry": "gx-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2e3e",
+   "mood": "snow going sideways, then nothing at all",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "gx-plan-looker"
+    ],
+    [
+     "gx-plan-rival"
+    ],
+    [
+     "gx-plan-cynthia"
+    ],
+    [
+     "gx-plan-load"
+    ],
+    [
+     "gx-plan-fold"
+    ],
+    [
+     "gx-plan-nothing"
+    ],
+    [
+     "gx-plan-door"
+    ],
+    [
+     "gx-plan-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_gx_turn",
+   "name": "Spear Pillar: Let Go",
+   "entry": "gx-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2e3e",
+   "mood": "two lines in the sky like kite strings",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "gx-turn-slack"
+    ],
+    [
+     "gx-turn-cyrus"
+    ],
+    [
+     "gx-turn-tear"
+    ],
+    [
+     "gx-turn-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_gx_charon",
+   "name": "Spear Pillar: The Licence",
+   "entry": "gx-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2e3e",
+   "mood": "a board meeting in a blizzard",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "gx-charon-meeting"
+    ],
+    [
+     "gx-charon-repo"
+    ],
+    [
+     "gx-charon-bought"
+    ],
+    [
+     "gx-charon-confirm",
+     "gx-charon-unpaid"
+    ]
+   ]
+  },
+  {
+   "id": "ps_gx_own",
+   "name": "Spear Pillar: Mind This One",
+   "entry": "gx-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2e3e",
+   "mood": "five hundred people on a stair, looking up",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "gx-own-mars"
+    ],
+    [
+     "gx-own-mars-down"
+    ],
+    [
+     "gx-own-lines"
+    ],
+    [
+     "gx-own-d1"
+    ],
+    [
+     "gx-own-d2"
+    ],
+    [
+     "gx-own-d3"
+    ],
+    [
+     "gx-own-d4"
+    ],
+    [
+     "gx-own-title"
+    ]
+   ]
+  },
+  {
+   "id": "ps_lantern_families",
+   "name": "Round 1: The Families",
+   "entry": "lantern-round-1",
+   "themeId": "ghost-dark",
+   "tint": "#3a2e1a",
+   "mood": "a lamp, and three doors",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "lantern-door-1"
+    ],
+    [
+     "lantern-door-2"
+    ],
+    [
+     "lantern-door-3"
+    ]
+   ]
+  },
+  {
+   "id": "ps_lantern_climax",
+   "name": "Three Hundred Lanterns",
+   "entry": "lantern-climax",
+   "themeId": "ghost-dark",
+   "tint": "#3a2e1a",
+   "mood": "a string of bulbs into the cloud",
+   "team": "galactic",
+   "start": "opened",
+   "layout": [
+    [
+     "lantern-ridge"
+    ],
+    [
+     "lantern-saddle"
+    ],
+    [
+     "lantern-col"
+    ],
+    [
+     "lantern-summit"
+    ],
+    [
+     "lantern-dais"
+    ],
+    [
+     "lantern-question",
+     "lantern-cold"
+    ]
+   ]
+  },
+  {
+   "id": "ps_px_dreamyard",
+   "name": "The Dreamyard",
+   "entry": "px-act3",
+   "themeId": "ghost-dark",
+   "tint": "#5a3a50",
+   "mood": "pink mist at ankle height",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "px-act3-floor"
+    ],
+    [
+     "px-act3-ledger"
+    ],
+    [
+     "px-act3-giallo",
+     "px-act3-mist"
+    ]
+   ]
+  },
+  {
+   "id": "ps_px_asking",
+   "name": "The Coronation: The Asking",
+   "entry": "px-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2a48",
+   "mood": "ten thousand candles, and a ship overhead",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "px-asking-kings"
+    ],
+    [
+     "px-asking-aldith"
+    ],
+    [
+     "px-asking-bronius"
+    ],
+    [
+     "px-asking-breaker"
+    ],
+    [
+     "px-asking-question"
+    ],
+    [
+     "px-asking-ghetsis"
+    ],
+    [
+     "px-asking-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_px_turn",
+   "name": "The Coronation: Where Do They Go",
+   "entry": "px-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2a48",
+   "mood": "a thin tune, and six hundred people asking",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "px-turn-box"
+    ],
+    [
+     "px-turn-vigil"
+    ],
+    [
+     "px-turn-chasm"
+    ],
+    [
+     "px-turn-where"
+    ],
+    [
+     "px-turn-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_px_ghetsis",
+   "name": "The Coronation: The Second Half",
+   "entry": "px-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2a48",
+   "mood": "snow in summer, and every light going up",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "px-ghetsis-warn"
+    ],
+    [
+     "px-ghetsis-warn-2"
+    ],
+    [
+     "px-ghetsis-bow"
+    ],
+    [
+     "px-ghetsis-wedge"
+    ],
+    [
+     "px-ghetsis-seal"
+    ],
+    [
+     "px-ghetsis-late"
+    ],
+    [
+     "px-ghetsis-sealed",
+     "px-ghetsis-late-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_px_own",
+   "name": "The Coronation: The Other Four Hundred",
+   "entry": "px-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#2a2a48",
+   "mood": "a throne nobody sits on",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "px-own-throne"
+    ],
+    [
+     "px-own-d1"
+    ],
+    [
+     "px-own-d2"
+    ],
+    [
+     "px-own-d3"
+    ],
+    [
+     "px-own-d4"
+    ],
+    [
+     "px-own-bronius"
+    ]
+   ]
+  },
+  {
+   "id": "ps_openhand_insp1",
+   "name": "Inspection 1: Number Nine",
+   "entry": "openhand-insp1",
+   "themeId": "ghost-dark",
+   "tint": "#4a3a28",
+   "mood": "three doors, and a tea towel in each",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "openhand-house-1"
+    ],
+    [
+     "openhand-house-2"
+    ],
+    [
+     "openhand-house-3"
+    ],
+    [
+     "openhand-house-3-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_openhand_night",
+   "name": "All Night",
+   "entry": "openhand-climax",
+   "themeId": "ghost-dark",
+   "tint": "#2a2a48",
+   "mood": "a lamp on the castle steps till dawn",
+   "team": "plasma",
+   "start": "opened",
+   "layout": [
+    [
+     "openhand-dragon"
+    ],
+    [
+     "openhand-dawn"
+    ],
+    [
+     "openhand-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mg_plan",
+   "name": "The Seafloor Cavern: Carry Out the Plan",
+   "entry": "mg-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "black water, and a wall that breathes",
+   "team": "magma",
+   "start": "opened",
+   "layout": [
+    [
+     "mg-plan-wake"
+    ],
+    [
+     "mg-plan-cost"
+    ],
+    [
+     "mg-plan-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mg_turn",
+   "name": "The Seafloor Cavern: Turn On the Team",
+   "entry": "mg-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "two orbs, and a long climb home",
+   "team": "magma",
+   "start": "opened",
+   "layout": [
+    [
+     "mg-turn-lines"
+    ],
+    [
+     "mg-turn-battle"
+    ],
+    [
+     "mg-turn-other"
+    ],
+    [
+     "mg-turn-pyre"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mg_cross",
+   "name": "The Seafloor Cavern: Side With the Other Team",
+   "entry": "mg-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "the other colour, all the way up",
+   "team": "magma",
+   "start": "opened",
+   "layout": [
+    [
+     "mg-cross-run"
+    ],
+    [
+     "mg-cross-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mg_all",
+   "name": "The Seafloor Cavern: Take It All",
+   "entry": "mg-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "both colours, looking up",
+   "team": "magma",
+   "start": "opened",
+   "layout": [
+    [
+     "mg-all-battle"
+    ],
+    [
+     "mg-all-gantry"
+    ]
+   ]
+  },
+  {
+   "id": "ps_aq_plan",
+   "name": "The Seafloor Cavern: Carry Out the Plan",
+   "entry": "aq-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "black water, and a wall that breathes",
+   "team": "aqua",
+   "start": "opened",
+   "layout": [
+    [
+     "aq-plan-wake"
+    ],
+    [
+     "aq-plan-cost"
+    ],
+    [
+     "aq-plan-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_aq_turn",
+   "name": "The Seafloor Cavern: Turn On the Team",
+   "entry": "aq-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "two orbs, and a long climb home",
+   "team": "aqua",
+   "start": "opened",
+   "layout": [
+    [
+     "aq-turn-lines"
+    ],
+    [
+     "aq-turn-battle"
+    ],
+    [
+     "aq-turn-other"
+    ],
+    [
+     "aq-turn-pyre"
+    ]
+   ]
+  },
+  {
+   "id": "ps_aq_cross",
+   "name": "The Seafloor Cavern: Side With the Other Team",
+   "entry": "aq-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "the other colour, all the way up",
+   "team": "aqua",
+   "start": "opened",
+   "layout": [
+    [
+     "aq-cross-run"
+    ],
+    [
+     "aq-cross-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_aq_all",
+   "name": "The Seafloor Cavern: Take It All",
+   "entry": "aq-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#14202e",
+   "mood": "both colours, looking up",
+   "team": "aqua",
+   "start": "opened",
+   "layout": [
+    [
+     "aq-all-battle"
+    ],
+    [
+     "aq-all-gantry"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sky_pyre",
+   "name": "Mt. Pyre, From the Other Side",
+   "entry": "sky-pyre",
+   "themeId": "ghost-dark",
+   "tint": "#3a3a48",
+   "mood": "fog, and two columns climbing",
+   "start": "opened",
+   "layout": [
+    [
+     "sky-pyre-tabitha"
+    ],
+    [
+     "sky-pyre-shelly"
+    ],
+    [
+     "sky-pyre-held"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sky_choice",
+   "name": "The Sky's Choice",
+   "entry": "sky-climax",
+   "themeId": "ghost-dark",
+   "tint": "#3a2a48",
+   "mood": "a sky the colour of a bruise",
+   "start": "opened"
+  }
+ ]
+}

@@ -1,0 +1,2572 @@
+{
+ "catalogOverhaul": "evil-hoenn-sinnoh-unova",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "sky-draconid",
+   "name": "The Draconid at the Fire",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 4,
+     "inside": false,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "hoenn-side-none",
+      "hoenn-left-team"
+     ]
+    },
+    {
+     "kind": "eventSeen",
+     "id": "sky-pillar"
+    },
+    {
+     "kind": "flag",
+     "key": "sky-draconid-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "pokemon": "whismur",
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "A rest on high ground. Somebody's already sitting at your fire, toasting something on a stick. A Whismur sleeps in her lap. Zinnia: \"Hi. I let myself in. You don't own the hill.\" Zinnia: \"I've been watching you watch them. Red hats want more land. Blue hats want more sea. You walked straight down the middle like you'd smelled something.\" Zinnia: \"My people have a story. Land and sea fight. They always fight. And every time, what stops them comes from up there.\" She points with the stick. The sky's very clear. Zinnia: \"Nobody's on the sky's side. No hats. No boats. Funny, that.\"",
+   "choices": [
+    {
+     "label": "\"Somebody should be.\"",
+     "success": {
+      "text": "Zinnia: \"Mm. Somebody.\" She hands over the stick. Zinnia: \"It needs a name. And you'll need people. Good ones, for once.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You are. Why not you?\"",
+     "success": {
+      "text": "Zinnia: \"I'm the last of a lot of things. I'm not a joiner. But I'll come to the meetings and criticise.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zinnia-trust",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not starting a team.\"",
+     "success": {
+      "text": "Zinnia: \"Fair.\" She finishes her snack and goes. She'll ask once more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-declined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-draconid-2",
+   "name": "The Draconid at the Fire",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 4,
+     "inside": false,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "hoenn-side-none",
+      "hoenn-left-team"
+     ]
+    },
+    {
+     "kind": "eventSeen",
+     "id": "windswept-spire-1"
+    },
+    {
+     "kind": "flag",
+     "key": "sky-draconid-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "pokemon": "whismur",
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "A rest on high ground. Somebody's already sitting at your fire, toasting something on a stick. A Whismur sleeps in her lap. Zinnia: \"Hi. I let myself in. You don't own the hill.\" Zinnia: \"I've been watching you watch them. Red hats want more land. Blue hats want more sea. You walked straight down the middle like you'd smelled something.\" Zinnia: \"My people have a story. Land and sea fight. They always fight. And every time, what stops them comes from up there.\" She points with the stick. The sky's very clear. Zinnia: \"Nobody's on the sky's side. No hats. No boats. Funny, that.\"",
+   "choices": [
+    {
+     "label": "\"Somebody should be.\"",
+     "success": {
+      "text": "Zinnia: \"Mm. Somebody.\" She hands over the stick. Zinnia: \"It needs a name. And you'll need people. Good ones, for once.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You are. Why not you?\"",
+     "success": {
+      "text": "Zinnia: \"I'm the last of a lot of things. I'm not a joiner. But I'll come to the meetings and criticise.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zinnia-trust",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not starting a team.\"",
+     "success": {
+      "text": "Zinnia: \"Fair.\" She finishes her snack and goes. She'll ask once more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-declined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-draconid-3",
+   "name": "The Draconid at the Fire",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 4,
+     "inside": false,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "hoenn-side-none",
+      "hoenn-left-team"
+     ]
+    },
+    {
+     "kind": "eventSeen",
+     "id": "w4-lightning-rod"
+    },
+    {
+     "kind": "flag",
+     "key": "sky-draconid-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "pokemon": "whismur",
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "A rest on high ground. Somebody's already sitting at your fire, toasting something on a stick. A Whismur sleeps in her lap. Zinnia: \"Hi. I let myself in. You don't own the hill.\" Zinnia: \"I've been watching you watch them. Red hats want more land. Blue hats want more sea. You walked straight down the middle like you'd smelled something.\" Zinnia: \"My people have a story. Land and sea fight. They always fight. And every time, what stops them comes from up there.\" She points with the stick. The sky's very clear. Zinnia: \"Nobody's on the sky's side. No hats. No boats. Funny, that.\"",
+   "choices": [
+    {
+     "label": "\"Somebody should be.\"",
+     "success": {
+      "text": "Zinnia: \"Mm. Somebody.\" She hands over the stick. Zinnia: \"It needs a name. And you'll need people. Good ones, for once.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You are. Why not you?\"",
+     "success": {
+      "text": "Zinnia: \"I'm the last of a lot of things. I'm not a joiner. But I'll come to the meetings and criticise.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zinnia-trust",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not starting a team.\"",
+     "success": {
+      "text": "Zinnia: \"Fair.\" She finishes her snack and goes. She'll ask once more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-declined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-draconid-4",
+   "name": "The Draconid at the Fire",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 4,
+     "inside": false,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "hoenn-side-none",
+      "hoenn-left-team"
+     ]
+    },
+    {
+     "kind": "eventSeen",
+     "id": "rainbow"
+    },
+    {
+     "kind": "flag",
+     "key": "sky-draconid-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "pokemon": "whismur",
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "A rest on high ground. Somebody's already sitting at your fire, toasting something on a stick. A Whismur sleeps in her lap. Zinnia: \"Hi. I let myself in. You don't own the hill.\" Zinnia: \"I've been watching you watch them. Red hats want more land. Blue hats want more sea. You walked straight down the middle like you'd smelled something.\" Zinnia: \"My people have a story. Land and sea fight. They always fight. And every time, what stops them comes from up there.\" She points with the stick. The sky's very clear. Zinnia: \"Nobody's on the sky's side. No hats. No boats. Funny, that.\"",
+   "choices": [
+    {
+     "label": "\"Somebody should be.\"",
+     "success": {
+      "text": "Zinnia: \"Mm. Somebody.\" She hands over the stick. Zinnia: \"It needs a name. And you'll need people. Good ones, for once.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You are. Why not you?\"",
+     "success": {
+      "text": "Zinnia: \"I'm the last of a lot of things. I'm not a joiner. But I'll come to the meetings and criticise.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zinnia-trust",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not starting a team.\"",
+     "success": {
+      "text": "Zinnia: \"Fair.\" She finishes her snack and goes. She'll ask once more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-declined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-draconid-5",
+   "name": "The Draconid at the Fire",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 4,
+     "inside": false,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "anyFlag",
+     "keys": [
+      "hoenn-side-none",
+      "hoenn-left-team"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "sign-rayquaza",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sky-draconid-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "pokemon": "whismur",
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "A rest on high ground. Somebody's already sitting at your fire, toasting something on a stick. A Whismur sleeps in her lap. Zinnia: \"Hi. I let myself in. You don't own the hill.\" Zinnia: \"I've been watching you watch them. Red hats want more land. Blue hats want more sea. You walked straight down the middle like you'd smelled something.\" Zinnia: \"My people have a story. Land and sea fight. They always fight. And every time, what stops them comes from up there.\" She points with the stick. The sky's very clear. Zinnia: \"Nobody's on the sky's side. No hats. No boats. Funny, that.\"",
+   "choices": [
+    {
+     "label": "\"Somebody should be.\"",
+     "success": {
+      "text": "Zinnia: \"Mm. Somebody.\" She hands over the stick. Zinnia: \"It needs a name. And you'll need people. Good ones, for once.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You are. Why not you?\"",
+     "success": {
+      "text": "Zinnia: \"I'm the last of a lot of things. I'm not a joiner. But I'll come to the meetings and criticise.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zinnia-trust",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not starting a team.\"",
+     "success": {
+      "text": "Zinnia: \"Fair.\" She finishes her snack and goes. She'll ask once more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-draconid-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-declined",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-draconid-again",
+   "name": "The Draconid at the Fire",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 5,
+     "inside": false,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "sky-declined",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sky-again",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "pokemon": "whismur",
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "Zinnia: \"Me again. You saw that one too. Still not starting a team?\"",
+   "choices": [
+    {
+     "label": "\"Somebody should be.\"",
+     "success": {
+      "text": "Zinnia: \"Mm. Somebody. It needs a name.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-again",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not.\"",
+     "success": {
+      "text": "Zinnia: \"Fair.\" She doesn't come back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-again",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-emblem",
+   "name": "The Founding: the Emblem",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "The emblem. Eight shapes; green and gold.",
+   "choices": [
+    {
+     "label": "A wing.",
+     "success": {
+      "text": "A wing, in green and gold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-emblem-wing",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-creed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A ring.",
+     "success": {
+      "text": "A ring, in green and gold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-emblem-ring",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-creed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A cloud.",
+     "success": {
+      "text": "A cloud, in green and gold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-emblem-cloud",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-creed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(More shapes.)",
+     "success": {
+      "text": "The stick draws in the ash.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-emblem-2",
+   "name": "The Founding: the Emblem",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "The emblem.",
+   "choices": [
+    {
+     "label": "A star.",
+     "success": {
+      "text": "A star, in green and gold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-emblem-star",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-creed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A feather.",
+     "success": {
+      "text": "A feather, in green and gold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-emblem-feather",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-creed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "An eye.",
+     "success": {
+      "text": "An eye, in green and gold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-emblem-eye",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-creed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(More shapes.)",
+     "success": {
+      "text": "The stick draws in the ash.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sky-emblem-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-emblem-3",
+   "name": "The Founding: the Emblem",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "The emblem.",
+   "choices": [
+    {
+     "label": "A spire.",
+     "success": {
+      "text": "A spire, in green and gold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-emblem-spire",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-creed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A kite.",
+     "success": {
+      "text": "A kite, in green and gold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-emblem-kite",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-creed"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-creed",
+   "name": "The Founding: the Creed",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "The creed. It can't be changed later, and it changes the story.",
+   "choices": [
+    {
+     "label": "\"Keep the Balance.\"",
+     "success": {
+      "text": "Neither land nor sea should win. Missions that stop both teams equally pay more Renown. Zinnia approves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-creed-balance",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-first-three"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Protect the Small.\"",
+     "success": {
+      "text": "The towns and wild Pokémon in the way come first. Rescues pay more, and kindness counts double.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-creed-small",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-first-three"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Above It All.\"",
+     "success": {
+      "text": "The sky should rule the other two. Raids pay more. Grunts are bolder and less loyal. Zinnia watches you closely.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-creed-above",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-first-three"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-first-three",
+   "name": "The First Three",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer_m",
+     "boss.npc_ruinmaniac",
+     "boss.npc_youngster"
+    ],
+    "tint": "#2a5a48",
+    "effect": "none"
+   },
+   "intro": "Your first recruits aren't hired. They come. Marlo, the Aqua diver: \"I found the trench. I know what's in it. I've not slept right since. I'd like to work for someone who's scared of it.\" Dr. Tuff, the Magma geologist: \"My readings said it would kill everyone. He wouldn't look. Will you look?\" The third is whoever you've been kindest to in Hoenn: the freed spy, if there is one; or, failing all else, a kid with a kite, Lowen, who heard there was a team with no hats.",
+   "choices": [
+    {
+     "label": "(Welcome them.)",
+     "success": {
+      "text": "Team Sky has three, and Zinnia, who'll come to the meetings and criticise. It meets on hills.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "sky-founded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-renown",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-loyalty",
+        "amount": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-drill-dig",
+   "name": "The Drill and the Dig",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 4,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s2-1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_ruinmaniac",
+     "boss.npc_swimmer_m"
+    ],
+    "tint": "#2a5a48",
+    "effect": "none"
+   },
+   "intro": "Both teams are working the same coast, a mile apart: Magma's drill and Aqua's dig. Dr. Tuff: \"If the drill reaches the vent, the dig floods with boiling water. Neither of them knows the other's there.\" Marlo: \"There are grunts in that trench. Kids, mostly.\"",
+   "choices": [
+    {
+     "label": "Stop the drill.",
+     "success": {
+      "text": "The other team finishes its job.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "sky-s2-1",
+         "amount": 1
+        }
+       ],
+       "sprite": "trainer.pr/magma_grunt_m",
+       "team": [
+        "numel",
+        "mightyena",
+        "koffing"
+       ],
+       "name": "Magma Grunts",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "sky-renown",
+         "amount": 2
+        },
+        {
+         "kind": "evil",
+         "heat": 2
+        },
+        {
+         "kind": "flag",
+         "key": "sky-s2-1",
+         "amount": 1
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Stop the dig.",
+     "success": {
+      "text": "The other team finishes its job.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "sky-s2-1",
+         "amount": 1
+        }
+       ],
+       "sprite": "trainer.pr/aqua_grunt_m",
+       "team": [
+        "carvanha",
+        "poochyena",
+        "zubat"
+       ],
+       "name": "Aqua Grunts",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "sky-renown",
+         "amount": 2
+        },
+        {
+         "kind": "evil",
+         "heat": 2
+        },
+        {
+         "kind": "flag",
+         "key": "sky-s2-1",
+         "amount": 1
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Warn both, in person.",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-freed-spy",
+        "hoenn-same-story",
+        "hoenn-asked-both"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You walk into each camp in turn, in a green scarf, and tell them. Each lieutenant has to decide whether to believe an enemy. They do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-renown",
+        "amount": 4
+       },
+       {
+        "kind": "evil",
+        "heat": -1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-warned-both",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s2-1",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them find out.",
+     "success": {
+      "text": "The vent blows. Nobody dies. Twenty grunts in both colours crawl out scalded and furious at their own leaders. Six of them ask to join Sky. Zinnia: \"That was cold.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-renown",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-recruits",
+        "amount": 6
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s2-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-name-wall",
+   "name": "The Name on the Wall",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 4,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s2-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s2-2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#2a5a48",
+    "effect": "none"
+   },
+   "intro": "Somebody has painted the Sky emblem on a town hall. It wasn't you. The mayor: \"Are you a gang? We've got two. We can't afford three.\" The painter is one of your own recruits, who wanted people to know.",
+   "choices": [
+    {
+     "label": "\"We're not a gang. Watch.\"",
+     "success": {
+      "text": "You say it to the painter too. Team Sky's public face is proud: recruits come faster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-face-proud",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s2-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-renown",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find who painted it.\"",
+     "success": {
+      "text": "You find them. You tell them quietly. Team Sky's public face is quiet: Heat rises slower.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-face-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s2-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Paint over it.\"",
+     "success": {
+      "text": "The painter helps. Team Sky's public face is quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-face-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s2-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-first-loss",
+   "name": "The First Loss",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 4,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s2-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s2-3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_youngster"
+    ],
+    "tint": "#2a5a48",
+    "effect": "none"
+   },
+   "intro": "A mission goes wrong. A grunt is captured by one of the teams. The team looks at you. Lowen: \"We go and get them. Right? That's what we are?\"",
+   "choices": [
+    {
+     "label": "\"We go tonight.\"",
+     "success": {
+      "text": "A Hideout raid, led by you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "sky-s2-3",
+         "amount": 1
+        }
+       ],
+       "sprite": "trainer.pr/magma_grunt_m",
+       "team": [
+        "mightyena",
+        "golbat",
+        "camerupt"
+       ],
+       "name": "Hideout Guards",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "sky-loyalty",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "sky-leaves-no-one",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sky-s2-3",
+         "amount": 1
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "\"We trade for them.\"",
+     "success": {
+      "text": "You give up something for them. They come home.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-loyalty",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s2-3",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": -1000
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"We can't risk everyone for one.\"",
+     "success": {
+      "text": "The grunt is freed later, by Zinnia, who tells the team who came for them and who didn't.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-loyalty",
+        "amount": -3
+       },
+       {
+        "kind": "flag",
+        "key": "sky-left-one",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s2-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-invitations",
+   "name": "Two Invitations",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s2-3",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s3-1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.archie-gen6"
+    ],
+    "tint": "#2a5a48",
+    "effect": "none"
+   },
+   "intro": "Maxie, by letter: \"Your organisation shows method. Ally with me against the sea, and I'll leave you the air. I've no use for it.\" Archie, in person, on your hill, with a barrel: \"A third crew! I love it! Sail with me against the hot-heads and I'll name a ship after you.\"",
+   "choices": [
+    {
+     "label": "Ally with Magma.",
+     "success": {
+      "text": "Maxie writes back within the hour. It's a very precise letter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-ally-magma",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s3-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ally with Aqua.",
+     "success": {
+      "text": "Archie opens the barrel.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-ally-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s3-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ally with neither.",
+     "success": {
+      "text": "Both are offended in different ways.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-s3-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell each about the other's offer.",
+     "success": {
+      "text": "They're furious at each other, and wary of you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-renown",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "sky-told-each",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s3-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-base",
+   "name": "The Base",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s3-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s3-2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "tint": "#2a5a48",
+    "effect": "none"
+   },
+   "intro": "The team needs a home. Three sites, each with a cost.",
+   "choices": [
+    {
+     "label": "The Weather Institute's roof.",
+     "success": {
+      "text": "Forecasts, and Dr. Cirra Hart as an ally. It's public. Everyone knows where Sky is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-base-institute",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s3-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A ruined Draconid watchtower.",
+     "success": {
+      "text": "Hidden, and a Rayquaza Sign site. It needs Zinnia's permission.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-base-tower",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s3-2",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-zinnia-wants"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A stolen ship.",
+     "success": {
+      "text": "It moves. Missions launch from anywhere. Heat +4 with the team it's stolen from.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 4
+       },
+       {
+        "kind": "flag",
+        "key": "sky-base-ship",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s3-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-zinnia-wants",
+   "name": "What Zinnia Wants",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "tint": "#3a4a58",
+    "effect": "none"
+   },
+   "intro": "Zinnia: \"The tower's my grandmother's. You can have it. One condition.\" Zinnia: \"When it comes to it, and it will, you don't call the dragon down for yourself. You call it for everyone, or not at all. Say it.\"",
+   "choices": [
+    {
+     "label": "\"I promise.\"",
+     "success": {
+      "text": "She nods once. She'll know.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-promise-zinnia",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I can't promise that.\"",
+     "success": {
+      "text": "Zinnia: \"...Honest. I'll take honest.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What if it's the only way?\"",
+     "success": {
+      "text": "Zinnia: \"Then it's the only way for everyone. Say it, or don't.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-lieutenant",
+   "name": "The Lieutenant Who Wants More",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s3-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s3-4",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "tint": "#2a5a48",
+    "effect": "none"
+   },
+   "intro": "One of your Admins has been reading the Draconid murals. The Admin: \"They can each wake one. We could wake the one that beats both. Why are we playing referee when we could be the whistle?\" The Admin: \"You'd be the most powerful person in Hoenn. You'd never have to ask anybody anything again.\"",
+   "choices": [
+    {
+     "label": "\"That's not what we're for.\"",
+     "success": {
+      "text": "They nod. If they're not loyal, they don't mean it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-admin-warned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s3-4",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell me more.\"",
+     "success": {
+      "text": "They show you how.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-admin-tempted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s3-4",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Step down.\"",
+     "success": {
+      "text": "They're demoted. A third of the boldest grunts leave with them, and found a splinter: the Zenith.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-zenith",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s3-4",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-pyre",
+   "name": "Mt. Pyre, From the Other Side",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "sky-s4",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman",
+     "boss.npc_lady"
+    ],
+    "tint": "#3a3a48",
+    "effect": "fog"
+   },
+   "intro": "The summit bench. The old couple. And below, climbing from two sides, a red column and a blue one. The old man: \"You're new. No hat.\" The old woman: \"A scarf. That's a hat for your neck.\" The old man: \"They're coming for these. We can't stop two. Can you?\"",
+   "choices": [
+    {
+     "label": "Hold the summit.",
+     "success": {
+      "text": "Two battles, uphill, against both lieutenants.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sky-pyre-tabitha"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the orbs somewhere safe.",
+     "success": {
+      "text": "Sky now holds both orbs. Every faction in Hoenn is after you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 6
+       },
+       {
+        "kind": "flag",
+        "key": "sky-has-orbs",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s4",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give each team the wrong orb.",
+     "success": {
+      "text": "The swap, on purpose, to both. In the cavern, each legend will turn on the team that woke it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-swapped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s4",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them have them. We stop it at the cavern.",
+     "success": {
+      "text": "The old woman: \"That's a gamble with other people's coast.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-gambled",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s4",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-pyre-tabitha",
+   "name": "The Red Column",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.tabitha"
+    ],
+    "tint": "#2a5a48",
+    "effect": "fog"
+   },
+   "intro": "Tabitha, at the head of the red column. Tabitha: \"Hoo... a scarf. Out of the way.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Uphill.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.tabitha",
+       "team": [
+        "camerupt",
+        "mightyena",
+        "golbat"
+       ],
+       "name": "Tabitha",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "sky-pyre-shelly"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-pyre-shelly",
+   "name": "The Blue Column",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.shelly"
+    ],
+    "tint": "#2a5a48",
+    "effect": "fog"
+   },
+   "intro": "Shelly, at the head of the blue column. Shelly: \"Ahaha! A third colour. How sweet. Move.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Uphill.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.shelly",
+       "team": [
+        "sharpedo",
+        "mightyena",
+        "crobat"
+       ],
+       "name": "Shelly",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "sky-pyre-held"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-pyre-held",
+   "name": "The Summit Held",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman",
+     "boss.npc_lady"
+    ],
+    "tint": "#2a5a48",
+    "effect": "fog"
+   },
+   "intro": "Your squads held the paths. The orbs stay in two laps.",
+   "choices": [
+    {
+     "label": "(Sit on the bench.)",
+     "success": {
+      "text": "The old man offers you a sweet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sky-renown",
+        "amount": 6
+       },
+       {
+        "kind": "flag",
+        "key": "sky-held-pyre",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-s4",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-zenith-pillar",
+   "name": "The Zenith",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "after": 6,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "sky-zenith",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "sky-zenith-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "tint": "#1a2a20",
+    "effect": "glint"
+   },
+   "intro": "A splinter team in black-green, on Sky Pillar, trying to call it down for themselves. At the front: your own old lieutenant.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The Admin: \"I learned it from watching you. I just didn't stop where you stopped.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "sky-zenith-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sky-zenith-won",
+         "amount": 1
+        }
+       ],
+       "sprite": "boss.npc_cooltrainer_m",
+       "team": [
+        "salamence",
+        "altaria",
+        "flygon",
+        "tropius"
+       ],
+       "name": "The Zenith",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "sky-zenith-done",
+         "amount": 1
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-climax",
+   "name": "The Sky's Choice",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "anyRoute": true,
+     "beat": 6,
+     "has": "third",
+     "inside": false
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "hoenn"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.archie-gen6",
+     "boss.zinnia"
+    ],
+    "tint": "#3a2a48",
+    "effect": "rain"
+   },
+   "intro": "The Seafloor Cavern. Both leaders. Both legends, waking. And a green-scarfed line between them. Maxie: \"You. The referee.\" Archie: \"The kite club! You've got some nerve!\" Zinnia, behind you, quietly: \"Here it is. This is the bit in the story.\" The sky above the cavern roof has gone the colour of a bruise. Something up there is listening.",
+   "choices": [
+    {
+     "label": "Call it for everyone.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sky-promise-zinnia",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You don't use an orb. You ask.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sky-everyone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call it for us.",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "sky-admin-tempted",
+        "sky-creed-above"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You raise a hand, and it comes, and it isn't asking.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sky-ours"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand between them.",
+     "success": {
+      "text": "You walk out onto the rock between two waking legends, with the whole team behind, and no orb, and no dragon.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sky-between"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make them talk.",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "sky-warned-both",
+        "hoenn-lt-doubt"
+       ]
+      }
+     ],
+     "success": {
+      "text": "\"Lilycove. Both of you. Say it.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sky-talk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-everyone",
+   "name": "Call It for Everyone",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "pokemon": "rayquaza",
+    "tint": "#2a5a48",
+    "effect": "sparkle"
+   },
+   "intro": "Rayquaza comes down through the storm like a line being drawn. It looks at the two below. It looks at you. It waits to be told, and isn't. Zinnia: \"You didn't order it. ...It noticed.\" Both legends sleep. Rayquaza leaves. Team Sky becomes a standing watch: a hut on every high place in Hoenn, a kite flying when the weather's wrong.",
+   "choices": [
+    {
+     "label": "(Fly a kite.)",
+     "success": {
+      "text": "Zinnia's trust is at its highest.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "sky-end-everyone",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zinnia-trust",
+        "amount": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-ours",
+   "name": "Call It for Us",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "pokemon": "rayquaza",
+    "tint": "#2a5a48",
+    "effect": "glint"
+   },
+   "intro": "The Admin: \"Yes. Yes.\" Zinnia: \"You said it. You said it to my face.\" Rayquaza ends the fight in a single turn, and stays. Hoenn's sky belongs to you. Both old teams kneel or flee. Every town flies the emblem, because it must. Zinnia leaves, and takes the Draconid tower with her.",
+   "choices": [
+    {
+     "label": "(Look up.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sky-promise-zinnia",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "It's still there.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sky-ours-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(She stops in the door.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sky-promise-zinnia",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Promise is broken. She'll battle you, now.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sky-zinnia-fight"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-ours-after",
+   "name": "Call It for Us",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "pokemon": "rayquaza",
+    "tint": "#2a5a48",
+    "effect": "glint"
+   },
+   "intro": "Hoenn's sky is yours. Your rival's last battle of the run will be fought on Sky Pillar, to make you let it go.",
+   "choices": [
+    {
+     "label": "(Keep it.)",
+     "success": {
+      "text": "Every town flies the emblem.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "sky-end-ours",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-hoenn",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -3
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-zinnia-fight",
+   "name": "A Broken Promise",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "tint": "#2a5a48",
+    "effect": "glint"
+   },
+   "intro": "Her Salamence, and a fury the game hasn't shown before.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Whatever the result, she doesn't come back.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "evil",
+         "end": "allied"
+        },
+        {
+         "kind": "flag",
+         "key": "sky-end-ours",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "evil-start-hoenn",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "zinnia-gone",
+         "amount": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": -3
+         }
+        }
+       ],
+       "sprite": "boss.zinnia",
+       "team": [
+        "salamence",
+        "goodra",
+        "noivern",
+        "altaria",
+        "tyrantrum",
+        "whismur"
+       ],
+       "name": "Zinnia",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "evil",
+         "end": "allied"
+        },
+        {
+         "kind": "flag",
+         "key": "sky-end-ours",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "evil-start-hoenn",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "zinnia-gone",
+         "amount": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "trust": -3
+         }
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-between",
+   "name": "Stand Between Them",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.archie-gen6"
+    ],
+    "tint": "#2a5a48",
+    "effect": "rain"
+   },
+   "intro": "Lowen, voice cracking: \"This is so stupid. I'm staying.\" Five turns between Primal Groudon and Primal Kyogre, taking hits meant for each other. Every Sky grunt who's loyal enough stands one turn in your place.",
+   "choices": [
+    {
+     "label": "(Hold the line.)",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "It holds for five turns. Both leaders are looking at a hundred people in green who are willing to be the thing in the way, and it's that, not force, that stops them. Maxie: \"...Stand down. All units. Stand down.\" Archie: \"Drop anchor. Drop it! I said drop it!\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sky-between-after"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It bends, and doesn't break. Your party takes the hits nobody else could. Nobody faints from it. It holds for five turns. Maxie: \"...Stand down. All units. Stand down.\" Archie: \"Drop anchor. Drop it! I said drop it!\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sky-between-after"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "line-many",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sky-loyal-line",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ],
+     "notice": "Most of your roster is in the line, in green, shoulder to shoulder. The ones with cracked feathers stand a little apart, and then step in."
+    },
+    {
+     "id": "line-few",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sky-loyal-line",
+       "atLeast": 1,
+       "atMost": 4
+      }
+     ],
+     "notice": "A handful of your grunts are in the line. The rest watch from the rock, and you can't blame them."
+    },
+    {
+     "id": "line-none",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sky-loyal-line",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "sky-roster",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "None of your grunts is loyal enough to stand in the line. It's you and your party, and Lowen."
+    }
+   ]
+  },
+  {
+   "id": "sky-between-after",
+   "name": "Stand Between Them",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.zinnia"
+    ],
+    "tint": "#2a5a48",
+    "effect": "none"
+   },
+   "intro": "Nobody dies. Renown at its highest.",
+   "choices": [
+    {
+     "label": "(Let go of the breath.)",
+     "success": {
+      "text": "Every Pokémon that held the line is closer to you for it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "sky-renown",
+        "amount": 10
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "sky-end-between",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-talk",
+   "name": "Make Them Talk",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.archie-gen6"
+    ],
+    "tint": "#2a5a48",
+    "effect": "none"
+   },
+   "intro": "Maxie and Archie look at each other. Something they've spent twenty years not saying is in the room. Archie: \"...You were on that street.\" Maxie: \"You were on that pier.\" They grew up three streets apart. The same wave, the same year. One blamed the sea; one blamed the people who built on it. Shelly and Tabitha, who've both walked out by now, stand at the back with their arms folded, like parents at a school play. The orbs go back up Mt. Pyre in two hands that have never touched before.",
+   "choices": [
+    {
+     "label": "Dissolve Team Sky.",
+     "success": {
+      "text": "It's dissolved by its own success. Nothing woke at all.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "sky-end-talk",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-dissolved",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it, as the Hoenn Weather Watch.",
+     "success": {
+      "text": "A red wing and a blue wing. Nothing woke at all.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "sky-end-talk",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-weather-watch",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -337,6 +337,7 @@ import { memoryPick } from './memories/encounters';
 import { noteReplayTurn, sealReplay } from './memories/replay';
 import { noteSkips, worldStageStart } from './memories/world';
 import { evilStageStart, evilTeam } from './evil/teams';
+import { skyNodeTick, skyStageStart } from './evil/teamSky';
 import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
 import { StoryV2Schema } from './story2/schema';
 import type { PronounSet } from './story2/identity';
@@ -800,6 +801,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   tellAct(content, run);
   worldStageStart(content, run);
   evilStageStart(content, run);
+  skyStageStart(content, run);
   worldTick(content, run);
   applyGrandInfluence(content, run);
   growCrisis(content, run);
@@ -1118,6 +1120,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   stage.current = nodeId;
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
+  skyNodeTick(content, run);
   stepClock(content, run);
   coStep(content, run);
   followedStep(content, run);
@@ -1206,6 +1209,7 @@ function moveInPseudo(content: Content, run: RunState, nodeId: string): RunState
   stage.current = nodeId;
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
+  skyNodeTick(content, run);
   stepClock(content, run);
   coStep(content, run);
   if (node.roomEvent && !node.sides.some((x) => x.eventId === node.roomEvent)) {

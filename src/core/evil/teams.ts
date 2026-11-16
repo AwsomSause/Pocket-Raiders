@@ -26,7 +26,7 @@ import { evilConfig, HIDEOUT_AT_LEAGUE } from '../campaign/circuit';
 import { recordChoice } from './choices';
 import { beatTeamLeaders } from '../expansion/cast/dossier';
 import { trackOnClimax, trackOnOperation } from '../expansion/trackRun';
-import { applyInside, clearInside, insideLine, insideMet, insideOn, replacedByInside } from './inside';
+import { applyInside, clearInside, crossInside, insideLine, insideMet, insideOn, rankOf, replacedByInside, routeOf } from './inside';
 import { freshEvil, type EvilRank, type EvilState, type EvilTeam, type VillainRecord } from './schema';
 
 type EvilCondition = Extract<EventCondition, { kind: 'evil' }>;
@@ -141,6 +141,16 @@ export function evilStageStart(content: Content, run: RunState): void {
   const s = evilOf(run);
   const cfg = evilConfig(content, run);
   s.stages += 1;
+  // HOENN_TEAMS 7.1: the uniform pays each stage, by rank, while you're inside (routes with `pay`).
+  const payTeam = s.teamId ? content.evilTeams.teams.find((t) => t.id === s.teamId) : undefined;
+  const payRoute = payTeam && insideOn(run, payTeam.id) ? routeOf(payTeam, run.regionOrder[run.regionIndex]) : undefined;
+  if (payTeam && payRoute?.pay) {
+    const wage = payRoute.pay[rankOf(run, payTeam.id, payRoute) - 1] ?? 0;
+    if (wage > 0) {
+      run.money += wage;
+      tell(content, run, 'evil-pay', `${payTeam.name} pays you ₽${wage} for the stage.`, 30);
+    }
+  }
   if (regionalStory(content, run)) {
     if (s.teamId && s.region !== run.regionIndex) closeRegionStory(content, run, s);
     dropRegionMods(run, s);
@@ -177,7 +187,7 @@ export function evilConditionMet(content: Content, run: RunState, c: EvilConditi
   if (!s?.teamId) return false;
   if (c.team !== undefined && s.teamId !== c.team) return false;
   // Volume III: on the inside route the outside story steps aside (core/evil/inside.ts).
-  if (replacedByInside(run, s.teamId, c) || !insideMet(run, s.teamId, c)) return false;
+  if (replacedByInside(run, s.teamId, c) || !insideMet(run, s.teamId, c, routeOf(content.evilTeams.teams.find((t) => t.id === s.teamId), run.regionOrder[run.regionIndex]))) return false;
   if (c.beat !== undefined && (s.beat !== c.beat || s.stages < s.nextAt || s.end !== 'none')) return false;
   if (c.after !== undefined && s.beat < c.after) return false;
   if (c.op !== undefined && !s.ops.some((o) => o.id === c.op && o.region === run.regionIndex && o.outcome === 'running')) return false;
@@ -221,6 +231,17 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
   const team = evilTeam(content, run);
   const s = evilOf(run);
   if (!team) return '';
+  // Hoenn: the Offer and the Counter-Offer move the player to the region's other team. Its story goes on from the same
+  // beat; the Operations running here become the new team's (one for one), so nothing is lost or doubled.
+  if (e.side && e.side !== team.id) {
+    const to = content.evilTeams.teams.find((t) => t.id === e.side);
+    if (!to) return '';
+    const region = run.regionOrder[run.regionIndex];
+    crossInside(run, team, to, region, !!e.demote);
+    s.ops.filter((o) => o.region === run.regionIndex).forEach((o, i) => { o.id = to.ops[i % to.ops.length]!.id; });
+    s.teamId = to.id;
+    return `You're ${to.name} now.`;
+  }
   const words: string[] = [];
   if (e.talk) words.push(`${team.ranks[e.talk].name}: ${villainLine(team, e.talk, s.villains[e.talk])}`);
   if (e.beat && s.beat < 7) {
@@ -270,6 +291,7 @@ export function applyEvilEffect(content: Content, run: RunState, e: EvilEffect):
     });
   }
   if (e.mark) bump(run, `team-${team.id}-${e.mark}`);
+  if (e.leave) { clearInside(run, team.id); bump(run, `team-${team.id}-left`); }
   if (e.standing || e.suspicion || e.rank) words.push(...applyInside(run, team, run.regionOrder[run.regionIndex], e));
   if (e.pen) {
     const node = rescueNode(content, run);

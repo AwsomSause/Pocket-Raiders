@@ -1511,6 +1511,10 @@
         "kind": "flag",
         "key": "team-files-kept",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-aqua-offer-{region}"
        }
       ]
      }
@@ -1532,6 +1536,10 @@
         "kind": "flag",
         "key": "team-files-given",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-aqua-offer-{region}"
        }
       ]
      }
@@ -1563,6 +1571,10 @@
         "feelings": {
          "trust": -1
         }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-aqua-offer-{region}"
        }
       ]
      }
@@ -1606,6 +1618,10 @@
           "kind": "flag",
           "key": "shelf-kit-address",
           "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "evil-aqua-offer-{region}"
          }
         ]
        }
@@ -2855,6 +2871,10 @@
         "kind": "flag",
         "key": "team-files-kept",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-magma-offer-{region}"
        }
       ]
      }
@@ -2876,6 +2896,10 @@
         "kind": "flag",
         "key": "team-files-given",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-magma-offer-{region}"
        }
       ]
      }
@@ -2907,6 +2931,10 @@
         "feelings": {
          "trust": -1
         }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-magma-offer-{region}"
        }
       ]
      }
@@ -2950,6 +2978,10 @@
           "kind": "flag",
           "key": "shelf-kit-address",
           "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "evil-magma-offer-{region}"
          }
         ]
        }
@@ -4199,6 +4231,10 @@
         "kind": "flag",
         "key": "team-files-kept",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-galactic-offer-{region}"
        }
       ]
      }
@@ -4220,6 +4256,10 @@
         "kind": "flag",
         "key": "team-files-given",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-galactic-offer-{region}"
        }
       ]
      }
@@ -4251,6 +4291,10 @@
         "feelings": {
          "trust": -1
         }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-galactic-offer-{region}"
        }
       ]
      }
@@ -4294,6 +4338,10 @@
           "kind": "flag",
           "key": "shelf-kit-address",
           "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "evil-galactic-offer-{region}"
          }
         ]
        }
@@ -5598,6 +5646,10 @@
         "kind": "flag",
         "key": "team-files-kept",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-plasma-offer-{region}"
        }
       ]
      }
@@ -5619,6 +5671,10 @@
         "kind": "flag",
         "key": "team-files-given",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-plasma-offer-{region}"
        }
       ]
      }
@@ -5650,6 +5706,10 @@
         "feelings": {
          "trust": -1
         }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "evil-plasma-offer-{region}"
        }
       ]
      }
@@ -5693,6 +5753,10 @@
           "kind": "flag",
           "key": "shelf-kit-address",
           "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "evil-plasma-offer-{region}"
          }
         ]
        }
