@@ -96,7 +96,7 @@ const gnew24: Json[] = [
     'Behind a collapsed barn, in a nest of coats and dry leaves, a hatchling is asleep. Four thin Sneasel sit around it, taking turns to keep watch.',
     'It hatched here. It has their way of tucking its chin. A hatchling raised by Sneasel has a nature no day-care would ever have given it.',
   ), [
-    ch('Take it home.', out('The Sneasel watch you lift it. The thinnest one steps aside, and doesn\'t make a sound.', join({ species: ['sneasel'], lv: -3 }), setTo('ns-found', 1), moment('Found the stolen egg, hatched and raised by the Sneasel who took it.', 70))),
+    ch('Take it home.', out('The Sneasel watch you lift it. The thinnest one steps aside, and doesn\'t make a sound.', { ...join({ species: ['sneasel'], lv: -3 }), nature: 'naughty' }, setTo('ns-found', 1), moment('Found the stolen egg, hatched and raised by the Sneasel who took it.', 70))),
     ch('Leave it with them.', out('The hatchling yawns. The Sneasel look at you as if you had finally said something sensible.', setTo('ns-found', 1))),
   ]),
 ];

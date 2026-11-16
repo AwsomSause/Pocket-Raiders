@@ -2224,7 +2224,8 @@
         ],
         "types": [],
         "levelBonus": -3,
-        "shinyMultiplier": 1
+        "shinyMultiplier": 1,
+        "nature": "naughty"
        },
        {
         "kind": "gn",

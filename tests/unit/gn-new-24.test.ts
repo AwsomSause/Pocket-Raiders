@@ -76,7 +76,11 @@ describe('gn.new.24 The Night Shift at the Day-Care', () => {
     expect(flagOf(run, 'daycare-egg-taken')).toBe(1);
     expect(sides(run)).toBe('gn-new-24-sent-2');
     expect(scene(run, 'gn-new-24-found').labels).toEqual(['Take it home.', 'Leave it with them.']);
-    setFlag(run, 'daycare-defended', 0);
-    expect(flagOf(run, 'daycare-defended')).toBe(0);
+    setFlag(run, 'ns-at', 0);
+    open(run, 'gn-new-24-found');
+    const home = choose(run, 'gn-new-24-found', 'Take it home.');
+    expect(home.changes.join(' ')).toContain('Sneasel');
+    const pend = home.run.pending.find((p) => p.kind === 'caught');
+    expect(pend && pend.kind === 'caught' ? pend.mon.nature : '').toBe('naughty');
   });
 });
