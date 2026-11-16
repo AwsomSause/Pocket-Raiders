@@ -5347,5 +5347,38 @@
    "Companion Story"
   ],
   "tags": []
+ },
+ "gn-new-11-door": {
+  "gn": "gn.new.11",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "must-see",
+  "attaches": "after",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7
+  ],
+  "level": "No battles",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Night Parade",
+   "elsewhere": "The Night Parade"
+  },
+  "note": "Badge: a lantern. Once per region, at night (fallback: step 10 at night, then the first night join of the next stage). Joining opens the Spirit Market (six lanterns); the last region opens the palanquin for a player who joined every parade.",
+  "kinds": [
+   "World Event"
+  ],
+  "tags": [
+   "night"
+  ]
  }
 }

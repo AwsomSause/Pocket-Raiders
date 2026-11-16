@@ -1,0 +1,864 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-11-door",
+   "name": "The Night Parade",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "parade-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2140",
+    "effect": "none"
+   },
+   "intro": "Every street lamp goes out. One after another, in a line, coming toward you.\n\n*Lanterns. Masks. A hundred Ghost- and Dark-types, walking in step. In the middle, a palanquin with its curtains shut.*\n\nNobody speaks. Your Pokémon have stopped moving. You can hear them breathe.",
+   "choices": [
+    {
+     "label": "Hide.",
+     "success": {
+      "text": "You flatten yourself into a doorway and hold your breath. The lanterns pass, a hundred of them, close enough to warm your face. In the morning there is a mask on the road, left behind or left for you. It is only a mask.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "parade-hid",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "parade-at"
+       },
+       {
+        "kind": "moment",
+        "text": "Hid from the Night Parade, and found a mask on the road.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You stand where you are. The palanquin goes by. For a moment its curtain moves, as if someone inside is looking back. One of your Pokémon presses hard against your leg and does not let go until the last lantern is gone.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "parade-watched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "parade-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join the back of the line.",
+     "success": {
+      "text": "You step in behind the last lantern. Nobody stops you. **The line ends at a Spirit Market. Six actions before the lanterns burn down. Stay past the sixth, and you wake at the next step with one item swapped for another of the same tier.** A Misdreavus at the gate says so, once, politely.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "parade-joined",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "parade-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "parade-lanterns",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-lane-a"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-11-lane-a",
+   "name": "The Spirit Market: First Lane",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "bell",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "parade-lanterns",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "At the gate the Misdreavus rings its little bell. Once. The fifth action is coming, and everyone in the lane hears it."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2140",
+    "effect": "none"
+   },
+   "intro": "*Paper lanterns, burning low. Stalls with no prices. Nothing here is sold for money.*\n\nThe Masked Banette keeps a stall of three moves. The Sableye with scales sits behind a pile of old pages.\n\nLanterns left: **{flag:parade-lanterns}** of six.",
+   "choices": [
+    {
+     "label": "The Masked Banette.",
+     "success": {
+      "text": "The Banette lays three moves on a cloth: Shadow Sneak, Night Slash, Will-O-Wisp. \"A move for a move,\" it says. \"Fair is fair.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-banette"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Sableye with scales.",
+     "success": {
+      "text": "It rubs a gem against its claws. \"A memory,\" it says. \"One line from your Notebook. I'll erase it. You'll never miss it. For something Rare.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-sableye"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on, down the lane.",
+     "success": {
+      "text": "The lantern light bends. The lane turns, and two more stalls wait there.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-lane-b"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the market.",
+     "success": {
+      "text": "You turn your back on the lanterns. The line closes behind you without a sound. The market is gone before you reach the road.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "parade-all",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "paradeAll",
+          "key": "parade-joined"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-curtain"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-11-lane-b",
+   "name": "The Spirit Market: Second Lane",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "bell",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "parade-lanterns",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "At the gate the Misdreavus rings its little bell. Once. The fifth action is coming, and everyone in the lane hears it."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2140",
+    "effect": "none"
+   },
+   "intro": "*A mirror-bright stall. Further down, a very old shape, folded small, behind a cold fire.*\n\nThe Mismagius trades secrets. The Old Dusclops trades what was taught before the game began.\n\nLanterns left: **{flag:parade-lanterns}** of six.",
+   "choices": [
+    {
+     "label": "The Mismagius.",
+     "success": {
+      "text": "It floats at your shoulder and sings very softly. \"A nickname,\" it says. \"Give it to me, and I'll give you a secret. One on this stage.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-mismagius"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Old Dusclops.",
+     "success": {
+      "text": "It opens one eye. \"Any one egg move,\" it says. \"For a move your Pokémon already knows. It will not be the same Pokémon after.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-dusclops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk back, up the lane.",
+     "success": {
+      "text": "The lanterns sway. The first lane is where you left it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-lane-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the market.",
+     "success": {
+      "text": "You turn your back on the lanterns. The line closes behind you without a sound. The market is gone before you reach the road.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "parade-all",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "paradeAll",
+          "key": "parade-joined"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-curtain"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-11-banette",
+   "name": "The Spirit Market: The Masked Banette",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2140",
+    "effect": "none"
+   },
+   "intro": "Three moves on a cloth. A tiny hand covers the one you are not looking at.\n\n**The Banette:** \"Your lead gives its last move to the cloth. Take one. Only one.\"\n\nLanterns left: **{flag:parade-lanterns}** of six.",
+   "choices": [
+    {
+     "label": "Shadow Sneak.",
+     "success": {
+      "text": "The cloth is empty again. Your lead moves quietly now, and a little faster than before.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "paradeSwap",
+        "key": "shadow-sneak"
+       },
+       {
+        "kind": "flag",
+        "key": "parade-lanterns",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-dark"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-lane-a"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Night Slash.",
+     "success": {
+      "text": "The cloth is empty again. Your lead cuts the air once, to see. The air stays cut.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "paradeSwap",
+        "key": "night-slash"
+       },
+       {
+        "kind": "flag",
+        "key": "parade-lanterns",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-dark"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-lane-a"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Will-O-Wisp.",
+     "success": {
+      "text": "The cloth is empty again. A small blue flame is following your lead, shyly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "paradeSwap",
+        "key": "will-o-wisp"
+       },
+       {
+        "kind": "flag",
+        "key": "parade-lanterns",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-dark"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-lane-a"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the lane.",
+     "success": {
+      "text": "\"Come back before the bell,\" says the Banette. \"I do like a customer.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-lane-a"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-11-sableye",
+   "name": "The Spirit Market: The Sableye with Scales",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2140",
+    "effect": "none"
+   },
+   "intro": "Pages of old handwriting, piled like leaves. Yours, somewhere in there.\n\n**The Sableye:** \"One line. The one you'd miss least. Gone. And not a soul will remember it ever being there.\"\n\nLanterns left: **{flag:parade-lanterns}** of six.",
+   "choices": [
+    {
+     "label": "Trade a memory.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "paradeMemory"
+      }
+     ],
+     "success": {
+      "text": "A page curls and drops to ash. You try to remember what it said, and cannot, and the Sableye is already holding out something Rare, kind about it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "paradeForget"
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "parade-lanterns",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-dark"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-lane-a"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the lane.",
+     "success": {
+      "text": "\"The pages keep,\" says the Sableye. \"That is the trouble with them.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-lane-a"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-11-mismagius",
+   "name": "The Spirit Market: The Mismagius",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2140",
+    "effect": "none"
+   },
+   "intro": "It sings in a voice like a music box with the lid half closed.\n\n**The Mismagius:** \"A name you gave. Give it back. I give you a secret in exchange, and a good one.\"\n\nLanterns left: **{flag:parade-lanterns}** of six.",
+   "choices": [
+    {
+     "label": "Trade a nickname.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "paradeNickname"
+      }
+     ],
+     "success": {
+      "text": "The name goes up into the lantern light. Your Pokémon blinks, pleased and lost and a little lighter. The Mismagius whispers where to look.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "paradeSecret"
+       },
+       {
+        "kind": "flag",
+        "key": "parade-lanterns",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-dark"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-lane-b"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the lane.",
+     "success": {
+      "text": "\"Names are heavy,\" says the Mismagius. \"Come back when yours is.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-lane-b"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-11-dusclops",
+   "name": "The Spirit Market: The Old Dusclops",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2140",
+    "effect": "none"
+   },
+   "intro": "It has outlasted every lantern in the lane, and it knows it.\n\n**The Old Dusclops:** \"Teach me what yours knows. I will teach it what its grandparents knew. Sit. It is a long lesson.\"\n\nLanterns left: **{flag:parade-lanterns}** of six.",
+   "choices": [
+    {
+     "label": "Trade for an egg move.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "paradeEggReady"
+      }
+     ],
+     "success": {
+      "text": "The lesson takes no time at all, and all night. Your lead steps away from the stall with something very old behind its eyes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "paradeEgg"
+       },
+       {
+        "kind": "flag",
+        "key": "parade-lanterns",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-dark"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-lanterns",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-lane-b"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the lane.",
+     "success": {
+      "text": "\"Another time,\" says the Dusclops. It does not say when.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-11-lane-b"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-11-dark",
+   "name": "The Spirit Market: The Last Lantern",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2140",
+    "effect": "none"
+   },
+   "intro": "The last lantern gutters. The Misdreavus is already at the gate, ringing its bell, and ringing it, and ringing it.\n\n**The Misdreavus:** \"Out, please. Now, please. Nobody has ever been sorry to leave on time.\"",
+   "choices": [
+    {
+     "label": "Leave now.",
+     "success": {
+      "text": "You step out through the gate as the last light goes. Behind you the market folds up like a letter. You are on the road, and it is raining a little, and you are fine.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "parade-all",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "paradeAll",
+          "key": "parade-joined"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-curtain"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay.",
+     "success": {
+      "text": "You stay. The dark is soft, and then it is not there. You wake at the next step with something in your bag that was not there before. One item swapped for another of the same tier, as the Misdreavus said.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "paradeWake"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "parade-all",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "paradeAll",
+          "key": "parade-joined"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "parade-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-11-curtain"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-11-curtain",
+   "name": "The Night Parade: The Curtain",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2140",
+    "effect": "none"
+   },
+   "intro": "The palanquin stops in front of you. You have followed it in every region. It has been waiting.\n\nThe curtain opens. There is no one grand inside. A small Litwick sits on the cushion, holding a lantern as big as itself, asleep on its feet.\n\n*It has been carried across the world, every night, so it would not have to walk. It opens its eyes and sees you, and knows you.*",
+   "choices": [
+    {
+     "label": "Take its lantern.",
+     "success": {
+      "text": "It puts its flame into your hand, and follows. The palanquin goes on without it, lighter, and one lantern fewer.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "litwick"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Night Parade opened its curtain for you, and a Litwick came out.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

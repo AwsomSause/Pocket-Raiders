@@ -50,6 +50,7 @@ import { cheerJoin } from './cheer';
 import { mirrorReady, mirrorStart } from './mirror';
 import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, oldfriendTokens, releases } from './oldfriend';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
+import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
@@ -190,6 +191,10 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.16: the fighter won from behind (the first Pokémon able to fight is at half its HP or less).
   // gn.33: the tide is low (the Sunken City's causeway is out of the water).
   if (c.test === 'lastStage') { const camp = getCampaign(content, run.campaignId); return isLastStage(content, run, camp.stagesPerRegion, camp.regularRegions); }
+  if (c.test === 'paradeMemory') return paradeMemory(run);
+  if (c.test === 'paradeNickname') return paradeNickname(run);
+  if (c.test === 'paradeEggReady') return paradeEggReady(content, run);
+  if (c.test === 'paradeAll') return paradeAll(run, gnFlag(run, c.key!));
   if (c.test === 'lowTide') return tideOf(content, run) === 'low';
   if (c.test === 'highTide') return tideOf(content, run) === 'high';
   if (c.test === 'hurtLead') { const lead = run.party.find((m) => m.hp > 0); return !!lead && lead.hp * 2 <= maxHp(content, lead); }
@@ -650,6 +655,17 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return draftAldhelm(content, run, host);
     case 'draftLetter':
       return draftLetter(content, run);
+    // gn.new.11: the Night Parade's Spirit Market.
+    case 'paradeSwap':
+      return paradeSwap(content, run, e.key!);
+    case 'paradeEgg':
+      return paradeEgg(content, run);
+    case 'paradeForget':
+      return paradeForget(run);
+    case 'paradeSecret':
+      return paradeSecret(content, run);
+    case 'paradeWake':
+      return paradeWake(content, run, host.float());
     case 'snorlaxFeed':
       return snorlaxFeed(content, run, e.n ?? 3, e.key === 'first');
     case 'snorlaxFond':
