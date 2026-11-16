@@ -1917,6 +1917,26 @@
           "n": 4
          },
          {
+          "kind": "gn",
+          "op": "moonRaid"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "team-raid-moon-lost",
+          "then": [
+           {
+            "kind": "gn",
+            "op": "pick",
+            "key": "gn-moon-payroll",
+            "weights": [
+             1,
+             1
+            ]
+           }
+          ]
+         },
+         {
           "kind": "addEvent",
           "eventId": "gn-04-mouth"
          }
@@ -1954,6 +1974,26 @@
         "op": "stageMod",
         "key": "gn-moon-phase",
         "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "moonRaid"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "team-raid-moon-lost",
+        "then": [
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "gn-moon-payroll",
+          "weights": [
+           1,
+           1
+          ]
+         }
+        ]
        },
        {
         "kind": "addEvent",
@@ -3047,6 +3087,12 @@
        "key": "team-raid-moon-lost",
        "atLeast": 1,
        "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-moon-payroll",
+       "atLeast": 0,
+       "atMost": 1
       }
      ],
      "notice": "Dr. Crowe's coat is new. Very new. There is a badge on the lining you are not supposed to see, and he keeps glancing at the tunnel the raiders went down. He is on their payroll now, and he fights like it.",
@@ -3068,6 +3114,79 @@
          ],
          "name": "Dr. Ansel Crowe",
          "classId": "worker",
+         "size": 3,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "gn",
+           "op": "fossil",
+           "key": "local"
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "team-raid-moon-won",
+           "then": [
+            {
+             "kind": "gn",
+             "op": "fossil",
+             "key": "local"
+            }
+           ],
+           "text": "The other one presses a second fossil into your hands. \"For the raid. We remember who stood in the door.\""
+          },
+          {
+           "kind": "flag",
+           "key": "kanto-moon-fossil",
+           "amount": 1
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-04-mine"
+          }
+         ],
+         "pseudo": true
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "payroll-larkin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "team-raid-moon-lost",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "gn-moon-payroll",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "Dr. Larkin's boots are new. Very new. There is a badge inside her field bag you are not supposed to see, and she keeps glancing at the tunnel the raiders went down. She is on their payroll now, and she fights like it.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Battle Dr. Larkin.",
+       "success": {
+        "text": "**Dr. Mirabel Larkin:** \"Nothing personal. They fund digs. The university funds meetings.\"",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "team": [
+          "magnemite",
+          "voltorb",
+          "koffing"
+         ],
+         "name": "Dr. Mirabel Larkin",
+         "classId": "aroma-lady",
          "size": 3,
          "types": [],
          "levelBonus": 1,
@@ -4389,34 +4508,6 @@
    },
    "intro": "A market stall with one table and two chairs and two researchers, and a sign that has been crossed out and rewritten so many times the price is just a smudge.\n\n**Dr. Ansel Crowe:** \"Fifteen hundred.\"\n\n**Dr. Mirabel Larkin:** \"Five hundred. It's a pebble.\"\n\n**Dr. Ansel Crowe:** \"It's YOUR pebble.\"",
    "choices": [
-    {
-     "label": "Pay the price in the middle. (₽1000)",
-     "requires": [
-      {
-       "kind": "money",
-       "atLeast": 1000
-      }
-     ],
-     "success": {
-      "text": "You put a thousand on the table. They both open their mouths to object, then both close them, because neither of them can say the other was right. **Dr. Mirabel Larkin:** \"Fine. Fine.\"",
-      "effects": [
-       {
-        "kind": "money",
-        "amount": -1000
-       },
-       {
-        "kind": "gn",
-        "op": "fossil",
-        "key": "local"
-       },
-       {
-        "kind": "flag",
-        "key": "gn-04-after-done",
-        "amount": 1
-       }
-      ]
-     }
-    },
     {
      "label": "Leave them to it.",
      "success": {

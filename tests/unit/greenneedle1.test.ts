@@ -3,6 +3,8 @@ import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import { fitsStage, positioned } from '../../src/core/co/placement';
 import { RunStateSchema } from '../../src/core/state';
 import { conditionMet } from '../../src/core/events';
+import { freshEvil } from '../../src/core/evil/schema';
+import { moonRaid } from '../../src/core/greenneedle/moon';
 import { content } from './helpers';
 import { choose, flagOf, gnRun, lose, open, openSide, scene, setFlag, win } from './helpers/gnPlay';
 
@@ -341,6 +343,73 @@ describe('gn.04 Mt. Moon', () => {
     const out = choose(run, 'gn-04-far', 'Count it.');
     expect(out.text + out.changes.join(' ')).toMatch(/cracked fossil/);
     expect(out.run.stage!.pseudo).toBeUndefined();
+  });
+});
+
+describe('gn.04 Mt. Moon: the evil-team raid (an Operation in this region)', () => {
+  const withOp = (seed: string, outcome: 'running' | 'foiled' | 'infiltrated' | 'succeeded' | 'joined', region = 0) => {
+    let run = gnRun(seed);
+    run.story.evil = freshEvil();
+    run.story.evil.ops.push({ id: 'pokemon-heist', region, outcome });
+    open(run, 'gn-04-door');
+    run = choose(run, 'gn-04-door', 'Go in.').run;
+    return run;
+  };
+  it('reads won, lost and none from the region\'s Operations', () => {
+    const base = gnRun('gnfix04-unit');
+    expect(moonRaid(base)).toBe('none');
+    base.story.evil = freshEvil();
+    base.story.evil.ops.push({ id: 'a', region: 0, outcome: 'running' }, { id: 'b', region: 1, outcome: 'foiled' });
+    expect(moonRaid(base)).toBe('none');
+    base.story.evil.ops.push({ id: 'c', region: 0, outcome: 'succeeded' });
+    expect(moonRaid(base)).toBe('lost');
+    base.story.evil.ops.push({ id: 'd', region: 0, outcome: 'infiltrated' });
+    expect(moonRaid(base)).toBe('won');
+  });
+  it('a raid won: the marks are ticked at the Mouth and the grateful researcher adds a second fossil', () => {
+    const run = withOp('gnfix04-won', 'foiled');
+    expect(flagOf(run, 'team-raid-moon-won')).toBe(1);
+    expect(flagOf(run, 'team-raid-moon-lost')).toBe(0);
+    expect(scene(run, 'gn-04-mouth').intro).toMatch(/That was you, wasn't it/);
+    expect(scene(run, 'gn-04-fossil').intro).toMatch(/You're the one who ran them off/);
+    open(run, 'gn-04-fossil');
+    const got = choose(structuredClone(run), 'gn-04-fossil', 'Can I have the third one?');
+    const plain = structuredClone(run);
+    setFlag(plain, 'team-raid-moon-won', 0);
+    const one = choose(plain, 'gn-04-fossil', 'Can I have the third one?');
+    expect([got.text, ...got.changes].join(' ')).toMatch(/For the raid/);
+    expect([one.text, ...one.changes].join(' ')).not.toMatch(/For the raid/);
+    expect(got.changes.length).toBeGreaterThan(one.changes.length);
+  });
+  it('a raid lost or left alone: fresh marks, and one researcher (either) is on the payroll at A+1', () => {
+    const seen = new Set<number>();
+    for (let i = 0; i < 12; i++) {
+      const run = withOp(`gnfix04-lost-${i}`, i % 2 ? 'succeeded' : 'joined');
+      expect(flagOf(run, 'team-raid-moon-lost')).toBe(1);
+      expect(scene(run, 'gn-04-mouth').intro).toMatch(/They've been through/);
+      const who = flagOf(run, 'gn-moon-payroll');
+      expect([1, 2]).toContain(who);
+      seen.add(who);
+      open(run, 'gn-04-fossil');
+      expect(scene(run, 'gn-04-fossil').intro).toMatch(who === 1 ? /Dr\. Crowe's coat is new/ : /Dr\. Larkin's boots are new/);
+      const plain = choose(structuredClone(run), 'gn-04-fossil', who === 1 ? 'Battle Dr. Larkin.' : 'Battle Dr. Crowe.').run;
+      const paid = choose(run, 'gn-04-fossil', who === 1 ? 'Battle Dr. Crowe.' : 'Battle Dr. Larkin.').run;
+      expect(paid.battle!.enemyTeam[0]!.level).toBe(plain.battle!.enemyTeam[0]!.level + 1);
+    }
+    expect(seen.size).toBe(2);
+  });
+  it('no Operation here (or only one still running): no marks, nobody on the payroll', () => {
+    for (const run of [withOp('gnfix04-none', 'running'), withOp('gnfix04-far', 'succeeded', 3)]) {
+      expect(flagOf(run, 'team-raid-moon-won') + flagOf(run, 'team-raid-moon-lost')).toBe(0);
+      expect(scene(run, 'gn-04-mouth').intro).not.toMatch(/marks the raiders left/);
+    }
+  });
+  it('the afterstory is the two of them arguing about the price: nothing is sold', () => {
+    const run = gnRun('gnfix04-after');
+    setFlag(run, 'kanto-moon-fossil', 1);
+    open(run, 'gn-04-after');
+    expect(scene(run, 'gn-04-after').intro).toMatch(/Fifteen hundred/);
+    expect(scene(run, 'gn-04-after').labels).toEqual(['Leave them to it.']);
   });
 });
 

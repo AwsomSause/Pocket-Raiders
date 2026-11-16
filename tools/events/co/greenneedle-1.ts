@@ -349,7 +349,9 @@ const SWINGS_LEFT = is('gn-moon-swings', 0, 2);
 
 const GO_IN = (kanto: boolean): Json => ch('Go in.', out(
   'You duck under the lip of the rock. The air changes: colder, stiller, older. Your footsteps come back to you a half-second late, from somewhere far ahead.',
-  flag('gn-04-entered'), setTo('gn-moon-kanto', kanto ? 1 : 0), stageMod('gn-moon-phase', 4), room('gn-04-mouth'),
+  flag('gn-04-entered'), setTo('gn-moon-kanto', kanto ? 1 : 0), stageMod('gn-moon-phase', 4),
+  // An evil-team raid in this region (an Operation stopped, or one that went through) has left its marks; one of the two researchers took the team's money.
+  gn('moonRaid'), when(RAID_LOST, {}, [pick('gn-moon-payroll', 1, 1)]), room('gn-04-mouth'),
 ));
 
 const gn04: Json[] = [
@@ -531,10 +533,16 @@ const gn04: Json[] = [
     effect: 'none', tags: ['Dungeon', 'Trainer', 'Treasure'],
     remembers: [
       {
-        id: 'payroll', when: [is(RAID_LOST)],
+        id: 'payroll', when: [is(RAID_LOST), is('gn-moon-payroll', 0, 1)],
         notice: 'Dr. Crowe\'s coat is new. Very new. There is a badge on the lining you are not supposed to see, and he keeps glancing at the tunnel the raiders went down. He is on their payroll now, and he fights like it.',
         hide: [0],
         addChoices: [ch('Battle Dr. Crowe.', fight('**Dr. Ansel Crowe:** "Nothing personal. The pay is simply better than the university\'s."', RESEARCHER('Dr. Ansel Crowe', 'worker', 1)))],
+      },
+      {
+        id: 'payroll-larkin', when: [is(RAID_LOST), exactly('gn-moon-payroll', 2)],
+        notice: 'Dr. Larkin\'s boots are new. Very new. There is a badge inside her field bag you are not supposed to see, and she keeps glancing at the tunnel the raiders went down. She is on their payroll now, and she fights like it.',
+        hide: [1],
+        addChoices: [ch('Battle Dr. Larkin.', fight('**Dr. Mirabel Larkin:** "Nothing personal. They fund digs. The university funds meetings."', RESEARCHER('Dr. Mirabel Larkin', 'aroma-lady', 1)))],
       },
       { id: 'grateful', when: [is(RAID_WON)], notice: 'They both stop to look at you. **Dr. Mirabel Larkin:** "You\'re the one who ran them off." **Dr. Ansel Crowe:** "We\'re grateful. We\'re still not agreeing."' },
     ],
@@ -599,7 +607,6 @@ const gn04: Json[] = [
     '**Dr. Mirabel Larkin:** "Five hundred. It\'s a pebble."',
     '**Dr. Ansel Crowe:** "It\'s YOUR pebble."',
   ), [
-    ch('Pay the price in the middle. (₽1000)', out('You put a thousand on the table. They both open their mouths to object, then both close them, because neither of them can say the other was right. **Dr. Mirabel Larkin:** "Fine. Fine."', $(-1000), fossil('local'), flag('gn-04-after-done')), { requires: [money(1000)] }),
     ch('Leave them to it.', out('You leave them to it. Halfway down the street you hear them both laugh, at the same moment, which still surprises them.', flag('gn-04-after-done'))),
   ]),
 ];

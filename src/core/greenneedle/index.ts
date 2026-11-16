@@ -13,6 +13,7 @@ import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
 import type { TypeName } from '../contentSchema';
 import { SLUDGE_TURNS } from './factory';
+import { MOON_RAID_LOST, MOON_RAID_WON, moonRaid } from './moon';
 import { bondLevel, firstCatch } from '../co/who';
 import { NATURE_IDS } from '../natures';
 import { fnv1a } from '../expansion/hash';
@@ -1002,6 +1003,13 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'stageMod':
       setGnFlag(run, e.key!, host.stage % e.n!);
       return '';
+    case 'moonRaid': {
+      // Only ever raises the flags (a test or another row may have set them already).
+      const raid = moonRaid(run);
+      if (raid === 'won') setGnFlag(run, MOON_RAID_WON, 1);
+      if (raid === 'lost') setGnFlag(run, MOON_RAID_LOST, 1);
+      return '';
+    }
     case 'fossil': {
       const far = e.key === 'far' || (e.key === 'local' && host.float() >= 0.7);
       const table = (far ? fossilsElsewhere(host.region) : fossilsOf(host.region)).filter((id) => content.catalog.has(id) || content.items.has(id));
