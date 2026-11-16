@@ -25,6 +25,11 @@ function mirror(id: string, easy: boolean): Json {
   });
 }
 
+const SLY_CHOICES: Json[] = [
+  ch('It\'s not fine.', out('Tib: "But you—" And Tib tells it back to you. All of it. The day, the place, what you took or took advantage of, what you said afterwards. Tib was watching from behind a too-thin tree, and remembers it better than you do. When Tib has finished there is nothing either of you can say. Tib closes the bag and walks off, confused, looking back twice.', flag('apprentice-sly'), flag('apprentice-confronted'))),
+  ch('Give them back with me. (two nodes)', out('Three shops. Three counters. Tib does the talking at each one, in a voice that gets smaller every time, and you stand behind with a hand on Tib\'s shoulder. Two shopkeepers take their goods back and say nothing. The third reaches for the telephone. It costs you ₽500 to put the receiver down again. Outside, Tib says, very quietly, "You did it too, though." You say yes. You say that is why you came.', takeNode(2), flag('apprentice-sly'), flag('apprentice-returned'), $(-500), ...kind()), { requires: [money(500)] }),
+  ch('Nice haul.', out('Tib grins, a grin you have seen in a mirror. Across the street, a man in a dark cap who has been reading the same page of a newspaper for some time folds it, and looks at Tib for a long moment, and smiles too.', flag('apprentice-sly'), flag('apprentice-praised'), ...sly())),
+];
 const APPRENTICE: Json[] = [
   {
     id: 'apprentice-follows', requires: [not('apprentice-on')],
@@ -52,14 +57,16 @@ const APPRENTICE: Json[] = [
       ch('Do it your way next time.', out('Tib\'s mouth opens to argue and then closes. You can see the idea go in: that there might be a way that is not your way. Tib walks off slowly, frowning at nothing, the Sentret patting Tib\'s ear. Next time you meet, Tib will have invented something.', flag('apprentice-kind'), flag('apprentice-own'))),
       ch('Was it scared?', out('The bounce goes out of Tib, and something better comes in. Tib: "...Yeah. I talked to it until it wasn\'t." Tib reaches up without looking, and the Sentret puts its paw in Tib\'s hand.', flag('apprentice-kind'), flag('apprentice-gentle'), fr(3, 'party'))),
     ],
+    remembers: [
+      v('kept-wallet', [is('honest-kept')], { intro: 'A new region, and someone standing in the path with a very innocent look. The kid from before. Tib: "I copied what you did with that wallet. Want to see?" Tib opens a bag. Three things that belong to other people, a purse, a ring, a lost Pokémon\'s collar. Tib was watching from behind a too-thin tree when you kept it. Tib looks up at you with total trust. "You did it. So it\'s fine. Right?"', hide: [0, 1, 2], add: SLY_CHOICES }),
+      v('rescued-too', [is('found-count', 3)], { notice: 'Tib is holding something wrapped in a jacket: a Pokémon, small and muddy and very much alive. Tib: "It was stuck in a drain. I got it out. Like you do." Tib says it like you have done it a hundred times. Maybe you have.' }),
+    ],
   },
   {
     id: 'apprentice-sly', name: 'What You Did', requires: [is('apprentice-on'), flagAgo('apprentice-on', 1), not('apprentice-kind'), not('apprentice-sly'), isEvil(1)],
     intro: 'A new region, and someone standing in the path with a very innocent look. The kid from before. Tib: "I copied what you did to that shopkeeper. Want to see?" Tib opens a bag. Three items, tags still on, stolen. Tib looks up at you with total trust. "You did it. So it\'s fine. Right?"',
     choices: [
-      ch('It\'s not fine.', out('Tib: "But you—" And Tib tells it back to you. All of it. The day, the place, what you took or took advantage of, what you said afterwards. Tib was watching from behind a too-thin tree, and remembers it better than you do. When Tib has finished there is nothing either of you can say. Tib closes the bag and walks off, confused, looking back twice.', flag('apprentice-sly'), flag('apprentice-confronted'))),
-      ch('Give them back with me. (two nodes)', out('Three shops. Three counters. Tib does the talking at each one, in a voice that gets smaller every time, and you stand behind with a hand on Tib\'s shoulder. Two shopkeepers take their goods back and say nothing. The third reaches for the telephone. It costs you ₽500 to put the receiver down again. Outside, Tib says, very quietly, "You did it too, though." You say yes. You say that is why you came.', takeNode(2), flag('apprentice-sly'), flag('apprentice-returned'), $(-500), ...kind()), { requires: [money(500)] }),
-      ch('Nice haul.', out('Tib grins, a grin you have seen in a mirror. Across the street, a man in a dark cap who has been reading the same page of a newspaper for some time folds it, and looks at Tib for a long moment, and smiles too.', flag('apprentice-sly'), flag('apprentice-praised'), ...sly())),
+      ...SLY_CHOICES,
     ],
   },
   mirror('apprentice-mirror', false),

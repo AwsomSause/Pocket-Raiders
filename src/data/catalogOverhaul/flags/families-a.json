@@ -20,6 +20,7 @@
   },
   "apprentice-confronted": {
    "setBy": [
+    "apprentice-kind",
     "apprentice-sly"
    ],
    "readBy": [],
@@ -99,6 +100,7 @@
   },
   "apprentice-praised": {
    "setBy": [
+    "apprentice-kind",
     "apprentice-sly"
    ],
    "readBy": [
@@ -117,6 +119,7 @@
   },
   "apprentice-returned": {
    "setBy": [
+    "apprentice-kind",
     "apprentice-sly"
    ],
    "readBy": [],
@@ -147,6 +150,7 @@
   },
   "apprentice-sly": {
    "setBy": [
+    "apprentice-kind",
     "apprentice-sly"
    ],
    "readBy": [
@@ -243,6 +247,57 @@
     "vale-dam"
    ],
    "note": "Read-only state flag from legends (LEGENDS_PIECES section 3): that Legendary's blessing is the run's."
+  },
+  "camp-mentor-story": {
+   "setBy": [
+    "camp-mentor"
+   ],
+   "readBy": [],
+   "note": "SF45 camp flags: kept in the run log."
+  },
+  "cards-sun": {
+   "setBy": [
+    "fortune-three-cards"
+   ],
+   "readBy": [],
+   "note": "SF48 Three Cards: which card was drawn."
+  },
+  "cards-tower": {
+   "setBy": [
+    "fortune-three-cards"
+   ],
+   "readBy": [],
+   "note": "SF48 Three Cards: which card was drawn."
+  },
+  "cards-wheel": {
+   "setBy": [
+    "fortune-three-cards"
+   ],
+   "readBy": [],
+   "note": "SF48 Three Cards: which card was drawn."
+  },
+  "charity": {
+   "setBy": [
+    "charity-drive"
+   ],
+   "readBy": [],
+   "note": "SF43.12/14 Hettie's ledger: charity-hettie opens The Favour Returned."
+  },
+  "charity-favor": {
+   "setBy": [
+    "charity-favor"
+   ],
+   "readBy": [
+    "charity-favor"
+   ]
+  },
+  "charity-hettie": {
+   "setBy": [
+    "charity-drive"
+   ],
+   "readBy": [
+    "charity-favor"
+   ]
   },
   "circuit-bronze": {
    "setBy": [
@@ -1027,7 +1082,8 @@
   },
   "crisis-ally-split": {
    "setBy": [
-    "crisis-old-friend"
+    "crisis-old-friend",
+    "kind-helpers"
    ],
    "readBy": [
     "crisis-blackout-climax",
@@ -1069,7 +1125,8 @@
     "world-disaster-quake"
    ],
    "readBy": [
-    "crisis-old-friend"
+    "crisis-old-friend",
+    "kind-helpers"
    ]
   },
   "crisis-blackout-ended": {
@@ -1239,7 +1296,8 @@
    ],
    "readBy": [
     "crisis-factory-climax",
-    "crisis-factory-lost"
+    "crisis-factory-lost",
+    "wx-smog-alert"
    ]
   },
   "crisis-factory-first-canal": {
@@ -1305,7 +1363,8 @@
    "readBy": [
     "crisis-factory-climax",
     "crisis-factory-lost",
-    "crisis-report-industry"
+    "crisis-report-industry",
+    "wx-smog-alert"
    ]
   },
   "crisis-factory-owner": {
@@ -1534,7 +1593,8 @@
    "readBy": [
     "crisis-flood-climax",
     "crisis-flood-lost",
-    "lost-at-sea"
+    "lost-at-sea",
+    "wx-sunken-road"
    ]
   },
   "crisis-flood-first-nobody": {
@@ -1602,7 +1662,8 @@
     "crisis-flood-climax",
     "crisis-flood-lost",
     "crisis-report-flood",
-    "lost-at-sea"
+    "lost-at-sea",
+    "wx-sunken-road"
    ]
   },
   "crisis-flood-psyduck": {
@@ -1740,6 +1801,7 @@
     "crisis-report-flood",
     "crisis-report-industry",
     "crisis-report-outbreak",
+    "kind-helpers",
     "mudslide-rescue",
     "vt-pyromaniac-sweep",
     "world-disaster-blizzard",
@@ -1752,6 +1814,57 @@
    ],
    "readBy": [],
    "note": "SF17 Dilly's uniform cap (cosmetic): kept in the run log."
+  },
+  "dog-chose": {
+   "setBy": [
+    "dog-walker-pays"
+   ],
+   "readBy": [],
+   "note": "SF46 The Borrowed Dog flags."
+  },
+  "dog-done": {
+   "setBy": [
+    "dog-walker-pays"
+   ],
+   "readBy": [
+    "dog-walker-pays"
+   ]
+  },
+  "dog-home": {
+   "setBy": [
+    "dog-walker-pays"
+   ],
+   "readBy": [],
+   "note": "SF46 The Borrowed Dog flags."
+  },
+  "dog-kept": {
+   "setBy": [
+    "dog-walker-pays"
+   ],
+   "readBy": [],
+   "note": "SF46 The Borrowed Dog flags."
+  },
+  "dog-lost": {
+   "setBy": [
+    "dog-walker-pays"
+   ],
+   "readBy": [],
+   "note": "SF46 The Borrowed Dog flags."
+  },
+  "dog-on": {
+   "setBy": [
+    "dog-walker"
+   ],
+   "readBy": [
+    "dog-walker-pays"
+   ]
+  },
+  "dog-paid": {
+   "setBy": [
+    "dog-walker"
+   ],
+   "readBy": [],
+   "note": "SF46 The Borrowed Dog flags."
   },
   "elder-asked": {
    "setBy": [
@@ -2302,6 +2415,61 @@
     "fog-end"
    ]
   },
+  "found-count": {
+   "setBy": [
+    "coins-found",
+    "flooded-basement",
+    "lost-pet-home",
+    "midnight-lullaby",
+    "stray-kitten",
+    "stuck-pokemon"
+   ],
+   "readBy": [
+    "apprentice-kind"
+   ]
+  },
+  "found-fence": {
+   "setBy": [
+    "stuck-pokemon"
+   ],
+   "readBy": [],
+   "note": "SF47 rescues found.<species>: read by the Final Reunion (other row); found-count 3+ makes Tib's next scene mention a rescue of Tib's own."
+  },
+  "found-lillipup": {
+   "setBy": [
+    "lost-pet-home"
+   ],
+   "readBy": [],
+   "note": "SF47 rescues found.<species>: read by the Final Reunion (other row); found-count 3+ makes Tib's next scene mention a rescue of Tib's own."
+  },
+  "found-meowth": {
+   "setBy": [
+    "coins-found"
+   ],
+   "readBy": [],
+   "note": "SF47 rescues found.<species>: read by the Final Reunion (other row); found-count 3+ makes Tib's next scene mention a rescue of Tib's own."
+  },
+  "found-pichu": {
+   "setBy": [
+    "midnight-lullaby"
+   ],
+   "readBy": [],
+   "note": "SF47 rescues found.<species>: read by the Final Reunion (other row); found-count 3+ makes Tib's next scene mention a rescue of Tib's own."
+  },
+  "found-purrloin": {
+   "setBy": [
+    "stray-kitten"
+   ],
+   "readBy": [],
+   "note": "SF47 rescues found.<species>: read by the Final Reunion (other row); found-count 3+ makes Tib's next scene mention a rescue of Tib's own."
+  },
+  "found-rattata": {
+   "setBy": [
+    "flooded-basement"
+   ],
+   "readBy": [],
+   "note": "SF47 rescues found.<species>: read by the Final Reunion (other row); found-count 3+ makes Tib's next scene mention a rescue of Tib's own."
+  },
   "freed-caged": {
    "setBy": [],
    "readBy": [
@@ -2323,6 +2491,22 @@
     "crisis-blizzard-lost"
    ],
    "note": "Set by Alpha A3, the Baxcalibur kept warm (legends)."
+  },
+  "funeral-jory": {
+   "setBy": [
+    "funeral-jory"
+   ],
+   "readBy": [
+    "funeral-jory"
+   ]
+  },
+  "funeral-stood": {
+   "setBy": [
+    "funeral-respects"
+   ],
+   "readBy": [
+    "funeral-jory"
+   ]
   },
   "gl7-pell-helped": {
    "setBy": [],
@@ -2608,8 +2792,475 @@
    "setBy": [
     "fog-end"
    ],
+   "readBy": [
+    "wx-fog-bank"
+   ]
+  },
+  "hazard-ancient-lava-tube-push": {
+   "setBy": [
+    "wx-ancient-lava-tube"
+   ],
    "readBy": [],
-   "note": "SF29 Halden's Bell (key item: rings before every ambush). The ambush warning is not built; the bell is kept in the run log."
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-ancient-lava-tube-used": {
+   "setBy": [
+    "wx-ancient-lava-tube"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-ancient-lava-tube-wait": {
+   "setBy": [
+    "wx-ancient-lava-tube"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-answered": {
+   "setBy": [
+    "wx-ancient-lava-tube",
+    "wx-black-ice-road",
+    "wx-dust-devil",
+    "wx-fog-bank",
+    "wx-hailstorm",
+    "wx-heat-wave-trek",
+    "wx-mudslide-pass",
+    "wx-overgrown-trail",
+    "wx-pollen-season",
+    "wx-rainy-day-market",
+    "wx-rising-tide",
+    "wx-salt-flats-mirage",
+    "wx-smog-alert",
+    "wx-solar-flare",
+    "wx-sunken-road",
+    "wx-swampy-mist",
+    "wx-thunderstorm-crossing",
+    "wx-tropical-squall",
+    "wx-volcanic-ash",
+    "wx-windstorm-gap"
+   ],
+   "readBy": [
+    "wx-ancient-lava-tube",
+    "wx-black-ice-road",
+    "wx-dust-devil",
+    "wx-fog-bank",
+    "wx-hailstorm",
+    "wx-heat-wave-trek",
+    "wx-mudslide-pass",
+    "wx-overgrown-trail",
+    "wx-pollen-season",
+    "wx-rainy-day-market",
+    "wx-rising-tide",
+    "wx-salt-flats-mirage",
+    "wx-smog-alert",
+    "wx-solar-flare",
+    "wx-sunken-road",
+    "wx-swampy-mist",
+    "wx-thunderstorm-crossing",
+    "wx-tropical-squall",
+    "wx-volcanic-ash",
+    "wx-windstorm-gap"
+   ]
+  },
+  "hazard-black-ice-road-push": {
+   "setBy": [
+    "wx-black-ice-road"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-black-ice-road-used": {
+   "setBy": [
+    "wx-black-ice-road"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-black-ice-road-wait": {
+   "setBy": [
+    "wx-black-ice-road"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-dust-devil-push": {
+   "setBy": [
+    "wx-dust-devil"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-dust-devil-used": {
+   "setBy": [
+    "wx-dust-devil"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-dust-devil-wait": {
+   "setBy": [
+    "wx-dust-devil"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-fog-bank-push": {
+   "setBy": [
+    "wx-fog-bank"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-fog-bank-used": {
+   "setBy": [
+    "wx-fog-bank"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-fog-bank-wait": {
+   "setBy": [
+    "wx-fog-bank"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-hailstorm-push": {
+   "setBy": [
+    "wx-hailstorm"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-hailstorm-used": {
+   "setBy": [
+    "wx-hailstorm"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-hailstorm-wait": {
+   "setBy": [
+    "wx-hailstorm"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-heat-wave-trek-push": {
+   "setBy": [
+    "wx-heat-wave-trek"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-heat-wave-trek-used": {
+   "setBy": [
+    "wx-heat-wave-trek"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-heat-wave-trek-wait": {
+   "setBy": [
+    "wx-heat-wave-trek"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-mudslide-pass-push": {
+   "setBy": [
+    "wx-mudslide-pass"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-mudslide-pass-used": {
+   "setBy": [
+    "wx-mudslide-pass"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-mudslide-pass-wait": {
+   "setBy": [
+    "wx-mudslide-pass"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-overgrown-trail-push": {
+   "setBy": [
+    "wx-overgrown-trail"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-overgrown-trail-used": {
+   "setBy": [
+    "wx-overgrown-trail"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-overgrown-trail-wait": {
+   "setBy": [
+    "wx-overgrown-trail"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-pollen-season-push": {
+   "setBy": [
+    "wx-pollen-season"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-pollen-season-used": {
+   "setBy": [
+    "wx-pollen-season"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-pollen-season-wait": {
+   "setBy": [
+    "wx-pollen-season"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-rainy-day-market-push": {
+   "setBy": [
+    "wx-rainy-day-market"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-rainy-day-market-used": {
+   "setBy": [
+    "wx-rainy-day-market"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-rainy-day-market-wait": {
+   "setBy": [
+    "wx-rainy-day-market"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-rising-tide-push": {
+   "setBy": [
+    "wx-rising-tide"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-rising-tide-used": {
+   "setBy": [
+    "wx-rising-tide"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-rising-tide-wait": {
+   "setBy": [
+    "wx-rising-tide"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-salt-flats-mirage-push": {
+   "setBy": [
+    "wx-salt-flats-mirage"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-salt-flats-mirage-used": {
+   "setBy": [
+    "wx-salt-flats-mirage"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-salt-flats-mirage-wait": {
+   "setBy": [
+    "wx-salt-flats-mirage"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-smog-alert-push": {
+   "setBy": [
+    "wx-smog-alert"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-smog-alert-used": {
+   "setBy": [
+    "wx-smog-alert"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-smog-alert-wait": {
+   "setBy": [
+    "wx-smog-alert"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-solar-flare-push": {
+   "setBy": [
+    "wx-solar-flare"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-solar-flare-used": {
+   "setBy": [
+    "wx-solar-flare"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-solar-flare-wait": {
+   "setBy": [
+    "wx-solar-flare"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-sunken-road-push": {
+   "setBy": [
+    "wx-sunken-road"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-sunken-road-used": {
+   "setBy": [
+    "wx-sunken-road"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-sunken-road-wait": {
+   "setBy": [
+    "wx-sunken-road"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-swampy-mist-push": {
+   "setBy": [
+    "wx-swampy-mist"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-swampy-mist-used": {
+   "setBy": [
+    "wx-swampy-mist"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-swampy-mist-wait": {
+   "setBy": [
+    "wx-swampy-mist"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-thunderstorm-crossing-push": {
+   "setBy": [
+    "wx-thunderstorm-crossing"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-thunderstorm-crossing-used": {
+   "setBy": [
+    "wx-thunderstorm-crossing"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-thunderstorm-crossing-wait": {
+   "setBy": [
+    "wx-thunderstorm-crossing"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-tropical-squall-push": {
+   "setBy": [
+    "wx-tropical-squall"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-tropical-squall-used": {
+   "setBy": [
+    "wx-tropical-squall"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-tropical-squall-wait": {
+   "setBy": [
+    "wx-tropical-squall"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-volcanic-ash-push": {
+   "setBy": [
+    "wx-volcanic-ash"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-volcanic-ash-used": {
+   "setBy": [
+    "wx-volcanic-ash"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-volcanic-ash-wait": {
+   "setBy": [
+    "wx-volcanic-ash"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-windstorm-gap-push": {
+   "setBy": [
+    "wx-windstorm-gap"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-windstorm-gap-used": {
+   "setBy": [
+    "wx-windstorm-gap"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
+  },
+  "hazard-windstorm-gap-wait": {
+   "setBy": [
+    "wx-windstorm-gap"
+   ],
+   "readBy": [],
+   "note": "SF42 flags hazard.<id>.<way> (push, wait, used): kept in the run log for later families."
   },
   "heist-asked": {
    "setBy": [
@@ -2751,12 +3402,89 @@
    "readBy": [],
    "note": "SF18 Heist record flags (role, approach, who was named, where the ledger went). Kept in the run log."
   },
+  "hettie-drawing": {
+   "setBy": [
+    "charity-favor"
+   ],
+   "readBy": [],
+   "note": "SF43.14 the orphanage children's drawing (the hub picture is not built; kept as a run moment)."
+  },
+  "honest-child": {
+   "setBy": [
+    "lost-child"
+   ],
+   "readBy": [],
+   "note": "SF47/SF53 honesty flags (MEMORY_AND_FORMAT 2.1): honest-returned-wallet and honest-kept-wallet are shared; the Pawn Appraiser (other row) reads honest-kept-wallet. honest-kept counts every keep for the Apprentice; 2+ is for the Final Reunion (other row)."
+  },
+  "honest-kept": {
+   "setBy": [
+    "ev-lost-pokemon",
+    "lost-ring",
+    "lost-umbrella",
+    "lost-wallet"
+   ],
+   "readBy": [
+    "apprentice-kind"
+   ]
+  },
+  "honest-kept-lost": {
+   "setBy": [
+    "ev-lost-pokemon"
+   ],
+   "readBy": [],
+   "note": "SF47/SF53 honesty flags (MEMORY_AND_FORMAT 2.1): honest-returned-wallet and honest-kept-wallet are shared; the Pawn Appraiser (other row) reads honest-kept-wallet. honest-kept counts every keep for the Apprentice; 2+ is for the Final Reunion (other row)."
+  },
+  "honest-kept-ring": {
+   "setBy": [
+    "lost-ring"
+   ],
+   "readBy": [],
+   "note": "SF47/SF53 honesty flags (MEMORY_AND_FORMAT 2.1): honest-returned-wallet and honest-kept-wallet are shared; the Pawn Appraiser (other row) reads honest-kept-wallet. honest-kept counts every keep for the Apprentice; 2+ is for the Final Reunion (other row)."
+  },
+  "honest-kept-umbrella": {
+   "setBy": [
+    "lost-umbrella"
+   ],
+   "readBy": [],
+   "note": "SF47/SF53 honesty flags (MEMORY_AND_FORMAT 2.1): honest-returned-wallet and honest-kept-wallet are shared; the Pawn Appraiser (other row) reads honest-kept-wallet. honest-kept counts every keep for the Apprentice; 2+ is for the Final Reunion (other row)."
+  },
+  "honest-kept-wallet": {
+   "setBy": [
+    "lost-ring",
+    "lost-wallet"
+   ],
+   "readBy": [],
+   "note": "SF47/SF53 honesty flags (MEMORY_AND_FORMAT 2.1): honest-returned-wallet and honest-kept-wallet are shared; the Pawn Appraiser (other row) reads honest-kept-wallet. honest-kept counts every keep for the Apprentice; 2+ is for the Final Reunion (other row)."
+  },
   "honest-returned-wallet": {
-   "setBy": [],
+   "setBy": [
+    "lost-ring",
+    "lost-wallet"
+   ],
    "readBy": [
     "pen-pal-letter"
+   ]
+  },
+  "honest-ring": {
+   "setBy": [
+    "lost-ring"
    ],
-   "note": "Set by Lost Wallet / Lost Ring (MEMORY_AND_FORMAT 2.1)."
+   "readBy": [],
+   "note": "SF47/SF53 honesty flags (MEMORY_AND_FORMAT 2.1): honest-returned-wallet and honest-kept-wallet are shared; the Pawn Appraiser (other row) reads honest-kept-wallet. honest-kept counts every keep for the Apprentice; 2+ is for the Final Reunion (other row)."
+  },
+  "honest-umbrella": {
+   "setBy": [
+    "lost-umbrella"
+   ],
+   "readBy": [],
+   "note": "SF47/SF53 honesty flags (MEMORY_AND_FORMAT 2.1): honest-returned-wallet and honest-kept-wallet are shared; the Pawn Appraiser (other row) reads honest-kept-wallet. honest-kept counts every keep for the Apprentice; 2+ is for the Final Reunion (other row)."
+  },
+  "honest-wallet": {
+   "setBy": [
+    "lost-wallet"
+   ],
+   "readBy": [],
+   "note": "SF47/SF53 honesty flags (MEMORY_AND_FORMAT 2.1): honest-returned-wallet and honest-kept-wallet are shared; the Pawn Appraiser (other row) reads honest-kept-wallet. honest-kept counts every keep for the Apprentice; 2+ is for the Final Reunion (other row)."
   },
   "hood-asked-what": {
    "setBy": [
@@ -2859,11 +3587,41 @@
    "readBy": [],
    "note": "The Hooded Traveller (SF10): each meeting's answer; hood-returned is the 'Come back' promise read by the Final Reunion (greenneedle) and the PC/GL/PA questlines (people)."
   },
+  "hospice-sea": {
+   "setBy": [
+    "pokemon-hospice"
+   ],
+   "readBy": [],
+   "note": "SF54 The Hospice (hospice-stayed, hospice-sea)."
+  },
+  "hospice-stayed": {
+   "setBy": [
+    "pokemon-hospice"
+   ],
+   "readBy": [],
+   "note": "SF54 The Hospice (hospice-stayed, hospice-sea)."
+  },
+  "kind-forward": {
+   "setBy": [
+    "pay-it-forward"
+   ],
+   "readBy": [
+    "pay-it-forward-pass"
+   ]
+  },
   "kind-helped-stranger": {
    "setBy": [
     "apprentice-after",
+    "apprentice-kind",
     "apprentice-lieutenant",
     "apprentice-sly",
+    "bakery-gift",
+    "barefoot-monk",
+    "blind-old-lady",
+    "center-lady",
+    "charity-drive",
+    "charity-favor",
+    "coins-found",
     "crisis-blackout-climax",
     "crisis-blizzard-bus",
     "crisis-blizzard-climax",
@@ -2886,16 +3644,37 @@
     "farmers-field",
     "farmers-field-again",
     "farmers-quest-3",
+    "flooded-basement",
+    "gift-from-mom",
     "habitat-culprit",
     "habitat-disturbed",
     "hurt-wanderer",
+    "kind-hiker",
+    "kind-ranger",
+    "kind-rival-visit",
+    "last-cookie",
     "lost-at-sea",
+    "lost-child",
+    "lost-pet-home",
+    "lost-ring",
+    "lost-umbrella",
+    "lost-wallet",
+    "midnight-lullaby",
     "mudslide-mudbray",
     "mudslide-rescue",
+    "nurse-clinic",
+    "pay-it-forward",
+    "pay-it-forward-pass",
     "peddler-3",
+    "quiet-hermit",
     "sanctuary-attack",
+    "shelf-kit-hideout",
+    "stray-kitten",
+    "stuck-pokemon",
     "surf-rescue",
+    "umbrella-share",
     "vt-pyromaniac-sweep",
+    "wallet-nurse",
     "wm-2",
     "wm-3",
     "world-disaster-quake"
@@ -2904,11 +3683,49 @@
     "pen-pal-letter"
    ]
   },
+  "kind-helpers": {
+   "setBy": [
+    "kind-helpers"
+   ],
+   "readBy": [
+    "kind-helpers"
+   ]
+  },
+  "kind-passed-on": {
+   "setBy": [
+    "pay-it-forward"
+   ],
+   "readBy": [],
+   "note": "SF43 Kindness Ledger flags (kind-total, kind-helped-stranger and kind-walked-past are shared board flags; the rest are kept in the run log; kind-tab-covered brings the traveller to the crisis helpers)."
+  },
+  "kind-stranger-note": {
+   "setBy": [
+    "pay-it-forward"
+   ],
+   "readBy": [],
+   "note": "SF43 Kindness Ledger flags (kind-total, kind-helped-stranger and kind-walked-past are shared board flags; the rest are kept in the run log; kind-tab-covered brings the traveller to the crisis helpers)."
+  },
+  "kind-tab-covered": {
+   "setBy": [
+    "pay-it-forward-pass"
+   ],
+   "readBy": [
+    "kind-helpers"
+   ]
+  },
   "kind-total": {
    "setBy": [
     "apprentice-after",
+    "apprentice-kind",
     "apprentice-lieutenant",
     "apprentice-sly",
+    "bakery-gift",
+    "barefoot-monk",
+    "blind-old-lady",
+    "center-lady",
+    "charity-drive",
+    "charity-favor",
+    "coins-found",
     "crisis-blackout-climax",
     "crisis-blizzard-bus",
     "crisis-blizzard-climax",
@@ -2931,26 +3748,53 @@
     "farmers-field",
     "farmers-field-again",
     "farmers-quest-3",
+    "flooded-basement",
+    "gift-from-mom",
     "habitat-culprit",
     "habitat-disturbed",
     "hurt-wanderer",
+    "kind-hiker",
+    "kind-ranger",
+    "kind-rival-visit",
+    "last-cookie",
     "lost-at-sea",
+    "lost-child",
+    "lost-pet-home",
+    "lost-ring",
+    "lost-umbrella",
+    "lost-wallet",
+    "midnight-lullaby",
     "mudslide-mudbray",
     "mudslide-rescue",
+    "nurse-clinic",
+    "pay-it-forward",
+    "pay-it-forward-pass",
     "peddler-3",
+    "quiet-hermit",
     "sanctuary-attack",
+    "shelf-kit-hideout",
+    "stray-kitten",
+    "stuck-pokemon",
     "surf-rescue",
+    "umbrella-share",
     "vt-pyromaniac-sweep",
+    "wallet-nurse",
     "wm-2",
     "wm-3",
     "world-disaster-quake"
    ],
-   "readBy": [],
-   "note": "Shared board: the Kindness total, +1 beside every Kindness +1."
+   "readBy": [
+    "charity-favor",
+    "kind-helpers",
+    "riolu-watch-1"
+   ]
   },
   "kind-walked-past": {
    "setBy": [
+    "barefoot-monk",
     "crisis-report-blackout",
+    "pay-it-forward-pass",
+    "umbrella-share",
     "world-disaster-blizzard"
    ],
    "readBy": [],
@@ -3383,6 +4227,14 @@
    "readBy": [],
    "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
   },
+  "lost-pet-carried": {
+   "setBy": [
+    "ev-lost-pokemon"
+   ],
+   "readBy": [
+    "lost-pet-home"
+   ]
+  },
   "map-champion-met": {
    "setBy": [
     "dg-treasure-dig-c"
@@ -3625,6 +4477,22 @@
    "readBy": [],
    "note": "Gatekeeper Mara (SF7): how her story went this run, kept for the Final Reunion (greenneedle) and the run's chronicle."
   },
+  "mom-parcel-two": {
+   "setBy": [
+    "mom-second-parcel"
+   ],
+   "readBy": [
+    "mom-second-parcel"
+   ]
+  },
+  "mom-wrote": {
+   "setBy": [
+    "gift-from-mom"
+   ],
+   "readBy": [
+    "mom-second-parcel"
+   ]
+  },
   "nobody-caught": {
    "setBy": [
     "rk-hidden-quest-payoff"
@@ -3698,6 +4566,52 @@
    ],
    "readBy": [],
    "note": "SF20 The Nobody record flags (how it went). Kept in the run log."
+  },
+  "pathfinder": {
+   "setBy": [
+    "wx-ancient-lava-tube",
+    "wx-black-ice-road",
+    "wx-dust-devil",
+    "wx-fog-bank",
+    "wx-hailstorm",
+    "wx-heat-wave-trek",
+    "wx-mudslide-pass",
+    "wx-overgrown-trail",
+    "wx-pollen-season",
+    "wx-rainy-day-market",
+    "wx-rising-tide",
+    "wx-salt-flats-mirage",
+    "wx-smog-alert",
+    "wx-solar-flare",
+    "wx-sunken-road",
+    "wx-swampy-mist",
+    "wx-thunderstorm-crossing",
+    "wx-tropical-squall",
+    "wx-volcanic-ash",
+    "wx-windstorm-gap"
+   ],
+   "readBy": [
+    "wx-ancient-lava-tube",
+    "wx-black-ice-road",
+    "wx-dust-devil",
+    "wx-fog-bank",
+    "wx-hailstorm",
+    "wx-heat-wave-trek",
+    "wx-mudslide-pass",
+    "wx-overgrown-trail",
+    "wx-pollen-season",
+    "wx-rainy-day-market",
+    "wx-rising-tide",
+    "wx-salt-flats-mirage",
+    "wx-smog-alert",
+    "wx-solar-flare",
+    "wx-sunken-road",
+    "wx-swampy-mist",
+    "wx-thunderstorm-crossing",
+    "wx-tropical-squall",
+    "wx-volcanic-ash",
+    "wx-windstorm-gap"
+   ]
   },
   "penpal-1": {
    "setBy": [
@@ -3851,6 +4765,20 @@
     "sanctuary-attack"
    ],
    "note": "Read-only state flag from legends (LEGENDS_PIECES section 3): the Shaymin Promise is active."
+  },
+  "pryor-hiker": {
+   "setBy": [
+    "center-lady"
+   ],
+   "readBy": [],
+   "note": "SF43.2 Mrs. Pryor: kept in the run log."
+  },
+  "pryor-lunch": {
+   "setBy": [
+    "center-lady"
+   ],
+   "readBy": [],
+   "note": "SF43.2 Mrs. Pryor: kept in the run log."
   },
   "pumpkin-trophy": {
    "setBy": [
@@ -4168,10 +5096,21 @@
     "story-tour-final",
     "story-tour-opening",
     "story-tour-semi",
-    "tournament-quarter"
+    "tournament-quarter",
+    "wallet-nurse"
    ],
    "readBy": [],
    "note": "Reputation (shared with the rivals row, which sets and reads it the same way)."
+  },
+  "rep-lost": {
+   "setBy": [
+    "ev-lost-pokemon",
+    "lost-ring",
+    "lost-umbrella",
+    "lost-wallet"
+   ],
+   "readBy": [],
+   "note": "Shared board: Reputation -1 (families-c owns Reputation and reads it)."
   },
   "reported-crime": {
    "setBy": [
@@ -4245,6 +5184,71 @@
    ],
    "readBy": [],
    "note": "Pack flags rescue.* (SF1.6 to SF1.8): read by rescued-callback scenes and the Final Reunion."
+  },
+  "riolu-done": {
+   "setBy": [
+    "ledge-riolu-return"
+   ],
+   "readBy": [
+    "ledge-riolu-return"
+   ]
+  },
+  "riolu-home": {
+   "setBy": [
+    "ledge-riolu-return"
+   ],
+   "readBy": [],
+   "note": "SF52 The Riolu on the Ledge (riolu-watch is its hidden count; riolu-home is read by the Final Reunion, other row)."
+  },
+  "riolu-joined": {
+   "setBy": [
+    "ledge-riolu-return"
+   ],
+   "readBy": [],
+   "note": "SF52 The Riolu on the Ledge (riolu-watch is its hidden count; riolu-home is read by the Final Reunion, other row)."
+  },
+  "riolu-saved": {
+   "setBy": [
+    "ledge-riolu"
+   ],
+   "readBy": [
+    "riolu-watch-1"
+   ]
+  },
+  "riolu-seen-1": {
+   "setBy": [
+    "riolu-watch-1"
+   ],
+   "readBy": [
+    "riolu-watch-1",
+    "riolu-watch-2"
+   ]
+  },
+  "riolu-seen-2": {
+   "setBy": [
+    "riolu-watch-2"
+   ],
+   "readBy": [
+    "ledge-riolu-return",
+    "riolu-watch-2"
+   ]
+  },
+  "riolu-splash": {
+   "setBy": [
+    "ledge-riolu"
+   ],
+   "readBy": [],
+   "note": "SF52 The Riolu on the Ledge (riolu-watch is its hidden count; riolu-home is read by the Final Reunion, other row)."
+  },
+  "riolu-watch": {
+   "setBy": [
+    "ledge-riolu",
+    "riolu-watch-1",
+    "riolu-watch-2"
+   ],
+   "readBy": [
+    "ledge-riolu-return"
+   ]
   },
   "rival-helped": {
    "setBy": [],
@@ -4547,6 +5551,54 @@
     "sanct-trial-end"
    ]
   },
+  "shelf-home": {
+   "setBy": [
+    "shelf-home"
+   ],
+   "readBy": [
+    "shelf-home"
+   ]
+  },
+  "shelf-kit": {
+   "setBy": [
+    "gift-the-keeper"
+   ],
+   "readBy": [
+    "shelf-kit-hideout"
+   ]
+  },
+  "shelf-kit-home": {
+   "setBy": [
+    "shelf-kit-hideout"
+   ],
+   "readBy": [
+    "shelf-home"
+   ]
+  },
+  "shelf-kit-letter": {
+   "setBy": [
+    "shelf-kit-hideout"
+   ],
+   "readBy": [
+    "shelf-letter"
+   ]
+  },
+  "shelf-kit-met": {
+   "setBy": [
+    "shelf-kit-hideout"
+   ],
+   "readBy": [
+    "shelf-kit-hideout"
+   ]
+  },
+  "shelf-letter-read": {
+   "setBy": [
+    "shelf-letter"
+   ],
+   "readBy": [
+    "shelf-letter"
+   ]
+  },
   "shift-colony": {
    "setBy": [
     "foundry-final"
@@ -4599,6 +5651,13 @@
    "readBy": [
     "foundry-final"
    ]
+  },
+  "shop-loyalty": {
+   "setBy": [],
+   "readBy": [
+    "gift-the-keeper"
+   ],
+   "note": "Set by the older shopkeeper-loyalty events (eventsW5.json; core/npcShop.ts reads it for discounts). The Empty Shelf keeps its old placement: Mrs. Arden opens up to a loyal customer."
   },
   "sign-articuno": {
    "setBy": [
@@ -4744,6 +5803,62 @@
     "wm-3",
     "wm-4"
    ]
+  },
+  "teller-hob": {
+   "setBy": [
+    "old-mans-tale"
+   ],
+   "readBy": [],
+   "note": "SF44 Tellers (Tal, Marguerite, the old lady, Hob, Wennick, the traveller, the umbrella stranger): read by the Legendary and Mythical questlines (other rows) as Signs and Tellings."
+  },
+  "teller-marguerite": {
+   "setBy": [
+    "blind-describer"
+   ],
+   "readBy": [],
+   "note": "SF44 Tellers (Tal, Marguerite, the old lady, Hob, Wennick, the traveller, the umbrella stranger): read by the Legendary and Mythical questlines (other rows) as Signs and Tellings."
+  },
+  "teller-oldlady": {
+   "setBy": [
+    "blind-old-lady"
+   ],
+   "readBy": [],
+   "note": "SF44 Tellers (Tal, Marguerite, the old lady, Hob, Wennick, the traveller, the umbrella stranger): read by the Legendary and Mythical questlines (other rows) as Signs and Tellings."
+  },
+  "teller-tal": {
+   "setBy": [
+    "barefoot-monk"
+   ],
+   "readBy": [],
+   "note": "SF44 Tellers (Tal, Marguerite, the old lady, Hob, Wennick, the traveller, the umbrella stranger): read by the Legendary and Mythical questlines (other rows) as Signs and Tellings."
+  },
+  "teller-traveller": {
+   "setBy": [
+    "share-a-meal"
+   ],
+   "readBy": [],
+   "note": "SF44 Tellers (Tal, Marguerite, the old lady, Hob, Wennick, the traveller, the umbrella stranger): read by the Legendary and Mythical questlines (other rows) as Signs and Tellings."
+  },
+  "teller-umbrella": {
+   "setBy": [
+    "umbrella-share"
+   ],
+   "readBy": [],
+   "note": "SF44 Tellers (Tal, Marguerite, the old lady, Hob, Wennick, the traveller, the umbrella stranger): read by the Legendary and Mythical questlines (other rows) as Signs and Tellings."
+  },
+  "teller-wennick": {
+   "setBy": [
+    "quiet-hermit"
+   ],
+   "readBy": [],
+   "note": "SF44 Tellers (Tal, Marguerite, the old lady, Hob, Wennick, the traveller, the umbrella stranger): read by the Legendary and Mythical questlines (other rows) as Signs and Tellings."
+  },
+  "trail-first": {
+   "setBy": [
+    "camp-rival-trail"
+   ],
+   "readBy": [],
+   "note": "SF45.7: the Pokémon starts the next rival battle first (rival battles read it when built; kept in the run log)."
   },
   "vale-again-seen": {
    "setBy": [
@@ -4928,6 +6043,44 @@
    ],
    "readBy": [],
    "note": "Wicker's Cart (SF5): what the player learned about her, kept for later merchant scenes."
+  },
+  "wil-asked": {
+   "setBy": [
+    "gym-eve-tone"
+   ],
+   "readBy": [],
+   "note": "SF51 Wil at the gym steps."
+  },
+  "wil-badge": {
+   "setBy": [
+    "wil-badge"
+   ],
+   "readBy": [
+    "wil-badge"
+   ]
+  },
+  "wil-loud": {
+   "setBy": [
+    "gym-eve-tone"
+   ],
+   "readBy": [],
+   "note": "SF51 Wil at the gym steps."
+  },
+  "wil-quiet": {
+   "setBy": [
+    "gym-eve-tone"
+   ],
+   "readBy": [
+    "wil-badge"
+   ]
+  },
+  "wil-tries": {
+   "setBy": [
+    "gym-eve-tone"
+   ],
+   "readBy": [
+    "wil-badge"
+   ]
   },
   "zygarde-cells": {
    "setBy": [

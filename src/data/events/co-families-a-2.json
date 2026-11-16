@@ -360,6 +360,127 @@
       ]
      }
     }
+   ],
+   "remembers": [
+    {
+     "id": "kept-wallet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "honest-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A new region, and someone standing in the path with a very innocent look. The kid from before. Tib: \"I copied what you did with that wallet. Want to see?\" Tib opens a bag. Three things that belong to other people, a purse, a ring, a lost Pokémon's collar. Tib was watching from behind a too-thin tree when you kept it. Tib looks up at you with total trust. \"You did it. So it's fine. Right?\"",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "It's not fine.",
+       "success": {
+        "text": "Tib: \"But you—\" And Tib tells it back to you. All of it. The day, the place, what you took or took advantage of, what you said afterwards. Tib was watching from behind a too-thin tree, and remembers it better than you do. When Tib has finished there is nothing either of you can say. Tib closes the bag and walks off, confused, looking back twice.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "apprentice-sly",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "apprentice-confronted",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Give them back with me. (two nodes)",
+       "requires": [
+        {
+         "kind": "money",
+         "atLeast": 500
+        }
+       ],
+       "success": {
+        "text": "Three shops. Three counters. Tib does the talking at each one, in a voice that gets smaller every time, and you stand behind with a hand on Tib's shoulder. Two shopkeepers take their goods back and say nothing. The third reaches for the telephone. It costs you ₽500 to put the receiver down again. Outside, Tib says, very quietly, \"You did it too, though.\" You say yes. You say that is why you came.",
+        "effects": [
+         {
+          "kind": "takeNode",
+          "nodes": 2
+         },
+         {
+          "kind": "flag",
+          "key": "apprentice-sly",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "apprentice-returned",
+          "amount": 1
+         },
+         {
+          "kind": "money",
+          "amount": -500
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-helped-stranger",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Nice haul.",
+       "success": {
+        "text": "Tib grins, a grin you have seen in a mirror. Across the street, a man in a dark cap who has been reading the same page of a newspaper for some time folds it, and looks at Tib for a long moment, and smiles too.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "apprentice-sly",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "apprentice-praised",
+          "amount": 1
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": -1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "rescued-too",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "found-count",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "Tib is holding something wrapped in a jacket: a Pokémon, small and muddy and very much alive. Tib: \"It was stuck in a drain. I got it out. Like you do.\" Tib says it like you have done it a hundred times. Maybe you have."
+    }
    ]
   },
   {
