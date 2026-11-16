@@ -4218,6 +4218,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;
       if (foeAbility && weather && WEATHER_EVASION[foeAbility]?.includes(weather)) accuracy *= 0.8;
       if (foeAbility === 'tangled-feet' && target.vol.confusion > 0) accuracy *= 0.5;
+      if (foeAbility === 'unlooked-for' && target.mon.hp >= maxHp(content, target.mon)) accuracy *= 0.9;
       if (ctx.battle.field.gravity > 0) accuracy *= 5 / 3;
       if (ctx.battle.accuracyMult) accuracy *= ctx.battle.accuracyMult;
       if (ctx.battle.eventRule?.accuracyMult && (!ctx.battle.eventRule.accuracyTurns || ctx.battle.turn <= ctx.battle.eventRule.accuracyTurns)) accuracy *= ctx.battle.eventRule.accuracyMult;

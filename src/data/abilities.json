@@ -1670,6 +1670,11 @@
   "description": "The first time each battle that it would be bound or held in place, it breaks free and gains +1 Speed."
  },
  {
+  "id": "unlooked-for",
+  "name": "Unlooked-For",
+  "description": "Opponents' accuracy against it is lowered by 10% while it is at full HP."
+ },
+ {
   "id": "inherited-strength",
   "name": "Inherited Strength",
   "description": "Attack +1 whenever an ally faints, up to +2 in a battle."
