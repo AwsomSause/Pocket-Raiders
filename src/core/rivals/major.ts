@@ -26,7 +26,7 @@ import { RIVAL_ARCS, RIVAL_CONFIG, RIVAL_PROFILES } from './schema';
 const LinesSchema = z.object({ intro: z.string(), studied: z.string(), counter: z.string() });
 export const MajorRivalsSchema = z.object({
   note: z.string(),
-  characters: z.record(z.string(), z.object({ home: z.string(), personality: z.string(), style: z.string(), pool: z.array(z.string()).min(3), lines: LinesSchema, poolClass: z.enum(['primary', 'secondary', 'special']), approved: z.boolean().optional() })),
+  characters: z.record(z.string(), z.object({ home: z.string(), personality: z.string(), style: z.string(), pool: z.array(z.string()).min(3), lines: LinesSchema, poolClass: z.enum(['primary', 'secondary', 'special']), approved: z.boolean().optional(), /** Boss id whose sprite stands in when the character has no boss entry of their own. */ sprite: z.string().optional() })),
   config: z.object({
     interval: z.number().int().min(1),
     aceHeldAt: z.number().int().min(0),
@@ -58,6 +58,13 @@ function aceSpeciesOf(content: Content, name: string, team: string[]): string {
 
 /** The run's major rival, if it has been met. */
 export const majorRival = (run: RunState): Rival | undefined => run.story.rivals.find((r) => r.major);
+
+/** The boss entry whose sprite draws a named rival: their own (slug of the name), else a stand-in, else none (the class sprite). */
+export function rivalBossFor(content: Content, name: string): ReturnType<Content['bosses']['get']> {
+  const slug = name.toLowerCase().replace(/\s+/g, '-');
+  const stand = MAJOR.characters[name]?.sprite;
+  return content.bosses.get(slug) ?? (stand ? content.bosses.get(stand) : undefined);
+}
 
 /** The canon character for a first-rival name (the trainer class's names are the characters), or a stable fallback. */
 export function characterOf(name: string): { id: string; data: (typeof MAJOR.characters)[string] } {
