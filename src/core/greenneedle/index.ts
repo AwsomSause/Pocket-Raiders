@@ -32,7 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
-import { leftFates, leftHas, leftTake, leftTokens } from './left';
+import { leftFates, leftFreeze, leftHas, leftTake, leftTokens } from './left';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -649,6 +649,9 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return leftTake(content, run, e.n ?? 1, host);
     case 'leftFates':
       return leftFates(run);
+    case 'leftFreeze':
+      leftFreeze(run);
+      return '';
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

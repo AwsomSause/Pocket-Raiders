@@ -15,7 +15,9 @@
    "rarity": "uncommon",
    "requires": [
     {
-     "kind": "retiredGhost"
+     "kind": "gn",
+     "test": "leftHas",
+     "n": 1
     }
    ],
    "scene": {
@@ -23,13 +25,17 @@
     "tint": "#3b3a4e",
     "effect": "none"
    },
-   "intro": "A cold fire. A bedroll, still rolled. Six Poké Balls in a row on a log, and beside them, a notebook in your own handwriting.\n\nThe last page is the team, by nickname. Under it, in a hurry: \"Tomorrow, the Gym.\"\n\nThe Balls open by themselves. They have been waiting. They look at you the way a Pokémon looks at someone it remembers losing with.",
+   "intro": "A cold fire. A bedroll, still rolled. Poké Balls in a row on a log, and beside them, a notebook in your own handwriting.\n\nThe last page lists every Pokémon you let go, boxed or lost on this road, by name. Under it, in a hurry: \"Tomorrow, the Gym.\"\n\nThe Balls open by themselves. They have been waiting. They look at you the way a Pokémon looks at someone it remembers losing with.",
    "choices": [
     {
      "label": "Take one.",
      "success": {
       "text": "You kneel by the log. Nobody asks you to hurry. The Balls wait for you to choose, and they do not look away.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "leftFreeze"
+       },
        {
         "kind": "gn",
         "op": "scene",
@@ -53,6 +59,10 @@
         "op": "setFlag",
         "key": "left-buried",
         "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "leftFreeze"
        },
        {
         "kind": "gn",
