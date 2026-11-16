@@ -49,6 +49,7 @@ import { muralJoin, muralPick } from './mural';
 import { cheerJoin } from './cheer';
 import { mirrorReady, mirrorStart } from './mirror';
 import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, oldfriendTokens, releases } from './oldfriend';
+import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
@@ -806,6 +807,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return ofGuest(content, run, host);
     case 'ofReplacer':
       return ofReplacer(content, run);
+    case 'ferrisArrive':
+      return ferrisArrive(content, run);
+    case 'ferrisBest':
+      return ferrisBest(run);
+    case 'ferrisHand':
+      return ferrisHand(content, run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
@@ -962,6 +969,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   worthyStart(run, battle);
   // gn.new.10: the Mirror Lake's reflections, the team from the battle the player would rather forget.
   if (rule === 'mirror') mirrorStart(content, run, battle, makeFull(content));
+  // gn.59: Old Ferris's five: no items, no switching.
+  if (rule === 'ferris') ferrisStart(battle);
   if (rule === 'quillfeather') quillfeatherStart(content, run, battle, makeFull(content));
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {
@@ -1115,7 +1124,13 @@ export function trainAce(content: Content, ace: PokemonInstance | undefined, plu
 }
 
 /** Before the player's command is played: a Greenneedle rule may answer it. Returns the action to play and lines to show first. */
+/** gn.59: the 5th region's look is answered before any rule applies. */
 export function gnShape(content: Content, run: RunState, action: PlayerAction): { action: PlayerAction; events: Cue[] } {
+  const r = gnShapeRule(content, run, action);
+  return { action: r.action, events: [...ferrisShape(content, run, action), ...r.events] };
+}
+
+function gnShapeRule(content: Content, run: RunState, action: PlayerAction): { action: PlayerAction; events: Cue[] } {
   const battle = run.battle;
   const rule = battle?.eventRule?.gn;
   const mon = battle ? run.party[battle.activeIndex] : undefined;
@@ -1155,10 +1170,11 @@ function countForest(content: Content, run: RunState, battle: BattleState): void
 /** After a turn: once a fight is won, the stories that count fights take their count (once per fight). */
 export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   const battle = run.battle;
-  if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return [];
+  const seen = ferrisTurn(content, run);
+  if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return seen;
   battle.storyEffects.push('gn-counted');
   countForest(content, run, battle);
-  return [];
+  return seen;
 }
 
 export { cue as gnCue };

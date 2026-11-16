@@ -24,7 +24,8 @@
   "ranch-dug": "gn.new.20 The Bibarel Dam: dug a channel (read by gn.new.38 Long Table)",
   "ranch-moved": "gn.new.20 The Bibarel Dam: moved the colony (read by gn.new.38 Long Table)",
   "well-lifted": "gn.new.16 The Thing in the Well: lifted the Feebas out (read by gn.new.38 Long Table)",
-  "lantern-boat-floated": "gn.new.36 (the Lantern Sea boat)"
+  "lantern-boat-floated": "gn.new.36 (the Lantern Sea boat)",
+  "lost-mon": "another row's permanent-loss scene (read by gn.59: the first catch is lost)"
  },
  "flags": [
   {

@@ -1,0 +1,1250 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-59-fire",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "ferris-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lesson",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "champ-lesson",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He looks at you over the kettle. \"You've been taught by a Champion. I can tell by how you stand.\" He won't say which of them was his pupil."
+    },
+    {
+     "id": "exhibition",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ex-known",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He watches your hands. \"You watched a League match closely. Someone I taught is in that stadium.\" He won't say who."
+    },
+    {
+     "id": "plums",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "champ-told-plums",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"A plum tree,\" he says, to himself, and smiles. \"One of mine, that. I taught them to sit under it.\" He won't say which of them."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "arcanine",
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "*A fire by the road, and the kettle already on. An old man in a coat with a great many pockets, and a stick that isn't for walking.*\n\nBehind him, a grey-muzzled Arcanine lies on its side, one eye open. A Tyranitar sits farther off, scarred and enormous, and perfectly gentle.\n\n**Old Ferris Hawthorne:** \"Sit. You look like someone who's been doing it properly. Properly's tiring.\"",
+   "choices": [
+    {
+     "label": "Sit.",
+     "success": {
+      "text": "You sit. He hands you a cup before you've agreed. His hands shake very slightly, and he pretends not to notice them.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ferrisArrive"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "ferris-at"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ferris-story",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-59-s1",
+          "gn-59-s2",
+          "gn-59-s3",
+          "gn-59-s4",
+          "gn-59-s5",
+          "gn-59-s6"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "He raises the stick, as if to wave, and decides it's not worth the effort. \"Another time,\" he says. He sounds like he's said it before.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-s1",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "**Ferris:** \"My first badge. I cried. Right there on the gym floor, in front of everyone. The Leader pretended not to see.\"\n\n\"That was kind. I didn't know it was kind until I was old enough to do it for someone else.\"\n\nHe points with the stick, at nothing, at everything. **\"Look at their feet, not their face.\"**",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You listen. The kettle ticks as it cools. Somewhere behind the fire, a Clefable hums, and has an opinion about the tea.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-advice-1",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-s2",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "**Ferris:** \"A storm at sea. That Lanturn was a Chinchou then, no bigger than a loaf of bread.\"\n\n\"Three ships followed its light home. It was frightened the whole way. It did it anyway.\"\n\nHe points with the stick, at nothing, at everything. **\"When you can't see, stop. Don't guess.\"**",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You listen. The kettle ticks as it cools. Somewhere behind the fire, a Clefable hums, and has an opinion about the tea.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-advice-2",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-s3",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "**Ferris:** \"That Tyranitar was a Larvitar that bit everybody. Everybody. I let it. I have the scars, look.\"\n\n\"Now children climb it. It lies very still for them. It has never once bitten a child.\"\n\nHe points with the stick, at nothing, at everything. **\"The ones that bite are the ones that stay.\"**",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You listen. The kettle ticks as it cools. Somewhere behind the fire, a Clefable hums, and has an opinion about the tea.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-advice-3",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-s4",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "**Ferris:** \"The League. I won on a Tuesday. Nobody came, because it was raining.\"\n\n\"I sat in the empty stands afterward with my team. It was the best day of my life. I mean that.\"\n\nHe points with the stick, at nothing, at everything. **\"Win as if nobody's watching. Lose the same way.\"**",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You listen. The kettle ticks as it cools. Somewhere behind the fire, a Clefable hums, and has an opinion about the tea.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-advice-4",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-s5",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "**Ferris:** \"I retired the day the Noctowl's eye went. It wasn't that it couldn't. It was that it *would* have.\"\n\n\"It would have gone on, for me, until it dropped. That is exactly why I stopped.\"\n\nHe points with the stick, at nothing, at everything. **\"Know when it's asking you to stop.\"**",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You listen. The kettle ticks as it cools. Somewhere behind the fire, a Clefable hums, and has an opinion about the tea.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-advice-5",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-s6",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "**Ferris:** \"You'll have noticed the belt. Six clips. Five Balls. I've been looking at that empty clip for sixty years.\"\n\n\"Don't pity it. It's the most honest thing I own.\"\n\nHe points with the stick, at nothing, at everything. **\"Go back for it. Even late.\"**",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You listen. The kettle ticks as it cools. Somewhere behind the fire, a Clefable hums, and has an opinion about the tea.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-advice-6",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-after",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "The fire settles. Ferris leans back, and looks at the five Balls on his belt, one at a time, the way you'd count children.\n\n**Ferris:** \"I talk more than I battle. But they've been sitting a while, and they'd like the exercise.\"",
+   "choices": [
+    {
+     "label": "Would you battle me?",
+     "success": {
+      "text": "**Ferris:** \"With five? Go on. It'll be unfair. To you. I've had sixty years to get five right.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-59-lost"
+        }
+       ],
+       "rule": {
+        "gn": "ferris"
+       },
+       "team": [
+        "arcanine",
+        "noctowl",
+        "tyranitar",
+        "lanturn",
+        "clefable"
+       ],
+       "name": "Old Ferris Hawthorne",
+       "classId": "veteran",
+       "size": 5,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ferris-battled",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "ferrisBest"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-59-tutor"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Just the tea, thanks.",
+     "success": {
+      "text": "**Ferris:** \"Wise. The tea's the better half.\" He pours. It is, in fact, very good tea.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ferris-last",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-59-leave",
+          "gn-59-request"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's the empty clip?",
+     "success": {
+      "text": "**Ferris:** \"That's a long one. Not tonight.\" He taps the belt twice with the stick, gently, like knocking on a door.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-after-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-after-2",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "The empty clip swings a little on his belt. He doesn't look at it. Everyone else does.\n\n**Ferris:** \"Well? Battle, or tea?\"",
+   "choices": [
+    {
+     "label": "Would you battle me?",
+     "success": {
+      "text": "**Ferris:** \"With five? Go on. It'll be unfair. To you. I've had sixty years to get five right.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-59-lost"
+        }
+       ],
+       "rule": {
+        "gn": "ferris"
+       },
+       "team": [
+        "arcanine",
+        "noctowl",
+        "tyranitar",
+        "lanturn",
+        "clefable"
+       ],
+       "name": "Old Ferris Hawthorne",
+       "classId": "veteran",
+       "size": 5,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ferris-battled",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "ferrisBest"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-59-tutor"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Just the tea, thanks.",
+     "success": {
+      "text": "**Ferris:** \"Wise. The tea's the better half.\" He pours. It is, in fact, very good tea.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ferris-last",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-59-leave",
+          "gn-59-request"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-tutor",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "The last of his five goes back into its Ball. Ferris sits down hard, delighted, and out of breath.\n\n**Ferris:** \"*Ha.* That was unfair to you. Now. One of mine will teach one of yours a trick. I won't say which was my favourite.\"",
+   "choices": [
+    {
+     "label": "Arcanine: Flare Blitz.",
+     "pick": {},
+     "success": {
+      "text": "Ferris's Arcanine shows yours how it's done, patiently, three times. It takes.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "flare-blitz",
+        "who": "picked"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ferris-last",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-59-leave",
+          "gn-59-request"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Noctowl: Air Slash.",
+     "pick": {},
+     "success": {
+      "text": "Ferris's Noctowl shows yours how it's done, patiently, three times. It takes.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "air-slash",
+        "who": "picked"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ferris-last",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-59-leave",
+          "gn-59-request"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tyranitar: Rock Slide.",
+     "pick": {},
+     "success": {
+      "text": "Ferris's Tyranitar shows yours how it's done, patiently, three times. It takes.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "rock-slide",
+        "who": "picked"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ferris-last",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-59-leave",
+          "gn-59-request"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "The other two.",
+     "success": {
+      "text": "He grins, and holds the Balls out. \"Greedy. Good.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-tutor-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-tutor-2",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "**Ferris:** \"The Lanturn swims alongside the boat, when there's a boat. The Clefable has opinions. Choose.\"",
+   "choices": [
+    {
+     "label": "Lanturn: Surf.",
+     "pick": {},
+     "success": {
+      "text": "Ferris's Lanturn shows yours how it's done, patiently, three times. It takes.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "surf",
+        "who": "picked"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ferris-last",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-59-leave",
+          "gn-59-request"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clefable: Moonblast.",
+     "pick": {},
+     "success": {
+      "text": "Ferris's Clefable shows yours how it's done, patiently, three times. It takes.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "moonblast",
+        "who": "picked"
+       },
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ferris-last",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-59-leave",
+          "gn-59-request"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-lost",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "**Ferris:** \"Good. You learn nothing winning.\" He says it warmly, and refills your cup. Nothing is taken from you but the afternoon.",
+   "choices": [
+    {
+     "label": "Drink the tea.",
+     "success": {
+      "text": "It is still very good tea. You are still, a little, annoyed. He seems to approve of both.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "route",
+        "key": "ferris-last",
+        "to": {
+         "kind": "addEventFrom",
+         "ids": [
+          "gn-59-leave",
+          "gn-59-request"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-leave",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "He puts out the fire with the toe of his boot, and with a little sigh, as if putting out a candle.\n\n**Ferris:** \"Go on. The road's better with company, but it's better still when it's moving.\"",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "You look back once. He's already telling the Clefable something, with the stick. It is not listening.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-request",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "**Ferris:** \"I'm not going round again. This is my last walk. There's one thing I want before I sit down for good.\"\n\n\"Not a rare one. You'll laugh.\"\n\n*He takes a Ball out of an inside pocket. It's old. The paint's worn off where a thumb would go.*\n\n**Ferris:** \"My first. A {cast:ferris-first}. Caught it with my own two hands, behind my mother's house. I was eight.\"\n\n\"I lost it. Not a battle. A river in flood, and I was showing off. I never caught another of its kind. Couldn't.\"\n\n\"I'd like to. Now. One of them. Not to replace it. Just so the belt's full when I hang it up.\"",
+   "choices": [
+    {
+     "label": "Find one with me.",
+     "success": {
+      "text": "He's on his feet before you finish. \"Not a rare one,\" he says again, as if you might have forgotten how to laugh. There's a patch of ordinary grass nearby.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-grass"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I can't. I'm sorry.",
+     "success": {
+      "text": "**Ferris:** \"No one's to blame for a long walk.\" He sits back down. His hand goes to the empty clip, and stays there.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-grass",
+   "name": "The Former Champion: The Grass",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "*A patch of ordinary grass, at the edge of the road. Somewhere in it, a {cast:ferris-first}, being ordinary.*\n\n*Ferris can't make the throw. Their hands aren't what they were.*",
+   "choices": [
+    {
+     "label": "I'll catch it for you.",
+     "success": {
+      "text": "You go into the grass alone. He stays where he is, holding the old Ball in both hands, and doesn't say a word.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@ferris-first"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "ferrisHand"
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ferris-how",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ferris-request-caught",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "route",
+         "key": "ferris-handed",
+         "to": {
+          "kind": "addEventFrom",
+          "ids": [
+           "gn-59-grass",
+           "gn-59-clip"
+          ]
+         }
+        }
+       ],
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "ferrisHand"
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ferris-how",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ferris-request-caught",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "route",
+         "key": "ferris-handed",
+         "to": {
+          "kind": "addEventFrom",
+          "ids": [
+           "gn-59-grass",
+           "gn-59-clip"
+          ]
+         }
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Throw. I'll steady your arm.",
+     "prompt": {
+      "id": "ferris-steady",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You stand behind him, a hand under his elbow. He is so light. He is shaking. He throws. It goes in, first try. Ferris laughs so hard he has to sit down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-how",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-request-steadied",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-clip"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It goes wide, and wider, and in on the third try. Ferris laughs so hard he has to sit down, and you do too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-how",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-request-steadied",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-clip"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it come to you.",
+     "success": {
+      "text": "Ferris sits in the grass, and holds out a hand, and waits. A long time. One comes. It sniffs the old Ball. It climbs into his lap. No throw at all.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-how",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-request-waited",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-59-clip"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-59-clip",
+   "name": "The Former Champion",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "remembers": [
+    {
+     "id": "caught",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ferris-how",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "He takes the Ball from you in both hands. \"...It's lighter than I remember,\" he says. \"Everything is.\""
+    },
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lost-mon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He looks at you for a while. Somehow, he knows. \"You too. You'll want to go back for it. Even late.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b4a2b",
+    "effect": "none"
+   },
+   "intro": "*Ferris clips the Ball on. Six.*\n\n**Ferris:** \"There. Sixty years. That's better.\"\n\nHe takes off his hat, and looks inside it, as if checking for something, and holds it out.\n\n**Ferris:** \"Worn thin at the brim. It'll make anything wearing it grow faster. Go on. I won't be needing it where I'm sitting.\"",
+   "choices": [
+    {
+     "label": "Take the hat.",
+     "success": {
+      "text": "It smells of woodsmoke and old tea. It is warmer than it should be.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "ferris-hat",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the hat. Ask {cast:ferris-best} to come.",
+     "success": {
+      "text": "One of his five gets up, stiffly, and looks at you for a long moment. Then at him. He nods. It comes with you, old, and not done yet.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "ferris-hat",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ferris-best",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "arcanine"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "teachMove",
+          "move": "extreme-speed",
+          "species": "arcanine"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ferris-best",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "noctowl"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "teachMove",
+          "move": "sky-attack",
+          "species": "noctowl"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ferris-best",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "tyranitar"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "teachMove",
+          "move": "ancient-power",
+          "species": "tyranitar"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ferris-best",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "lanturn"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "teachMove",
+          "move": "supersonic",
+          "species": "lanturn"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ferris-best",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "clefable"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "teachMove",
+          "move": "metronome",
+          "species": "clefable"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ferris-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-59-stop",
+   "name": "Fog on the Road",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "tags": [
+    "Story",
+    "Mystery"
+   ],
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "ferris-at"
+    },
+    {
+     "kind": "flag",
+     "key": "ferris-advice-2",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ferris-stop",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#7d8a8a",
+    "effect": "fog"
+   },
+   "intro": "*Fog, thick as wool. You can't see your own boots. Something is out there. You can hear it breathing.*\n\nAn old voice comes back to you, dry and patient, from a fire some way behind: *When you can't see, stop. Don't guess.*",
+   "choices": [
+    {
+     "label": "Stop.",
+     "success": {
+      "text": "You stand perfectly still. The fog thins, a little, the way it does for people who wait. Something has been left in the road, plain as day. Free.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-stop",
+        "n": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "expert-belt",
+         "assault-vest"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep walking.",
+     "success": {
+      "text": "You pick your way through. Whatever was hiding stays hidden. Behind you, the fog closes up like a door.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ferris-stop",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
