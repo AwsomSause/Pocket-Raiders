@@ -99,7 +99,62 @@ export function ferrisCatch(content: Content, run: RunState, battle: BattleState
   return calcStats(content, foe).spe > calcStats(content, lead).spe ? 2 : 1;
 }
 
-/** At the end of each turn: the 1st region's feet, the 5th region's look, and which of Ferris's five you have faced the longest. */
+const WAITS = 'gn-foe-waits:';
+const tally = (b: BattleState, k: string): number => b.storyEffects.filter((s) => s === k).length;
+
+/** Ferris's five each fight the way the table says (before each turn: a line, a wait, a boost or a heal). */
+function ferrisStyle(content: Content, run: RunState, b: BattleState): Cue[] {
+  const foe = b.enemyTeam[b.enemyIndex];
+  if (!foe || foe.hp <= 0) return [];
+  const max = maxHp(content, foe);
+  const mine = run.party[b.activeIndex];
+  const out: Cue[] = [];
+  switch (foe.speciesId) {
+    case 'arcanine': {
+      // Lies down in battle: every other turn it rests (a little HP back). Still wins: it starts with +1 Attack.
+      const turns = tally(b, 'ferris-arc');
+      b.storyEffects.push('ferris-arc');
+      if (turns === 0) b.enemyStages.atk = Math.min(6, b.enemyStages.atk + 1);
+      if (turns % 2 === 1) {
+        foe.hp = Math.min(max, foe.hp + Math.floor(max / 8));
+        b.storyEffects.push(`${WAITS}The grey-muzzled Arcanine lies down, chin on its paws, and gets some of its breath back. It never stops watching you.`);
+      }
+      break;
+    }
+    case 'tyranitar':
+      // Gentle with children: it won't strike a Pokémon that is nearly down. It sits, and waits.
+      if (mine && mine.hp > 0 && mine.hp * 4 <= maxHp(content, mine)) b.storyEffects.push(`${WAITS}The Tyranitar looks at yours, hurt and small. It sits down, very carefully, and waits.`);
+      break;
+    case 'lanturn':
+      // Its light has gone dim, but it flares once, when it matters.
+      if (foe.hp * 2 <= max && !b.storyEffects.includes('ferris-lan')) {
+        b.storyEffects.push('ferris-lan');
+        b.enemyStages.spa = Math.min(6, b.enemyStages.spa + 1);
+        out.push(cue('enemy', 'The Lanturn\'s dim light flares, once, the way it did for three ships. Its Sp. Atk rises.', foe.uid));
+      }
+      break;
+    case 'clefable':
+      // Has opinions about tea: once, hurt, it stops for a cup.
+      if (foe.hp * 2 <= max && !b.storyEffects.includes('ferris-tea')) {
+        b.storyEffects.push('ferris-tea');
+        foe.hp = Math.min(max, foe.hp + Math.floor(max / 4));
+        b.storyEffects.push(`${WAITS}The Clefable pauses, in the middle of everything, for tea. It has opinions about the tea. It feels better.`);
+      }
+      break;
+    default:
+  }
+  return out;
+}
+
+/** The Gym Leader's heel: the next turn they switch. A right call (yes) hits what arrives. Used by the engine. */
+export function ferrisPredicted(content: Content, battle: BattleState): string | null {
+  const incoming = battle.enemyTeam[battle.enemyIndex];
+  if (!battle.storyEffects.includes('ferris-pred:yes') || !incoming || incoming.hp <= 0) return null;
+  incoming.hp = Math.max(1, incoming.hp - Math.floor(maxHp(content, incoming) * 0.25));
+  return 'You called it. Your Pokémon was already moving, and what arrives takes the hit.';
+}
+
+/** At the end of each turn: the 1st region's feet (a tell, and the question), the 5th region's look, and which of Ferris's five you faced longest. */
 export function ferrisTurn(content: Content, run: RunState): Cue[] {
   const b = run.battle;
   if (!b) return [];
@@ -108,12 +163,12 @@ export function ferrisTurn(content: Content, run: RunState): Cue[] {
   if (b.eventRule?.gn === 'ferris' && foe && foe.hp > 0 && (FERRIS_FIVE as readonly string[]).includes(foe.speciesId)) set(run, `ferris-t-${foe.speciesId}`, f(run, `ferris-t-${foe.speciesId}`) + 1);
   // 3rd region: the double chance was used when something that bit first was caught.
   if (b.outcome === 'caught' && ferrisCatch(content, run, b) === 2) set(run, 'ferris-advice-3-used', 1);
-  // 1st region: the Leader's weight shifts before a switch. You were watching their feet: your lead is already moving, and what arrives is hit as it arrives.
-  if (b.storyEffects.includes('ferris-feet') && !b.storyEffects.includes('ferris-feet-done') && b.enemySwitches > 0 && foe && foe.hp > 0) {
-    b.storyEffects.push('ferris-feet-done');
+  // 1st region: after the first full turn the Leader's weight shifts onto the back foot. You were watching: you are asked, once, if they will switch.
+  const spare = b.enemyTeam.some((m, i) => i !== b.enemyIndex && m.hp > 0);
+  if (b.storyEffects.includes('ferris-feet') && !b.storyEffects.includes('ferris-feet-done') && !b.outcome && b.enemySwitches === 0 && foe && foe.hp > 0 && spare) {
+    b.storyEffects.push('ferris-feet-done', 'ferris-ask', 'ferris-tell');
     set(run, 'ferris-advice-1-used', 1);
-    foe.hp = Math.max(1, foe.hp - Math.floor(maxHp(content, foe) * 0.25));
-    out.push(cue('enemy', 'You watched their feet, not their face. Their weight went back before the switch, and your Pokémon was already moving. What arrives takes the hit.', foe.uid));
+    out.push(cue('enemy', 'Their weight shifts onto the back foot. You were watching their feet, not their face.', foe.uid));
   }
   // 5th region: a Pokémon at low HP gives a look, once.
   const mine = run.party[b.activeIndex];
@@ -124,14 +179,16 @@ export function ferrisTurn(content: Content, run: RunState): Cue[] {
   return out;
 }
 
-/** Before a command is played: switching out the Pokémon that gave the look (5th region) is Bond +2. */
+/** Before a command is played: Ferris's styles; switching out the Pokémon that gave the look (5th region) is Bond +2. */
 export function ferrisShape(content: Content, run: RunState, action: { kind: string }): Cue[] {
   const b = run.battle;
   const mine = b ? run.party[b.activeIndex] : undefined;
-  if (!b || !mine || action.kind !== 'switch' || !b.storyEffects.includes(`ferris-look:${mine.uid}`) || !live(run, 5)) return [];
+  if (!b || action.kind === 'predict') return [];
+  const out = b.eventRule?.gn === 'ferris' && !b.needsSwitch ? ferrisStyle(content, run, b) : [];
+  if (!mine || action.kind !== 'switch' || !b.storyEffects.includes(`ferris-look:${mine.uid}`) || !live(run, 5)) return out;
   set(run, 'ferris-advice-5-used', 1);
   changeFriendship(content, mine, 10);
-  return [cue('player', 'You pull it out. It leans into your hand on the way past. Bond +2.', mine.uid)];
+  return [...out, cue('player', 'You pull it out. It leans into your hand on the way past. Bond +2.', mine.uid)];
 }
 
 /** gn rule `ferris`: they don't use items, and they don't switch. */
@@ -139,4 +196,6 @@ export function ferrisStart(battle: BattleState): void {
   battle.enemySwitches = 99;
   battle.enemyItemsUsed = 99;
   battle.trainerKit = { cure: 0, boost: 0, restore: 0, boostStat: 'atk' };
+  // Noctowl never misses with the eye that's left.
+  battle.storyEffects.push('ferris-eye');
 }

@@ -143,6 +143,8 @@ function hookText(hook: HeldHook, copies: number): HookText {
       return { text: `${hook.weathers.map(cap).join('/')} it starts lasts ${hook.turns} turns.` };
     case 'exp':
       return { text: `Earns ${times(hook.multiplier)} experience.` };
+    case 'expLevel':
+      return { text: `Earns experience as if it were ${hook.levels} level${hook.levels === 1 ? '' : 's'} lower, so it grows faster.` };
     case 'growth':
       return { text: `Every ${hook.everyLevels} level${hook.everyLevels === 1 ? '' : 's'} it gains, it grows ${cap(statName(hook.stat))} like a vitamin.`, when: 'on level up' };
     case 'noEvolve':

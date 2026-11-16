@@ -2,8 +2,10 @@
 import { describe, expect, it } from 'vitest';
 import { content } from './helpers';
 import { choose, flagOf, gnRun, open, scene, setFlag, win } from './helpers/gnPlay';
-import { ferrisCatch, ferrisFree, ferrisTurn, ferrisBossMark, FERRIS_FIVE, OLD_MOVES, TUTOR_MOVES } from '../../src/core/greenneedle/ferris';
+import { ferrisCatch, ferrisFree, ferrisBossMark, ferrisShape, FERRIS_FIVE, OLD_MOVES, TUTOR_MOVES } from '../../src/core/greenneedle/ferris';
 import { maxHp } from '../../src/core/pokemon';
+import { takeTurn } from '../../src/core/run';
+import { expLevelShift } from '../../src/core/battle/held';
 import type { BattleState, RunState } from '../../src/core/state';
 
 const hasStop = (run: RunState, id: string): boolean => run.stage!.map.nodes.some((n) => n.sides.some((x) => x.eventId === id && !x.used));
@@ -113,20 +115,64 @@ describe('gn.59 The Former Champion', () => {
     expect(ferrisCatch(content, run, run.battle!)).toBe(1);
   });
 
-  it('1st region advice: the Gym Leader\'s first switch is read, once', () => {
-    const run = gnRun('gn59-i');
-    setFlag(run, 'ferris-advice-1');
-    run.battle = fake({ kind: 'trainer', trainer: { name: 'Leader' }, enemyTeam: [{ ...run.party[0]! }], enemyIndex: 0, activeIndex: 0, enemySwitches: 0, storyEffects: [], outcome: null });
-    ferrisBossMark(run, 'gym');
-    expect(run.battle!.storyEffects).toContain('ferris-feet');
-    const foe = run.battle!.enemyTeam[0]!;
-    foe.hp = maxHp(content, foe);
-    expect(ferrisTurn(content, run)).toHaveLength(0);
-    run.battle!.enemySwitches = 1;
-    expect(ferrisTurn(content, run)).toHaveLength(1);
-    expect(foe.hp).toBeLessThan(maxHp(content, foe));
+  it('1st region advice: the feet shift, you are asked, and a right call hits what arrives', () => {
+    let run = start('gn59-i');
+    run.regionOrder = ['kanto', 'johto', 'hoenn'];
+    run = sit(run);
+    run = choose(run, 'gn-59-s1', 'Listen.').run;
+    run = choose(run, 'gn-59-after', 'Would you battle me?').run;
+    expect(run.phase).toBe('battle');
+    // Ferris himself never switches; borrow his team to play the Leader's switch (the first region's advice is live).
+    run.battle!.enemySwitches = 0;
+    run.battle!.storyEffects.push('ferris-feet');
+    run.battle!.enemyTeam.forEach((m) => (m.hp = maxHp(content, m)));
+    const first = run.battle!.enemyTeam[run.battle!.enemyIndex]!.uid;
+    run = takeTurn(content, run, { kind: 'move', index: 0 }).run;
+    expect(run.battle!.storyEffects).toContain('ferris-ask');
+    run = takeTurn(content, run, { kind: 'predict', yes: true }).run;
+    expect(run.battle!.storyEffects).toContain('ferris-pred:yes');
+    expect(run.battle!.storyEffects).not.toContain('ferris-ask');
+    run.battle!.enemyTeam.forEach((m) => (m.hp = maxHp(content, m)));
+    run = takeTurn(content, run, { kind: 'move', index: 0 }).run;
+    expect(run.battle!.enemySwitches).toBe(1);
+    expect(run.battle!.enemyTeam[run.battle!.enemyIndex]!.uid).not.toBe(first);
     expect(flagOf(run, 'ferris-advice-1-used')).toBe(1);
-    expect(ferrisTurn(content, run)).toHaveLength(0);
+  });
+
+  it('Ferris\'s styles: Arcanine lies down every other turn, Tyranitar waits for a hurt Pokémon, Clefable stops for tea', () => {
+    let run = start('gn59-s');
+    run.regionOrder = ['kanto', 'johto', 'hoenn'];
+    run = sit(run);
+    run = choose(run, 'gn-59-s1', 'Listen.').run;
+    run = choose(run, 'gn-59-after', 'Would you battle me?').run;
+    const b = run.battle!;
+    expect(b.storyEffects).toContain('ferris-eye');
+    const lines = (r: typeof run) => r.battle!.storyEffects.filter((s) => s.startsWith('gn-foe-waits:')).length;
+    ferrisShape(content, run, { kind: 'move' });
+    expect(b.enemyStages.atk).toBe(1);
+    expect(lines(run)).toBe(0);
+    ferrisShape(content, run, { kind: 'move' });
+    expect(lines(run)).toBe(1);
+    // Tyranitar
+    b.storyEffects = b.storyEffects.filter((s) => !s.startsWith('gn-foe-waits:'));
+    b.enemyIndex = 2;
+    run.party[b.activeIndex]!.hp = 1;
+    ferrisShape(content, run, { kind: 'move' });
+    expect(lines(run)).toBe(1);
+    // Clefable
+    b.storyEffects = b.storyEffects.filter((s) => !s.startsWith('gn-foe-waits:'));
+    b.enemyIndex = 4;
+    b.enemyTeam[4]!.hp = Math.floor(maxHp(content, b.enemyTeam[4]!) / 3);
+    ferrisShape(content, run, { kind: 'move' });
+    expect(b.storyEffects).toContain('ferris-tea');
+    expect(lines(run)).toBe(1);
+  });
+
+  it('Ferris\'s Hat: experience as if one level lower', () => {
+    const mon = gnRun('gn59-hat').party[0]!;
+    expect(expLevelShift(content, mon)).toBe(0);
+    mon.held = { 'ferris-hat': 1 };
+    expect(expLevelShift(content, mon)).toBe(1);
   });
 
   it('4th region advice marks the Champion fight as free to lose; other regions do not', () => {
