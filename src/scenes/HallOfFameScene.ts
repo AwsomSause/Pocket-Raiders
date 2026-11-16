@@ -12,6 +12,9 @@ import { AERO, type MotionLevel } from '../ui/aero';
 import { onInputAction } from '../ui/input';
 import { preloadPokemon } from '../ui/lazyAssets';
 import { Picker, type PickerRow } from '../ui/partyPanel';
+import { monFile } from '../ui/redux/game';
+import { partyView, type PartyCard } from '../ui/redux/screens/party';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { pokemonIcon } from '../ui/sprites';
 import { textStyle } from '../ui/theme';
 
@@ -19,6 +22,8 @@ const GOLD = '#ffe08a';
 
 export class HallOfFameScene extends Phaser.Scene {
   private picker: Picker | null = null;
+  /** New UI: the winning-team page of the champion run that was opened (the mock-ups' Hall of Fame page), or null. */
+  private team: { view: ReduxView; index: number; size: number } | null = null;
 
   constructor() {
     super('HallOfFame');
@@ -54,9 +59,13 @@ export class HallOfFameScene extends Phaser.Scene {
     const heading = (box: Phaser.GameObjects.Container, text: string, color = GOLD) => box.add(this.add.text(14, 8, text, textStyle(20, color, { stroke: '#10203a', strokeThickness: 4 })));
 
     const rows: PickerRow[] = [];
+    /** The champion run behind a row, for the winning-team page. */
+    const champAt = new Map<number, RunRecord>();
+    const empty = hof.champions.length === 0 && hof.legends.length === 0;
+    this.team = null;
     rows.push({
       problem: null,
-      hint: 'Your records across every run.',
+      hint: empty && reduxOn() ? 'Your records across every run. Win a run to see your champions here.' : 'Your records across every run.',
       draw: (_scene, box, w) => {
         heading(box, 'Records');
         hof.records.forEach((rec, i) => {
@@ -70,6 +79,7 @@ export class HallOfFameScene extends Phaser.Scene {
     // Revisit This Timeline (M13) lives in the Legacy Gallery (scenes/LegacyGalleryScene.ts), beside each lost run.
     for (const [n, r] of hof.champions.entries()) {
       const odd = hof.unusual.find((u) => u.run === r);
+      champAt.set(rows.length, r);
       rows.push({
         problem: null,
         hint: `${r.epitaph ?? 'No epitaph: nothing stood out on this run.'}${odd ? `  Unusual: ${odd.why}.` : ''}  Seed ${r.seed} · ${r.encounters} encounters · ${r.badges} badges.`,
@@ -155,14 +165,29 @@ export class HallOfFameScene extends Phaser.Scene {
         },
       });
     }
-    const empty = hof.champions.length === 0 && hof.legends.length === 0;
+    // New UI: Enter on a champion row opens that run's winning team, as on the mock-up (lead on the left, the rest beside it).
+    const openTeam = (r: RunRecord): void => {
+      if (!reduxOn() || this.team || r.party.length === 0) return;
+      const cards = r.party.slice(0, 6).map((m, i): PartyCard => {
+        const types = content.species.get(m.speciesId)?.types ?? [];
+        // A run record keeps who was on the team and their level, not their HP or items: the bar is full and the line names the types.
+        return { name: name(m.speciesId), file: monFile(this, m.speciesId, 'front', m.shiny), level: m.level, hp: 1, maxHp: 1, held: m.shiny ? 'Shiny' : '', tag: i === 0 ? 'LEAD' : '', types: [...types], ability: '', nature: '', moves: [], off: false, line: types.map((t) => t.charAt(0).toUpperCase() + t.slice(1)).join(' · ') };
+      });
+      const state = { index: 0, size: cards.length, view: null as unknown as ReduxView };
+      state.view = mountRedux(this, {
+        render: (c) => partyView(c, { title: 'Hall of Fame', area: 'end', hints: [['Esc', 'back']], mons: cards, index: state.index, text: `${date(r)} · Champion · ${trainer(r)}. Your winning team.` }),
+        acts: { pick: (k) => { state.index = Math.max(0, Math.min(state.size - 1, Number(k) || 0)); state.view.refresh(); } },
+        overs: { over: (k) => { const at = Number(k); if (at >= 0 && at < state.size && at !== state.index) { state.index = at; state.view.refresh(); } } },
+      });
+      this.team = state;
+    };
     this.picker = new Picker(this, {
       glass: true,
-      title: empty ? 'Hall of Fame: win a run to see your champions here' : 'Hall of Fame',
+      title: empty && !reduxOn() ? 'Hall of Fame: win a run to see your champions here' : 'Hall of Fame',
       columns: 1,
       rowHeight: 104,
       rows,
-      onSelect: () => undefined,
+      onSelect: (i) => { const r = champAt.get(i); if (r) openTeam(r); },
       onBack: () => this.scene.start('Hub', { focus: 3 }),
     });
     // The title band shines once.
@@ -170,6 +195,16 @@ export class HallOfFameScene extends Phaser.Scene {
       const shine = this.add.rectangle(-80, 40, 60, 60, AERO.white, 0.25).setAngle(20).setBlendMode('ADD').setDepth(2000);
       this.tweens.add({ targets: shine, x: this.scale.width + 80, duration: 900, delay: 200, ease: 'Sine.easeInOut', onComplete: () => shine.destroy() });
     }
-    onInputAction(this, (a) => this.picker?.handle(a));
+    onInputAction(this, (a) => {
+      const t = this.team;
+      if (!t) return this.picker?.handle(a);
+      if (a === 'back' || a === 'confirm') {
+        t.view.destroy();
+        this.team = null;
+        return;
+      }
+      t.index = (t.index + (a === 'up' || a === 'left' ? t.size - 1 : 1)) % t.size;
+      t.view.refresh();
+    });
   }
 }

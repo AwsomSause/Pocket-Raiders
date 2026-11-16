@@ -10,6 +10,9 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { storyIcon } from '../ui/storyIcon';
 import { heartIconId, storyIconId } from '../assets/storyIcons';
 import { preloadPokemon } from '../ui/lazyAssets';
+import { artOf, characterArt, monFile, rivalArt } from '../ui/redux/game';
+import { versusView, type VersusModel } from '../ui/redux/screens/versus';
+import { mountRedux, reduxOn } from '../ui/redux/stage';
 import { pokemonVisual, type Visual } from '../ui/sprites';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 
@@ -74,7 +77,42 @@ export class FieldTrialScene extends Phaser.Scene {
     this.input.on('pointerdown', () => this.wait?.('confirm'));
     this.cameras.main.fadeIn(session.settings.battleAnimations === 'full' ? 300 : 1);
     playStoryMusic(this, 'mu_battle_rival_a', 'bgm.battle_trainer');
-    void this.play();
+    if (reduxOn()) this.versus(() => void this.play());
+    else void this.play();
+  }
+
+  /** New UI: the spar opens on the mock-ups' versus card (you against the rival); a key, a click or a short wait moves on. */
+  private versus(done: () => void): void {
+    const { session } = services();
+    const run = session.run!, content = session.content;
+    // The spar is where you first meet: the rival is a Story character before they are a rival of the run.
+    const cast = content.storyData.rivals.find((r) => r.id === run.story.v2?.blueprint?.rivals.primary)?.character;
+    const rival = run.story.rivals.find((r) => r.name === this.view.rivalName) ?? run.story.rivals[0];
+    const model: VersusModel = {
+      name: this.view.rivalName,
+      role: 'Rival',
+      cast: characterArt(cast) ?? rivalArt(this, rival),
+      // The mock-up's line for this card.
+      line: 'Do not hold back. I will not.',
+      evil: false,
+      team: 1,
+      lead: monFile(this, this.view.cast.rival, 'front'),
+      player: artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId),
+      playerName: run.story.v2?.protagonist?.name || content.archetypes.get(run.archetypeId)?.name || 'You',
+      party: run.party.map((m) => monFile(this, m.speciesId, 'front', !!m.shiny)),
+      backdrop: 'arenas/grass_bg.png',
+    };
+    let over = false;
+    const end = (): void => {
+      if (over) return;
+      over = true;
+      this.wait = null;
+      view.destroy();
+      done();
+    };
+    const view = mountRedux(this, { render: (c) => versusView(c, model), acts: { next: end }, card: true });
+    this.wait = (a) => { if (a === 'confirm') end(); };
+    this.time.delayedCall(session.settings.battleAnimations === 'full' ? 2600 : 1500, end);
   }
 
   private side(x: number, y: number, speciesId: string, face: 'front' | 'back', sx: number, sy: number): Side {

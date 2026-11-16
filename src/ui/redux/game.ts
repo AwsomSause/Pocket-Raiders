@@ -50,6 +50,14 @@ export function partyCards(scene: Phaser.Scene): PartyCard[] {
   });
 }
 
+/** A Story character's picture (their neutral pose, a Trainer atlas), by character id. */
+export function characterArt(characterId: string | undefined | null): Art | null {
+  const ch = services().session.content.storyData.characters.find((c) => c.id === characterId);
+  const pose = ch?.poses.neutral ?? Object.values(ch?.poses ?? {})[0];
+  const hit = typeof pose === 'string' ? /images\/(.+)\.png$/.exec(pose) : null;
+  return hit ? { file: hit[1]!, atlas: true } : null;
+}
+
 /** A rival's picture: a named character's own sprite when the game has one, otherwise their Trainer class. */
 export function rivalArt(scene: Phaser.Scene, rival: { classId: string; name: string } | undefined | null): Art | null {
   if (!rival) return null;

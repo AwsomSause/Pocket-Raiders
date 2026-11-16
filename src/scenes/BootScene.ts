@@ -19,6 +19,9 @@ import { buildLoading, LOADING_LOOKS, type LoadingLook } from '../ui/loadingLook
 import { loadingTip, loadingTipFor } from '../core/presentation/uiPrefs';
 import { playUpdateSplash, readSplashEnv, splashDue, type SplashHandle } from '../ui/updateSplash';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { bootView } from '../ui/redux/screens/boot';
+import { SPLASH_IMAGE, SPLASH_NOTE, VERSION_LABEL } from '../ui/updateSplashGate';
 
 export class BootScene extends Phaser.Scene {
   private splash: SplashHandle | null = null;
@@ -91,16 +94,33 @@ export class BootScene extends Phaser.Scene {
     const styleId = screenStyleOf('loading', session.settings.screenStyles, visit);
     const look = (LOADING_LOOKS as readonly string[]).includes(styleId) ? (styleId as LoadingLook) : null;
     const view = look ? buildLoading(this, look, session.settings.battleAnimations, loadingTipFor(visit, this.runTipContext(session)), 'your next adventure') : null;
+    // New UI: the mock-ups' loading screen (and their update splash while the splash plays), unless a loading look was picked.
+    let pct = 0;
+    let splashOn = this.splash !== null;
+    const tip = `Tip: ${loadingTipFor(visit, this.runTipContext(session))}`;
+    const rx: ReduxView | null = !look && reduxOn()
+      ? mountRedux(this, {
+          render: (c) => bootView(c, splashOn
+            ? { title: `${VERSION_LABEL} is here`, progress: pct, note: SPLASH_NOTE, splash: SPLASH_IMAGE.replace('assets/images/', '') }
+            : { title: 'Loading the region…', progress: pct, note: tip, splash: null }),
+          acts: { next: () => this.splash?.skip() },
+        })
+      : null;
+    void this.splash?.ended.then(() => {
+      splashOn = false;
+      rx?.refresh();
+    });
     let bar: Phaser.GameObjects.Rectangle | null = null;
-    if (!view) {
+    if (!view && !rx) {
       bar = this.add.rectangle(GAME_WIDTH / 2 - 200, GAME_HEIGHT / 2, 0, 16, COLORS.hpGreen).setOrigin(0, 0.5);
       this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, 404, 20).setStrokeStyle(2, 0xffffff);
       this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 - 40, 'Loading…', textStyle(28, COLORS.textLight)).setOrigin(0.5);
     }
-    this.loadingExtras(Boolean(view));
+    this.loadingExtras(Boolean(view) || rx !== null);
 
     const tracker = new PreloadTracker();
     const packText = view?.pack ?? this.add.text(GAME_WIDTH / 2, GAME_HEIGHT / 2 + 24, '', textStyle(13, COLORS.textMuted)).setOrigin(0.5);
+    if (rx) packText.setVisible(false);
     for (const entry of assets.entries()) {
       if (entry.lazy) continue;
       if (entry.kind === 'font') continue; // handled by loadFont
@@ -111,7 +131,12 @@ export class BootScene extends Phaser.Scene {
       tracker.complete(key);
       packText.setText(tracker.line());
     });
-    this.load.on('progress', (p: number) => (view ? view.progress(p) : bar && (bar.width = 400 * p)));
+    this.load.on('progress', (p: number) => {
+      pct = p;
+      if (rx) rx.refresh();
+      else if (view) view.progress(p);
+      else if (bar) bar.width = 400 * p;
+    });
     this.load.on('loaderror', (file: Phaser.Loader.File) => {
       console.warn(`Failed to load asset ${file.key} (${String(file.url)})`);
       assets.markFailed(file.key);
