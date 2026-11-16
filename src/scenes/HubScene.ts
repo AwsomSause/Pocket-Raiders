@@ -65,6 +65,7 @@ import { playerPortrait } from '../ui/redux/templates';
 import { dockView, type DockFigure } from '../ui/redux/screens/hub';
 import { rxFileOf } from '../ui/redux/assets';
 import { counterView } from '../ui/redux/screens/counter';
+import { treeView, type TreeCellState } from '../ui/redux/screens/tree';
 import type { AssetManifest } from '../assets/catalog';
 import { monFile } from '../ui/redux/game';
 import { boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../core/hubTown/merchant';
@@ -771,6 +772,8 @@ export class HubScene extends Phaser.Scene {
       return {
         problem: merchantProblem(p, ware, day),
         hint: `${ware.line} Waits in your pack for the next run.`,
+        // New look: the price at the right of the row, as on the mock-up's shop list.
+        menu: { label: item?.name ?? ware.item, note: sold.includes(ware.item) ? 'Sold out' : `${ware.price} credits`, detail: `${ware.line} Waits in your pack for the next run.` },
         draw: (scene, box, w, h) => {
           box.add(itemVisual(scene, item?.iconAssetId ?? `item.${ware.item.replace(/-/g, '_')}`, 34, h / 2, 1));
           box.add(scene.add.text(66, 8, item?.name ?? ware.item, textStyle(22, COLORS.textLight)));
@@ -1817,14 +1820,28 @@ export class HubScene extends Phaser.Scene {
       return notice;
     };
     let title = '';
+    let treeGrid: { name: string; nodes: ((typeof LEGACY.tree.nodes)[number] | null)[] }[] | null = null;
+    let treeCols = 1;
     switch (room) {
-      case 'tree':
+      case 'tree': {
         title = `Research Tree  ·  ${p.researchPoints} Research Points`;
-        for (const n of LEGACY.tree.nodes) {
+        // New look: the mock-ups' tree page, a row per branch; a short branch is padded so the cursor moves in a grid.
+        const padded = reduxOn();
+        treeCols = Math.max(...LEGACY.tree.branches.map((b) => LEGACY.tree.nodes.filter((n) => n.branch === b.id).length));
+        treeGrid = LEGACY.tree.branches.map((b) => {
+          const ns = LEGACY.tree.nodes.filter((n) => n.branch === b.id);
+          return { name: b.name, nodes: padded ? Array.from({ length: treeCols }, (_, k) => ns[k] ?? null) : ns };
+        });
+        for (const n of treeGrid.flatMap((r) => r.nodes)) {
+          if (!n) {
+            entries.push({ label: '', sub: 'Nothing more on this branch.' });
+            continue;
+          }
           const st = nodeStatus(p, n);
           entries.push({ label: `${LEGACY.tree.branches.find((b) => b.id === n.branch)?.name}: ${n.name}`, sub: n.blurb, right: st === 'owned' ? 'Researched' : `${n.cost} RP`, on: st === 'owned', problem: nodeProblem(p, n), run: () => apply((pr) => buyNode(pr, n.id), `Researched ${n.name}. ${n.blurb}`) });
         }
         break;
+      }
       case 'prestige': {
         const next = nextPrestige(p);
         title = `Prestige  ·  rank ${prestigeRank(p)} of ${LEGACY.prestige.maxRank}`;
@@ -2004,11 +2021,28 @@ export class HubScene extends Phaser.Scene {
         if (e.right) box.add(scene.add.text(w - 12, h / 2, e.right, textStyle(16, e.problem && !e.on ? COLORS.textMuted : COLORS.gold)).setOrigin(1, 0.5));
       },
     }));
+    const flat = treeGrid?.flatMap((r) => r.nodes) ?? [];
+    const cellState = (n: (typeof flat)[number]): TreeCellState => (!n ? 'none' : nodeStatus(p, n) === 'owned' ? 'owned' : nodeStatus(p, n) === 'open' ? 'open' : 'locked');
+    const tree = treeGrid && reduxOn() ? treeGrid : null;
     this.openPicker({
       title,
       rows,
       columns: 1,
       rowHeight: 56,
+      ...(tree ? {
+        pageCols: treeCols,
+        page: (c: ReduxCtx, index: number) => {
+          const n = flat[index] ?? null, problem = n ? nodeProblem(p, n) : null, owned = !!n && nodeStatus(p, n) === 'owned';
+          return treeView(c, {
+            title: 'Research Tree', chips: [`${p.researchPoints} Research Points`], cols: treeCols, index,
+            rows: tree.map((r) => ({ name: r.name, cells: r.nodes.map((x) => ({ label: x?.name ?? '', state: cellState(x) })) })),
+            card: n
+              ? { name: n.name, line: n.blurb, facts: [['Cost', `${n.cost} Research Points`], ['Have', `${p.researchPoints}`], ...(n.prestige ? [['Needs prestige rank', `${n.prestige}`] as const] : [])], button: owned ? 'Researched' : 'Unlock', ready: !owned && !problem }
+              : { name: '—', line: 'Nothing more on this branch.', facts: [], button: 'Unlock', ready: false },
+            text: n ? (owned ? `${n.name}: researched. ${n.blurb}` : problem ? `${n.blurb} · ${problem}` : `${n.blurb} · Enter: research it.`) : 'Nothing more on this branch.',
+          });
+        },
+      } : {}),
       onSelect: (i) => {
         const e = entries[i]!;
         if (e.start) {
