@@ -39,7 +39,6 @@ interface Row {
 }
 
 /** New UI tab names, in SETTING_CATEGORIES order (the mock-ups' short forms). */
-const TAB_NAMES: Record<SettingCategory, string> = { display: 'Display', audio: 'Audio', gameplay: 'Gameplay', animations: 'Animations', text: 'Text', accessibility: 'Access', controls: 'Controls', story: 'Story', data: 'Data' };
 
 const APPLIES_TAG = { now: '', nextBattle: '  · next battle', restart: '  · restart needed' } as const;
 
@@ -376,7 +375,8 @@ export class SettingsScene extends Phaser.Scene {
       const search = this.page === 'search';
       return settingsView(c, {
         title: search ? 'Search settings' : 'Settings',
-        tabs: search ? [`Find: ${this.query}▌`] : cats.map((id) => TAB_NAMES[id]),
+        // The mock-up's tabs carry each category's whole name ("Animations & Effects", "Save & Data"), two lines where it is long.
+        tabs: search ? [`Find: ${this.query}▌`] : SETTING_CATEGORIES.map((x) => x.label),
         tab: search ? 0 : cats.indexOf(this.page as SettingCategory),
         rows: rows.map((r) => ({ label: r.name ?? r.option.label, value: r.value ?? '', disabled: r.option.disabled })),
         index,

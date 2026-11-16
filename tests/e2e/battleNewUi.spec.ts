@@ -3,7 +3,7 @@ import { confirmUntil } from './battleInput';
 import { scene, view, waitForScene, watch, start, toMap, toCommands } from './helpers/newUi';
 
 // The New UI (Settings > UI style: New, the default for players): the battle (boxes, windows, versus and cutscene cards, Exp), tooltips, notices and the phone layout.
-// The New UI specs are split over several files (newUi, battleNewUi, menusNewUi, runNewUi, storyNewUi, worldNewUi) whose
+// The New UI specs are split over several files (newUi, battleNewUi, fieldNewUi, menusNewUi, runNewUi, storyNewUi, worldNewUi) whose
 // names are spread over the alphabet, so the browser-test shards each get one of them; the shared steps are in
 // helpers/newUi.ts. The older specs run with the Old UI, so both styles stay covered.
 
@@ -245,16 +245,19 @@ test('New UI: a win shows the Exp panel, the level-up window and the evolution p
   // The Exp panel names the Pokémon that earned it, as it was in the fight.
   await confirmUntil(page, count('.win', /\+\d+ Exp|Level up!/), 40_000);
   await expect(stages.locator('.win', { hasText: /\+\d+ Exp|Level up!/ }).first()).toContainText('Caterpie');
+  await page.screenshot({ path: 'test-results/newui-exp.png' });
   // The level-up window: the step from the level it had, and six stats.
   await confirmUntil(page, count('.win', /Lv \d+ → \d+/), 40_000);
   const level = stages.locator('.win', { hasText: /Lv \d+ → \d+/ });
   await expect(level).toContainText('Caterpie');
   await expect(level).toContainText('Lv 5 →');
   for (const stat of ['HP', 'Attack', 'Defense', 'Sp. Atk', 'Sp. Def', 'Speed']) await expect(level).toContainText(stat);
+  await page.screenshot({ path: 'test-results/newui-levelup.png' });
   // The evolution takes the whole picture: no boxes, the words under it.
   await confirmUntil(page, count('.burst'), 60_000);
   await expect(stages.locator('.win.glass')).toHaveCount(0);
   await expect(stages.locator('.txt')).toContainText(/evolving|evolved/);
+  await page.screenshot({ path: 'test-results/newui-evolution.png' });
   // Then the run goes on, a new species in the party.
   await confirmUntil(page, async () => (await page.evaluate(() => (window as any).__pkr.activeScene())) !== 'Battle', 60_000);
   expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).not.toBe('caterpie');
@@ -334,6 +337,7 @@ test('New UI: the map shows a party Pokémon\'s info card on hover; Bonds is the
   await expect(card).toHaveCount(0);
   await map.locator('[data-tip="mon:0"]').hover();
   await expect(card).toBeVisible();
+  await page.screenshot({ path: 'test-results/newui-info-card.png' });
   const names = await page.evaluate(() => [...(window as any).__pkr.session.content.abilities.values()].map((a: any) => a.name as string));
   expect(names).toContain((await card.locator('b.acc').textContent()) ?? '');
   await page.mouse.move(2, 2);
@@ -347,6 +351,7 @@ test('New UI: the map shows a party Pokémon\'s info card on hover; Bonds is the
   await expect(rows.first()).toContainText(/Trust \d+/);
   await expect(rows.first().locator('.hp')).toHaveCount(1);
   await expect(top().locator('.txt')).toContainText(/Affection \d+ · Respect \d+/);
+  await page.screenshot({ path: 'test-results/newui-bonds.png' });
   await page.waitForTimeout(250);
   await page.keyboard.press('Escape');
   await expect(view(page, 'Map')).toHaveCount(1);
@@ -362,6 +367,7 @@ test('New UI: the map shows a party Pokémon\'s info card on hover; Bonds is the
   await top().locator('[data-tip="move:0"]').hover();
   await expect(tip).toBeVisible();
   await expect(tip).toContainText('Category');
+  await page.screenshot({ path: 'test-results/newui-move-tip.png' });
   // (The top-left corner is clear of every chip at any window size.)
   await page.mouse.move(2, 2);
   await expect(tip).toHaveCount(0);
@@ -386,6 +392,7 @@ test('New UI: notifications, an achievement toast and the interaction log show o
   await expect(notices.first().locator('b.acc')).toHaveText('Egg');
   await expect(notices.nth(1)).toContainText('Notice');
   await expect(notices.nth(1)).toContainText('Saved the game');
+  await page.screenshot({ path: 'test-results/newui-notices.png' });
   // The title screen under it still takes its own clicks and keys.
   await expect(view(page, 'MainMenu')).toBeVisible();
   // A tap sends one away.

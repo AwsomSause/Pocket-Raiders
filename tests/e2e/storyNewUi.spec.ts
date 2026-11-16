@@ -132,6 +132,7 @@ test('New UI: Galar\'s Champion Tournament bracket opens on the map as the mock-
   const map = view(page, 'Map').first();
   await page.keyboard.press('b');
   await expect(map.locator('.hd')).toContainText('Champion Tournament');
+  await page.screenshot({ path: 'test-results/newui-bracket-galar.png' });
   // Two rounds won: it opens on the finals page with the eight who are left, and nothing later is given away.
   const chips = map.locator('[data-act="bracketPage"]');
   await expect(chips).toHaveCount(5);
@@ -375,6 +376,7 @@ test('New UI: the Siege map is the mock-up ledger page; keys and clicks move ove
   // The cursor starts on a free gate.
   await expect(siege.locator('[data-act="enter"]')).toContainText('Enter by North Gate');
   await expect(siege).toContainText('Your rival');
+  await page.screenshot({ path: 'test-results/newui-siege.png' });
   // Keys move it: two to the right is a contested gate (one battle); the middle of the city has no gate.
   await page.keyboard.press('ArrowRight');
   await page.keyboard.press('ArrowRight');
@@ -426,6 +428,7 @@ test('New UI: the Rescue screen is the mock-up page: the receipt, the holding cl
   await expect(rescue).toContainText('Holding clock');
   // The rival speaks first; the plans wait until every line is read (a click or Enter turns the page).
   await expect(rescue.locator('.txt .nm')).toHaveText('Blue');
+  await page.screenshot({ path: 'test-results/newui-rescue.png' });
   await expect(rescue.locator('[data-act="pick"]')).toHaveCount(0);
   for (let i = 0; i < 6 && (await rescue.locator('[data-act="page"]').count()) > 0; i++) {
     await rescue.locator('[data-act="page"]').click();
@@ -434,6 +437,7 @@ test('New UI: the Rescue screen is the mock-up page: the receipt, the holding cl
   // Five plans and "wait": each open plan with a roll shows a word, never a number.
   await expect(rescue.locator('[data-act="pick"]')).toHaveCount(6);
   await expect(rescue.locator('[data-act="pick"]').first()).toContainText('Quiet Extraction');
+  await page.screenshot({ path: 'test-results/newui-rescue-plans.png' });
   await expect(rescue.locator('[data-act="pick"]').first().locator('.tg')).toHaveText(/^(Risky|Even|Likely|Safe)$/);
   await expect(rescue.locator('[data-act="pick"]').last()).toContainText('Wait for a better day');
   // Moving the cursor makes the text box speak for the choice under it.
@@ -501,6 +505,7 @@ test('New UI: a story scene is the mock-up talk page; its lines turn with a clic
   const story = view(page, 'Story');
   await expect(story).toBeVisible();
   await expect(story.locator('.txt')).not.toHaveText('');
+  await page.screenshot({ path: 'test-results/newui-story-scene.png' });
   const first = await story.locator('.txt').innerText();
   // A click anywhere turns the page while lines wait; the choices (or Continue) come with the last line.
   let turned = false;

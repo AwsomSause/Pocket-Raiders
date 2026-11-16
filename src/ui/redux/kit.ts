@@ -52,6 +52,8 @@ export const keys = (list: readonly (readonly [string, string])[]): string => li
 /** Header band with the key hints at the top right. */
 export const H = (title: string, area: Area = 'sys', hints: readonly (readonly [string, string])[] = [['Enter', 'choose'], ['Esc', 'back']]): string =>
   `<div class="hd" style="--c:${AREA[area]}"><i class="dot"></i>${esc(title)}</div><div class="keys">${keys(hints)}</div>`;
+/** Where the chips beside a header band start: past the title, which grows with its length (about 15 px a letter). */
+export const chipsLeft = (title: string): number => Math.max(350, 60 + Math.round(title.length * 15));
 /** The text box along the bottom, with an optional speaker name tab. `t` is HTML. */
 export const TX = (t: string, name = '', st = ''): string => `<div class="abs txt" style="left:20px;right:20px;bottom:16px;${st}">${name ? `<span class="nm">${esc(name)}</span>` : ''}${t}</div>`;
 /** A window. `h` is HTML. */

@@ -5,6 +5,7 @@
 import type { Content, Item } from '../core/contentSchema';
 import { getSpecies } from '../core/pokemon';
 import { itemCount, itemUseProblem } from '../core/items';
+import { oneOnly } from '../core/run';
 import type { RunState } from '../core/state';
 
 /** Frames of `pack.ess.pockets` (Essentials bag pockets). */
@@ -78,6 +79,10 @@ export interface ShopRow {
   /** Uids of party members who can use it (evolution and form items), else null. */
   users: string[] | null;
   hint: string;
+  /** The focus line without what the item does: who can use it, what you own, what you can spend. */
+  who: string;
+  /** Sold one at a time (a Mega Stone, a Z-Crystal, a key item): no "Buy 5". */
+  single: boolean;
   problem: string | null;
 }
 
@@ -142,6 +147,8 @@ export function shopView(content: Content, run: RunState, deps: {
       description: item.description,
       users,
       hint: `${shopHint(content, run, item)}.${nextStock ? `  ${nextStock}.` : ''}${deps.working ? `  ·  ${deps.working}` : ''}`,
+      who: [shopUsers(content, run, item), item.effect.kind !== 'attribute' && itemCount(run.inventory, entry.item) > 0 ? `You have ${itemCount(run.inventory, entry.item)}` : null, `₽${run.money} to spend`].filter(Boolean).join(' · '),
+      single: oneOnly(content, entry.item),
       problem: run.money < price ? `Not enough money for the ${item.name} (₽${price}, you have ₽${run.money}).` : null,
     };
   });

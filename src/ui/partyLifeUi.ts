@@ -7,6 +7,8 @@ import type { Scene } from '../core/partyLife';
 import { services } from '../game/services';
 import { Picker, type PickerRow } from './partyPanel';
 import { pokemonIcon } from './sprites';
+import { monFile } from './redux/game';
+import { reduxOn } from './redux/stage';
 import { textStyle } from './theme';
 import type { FieldMenuHost } from './fieldMenus';
 import type { Content } from '../core/contentSchema';
@@ -54,6 +56,9 @@ function poseTween(trait: string): Record<string, number> {
   return { angle: -6 };
 }
 
+/** New UI: the Album's wall is at least this many pictures (three rows of six, as in the mock-up). */
+const ALBUM_CELLS = 18;
+
 /** The run scrapbook: team photos and notable moments, newest first. The first row takes a team photo. */
 export function openScrapbook(host: FieldMenuHost): void {
   const { session } = services();
@@ -92,18 +97,40 @@ export function openScrapbook(host: FieldMenuHost): void {
       },
     })),
   ];
+  // New UI: the mock-up's Album, a wall of pictures: each entry shows who it is about, with its stage and caption on
+  // the card, and empty pages fill the wall out. Enter on any page takes the team photo.
+  const rx = reduxOn();
+  if (rx) {
+    const fileOf = (uid: string | undefined): string | null => {
+      const m = uid ? [...run.party, ...run.box].find((x) => x.uid === uid) : undefined;
+      return m ? monFile(host.scene, m.speciesId, 'front', m.shiny) : null;
+    };
+    const photo = photoReady ? 'Enter takes a team photo.' : 'You already took a photo this stage.';
+    rows.length = 0;
+    for (const e of book) {
+      const kind = e.kind === 'photo' ? 'Photo' : e.kind === 'milestone' ? 'Milestone' : 'Moment';
+      const who = e.poses.length > 0 ? e.poses.join(' · ') : e.uids.map(nameOf).join(' & ');
+      rows.push({
+        problem: null,
+        hint: `Snapshots from this run. ${photo}`,
+        cell: { file: fileOf(e.uids[0]), title: `Stage ${e.stage + 1}`, body: [e.caption, `${kind} · region ${e.region + 1}${e.delta > 0 ? ` · chemistry +${e.delta}` : ''}`, who].filter(Boolean).join(' ') },
+        draw: () => undefined,
+      });
+    }
+    while (rows.length < ALBUM_CELLS || rows.length % 6 !== 0) rows.push({ problem: null, hint: `An empty page: team photos and big moments fill the Album. ${photo}`, cell: { file: null, title: 'Empty page', body: '', off: true }, draw: () => undefined });
+  }
   const picker: Picker = new Picker(host.scene, {
     glass: true,
-    title: `Scrapbook · ${book.length} entr${book.length === 1 ? 'y' : 'ies'}`,
+    title: rx ? 'Album' : `Scrapbook · ${book.length} entr${book.length === 1 ? 'y' : 'ies'}`,
     columns: 1,
     rowHeight: 110,
     rows,
     onSelect: (i) => {
-      if (i !== 0) return;
+      if (rx ? !photoReady : i !== 0) return;
       session.takeTeamPhoto();
       picker.close();
       host.setPicker(null);
-      host.changed('Photo taken! It is in your Scrapbook.');
+      host.changed(rx ? 'Photo taken! It is in your Album.' : 'Photo taken! It is in your Scrapbook.');
     },
     onBack: () => {
       picker.close();

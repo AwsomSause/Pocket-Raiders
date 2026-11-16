@@ -64,3 +64,8 @@ export function cutView(c: ReduxCtx, d: CutModel): string {
   return letter(back + '<div class="shade" style="background:linear-gradient(90deg,#000c,#0000 70%)"></div>' + (d.mon ? foot(680, 440, figure(d.mon, 290)) : '') + foot(d.mon ? 300 : 660, 482, figure(d.cast, d.mon ? 290 : 344)))
     + `<div class="abs col" style="left:60px;top:110px;gap:8px;z-index:6;color:#fff;max-width:420px">${plate('align-self:flex-start;background:var(--acc);color:#14161e')}<b style="font-size:${Math.round(60 * name)}px;line-height:.95;text-shadow:5px 5px 0 #000">${esc(d.name)}</b><span style="font-size:${size(len, 20)}px;line-height:1.35;text-shadow:2px 2px 0 #000">${line}</span></div>` + tag + next;
 }
+
+/** The shortest sentence of a blurb: the card's one line ("It cannot be caught."), short enough to clear the figure under it. */
+export function shortestSentence(text: string): string {
+  return text.split(/(?<=[.!?])\s+/).filter(Boolean).reduce((a, b) => (b.length < a.length ? b : a), text);
+}

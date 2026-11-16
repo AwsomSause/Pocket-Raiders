@@ -131,6 +131,17 @@ describe('New UI battle windows (Party and Item)', () => {
     expect(html).toContain('FNT');
   });
 
+  it('a map stop\'s quick choice sits in the middle under a pulsing headline and a gold bar (the mock-up\'s fishing window)', () => {
+    const html = battleListView(ctx(0), list({ title: 'Which one do you reel in?', n: 2, row: (i) => thing(i, { tag: `Lv${i + 4}` }), top: 160, center: true, lead: '! A bite !', back: true }));
+    expect(html).toContain('left:300px;top:160px;width:360px');
+    expect(html).toContain('class="acc pulse"');
+    expect(html).toContain('! A bite !');
+    expect(html).toContain('class="hp gold"');
+    expect(html.indexOf('! A bite !')).toBeLessThan(html.indexOf('Which one do you reel in?'));
+    expect(count(html, 'data-act="pick"')).toBe(2);
+    expect(battleListView(ctx(0), list())).not.toContain('pulse');
+  });
+
   it('a long mark gives the name room by shortening the HP bar', () => {
     expect(battleListView(ctx(0), list({ n: 1, row: (i) => mon(i, { tag: '✔ Revive 11 HP' }) }))).toContain('width:54px');
     expect(battleListView(ctx(0), list({ n: 1, row: (i) => mon(i, { tag: 'FNT' }) }))).toContain('width:90px');

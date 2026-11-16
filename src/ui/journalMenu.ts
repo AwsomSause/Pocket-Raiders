@@ -6,13 +6,14 @@ import { services } from '../game/services';
 import type { FieldMenuHost } from './fieldMenus';
 import { fitLine } from './fitText';
 import { Picker } from './partyPanel';
+import { reduxOn } from './redux/stage';
 import { textStyle } from './theme';
 
 export function hasJournal(): boolean {
   return !!services().session.run?.story.v2;
 }
 
-function listRows(host: FieldMenuHost, title: string, rows: { title: string; right: string; hint: string }[], onSelect: (i: number) => void, onBack: () => void): void {
+function listRows(host: FieldMenuHost, title: string, rows: { title: string; right: string; hint: string }[], onSelect: (i: number) => void, onBack: () => void): Picker {
   const picker: Picker = new Picker(host.scene, {
     glass: true,
     title,
@@ -21,6 +22,8 @@ function listRows(host: FieldMenuHost, title: string, rows: { title: string; rig
     rows: rows.map((r) => ({
       problem: null,
       hint: r.hint,
+      // New UI: the count sits at the row's right and the note fills the detail card.
+      menu: { label: r.title, note: r.right, detail: r.hint },
       draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
         box.add(fitLine(scene.add.text(14, 9, r.title, textStyle(20, '#ffffff')), w - 190));
         box.add(scene.add.text(w - 12, 11, r.right, textStyle(17, '#a9d8ff')).setOrigin(1, 0));
@@ -30,14 +33,17 @@ function listRows(host: FieldMenuHost, title: string, rows: { title: string; rig
     onBack: () => { picker.close(); onBack(); },
   });
   host.setPicker(picker);
+  return picker;
 }
 
 function openTab(host: FieldMenuHost, tab: JournalTab): void {
-  listRows(host, tab.label, tab.rows, () => undefined, () => openJournalMenu(host));
+  // New UI: a tab's page keeps the notebook's name and band; the tab is a chip beside it.
+  listRows(host, reduxOn() ? `Field Notebook · ${tab.label}` : tab.label, tab.rows, () => undefined, () => openJournalMenu(host));
 }
 
 export function openJournalMenu(host: FieldMenuHost): void {
   const tabs = journalTabs(services().session.run!, services().session.settings.story.journalVoice);
   const rows = tabs.map((t) => ({ title: t.label, right: String(t.rows.length), hint: t.rows[0]?.hint ?? 'Nothing here yet.' }));
-  listRows(host, 'Field Notebook', rows, (i) => { const t = tabs[i]; if (t) openTab(host, t); }, () => host.setPicker(null));
+  // The notebook closes when a tab opens (the tab's Back opens it again), so it is never left open under the tab.
+  const book: Picker = listRows(host, 'Field Notebook', rows, (i) => { const t = tabs[i]; if (t) { book.close(); openTab(host, t); } }, () => host.setPicker(null));
 }
