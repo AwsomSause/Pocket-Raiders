@@ -2759,5 +2759,59 @@
    "Mystery Episode"
   ],
   "tags": []
+ },
+ "gn-n19-door": {
+  "gn": "gn.new.19",
+  "shape": "Door",
+  "earliest": "A8",
+  "home": 11,
+  "window": [
+   9,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+0; each extra crate makes one wild encounter A+1",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Snowbound Village",
+   "elsewhere": "The Snowbound Village"
+  },
+  "note": "Door at step 11, optional (the doc prefers a high stage there); fallback step 16, optional (the window runs to 16). Once per run. Four legs.",
+  "kinds": [
+   "Pseudo Stage"
+  ],
+  "tags": [
+   "snow"
+  ]
+ },
+ "gn-n19-grown": {
+  "gn": "gn.new.19",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "stages": [
+   5
+  ],
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "A Grown Child",
+   "elsewhere": "A Grown Child"
+  },
+  "note": "Afterstory: if any crate was left behind, two regions later at a Step 5 town a grown child from that house finds the player.",
+  "kinds": [
+   "Pokémon",
+   "Story"
+  ],
+  "tags": []
  }
 }

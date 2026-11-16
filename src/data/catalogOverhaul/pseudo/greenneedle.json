@@ -217,6 +217,15 @@
    "tint": "#3b4060",
    "mood": "thunderstorm ridge",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_snowbound",
+   "name": "The Snowbound Village",
+   "entry": "gn-n19-door",
+   "themeId": "normal-ice",
+   "tint": "#bcd3e6",
+   "mood": "snow village",
+   "start": "opened"
   }
  ]
 }
