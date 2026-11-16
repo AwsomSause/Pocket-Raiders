@@ -39,7 +39,13 @@
     "rival-shared-drink": "R22 One for the Road",
     "rival-race": "R23 The Race for First Pick (pseudo-stage)",
     "rival-nickname": "R24 What They Call You",
-    "living-rival-acknowledges": "R24 What They Call You (the real name)"
+    "living-rival-acknowledges": "R24 What They Call You (the real name)",
+    "rival-views": "Batch 5 rival beat (rivals-8): Lead, Marks and axes gates",
+    "ev-rivals-defeat": "Batch 5 rival beat (rivals-8): Lead, Marks and axes gates",
+    "ev-rivals-victory": "Batch 5 rival beat (rivals-8): Lead, Marks and axes gates",
+    "rival-berry-boss": "Batch 5 rival beat (rivals-8): Lead, Marks and axes gates",
+    "rival-gloat": "Batch 5 rival beat (rivals-8): Lead, Marks and axes gates",
+    "rival-grudge-spot": "Batch 5 rival beat (rivals-8): Lead, Marks and axes gates"
   },
   "merged": {
     "rival-rematch": "ev-rival-rematch",

@@ -1,0 +1,3165 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "oaks-letter-birds",
+   "name": "Oak's Letter: The Sky Trio",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "oaks-letter",
+   "scene": {
+    "cast": [
+     "boss.oak"
+    ],
+    "pokemon": "articuno",
+    "tint": "#a0c8f0",
+    "effect": "float"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-oaks-letter",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "with-you",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "articuno",
+       "bond": 0
+      }
+     ],
+     "notice": "Articuno is already with you. It knows this place.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let Articuno go on alone.",
+       "success": {
+        "text": "Articuno flies up to meet the other two. For a moment the three of them hang together in the sky, and then it comes home.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-articuno",
+          "amount": 2
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "moment",
+          "text": "Articuno went back to the place its key opened, and came back to you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-articuno",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "articuno",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "notice": "Articuno knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Articuno.",
+       "success": {
+        "text": "Articuno lowers its head into your hand. It has been watching the whole road, and it has decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "articuno"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "articuno-offered",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Articuno offered itself at the place its key opened.",
+          "importance": 95
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "The letter is in Professor Oak's hand, and it is addressed to the sky.\n\nYou followed its map to a cliff above the sea. The three birds who tested you are circling. One of them comes lower.\n\nThe last line of the letter: \"If they let you near, do not waste it.\"",
+   "choices": [
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "Articuno lands on the cliff edge. The wind goes cold and very still. It wants to see how far you have come.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "articuno"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "articuno-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-articuno",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave an offering and go.",
+     "success": {
+      "text": "You leave the letter on a flat stone, weighted with a pebble. A blue feather drifts down onto it. Your team breathes easier.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-articuno",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "works-key-plant",
+   "name": "Works Key: Power Plant",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "works-key",
+   "scene": {
+    "cast": [],
+    "pokemon": "zapdos",
+    "tint": "#f0e060",
+    "effect": "sparkle"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-works-key",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "with-you",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "zapdos",
+       "bond": 0
+      }
+     ],
+     "notice": "Zapdos is already with you. It knows this place.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let Zapdos go on alone.",
+       "success": {
+        "text": "Zapdos goes in alone. Every light in the plant flashes once, a greeting, and it comes back crackling and pleased.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-zapdos",
+          "amount": 2
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "moment",
+          "text": "Zapdos went back to the place its key opened, and came back to you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-zapdos",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "zapdos",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "notice": "Zapdos knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Zapdos.",
+       "success": {
+        "text": "Zapdos lowers its head into your hand. It has been watching the whole road, and it has decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "zapdos"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "zapdos-offered",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Zapdos offered itself at the place its key opened.",
+          "importance": 95
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "The Works Key fits a rusted door that has not opened in years.\n\nInside, the old power plant is dark. Then every dead bulb in the hall lights up at once, buzzing.\n\nSomething at the far end remembers you from the storm.",
+   "choices": [
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "Zapdos spreads its wings across the turbines. The lights go white. It wants a rematch, and it is laughing.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "zapdos"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "zapdos-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-zapdos",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave an offering and go.",
+     "success": {
+      "text": "You throw the main switch to OFF and leave a full Elixir by the door. The bulbs dim, one by one, almost gently.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-zapdos",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "secret-key-volcano",
+   "name": "Secret Key: Hidden Volcano",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "secret-key",
+   "scene": {
+    "cast": [],
+    "pokemon": "moltres",
+    "tint": "#f08040",
+    "effect": "fire"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-secret-key",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "with-you",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "moltres",
+       "bond": 0
+      }
+     ],
+     "notice": "Moltres is already with you. It knows this place.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let Moltres go on alone.",
+       "success": {
+        "text": "Moltres dives into the crater and comes up shining, every feather new. It shakes the sparks off over your team.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-moltres",
+          "amount": 2
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "moment",
+          "text": "Moltres went back to the place its key opened, and came back to you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-moltres",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "moltres",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "notice": "Moltres knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Moltres.",
+       "success": {
+        "text": "Moltres lowers its head into your hand. It has been watching the whole road, and it has decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "moltres"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "moltres-offered",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Moltres offered itself at the place its key opened.",
+          "importance": 95
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "The Secret Key opens a gate on the volcano's slope that nobody marked on any map.\n\nThe air shimmers. Ash falls like warm snow.\n\nAt the crater's lip, a bird of fire is waiting. It saw you pass its Trial.",
+   "choices": [
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "Moltres rises out of the crater, wings dripping flame. It will not burn you. It wants to know if you burn back.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "moltres"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "moltres-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-moltres",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave an offering and go.",
+     "success": {
+      "text": "You leave a Charcoal on the gatepost. When you look back, it is glowing, and your team is warm to the bone.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-moltres",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "magma-stone-heatran",
+   "name": "Magma Stone: Stark Mountain",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "magma-stone",
+   "scene": {
+    "cast": [],
+    "pokemon": "heatran",
+    "tint": "#c04018",
+    "effect": "fire"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-magma-stone",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "with-you",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "heatran",
+       "bond": 0
+      }
+     ],
+     "notice": "Heatran is already with you. It knows this place.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let Heatran go on alone.",
+       "success": {
+        "text": "Heatran walks into the lava as if it were a bath, and comes out glowing, and sits by your fire all night.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-heatran",
+          "amount": 2
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "moment",
+          "text": "Heatran went back to the place its key opened, and came back to you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-heatran",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "heatran",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "notice": "Heatran knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Heatran.",
+       "success": {
+        "text": "Heatran lowers its head into your hand. It has been watching the whole road, and it has decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "heatran"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "heatran-offered",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Heatran offered itself at the place its key opened.",
+          "importance": 95
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "The Magma Stone grew too hot to hold the moment you reached the mountain.\n\nDeep inside Stark Mountain, the lava moves around an empty hollow. The stone fits it exactly.\n\nThe mountain wakes, and something steel crawls up out of the fire.",
+   "choices": [
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "Heatran clings to the cavern roof, upside down, molten iron on its back. It drops.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "heatran"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "heatran-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-heatran",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave an offering and go.",
+     "success": {
+      "text": "You set the stone back in its hollow and step away. The lava calms. Something below rumbles, satisfied.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-heatran",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "silver-wing-islands",
+   "name": "Silver Wing: Whirl Islands",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "silver-wing",
+   "scene": {
+    "cast": [],
+    "pokemon": "lugia",
+    "tint": "#6090c0",
+    "effect": "rain"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-silver-wing",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "with-you",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "lugia",
+       "bond": 0
+      }
+     ],
+     "notice": "Lugia is already with you. It knows this place.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let Lugia go on alone.",
+       "success": {
+        "text": "Lugia dives without a sound. The whole sea brightens from below, and it comes back up beside your boat.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-lugia",
+          "amount": 2
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "moment",
+          "text": "Lugia went back to the place its key opened, and came back to you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-lugia",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "lugia",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "notice": "Lugia knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Lugia.",
+       "success": {
+        "text": "Lugia lowers its head into your hand. It has been watching the whole road, and it has decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "lugia"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "lugia-offered",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Lugia offered itself at the place its key opened.",
+          "importance": 95
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "The Silver Wing hums in your bag the moment you reach the Whirl Islands.\n\nThe whirlpools you fought through on its Trial are calm now. The sea is holding its breath.\n\nA silver shape rises from the deep, and it is looking at you.",
+   "choices": [
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "Lugia rises with the sea behind it, a wall of water hanging on its wings. Its song shakes the rocks.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "lugia"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lugia-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-lugia",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave an offering and go.",
+     "success": {
+      "text": "You let the Silver Wing float on the still water. It sinks slowly, glowing. The sea sighs, and your team rests.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-lugia",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rainbow-wing-tower",
+   "name": "Rainbow Wing: Bell Tower",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "rainbow-wing",
+   "scene": {
+    "cast": [],
+    "pokemon": "ho-oh",
+    "tint": "#f8c850",
+    "effect": "sparkle"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-rainbow-wing",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "with-you",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "ho-oh",
+       "bond": 0
+      }
+     ],
+     "notice": "Ho-Oh is already with you. It knows this place.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let Ho-Oh go on alone.",
+       "success": {
+        "text": "Ho-Oh circles the tower nine times and every bell answers it. It comes down shining, and stays.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-ho-oh",
+          "amount": 2
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "moment",
+          "text": "Ho-Oh went back to the place its key opened, and came back to you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-ho-oh",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "ho-oh",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "notice": "Ho-Oh knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Ho-Oh.",
+       "success": {
+        "text": "Ho-Oh lowers its head into your hand. It has been watching the whole road, and it has decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "ho-oh"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "ho-oh-offered",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Ho-Oh offered itself at the place its key opened.",
+          "importance": 95
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "Every bell in the tower rings when you climb the last stair. Nobody pulled a rope.\n\nThe Rainbow Wing from its Trial burns in your hand, seven colours at once.\n\nA rainbow bird lands on the roof. It remembers what you did for the ones who were lost.",
+   "choices": [
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "Ho-Oh opens its wings and the roof tiles catch fire without burning. It wants to see you stand in the light.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ho-oh"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ho-oh-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-ho-oh",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave an offering and go.",
+     "success": {
+      "text": "You hang the Rainbow Wing from the highest bell. It rings once by itself. Your team feels whole again.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-ho-oh",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mysticticket-rock",
+   "name": "MysticTicket: Navel Rock",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "mysticticket",
+   "scene": {
+    "cast": [],
+    "pokemon": "lugia",
+    "tint": "#506080",
+    "effect": "fog"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-mysticticket",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "both-with-you",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "lugia",
+       "bond": 0
+      },
+      {
+       "kind": "partyLine",
+       "species": "ho-oh",
+       "bond": 0
+      }
+     ],
+     "notice": "Lugia and Ho-Oh are both with you. Navel Rock goes quiet for them.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Let them go up and down together.",
+       "success": {
+        "text": "One climbs, one dives. When they come back, they come back side by side, and the rock is warm from top to bottom.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-lugia",
+          "amount": 2
+         },
+         {
+          "kind": "flag",
+          "key": "sign-ho-oh",
+          "amount": 2
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 5,
+          "who": "party"
+         },
+         {
+          "kind": "moment",
+          "text": "Lugia and Ho-Oh met at Navel Rock because you brought them both.",
+          "importance": 95
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "The MysticTicket came after you had answered one of them. Now Navel Rock rises out of the sea in front of you.\n\nAt the top, a rainbow that does not fade. At the bottom, water deeper than any light.\n\nThe ticket says only: CHOOSE.",
+   "choices": [
+    {
+     "label": "Ring your bell and wait.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "tidal-bell",
+        "clear-bell"
+       ]
+      }
+     ],
+     "success": {
+      "text": "The bell's note runs down the rock and out over the sea. The one it was made for answers.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ho-oh",
+        "lugia"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "navel-bell-answered",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-lugia",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-ho-oh",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Climb to the top.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "ho-oh",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "Ho-Oh is waiting at the summit, in the rainbow. It lifts its wings.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ho-oh"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ho-oh-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-ho-oh",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Go down into the deep.",
+     "requires": [
+      {
+       "kind": "partyLine",
+       "species": "lugia",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "Lugia is waiting at the bottom, in the dark. The water starts to turn.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "lugia"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "lugia-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-lugia",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave the ticket on the rock.",
+     "success": {
+      "text": "You lay the ticket on the middle step. From above, a warm wind. From below, a cool one. Your team sleeps well that night.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-lugia",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-ho-oh",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "eon-ticket-island",
+   "name": "Eon Ticket: Southern Island",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "eon-ticket",
+   "scene": {
+    "cast": [],
+    "pokemon": "latias",
+    "tint": "#e07090",
+    "effect": "float"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-eon-ticket",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "with-you",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "latias",
+       "bond": 0
+      }
+     ],
+     "notice": "Latias is already with you. It knows this place.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let Latias go on alone.",
+       "success": {
+        "text": "Latias and the island's other shape fly a loop around the tree, laughing. Latias comes back with the sea in its eyes.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-latias",
+          "amount": 2
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "moment",
+          "text": "Latias went back to the place its key opened, and came back to you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-latias",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "latias",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "notice": "Latias knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Latias.",
+       "success": {
+        "text": "Latias lowers its head into your hand. It has been watching the whole road, and it has decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "latias"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "latias-offered",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Latias offered itself at the place its key opened.",
+          "importance": 95
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "The Eon Ticket is stamped with a sea you had never seen until today.\n\nSouthern Island is small: one tree, warm sand, a ring of sea. Two shapes circle above the tree.\n\nOne of them is the girl from the canal city. She came to say thank you.",
+   "choices": [
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "Latias swoops down and stops a hand's width from your nose. It wants to play, and it plays hard.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "latias"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "latias-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-latias",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave an offering and go.",
+     "success": {
+      "text": "You leave the ticket under the tree with a Soul Dew's worth of flowers. Latias sings above you, and your team feels lighter.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-latias",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "light-stone-reshiram",
+   "name": "Light Stone: Reshiram",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "light-stone",
+   "scene": {
+    "cast": [],
+    "pokemon": "reshiram",
+    "tint": "#f0f0f0",
+    "effect": "fire"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-light-stone",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "with-you",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "reshiram",
+       "bond": 0
+      }
+     ],
+     "notice": "Reshiram is already with you. It knows this place.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let Reshiram go on alone.",
+       "success": {
+        "text": "Reshiram looks at the stone it slept in for so long, and then at you. It chooses the road.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-reshiram",
+          "amount": 2
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "moment",
+          "text": "Reshiram went back to the place its key opened, and came back to you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-reshiram",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "reshiram",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "notice": "Reshiram knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Reshiram.",
+       "success": {
+        "text": "Reshiram lowers its head into your hand. It has been watching the whole road, and it has decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "reshiram"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "reshiram-offered",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Reshiram offered itself at the place its key opened.",
+          "importance": 95
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "The tower answered you, and now the Light Stone will not cool down.\n\nIt pulls you to a white field where the snow melts in a ring. In the middle, the stone opens like an eye.\n\nReshiram has not forgotten what you said you believe.",
+   "choices": [
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "White fire pours out of the stone and becomes Reshiram. It asks, without words, whether you still believe it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "reshiram"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "reshiram-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-reshiram",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave an offering and go.",
+     "success": {
+      "text": "You set the stone down in the melted ring and say what you believe out loud. The fire dims to a warm glow.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-reshiram",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dark-stone-zekrom",
+   "name": "Dark Stone: Zekrom",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "dark-stone",
+   "scene": {
+    "cast": [],
+    "pokemon": "zekrom",
+    "tint": "#202040",
+    "effect": "sparkle"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-dark-stone",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "with-you",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "zekrom",
+       "bond": 0
+      }
+     ],
+     "notice": "Zekrom is already with you. It knows this place.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Let Zekrom go on alone.",
+       "success": {
+        "text": "Zekrom looks at the dark stone, then at you, and the storm in its tail goes quiet. It chooses the road.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "sign-zekrom",
+          "amount": 2
+         },
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 3,
+          "who": "party"
+         },
+         {
+          "kind": "moment",
+          "text": "Zekrom went back to the place its key opened, and came back to you.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-zekrom",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      },
+      {
+       "kind": "partyLine",
+       "species": "zekrom",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "notice": "Zekrom knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Zekrom.",
+       "success": {
+        "text": "Zekrom lowers its head into your hand. It has been watching the whole road, and it has decided.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "zekrom"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "zekrom-offered",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Zekrom offered itself at the place its key opened.",
+          "importance": 95
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "The tower answered you, and now the Dark Stone crackles in your bag every night.\n\nIt leads you to a black field where storms circle and never land. The stone opens like a fist.\n\nZekrom has not forgotten what you said should be true.",
+   "choices": [
+    {
+     "label": "Step forward.",
+     "success": {
+      "text": "Black lightning pours out of the stone and becomes Zekrom. It asks whether your ideal is still worth a fight.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "zekrom"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "zekrom-key-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-zekrom",
+         "amount": 2
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave an offering and go.",
+     "success": {
+      "text": "You set the stone down and tell it the ideal you still hold. The storm stops circling and moves on.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-zekrom",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "auroraticket-island",
+   "name": "AuroraTicket: Birth Island",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "auroraticket",
+   "scene": {
+    "cast": [],
+    "pokemon": "deoxys",
+    "tint": "#c05040",
+    "effect": "sparkle"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-auroraticket",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "believed-deoxys",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The AuroraTicket arrived the night you heard of the Visitor for the third time. Nobody sent it.\n\nBirth Island is bare rock and one black triangle. As you step closer, the triangle shifts, and shifts again.\n\nIt is learning the shape of you.",
+   "choices": [
+    {
+     "label": "Step in time with it.",
+     "success": {
+      "text": "You step when it shifts. It shifts faster. You keep up. The triangle splits open, and Deoxys comes out of it, curious.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-answered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-deoxys-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand still.",
+     "success": {
+      "text": "You do not move. The triangle stops too. After a long time, it opens, and Deoxys is standing there, copying your stillness.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-answered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-deoxys-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Change your lead.",
+     "success": {
+      "text": "You send out someone new. The triangle turns to look. Deoxys steps out wearing almost the same shape.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "deoxys-answered",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-deoxys-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "old-sea-map-island",
+   "name": "Old Sea Map: Faraway Island",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "old-sea-map",
+   "scene": {
+    "cast": [],
+    "pokemon": "mew",
+    "tint": "#f0a0c0",
+    "effect": "float"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-old-sea-map",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "believed-mew",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The Old Sea Map turned up in your bag after the third story about the Ancestor. It is drawn in crayon.\n\nFaraway Island is tall grass and warm wind. Something pink giggles somewhere in it.\n\nThe map has one more line, in the same crayon: FIND ME.",
+   "choices": [
+    {
+     "label": "Play hide-and-seek.",
+     "success": {
+      "text": "You look for an hour. It finds you first, every time, and laughs until it falls over in the grass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mew-played",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-mew-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lie down in the grass.",
+     "success": {
+      "text": "You lie down and look at the sky. Something small lies down beside you and looks too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mew-trusted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-mew-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out a hello.",
+     "success": {
+      "text": "The grass goes still. Then a pink head pops up right in front of you, upside down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-mew-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "liberty-pass-garden",
+   "name": "Liberty Pass: Liberty Garden",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "liberty-pass",
+   "scene": {
+    "cast": [],
+    "pokemon": "victini",
+    "tint": "#e08040",
+    "effect": "sparkle"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-liberty-pass",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "believed-victini",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mythical-visited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The Liberty Pass came after the third story about the Victory Star. It is stamped with a V.\n\nUnder the lighthouse on Liberty Garden, a basement door stands open.\n\nSomething tiny with a V on its head is sitting on the stairs, waiting to see why you came.",
+   "choices": [
+    {
+     "label": "\"To win.\"",
+     "success": {
+      "text": "Victini grins and flashes a V at you with both hands. That was the right kind of honest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "victini-honest",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-victini-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"For them.\"",
+     "success": {
+      "text": "You point at your team. Victini looks at them for a long time, then hops onto your lead's head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "victini-them",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-victini-promise"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I just heard you were here.\"",
+     "success": {
+      "text": "Victini laughs, a small bright sound, and comes down the last stair to meet you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my-victini-promise"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "azure-flute-hall",
+   "name": "Azure Flute: Hall of Origin",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "azure-flute",
+   "scene": {
+    "cast": [],
+    "pokemon": "arceus",
+    "tint": "#f0e8c0",
+    "effect": "glint"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-azure-flute",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "arceus-judged",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The Azure Flute came to you on the last road, because your Guest is still beside you and you never broke your word.\n\nYou play it. One note. Stairs of light rise out of the ground, step by step, into the sky.\n\nAt the top, a hall with sixteen pedestals. Someone is listening.",
+   "choices": [
+    {
+     "label": "Climb the stairs.",
+     "success": {
+      "text": "The stairs hold. Your team climbs behind you without a word.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "co-my11-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Play the flute again, softer.",
+     "success": {
+      "text": "The second note is for your Guest. It goes up the stairs first, and you follow it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-my11-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put the flute away.",
+     "success": {
+      "text": "The stairs fade. The flute stays warm in your bag, but the hall does not open again this run.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "flute-maker",
+   "name": "The Flute Maker",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "minStage": 7,
+   "scene": {
+    "cast": [
+     "trainer.musician"
+    ],
+    "tint": "#101830",
+    "effect": "float"
+   },
+   "remembers": [
+    {
+     "id": "has-key",
+     "when": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "azure-flute",
+        "auroraticket",
+        "old-sea-map",
+        "liberty-pass",
+        "silver-wing",
+        "rainbow-wing",
+        "mysticticket",
+        "eon-ticket"
+       ]
+      }
+     ],
+     "notice": "She hears the key in your bag before she sees it, and smiles.",
+     "addChoices": [
+      {
+       "label": "Let her hear the key.",
+       "success": {
+        "text": "She holds it to her ear like a shell. \"Oh. Somebody earned this one.\" She plays the tune it hums, and your team sleeps sound.",
+        "effects": [
+         {
+          "kind": "heal",
+          "share": 1
+         },
+         {
+          "kind": "friendship",
+          "amount": 2,
+          "who": "party"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "A craftsman sits on a crate, playing a blue flute that is only nearly finished.\n\nFlute Maker: \"People used to come to buy this. I stopped selling. You cannot buy what it opens.\"\nFlute Maker: \"But I can tell you how it is earned.\"",
+   "choices": [
+    {
+     "label": "\"How is the flute earned?\"",
+     "success": {
+      "text": "\"Keep one Promise all the way to the last road,\" she says. \"A Mythical walks beside you; you never break your word. Then the flute finds you.\" She plays you a few notes of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-any",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"And the tickets?\"",
+     "success": {
+      "text": "\"Hear of a Mythical three times and believe it. The ticket comes on its own. Wings and stones come from a Legendary's Trial. Nobody sells any of them. Not honestly.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just listen.",
+     "success": {
+      "text": "She plays the unfinished song. It is beautiful, and it stops in the middle, and somehow that is right.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "old-collector",
+   "name": "The Old Collector",
+   "group": "Legendary keys",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "effect": "glint"
+   },
+   "remembers": [
+    {
+     "id": "has-key",
+     "when": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "oaks-letter",
+        "works-key",
+        "secret-key",
+        "magma-stone",
+        "silver-wing",
+        "rainbow-wing",
+        "mysticticket",
+        "eon-ticket",
+        "light-stone",
+        "dark-stone",
+        "auroraticket",
+        "old-sea-map",
+        "liberty-pass",
+        "azure-flute"
+       ]
+      }
+     ],
+     "notice": "His eyes go straight to your bag. \"You have one. May I see?\"",
+     "addChoices": [
+      {
+       "label": "Show him the key.",
+       "success": {
+        "text": "He holds it up to the light with shaking hands. \"I spent my life buying copies. This one is real.\" He will not take it. He gives you something of his instead.",
+        "effects": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "relic-statue",
+           "relic-crown",
+           "ruby",
+           "sapphire"
+          ]
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "An old man keeps a glass case of tickets and stones. Every one has a SOLD card, faded, and every one is a copy.\n\nThe Old Collector: \"Tickets and wings and stones. People think they are bought. They are not. They are answers.\"\nThe Old Collector: \"I can tell you who to ask.\"",
+   "choices": [
+    {
+     "label": "Battle him for his best piece.",
+     "requires": [
+      {
+       "kind": "noTrainerTag",
+       "tag": "pacifist"
+      }
+     ],
+     "success": {
+      "text": "\"Show me your strength, then. Not for a ticket. For a good afternoon.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Collector",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1500
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "scope-lens"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Who do I ask?\"",
+     "success": {
+      "text": "\"A Legendary's Trial gives its wing, its stone, its letter. A Mythical, heard of three times, sends its own ticket. Go and listen to the road.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-any",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen to his stories.",
+     "success": {
+      "text": "He tells you about the ones he never saw. He tells them like a man who still hopes.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ruins-dig",
+   "name": "Ruins Dig Site",
+   "group": "Legendary keys",
+   "rarity": "rare",
+   "minStage": 5,
+   "scene": {
+    "cast": [
+     "boss.cynthia-masters"
+    ],
+    "tint": "#302418",
+    "effect": "shake"
+   },
+   "intro": "Researchers dig at ancient ruins. Two hollows in the dirt, one scorched black and one scorched white, are empty.\n\nCynthia: \"The stones were here. They left on their own, a long time ago.\"\nCynthia: \"They only go to someone who answers the tower. Truth or ideals.\"",
+   "choices": [
+    {
+     "label": "Kneel by the hollows.",
+     "success": {
+      "text": "The black hollow is cold. The white one is warm. Between them, in the dirt, a carving of a third shape that is neither.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-tao",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-kyurem",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help the dig.",
+     "check": "strength",
+     "success": {
+      "text": "The team pays well, and Cynthia shows you a mural of two dragons back to back.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1000
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "soft-sand",
+         "hard-stone",
+         "spell-tag",
+         "metal-coat"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Hard work, little to show. Cynthia thanks you anyway.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where is the tower?\"",
+     "success": {
+      "text": "Cynthia draws you a map. \"A divided town, and a tower above it. The stones will find you there, if you are honest.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-tao",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "kyurem-black",
+   "name": "The Dark Stone Fusion",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "kyurem-black",
+   "scene": {
+    "cast": [],
+    "pokemon": "kyurem-black",
+    "tint": "#080818",
+    "effect": "spin"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-kyurem-black",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "The empty vessel has been cold and hungry all this way. Tonight it is not.\n\nKyurem and Zekrom face each other across your camp. The ice in Kyurem's hollow cracks, and black lightning crawls into it.\n\nIt is waiting to be made whole by whatever comes near.",
+   "choices": [
+    {
+     "label": "Let them fuse.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "kyurem"
+      },
+      {
+       "kind": "partySpecies",
+       "species": "zekrom"
+      }
+     ],
+     "success": {
+      "text": "Zekrom folds into the ice like a storm into a cloud. Black Kyurem stands up, whole for the first time, and roars at the sky.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "kyurem",
+        "to": "kyurem-black",
+        "consume": "zekrom"
+       },
+       {
+        "kind": "moment",
+        "text": "Kyurem took Zekrom into itself and became Black Kyurem.",
+        "importance": 95
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "You step between them. The lightning crawls back. Both of them look at you, and wait.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "kyurem-white",
+   "name": "The Light Stone Fusion",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "kyurem-white",
+   "scene": {
+    "cast": [],
+    "pokemon": "kyurem-white",
+    "tint": "#181830",
+    "effect": "spin"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-kyurem-white",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "The empty vessel has been cold and hungry all this way. Tonight it is not.\n\nKyurem and Reshiram face each other across your camp. The ice in Kyurem's hollow steams, and white fire pours into it.\n\nIt is waiting to be made whole by whatever comes near.",
+   "choices": [
+    {
+     "label": "Let them fuse.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "kyurem"
+      },
+      {
+       "kind": "partySpecies",
+       "species": "reshiram"
+      }
+     ],
+     "success": {
+      "text": "Reshiram folds into the ice like the sun into a frozen lake. White Kyurem rises, whole for the first time, and the snow around it melts.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "kyurem",
+        "to": "kyurem-white",
+        "consume": "reshiram"
+       },
+       {
+        "kind": "moment",
+        "text": "Kyurem took Reshiram into itself and became White Kyurem.",
+        "importance": 95
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "You step between them. The fire draws back. Both of them look at you, and wait.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "tornadus-mirror",
+   "name": "The Reveal Glass: Tornadus",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "tornadus-therian",
+   "scene": {
+    "cast": [],
+    "pokemon": "tornadus-therian",
+    "effect": "float"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-tornadus-therian",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "Your blessing is in Communion now, and the Forces of Nature know it.\n\nA shrine in the middle of farmland holds a round glass. It shows the sky, the storm and the field, and then Tornadus, not as it walks with you, but as it truly is.\n\nThe glass asks if you want to see.",
+   "choices": [
+    {
+     "label": "Show the true form.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "tornadus"
+      }
+     ],
+     "success": {
+      "text": "The glass flashes. Tornadus changes: the cloud falls away and the beast underneath stands up, wild and bright. Therian Forme.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "tornadus",
+        "to": "tornadus-therian"
+       },
+       {
+        "kind": "moment",
+        "text": "The Reveal Glass showed Tornadus as it truly is.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look away.",
+     "success": {
+      "text": "You turn the glass to face the field. The crops lean toward it, and grow a little taller.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "thundurus-mirror",
+   "name": "The Reveal Glass: Thundurus",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "thundurus-therian",
+   "scene": {
+    "cast": [],
+    "pokemon": "thundurus-therian",
+    "effect": "sparkle"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-thundurus-therian",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "Your blessing is in Communion now, and the Forces of Nature know it.\n\nA shrine in the middle of farmland holds a round glass. It shows the sky, the storm and the field, and then Thundurus, not as it walks with you, but as it truly is.\n\nThe glass asks if you want to see.",
+   "choices": [
+    {
+     "label": "Show the true form.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "thundurus"
+      }
+     ],
+     "success": {
+      "text": "The glass flashes. Thundurus changes: the cloud falls away and the beast underneath stands up, wild and bright. Therian Forme.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "thundurus",
+        "to": "thundurus-therian"
+       },
+       {
+        "kind": "moment",
+        "text": "The Reveal Glass showed Thundurus as it truly is.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look away.",
+     "success": {
+      "text": "You turn the glass to face the field. The crops lean toward it, and grow a little taller.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "landorus-mirror",
+   "name": "The Reveal Glass: Landorus",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "landorus-therian",
+   "scene": {
+    "cast": [],
+    "pokemon": "landorus-therian",
+    "effect": "shake"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-landorus-therian",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "Your blessing is in Communion now, and the Forces of Nature know it.\n\nA shrine in the middle of farmland holds a round glass. It shows the sky, the storm and the field, and then Landorus, not as it walks with you, but as it truly is.\n\nThe glass asks if you want to see.",
+   "choices": [
+    {
+     "label": "Show the true form.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "landorus"
+      }
+     ],
+     "success": {
+      "text": "The glass flashes. Landorus changes: the cloud falls away and the beast underneath stands up, wild and bright. Therian Forme.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "landorus",
+        "to": "landorus-therian"
+       },
+       {
+        "kind": "moment",
+        "text": "The Reveal Glass showed Landorus as it truly is.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look away.",
+     "success": {
+      "text": "You turn the glass to face the field. The crops lean toward it, and grow a little taller.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "meteorite-deoxys",
+   "name": "The Meteorite",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "meteorite",
+   "scene": {
+    "cast": [],
+    "pokemon": "deoxys",
+    "tint": "#100820",
+    "effect": "sparkle"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-meteorite",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "promise-deoxys",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "Deoxys is your Guest, and you have kept changing with it. Tonight a meteorite comes down beside your camp, small and still hot.\n\nDeoxys touches it, and its body shifts through four shapes in one breath.\n\nIt looks at your team, then at you. Which shape, for the road ahead?",
+   "choices": [
+    {
+     "label": "Attack Forme.",
+     "success": {
+      "text": "Its arms sharpen. Your whole team stands a little forward, ready to hit harder, until the region ends.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Meteorite: Attack Forme",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.15
+         }
+        ]
+       },
+       {
+        "kind": "formChange",
+        "from": "deoxys",
+        "to": "deoxys-attack"
+       },
+       {
+        "kind": "flag",
+        "key": "deoxys-forme-attack",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Defense Forme.",
+     "success": {
+      "text": "It thickens and settles. Your team feels harder to knock down, until the region ends.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Meteorite: Defense Forme",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 0.85
+         }
+        ]
+       },
+       {
+        "kind": "formChange",
+        "from": "deoxys",
+        "to": "deoxys-defense"
+       },
+       {
+        "kind": "flag",
+        "key": "deoxys-forme-defense",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Speed Forme.",
+     "success": {
+      "text": "It goes thin and quick. Your team moves first more often, until the region ends.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Meteorite: Speed Forme",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.5
+         }
+        ]
+       },
+       {
+        "kind": "formChange",
+        "from": "deoxys",
+        "to": "deoxys-speed"
+       },
+       {
+        "kind": "flag",
+        "key": "deoxys-forme-speed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Normal Forme.",
+     "success": {
+      "text": "It settles back into itself. A little of everything, for everyone, until the region ends.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Meteorite: Normal Forme",
+        "until": "region",
+        "effects": [
+         {
+          "kind": "damageMultiplier",
+          "value": 1.05
+         },
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 0.95
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "deoxys-forme-normal",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "odd-keystone-spiritomb",
+   "name": "The Odd Keystone",
+   "group": "Legendary keys",
+   "rarity": "epic",
+   "keyItem": "odd-keystone",
+   "scene": {
+    "cast": [],
+    "pokemon": "spiritomb",
+    "tint": "#181028",
+    "effect": "fog"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "key-odd-keystone",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "odd-spirits",
+     "atLeast": 108,
+     "atMost": 9999
+    }
+   ],
+   "intro": "The Odd Keystone has been getting heavier all run. Every Ghost-type you knocked out and let go left a whisper in it.\n\nTonight it has one hundred and eight. They are all talking at once.\n\nThe crack down its middle is glowing.",
+   "choices": [
+    {
+     "label": "Break the keystone.",
+     "success": {
+      "text": "The stone splits. A hundred and eight voices pour out, swirl, and knot together into one grinning shape. Spiritomb follows you out of the mist.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "spiritomb"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A hundred and eight spirits gathered in the Odd Keystone, and Spiritomb came out of it.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "Set the spirits free.",
+     "success": {
+      "text": "You carry the keystone to a shrine and lay it down. The voices go quiet, one by one, and say thank you. Your team sleeps without dreams.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "researcher-recognizes-legendary",
+   "name": "A Researcher Recognizes Something",
+   "group": "Legendary reactions",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "partyTag",
+     "tag": "legendary"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.scientist_f"
+    ],
+    "tint": "#405070",
+    "effect": "glint"
+   },
+   "remembers": [
+    {
+     "id": "communion",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-communion",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She sees the blessing's object in your bag, glowing, and her hands start to shake.",
+     "addChoices": [
+      {
+       "label": "Show her the blessing.",
+       "success": {
+        "text": "She reads the old words on it out loud, and gets them right. \"It chose you twice,\" she says. \"The blessing, and then itself.\"",
+        "effects": [
+         {
+          "kind": "research",
+          "amount": 20
+         },
+         {
+          "kind": "flag",
+          "key": "sign-own",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "A researcher saw your Legendary and its blessing together, and wept.",
+          "importance": 85
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "intro": "A researcher stops dead in the road and stares at your party.\n\nResearcher: \"That one. I have only read about it. Three books, all of them wrong.\"\nResearcher: \"Please. Let me record it. I will be quick.\"",
+   "choices": [
+    {
+     "label": "\"Go ahead.\"",
+     "success": {
+      "text": "She sketches fast, talking the whole time. When she shows you, the drawing is good. Your Legendary looks at it for a long time.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "money",
+        "amount": 800
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do the books say?\"",
+     "success": {
+      "text": "She tells you what the books got wrong, and what one old book got right. You learn a place your Legendary would like.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's not a specimen.\"",
+     "success": {
+      "text": "She stops, and puts the pencil away. \"No. You are right. I am sorry.\" She bows to your Legendary, and it bows back.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "researcher-recognizes-mythical",
+   "name": "A Researcher Recognizes Something",
+   "group": "Legendary reactions",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "guest-any",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.scientist_f"
+    ],
+    "tint": "#504070",
+    "effect": "sparkle"
+   },
+   "intro": "A researcher stops dead in the road. She is not looking at your party. She is looking just behind you, at your Guest.\n\nResearcher: \"Nobody has ever seen one walk beside a person. Nobody.\"\nResearcher: \"Please. Let me record it.\"",
+   "choices": [
+    {
+     "label": "\"You can try.\"",
+     "success": {
+      "text": "She raises her camera. Every photo comes out blank, except one: you, smiling, and a small blur of light by your shoulder. She gives it to you.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask it yourself.\"",
+     "success": {
+      "text": "She kneels and asks, very politely. Your Guest thinks about it, then lets her draw it for exactly one minute.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Please keep it a secret.\"",
+     "success": {
+      "text": "She closes her notebook. \"Then I never saw it.\" Your Guest comes a step closer to you, and stays there.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

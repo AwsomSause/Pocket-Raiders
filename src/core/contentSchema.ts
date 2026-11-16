@@ -790,6 +790,14 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('legendaryFocus'), species: z.array(z.string()).min(1), weight: z.number().positive(), gateChance: z.number().positive().max(1) }),
   /** A Team week: the evil team of the run is picked from these (by the run's seed) instead of from every team. */
   z.object({ kind: z.literal('evilTeamFocus'), teams: z.array(z.string()).min(1) }),
+  /** Catalog Overhaul (legends, row C): a calendar week sets this run flag at run start (Rivalry weeks open the Rival Circuit: `circuit-qualified`; `rivalry-week` brings the rival into every pseudo-stage). Core: co/weeks.ts. */
+  z.object({ kind: z.literal('startFlag'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), value: z.number().int().min(1).max(99).default(1) }),
+  /** Catalog Overhaul (legends, row C): Leap Day's free Telling (a Mythical half-told, else a seeded one) at run start, when Mythical Promises are on. */
+  z.object({ kind: z.literal('freeTelling'), count: z.number().int().min(1).max(3).default(1) }),
+  /** Catalog Overhaul (legends, row C): a Legend week whose matching blessings are not a Legendary world event (Paradox Tide): the blessing's starting Influence is +1 when its Legendary is listed. */
+  z.object({ kind: z.literal('blessingWeek'), species: z.array(z.string()).min(1) }),
+  /** Catalog Overhaul (legends, row C): an odds week's placed questline openings (Catalog Overhaul placement): the placer gives them first claim on a stage's event budget. Checked by tests/unit/coLegendsWeeks.test.ts (not here, so old-content fingerprints still build). */
+  z.object({ kind: z.literal('featuredOpenings'), ids: z.array(z.string().min(1)).min(1) }),
   /** Wild odds of a kind of species: dual-type, single-type, baby, pseudo-legend (600 BST, 3 stages), or the lines that start at the listed base species. */
   z.object({ kind: z.literal('speciesEncounterWeight'), trait: z.enum(['dual', 'mono', 'baby', 'pseudo', 'unevolved', 'fullyEvolved']).optional(), generation: z.number().int().min(1).max(9).optional(), lines: z.array(z.string()).min(1).optional(), value: z.number().positive() }),
   /** Shiny odds for wild Pokémon, event gifts and Eggs. */
@@ -3025,6 +3033,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('keptGoods') }),
   /** Catalog Overhaul SF59: the player still carries an unhatched Egg of this species. */
   z.object({ kind: z.literal('eggOf'), species: z.string().min(1) }),
+  /** Catalog Overhaul batch 5 (PAST ALLIES, same run only): this run holds the record (a big battle won or lost, its first or best, a rival beaten, two frames, rival lines said, an item lost, a Pokémon left behind, a Pokémon sent to the ranch, an item on the pedestal). core/co/pastAllies.ts. */
+  z.object({ kind: z.literal('pastAlly'), has: z.enum(['won', 'fell', 'earliest', 'best', 'rival', 'second', 'echoes', 'lostItem', 'left', 'pedestal', 'ranchReleased']), atLeast: z.number().int().min(1).default(1) }),
   /** GL2: a Gym of the current region was beaten this run. */
   z.object({ kind: z.literal('gymHere') }),
   /** Catalog Overhaul families-c (L1, L16, roamers): the run has a Legendary Blessing (`has: false`: has none); `species` names whose; `atLeast` is its Influence. */
@@ -3131,6 +3141,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     /** A mark the main rival holds, or does not hold. */
     mark: z.string().optional(),
     noMark: z.string().optional(),
+    /** Batch 5 rival hooks: the main rival's Lead is in this range (-3 behind .. +3 ahead). */
+    lead: z.object({ atLeast: z.number().int().min(-3).max(3).optional(), atMost: z.number().int().min(-3).max(3).optional() }).optional(),
   }),
   /** Permanent choices (spec §17): a choice made earlier this run (`pick`: that answer; `made: false`: not made yet). */
   z.object({ kind: z.literal('choice'), id: z.string().min(1), pick: z.string().optional(), made: z.boolean().default(true) }),
@@ -3219,7 +3231,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Catalog Overhaul: the Honest Trade Card (core/co/tradeCard.ts). The player picks one of their Pokémon that fits `wants` and gets `gives` (or a draw from trade pool `pool`, made from the run's seed, so the card shows exactly what arrives). Sets `trade-<id>`. `askedFirst`: the player heard its story first, so it arrives at Bond 3, not 2.*/
   /** Catalog Overhaul: the trade-back service (TRADES.md 4.3, T030). The player picks a Pokémon that evolves by trade (a Linking Cord evolver, or one holding its trade item); it is traded over and straight back, evolved. */
   z.object({ kind: z.literal('tradeBack') }),
-  z.object({ kind: z.literal('honestTrade'), id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/), wants: TradeWantSchema.optional(), gives: HonestGivesSchema.optional(), pool: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), askedFirst: z.boolean().default(false), /** A gift: nothing is taken (Nell's Sneasel). */ gift: z.boolean().default(false) }),
+  z.object({ kind: z.literal('honestTrade'), id: z.string().regex(/^[a-z0-9][a-z0-9-]*$/), wants: TradeWantSchema.optional(), gives: HonestGivesSchema.optional(), pool: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), askedFirst: z.boolean().default(false), /** A gift: nothing is taken (Nell's Sneasel). */ gift: z.boolean().default(false), /** Batch 5 (An Old Face on the Road): the main rival offers one of their own raised Pokémon, the newest non-ace from your last battle with them (core/co/tradeCard.ts rivalGives). */ rival: z.boolean().optional() }),
   z.object({ kind: z.literal('tradeFor'), want: TradeWantSchema, table: z.record(z.string(), z.string()).default({}), similar: z.object({ pool: z.array(z.string()).default([]), /** Catalog Overhaul (Greenneedle gn.10): the pool is the region the run is in now (its generation's ordinary species; every generation in a region of the game's own). */ region: z.boolean().optional(), bst: z.number().int().min(0).max(200) }).refine((x) => x.pool.length > 0 || x.region, { message: 'a similar trade needs a `pool` or `region`' }).optional(), /** Greenneedle (gn.10 S.S. Anne, gn.12 Swap Alley): show the Honest Trade Card. The swap is worked out from the run's seed before you commit, so the card is what arrives; an ordinary swap's held item goes with the Pokémon; `region` (gn.10's Trade B) keeps it and starts at your Pokémon's Bond +1. */ honest: z.union([z.literal(true), z.literal('region')]).optional() }),
   /** Beta 0.6 Vermilion Flight North: the whole party is taken away (kept in run.expansion.canon.stash) until `restoreParty` or a lost fight inside the stage hands it back. */
   /** Poli-Pond (core/episodes/poliPond.ts): one step of the story. `lesson` names the lesson (with `lesson`); `firstTry` is true when it was taught on the first retry. */
@@ -3282,7 +3294,17 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** The item for the chosen Pokémon's type (a Z-Crystal for the one you trust most). */
   z.object({ kind: z.literal('typeItem'), who: CoWhoSchema.default('lead'), table: z.partialRecord(TypeNameSchema, z.string().min(1)) }),
   /** A copy of your lead fights beside you in the next `battles` ordinary trainer battles (a double battle). */
-  z.object({ kind: z.literal('tagPartner'), copy: z.literal('lead').default('lead'), battles: z.number().int().min(1).max(3).default(1) }),
+  z.object({
+    kind: z.literal('tagPartner'), copy: z.literal('lead').default('lead'), battles: z.number().int().min(1).max(3).default(1),
+    /** PAST ALLIES (PA5): a named partner's own Pokémon (this species, at your lead's level) instead of a copy of your lead. */
+    species: z.string().min(1).optional(),
+    /** PA5 "It was mine.": the partner stays for every ordinary trainer battle until the region ends. */
+    region: z.boolean().optional(),
+    /** PA5 "Be faster now.": the partner's Pokémon gets +1 to this stat (5%, the pack's +1). */
+    boost: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(),
+  }),
+  /** Catalog Overhaul batch 5 (PAST ALLIES, same run only): the Lost-and-Found Desk hands back the item an event took earlier this run (`returnItem`); the Ranch Keeper's Egg from the Pokémon you left this run with the highest Bond (`egg`, hatching in three stages and knowing its most-used move); the Legacy Pedestal keeps one bag item (`pedestal`: the one in `item`, else the one you carry most of) and the one who took it pays it back (`pedestalThanks`). core/co/pastAllies.ts. */
+  z.object({ kind: z.literal('pastAlly'), action: z.enum(['returnItem', 'egg', 'pedestal', 'pedestalThanks']), item: z.string().min(1).optional(), /** With `egg`: Mags kept it a region; it hatches after the next battle, one level higher. */ now: z.boolean().optional() }),
   /** Catalog Overhaul new events (NE39 Swap Day): trade teams with the main rival (`all`), one Pokémon each (`one`: the picked one, or the lead), or hand everything back (`back`; it also happens before a Gym, Elite Four or Champion fight and at a new stage). */
   z.object({ kind: z.literal('teamSwap'), mode: z.enum(['all', 'one', 'back']) }),
   z.object({ kind: z.literal('attribute'), key: AttributeKeySchema, amount: z.number().int() }),
@@ -3353,6 +3375,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 E2: move the current region's world-state track (once per event id). */
   /** Beta 0.6 E3b: lowers every party Shadow Pokémon's corruption by `amount` (never below 1: the last step stays with its own key). */
   z.object({ kind: z.literal('shadowHeart'), amount: z.number().int().min(-20).max(0) }),
+  /** Catalog Overhaul (legends, row C, The Haze Lifts): the first party Shadow Pokémon that is ready (Heart Gauge at or under `ready`) is purified for good. A Named Shadow whose key is still waiting is eased to its last step instead (its key stays its own). Core: co/shadowChain.ts. */
+  z.object({ kind: z.literal('purifyShadow'), ready: z.number().int().min(1).max(100).default(100) }),
   /** Beta 0.7 Pidgey's Resolve: one step of the Rivalry of the Sky (core/sky/story.ts applySky). */
   z.object({ kind: z.literal('sky'), act: z.enum(['duel', 'meetSpar', 'sparWon', 'sparLost', 'giftBerry', 'giftItem', 'finaleGiftBerry', 'finaleGiftItem', 'meetAlone', 'aloneGift', 'joinBird', 'freeBird', 'overhead', 'rematchWon', 'rematchLost', 'passBy', /** gn.02 (catalog overhaul) */ 'watch', 'giftAny', 'aloneLeave', 'aloneCall']), side: z.enum(['pidgey', 'spearow']).optional(), bird: z.enum(['pidgeot', 'fearow']).optional() }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
@@ -3520,6 +3544,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('enterPseudo'), id: z.string().min(1) }),
   /** Pseudo-stage: the way out. Back to the parent stage (a no-op outside a pseudo-stage). */
   z.object({ kind: z.literal('leavePseudo') }),
+  /** Legendary Blessings: a blessing offered mid-run takes the place of the run's (The Rift Whisper offers Giratina's). Nothing when Blessings are off. */
+  z.object({ kind: z.literal('takeBlessing'), id: z.string().min(1) }),
   z.object({ kind: z.literal('addEventFrom'), ids: z.array(z.string().min(1)).min(1) }),
   /** Exploration: a front of this weather rolls in over the columns ahead (it hits the routes it covers). */
   z.object({ kind: z.literal('front'), weather: WeatherSchema, columns: z.number().int().min(1).max(8).default(3) }),
@@ -3849,13 +3875,15 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** A trainer class from trainers.json, or a boss id (its signature team). */
     classId: z.string().optional(),
     bossId: z.string().optional(),
+    /** PAST ALLIES (same run only): the team is rebuilt from one of this run's big battles (core/co/pastAllies.ts): your team the last time you won (`won`) or lost (`fell`) one, your earliest or best, the second frame, or the rival team you beat last (`rival`). A loss never ends the run. */
+    pastAlly: z.enum(['won', 'fell', 'earliest', 'best', 'rival', 'second']).optional(),
     /** Champion defense: the team is your newest Hall of Fame team (core/story/championDefense.ts). */
     ghost: z.boolean().default(false),
     /** The team is the newest run that did not win (core/story/championDefense.ts). */
     retired: z.boolean().default(false),
     /** The team is a rival you have met (the likeliest by relationship path), at its latest roster; the trainer takes its name. */
     rival: z.boolean().default(false),
-    /** A species that fights beside you as a temporary ally (a double battle; needs two or more foes). */
+    /** A species that fights beside you as a temporary ally (a double battle; needs two or more foes). `rival`: the rival's; `fellow`: the apprentice's; `past` (batch 5, A Familiar Face Steps In): the ace of the trainer you beat in this run's newest big battle won. */
     ally: z.string().optional(),
     /** Evil Teams: a member of the run's team at this rank (their Pokémon, name and battle rule; core/evil). */
     evil: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),

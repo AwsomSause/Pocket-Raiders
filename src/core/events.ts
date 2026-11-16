@@ -13,6 +13,8 @@ import { lastReleased } from './co/familiesA';
 import { prisonOnLoss } from './greenneedle/prison';
 import { applyGnEffect, gnBattleStart, gnConditionMet, gnTokens, resolveCast } from './greenneedle';
 import { applySinglesEffect, singlesEffectWords } from './events/coSingles';
+import { applyPastAlly } from './co/pastAlliesEffects';
+import { noteLostItem, pastAllyAce, pastAllyHas, pastAllyNeeds, pastTeam, setTagPartner } from './co/pastAllies';
 import { applyCoEffect, coConditionMet, coConditionText, coEffectWords, coFoeNote, coFoeTypes, coRegionPick, fillCoText, restoreMachine } from './events/coToolkit';
 import { flagAge, lineHolds, lineMember, queueLaterEvent, stampFlagStage } from './events/questline';
 import { modifierEventWeight } from './runModifiers';
@@ -76,7 +78,8 @@ import { activePerks, hasPerk, perkItem, perksOf, spendUse, stageKey } from './m
 import { scavengerBonus } from './bank';
 import { ALPHA_MARK_HP, addLevels, calcStats, maxHp, maxPp } from './pokemon';
 import { startCalm } from './battle/calm';
-import { legendFlag } from './legends/signs';
+import { legendFlag, syncLegendFlags } from './legends/signs';
+import { takeBlessing } from './blessings';
 import { count, countShiny, discover } from './progress';
 import { FLAGS as POND_FLAGS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
@@ -84,6 +87,8 @@ import { beginSwap, endSwap, swapReady } from './co/swap';
 import { anyFlagSet, eggWarm, hasEgg, itemForType, owePartner, quietWild, runPlaceMet, stageTypesMet, stageWeatherMet, stripFoeMoves } from './co/neRules';
 import { makeShadow, rollShadowHeart } from './shadow';
 import { addFlag } from './shadowWorld/world';
+import { purifyShadow } from './co/shadowChain';
+import { featuredOpenings } from './co/weeks';
 import { grantBlessing, makeBlissful } from './shadowWorld/blissful';
 import { eggMoveOptions, familyId, teachEggMove } from './mastery';
 import { applyTrainEffect, trainEffectText } from './trainingEffects';
@@ -341,6 +346,8 @@ export function conditionMet(content: Content, run: RunState, c: EventCondition)
       return oldFoe(run) !== null;
     case 'feud':
       return openFeud(run) !== null;
+    case 'pastAlly':
+      return pastAllyHas(content, run, c.has, c.atLeast);
     case 'championGhost':
       return championTeam(run.story).length > 0;
     case 'retiredGhost':
@@ -617,6 +624,8 @@ export function conditionText(content: Content, c: EventCondition): string {
       return 'Needs a wild Pokémon that once beat you';
     case 'feud':
       return 'Needs two rivals who are feuding';
+    case 'pastAlly':
+      return pastAllyNeeds(c.has);
     case 'championGhost':
       return 'Needs a won run in your Hall of Fame';
     case 'retiredGhost':
@@ -868,7 +877,8 @@ export function addEventStops(content: Content, run: RunState): void {
   if (coOpen.length > 0) {
     // A same-stage story's later beats are placed when they are earned (placeEarnedCoBeats), not at the start of the stage.
     const entries = coOpen.map((id) => ({ id, p: content.coPlacement!.get(id)!, door: content.events.get(id)!.pseudo })).filter((e) => !(SAME_STAGE.has(e.p.shape) && e.p.beat >= 2));
-    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`));
+    // Calendar weeks (legends, row C): the week's questline openings (its `mapEvents`) get first claim on the stage's budget.
+    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`, undefined, featuredOpenings(run, featuredMapEvents(content, run))));
     for (const id of coOpen) { taken.add(id); open.delete(id); }
   }
   // A run milestone (catalog 99) is offered at the middle stage of every region.
@@ -923,7 +933,7 @@ export function addEventStops(content: Content, run: RunState): void {
   const rests = [...content.events.values()].filter((e) => e.stop === 'rest' && e.minStage <= stageNumber(content, run));
   for (let i = 0; i < cfg.restPerStage && rests.length > 0 && candidates.length > 0; i++) place(rng.pick(rests).id, false);
   for (const e of content.events.values()) {
-    if (e.keyItem && conditionMet(content, run, { kind: 'item', id: e.keyItem }) && e.minStage <= stageNumber(content, run) && !run.itemCounters?.[`event-seen:${e.id}`]) place(e.id, false);
+    if (e.keyItem && !e.disabled && conditionMet(content, run, { kind: 'item', id: e.keyItem }) && e.minStage <= stageNumber(content, run) && !run.itemCounters?.[`event-seen:${e.id}`] && e.requires.every((c) => conditionMet(content, run, c))) place(e.id, false);
   }
   if (effectiveAttributes(content, run).intelligence >= cfg.revealIntelligence) {
     const hidden = stage.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'event' && s.hidden);
@@ -1323,7 +1333,10 @@ export function effectWords(content: Content, e: EventEffect): string {
     case 'teamSwap':
       return e.mode === 'all' ? 'you and your rival trade teams' : e.mode === 'one' ? 'you and your rival trade one Pokémon each' : 'the teams go back';
     case 'tagPartner':
+      if (e.species) return `${content.species.get(e.species)?.name ?? e.species} fights beside you ${e.region ? 'for the rest of the region' : e.battles === 1 ? 'next battle' : `for ${e.battles} battles`}`;
       return `a copy of your lead fights beside you ${e.battles === 1 ? 'next battle' : `for ${e.battles} battles`}`;
+    case 'pastAlly':
+      return e.action === 'returnItem' ? 'something lost comes back' : e.action === 'egg' ? 'an Egg from one you left' : e.action === 'pedestal' ? `leave ${e.item ? itemName(content, e.item) : 'an item'} on the pedestal` : 'a gift for a gift';
     case 'attribute': {
       const label = e.key === 'ragePeace' ? (e.amount >= 0 ? 'Rage' : 'Peace') : e.key === 'goodEvil' ? (e.amount >= 0 ? 'Good' : 'Evil') : ATTRIBUTE_LABELS[e.key];
       return `${label} +${Math.abs(e.amount)}`;
@@ -1396,6 +1409,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return 'you step into a place with a map of its own';
     case 'leavePseudo':
       return 'you walk back out';
+    case 'takeBlessing':
+      return 'a new blessing takes the place of your own';
     case 'front':
       return `a ${e.weather} front is coming`;
     case 'clearSky':
@@ -1463,6 +1478,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return '';
     case 'shadowHeart':
       return 'a Shadow Pokémon eases';
+    case 'purifyShadow':
+      return 'a Shadow Pokémon is purified';
     case 'sky':
       return '';
     case 'track':
@@ -1591,6 +1608,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const n = Math.min(e.id ? e.count ?? 1 : 1, run.inventory[id]!);
       run.inventory[id]! -= n;
       if (run.inventory[id] === 0) delete run.inventory[id];
+      // PAST ALLIES: a random item taken from the bag waits at the Lost-and-Found Desk.
+      if (!e.id && !e.from) noteLostItem(run, id);
       return n > 1 ? `Used ${n} × ${itemName(content, id)}` : `Lost a ${itemName(content, id)}`;
     }
     case 'tradeAway': {
@@ -1733,8 +1752,15 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'teamSwap':
       return e.mode === 'back' ? endSwap(content, run, partyCapacity(content, run)) : beginSwap(content, run, e.mode, pickedUid);
     case 'tagPartner':
+      if (e.species) {
+        setTagPartner(run, e.species, e.boost, e.region);
+        owePartner(run, e.region ? 99 : e.battles);
+        return `${content.species.get(e.species)?.name ?? e.species} will fight beside you ${e.region ? 'until the region ends' : e.battles === 1 ? 'in the next trainer battle' : `in the next ${e.battles} trainer battles`}.`;
+      }
       owePartner(run, e.battles);
       return 'A copy of your lead will fight beside you in the next trainer battle.';
+    case 'pastAlly':
+      return applyPastAlly(content, run, e, rng, (id) => giveItem(content, run, id, 1, rng));
     case 'attribute':
       addRunAttribute(content, run, e.key, e.amount);
       return effectWords(content, e);
@@ -1910,6 +1936,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       for (const m of run.party) if (m.shadow && m.shadow.heart > 1) { m.shadow.heart = Math.max(1, m.shadow.heart + e.amount); eased += 1; }
       return eased > 0 ? 'Their Shadow loosens its hold a little.' : '';
     }
+    case 'purifyShadow':
+      return purifyShadow(content, run, e.ready);
     case 'track': {
       // The key is this node, so one stop moves the track once however often it is replayed.
       const before = trackStep(run, currentRegion(content, run).id);
@@ -2125,6 +2153,10 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'leavePseudo':
       leavePseudoStage(run);
       return effectWords(content, e);
+    case 'takeBlessing':
+      if (!takeBlessing(run, e.id)) return '';
+      syncLegendFlags(run);
+      return effectWords(content, e);
     case 'addEventFrom': {
       const eventId = rng.pick(e.ids);
       if (routeChainEvent(content, run, eventId)) return effectWords(content, e);
@@ -2323,7 +2355,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (b.aura) for (const s of ['atk', 'def', 'spa', 'spd', 'spe'] as const) run.battle.enemyStages[s] = 1;
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
-    const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : [];
+    const ghost = b.retired ? retiredTeam(run.story) : b.ghost ? championTeam(run.story) : b.kind === 'trainer' && b.pastAlly ? pastTeam(run, b.pastAlly).map((speciesId) => ({ speciesId, level: base })) : [];
     const authored = ghost.length > 0 || (b.rival && featuredRival(run)) ? 'rival-ghost-team' : boss ? 'event-boss-signature' : null;
     const plan = b.kind === 'trainer' ? b.quest : undefined;
     // Rival questlines fight the main rival (R11: the second rival, or both together, or the second rival watched against the main).
@@ -2440,7 +2472,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       ruleStages(run.battle, b.rule);
       if (b.rule.giant) growGiants(content, run.battle.enemyTeam);
     }
-    const allyId = b.ally === 'rival' ? rivalAllySpecies(content, run) : b.ally === 'fellow' ? (run.mentor ? pickSpecies(content, run, [], run.mentor.fellow.types, rng) : undefined) : b.ally;
+    const allyId = b.ally === 'rival' ? rivalAllySpecies(content, run) : b.ally === 'fellow' ? (run.mentor ? pickSpecies(content, run, [], run.mentor.fellow.types, rng) : undefined) : b.ally === 'past' ? pastAllyAce(run) : b.ally;
     if (allyId && content.species.has(allyId) && team.length >= 2) {
       // A temporary ally joins the party for this fight only (finishBattle sends it home).
       const ally = newMon(content, run, allyId, Math.max(1, base), 'p');
@@ -2494,7 +2526,7 @@ export function isApprenticeBattle(content: Content, event: EventBattleRef): boo
 export function isStoryEventBattle(content: Content, event: EventBattleRef): boolean {
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
-  return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired || battle.quest?.mentor || battle.quest?.soft));
+  return event.eventId.startsWith('format:') || (battle?.kind === 'trainer' && Boolean(battle.rival || battle.evil || battle.ghost || battle.retired || battle.pastAlly || battle.quest?.mentor || battle.quest?.soft));
 }
 
 /** A Stand-with climax battle (a loss is Second Shot). */

@@ -1,0 +1,858 @@
+{
+ "catalogOverhaul": "rivals",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "rival-views",
+   "name": "The Rival's Opinion",
+   "group": "Rival questline",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rescued",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#20202c",
+    "effect": "none"
+   },
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "intro": "{rival} is leaning on a fence, arms folded. They have clearly heard.\n{rival}: \"You took a Shadow Pokémon off its trainer?\"\n{rival}: \"Heroic, or just greedy?\"\n\n{rival}: \"{say event||idealist::Tell me you did it for the Pokémon. Please.||strategist::Interesting move. I am trying to decide if it was a good one.||protector::Is it all right? Is it eating? They don't always eat, at first.||champion-chaser::Strong, though. I bet it's strong.}\"",
+   "choices": [
+    {
+     "label": "\"Someone had to.\"",
+     "success": {
+      "text": "{rival} studies your face for a long time.\n{rival}: \"...Yeah. Someone did.\"\nThey do not say \"good\". They nod like they mean it.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1,
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "kindness",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a strong Pokémon.\"",
+     "success": {
+      "text": "{rival}: \"So that's what it was.\"\nSomething in their voice closes, quietly, like a door.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1,
+         "rivalry": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You let the question sit between you. They let it sit too. Neither of you picks it up again.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "idealist",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "personality": [
+        "idealist",
+        "protector"
+       ]
+      }
+     ],
+     "notice": "\n\nThey have a Heal Ball in their hand. They are turning it over and over."
+    }
+   ]
+  },
+  {
+   "id": "ev-rivals-defeat",
+   "name": "Rival's Defeat",
+   "group": "Rival questline",
+   "rarity": "uncommon",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalLast",
+     "result": "win"
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "{rival} is sitting on a fence, staring at the ground. Their team is in their Balls. They have not let anyone out.\nThey notice you and look away.\n\n{rival}: \"Do not say it.\"\n{rival}: \"{say lost||bitter-challenger::Again. Always again.||underdog::I really thought I had it. I really did.||prodigy::I have already worked out the mistake. I do not need you to explain it.}\"",
+   "choices": [
+    {
+     "label": "Sit with them. Offer a Potion.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "You sit on the fence. You hold out a Potion for their team. They do not take it for a while.\nThen they do.\n\n{rival}: \"...Thanks.\"\nTheir Pokémon come out, one at a time, and the worst of the day goes out of their shoulders.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion"
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {},
+        "lead": 0,
+        "mark": "the-hand-up"
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2,
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them what you saw in the battle.",
+     "success": {
+      "text": "You tell them the one thing they did that nearly beat you.\nThey look up for the first time.\n\n{rival}: \"You saw that?\"\n{rival}: \"...Nobody ever sees that.\"",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1,
+         "admiration": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past without a word.",
+     "success": {
+      "text": "You walk past. You do not look back.\nBehind you, very quietly, the fence creaks as they stand up.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {},
+        "lead": 0,
+        "mark": "left-standing"
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1,
+         "friendship": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "streak",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "lead": {
+        "atMost": -2
+       }
+      }
+     ],
+     "notice": "\n\n{rival}: \"That's twice. More than twice. I'm counting.\"\nThey are not counting out loud. They are counting."
+    },
+    {
+     "id": "swept",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "mark": "swept"
+      }
+     ],
+     "notice": "\n\nOne Ball on their belt is cracked down the side. It is the one your team went through first."
+    }
+   ]
+  },
+  {
+   "id": "ev-rivals-victory",
+   "name": "Rival's Victory",
+   "group": "Rival questline",
+   "rarity": "uncommon",
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalLast",
+     "result": "lose"
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "{rival} catches up with you, grinning, a little out of breath.\n{rival}: \"That was close. Admit it.\"\n{rival}: \"I earned that win.\"\n\n{rival}: \"{say won||champion-chaser::One step closer. You're just a step on the way. A good step!||enthusiast::Did you SEE the last turn? I'm going to dream about that turn.||protector::Your team all right? I didn't want to hurt anyone. Much.}\"",
+   "choices": [
+    {
+     "label": "\"You earned it.\"",
+     "success": {
+      "text": "They were ready for an argument. They do not know what to do without one.\n{rival}: \"...Yeah. I did.\"\nThey say it again, quieter, to themselves.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1,
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rematch. Now.\"",
+     "success": {
+      "text": "{rival}: \"Now? Your team's still tired!\"\n{rival}: \"...Fine. Fine! Don't cry about it after.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "friendship",
+         "amount": 1,
+         "who": "party"
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "respect": 1
+         },
+         "lead": 0
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "admiration": 1
+         },
+         "lead": 0
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You keep walking. They keep pace for three steps, still grinning, then let you go.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "thread",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "mark": "by-a-thread"
+      }
+     ],
+     "notice": "\n\n{rival}: \"That close, though. That's what makes it count.\"\nTheir last Pokémon is still limping. They are prouder of that than of anything."
+    },
+    {
+     "id": "ahead",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "lead": {
+        "atLeast": 2
+       }
+      }
+     ],
+     "notice": "\n\nThey tap their badge case without meaning to. It is fuller than yours."
+    }
+   ]
+  },
+  {
+   "id": "rival-berry-boss",
+   "name": "A Berry for the Road",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 2
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "key": "friendship",
+      "atLeast": 4
+     }
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1d",
+    "effect": "hearts"
+   },
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "intro": "{rival} catches up with you outside the gate. They have a single Berry in their hand, unripe at the edges.\n{rival}: \"For luck.\"\n{rival}: \"Do not make a big deal of it.\"\n\n{rival}: \"{say event||bitter-challenger::I want to beat you at your best. That's all this is.||underdog::I picked it myself. It's the best one on the bush. Probably.}\"",
+   "choices": [
+    {
+     "label": "Take it and say thank you.",
+     "success": {
+      "text": "You take it. You say thank you. They go red and pretend a Pidgey is very interesting.\nYour team watches the whole thing and says nothing, kindly.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1,
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them to keep it for their own fight.",
+     "success": {
+      "text": "{rival}: \"I have six. I'm not an idiot.\"\nThey give you one anyway. And then a second, for your lead, \"because it looked hungry\".",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "behind",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "lead": {
+        "atMost": -1
+       }
+      }
+     ],
+     "notice": "\n\nTheir hand is shaking a little. They have their own fight coming. They came here first anyway."
+    },
+    {
+     "id": "kind",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kindness",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\n{rival}: \"For the Shadow one, too. If it eats Berries yet.\""
+    }
+   ]
+  },
+  {
+   "id": "rival-gloat",
+   "name": "The Victory Lap",
+   "group": "Rival questline",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 2
+    },
+    {
+     "kind": "rivalLast",
+     "result": "lose"
+    },
+    {
+     "kind": "rivalQuest",
+     "lead": {
+      "atLeast": 1
+     }
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#38202a",
+    "effect": "sparkle"
+   },
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "intro": "{rival}'s team is still on the field, cheering. {rival} looks at you, very slowly, and starts a lap around the grass.\n{rival}: \"Say it with me.\"\n{rival}: \"Second. Place.\"\n\n{rival}: \"{say won||champion-chaser::Somebody get a photographer. This is a historic day.||prodigy::It was not personal. It was simply correct.||protector::...Sorry. I'm sorry. That was mean. I'm still doing the lap, though.||idealist::I am being gracious inside. You cannot see it, but it is there.}\"",
+   "choices": [
+    {
+     "label": "Take it in silence, and go and train.",
+     "success": {
+      "text": "You do not say anything. You watch the whole lap. You remember every step of it.\nThat night your team trains until the stars come out.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 30
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Again. Right now.\"",
+     "success": {
+      "text": "{rival}: \"A rematch? While I'm still on my lap?\"\n{rival}: \"...Oh, you are SO on.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "levels",
+         "amount": 1,
+         "who": "party"
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "respect": 1,
+          "resentment": 1
+         },
+         "lead": 0
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "admiration": 1
+         },
+         "lead": 0
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Say it with them: \"Second place.\"",
+     "success": {
+      "text": "You say it with them, flat and dead serious.\nThey stop halfway round the lap. They laugh before they can help it.\n\n{rival}: \"...You're impossible.\"\nThey do not finish the lap.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1,
+         "rivalry": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "nocontest",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "mark": "no-contest"
+      }
+     ],
+     "notice": "\n\n{rival}: \"You didn't even knock one out. Not one!\"\nThey are delighted about it. They are going to bring it up for weeks."
+    }
+   ]
+  },
+  {
+   "id": "rival-grudge-spot",
+   "name": "Their Spot",
+   "group": "Rival questline",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "partySize",
+     "atLeast": 3
+    },
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "key": "rivalry",
+      "atLeast": 3
+     }
+    },
+    {
+     "kind": "rivalQuest",
+     "slotFree": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d24",
+    "effect": "rattle"
+   },
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "intro": "{rival} has been camped beside a tall patch of grass for hours. There is a flask, a blanket and a very small, very serious tent.\nThey are waiting on one Pokémon.\n\nYou see it before they do. Your Poké Ball is already in your hand.\n{rival}: \"{say catch||strategist::Don't. Move. I have a plan and the plan is not you.}\"",
+   "choices": [
+    {
+     "label": "Catch it first.",
+     "success": {
+      "text": "It is over before they have stood up.\n{rival}: \"Are you SERIOUS.\"\nThey are going to tell this story at the League. They are going to tell it wrong.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "rivalry": 2,
+         "resentment": 1,
+         "friendship": -1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "flag",
+        "key": "rival-heat",
+        "amount": 2
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them have it.",
+     "success": {
+      "text": "You put your Ball away and sit down on their blanket.\nWhen it finally comes out, they catch it. They look over at you, and do not say thank you, and do not have to.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1,
+         "trust": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "rival-friend",
+        "amount": 2
+       },
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Race you for it.\"",
+     "success": {
+      "text": "{rival}: \"Fine. Winner takes the grass.\"\nNeither of you notices the Pokémon wander off halfway through the fight.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "takeSlot": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "join",
+         "species": [],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "respect": 1
+         },
+         "lead": 0
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalChange",
+         "feelings": {
+          "admiration": 1
+         },
+         "lead": 0
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "resent",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "key": "resentment",
+        "atLeast": 5
+       }
+      }
+     ],
+     "notice": "\n\nThey see you. Their hand goes to the tent zip like they want to hide inside it.\n{rival}: \"Not this time. Not THIS one.\""
+    },
+    {
+     "id": "heat",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-heat",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\n{rival}: \"You again. Last time you took one right out from under me.\"\nThey move the blanket so it is between you and the grass."
+    },
+    {
+     "id": "friend",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rival-friend",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\nThey pat the blanket beside them without looking up. There is already a second cup."
+    }
+   ]
+  }
+ ]
+}

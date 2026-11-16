@@ -249,7 +249,7 @@ export function questConditionMet(content: Content, run: RunState, c: QuestCondi
   const main = mainRival(run);
   const rec = recOf(run, main);
   // Fields about the rival need one; the schedule, the map and the mentor do not.
-  const aboutRival = c.personality || c.arc || c.second !== undefined || c.feeling || c.mark || c.noMark;
+  const aboutRival = c.personality || c.arc || c.second !== undefined || c.feeling || c.mark || c.noMark || c.lead;
   if ((!main || !rec) && aboutRival) return false;
   if (!rec) return questScheduleOnly(content, run, c, met);
   if (c.personality && !c.personality.includes(rec.personality)) return false;
@@ -265,6 +265,7 @@ export function questConditionMet(content: Content, run: RunState, c: QuestCondi
   if (c.active !== undefined && (c.line ? lineState(content, run, c.line).active : activeLines(content, run).length > 0) !== c.active) return false;
   if (c.mark && !rec.marks.includes(c.mark)) return false;
   if (c.noMark && rec.marks.includes(c.noMark)) return false;
+  if (c.lead && (rec.lead < (c.lead.atLeast ?? -3) || rec.lead > (c.lead.atMost ?? 3))) return false;
   if (c.stale && flagOf(run, c.stale) === stageNow(content, run)) return false;
   if (c.hpBelow !== undefined) {
     const max = run.party.reduce((n, m) => n + maxHp(content, m), 0);

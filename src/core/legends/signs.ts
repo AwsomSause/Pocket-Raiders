@@ -100,6 +100,7 @@ export function syncLegendFlags(run: Pick<RunState, 'story' | 'expansion' | 'reg
       setFlag(run, `believed-${m.id}`, (p.tellings[m.id] ?? 0) >= 3 ? 1 : 0);
     }
     setFlag(run, 'mythical-visited', p.visited ? 1 : 0);
+    setFlag(run, 'guest-any', p.guest ? 1 : 0); // row A: the researcher's reaction to a Mythical Guest
     // MY11 Arceus (same-run version): a Guest still walking with you whose Promise was never broken, not even once forgiven.
     setFlag(run, 'guest-true', p.guest && !p.guest.forgiven ? 1 : 0);
   }

@@ -56,6 +56,8 @@ import { bondFriendship } from './co/who';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { syncLegendFlags, weekInfluence } from './legends/signs';
+import { noteSpirits, syncLegendKeys } from './legends/keys';
+import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
@@ -144,9 +146,10 @@ import { growGarden } from './berries';
 import { layEgg, tickEggs } from './eggs';
 import { spendTakenNode } from './co/takeNode';
 import { partnerOwed, quietWildWeight, spendPartner } from './co/neRules';
+import { clearTagPartner, tagPartnerOf, tagPartnerRegion } from './co/pastAllies';
 import { quirkBadgeBond } from './co/quirks';
 import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
-import { addEventStops, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { addEventStops, boostStat, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -244,6 +247,7 @@ import { allyLevel, applyTotemHp, describeAlly, describeTotemRewards, freshTotem
 import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { lastChanceRevive } from './lastChance';
+import { reverseSideProblem, useReverseSide } from './legends/reverseSide';
 import { assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor, syncCommunion } from './blessings';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
 import { closeNodeMenu, freshNodeMenuState, menuBlocker, nodeMenusAllowed } from './nodeMenu/flow';
@@ -508,6 +512,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     run.story.v2 ??= StoryV2Schema.parse({ mode: 'story_run' });
     run.story.v2.protagonist = { ...run.story.v2.protagonist, look: opts.protagonist.look, name: opts.protagonist.name, pronouns: opts.protagonist.pronouns, ...(opts.protagonist.backstory ? { backstory: opts.protagonist.backstory } : {}) };
   }
+  weekFlags(run); // Catalog Overhaul (legends, row C): a calendar week's run flags (Rivalry weeks open the Rival Circuit)
   if (opts.expansion) {
     const e = opts.expansion;
     const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {}, ...(e.labyrinthResume ? { labResume: true } : {}) } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.ultraBeasts ? { ultra: freshUltra() } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
@@ -515,7 +520,9 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     if (e.secondChancePct || e.heatedMoments || e.mythicalPromises) run.expansion = { ...run.expansion, ...(e.secondChancePct ? { secondChancePct: e.secondChancePct } : {}), ...(e.heatedMoments ? { heated: true } : {}), ...(e.mythicalPromises ? { promises: true } : {}) };
     if (e.blessings) assignBlessing(run);
     if (e.wholeRunEvents) drawWholeRun(run); // Catalog Overhaul (legends): a Whole Run Event, 35% of runs, own stream
-    weekInfluence(run); // Catalog Overhaul (legends): Legend weeks raise the blessing's starting Influence, or tell of a Mythical
+    weekInfluence(run);
+    weekLegends(run); // Catalog Overhaul (legends, row C): Paradox Tide's +1 Influence, Leap Day's free Telling
+    // Catalog Overhaul (legends): Legend weeks raise the blessing's starting Influence, or tell of a Mythical
     // Beta 0.7 Node Event Menus: on for this run when the setting is on, except in speedrun, boss rush and time attack.
     if (e.nodeMenus && nodeMenusAllowed(run.rules.modifierIds)) run.expansion = { ...run.expansion, nodeMenus: freshNodeMenuState() };
     setClimaxCut(run, e.climaxCut);
@@ -811,6 +818,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   advanceShadowWorld(content, run);
   // Rods, and Wave, Tropic and Harbor Mail, add stops to the new map; then the event ("?") stops.
   addItemStops(content, run);
+  syncLegendKeys(content, run); // Catalog Overhaul row A: keys earned at Trials and Visits, Communion upgrades (their stops open below)
   addEventStops(content, run);
   addCanonStops(content, run);
   addOpeningCanonStops(content, run);
@@ -2523,6 +2531,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       if (doublesOnly(run.rules) || new Rng(hashSeed(`${run.seed}::doubles::${run.regionIndex}::${stage.index}::${node.id}`)).chance(doublesCfg.chance)) makeDoubles(run.battle, run.party);
     }
     // Catalog Overhaul new events (tagPartner): a copy of your lead fights beside you in an ordinary trainer battle.
+    // PA5: a partner who stays "for the rest of the region" goes home when the region changes.
+    if (tagPartnerRegion(run) > 0 && tagPartnerRegion(run) !== run.regionIndex + 1) clearTagPartner(run);
     if (ordinary && !run.battle.doubles && team.length >= 2 && partnerOwed(run) > 0) joinTagPartner(content, run);
     if (trainingIndex >= 0) run.battle.drama.evolvable.push(team[trainingIndex]!.uid);
     if (rivalBack) {
@@ -3290,6 +3300,13 @@ function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng,
   const problem = itemProblem(battleContext(content, run, rng, captureRng, hyperRng), itemId);
   if (problem) throw new Error(problem);
   consumeItem(run.inventory, itemId);
+  slipOutOfBattle(content, run, battle);
+  const events: RunEvent[] = [{ type: 'spectacle', kind: 'arena', side: 'player', text: 'You used a Poké Doll and slipped away!' } as RunEvent];
+  return { run, events, end: null, defeated: false, cues: [], drama: [], escaped: true };
+}
+
+/** Leaves a battle with nothing earned or lost and back on the map (the Poké Doll, the Renegade's Reverse Side). Mutates `run`. */
+function slipOutOfBattle(content: Content, run: RunState, battle: BattleState): void {
   revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
   coFled(run);
   for (const mon of run.party) endHeldBattle(mon);
@@ -3298,8 +3315,26 @@ function escapeBattle(content: Content, run: RunState, itemId: string, rng: Rng,
   endHyperMoves(run, false);
   run.battle = null;
   run.phase = 'map';
-  const events: RunEvent[] = [{ type: 'spectacle', kind: 'arena', side: 'player', text: 'You used a Poké Doll and slipped away!' } as RunEvent];
-  return { run, events, end: null, defeated: false, cues: [], drama: [], escaped: true };
+}
+
+/**
+ * The Renegade's blessing (legends row B): step out of a battle that is not a boss's, once per stage. The battle ends with nothing won
+ * or lost and the node opens again from its other side: a Distortion pseudo-stage's gate beside it (core/legends/reverseSide.ts).
+ * Null when it can't be used here.
+ */
+export function stepToReverseSide(content: Content, current: RunState): { run: RunState; message: string } | null {
+  if (reverseSideProblem(current) !== null) return null;
+  const run = structuredClone(current);
+  slipOutOfBattle(content, run, run.battle!);
+  const gate = useReverseSide(run);
+  const stage = run.stage;
+  if (gate && stage && stage.current !== null && content.events.has(gate)) {
+    const here = findNode(stage.map, stage.current);
+    here.sides.push({ id: `event-room-${here.sides.length + 1}-${here.id}`, kind: 'event', used: false, eventId: gate });
+    if (run.itemCounters) delete run.itemCounters[`event-seen:${gate}`];
+    return { run, message: 'You step sideways out of the fight. The node is still here, but from the other side, and something else waits in it.' };
+  }
+  return { run, message: 'You step sideways out of the fight, and back onto the path.' };
 }
 
 export function takeTurn(content: Content, current: RunState, action: PlayerAction, dialogue: DialogueFrequency = 'normal'): TurnResult {
@@ -3841,6 +3876,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (share > 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * share));
   }
   noteSwapFaint(run);
+  noteSpirits(content, run, battle); // Catalog Overhaul row A: Ghost-type foes knocked out feed the Odd Keystone
   // Pack Pokémon Moments (PA4 The Little Ones): a scared baby that landed a move gains Bond, win or lose, and counts it.
   for (const tag of battle.storyEffects.filter((t) => t.startsWith(BRAVE_HIT))) {
     const [uid, bond] = tag.slice(BRAVE_HIT.length).split(':') as [string, string];
@@ -4885,12 +4921,16 @@ function joinTagPartner(content: Content, run: RunState): void {
   const battle = run.battle!;
   const lead = run.party[battle.activeIndex];
   if (!lead) return;
-  const copy = newMon(content, run, lead.speciesId, lead.level, 'p');
-  copy.moves = lead.moves.map((m) => ({ id: m.id, pp: content.moves.get(m.id)?.pp ?? m.pp }));
+  // PAST ALLIES (PA5): a named partner brings their own Pokémon (at your lead's level) instead of a copy of your lead.
+  const named = tagPartnerOf(run);
+  const copy = newMon(content, run, named && content.species.has(named.species) ? named.species : lead.speciesId, lead.level, 'p');
+  if (!named) copy.moves = lead.moves.map((m) => ({ id: m.id, pp: content.moves.get(m.id)?.pp ?? m.pp }));
+  if (named?.boost) boostStat(content, copy, named.boost as 'atk' | 'def' | 'spa' | 'spd' | 'spe', 5, false);
   run.party.push(copy);
   makeDoubles(battle, run.party);
   battle.doubles!.player.index = run.party.length - 1;
   battle.participants = [lead.uid, copy.uid];
   battle.loaner = copy.uid;
   spendPartner(run);
+  if (named && partnerOwed(run) === 0) clearTagPartner(run, false);
 }

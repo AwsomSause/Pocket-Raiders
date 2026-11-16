@@ -73,6 +73,15 @@
    "tint": "#606060",
    "mood": "a city with nothing in it",
    "start": "opened"
+  },
+  {
+   "id": "ps_rival_ambush",
+   "name": "The Ambush Meadow",
+   "entry": "dz-rival-ambush",
+   "themeId": "normal-grass",
+   "tint": "#2a4a1a",
+   "mood": "tall grass",
+   "start": "opened"
   }
  ]
 }

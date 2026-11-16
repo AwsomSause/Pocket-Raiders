@@ -1,7 +1,7 @@
 // Catalog Overhaul Pack, category "singles" (revised single events), batch 6.
 // Doc: catalog_overhaul/STORY_FAMILIES_20.md SF144 Challenges, SF145 Shops and Workshops.
 // Known limits: docs/status/co-singles.md.
-import { $, any, anyType, bondUp, ch, fight, flag, flagIs, good, gym, heal, item, leave, out, room, trainer, wild, type Json } from '../dsl.ts';
+import { $, any, anyType, bondUp, br, ch, fight, flag, flagIs, good, gym, hasAny, heal, item, leave, out, room, trainer, wild, type Json } from '../dsl.ts';
 import { friendlyAll } from './_singlesKit.ts';
 
 export const CATEGORY = 'singles';
@@ -271,6 +271,35 @@ function mootBranches(): Json[] {
   }));
 }
 
+
+/** The Plush Workshops (SF145): Mrs. Brisby sews a Canari Pal of her colour up one level (Lv.1 to Lv.2, Lv.2 to Lv.3) for ₽100. */
+const PLUSH_LINE: Record<string, string> = {
+  red: 'a red one, the colour of a Cheri Berry',
+  blue: 'a blue one, the colour of deep water',
+  green: 'a green one, the colour of new leaves',
+  pink: 'a pink one, the colour of a Pecha Berry',
+  gold: 'a gold one, the colour of a Nugget in the sun',
+};
+const plush = (colour: string): Json => {
+  const pal = (n: number): string => `${colour}-canari-pal-${n}`;
+  return {
+    id: `plush-workshop-${colour}`,
+    intro: `A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** "Bring me ${PLUSH_LINE[colour]}. I'll sew it up a level. Thread costs money; love is free."\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.`,
+    choices: [
+      ch('Sew it up a level (₽100).', out(
+        `She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** "There. Level two. It looks happier already. Don't tell it I said so."`,
+        $(-100), { kind: 'loseItem', id: pal(1) }, item(pal(2)),
+      ), {
+        requires: [{ kind: 'money', atLeast: 100 }, hasAny(pal(1), pal(2))],
+        branches: [br([{ kind: 'item', id: pal(2) }],
+          `She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** "Gold at the seams. That's level three, as high as they go." She hands it back. "Look after it. It's looked after you."`,
+          $(-100), { kind: 'loseItem', id: pal(2) }, item(pal(3)))],
+      }),
+      ch('Not now.', leave('**Mrs. Brisby:** "Come back with one when you\'re ready, dear. I\'m not going anywhere. My knees saw to that."')),
+    ],
+  };
+};
+
 // ---------- SF145. SHOPS AND WORKSHOPS ----------
 const SF145: Json[] = [
   {
@@ -368,5 +397,5 @@ const SF145: Json[] = [
   },
 ];
 
-export const EVENTS: Json[] = friendlyAll([...SF144, ...SF145]);
+export const EVENTS: Json[] = friendlyAll([...SF144, ...SF145, ...['blue', 'gold', 'green', 'pink', 'red'].map(plush)]);
 export const REMOVE: string[] = [];

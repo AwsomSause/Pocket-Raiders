@@ -4,6 +4,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { buildContent, getContent, RAW_CONTENT } from '../../src/data';
+import { pseudoEvents } from '../../src/core/dungeon/pseudo';
 
 const dir = join(__dirname, '../../src/data/catalogOverhaul');
 const json = <T>(p: string): T => JSON.parse(readFileSync(p, 'utf8')) as T;
@@ -58,9 +59,11 @@ describe('catalog overhaul: status files', () => {
     }
   });
 
-  it('built ids are live events from a co file', () => {
+  // Pseudo-stage gates and rooms are built by code from src/data/pseudoStages.json (legends row B), not by a co file.
+  const pseudoIds = new Set(pseudoEvents().map((e) => String(e.id)));
+  it('built ids are live events from a co file (or pseudo-stage gates and rooms)', () => {
     for (const s of statuses) for (const id of Object.keys(s.built ?? {})) {
-      expect(coIds.has(id), `${id} is marked built but no co file has it`).toBe(true);
+      expect(coIds.has(id) || pseudoIds.has(id), `${id} is marked built but no co file has it`).toBe(true);
       expect(gone(id), `${id} is marked built but is not drawn`).toBe(false);
     }
   });

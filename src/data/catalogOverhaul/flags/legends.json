@@ -1273,6 +1273,142 @@
   {
    "key": "chi-yu-beaten",
    "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "key-<item>",
+   "about": "row A: a Legendary key, Mythical key or Communion upgrade was earned this run (core/legends/keys.ts; meteorite: region + 1) -> its place event requires it"
+  },
+  {
+   "key": "odd-spirits",
+   "about": "row A: Ghost-type foes knocked out in battles won (core/legends/keys.ts noteSpirits) -> Odd Keystone at 108"
+  },
+  {
+   "key": "guest-any",
+   "about": "row A: a Mythical Guest walks with you (signs.ts mirror) -> researcher-recognizes-mythical"
+  },
+  {
+   "key": "<legend>-key-met",
+   "about": "row A: the Legendary was fought at its key place"
+  },
+  {
+   "key": "sighting-kind",
+   "about": "shadow-sighting berry -> shadow-sanctuary remembers"
+  },
+  {
+   "key": "sanctuary-friend",
+   "about": "shadow-sanctuary (helped, left a Pokémon) and shadow-stronghold (freed cages) -> shadow-stabilize Sanctuary visit"
+  },
+  {
+   "key": "sanctuary-ward-wild",
+   "about": "shadow-sanctuary / shadow-stronghold: a Shadow Pokémon left in the caretaker's care -> shadow-purified Reclaim"
+  },
+  {
+   "key": "shadow-sanctuary-ward",
+   "about": "sendAway key: your own Shadow Pokémon left at the Sanctuary -> shadow-purified Reclaim (bringBack, purified)"
+  },
+  {
+   "key": "sanctuary-reclaimed",
+   "about": "shadow-purified Reclaim, once per run -> shadow-purified"
+  },
+  {
+   "key": "sanctuary-visits",
+   "about": "shadow-stabilize Sanctuary visit -> shadow-purified remembers"
+  },
+  {
+   "key": "lieutenant-beaten",
+   "about": "shadow-lieutenant won -> shadow-lieutenant remembers"
+  },
+  {
+   "key": "week-rival-won",
+   "about": "co-week-rival won -> co-week-rival remembers"
+  },
+  {
+   "key": "rivalry-week",
+   "about": "Rivalry weeks at run start (startFlag) -> core/co/weeks.ts rivalInPseudo"
+  },
+  {
+   "key": "circuit-qualified",
+   "about": "also set by Rivalry weeks at run start (startFlag) -> tournament-entry (families-a)"
+  },
+  {
+   "key": "echoes-listened",
+   "about": "mr-rival-echoes (listened to every echo); pack Remembers flag, kept for the Final Reunion"
+  },
+  {
+   "key": "cameo-used",
+   "about": "cameo-ally-assist -> its own once-per-run gate"
+  },
+  {
+   "key": "arlen-met",
+   "about": "cameo-veteran-garchomp / -lucario (PA5) -> the two veterans are one Arlen, met once a run"
+  },
+  {
+   "key": "arlen-fought",
+   "about": "PA5 Fight (pack flag arlen.fought), kept for the Final Reunion"
+  },
+  {
+   "key": "arlen-told",
+   "about": "PA5 Tell me (pack flag arlen.told) -> opens the Whose Fault room"
+  },
+  {
+   "key": "arlen-mine",
+   "about": "PA5 \"It was mine.\" (region stamp) -> cameo-veteran-*-joins next region"
+  },
+  {
+   "key": "cameo-veteran-garchomp-joined",
+   "about": "cameo-veteran-garchomp-joins -> once"
+  },
+  {
+   "key": "cameo-veteran-lucario-joined",
+   "about": "cameo-veteran-lucario-joins -> once"
+  },
+  {
+   "key": "archive-visited",
+   "about": "archive-gauntlet-entry (PA7) -> its own Remembers (the empty frame for this run)"
+  },
+  {
+   "key": "companion-recruited",
+   "about": "companion-recruit -> once a run"
+  },
+  {
+   "key": "rk-archive-note",
+   "about": "rk-anniversary-archive note -> rk-hall-of-records Remembers"
+  },
+  {
+   "key": "pedestal-left",
+   "about": "rk-legacy-pedestal (region stamp) -> rk-legacy-pedestal-thanks next region"
+  },
+  {
+   "key": "ranch-taken",
+   "about": "legacy-ranch (pack flag ranch.taken)"
+  },
+  {
+   "key": "ranch-asked",
+   "about": "legacy-ranch Which one? (pack flag ranch.asked) -> the photo room"
+  },
+  {
+   "key": "ranch-kept",
+   "about": "legacy-ranch Keep it here (region stamp, pack ranch.kept) -> legacy-ranch-waiting next region"
+  },
+  {
+   "key": "ranch-done",
+   "about": "legacy-ranch -> once a run"
+  },
+  {
+   "key": "ranch-collected",
+   "about": "legacy-ranch-waiting -> once"
+  },
+  {
+   "key": "cheered-main",
+   "about": "cheer-rival-match (you cheered for the main rival)"
+  },
+  {
+   "key": "cheered-second",
+   "about": "cheer-rival-match (you cheered for the second rival)"
+  },
+  {
+   "key": "rival-traded",
+   "about": "old-rival-old-friend honest trade with the rival"
   }
  ],
  "external": {
