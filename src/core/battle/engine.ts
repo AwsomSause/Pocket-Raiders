@@ -21,6 +21,7 @@ import { golemBlueType, golemColour } from '../greenneedle/crystals';
 import { unflinching } from '../greenneedle/daycare';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
+import { agencyArrives, callHelper, fieldOf, helperProblem, reunionTakeHit } from '../greenneedle/reunion';
 import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
 import { draftTurn } from '../greenneedle/draft';
 import { snorlaxTurn } from '../greenneedle/snorlax';
@@ -286,6 +287,8 @@ export type PlayerAction =
   | { kind: 'deal'; accept: boolean }
   /** Smash the arena (rocks, lava, flood): hurts the foe once per battle and uses the turn (ideas W1). */
   | { kind: 'arena' }
+  /** Greenneedle gn.61: call a helper from the Final Reunion (`slot` 1 to 3). Uses the turn; the helper acts once. */
+  | { kind: 'helper'; slot: number }
   /** A raid cheer (Raid Battles pack): uses the turn, costs one of three cheers. */
   | { kind: 'cheer'; cheer: Cheer }
   /** The Pokémon refused its command and does nothing this turn (only the Bond Engine sends this). */
@@ -877,6 +880,10 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     const problem = arenaProblem(ctx);
     if (problem) throw new Error(problem);
   }
+  if (action.kind === 'helper') {
+    const problem = helperProblem(battle, action.slot);
+    if (problem) throw new Error(problem);
+  }
   w1StartOfTurn(ctx, events);
   ctx.doubleKoLoser = undefined;
   ctx.hyperUsed = false;
@@ -889,7 +896,9 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     totemCallAlly(ctx, events);
   } else if (battle.raid) raidCallReinforcement(ctx, events);
   else sosCall(ctx, events);
-  const enemy: Combatant = { side: 'enemy', mon: currentEnemy(battle), stages: battle.enemyStages, vol: battle.enemyVolatile, flinched: false, protected: false };
+  const agency = agencyArrives(battle);
+  if (agency) events.push({ type: 'raid', tone: 'info', text: `${agency} arrive, a week late and entirely sure of themselves. The opponent flinches from sheer confusion.` });
+  const enemy: Combatant = { side: 'enemy', mon: currentEnemy(battle), stages: battle.enemyStages, vol: battle.enemyVolatile, flinched: !!agency, protected: false };
   const spec = spectacleStart(ctx, action, events);
   const enemyForced = forcedMoveId(enemy.vol);
   const enemyForcedIndex = enemyForced ? enemy.mon.moves.findIndex((m) => m.id === enemyForced) : -1;
@@ -922,6 +931,8 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     resolveEntries(ctx, events);
   } else if (action.kind === 'cheer') {
     useCheer(ctx, action.cheer, events);
+  } else if (action.kind === 'helper') {
+    useHelper(ctx, action.slot, events);
   } else if (action.kind === 'arena') {
     smashArena(ctx, events);
     if (currentEnemy(battle).hp <= 0) {
@@ -1670,6 +1681,46 @@ function validateAction(ctx: BattleContext, action: PlayerAction): void {
 }
 
 /** A raid cheer: Offense / Defense last a few turns; Healing restores some of the active Pokémon's HP and cures its status (level 3 also refills its PP). */
+/** Greenneedle gn.61: a helper's one turn (core/greenneedle/reunion.ts has the list and who they are). */
+function useHelper(ctx: BattleContext, slot: number, events: BattleEvent[]): void {
+  const { battle, content } = ctx;
+  const h = callHelper(battle, slot);
+  if (!h) return;
+  const say1 = (text: string): void => void events.push({ type: 'raid', tone: 'info', text });
+  const foe = currentEnemy(battle);
+  if (h.kind === 'ace') {
+    const hit = Math.min(foe.hp - 1, Math.max(1, Math.floor(maxHp(content, foe) / 4)));
+    say1(`${h.name}!  "One turn. Then it's yours." Their ace uses its best move.`);
+    if (hit > 0) {
+      foe.hp -= hit;
+      events.push({ type: 'damage', side: 'enemy', amount: hit, hpAfter: foe.hp, effectiveness: 1, crit: false });
+    }
+  } else if (h.kind === 'field') {
+    const field = fieldOf(content, h.boss);
+    say1(`${h.name}!  Their Gym's field takes the ground for three turns.`);
+    if (field.weather) {
+      battle.weather = { id: field.weather, turns: 3 };
+      events.push({ type: 'weather', weather: field.weather });
+    } else if (field.terrain) {
+      battle.terrain = { id: field.terrain, turns: 3 };
+      events.push({ type: 'terrain', terrain: field.terrain });
+    }
+  } else if (h.kind === 'guard') {
+    say1(`${h.name}!  They step in front of ${nameOf(ctx, ctx.party[battle.activeIndex]!)}, and will take the next hit.`);
+    battle.storyEffects.push(`helper-guard:${h.name}`);
+  } else {
+    say1(`${h.name}!  They've brought food, and the whole party eats.`);
+    for (const m of ctx.party) {
+      if (m.hp <= 0) continue;
+      const max = maxHp(content, m);
+      const gain = Math.min(max - m.hp, Math.max(1, Math.floor(max / 5)));
+      if (gain <= 0) continue;
+      m.hp += gain;
+      if (m === ctx.party[battle.activeIndex]) events.push({ type: 'heal', side: 'player', amount: gain, hpAfter: m.hp });
+    }
+  }
+}
+
 function useCheer(ctx: BattleContext, cheer: Cheer, events: BattleEvent[]): void {
   const raid = ctx.battle.raid!;
   raid.cheersLeft -= 1;
@@ -4128,6 +4179,14 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     announce(target, 'magic-bounce', events);
     applyStatusMove(ctx, target, user, move, events);
     return;
+  }
+  // Greenneedle gn.61: a helper takes one hit meant for the player's Pokémon.
+  if (targetsEnemy && target.side === 'player' && user.side === 'enemy' && move.category !== 'status') {
+    const guard = reunionTakeHit(ctx.battle);
+    if (guard) {
+      events.push({ type: 'raid', tone: 'info', text: `${guard} takes the hit. ${nameOf(ctx, target.mon)} is untouched.` });
+      return;
+    }
   }
   if (targetsEnemy && target.protected && !fx.breaksProtect && !piercesProtect && !move.flags.includes('zmove') && !move.flags.includes('max')) {
     events.push({ type: 'protected', side: target.side });

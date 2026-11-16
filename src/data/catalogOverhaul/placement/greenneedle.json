@@ -2459,6 +2459,27 @@
   ],
   "tags": []
  },
+ "gn-61-field": {
+  "gn": "gn.61",
+  "shape": "Single",
+  "earliest": "A1",
+  "home": 18,
+  "window": [
+   18,
+   18
+  ],
+  "sits": "must-see",
+  "attaches": "instead",
+  "level": "No battle",
+  "often": "run",
+  "badge": "A crowd",
+  "note": "The last stage of the run's last region, step 18; the Long Table (gn.new.38) is step 19. Instead of the battle. Up to three helpers in the final battle (core/greenneedle/reunion.ts).",
+  "kinds": [
+   "Finale Episode",
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
  "gn-31-door": {
   "gn": "gn.31",
   "shape": "Door",

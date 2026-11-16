@@ -32,6 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
+import { reunionArrive, reunionFar, reunionTokens } from './reunion';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -67,6 +68,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   // gn.44: the reigning 1v1 champion, a different trainer each region.
   // gn.48: the Draft's table.
   if (text.includes('{draft:')) text = draftTokens(content, run, text);
+  if (text.includes('{reunion:')) text = reunionTokens(run, text);
   // gn.50: the defector.
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
@@ -640,6 +642,11 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return kcEvolve(run);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
+    // gn.61: the Final Reunion.
+    case 'reunionArrive':
+      return reunionArrive(content, run);
+    case 'reunionFar':
+      return reunionFar(run, e.n ?? 3);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
