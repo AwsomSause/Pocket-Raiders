@@ -23,5 +23,5 @@ Built 2026-11-16 on `claude/project-thread-qrlk9b` (PR into `ui-mockups`). Ids f
 
 ## Limits
 - Koraidon and Miraidon blessings are not in `blessings.json` (10 built), so Paradox Tide lands on Dialga only until they are added. Dialga is my reading of "matching" (Paradox Pokémon come from the past and future).
-- QUESTLINES_LEGENDARY L1 (Three Beasts) and L16 (Tower of Legends) were never rebuilt by the legends row; the weeks raise the older beast-clue and tower floor events. Reported to the lead.
+- QUESTLINES_LEGENDARY L1 (Three Beasts) and L16 (Tower of Legends) are built by families-c (`tools/events/co/families-c-7.ts`, `src/core/events/coLegends.ts`, STORY_FAMILIES_10 Part 0); the weeks raise those events.
 - "Raise odds" for placed openings means first claim on the stage's 8-event budget; it does not lift an opening's own `earliest`/`stages`/tags limits.
