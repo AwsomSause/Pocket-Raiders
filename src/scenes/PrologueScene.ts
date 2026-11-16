@@ -12,7 +12,7 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { Menu, type MenuOption } from '../ui/widgets';
 import { drawBackdrop } from '../ui/widgets';
 import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
-import { eventView } from '../ui/redux/screens/event';
+import { talkView } from '../ui/redux/screens/talk';
 import { cutBeat, cutView } from '../ui/redux/screens/cut';
 import { beatTag, formView, typeKey, vanceLine } from '../ui/redux/screens/prologue';
 import { pageLines, pageSpeaker } from '../ui/redux/script';
@@ -350,7 +350,7 @@ export class PrologueScene extends Phaser.Scene {
     const pages = this.rxPages(), at = Math.min(this.rxAt, pages.length - 1), page = pages[at]!;
     const { tag, name } = beatTag(m.title, BEATS.length);
     const index = this.menu?.index ?? 0;
-    return eventView(c, {
+    return talkView(c, {
       name,
       tag: m.looks && !this.story.prologue.done ? 'First launch' : tag,
       lines: page,

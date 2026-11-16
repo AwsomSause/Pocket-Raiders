@@ -42,6 +42,40 @@ test('New UI: an event is played with clicks (choice, outcome text, results) and
   expect(errors).toEqual([]);
 });
 
+test('New UI: the remade event screen draws each event its own way, and the scene leans with the cursor', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-e2e');
+  await toMap(page);
+  await addSide(page, { id: 'nu-duel', kind: 'event', used: false, eventId: 'underground-duel-again' });
+  await addSide(page, { id: 'nu-alley', kind: 'event', used: false, eventId: 'aq59-empty-alley' });
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Map').scene.start('Event', { sideId: 'nu-duel' }));
+  await waitForScene(page, 'Event');
+  const ev = view(page, 'Event');
+  // A road event: the place's own picture, the event's name and mark, the Hiker in the scene, a card per choice.
+  await expect(ev.locator('.ev-name')).toHaveText('Tunneller Hask, Again');
+  await expect(ev.locator('.ev-scene .ev-pic')).toHaveCount(1);
+  await expect(ev.locator('.ev-fig')).not.toHaveCount(0);
+  await expect(ev.locator('.ev-ch')).toHaveCount(3);
+  const mark = await ev.locator('.ev-sigil').innerHTML();
+  // The first choice is a battle: the scene turns tense. The last one walks away: it cools.
+  await expect(ev.locator('.ev-tone.t-danger')).toHaveCount(1);
+  await expect(ev.locator('.ev-ch.on .ev-ic')).toHaveCount(1);
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(150);
+  await page.keyboard.press('ArrowDown');
+  await expect(ev.locator('.ev-tone.t-away')).toHaveCount(1);
+  await expect(ev.locator('.ev-tone.t-danger')).toHaveCount(0);
+  // A redraw does not start the figures' entrance again: it carries on from when they first showed.
+  expect(await ev.locator('.ev-in').first().evaluate((el) => (el as HTMLElement).style.getPropertyValue('--t0'))).toMatch(/^-\d+ms$/);
+  // A town with no picture of its own is drawn, at night as its text says, with another mark.
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Event').scene.start('Event', { sideId: 'nu-alley' }));
+  await expect(ev.locator('.ev-name')).toHaveText('The Empty Alley', { timeout: 10_000 });
+  await expect(ev.locator('.ev-scene .ev-pic')).toHaveCount(0);
+  await expect(ev.locator('.ev-scene svg.ev-mid')).toHaveCount(1);
+  expect(await ev.locator('.ev-sigil').innerHTML()).not.toBe(mark);
+  expect(errors).toEqual([]);
+});
+
 test('New UI: a long event script is read page by page; choices wait for the last page, rewards for the last outcome page', async ({ page }) => {
   const errors = watch(page);
   await start(page, 'ui=new&seed=newui-e2e');

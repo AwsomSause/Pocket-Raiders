@@ -130,7 +130,7 @@ import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, ty
 import { artOf, monFile } from '../ui/redux/game';
 import { moveTipOf, ownAbilityCard, seenFact } from '../ui/redux/tips';
 import { versusView, type VersusModel } from '../ui/redux/screens/versus';
-import { eventView } from '../ui/redux/screens/event';
+import { talkView } from '../ui/redux/screens/talk';
 import { shortestSentence, type CutModel } from '../ui/redux/screens/cut';
 import type { Art } from '../ui/redux/templates';
 import { playCutMoment } from '../ui/redux/moment';
@@ -4777,7 +4777,7 @@ export class BattleScene extends Phaser.Scene {
         resolve();
       };
       const view = mountRedux(this, {
-        render: (c) => eventView(c, {
+        render: (c) => talkView(c, {
           name: 'Stadium broadcast', tag, lines: [{ who: speaker, text }], speaker, page: { at: 0, of: 1 },
           art: backdrop, tint: null, fx: null, cast, mon: null,
           choices: [{ label: 'Go on', sub: '', chance: '', locked: false }], index: 0,

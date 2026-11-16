@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-// Beta 0.7 Legendary Blessings: the Side Plinth opening after the starter is chosen, and no screen at all with the setting off.
+// Beta 0.7 Legendary Blessings: the blessing opening after the starter is chosen, and no screen at all with the setting off.
 
 const scene = (page: Page) => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null);
 async function waitForScene(page: Page, key: string) {
@@ -19,7 +19,7 @@ async function toStarter(page: Page, blessings: boolean) {
   }
 }
 
-test('a run with a blessing opens with the plinth screen, then the briefing and the map', async ({ page }) => {
+test('a run with a blessing opens with the blessing screen, then the briefing and the map', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await toStarter(page, true);
@@ -30,7 +30,7 @@ test('a run with a blessing opens with the plinth screen, then the briefing and 
   await page.waitForTimeout(1200);
   await page.keyboard.press('Enter'); // finishes the sequence at once
   await page.waitForTimeout(400);
-  await page.screenshot({ path: 'test-results/blessing-plinth.png' });
+  await page.screenshot({ path: 'test-results/blessing-opening.png' });
   expect(await scene(page)).toBe('Blessing');
   await page.keyboard.press('Enter'); // on to the briefing
   await waitForScene(page, 'Briefing');
