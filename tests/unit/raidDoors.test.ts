@@ -41,8 +41,9 @@ describe('shout prompt', () => {
     expect(promptLengthMs(def)).toBe(def.listenMs);
   });
   it('the Sleeping Snorlax event offers it', () => {
-    const e = content.events.get('cs-kanto-route-snorlax')!;
-    expect(e.choices.some((c) => c.prompt?.id === 'snorlax-shout')).toBe(true);
+    // Greenneedle gn.49 replaced the Kanto Snorlax (cs-kanto-route-snorlax): the shout comes after the Poké Flute, on the noise meter.
+    expect(content.events.get('cs-kanto-route-snorlax')!.choices.some((c) => c.label === 'Play the Poké Flute.')).toBe(true);
+    for (const i of [1, 2, 3]) expect(content.events.get(`gn-49-noise-${i}`)!.choices.some((c) => c.prompt?.id === 'snorlax-shout'), `gn-49-noise-${i}`).toBe(true);
   });
 });
 

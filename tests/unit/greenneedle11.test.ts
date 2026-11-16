@@ -693,10 +693,9 @@ describe('gn.49 The Sleeping Snorlax', () => {
     expect(flagOf(run, 'snorlax-notes')).toBe(5);
     expect(scene(run, 'gn-49-nearly').intro).toContain('Some sleeps are deeper than music.');
     run = choose(run, 'gn-49-nearly', 'Make some noise.').run;
-    expect(scene(run, 'gn-49-noise-1').labels).toEqual(['Shout.', 'Hold and tap.']);
-    run = choose(run, 'gn-49-noise-1', 'Shout.').run;
-    run = choose(run, 'gn-49-noise-2', 'Hold and tap.').run;
-    run = choose(run, 'gn-49-noise-3', 'Shout.').run;
+    expect(scene(run, 'gn-49-noise-1').labels).toEqual(['Shout, or hold and tap.']);
+    expect(content.events.get('gn-49-noise-1')!.choices[0]!.prompt?.id).toBe('snorlax-shout');
+    for (const i of [1, 2, 3]) run = choose(run, `gn-49-noise-${i}`, 'Shout, or hold and tap.').run; // a miss still fills the meter
     expect(scene(run, 'gn-49-woke-music').intro).toContain('The bride\'s veil blows off.');
     const r = choose(run, 'gn-49-woke-music', 'Ask it to come with you.');
     const mon = joinedSnorlax(r.run)!;

@@ -439,8 +439,12 @@ const noise: Json[] = METER.map((bar, i) => rm(`gn-49-noise-${i + 1}`, 'The Slee
   i === 0 ? 'The flute wasn\'t enough on its own. Now it\'s noise or nothing. A meter fills with sound, and the queue joins in.' : QUEUE[i - 1]!,
   `**Noise:** ${i === 0 ? '▯▯▯' : METER[i - 1]}`,
 ), [
-  ch('Shout.', out(`You shout, from your boots up. **Noise:** ${bar}`, scene(i < 2 ? `gn-49-noise-${i + 2}` : 'gn-49-woke-music'))),
-  ch('Hold and tap.', out(`You hold and tap, steady as a drum. **Noise:** ${bar}`, scene(i < 2 ? `gn-49-noise-${i + 2}` : 'gn-49-woke-music'))),
+  // The doc: shout into the microphone, or hold and tap a button, on the same screen (the snorlax-shout prompt offers both). The meter
+  // fills either way: it is noise until it wakes, never a fail.
+  ch('Shout, or hold and tap.', out(`You make noise from your boots up, and the queue hears you. **Noise:** ${bar}`, scene(i < 2 ? `gn-49-noise-${i + 2}` : 'gn-49-woke-music')), {
+    prompt: { id: 'snorlax-shout', needs: 'ok' },
+    fail: out(`Not much comes out. The queue doesn't mind: they are loud enough for everyone. **Noise:** ${bar}`, scene(i < 2 ? `gn-49-noise-${i + 2}` : 'gn-49-woke-music')),
+  }),
 ]));
 
 const HILL_CHOICES: Json[] = [

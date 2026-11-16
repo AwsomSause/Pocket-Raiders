@@ -4418,9 +4418,13 @@
    "intro": "The flute wasn't enough on its own. Now it's noise or nothing. A meter fills with sound, and the queue joins in.\n\n**Noise:** ▯▯▯",
    "choices": [
     {
-     "label": "Shout.",
+     "label": "Shout, or hold and tap.",
+     "prompt": {
+      "id": "snorlax-shout",
+      "needs": "ok"
+     },
      "success": {
-      "text": "You shout, from your boots up. **Noise:** ▮▯▯",
+      "text": "You make noise from your boots up, and the queue hears you. **Noise:** ▮▯▯",
       "effects": [
        {
         "kind": "gn",
@@ -4428,12 +4432,9 @@
         "key": "gn-49-noise-2"
        }
       ]
-     }
-    },
-    {
-     "label": "Hold and tap.",
-     "success": {
-      "text": "You hold and tap, steady as a drum. **Noise:** ▮▯▯",
+     },
+     "failure": {
+      "text": "Not much comes out. The queue doesn't mind: they are loud enough for everyone. **Noise:** ▮▯▯",
       "effects": [
        {
         "kind": "gn",
@@ -4463,9 +4464,13 @@
    "intro": "The hikers start clapping, slow, then faster. It's catching.\n\n**Noise:** ▮▯▯",
    "choices": [
     {
-     "label": "Shout.",
+     "label": "Shout, or hold and tap.",
+     "prompt": {
+      "id": "snorlax-shout",
+      "needs": "ok"
+     },
      "success": {
-      "text": "You shout, from your boots up. **Noise:** ▮▮▯",
+      "text": "You make noise from your boots up, and the queue hears you. **Noise:** ▮▮▯",
       "effects": [
        {
         "kind": "gn",
@@ -4473,12 +4478,9 @@
         "key": "gn-49-noise-3"
        }
       ]
-     }
-    },
-    {
-     "label": "Hold and tap.",
-     "success": {
-      "text": "You hold and tap, steady as a drum. **Noise:** ▮▮▯",
+     },
+     "failure": {
+      "text": "Not much comes out. The queue doesn't mind: they are loud enough for everyone. **Noise:** ▮▮▯",
       "effects": [
        {
         "kind": "gn",
@@ -4508,9 +4510,13 @@
    "intro": "Old Jarvis bangs a frying pan with a ladle. He looks happier than he has in three days.\n\n**Noise:** ▮▮▯",
    "choices": [
     {
-     "label": "Shout.",
+     "label": "Shout, or hold and tap.",
+     "prompt": {
+      "id": "snorlax-shout",
+      "needs": "ok"
+     },
      "success": {
-      "text": "You shout, from your boots up. **Noise:** ▮▮▮",
+      "text": "You make noise from your boots up, and the queue hears you. **Noise:** ▮▮▮",
       "effects": [
        {
         "kind": "gn",
@@ -4518,12 +4524,9 @@
         "key": "gn-49-woke-music"
        }
       ]
-     }
-    },
-    {
-     "label": "Hold and tap.",
-     "success": {
-      "text": "You hold and tap, steady as a drum. **Noise:** ▮▮▮",
+     },
+     "failure": {
+      "text": "Not much comes out. The queue doesn't mind: they are loud enough for everyone. **Noise:** ▮▮▮",
       "effects": [
        {
         "kind": "gn",
