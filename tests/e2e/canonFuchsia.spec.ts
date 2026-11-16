@@ -17,7 +17,7 @@ async function toMap(page: Page) {
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
 }
 
-test('the Fuchsia Safari Land event is plain data: it costs money and starts a wild fight', async ({ page }) => {
+test('the Fuchsia Safari Land event is plain data: it costs money and opens the Safari park (Greenneedle gn.18: no battles)', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
@@ -30,8 +30,8 @@ test('the Fuchsia Safari Land event is plain data: it costs money and starts a w
     const events = (window as any).__pkr.session.content.events;
     const list = Array.isArray(events) ? events : [...(events?.values?.() ?? [])];
     const e = list.find((x: any) => x.id === 'cs-kanto-fuchsia-safari');
-    return e ? { kinds: e.choices[0].success.effects.map((f: any) => f.kind), battle: e.choices[0].success.battle?.kind } : null;
+    return e ? { kinds: e.choices[0].success.effects.map((f: any) => f.kind), park: e.choices[0].success.effects.find((f: any) => f.op === 'minigame')?.key, battle: e.choices[0].success.battle?.kind } : null;
   });
-  expect(ev).toEqual({ kinds: ['money', 'flag', 'flag'], battle: 'wild' });
+  expect(ev).toEqual({ kinds: ['money', 'gn', 'gn'], park: 'gn-safari', battle: undefined });
   expect(errors).toEqual([]);
 });
