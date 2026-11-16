@@ -26,6 +26,7 @@ import { listenedHatch, listenedTake, listenedWord } from './listened';
 import { daycareLeave, daycareReturn, eggShape, parentAndChild } from './daycare';
 import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
+import { borrowBattleStart, borrowEnd, borrowMeet, borrowStart, borrowTokens, rivalTrustAtLeast } from './borrowed';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
@@ -91,6 +92,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   // gn.44: the reigning 1v1 champion, a different trainer each region.
   // gn.48: the Draft's table.
   if (text.includes('{draft:')) text = draftTokens(content, run, text);
+  if (text.includes('{borrow:')) text = borrowTokens(content, run, text);
   // gn.50: the defector.
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
@@ -257,6 +259,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'rivalTrustBelow') return !rivalTrustMax(run);
   if (c.test === 'exKnown') return exKnown(run);
   if (c.test === 'exLeft') return !!nextMatchup(run);
+  if (c.test === 'rivalTrust') return rivalTrustAtLeast(run, c.n ?? 1);
   if (c.test === 'draftFriend') return !!draftFriend(run);
   // gn.49: a flute to play (or the Exploud you healed roars for you: that counts as music).
   if (c.test === 'fluteReady') return fluteReady(run, run.regionOrder[run.regionIndex] ?? '') || gnFlag(run, 'exploud-healed') > 0;
@@ -643,6 +646,10 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return onevoneEnd(run, e.n ?? 0);
     case 'onevoneChampion':
       return onevoneChampion(content, run);
+    case 'borrowStart':
+      return borrowStart(content, run, makeFull(content));
+    case 'borrowEnd':
+      return borrowEnd(content, run, e.n ?? 0);
     case 'draftStart':
       return draftStart(content, run);
     case 'draftPick':
@@ -979,6 +986,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.59: Old Ferris's five: no items, no switching.
   if (rule === 'ferris') ferrisStart(battle);
   if (rule === 'quillfeather') quillfeatherStart(content, run, battle, makeFull(content));
+  if (rule === 'borrowed') borrowBattleStart(content, run, battle);
+  borrowMeet(run, battle);
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {
     if (gnFlag(run, 'allstar-shake') > 0) battle.storyEffects.push('allstar-shake');
