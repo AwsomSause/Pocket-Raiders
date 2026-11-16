@@ -1,0 +1,3151 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "mc-final-choice",
+   "name": "The Final Choice",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose",
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "Wyndon Stadium. Sixty thousand. The Champion Cup's final: Leon, and whoever's got there. A red cloud over the roof. On the big screen: Rose. In a suit, for once. Smiling. Under Hammerlocke: a cage of light, opening. A switch. Floor 50: Oleana, at the window. A lamp on a desk. The away end, block J: forty people in black and pink. Towels. No horns: she asked. In Spikemuth: Piers, on a pallet stage, with a camera somebody's borrowed. Rose, on the screen, to sixty thousand: \"Galar! Forgive the interruption. I'll be brief. I've some wonderful news, and I'm afraid it can't wait a thousand years.\" The stadium laughs. They think it's a sponsor message. Rose: \"In a few moments, Macro Cosmos will secure this region's energy for the next millennium. There'll be a little light. A little noise. Please remain seated.\" Off screen, to an earpiece; you hear it, and so does anyone with a lanyard: Rose: \"Future Planning. You're at the Plant? Good. I'd not trust it to anyone else. The switch on the left. When I say.\"",
+   "choices": [
+    {
+     "label": "Throw the switch.",
+     "success": {
+      "text": "The switch on the left.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-final-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-plan-hop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the breaker.",
+     "success": {
+      "text": "Your hand's on the switch on the left. It moves to the one on the right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-turn-breaker"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Reroute one line, east.",
+     "success": {
+      "text": "You touch neither. You go to the bottom of the panel. Brass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-final-lift",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-lift-feeder"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give it to someone with a thousand years.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "rank": 5,
+       "has": "confided"
+      }
+     ],
+     "success": {
+      "text": "You go up to the roof.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-final-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-own-roof"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "spur",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rose-knows-spur",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You could say it into the earpiece: \"You're dimming the first town you lit.\""
+    },
+    {
+     "id": "floor",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-told-floor",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Thirty-one's dark. Nobody's at the relays."
+    },
+    {
+     "id": "chips",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-chipshop",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zane's got the feeders. Beck's got a coach."
+    }
+   ]
+  },
+  {
+   "id": "yl-final-choice",
+   "name": "The Final Choice",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.marnie-masters4"
+    ],
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "Wyndon Stadium. Sixty thousand. The Champion Cup's final: Leon, and whoever's got there. A red cloud over the roof. On the big screen: Rose. In a suit, for once. Smiling. Under Hammerlocke: a cage of light, opening. A switch. Floor 50: Oleana, at the window. A lamp on a desk. The away end, block J: forty people in black and pink. Towels. No horns: she asked. In Spikemuth: Piers, on a pallet stage, with a camera somebody's borrowed. Rose, on the screen, to sixty thousand: \"Galar! Forgive the interruption. I'll be brief. I've some wonderful news, and I'm afraid it can't wait a thousand years.\" The stadium laughs. They think it's a sponsor message. Rose: \"In a few moments, Macro Cosmos will secure this region's energy for the next millennium. There'll be a little light. A little noise. Please remain seated.\" The same minute, in block J. Gaz, looking up: \"It's gone red. Oi. Oi. The sky's gone red.\" Beck: \"That's the leccy. That's where it's all been goin'.\" Marnie, on the pitch, not to them, to her Morpeko: Marnie: \"Steady.\" Across the stadium, on the grass, a Wooloo's starting to swell.",
+   "choices": [
+    {
+     "label": "\"Is this on?\" Take the broadcast for Spikemuth.",
+     "success": {
+      "text": "Kaya's already got her rucksack on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-final-yell-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-plan-feed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go home and eat.\"",
+     "success": {
+      "text": "You stand up in block J.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-final-yell-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-turn-coach"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand Oleana the old plant's gate.",
+     "success": {
+      "text": "You take a key out of your pocket: the old substation's. Mr. Oldroyd's.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-bought-warn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You've never had a leader. D'you want one?\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "rank": 5,
+       "has": "confided"
+      }
+     ],
+     "success": {
+      "text": "Forty people look round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-final-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-own-blockj"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "coach",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-told-coach",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Shaz has five stadiums' worth of names in a ring binder."
+    },
+    {
+     "id": "names",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "yell-names-all",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know all six names. You could lead a chant."
+    },
+    {
+     "id": "chips",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-chipshop",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zane's got the feeders. Beck's got a coach."
+    }
+   ]
+  },
+  {
+   "id": "mc-plan-hop",
+   "name": "Phase 1: The Lobby",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.hop"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Your party holds Rose Tower. Three come up. The first is Hop. Hop: \"You've got a lanyard. You've got a— mate, what's Future Planning?\"",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "\"Right. Right! Let's see it, then.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.hop",
+       "name": "Hop",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mc-plan-sonia"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-plan-sonia",
+   "name": "Phase 1: The Lobby",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.sonia"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Sonia, with a book. Sonia: \"I've read every source on the Darkest Day there is. D'you know what none of them say? 'And it went fine.'\"",
+   "choices": [
+    {
+     "label": "Battle her.",
+     "success": {
+      "text": "She closes the book, and keeps a finger in her page.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.sonia",
+       "team": [
+        "yamper",
+        "boltund",
+        "eldegoss"
+       ],
+       "name": "Sonia",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mc-plan-leon"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-plan-leon",
+   "name": "Phase 1: The Lobby",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.leon-masters"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Leon: \"I've never lost. I'd like you to know I'm not angry. I'm lost. I came up the wrong stairs twice. But I'm here now.\"",
+   "choices": [
+    {
+     "label": "Battle the Champion.",
+     "success": {
+      "text": "Charizard lands on the marble.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.leon-masters",
+       "team": [
+        "charizard",
+        "aegislash",
+        "dragapult",
+        "haxorus",
+        "rhyperior",
+        "seismitoad"
+       ],
+       "name": "Leon",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mc-plan-relays"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-plan-relays",
+   "name": "Phase 2: The Relays",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Leon, beaten: Leon: \"...So that's what it's like. Huh.\" He sits on the marble. He takes off the cape. It's all logos. He looks at them as if for the first time. Five relays to feed.",
+   "choices": [
+    {
+     "label": "Feed the relays.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Five relays. Each takes a turn.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-plan-switch"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The fourth relay arcs and throws you off it; you feed it on the second try.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-plan-switch"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "floor",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-told-floor",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Thirty-one was told. Nobody's at the relays: you feed all five alone."
+    }
+   ]
+  },
+  {
+   "id": "mc-plan-switch",
+   "name": "Phase 3: The Switch",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "pokemon": "eternatus",
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "Rose, in the earpiece: \"Now.\" The switch on the left. The cage opens. The Darkest Day: three feeds, and then a hand the size of the sky. You're holding the Stars feed open. Two helpless turns. Rose, on the roof, beside you, in a red wind: \"There. There. Do you see it? A thousand years. Was that so hard?\" Two shapes arrive. Nobody invited them. One comes down the red light like a blade. One lands like a door being shut. Rose: \"Ah. The heritage. I'd wondered if they'd turn up.\"",
+   "choices": [
+    {
+     "label": "Hold it.",
+     "success": {
+      "text": "It's held. Barely. By you, and two wolves, and a Champion who's just lost for the first time and got back up.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "eternatus"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mc-plan-roof"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-plan-roof",
+   "name": "The Roof, After",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose",
+     "trainer.pr/oleana"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Rose: \"It's done. It's banked. A thousand years of light, and I was the one who—\" He looks north. The hills. Then east. The coast's dark. One patch. It's been dark for nine minutes. Rose: \"What's that. There. That's not a cut; I didn't authorise—\"",
+   "choices": [
+    {
+     "label": "\"East coast spur. R and B.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galar-brass-seen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Rose: \"That's— that's on my wire?\" He takes his glasses off. Rose: \"I lit that. With a hand winch. I've just put it out to prove nobody'd ever be left dark.\" Oleana, behind you: Oleana: \"The press release, Chairman. Shall I insert the figure?\" Rose: \"...What is it?\" Oleana: \"Low.\" He doesn't say \"good.\" It's the first time. He hands himself in. He walks into Hammerlocke station and asks for a pencil. Galar is lit for a millennium. And it's frightened of its own power stations: once a stage, something on a pitch or a road may be the size of a house for a turn, and nobody's sure it'll come down. Spikemuth is dark, that night. Then the first line is reconnected: he signed the order from a cell, in pencil. The company has no Chairman. It looks to Future Planning. Rose hands himself in, and asks for a pencil. Oleana inserts the figure: low. Zane was right, and frames the graph. Shay finds the four billion's gone. Beck watched a red sky from a dark town. Kaya makes a banner: WE'RE STILL HERE. Marnie played under a red sky. Piers sang in the dark. Leon lost, and got up. Peony went in first, two hours. The Ball Guy has a ball. Bede collects the last Star. Spikemuth is dark; then one line. At Number Two, Rose writes forty-one sheets from memory, and gets thirty-eight.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-lit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-station",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-overcharged",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "Oleana, behind you: Oleana: \"The press release, Chairman. Shall I insert the figure?\" Rose: \"...What is it?\" Oleana: \"Low.\" He doesn't say \"good.\" It's the first time. He hands himself in. He walks into Hammerlocke station and asks for a pencil. Galar is lit for a millennium. And it's frightened of its own power stations: once a stage, something on a pitch or a road may be the size of a house for a turn, and nobody's sure it'll come down. Spikemuth is dark, that night. Then the first line is reconnected: he signed the order from a cell, in pencil. The company has no Chairman. It looks to Future Planning. Rose hands himself in, and asks for a pencil. Oleana inserts the figure: low. Zane was right, and frames the graph. Shay finds the four billion's gone. Beck watched a red sky from a dark town. Kaya makes a banner: WE'RE STILL HERE. Marnie played under a red sky. Piers sang in the dark. Leon lost, and got up. Peony went in first, two hours. The Ball Guy has a ball. Bede collects the last Star. Spikemuth is dark; then one line. At Number Two, Rose writes forty-one sheets from memory, and gets thirty-eight.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-lit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-station",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-overcharged",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-plan-feed",
+   "name": "Phase 1: The Feed",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Kaya, in block J, with a rucksack: Kaya: \"I've a cousin in the broadcast truck. He's on his break. He's left it unlocked.\" Beck: \"Eight years I've wanted this town on a screen.\" The stands, the concourse, the truck. Stadium Security have whistles.",
+   "choices": [
+    {
+     "label": "Run for the truck.",
+     "success": {
+      "text": "Two whistles at once.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Stadium Security",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "yl-plan-truck"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-plan-truck",
+   "name": "Phase 1: The Feed",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "More whistles, on the concourse.",
+   "choices": [
+    {
+     "label": "Keep running.",
+     "success": {
+      "text": "They don't stop blowing them the whole fight.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Stadium Security",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "yl-plan-aux"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-plan-aux",
+   "name": "Phase 2: Is This On",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.piers"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "The truck. A desk. Sixty thousand faces on one monitor; a red sky on another; a third, dark, labelled AUX: UNUSED. Kaya's cousin, coming back with a pasty: \"What're you— that's live—\" \"What's on Aux?\" The cousin: \"Nothing. It's the regional feed. It's been dead since— it used to be Spikemuth.\"",
+   "choices": [
+    {
+     "label": "Switch to Aux.",
+     "success": {
+      "text": "The big screen. Rose, mid-sentence. The picture tears. A test card: SPIKEMUTH PUBLIC ACCESS. A thin man, squinting. Piers: \"Is this on? ...Right. Galar. This is Spikemuth. No Power Spot. No stadium. No sponsors. You've not seen us in eight years. We're still here.\" Sixty thousand people, who came for a final, looking at a street.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-plan-chant"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-plan-chant",
+   "name": "Phase 3: The Chant",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.marnie-masters4",
+     "trainer.pr/musician"
+    ],
+    "pokemon": "morpeko",
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "The sky's gone red. On the pitch: a Wooloo the size of a bus. A Corviknight that fills the goal. Marnie's Morpeko, enormous, hangry, lost. Marnie, small on the grass, level: Marnie: \"Oi. Hangry. It's all right.\" It doesn't hear. It's too big. One voice isn't enough. Shaz, in block J, on her feet, with a ring binder: Shaz: \"One, two, three—\"",
+   "choices": [
+    {
+     "label": "\"Han-gry.\"",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Forty people, low, in time: \"Han-gry. Han-gry. Han-gry.\" It looks down. Block J has it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-plan-rounds"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You come in late. Shaz carries it. \"Han-gry. Han-gry.\" It looks down. Block J has it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-plan-rounds"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-plan-rounds",
+   "name": "Phase 3: The Chant",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.leon-masters",
+     "boss.piers"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Five stadiums, by link. You lead; Yell follows; the stands learn it. The lower tier is next. Then the whole east stand: a girl in row nine knows what the Corviknight's called; it's her dad's. Then Wyndon. Leon: \"He's just 'Charizard.' I never— he's never had a—\" Sixty thousand: \"CHAR-I-ZARD.\" Leon's crying. He's delighted. The last name is your lead's. Galar says it.",
+   "choices": [
+    {
+     "label": "Say your lead's name.",
+     "success": {
+      "text": "Piers, on the screen, deadpan: Piers: \"...And that's why we don't Dynamax in Spikemuth.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-plan-above"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bobbin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-cheered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The lower tier joins on \"Bob-bin.\" They'd heard about the boy from Postwick."
+    }
+   ]
+  },
+  {
+   "id": "yl-plan-above",
+   "name": "Phase 4: The Thing Above the Plant",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "eternatus",
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "It's still up there. The chant's brought the pitches down; it's not shut the cage. Every stadium's chanting.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "One helpless turn, not two: there's a whole region shouting. It's held. It comes down. The cage shuts. The League votes to build no stadium in Spikemuth. It votes to hold the final there. No Dynamax. Piers hates it. He writes a song. Yell stops blocking roads. Nobody told them to. They've found something louder. Rose hands himself in, after. Oleana refunds forty thousand policies. Zane wires the truck's aux. Shay finds the clause. Beck got it on a screen, after eight years. Kaya has a cousin in a truck. Marnie: \"Oi. Hangry.\" Piers: \"Is this on?\" Leon: \"He's just 'Charizard.'\" The Ball Guy is chanted, on the concourse. Bede is chanted, by name, and has to leave the room. Spikemuth is on.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-yell-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spikemuth-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-chanted",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "eternatus"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-turn-breaker",
+   "name": "Phase 1: The Breaker",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Zane, beside you: \"That's the breaker.\" \"It's a thousand years off.\" Zane: \"...It's a thousand years off.\" He puts his hand on it too. He's wanted to for three years. The cage stops opening. Rose: \"Future Planning? I've no reading. Future Planning. Ingleby. What have you done.\"",
+   "choices": [
+    {
+     "label": "Go up the tower.",
+     "success": {
+      "text": "The Tower Climb, from the bottom, with a lanyard. Every floor knows you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-turn-ballguy"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-turn-ballguy",
+   "name": "Phase 2: The Tower",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ballguy"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor 12. The Ball Guy. The Ball Guy: \"Heya, Trainer! Have a—\" He stops. He takes the head off. There's a man under it. He's about fifty. \"Go on up. I'll say I didn't see.\"",
+   "choices": [
+    {
+     "label": "Go on up.",
+     "success": {
+      "text": "Floor 20.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-turn-hollis"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-turn-hollis",
+   "name": "Phase 2: The Tower",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-leaguestaff-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor 20. Director Hollis.",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "He announces his own defeat as a delay.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.drive/galarian-swsh-leaguestaff-man",
+       "team": [
+        "steelix",
+        "klinklang",
+        "copperajah"
+       ],
+       "name": "Director Hollis",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mc-turn-pryce"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-turn-pryce",
+   "name": "Phase 2: The Tower",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor 25. Director Pryce, who reads your policy aloud. \"You're covered. I checked. I'd hoped you'd not need it.\"",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "He files each move as he makes it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.drive/galarian-swsh-office-worker-man",
+       "team": [
+        "bronzong",
+        "perrserker",
+        "klinklang"
+       ],
+       "name": "Director Pryce",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mc-turn-thirtyone"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-turn-thirtyone",
+   "name": "Phase 2: The Tower",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man",
+     "boss.drive/galarian-swsh-office-worker-woman"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor 31. Forty people at forty desks, who look up, and then look at Zane. Zane: \"It's a thousand years. I've the graph. Go home.\" They go. Floor 44: Shay, holding the lift.",
+   "choices": [
+    {
+     "label": "Up to forty-nine.",
+     "success": {
+      "text": "The corridor outside fifty.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-turn-oleana"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "floor",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-told-floor",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Nobody's on thirty-one. The floor was told. It's dark."
+    }
+   ]
+  },
+  {
+   "id": "mc-turn-oleana",
+   "name": "Phase 3: Oleana",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Oleana: \"I was nine. He shook my hand and the lights came on behind him. I thought he'd done it by shaking my hand.\" Oleana: \"I've known for a year. I'd stand between him and whoever tried to stop him, and I'd hate it, and I'd do it. So. Here I am. Doing it.\" Oleana: \"Hurry up and win.\"",
+   "choices": [
+    {
+     "label": "Battle her.",
+     "success": {
+      "text": "Garbodor first: her First Friend. She fights as well as she can. She can't not.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/oleana",
+       "team": [
+        "garbodor",
+        "froslass",
+        "tsareena",
+        "salazzle",
+        "milotic"
+       ],
+       "name": "Oleana",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mc-turn-fifty"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-turn-fifty",
+   "name": "Phase 4: Floor 50",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Oleana, beaten: Oleana: \"Good. Go in. He'll be kind. That's the worst of him.\" The office. He's at the window. He's not fighting; the Plant's off; there's nothing to fight for. Rose: \"Well played. Truly. I'd endorse you.\" Rose: \"You'll tell me there's time. They all do.\" \"There's time. And there's a town on the east coast you've been turning off to save it.\"",
+   "choices": [
+    {
+     "label": "(Leave him.)",
+     "success": {
+      "text": "You leave him at the window. Macro Cosmos is broken up. Zane keeps the mug. He's turned it round, so the words face the wall. The thousand-year problem's still real. It's given to Sonia; or to Magnolia; or to Rose, from his cell, with a pencil. The third's the only one that says a number. Rose lit the lamp; or didn't. Oleana told you to hurry up and win. Zane pulled it too, and turned the mug round. Shay gives evidence, in a spreadsheet. Beck gets a crowd, cries, and denies it. Kaya makes the League's banners. Marnie plays, and wins or doesn't. Piers has a crowd. Leon is Champion. Peony was sent for, and put his boots on the desk. The Ball Guy took the head off. Bede takes the watch off. Spikemuth has a crowd. At Number Two, the lamp is lit.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-broken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-left",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Light it.\"",
+     "success": {
+      "text": "There's a box of matches in the drawer. There's always been. He's never. He lights number forty-one. It's a small yellow light in a very large dark office. It's the first time in forty-five years he's looked at a light and not counted it. Macro Cosmos is broken up. Zane keeps the mug. He's turned it round, so the words face the wall. The thousand-year problem's still real. It's given to Sonia; or to Magnolia; or to Rose, from his cell, with a pencil. The third's the only one that says a number. Rose lit the lamp; or didn't. Oleana told you to hurry up and win. Zane pulled it too, and turned the mug round. Shay gives evidence, in a spreadsheet. Beck gets a crowd, cries, and denies it. Kaya makes the League's banners. Marnie plays, and wins or doesn't. Piers has a crowd. Leon is Champion. Peony was sent for, and put his boots on the desk. The Ball Guy took the head off. Bede takes the watch off. Spikemuth has a crowd. At Number Two, the lamp is lit.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-broken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-lit",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come and look at Spikemuth.\"",
+     "success": {
+      "text": "He gets his coat. He's never been. Macro Cosmos is broken up. Zane keeps the mug. He's turned it round, so the words face the wall. The thousand-year problem's still real. It's given to Sonia; or to Magnolia; or to Rose, from his cell, with a pencil. The third's the only one that says a number. Rose lit the lamp; or didn't. Oleana told you to hurry up and win. Zane pulled it too, and turned the mug round. Shay gives evidence, in a spreadsheet. Beck gets a crowd, cries, and denies it. Kaya makes the League's banners. Marnie plays, and wins or doesn't. Piers has a crowd. Leon is Champion. Peony was sent for, and put his boots on the desk. The Ball Guy took the head off. Bede takes the watch off. Spikemuth has a crowd. At Number Two, the lamp is lit.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-broken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-came",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You didn't lose one. Thackray came up whistling.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rose-lamp-41",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He picks up the lamp. Rose: \"Four minutes. I stood at that pithead four minutes thinking I'd lost a man. I've been standing there since. Forty-five years of four minutes.\" There's a box of matches in the drawer. He lights number forty-one. Macro Cosmos is broken up. Zane keeps the mug. He's turned it round, so the words face the wall. The thousand-year problem's still real. It's given to Sonia; or to Magnolia; or to Rose, from his cell, with a pencil. The third's the only one that says a number. Rose lit the lamp; or didn't. Oleana told you to hurry up and win. Zane pulled it too, and turned the mug round. Shay gives evidence, in a spreadsheet. Beck gets a crowd, cries, and denies it. Kaya makes the League's banners. Marnie plays, and wins or doesn't. Piers has a crowd. Leon is Champion. Peony was sent for, and put his boots on the desk. The Ball Guy took the head off. Bede takes the watch off. Spikemuth has a crowd. At Number Two, the lamp is lit.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-broken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-lit",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "peony",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-peony-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You could tell him what Peony told you: \"The lamps all came up. Every one.\""
+    }
+   ]
+  },
+  {
+   "id": "yl-turn-coach",
+   "name": "Phase 1: The Coach",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "trainer.pr/musician"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "\"She asked you to go home.\" Gaz: \"We came to watch.\" \"You came to boo. You've three chants ready for the lad from Postwick and they're all about his mum.\" Shaz closes the ring binder. Beck: \"...They are.\" \"Go home. Eat. Let her win it or lose it.\"",
+   "choices": [
+    {
+     "label": "Watch them go.",
+     "success": {
+      "text": "They go. It's the saddest walk in the game: forty people in black and pink, down a concourse, past sixty thousand going the other way. One towel's left on a seat in block J. Beck's.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "yell-walked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-turn-final"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-turn-final",
+   "name": "Phase 2: The Final, with Nobody",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.marnie-masters4"
+    ],
+    "pokemon": "morpeko",
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Marnie plays Leon. You watch from the tunnel. She's good. She's very good. Nobody's shouting for her. She looks up, once, at block J. There's a towel on a seat. Marnie, to her Morpeko: \"S'all right. Just us. Always was.\"",
+   "choices": [
+    {
+     "label": "Wait in the tunnel.",
+     "success": {
+      "text": "The Darkest Day comes. There's nobody in Wyndon who knows the names. The pitch is full of things the size of houses.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-turn-red"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-turn-red",
+   "name": "Phase 3: The Red Sky, with No Chant",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "Five of them, the size of houses, and no chant to bring them down. Every one has to be fought down.",
+   "choices": [
+    {
+     "label": "Fight them down.",
+     "success": {
+      "text": "One. Two. Three. And then, at the fourth: a horn. From the car park. The coach never left. Big Daz couldn't get it started. Forty people come back up the concourse. Not booing. Not blocking. Shaz: \"She said go home. She never said stay home. One, two, three—\"",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "wooloo",
+        "corviknight",
+        "morpeko",
+        "centiskorch"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "yl-turn-after"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-turn-after",
+   "name": "Go Home and Eat",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.marnie-masters4"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "The fifth comes down to its own name.",
+   "choices": [
+    {
+     "label": "Go down to the pitch.",
+     "success": {
+      "text": "Marnie didn't ask. They came anyway. That's Yell. It always was. But they've stopped getting in the way, and they never do again. Rose is the same. Oleana resigns in six weeks. Zane finds the spur a month late. Beck left his towel on a seat. Kaya has a banner she doesn't unroll. Marnie: \"Just us. Always was.\" Piers stands in an away end, for the first time. Leon played Marnie with nobody watching her. The Ball Guy has a ball. Spikemuth is the same as it was. But the forty have stopped getting in the way, and they never do again.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-yell-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-came-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-lift-feeder",
+   "name": "Phase 1: The Feeder",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#14181c",
+    "effect": "none"
+   },
+   "intro": "The board, under Hammerlocke. EAST COAST (R&B). Zane: \"That's— you can't route to that. It's a spur. It's forty years old.\" \"Can it take a tenth of what's in that cage?\" He does the sum on his hand. Zane: \"...It can take a hundredth. That's still more than Spikemuth's had since I was born.\"",
+   "choices": [
+    {
+     "label": "Throw it. Permanently.",
+     "success": {
+      "text": "It's a big brass lever and it takes two of you. In Spikemuth: every bulb in the street comes on. Ones nobody knew were there. Neon that hasn't worked in eight years. A sign over the Gym, forty feet long, that nobody under thirty's ever seen lit: SPIKEMUTH.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "spur-live",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spikemuth-sign",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-lift-lift"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-lift-lift",
+   "name": "Phase 2: The Tower",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.ballguy"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "By Holo-call, to block J: \"Beck. The tower's side door. I've a lanyard.\" Beck: \"How many can you get in?\" \"How many've you got?\" Sixty Yellers in a lift. It's rated for twelve. Gaz: \"Breathe in!\" Kaya, flat against the mirror, with a banner: Kaya: \"I've made one for the tower. It says HIYA.\" Floor 12. The doors open. The Ball Guy. He looks at sixty people in black and pink. Sixty people look at a man with a Poké Ball for a head. The Ball Guy: \"...Have a ball?\" Sixty people: \"BALL! GUY! BALL! GUY!\" Nobody's ever chanted him. The head tilts. Under it, something that might be a sob.",
+   "choices": [
+    {
+     "label": "Up, floor by floor.",
+     "success": {
+      "text": "They don't fight anyone. They cheer them. Director Hollis is chanted out of his office. He comes quietly. He's not been called by his first name in a decade; Shaz got it off the door.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-lift-fifty"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-lift-fifty",
+   "name": "Phase 3: Floor 50",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose",
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "The lift. Sixty people. Rose's office. Rose: \"...Who are all of you?\" Beck: \"Spikemuth.\" Rose: \"I don't—\" Beck: \"East coast. End o' the old spur. You laid it. There's a plate. 'R and B.' You've been turnin' us off for eight year an' tonight some lass with a lanyard turned us back on.\" Rose: \"You came up here to—\" Beck: \"Say ta.\" A pause. Beck: \"An' to ask who the League is. I sat in your lobby four hours once. Nobody could tell me.\" Rose sits down. In his brother's chair. Rose: \"It's me. I'm afraid the League's me.\"",
+   "choices": [
+    {
+     "label": "\"There's time.\"",
+     "success": {
+      "text": "The cage is still half open. He shuts it from the desk, with sixty people at your back and no battle on any floor. Spikemuth has lights and a crowd. The away coaches come back. The chip shop by the Gym reopens. Then the other one. Rose: \"The League's me.\" Oleana holds the lift. Zane threw a brass lever. Shay audits a lift's load rating, after. Beck: \"Say ta.\" Kaya made one for the tower: HIYA. Marnie sees the sign lit. Piers has forty feet of neon. Leon gets lost in the tower and meets sixty people in a lift. Peony rides the lift. The Ball Guy: \"BALL! GUY!\" Bede is in the lift, somehow, appalled. Spikemuth is lit.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-other-yell",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-bought-warn",
+   "name": "Bought",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Spikemuth will be sold. It'll have light, a Power Spot, a stadium and a new name. Nobody's harmed. It won't be Spikemuth.",
+   "choices": [
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "You read it again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-bought-warn-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back.",
+     "success": {
+      "text": "You put the key back in your pocket.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-bought-warn-2",
+   "name": "Bought",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Spikemuth will be sold. It'll have light, a Power Spot, a stadium and a new name. Nobody's harmed. It won't be Spikemuth. Are you sure?",
+   "choices": [
+    {
+     "label": "I'm sure.",
+     "success": {
+      "text": "You go to Oleana, with the key.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-final-bought",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-bought-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back.",
+     "success": {
+      "text": "You put the key back in your pocket.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-bought-gate",
+   "name": "Phase 1: The Gate",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Oleana: \"Spikemuth. There's a plant?\" \"The old one. Under the Gym. It's on your first spur.\" She looks it up. Four seconds. Oleana: \"...There's a Power Spot under it. Capped. Since before the survey. We never looked; it wasn't on the map.\" She almost smiles. It's the efficient kind. Oleana: \"The Chairman will be delighted. We'll make an offer for the freehold tonight.\"",
+   "choices": [
+    {
+     "label": "Go back to Spikemuth.",
+     "success": {
+      "text": "Beck is at the shutter, alone.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-bought-beck"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-bought-beck",
+   "name": "Phase 2: Beck",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "Beck: \"You give 'em the key. Oldroyd's key. He polished that plate thirty year.\" Beck: \"They'll light us. I know. They'll light us lovely.\"",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "He was a Gym trainer when there were sixty in on a Tuesday. He's better than he's let on.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.drive/galarian-swsh-yell-grunt-man",
+       "team": [
+        "obstagoon",
+        "skuntank",
+        "scrafty",
+        "toxtricity"
+       ],
+       "name": "Beck Gallowglass",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "yl-bought-offer"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-bought-offer",
+   "name": "Phase 3: The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.piers"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "Beck, beaten: Beck: \"...They'll not know the names.\" A contract, four lines: \"Macro Cosmos Construction to redevelop the site known as Spikemuth as WYNDON EAST ARENA. Capacity 40,000. Dynamax-capable. Existing structures to be cleared. Residents to be rehoused at the developer's expense in superior accommodation.\" Nobody's harmed. Everybody's rehoused. It's generous. Piers, reading it, on a pallet: Piers: \"'Superior.' Aye. It will be.\" He puts the guitar in its case. Piers: \"They've offered me the Gym. In the new place. Power Spot. Telly.\" A pause. Piers: \"It's what I turned down. They've just moved the town to it instead.\"",
+   "choices": [
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "Spikemuth is Wyndon East: a Center that heals in full, a shop with everything, very bright. Your Pokémon are each a step less sure of you, for now; it recovers. Team Yell still goes to every match. It doesn't chant names. It's got nothing of its own to shout for. It claps, politely. The night before the diggers came, Mr. Oldroyd took the plate off the box and gave it to you, and didn't say why: R. & B., LAMPS. Rose is delighted. Until the plate. Oleana made the offer, efficiently. Zane costs an arena. Shay stops the cheque once; it's reissued. Beck: \"They'll not know the names.\" Kaya is asked to do the arena's signage, and says no. Marnie is offered a sponsorship, and raises one eyebrow. Piers puts the guitar in its case. Leon opens the arena. Peony scratched his initial, forty years back. The Ball Guy is the mascot of Wyndon East. Bede is offered the arena's Gym. Spikemuth is Wyndon East.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": -1,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-other-macro",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spikemuth-bought",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "brass-plate",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gl-brass-plate",
+   "name": "The Brass Plate",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "brass-plate",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "brass-plate-given",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "rose-station",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Rose, at his desk. You've a brass plate in your bag: R. & B., LAMPS.",
+   "choices": [
+    {
+     "label": "Put the plate on his desk.",
+     "success": {
+      "text": "Rose: \"...I laid that.\" \"You've knocked it down.\" Rose: \"I've— there's an arena. It's a good arena.\" He turns the plate over. On the back, scratched with a nail, forty years ago, in two hands: R. and P. Rose: \"He scratched his. I'd forgotten he scratched his.\" He stops the diggers. Half the street's left. It's enough to start from.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "brass-plate-given",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spikemuth-half",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-own-roof",
+   "name": "Phase 1: The Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "\"It's a good company run by a man in a hurry.\" Rose: \"I beg your pardon.\" \"Give it to someone with a thousand years.\" Rose: \"...You'd wait?\" \"I'd light Spikemuth first.\" Rose: \"Spikemuth. You keep— everybody keeps—\" He looks east. He's a man who can read a grid by its glow. There's a gap. Rose: \"Ah.\" Rose: \"I love an upset. I've always said. The Chair's yours if you can win it.\"",
+   "choices": [
+    {
+     "label": "Win it.",
+     "success": {
+      "text": "He sends out Escavalier.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-rose"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-own-blockj",
+   "name": "Phase 1: Block J",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.piers"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "\"You've never had a leader.\" Forty people point at Piers. He's not there. They point at the screen he's on. Piers, on the screen: \"Don't.\" \"D'you want one? I'll not block a road. I'll not boo. I'll get you a town with the lights on.\" Gaz: \"...Can we still have the horns?\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "Forty horns. You go up the tower with them behind you. Rose is on the roof. Rose: \"I love an upset. The Chair's yours if you can win it.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-rose"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gl-own-rose",
+   "name": "Phase 2: Rose",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Escavalier, Perrserker (Boardroom), Klinklang, Copperajah (Foundry), and Duraludon (Skyline; it Gigantamaxes). At half Skyline's health: Any Questions? He gives a press conference to the cameras while his Pokémon choose for themselves. Rose: \"Yes, you at the back. Was it necessary? An excellent question. Next.\"",
+   "choices": [
+    {
+     "label": "\"Chairman. Who's on the east coast spur?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galar-brass-seen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Rose: \"I— next question.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/rose",
+       "team": [
+        "escavalier",
+        "perrserker",
+        "klinklang",
+        "copperajah",
+        "duraludon"
+       ],
+       "name": "Rose",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gl-own-mug"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "\"Chairman. Whose lamp's on your desk?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rose-lamp-41",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He takes his glasses off. Skyline's next move is skipped.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/rose",
+       "team": [
+        "escavalier",
+        "perrserker",
+        "klinklang",
+        "copperajah",
+        "duraludon"
+       ],
+       "name": "Rose",
+       "size": 5,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gl-own-mug"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "He's gracious. He's always been gracious.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/rose",
+       "team": [
+        "escavalier",
+        "perrserker",
+        "klinklang",
+        "copperajah",
+        "duraludon"
+       ],
+       "name": "Rose",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gl-own-mug"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gl-own-mug",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Rose: \"I'd endorse you. I mean that. There's a pen in the drawer. And a box of matches. I never used the matches.\" A tower. Forty thousand staff. A grid. A thing in a cage. A coach in the car park. Four decisions. The first: the mug.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "\"There's never time.\" It stays on the desk.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-mug-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-map"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Smash them.",
+     "success": {
+      "text": "Four hundred mugs. It takes a while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-mug-smashed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-map"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Reprint it: \"There's time. Who's it for?\"",
+     "success": {
+      "text": "No Operation will have a deadline. Every one will have a named person it's for.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-mug-reprinted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-map"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gl-own-map",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "The second: the map.",
+   "choices": [
+    {
+     "label": "As it is.",
+     "success": {
+      "text": "The Power Spots, as they were.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-map-same",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-cage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Redraw it from the wires, not the Power Spots.",
+     "success": {
+      "text": "Forty places light up that were never on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-map-wires",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-cage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Burn it.",
+     "success": {
+      "text": "It burns quickly. It was mostly logos.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-map-burned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-cage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gl-own-cage",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "eternatus",
+    "tint": "#2a1420",
+    "effect": "none"
+   },
+   "intro": "The third: the cage.",
+   "choices": [
+    {
+     "label": "Seal it.",
+     "success": {
+      "text": "It's sealed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-cage-sealed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-yell"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run it, slowly, at a hundredth.",
+     "success": {
+      "text": "A hundredth. The dials barely move.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-cage-slow",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-yell"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give the problem away: Sonia, Magnolia, and a man in a cell with a pencil.",
+     "success": {
+      "text": "The Thousand-Year Desk. It produces nothing. It's for somebody else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-cage-given",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-yell"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gl-own-yell",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "The fourth: Team Yell.",
+   "choices": [
+    {
+     "label": "A department.",
+     "success": {
+      "text": "They get a floor, and lanyards.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-yell-department",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-oleana"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nothing to do with it.",
+     "success": {
+      "text": "They go home on the coach.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-yell-apart",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-oleana"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The company's crowd: wherever Macro Cosmos lights a place, a coach turns up.",
+     "success": {
+      "text": "Forty people who'll learn every new place's names.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-yell-crowd",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gl-own-oleana"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gl-own-oleana",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Oleana, with a tablet: Oleana: \"You'll want a secretary. I come with the office. I should tell you I'd have stood between you and him, an hour ago.\"",
+   "choices": [
+    {
+     "label": "\"I know.\"",
+     "success": {
+      "text": "Oleana: \"Good.\" Macro Cosmos is yours, with Team Yell as its loudest department. Eight subsidiaries, each a ready-made department. Forty thousand insurance policies that must be honoured or refunded. And the flaw: everything's a line on a budget, and you can't see who's on the wire unless you go and look. Rose was beaten: \"I'd endorse you.\" Oleana takes six weeks' leave, and comes back with a tan and a list. Zane has the Workshop. Shay has the Counting Room. Beck is the loudest Lead. Kaya designs the uniform. Marnie lends her name. Piers: \"Don't.\" Leon asks to be un-sponsored, and is. Peony: \"Chin up!\" He runs Rail, badly, joyfully. The Ball Guy is asked, and says no, and thinks about it. Bede has a pink cardigan. Spikemuth is lit first. Number Two is on the redrawn map.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-galar",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-oleana-stays",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Would you stand between me and anyone?\"",
+     "success": {
+      "text": "Oleana: \"Ask me in a year.\" Macro Cosmos is yours, with Team Yell as its loudest department. Eight subsidiaries, each a ready-made department. Forty thousand insurance policies that must be honoured or refunded. And the flaw: everything's a line on a budget, and you can't see who's on the wire unless you go and look. Rose was beaten: \"I'd endorse you.\" Oleana takes six weeks' leave, and comes back with a tan and a list. Zane has the Workshop. Shay has the Counting Room. Beck is the loudest Lead. Kaya designs the uniform. Marnie lends her name. Piers: \"Don't.\" Leon asks to be un-sponsored, and is. Peony: \"Chin up!\" He runs Rail, badly, joyfully. The Ball Guy is asked, and says no, and thinks about it. Bede has a pink cardigan. Spikemuth is lit first. Number Two is on the redrawn map.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-galar",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-oleana-stays",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go home. Six weeks' leave. Then tell me.\"",
+     "success": {
+      "text": "She looks at you as if you'd spoken another language. Oleana: \"...I've not had leave since I was nineteen.\" She takes it. She goes back to a recycling plant, on purpose, with a Garbodor. She comes back in six weeks. She's got a tan and a list. Macro Cosmos is yours, with Team Yell as its loudest department. Eight subsidiaries, each a ready-made department. Forty thousand insurance policies that must be honoured or refunded. And the flaw: everything's a line on a budget, and you can't see who's on the wire unless you go and look. Rose was beaten: \"I'd endorse you.\" Oleana takes six weeks' leave, and comes back with a tan and a list. Zane has the Workshop. Shay has the Counting Room. Beck is the loudest Lead. Kaya designs the uniform. Marnie lends her name. Piers: \"Don't.\" Leon asks to be un-sponsored, and is. Peony: \"Chin up!\" He runs Rail, badly, joyfully. The Ball Guy is asked, and says no, and thinks about it. Bede has a pink cardigan. Spikemuth is lit first. Number Two is on the redrawn map.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-galar",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-oleana-leave",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-route9",
+   "name": "Route 9",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-yell-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "galar-cheered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.marnie-masters4"
+    ],
+    "pokemon": "wooloo",
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "A coach, parked across Route 9. Forty people in black and pink, arms linked. Horns. Gaz: \"Right! Three challengers comin' through to Circhester! All of 'em drawn before our Marnie! They're late, they forfeit! Nobody passes!\" Kaya, nineteen, with a banner still wet: Kaya: \"I did a new one.\" It says NONE SHALL PASS (EXCEPT MARNIE). The brackets are very neat. A challenger arrives: a boy from Postwick, fourteen, with a Wooloo, out of breath. The boy: \"I've a match at two. Please. I've never got this far.\" Gaz: \"BOO!\" Forty people: \"BOOOO!\" The Wooloo rolls behind his legs. And then, behind the line, a quiet voice. Marnie, arriving, mortified: Marnie: \"Stop it. I never asked. If I win 'cause they were late, I've not won. Go home.\" She looks at them. Forty people who came on a coach. Marnie: \"...Have you eaten? Go home and eat.\"",
+   "choices": [
+    {
+     "label": "\"What's the Wooloo's name?\"",
+     "success": {
+      "text": "\"What's the Wooloo's name?\" The boy: \"...Bobbin.\" Shaz, who's got a pencil out before anyone's told her: Shaz: \"Bobbin. Two syllables. Right. One, two, three—\" Forty people: \"BOB-BIN! BOB-BIN! BOB-BIN!\" The Wooloo comes out from behind his legs. It's twice the size it was. Not Dynamaxed. Just: stood up. The boy's crying. He's fourteen and he's from Postwick and forty strangers know his Wooloo's name. Gaz, baffled, delighted: Gaz: \"That were louder than booin'. Did you hear that? We were louder.\" They do it for all three. It's deafening. Marnie pretends not to see, and is seen smiling.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-cheered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-road-cheered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk round them.",
+     "success": {
+      "text": "You go the long way, by the river. Behind you, the booing starts again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-founding",
+   "name": "Team Encore",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-yell-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "galar-mc-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "galar-cheered",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A chip shop on the Hammerlocke road. One table. Vinegar. A man in a lanyard, a man with a towel, and a third chair. Beck Gallowglass: \"You're the one who asked the Wooloo's name. It went round the coach in a minute flat.\" Zane Ingleby: \"I heard it in the tower. Somebody on twelve had it on a clip. Forty people chanting 'Bobbin.' I watched it nine times.\" Beck: \"He's got the power and no idea where it goes.\" Zane: \"They've got a town and no power. And there's— I've been through the feeders. There's forty places like theirs. Off the map. A Gym in a quarry. A village the League skipped. An island with one trainer.\" Beck: \"Somebody should just—\" Zane: \"—carry it over.\" The chip shop's owner, Mrs. Jocelyn Sowerby, wiping the counter: \"You'll want a generator, then. I've one in the yard. It were my husband's; he were a lamp man.\" The creed, on the specials board, in chalk, under MUSHY PEAS: NOBODY PLAYS TO AN EMPTY HOUSE.",
+   "choices": [
+    {
+     "label": "Take the third chair.",
+     "success": {
+      "text": "Team Encore: Beck, who knows what it's like when sixty people know your name, and when eleven do. Zane: the feeders, and a graph that says there's time. Shay: \"There's four billion in a line called 'contingency.' Nobody'll miss a van.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "encore-founded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who else?\"",
+     "success": {
+      "text": "Kaya: banners, one per place; she asks what they want on it. Shaz: the ring binder; she learns the names before they arrive. Big Daz: a coach, forty-two seats. Mrs. Sowerby: a generator, and a chip van, in time. Peony: \"An adven-tour! Where there's no lights! Chin up, I'm in!\" The Ball Guy isn't asked. He turns up. Without the head. Nobody recognises him. He's thrilled. Marnie doesn't join. She's got a final. She lends her name: \"Say I said it were all right.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "encore-founded",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-away-1",
+   "name": "Away Day 1: The Quarry",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "An Away Day's a visit. A coach, a generator, a banner, and forty people who've learned the names. A Gym in a worked-out quarry, north of Circhester. No Power Spot. Four trainers. A Leader of sixty who's not had a challenger in two years.",
+   "choices": [
+    {
+     "label": "Get on the coach.",
+     "success": {
+      "text": "The coach doesn't fit down the track.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-q-road"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-q-road",
+   "name": "The Road",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "The coach doesn't fit. Everybody gets out and carries the generator.",
+   "choices": [
+    {
+     "label": "Carry.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Forty people, one generator, a track.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-q-pitch"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It slips twice. Big Daz catches it both times.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-q-pitch"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-q-pitch",
+   "name": "The Pitch",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Zane wires it. Floodlights that last worked when Beck was a lad. They come on one at a time, with a clunk.",
+   "choices": [
+    {
+     "label": "Step onto the pitch.",
+     "success": {
+      "text": "You're the challenger.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-q-match"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-q-match",
+   "name": "The Match",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "pokemon": "coalossal",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "The old Leader, Mr. Gwilym Hartshorn. Forty people chant for both sides. By name.",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "He's not heard his Coalossal's name shouted since his wife.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "encore-away1",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/veteran_m",
+       "team": [
+        "coalossal",
+        "stonjourner",
+        "rhyperior"
+       ],
+       "name": "Mr. Gwilym Hartshorn",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-away-2",
+   "name": "Away Day 2: The Island",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "encore-away1",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.peony"
+    ],
+    "tint": "#1e3a40",
+    "effect": "none"
+   },
+   "intro": "An island off the west coast with one house. A girl of twelve who trains alone, because the ferry's Macro Cosmos Rail's, and it was \"rationalised.\"",
+   "choices": [
+    {
+     "label": "Find a boat.",
+     "success": {
+      "text": "No ferry. Peony's got a boat. It's not his. \"Borrowed! With enthusiasm!\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-i-beach"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-i-beach",
+   "name": "The Beach",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/youngster_f"
+    ],
+    "pokemon": "clobbopus",
+    "tint": "#1e3a40",
+    "effect": "none"
+   },
+   "intro": "She's practising. Against the tide. A Clobbopus and a Dreepy and nobody.",
+   "choices": [
+    {
+     "label": "Challenge her.",
+     "success": {
+      "text": "She's never had a crowd. She freezes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-i-match"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-i-match",
+   "name": "The Match",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/youngster_f",
+     "trainer.pr/musician"
+    ],
+    "pokemon": "dreepy",
+    "tint": "#1e3a40",
+    "effect": "none"
+   },
+   "intro": "Forty people, waiting.",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "Forty people, waiting, quietly, for a girl of twelve to send out a Dreepy. She does. Shaz, low: Shaz: \"One, two, three—\" Forty people: \"Mizzle. Mizzle. Mizzle.\" The girl: \"How d'you know she's called Mizzle?\" Shaz: \"It's on your bucket, love.\" Shay, that week, finds the ferry in the budget. It costs less than the Chairman's flowers. It runs again from the next stage.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "encore-away2",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/youngster_f",
+       "team": [
+        "clobbopus",
+        "dreepy"
+       ],
+       "name": "The girl on the island",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-away-3",
+   "name": "Away Day 3: Number Two",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "encore-away1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man",
+     "boss.peony"
+    ],
+    "tint": "#1a1a14",
+    "effect": "none"
+   },
+   "intro": "Zane: \"There's one more feeder I can't place. It's not on the grid at all. It's got no load. It's just— a wire, that goes into the hills behind Motostoke and stops.\" Peony, very quiet for him: Peony: \"I know where that goes.\" A pit village. Forty years dark. A street. A chapel with no roof. A bandstand. Old men on a bench. Seven of them. They were in the forty-one. Peony: \"Evenin', lads.\" An old miner, Mr. Thackray, who stopped to help a pony: \"Peony. You've brought a coach.\" Peony: \"I've brought a crowd.\"",
+   "choices": [
+    {
+     "label": "Wire the street.",
+     "success": {
+      "text": "Zane wires one street. It's the one Rose paid for himself, forty years ago, till he couldn't. The lamps come on. Seven old men, under street lights, in a village with no name. Shaz, with the binder, quietly: Shaz: \"I've not got these. I've nowt on these. What are they called?\" Mr. Thackray: \"We're not Pokémon, love.\" Shaz: \"No. But what're you called?\" They tell her. Seven names. And then the others: the thirty-four who aren't on the bench. Forty-one. Forty people, low, in time. One name at a time. It takes a while. Shaz gives you the list: forty-one names, in her writing.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "encore-away3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fortyone-names",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-twelve-thousand",
+   "name": "Twelve Thousand",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "beat": 6,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.piers",
+     "boss.marnie-masters4"
+    ],
+    "tint": "#1a141c",
+    "effect": "glint"
+   },
+   "intro": "The night of the final. Wyndon's full. And half of Galar isn't watching it. Kaya's cousin. The truck. Aux. Encore's put Spikemuth on the regional feed, with a generator, legally: Shay found the clause. \"Televised fixtures shall take place at venues with Dynamax capability.\" It doesn't say what a fixture is. Encore's registered a concert.",
+   "choices": [
+    {
+     "label": "Go to Spikemuth.",
+     "success": {
+      "text": "The shutters are up. All of them. For the first time in eight years.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-12k-street"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-12k-street",
+   "name": "Twelve Thousand",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.piers",
+     "boss.marnie-masters4",
+     "boss.peony"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "The street's full. Not forty. The quarry's come. The island's come: one girl, on Peony's shoulders. Number Two's come: seven old men, in a coach, in their good caps. And then the others. Forty places off the map, each with a banner Kaya asked them about. Piers, at a microphone, looking at it: Piers: \"...There's twelve thousand people in my street.\" Marnie, who isn't in Wyndon; she was knocked out in the semi, fairly, and came home: Marnie: \"Go on, then. They've not come to watch you tune.\"",
+   "choices": [
+    {
+     "label": "Look at the sky.",
+     "success": {
+      "text": "It comes. Over Wyndon. On the feed from the stadium, things are getting big.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-12k-sky"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-12k-sky",
+   "name": "The Red Sky",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.piers",
+     "trainer.pr/musician"
+    ],
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "Rose, on one screen: \"—a little light. A little noise. Please remain—\" Piers, on the other: \"Right. Galar. You know the one. After me.\" Spikemuth leads; Wyndon learns it off the screen. Twelve thousand people who know what it's like to be forgotten, saying sixty thousand strangers' Pokémon's names until they come down.",
+   "choices": [
+    {
+     "label": "Chant.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "One name at a time. They come down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-12k-chairman"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose the beat twice. Twelve thousand people don't. They come down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-12k-chairman"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-12k-chairman",
+   "name": "The Chairman",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose",
+     "trainer.pr/oleana"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor 50. He's watching both screens. The stadium, where it's working. And a street he doesn't know, where twelve thousand people are standing under lights he can't account for. Rose: \"Oleana. What's that. That's not one of ours. Who's lit that?\" Oleana: \"A generator, Chairman. From a chip shop. And the east coast spur. An analyst from thirty-one's been feeding it a hundredth of the Plant for a week. I signed it off as 'losses.'\" Rose: \"You— you signed—\" Oleana: \"It's the town with no lights, Chairman. I grew up in one. I thought somebody should shake its hand.\" On the screen: seven old men in caps. He knows the caps. Rose: \"...That's Thackray.\" He's got the lamp in his hands before he knows he's picked it up. Rose: \"That's Thackray. He's— they're all—\" He switches off the Plant himself. From the desk. There's a button. He's never looked at it.",
+   "choices": [
+    {
+     "label": "Stay in the street.",
+     "success": {
+      "text": "Team Encore doesn't disband. It becomes a thing Galar has: a coach in a lay-by, where a match can be played with a crowd. Number Two has one lit street. Rose pays for it, from a cell, by postal order. He's very organised. Rose switched it off himself. Oleana signed it off as \"losses.\" Zane carries a generator up a quarry. Shay finds a ferry in the budget. Beck has a chip shop, and a third chair. Kaya made forty banners; she asked each. Marnie came home: \"Go on, then.\" Piers has twelve thousand. Leon watches it on the other screen, and wishes he were there. Peony: \"I've brought a crowd.\" The Ball Guy turned up without it. Bede is found by a very old woman. Spikemuth has twelve thousand. Number Two has one street, seven men, and forty-one names.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-encore",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find who came to wake something.",
+     "success": {
+      "text": "Sordward and Shielbert, who've come to Spikemuth to wake something and found twelve thousand people between them and it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "enc-12k-brothers"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-12k-brothers",
+   "name": "Twelve Thousand",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.sordward-shielbert"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "Two brothers in very good coats, at the back of twelve thousand people.",
+   "choices": [
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "They're chanted off. By name. They're very moved. Team Encore doesn't disband. It becomes a thing Galar has: a coach in a lay-by, where a match can be played with a crowd. Number Two has one lit street. Rose pays for it, from a cell, by postal order. He's very organised. Rose switched it off himself. Oleana signed it off as \"losses.\" Zane carries a generator up a quarry. Shay finds a ferry in the budget. Beck has a chip shop, and a third chair. Kaya made forty banners; she asked each. Marnie came home: \"Go on, then.\" Piers has twelve thousand. Leon watches it on the other screen, and wishes he were there. Peony: \"I've brought a crowd.\" The Ball Guy turned up without it. Bede is found by a very old woman. Spikemuth has twelve thousand. Number Two has one street, seven men, and forty-one names.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-encore",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.sordward-shielbert",
+       "team": [
+        "sirfetchd",
+        "bisharp",
+        "golisopod",
+        "rhyperior"
+       ],
+       "format": "doubles",
+       "name": "Sordward and Shielbert",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "enc-lay-by",
+   "name": "A Coach in a Lay-By",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-ending-encore",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "A coach in a lay-by. Forty people, with a ring binder. They'd like to know your Pokémon's names.",
+   "choices": [
+    {
+     "label": "Tell them.",
+     "success": {
+      "text": "They learn every one. For a while, your party fights as if somebody knows their names: they do.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

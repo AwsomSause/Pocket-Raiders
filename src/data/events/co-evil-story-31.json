@@ -1,0 +1,3251 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "fl-final-choice",
+   "name": "The Final Choice",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre",
+     "boss.az"
+    ],
+    "tint": "#1e1418",
+    "effect": "glint"
+   },
+   "intro": "Under Geosenge. A crystal flower the height of a tower, half open. A console with a key in it. A table laid for forty. A countdown on every screen in Kalos. At the console, Lysandre, with his hand near the key, not on it. At the table, thirty-nine of the Chosen, seated; one chair pulled out. At the door, AZ: he's too tall for it; he's bent, to look in. On the monitors, Lumiose: a balcony, and a woman of seventy-one in her good coat. In the lift hall above, some three hundred and seventy people in red, holding keys that chime. At the far wall, with a bucket, Rue. Lysandre: \"You're here. Good. I'd not have turned it without you. Please.\" He pulls out the fortieth chair. He doesn't sit. There's no forty-first. Lysandre: \"It's dusk. I chose dusk; it's the kindest light. I've told them. The Holo Caster. So that they might spend today as they'd wish to have spent it.\" At the door: AZ: \"I fired it for one life. I have walked three thousand years to say one word to whoever stood where you stand. May I come in? I'll have to stoop.\" Lysandre: \"You're the king. The first one.\" He's looked this man up. He's descended from his brother. Lysandre: \"...You're family.\" AZ: \"Yes. I'm sorry for it.\" Lysandre turns to you. Lysandre: \"I've made every choice in this alone. I find I can't make the last. I've a guest. A host asks the guest.\" He steps back from the console. The key's there. Lysandre: \"It turns one way.\" It turns two. AZ knows. Xerosic knows. Nobody's told Lysandre.",
+   "choices": [
+    {
+     "label": "Sit in the fortieth chair. \"Turn it.\"",
+     "success": {
+      "text": "You sit. He looks at you a long moment, and then at the key.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-final-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-plan-lobby"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the key out of the console.",
+     "success": {
+      "text": "You take it out. It's small. It's warm. Lysandre: \"...Ah.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-turn-key"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand the key to the tall man in the door.",
+     "success": {
+      "text": "You cross the chamber. You hold the key up. A hand the size of a tray takes it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-final-az",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-az-door"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the key, and his place at the console. \"Forty's Xerosic's number. I'll ask a better question.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "rank": 5,
+       "has": "confided"
+      }
+     ],
+     "success": {
+      "text": "You take the key. You stand where he stood.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-final-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-console"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "told-all",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-told-all",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The lift hall above is silent. They're not queuing."
+    },
+    {
+     "id": "yours",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-test-yours",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He's already named the village to you. He doesn't look at the photograph on the console; he doesn't need to."
+    },
+    {
+     "id": "who-forty",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-who-forty",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"Who told you forty?\" He's been thinking about it for two stages. You can see it."
+    }
+   ]
+  },
+  {
+   "id": "fl-plan-lobby",
+   "name": "Phase 1: The Lobby",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "You're in the chair. Your party holds the lift hall above. Three come down. First, two in masks. Sina: \"You'll never guess who we are!\" Dexio: \"It's us.\" Sina: \"Dexio.\"",
+   "choices": [
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "They fight side by side, the way they've practised.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Sina and Dexio",
+       "size": 4,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-plan-rival"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-plan-rival",
+   "name": "Phase 1: The Lobby",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Your rival comes down the stairs two at a time, and stops at the bottom, and looks at the red suit.",
+   "choices": [
+    {
+     "label": "\"Go home.\"",
+     "success": {
+      "text": "\"Not without you.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-plan-sycamore"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "\"There's a reason.\"",
+     "success": {
+      "text": "\"Then show me.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-plan-sycamore"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-plan-sycamore",
+   "name": "Phase 1: The Lobby",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.sycamore"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Professor Sycamore: \"I sat across a table from him for six years and thought it was philosophy. I'm not going to make that mistake with you. I'm going to assume you mean it.\"",
+   "choices": [
+    {
+     "label": "Battle the Professor.",
+     "success": {
+      "text": "His Garchomp comes out of the Ball already moving.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.sycamore",
+       "team": [
+        "garchomp"
+       ],
+       "name": "Professor Sycamore",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-plan-petals"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-plan-petals",
+   "name": "Phase 2: The Petals",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.sycamore"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Sycamore: \"Then I'll go down. He's put me on his list; did you know? I looked. I'd rather be struck off.\" He goes past you. He sits at the table, in the place that says his name. He doesn't touch the glass. Three housings to prime: the Draw, the Gift, the Aim. Each takes two turns. The defenders try to short them.",
+   "choices": [
+    {
+     "label": "Prime the Draw and the Gift.",
+     "success": {
+      "text": "The defenders come at the housings.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The defenders",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-plan-aim"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-plan-aim",
+   "name": "Phase 2: The Aim",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.az"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "At the Aim: AZ. He's got his arms round a petal thicker than he is. AZ: \"I'll not fight you. I've not fought anyone since. I'll simply hold. You'll have to move me.\" It isn't a battle. He can't be knocked out. He can be outlasted. He's three thousand years tired.",
+   "choices": [
+    {
+     "label": "Push.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You push. He holds. You push, and he holds, and at last he doesn't: not because you were stronger, but because you were younger.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-plan-light"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You push until your arms shake. He holds. Then, very slowly, he lets go: he was only ever going to be outlasted.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-plan-light"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't push.",
+     "success": {
+      "text": "You stand beside him and don't push. He holds the petal for a long time. Then he lets go of it himself, very gently, as one puts down something one has carried too far. AZ: \"I'm tired. Forgive me.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-plan-light"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-plan-light",
+   "name": "Phase 3: The Light",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "glint"
+   },
+   "intro": "Lysandre turns the key. It isn't loud. It's white. It goes up the flower and out. On the monitors: Kalos. The light crossing it like a tide. It gets to the hills round Geosenge. It gets a little past. It stops.",
+   "choices": [
+    {
+     "label": "Watch the monitors.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "team": "flare",
+         "inside": true
+        },
+        {
+         "kind": "flag",
+         "key": "flare-stones-tenth",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Xerosic: \"It's— ah. The stones. Somebody's been unhooking stones. A tenth a night. It's short. It's reached— let me see— about nine miles.\" It never reaches Lumiose. The hills are grey. The valley's quiet. Nobody on screen is seen to fall; the monitors show places, and then show them empty of colour.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-plan-last"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-stones-unhooked",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Xerosic: \"It's— ah. The stones. Somebody unhooked a whole row. It's short. It's reached— let me see— about nine miles.\" It never reaches Lumiose. The hills are grey. The valley's quiet. Nobody on screen is seen to fall; the monitors show places, and then show them empty of colour.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-plan-last"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Xerosic: \"It's— ah.\" says the intercom, delighted, then not. It reached thirty miles. Nobody had touched the stones. It never reaches Lumiose. The hills are grey. The valley's quiet. Nobody on screen is seen to fall; the monitors show places, and then show them empty of colour.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-thirty-miles",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-plan-last"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-plan-last",
+   "name": "Forty at a Table",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre",
+     "trainer.pr/janitor"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "The shelter. White light fading in the vents. Forty people who've been spared a thing that didn't arrive. Lysandre: \"...It's so clean.\" The grey hills. Nothing moving on them. Lysandre: \"It didn't reach. Nine miles. I've— for nine miles.\" One monitor's still Lumiose. A balcony. A woman in her good coat, who stayed to see. She's looking toward Geosenge. She's seen the light come up over the hills, and stop. She's looking straight at the camera. She doesn't know it's there. He can't look away from her. Lysandre: \"That's Mme Carmody's mother. She does— her daughter does the flower room. She hums.\" At the far wall: a bucket, set down. Rue: \"She said she'd stay and see what I'd done.\" A pause. Rue: \"That's what you've done. That's nine miles of it. D'you want to see the rest of what I've done? I've been unhooking a tenth a night.\"",
+   "choices": [
+    {
+     "label": "\"It was arithmetic.\"",
+     "success": {
+      "text": "He doesn't answer. He's still looking at the balcony. Rue was never on the list. She's the one who lets them out; she's got the keys. At the lift, to forty people in red: Rue: \"Mind the step. It's all still there. Mostly. They know your names; it was on the wireless. Off you go.\" The Chosen come out into a country that knows their names. Three hundred and seventy more come out behind them, holding keys that chimed, and they've worked it out on the stairs. Geosenge and nine miles round are grey for the rest of the region: no wild pools, no shop, and a rest that heals in full; it's very quiet there. Your Pokémon were in the lift hall: they've each lost a step of trust in you, for now. In every town in Kalos, people look at the red suit. The team has no leader. Lysandre's in the grass. It looks to the Guest. Lysandre is in the grey grass, with Sycamore. Sycamore sat at his place and didn't drink. AZ held a petal, and was outlasted. Xan was in the shelter, in a bespoke suit, sick on the floor. Rue let them out. Her mum was on a balcony; she stayed to see. Yarborough poured for forty. Xerosic: \"It's short!\" Malva reads the bulletin, and her voice goes. Garance issues a statement about \"range.\" Mable wins the pool. Valerie unpicks. Bijou is not returned; it's the one ending. The members come out to a country that knows their names. The dining room is still laid.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -25,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.2
+         }
+        ],
+        "modsText": "Every Kalos shop charges you 20% more for the rest of the region: they look at the red suit."
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kalos-nine-miles",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lysandre-grass",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "You say nothing. Nor does he. Nor does anyone at the table. Rue was never on the list. She's the one who lets them out; she's got the keys. At the lift, to forty people in red: Rue: \"Mind the step. It's all still there. Mostly. They know your names; it was on the wireless. Off you go.\" The Chosen come out into a country that knows their names. Three hundred and seventy more come out behind them, holding keys that chimed, and they've worked it out on the stairs. Geosenge and nine miles round are grey for the rest of the region: no wild pools, no shop, and a rest that heals in full; it's very quiet there. Your Pokémon were in the lift hall: they've each lost a step of trust in you, for now. In every town in Kalos, people look at the red suit. The team has no leader. Lysandre's in the grass. It looks to the Guest. Lysandre is in the grey grass, with Sycamore. Sycamore sat at his place and didn't drink. AZ held a petal, and was outlasted. Xan was in the shelter, in a bespoke suit, sick on the floor. Rue let them out. Her mum was on a balcony; she stayed to see. Yarborough poured for forty. Xerosic: \"It's short!\" Malva reads the bulletin, and her voice goes. Garance issues a statement about \"range.\" Mable wins the pool. Valerie unpicks. Bijou is not returned; it's the one ending. The members come out to a country that knows their names. The dining room is still laid.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -25,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.2
+         }
+        ],
+        "modsText": "Every Kalos shop charges you 20% more for the rest of the region: they look at the red suit."
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kalos-nine-miles",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lysandre-grass",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go up. Look at it.\"",
+     "success": {
+      "text": "He goes. He stands in the grey grass. Sycamore comes and stands next to him. Neither says anything. It's the corner table, without the table. Rue was never on the list. She's the one who lets them out; she's got the keys. At the lift, to forty people in red: Rue: \"Mind the step. It's all still there. Mostly. They know your names; it was on the wireless. Off you go.\" The Chosen come out into a country that knows their names. Three hundred and seventy more come out behind them, holding keys that chimed, and they've worked it out on the stairs. Geosenge and nine miles round are grey for the rest of the region: no wild pools, no shop, and a rest that heals in full; it's very quiet there. Your Pokémon were in the lift hall: they've each lost a step of trust in you, for now. In every town in Kalos, people look at the red suit. The team has no leader. Lysandre's in the grass. It looks to the Guest. Lysandre is in the grey grass, with Sycamore. Sycamore sat at his place and didn't drink. AZ held a petal, and was outlasted. Xan was in the shelter, in a bespoke suit, sick on the floor. Rue let them out. Her mum was on a balcony; she stayed to see. Yarborough poured for forty. Xerosic: \"It's short!\" Malva reads the bulletin, and her voice goes. Garance issues a statement about \"range.\" Mable wins the pool. Valerie unpicks. Bijou is not returned; it's the one ending. The members come out to a country that knows their names. The dining room is still laid.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -25,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.2
+         }
+        ],
+        "modsText": "Every Kalos shop charges you 20% more for the rest of the region: they look at the red suit."
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kalos-nine-miles",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lysandre-grass",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Whose plate was it?\"",
+     "success": {
+      "text": "He looks down at the table, laid for forty, and doesn't find his own. Rue was never on the list. She's the one who lets them out; she's got the keys. At the lift, to forty people in red: Rue: \"Mind the step. It's all still there. Mostly. They know your names; it was on the wireless. Off you go.\" The Chosen come out into a country that knows their names. Three hundred and seventy more come out behind them, holding keys that chimed, and they've worked it out on the stairs. Geosenge and nine miles round are grey for the rest of the region: no wild pools, no shop, and a rest that heals in full; it's very quiet there. Your Pokémon were in the lift hall: they've each lost a step of trust in you, for now. In every town in Kalos, people look at the red suit. The team has no leader. Lysandre's in the grass. It looks to the Guest. Lysandre is in the grey grass, with Sycamore. Sycamore sat at his place and didn't drink. AZ held a petal, and was outlasted. Xan was in the shelter, in a bespoke suit, sick on the floor. Rue let them out. Her mum was on a balcony; she stayed to see. Yarborough poured for forty. Xerosic: \"It's short!\" Malva reads the bulletin, and her voice goes. Garance issues a statement about \"range.\" Mable wins the pool. Valerie unpicks. Bijou is not returned; it's the one ending. The members come out to a country that knows their names. The dining room is still laid.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -25,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.2
+         }
+        ],
+        "modsText": "Every Kalos shop charges you 20% more for the rest of the region: they look at the red suit."
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kalos-nine-miles",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lysandre-grass",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "corked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-drought-corked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On Lysandre's desk, still corked: the bottle from the drought year."
+    }
+   ]
+  },
+  {
+   "id": "fl-turn-key",
+   "name": "Phase 1: The Key",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Lysandre: \"I asked the guest. One must abide by the guest.\" A pause. Lysandre: \"I find I can't. I've spent six years on the arithmetic. If I let you walk out with that, they were six years of nothing.\"",
+   "choices": [
+    {
+     "label": "(Hold on to the key.)",
+     "success": {
+      "text": "You hold on to it. He takes off his coat, and folds it over the fortieth chair.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-turn-lysandre"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who told you forty?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "flare-who-forty",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Lysandre: \"Don't. Not now. I've thought of nothing else for a fortnight.\" He takes off his coat, and folds it over the fortieth chair.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-turn-lysandre"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-turn-lysandre",
+   "name": "Phase 2: Lysandre",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "The Beautiful World, as he's always fought for it: Mienshao, Honchkrow, Pyroar, and Gyarados, the one he calls Sovereign, with a stone at its throat.",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "He fights beautifully. He always has.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.lysandre",
+       "team": [
+        "mienshao",
+        "honchkrow",
+        "pyroar",
+        "gyarados"
+       ],
+       "name": "Lysandre",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-turn-offer"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "told-two",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-told-two",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the monitors: Xan, opening the cages on Route 10, in a ruined suit. By the end of the battle, the flower's got nothing to draw on. Xan: \"I've done forty stones! I've had help! There's a woman here with a lead who keeps thanking me!\""
+    },
+    {
+     "id": "told-all",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-told-all",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Three hundred and seventy members aren't in the lift hall. They've gone up. They're on Route 10, in red, unclipping. They're very bad at it. A member, kneeling in mud: \"This'll never come out. I don't care. Hold still, darling.\""
+    },
+    {
+     "id": "bijou",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-bijou-rung",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On a monitor: a Furfrou, crossing a field to a woman with her arms out."
+    }
+   ]
+  },
+  {
+   "id": "fl-turn-offer",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "At a quarter of Sovereign's health, he stopped the battle for a turn and held out a key. Lysandre: \"Take it. No fee. You and yours. Stand beside me and watch it be beautiful, and afterwards help me deserve it.\"",
+   "choices": [
+    {
+     "label": "(Refuse.)",
+     "success": {
+      "text": "You don't take it. He puts it back in his pocket, and Sovereign goes down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-turn-flower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"That one chimes. Doesn't it.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-tester",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You hold Bastien's tester to it. Red. He looks at it. In his own hand. Lysandre: \"...I don't know. I don't know which this is. I've four hundred of them in a drawer and forty in a safe and I picked this up from the desk.\" He puts it down. Sovereign's next move doesn't come.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-turn-flower"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "He looks at it. In his own hand. Lysandre: \"...I don't know. I don't know which this is. I've four hundred of them in a drawer and forty in a safe and I picked this up from the desk.\" He puts it down. Sovereign's next move doesn't come.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-turn-flower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who's holding the plate now?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "flare-guest",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He looks at his own hands, as if there might be one in them. Lysandre: \"...I am. I always was. I never once put it down.\" Sovereign goes down while he's still looking.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-turn-flower"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-turn-flower",
+   "name": "Phase 3: The Flower",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.az"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "The Battery: three petals, twelve turns. With the key in your hand, the Aim's already shut. Two to close. AZ has his arms round the Draw. AZ: \"I built you to give one life back. I built you badly. Close.\"",
+   "choices": [
+    {
+     "label": "Close the Draw and the Gift.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The petals fold, one and then the other.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-turn-rubble"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The Gift sparks and burns your hands before it folds. It folds.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-turn-rubble"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pool",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-pool-talked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Aliana, Bryony, Celosia and Mable don't come down. \"We've money on this.\""
+    }
+   ]
+  },
+  {
+   "id": "fl-turn-rubble",
+   "name": "Phase 4: The Rubble",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Lysandre: \"It will fire. It has enough for here. Only for here.\" He's on his knees at the console. Lysandre: \"Go. All of you. I mean it kindly. It's the last thing I have to give away.\"",
+   "choices": [
+    {
+     "label": "(Pull him out.)",
+     "success": {
+      "text": "You pull him out. He doesn't fight you. The third petal closes behind you both. Flare's assets are seized. The list's published. Xan spends what's left of his allowance on Route 10: a vet, a fence, a sign with a telephone number on it. Treasurer Garance, at the hearing, warmly: \"There are no refunds. It's on page eleven. However. There's a credit. It can be redeemed against the damage.\" Lysandre is pulled out, or left, or sat with a glass. Sycamore keeps the corner table, every day, till one understands the other. AZ had his arms round the Draw. Xan is on Route 10: a vet, a fence. Rue has the keys, officially. Her mum makes the tea at the hearing. Yarborough poured for one. Xerosic is in custody, and asks for graph paper. Malva reads the news straight. Garance: \"There's a credit.\" The four roll the pool over. Valerie quilts, for Geosenge. Bijou is home. The members were in red, in mud, unclipping. The dining room is cleared, by Yarborough, alone, in an afternoon.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "route10-woke",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lysandre-pulled",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Leave him.)",
+     "success": {
+      "text": "You leave him. The third petal closes. When the dust settles, the console is empty. Flare's assets are seized. The list's published. Xan spends what's left of his allowance on Route 10: a vet, a fence, a sign with a telephone number on it. Treasurer Garance, at the hearing, warmly: \"There are no refunds. It's on page eleven. However. There's a credit. It can be redeemed against the damage.\" Lysandre is pulled out, or left, or sat with a glass. Sycamore keeps the corner table, every day, till one understands the other. AZ had his arms round the Draw. Xan is on Route 10: a vet, a fence. Rue has the keys, officially. Her mum makes the tea at the hearing. Yarborough poured for one. Xerosic is in custody, and asks for graph paper. Malva reads the news straight. Garance: \"There's a credit.\" The four roll the pool over. Valerie quilts, for Geosenge. Bijou is home. The members were in red, in mud, unclipping. The dining room is cleared, by Yarborough, alone, in an afternoon.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "route10-woke",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lysandre-left",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You never sat down. Sit down.\"",
+     "success": {
+      "text": "There's a chair. The fortieth. It was yours. He looks at it for a long time. He sits. It's the first time in six years he's taken a place. The third petal closes. He's still in the chair when the dust settles. Yarborough pours him a glass. \"The house red, sir.\" Flare's assets are seized. The list's published. Xan spends what's left of his allowance on Route 10: a vet, a fence, a sign with a telephone number on it. Treasurer Garance, at the hearing, warmly: \"There are no refunds. It's on page eleven. However. There's a credit. It can be redeemed against the damage.\" Lysandre is pulled out, or left, or sat with a glass. Sycamore keeps the corner table, every day, till one understands the other. AZ had his arms round the Draw. Xan is on Route 10: a vet, a fence. Rue has the keys, officially. Her mum makes the tea at the hearing. Yarborough poured for one. Xerosic is in custody, and asks for graph paper. Malva reads the news straight. Garance: \"There's a credit.\" The four roll the pool over. Valerie quilts, for Geosenge. Bijou is home. The members were in red, in mud, unclipping. The dining room is cleared, by Yarborough, alone, in an afternoon.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "route10-woke",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lysandre-sat",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "well-column",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-eleventh",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "flare-column",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He looks at the fortieth chair. Then he sits down in it, without being told.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "(Let him sit.)",
+       "success": {
+        "text": "He sits. It's the first time in six years he's taken a place. The third petal closes. He's still in the chair when the dust settles. Yarborough pours him a glass. \"The house red, sir.\" Flare's assets are seized. The list's published. Xan spends what's left of his allowance on Route 10: a vet, a fence, a sign with a telephone number on it. Treasurer Garance, at the hearing, warmly: \"There are no refunds. It's on page eleven. However. There's a credit. It can be redeemed against the damage.\" Lysandre is pulled out, or left, or sat with a glass. Sycamore keeps the corner table, every day, till one understands the other. AZ had his arms round the Draw. Xan is on Route 10: a vet, a fence. Rue has the keys, officially. Her mum makes the tea at the hearing. Yarborough poured for one. Xerosic is in custody, and asks for graph paper. Malva reads the news straight. Garance: \"There's a credit.\" The four roll the pool over. Valerie quilts, for Geosenge. Bijou is home. The members were in red, in mud, unclipping. The dining room is cleared, by Yarborough, alone, in an afternoon.",
+        "effects": [
+         {
+          "kind": "evil",
+          "beat": true
+         },
+         {
+          "kind": "evil",
+          "end": "defeated"
+         },
+         {
+          "kind": "flag",
+          "key": "flare-ending-turn",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "route10-woke",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "lysandre-sat",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "corked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-drought-corked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On Lysandre's desk, still corked: the bottle from the drought year."
+    }
+   ]
+  },
+  {
+   "id": "fl-az-door",
+   "name": "Phase 1: The Door",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.az",
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Lysandre: \"He'll turn it. He built it. He's the only one alive who's used it.\" AZ: \"I fired it for one life. I've walked three thousand years to say: don't.\" He stoops. He comes in. He's the tallest thing in the room but the flower. AZ: \"You're my brother's child. A long way down. He was the kind one. He told me not to build it. I said: you've never loved anything enough to do a terrible thing. He said: no. I've loved things enough not to.\" AZ: \"I didn't understand him for a thousand years.\"",
+   "choices": [
+    {
+     "label": "Stand beside him.",
+     "success": {
+      "text": "Lysandre doesn't fight. The scientists do: they've a pool on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-az-four"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "key",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-az-key",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "AZ knows you. He nods."
+    },
+    {
+     "id": "ally",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-az-ally",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "AZ knows you. He nods."
+    }
+   ]
+  },
+  {
+   "id": "fl-az-four",
+   "name": "Phase 2: The Four",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aliana",
+     "trainer.pr/mable"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Aliana and Mable first. AZ fights beside you: Torkoal, Golurk, Sigilyph. He's slow. Every move's travelled a long way.",
+   "choices": [
+    {
+     "label": "Battle Aliana and Mable.",
+     "success": {
+      "text": "AZ's Golurk lumbers forward beside yours.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Aliana and Mable",
+       "ally": "golurk",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-az-four-2"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-az-four-2",
+   "name": "Phase 2: The Four",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/bryony",
+     "trainer.pr/celosia"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Then Bryony and Celosia.",
+   "choices": [
+    {
+     "label": "Battle Bryony and Celosia.",
+     "success": {
+      "text": "AZ's Golurk is still standing. So is he.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Bryony and Celosia",
+       "ally": "golurk",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-az-back"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-az-back",
+   "name": "Phase 3: Back",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.az",
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "sparkle"
+   },
+   "intro": "Celosia: \"Who had 'the tall one'? Nobody had the tall one.\" Mable: \"It's not on the grid. We'll have to roll it over.\" AZ puts the key in the console. His hand covers it. Lysandre: \"It turns one way.\" AZ: \"It was built to give a life back. I only ever used the half that takes. Nobody's turned it the other way. I was afraid to. I thought: if it could give without taking, I'd have done the terrible thing for nothing.\" He turns it. Not on. Back. The flower doesn't open. It folds. The light goes down, not up: into the roots, along the cables, out to the stones.",
+   "choices": [
+    {
+     "label": "Watch the monitors.",
+     "success": {
+      "text": "Route 10, on every monitor. Row on row. Every Pokémon on the stones wakes. They stand up. They shake. A Furfrou with a fussy home trim sneezes, twice, and looks about for a garden. Xerosic: \"It runs backwards! I said it'd be more interesting! Nobody asked!\" says the intercom, in ecstasy. The weapon gives back what it took, once. Then it's a tree. Or a cocoon. Quiet.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-az-hour"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "backwards",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-backwards",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You knew it turned back. Xerosic told you, over a sandwich."
+    }
+   ]
+  },
+  {
+   "id": "fl-az-hour",
+   "name": "Phase 4: The Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.az",
+     "boss.lysandre"
+    ],
+    "pokemon": "floette",
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "A small Pokémon with a black flower floats down the lift shaft, out of the evening. AZ doesn't say anything. He's too tall to kneel easily. He manages. Lysandre's watching. Lysandre: \"It could give. All along. It could have been a well.\" AZ: \"Yes. That's the grief of it. I'll help you carry it. I've had practice.\"",
+   "choices": [
+    {
+     "label": "(Leave them be.)",
+     "success": {
+      "text": "You leave them be: a king on his knees, and a man with a bag. Kalos has a very old man in it, planting flowers. A Floette's found him. Lysandre walks with him a while. He carries the bag. He's asked whether there's a list of who gets a flower. AZ: \"No. One plants them, and people come.\" On Route 10, every stone has something growing at its foot. The Pokémon that fought beside AZ has gained a year. \"She may walk where she likes,\" AZ says of the Floette. Lysandre carries an old man's bag. Sycamore brings the sandwiches. AZ turned it back: one hour, again. Xan walks with AZ a while. Rue mops the flower room; there's a flower in it. Her mum gives AZ a sandwich. Yarborough poured for a king: \"Sir's a little tall for the glass.\" Xerosic is in ecstasy. Malva covers the flowers; it's her best work. Garance sells seed packets. \"Nobody had the tall one.\" Valerie makes a dress for a Floette. Bijou is home, sneezing. The members ask if the flowers are exclusive. They aren't. There's a vase on the dining-room table.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-az",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "weapon-back",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lysandre-walks",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sv-flare-eternal-flower",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "route10-woke",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-own-console",
+   "name": "Phase 1: The Console",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Lysandre: \"It's the machine's range.\" \"It's the first capacitor he had on the shelf. He could do four hundred. He could run it backwards. He's been waiting for somebody to ask.\" Silence. Then, from the intercom: Xerosic: \"...Is somebody asking? Because I've the drawings! I've had the drawings since March!\" Lysandre: \"March.\" Lysandre: \"I asked how to choose. For three years. I never once asked if there was more.\" \"Give me the machine. I'll ask a better question.\" Lysandre: \"...You'd run it the other way. You'd give with it.\" He takes the key out himself. He looks at it. He takes off his coat; it's a very good coat; it's the fourth he's owned this decade. He hands over the key, and the coat. Lysandre: \"I've given away everything else. I don't know why I thought I'd keep this.\"",
+   "choices": [
+    {
+     "label": "Take the coat.",
+     "success": {
+      "text": "It's warm. He doesn't fight. She does.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-malva"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-own-malva",
+   "name": "Phase 2: Malva",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Malva comes down in the lift, in both uniforms. Malva: \"No. I was picked. I'm on the forty. I've a seat with my name on, and I'll not have it turned into a— soup kitchen.\" Malva: \"Both my jobs choose who's worth it. I'm good at being worth it. If everyone's let in, what was I?\"",
+   "choices": [
+    {
+     "label": "Battle Malva.",
+     "success": {
+      "text": "She fights as if there were cameras.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-own-lost"
+        }
+       ],
+       "sprite": "trainer.malva",
+       "team": [
+        "pyroar",
+        "torkoal",
+        "chandelure",
+        "talonflame"
+       ],
+       "name": "Malva",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "fl-own-clapping"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-own-clapping",
+   "name": "Phase 2: Malva",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.malva"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Malva: \"...They clapped. In the lift hall. I could hear it. They were clapping you, and you hadn't hurt anyone.\"",
+   "choices": [
+    {
+     "label": "Let her go.",
+     "success": {
+      "text": "She stays for the clapping.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-list"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "keep",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-malva-keep",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\"That's the one you wanted.\" Malva: \"Don't be clever. ...Yes.\""
+    }
+   ]
+  },
+  {
+   "id": "fl-own-list",
+   "name": "The First Hour: The List",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "boss.npc_gentleman"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Forty at a table. Three hundred and seventy in a lift hall. Sixty in a staff corridor. A flower. Four decisions, each one line. The first: the list.",
+   "choices": [
+    {
+     "label": "Keep forty.",
+     "success": {
+      "text": "Forty it stays.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-list-forty",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-fees"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make it four hundred and eleven: everyone who paid.",
+     "success": {
+      "text": "Four hundred and eleven chairs. Yarborough will need more glasses.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-list-paid",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-fees"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Burn it. \"Nobody's not on the list.\"",
+     "success": {
+      "text": "It burns in the fireplace of his study. There's no membership now; there's a door.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-list-burned",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-fees"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-own-fees",
+   "name": "The First Hour: The Fees",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "boss.npc_gentleman"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "The second: the fees.",
+   "choices": [
+    {
+     "label": "Keep them.",
+     "success": {
+      "text": "Five million a head, in the safe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-fees-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-flower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refund them.",
+     "success": {
+      "text": "Garance processes the refunds, warmly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-fees-refunded",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-flower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "They're the fund again: five million a head, to the wells, and every member's told which well.",
+     "success": {
+      "text": "Every coin's got a destination that can be visited.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-fees-fund",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-flower"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-own-flower",
+   "name": "The First Hour: The Flower",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "boss.npc_gentleman"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "The third: the flower.",
+   "choices": [
+    {
+     "label": "Seal it.",
+     "success": {
+      "text": "It's sealed, under Geosenge, for good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-flower-sealed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-staff"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run it backwards.",
+     "success": {
+      "text": "Xerosic has the drawings. It'll be a Well: once a stage, it gives a year back to a place that's lost one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-flower-well",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-staff"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it as it is, unfired.",
+     "success": {
+      "text": "It stays as it is: half open, and waiting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-flower-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-staff"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-own-staff",
+   "name": "The First Hour: The Staff Corridor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "boss.npc_gentleman"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "The fourth: the staff corridor.",
+   "choices": [
+    {
+     "label": "As it was.",
+     "success": {
+      "text": "The rota stays on the wall.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-staff-same",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-yarborough"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A rise.",
+     "success": {
+      "text": "Sixty pay slips, a little heavier.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-staff-rise",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-yarborough"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Seat them. The sixty are the council.",
+     "success": {
+      "text": "Rue's the Executive. The lift man's Intelligence. They've the keys to everything.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-council-staff",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-own-yarborough"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-own-yarborough",
+   "name": "The First Hour: A Table",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "boss.npc_gentleman"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Yarborough, with a tray: Yarborough: \"Will there be a table, under the new management? I ask only to know how many to lay.\"",
+   "choices": [
+    {
+     "label": "\"Forty.\"",
+     "success": {
+      "text": "Yarborough: \"Very good.\" Team Flare is yours. Everything the team gives brings more hands; every stage, the table's longer. Lysandre gave away the coat. Sycamore is on the council: \"I'll ask the stupid questions. I've a gift.\" AZ advises on the Well, slowly. Xan is your first investor, and reads the contract this time. Rue is your Executive. Her mum lives over the base and complains about the noise. Yarborough lays it, and sees who comes. Xerosic builds the Well. Malva was beaten in the lift, and stays for the clapping. Garance sells wells; she's superb. Celosia had \"new management,\" at forty to one. Valerie cuts aprons: sixty, to measure. Bijou is home. The members are told which well. The dining room is laid again.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-flare",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-table-forty",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Four hundred and eleven.\"",
+     "success": {
+      "text": "Yarborough: \"I'll need the good china.\" Team Flare is yours. Everything the team gives brings more hands; every stage, the table's longer. Lysandre gave away the coat. Sycamore is on the council: \"I'll ask the stupid questions. I've a gift.\" AZ advises on the Well, slowly. Xan is your first investor, and reads the contract this time. Rue is your Executive. Her mum lives over the base and complains about the noise. Yarborough lays it, and sees who comes. Xerosic builds the Well. Malva was beaten in the lift, and stays for the clapping. Garance sells wells; she's superb. Celosia had \"new management,\" at forty to one. Valerie cuts aprons: sixty, to measure. Bijou is home. The members are told which well. The dining room is laid again.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-flare",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-table-all",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Lay it, and see who comes.\"",
+     "success": {
+      "text": "He looks at you a long time. Yarborough: \"...That's what he used to say. Before the pencil.\" He goes to find the good china. Team Flare is yours. Everything the team gives brings more hands; every stage, the table's longer. Lysandre gave away the coat. Sycamore is on the council: \"I'll ask the stupid questions. I've a gift.\" AZ advises on the Well, slowly. Xan is your first investor, and reads the contract this time. Rue is your Executive. Her mum lives over the base and complains about the noise. Yarborough lays it, and sees who comes. Xerosic builds the Well. Malva was beaten in the lift, and stays for the clapping. Garance sells wells; she's superb. Celosia had \"new management,\" at forty to one. Valerie cuts aprons: sixty, to measure. Bijou is home. The members are told which well. The dining room is laid again.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-flare",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-table-open",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-own-lost",
+   "name": "The Verdict",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.malva",
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "Malva stands over your lead. Malva: \"Sit down, Guest. Your chair's there. It always was.\" Lysandre takes the key back from your hand, gently, as one takes a glass from a guest who's had enough.",
+   "choices": [
+    {
+     "label": "Take the fortieth chair.",
+     "success": {
+      "text": "You sit. He turns the key. It isn't loud. It's white. It goes up the flower and out, and crosses the hills round Geosenge, and stops. Lysandre: \"...It's so clean.\" Rue was never on the list. She's the one who lets them out; she's got the keys. At the lift, to forty people in red: Rue: \"Mind the step. It's all still there. Mostly. They know your names; it was on the wireless. Off you go.\" The Chosen come out into a country that knows their names. Three hundred and seventy more come out behind them, holding keys that chimed, and they've worked it out on the stairs. Geosenge and nine miles round are grey for the rest of the region: no wild pools, no shop, and a rest that heals in full; it's very quiet there. Your Pokémon were in the lift hall: they've each lost a step of trust in you, for now. In every town in Kalos, people look at the red suit. The team has no leader. Lysandre's in the grass. It looks to the Guest. Lysandre is in the grey grass, with Sycamore. Sycamore sat at his place and didn't drink. AZ held a petal, and was outlasted. Xan was in the shelter, in a bespoke suit, sick on the floor. Rue let them out. Her mum was on a balcony; she stayed to see. Yarborough poured for forty. Xerosic: \"It's short!\" Malva reads the bulletin, and her voice goes. Garance issues a statement about \"range.\" Mable wins the pool. Valerie unpicks. Bijou is not returned; it's the one ending. The members come out to a country that knows their names. The dining room is still laid.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -25,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.2
+         }
+        ],
+        "modsText": "Every Kalos shop charges you 20% more for the rest of the region: they look at the red suit."
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kalos-nine-miles",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lysandre-grass",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-founding",
+   "name": "Team Ember",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "flare-offer-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "flare-az-key",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "flare-kind-staff",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "A service door, propped with a mop bucket. Lino. A rota on the wall. A kettle, just boiled. Rue Carmody: \"You're the one who wouldn't. He offered it you free and you said no. It went round the corridor in about four minutes.\" Rue: \"There's sixty of us on staff passes. Cleaners. Cooks. The lift man. We're not on the list. We've the keys to everything.\" The lift man, Monsieur Everard Kettering: \"I've taken every one of them up and down for six years. They don't see me. D'you know what people say in a lift, when they don't see you?\" Rue: \"We're not going to fight them. Look at us. I've a mop. We're just going to stop.\" The creed is on the rota, in biro, under FRIDAY: NOBODY'S NOT ON THE LIST.",
+   "choices": [
+    {
+     "label": "Sign the rota.",
+     "success": {
+      "text": "You write your name under FRIDAY. Rue puts the kettle on again. Team Ember: sixty on staff passes, and you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "ember-founded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who else?\"",
+     "success": {
+      "text": "Rue counts them off. Herself: the flower room, Tuesdays; she knows where the fuses are. Everard Kettering, the lift man: six years of what's said between floors. The night porter: every delivery, every signature. Four cooks: the Chosen eat what they're given. The laundry: four hundred red suits go through it on a Thursday. A dishwasher at the café: the corner table's glasses; who sat; how long. Concierge Yarborough doesn't join; he leaves a door on the latch, and says nothing, and brings the wine. And Rue's mum: a handbag.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "ember-founded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do we stop?\"",
+     "success": {
+      "text": "Rue: \"Nothing big. That's the trick. What's the smallest thing that, left undone, stops the largest? We'll find out on Thursday.\" She writes your name under FRIDAY.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "ember-founded",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-stop-1",
+   "name": "Stoppage 1: Thursday's Laundry",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "The Gala at Parfum Palace is on Friday. Four hundred suits are in the wash.",
+   "choices": [
+    {
+     "label": "Go down to the laundry.",
+     "success": {
+      "text": "Steam, and the smell of starch.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-laundry-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-laundry-1",
+   "name": "Thursday's Laundry",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#2a2420",
+    "effect": "fog"
+   },
+   "intro": "Four hundred red suits on rails. The laundry crew look at you. What could be left undone?",
+   "choices": [
+    {
+     "label": "The pressing.",
+     "success": {
+      "text": "They go wrinkled. Members complain. The Gala goes ahead.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-laundry-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The delivery.",
+     "success": {
+      "text": "They go late. Members complain louder. It goes ahead.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-laundry-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The visors: rinse them with the reds.",
+     "success": {
+      "text": "Every visor comes out pink. Not one member'll be seen in it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-laundry-gala"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-laundry-2",
+   "name": "Thursday's Laundry",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#2a2420",
+    "effect": "fog"
+   },
+   "intro": "The next Thursday. Another rail of suits. Another try.",
+   "choices": [
+    {
+     "label": "The visors: rinse them with the reds.",
+     "success": {
+      "text": "Every visor comes out pink. Not one member'll be seen in it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-laundry-gala"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The buttons.",
+     "success": {
+      "text": "They go on with the wrong buttons. Nobody notices. It goes ahead.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-laundry-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-laundry-gala",
+   "name": "The Gala",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_f",
+     "trainer.pr/rich_m"
+    ],
+    "tint": "#3a2830",
+    "effect": "sparkle"
+   },
+   "intro": "Four hundred people come to a Flare gala in their own faces, and look at each other, and three recognise their own dentist. A member, to another: \"Hélène? You're in this?\" The other: \"I thought it was a wine thing!\"",
+   "choices": [
+    {
+     "label": "Slip out by the staff door.",
+     "success": {
+      "text": "A third of the members ask about refunds within the week.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ember-stop1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-stop-2",
+   "name": "Stoppage 2: The Kitchen",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 6,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "The scientists eat at their benches. Xerosic never stops; he's fed by tray. A cook: \"He doesn't look at what it is. He'd eat the napkin.\" Rue: \"Then we don't send the tray.\" Which meal, which day?",
+   "choices": [
+    {
+     "label": "Breakfast, on Monday.",
+     "success": {
+      "text": "He doesn't notice. He's had a biscuit from under the console.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-kitchen-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lunch, before the capacitor test.",
+     "success": {
+      "text": "He's light-headed for the calibration.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-kitchen-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Supper, after the test.",
+     "success": {
+      "text": "The test's already done. He's hungry, and cross, and nothing else.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-kitchen-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-kitchen-2",
+   "name": "The Kitchen",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Rue: \"Not that one. Think. What does he need his head for?\"",
+   "choices": [
+    {
+     "label": "Lunch, before the capacitor test.",
+     "success": {
+      "text": "He's light-headed for the calibration.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-kitchen-test"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-kitchen-test",
+   "name": "The Kitchen",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/xerosic"
+    ],
+    "tint": "#202430",
+    "effect": "none"
+   },
+   "intro": "Xerosic, on the lab floor, with a low blood sugar and a clipboard: Xerosic: \"Forty. No. Four. Fourteen? I've written 'sandwich.' I've written 'sandwich' in the tolerance column.\" The test's put back a day. It's the day that matters. And somebody on staff brings him a sandwich, in the end, and stays while he eats it, and asks what the machine's for. Nobody on staff has ever asked.",
+   "choices": [
+    {
+     "label": "Listen at the door.",
+     "success": {
+      "text": "He tells her. All of it. He's delighted. The whole design, as told to a cook. Including: it runs backwards.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ember-stop2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-backwards",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-stop-3",
+   "name": "Stoppage 3: The Flower Room",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 6,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor"
+    ],
+    "tint": "#18201c",
+    "effect": "fog"
+   },
+   "intro": "Tuesday. Rue mops it. The flower. The console. A grey box on the wall: forty fuses, ceramic, each the size of a thumb. Rue: \"I've dusted that box for three years. I've never opened it. I'm not supposed to open it.\"",
+   "choices": [
+    {
+     "label": "\"Open it.\"",
+     "success": {
+      "text": "She opens it. Forty fuses, in a row, like teeth.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-flower-where"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happens if they're gone?\"",
+     "success": {
+      "text": "Rue: \"Then it's a very big flower.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-flower-where"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where would you put them?\"",
+     "success": {
+      "text": "Rue: \"Somewhere nobody in a red suit'd ever go.\" She thinks. Rue: \"My mum's.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-flower-bus"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-flower-where",
+   "name": "The Flower Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor"
+    ],
+    "tint": "#18201c",
+    "effect": "none"
+   },
+   "intro": "Rue: \"And put them where?\"",
+   "choices": [
+    {
+     "label": "\"Where would you put them?\"",
+     "success": {
+      "text": "Rue: \"Somewhere nobody in a red suit'd ever go.\" She thinks. Rue: \"My mum's.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-flower-bus"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-flower-bus",
+   "name": "The Staff Bus",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "trainer.pr/veteran_f"
+    ],
+    "tint": "#2a2a30",
+    "effect": "none"
+   },
+   "intro": "The fuses go to Lumiose in a mop bucket, on the staff bus. It's the longest, quietest part of it: a woman on a bus with a bucket on her knee. Rue's mum, Madame Winnifred Carmody, seventy-one, opening her handbag: \"In here? With my mints? ...Is this your work?\" Rue: \"Yes.\" Madame Carmody: \"Then I'll mind it.\"",
+   "choices": [
+    {
+     "label": "Ride back with Rue.",
+     "success": {
+      "text": "The weapon's got no fuses. Nobody knows but sixty people and a handbag.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ember-stop3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-tea",
+   "name": "A Cup of Tea",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "beat": 6,
+     "has": "third",
+     "inside": false
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1e1418",
+    "effect": "none"
+   },
+   "intro": "The chamber. Dusk. Forty at a table. The countdown. Lysandre: \"This is not a threat. I am telling you so that you may spend today as you would wish to have spent it.\" He turns the key. Nothing happens. He turns it again. Xerosic: \"It's— there's no circuit. There's no— somebody's taken the fuses! All forty! Who takes fuses?\" says the intercom. Lysandre looks at the box on the wall. It's been dusted. Recently.",
+   "choices": [
+    {
+     "label": "Follow him up.",
+     "success": {
+      "text": "He goes up. Alone. The lift man takes him.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-tea-lift"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "no-stop3",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ember-stop3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "(Rue went down on the Tuesday herself, with a mop bucket, and came back without the fuses.)"
+    }
+   ]
+  },
+  {
+   "id": "ember-tea-lift",
+   "name": "A Cup of Tea: The Lift",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/waiter_m",
+     "boss.lysandre"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Kettering, looking straight ahead: \"Ground floor, monsieur?\" Lysandre: \"...You're Everard. Your daughter's at the conservatoire. The cello.\" Kettering: \"Viola, monsieur. But it's kind of you.\" Lysandre: \"Six years. I've said 'cello' for six years. You never—\" Kettering: \"You never asked, monsieur. You told me. Very warmly.\"",
+   "choices": [
+    {
+     "label": "(The doors open.)",
+     "success": {
+      "text": "The lift opens on the staff floor. He's never been down here.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ember-tea-corridor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ember-tea-corridor",
+   "name": "A Cup of Tea: The Corridor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "boss.lysandre"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Sixty people in aprons and overalls, along the lino, not blocking anything. A kettle. Rue: \"The fuses are in my mum's handbag. In Lumiose. With her mints. You'll not get them. She doesn't open it for strangers.\" Lysandre: \"Mme Carmody.\" Rue: \"Rue.\" Lysandre: \"You've— all of you. You've simply not.\" Rue: \"We've not. It's all we could think of. We can't fight you; you're very good at it. We just didn't do Tuesday.\" A cook: \"You've sixty people on your payroll and none on your list. We wondered if you'd noticed.\" Lysandre: \"I'd noticed. I wrote a page about it. I couldn't— if I put you on it—\" Rue: \"Then it's Thursday. I know. I've dusted round your table for three years. You never cleared it.\" Rue: \"Here's the thing about Thursday. You never once asked any of them to bring a dish.\" Silence. Rue: \"Four hundred and eleven people, and you fed every one off your own china till there wasn't any. My mum does a street party. Forty houses. Everybody brings something. Nobody counts plates.\" Somebody holds out a cup. Rue: \"Tea. It's not the house red. Sit down; you're making the corridor look untidy.\"",
+   "choices": [
+    {
+     "label": "(Let him sit.)",
+     "success": {
+      "text": "He sits. On a plastic chair. With a cup of staff tea. It's the first time in six years somebody's handed him something. Team Ember doesn't disband. It becomes a thing Kalos has: at a city in this region, a staff door propped with a bucket is a way round a battle, and a cup of tea. Thursday comes back, at the house on the Avenue d'Été. The cloth's been washed. Everybody brings something. Nobody counts. Lysandre is on a plastic chair, with tea. Sycamore brings a dish; it's dreadful; everyone eats it. AZ is planting; he wasn't needed. Xan carries, and has learned tea. Rue: \"We just didn't do Tuesday.\" Her mum has a handbag, and mints. Yarborough left a door on the latch. Xerosic told a cook everything. Malva came in her own face to the Gala, was recognised, and was asked for an autograph. Garance processes four hundred refunds, warmly. Nobody had \"the cleaners.\" Valerie asks, at last, what the play was. Bijou is home, never clipped again. The members came in their own faces. Everybody brings something.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-ember",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "thursday-again",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ember-door",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I want a battle.\"",
+     "success": {
+      "text": "There isn't one to have. He's got nobody to fight. For the pool's sake, the four scientists come up anyway.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-ember",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "thursday-again",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ember-door",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Aliana, Bryony, Celosia and Mable",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-pool-pays-yes",
+   "name": "The Pool Pays",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flare-pool-yes",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "flare-pool-paid",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "flare-ending-plan",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mable"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Your slip: \"Yes,\" at 2 to 1. Mable, counting it out in a staff corridor, into your hand: \"I'd like it noted that this is the worst day of my professional life and I've never been so relieved.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "₽3,000: outsiders paid double, and are paid double.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 3000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-paid",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "₽1,500.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-pool-pays-short",
+   "name": "The Pool Pays",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flare-pool-short",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "flare-pool-paid",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "flare-ending-plan",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "flare-thirty-miles",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mable"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Your slip: \"Yes, but it's short,\" at 5 to 1. Mable, counting it out in a staff corridor, into your hand: \"I'd like it noted that this is the worst day of my professional life and I've never been so relieved.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "₽6,000: outsiders paid double, and are paid double.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 6000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-paid",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "₽3,000.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 3000
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-pool-pays-stopped",
+   "name": "The Pool Pays",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flare-pool-stopped",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "flare-pool-paid",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "evil",
+     "team": "flare",
+     "ends": [
+      "defeated"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mable"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Your slip: \"No: stopped,\" at 3 to 1. Mable, counting it out in a staff corridor, into your hand: \"I'd like it noted that this is the worst day of my professional life and I've never been so relieved.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "₽4,000: outsiders paid double, and are paid double.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 4000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-paid",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "₽2,000.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 2000
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-pool-pays-talked",
+   "name": "The Pool Pays",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flare-pool-talked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "flare-pool-paid",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "lysandre-sat",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mable"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Your slip: \"No: talked out of it,\" at 20 to 1. Mable, counting it out in a staff corridor, into your hand: \"I'd like it noted that this is the worst day of my professional life and I've never been so relieved.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "₽21,000: outsiders paid double, and are paid double.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 21000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-paid",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "₽10,500.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 10500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-pool-pays-talked-ember",
+   "name": "The Pool Pays",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flare-pool-talked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "flare-pool-paid",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "flare-ending-ember",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mable"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Your slip: \"No: talked out of it,\" at 20 to 1. Mable, counting it out in a staff corridor, into your hand: \"I'd like it noted that this is the worst day of my professional life and I've never been so relieved.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "₽21,000: outsiders paid double, and are paid double.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 21000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-paid",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "₽10,500.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 10500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-pool-pays-tall",
+   "name": "The Pool Pays",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flare-pool-tall",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "flare-pool-paid",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "flare-ending-az",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mable"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Your slip: \"The tall one,\" at 50 to 1. Mable, counting it out in a staff corridor, into your hand: \"I'd like it noted that this is the worst day of my professional life and I've never been so relieved.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "₽51,000: outsiders paid double, and are paid double.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 51000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-paid",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "₽25,500.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 25500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-pool-pays-mgmt",
+   "name": "The Pool Pays",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flare-pool-mgmt",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "flare-pool-paid",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "flare-ending-own",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mable"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Your slip: \"New management,\" at 40 to 1. Mable, counting it out in a staff corridor, into your hand: \"I'd like it noted that this is the worst day of my professional life and I've never been so relieved.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "₽41,000: outsiders paid double, and are paid double.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 41000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-paid",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "₽20,500.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 20500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-pool-pays-cleaners",
+   "name": "The Pool Pays",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "flare-pool-cleaners",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "flare-pool-paid",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "flare-ending-ember",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mable"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Your slip: \"The cleaners,\" at 100 to 1. Mable, counting it out in a staff corridor, into your hand: \"I'd like it noted that this is the worst day of my professional life and I've never been so relieved.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "₽101,000: outsiders paid double, and are paid double.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 101000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-paid",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "₽50,500.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 50500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-paid",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

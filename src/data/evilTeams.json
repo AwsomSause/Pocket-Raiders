@@ -1391,7 +1391,19 @@
     "op": "stone-mining",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "kalos",
+     "ranks": [
+      "Subscriber",
+      "Member",
+      "Stylist",
+      "Patron",
+      "Chosen",
+      "The Last Guest"
+     ]
+    }
+   ]
   },
   {
    "id": "skull",
@@ -1550,7 +1562,19 @@
     "op": "trial-crash",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "alola",
+     "ranks": [
+      "Numbskull",
+      "Grunt",
+      "Big Sib",
+      "Enforcer",
+      "Admin",
+      "Guzma's Second"
+     ]
+    }
+   ]
   },
   {
    "id": "aether",
@@ -1716,7 +1740,19 @@
     "op": "preservation-lab",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "alola",
+     "ranks": [
+      "Volunteer",
+      "Employee",
+      "Researcher",
+      "Branch Deputy",
+      "Branch Chief",
+      "The President's Favourite"
+     ]
+    }
+   ]
   },
   {
    "id": "yell",
@@ -1879,7 +1915,19 @@
     "op": "route-chant",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "galar",
+     "ranks": [
+      "Supporter",
+      "Yeller",
+      "Road Crew",
+      "Head of the Queue",
+      "Marnie's Corner",
+      "Piers's Opening Act"
+     ]
+    }
+   ]
   },
   {
    "id": "star",
@@ -2039,7 +2087,19 @@
     "op": "base-blockade",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "paldea",
+     "ranks": [
+      "New Kid",
+      "Grunt",
+      "Squad Second",
+      "Sixth Boss",
+      "Cassiopeia's Voice",
+      "The One She Meets"
+     ]
+    }
+   ]
   },
   {
    "id": "marauders",

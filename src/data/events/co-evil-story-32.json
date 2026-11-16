@@ -1,0 +1,1594 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "fl-afford-the-suit",
+   "name": "Couldn't Afford the Suit Either",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "The boutique's back step, in the alley. The clerk, on her break, with her shoes off and a notebook on her knee. The clerk: \"Oh. It's you. I turned you away. I'm sorry; I'm meant to. It's in the contract: 'maintain the tone.'\" The clerk: \"I keep a book. Everyone I've refused. What they'd on. What their face did. I thought I'd write to them, after. When I've left. I haven't got addresses. It's just a list of faces.\" The notebook's thick. She's worked there four years. The clerk: \"The red-suit woman waits outside for the ones I turn away. Did you notice? I'm the bad shop, so she can be the kind one. I'm part of it. Nobody told me. I worked it out from where she stands.\"",
+   "choices": [
+    {
+     "label": "\"What's your name?\"",
+     "success": {
+      "text": "She stares. The clerk: \"...Nobody asks the clerk. Margaux. Margaux Tessier. Four years.\" Margaux lets you in by the back. The boutique's stock, at the staff discount, with the price written plainly on each tag. One thing only she can sell: a Resoled Shoe. \"Hold it, and your first move each battle won't miss. It's what he wore. The older gentleman.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "flare-kind-staff",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-resoled-shoe",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why stay?\"",
+     "success": {
+      "text": "Margaux: \"Because if I go, they'll hire someone who doesn't keep a book.\" Margaux lets you in by the back. The boutique's stock, at the staff discount, with the price written plainly on each tag. One thing only she can sell: a Resoled Shoe. \"Hold it, and your first move each battle won't miss. It's what he wore. The older gentleman.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "flare-resoled-shoe",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Read me one.\"",
+     "success": {
+      "text": "She turns back a long way. The clerk: \"'Older gentleman. Good shoes, resoled. Wanted a scarf for his wife's birthday. I said we couldn't possibly. He said, quite right, quite right, and thanked me.' I think about 'quite right.'\" Margaux lets you in by the back. The boutique's stock, at the staff discount, with the price written plainly on each tag. One thing only she can sell: a Resoled Shoe. \"Hold it, and your first move each battle won't miss. It's what he wore. The older gentleman.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "flare-resoled-shoe",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-soup-plate",
+   "name": "A Soup Plate",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_f"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A fourth-floor room. A dresser. One plate on it, on a stand: white, with a gold rim, far too good for the room. The old woman, Madame Honorine Aubert: \"That's from the Avenue d'Été. I took it. I'm not proud. Nine years I ate at that table; every Thursday; I'd nowhere else on a Thursday. The last night, I put the plate in my bag.\" \"Not to sell. I wanted to have been somewhere. D'you understand? Nine years, and he never knew my name. He'd pass down the table, he'd say, 'Is there enough? Have you enough?' He'd fill your glass himself. He never once said, 'And who are you?'\" \"I'd have liked to be asked. I'd have told him: I was a seamstress; I made the dresses his mother's friends wore to dine at that same table, forty years before. I'd have liked him to know I'd been in that room both ways.\"",
+   "choices": [
+    {
+     "label": "\"Would you go back?\"",
+     "success": {
+      "text": "\"If I could bring something. I can still do a tart. I'd not go empty again. It's hard on a person, nine years of being given to.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Shall I return it?\"",
+     "success": {
+      "text": "She looks at it a long time. Then she wraps it in a tea towel and puts it in your hands. \"Lend. Not give. It's the only thing I've got that says I was there.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-plate",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-soup-plate-back"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What was the food like?\"",
+     "success": {
+      "text": "\"Extraordinary. That was the trouble. You can't feed four hundred people like that. You can feed four hundred people soup. He wouldn't. He'd have thought it an insult.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-soup-plate-back",
+   "name": "Place Two Hundred and Six",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#2a2020",
+    "effect": "fog"
+   },
+   "intro": "The dining room. Four hundred and eleven places. One's got no soup plate. It's had none for six years. Nobody noticed but Yarborough, who laid round the gap.",
+   "choices": [
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "Yarborough: \"Place two hundred and six. I wondered who.\" He takes it. He polishes it on his sleeve, which he's never done to anything. Yarborough: \"Tell Madame she's expected.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-plate-back",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-enough-well",
+   "name": "Enough Well",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/worker_f"
+    ],
+    "tint": "#4a3a24",
+    "effect": "sparkle"
+   },
+   "intro": "A hamlet in the Kalos badlands. A square. A well with a stone rim and a brass plate: GIFT OF A FRIEND. Children. A queue of two, with buckets, chatting. A woman at the rope, Madame Clémence Girard: \"The eleventh. That's what the man who dug it called it; he'd a number for each. Tall. Red hair. Dug with the crew, in his shirt. My husband said: a gentleman who blisters. You don't see it.\" \"Twenty years. It's never gone dry. We've had the drought, same as the south. It went low. We queued. It was enough.\" \"He's never been back. I'd have thought he'd want to see one that worked. You'd want to, wouldn't you? After the other.\"",
+   "choices": [
+    {
+     "label": "\"The other?\"",
+     "success": {
+      "text": "\"A village in the south. He'd dug theirs first. It went dry in the drought, and they went with it. Everybody knows. Nobody says it to him.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-enough-well-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why was this one enough?\"",
+     "success": {
+      "text": "\"It wasn't, on its own. Nobody's well is. We'd the well and a cistern we built ourselves, the second year, and a rule about gardens. He gave us the hole. We made it enough.\" She hauls. \"He'd not have liked the cistern. It's ugly.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-enough-well-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Does he know?\"",
+     "success": {
+      "text": "\"He's thirty-one of these. I don't suppose he's had a letter from one. You don't write to thank a man for water. It'd be like thanking him for Tuesday.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-enough-well-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-enough-well-2",
+   "name": "Enough Well",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/worker_f"
+    ],
+    "tint": "#4a3a24",
+    "effect": "none"
+   },
+   "intro": "She fills a bottle. \"If you see him. Tell him the eleventh's enough. And tell him why.\"",
+   "choices": [
+    {
+     "label": "Take the Water from the Eleventh Well.",
+     "success": {
+      "text": "It's heavier than a bottle of water ought to be. Put it on his desk, or hand it to him at the end.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-eleventh",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-page-nine",
+   "name": "Page Nine",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/worker_m"
+    ],
+    "tint": "#2a2a30",
+    "effect": "none"
+   },
+   "intro": "A press. The smell of ink. A man with a loupe and a galley proof he's kept two years. The typesetter, Monsieur Fabrice Collet: \"A Beautiful Future. Eleven pages, four colours, a thousand copies on the heavy stock. I set it myself. You read what you set; you can't help it. Letter by letter.\" \"Page nine. 'The device removes the surplus.' I stopped the press. I rang the client. I said, monsieur, there's a line here I don't follow; is it a figure of speech?\" \"A lady came on. Very warm. She said: 'It's conceptual.' I said, ah. I ran it.\" He holds up the proof. In the margin of page nine, in blue pencil, a printer's mark: ? \"That's a query. It means: author to confirm. It was never confirmed. I ran it with the query open. I've not done that before or since.\"",
+   "choices": [
+    {
+     "label": "\"What did you think it meant?\"",
+     "success": {
+      "text": "\"I thought it meant what it said. That's the trouble with setting type. You can't not read it.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Can I have the proof?\"",
+     "success": {
+      "text": "He hands it over. The blue question mark is the only thing on the page in his own hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-proof",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Would you set a correction?\"",
+     "success": {
+      "text": "\"For whom?\" \"For anyone who's got the brochure.\" He thinks. He goes to the type case. \"One line. Under page nine. What should it say?\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-page-nine-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-page-nine-2",
+   "name": "Page Nine",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/worker_m"
+    ],
+    "tint": "#2a2a30",
+    "effect": "none"
+   },
+   "intro": "He waits, with the composing stick in his hand.",
+   "choices": [
+    {
+     "label": "\"'Surplus' means people.\"",
+     "success": {
+      "text": "A thousand slips, gummed. He posts them to every member on his delivery list. Kalos feels it. Garance: \"Somebody's annotated us.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-correction-people",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "world-state-down",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask which key you have.\"",
+     "success": {
+      "text": "A hundred members do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-members-asking",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Author to confirm.\"",
+     "success": {
+      "text": "Only the query. He likes that best. It's what's on Lysandre's own copy, the next time you're in his study.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-correction-query",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-two-chimes",
+   "name": "Two Chimes",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m"
+    ],
+    "tint": "#2a2a30",
+    "effect": "none"
+   },
+   "intro": "A repair stall. Holo Casters in pieces. A boy of fifteen with a soldering iron and a jeweller's eye. The repair boy, Bastien Lemaire: \"They bring them when they drop them. The red ones. I'm not meant to open the upgrade; there's a seal. I open it. I put the seal back. I'm good at seals.\" \"There's two kinds. Look.\" Two backs, off. \"This one's got a capacitor the size of a sugar lump. Proper. I don't know what it does; it's listening for something.\" \"This one's got a comb and a pin. Like a music box. It plays a chime. That's all. That's all it does. I've had forty-one of these and one of the other.\"",
+   "choices": [
+    {
+     "label": "\"Whose was the one?\"",
+     "success": {
+      "text": "\"A lady off the television. She tipped. She said, 'You didn't open it.' I said no, madame. She said, 'Good boy,' like she knew I had.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-two-chimes-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do the owners know?\"",
+     "success": {
+      "text": "\"They think they've all got the same one. Why would they look? It chimes.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-two-chimes-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Can you make the chime one work?\"",
+     "success": {
+      "text": "\"I'd need the sugar lump. I'd need forty. ...I could make one that says which it is. A light. Green if it's real.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-two-chimes-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-two-chimes-2",
+   "name": "Two Chimes",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m"
+    ],
+    "tint": "#2a2a30",
+    "effect": "none"
+   },
+   "intro": "\"A tester. Hold it to a Flare key. Red, it only chimes. Green, it's real. A thousand, and I'll tell you straight: it's a light and a wire and an afternoon.\"",
+   "choices": [
+    {
+     "label": "Buy the tester. (₽1,000)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "On a member's key: red. \"It's what?\" On your own, if you're inside: red, before you're Chosen; green, after, the night he wrote the name in. On the key Lysandre holds out, at the very end: red. He picked it up off the desk.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "flag",
+        "key": "flare-tester",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "He goes back to his seals.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-kitchen-scissors",
+   "name": "Kitchen Scissors",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_f"
+    ],
+    "tint": "#3a4a2a",
+    "effect": "none"
+   },
+   "intro": "A garden. A washing line. A basket of pegs, tipped over, not picked up. A grooming table made from a door. The owner, Madame Yvette Peltier: \"I trim her myself. I can't afford the salon. She doesn't mind; she stands like a lamb. I do the pom-poms uneven. I always have. My husband used to say she looked like she'd been done in the dark.\" \"I turned round for the pegs. That's all. And the gate was open and she wasn't— she doesn't wander. She's eleven. She sleeps on my feet.\" \"I've left the pegs. I know it's silly. I thought: if I pick them up, that's the afternoon over, and she went in it.\"",
+   "choices": [
+    {
+     "label": "\"What's her name?\"",
+     "success": {
+      "text": "\"Bijou.\" She says it as if it might bring her.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-kitchen-scissors-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll look.\"",
+     "success": {
+      "text": "A lead's pressed into your hand. \"Then take this. She'll not come to a stranger without it; it smells of the house.\" With Bijou's Lead, on Route 10, one stone's Pokémon can be unclipped without a battle. She gives you a jar of plum jam. On the road, one of your Pokémon gets a spoonful and decides it likes you better.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-bijou-lead",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"There's a tag?\"",
+     "success": {
+      "text": "\"Brass. A heart. BIJOU, and the telephone. I had it done for her tenth. She'd never needed one. I just wanted her to have something with my number on.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-kitchen-scissors-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I know where she is.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "flare-inside-act3",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-stones-unhooked",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Bijou's at the gate before you've finished the sentence. She's walked. She's thinner. The pom-poms have grown out. Madame Peltier picks up the pegs. She gives you a jar of plum jam. On the road, one of your Pokémon gets a spoonful and decides it likes you better.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "flare-bijou-home",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "lead"
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "A lead's pressed into your hand. \"Then take this. She'll not come to a stranger without it; it smells of the house.\" With Bijou's Lead, on Route 10, one stone's Pokémon can be unclipped without a battle. She gives you a jar of plum jam. On the road, one of your Pokémon gets a spoonful and decides it likes you better.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-bijou-lead",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-kitchen-scissors-2",
+   "name": "Kitchen Scissors",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_f"
+    ],
+    "tint": "#3a4a2a",
+    "effect": "none"
+   },
+   "intro": "She's looking at the gate.",
+   "choices": [
+    {
+     "label": "\"I'll look.\"",
+     "success": {
+      "text": "A lead's pressed into your hand. \"Then take this. She'll not come to a stranger without it; it smells of the house.\" With Bijou's Lead, on Route 10, one stone's Pokémon can be unclipped without a battle. She gives you a jar of plum jam. On the road, one of your Pokémon gets a spoonful and decides it likes you better.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-bijou-lead",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-what-the-glasses-say",
+   "name": "What the Glasses Say",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "The Lysandre Café's kitchen door. A yard. Crates. A man in an apron, on an upturned bucket, smoking nothing: he's given up; he just sits where he used to. The dishwasher, Monsieur Anselme Brunel: \"Forty years of glasses. You learn to read them. Lipstick; that's easy. But how much is left. That's the real news.\" \"Corner table. The Professor: drained. Always. A man who's enjoying himself. The actress: half. She's watching her figure, or the room.\" \"The patron. Six years, it comes back full. Every night. He orders the house red. He lifts it. He puts it down. I pour away a full glass of the best wine in Lumiose every evening of my life.\" \"Before that, he drank like the Professor. I could tell you the date it changed. I've got it on the wall, in pencil, by the sink.\"",
+   "choices": [
+    {
+     "label": "\"What date?\"",
+     "success": {
+      "text": "He shows you. The date by the sink's the day of the drought. Last night's glasses: one extra, at the corner table. Very tall. The stem's been held like something breakable.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why order it, then?\"",
+     "success": {
+      "text": "\"So the others will. A host doesn't let a guest drink alone. He just doesn't swallow.\" The date by the sink's the day of the drought. Last night's glasses: one extra, at the corner table. Very tall. The stem's been held like something breakable.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Tip him.)",
+     "success": {
+      "text": "He looks at the coin. \"...In forty years. You're the second.\" \"Who was the first?\" \"Him. Every Thursday. Before.\" The date by the sink's the day of the drought. Last night's glasses: one extra, at the corner table. Very tall. The stem's been held like something breakable.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "flare-kind-staff",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-the-pool",
+   "name": "The Pool",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/bryony",
+     "trainer.pr/mable",
+     "trainer.pr/celosia"
+    ],
+    "tint": "#3a2830",
+    "effect": "none"
+   },
+   "intro": "A lunch table. Four women in coloured visors. A sheet of graph paper with squares on it, and money under a salt cellar. Bryony: \"It's a pool. On whether he'll go through with it.\" Mable: \"I've 'yes.'\" Celosia: \"I've 'no,' and I've started sleeping in my street clothes.\" Aliana: \"I've 'yes, but it doesn't work.' It was long odds. They've shortened.\" Bryony: \"You can buy a square. Outsiders pay double. It's not personal, it's actuarial.\" The price is written on the sheet: ₽500 a square (₽1,000 from outside). \"A bet. It pays at the end of the region. You may lose it.\"",
+   "choices": [
+    {
+     "label": "Look at the grid.",
+     "success": {
+      "text": "\"Yes,\" 2 to 1. \"Yes, but it's short,\" 5 to 1. \"No: stopped,\" 3 to 1. \"No: talked out of it,\" 20 to 1. \"The tall one,\" 50 to 1: nobody's got it. \"New management,\" 40 to 1.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-the-pool-grid"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write in \"The cleaners.\"",
+     "success": {
+      "text": "It's not on the grid.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-the-pool-cleaners"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "Bryony: \"Suit yourself. It's actuarial.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-the-pool-grid",
+   "name": "The Pool",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/bryony"
+    ],
+    "tint": "#3a2830",
+    "effect": "none"
+   },
+   "intro": "Bryony: \"One square each. Pick.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\" (2 to 1)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "team": "flare",
+         "inside": false
+        }
+       ],
+       "text": "Mable looks pleased. Outsiders pay double: ₽1,000. The slip pays at the end of the region, by whichever of the four's still solvent. You may lose it.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -1000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-yes",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Mable looks pleased. The slip pays at the end of the region, in whatever ending, by whichever of the four's still solvent. You may lose it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-yes",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes, but it's short.\" (5 to 1)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "team": "flare",
+         "inside": false
+        }
+       ],
+       "text": "Aliana raises an eyebrow. Outsiders pay double: ₽1,000. The slip pays at the end of the region, by whichever of the four's still solvent. You may lose it.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -1000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-short",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Aliana raises an eyebrow. The slip pays at the end of the region, in whatever ending, by whichever of the four's still solvent. You may lose it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-short",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No: stopped.\" (3 to 1)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "team": "flare",
+         "inside": false
+        }
+       ],
+       "text": "Celosia nods, as if you'd confirmed something. Outsiders pay double: ₽1,000. The slip pays at the end of the region, by whichever of the four's still solvent. You may lose it.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -1000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-stopped",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Celosia nods, as if you'd confirmed something. The slip pays at the end of the region, in whatever ending, by whichever of the four's still solvent. You may lose it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-stopped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The long odds.",
+     "success": {
+      "text": "Bryony turns the sheet over.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-the-pool-long"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-the-pool-long",
+   "name": "The Pool",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/bryony"
+    ],
+    "tint": "#3a2830",
+    "effect": "none"
+   },
+   "intro": "Bryony: \"The long odds. People like the long odds. People are wrong.\"",
+   "choices": [
+    {
+     "label": "\"No: talked out of it.\" (20 to 1)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "team": "flare",
+         "inside": false
+        }
+       ],
+       "text": "Aliana: \"...Nobody's got that square.\" Outsiders pay double: ₽1,000. The slip pays at the end of the region, by whichever of the four's still solvent. You may lose it.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -1000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-talked",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Aliana: \"...Nobody's got that square.\" The slip pays at the end of the region, in whatever ending, by whichever of the four's still solvent. You may lose it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-talked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The tall one.\" (50 to 1)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "team": "flare",
+         "inside": false
+        }
+       ],
+       "text": "Celosia: \"Who's the tall one?\" Nobody knows. Outsiders pay double: ₽1,000. The slip pays at the end of the region, by whichever of the four's still solvent. You may lose it.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -1000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-tall",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Celosia: \"Who's the tall one?\" Nobody knows. The slip pays at the end of the region, in whatever ending, by whichever of the four's still solvent. You may lose it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-tall",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"New management.\" (40 to 1)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "team": "flare",
+         "inside": false
+        }
+       ],
+       "text": "Celosia writes your name next to hers. Outsiders pay double: ₽1,000. The slip pays at the end of the region, by whichever of the four's still solvent. You may lose it.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -1000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-mgmt",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Celosia writes your name next to hers. The slip pays at the end of the region, in whatever ending, by whichever of the four's still solvent. You may lose it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-mgmt",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-the-pool-cleaners",
+   "name": "The Pool",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/celosia"
+    ],
+    "tint": "#3a2830",
+    "effect": "none"
+   },
+   "intro": "Celosia: \"The cleaners? Fine. A hundred to one. It's your money.\"",
+   "choices": [
+    {
+     "label": "Pay for it. (100 to 1)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "team": "flare",
+         "inside": false
+        }
+       ],
+       "text": "She writes it in the margin, in very small letters. Outsiders pay double: ₽1,000. The slip pays at the end of the region, by whichever of the four's still solvent. You may lose it.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -1000
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-cleaners",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "flare-pool-outside",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She writes it in the margin, in very small letters. The slip pays at the end of the region, in whatever ending, by whichever of the four's still solvent. You may lose it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "flare-pool-cleaners",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Think better of it.",
+     "success": {
+      "text": "She rubs it out.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-good-china",
+   "name": "The Good China",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A Lumiose market. A bric-a-brac stall. A man of seventy in a black coat, turning over a white plate with a gold rim, and checking the mark on the back. Concierge Yarborough: \"It's the pattern. Discontinued. I've been making up the set for six years. We lost a number, on the Thursdays. Breakages. And one walked.\" Yarborough: \"It isn't in use. The table. I'm aware it's not rational to complete a service nobody'll eat off. I find I can't have it short. If he ever came down and counted.\"",
+   "choices": [
+    {
+     "label": "\"Would he count?\"",
+     "success": {
+      "text": "Yarborough: \"He counted once. I'd not have him count and find me wanting.\" The address of the stall, and a word with the seller: she's the one who buys the chiming keys back, from members who've dropped them, for scrap.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let me carry those.\"",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "A tray of eleven plates, through a market. Not one breaks. Yarborough: \"You've hands. I'd have you in service.\" It's the highest thing he can say. The address of the stall, and a word with the seller: she's the one who buys the chiming keys back, from members who've dropped them, for scrap.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "flare-kind-staff",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A tray of eleven plates, through a market. One slides. Yarborough: \"Ten, then. I'll find the eleventh. I've found the others.\" The address of the stall, and a word with the seller: she's the one who buys the chiming keys back, from members who've dropped them, for scrap.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Forty years. Tell me one thing.\"",
+     "success": {
+      "text": "Yarborough: \"The second coat. A January. A man at the kitchen door, no coat at all. Monsieur was coming in from the opera. He took it off on the step. I said, sir, that's the vicuña. He said, 'Then he'll be warm, Wilhelm.' I ordered another. He gave that one away in March.\" The address of the stall, and a word with the seller: she's the one who buys the chiming keys back, from members who've dropped them, for scrap.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-better-part",
+   "name": "A Better Part",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.diantha"
+    ],
+    "tint": "#3a2838",
+    "effect": "none"
+   },
+   "intro": "A film set outside Lumiose. A caravan. A mirror with bulbs. Kalos's most famous face, being made eighty by a man with a sponge. Diantha: \"Don't make me laugh; it cracks. I'm somebody's grandmother. It's eleven lines. I've wanted it for a year.\" Diantha: \"A friend of mine asked me if I'd not rather be this, always. He meant it as the kindest thing he could offer. I said I'd rather play a grandmother. He looked at me as if I'd said I'd rather be ill.\" Diantha: \"Run the scene with me? You're the grandchild. You've come to say you're leaving.\"",
+   "choices": [
+    {
+     "label": "\"I'm going away, Gran. A long way.\"",
+     "success": {
+      "text": "She takes your hand, in character.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-better-part-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I've got to go. I don't know when I'll be back.\"",
+     "success": {
+      "text": "She takes your hand, in character.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-better-part-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Don't be sad. I'll write.\"",
+     "success": {
+      "text": "She takes your hand, in character.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-better-part-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-better-part-2",
+   "name": "A Better Part",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.diantha"
+    ],
+    "tint": "#3a2838",
+    "effect": "none"
+   },
+   "intro": "Diantha, as the grandmother: \"Go, then. I'll be here, and I'll be different when you're back, and so will you. That's not a loss. That's the visit.\" She comes out of it. Diantha: \"He's confused a thing lasting with a thing staying the same. He always has. Give him a sunset, he wants to nail it up.\"",
+   "choices": [
+    {
+     "label": "\"Will you tell him?\"",
+     "success": {
+      "text": "Diantha: \"I have. Every way I know. He hears it as a review.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "diantha-part",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Would you take a seat, if he offered?\"",
+     "success": {
+      "text": "Diantha: \"He has. I'm on some list; Augustine's seen it. I shan't go. I'll be on set. If the world ends I'd like to be in the middle of a take. The crew'd never forgive me otherwise.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "diantha-part",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a good part.\"",
+     "success": {
+      "text": "Diantha: \"It's the best part I've ever had. Eleven lines.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "diantha-part",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-the-brother",
+   "name": "The Brother",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.az"
+    ],
+    "tint": "#1e2418",
+    "effect": "fog"
+   },
+   "intro": "Geosenge. A small stone, among the big ones, set a little apart. No cable on it. Lichen. Letters almost gone. A man twice a man's height is sitting beside it, with his hand flat on the top, as one might on a child's head. AZ: \"My brother. He was the younger. He kept bees. He'd no talent for kingship and he knew it; that was his talent.\" AZ: \"When I built the machine, he came to the door of the workshop. He said: 'Brother, what does it eat?' I said: nothing you'll miss. He said: 'Then it eats something.' He didn't come in.\" AZ: \"He raised this himself. For the ones I took. He never told me. I found it six hundred years on. He'd cut one line.\" The line's worn. You trace it: I LOVED THEM ENOUGH NOT TO.",
+   "choices": [
+    {
+     "label": "\"Did he forgive you?\"",
+     "success": {
+      "text": "AZ: \"He was dead before I could ask. I've decided he did. It's the only kindness I've allowed myself.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-lore-brother",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"His line goes on. There's a man in Lumiose.\"",
+     "success": {
+      "text": "AZ: \"I know. I've seen him across a café. He's my brother's hair. He's got my hands.\" A pause. AZ: \"That's the wrong way round.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-lore-brother",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What does it eat?\"",
+     "success": {
+      "text": "AZ: \"That's the only question. He asked it at the door and I've been answering it since.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-lore-brother",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-other-column",
+   "name": "The Other Column",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#2a2a24",
+    "effect": "none"
+   },
+   "intro": "Lumiose: the Prefecture. A records office. Ledgers to the ceiling. A woman on a rolling ladder. The census clerk, Mademoiselle Séverine Moreau: \"He came himself. Six years ago. Very courteous; he held the ladder. He wanted the figures for the south: villages, head by head. I gave them.\" \"He came back every spring. Same request. The count. It went up; it does. He'd go quite white. He'd say: 'More.'\" \"He only ever asked for the one column. I've two. I said, the third year. I said, monsieur, would you like the other? He said, 'What other?' I said: what they grew. He said he'd not time.\" She turns the ledger. Two columns. Heads. And beside it: yield. Hectares under the plough. Cisterns. Schools. The second column's gone up faster than the first. Every year but one. \"The drought year. That's the one he looked at. I don't blame him; it's a dreadful year. But it's one. He's built on one year and one column.\"",
+   "choices": [
+    {
+     "label": "\"Can I copy it?\"",
+     "success": {
+      "text": "She lets you. The Other Column, in your own hand, every year but one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-column",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why didn't he look?\"",
+     "success": {
+      "text": "\"Because he'd already decided what the page said. People do. I copy it out for you anyway; somebody should read both.\" The Other Column.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-column",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is there enough, then?\"",
+     "success": {
+      "text": "\"I'm a clerk. I don't say 'enough.' I say: more hands, and more in them. Both. Every year but one. He's been reading half the page.\" She copies it out for you: the Other Column.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-column",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
