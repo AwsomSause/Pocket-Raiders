@@ -435,6 +435,9 @@ function tradeMissing(content: Content, run: RunState, choice: EventChoice): str
 export function conditionText(content: Content, c: EventCondition): string {
   switch (c.kind) {
     case 'gn':
+      // Greenneedle gn.49: say what the Sleeping Snorlax needs.
+      if (c.test === 'fluteReady') return 'Needs a Poké Flute';
+      if (c.test === 'foodReady') return 'Needs three Berries, or cooked food';
       return 'Not yet: come back in a later region';
     case 'money':
       return `Needs ₽${c.atLeast}`;

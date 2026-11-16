@@ -1645,6 +1645,11 @@
   "description": "When it survives a super-effective hit, its Attack and Speed rise by one stage. Once per battle."
  },
  {
+  "id": "heavy-sleeper",
+  "name": "Heavy Sleeper",
+  "description": "Restores 1/8 of its HP at the end of any turn in which it didn't use a damaging move."
+ },
+ {
   "id": "inherited-strength",
   "name": "Inherited Strength",
   "description": "Attack +1 whenever an ally faints, up to +2 in a battle."

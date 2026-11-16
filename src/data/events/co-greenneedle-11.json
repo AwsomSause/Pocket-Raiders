@@ -3813,6 +3813,1413 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-49-hill",
+   "name": "The Sleeping Snorlax",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "snorlax-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tickled",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "giants-river",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "giants-snorlax-attacked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "**Old Jarvis squints at you:** \"Here. You're the one who's good with these. Tickled a big one's foot, I heard. Go on, then.\""
+    },
+    {
+     "id": "exploud",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "exploud-healed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Far off, past three hills, something big is clearing its throat. You know that voice."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "*The road ends in a hill. The hill's breathing.*\n\n*A queue of travellers has built up: a carter, two hikers, a wedding party in their good clothes. The flowers are wilting.*\n\n**Carter, Old Jarvis Sykes:** \"Three days. We've tried shouting. We've tried a horn. The bride's mother tried *reasoning* with it.\"\n\nThe bride sits on her own suitcase, veil in her lap. She hasn't cried yet. She looks like she's deciding whether to.",
+   "choices": [
+    {
+     "label": "Play the Poké Flute.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "fluteReady"
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "exploud-healed",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You lift the flute. Before the first note, a roar rolls in from far off, over three hills.\n\nYou know that voice. The Exploud you healed. It sounds like it's saying hello. The hill shudders, and sits up.",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-49-woke-music"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You lift the flute. The queue goes quiet, the way people do before a speech.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put food under its nose.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "foodReady"
+      }
+     ],
+     "success": {
+      "text": "You kneel by its nose with your bag open. Old Jarvis holds his breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "snorlaxFeed",
+        "n": 3,
+        "key": "first"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-food"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "You walk up and tap its belly. Hard. One eye opens. Then the other, slower. It isn't pleased.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snorlax"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "snorlax-woke",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-49-woke-battle"
+        }
+       ],
+       "rule": {
+        "gn": "snorlax"
+       },
+       "exact": true,
+       "friendly": true,
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "snorlaxCaught"
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "snorlax-woke",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "snorlax-joined",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-49-caught"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "snorlax-woke",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-49-lost"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Go back and find another way.",
+     "success": {
+      "text": "You turn back. There's a path the map didn't show, round the long way. It costs you the afternoon.\n\nWhen you look back from the far ridge, the queue's still there. So is the hill. It's still breathing.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-note-1",
+   "name": "The Sleeping Snorlax: Note 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "The tune is scratched on the flute's side, five marks: *high, low, low, high, middle.* The whole queue leans in.\n\nNote 1 of five.",
+   "choices": [
+    {
+     "label": "High.",
+     "success": {
+      "text": "That one's right. You feel it land.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snorlax-notes",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Middle.",
+     "success": {
+      "text": "Not quite the note. The tune bends, and carries on anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Low.",
+     "success": {
+      "text": "Not quite the note. The tune bends, and carries on anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-note-2",
+   "name": "The Sleeping Snorlax: Note 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "The first note wobbles out over the hill. A hiker winces, kindly.\n\nNote 2 of five.",
+   "choices": [
+    {
+     "label": "High.",
+     "success": {
+      "text": "Not quite the note. The tune bends, and carries on anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Middle.",
+     "success": {
+      "text": "Not quite the note. The tune bends, and carries on anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Low.",
+     "success": {
+      "text": "That one's right. You feel it land.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snorlax-notes",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-note-3",
+   "name": "The Sleeping Snorlax: Note 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "The second. The hill's breathing catches, just once.\n\nNote 3 of five.",
+   "choices": [
+    {
+     "label": "High.",
+     "success": {
+      "text": "Not quite the note. The tune bends, and carries on anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Middle.",
+     "success": {
+      "text": "Not quite the note. The tune bends, and carries on anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Low.",
+     "success": {
+      "text": "That one's right. You feel it land.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snorlax-notes",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-note-4",
+   "name": "The Sleeping Snorlax: Note 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "The third. The wedding party has gone quiet. Somebody's mother is mouthing the tune.\n\nNote 4 of five.",
+   "choices": [
+    {
+     "label": "High.",
+     "success": {
+      "text": "That one's right. You feel it land.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snorlax-notes",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Middle.",
+     "success": {
+      "text": "Not quite the note. The tune bends, and carries on anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Low.",
+     "success": {
+      "text": "Not quite the note. The tune bends, and carries on anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-note-5",
+   "name": "The Sleeping Snorlax: Note 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "The fourth. An ear the size of a tent flap turns towards you.\n\nNote 5 of five.",
+   "choices": [
+    {
+     "label": "High.",
+     "success": {
+      "text": "Not quite the note. The tune bends, and carries on anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-nearly"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Middle.",
+     "success": {
+      "text": "That one's right. You feel it land.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snorlax-notes",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-nearly"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Low.",
+     "success": {
+      "text": "Not quite the note. The tune bends, and carries on anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-nearly"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-nearly",
+   "name": "The Sleeping Snorlax: Nearly",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "perfect",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "snorlax-notes",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ],
+     "notice": "Every note was right. You played it perfectly. Some sleeps are deeper than music."
+    },
+    {
+     "id": "lent",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "notRegion",
+       "types": [
+        "kanto"
+       ]
+      }
+     ],
+     "notice": "The hiker who lent you the flute is clapping. \"I never could play it,\" she says. \"Not like that.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "*One eye opens. It closes again. It was nearly enough.*\n\nThe queue lets out the breath it was holding. Old Jarvis puts down his hat. \"Nearly,\" he says. \"Nearly's more than the horn got.\"",
+   "choices": [
+    {
+     "label": "Make some noise.",
+     "success": {
+      "text": "You turn to the queue. They're already rolling up their sleeves.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-met",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-noise-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-noise-1",
+   "name": "The Sleeping Snorlax: Make Some Noise",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "The flute wasn't enough on its own. Now it's noise or nothing. A meter fills with sound, and the queue joins in.\n\n**Noise:** ▯▯▯",
+   "choices": [
+    {
+     "label": "Shout.",
+     "success": {
+      "text": "You shout, from your boots up. **Noise:** ▮▯▯",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-noise-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold and tap.",
+     "success": {
+      "text": "You hold and tap, steady as a drum. **Noise:** ▮▯▯",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-noise-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-noise-2",
+   "name": "The Sleeping Snorlax: Make Some Noise",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "The hikers start clapping, slow, then faster. It's catching.\n\n**Noise:** ▮▯▯",
+   "choices": [
+    {
+     "label": "Shout.",
+     "success": {
+      "text": "You shout, from your boots up. **Noise:** ▮▮▯",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-noise-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold and tap.",
+     "success": {
+      "text": "You hold and tap, steady as a drum. **Noise:** ▮▮▯",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-noise-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-noise-3",
+   "name": "The Sleeping Snorlax: Make Some Noise",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "Old Jarvis bangs a frying pan with a ladle. He looks happier than he has in three days.\n\n**Noise:** ▮▮▯",
+   "choices": [
+    {
+     "label": "Shout.",
+     "success": {
+      "text": "You shout, from your boots up. **Noise:** ▮▮▮",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-woke-music"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold and tap.",
+     "success": {
+      "text": "You hold and tap, steady as a drum. **Noise:** ▮▮▮",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-woke-music"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-woke-music",
+   "name": "The Sleeping Snorlax: Friendly",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "*It sits up. It looks at the flute. It looks at everyone looking at it.*\n\n*It yawns. The bride's veil blows off.*\n\nIt sways. It hums the tune back at you, an octave down, so deep you feel it in your ribs. Then it gets up, and moves.\n\nIt holds the road clear with one arm while the queue goes by. The carter tips his hat to it. It tips its head back.\n\n**The bride, as the queue moves:** \"Three days late to my own wedding. Because of a *nap.*\"\n\nThen she looks back at it, curled up on the verge. \"...I'm a bit jealous, honestly.\"\n\nWhere it lay, the grass is flat as a table. In the middle, half-eaten and somehow still warm: Leftovers.",
+   "choices": [
+    {
+     "label": "Ask it to come with you.",
+     "success": {
+      "text": "You hold out a hand. It looks at the hand, then at you, then hums the tune again. That's a yes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-met",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-woke",
+        "n": 1
+       },
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "snorlax"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1,
+        "ability": "heavy-sleeper",
+        "mark": "snorlax-woke"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-joined",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "snorlax-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go on its way.",
+     "success": {
+      "text": "It ambles off over the hill, humming. You can hear it long after you can't see it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-met",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-woke",
+        "n": 1
+       },
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "snorlax-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-food",
+   "name": "The Sleeping Snorlax: Food",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "*You set the food down a yard from its nose. Then a yard closer.*\n\n*The nose moves. The rest of it hasn't woken up yet. The nose is ahead of it.*\n\nIt eats in its sleep, with tiny, polite snuffles. Then the food is gone, and the nose keeps looking. One eye cracks open: *more?*",
+   "choices": [
+    {
+     "label": "Give it more.",
+     "success": {
+      "text": "You hand over Berries, one by one. It takes each one like a gift. It is very fond of you now.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "snorlaxFeed",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-woke-food"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ]
+    },
+    {
+     "label": "That's all there is.",
+     "success": {
+      "text": "You show it your empty hands. It sighs. Then it sits up, to see if you're hiding any.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-woke-food"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-woke-food",
+   "name": "The Sleeping Snorlax: Following Its Nose",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "It's awake. It's friendly. And it's worked out where the food came from: your bag.\n\nIt gets up, and moves out of the road. Then it's behind you. You take a step. It takes a step.\n\n**The bride, as the queue moves:** \"Three days late to my own wedding. Because of a *nap.*\"\n\nThen she looks back at it, curled up on the verge. \"...I'm a bit jealous, honestly.\"\n\nWhere it lay, the grass is flat as a table. In the middle, half-eaten and somehow still warm: Leftovers.",
+   "choices": [
+    {
+     "label": "Ask it to come with you.",
+     "success": {
+      "text": "It was coming anyway. Now it's official. It pats your bag, very gently, and keeps patting it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-met",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-woke",
+        "n": 2
+       },
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "snorlax"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1,
+        "ability": "heavy-sleeper",
+        "mark": "snorlax-woke"
+       },
+       {
+        "kind": "gn",
+        "op": "snorlaxFond"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-joined",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "snorlax-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it follow.",
+     "success": {
+      "text": "You walk on. It walks on, one step back. Every so often you hear it sniff.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-met",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-woke",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-followed",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "snorlaxFollow"
+       },
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "snorlax-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-woke-battle",
+   "name": "The Sleeping Snorlax: Angry",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "Beaten, it moves. Not far. It sits down on the verge with its back to the road, and to you.\n\nThe queue files past it carefully, the way you'd pass a neighbour you've argued with.\n\n**The bride, as the queue moves:** \"Three days late to my own wedding. Because of a *nap.*\"\n\nThen she looks back at it, curled up on the verge. \"...I'm a bit jealous, honestly.\"\n\nWhere it lay, the grass is flat as a table. In the middle, half-eaten and somehow still warm: Leftovers.",
+   "choices": [
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "You leave it be. It doesn't turn round. It's going to remember this.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-met",
+        "n": 1
+       },
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "snorlax-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-caught",
+   "name": "The Sleeping Snorlax: Caught",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "It's yours. It isn't happy about it. It turns its back on you inside the Ball, somehow.\n\nIt doesn't forgive quickly. Its Bond starts at nothing, and for the rest of this region it warms to you at half the speed.\n\n**The bride, as the queue moves:** \"Three days late to my own wedding. Because of a *nap.*\"\n\nThen she looks back at it, curled up on the verge. \"...I'm a bit jealous, honestly.\"\n\nWhere it lay, the grass is flat as a table. In the middle, half-eaten and somehow still warm: Leftovers.",
+   "choices": [
+    {
+     "label": "Pick up the Leftovers.",
+     "success": {
+      "text": "You pick them up. From inside the Ball, a long, unimpressed snore.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-met",
+        "n": 1
+       },
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "snorlax-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-lost",
+   "name": "The Sleeping Snorlax: Back to Sleep",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "You come round on the verge. Somebody's put a coat under your head. The Snorlax has gone back to sleep, right where it was.\n\nBut it rolled, a little, in the fight. There's a gap now, just wide enough. The queue squeezes through it, one at a time.",
+   "choices": [
+    {
+     "label": "Squeeze past.",
+     "success": {
+      "text": "You squeeze past its belly. It snores at you. It sounds like a grudge.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-met",
+        "n": 1
+       },
+       {
+        "kind": "item",
+        "id": "leftovers",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "snorlax-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-49-later",
+   "name": "The Sleeping Snorlax, Again",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "snorlax-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "snorlax-joined",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "snorlax-later",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "snorlax-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "*The road ends in a hill. The hill's breathing. You've seen this hill before.*\n\nIt opens one eye. It looks at you for a long moment. It knows you.",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "It rolls over, slowly, like a wave going out, and leaves the road clear. The eye closes. That was hello.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-later",
+        "n": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "snorlax-woke",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Ask nicely.",
+     "success": {
+      "text": "\"Please,\" you say. It thinks about it for a long time. Then it rolls over. It wanted to hear you say it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-later",
+        "n": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "snorlax-woke",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-route-snorlax",
+   "name": "The Sleeping Snorlax",
+   "group": "Canon Spaces: Kanto",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "snorlax-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tickled",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "giants-river",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "giants-snorlax-attacked",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "**Old Jarvis squints at you:** \"Here. You're the one who's good with these. Tickled a big one's foot, I heard. Go on, then.\""
+    },
+    {
+     "id": "exploud",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "exploud-healed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Far off, past three hills, something big is clearing its throat. You know that voice."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "*The road ends in a hill. The hill's breathing.*\n\n*A queue of travellers has built up: a carter, two hikers, a wedding party in their good clothes. The flowers are wilting.*\n\n**Carter, Old Jarvis Sykes:** \"Three days. We've tried shouting. We've tried a horn. The bride's mother tried *reasoning* with it.\"\n\nThe bride sits on her own suitcase, veil in her lap. She hasn't cried yet. She looks like she's deciding whether to.",
+   "choices": [
+    {
+     "label": "Play the Poké Flute.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "fluteReady"
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "exploud-healed",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You lift the flute. Before the first note, a roar rolls in from far off, over three hills.\n\nYou know that voice. The Exploud you healed. It sounds like it's saying hello. The hill shudders, and sits up.",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-49-woke-music"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You lift the flute. The queue goes quiet, the way people do before a speech.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-note-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put food under its nose.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "foodReady"
+      }
+     ],
+     "success": {
+      "text": "You kneel by its nose with your bag open. Old Jarvis holds his breath.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "snorlaxFeed",
+        "n": 3,
+        "key": "first"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-49-food"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "You walk up and tap its belly. Hard. One eye opens. Then the other, slower. It isn't pleased.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snorlax"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "snorlax-woke",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-49-woke-battle"
+        }
+       ],
+       "rule": {
+        "gn": "snorlax"
+       },
+       "exact": true,
+       "friendly": true,
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "snorlaxCaught"
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "snorlax-woke",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "snorlax-joined",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-49-caught"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "snorlax-woke",
+         "n": 3
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-49-lost"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Go back and find another way.",
+     "success": {
+      "text": "You turn back. There's a path the map didn't show, round the long way. It costs you the afternoon.\n\nWhen you look back from the far ridge, the queue's still there. So is the hill. It's still breathing.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.route.snorlax"
   }
  ]
 }

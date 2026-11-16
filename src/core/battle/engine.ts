@@ -23,6 +23,7 @@ import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
 import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
 import { draftTurn } from '../greenneedle/draft';
+import { snorlaxTurn } from '../greenneedle/snorlax';
 import { champPower, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
@@ -1042,6 +1043,16 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
         events.push({ type: 'ability', side: c.side, ability: 'speed-boost' });
         applyStageChange(ctx, c, 'spe', 1, events);
       }
+      // Greenneedle gn.49 Heavy Sleeper: 1/8 of its HP back after a turn it didn't use a damaging move.
+      if (abilityIn(ctx, c) === 'heavy-sleeper' && !c.vol.plannedAttack && c.mon.hp > 0 && c.vol.healBlock <= 0) {
+        const max = calcStats(ctx.content, c.mon).hp;
+        const amount = Math.min(max - c.mon.hp, Math.max(1, Math.floor(max / 8)));
+        if (amount > 0) {
+          events.push({ type: 'ability', side: c.side, ability: 'heavy-sleeper' });
+          c.mon.hp += amount;
+          events.push({ type: 'heal', side: c.side, amount, hpAfter: c.mon.hp });
+        }
+      }
     }
   }
   primalCheck(ctx, playerC, enemy, events);
@@ -1222,6 +1233,8 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     const line = earthLine(battle.turn - 1, rule.surviveTurns);
     if (line) events.push({ type: 'raid', tone: 'info', text: line });
   }
+  // Greenneedle gn.49: the Snorlax dozes for three turns (Snore only), then wakes properly.
+  if (rule.gn === 'snorlax' && content && !battle.outcome) snorlaxTurn(content, battle, (text) => events.push({ type: 'raid', tone: 'info', text }));
   // Greenneedle gn.48, the Pokémon Draft: the cards' lines come true.
   if (rule.gn === 'draft' && party) draftTurn(battle, party, events, (text) => events.push({ type: 'raid', tone: 'info', text }));
   // Greenneedle gn.45, the Champion's lesson: the Champion explains each decision; it ends once all three of theirs have been out.

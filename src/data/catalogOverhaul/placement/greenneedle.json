@@ -279,6 +279,55 @@
   ],
   "tags": []
  },
+ "gn-49-hill": {
+  "gn": "gn.49",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   7,
+   12
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "If fought: A+2, double HP",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "Snorlax Blockade",
+   "kantoStage": "The route (cs.kanto.route.snorlax)",
+   "elsewhere": "The Sleeping Snorlax"
+  },
+  "note": "Badge: a large \"Zzz\". Lies across a single-node column, so there is no way round on the map. In Kanto the canon space cs-kanto-route-snorlax shows it instead.",
+  "kinds": [
+   "Interrupting Episode"
+  ],
+  "tags": []
+ },
+ "gn-49-later": {
+  "gn": "gn.49",
+  "shape": "Single",
+  "earliest": "A3",
+  "home": 9,
+  "window": [
+   5,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Sleeping Snorlax, Again",
+   "elsewhere": "The Sleeping Snorlax, Again"
+  },
+  "note": "Afterstory: a Snorlax that did not join, asleep across the road in a later region. Fought, it needs \"Ask nicely.\"",
+  "kinds": [
+   "Interrupting Episode"
+  ],
+  "tags": []
+ },
  "gn-45-field": {
   "gn": "gn.45",
   "shape": "Single",

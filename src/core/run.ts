@@ -26,6 +26,7 @@ import { lessonAfterstory } from './greenneedle/champion';
 import { allstarRecord, allstarTurn } from './greenneedle/allstar';
 import { draftRecord } from './greenneedle/draft';
 import { exRipple } from './greenneedle/exhibition';
+import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
@@ -122,7 +123,7 @@ import { spendTakenNode } from './co/takeNode';
 import { partnerOwed, quietWildWeight, spendPartner } from './co/neRules';
 import { quirkBadgeBond } from './co/quirks';
 import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
-import { addEventStops, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { addEventStops, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -978,6 +979,7 @@ function enterNextRegion(content: Content, run: RunState): void {
   }
   run.regionIndex += 1;
   run.log.charmUsedInRegion = false;
+  snorlaxForgives(run);
   endRegionTempEffects(run);
   endRegionStatBoosts(content, [...run.party, ...run.box]);
   shiftPartyLevels(content, run, regionLevelOffset(runArchetype(content, run).modifiers));
@@ -2693,6 +2695,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const centerHeal = trackEffects(content, run).centerHeal;
     if (centerHeal < 1) for (const mon of run.party) mon.hp = Math.max(1, Math.min(mon.hp, Math.floor(maxHp(content, mon) * centerHeal)));
     careRest(run, content);
+    const snorlaxLine = snorlaxRest(run, stageNumber(content, run));
     partyLifeCamp(run);
     const comboLine = [partyLifeCombos(content, run), ...assignGrowthPaths(content, run.party, run.story.histories)].filter(Boolean).join(' ');
     runSide.used = true;
@@ -2712,7 +2715,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     const camp = campQuirkLine(run.party, campMoment(content, run), campKey, nameOf) ?? quirkReaction(run.party, 'rest_node', campKey, nameOf) ?? partyNarration(run.party, 'rest_node', campKey, nameOf, (m) => content.species.get(m.speciesId)?.types ?? []);
     // Pokémon moments (Beta 0.6): a party member's rest moment can add a line.
     const momentLine = restMoments(content, run).join(' ');
-    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}` };
+    return { run, message: `Your Pokémon were fully healed!${momentLine ? ` ${momentLine}` : ''}${calmed.length > 0 ? ` The Blissful aura lifts the haze from ${calmed.join(', ')}!` : ''}${camp ? ` ${camp}` : ''}${comboLine ? ` ${comboLine}` : ''}${heartbondScenes ? ` ${heartbondScenes}` : ''}${sigLines ? ` ${sigLines}` : ''}${snorlaxLine ? ` ${snorlaxLine}` : ''}` };
   }
   run.phase = 'shop';
   noteMapGrowth(content, run, run.party[0]?.uid, 'shopVisit');
@@ -3151,10 +3154,13 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const afterstory = lessonAfterstory(content, run);
   // Greenneedle gn.47: a trainer of a later stage talks about the Exhibition, and copied a move from it.
   const ripple = exRipple(content, run);
+  // Greenneedle gn.49: the Snorlax that followed your bag sits down at the Gym door.
+  const gymDoor = snorlaxGym(run, stageNumber(content, run));
   kantoSweetAir(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   if (afterstory) events.push({ type: 'raid', tone: 'info', text: afterstory });
   if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
+  if (gymDoor) events.push({ type: 'raid', tone: 'info', text: gymDoor });
   run.rng.battle = rng.state;
   noteBattle(content, run);
   wildBehaviorEffect(content, run, events);

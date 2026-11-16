@@ -27,6 +27,7 @@ import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
+import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
 import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
@@ -195,6 +196,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'exKnown') return exKnown(run);
   if (c.test === 'exLeft') return !!nextMatchup(run);
   if (c.test === 'draftFriend') return !!draftFriend(run);
+  // gn.49: a flute to play (or the Exploud you healed roars for you: that counts as music).
+  if (c.test === 'fluteReady') return fluteReady(run, run.regionOrder[run.regionIndex] ?? '') || gnFlag(run, 'exploud-healed') > 0;
+  if (c.test === 'foodReady') return foodReady(run);
   if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
   if (c.test === 'natureIs') return run.party.some((m) => m.nature === c.key);
@@ -555,6 +559,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return draftAldhelm(content, run, host);
     case 'draftLetter':
       return draftLetter(content, run);
+    case 'snorlaxFeed':
+      return snorlaxFeed(content, run, e.n ?? 3, e.key === 'first');
+    case 'snorlaxFond':
+      return snorlaxFond(content, run);
+    case 'snorlaxFollow':
+      return snorlaxFollow(run, host.stage);
+    case 'snorlaxCaught':
+      return snorlaxCaught(run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
@@ -691,6 +703,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.47: the Exhibition's winner, with their own three.
   if (rule === 'exhibition') exStart(content, run, battle, makeFull(content));
   // gn.48: a draft battle (n on n), or the bracket against one of the other drafters (`slot`).
+  // gn.49: the Sleeping Snorlax, double HP and half asleep.
+  if (rule === 'snorlax') snorlaxStart(content, battle);
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {
     if (gnFlag(run, 'allstar-shake') > 0) battle.storyEffects.push('allstar-shake');

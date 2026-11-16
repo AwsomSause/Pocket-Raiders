@@ -1,6 +1,6 @@
 // Greenneedle, part 11: gn.44 The 1v1 Championship (doc GREENNEEDLE_REWORKED_PLACED_10.md).
 // Build: npm run co:build -- greenneedle-11   then   npm run co:gn
-import { $, any, ch, fight, heal, out, trainer, wild, type Json } from '../dsl.ts';
+import { $, any, br, ch, fight, flag, heal, item, join, out, takeNode, trainer, wild, type Json } from '../dsl.ts';
 import { bond, chIf, gev, gn, is, moment, not, notThisRegion, rm, roll, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
@@ -403,7 +403,144 @@ const gn48: Json[] = [
   ]),
 ];
 
-export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48];
+// =====================================================================================================================
+// gn.49  THE SLEEPING SNORLAX  (step 9, must-see, window 7–12; before the node's battle; once per run, from A3. In Kanto it replaces
+// the Snorlax Blockade canon space.) Music, food or a fight wakes it, and how it wakes decides who it is (core/greenneedle/snorlax.ts).
+// =====================================================================================================================
+const HILL_TINT = '#3a4a3a';
+const hill = (o: Json = {}): Json => ({ tint: HILL_TINT, pokemon: 'snorlax', tags: ['Story', 'Pokémon'], effect: 'none', ...o });
+const BRIDE = say(
+  '**The bride, as the queue moves:** "Three days late to my own wedding. Because of a *nap.*"',
+  'Then she looks back at it, curled up on the verge. "...I\'m a bit jealous, honestly."',
+);
+const LEFTOVERS = 'Where it lay, the grass is flat as a table. In the middle, half-eaten and somehow still warm: Leftovers.';
+const snorlaxJoin = (o: Json = {}): Json => ({ ...join({ species: ['snorlax'], lv: 2 }), ability: 'heavy-sleeper', mark: 'snorlax-woke', ...o });
+const TUNE = ['High', 'Low', 'Low', 'High', 'Middle'];
+const NOTE_LINES = [
+  'The first note wobbles out over the hill. A hiker winces, kindly.',
+  'The second. The hill\'s breathing catches, just once.',
+  'The third. The wedding party has gone quiet. Somebody\'s mother is mouthing the tune.',
+  'The fourth. An ear the size of a tent flap turns towards you.',
+  'The last note. You hold it as long as your breath lasts.',
+];
+const notes: Json[] = TUNE.map((right, i) => rm(`gn-49-note-${i + 1}`, `The Sleeping Snorlax: Note ${i + 1}`, hill(), say(
+  i === 0 ? 'The tune is scratched on the flute\'s side, five marks: *high, low, low, high, middle.* The whole queue leans in.' : NOTE_LINES[i - 1]!,
+  `Note ${i + 1} of five.`,
+), ['High', 'Middle', 'Low'].map((n) => ch(`${n}.`, out(n === right ? 'That one\'s right. You feel it land.' : 'Not quite the note. The tune bends, and carries on anyway.',
+  ...(n === right ? [flag('snorlax-notes')] : []), scene(i < 4 ? `gn-49-note-${i + 2}` : 'gn-49-nearly'))))));
+const METER = ['▮▯▯', '▮▮▯', '▮▮▮'];
+const QUEUE = [
+  'The hikers start clapping, slow, then faster. It\'s catching.',
+  'Old Jarvis bangs a frying pan with a ladle. He looks happier than he has in three days.',
+  'The wedding party sings. Badly. Gloriously. The bride\'s mother hits a note nobody knew existed.',
+];
+const noise: Json[] = METER.map((bar, i) => rm(`gn-49-noise-${i + 1}`, 'The Sleeping Snorlax: Make Some Noise', hill(), say(
+  i === 0 ? 'The flute wasn\'t enough on its own. Now it\'s noise or nothing. A meter fills with sound, and the queue joins in.' : QUEUE[i - 1]!,
+  `**Noise:** ${i === 0 ? '▯▯▯' : METER[i - 1]}`,
+), [
+  ch('Shout.', out(`You shout, from your boots up. **Noise:** ${bar}`, scene(i < 2 ? `gn-49-noise-${i + 2}` : 'gn-49-woke-music'))),
+  ch('Hold and tap.', out(`You hold and tap, steady as a drum. **Noise:** ${bar}`, scene(i < 2 ? `gn-49-noise-${i + 2}` : 'gn-49-woke-music'))),
+]));
+
+const HILL_CHOICES: Json[] = [
+  ch('Play the Poké Flute.', out('You lift the flute. The queue goes quiet, the way people do before a speech.', scene('gn-49-note-1')), {
+    requires: [gnc('fluteReady')],
+    branches: [br([is('exploud-healed')], say(
+      'You lift the flute. Before the first note, a roar rolls in from far off, over three hills.',
+      'You know that voice. The Exploud you healed. It sounds like it\'s saying hello. The hill shudders, and sits up.',
+    ), scene('gn-49-woke-music'))],
+  }),
+  ch('Put food under its nose.', out('You kneel by its nose with your bag open. Old Jarvis holds his breath.', gn('snorlaxFeed', { n: 3, key: 'first' }), scene('gn-49-food')), { requires: [gnc('foodReady')] }),
+  ch('Battle it.', fight('You walk up and tap its belly. Hard. One eye opens. Then the other, slower. It isn\'t pleased.', {
+    ...wild({ species: ['snorlax'], lv: 2, win: [setTo('snorlax-woke', 3), scene('gn-49-woke-battle')] }),
+    rule: { gn: 'snorlax' }, exact: true, friendly: true,
+    caught: [gn('snorlaxCaught'), setTo('snorlax-woke', 3), setTo('snorlax-joined', 1), scene('gn-49-caught')],
+    lose: [setTo('snorlax-woke', 3), scene('gn-49-lost')],
+  })),
+  ch('Go back and find another way.', out(say(
+    'You turn back. There\'s a path the map didn\'t show, round the long way. It costs you the afternoon.',
+    'When you look back from the far ridge, the queue\'s still there. So is the hill. It\'s still breathing.',
+  ), takeNode(1))),
+];
+const HILL_INTRO = say(
+  '*The road ends in a hill. The hill\'s breathing.*',
+  '*A queue of travellers has built up: a carter, two hikers, a wedding party in their good clothes. The flowers are wilting.*',
+  '**Carter, Old Jarvis Sykes:** "Three days. We\'ve tried shouting. We\'ve tried a horn. The bride\'s mother tried *reasoning* with it."',
+  'The bride sits on her own suitcase, veil in her lap. She hasn\'t cried yet. She looks like she\'s deciding whether to.',
+);
+const HILL_REMEMBERS: Json[] = [
+  { id: 'tickled', when: [is('giants-river'), not('giants-snorlax-attacked')], notice: '**Old Jarvis squints at you:** "Here. You\'re the one who\'s good with these. Tickled a big one\'s foot, I heard. Go on, then."' },
+  { id: 'exploud', when: [is('exploud-healed')], notice: 'Far off, past three hills, something big is clearing its throat. You know that voice.' },
+];
+
+const gn49: Json[] = [
+  gev('gn-49-hill', 'The Sleeping Snorlax', hill({ stop: 'event', rarity: 'rare', requires: [not('snorlax-met')], remembers: HILL_REMEMBERS }), HILL_INTRO, HILL_CHOICES),
+  ...notes,
+  rm('gn-49-nearly', 'The Sleeping Snorlax: Nearly', hill({ remembers: [
+    { id: 'perfect', when: [is('snorlax-notes', 5)], notice: 'Every note was right. You played it perfectly. Some sleeps are deeper than music.' },
+    { id: 'lent', when: [gnc('notRegion', { types: ['kanto'] })], notice: 'The hiker who lent you the flute is clapping. "I never could play it," she says. "Not like that."' },
+  ] }), say(
+    '*One eye opens. It closes again. It was nearly enough.*',
+    'The queue lets out the breath it was holding. Old Jarvis puts down his hat. "Nearly," he says. "Nearly\'s more than the horn got."',
+  ), [ch('Make some noise.', out('You turn to the queue. They\'re already rolling up their sleeves.', setTo('snorlax-met', 1), scene('gn-49-noise-1')))]),
+  ...noise,
+  rm('gn-49-woke-music', 'The Sleeping Snorlax: Friendly', hill({ tags: ['Story', 'Recovery'] }), say(
+    '*It sits up. It looks at the flute. It looks at everyone looking at it.*',
+    '*It yawns. The bride\'s veil blows off.*',
+    'It sways. It hums the tune back at you, an octave down, so deep you feel it in your ribs. Then it gets up, and moves.',
+    'It holds the road clear with one arm while the queue goes by. The carter tips his hat to it. It tips its head back.',
+    BRIDE, LEFTOVERS,
+  ), [
+    ch('Ask it to come with you.', out('You hold out a hand. It looks at the hand, then at you, then hums the tune again. That\'s a yes.',
+      setTo('snorlax-met', 1), setTo('snorlax-woke', 1), item('leftovers'), snorlaxJoin(), setTo('snorlax-joined', 1), stampRegion('snorlax-at'))),
+    ch('Let it go on its way.', out('It ambles off over the hill, humming. You can hear it long after you can\'t see it.',
+      setTo('snorlax-met', 1), setTo('snorlax-woke', 1), item('leftovers'), stampRegion('snorlax-at'))),
+  ]),
+  rm('gn-49-food', 'The Sleeping Snorlax: Food', hill(), say(
+    '*You set the food down a yard from its nose. Then a yard closer.*',
+    '*The nose moves. The rest of it hasn\'t woken up yet. The nose is ahead of it.*',
+    'It eats in its sleep, with tiny, polite snuffles. Then the food is gone, and the nose keeps looking. One eye cracks open: *more?*',
+  ), [
+    chIf([gnc('holdsBerry')], 'Give it more.', out('You hand over Berries, one by one. It takes each one like a gift. It is very fond of you now.', gn('snorlaxFeed', { n: 3 }), scene('gn-49-woke-food'))),
+    ch('That\'s all there is.', out('You show it your empty hands. It sighs. Then it sits up, to see if you\'re hiding any.', scene('gn-49-woke-food'))),
+  ]),
+  rm('gn-49-woke-food', 'The Sleeping Snorlax: Following Its Nose', hill({ tags: ['Story', 'Recovery'] }), say(
+    'It\'s awake. It\'s friendly. And it\'s worked out where the food came from: your bag.',
+    'It gets up, and moves out of the road. Then it\'s behind you. You take a step. It takes a step.',
+    BRIDE, LEFTOVERS,
+  ), [
+    ch('Ask it to come with you.', out('It was coming anyway. Now it\'s official. It pats your bag, very gently, and keeps patting it.',
+      setTo('snorlax-met', 1), setTo('snorlax-woke', 2), item('leftovers'), snorlaxJoin(), gn('snorlaxFond'), setTo('snorlax-joined', 1), stampRegion('snorlax-at'))),
+    ch('Let it follow.', out('You walk on. It walks on, one step back. Every so often you hear it sniff.',
+      setTo('snorlax-met', 1), setTo('snorlax-woke', 2), setTo('snorlax-followed', 1), gn('snorlaxFollow'), item('leftovers'), stampRegion('snorlax-at'))),
+  ]),
+  rm('gn-49-woke-battle', 'The Sleeping Snorlax: Angry', hill({ tags: ['Story'] }), say(
+    'Beaten, it moves. Not far. It sits down on the verge with its back to the road, and to you.',
+    'The queue files past it carefully, the way you\'d pass a neighbour you\'ve argued with.',
+    BRIDE, LEFTOVERS,
+  ), [ch('Leave it be.', out('You leave it be. It doesn\'t turn round. It\'s going to remember this.', setTo('snorlax-met', 1), item('leftovers'), stampRegion('snorlax-at')))]),
+  rm('gn-49-caught', 'The Sleeping Snorlax: Caught', hill({ tags: ['Story'] }), say(
+    'It\'s yours. It isn\'t happy about it. It turns its back on you inside the Ball, somehow.',
+    'It doesn\'t forgive quickly. Its Bond starts at nothing, and for the rest of this region it warms to you at half the speed.',
+    BRIDE, LEFTOVERS,
+  ), [ch('Pick up the Leftovers.', out('You pick them up. From inside the Ball, a long, unimpressed snore.', setTo('snorlax-met', 1), item('leftovers'), stampRegion('snorlax-at')))]),
+  rm('gn-49-lost', 'The Sleeping Snorlax: Back to Sleep', hill({ tags: ['Story'] }), say(
+    'You come round on the verge. Somebody\'s put a coat under your head. The Snorlax has gone back to sleep, right where it was.',
+    'But it rolled, a little, in the fight. There\'s a gap now, just wide enough. The queue squeezes through it, one at a time.',
+  ), [ch('Squeeze past.', out('You squeeze past its belly. It snores at you. It sounds like a grudge.', setTo('snorlax-met', 1), item('leftovers'), stampRegion('snorlax-at')))]),
+  // ---- Afterstory: a Snorlax that didn't join, asleep across the road in a later region ----
+  gev('gn-49-later', 'The Sleeping Snorlax, Again', hill({ stop: 'event', rarity: 'rare', requires: [is('snorlax-met'), not('snorlax-joined'), not('snorlax-later'), notThisRegion('snorlax-at')] }), say(
+    '*The road ends in a hill. The hill\'s breathing. You\'ve seen this hill before.*',
+    'It opens one eye. It looks at you for a long moment. It knows you.',
+  ), [
+    chIf([is('snorlax-woke', 0, 2)], 'Wait.', out('It rolls over, slowly, like a wave going out, and leaves the road clear. The eye closes. That was hello.', setTo('snorlax-later', 1))),
+    chIf([is('snorlax-woke', 3, 3)], 'Ask nicely.', out('"Please," you say. It thinks about it for a long time. Then it rolls over. It wanted to hear you say it.', setTo('snorlax-later', 1))),
+  ]),
+];
+// Kanto: the canon space on the route (cs.kanto.route.snorlax) shows the same story.
+const KANTO_SNORLAX: Json = { ...gev('cs-kanto-route-snorlax', 'The Sleeping Snorlax', hill({ stop: 'event', rarity: 'common', group: 'Canon Spaces: Kanto', requires: [not('snorlax-met')], remembers: HILL_REMEMBERS }), HILL_INTRO, HILL_CHOICES), canon: 'cs.kanto.route.snorlax' };
+
+export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48, ...gn49, KANTO_SNORLAX];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -436,6 +573,18 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'None', often: 'region', badge: 'own',
     dressing: { kanto: 'A Letter', elsewhere: 'A Letter' },
     note: 'Once a region, while a drafted Pokémon that stayed is with you: its first trainer writes. "Write back." gives it Bond +1.',
+  },
+  'gn-49-hill': {
+    gn: 'gn.49', shape: 'Single', earliest: 'A3', home: 9, window: [7, 12], sits: 'must-see', attaches: 'before', tags: ['Interrupting Episode'],
+    level: 'If fought: A+2, double HP', often: 'run', badge: 'own',
+    dressing: { kanto: 'Snorlax Blockade', kantoStage: 'The route (cs.kanto.route.snorlax)', elsewhere: 'The Sleeping Snorlax' },
+    note: 'Badge: a large "Zzz". Lies across a single-node column, so there is no way round on the map. In Kanto the canon space cs-kanto-route-snorlax shows it instead.',
+  },
+  'gn-49-later': {
+    gn: 'gn.49', shape: 'Single', earliest: 'A3', home: 9, window: [5, 14], sits: 'optional', attaches: 'before', tags: ['Interrupting Episode'],
+    level: 'None', often: 'run', badge: 'own',
+    dressing: { kanto: 'The Sleeping Snorlax, Again', elsewhere: 'The Sleeping Snorlax, Again' },
+    note: 'Afterstory: a Snorlax that did not join, asleep across the road in a later region. Fought, it needs "Ask nicely."',
   },
   'gn-45-field': {
     gn: 'gn.45', shape: 'Single', earliest: 'A10', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Companion Story'],

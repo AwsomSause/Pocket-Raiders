@@ -654,3 +654,163 @@ describe('gn.48 The Pokémon Draft', () => {
     expect([...out.party, ...out.box].some((m) => m.gn?.includes(DRAFT_BENCH))).toBe(false);
   });
 });
+
+// ---- gn.49 The Sleeping Snorlax ----
+import { foodReady, snorlaxFeed, snorlaxGym, snorlaxRest, SNORLAX_MOVES } from '../../src/core/greenneedle/snorlax';
+import { changeFriendship } from '../../src/core/friendship';
+import { stageNumber } from '../../src/core/events';
+import { takeTurn } from '../../src/core/run';
+
+const snorlaxRun = (seed: string, prep?: (run: RunState) => void): RunState => {
+  const run = gnRun(seed);
+  run.passives = { ...run.passives, 'poke-flute': 1 };
+  prep?.(run);
+  open(run, 'gn-49-hill');
+  return run;
+};
+const joinedSnorlax = (run: RunState) => [...run.party, ...run.box, ...run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.speciesId === 'snorlax');
+const berries = (run: RunState): number => run.party.reduce((a, m) => a + Object.entries(m.held ?? {}).reduce((x, [id, n]) => x + (id.endsWith('-berry') ? n : 0), 0), 0);
+
+describe('gn.49 The Sleeping Snorlax', () => {
+  it('the hill: the doc\'s four choices; no flute in Kanto without Mr. Fuji\'s, no food without three Berries', () => {
+    const run = gnRun('t49-locks');
+    run.regionOrder[run.regionIndex] = 'kanto';
+    open(run, 'gn-49-hill');
+    expect(scene(run, 'gn-49-hill').labels).toEqual(['Play the Poké Flute.', 'Put food under its nose.', 'Battle it.', 'Go back and find another way.']);
+    expect(() => choose(run, 'gn-49-hill', 'Play the Poké Flute.')).toThrow('Needs a Poké Flute');
+    expect(() => choose(run, 'gn-49-hill', 'Put food under its nose.')).toThrow('Needs three Berries');
+    const left = choose(run, 'gn-49-hill', 'Go back and find another way.');
+    expect(flagOf(left.run, 'snorlax-met')).toBe(0);
+    const elsewhere = gnRun('t49-locks');
+    elsewhere.regionOrder[elsewhere.regionIndex] = 'johto';
+    open(elsewhere, 'gn-49-hill');
+    expect(choose(elsewhere, 'gn-49-hill', 'Play the Poké Flute.').success).toBe(true);
+  });
+
+  it('music: five notes, nearly enough, then the noise meter (shout or tap, the same); it wakes friendly and may join with Heavy Sleeper', () => {
+    let run = choose(snorlaxRun('t49-music'), 'gn-49-hill', 'Play the Poké Flute.').run;
+    for (const [i, n] of ['High', 'Low', 'Low', 'High', 'Middle'].entries()) run = choose(run, `gn-49-note-${i + 1}`, `${n}.`).run;
+    expect(flagOf(run, 'snorlax-notes')).toBe(5);
+    expect(scene(run, 'gn-49-nearly').intro).toContain('Some sleeps are deeper than music.');
+    run = choose(run, 'gn-49-nearly', 'Make some noise.').run;
+    expect(scene(run, 'gn-49-noise-1').labels).toEqual(['Shout.', 'Hold and tap.']);
+    run = choose(run, 'gn-49-noise-1', 'Shout.').run;
+    run = choose(run, 'gn-49-noise-2', 'Hold and tap.').run;
+    run = choose(run, 'gn-49-noise-3', 'Shout.').run;
+    expect(scene(run, 'gn-49-woke-music').intro).toContain('The bride\'s veil blows off.');
+    const r = choose(run, 'gn-49-woke-music', 'Ask it to come with you.');
+    const mon = joinedSnorlax(r.run)!;
+    expect(mon.fixedAbility).toBe('heavy-sleeper');
+    expect(mon.gn).toContain('snorlax-woke');
+    expect(said(r)).toMatch(/Leftovers/);
+    expect(flagOf(r.run, 'snorlax-woke')).toBe(1);
+    expect(flagOf(r.run, 'snorlax-joined')).toBe(1);
+  });
+
+  it('the healed Exploud roars far off and wakes it before the flute\'s needed (counts as music), even with no flute', () => {
+    const run = gnRun('t49-exploud');
+    setFlag(run, 'exploud-healed');
+    open(run, 'gn-49-hill');
+    expect(scene(run, 'gn-49-hill').intro).toContain('You know that voice.');
+    const r = choose(run, 'gn-49-hill', 'Play the Poké Flute.');
+    expect(r.success).toBe(true);
+    expect(opened(r.run, 'gn-49-woke-music')).toBe(true);
+  });
+
+  it('food: three Berries, then "Give it more." makes it very fond; followed, a Berry goes missing at each rest and it sits at the Gym door', () => {
+    let run = snorlaxRun('t49-food', (r) => { r.party[0]!.held = { 'oran-berry': 7 }; });
+    run = choose(run, 'gn-49-hill', 'Put food under its nose.').run;
+    expect(berries(run)).toBe(4);
+    expect(scene(run, 'gn-49-food').labels).toEqual(['Give it more.', 'That\'s all there is.']);
+    run = choose(run, 'gn-49-food', 'Give it more.').run;
+    expect(berries(run)).toBe(1);
+    expect(flagOf(run, 'snorlax-fed')).toBe(6);
+    const joinedRun = choose(run, 'gn-49-woke-food', 'Ask it to come with you.').run;
+    expect(joinedSnorlax(joinedRun)!.friendship).toBeGreaterThanOrEqual(60);
+    const follow = choose(run, 'gn-49-woke-food', 'Let it follow.').run;
+    expect(flagOf(follow, 'snorlax-followed')).toBe(1);
+    expect(flagOf(follow, 'snorlax-following')).toBe(stageNumber(content, follow));
+    expect(joinedSnorlax(follow)).toBeUndefined();
+  });
+
+  it('a follower takes a Berry at a rest; at the Gym it sits down at the door (once); a cooked food counts as the first three', () => {
+    const run = gnRun('t49-rest');
+    run.party[0]!.held = { 'pecha-berry': 2 };
+    setFlag(run, 'snorlax-following', stageNumber(content, run));
+    expect(snorlaxRest(run, stageNumber(content, run))).toContain('one is missing');
+    expect(berries(run)).toBe(1);
+    expect(snorlaxRest(run, stageNumber(content, run) + 1)).toBe('');
+    run.battle = { trainer: { leaderId: 'brock' } } as unknown as RunState['battle'];
+    expect(snorlaxGym(run, stageNumber(content, run))).toContain('Gym door');
+    expect(snorlaxGym(run, stageNumber(content, run))).toBe('');
+    const cook = gnRun('t49-cook');
+    expect(foodReady(cook)).toBe(false);
+    cook.passives = { ...cook.passives, sandwich: 1 };
+    expect(foodReady(cook)).toBe(true);
+    expect(snorlaxFeed(content, cook, 3, true)).toContain('You set down');
+    expect(cook.passives.sandwich).toBe(0);
+  });
+
+  it('battle: double HP, Snore only and asleep for three turns, then properly awake with its four moves', () => {
+    let run = choose(snorlaxRun('t49-fight'), 'gn-49-hill', 'Battle it.').run;
+    const foe = run.battle!.enemyTeam[0]!;
+    expect(foe.moves.map((m) => m.id)).toEqual(['snore']);
+    expect(foe.status?.id).toBe('slp');
+    const plain = { ...foe, eventBoosts: undefined };
+    expect(maxHp(content, foe)).toBeGreaterThan(maxHp(content, plain) * 1.8);
+    for (let t = 0; t < 3; t += 1) {
+      run = structuredClone(run);
+      run.battle!.enemyTeam[0]!.hp = maxHp(content, run.battle!.enemyTeam[0]!);
+      for (const m of run.party) m.hp = maxHp(content, m);
+      run = takeTurn(content, run, { kind: 'move', index: 0 }).run;
+      if (t < 2) expect(run.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toEqual(['snore']);
+    }
+    expect(run.battle!.enemyTeam[0]!.moves.map((m) => m.id)).toEqual(SNORLAX_MOVES.filter((id) => content.moves.has(id)));
+    expect(run.battle!.enemyTeam[0]!.status?.id).not.toBe('slp');
+  });
+
+  it('caught angry: Bond 0, rising at half speed for the region; beaten, it sits with its back to the road', () => {
+    const caught = win(choose(snorlaxRun('t49-catch'), 'gn-49-hill', 'Battle it.').run, { catchIt: true });
+    const mon = joinedSnorlax(caught)!;
+    expect(mon.friendship).toBe(0);
+    expect(mon.gn).toContain('snorlax-grudge');
+    expect(flagOf(caught, 'snorlax-joined')).toBe(1);
+    expect(changeFriendship(content, mon, 10)).toBe(5);
+    expect(opened(caught, 'gn-49-caught')).toBe(true);
+    const beaten = win(choose(snorlaxRun('t49-beat'), 'gn-49-hill', 'Battle it.').run);
+    expect(opened(beaten, 'gn-49-woke-battle')).toBe(true);
+    expect(flagOf(beaten, 'snorlax-woke')).toBe(3);
+  });
+
+  it('losing to it never ends the run: it rolls a little, and the queue squeezes past', () => {
+    const lost = lose(choose(snorlaxRun('t49-lose'), 'gn-49-hill', 'Battle it.').run);
+    expect(lost.phase).toBe('map');
+    expect(opened(lost, 'gn-49-lost')).toBe(true);
+  });
+
+  it('Heavy Sleeper: 1/8 HP back after a turn with no damaging move; nothing after an attack', () => {
+    let run = choose(snorlaxRun('t49-heavy'), 'gn-49-hill', 'Battle it.').run;
+    run = structuredClone(run);
+    const lead = run.party[run.battle!.activeIndex]!;
+    lead.fixedAbility = 'heavy-sleeper';
+    lead.moves = [{ id: 'growl', pp: 40 }, { id: 'tackle', pp: 35 }];
+    lead.hp = Math.floor(maxHp(content, lead) / 2);
+    const healed = takeTurn(content, structuredClone(run), { kind: 'move', index: 0 });
+    expect(healed.events.some((e) => e.type === 'ability' && 'ability' in e && e.ability === 'heavy-sleeper')).toBe(true);
+    const hit = takeTurn(content, structuredClone(run), { kind: 'move', index: 1 });
+    expect(hit.events.some((e) => e.type === 'ability' && 'ability' in e && e.ability === 'heavy-sleeper')).toBe(false);
+  });
+
+  it('afterstory: in a later region it lets you past; a fought one waits for "Ask nicely."; Kanto shows it as the Snorlax Blockade space', () => {
+    const run = gnRun('t49-later');
+    setFlag(run, 'snorlax-met');
+    setFlag(run, 'snorlax-woke', 3);
+    open(run, 'gn-49-later');
+    expect(scene(run, 'gn-49-later').labels).toEqual(['Ask nicely.']);
+    setFlag(run, 'snorlax-woke', 1);
+    expect(scene(run, 'gn-49-later').labels).toEqual(['Wait.']);
+    const kanto = content.events.get('cs-kanto-route-snorlax')!;
+    expect(kanto.canon).toBe('cs.kanto.route.snorlax');
+    expect(kanto.choices.map((c) => c.label)).toEqual(scene(run, 'gn-49-hill').labels);
+  });
+});
