@@ -65,7 +65,7 @@ LIMITS.AN14 = [
 
 LIMITS.AN15 = [
   'The "small trust game" is a hold-still skill check while the Toedscool climbs onto your hat; a miss only means it takes longer.',
-  'The reward recipe ("rest-node buff") is two portions of a new item, The Queen\'s Mushroom Stew, used from the map (heals the whole team by half and restores all PP); the game has no buff tied to rest nodes.',
+  'The reward recipe ("rest-node buff") is two portions of a new item, The Queen\'s Mushroom Stew, used from the map (each fully restores one Pokémon, HP and status; the doc\'s whole-team half heal with PP has no bag effect); the game has no buff tied to rest nodes.',
   'Remembers "a Fire- or Grass-type uses Sunny Day": the tribute needs a party Pokémon that knows Sunny Day and a Fire- or Grass-type in the party; the game does not check that they are the same Pokémon. "Safe passage for the whole dungeon" is the Queen\'s road: the rest of the Door has no fight.',
   'Remembers "won the Cooking Circuit" reads flag cooking-circuit-won, which the thread that builds SF22 The Cooking Circuit must set.',
   'Afterstory "the adventurers are in the Road Roster later, better fed": they are not added to the Road Roster; a flag (an15-adventurers-fed) and a Chronicle line record it.',

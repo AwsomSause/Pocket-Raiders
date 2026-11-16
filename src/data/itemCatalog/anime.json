@@ -1,21 +1,5 @@
 [
  {
-  "id": "camp-curry",
-  "name": "Camp Curry",
-  "family": "Questline rewards (anime)",
-  "description": "Very spicy. Fully heals the whole team (one use, from the map)",
-  "rarity": "rare",
-  "stacksOn": "team",
-  "max": null,
-  "how": "use",
-  "icon": "packaged-curry",
-  "status": "supported",
-  "effect": {
-   "kind": "teamCare",
-   "heal": 1
-  }
- },
- {
   "id": "silt-pellet",
   "name": "Clean Silt Pellet",
   "family": "Questline rewards (anime)",

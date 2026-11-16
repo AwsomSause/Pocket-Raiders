@@ -1422,7 +1422,7 @@
       "effects": [
        {
         "kind": "friendship",
-        "amount": 10,
+        "bond": 2,
         "who": "picked"
        },
        {

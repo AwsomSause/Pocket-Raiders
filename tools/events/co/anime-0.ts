@@ -21,13 +21,17 @@ export const NOT_A_BUTTON: Record<string, Record<string, string>> = {
   AQ16: { 'Seen a bird? Gold?': 'the hunter\'s question, printed on the same line as the choices' },
 };
 
+/** Questline -> the date it was last re-read against its doc. */
+export const CHECKED: Record<string, string> = { AN9: '2026-11-16', AN11: '2026-11-16', AQ16: '2026-11-16' };
+
 export const LIMITS: Record<string, string[]> = {
   AN9: [
     'The crew helps in the storm fight as one boost (your Pokémon take 15% less damage); the navigator calling the foe\'s next move is told in the text only.',
     'The crew\'s flag is a run relic (healing items restore 10% more); the doc\'s "sea-stage rests heal a little more" has no rest-heal modifier yet. Keepsakes are cut, so it is not a keepsake.',
     'Remembers "The Captain\'s Chest dive" reads flag captains-chest-dived, which the thread that owns that event must set. The later-run postcard is not built (nothing crosses runs).',
   ],
-  AN11: ['Remembers "no battle for a whole stage" (a wild Rolycoly comes to the fire) is not built: the game does not record battles per stage.'],
+  AN11: [
+    'The curry is a map-only bag item that fully restores one Pokémon; the doc\'s pot heals the party, which no bag item can do.','Remembers "no battle for a whole stage" (a wild Rolycoly comes to the fire) is not built: the game does not record battles per stage.'],
   AQ16: [
     '"Catch it first" starts its Bond low (friendship 40 instead of 70); the doc says Bond 0.',
     'Its Hypnosis "cannot miss" in the turning-point fight is not built; the fight is an ordinary A+1 double battle.',
