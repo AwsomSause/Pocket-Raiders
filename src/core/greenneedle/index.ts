@@ -39,7 +39,7 @@ import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfea
 import { applianceRepair } from './appliance';
 import { bidoofJoin, bidoofStart } from './bidoof';
 import { alleyStart } from './alley';
-import { leftFates, leftHas, leftTake, leftTokens } from './left';
+import { leftFates, leftFreeze, leftHas, leftTake, leftTokens } from './left';
 import { isLastStage, ltArrive, ltDawn, ltPage, ltSit, ltTokens } from './longtable';
 import { impClaim, impJoin, impersonatorStart } from './impersonator';
 import { shedNinjask, shedRest } from './shedinja';
@@ -772,6 +772,9 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return muralJoin(content, run, host);
     case 'cheerJoin':
       return cheerJoin(content, run, e.n ?? 3, host);
+    case 'leftFreeze':
+      leftFreeze(run);
+      return '';
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

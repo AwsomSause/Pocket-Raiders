@@ -11,17 +11,17 @@ const CAMP_TINT = '#3b3a4e';
 const camp = (o: Json = {}): Json => ({ tint: CAMP_TINT, tags: ['Story', 'Recovery'], effect: 'none', ...o });
 const left = (n: number): Json => ({ kind: 'gn', test: 'leftHas', n });
 
-const door = gev('gn-new-13-door', 'The Ones You Left', camp({ stop: 'event', rarity: 'uncommon', requires: [{ kind: 'retiredGhost' }] }), say(
-  'A cold fire. A bedroll, still rolled. Six Poké Balls in a row on a log, and beside them, a notebook in your own handwriting.',
-  'The last page is the team, by nickname. Under it, in a hurry: "Tomorrow, the Gym."',
+const door = gev('gn-new-13-door', 'The Ones You Left', camp({ stop: 'event', rarity: 'uncommon', requires: [left(1)] }), say(
+  'A cold fire. A bedroll, still rolled. Poké Balls in a row on a log, and beside them, a notebook in your own handwriting.',
+  'The last page lists every Pokémon you let go, boxed or lost on this road, by name. Under it, in a hurry: "Tomorrow, the Gym."',
   'The Balls open by themselves. They have been waiting. They look at you the way a Pokémon looks at someone it remembers losing with.',
 ), [
-  ch('Take one.', out('You kneel by the log. Nobody asks you to hurry. The Balls wait for you to choose, and they do not look away.', scene('gn-new-13-pick-a'))),
+  ch('Take one.', out('You kneel by the log. Nobody asks you to hurry. The Balls wait for you to choose, and they do not look away.', gn('leftFreeze'), scene('gn-new-13-pick-a'))),
   ch('Take none. Bury the notebook.', out(say(
     'You dig a hole beside the fire, with your hands, and it takes longer than it should.',
     'The notebook goes in. Your Pokémon stand around the little grave and watch, the way you watch a friend do something hard. Nobody says anything.',
     'When you stand, they stand closer. Something is different, and none of you could say what.',
-  ), bondAll(1), setTo('left-buried', 1), gn('leftFates'), scene('gn-new-13-goodbye'))),
+  ), bondAll(1), setTo('left-buried', 1), gn('leftFreeze'), gn('leftFates'), scene('gn-new-13-goodbye'))),
 ]);
 
 const take = (n: number): Json => chIf([left(n)], `The ${['first', 'second', 'third', 'fourth', 'fifth', 'sixth'][n - 1]} Ball: {left:${n}}.`, out(
@@ -56,9 +56,9 @@ export const REMOVE: string[] = [];
 export const PLACEMENT: Record<string, Placement> = {
   'gn-new-13-door': {
     gn: 'gn.new.13', shape: 'Single', earliest: 'A4', home: 13, window: [13, 17], sits: 'optional', attaches: 'after', tags: ['Reunion'],
-    level: 'That team, scaled to this absolute stage', often: 'run', badge: 'own',
+    level: 'The left Pokémon, scaled to this absolute stage', often: 'run', badge: 'own',
     dressing: { kanto: 'The Ones You Left', elsewhere: 'The Ones You Left' },
-    note: 'Needs a lost run on this save (the newest lost team, `retired:team`; once per run, so once per lost run). Step 13, fallback step 17. The other Pokémon decide by a seeded shuffle: one walks into the woods, the rest split between a passing trainer and the camp (run flag `left:fates`, read by gn.61). Nicknames are not kept in the run record, so the Balls show species and old level.',
+    note: 'Needs Pokémon left earlier in THIS run (released catches, the Nuzlocke fallen, boxed ones; run memory only, no earlier runs). Once per run. Step 13, fallback step 17. The other Pokémon decide by a seeded shuffle: one walks into the woods, the rest split between a passing trainer and the camp (run flag `left:fates`, read by gn.61). Boxed ones keep their nickname.',
   },
 };
 export const CHAINS: Json[] = [];

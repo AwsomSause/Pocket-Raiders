@@ -22,6 +22,7 @@ import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
 import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
 import { ridgeCatch } from './greenneedle/ridge';
+import { noteLeft } from './greenneedle/left';
 import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
 import { lessonAfterstory } from './greenneedle/champion';
@@ -4462,6 +4463,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       count(run, 'caughtToCandies');
       message = `${name} was released. You got ${candies} cand${candies === 1 ? 'y' : 'ies'}. ${markDecided(run, caught, false)}`.trim();
       recordReleased(content, run, caught);
+      noteLeft(run, caught);
     } else {
       throw new Error('Choose what to do with the caught Pokémon');
     }

@@ -3483,14 +3483,14 @@
   ],
   "sits": "optional",
   "attaches": "after",
-  "level": "That team, scaled to this absolute stage",
+  "level": "The left Pokémon, scaled to this absolute stage",
   "often": "run",
   "badge": "own",
   "dressing": {
    "kanto": "The Ones You Left",
    "elsewhere": "The Ones You Left"
   },
-  "note": "Needs a lost run on this save (the newest lost team, `retired:team`; once per run, so once per lost run). Step 13, fallback step 17. The other Pokémon decide by a seeded shuffle: one walks into the woods, the rest split between a passing trainer and the camp (run flag `left:fates`, read by gn.61). Nicknames are not kept in the run record, so the Balls show species and old level.",
+  "note": "Needs Pokémon left earlier in THIS run (released catches, the Nuzlocke fallen, boxed ones; run memory only, no earlier runs). Once per run. Step 13, fallback step 17. The other Pokémon decide by a seeded shuffle: one walks into the woods, the rest split between a passing trainer and the camp (run flag `left:fates`, read by gn.61). Boxed ones keep their nickname.",
   "kinds": [
    "Reunion"
   ],
