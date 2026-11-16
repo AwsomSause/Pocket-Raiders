@@ -7,6 +7,7 @@
 // stages, cycles, learnsets that could not give a Pokémon a usable move, duplicates, and stats.
 // Sprite files are checked by `npm run assets:manifest` (it fails on a missing file).
 
+import jetSpeciesJson from '../data/jetSpecies.json';
 import { CONDITION_EVOLUTIONS } from '../core/conditionEvolution';
 import type { Content, Species } from '../core/contentSchema';
 
@@ -20,6 +21,8 @@ export interface SpeciesProblem {
 const STATE_FORMS = new Set(['mega', 'gigantamax', 'primal', 'battle']);
 
 const STATS = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
+
+const INTO_EXISTING = new Set((jetSpeciesJson.intoExisting as { from: string; to: string }[]).map((e) => `${e.from}>${e.to}`));
 
 export function auditSpecies(content: Content): SpeciesProblem[] {
   const problems: SpeciesProblem[] = [];
@@ -63,6 +66,8 @@ export function auditSpecies(content: Content): SpeciesProblem[] {
     for (const evo of s.evolutions) {
       const to = content.species.get(evo.to);
       if (!to) continue; // buildContent reports unknown targets.
+      // Jet Pokédex pre-evolutions of existing species (Skyrake before Fearow): the existing species keeps its own stage and parent so old seeds do not move.
+      if (INTO_EXISTING.has(`${s.id}>${evo.to}`)) continue;
       if (to.evolvesFrom !== s.id) add(s, 'evolution', `evolves into ${evo.to}, but ${evo.to} evolves from ${to.evolvesFrom ?? 'nothing'}`);
       if (!s.tags.includes('baby') && to.evolutionStage !== s.evolutionStage + 1) add(s, 'evolution', `stage ${s.evolutionStage} evolves into ${evo.to} at stage ${to.evolutionStage}`);
     }
