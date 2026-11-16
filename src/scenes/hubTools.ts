@@ -72,6 +72,14 @@ function page(host: ToolsHost, title: string, rows: PickerRow[], onSelect: (i: n
   host.open({ title, rows, columns: 1, rowHeight: 56, onSelect, onBack: back });
 }
 
+/**
+ * A typed answer. New look: the mock-ups' form page (`o`); Old look: the browser's own box with the line `old`.
+ * Null when the player backs out.
+ */
+function ask(host: ToolsHost, old: string, o: Omit<AskOptions, 'value'>, initial = ''): Promise<string | null> {
+  return host.ask ? host.ask({ ...o, value: initial }) : Promise.resolve(window.prompt(old, initial));
+}
+
 /** What the Tools room shows first. */
 export function openTools(host: ToolsHost): void {
   const { session } = services();
@@ -198,11 +206,13 @@ function openPacks(host: ToolsHost): void {
 
 async function openBracket(host: ToolsHost): Promise<void> {
   const form = { title: 'Tournament bracket', area: 'run' } as const;
-  const text = host.ask ? await host.ask({ ...form, heading: 'Type the names, with commas between them', text: 'Two to 32 names. The same names and seed always draw the same bracket. Works offline.', ok: 'Next' }) : window.prompt('Names, separated by commas (2 to 32):', '');
+  const text = await ask(host, 'Names, separated by commas (2 to 32):', { ...form, heading: 'Type the names, with commas between them', text: 'Two to 32 names. The same names and seed always draw the same bracket. Works offline.', ok: 'Next' });
   if (text === null) return openTools(host);
   const start = String(Date.now() % 100000);
-  const seed = host.ask ? await host.ask({ ...form, heading: 'Type a seed for the draw', text: 'Anything works. The same names and seed always draw the same bracket.', ok: 'Draw', value: start }) : (window.prompt('Seed for the draw (anything; same names + seed = same bracket):', start) ?? '');
-  if (seed === null) return openTools(host);
+  const typed = await ask(host, 'Seed for the draw (anything; same names + seed = same bracket):', { ...form, heading: 'Type a seed for the draw', text: 'Anything works. The same names and seed always draw the same bracket.', ok: 'Draw' }, start);
+  // Backing out of the seed: the New look goes back to Tools, the Old look draws with no seed (as it always did).
+  if (typed === null && host.ask) return openTools(host);
+  const seed = typed ?? '';
   const result = makeBracket(parseNames(text), seed);
   if (!result.ok) return host.restart(result.reason);
   const lines = bracketLines(result.rounds);
@@ -281,11 +291,12 @@ function openPhotos(host: ToolsHost): void {
   const { session } = services();
   const today = new Date().toISOString().slice(0, 10);
   const rows = [row(`This week: ${weekTheme(today)}`, 'Enter to log your entry (a note and your own star rating).', 'Log'), ...legacyOf(session.profile).photos.map((x) => row(`${x.week}  ·  ${x.theme}`, x.note, '★'.repeat(x.stars)))];
-  page(host, 'Photo contest', rows, (n) => {
+  page(host, 'Photo contest', rows, async (n) => {
     if (n !== 0) return;
-    const note = window.prompt(`Describe your shot for "${weekTheme(today)}":`, '');
+    const form = { title: 'Photo contest' } as const;
+    const note = await ask(host, `Describe your shot for "${weekTheme(today)}":`, { ...form, heading: 'Describe your shot', text: `This week's theme: ${weekTheme(today)}. F9 saves a framed screenshot.`, ok: 'Next' });
     if (note === null) return;
-    const stars = Number(window.prompt('Rate it yourself, 1 to 5 stars:', '3'));
+    const stars = Number(await ask(host, 'Rate it yourself, 1 to 5 stars:', { ...form, heading: 'Rate it yourself, 1 to 5 stars', text: 'Your own rating; it shows beside the entry.', ok: 'Log' }, '3'));
     session.changeProfile((pr) => logPhoto(pr, today, note, stars));
     host.restart('Entry logged.');
   });
@@ -304,44 +315,45 @@ function openTradeBoard(host: ToolsHost): void {
     if (text) void navigator.clipboard?.writeText(text).catch(() => undefined);
     host.restart(text ? `${keep} Code copied: send it to your friend.` : keep);
   };
-  const items: { label: string; sub: string; go: () => void }[] = [
-    { label: 'Post an offer', sub: `Put one of your ${kept.length} kept Pokémon on the board and copy its code.`, go: () => {
+  const form = { title: 'Trade board' } as const;
+  const items: { label: string; sub: string; go: () => void | Promise<void> }[] = [
+    { label: 'Post an offer', sub: `Put one of your ${kept.length} kept Pokémon on the board and copy its code.`, go: async () => {
       const list = kept.map((m, i) => `${i + 1} ${name(m.speciesId)} Lv${m.level}`).join(', ');
-      const pick = window.prompt(`Which one? ${list}`, '1');
+      const pick = await ask(host, `Which one? ${list}`, { ...form, heading: 'Type the number of the Pokémon to offer', text: list || 'You have no kept Pokémon yet.', ok: 'Next' }, '1');
       if (pick === null) return;
-      const want = window.prompt('Species id you want back (empty: a gift)', '') ?? '';
+      const want = (await ask(host, 'Species id you want back (empty: a gift)', { ...form, heading: 'Type the species you want back', text: 'A species id such as "pikachu". Leave it empty to make it a gift.', ok: 'Post' })) ?? '';
       done(postOffer(session.profile, Number(pick) - 1, want.trim() || null, 'A friend', new Date().toISOString()), 'Offer posted.');
     } },
-    { label: 'Take a friend\'s offer', sub: 'Paste their TB1 code. You get a reply code to send back.', go: () => {
-      const code = window.prompt('Paste the offer code:', '');
+    { label: 'Take a friend\'s offer', sub: 'Paste their TB1 code. You get a reply code to send back.', go: async () => {
+      const code = await ask(host, 'Paste the offer code:', { ...form, heading: 'Paste the offer code', text: 'Offer codes start with TB1. You get a reply code to send back.', ok: 'Take' });
       if (!code) return;
       const read = readOffer(code);
       if (!read.ok) return host.restart(read.reason);
       let give: number | null = null;
       if (read.offer.want) {
         const list = kept.map((m, i) => `${i + 1} ${name(m.speciesId)}`).join(', ');
-        const pick = window.prompt(`${read.offer.from} wants a ${name(read.offer.want)}. Which of yours? ${list}`, '1');
+        const pick = await ask(host, `${read.offer.from} wants a ${name(read.offer.want)}. Which of yours? ${list}`, { ...form, heading: `${read.offer.from} wants a ${name(read.offer.want)}: type the number of yours`, text: list || 'You have no kept Pokémon yet.', ok: 'Give' }, '1');
         if (pick === null) return;
         give = Number(pick) - 1;
       }
       done(acceptOffer(session.profile, code, give, new Date().toISOString()), `You received ${name(read.offer.mon.speciesId)}.`);
     } },
-    { label: 'Use a friend\'s reply', sub: 'Paste the TR1 code they sent back to finish your offer.', go: () => {
-      const code = window.prompt('Paste the reply code:', '');
+    { label: 'Use a friend\'s reply', sub: 'Paste the TR1 code they sent back to finish your offer.', go: async () => {
+      const code = await ask(host, 'Paste the reply code:', { ...form, heading: 'Paste the reply code', text: 'Reply codes start with TR1. Each code works once.', ok: 'Finish' });
       if (code) done(redeemReply(session.profile, code, new Date().toISOString()), 'Trade finished.');
     } },
     ...board.map((e) => ({ label: `Open: ${name(e.mon.speciesId)} Lv${e.mon.level}`, sub: `Wants ${e.want ? name(e.want) : 'nothing (gift)'}. Enter cancels it and returns the Pokémon.`, go: () => done(cancelOffer(session.profile, e.id), 'Offer cancelled.') })),
   ];
-  page(host, 'Trade board', items.map((i) => row(i.label, i.sub)), (n) => items[n]!.go());
+  page(host, 'Trade board', items.map((i) => row(i.label, i.sub)), (n) => void items[n]!.go());
 }
 
 function openBugReport(host: ToolsHost): void {
   const { session } = services();
   const make = (note: string) => buildBugReport({ version: APP_VERSION, build: BUILD_ID, now: new Date().toISOString(), userAgent: navigator.userAgent, scene: 'Hub', run: session.run, settings: session.settings, errors: recentErrors(), note });
   const head = bugReportHeadline(make(''));
-  page(host, 'Report a bug', [row('Save a bug report file', `${head}. Contains no save data, only the run seed, version and recent errors.`, 'Save'), row('Copy a one-line summary', 'For pasting into a chat.', 'Copy')], (n) => {
+  page(host, 'Report a bug', [row('Save a bug report file', `${head}. Contains no save data, only the run seed, version and recent errors.`, 'Save'), row('Copy a one-line summary', 'For pasting into a chat.', 'Copy')], async (n) => {
     if (n === 0) {
-      const note = window.prompt('What went wrong? (optional)', '') ?? '';
+      const note = (await ask(host, 'What went wrong? (optional)', { title: 'Report a bug', heading: 'What went wrong? (optional)', text: 'A few words help. The file holds no save data, only the run seed, the version and recent errors.', ok: 'Save' })) ?? '';
       downloadText(`pkmn-bug-${new Date().toISOString().slice(0, 10)}.json`, JSON.stringify(make(note), null, 2));
       host.restart('Bug report saved.');
     } else {
@@ -447,11 +459,12 @@ function openSeedBoards(host: ToolsHost): void {
   });
 }
 
-function openCoop(host: ToolsHost, draft: CoopDraft | null): void {
+async function openCoop(host: ToolsHost, draft: CoopDraft | null): Promise<void> {
   const { session } = services();
   if (!draft) {
-    const names = (window.prompt('Two names, separated by a comma:', 'Player 1, Player 2') ?? '').split(',');
-    const seed = window.prompt('Seed for the pool (same seed = same pool):', String(Date.now() % 100000)) ?? '';
+    const form = { title: 'Co-op draft' } as const;
+    const names = ((await ask(host, 'Two names, separated by a comma:', { ...form, heading: 'Type two names, with a comma between them', text: 'Two players take turns picking from one pool and share the team as a code.', ok: 'Next' }, 'Player 1, Player 2')) ?? '').split(',');
+    const seed = (await ask(host, 'Seed for the pool (same seed = same pool):', { ...form, heading: 'Type a seed for the pool', text: 'The same seed gives the same pool.', ok: 'Start' }, String(Date.now() % 100000))) ?? '';
     const made = startCoop(wildEligibleSpecies(session.content).map((sp) => sp.id), seed, [names[0] ?? '', names[1] ?? '']);
     if ('problem' in made) return host.restart(made.problem);
     return openCoop(host, made);
@@ -462,20 +475,21 @@ function openCoop(host: ToolsHost, draft: CoopDraft | null): void {
     const rows = draft.picks.map((p) => row(name(p.speciesId), `Picked by ${draft.names[p.by]}`), ) as PickerRow[];
     rows.push(row('Team code', code ?? '', 'Copy'));
     return page(host, 'Co-op team', rows, (n) => {
-      if (n === rows.length - 1 && code) void navigator.clipboard?.writeText(code).then(() => host.restart('Team code copied.'), () => window.prompt('Team code:', code));
+      if (n === rows.length - 1 && code) void navigator.clipboard?.writeText(code).then(() => host.restart('Team code copied.'), () => void ask(host, 'Team code:', { title: 'Co-op team', heading: 'Team code', text: 'Copy this code and send it to your friend.', ok: 'Done' }, code));
     }, () => host.close());
   }
   const left = remaining(draft);
   page(host, `${draft.names[whoseTurn(draft)]}: pick ${draft.picks.length + 1} of ${COOP_SIZE}`, left.map((id) => row(name(id), '')), (n) => {
     const next = left[n] ? coopPick(draft, left[n]!) : null;
-    if (next && !('problem' in next)) openCoop(host, next);
+    if (next && !('problem' in next)) void openCoop(host, next);
   }, () => openTools(host));
 }
 
-function openHotSeat(host: ToolsHost): void {
+async function openHotSeat(host: ToolsHost): Promise<void> {
   const { session } = services();
-  const names = (window.prompt('Two names, separated by a comma:', 'Player 1, Player 2') ?? '').split(',');
-  const seed = window.prompt('Seed (same seed + same picks = same battle):', String(Date.now() % 100000)) ?? '';
+  const form = { title: 'Hot-seat versus' } as const;
+  const names = ((await ask(host, 'Two names, separated by a comma:', { ...form, heading: 'Type two names, with a comma between them', text: 'Two people, one device: pick moves in turn and pass it on.', ok: 'Next' }, 'Player 1, Player 2')) ?? '').split(',');
+  const seed = (await ask(host, 'Seed (same seed + same picks = same battle):', { ...form, heading: 'Type a seed for the battle', text: 'The same seed and the same picks give the same battle.', ok: 'Start' }, String(Date.now() % 100000))) ?? '';
   const pool = wildEligibleSpecies(session.content).map((sp) => sp.id).sort();
   const rng = new Rng(hashSeed(`${seed}#hotseat-teams`));
   const mix = rng.shuffle(pool);
@@ -517,11 +531,11 @@ function openReplay(host: ToolsHost, runId: string, journal: string[], index: nu
     row('Previous step', '', v.atStart ? '' : 'Enter'),
     row(v.note ? `Note: ${v.note}` : 'Add a note', 'Notes stay on this device.', 'Edit'),
   ];
-  page(host, 'Replay', rows, (n) => {
+  page(host, 'Replay', rows, async (n) => {
     if (n === 1) openReplay(host, runId, journal, v.index + 1);
     else if (n === 2) openReplay(host, runId, journal, v.index - 1);
     else if (n === 3) {
-      const text = window.prompt('Note for this step (empty clears it):', notes[noteKey(runId, v.index)] ?? '');
+      const text = await ask(host, 'Note for this step (empty clears it):', { title: 'Replay', heading: 'Write a note for this step', text: 'An empty note clears it. Notes stay on this device.', ok: 'Save' }, notes[noteKey(runId, v.index)] ?? '');
       if (text !== null) {
         const next = setNote(notes, journal, runId, v.index, text);
         if ('problem' in next) return host.restart(next.problem);
@@ -539,9 +553,10 @@ function openVoting(host: ToolsHost): void {
   const top = featured(votes, ids);
   const rows = [row('Enter a friend\'s vote code', 'Codes look like PV1.pack-id.Name. One vote per friend.', 'Add'), ...tally(votes, ids).map((t) => row(installed.find((p) => p.id === t.packId)?.name ?? t.packId, `Enter makes a vote code to send to friends`, `${t.votes}${t.packId === top ? ' ★' : ''}`))];
   if (!ids.length) rows.push(row('No packs installed', 'Add one in Mod packs first.'));
-  page(host, 'Pack voting', rows, (n) => {
+  const form = { title: 'Pack voting' } as const;
+  page(host, 'Pack voting', rows, async (n) => {
     if (n === 0) {
-      const code = window.prompt('Vote code:', '');
+      const code = await ask(host, 'Vote code:', { ...form, heading: 'Enter a friend\'s vote code', text: 'Codes look like PV1.pack-id.Name. One vote per friend.', ok: 'Add' });
       if (!code) return;
       const next = castVote(votes, code, ids);
       if ('problem' in next) return host.restart(next.problem);
@@ -549,7 +564,9 @@ function openVoting(host: ToolsHost): void {
       return host.restart('Vote counted.');
     }
     const t = tally(votes, ids)[n - 1];
-    if (t) window.prompt('Send this code to friends, or add it yourself:', voteCode(t.packId, window.prompt('Your name:', 'Me') ?? 'Me'));
+    if (!t) return;
+    const me = (await ask(host, 'Your name:', { ...form, heading: 'Type your name', text: 'It goes into the vote code, so friends see whose vote it is.', ok: 'Next' }, 'Me')) ?? 'Me';
+    await ask(host, 'Send this code to friends, or add it yourself:', { ...form, heading: 'Your vote code', text: 'Send this code to friends, or add it yourself.', ok: 'Done' }, voteCode(t.packId, me));
   });
 }
 

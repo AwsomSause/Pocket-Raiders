@@ -58,7 +58,7 @@ import { HUB_TOWN, type HubPlace } from '../core/hubTown/schema';
 import { chooseHubPokemon, hubPokemon, hubPokemonChoices, placeById } from '../core/hubTown/world';
 import { pokemonHeightM } from '../core/heights';
 import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
-import { askText } from '../ui/redux/ask';
+import { askText, type AskOptions } from '../ui/redux/ask';
 import { runCardView } from '../ui/redux/screens/over';
 import { playerPortrait } from '../ui/redux/templates';
 import { dockView, type DockFigure } from '../ui/redux/screens/hub';
@@ -1010,6 +1010,11 @@ export class HubScene extends Phaser.Scene {
     }
   }
 
+  /** A typed answer: the New look's form page (the mock-ups' code entry), the Old look's browser box (`old` is its line). */
+  private askLine(o: AskOptions, old: string, initial = ''): Promise<string | null> {
+    return reduxOn() ? askText(this, { ...o, value: initial }) : Promise.resolve(window.prompt(old, initial));
+  }
+
   private openPicker(config: ConstructorParameters<typeof Picker>[1]): void {
     // One list at a time: a page opened from a list (Tools, a quest line) takes its place. A list left open under
     // the new one would stay drawn for the rest of the visit and slow the hub down.
@@ -1729,7 +1734,7 @@ export class HubScene extends Phaser.Scene {
     const { session } = services();
     const { content } = session;
     const p = session.profile;
-    interface Entry { label: string; sub: string; right?: string; on?: boolean; problem?: string | null; run?: () => string | void; start?: () => void }
+    interface Entry { label: string; sub: string; right?: string; on?: boolean; problem?: string | null; run?: () => string | void | Promise<string | void>; start?: () => void }
     const entries: Entry[] = [];
     const now = new Date().toISOString();
     const apply = (fn: (pr: Profile) => Profile, notice: string): string => {
@@ -1831,8 +1836,8 @@ export class HubScene extends Phaser.Scene {
         entries.push({
           label: 'Write a note to your future self',
           sub: nk.note !== null ? `${nk.noteDelivered ? 'Last note' : 'Waiting for your next run'}: "${nk.note}"` : 'It is read to you when your next run begins.',
-          run: () => {
-            const text = window.prompt(`A note to your next run (up to ${NOOK.note_rules.maxLength} letters):`, '')?.trim();
+          run: async () => {
+            const text = (await this.askLine({ title: 'A note to your next run', heading: 'Write a note to your future self', text: `Up to ${NOOK.note_rules.maxLength} letters. It is read to you when your next run begins.`, ok: 'Seal' }, `A note to your next run (up to ${NOOK.note_rules.maxLength} letters):`))?.trim();
             if (!text) return;
             return apply((pr) => writeNote(pr, text), 'The note is sealed. You will read it at your next run start.');
           },
@@ -1840,8 +1845,8 @@ export class HubScene extends Phaser.Scene {
         entries.push({
           label: 'Enter a poster code',
           sub: `${nk.codesUsed.length}/${NOOK.giftCodes.length} codes used. Codes unlock titles.`,
-          run: () => {
-            const code = window.prompt('Poster code:', '')?.trim();
+          run: async () => {
+            const code = (await this.askLine({ title: 'Poster code', area: 'run', heading: 'Enter a poster code', text: `Codes unlock titles. ${nk.codesUsed.length} of ${NOOK.giftCodes.length} used.` }, 'Poster code:'))?.trim();
             if (!code) return;
             const r = redeemCode(session.profile, code);
             session.changeProfile(() => r.profile);
@@ -1883,8 +1888,8 @@ export class HubScene extends Phaser.Scene {
         entries.push({
           label: 'Paste a seed code',
           sub: 'Add a code a friend shared (PR1.…).',
-          run: () => {
-            const code = window.prompt('Seed code (PR1.…):', '')?.trim();
+          run: async () => {
+            const code = (await this.askLine({ title: 'Seed code', area: 'run', heading: 'Enter a seed code', text: 'A code a friend shared. Seed codes start with PR1.' }, 'Seed code (PR1.…):'))?.trim();
             if (!code) return;
             const r = decodeSeedCode(code);
             if (!r.ok) return r.reason;
@@ -1940,10 +1945,15 @@ export class HubScene extends Phaser.Scene {
           if (e.problem) playSfx(this, 'ui.error', 0.5);
           return;
         }
-        const notice = e.run();
-        if (notice === undefined) return;
-        playSfx(this, 'se.exp', 0.6);
-        this.restart(notice, room);
+        const done = (notice: string | void): void => {
+          if (notice === undefined) return;
+          playSfx(this, 'se.exp', 0.6);
+          this.restart(notice, room);
+        };
+        // An entry that asks for typed text answers later.
+        const out = e.run();
+        if (out instanceof Promise) void out.then(done);
+        else done(out);
       },
       onBack: () => this.closePicker(),
     });

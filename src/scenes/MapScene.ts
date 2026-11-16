@@ -116,6 +116,7 @@ import { dossierFolders } from '../core/expansion/cast/dossier';
 import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { askText } from '../ui/redux/ask';
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
@@ -645,8 +646,14 @@ export class MapScene extends Phaser.Scene {
       const cur = run.stage?.current;
       const node = run.stage?.map.nodes.find((x) => x.id === cur);
       if (!node || typeof window === 'undefined' || typeof window.prompt !== 'function') return;
-      const text = window.prompt('Name this place (up to 24 letters, empty clears):', node.name ?? '');
-      if (text === null) return;
+      // The New look asks on the mock-ups' entry page; the Old look in the browser's own box.
+      if (reduxOn()) void askText(this, { title: 'Name this place', area: 'run', heading: 'Name this place', text: 'Up to 24 letters. Leave it empty to clear the name.', value: node.name ?? '' }).then((text) => { if (text !== null) named(node, text); });
+      else {
+        const text = window.prompt('Name this place (up to 24 letters, empty clears):', node.name ?? '');
+        if (text !== null) named(node, text);
+      }
+    };
+    const named = (node: NonNullable<typeof run.stage>['map']['nodes'][number], text: string): void => {
       const renamed = renameNode(run, node.id, text);
       node.name = renamed.stage!.map.nodes.find((x) => x.id === node.id)!.name;
       const names = { ...(session.profile.nook?.nodeNames ?? {}) };

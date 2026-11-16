@@ -2401,3 +2401,224 @@ test('New UI: the Tools pages follow the mock-ups (number tiles for My stats and
   await expect(view(page, 'Hub').last()).toContainText('Not valid JSON');
   expect(errors).toEqual([]);
 });
+
+test('New UI: typed text is asked on the mock-up code entry page (a poster code, a note to the next run); Esc leaves it with nothing changed', async ({ page }) => {
+  const errors = watch(page);
+  // The game must never open the browser's own box in the New look.
+  let boxes = 0;
+  page.on('dialog', (d) => { boxes++; void d.dismiss(); });
+  await start(page, 'ui=new&seed=newui-ask');
+  await open(page, 'Hub');
+  await page.waitForTimeout(500);
+  const hub = () => view(page, 'Hub').last();
+  const form = () => page.locator('#rx .stage[data-scene="Hub"]').last();
+  const box = page.locator('[data-testid="ask-input"]');
+  const nook = async (row: string) => {
+    await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').openLegacy('nook'));
+    await expect(hub().locator('.hd')).toContainText('Corner Nook');
+    await page.waitForTimeout(250);
+    for (let k = 0; k < 30 && !(await hub().locator('.btn.on', { hasText: row }).count()); k++) { await page.keyboard.press('ArrowDown'); await page.waitForTimeout(60); }
+    await expect(hub().locator('.btn.on')).toContainText(row);
+    await page.keyboard.press('Enter');
+    await expect(box).toBeFocused();
+  };
+  const profile = () => page.evaluate(() => { const p = (window as any).__pkr.session.profile; return { titles: p.titles as string[], note: (p.nook?.note ?? null) as string | null, used: (p.nook?.codesUsed ?? []) as string[] }; });
+
+  // Esc: the form closes, the Nook list is back and nothing is used.
+  await nook('Enter a poster code');
+  await expect(form().locator('.hd')).toContainText('Poster code');
+  await expect(form()).toContainText('Enter a poster code');
+  await page.screenshot({ path: 'test-results/newui-ask-poster.png' });
+  await box.fill('PIKA-2026');
+  await page.keyboard.press('Escape');
+  await expect(box).toHaveCount(0);
+  await expect(hub().locator('.hd')).toContainText('Corner Nook');
+  expect((await profile()).used).toEqual([]);
+
+  // A code that matches no poster changes nothing; the real one gives its title.
+  await nook('Enter a poster code');
+  await box.fill('NOT-A-CODE');
+  await page.keyboard.press('Enter');
+  await expect(box).toHaveCount(0);
+  await page.waitForTimeout(600);
+  expect((await profile()).used).toEqual([]);
+  await nook('Enter a poster code');
+  await box.fill('pika-2026');
+  await page.keyboard.press('Enter');
+  await expect(box).toHaveCount(0);
+  await expect.poll(async () => (await profile()).used).toEqual(['PIKA-2026']);
+  expect((await profile()).titles).toContain('Poster Fan');
+  await page.waitForTimeout(600);
+
+  // The note to the next run: typed, sealed with the button.
+  await nook('Write a note to your future self');
+  await expect(form()).toContainText('Write a note to your future self');
+  await box.fill('Bring a Water type.');
+  await form().locator('[data-act="btn"]', { hasText: 'Seal' }).click();
+  await expect(box).toHaveCount(0);
+  await expect.poll(async () => (await profile()).note).toBe('Bring a Water type.');
+  expect(boxes).toBe(0);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the Preparation Desk is the mock-up menu: seven rows with what they are set to, each opens its page and comes back to its row, and Depart starts', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-desk');
+  for (const next of ['Hub', 'TrainerSelect', 'RunPrep']) { await page.keyboard.press('Enter'); await waitForScene(page, next); }
+  const desk = () => view(page, 'RunPrep').last();
+  const lit = () => desk().locator('.btn.on');
+  await expect(desk().locator('.hd')).toContainText('Preparation Desk');
+  // Seven rows, no page tabs, and the cursor waits on Depart.
+  await expect(desk().locator('[data-act="pick"]')).toHaveCount(7);
+  await expect(desk().locator('[data-act="tab"]')).toHaveCount(0);
+  for (const [i, name] of ['Campaign', 'Mode', 'Preparation', 'Modifiers', 'Seed & Codes', 'Loadout presets', 'Depart'].entries()) await expect(desk().locator('[data-act="pick"]').nth(i)).toContainText(name);
+  await expect(lit()).toContainText('Depart');
+  await expect(desk().locator('[data-act="pick"]').nth(4)).toContainText('newui-desk');
+  await expect(desk().locator('.txt')).toContainText('Set the run up, then depart.');
+  await expect(desk()).toContainText('Run Overview');
+  await page.screenshot({ path: 'test-results/newui-desk.png' });
+
+  // Up to Campaign: the card beside the list says what the row changes, with the three facts.
+  for (let k = 0; k < 6; k++) { await page.keyboard.press('ArrowUp'); await page.waitForTimeout(80); }
+  await expect(lit()).toContainText('Campaign');
+  await expect(desk()).toContainText('How many regions the run covers');
+  for (const f of ['Trainer', 'Difficulty', 'Weeks']) await expect(desk().locator('.win')).toContainText(f);
+  // Enter opens Run Setup; Esc comes back to the same row.
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'RunChoices');
+  await expect(view(page, 'RunChoices').locator('.hd')).toContainText('Run Setup');
+  await page.keyboard.press('Escape');
+  await waitForScene(page, 'RunPrep');
+  await expect(lit()).toContainText('Campaign');
+
+  // Mode: left and right step through the modes in place.
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(120);
+  const before = (await lit().innerText()).trim();
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(500);
+  await expect(lit()).toContainText('Mode');
+  expect((await lit().innerText()).trim()).not.toBe(before);
+  await page.keyboard.press('ArrowLeft');
+  await page.waitForTimeout(500);
+  expect((await lit().innerText()).trim()).toBe(before);
+
+  // Modifiers and Seed & Codes open their pages by click and come back to their rows.
+  await desk().locator('[data-act="pick"]').nth(3).click();
+  await waitForScene(page, 'RunModifiers');
+  await page.keyboard.press('Escape');
+  await waitForScene(page, 'RunPrep');
+  await expect(lit()).toContainText('Modifiers');
+  await desk().locator('[data-act="pick"]').nth(4).click();
+  await waitForScene(page, 'RunSeed');
+  await page.keyboard.press('Escape');
+  await waitForScene(page, 'RunPrep');
+  await expect(lit()).toContainText('Seed & Codes');
+
+  // Loadout presets: the list starts with Save; saving in slot 1 shows on the row.
+  await expect(desk().locator('[data-act="pick"]').nth(5)).toContainText('0 of');
+  await desk().locator('[data-act="pick"]').nth(5).click();
+  await page.waitForTimeout(400);
+  const list = () => view(page, 'RunPrep').last();
+  await expect(list().locator('.hd')).toContainText('Loadout presets');
+  await expect(list()).toContainText('Save this setup in a slot');
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(400);
+  await expect(view(page, 'RunPrep').last().locator('.hd')).toContainText('Save this loadout in a slot');
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(600);
+  await expect(desk().locator('.txt')).toContainText('Saved in preset slot 1.');
+  await expect(desk().locator('[data-act="pick"]').nth(5)).toContainText('1 of');
+  // Loading it puts the cursor back on Depart, and Enter rolls the starters.
+  await desk().locator('[data-act="pick"]').nth(5).click();
+  await page.waitForTimeout(400);
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(120);
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(600);
+  await expect(desk().locator('.txt')).toContainText('Loaded preset 1.');
+  await expect(lit()).toContainText('Depart');
+  await page.keyboard.press('Enter');
+  await waitForScene(page, 'StarterSelect');
+  expect(errors).toEqual([]);
+});
+
+test('New UI: naming a place on the map (N) asks on the code entry page; the name is kept, and Esc changes nothing', async ({ page }) => {
+  const errors = watch(page);
+  let boxes = 0;
+  page.on('dialog', (d) => { boxes++; void d.dismiss(); });
+  await start(page, 'ui=new&seed=newui-name');
+  await toMap(page);
+  // A place can be named once the party stands on it.
+  await page.evaluate(() => {
+    const { session, game } = (window as any).__pkr;
+    const node = session.run.stage.map.nodes.find((n: any) => n.column === 1);
+    session.run.stage.current = node.id;
+    if (!session.run.stage.visited.includes(node.id)) session.run.stage.visited.push(node.id);
+    game.scene.getScene('Map').scene.restart({ focus: 0 });
+  });
+  await page.waitForTimeout(600);
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 15_000 }).toBe(false);
+  const box = page.locator('[data-testid="ask-input"]');
+  const name = () => page.evaluate(() => { const { run } = (window as any).__pkr.session; return (run.stage.map.nodes.find((n: any) => n.id === run.stage.current)?.name ?? null) as string | null; });
+  await page.keyboard.press('n');
+  await expect(box).toBeFocused();
+  await expect(page.locator('#rx .stage[data-scene="Map"]').last()).toContainText('Name this place');
+  await box.fill('Quiet Hill');
+  await page.keyboard.press('Escape');
+  await expect(box).toHaveCount(0);
+  expect(await name()).toBeNull();
+  await page.waitForTimeout(250);
+  await page.keyboard.press('n');
+  await expect(box).toBeFocused();
+  await box.fill('Quiet Hill');
+  await page.keyboard.press('Enter');
+  await expect(box).toHaveCount(0);
+  await expect.poll(name).toBe('Quiet Hill');
+  expect(boxes).toBe(0);
+  expect(errors).toEqual([]);
+});
+
+test('New UI: a nickname is typed on the code entry page from the Summary\'s Care menu; Esc keeps the old name', async ({ page }) => {
+  const errors = watch(page);
+  let boxes = 0;
+  page.on('dialog', (d) => { boxes++; void d.dismiss(); });
+  await start(page, 'ui=new&seed=newui-nick');
+  await toMap(page);
+  await view(page, 'Map').first().locator('[data-act="pick"]', { hasText: 'Party' }).first().click();
+  const top = () => view(page, 'Map').last();
+  await expect(top().locator('.hd')).toContainText('Party');
+  await page.waitForTimeout(250);
+  await top().locator('[data-act="pick"]').first().click();
+  await expect(top().locator('.hd')).toContainText('Summary');
+  const box = page.locator('[data-testid="ask-input"]');
+  const nick = () => page.evaluate(() => ((window as any).__pkr.session.run.party[0].care?.nickname ?? null) as string | null);
+  const ask = async () => {
+    await page.waitForTimeout(250);
+    await page.keyboard.press('Enter');
+    await top().locator('[data-act="menu"]', { hasText: 'Care' }).click();
+    await page.waitForTimeout(150);
+    // The Care list scrolls: step down until Nickname is the lit row.
+    for (let k = 0; k < 40 && !(await top().locator('[data-act="menu"].on', { hasText: 'Nickname' }).count()); k++) { await page.keyboard.press('ArrowDown'); await page.waitForTimeout(60); }
+    await expect(top().locator('[data-act="menu"].on')).toContainText('Nickname');
+    await page.keyboard.press('Enter');
+    await expect(box).toBeFocused();
+  };
+  await ask();
+  await expect(page.locator('#rx .stage[data-scene="Map"]').last()).toContainText('Nickname for');
+  await box.fill('Sparky');
+  await page.keyboard.press('Escape');
+  await expect(box).toHaveCount(0);
+  expect(await nick()).toBeNull();
+  // The menu under the form is still there: Esc closes it, then the name is given for real.
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Escape');
+  await ask();
+  await box.fill('Sparky');
+  await page.keyboard.press('Enter');
+  await expect(box).toHaveCount(0);
+  await expect.poll(nick).toBe('Sparky');
+  await expect(top()).toContainText('Sparky');
+  expect(boxes).toBe(0);
+  expect(errors).toEqual([]);
+});

@@ -15,7 +15,6 @@
 
 **Limits:**
 - The mock-up's "Me" page has no room of its own in the game; its numbers are on My stats.
-- The other Tools pages that ask for typed text (trade codes, vote codes, notes) still use the browser's own box.
 - The Character Database grid shows names; the cast has no portraits yet.
 
 **Tests:** two old shop tests (`milestone3`, `milestone8_75`) failed on every PR from Nov 16 because the real week's event (Market Week, 10% off) changed their prices; they now take the dated events off their run. The hub dock test no longer loses key presses on a slow machine.
