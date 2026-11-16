@@ -85,7 +85,11 @@ describe('every ability a Pokémon can have is handled', () => {
   it('each supported ability is named in battle code outside the supported list', () => {
     const start = battleSource.indexOf('const SUPPORTED = new Set');
     const end = battleSource.indexOf(']);', start);
-    const outside = battleSource.slice(0, start) + battleSource.slice(end) + extraSource;
+    // The Jet batch 5 roll call (jetAbilities.ts JET_ABILITIES) is a list like SUPPORTED, so it doesn't count either.
+    const jetStart = battleSource.indexOf('export const JET_ABILITIES');
+    const jetEnd = battleSource.indexOf('];', jetStart);
+    const rest = battleSource.slice(0, start) + battleSource.slice(end);
+    const outside = rest.replace(battleSource.slice(jetStart, jetEnd), '') + extraSource;
     const missing = [...content.abilities.keys()].filter((a) => abilityStatus(a) === 'supported' && !new RegExp(`['"]${a}['"]|[{,\\s]${a.includes('-') ? `'${a}'` : a}\\s*:`).test(outside));
     expect(missing).toEqual([]);
   });

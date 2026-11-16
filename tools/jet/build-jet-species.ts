@@ -9,6 +9,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { parseMove, type PackMove } from './jetMoveText.ts';
+import { JET_ABILITIES } from '../../src/core/battle/jetAbilities.ts';
 
 const here = import.meta.dirname;
 const dataDir = join(here, '..', '..', 'src', 'data');
@@ -347,7 +348,7 @@ for (const line of readFileSync(join(here, 'source', 'signature_moves.csv'), 'ut
 descriptions['cataclysm-cannon-attack'] = descriptions['cataclysm-cannon-defence'] = descriptions['cataclysm-cannon']!;
 descriptions['hypnospot-mega'] = descriptions['hypnospot']!;
 for (const m of newMoves) if (!descriptions[m.id]) throw new Error(`no description for ${m.id}`);
-writeFileSync(join(dataDir, 'jetSpecies.json'), JSON.stringify({ species: out, evolutions: external, moves: newMoves, abilities, learnables, items, rewards, descriptions, conditionEvolutions, patches, megaMoves, footprintBase, pendingAbilities: abilities.slice(abilitiesBefore).map((a) => a.id) }) + '\n');
+writeFileSync(join(dataDir, 'jetSpecies.json'), JSON.stringify({ species: out, evolutions: external, moves: newMoves, abilities, learnables, items, rewards, descriptions, conditionEvolutions, patches, megaMoves, footprintBase, pendingAbilities: abilities.slice(abilitiesBefore).map((a) => a.id).filter((id) => !JET_ABILITIES.includes(id)) }) + '\n');
 // Gigantamax moves of the three Dynamax forms join the G-Max table (presentation of Max moves is the engine's).
 const maxPath = join(dataDir, 'maxMoves.json');
 const maxData = JSON.parse(readFileSync(maxPath, 'utf8'));

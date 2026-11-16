@@ -16,7 +16,7 @@
 import { hasChampionLastStand, isLastStanding } from '../trainerEvolution';
 import type { BattleBoost, BoostStat, Content, HeldHook, Move, StatusId, TypeName, Weather } from '../contentSchema';
 import type { Perks } from '../archetypes';
-import { calcStats, getSpecies } from '../pokemon';
+import { abilityOf, calcStats, getSpecies } from '../pokemon';
 import { inThreeStageLine, scaleHeldBonus, statPerk, survivalChance, weatherTurnsBonus } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { freshHeldState } from '../state';
@@ -215,10 +215,27 @@ function teamBerryPercent(ctx: Pick<HeldContext, 'content' | 'teamItems'>, side:
   return total;
 }
 
+/** The holder's ability, counting a battle override (Trace, Skill Swap) while it is the one in front. */
+function heldAbility(ctx: HeldContext, mon: PokemonInstance, side: Side): string | null {
+  const vol = side === 'player' ? ctx.battle.playerVolatile : ctx.battle.enemyVolatile;
+  const front = side === 'player' ? ctx.party?.[ctx.battle.activeIndex] : ctx.battle.enemyTeam[ctx.battle.enemyIndex];
+  return (front?.uid === mon.uid ? vol?.abilityOverride : null) ?? abilityOf(ctx.content, mon);
+}
+
 /** A Berry is eaten: counts for Powder Jar and Gooey Mulch, and a Berry Pouch may keep it. */
 function eatBerry(ctx: HeldContext, holder: Pick<Holder, 'mon' | 'side'>, itemId: string): void {
   if (holder.side === 'player') stateOf(ctx.battle).berries += 1;
   if (ctx.content.catalog.get(itemId)?.family.startsWith('Berries') && ctx.rng.chance(Math.min(1, teamBerryPercent(ctx, holder.side, 'berrySave') / 100))) return;
+  // Fermented Shell (Jet batch 5): each Berry works twice before it is gone.
+  if (ctx.content.catalog.get(itemId)?.family.startsWith('Berries') && heldAbility(ctx, holder.mon, holder.side) === 'fermented-shell') {
+    const key = `ferment:${holder.mon.uid}:${itemId}`;
+    const used = stateOf(ctx.battle).used;
+    if (!used[key]) {
+      used[key] = { on: 1 };
+      return;
+    }
+    delete used[key];
+  }
   eat(holder.mon, itemId);
 }
 
