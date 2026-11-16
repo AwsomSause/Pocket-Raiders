@@ -42,6 +42,8 @@ export function toBattle(run: RunState, c: Content = content): RunState {
   }
   const node = choices.find((n) => !n.harder) ?? choices[0]!;
   const next = chooseNode(c, run, node.id);
+  // An event that comes before this node's battle (a must-see check placed on it) holds the battle: play it first.
+  if (next.phase === 'map' && waitingStop(c, next)) return toBattle(next, c);
   // Scripted fights in tests expect one foe: an SOS call is marked as already used (tests/unit/sos.test.ts covers calls).
   if (next.battle) next.battle.sos = { ...freshSos(), answered: 1 };
   return next;

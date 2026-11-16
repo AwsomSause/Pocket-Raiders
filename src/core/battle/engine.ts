@@ -4875,6 +4875,14 @@ function afterHitAbilities(ctx: BattleContext, user: Combatant, target: Combatan
       user.vol.abilityOverride = holder;
       target.vol.abilityOverride = userAbility;
     }
+    // Impossible Leap (Greenneedle gn.23): it survives a super-effective hit: Attack +1 and Speed +1. Once a battle.
+    if (holder === 'impossible-leap' && target.mon.hp > 0 && move.category !== 'status' && !ctx.battle.storyEffects.includes(`leap:${target.mon.uid}`)
+      && typeEffectiveness(ctx.content.typeChart, moveType, battleTypes(ctx.content, ctx.battle, target.mon)) > 1) {
+      ctx.battle.storyEffects.push(`leap:${target.mon.uid}`);
+      announce(target, holder, events);
+      applyStageChange(ctx, target, 'atk', 1, events);
+      applyStageChange(ctx, target, 'spe', 1, events);
+    }
     if (holder === 'anger-point' && crit && target.stages.atk < 6) {
       announce(target, holder, events);
       applyStageChange(ctx, target, 'atk', 12, events);

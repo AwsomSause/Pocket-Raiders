@@ -13,14 +13,15 @@ const play = (run: RunState, id: string, choice: number) => { const f = debugFor
 const flag = (run: RunState, key: string) => Number(run.story.flags[`ev:${key}`] ?? 0);
 
 describe('Fuchsia canon: the event graph', () => {
-  const ids = [...content.events.keys()].filter((id) => id.startsWith(P));
+  // Retired rooms (the old factory rooms, rebuilt as Greenneedle gn.17) stay for saved runs but are never reached.
+  const ids = [...content.events.values()].filter((e) => e.id.startsWith(P) && !e.disabled).map((e) => e.id);
   const targets = (id: string) => content.events.get(id)!.choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).filter((e) => e.kind === 'addEvent').map((e) => (e as { eventId: string }).eventId);
   it('every target exists and every room is reachable from a gate', () => {
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
     const gates = ids.filter((id) => content.events.get(id)!.canon);
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
-    expect([...reach].sort()).toEqual(ids.sort());
+    expect([...reach].filter((id) => id.startsWith(P)).sort()).toEqual(ids.sort());
   });
   it('the gates carry catalog ids, and each Fuchsia space with a play-through has one', () => {
     const wanted = ['factory', 'safari', 'savanna', 'jungle', 'warden', 'tauros', 'zoo', 'snag'];
@@ -40,10 +41,11 @@ describe('Fuchsia canon: the event graph', () => {
 });
 
 describe('Polluted Factory', () => {
-  it('the gate adds the Sludge field (Poison +10%) and opens the first room', () => {
+  // The factory was rebuilt as Greenneedle gn.17 (tests/unit/greenneedle4.test.ts); its Kanto gate opens the new factory.
+  it('the gate opens the Greenneedle factory: the waiver, then the pipes', () => {
     const out = play(begin('FAC1'), 'factory', 0).run;
-    expect(out.tempEffects.some((t) => JSON.stringify(t).includes('"poison"'))).toBe(true);
-    expect(out.stage!.map.nodes.some((n) => n.sides.some((s) => s.eventId === `${P}factory-n1`))).toBe(true);
+    expect(flag(out, 'factory-entered')).toBe(1);
+    expect(out.stage!.map.nodes.some((n) => n.sides.some((s) => s.eventId === 'gn-17-pipes'))).toBe(true);
   });
   it('the pipes burst in about a quarter of crossings and poison the lead (Poison types are immune)', () => {
     let burst = 0;
@@ -107,19 +109,16 @@ describe('Polluted Factory', () => {
   });
 });
 
-describe('Safari Land (a plain event)', () => {
-  it('the entry costs ₽500, needs the money and starts a wild fight in the Safari pool', () => {
+describe('Safari Land', () => {
+  it('the entry costs ₽500, needs the money and opens the Safari Land park', () => {
     const rich = begin('SAF1');
     rich.money = 1000;
     const f = debugForceEvent(content, structuredClone(rich), `${P}safari`);
     const r = chooseEvent(content, f.run, f.sideId, 0).run;
     expect(r.money).toBe(500);
-    expect(flag(r, 'kanto-safari-balls')).toBe(30);
-    expect(flag(r, 'kanto-safari-steps')).toBe(500);
-    const battle = room('safari').choices[0]!.success.battle as { kind: string; species: string[] };
-    expect(battle.kind).toBe('wild');
-    expect(battle.species).toContain('chansey');
-    for (const id of battle.species) expect(content.species.has(id)).toBe(true);
+    // Rebuilt as Greenneedle gn.18: the park is the story-only minigame gn-safari (30 Balls, 500 steps; tests/unit/greenneedle4.test.ts).
+    expect(r.stage!.map.nodes.some((n) => n.sides.some((s) => s.kind === 'minigame' && s.minigameId === 'gn-safari'))).toBe(true);
+    expect(JSON.stringify(content.minigames.games.find((g) => g.id === 'gn-safari'))).toMatch(/"steps":500.*"balls":30|"balls":30.*"steps":500/);
     const poor = begin('SAF2');
     poor.money = 100;
     const g = debugForceEvent(content, structuredClone(poor), `${P}safari`);

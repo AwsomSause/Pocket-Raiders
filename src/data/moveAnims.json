@@ -23069,6 +23069,22 @@
       "flash": "#6890f0",
       "hitStopMs": 70,
       "telegraph": "normal"
+    },
+    "proof": {
+      "anim": "mega-punch",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 63,
+      "telegraph": "normal"
+    },
+    "two-trainers": {
+      "anim": "double-hit",
+      "source": "type",
+      "shake": 2,
+      "flash": null,
+      "hitStopMs": 60,
+      "telegraph": "normal"
     }
   },
   "commonPack": {

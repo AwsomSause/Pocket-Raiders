@@ -1467,6 +1467,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (e.ability) mon.fixedAbility = e.ability;
       if (e.held) mon.held = { [e.held]: 1 };
       if (e.mark) mon.gn = [...(mon.gn ?? []), e.mark];
+      if (e.boost) boostStat(content, mon, e.boost.stat, e.boost.percent, false);
       if (e.look) mon.look = e.look;
       if (e.friendship) mon.friendship = Math.min(255, mon.friendship + e.friendship);
       // A full moveset gives up its last moves, one for each new one; every taught move stays (the Squad recruit's Swagger, Hex and Shades Down).
@@ -1555,7 +1556,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
     case 'evoEncounter':
       return applyEvoEncounter(content, run, e);
     case 'formChange': {
-      const mon = run.party.find((m) => m.speciesId === e.from);
+      const mon = run.party.find((m) => m.speciesId === e.from && (!e.mark || !!m.gn?.includes(e.mark)));
       const to = content.species.get(e.to);
       if (!mon || !to) return '';
       if (e.consume) {
@@ -1565,6 +1566,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       }
       const before = calcStats(content, mon).hp;
       mon.speciesId = e.to;
+      if (e.ability) mon.fixedAbility = e.ability;
       mon.hp = Math.max(1, Math.min(calcStats(content, mon).hp, Math.round((mon.hp * calcStats(content, mon).hp) / before)));
       discover(run, e.to, true);
       return `${to.name} appears!`;

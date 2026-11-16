@@ -106,6 +106,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'notThisRegion') return stamped !== run.regionIndex + 1;
   if (c.test === 'thisRegion') return stamped === run.regionIndex + 1;
   // gn.22: the guest carrying mark `key` is down (fainted, or no longer in the party).
+  if (c.test === 'holdsItem') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && !id.endsWith('-berry')));
   if (c.test === 'hasMark') return run.party.some((m) => m.gn?.includes(c.key!));
   if (c.test === 'markDown') return !run.party.some((m) => m.gn?.includes(c.key!) && m.hp > 0);
   return stamped > 0 && stamped < run.regionIndex + 1;
@@ -279,6 +280,28 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       if (staying.length === 0) return '';
       run.party = staying;
       return '';
+    }
+    case 'lendHeld': {
+      for (const m of run.party) {
+        const id = Object.keys(m.held ?? {}).sort().find((k) => !k.endsWith('-berry') && (m.held![k] ?? 0) > 0);
+        if (!id) continue;
+        m.held![id]! -= 1;
+        if (m.held![id] === 0) delete m.held![id];
+        const k = `${key(`lent-${e.key}`)}:${id}`;
+        run.story.flags[k] = Number(run.story.flags[k] ?? 0) + 1;
+        return `Lent: ${content.catalog.get(id)?.name ?? id}`;
+      }
+      return '';
+    }
+    case 'returnLent': {
+      const prefix = `${key(`lent-${e.key}`)}:`;
+      const lines: string[] = [];
+      for (const k of Object.keys(run.story.flags).filter((x) => x.startsWith(prefix)).sort()) {
+        const n = Number(run.story.flags[k] ?? 0);
+        run.story.flags[k] = 0;
+        if (n > 0) lines.push(host.apply({ kind: 'item', id: k.slice(prefix.length), count: n }));
+      }
+      return lines.filter(Boolean).join(', ');
     }
     case 'castItem': {
       const sp = castOf(run, e.key!);

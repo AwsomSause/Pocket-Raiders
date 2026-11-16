@@ -974,5 +974,680 @@
   "tags": [
    "forest|eerie"
   ]
+ },
+ "gn-23-salesman": {
+  "gn": "gn.23",
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "attaches": "after",
+  "level": "A+0, four levels higher each time",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.23",
+  "home": 4,
+  "window": [
+   2,
+   6
+  ],
+  "stages": [
+   1
+  ],
+  "beats": [
+   {
+    "beat": "The salesman (optional start)",
+    "event": "gn-23-salesman",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     2,
+     6
+    ]
+   },
+   {
+    "beat": "Appearance 1",
+    "event": "gn-23-a1",
+    "stage": "S1, S2",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 2",
+    "event": "gn-23-a2",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 3",
+    "event": "gn-23-a3",
+    "stage": "S4, S5",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 4",
+    "event": "gn-23-a4",
+    "stage": "S6",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 5",
+    "event": "gn-23-a5",
+    "stage": "S7",
+    "home": 16,
+    "window": [
+     14,
+     18
+    ]
+   },
+   {
+    "beat": "The falls",
+    "event": "gn-23-falls",
+    "stage": "S8",
+    "home": 18,
+    "window": [
+     16,
+     19
+    ]
+   }
+  ],
+  "note": "Optional start: the Honest Salesman (SF134.3). In Kanto the canon Magikarp Salesman (cs.kanto.pewter.magikarp) is this scene.",
+  "kinds": [
+   "Region-Wide Story"
+  ],
+  "tags": []
+ },
+ "gn-23-a1": {
+  "gn": "gn.23",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "after",
+  "level": "A+0, four levels higher each time",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.23",
+  "beat": 1,
+  "beats": [
+   {
+    "beat": "The salesman (optional start)",
+    "event": "gn-23-salesman",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     2,
+     6
+    ]
+   },
+   {
+    "beat": "Appearance 1",
+    "event": "gn-23-a1",
+    "stage": "S1, S2",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 2",
+    "event": "gn-23-a2",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 3",
+    "event": "gn-23-a3",
+    "stage": "S4, S5",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 4",
+    "event": "gn-23-a4",
+    "stage": "S6",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 5",
+    "event": "gn-23-a5",
+    "stage": "S7",
+    "home": 16,
+    "window": [
+     14,
+     18
+    ]
+   },
+   {
+    "beat": "The falls",
+    "event": "gn-23-falls",
+    "stage": "S8",
+    "home": 18,
+    "window": [
+     16,
+     19
+    ]
+   }
+  ],
+  "note": "Badge: a small fish (notched from the second appearance). Straight after a trainer battle.",
+  "kinds": [
+   "Region-Wide Story"
+  ],
+  "tags": [],
+  "home": 8,
+  "window": [
+   6,
+   10
+  ],
+  "stages": [
+   1,
+   2
+  ]
+ },
+ "gn-23-a2": {
+  "gn": "gn.23",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "after",
+  "level": "A+0, four levels higher each time",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.23",
+  "beat": 2,
+  "beats": [
+   {
+    "beat": "The salesman (optional start)",
+    "event": "gn-23-salesman",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     2,
+     6
+    ]
+   },
+   {
+    "beat": "Appearance 1",
+    "event": "gn-23-a1",
+    "stage": "S1, S2",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 2",
+    "event": "gn-23-a2",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 3",
+    "event": "gn-23-a3",
+    "stage": "S4, S5",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 4",
+    "event": "gn-23-a4",
+    "stage": "S6",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 5",
+    "event": "gn-23-a5",
+    "stage": "S7",
+    "home": 16,
+    "window": [
+     14,
+     18
+    ]
+   },
+   {
+    "beat": "The falls",
+    "event": "gn-23-falls",
+    "stage": "S8",
+    "home": 18,
+    "window": [
+     16,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story"
+  ],
+  "tags": [],
+  "home": 8,
+  "window": [
+   6,
+   10
+  ],
+  "stages": [
+   3
+  ]
+ },
+ "gn-23-a3": {
+  "gn": "gn.23",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "after",
+  "level": "A+0, four levels higher each time",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.23",
+  "beat": 3,
+  "beats": [
+   {
+    "beat": "The salesman (optional start)",
+    "event": "gn-23-salesman",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     2,
+     6
+    ]
+   },
+   {
+    "beat": "Appearance 1",
+    "event": "gn-23-a1",
+    "stage": "S1, S2",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 2",
+    "event": "gn-23-a2",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 3",
+    "event": "gn-23-a3",
+    "stage": "S4, S5",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 4",
+    "event": "gn-23-a4",
+    "stage": "S6",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 5",
+    "event": "gn-23-a5",
+    "stage": "S7",
+    "home": 16,
+    "window": [
+     14,
+     18
+    ]
+   },
+   {
+    "beat": "The falls",
+    "event": "gn-23-falls",
+    "stage": "S8",
+    "home": 18,
+    "window": [
+     16,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story"
+  ],
+  "tags": [],
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "stages": [
+   4,
+   5
+  ]
+ },
+ "gn-23-a4": {
+  "gn": "gn.23",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "after",
+  "level": "A+0, four levels higher each time",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.23",
+  "beat": 4,
+  "beats": [
+   {
+    "beat": "The salesman (optional start)",
+    "event": "gn-23-salesman",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     2,
+     6
+    ]
+   },
+   {
+    "beat": "Appearance 1",
+    "event": "gn-23-a1",
+    "stage": "S1, S2",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 2",
+    "event": "gn-23-a2",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 3",
+    "event": "gn-23-a3",
+    "stage": "S4, S5",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 4",
+    "event": "gn-23-a4",
+    "stage": "S6",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 5",
+    "event": "gn-23-a5",
+    "stage": "S7",
+    "home": 16,
+    "window": [
+     14,
+     18
+    ]
+   },
+   {
+    "beat": "The falls",
+    "event": "gn-23-falls",
+    "stage": "S8",
+    "home": 18,
+    "window": [
+     16,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story"
+  ],
+  "tags": [],
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "stages": [
+   6
+  ]
+ },
+ "gn-23-a5": {
+  "gn": "gn.23",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "after",
+  "level": "A+0, four levels higher each time",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.23",
+  "beat": 5,
+  "beats": [
+   {
+    "beat": "The salesman (optional start)",
+    "event": "gn-23-salesman",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     2,
+     6
+    ]
+   },
+   {
+    "beat": "Appearance 1",
+    "event": "gn-23-a1",
+    "stage": "S1, S2",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 2",
+    "event": "gn-23-a2",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 3",
+    "event": "gn-23-a3",
+    "stage": "S4, S5",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 4",
+    "event": "gn-23-a4",
+    "stage": "S6",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 5",
+    "event": "gn-23-a5",
+    "stage": "S7",
+    "home": 16,
+    "window": [
+     14,
+     18
+    ]
+   },
+   {
+    "beat": "The falls",
+    "event": "gn-23-falls",
+    "stage": "S8",
+    "home": 18,
+    "window": [
+     16,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story"
+  ],
+  "tags": [],
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "stages": [
+   7
+  ]
+ },
+ "gn-23-falls": {
+  "gn": "gn.23",
+  "shape": "Region",
+  "earliest": "A1",
+  "sits": "must-see",
+  "attaches": "after",
+  "level": "A+0, four levels higher each time",
+  "often": "run",
+  "badge": "own",
+  "chain": "gn.23",
+  "beat": 6,
+  "beats": [
+   {
+    "beat": "The salesman (optional start)",
+    "event": "gn-23-salesman",
+    "stage": "S1",
+    "home": 4,
+    "window": [
+     2,
+     6
+    ]
+   },
+   {
+    "beat": "Appearance 1",
+    "event": "gn-23-a1",
+    "stage": "S1, S2",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 2",
+    "event": "gn-23-a2",
+    "stage": "S3",
+    "home": 8,
+    "window": [
+     6,
+     10
+    ]
+   },
+   {
+    "beat": "Appearance 3",
+    "event": "gn-23-a3",
+    "stage": "S4, S5",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 4",
+    "event": "gn-23-a4",
+    "stage": "S6",
+    "home": 12,
+    "window": [
+     10,
+     14
+    ]
+   },
+   {
+    "beat": "Appearance 5",
+    "event": "gn-23-a5",
+    "stage": "S7",
+    "home": 16,
+    "window": [
+     14,
+     18
+    ]
+   },
+   {
+    "beat": "The falls",
+    "event": "gn-23-falls",
+    "stage": "S8",
+    "home": 18,
+    "window": [
+     16,
+     19
+    ]
+   }
+  ],
+  "kinds": [
+   "Region-Wide Story"
+  ],
+  "tags": [],
+  "home": 18,
+  "window": [
+   16,
+   19
+  ],
+  "stages": [
+   8
+  ]
  }
 }

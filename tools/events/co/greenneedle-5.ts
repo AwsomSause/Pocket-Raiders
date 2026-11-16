@@ -1,7 +1,7 @@
 // Greenneedle, part 5: gn.21 The Pokémon That Wouldn't Evolve (doc GREENNEEDLE_REWORKED_PLACED_5.md).
 // Build: npm run co:build -- greenneedle-5   then   npm run co:gn
-import { any, ch, fight, flag, heal, item, join, lose, out, RARE_HELD, room, trainer, wild, type Json } from '../dsl.ts';
-import { bond, chIf, eitherWay, gev, gn, inside, is, leavePseudo, moment, not, notThisRegion, regionChanged, rm, say, scene, setTo, stampRegion, stampStage, teach, when, type Placement } from './_gn.ts';
+import { $, any, bondUp, ch, fight, flag, heal, item, join, lose, money, out, RARE_HELD, room, takeNode, trainer, wild, type Json } from '../dsl.ts';
+import { bond, chIf, eitherWay, gev, gn, inside, is, leavePseudo, moment, not, notThisRegion, regionChanged, rm, roll, say, scene, setTo, stampRegion, stampStage, teach, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -344,7 +344,291 @@ const gn22: Json[] = [
   ]),
 ];
 
-export const EVENTS: Json[] = [...gn21, ...gn22];
+// =====================================================================================================================
+// gn.23  THE MAGIKARP THAT COULD  (Region-wide: an optional salesman, five appearances and the falls, each must-see after a battle;
+// once a run). The same notched Magikarp every time; the salesman's one (mark `karp-notch`) jumps from your party.
+// =====================================================================================================================
+const KARP_TINT = '#5a86b0';
+const karp = (o: Json = {}): Json => ({ tint: KARP_TINT, tags: ['Pokémon', 'Story'], effect: 'none', pokemon: 'magikarp', ...o });
+const kroom = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, karp(o), intro, choices);
+const ENC = 'karp-encouraged';
+const OWN: Json = { id: 'own', when: [is('karp-bought'), { kind: 'gn', test: 'hasMark', key: 'karp-notch' }], notice: '*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*' };
+const SALESMAN = say(
+  '*A Magikarp on a cushion.* **"Only ₽500! It\'s a secret kind!"**',
+  '**You:** "It\'s a Magikarp."',
+  '**Mr. Pettigrew, after a long pause:** "...It is a Magikarp. It\'s a good one. It tries very hard. I\'m tired of lying about it."',
+  '*It\'s level 10, it knows Bounce, and it already likes people. It\'s worth about ₽200. He says so.*',
+);
+const BOUGHT = (price: number, ...extra: Json[]): Json[] => [$(-price), { ...join({ species: ['magikarp'] }), level: 10, moves: ['bounce'], friendship: 30, mark: 'karp-notch' }, flag('karp-bought'), ...extra];
+const SALESMAN_CHOICES: Json[] = [
+  ch('Buy it (₽500).', out('He\'s so surprised he throws in a Mystic Water. **Mr. Pettigrew:** "Nobody ever just... buys it."', ...BOUGHT(500, item('mystic-water'))), { requires: [money(500)] }),
+  ch('Offer ₽200.', out('**"Fair. That\'s fair."** He takes it, and looks lighter for it.', ...BOUGHT(200)), { requires: [money(200)] }),
+  ch('No.', out('He nods. The Magikarp flops in a way that may be a wave.')),
+];
+/** One appearance: what it does this time, who is on the bank, and the four choices. */
+const appearance = (n: number, name: string, falls: string, tries: string, bank: string, extra: Json = {}): Json => gev(`gn-23-a${n}`, name, karp({
+  stop: 'event', rarity: 'rare',
+  requires: n === 1 ? [not('karp-1')] : [is(`karp-${n - 1}`), not(`karp-${n}`), { kind: 'gn', test: 'thisRegion', key: 'karp-at' }],
+  remembers: [OWN, ...((extra.remembers as Json[]) ?? [])],
+}), say(falls, tries, bank), [
+  ch('Go on! You can do it!', out('It jumps again at once. A little higher than the first try.', flag(ENC), flag(`karp-${n}`), ...(n === 1 ? [stampRegion('karp-at')] : []))),
+  ch('Give it something.', out('You look for something to give it.', flag(`karp-${n}`), ...(n === 1 ? [stampRegion('karp-at')] : []), scene('gn-23-give'))),
+  ch('Race it up the bank.', out('You beat it to the top rock by a fin. It doesn\'t care. It splashes you, delighted.', flag(ENC), flag('karp-raced'), flag(`karp-${n}`), ...(n === 1 ? [stampRegion('karp-at')] : [])), {
+    prompt: { id: 'bank-race', needs: 'ok' },
+    fail: out('It beats you to the top rock. It splashes you, delighted, and does it again.', flag(ENC), flag('karp-raced'), flag(`karp-${n}`), ...(n === 1 ? [stampRegion('karp-at')] : [])),
+  }),
+  ch('Walk on.', out('It watches you go. It jumps anyway.', flag('karp-ignored'), flag(`karp-${n}`), ...(n === 1 ? [stampRegion('karp-at')] : []))),
+]);
+const LENT_BACK = gn('returnLent', { key: 'karp' });
+const gyarados = (extra: Json = {}): Json[] => [
+  when('karp-raced', { min: 3 }, [{ ...join({ species: ['gyarados'] }), ability: 'impossible-leap', boost: { stat: 'spe', percent: 5 }, mark: 'karp-notch', ...extra }], 'It learned to be quick from you: Speed +1, for good.'),
+  when('karp-raced', { min: 0, max: 2 }, [{ ...join({ species: ['gyarados'] }), ability: 'impossible-leap', mark: 'karp-notch', ...extra }]),
+];
+
+const gn23: Json[] = [
+  gev('gn-23-salesman', 'The Honest Salesman', karp({ stop: 'event', rarity: 'uncommon', cast: ['trainer.gentleman'], requires: [not('karp-1'), not('karp-bought')] }), SALESMAN, SALESMAN_CHOICES),
+  appearance(1, 'The Magikarp That Could', 'A waterfall, far off. You can only just hear it.', 'A Magikarp in the river jumps at nothing. It barely clears the water. It lands on its side.',
+    '**A fisher, on the bank:** "That one? Been at it all spring. Daft fish."'),
+  appearance(2, 'The Magikarp That Could', 'The waterfall is closer. A notch in a tail fin flashes as something jumps. *That notch. It\'s the same one.*',
+    'It reaches the lower rocks. It hangs there a second, gasping, and slides back.', 'The fisher is back on the bank, pretending to watch his float.'),
+  appearance(3, 'The Magikarp That Could', 'You can feel the waterfall now, a cold mist on your face.',
+    'Halfway. It gets halfway. And it falls a long way. It lies in the pool, not moving. Then it moves.', '**The same fisher:** "...It got halfway. I\'ve stopped fishing this bit."'),
+  appearance(4, 'The Magikarp That Could', 'The waterfall fills half the sky. The noise is all there is.',
+    'It touches the lip of the falls. It *touches* it. Its fin slips.', 'The fisher has brought a friend. Neither of them says anything when it slips.'),
+  appearance(5, 'The Magikarp That Could', 'The foot of the falls. Spray everywhere. Rainbows in it.',
+    'It makes the jump. It\'s up. It\'s at the top. It\'s still only a Magikarp. It looks down at you, and it can\'t believe it either.',
+    'The fisher, three children and a dog are on the bank. Nobody says anything. One of the children is holding their breath.',
+    { remembers: [{ id: 'league', when: [is('little-league-losing')], notice: '*The children on the bank are your Little League team. One of them is mouthing: "losing\'s how you learn."*' }] }),
+  kroom('gn-23-give', 'The Magikarp That Could', {}, say('It watches your hands. It knows what giving looks like.'), [
+    ch('A Berry.', out('It eats it on the spot, in one gulp, and jumps again at once.', gn('payBerry'), flag(ENC), flag('karp-item-berry')), { requires: [{ kind: 'gn', test: 'holdsBerry' }] }),
+    ch('Something to carry.', out('It takes it in its mouth, very carefully, and keeps it. It will carry it for the rest of the region.', gn('lendHeld', { key: 'karp' }), flag(ENC), flag('karp-item-held')), { requires: [{ kind: 'gn', test: 'holdsItem' }] }),
+    ch('Nothing after all.', out('It jumps anyway.')),
+  ]),
+  // ---- The falls (S8) ----
+  gev('gn-23-falls', 'The Falls', karp({ stop: 'event', rarity: 'rare', pokemon: 'gyarados', requires: [is('karp-5'), not('karp-falls'), { kind: 'gn', test: 'thisRegion', key: 'karp-at' }] }), say(
+    'The falls. The whole bank is there: the fisher, the children, the dog, people you have never seen.',
+    'Up at the top, a Magikarp with a notch in its tail fin is looking down.',
+  ), [ch('Watch.', out('Everyone holds their breath.', flag('karp-falls'), LENT_BACK,
+    gn('check', { key: 'karp-in-party', if: [{ kind: 'gn', test: 'hasMark', key: 'karp-notch' }] }),
+    when('karp-in-party', { min: 1 }, [scene('gn-23-party')]),
+    when('karp-in-party', { min: 0, max: 0 }, [
+      when(ENC, { min: 3 }, [scene('gn-23-rise')]),
+      when(ENC, { min: 1, max: 2 }, [scene('gn-23-top')]),
+      when(ENC, { min: 0, max: 0 }, [roll('karp-evolved', 50), when('karp-evolved', { min: 1 }, [scene('gn-23-hostile')]), when('karp-evolved', { min: 0, max: 0 }, [scene('gn-23-still')])]),
+    ]),
+  ))]),
+  kroom('gn-23-party', 'The Falls', { pokemon: 'gyarados', cast: ['trainer.gentleman'] }, say(
+    'It was in your party all along. Your Magikarp, the notched one, the one from the cushion.',
+    'It goes up the falls with everyone on the bank cheering. The water goes white.',
+    'It evolves there, in your own team. Something very long looks down at you, with a notch in its tail.',
+    'Mr. Pettigrew is on the bank. He is weeping, and he doesn\'t care who sees.',
+  ), [ch('Welcome it back.', out('It lowers its great head to your hand.', { kind: 'formChange', from: 'magikarp', to: 'gyarados', mark: 'karp-notch', ability: 'impossible-leap' },
+    when('karp-raced', { min: 3 }, [{ kind: 'statBoost', stat: 'spe', percent: 5, who: { species: ['gyarados'] }, until: 'run' }], 'It learned to be quick from you: Speed +1, for good.'),
+    setTo('karp-end', 4), flag('karp-pettigrew-saw'), moment('Your Magikarp cleared the falls, and Mr. Pettigrew wept on the bank.', 95)))]),
+  kroom('gn-23-rise', 'The Falls', { pokemon: 'gyarados' }, say(
+    'It clears the falls.',
+    '*The water goes white. Something very long comes up out of it, and looks down, and it\'s got a notch in its tail.*',
+    'The whole bank roars.',
+  ), [
+    ch('Hold out your hand.', out('It lowers its head to your hand.', ...gyarados(), setTo('karp-end', 1), moment('The notched Magikarp cleared the falls, and chose you.', 90))),
+    ch('Let it go free.', out('It roars once, at the sky, and is gone upriver. The children talk about nothing else.', setTo('karp-end', 1))),
+  ]),
+  kroom('gn-23-top', 'The Falls', {}, say(
+    'It clears the falls. It\'s a Magikarp at the top.',
+    'It looks at you, and waits to see whether you\'re coming.',
+  ), [
+    ch('Climb up to it.', out('You climb the wet rocks to the top. It\'s still there when you get there.', { ...join({ species: ['magikarp'] }), mark: 'karp-notch' }, setTo('karp-end', 3))),
+    ch('Wave.', out('It flops, once. It may be a wave. Then it\'s gone upriver.', setTo('karp-end', 3))),
+  ]),
+  kroom('gn-23-hostile', 'The Falls', { pokemon: 'gyarados' }, say(
+    'It evolves anyway, at the top, with nobody watching but you.',
+    'It\'s hostile. It looks straight at you. It remembers your face.',
+  ), [
+    ch('Challenge it.', fight('It comes down the falls at you.', { ...wild({ species: ['gyarados'], lv: 2, win: [{ ...join({ species: ['gyarados'] }), ability: 'impossible-leap', mark: 'karp-notch' }, setTo('karp-end', 2)] }), exact: true, caught: [setTo('karp-end', 2)], friendly: true, lose: [setTo('karp-end', 2)] })),
+    ch('Back away.', out('It watches you all the way to the road.', setTo('karp-end', 2))),
+  ]),
+  kroom('gn-23-still', 'The Falls', {}, say(
+    'It\'s still jumping. It\'ll be jumping for a long time yet.',
+    'It doesn\'t look at you at all.',
+  ), [ch('Walk on.', out('Behind you, the splash, and the splash, and the splash.', setTo('karp-end', 5)))]),
+  // ---- Afterstory ----
+  gev('gn-23-fisher', 'The Fisher\'s Tale', karp({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: [is('karp-falls'), regionChanged('karp-at'), not('karp-fisher')] }), say(
+    'A fisher in a bar, a long way from that river, holding court.',
+    '**Fisher:** "...trained it myself, I did. Every morning. Daft fish, but it listened to me."',
+    'It\'s the fisher. He\'s telling it wrong.',
+  ), [
+    ch('Let him tell it.', out('You let him. It\'s a good story his way too.', flag('karp-fisher'))),
+    ch('That\'s not how it went.', out('He looks at you for a long moment. **Fisher:** "...No. No, it isn\'t." He buys you a drink.', flag('karp-fisher'))),
+  ]),
+];
+// =====================================================================================================================
+// gn.24  THE FORGOTTEN PARTNER  (single, step 13 must-see before the battle until towns exist; A8; no battle; once a run).
+// The partner is your longest-owned wild-caught Pokémon (gn op `partner` marks it `old-partner`); {petname} / {partner} in the
+// text are its old name and species. Up to three visits make peace.
+// =====================================================================================================================
+const PARTNER_TINT = '#9a7b5f';
+const pal = (o: Json = {}): Json => ({ tint: PARTNER_TINT, tags: ['Pokémon', 'Story', 'Relationship'], effect: 'none', ...o });
+const proom = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, pal(o), intro, choices);
+const PARTNER = 'old-partner';
+const hasPartner: Json = { kind: 'gn', test: 'hasMark', key: PARTNER };
+/** What Rosabel gives back: a move it used to know, and Two Trainers at high Bond. */
+const REMEMBERED: Json[] = [
+  gn('oldMove', { key: PARTNER }),
+  when('partner-bond', { min: 4 }, [{ kind: 'teachMove', move: 'two-trainers', mark: PARTNER }], 'Something the two of them used to do together comes back to it: Two Trainers.'),
+  flag('partner-done'),
+];
+const VISIT_ON = (n: number): Json => ch("We'll come back.", out('Rosabel nods. **Rosabel:** "I\'ll be here. I\'m always here."', setTo('partner-visits', n + 1), stampStage('partner-visit-at')));
+const visitReq = (n: number): Json[] => [is('partner-visits', n, n), { kind: 'gn', test: 'thisRegion', key: 'partner-at' }, { kind: 'gn', test: 'laterStage', key: 'partner-visit-at' }, hasPartner, not('partner-done')];
+const ASKED_ALL: Json[] = [gn('check', { key: 'partner-asked-all', if: [is('partner-q1'), is('partner-q2'), is('partner-q3')] }), when('partner-asked-all', { min: 1 }, [scene('gn-24-choose')]), when('partner-asked-all', { min: 0, max: 0 }, [scene('gn-24-ask')])];
+
+const gn24: Json[] = [
+  gev('gn-24-bench', 'The Forgotten Partner', pal({ stop: 'event', rarity: 'rare', requires: [{ kind: 'gn', test: 'oldCatch' }, not('partner-met')] }), say(
+    '*An old trainer on a bench drops their walking stick.*',
+    '**Rosabel Verey:** "...{petname}? No. It can\'t. {petname}?"',
+    '*Your {partner} has stopped walking.*',
+  ), [ch('Wait.', out('Rosabel picks up the stick, and doesn\'t lean on it. Rosabel can\'t stop looking.',
+    gn('partner', { key: PARTNER }), flag('partner-met'), stampRegion('partner-at'),
+    when('partner-story', { min: 1, max: 1 }, [], '**Rosabel:** "I got ill. Couldn\'t keep up. I let it go where there was good grass. I thought that was kind."'),
+    when('partner-story', { min: 2, max: 2 }, [], '**Rosabel:** "We lost. A lot. I said things. I opened the Ball in a field and I walked off, before I could change my mind."'),
+    when('partner-story', { min: 3, max: 3 }, [], '**Rosabel:** "It ran. In a storm. I looked for a month. I\'ve always thought it ran *from* me."'),
+    roll('partner-flinch', 10),
+    when('partner-flinch', { min: 1 }, [], '*It flinches.*'),
+    when('partner-flinch', { min: 0, max: 0 }, [
+      when('partner-bond', { min: 4 }, [], '*It greets Rosabel warmly: a nuzzle, a cry. Then it comes back to your side, and sits.*'),
+      when('partner-bond', { min: 2, max: 3 }, [], '*It goes to Rosabel slowly. It lets Rosabel touch its head. It looks back at you.*'),
+      when('partner-bond', { min: 0, max: 1 }, [], '*It goes to Rosabel, and stays there a while.*'),
+    ]),
+    scene('gn-24-choose'),
+  ))]),
+  proom('gn-24-choose', 'The Forgotten Partner', {
+    remembers: [
+      { id: 'third', when: [is('partner-was-ball')], notice: '*Rosabel isn\'t the child from the tape. This is somebody from before even that. It has had three trainers.*' },
+      { id: 'home', when: [is('starter-home')], notice: '*You have let a Pokémon visit home before. You know how long it takes. It doesn\'t take long.*' },
+    ],
+  }, say(
+    'Rosabel is looking at it the way you look at the last page of a book.',
+    '*If you let it decide, it might not choose you.*',
+  ), [
+    ch('Let them have some time.', out(say(
+      'They sit on the bench together. You walk on a little way, and come back later.',
+      'Rosabel is asleep. It is keeping watch.',
+    ), flag('partner-time'), bondUp(1, 'firstCatch'), when('starter-home', { min: 0, max: 0 }, [takeNode(1)]), ...REMEMBERED)),
+    ch('No. Come on.', out('It follows you. It looks back twice.', flag('partner-refused'), flag('partner-done'))),
+    ch('Can I ask you something?', out('**Rosabel:** "Anything. Ask anything."', flag('partner-asked'), scene('gn-24-ask'))),
+    ch('Let it decide.', out('You step back. You leave it room.', flag('partner-decided'),
+      when('partner-bond', { min: 0, max: 1 }, [scene('gn-24-home')]),
+      when('partner-bond', { min: 2 }, [...REMEMBERED], 'It looks at the bench. It looks at you. It comes back to you, and sits down on your foot.'))),
+  ]),
+  proom('gn-24-ask', 'The Forgotten Partner: Questions', {}, say('Rosabel waits. It waits too, ears turned towards you both.'), [
+    chIf([not('partner-q1')], 'How long were you together?', out(say('**Rosabel:** "Two years. Good ones."', '*It turns its head away. Two years was most of its life.*'), flag('partner-q1'), ...ASKED_ALL)),
+    chIf([not('partner-q2')], 'Did you say goodbye?', out(say('**Rosabel:** "Of course I did."', '*It looks at the ground. It doesn\'t remember a goodbye.*'), flag('partner-q2'), ...ASKED_ALL)),
+    chIf([not('partner-q3')], 'Did you ever go back?', out(say('**Rosabel:** "...Once. It wasn\'t there."', '*It lifts its head, sharply. It was there. It waited. It can\'t have been far.*'), flag('partner-q3'), ...ASKED_ALL)),
+    VISIT_ON(0),
+  ]),
+  proom('gn-24-home', 'The Forgotten Partner: Home', {}, say(
+    '*It looks at you. It looks at the bench.*',
+    '*It goes home.*',
+    'Rosabel lifts a small one out of a basket by the bench.',
+    '**Rosabel:** "It\'s a good one. It hasn\'t got a name yet. I was waiting. I didn\'t know what for."',
+  ), [ch('Take the little one.', out('It settles into your arms as if it knew it would. Behind you, on the bench, two old friends sit very close.',
+    gn('castBase', { key: 'partner-young', type: PARTNER }), gn('dropMarked', { key: PARTNER }), join({ species: ['@partner-young'] }), flag('partner-went-home'), flag('partner-done'),
+    moment('You let your oldest friend choose, and it went home.', 90)))]),
+  gev('gn-24-visit1', 'The Bench', pal({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: visitReq(1) }), say(
+    'The bench again. Rosabel is there.',
+    'They sit at opposite ends of it, not looking at each other. Neither moves away.',
+  ), [VISIT_ON(1), ch('Leave it here.', out('You go. It follows, slower than usual.', flag('partner-done')))]),
+  gev('gn-24-visit2', 'The Bench', pal({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: visitReq(2) }), say(
+    'Rosabel has brought the food it used to like. It remembers the food.',
+    'It eats from Rosabel\'s hand.',
+  ), [VISIT_ON(2), ch('Leave it here.', out('You go. It follows, licking its mouth.', flag('partner-done')))]),
+  gev('gn-24-visit3', 'The Bench', pal({
+    stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: visitReq(3),
+    remembers: [
+      { id: 'a', when: [is('partner-story', 1, 1)], notice: '**Rosabel:** "I should\'ve kept you."' },
+      { id: 'b', when: [is('partner-story', 2, 2)], notice: '**Rosabel:** "I\'m sorry I shouted."' },
+      { id: 'c', when: [is('partner-story', 3, 3)], notice: '**Rosabel:** "I never stopped looking."' },
+    ],
+  }), say(
+    'The third visit. Rosabel says the thing they didn\'t say then.',
+    'It leans against Rosabel. Then it gets up, and comes to you, and looks back. And it\'s all right.',
+  ), [ch('Thank you, Rosabel.', out('Rosabel shows it something it used to know, and it remembers.', flag('partner-peace'), ...REMEMBERED, moment('Your oldest friend made peace with the trainer who lost it.', 85)))]),
+];
+
+// =====================================================================================================================
+// gn.25  THE UNLIKELY FRIENDSHIP  (single, step 7, optional, before the battle; A5; once a run). The node's wild battle becomes
+// the pack fight: six Mightyena in two double battles, the Zangoose beside you in the first, the Seviper in the second (the engine
+// has two places a side). New paired ability Truce.
+// =====================================================================================================================
+const TRUCE_TINT = '#7a6b8f';
+const tru = (o: Json = {}): Json => ({ tint: TRUCE_TINT, tags: ['Pokémon', 'Story', 'Relationship'], effect: 'none', pokemon: 'zangoose', ...o });
+const troom = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, tru(o), intro, choices);
+const PACK = (ally: string, win: Json[]): Json => trainer('The Pack', { size: 3, team: ['mightyena', 'mightyena', 'mightyena'], format: 'doubles', ally, lv: 0, friendly: true, win, lose: [flag('truce-pack-lost'), scene('gn-25-after')] });
+const truceJoin = (species: string): Json => ({ ...join({ species: [species] }), ability: 'truce' });
+const OTHER: Json[] = [when('truce-one', { min: 1, max: 1 }, [truceJoin('seviper')]), when('truce-one', { min: 2, max: 2 }, [truceJoin('zangoose')])];
+const sightReq = (n: number): Json[] => [is('truce-one'), is('truce-sight', n - 1, n - 1), { kind: 'gn', test: 'laterStage', key: n === 1 ? 'truce-at' : `truce-sight${n - 1}-at` }];
+
+const gn25: Json[] = [
+  gev('gn-25-heap', 'The Unlikely Friendship', tru({
+    stop: 'event', rarity: 'rare', types: ['normal', 'poison'], requires: [not('truce-met')],
+    remembers: [{ id: 'border', when: [is('border-united')], notice: '*You settled the border by uniting both sides. Somehow they know. They open their eyes, and they aren\'t afraid of you.*' }],
+  }), say(
+    '*A Zangoose and a Seviper, asleep in a heap. Its tail is across its neck. Its paw is on its coils.*',
+    '*Every book says these two fight on sight.*',
+  ), [
+    ch('Watch.', out(say(
+      'They wake. The Zangoose splits a Berry in two with one claw. It gives the Seviper the bigger half, and then looks as if it regrets it.',
+      'They set off. They squabble over who walks in front. The Seviper wins by being longer.',
+      'A branch cracks. Each puts itself between the other and the sound, and they collide.',
+    ), flag('truce-met'), flag('truce-watched'), { kind: 'nodeBattle', skip: true }, scene('gn-25-pack'))),
+    // Border Dispute settled by uniting both sides (NE73): they take to you at once, so "Step closer." isn't needed.
+    chIf([not('border-united')], 'Step closer.', out('Two heads come up at once. They look at you, then at each other, and close ranks: the snake in front, the claws behind.', flag('truce-met'), { kind: 'nodeBattle', skip: true }, scene('gn-25-pack'))),
+    ch('Back away quietly.', out('You back away. Neither of them wakes. You leave them to it.', flag('truce-met'))),
+  ]),
+  troom('gn-25-pack', 'The Unlikely Friendship: The Pack', { pokemon: 'mightyena' }, say(
+    '*A pack comes out of the grass. Mightyena, six, and they\'ve done this before.*',
+    'The Zangoose and the Seviper are already back to back. There\'s room beside them. Just.',
+  ), [ch('Fight beside them.', fight('The first three come in low. The Zangoose takes the place beside you.', PACK('zangoose', [scene('gn-25-pack-2')])))]),
+  troom('gn-25-pack-2', 'The Unlikely Friendship: The Pack', { pokemon: 'seviper' }, say(
+    'Three more. When the Zangoose is hit hard, the Seviper goes straight for whatever did it.',
+    'Now the Seviper slides in beside you, and the Zangoose watches its back.',
+  ), [ch('Hold together.', fight('The last of the pack circle, and come in.', PACK('seviper', [scene('gn-25-after')])))]),
+  troom('gn-25-after', 'The Unlikely Friendship', {}, say(
+    'The grass goes still.',
+    'They check each other for injuries before they look at you.',
+  ), [
+    ch('Come with me.', out('You crouch, and hold out your hand. Both of them look at it. Only one of them can take it first.', scene('gn-25-which'))),
+    ch('Both of you.', out(say('They try to get into the same Ball, if you let them. They don\'t fit.', 'They take two.'), truceJoin('zangoose'), truceJoin('seviper'), flag('truce-both'), stampRegion('truce-region'))),
+    ch('Stay together. Good luck.', out(say('They go. The Zangoose looks back, and lifts a paw.', 'On the path where they slept: a Berry, split neatly in two.'), item('sitrus-berry', 2), flag('truce-left'), stampRegion('truce-region'))),
+  ]),
+  troom('gn-25-which', 'The Unlikely Friendship', {}, say('Which one?'), [
+    ch('The Zangoose.', out('It comes. It looks back.', truceJoin('zangoose'), setTo('truce-one', 1), stampStage('truce-at'), stampRegion('truce-region'))),
+    ch('The Seviper.', out('It comes. It looks back.', truceJoin('seviper'), setTo('truce-one', 2), stampStage('truce-at'), stampRegion('truce-region'))),
+  ]),
+  // ---- The sightings (one was recruited) ----
+  gev('gn-25-sight1', 'A Shape on a Ridge', tru({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: sightReq(1) }), say(
+    'A shape on a ridge, against the sky.',
+    'The one you recruited stops dead, and stares.',
+  ), [ch('Keep going.', out('When you look again, the ridge is empty.', setTo('truce-sight', 1), stampStage('truce-sight1-at')))]),
+  gev('gn-25-sight2', 'Closer', tru({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: sightReq(2) }), say(
+    'Closer, this time. At the edge of the trees.',
+    'It\'s thin. It\'s been following you.',
+  ), [ch('Keep going.', out('It keeps its distance. It doesn\'t stop following.', setTo('truce-sight', 2), stampStage('truce-sight2-at')))]),
+  gev('gn-25-sight3', 'The Edge of the Firelight', tru({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: sightReq(3) }), say(
+    'You make camp. It\'s at the edge of the firelight.',
+    'The one you recruited is sitting up, very straight, not looking at it. Trying very hard not to look at it.',
+  ), [
+    ch('Come in.', out('It comes in. It lies down beside the other one as if it had never been anywhere else.', ...OTHER, setTo('truce-sight', 3), flag('truce-reunited'))),
+    ch('Go home.', out('It doesn\'t go home. It comes in anyway, and lies down beside the other one, and that\'s that.', ...OTHER, setTo('truce-sight', 3), flag('truce-reunited'))),
+  ]),
+  gev('gn-25-kits', 'A Ditch', tru({ stop: 'event', rarity: 'uncommon', callback: true, minStage: 2, requires: [is('truce-met'), regionChanged('truce-region'), not('truce-kits')] }), say(
+    'In a ditch by the road, a Zangoose kit and a small Seviper are playing.',
+    'Nobody has told them yet.',
+  ), [ch('Don\'t tell them.', out('You walk on quietly, and let them play.', flag('truce-kits')))]),
+];
+
+const KANTO_KARP: Json = { ...gev('cs-kanto-pewter-magikarp', 'Magikarp Salesman', karp({ stop: 'event', rarity: 'common', cast: ['trainer.gentleman'], requires: [not('karp-1'), not('karp-bought')] }), SALESMAN, SALESMAN_CHOICES), canon: 'cs.kanto.pewter.magikarp' };
+
+export const EVENTS: Json[] = [...gn21, ...gn22, ...gn23, KANTO_KARP, ...gn24, ...gn25];
 
 export const REMOVE: string[] = [];
 
@@ -354,6 +638,17 @@ const BEATS = [
   { beat: 'It comes back', event: 'gn-21-back', stage: 'S5', home: 11, window: [9, 14] as [number, number] },
   { beat: 'The stone', event: 'gn-21-stone', stage: 'S8', home: 17, window: [15, 19] as [number, number] },
 ];
+
+const KARP: Placement = { gn: 'gn.23', shape: 'Region', earliest: 'A1', sits: 'must-see', attaches: 'after', tags: ['Region-Wide Story'], level: 'A+0, four levels higher each time', often: 'run', badge: 'own', chain: 'gn.23' };
+const KARP_BEATS = [
+  { beat: 'The salesman (optional start)', event: 'gn-23-salesman', stage: 'S1', home: 4, window: [2, 6] as [number, number] },
+  { beat: 'Appearance 1', event: 'gn-23-a1', stage: 'S1, S2', home: 8, window: [6, 10] as [number, number] },
+  { beat: 'Appearance 2', event: 'gn-23-a2', stage: 'S3', home: 8, window: [6, 10] as [number, number] },
+  { beat: 'Appearance 3', event: 'gn-23-a3', stage: 'S4, S5', home: 12, window: [10, 14] as [number, number] },
+  { beat: 'Appearance 4', event: 'gn-23-a4', stage: 'S6', home: 12, window: [10, 14] as [number, number] },
+  { beat: 'Appearance 5', event: 'gn-23-a5', stage: 'S7', home: 16, window: [14, 18] as [number, number] },
+  { beat: 'The falls', event: 'gn-23-falls', stage: 'S8', home: 18, window: [16, 19] as [number, number] },
+];
 export const PLACEMENT: Record<string, Placement> = {
   'gn-21-road': { ...BEAT, beat: 1, attaches: 'after', beats: BEATS, note: 'Badge: a small stone. Once a run (the doc says once per save; no memory across runs).' },
   'gn-21-back': { ...BEAT, beat: 2, attaches: 'after', beats: BEATS },
@@ -362,6 +657,21 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.22', shape: 'Door', earliest: 'A4', home: 9, window: [7, 12], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage', 'Miniature Episode', 'Companion Story'], needs: ['forest', 'eerie'],
     level: 'A-1; the Mandibuzz A+1', often: 'run', badge: 'own', dressing: { kanto: 'The Lonely Cubone', elsewhere: 'The Lonely Cubone' },
     note: 'Badge: a bone. A cold open, then five nodes. Once a run (the doc says once per save; no memory across runs).',
+  },
+  'gn-23-salesman': { ...KARP, shape: 'Single', sits: 'optional', home: 4, window: [2, 6], stages: [1], beats: KARP_BEATS, note: 'Optional start: the Honest Salesman (SF134.3). In Kanto the canon Magikarp Salesman (cs.kanto.pewter.magikarp) is this scene.' },
+  'gn-23-a1': { ...KARP, beat: 1, beats: KARP_BEATS, note: 'Badge: a small fish (notched from the second appearance). Straight after a trainer battle.' },
+  'gn-23-a2': { ...KARP, beat: 2, beats: KARP_BEATS },
+  'gn-23-a3': { ...KARP, beat: 3, beats: KARP_BEATS },
+  'gn-23-a4': { ...KARP, beat: 4, beats: KARP_BEATS },
+  'gn-23-a5': { ...KARP, beat: 5, beats: KARP_BEATS },
+  'gn-23-falls': { ...KARP, beat: 6, beats: KARP_BEATS },
+  'gn-24-bench': {
+    gn: 'gn.24', shape: 'Single', earliest: 'A8', home: 13, window: [11, 16], sits: 'must-see', attaches: 'before', tags: ['Interrupting Episode', 'Reunion Episode'], level: 'no battle', often: 'run', badge: 'none',
+    note: 'The town, until towns exist: step 13. Needs a wild-caught Pokémon owned at least a region. Three visits are follow-ups on later stages of the region.',
+  },
+  'gn-25-heap': {
+    gn: 'gn.25', shape: 'Single', earliest: 'A5', home: 7, window: [5, 10], sits: 'optional', attaches: 'before', tags: ['Miniature Episode', 'Companion Story'], level: 'A+0', often: 'run', badge: 'own',
+    note: 'Badge: two small shapes, back to back. The node\'s wild battle becomes the pack fight.',
   },
 };
 

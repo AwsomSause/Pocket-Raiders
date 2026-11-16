@@ -111,9 +111,11 @@ describe('memory flag registry', () => {
       for (const v of ev.remembers) for (const c of v.when) if (c.kind === 'flag') reads.push(`${ev.id}:${c.key}`);
     }
     // Set by code, not by an effect: the Viridian Forest counters (core/greenneedle FOREST) and the Sky finale (core/sky/spectate.ts).
-    for (const k of [...Object.values(FOREST), 'pidgey-backed-spearow']) setKeys.add(k);
-    // Read now, set by events still being built (catalog row 15: gn.new.03, gn.new.06; Evil Team row: the Mt. Moon raid). Remove each as it lands.
-    for (const k of ['abandoned-mon', 'gn-new-06-won', 'team-raid-moon-won', 'team-raid-moon-lost']) setKeys.add(k);
+    // ... and the Safari Zone's end (core/greenneedle/safariEnd.ts), and the partner op (gn.24).
+    for (const k of [...Object.values(FOREST), 'pidgey-backed-spearow', 'safari-photo-best', 'partner-was-ball']) setKeys.add(k);
+    // Read now, set by events still being built (catalog row 15: gn.new.01/02/03/06/27, SF134 Little League, gn.new for the starter's home visit;
+    // new-events row: NE73 Border Dispute; Evil Team row: the Mt. Moon raid). Remove each as it lands.
+    for (const k of ['abandoned-mon', 'gn-new-06-won', 'team-raid-moon-won', 'team-raid-moon-lost', 'littlecup-cancelled', 'eevee-stayed', 'dog-sat', 'little-league-losing', 'starter-home', 'border-united']) setKeys.add(k);
     const missing = reads.filter((r) => !setKeys.has(r.split(':')[1]!));
     expect(missing.join(' ')).toBe('');
   });

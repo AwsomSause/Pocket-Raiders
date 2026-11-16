@@ -285,3 +285,103 @@ describe('gn.22 The Lonely Cubone', () => {
     expect(content.abilities.get('inherited-strength')?.name).toBe('Inherited Strength');
   });
 });
+
+describe('gn.23 The Magikarp That Could', () => {
+  const at = (seed: string, n: number, setup: (run: RunState) => void = () => {}): RunState => {
+    const run = gnRun(seed);
+    for (let i = 1; i < n; i++) setFlag(run, `karp-${i}`);
+    setFlag(run, 'karp-at', run.regionIndex + 1);
+    setup(run);
+    open(run, n === 6 ? 'gn-23-falls' : `gn-23-a${n}`);
+    return run;
+  };
+  const caught = (run: RunState) => run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []));
+
+  it('six must-see beats after a battle (S1-2, S3, S4-5, S6, S7, S8), the salesman an optional start on S1; each beat waits for the one before', () => {
+    expect(content.coPlacement!.get('gn-23-salesman')).toMatchObject({ sits: 'optional', stages: [1], home: 4, window: [2, 6] });
+    expect(content.coPlacement!.get('gn-23-a1')).toMatchObject({ beat: 1, stages: [1, 2], home: 8, sits: 'must-see', attaches: 'after' });
+    expect(content.coPlacement!.get('gn-23-a3')).toMatchObject({ beat: 3, stages: [4, 5], home: 12 });
+    expect(content.coPlacement!.get('gn-23-a5')).toMatchObject({ beat: 5, stages: [7], home: 16, window: [14, 18] });
+    expect(content.coPlacement!.get('gn-23-falls')).toMatchObject({ beat: 6, stages: [8], home: 18, window: [16, 19] });
+    expect(eligibleEvents(content, gnRun('t23-gate')).map((e) => e.id)).not.toContain('gn-23-a2');
+  });
+
+  it('each appearance: encourage, give, race (a timing game; win or lose it counts) or walk on', () => {
+    const run = at('t23-a1', 1);
+    expect(scene(run, 'gn-23-a1').labels).toEqual(['Go on! You can do it!', 'Give it something.', 'Race it up the bank.', 'Walk on.']);
+    expect(flagOf(choose(run, 'gn-23-a1', 'Go on! You can do it!').run, 'karp-encouraged')).toBe(1);
+    const raced = choose(run, 'gn-23-a1', 'Race it up the bank.').run;
+    expect([flagOf(raced, 'karp-encouraged'), flagOf(raced, 'karp-raced'), flagOf(raced, 'karp-at')]).toEqual([1, 1, raced.regionIndex + 1]);
+    expect(flagOf(choose(run, 'gn-23-a1', 'Walk on.').run, 'karp-ignored')).toBe(1);
+    expect(content.events.get('gn-23-a1')!.choices[2]!.prompt).toEqual({ id: 'bank-race', needs: 'ok' });
+  });
+
+  it('give it something: a held Berry is eaten; a held item is lent for the region and comes back at the falls', () => {
+    const run = at('t23-give', 1);
+    run.party[0]!.held = { 'oran-berry': 1, 'charcoal': 1 } as never;
+    const give = choose(run, 'gn-23-a1', 'Give it something.').run;
+    expect(scene(give, 'gn-23-give').labels).toEqual(['A Berry.', 'Something to carry.', 'Nothing after all.']);
+    const ate = choose(give, 'gn-23-give', 'A Berry.').run;
+    expect(ate.party[0]!.held?.['oran-berry'] ?? 0).toBe(0);
+    const lent = choose(give, 'gn-23-give', 'Something to carry.').run;
+    expect(lent.party[0]!.held?.['charcoal'] ?? 0).toBe(0);
+    expect(flagOf(lent, 'karp-encouraged')).toBe(1);
+    for (let i = 1; i <= 5; i++) setFlag(lent, `karp-${i}`);
+    open(lent, 'gn-23-falls');
+    const back = choose(lent, 'gn-23-falls', 'Watch.').run;
+    expect(JSON.stringify(back.party.map((m) => m.held)) + JSON.stringify(back.inventory)).toContain('charcoal');
+  });
+
+  it('the falls, encouraged three times: it evolves in a cutscene and can be recruited with Impossible Leap; raced three times, Speed +1 for good', () => {
+    const run = at('t23-rise', 6, (r) => { setFlag(r, 'karp-encouraged', 3); setFlag(r, 'karp-raced', 3); });
+    const rise = choose(choose(run, 'gn-23-falls', 'Watch.').run, 'gn-23-rise', 'Hold out your hand.');
+    const mon = caught(rise.run)[0]!;
+    expect(mon).toMatchObject({ speciesId: 'gyarados', fixedAbility: 'impossible-leap' });
+    expect(JSON.stringify(mon)).toMatch(/spe/);
+    expect(flagOf(rise.run, 'karp-end')).toBe(1);
+  });
+
+  it('somewhere between: it is a Magikarp at the top, waiting to see if you come', () => {
+    const run = at('t23-top', 6, (r) => setFlag(r, 'karp-encouraged', 2));
+    const top = choose(run, 'gn-23-falls', 'Watch.').run;
+    expect(scene(top, 'gn-23-top').labels).toEqual(['Climb up to it.', 'Wave.']);
+    expect(caught(choose(top, 'gn-23-top', 'Climb up to it.').run)[0]!.speciesId).toBe('magikarp');
+  });
+
+  it('ignored every time: half the time it evolves hostile and can be fought at A+2 and caught; half the time it is still jumping', () => {
+    const ends = new Set<string>();
+    for (const seed of ['a', 'b', 'c', 'd', 'e', 'f']) {
+      const out = choose(at(`t23-ign-${seed}`, 6), 'gn-23-falls', 'Watch.').run;
+      const open1 = out.stage!.map.nodes.find((n) => n.id === out.stage!.current)!.sides.filter((x) => !x.used && x.eventId?.startsWith('gn-23-')).map((x) => x.eventId);
+      ends.add(open1.join());
+      if (open1.includes('gn-23-hostile')) {
+        const fight = choose(out, 'gn-23-hostile', 'Challenge it.').run;
+        expect(fight.battle!.enemyTeam[0]!.speciesId).toBe('gyarados');
+      }
+    }
+    expect([...ends].sort()).toEqual(['gn-23-hostile', 'gn-23-still']);
+  });
+
+  it('the salesman\'s Magikarp: bought honestly (Bounce, level 10, Bond 2, Mystic Water); at the falls it evolves in your own team', () => {
+    const run = gnRun('t23-buy');
+    run.money = 1000;
+    open(run, 'gn-23-salesman');
+    expect(scene(run, 'gn-23-salesman').labels).toEqual(['Buy it (₽500).', 'Offer ₽200.', 'No.']);
+    const bought = choose(run, 'gn-23-salesman', 'Buy it (₽500).').run;
+    const fish = caught(bought)[0]!;
+    expect(fish).toMatchObject({ speciesId: 'magikarp', level: 10 });
+    expect(fish.moves.map((m) => m.id)).toContain('bounce');
+    expect(fish.gn).toContain('karp-notch');
+    expect(bought.money).toBe(500);
+    const falls = at('t23-own', 6);
+    falls.party.push(fish);
+    setFlag(falls, 'karp-bought');
+    const party = choose(choose(falls, 'gn-23-falls', 'Watch.').run, 'gn-23-party', 'Welcome it back.').run;
+    expect(party.party.find((m) => m.uid === fish.uid)).toMatchObject({ speciesId: 'gyarados', fixedAbility: 'impossible-leap' });
+    expect(flagOf(party, 'karp-end')).toBe(4);
+  });
+
+  it('in Kanto the canon Magikarp Salesman is this scene', () => {
+    expect(content.events.get('cs-kanto-pewter-magikarp')!.choices.map((c) => c.label)).toEqual(['Buy it (₽500).', 'Offer ₽200.', 'No.']);
+  });
+});

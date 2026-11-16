@@ -240,6 +240,8 @@ describe('the dev campaign, start to finish', () => {
   it('clears two regions (stages, league, champion), raises the cap, then wins the run', () => {
     // Six strong Pokémon: level 100 teams know one-hit KO moves such as Fissure.
     let run = withoutDoors(powerUp(newRun('dev-full', 'dev')));
+    // Greenneedle gn.13's Flight North check can steal the party into its seven-room chain (tested in greenneedle3.test.ts): this walk is about the campaign's shape.
+    run.story.flags['ev:flight-checked'] = 1;
     for (let i = 1; i < content.balance.partyMax; i++) run.party.push({ ...structuredClone(run.party[0]!), uid: `extra${i}` });
     const firstRegion = run.regionOrder[0]!;
     const kinds: string[] = [];

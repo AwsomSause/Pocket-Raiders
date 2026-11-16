@@ -1585,6 +1585,11 @@
   "description": "When sent out, a random stat rises by two stages (never the same stat twice running, and never more than +4 in total per battle). Its first attack after entering goes first."
  },
  {
+  "id": "impossible-leap",
+  "name": "Impossible Leap",
+  "description": "When it survives a super-effective hit, its Attack and Speed rise by one stage. Once per battle."
+ },
+ {
   "id": "inherited-strength",
   "name": "Inherited Strength",
   "description": "Attack +1 whenever an ally faints, up to +2 in a battle."

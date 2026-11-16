@@ -162,6 +162,8 @@ export const PROMPTS: readonly PromptDef[] = [
   { id: 'brace-hold', kind: 'hold', label: 'Hold steady', hint: 'Hold, then let go when the ring is full.', targetMs: 1200, windowsMs: W(90, 180, 320) },
   { id: 'echo-rhythm', kind: 'rhythm', label: 'Echo the beat', hint: 'Press on each beat.', beatsMs: [600, 1100, 1600, 2300], windowsMs: W(80, 160, 280) },
   // Ideas W4 set pieces (map events with a `prompt` choice).
+  // Greenneedle gn.23: race the Magikarp up the bank (win or lose, it's delighted).
+  { id: 'bank-race', kind: 'timing', label: 'Race it!', hint: 'Press as the ring closes: jump the last rock as it jumps.', landMs: 1000, windowsMs: W(80, 160, 300) },
   { id: 'zip-line', kind: 'timing', label: 'Let go!', hint: 'Press as the ring closes: let go of the zip-line at the platform.', landMs: 1300, windowsMs: W(80, 160, 300) },
   { id: 'climb-rhythm', kind: 'rhythm', label: 'Climb!', hint: 'Press on each beat to reach for the next hold.', beatsMs: [500, 1000, 1500, 2000, 2500], windowsMs: W(90, 170, 300) },
   { id: 'dodge-tap', kind: 'tap', label: 'Dodge!', hint: 'Press the moment the mark appears to dodge the snow.', windowsMs: W(200, 340, 560), expireMs: 1100 },

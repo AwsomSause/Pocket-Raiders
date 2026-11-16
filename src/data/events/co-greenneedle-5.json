@@ -3020,6 +3020,1738 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-23-salesman",
+   "name": "The Honest Salesman",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "karp-bought",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "*A Magikarp on a cushion.* **\"Only ₽500! It's a secret kind!\"**\n\n**You:** \"It's a Magikarp.\"\n\n**Mr. Pettigrew, after a long pause:** \"...It is a Magikarp. It's a good one. It tries very hard. I'm tired of lying about it.\"\n\n*It's level 10, it knows Bounce, and it already likes people. It's worth about ₽200. He says so.*",
+   "choices": [
+    {
+     "label": "Buy it (₽500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "He's so surprised he throws in a Mystic Water. **Mr. Pettigrew:** \"Nobody ever just... buys it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "level": 10,
+        "moves": [
+         "bounce"
+        ],
+        "friendship": 30,
+        "mark": "karp-notch"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-bought",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer ₽200.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "**\"Fair. That's fair.\"** He takes it, and looks lighter for it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "level": 10,
+        "moves": [
+         "bounce"
+        ],
+        "friendship": 30,
+        "mark": "karp-notch"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-bought",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "He nods. The Magikarp flops in a way that may be a wave.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-a1",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "karp-notch"
+      }
+     ],
+     "notice": "*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "A waterfall, far off. You can only just hear it.\n\nA Magikarp in the river jumps at nothing. It barely clears the water. It lands on its side.\n\n**A fisher, on the bank:** \"That one? Been at it all spring. Daft fish.\"",
+   "choices": [
+    {
+     "label": "Go on! You can do it!",
+     "success": {
+      "text": "It jumps again at once. A little higher than the first try.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "karp-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something.",
+     "success": {
+      "text": "You look for something to give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "karp-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-23-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race it up the bank.",
+     "prompt": {
+      "id": "bank-race",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You beat it to the top rock by a fin. It doesn't care. It splashes you, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "karp-at"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It beats you to the top rock. It splashes you, delighted, and does it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "karp-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It watches you go. It jumps anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-ignored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "karp-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-a2",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "karp-2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "karp-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "karp-notch"
+      }
+     ],
+     "notice": "*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "The waterfall is closer. A notch in a tail fin flashes as something jumps. *That notch. It's the same one.*\n\nIt reaches the lower rocks. It hangs there a second, gasping, and slides back.\n\nThe fisher is back on the bank, pretending to watch his float.",
+   "choices": [
+    {
+     "label": "Go on! You can do it!",
+     "success": {
+      "text": "It jumps again at once. A little higher than the first try.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something.",
+     "success": {
+      "text": "You look for something to give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-23-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race it up the bank.",
+     "prompt": {
+      "id": "bank-race",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You beat it to the top rock by a fin. It doesn't care. It splashes you, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-2",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It beats you to the top rock. It splashes you, delighted, and does it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It watches you go. It jumps anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-ignored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-a3",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "karp-3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "karp-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "karp-notch"
+      }
+     ],
+     "notice": "*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "You can feel the waterfall now, a cold mist on your face.\n\nHalfway. It gets halfway. And it falls a long way. It lies in the pool, not moving. Then it moves.\n\n**The same fisher:** \"...It got halfway. I've stopped fishing this bit.\"",
+   "choices": [
+    {
+     "label": "Go on! You can do it!",
+     "success": {
+      "text": "It jumps again at once. A little higher than the first try.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something.",
+     "success": {
+      "text": "You look for something to give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-23-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race it up the bank.",
+     "prompt": {
+      "id": "bank-race",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You beat it to the top rock by a fin. It doesn't care. It splashes you, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-3",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It beats you to the top rock. It splashes you, delighted, and does it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It watches you go. It jumps anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-ignored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-a4",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-3",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "karp-4",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "karp-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "karp-notch"
+      }
+     ],
+     "notice": "*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "The waterfall fills half the sky. The noise is all there is.\n\nIt touches the lip of the falls. It *touches* it. Its fin slips.\n\nThe fisher has brought a friend. Neither of them says anything when it slips.",
+   "choices": [
+    {
+     "label": "Go on! You can do it!",
+     "success": {
+      "text": "It jumps again at once. A little higher than the first try.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-4",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something.",
+     "success": {
+      "text": "You look for something to give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-4",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-23-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race it up the bank.",
+     "prompt": {
+      "id": "bank-race",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You beat it to the top rock by a fin. It doesn't care. It splashes you, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-4",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It beats you to the top rock. It splashes you, delighted, and does it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-4",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It watches you go. It jumps anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-ignored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-4",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-a5",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-4",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "karp-5",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "karp-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "karp-bought",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "hasMark",
+       "key": "karp-notch"
+      }
+     ],
+     "notice": "*Your own Magikarp flops out of its Ball and toward the water. Nobody asked it to.*"
+    },
+    {
+     "id": "league",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "little-league-losing",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The children on the bank are your Little League team. One of them is mouthing: \"losing's how you learn.\"*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "The foot of the falls. Spray everywhere. Rainbows in it.\n\nIt makes the jump. It's up. It's at the top. It's still only a Magikarp. It looks down at you, and it can't believe it either.\n\nThe fisher, three children and a dog are on the bank. Nobody says anything. One of the children is holding their breath.",
+   "choices": [
+    {
+     "label": "Go on! You can do it!",
+     "success": {
+      "text": "It jumps again at once. A little higher than the first try.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-5",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it something.",
+     "success": {
+      "text": "You look for something to give it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-5",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-23-give"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Race it up the bank.",
+     "prompt": {
+      "id": "bank-race",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You beat it to the top rock by a fin. It doesn't care. It splashes you, delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-5",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It beats you to the top rock. It splashes you, delighted, and does it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-raced",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-5",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It watches you go. It jumps anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-ignored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-5",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-give",
+   "name": "The Magikarp That Could",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It watches your hands. It knows what giving looks like.",
+   "choices": [
+    {
+     "label": "A Berry.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ],
+     "success": {
+      "text": "It eats it on the spot, in one gulp, and jumps again at once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "payBerry"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-item-berry",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something to carry.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "holdsItem"
+      }
+     ],
+     "success": {
+      "text": "It takes it in its mouth, very carefully, and keeps it. It will carry it for the rest of the region.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "lendHeld",
+        "key": "karp"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-encouraged",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "karp-item-held",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nothing after all.",
+     "success": {
+      "text": "It jumps anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-falls",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-5",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "karp-falls",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "karp-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "The falls. The whole bank is there: the fisher, the children, the dog, people you have never seen.\n\nUp at the top, a Magikarp with a notch in its tail fin is looking down.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "Everyone holds their breath.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-falls",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "returnLent",
+        "key": "karp"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "karp-in-party",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "hasMark",
+          "key": "karp-notch"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-in-party",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-23-party"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-in-party",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "karp-encouraged",
+          "min": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-23-rise"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "karp-encouraged",
+          "min": 1,
+          "max": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-23-top"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "karp-encouraged",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "roll",
+            "key": "karp-evolved",
+            "n": 50
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "karp-evolved",
+            "min": 1,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "scene",
+              "key": "gn-23-hostile"
+             }
+            ]
+           },
+           {
+            "kind": "gn",
+            "op": "when",
+            "key": "karp-evolved",
+            "min": 0,
+            "max": 0,
+            "then": [
+             {
+              "kind": "gn",
+              "op": "scene",
+              "key": "gn-23-still"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-party",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "gyarados",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It was in your party all along. Your Magikarp, the notched one, the one from the cushion.\n\nIt goes up the falls with everyone on the bank cheering. The water goes white.\n\nIt evolves there, in your own team. Something very long looks down at you, with a notch in its tail.\n\nMr. Pettigrew is on the bank. He is weeping, and he doesn't care who sees.",
+   "choices": [
+    {
+     "label": "Welcome it back.",
+     "success": {
+      "text": "It lowers its great head to your hand.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "magikarp",
+        "to": "gyarados",
+        "mark": "karp-notch",
+        "ability": "impossible-leap"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-raced",
+        "min": 3,
+        "then": [
+         {
+          "kind": "statBoost",
+          "stat": "spe",
+          "percent": 5,
+          "who": {
+           "species": [
+            "gyarados"
+           ]
+          },
+          "until": "run"
+         }
+        ],
+        "text": "It learned to be quick from you: Speed +1, for good."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 4
+       },
+       {
+        "kind": "flag",
+        "key": "karp-pettigrew-saw",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Magikarp cleared the falls, and Mr. Pettigrew wept on the bank.",
+        "importance": 95
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-rise",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It clears the falls.\n\n*The water goes white. Something very long comes up out of it, and looks down, and it's got a notch in its tail.*\n\nThe whole bank roars.",
+   "choices": [
+    {
+     "label": "Hold out your hand.",
+     "success": {
+      "text": "It lowers its head to your hand.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-raced",
+        "min": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "gyarados"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "impossible-leap",
+          "boost": {
+           "stat": "spe",
+           "percent": 5
+          },
+          "mark": "karp-notch"
+         }
+        ],
+        "text": "It learned to be quick from you: Speed +1, for good."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "karp-raced",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "gyarados"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "impossible-leap",
+          "mark": "karp-notch"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The notched Magikarp cleared the falls, and chose you.",
+        "importance": 90
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go free.",
+     "success": {
+      "text": "It roars once, at the sky, and is gone upriver. The children talk about nothing else.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-top",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It clears the falls. It's a Magikarp at the top.\n\nIt looks at you, and waits to see whether you're coming.",
+   "choices": [
+    {
+     "label": "Climb up to it.",
+     "success": {
+      "text": "You climb the wet rocks to the top. It's still there when you get there.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "mark": "karp-notch"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "It flops, once. It may be a wave. Then it's gone upriver.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-hostile",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gyarados",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It evolves anyway, at the top, with nobody watching but you.\n\nIt's hostile. It looks straight at you. It remembers your face.",
+   "choices": [
+    {
+     "label": "Challenge it.",
+     "success": {
+      "text": "It comes down the falls at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "gyarados"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "gyarados"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1,
+         "ability": "impossible-leap",
+         "mark": "karp-notch"
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "karp-end",
+         "n": 2
+        }
+       ],
+       "exact": true,
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "karp-end",
+         "n": 2
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "karp-end",
+         "n": 2
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "It watches you all the way to the road.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-still",
+   "name": "The Falls",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "It's still jumping. It'll be jumping for a long time yet.\n\nIt doesn't look at you at all.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Behind you, the splash, and the splash, and the splash.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "karp-end",
+        "n": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-23-fisher",
+   "name": "The Fisher's Tale",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-falls",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "karp-at"
+    },
+    {
+     "kind": "flag",
+     "key": "karp-fisher",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "A fisher in a bar, a long way from that river, holding court.\n\n**Fisher:** \"...trained it myself, I did. Every morning. Daft fish, but it listened to me.\"\n\nIt's the fisher. He's telling it wrong.",
+   "choices": [
+    {
+     "label": "Let him tell it.",
+     "success": {
+      "text": "You let him. It's a good story his way too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-fisher",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "That's not how it went.",
+     "success": {
+      "text": "He looks at you for a long moment. **Fisher:** \"...No. No, it isn't.\" He buys you a drink.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "karp-fisher",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-pewter-magikarp",
+   "name": "Magikarp Salesman",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "karp-1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "karp-bought",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#5a86b0",
+    "effect": "none"
+   },
+   "intro": "*A Magikarp on a cushion.* **\"Only ₽500! It's a secret kind!\"**\n\n**You:** \"It's a Magikarp.\"\n\n**Mr. Pettigrew, after a long pause:** \"...It is a Magikarp. It's a good one. It tries very hard. I'm tired of lying about it.\"\n\n*It's level 10, it knows Bounce, and it already likes people. It's worth about ₽200. He says so.*",
+   "choices": [
+    {
+     "label": "Buy it (₽500).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "He's so surprised he throws in a Mystic Water. **Mr. Pettigrew:** \"Nobody ever just... buys it.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "level": 10,
+        "moves": [
+         "bounce"
+        ],
+        "friendship": 30,
+        "mark": "karp-notch"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-bought",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer ₽200.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "**\"Fair. That's fair.\"** He takes it, and looks lighter for it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magikarp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "level": 10,
+        "moves": [
+         "bounce"
+        ],
+        "friendship": 30,
+        "mark": "karp-notch"
+       },
+       {
+        "kind": "flag",
+        "key": "karp-bought",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "He nods. The Magikarp flops in a way that may be a wave.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.pewter.magikarp"
   }
  ]
 }

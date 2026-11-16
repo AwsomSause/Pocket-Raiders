@@ -30,7 +30,7 @@ export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void =
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -71,6 +71,9 @@ export const GnEffectSchema = z.object({
   // leave (never the last one in the party).
   .refine((e) => (e.op === 'markLast' ? !!e.key && !!e.species : true), { message: 'a markLast needs `key` and `species`' })
   .refine((e) => (e.op === 'dropMarked' ? !!e.key : true), { message: 'a dropMarked needs `key`' })
+  // gn.23. lendHeld: one held item (not a Berry) comes off the first party Pokémon holding one and is lent to story `key` (the Magikarp
+  // carries it for the region). returnLent: every item lent to `key` comes back.
+  .refine((e) => (e.op === 'lendHeld' || e.op === 'returnLent' ? !!e.key : true), { message: 'needs `key`' })
   .refine((e) => (e.op === 'hpCap' ? e.n !== undefined && e.n >= 1 && e.n <= 100 : true), { message: 'an hpCap needs `n` (1 to 100)' })
   .refine((e) => (e.op === 'partyHas' ? !!e.key && !!e.species : true), { message: 'a partyHas needs `key` and `species`' })
   // leadBoost: the lead's next battle opens with stat `type` at `n` stages ("the lead starts its next battle at -1 Speed").
@@ -100,8 +103,8 @@ export type GnEffect = z.infer<typeof GnEffectSchema>;
  *  - `noMoveType`: no party Pokémon knows a move of any of `types` (the mine's pickaxe is for a party with no Fighting, Steel or Ground move).
  *  - `hurtLead`: the first party Pokémon able to fight is at half its HP or less (gn.16: a win from behind).
  */
-export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead', 'heavy', 'markDown', 'hasMark']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
-  .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'holdsBerry' || c.test === 'hurtLead' || c.test === 'heavy' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
+export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead', 'heavy', 'markDown', 'hasMark', 'holdsItem']), key: Key.optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
+  .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'holdsBerry' || c.test === 'hurtLead' || c.test === 'heavy' || c.test === 'holdsItem' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
 export type GnCond = z.infer<typeof GnCondSchema>;
 
 /**
