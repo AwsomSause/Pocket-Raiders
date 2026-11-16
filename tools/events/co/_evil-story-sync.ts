@@ -113,6 +113,7 @@ const ROUTES: Record<string, { region: string; ranks: string[] }[]> = {
   skull: [{ region: 'alola', ranks: ['Numbskull', 'Grunt', 'Big Sib', 'Enforcer', 'Admin', `Guzma's Second`] }],
   aether: [{ region: 'alola', ranks: ['Volunteer', 'Employee', 'Researcher', 'Branch Deputy', 'Branch Chief', `The President's Favourite`] }],
   yell: [{ region: 'galar', ranks: ['Supporter', 'Yeller', 'Road Crew', 'Head of the Queue', `Marnie's Corner`, `Piers's Opening Act`] }],
+  star: [{ region: 'paldea', ranks: ['New Kid', 'Grunt', 'Squad Second', 'Sixth Boss', `Cassiopeia's Voice`, 'The One She Meets'] }],
 };
 
 const COUNTERS: Record<string, string> = {
@@ -238,5 +239,16 @@ galar('ps_yl_own', 'A Thousand Years', 'yl-final-choice', [['yl-own-blockj'], ['
 galar('ps_enc_quarry', 'Away Day: The Quarry', 'enc-away-1', [['enc-q-road'], ['enc-q-pitch'], ['enc-q-match']], 'A coach that does not fit, a generator, and floodlights that come on with a clunk.', '#2a2418');
 galar('ps_enc_island', 'Away Day: The Island', 'enc-away-2', [['enc-i-beach'], ['enc-i-match']], 'An island with one house, and one trainer.', '#1e3a40');
 galar('ps_enc_12k', 'Twelve Thousand', 'enc-twelve-thousand', [['enc-12k-street'], ['enc-12k-sky'], ['enc-12k-chairman'], ['enc-12k-brothers']], 'Spikemuth, with the shutters up.', '#1a141c');
+// Volume III, Paldea (evil-story-39/40): Act 3's door into the Academy, the four endings in the yard, Team Homeroom's Lunches.
+const paldea = (id: string, name: string, entry: string, layout: string[][], mood: string, tint = '#1a1a2a'): void =>
+  void chains.push({ id, name, entry, themeId: 'ghost-dark', tint, mood, team: 'star', start: 'opened', layout } as never);
+paldea('ps_st_file', 'Forty-One, One Friday', 'st-act3', [['st-file-corridor'], ['st-file-records'], ['st-file-torch']], 'The Academy at night: lockers, a records room, a torch.', '#1c2038');
+paldea('ps_st_plan', 'By Their Own Rules', 'st-final-choice', [['st-plan-giacomo'], ['st-plan-mela'], ['st-plan-atticus'], ['st-plan-ortega'], ['st-plan-eri'], ['st-plan-rule4'], ['st-plan-buyers'], ['st-plan-engines']], 'Five bonnets, under the clock, one after another.');
+paldea('ps_st_turn', 'By Post', 'st-turn-warn-2', [['st-turn-map'], ['st-turn-eri'], ['st-turn-post'], ['st-turn-buyers']], 'A folded map: five hills, five crosses.');
+paldea('ps_st_academy', 'Read in the Yard', 'st-final-choice', [['st-academy-mop'], ['st-academy-hours'], ['st-academy-apology'], ['st-academy-buyers']], 'A mop, leaned on a wall, and a box of seventy-one Fridays.');
+paldea('ps_st_own', 'In Daylight', 'st-final-choice', [['st-own-bonnet'], ['st-own-giacomo'], ['st-own-mela'], ['st-own-atticus'], ['st-own-ortega'], ['st-own-eri'], ['st-own-penny'], ['st-own-nascour'], ['st-own-rule5'], ['st-own-helmets'], ['st-own-engines'], ['st-own-building'], ['st-own-star']], 'A sixth bonnet, six battles, and the first hour.');
+paldea('ps_hr_lunch1', 'Eleven Places', 'hr-lunch-1', [['hr-l1-stall'], ['hr-l1-boiler'], ['hr-l1-nurse']], 'A map of eleven places a person eats alone.', '#1c2038');
+paldea('ps_hr_lunch2', 'Double Maths', 'hr-lunch-2', [['hr-l2-walk'], ['hr-l2-canteen']], 'A hill, a speaker, and a canteen at one o\'clock.', '#1c2038');
+paldea('ps_hr_pyjamas', 'Pyjamas', 'hr-pyjamas', [['hr-pj-count'], ['hr-pj-mop'], ['hr-pj-buyers']], 'The yard, and two hundred children in dressing gowns.');
 writeFileSync(pseudoFile, JSON.stringify({ category: 'evil-story', note: 'Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133) and the Plasma Holding Camp (SF130). Written by tools/events/co/_evil-story-sync.ts.', chains }, null, 1) + '\n');
 console.log(`pseudo/evil-story.json: ${chains.length} Hideouts`);

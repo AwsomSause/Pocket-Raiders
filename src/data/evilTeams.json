@@ -2005,7 +2005,19 @@
     "op": "base-blockade",
     "half": false
    },
-   "routes": []
+   "routes": [
+    {
+     "region": "paldea",
+     "ranks": [
+      "New Kid",
+      "Grunt",
+      "Squad Second",
+      "Sixth Boss",
+      "Cassiopeia's Voice",
+      "The One She Meets"
+     ]
+    }
+   ]
   },
   {
    "id": "marauders",

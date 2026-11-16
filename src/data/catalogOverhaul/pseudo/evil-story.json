@@ -1840,6 +1840,222 @@
      "enc-12k-brothers"
     ]
    ]
+  },
+  {
+   "id": "ps_st_file",
+   "name": "Forty-One, One Friday",
+   "entry": "st-act3",
+   "themeId": "ghost-dark",
+   "tint": "#1c2038",
+   "mood": "The Academy at night: lockers, a records room, a torch.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "st-file-corridor"
+    ],
+    [
+     "st-file-records"
+    ],
+    [
+     "st-file-torch"
+    ]
+   ]
+  },
+  {
+   "id": "ps_st_plan",
+   "name": "By Their Own Rules",
+   "entry": "st-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2a",
+   "mood": "Five bonnets, under the clock, one after another.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "st-plan-giacomo"
+    ],
+    [
+     "st-plan-mela"
+    ],
+    [
+     "st-plan-atticus"
+    ],
+    [
+     "st-plan-ortega"
+    ],
+    [
+     "st-plan-eri"
+    ],
+    [
+     "st-plan-rule4"
+    ],
+    [
+     "st-plan-buyers"
+    ],
+    [
+     "st-plan-engines"
+    ]
+   ]
+  },
+  {
+   "id": "ps_st_turn",
+   "name": "By Post",
+   "entry": "st-turn-warn-2",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2a",
+   "mood": "A folded map: five hills, five crosses.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "st-turn-map"
+    ],
+    [
+     "st-turn-eri"
+    ],
+    [
+     "st-turn-post"
+    ],
+    [
+     "st-turn-buyers"
+    ]
+   ]
+  },
+  {
+   "id": "ps_st_academy",
+   "name": "Read in the Yard",
+   "entry": "st-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2a",
+   "mood": "A mop, leaned on a wall, and a box of seventy-one Fridays.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "st-academy-mop"
+    ],
+    [
+     "st-academy-hours"
+    ],
+    [
+     "st-academy-apology"
+    ],
+    [
+     "st-academy-buyers"
+    ]
+   ]
+  },
+  {
+   "id": "ps_st_own",
+   "name": "In Daylight",
+   "entry": "st-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2a",
+   "mood": "A sixth bonnet, six battles, and the first hour.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "st-own-bonnet"
+    ],
+    [
+     "st-own-giacomo"
+    ],
+    [
+     "st-own-mela"
+    ],
+    [
+     "st-own-atticus"
+    ],
+    [
+     "st-own-ortega"
+    ],
+    [
+     "st-own-eri"
+    ],
+    [
+     "st-own-penny"
+    ],
+    [
+     "st-own-nascour"
+    ],
+    [
+     "st-own-rule5"
+    ],
+    [
+     "st-own-helmets"
+    ],
+    [
+     "st-own-engines"
+    ],
+    [
+     "st-own-building"
+    ],
+    [
+     "st-own-star"
+    ]
+   ]
+  },
+  {
+   "id": "ps_hr_lunch1",
+   "name": "Eleven Places",
+   "entry": "hr-lunch-1",
+   "themeId": "ghost-dark",
+   "tint": "#1c2038",
+   "mood": "A map of eleven places a person eats alone.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "hr-l1-stall"
+    ],
+    [
+     "hr-l1-boiler"
+    ],
+    [
+     "hr-l1-nurse"
+    ]
+   ]
+  },
+  {
+   "id": "ps_hr_lunch2",
+   "name": "Double Maths",
+   "entry": "hr-lunch-2",
+   "themeId": "ghost-dark",
+   "tint": "#1c2038",
+   "mood": "A hill, a speaker, and a canteen at one o'clock.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "hr-l2-walk"
+    ],
+    [
+     "hr-l2-canteen"
+    ]
+   ]
+  },
+  {
+   "id": "ps_hr_pyjamas",
+   "name": "Pyjamas",
+   "entry": "hr-pyjamas",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2a",
+   "mood": "The yard, and two hundred children in dressing gowns.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "hr-pj-count"
+    ],
+    [
+     "hr-pj-mop"
+    ],
+    [
+     "hr-pj-buyers"
+    ]
+   ]
   }
  ]
 }
