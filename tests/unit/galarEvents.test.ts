@@ -25,7 +25,7 @@ describe('Galar events', () => {
       const text = JSON.stringify(content.events.get(id));
       for (const m of text.matchAll(/"(?:species|from|to)":("[a-z0-9-]+"|\[[^\]]*\])/g)) for (const s of m[1]!.match(/[a-z0-9-]+/g) ?? []) expect(content.species.has(s), `${id}: ${s}`).toBe(true);
       for (const m of text.matchAll(/"bossId":"([a-z0-9-]+)"/g)) expect(content.bosses.has(m[1]!), `${id}: ${m[1]}`).toBe(true);
-      for (const m of text.matchAll(/"kind":"item","id":"([a-z0-9-]+)"/g)) expect(content.items.has(m[1]!), `${id}: ${m[1]}`).toBe(true);
+      for (const m of text.matchAll(/"kind":"item","id":"([a-z0-9-]+)"/g)) expect(content.items.has(m[1]!) || content.catalog.has(m[1]!), `${id}: ${m[1]}`).toBe(true);
     }
   });
 });

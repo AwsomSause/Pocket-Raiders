@@ -1,7 +1,7 @@
 // Beta 0.6 workstream 18: Canon Spaces in a run. Puts the town menu's events on the stage map and records a space as
 // finished when its event is played. Own seeded stream; runs without run.expansion.canon (setting off, older saves) are untouched.
 
-import { canonKanto } from '../../data/expansion';
+import { canonKanto, canonKantoPlaced } from '../../data/expansion';
 import type { Content } from '../contentSchema';
 import { Rng, hashSeed } from '../rng';
 import { currentRegion } from '../regions';
@@ -9,6 +9,7 @@ import type { RunState } from '../state';
 import { rememberFlightBug } from '../instrumentality/flightNorth';
 import { ghostReturnEvent, markRivalReturned, rivalReturnEvent } from './canonSaffron';
 import { enterCanonSlot, finishCanonSpace } from './canonSpaces';
+import { addCanonFollowups, nodesForSpace } from './canonKantoPlaced';
 
 /** The story-flag key an event writes for a canon flag: `kanto.flock.seen` -> `ev:kanto-flock-seen`. */
 const evKey = (flag: string) => `ev:${flag.replace(/\./g, '-')}`;
@@ -45,6 +46,7 @@ export function addCanonStops(content: Content, run: RunState): void {
   if (slot) placeCanonSlot(content, run, slot);
   const interlude = run.expansion?.canon && currentRegion(content, run).id === 'kanto' ? canonInterludeOf(run) : null;
   if (interlude) placeCanonSlot(content, run, interlude);
+  addCanonFollowups(content, run, canonKantoPlaced);
 }
 
 function placeCanonSlot(content: Content, run: RunState, slot: string): void {
@@ -67,8 +69,8 @@ function placeCanonSlot(content: Content, run: RunState, slot: string): void {
     const event = canonEventFor(content, id, slot);
     if (!event) continue; // a space whose play-through is not built yet is simply not offered
     if (stage.map.nodes.some((n) => n.sides.some((s) => s.eventId === event.id))) continue;
-    const node = rng.pick(candidates);
-    node.sides.push({ id: `canon-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: event.id });
+    // Catalog overhaul: a placed space sits in its doc window (a must-see one on every node of its home column); the rest keep a random node.
+    for (const node of nodesForSpace(stage, canonKanto.spaces.find((x) => x.id === id), rng)) node.sides.push({ id: `canon-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: event.id });
   }
 }
 
@@ -145,5 +147,6 @@ export function failCanonRaid(content: Content, run: RunState, canon: string): v
   if (canon !== 'cs.kanto.vermilion.kaiju' || !run.stage) return;
   const market = [...content.events.values()].find((e) => e.canon === 'cs.kanto.vermilion.market');
   if (!market) return;
-  for (const n of run.stage.map.nodes) for (const sd of n.sides) if (sd.eventId === market.id) sd.used = true;
+  // Catalog overhaul: the stop stays, and the market's own scene shows the shutters and the sign ("BACK WHEN IT'S GONE").
+  run.story.flags['ev:kanto-kaiju-lost'] = 1;
 }

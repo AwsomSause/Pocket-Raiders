@@ -4,7 +4,7 @@
 
 import type Phaser from 'phaser';
 import type { RunEvent } from '../../core/run';
-import { defaultMoment, planMoment } from '../../core/cinematic/moments';
+import { defaultMoment, planMoment, type MomentPlan } from '../../core/cinematic/moments';
 import { GALAR_STADIUM, crowdReaction, pickCameraCut, type CrowdBeat } from '../../core/galarStadium';
 import { fillHype, pickHype, type GalarScope, type HypeMoment, type HypeSpeaker, type HypeTrigger } from '../../core/galarCrowd';
 import { GAME_WIDTH, textStyle } from '../theme';
@@ -61,6 +61,8 @@ export interface StadiumHooks {
     /** The foe's active Pokémon HP share (0-1). */
     foeShare: () => number;
   };
+  /** New UI: plays a moment as the mock-ups' cutscene card instead of the canvas card (`castId` is the picture of who is shown, '' for nobody). */
+  card?: (plan: MomentPlan, cut: { name: string; role: string; line: string; castId: string }) => Promise<void>;
   art?: {
     sprite: (assetId: string, x: number, y: number, scale: number) => Phaser.GameObjects.GameObject | null;
     preload: (ids: readonly string[]) => Promise<void>;
@@ -205,6 +207,18 @@ export class StadiumDirector {
     const spec = defaultMoment('stadiumCut', `stadium-${cut.id}`);
     spec.phases = { situation: 150, anticipation: 200, moment: cut.durationMs - 700 > 200 ? cut.durationMs - 700 : 400, reaction: 200, transition: 150 };
     const plan = planMoment(spec, { reduceMotion: this.h.reduceMotion(), disableAnimations: false, seen: new Set() });
+    if (this.h.card) {
+      // New UI: the camera cut is the cutscene card; a close-up shows who it is of.
+      const cast = this.h.art?.cast();
+      // A crowd shot has nobody of its own: the Champion hosting the stadium fronts it, as in the mock-up's stadium cut-in.
+      const names = this.h.hype?.facts() ?? {};
+      const who = cut.id === 'opponent-closeup' ? { name: names.foe || cut.label, role: 'Galar Stadium', castId: cast?.opponent ?? '' }
+        : cut.id === 'rival-silhouette' ? { name: names.rival || cut.label, role: 'Rival', castId: cast?.rival ?? '' }
+        : { name: this.h.host, role: 'Galar Champion', castId: cast?.host ?? '' };
+      await this.h.card(plan, { ...who, line: cut.caption });
+      await this.commentate(cut.id, beat);
+      return;
+    }
     if (plan.play) {
       try {
         drawCutArt(this.scene, cut.id, `${this.h.battleId}:${this.turn}`, cut.durationMs, !this.h.reduceMotion(), this.kit());
@@ -257,9 +271,11 @@ export class StadiumDirector {
         if (round.final) spec.phases = { situation: 600, anticipation: 1000, moment: 1400, reaction: 800, transition: 500 };
         const plan = planMoment(spec, { reduceMotion: this.h.reduceMotion(), disableAnimations: false, seen: new Set() });
         this.h.setIntensity(round.final ? 1.2 : 1.05);
-        await playMoment(this.scene, spec, plan, { title: round.final ? 'THE FINAL' : round.name, subtitle: `vs ${round.opponent}` });
+        // New UI: the round's opening is one cutscene card (the opponent, the round as the plate, their words).
+        if (this.h.card) await this.h.card(plan, { name: round.opponent, role: round.final ? 'The Final' : round.name, line: round.intro, castId: round.sprite ?? '' });
+        else await playMoment(this.scene, spec, plan, { title: round.final ? 'THE FINAL' : round.name, subtitle: `vs ${round.opponent}` });
         this.h.crowdSound?.(round.final ? 'crowd.roar' : 'crowd.swell', round.final ? 5 : 3);
-        await playIntroCard(this.scene, { tag: round.final ? 'THE FINAL' : round.name.toUpperCase(), name: round.opponent, style: round.style ?? '', line: round.intro, sprite: round.sprite ?? '', final: round.final }, `${this.h.battleId}:${round.round}`, !this.h.reduceMotion(), (x, y) => (round.sprite ? this.h.portrait?.(round.sprite, x, y) ?? null : null));
+        if (!this.h.card) await playIntroCard(this.scene, { tag: round.final ? 'THE FINAL' : round.name.toUpperCase(), name: round.opponent, style: round.style ?? '', line: round.intro, sprite: round.sprite ?? '', final: round.final }, `${this.h.battleId}:${round.round}`, !this.h.reduceMotion(), (x, y) => (round.sprite ? this.h.portrait?.(round.sprite, x, y) ?? null : null));
       }
       const reporter = (text: string): Promise<void> => (this.h.announce ? this.h.announce(text) : this.h.say(text));
       await reporter(round.final ? `Ladies and gentlemen, this is it: the final! ${round.opponent} stands in the champion's circle and the whole stadium is on its feet!` : `${round.name}! Next up: ${round.opponent}${round.style ? `, ${round.style}` : ''}. The crowd is getting loud!`);

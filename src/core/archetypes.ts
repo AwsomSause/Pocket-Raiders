@@ -120,9 +120,21 @@ export function runArchetype(content: Content, run: { archetypeId: string; perkE
 }
 
 /** The run's whole perk list (trainer plus signature choices), or undefined for an unknown trainer. */
-export function runPerks(content: Content, run: { archetypeId: string; perkEffects?: ArchetypeModifier[]; itemCounters?: Record<string, number> }): Perks | undefined {
+export function runPerks(content: Content, run: { archetypeId: string; perkEffects?: ArchetypeModifier[]; itemCounters?: Record<string, number>; passives?: Record<string, number> }): Perks | undefined {
   const archetype = content.archetypes.get(run.archetypeId);
-  return archetype ? resolveCounterPerks([...archetype.modifiers, ...(run.perkEffects ?? [])], run) : undefined;
+  return archetype ? resolveCounterPerks([...archetype.modifiers, ...(run.perkEffects ?? []), ...passiveItemModifiers(content, run.passives)], run) : undefined;
+}
+
+/** Modifiers from run-long items that work like a trainer perk (`runModifier`, e.g. Tobias's Satchel), once per copy. */
+function passiveItemModifiers(content: Content, passives: Record<string, number> | undefined): ArchetypeModifier[] {
+  if (!passives) return [];
+  const out: ArchetypeModifier[] = [];
+  for (const [id, copies] of Object.entries(passives)) {
+    const effect = content.catalog.get(id)?.effect;
+    if (effect?.kind !== 'perk' || effect.lasts.for !== 'run') continue;
+    for (const p of effect.perks) if (p.perk === 'runModifier') for (let i = 0; i < copies; i++) out.push(...p.modifiers);
+  }
+  return out;
 }
 
 /** The starting trainers (Beta 0.5): Red, Blue, Green, Hilda and Nate. Every other archetype stays in the data for old saves and stats, but cannot be picked. */

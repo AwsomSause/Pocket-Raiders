@@ -92,3 +92,13 @@
 
 @keyframes rx-pop{0%{scale:.2;opacity:0}60%{scale:1.15;opacity:1}100%{scale:1}}
 .rx .rx-pop{animation:rx-pop .45s ease-out both}.rx.calm .rx-pop{animation:none}
+@keyframes rx-more{from{translate:0 0}to{translate:0 3px}}
+.rx .rx-more{animation:rx-more .6s ease-in-out infinite alternate}.rx.calm .rx-more{animation:none}
+/* The debug panel (F2, mock-up overlay `debug`): a monospace window at the top left; the chosen tag's tool scrolls under the tags. */
+.rx .dbg{left:20px;top:20px;width:380px;display:flex;flex-direction:column;gap:8px;font-family:monospace}
+.rx .dbg[hidden]{display:none}
+.rx .dbg .tg{cursor:pointer}
+.rx .dbg-tool{max-height:280px;overflow:auto;font:12px/1.4 monospace;padding-right:4px}
+.rx .dbg-tool pre{margin:0;white-space:pre-wrap;font:inherit;user-select:text}
+.rx .dbg-tool h3{margin:8px 0 4px;font-size:12px;color:var(--acc)}
+.rx .dbg-tool button,.rx .dbg-tool select,.rx .dbg-tool input{font:12px monospace;margin:2px 2px 2px 0;max-width:100%}

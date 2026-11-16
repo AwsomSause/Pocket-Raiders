@@ -122,6 +122,8 @@ export function hatchEgg(content: Content, run: RunState, egg: Egg): PokemonInst
   mon.hatched = true;
   mon.eggTier = tier.id;
   mon.friendship = Math.max(mon.friendship, HATCH_FRIENDSHIP, tier.friendship);
+  // Catalog Overhaul new events: an Egg warmed under a wing (eggWarm) is born fonder of you.
+  mon.friendship = Math.min(255, mon.friendship + eggBondAtBirth(run, egg.uid));
   if (egg.hidden && content.species.get(egg.speciesId)?.abilities.hidden) mon.abilitySlot = -1;
   // Breeding Nursery (S49): the ability you picked beforehand.
   const picked = nurseryAbilitySlot(run, egg.uid);
@@ -152,6 +154,8 @@ export function tickEggs(content: Content, run: RunState, unit: Egg['unit']): Po
   if (run.eggs.length === 0) return [];
   const hatched: PokemonInstance[] = [];
   const warmth = eggWarmth(content, run);
+  // Marigold's Shell: an Egg counting now hatches one step sooner (with at least one step passed: this one).
+  const sooner = eggsHatchSooner(content, run);
   const kept: Egg[] = [];
   for (const egg of run.eggs) {
     let left = egg.unit === unit ? egg.left - 1 : egg.left;
@@ -163,7 +167,7 @@ export function tickEggs(content: Content, run: RunState, unit: Egg['unit']): Po
         left -= 1;
       }
     }
-    if (left > 0) {
+    if (left > (sooner && egg.unit === unit ? 1 : 0)) {
       kept.push({ ...egg, left, heat });
       continue;
     }
@@ -186,7 +190,24 @@ export function eggWarmth(content: Content, run: Pick<RunState, 'party'> & MapIt
   return warm + (hasPerk(content, run, 'ovalCharm') ? EGGS.warmPerStep : 0);
 }
 
+/** Marigold's Shell: every Egg hatches one battle (or stage) sooner. */
+export const eggsHatchSooner = (content: Content, run: MapItemRun): boolean => hasPerk(content, run, 'eggSooner');
+
 /** A night at camp (or any warm spot): every Egg gets `steps` closer to hatching, but never hatches by it (it keeps at least 1 left). Returns how many Eggs moved. */
+/** Run counter for the extra friendship an Egg's Pokémon is born with (co/neRules.ts eggWarm). */
+export const eggBondKey = (uid: string): string => `egg-bond:${uid}`;
+
+/** Extra friendship the Pokémon from this Egg is born with; the mark is cleared. */
+export function eggBondAtBirth(run: RunState, eggUid: string): number {
+  const key = eggBondKey(eggUid);
+  const n = run.itemCounters?.[key] ?? 0;
+  if (n > 0) {
+    const { [key]: _gone, ...rest } = run.itemCounters ?? {};
+    run.itemCounters = rest;
+  }
+  return n;
+}
+
 export function warmEggs(run: RunState, steps = 1): number {
   let moved = 0;
   run.eggs = run.eggs.map((egg) => {
@@ -207,15 +228,16 @@ export function eggProgress(egg: Egg): number {
 export const eggRevealed = (egg: Egg): boolean => egg.kind !== 'mystery' || eggProgress(egg) >= EGGS.revealAt;
 
 /** "Rare Egg (Event) [###-----] Hatches in 3 stages" with a small progress bar, for menus. */
-export function eggLabel(egg: Egg): string {
+export function eggLabel(egg: Egg, sooner = false): string {
   const filled = Math.round(eggProgress(egg) * 8);
   const bar = `[${'#'.repeat(filled)}${'-'.repeat(8 - filled)}]`;
   const name = eggRevealed(egg) ? `${eggTier(egg.tier).name} Egg` : 'Mystery Egg';
-  return `${name} (${egg.source}) ${bar} ${eggStatus(egg)}`;
+  return `${name} (${egg.source}) ${bar} ${eggStatus(egg, sooner)}`;
 }
 
-/** "Hatches after 3 more battles" for menus. */
-export function eggStatus(egg: Egg): string {
+/** "Hatches after 3 more battles" for menus (`sooner`: Marigold's Shell is held, one fewer). */
+export function eggStatus(egg: Egg, sooner = false): string {
   const what = egg.unit === 'battle' ? 'battle' : 'stage';
-  return egg.left <= 1 ? `Hatches after the next ${what}` : `Hatches in ${egg.left} ${what}s`;
+  const left = sooner ? Math.max(1, egg.left - 1) : egg.left;
+  return left <= 1 ? `Hatches after the next ${what}` : `Hatches in ${left} ${what}s`;
 }

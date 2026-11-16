@@ -14,9 +14,9 @@ export function mon(file: string, k = 3, cls = '', play = false): string {
   return `<i class="an ${cls}" data-a="${file}" data-k="${k}"${play ? ' data-play' : ''} style="width:${a.sw * k}px;height:${a.sh * k}px"><b style="left:${ox * k}px;top:${oy * k}px;width:${w * k}px;height:${h * k}px;background-image:url(${rxUrl(file + '.png')});background-position:${-x * k}px ${-y * k}px;background-size:${a.w * k}px ${a.h * k}px"></b></i>`;
 }
 /** A sprite fitted into a square of `size`. */
-export function mini(file: string, size = 48, cls = ''): string {
+export function mini(file: string, size = 48, cls = '', play = false): string {
   const a = rxAtlas(file);
-  return a ? mon(file, size / Math.max(a.sw, a.sh), cls) : '';
+  return a ? mon(file, size / Math.max(a.sw, a.sh), cls, play) : '';
 }
 /** A sprite scaled to a height. */
 export function tall(file: string, px: number, cls = ''): string {
@@ -58,6 +58,8 @@ export const TX = (t: string, name = '', st = ''): string => `<div class="abs tx
 export const W = (h: string, st = '', c = '', attr = ''): string => `<div class="win ${c}" style="${st}"${attr}>${h}</div>`;
 /** A button. `t` is HTML; `sm` is the small note at its right. */
 export const B = (t: string, on: boolean, st = '', sm = '', attr = ''): string => `<div class="btn${on ? ' on' : ''}" style="${st}"${attr}>${t}${sm ? `<small>${sm}</small>` : ''}</div>`;
+/** A sheet of paper (receipts, ledgers, notebook pages). */
+export const paper = (h: string, st = ''): string => `<div style="background:var(--pa);color:var(--pai);padding:16px 18px;box-shadow:0 0 0 3px var(--l),6px 6px 0 #0005;${st}">${h}</div>`;
 export const facts = (f: readonly (readonly [string, string])[] = []): string => f.map(([a, b]) => `<div class="row sm"><span class="grow">${esc(a)}</span><b>${esc(b)}</b></div>`).join('');
 /** `data-act` attribute: a click calls the view's handler `name` with `arg`. */
 export const act = (name: string, arg: string | number = ''): string => ` data-act="${name}" data-arg="${esc(arg)}"`;

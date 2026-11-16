@@ -33,6 +33,14 @@ export function installPortraitRotate(game: Phaser.Game): void {
     }
     return false;
   };
+  // Centring reads the canvas's box on screen, which is the turned one (width and height swapped): while turned,
+  // centre from the layout sizes instead, or the game sits off to one side and is cut off.
+  const origCenter = sm.updateCenter.bind(sm);
+  sm.updateCenter = () => {
+    if (!rotated) return origCenter();
+    canvas.style.marginLeft = `${Math.floor((parent.clientWidth - canvas.offsetWidth) / 2)}px`;
+    canvas.style.marginTop = `${Math.floor((parent.clientHeight - canvas.offsetHeight) / 2)}px`;
+  };
   const origX = sm.transformX.bind(sm), origY = sm.transformY.bind(sm);
   sm.transformX = (pageX: number) => (rotated && stash ? ((stash.x - canvas.offsetLeft) * GAME_WIDTH) / Math.max(1, canvas.offsetWidth) : origX(pageX));
   sm.transformY = (pageY: number) => (rotated && stash ? ((stash.y - canvas.offsetTop) * (game.scale.gameSize.height)) / Math.max(1, canvas.offsetHeight) : origY(pageY));

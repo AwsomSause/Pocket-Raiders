@@ -1,0 +1,221 @@
+{
+ "category": "kanto-canon",
+ "note": "Kanto Canon Spaces with a Pseudo Stage shape (KANTO_PLACED_*.md).",
+ "chains": [
+  {
+   "id": "ps_cs_kanto_viridian_diglett",
+   "name": "Diglett's Cave",
+   "entry": "cs-kanto-viridian-diglett",
+   "themeId": "normal-ground",
+   "tint": "#3f6b3a",
+   "mood": "a hundred small throats clearing"
+  },
+  {
+   "id": "ps_cs_kanto_lavender_tower",
+   "name": "Pokémon Tower",
+   "entry": "cs-kanto-lavender-tower",
+   "themeId": "ghost-dark",
+   "tint": "#4a3a66",
+   "mood": "candles in every window"
+  },
+  {
+   "id": "ps_cs_kanto_lavender_rocktunnel",
+   "name": "Rock Tunnel",
+   "entry": "cs-kanto-lavender-rocktunnel",
+   "themeId": "ground-rock",
+   "tint": "#4a3a66",
+   "mood": "no light at all"
+  },
+  {
+   "id": "ps_cs_kanto_lavender_powerplant",
+   "name": "Abandoned Power Plant",
+   "entry": "cs-kanto-lavender-powerplant",
+   "themeId": "electric-steel",
+   "tint": "#4a3a66",
+   "mood": "windows out, lights on"
+  },
+  {
+   "id": "ps_cs_kanto_cinnabar_mansion",
+   "name": "Pokémon Mansion",
+   "entry": "cs-kanto-cinnabar-mansion",
+   "themeId": "fire-poison",
+   "tint": "#8a3a2a",
+   "mood": "a great house with no roof"
+  },
+  {
+   "id": "ps_cs_kanto_cinnabar_seafoam",
+   "name": "Seafoam Islands",
+   "entry": "cs-kanto-cinnabar-seafoam",
+   "themeId": "water-ice",
+   "tint": "#8a3a2a",
+   "mood": "the sea going in at one end and out the other, fast"
+  },
+  {
+   "id": "ps_cs_kanto_cinnabar_newisland",
+   "name": "New Island",
+   "entry": "cs-kanto-cinnabar-newisland",
+   "themeId": "psychic-dark",
+   "tint": "#8a3a2a",
+   "mood": "a thunderstorm that never ends"
+  },
+  {
+   "id": "ps_cs_kanto_indigo_road",
+   "name": "Victory Road",
+   "entry": "cs-kanto-indigo-road",
+   "themeId": "ground-rock",
+   "tint": "#3a3f7a",
+   "mood": "eight lights coming on, one at a time"
+  },
+  {
+   "id": "ps_cs_kanto_cerulean_cave",
+   "name": "Cerulean Cave",
+   "entry": "cs-kanto-cerulean-cave",
+   "themeId": "psychic-dark",
+   "tint": "#2f5f8a",
+   "mood": "still water, and something standing in it"
+  },
+  {
+   "id": "ps_cs_kanto_viridian_center",
+   "name": "The Pokémon Center Siege",
+   "entry": "cs-kanto-viridian-center",
+   "themeId": "normal-poison",
+   "tint": "#3f6b3a",
+   "mood": "glass on the floor, and the machine still humming in the dark"
+  },
+  {
+   "id": "ps_cs_kanto_pewter_afterhours",
+   "name": "The Museum After Hours",
+   "entry": "cs-kanto-pewter-afterhours",
+   "themeId": "water-rock",
+   "tint": "#6b6257",
+   "mood": "moonlight through the roof, and something old turning over"
+  },
+  {
+   "id": "ps_cs_kanto_vermilion_capsized",
+   "name": "The Capsized Liner",
+   "entry": "cs-kanto-vermilion-capsized",
+   "themeId": "water-dark",
+   "tint": "#2f5d73",
+   "mood": "the chandelier standing up out of the floor, and water at every porthole"
+  },
+  {
+   "id": "ps_cs_kanto_celadon_bridgerun",
+   "name": "The Bridge Run",
+   "entry": "cs-kanto-celadon-bridgerun",
+   "themeId": "normal-water",
+   "tint": "#3d7a4a",
+   "mood": "twenty headlamps in the rain"
+  },
+  {
+   "id": "ps_cs_kanto_fuchsia_ranch",
+   "name": "The Big P Ranch",
+   "entry": "cs-kanto-fuchsia-ranch",
+   "themeId": "normal-fire",
+   "tint": "#7a3d6b",
+   "mood": "a herd of Tauros moving like weather"
+  },
+  {
+   "id": "ps_cs_kanto_cinnabar_wave",
+   "name": "The Big Wave",
+   "entry": "cs-kanto-cinnabar-wave",
+   "themeId": "water-ice",
+   "tint": "#8a3a2a",
+   "mood": "the sea going back a long way, and then standing up"
+  },
+  {
+   "id": "ps_cs_kanto_route_canyon",
+   "name": "The Fossil Rush",
+   "entry": "cs-kanto-route-canyon",
+   "themeId": "rock-ghost",
+   "tint": "#5a6b3a",
+   "mood": "eyes opening in rows in the dark, and a shaft of daylight far above"
+  },
+  {
+   "id": "ps_cs_kanto_route_buried",
+   "name": "The Buried City",
+   "entry": "cs-kanto-route-buried",
+   "themeId": "psychic-ghost",
+   "tint": "#5a6b3a",
+   "mood": "a valley with two giants in it, arguing in the rain"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network",
+   "name": "The Sevii Islands",
+   "entry": "cs-kanto-sevii-network",
+   "themeId": "water-grass",
+   "tint": "#8a3a2a",
+   "mood": "seven islands in a warm sea, and a ferry that does three and the first",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_route_transfer",
+   "name": "Inside the Machine",
+   "entry": "cs-kanto-route-transfer",
+   "themeId": "electric-psychic",
+   "tint": "#5a6b3a",
+   "mood": "corridors of steady light, and Poké Balls drifting along a rail like a slow river"
+  },
+  {
+   "id": "ps_cs_kanto_route_bikerace",
+   "name": "The Bicycle Race",
+   "entry": "cs-kanto-route-bikerace",
+   "themeId": "normal-flying",
+   "tint": "#5a6b3a",
+   "mood": "bunting, a start line, and a hill that goes on"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_two",
+   "name": "Two Island",
+   "entry": "cs-kanto-sevii-network-sail-two",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "a stall, a cottage that smells of mushrooms, and a game corner with three machines",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_three",
+   "name": "Three Island",
+   "entry": "cs-kanto-sevii-network-sail-three",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "one street, and a forest of berries beyond it",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_four",
+   "name": "Four Island",
+   "entry": "cs-kanto-sevii-network-sail-four",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "cold air off a cave mouth, and an old couple on a bench",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_five",
+   "name": "Five Island",
+   "entry": "cs-kanto-sevii-network-sail-five",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "a shed on a headland, a cave that counts, and a rock offshore",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_six",
+   "name": "Six Island",
+   "entry": "cs-kanto-sevii-network-sail-six",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "a door with no handle, and grass cut into a picture",
+   "start": "opened"
+  },
+  {
+   "id": "ps_cs_kanto_sevii_network_sail_seven",
+   "name": "Seven Island",
+   "entry": "cs-kanto-sevii-network-sail-seven",
+   "themeId": "water-grass",
+   "tint": "#2a6b6b",
+   "mood": "a tower with a clock, a sea cave, and a canyon",
+   "start": "opened"
+  }
+ ]
+}

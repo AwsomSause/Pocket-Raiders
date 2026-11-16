@@ -311,7 +311,7 @@
       },
       "exit": "win the executive or expose",
       "countsAsStage": false,
-      "status": "limited",
+      "status": "disabled",
       "trainerClass": "veteran",
       "intro": "Cold air, hum of machines, and a lot of guards.",
       "boss": {
@@ -676,6 +676,14 @@
       "themeId": "fighting-dragon",
       "tint": "#4a2a1a",
       "mood": "arena"
+    },
+    {
+      "id": "ps_rival_race",
+      "name": "The Race for First Pick",
+      "entry": "rival-race",
+      "themeId": "normal-grass",
+      "tint": "#2a2a14",
+      "mood": "open field"
     }
   ]
 }

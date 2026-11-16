@@ -1,0 +1,80 @@
+[
+  {
+    "id": "marigolds-shell",
+    "name": "Marigold's Shell",
+    "family": "Gifts from people",
+    "description": "Every Egg hatches one battle or stage sooner (at least one still has to pass)",
+    "rarity": "rare",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "shoal-shell",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "run"
+      },
+      "perks": [
+        {
+          "perk": "eggSooner"
+        }
+      ]
+    }
+  },
+  {
+    "id": "tobias-satchel",
+    "name": "Tobias's Satchel",
+    "family": "Gifts from people",
+    "description": "Each Pokémon can hold 2 more different items for the rest of the run",
+    "rarity": "rare",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "loot-sack",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "run"
+      },
+      "perks": [
+        {
+          "perk": "runModifier",
+          "modifiers": [
+            {
+              "kind": "itemSlotOffset",
+              "value": 2
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "lindens-notebook",
+    "name": "Linden's Notebook",
+    "family": "Gifts from people",
+    "description": "In the next region, the map shows the wild Pokémon you can walk to next, with their moves",
+    "rarity": "rare",
+    "stacksOn": "player",
+    "max": 1,
+    "how": "passive",
+    "icon": "journal",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "perk",
+      "lasts": {
+        "for": "run"
+      },
+      "perks": [
+        {
+          "perk": "wildMoves"
+        }
+      ]
+    }
+  }
+]

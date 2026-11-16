@@ -1,0 +1,1667 @@
+{
+ "catalogOverhaul": "rivals",
+ "override": true,
+ "remove": [
+  "living-rival-clash-retired"
+ ],
+ "events": [
+  {
+   "id": "rq-r19-champion",
+   "name": "The Rival Who Became Champion",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "leagueEve": true
+    },
+    {
+     "kind": "rivalState",
+     "leadAtLeast": 3
+    }
+   ],
+   "priority": 85,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2410",
+    "effect": "glint"
+   },
+   "intro": "The League doors. A steward bows.\nSteward: \"The Champion is expecting you.\"\nThe portrait above the doors is new. The paint is barely dry. It is {rival}.\n\nOn the way in, the screens in the hall play the Rival Reports you never opened, one second each.\n{rival} winning. {rival} training in the rain. {rival} asleep on a bench with their team piled on top of them.\n\nThe last one was never sent. {rival} in the chair, alone, in an empty hall, holding a cup they have not drunk from.\n\nThen the doors open, and there they are, in the chair.\n{rival}: \"{say champion||champion-chaser::Told you. Took the chair. Kept it warm.}\"",
+   "choices": [
+    {
+     "label": "\"Let's go.\"",
+     "success": {
+      "text": "{rival}: \"That's the only thing you could have said.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "quest": {
+        "counter": "lead"
+       },
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r19-title"
+         ]
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r19-photo"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Congratulations.\"",
+     "success": {
+      "text": "{rival}: \"Don't.\"\n{rival}: \"Not until you've tried to take it.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "quest": {
+        "counter": "lead"
+       },
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r19-title"
+         ]
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r19-photo"
+         ]
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"You don't look happy.\"",
+     "requires": [
+      {
+       "kind": "rivalQuest",
+       "feeling": {
+        "who": "main",
+        "key": "friendship",
+        "atLeast": 6
+       }
+      }
+     ],
+     "success": {
+      "text": "{rival} looks at you for a long time.\n{rival}: \"It's lonely up here. I didn't know.\"\n\nThey stand. Their ace is already at their side. So is yours. Neither of you remembers calling them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 3,
+       "quest": {
+        "aceFirst": true
+       },
+       "win": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r19-title"
+         ]
+        }
+       ],
+       "lose": [
+        {
+         "kind": "rivalQuest",
+         "openFirst": [
+          "rq-r19-photo"
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r19-title",
+   "name": "The Rival Who Became Champion: The Chair",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2410",
+    "effect": "confetti"
+   },
+   "intro": "Their last Pokémon goes down. {rival} kneels beside it for a moment before they recall it.\n{rival}: \"{say lost||champion-chaser::I kept it warm for you. I think I always knew I was.}\"\n\nThey take the Champion's pin off and hold it out.\n{rival}: \"It's yours. It was always going to be.\"\n{rival}: \"Rematch. Whenever you like. I mean it.\"",
+   "choices": [
+    {
+     "label": "Take the pin.",
+     "success": {
+      "text": "It is still warm from their hand.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r19-photo",
+   "name": "The Rival Who Became Champion: The Photo",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2410",
+    "effect": "none"
+   },
+   "intro": "They win. The hall roars. Someone with a camera runs in for the Hall of Fame photograph.\n\n{rival} puts a hand up.\n{rival}: \"Not without them.\"\nThey point at you. They do not lower their hand until you are standing next to them.",
+   "choices": [
+    {
+     "label": "Stand with them.",
+     "success": {
+      "text": "The flash goes off. In the photo, neither of you is looking at the camera.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rival-mon-greeting",
+   "name": "Greetings Between Teams",
+   "group": "Rival questline",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a24",
+    "effect": "hearts"
+   },
+   "rarity": "rare",
+   "callback": true,
+   "intro": "Before either of you can say a word, both teams burst out of their Balls.\nThe two starters square up, nose to nose. Everyone else sniffs everyone else.\n\n{rival}: \"...They've been waiting for this.\"",
+   "choices": [
+    {
+     "label": "\"Let them.\"",
+     "success": {
+      "text": "You let them. It takes a while. Nobody minds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-starter-rivalry",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Call them back.\"",
+     "success": {
+      "text": "You both call. Your teams come back slowly, looking over their shoulders.\n{rival}: \"Spoilsports, the pair of us.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Let just those two battle.\"",
+     "success": {
+      "text": "The two starters circle each other. A few sparks, a lot of noise. Nobody wins.\nBoth of them look delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-starter-rivalry",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r20-game",
+   "name": "Greetings Between Teams: The Game",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 4
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a24",
+    "effect": "hearts"
+   },
+   "intro": "The teams are out again before anyone asks. Two of them have a game going. It has rules.\nNobody else understands the rules. Every so often one of them shouts, and the other one has to hop.\n\n{rival}: \"I asked mine to explain it once. It looked at me like I was stupid.\"",
+   "choices": [
+    {
+     "label": "\"Let them.\"",
+     "success": {
+      "text": "You let them. It takes a while. Nobody minds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-starter-rivalry",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Call them back.\"",
+     "success": {
+      "text": "You both call. Your teams come back slowly, looking over their shoulders.\n{rival}: \"Spoilsports, the pair of us.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Let just those two battle.\"",
+     "success": {
+      "text": "The two starters circle each other. A few sparks, a lot of noise. Nobody wins.\nBoth of them look delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-starter-rivalry",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r20-gift",
+   "name": "Greetings Between Teams: A Present",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 6
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a24",
+    "effect": "sparkle"
+   },
+   "intro": "{rival}'s lead trots over to yours with something in its mouth. A stick. A good one. It puts it down very carefully.\nIt is a present. Your lead knows it is a present.\n\n{rival}: \"It's never given me a stick.\"\n{rival}: \"Not once.\"",
+   "choices": [
+    {
+     "label": "\"Let them.\"",
+     "success": {
+      "text": "You let them. It takes a while. Nobody minds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-starter-rivalry",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Call them back.\"",
+     "success": {
+      "text": "You both call. Your teams come back slowly, looking over their shoulders.\n{rival}: \"Spoilsports, the pair of us.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Let just those two battle.\"",
+     "success": {
+      "text": "The two starters circle each other. A few sparks, a lot of noise. Nobody wins.\nBoth of them look delighted.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-starter-rivalry",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r20-last",
+   "name": "Greetings Between Teams: Side by Side",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 3
+    },
+    {
+     "kind": "rivalQuest",
+     "leagueEve": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f2a24",
+    "effect": "glint"
+   },
+   "intro": "Neither of you says a word.\nBoth starters walk out first, side by side, all the way to the middle. Then they turn and face each other.\n\nNobody called them. Nobody needed to.",
+   "choices": [
+    {
+     "label": "Let them start.",
+     "success": {
+      "text": "Whatever happens next, it started like this.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-starter-rivalry",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r21-inn",
+   "name": "The Long Night at the Inn",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R21.open"
+    }
+   ],
+   "priority": 70,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1f2a",
+    "effect": "rain"
+   },
+   "intro": "A storm shuts the road. The only light for miles is an inn, and four other people have already had the same idea.\nA man in a heavy coat. A girl with red eyes and a too-big bag. A big, quiet man you are almost sure is a Gym Leader on holiday.\n\nAnd {rival}, at the end of the bar, who looks straight at you and says nothing at all.\n\nInnkeeper: \"Someone's Poké Ball has gone missing.\"\nInnkeeper: \"Nobody leaves till it's found. Not that you could, in this.\"",
+   "choices": [
+    {
+     "label": "Settle in for the night.",
+     "success": {
+      "text": "You take a chair by the fire. The storm hammers on the shutters.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r21-ten"
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R21.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r21-ten",
+   "name": "The Long Night at the Inn: Ten O'Clock",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1f2a",
+    "effect": "rain"
+   },
+   "intro": "The parlour. The man in the heavy coat is dealing cards, badly. He keeps losing count.\nHis coat is on the back of his chair. It hangs wrong, heavy on one side, as if something is in the lining.",
+   "choices": [
+    {
+     "label": "Remember the coat.",
+     "success": {
+      "text": "You do not say anything. You remember the way it hangs.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r21-midnight"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r21-midnight",
+   "name": "The Long Night at the Inn: Midnight",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1f2a",
+    "effect": "rain"
+   },
+   "intro": "The stairs, in the dark. {rival} is coming down as you go up.\n{rival}: \"Evening. Stranger.\"\nThey are muddy to the knee. They have been out the back, in the storm, nowhere near the rooms.",
+   "choices": [
+    {
+     "label": "\"Evening, stranger.\"",
+     "success": {
+      "text": "They nearly smile. They do not stop.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r21-two"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r21-two",
+   "name": "The Long Night at the Inn: Two O'Clock",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1f2a",
+    "effect": "rain"
+   },
+   "intro": "The kitchen. The girl with the big bag is crying over it. There is a Ball-shaped gap in the lining, where something used to be.\nThe Gym Leader is making her cocoa, very gently, and not asking any questions.\n\nRunaway: \"It was the only thing I took. The only one that wanted to come.\"",
+   "choices": [
+    {
+     "label": "Sit with her until she stops.",
+     "success": {
+      "text": "The Gym Leader hands you a cocoa too, without asking. He is exactly who he says he is.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r21-dawn"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r21-dawn",
+   "name": "The Long Night at the Inn: Dawn",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1f2a",
+    "effect": "rain"
+   },
+   "intro": "Dawn. The storm has blown itself out. The innkeeper gathers everyone in the parlour.\nInnkeeper: \"Well? Somebody saw something.\"\nEverybody looks at you.",
+   "choices": [
+    {
+     "label": "Accuse the smuggler.",
+     "success": {
+      "text": "You point at the coat. The man goes white. The innkeeper slits the lining, and out drops a Poké Ball.\nThe girl snatches it up and holds it against her chest.\n\nLater, on the step, she holds the Ball out to you.\nRunaway: \"I asked it. It wants to go with you. It says you notice things.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "eevee"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "respect": 1
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Accuse the rival.",
+     "success": {
+      "text": "{rival} goes very still.\n{rival}: \"Mud to the knee, and you still thought it was me.\"\nThey do not argue. Later, the innkeeper finds the Ball in the smuggler's coat.\n\n{rival} is gone before breakfast.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cover for the rival when their sponsor arrives.",
+     "success": {
+      "text": "A car pulls up outside. You hear {rival} go up the stairs, two at a time.\n\n{rival}: \"...You saw?\"\nYou nod.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r21-sponsor"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r21-sponsor",
+   "name": "The Long Night at the Inn: The Sponsor",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1f2a",
+    "effect": "rain"
+   },
+   "intro": "A man in a good coat comes in out of the wet and looks around the parlour as if he owns it.\nSponsor: \"I'm looking for a young trainer. Talented. Ungrateful.\"\n\nUpstairs, a curtain moves.",
+   "choices": [
+    {
+     "label": "\"Nobody here like that.\"",
+     "success": {
+      "text": "He looks at you. He looks at the stairs. He leaves.\n\nOn the road, later, {rival} falls into step beside you.\n{rival}: \"\"Nobody here like that.\" ...Thanks. I think.\"\n{rival}: \"Was it the \"talented\" or the \"ungrateful\" that didn't fit?\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"They left in the night.\"",
+     "success": {
+      "text": "He swears, quietly, and goes back out to the car.\n\nOn the road, later, {rival} catches up with you, out of breath.\n{rival}: \"Left in the night. That's good. I might use that.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who's asking?\"",
+     "success": {
+      "text": "He does not answer. He looks at you a little too long, then goes.\n\nOn the road, later, {rival} is waiting by the first milestone.\n{rival}: \"\"Who's asking.\" You're terrifying. I love it.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        },
+        "lead": 0
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rival-shared-drink",
+   "name": "One for the Road",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rq-drink-owed",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f1a",
+    "effect": "none"
+   },
+   "callback": true,
+   "tags": [
+    "Rival",
+    "Relationship"
+   ],
+   "remembers": [
+    {
+     "id": "glasses",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rq-drinks",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "intro": "{rival} is waiting at the next bench with two glasses, actual glasses, on a tray.\n{rival}: \"I asked. They do glasses. I thought: glasses.\""
+    },
+    {
+     "id": "pays",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rq-drinks",
+       "atLeast": 4,
+       "atMost": 4
+      }
+     ],
+     "intro": "The winner pays, by mistake. Neither of you notices. You sit on the bench and drink them anyway."
+    },
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rq-thread-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "{rival} is at the next bench with two cans from the machine. They lost. They are buying.\n{rival}: \"{say lost||bitter-challenger::Again. Always again.}\""
+    }
+   ],
+   "intro": "Two cans from the machine at the next bench. You lost, so you are buying.\n{rival} takes theirs without a word, then says one anyway.\n{rival}: \"{say won}\"",
+   "choices": [
+    {
+     "label": "\"Cheers.\"",
+     "success": {
+      "text": "The cans clink. Ten seconds. It is enough.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-drink-owed",
+         "value": 0
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "rq-drinks",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Next time.\"",
+     "success": {
+      "text": "{rival}: \"Next time.\"\nThey say it like a promise. It probably is.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-drink-owed",
+         "value": 0
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "rq-drinks",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You drink. They drink. The road is still there when you are done.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rq-drink-owed",
+         "value": 0
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "rq-drinks",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false
+  },
+  {
+   "id": "rq-r22-last",
+   "name": "One for the Road: The Last One",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "rq-drinks",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "rivalQuest",
+     "leagueEve": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1f1a",
+    "effect": "none"
+   },
+   "intro": "{rival} is on the bench outside the League doors. Two drinks, already bought. Already open.\nNothing is said.",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "Nothing is said. Nothing needs to be.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rival-race",
+   "name": "The Race for First Pick",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "beat": "R23.open"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a14",
+    "effect": "rattle"
+   },
+   "callback": true,
+   "pseudo": true,
+   "intro": "A supply crate on the far side of a field, sitting in the sun with its lid half off.\n{rival} is already running.\n\n{rival}: \"First one there picks!\"",
+   "choices": [
+    {
+     "label": "Run!",
+     "success": {
+      "text": "You are off the line before you have decided to be. Two ways across: a fence, or the long grass.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-fence"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-grass"
+       },
+       {
+        "kind": "rivalQuest",
+        "done": "R23.open"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them have it.",
+     "success": {
+      "text": "You watch them go. They get there, turn round, and look confused that you are not behind them.\n{rival}: \"...You're no fun.\"",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "done": "R23.open"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "rq-r23-fence",
+   "name": "The Race: The Fence",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a14",
+    "effect": "none"
+   },
+   "intro": "A fence, chest-high. {rival} is already over the next one.",
+   "choices": [
+    {
+     "label": "Vault it.",
+     "success": {
+      "text": "You clear it clean. Somewhere ahead, {rival} looks back and swears.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-r23-beat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-level"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the Pokémon nesting on it.",
+     "success": {
+      "text": "A Pokémon on the fence post does not want you climbing its fence.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "normal",
+        "flying"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r23-level"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r23-grass",
+   "name": "The Race: The Long Grass",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a14",
+    "effect": "none"
+   },
+   "intro": "Grass to the shoulder. You can hear {rival} crashing through it somewhere to your left.",
+   "choices": [
+    {
+     "label": "Find the trodden path.",
+     "success": {
+      "text": "There is a path, if you look. You find it, and you fly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-r23-beat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-level"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push through whatever is in there.",
+     "success": {
+      "text": "Something in the grass does not like being pushed through.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "grass",
+        "bug"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r23-level"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r23-level",
+   "name": "The Race: Neck and Neck",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a14",
+    "effect": "none"
+   },
+   "intro": "Halfway. You come out of the field and {rival} comes out of the grass at exactly the same moment. Level.\n{rival}: \"{say pseudo||enthusiast::This is the best day! I'm going to lose! I don't even mind!}\"",
+   "choices": [
+    {
+     "label": "Sprint.",
+     "success": {
+      "text": "You find a gear you did not know you had.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-r23-beat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-trainer"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-hill"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Laugh with them.",
+     "success": {
+      "text": "You are both laughing too hard to run properly. Neither of you minds.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "friendship": 1
+        },
+        "lead": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-trainer"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-hill"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r23-trainer",
+   "name": "The Race: In the Way",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a14",
+    "effect": "none"
+   },
+   "intro": "A trainer steps into the path with a Ball raised.\nTrainer: \"Nobody passes without a battle!\"",
+   "choices": [
+    {
+     "label": "Dodge round.",
+     "success": {
+      "text": "You go round. He is still announcing himself when you are gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-r23-beat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-crate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "He is very pleased to be battled.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rq-r23-crate"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r23-hill",
+   "name": "The Race: The Hill",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a14",
+    "effect": "none"
+   },
+   "intro": "A hill. The crate is on the other side of it. {rival} is going round.",
+   "choices": [
+    {
+     "label": "Straight over the top.",
+     "success": {
+      "text": "Your legs are on fire. You do not care. You are over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rq-r23-beat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-crate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stop for the view.",
+     "success": {
+      "text": "You stop for one breath at the top. It is a good view. {lead} thinks so too.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rq-r23-crate"
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r23-crate",
+   "name": "The Race: The Crate",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a14",
+    "effect": "none"
+   },
+   "intro": "The crate. Three things inside, in straw: a Lucky Egg, a Soothe Bell, a pouch of tuning dust.",
+   "choices": [
+    {
+     "label": "Who got there first?",
+     "success": {
+      "text": "You both arrive, gasping, and look at each other.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "openFirst": [
+         "rq-r23-first",
+         "rq-r23-kind",
+         "rq-r23-best"
+        ]
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rq-r23-first",
+   "name": "The Race: First Pick",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rq-r23-beat",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a14",
+    "effect": "confetti"
+   },
+   "intro": "You touch the crate first. Just. {rival} slaps it a second later and lies down in the grass.\n{rival}: \"Pick, then. Go on. Gloat.\"",
+   "choices": [
+    {
+     "label": "Take the Lucky Egg.",
+     "success": {
+      "text": "{rival} takes the Soothe Bell, very slowly, as if it was what they wanted all along.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the Soothe Bell.",
+     "success": {
+      "text": "{rival} grabs the Lucky Egg so fast they nearly drop it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the tuning dust.",
+     "success": {
+      "text": "{rival}: \"...Seriously? You won and you took the DUST?\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "tuning-dust-spe",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "remembers": []
+  },
+  {
+   "id": "rq-r23-kind",
+   "name": "The Race: Second Pick",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "requires": [
+    {
+     "kind": "rivalQuest",
+     "feeling": {
+      "who": "main",
+      "key": "friendship",
+      "atLeast": 6
+     }
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a14",
+    "effect": "none"
+   },
+   "intro": "{rival} gets there first. Their hand goes to the best one. It stops.\nIt moves one to the left.\n{rival}: \"This one. I wanted this one. Obviously.\"",
+   "choices": [
+    {
+     "label": "Take the Lucky Egg they left.",
+     "success": {
+      "text": "They do not look at you while you take it. They are smiling at the Soothe Bell as if it is the best thing they have ever owned.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "remembers": []
+  },
+  {
+   "id": "rq-r23-best",
+   "name": "The Race: Second Place",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a14",
+    "effect": "none"
+   },
+   "intro": "{rival} gets there first and takes the Lucky Egg. They hold it up to the sun.\n{rival}: \"First pick. Winner's pick. Write it down.\"",
+   "choices": [
+    {
+     "label": "Take the Soothe Bell.",
+     "success": {
+      "text": "It rings, very quietly, as you pick it up. {lead} likes the sound.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "soothe-bell",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [],
+   "remembers": []
+  },
+  {
+   "id": "rival-nickname",
+   "name": "What They Call You",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 1
+    },
+    {
+     "kind": "rivalQuest",
+     "mark": "first-blood"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f1f2a",
+    "effect": "none"
+   },
+   "callback": true,
+   "intro": "{rival} waves from across the road.\n{rival}: \"Oi! {called}!\"\nYou stop. That is new. You are not sure when it happened.",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "They grin, as if they have got away with something.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What did you call me?\"",
+     "success": {
+      "text": "{rival}: \"{called}. Suits you. Don't argue.\"",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  },
+  {
+   "id": "living-rival-acknowledges",
+   "name": "They Say It Out Loud",
+   "group": "Rival questline",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "rivalMet",
+     "atLeast": 2
+    },
+    {
+     "kind": "rivalQuest",
+     "leagueEve": true
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1f1f2a",
+    "effect": "glint"
+   },
+   "callback": true,
+   "priority": 75,
+   "intro": "The last stage before the League. {rival} is waiting, warmed up, ready, the way they have been waiting all run.\n{rival}: \"One more. Then the League. Then, I don't know.\"\n\nHalfway through a sentence, they say your name. Your real name. Said right. For the first time.\nThey hear themselves say it.\n\nThey do not take it back.",
+   "choices": [
+    {
+     "label": "Say theirs.",
+     "success": {
+      "text": "It is the first time either of you has meant it like that.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rival-name-known",
+         "value": 1
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing. Nod.",
+     "success": {
+      "text": "They nod back. That is enough.",
+      "effects": [
+       {
+        "kind": "rivalQuest",
+        "set": {
+         "key": "rival-name-known",
+         "value": 1
+        }
+       }
+      ]
+     }
+    }
+   ],
+   "tags": [
+    "Rival",
+    "Relationship",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "room": false,
+   "remembers": []
+  }
+ ]
+}

@@ -11,6 +11,7 @@
 // - Optional picks: `picks.base`, or `picks.bonus` on gym-eve, plaza and 5-entry nodes. Picks are never a currency.
 
 import type { Content, EventDef } from '../contentSchema';
+import { positioned } from '../co/placement';
 import { stageNumber } from '../events';
 import { stageKey } from '../mapItems';
 import { hashSeed, Rng } from '../rng';
@@ -35,11 +36,14 @@ export function isKeepEvent(run: RunState, e: EventDef): boolean {
     || e.id === tournamentEventId(run) || crisisEventIds(run).includes(e.id);
 }
 
+const coPlaced = (content: Content, id: string): boolean => { const p = content.coPlacement?.get(id); return !!p && (positioned(p) || p.own || p.attaches === 'before' || p.attaches === 'instead'); };
+
 function isKeepSide(content: Content, run: RunState, side: SideStop): boolean {
   if (side.kind === 'plaza' || side.roamer) return true;
   if (side.kind !== 'event' || !side.eventId) return false;
   const e = content.events.get(side.eventId);
-  return !!e && isKeepEvent(run, e);
+  // Catalog Overhaul: an event the placer put on its own step is never trimmed or locked either.
+  return !!e && (isKeepEvent(run, e) || coPlaced(content, e.id));
 }
 
 const SIDE_NAME: Record<SideStop['kind'], string> = { heal: 'Healing spot', shop: 'Shop', fish: 'Fishing spot', raid: 'Raid den', totem: 'Totem', event: 'Event', expedition: 'Expedition', minigame: 'Minigame', service: 'Service', plaza: 'Plaza' };
@@ -97,7 +101,8 @@ export function composeNodeMenu(content: Content, run: RunState, node: MapNode):
   for (const e of entries) {
     if (required >= data.maxRequired) break;
     const ev = e.sideId ? content.events.get(node.sides.find((s) => s.id === e.sideId)?.eventId ?? '') : undefined;
-    if (ev?.forced && !eventHasBattle(ev)) {
+    // Catalog Overhaul: a must-see placed event counts like a forced one.
+    if (ev && (ev.forced || content.coPlacement?.get(ev.id)?.sits === 'must-see') && !eventHasBattle(ev)) {
       e.required = true;
       required++;
     }
@@ -108,6 +113,8 @@ export function composeNodeMenu(content: Content, run: RunState, node: MapNode):
   const picks = Math.min(optional, plaza || isGymEve(run, node) || entries.length >= 5 ? data.picks.bonus : data.picks.base);
   const menu: NodeMenu = { nodeId: node.id, entries: [encounterEntry(node), ...entries], picks, picked: [], dropped, closed: false };
   for (const h of nodeMenuHooks()) h.addEntries?.(menu, { content, run, node, rng });
+  // A hook's card (a special entry) is optional too: a node whose own entries are all kept still gets a pick for it.
+  if (menu.picks === 0) menu.picks = Math.min(menu.entries.filter((e) => e.kind !== 'encounter' && !e.keep && !e.required).length, data.picks.base);
   return menu;
 }
 

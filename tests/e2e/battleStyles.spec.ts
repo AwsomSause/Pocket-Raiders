@@ -24,6 +24,8 @@ for (const campaign of ['dev']) for (const style of SCREEN_STYLES_READY.battle) 
       await page.waitForTimeout(250);
     }
     await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+    // A plain first fight: no event (Kanto's attached ones) opens before it.
+    await page.evaluate(() => { for (const n of (window as any).__pkr.session.run.stage.map.nodes) if (n.column === 1) n.sides = []; });
     await page.keyboard.press('Enter');
     await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Battle');
     await confirmToMenu(page, 30_000);
@@ -70,6 +72,8 @@ test('a failing battle intro still shows both Pokémon and boxes', async ({ page
     await page.waitForTimeout(250);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  // A plain first fight: no event (Kanto's attached ones) opens before it.
+  await page.evaluate(() => { for (const n of (window as any).__pkr.session.run.stage.map.nodes) if (n.column === 1) n.sides = []; });
   await page.keyboard.press('Enter');
   await expect.poll(() => scene(page), { timeout: 20_000 }).toBe('Battle');
   await page.evaluate(() => {

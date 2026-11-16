@@ -1,0 +1,4220 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "npc-meet-psychic-lorna",
+   "name": "Psychic Lorna: In My Head",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-lorna-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A cliff under the stars, so high the wind sings in the grass. A girl stands right at the edge with her eyes closed and her hands loose at her sides, as calm as if she were asleep standing up. She speaks before you have taken another step. Lorna: \"Your next move is already in my head.\" A small, private smile. Lorna: \"So is the one after.\" Behind her, a Meowstic's ears slowly unfold.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Lorna opens her eyes for the first time, and they are very bright. Her Pokémon are moving before yours have even settled, as if they had heard your orders before you gave them. Her Pokémon always act first on turn one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lorna-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-lorna-first-turn",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Psychic Lorna read every move you made",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "meowstic",
+        "gardevoir"
+       ],
+       "name": "Psychic Lorna",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Psychic Lorna on a cliff under the stars",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What am I thinking?\"",
+     "success": {
+      "text": "Lorna tilts her head as if listening to a far-off radio. Then she names a type, one that is in your party right now, and she is right. She does not look smug about it. She only looks a little tired, like someone who never gets to stop hearing things.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lorna-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You step back from the edge and leave her to the stars. She does not open her eyes, but you get the strange feeling she already knew you would.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-psychic-lorna-m2",
+   "name": "Psychic Lorna: Too Loud",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-lorna-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-lorna-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "A busy market at night, all lanterns and shouting and frying oil. In the middle of it, against a fruit stall, a girl stands with both hands pressed hard over her ears. It is Lorna, and she looks like the noise is a weight on her chest. Lorna: \"Everyone's thoughts. All at once. I can't turn it off.\" She is shaking. Her Meowstic presses against her shins, ears flat.",
+   "choices": [
+    {
+     "label": "\"Take her somewhere quiet.\"",
+     "success": {
+      "text": "You take her elbow and steer her out past the last lantern, then further, until the market is a glow behind the hills. She does not let go of your sleeve. A bend of the road later, the trees close in around you both.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lorna-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-psychic-lorna-forest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Teach her to block it.\"",
+     "success": {
+      "text": "You bring a Steel-type to stand right beside her, solid and still as a wall. Lorna blinks. Lorna: \"It's... quieter. Behind it.\" She practises leaning into that quiet, a breath at a time, until her hands come down from her ears. It helps.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lorna-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-lorna-steel",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle to focus.\"",
+     "success": {
+      "text": "Lorna looks at you like you are mad, then sees the point. A battle is one loud thought instead of a thousand. She lowers her hands and lifts her chin, and her Gardevoir steps between you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lorna-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-lorna-focus",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "The focus cleared Lorna's head",
+        "importance": 60
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lorna found her focus by beating you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gardevoir",
+        "meowstic"
+       ],
+       "name": "Psychic Lorna",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Lorna until the market went quiet in her head",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-psychic-lorna-forest",
+   "name": "Psychic Lorna: The Quiet Wood",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The forest is so still you can hear the leaves settle. Lorna sits down on the moss between two roots, and for the first time since you met her, her face goes slack and young. Her eyes are already closing.",
+   "choices": [
+    {
+     "label": "\"Keep watch.\"",
+     "success": {
+      "text": "You sit with your back to a tree and keep watch while she sleeps, deep and dreamless, her Meowstic curled on her chest. When she wakes, near dawn, she just says thank you, and means it more than most people mean anything.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lorna-quiet",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let your team curl up around her.\"",
+     "success": {
+      "text": "Your Pokémon settle round her in a loose, warm ring, and their quiet, sleepy minds are the only thoughts left in the wood. Lorna sleeps until the birds start. She wakes smiling, which she tells you she had forgotten how to do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lorna-quiet",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-psychic-lorna-m3",
+   "name": "Psychic Lorna: Quiet Mind",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-lorna-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-lorna-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "A clear night and a low wall by the road. Lorna sits on it with her eyes wide open, looking at you, not through you. A Gallade stands at her shoulder, arms folded like a bodyguard who has decided to like you. Lorna: \"I only listen now when someone asks.\" She sounds rested. Her Gardevoir hums somewhere behind her, a sound like a tuning fork.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Lorna slides off the wall. Gardevoir and Gallade step out side by side, and this time she watches the battle with her own eyes, the way anyone would.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lorna-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-psychic-lorna"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lorna's Gardevoir and Gallade beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gardevoir",
+        "gallade"
+       ],
+       "name": "Psychic Lorna",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Lorna, Gardevoir and Gallade on a quiet night",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Listen to my team.\"",
+     "success": {
+      "text": "Lorna closes her eyes, only because you asked. She tells you which of your Pokémon is the happiest, and you can see it in how it is sitting. Then, more gently, she tells you which one is worried. When you go and talk to it, quietly, just the two of you, something in it eases.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lorna-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-psychic-lorna"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Thanks.\"",
+     "success": {
+      "text": "Lorna laughs, a real laugh, surprised out of her. She digs in her pocket and presses something cool and dark into your hand: a Dawn Stone, glittering like the sky over that first cliff. Lorna: \"For the quiet.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lorna-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "dawn-stone",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-psychic-lorna"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-rocker-axel",
+   "name": "Rocker Axel: Eleven",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-axel-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_rocker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A crumbling stage behind a bar, the boards soft with old beer and rain. An amp the size of a fridge, a guitar with one string held on by tape, and a Toxtricity already bobbing its head to music only it can hear. A man in a leather jacket kicks the amp into life with a squeal. Axel: \"Turn it up to eleven!\" He spins the dial, grinning at you. Axel: \"First battle's a soundcheck.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Axel slams out a chord and the whole stage shakes. Every roar, screech and song in this fight comes out twice as loud, from your side and his. Sound moves hit harder this battle, both sides.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-axel-loud",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Rocker Axel's soundcheck blew you off the stage",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "toxtricity",
+        "electivire"
+       ],
+       "name": "Rocker Axel",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You won Rocker Axel's soundcheck",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Play something.\"",
+     "success": {
+      "text": "He does. It is terrible. It is the most joyful terrible thing you have ever heard, all wrong notes and stamping, and the Toxtricity sings along a full beat behind. By the end the barman is clapping on the off-beat and you are too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Turn it down.\"",
+     "success": {
+      "text": "Axel looks at you with real pity. Then he reaches for the dial, very slowly, and turns it up to twelve. The amp howls. Somewhere a window rattles. He winks, and the Toxtricity gives you a thumbs-up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-rocker-axel-m2",
+   "name": "Rocker Axel: The Band Broke Up",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-axel-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-axel-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_rocker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "The same stage, at the same hour, and it is empty. No crowd, no drum kit, just Axel sitting on the edge with his guitar across his knees and a Loudred snoring next to the amp. He does not even plug in. Axel: \"Drummer left. Bassist left. It's just me and a Loudred.\" He plucks one string and lets it die.",
+   "choices": [
+    {
+     "label": "\"Join the band.\"",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Axel sits up so fast he nearly drops the guitar. He counts in, and your Pokémon are the band: one on the bin lids, one on the stomp box, one just shouting. Your team found the beat and held it all the way to the last chord. Axel: \"Same time tomorrow?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-axel-band",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Axel counts in, and your Pokémon are the band: one on the bin lids, one on the stomp box, one just shouting. It falls apart in the second verse and nobody cares. Axel is laughing too hard to play. Axel: \"Best rehearsal we ever had.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-axel-band",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go solo.\"",
+     "success": {
+      "text": "Axel turns the idea over like a guitar pick. Then he grabs a beer mat and starts writing, fast, crossing things out. He writes a song about it, about the drummer and the bassist and the empty stage, and it is the first good song he has ever written. He knows it, too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-axel-solo",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find the drummer.\"",
+     "success": {
+      "text": "Axel: \"She's across the river. She won't want to see me.\" But he tells you the street anyway. A bend of the road later, you hear it before you see it: someone hitting a stack of crates with real feeling.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-rocker-axel-drummer"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-rocker-axel-drummer",
+   "name": "Rocker Axel: The Drummer",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_rocker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A yard full of crates and a woman with drumsticks, playing to nobody. She stops when she sees you looking. She does not have to ask who sent you. She glances at the river, toward the bar, and she misses it. It is all over her face.",
+   "choices": [
+    {
+     "label": "\"He misses you too.\"",
+     "success": {
+      "text": "She looks at her sticks for a long time. Then she taps out a little rhythm on the nearest crate, the one from the band's first song. She says she might come by the bar, just to listen. You both know she will.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-reunion",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The stage is still there.\"",
+     "success": {
+      "text": "She laughs, rough and sudden, and wipes her eyes on her wrist. She says the band was the best and worst thing she ever did. Then she picks up the crate she has been drumming on and tucks it under her arm, ready to go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-reunion",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-rocker-axel-m3",
+   "name": "Rocker Axel: The Gig",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-axel-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-axel-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_rocker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A real show. A real crowd, packed shoulder to shoulder, holding up their glowing phones. The old stage has new boards. Axel stands in the lights with the Toxtricity, the Loudred and an Electivire crackling at the back. He spots you in the crowd and points right at you. Axel: \"First song's for you.\" The crowd turns round to see who you are.",
+   "choices": [
+    {
+     "label": "\"Dance.\"",
+     "success": {
+      "text": "You dance, badly and completely, and your whole team dances with you, hopping and stomping and spinning in the crush. By the encore you are all soaked, hoarse and very close. Backstage, Axel tosses you a Throat Spray. Axel: \"For the singing. You were loud.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "item",
+        "id": "throat-spray",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-rocker-axel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle on stage.\"",
+     "success": {
+      "text": "Axel waves you up into the lights. The crowd cheers each hit like it is a guitar solo, and Axel plays the battle's soundtrack live, one hand on the strings.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "throat-spray",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-rocker-axel"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Rocker Axel beat you on stage, and the crowd loved it",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "toxtricity",
+        "electivire",
+        "loudred"
+       ],
+       "name": "Rocker Axel",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Rocker Axel on stage in front of a real crowd",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Request a song.\"",
+     "success": {
+      "text": "Axel leans down off the stage and hands you the setlist, sticky with tape. Three songs are circled. Axel: \"Pick one. We'll play it so loud you'll hear it all the way through the next region.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-rocker-axel-setlist"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-rocker-axel-setlist",
+   "name": "Rocker Axel: The Setlist",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_rocker"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "Three songs, circled in marker. The crowd is chanting. The Loudred is already taking a deep, deep breath.",
+   "choices": [
+    {
+     "label": "\"The one about the band.\"",
+     "success": {
+      "text": "The drummer counts it in. It is the song about the empty stage, and the whole room sings the chorus back. The song plays over the next region, stuck in your head on every road. Axel throws you a Throat Spray from the stage.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-axel-song",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "throat-spray",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-rocker-axel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Eleven.\"",
+     "success": {
+      "text": "The amp goes up to eleven, then twelve. It is fast and stupid and glorious, and the Toxtricity spins until it falls over. The song plays over the next region in your head. Axel throws you a Throat Spray from the stage.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-axel-song",
+        "amount": 2,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "throat-spray",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-rocker-axel"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The slow one.\"",
+     "success": {
+      "text": "The lights go down, the phones come up, and Axel plays it alone, just him and the one taped string. The song plays over the next region, soft on every quiet night. Afterwards he presses a Throat Spray into your hand without a word.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-axel-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-axel-song",
+        "amount": 3,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "throat-spray",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-rocker-axel"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-ruin-maniac-hadrian",
+   "name": "Ruin Maniac Hadrian: Secrets",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hadrian-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_ruinmaniac"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A dig site roped off with string and pegs, the earth cut into neat brown steps. An old man kneels in the deepest trench with a soft brush in one hand and a magnifying glass in the other, his hat pushed back. A Baltoy spins slowly beside him. Hadrian: \"These ruins hold such secrets.\" He looks up, sees your foot, and goes pale. Hadrian: \"Don't step there. That's a secret.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Hadrian climbs out of the trench with great care, dusts off his knees, and calls his Baltoy and Golett out from between the stones.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ruin Maniac Hadrian's Baltoy and Golett beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "baltoy",
+        "golett"
+       ],
+       "name": "Ruin Maniac Hadrian",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Ruin Maniac Hadrian at his dig",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Help dig.\"",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Hadrian hands you the spare brush like it is a holy relic. You work the soil away grain by grain, holding your breath, and something hard and curved comes up into the light: a fossil. Hadrian says you have the hands for it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-dug",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "helix-fossil",
+         "dome-fossil",
+         "old-amber",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Hadrian hands you the spare brush like it is a holy relic. You scrape a little too hard and he winces, but under the crumbled soil something glints anyway: an old lost item, someone else's secret. Hadrian lets you keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-dug",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hard-stone",
+         "stardust"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What secret?\"",
+     "success": {
+      "text": "Hadrian glances both ways, though there is nobody for miles. Then he lifts a tarp. Under it, cut deep into the old stone, is a carving of a Legendary Pokémon, worn soft by a thousand years of rain. He touches it with one fingertip, the way you would touch a sleeping child.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-ruin-maniac-hadrian-m2",
+   "name": "Ruin Maniac Hadrian: Closed",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hadrian-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hadrian-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_ruinmaniac"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "The dig site again, and now a tall wire fence runs all the way round it. A sign is bolted to the gate: CLOSED BY ORDER. Hadrian stands outside it with his hands hooked in the wire, looking in at his trenches. Hadrian: \"A company wants the land. They say the ruins are fake.\" His voice cracks on the last word.",
+   "choices": [
+    {
+     "label": "\"Prove them real.\"",
+     "success": {
+      "text": "Hadrian's head comes up. He has rubbings of every carving in his satchel, and he has always thought they matched something. He spreads them on the grass. A bend of the road later you are both on your knees beside an old sigil stone, comparing lines.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-ruin-maniac-hadrian-sigil"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Fight the company.\"",
+     "success": {
+      "text": "The company's men at the gate are not surveyors. The badges under their jackets belong to the evil team: the company is a front. They let their Pokémon off the lead without a word.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-fought",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The evil team's front company beat you at Hadrian's dig",
+         "importance": 60
+        }
+       ],
+       "name": "Company Guard",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You saw off the evil team's front at Hadrian's dig",
+         "importance": 60
+        }
+       ],
+       "evil": "grunt"
+      }
+     }
+    },
+    {
+     "label": "\"Help him move the finds.\"",
+     "success": {
+      "text": "You spend the afternoon carrying crates, each one packed in straw, out through a gap in the fence before the bulldozers come. Hadrian writes a label for every single find. By evening they are on a cart to the Museum, where nobody can say they are fake.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-museum",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-ruin-maniac-hadrian-sigil",
+   "name": "Ruin Maniac Hadrian: The Sigil",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_ruinmaniac"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "The old sigil stone sits in long grass, half sunk. Hadrian lays the first rubbing over it with shaking hands. The lines are close. Very close. Hadrian: \"If they match, the ruins are real. Help me look.\"",
+   "choices": [
+    {
+     "label": "\"Count the rings.\"",
+     "success": {
+      "text": "Seven rings on the carving, seven on the sigil, and the same notch in the fourth. Hadrian says it out loud three times, like he is afraid it will change. The carvings match the sigil. Nobody can call the ruins fake now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-proved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Trace the lines.\"",
+     "success": {
+      "text": "You run your finger along the sigil while he runs his along the rubbing, and your hands move the same way at the same time, curve for curve. Hadrian has to sit down. The carvings match the sigil, and the ruins are real.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-proved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-ruin-maniac-hadrian-m3",
+   "name": "Ruin Maniac Hadrian: The Chamber",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hadrian-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-hadrian-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_ruinmaniac"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Deep in the ruins, a stone door that has not moved in a thousand years stands open a crack. Cold air breathes out of it, smelling of dust and time. Hadrian holds a lamp up to the gap. His hand is trembling. Hadrian: \"Forty years.\" He turns to you, and he is smiling like a boy. Hadrian: \"Come and see.\"",
+   "choices": [
+    {
+     "label": "\"Go in first.\"",
+     "success": {
+      "text": "You squeeze through first, the lamp held high. The chamber glitters: shelves of offerings, untouched. Hadrian, right behind you, insists you take the best of them, a rare treasure, and a fossil from the floor where it has waited all this time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "helix-fossil",
+         "dome-fossil",
+         "old-amber",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-ruin-maniac-hadrian"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let him go first.\"",
+     "success": {
+      "text": "Hadrian goes in alone, and for a long moment there is no sound at all. Then you hear him crying, quietly, the way people cry when something finally happens. He names the find for both of you, there and then, and puts a fossil from the chamber floor into your hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Hadrian named his life's find for both of you",
+        "importance": 60
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "helix-fossil",
+         "dome-fossil",
+         "old-amber",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-ruin-maniac-hadrian"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle the guardian.\"",
+     "success": {
+      "text": "Something stirs in the dark at the back of the chamber. A Claydol, the old guardian, rises off its plinth and turns all its eyes on you. Hadrian whispers that it is the most beautiful thing he has ever seen.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-hadrian-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "helix-fossil",
+         "dome-fossil",
+         "old-amber",
+         "root-fossil",
+         "claw-fossil"
+        ]
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-ruin-maniac-hadrian"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "claydol"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The chamber's guardian Claydol drove you back",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-sailor-murphy",
+   "name": "Sailor Murphy: Hoist the Sails",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-murphy-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_sailor"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A dock that smells of tar and salt. A broad sailor with a grey beard leans on a bollard, a Pelipper perched on his shoulder like a parrot, beak tucked into its feathers. He sees you and throws out an arm toward the sea. Murphy: \"Hoist the sails, matey!\" The Pelipper opens one eye and squawks along.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Murphy rolls up his sleeves. A Machoke climbs out of a crate, and a Tentacruel rises dripping from the water beside the dock.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Sailor Murphy's crew beat you on the dock",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "machoke",
+        "tentacruel"
+       ],
+       "name": "Sailor Murphy",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Sailor Murphy on his dock",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Where are you sailing?\"",
+     "success": {
+      "text": "Murphy's grin wobbles. He looks along the dock at a little boat with peeling paint and weed on its rope. Murphy: \"Nowhere. Ship's been in dock four years.\" The Pelipper rubs its head against his ear.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave him to the gulls. Behind you, he is still saluting the sea.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-sailor-murphy-m2",
+   "name": "Sailor Murphy: Ship",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-murphy-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-murphy-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_sailor"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The little boat is out of the water on blocks, and Murphy is painting her, slow careful strokes of blue. The name on her side is fresh: you can still smell it. Murphy: \"I'm going. Before I'm too old.\" He wipes his brush on a rag and looks at you hard. Murphy: \"Need a crew.\"",
+   "choices": [
+    {
+     "label": "\"Crew for a night.\"",
+     "success": {
+      "text": "Murphy laughs so loudly the Pelipper falls off his shoulder. By dusk the boat is in the water and you are on her, the dock lights shrinking behind you. Ahead is nothing but sea.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-sailor-murphy-sea1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Patch the hull.\"",
+     "success": {
+      "text": "There is a split in the planks below the waterline that he has been pretending not to see. A Water-type helps, holding the seam shut from outside while you and Murphy hammer in the pitch. When she floats, dry inside, he hugs you with tar on both hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-murphy-patched",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay ashore.\"",
+     "success": {
+      "text": "Murphy nods, not hurt. Murphy: \"Fair. Somebody has to wave.\" At dawn you stand on the dock and wave, and he sails alone, a small blue boat getting smaller, the Pelipper flying ahead.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-murphy-alone",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-sailor-murphy-sea1",
+   "name": "Sailor Murphy: Open Water",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_sailor"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The first sea node. The land is gone. Stars above, stars in the water, and the boat creaking like it is happy. Murphy hands you the wheel and goes forward to look at the sails.",
+   "choices": [
+    {
+     "label": "\"Hold the course.\"",
+     "success": {
+      "text": "You keep her steady on the star he showed you, and Murphy hums an old shanty on the bow. The night goes on, and on. Further out, the swell grows.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-sailor-murphy-sea2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Mind the nets.\"",
+     "success": {
+      "text": "You coil ropes and mind the trailing net while Murphy steers, and you catch three silver fish and a very surprised Tentacool, which you put back. Further out, the swell grows.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-sailor-murphy-sea2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-sailor-murphy-sea2",
+   "name": "Sailor Murphy: The Far Buoy",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_sailor"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The second sea node. A lone buoy bells in the dark, the farthest mark Murphy has ever reached. Beyond it the sea is open all the way to the morning. He looks at it a long time.",
+   "choices": [
+    {
+     "label": "\"Bring her home.\"",
+     "success": {
+      "text": "You turn round the buoy and run home on the wind, fast and wet and laughing. At the dock Murphy ties up, sits down, and says that was the best night of his life. He means it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-sailed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Sail till dawn.\"",
+     "success": {
+      "text": "You do not turn back until the sky goes pink. Murphy watches the sun come up over open water with tears in his beard. Murphy: \"Four years. Should've done it sooner.\" You sail home in the light.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-sailed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-sailor-murphy-m3",
+   "name": "Sailor Murphy: Postcard",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-murphy-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-murphy-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_sailor"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "A postcard finds you at a rest stop, tucked under a pebble with your name on it in big square capitals. On the front: a green island, a white beach, a small blue boat. The Pelipper must have flown it the whole way. Murphy, written: \"Made it. Bring your team. I've got a hammock for every one.\"",
+   "choices": [
+    {
+     "label": "\"Visit.\"",
+     "success": {
+      "text": "You follow the card's little map down to the coast, and a fisherman ferries you across. A bend of the sea later, there is the island, and Murphy waving from the sand.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-sailor-murphy-island"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Write back.\"",
+     "success": {
+      "text": "You write him everything: where you have been, who you have beaten, how the team is. Two days later the Pelipper comes back with a parcel. Inside is a Mystic Water and a note: \"From the bottom of my sea.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-sailor-murphy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle him there.\"",
+     "success": {
+      "text": "You cross to the island and Murphy is delighted. Murphy: \"Fight on the beach? Like the old days!\" His Pelipper and Tentacruel come splashing out of the shallows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-sailor-murphy"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Sailor Murphy beat you on his island beach",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pelipper",
+        "tentacruel"
+       ],
+       "name": "Sailor Murphy",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Sailor Murphy on his island beach",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-sailor-murphy-island",
+   "name": "Sailor Murphy: The Island",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_sailor"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "A rest node on Murphy's island. Palm trees, a fire, the blue boat pulled up on the sand, and strung between the trees, a hammock for every one of your team, exactly as he promised.",
+   "choices": [
+    {
+     "label": "\"Take a hammock.\"",
+     "success": {
+      "text": "You swing in the shade while the sea hushes, and your whole team sleeps the afternoon away, rocked by the breeze. When you wake, everyone is fully rested, and Murphy is cooking fish.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-sailor-murphy"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Sit up with Murphy.\"",
+     "success": {
+      "text": "You sit by his fire till late while your team snores in the hammocks, and he tells you about the crossing, every wave of it. By morning everyone is fully rested, and he does not want you to go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-murphy-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-sailor-murphy"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-scientist-dr-orson",
+   "name": "Scientist Dr. Orson: Sample",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-orson-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A lab coat, very white, in the middle of a muddy field. The man inside it has a clipboard, three pens in his top pocket and grass stains on both knees. A Porygon2 hovers beside him, scanning the hedges. He looks you up and down and writes something. Orson: \"A fascinating battle sample.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Orson clicks a pen. Porygon2 and a Magneton float forward in perfect formation while he takes notes on every move you make.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-orson-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Dr. Orson's Porygon2 and Magneton beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "porygon2",
+        "magneton"
+       ],
+       "name": "Scientist Dr. Orson",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Dr. Orson and became a footnote in his data",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What's the study?\"",
+     "success": {
+      "text": "Orson brightens like nobody has ever asked. It is battle data for a paper: how trainers choose under pressure. He shows you graphs drawn by hand, with little apologetic arrows. He thanks you three times for asking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-orson-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave him in his field. He writes something down about that, too.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-scientist-dr-orson-m2",
+   "name": "Scientist Dr. Orson: Funding",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-orson-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-orson-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "Orson stands on the pavement outside a glass building. Over the doors is a logo you know: the evil team's. He is holding a fat envelope and not opening it. Orson: \"They'll fund me. I just have to not ask what for.\" He tries to laugh. It does not work.",
+   "choices": [
+    {
+     "label": "\"Don't take it.\"",
+     "success": {
+      "text": "Orson looks at the envelope for a long time. Then he walks in, hands it back at the desk, and walks out again, very quickly, like someone leaving a fire. He is broke but clean, and he looks ten years younger.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-orson-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-orson-clean",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take it and spy.\"",
+     "success": {
+      "text": "Orson goes white, then very still, then nods. A week of his life goes into it. He feeds you one step of the evil team's plan, folded small inside a lab report, and his hands shake as he passes it over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-orson-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-orson-spy",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Your choice.\"",
+     "success": {
+      "text": "Orson nods slowly, as if you have told him something sad. He takes it. The doors slide shut behind him, and through the glass you watch someone hand him a new white coat with the logo on the pocket.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-orson-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-orson-took",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-scientist-dr-orson-m3",
+   "name": "Scientist Dr. Orson: Results",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-orson-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-orson-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "Orson's lab: one room above a bakery, warm and smelling of bread, papers pinned to every wall. He looks thinner and much happier. A Porygon2 is sorting his mail. Orson: \"Small grant. Small results. I sleep fine.\" He offers you a stool and a bun.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Orson straightens his coat and calls out something new: a Porygon-Z, twitching with fresh code. Orson: \"My best result.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-orson-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "up-grade",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-scientist-dr-orson"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Dr. Orson's Porygon-Z beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "porygon-z"
+       ],
+       "name": "Scientist Dr. Orson",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Dr. Orson's Porygon-Z",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Use your data.\"",
+     "success": {
+      "text": "Orson pulls a thick binder off the shelf. It is every wild Pokémon he has measured in this region, every base stat, laid out in tidy tables. He gives you the whole thing, and an Up-Grade from his drawer for good measure. You see base stats of every wild Pokémon this region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-orson-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-orson-stats",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "up-grade",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-scientist-dr-orson"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bring him to the Professor.\"",
+     "success": {
+      "text": "You bring him to the Professor's lab, and Orson stammers through his graphs. The Professor reads them twice, then offers him a desk and a real job. Orson presses his old Up-Grade into your hand on the way out. He cannot stop smiling.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-orson-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "up-grade",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-scientist-dr-orson"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "took",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-orson-took",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Not Orson's lab: the team's. White corridors, humming machines, and grunts everywhere. Orson is here in the logo coat, an evil-team scientist now, standing behind them in the team battle with his clipboard and his Porygon-Z. He will not meet your eyes.",
+     "hide": [
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Your old data was good.\"",
+       "success": {
+        "text": "Orson stops. He looks down at the clipboard, then at the logo on his pocket. Then he takes off the coat, folds it neatly, and lays it on a bench. He walks out with you, and on the steps outside he gives you an Up-Grade, his hands steady at last.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-orson-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roster-orson-turned",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "item",
+          "id": "up-grade",
+          "count": 1
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-scientist-dr-orson"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-sis-and-bro-amy-and-tim",
+   "name": "Sis and Bro Amy and Tim: Always Together",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-amytim-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_sisandbro"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A swing set in the evening, chains squeaking. Two kids swing side by side in perfect time, up and back, up and back, like one kid and a mirror. A Plusle sits on one's lap and a Minun on the other's. They jump off at the top of the arc, together, and land together. Amy: \"We always fight together!\" Tim: \"Always!\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Amy and Tim stand back to back. Plusle and Minun hop forward, cheeks crackling, and high-five before the first move.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-amytim-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Amy and Tim beat you, together",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "plusle",
+        "minun"
+       ],
+       "format": "doubles",
+       "name": "Sis and Bro Amy and Tim",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Amy and Tim's Plusle and Minun",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What if you didn't?\"",
+     "success": {
+      "text": "The swing chains go quiet. Amy and Tim look at each other, and for a second they both look very scared, like you have asked what happens if the sun goes out. Then Tim grabs Amy's hand and they run off home.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-amytim-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-amytim-asked",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave them swinging. The chains squeak in time behind you until you are out of earshot.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-sis-and-bro-amy-and-tim-m2",
+   "name": "Sis and Bro Amy and Tim: Different Schools",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-amytim-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-amytim-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_sisandbro"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The same swing set. Only Amy this time, swinging alone, not in sync with anybody. The other swing hangs empty and turns a little in the wind. Her Plusle sits in the dirt watching it. Amy: \"Tim got into the science school. I didn't.\" She drags her feet to stop.",
+   "choices": [
+    {
+     "label": "\"Visit Tim.\"",
+     "success": {
+      "text": "You go with her across town to the science school's gates. Tim comes out in a too-big blazer, and the moment he sees his sister he bursts into tears. Tim is miserable too. They sit on the kerb and swap every single bad thing about the week.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-amytim-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-amytim-visit",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle me alone.\"",
+     "success": {
+      "text": "Amy wipes her nose and stands up. Amy: \"Fine. Just me.\" She fights alone for the first time, and she is good, sharper and braver than you have ever seen her. She looks surprised at herself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-amytim-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-amytim-alone",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Amy beat you on her own",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "plusle",
+        "ampharos"
+       ],
+       "name": "Amy",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Amy, battling alone for the first time",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"It's okay to be apart.\"",
+     "success": {
+      "text": "Amy does not answer for a long time. The empty swing turns in the wind. Amy: \"Is it?\" She is quiet after that, but she lets you push her on the swing, and she does not ask you to stop.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-amytim-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-amytim-talk",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-sis-and-bro-amy-and-tim-m3",
+   "name": "Sis and Bro Amy and Tim: Weekends",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-amytim-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-amytim-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_sisandbro"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The swing set on a Saturday, sunny and loud. Both of them are back, Amy in her old jumper and Tim still in the school blazer, swinging out of time and not caring. An Ampharos and a Pachirisu run circles under the swings. Tim: \"Weekends we're a team.\" Amy: \"Weekdays we're people.\" They say it like something they have practised and come to believe.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "They jump down together. Four Pokémon, two kids, one plan. It is a double battle, and it is very good: they have each learned things the other has not.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-amytim-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-sis-and-bro-amy-and-tim"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Amy and Tim beat you on a Saturday",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "plusle",
+        "minun",
+        "ampharos",
+        "pachirisu"
+       ],
+       "format": "doubles",
+       "name": "Sis and Bro Amy and Tim",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Amy and Tim at their best",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Tag with Amy.\"",
+     "success": {
+      "text": "Amy whoops and runs to your side with her Plusle. Tim grins and squares up across the sandpit with Minun and Pachirisu. She joins you in a double, and for once they are on opposite sides, and neither of them minds at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-amytim-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-sis-and-bro-amy-and-tim"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tim beat you and Amy in a double",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "minun",
+        "pachirisu"
+       ],
+       "format": "doubles",
+       "name": "Tim",
+       "ally": "plusle",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You and Amy beat Tim in a double",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Tag with Tim.\"",
+     "success": {
+      "text": "Tim straightens his blazer and joins you with his Minun. Amy sticks out her tongue and lines up across from you with Plusle and Ampharos. He joins you in a double, and the two of them trash-talk the whole way through.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-amytim-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-sis-and-bro-amy-and-tim"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Amy beat you and Tim in a double",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "plusle",
+        "ampharos"
+       ],
+       "format": "doubles",
+       "name": "Amy",
+       "ally": "minun",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You and Tim beat Amy in a double",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-super-nerd-miles",
+   "name": "Super Nerd Miles: Odds",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-miles-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_supernerd"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A boy on a park bench with a calculator held up close to his glasses, thumbs flying. A Magnemite hums beside him like a desk lamp. He looks at your team, taps three more keys, and frowns at the screen. Miles: \"I did the math on your odds. Thirty-eight percent.\" He says it kindly, like a doctor.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Miles pushes his glasses up his nose. Miles: \"For the data.\" Porygon and Magnemite take the field.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-miles-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Super Nerd Miles's math held up",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "porygon",
+        "magnemite"
+       ],
+       "name": "Super Nerd Miles",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Miles's thirty-eight percent",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Show me the math.\"",
+     "success": {
+      "text": "Miles turns the calculator round, then pulls out a dog-eared type chart covered in his own notes. He walks you through every matchup on your team, one by one. You check it twice. Annoyingly, it is right.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-miles-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ignore the odds.\"",
+     "success": {
+      "text": "You tell him what he can do with his thirty-eight percent. Miles blinks, then grins, and calls out his Porygon and Magnemite to prove the number.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-miles-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Super Nerd Miles's math held up",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "porygon",
+        "magnemite"
+       ],
+       "name": "Super Nerd Miles",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the odds, and Miles said: \"That's not possible.\"",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-super-nerd-miles-m2",
+   "name": "Super Nerd Miles: The Bet",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-miles-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-miles-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_supernerd"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "Miles on the same bench, surrounded by a ring of bigger kids with folded arms. He is clutching his calculator to his chest like a shield. He spots you and his face crumples with relief. Miles: \"I bet them all I could predict the gym leader's team. I can't.\"",
+   "choices": [
+    {
+     "label": "\"Help him.\"",
+     "success": {
+      "text": "You crouch down beside him and share what you know: what the gym leader leads with, what they save for last, the move that caught you out. Miles writes it all down, nodding fast. The big kids look less sure of themselves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-miles-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-miles-helped",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let him lose.\"",
+     "success": {
+      "text": "You shake your head. Miles has to guess, and he guesses wrong. He loses his lunch money, coin by coin, into a bigger kid's hand. He does not cry until they are gone. Then he cleans his glasses for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-miles-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-miles-lost",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask the leader.\"",
+     "success": {
+      "text": "You march Miles and the whole crowd up to the gym doors. The leader hears the story and laughs so hard they have to lean on the doorframe. Then they tell him, Pokémon by Pokémon. Miles wins every bet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-miles-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-miles-leader",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-super-nerd-miles-m3",
+   "name": "Super Nerd Miles: The Algorithm",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-miles-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-miles-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_supernerd"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "Miles at a café table with a laptop covered in stickers, its fan whirring. Lines of numbers scroll past his face. He turns the screen so you can see a little cartoon of your team, fighting. Miles: \"I built a battle simulator. It said you'd win.\" He sounds proud and a little worried.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Miles snaps the laptop shut. Miles: \"Let's test it.\" He calls out a Porygon-Z, glitching and grinning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-miles-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "scope-lens",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-super-nerd-miles"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Miles's Porygon-Z broke his own simulator's prediction",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "porygon-z"
+       ],
+       "name": "Super Nerd Miles",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Miles's Porygon-Z, just like his simulator said",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Run my team.\"",
+     "success": {
+      "text": "Miles types in your whole team, move by move. The simulator runs a thousand fights in a few seconds, then flashes one line in red: your team's biggest type weakness. He gives you a Scope Lens to help cover it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-miles-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-miles-weakness",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "scope-lens",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-super-nerd-miles"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Turn it off.\"",
+     "success": {
+      "text": "Miles looks at you, then at the screen, then at the real sky over the café. He closes the lid. Miles: \"...Good point.\" He hands you a Scope Lens and says you should look at things properly, not through a screen.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-miles-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "scope-lens",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-super-nerd-miles"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-coral",
+   "name": "Swimmer Coral: Splash",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-coral-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer2_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A shallow reef, the water clear and green over the coral. A swimmer in goggles bursts up through the surface right beside a Corsola, sending spray everywhere. She pushes the goggles up onto her forehead. Coral: \"Swim and splash!\" A Lanturn's light blinks on and off under the water behind her.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Coral flips over, laughing. The Corsola bobs up on one side and the Lanturn on the other, both ready.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-coral-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Swimmer Coral beat you on her reef",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "corsola",
+        "lanturn"
+       ],
+       "name": "Swimmer Coral",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Swimmer Coral on her reef",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Is the reef okay?\"",
+     "success": {
+      "text": "Coral's grin fades. She ducks under and comes back up holding a branch of coral in both hands, and it is pale at the tips, like bone. Coral: \"It's going white.\" Her Corsola nudges it, worried.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-coral-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-coral-asked",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Swim on.\"",
+     "success": {
+      "text": "You swim on along the coast. Behind you, Coral is still splashing.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-coral-m2",
+   "name": "Swimmer Coral: White Reef",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-coral-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-coral-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer2_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "Coral sits on the beach with her knees up and her goggles off, not swimming. Her Corsola is in her lap, and it has gone a dull, sick grey. She strokes its branches very gently, as if they might break. Coral: \"The reef's dying. Corsola's going grey.\"",
+   "choices": [
+    {
+     "label": "\"Find out why.\"",
+     "success": {
+      "text": "You follow the warm water. Upstream, round two bends of the river, a pipe pours hot runoff from a works straight into the current. A warm-water outflow. You find the valve, and between you, you shut it. Coral stands in the river until the water runs cold again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-coral-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-coral-saved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Move the Corsola.\"",
+     "success": {
+      "text": "You help her carry them, one by one, in buckets of seawater, down the coast to a colder bay. They live elsewhere now, and they like it. Coral says she has started seeing a new kind on the rocks there, ghostly and white: Galarian Corsola start appearing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-coral-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-coral-moved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Plant new coral.\"",
+     "success": {
+      "text": "You spend the afternoon in the shallows with her, tying tiny cuttings of living coral onto the dead branches with string. It is slow work, and it will be slow to grow. Coral says it does not matter how long it takes. She will be here.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-coral-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-coral-planted",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-coral-m3",
+   "name": "Swimmer Coral: New Reef",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-coral-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-coral-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer2_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "Coral comes running out of the waves smiling, goggles up, water streaming off her. She grabs your arm and points. Coral: \"It's coming back. Pink at the edges.\" Under the surface, the reef has a blush of colour again, and little shapes move between the branches. Coral: \"The Corsola are breeding again. Want to help count them?\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Coral whistles. Her Corsola, pink and healthy, comes up beside the Lanturn, and a Mantine glides in over the reef to join them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-coral-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-coral"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Swimmer Coral beat you over her new reef",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "corsola",
+        "lanturn",
+        "mantine"
+       ],
+       "name": "Swimmer Coral",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Swimmer Coral over her new reef",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Swim the reef.\"",
+     "success": {
+      "text": "You swim the reef with her, slow and easy, in water so clear it feels like flying. Your team floats in the warm shallows over the pink coral. When you come out, everyone is fully healed and very sleepy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-coral-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-coral"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Help count Corsola.\"",
+     "success": {
+      "text": "You float face-down with her, counting. Thirty-one, thirty-two, and a tiny one hiding under a ledge. When you surface, a young Corsola has followed you up and will not leave your side. Coral: \"It's chosen you. Take it. There are plenty now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-coral-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "corsola"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-coral"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-finn",
+   "name": "Swimmer Finn: Cannonball",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-finn-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer2_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A long wooden pier over deep water. A boy sprints the full length of it, arms windmilling, and leaps off the end, knees tucked, shouting the whole way down. Finn: \"Cannonball into battle!\" The splash soaks you to the knees. He surfaces laughing, a Buizel paddling in circles round his head.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Finn hauls himself up the ladder, dripping. His Buizel shakes off on the boards and a Wailmer surfaces under the pier, spouting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-finn-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Swimmer Finn beat you on his pier",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "buizel",
+        "wailmer"
+       ],
+       "name": "Swimmer Finn",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Swimmer Finn off the end of his pier",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Cannonball too.\"",
+     "success": {
+      "text": "You run the length of the pier and jump. The water is shockingly cold. Finn loves it, absolutely loves it, and is still whooping when you both climb out, and then it is straight into a battle, dripping.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-finn-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-finn-jumped",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "You cannonballed with Finn, then he beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "buizel",
+        "wailmer"
+       ],
+       "name": "Swimmer Finn",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You cannonballed with Finn, then beat him",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Stay dry.\"",
+     "success": {
+      "text": "You step back from the edge. Finn shrugs, climbs out and does it again. And again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-finn-m2",
+   "name": "Swimmer Finn: Too Far",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-finn-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-finn-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer2_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "The same pier, and the sea is choppy. Far out past the last buoy, a head bobs in the grey water, an arm waving. It is Finn, and he is not playing. Finn: \"Cramp! Cramp!\" His voice is thin over the waves. He goes under, and comes back up coughing.",
+   "choices": [
+    {
+     "label": "\"Swim out.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "You are in the water before you have decided to be, and your Water-type surges past you to get to him first. Together you get an arm under each of his and tow him in. On the pier you both lie there, gasping. Both fine.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-finn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-finn-saved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Send a Water-type.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type hits the sea like an arrow and cuts out through the chop. It reaches him, lets him grab on, and brings him all the way in. Finn hugs it, shaking, and will not let go for a long while.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-finn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-finn-saved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Call the lifeguard.\"",
+     "success": {
+      "text": "You run for the lifeguard's tower and shout. The lifeguard goes out on a board and brings him in by the collar, and the whole beach watches. He is fine but embarrassed, red to the ears under a towel. It takes the rest of the stage to calm him down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-finn-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-finn-lifeguard",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-finn-m3",
+   "name": "Swimmer Finn: Lifeguard",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-finn-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-finn-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer2_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "A tall white lifeguard's chair on the beach, and up in it, in a red vest with a whistle, is Finn. He sits straight and watches the water like a hawk. A Floatzel lies at the foot of the chair. He spots you and his face splits into a grin. Finn: \"Turns out I'm a good one.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Finn hands his whistle to another lifeguard and jumps down. His Floatzel bounds up the sand, and out past the swimmers a huge Wailord surfaces.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-finn-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-finn"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lifeguard Finn beat you on his beach",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "floatzel",
+        "wailord"
+       ],
+       "name": "Swimmer Finn",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Lifeguard Finn on his beach",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Race.\"",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "To the buoy and back. You hit the water together, and you touch the buoy first, just, and beat him back to the sand by an arm's length. Finn is thrilled to lose. He gives you a Wave Incense from the lifeguard hut.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-finn-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "wave-incense",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-finn"
+       }
+      ]
+     },
+     "failure": {
+      "text": "To the buoy and back. Finn is a lifeguard now, and it shows: he is waiting on the sand, not even out of breath, when you crawl in. He helps you up and tells you that you are better than he was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-finn-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-finn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Teach me.\"",
+     "success": {
+      "text": "Finn takes his job very seriously. He has your Water-types out in the shallows for an hour, kicking, breathing, turning, until they cut through the water faster than they ever have. Water-types in your party gain +1 Speed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-finn-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "relic",
+        "id": "finn-stroke",
+        "name": "Finn's Stroke",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "type": "water",
+          "value": 1.05
+         }
+        ]
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-finn"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-kai",
+   "name": "Swimmer Kai: Perfect Water",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kai-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer_m"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "intro": "A calm bay, flat as glass, the sky lying in it. A swimmer floats on his back far out with his arms spread, eyes closed, rising and falling on a swell you can barely see. A Seaking circles him lazily. Kai: \"The water is perfect today!\" He does not open his eyes to say it.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Kai rolls over and swims in with long easy strokes. His Seaking and a glowing Lumineon follow him into the shallows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kai-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Swimmer Kai beat you in his perfect water",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "seaking",
+        "lumineon"
+       ],
+       "name": "Swimmer Kai",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Swimmer Kai in his perfect water",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Float too.\"",
+     "success": {
+      "text": "You wade out and lie back beside him. The water holds you up like a hand. You float there a long time, saying nothing, while your Pokémon doze on the warm sand. Calm. Your lead comes out of the water a little hardier than it went in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kai-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "statBoost",
+        "stat": "hp",
+        "percent": 5,
+        "who": "lead",
+        "until": "run"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave him floating. When you look back from the headland, he has not moved.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-kai-m2",
+   "name": "Swimmer Kai: The Storm",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kai-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kai-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer_m"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "The bay in a storm. Waves the colour of slate smash over the harbour wall, and rain comes sideways. Kai stands on the shore in a soaked jacket, staring out, his face white. Kai: \"Never seen it like this. The fishing boats are still out.\" Far out, in the murk, little lights are tossing.",
+   "choices": [
+    {
+     "label": "\"Light a beacon.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "You and Kai drag driftwood up onto the point, and your Fire-type lights it, roaring, in spite of the rain. The beacon burns all night. One by one the little lights turn toward it, and all the boats come home.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kai-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-kai-beacon",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Swim out.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "It is madness and you both know it. Kai and your Water-type go out into the surf with a rope, and between them they reach the nearest boat and pull it in, foot by foot, to the harbour steps. The crew fall on the stones and kiss them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kai-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-kai-swam",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Wait.\"",
+     "success": {
+      "text": "There is nothing to do but wait. You stand with Kai and the families on the harbour wall all night. By morning the boats come in, one by one, battered. One boat doesn't come back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kai-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-kai-lost",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-swimmer-kai-m3",
+   "name": "Swimmer Kai: Calm Again",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kai-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kai-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_swimmer_m"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "The bay calm again, flat and shining, as if the storm never happened. Kai floats out on his back like the first day, then swims in to meet you. Kai: \"Water's perfect again.\" He looks out over it for a while. Kai: \"Feels different now.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Kai nods. His Lumineon glows in the shallows, and something huge stirs further out: a Gyarados, rising from the bay with the sea pouring off it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kai-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "splash-plate",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-kai"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Swimmer Kai beat you in the calm after the storm",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "lumineon",
+        "gyarados"
+       ],
+       "name": "Swimmer Kai",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Swimmer Kai in the calm after the storm",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Float.\"",
+     "success": {
+      "text": "You float with him, the two of you side by side, the bay holding you up. Your team rests on the sand. When you come in, everyone is fully healed. Kai gives you a Splash Plate he found on the seabed after the storm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kai-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "splash-plate",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-kai"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Visit the fishermen.\"",
+     "success": {
+      "text": "The fishermen know you from the storm. They press free fish on you, and a bag of Berries, three of them, and will not hear a word against it. Kai gives you a Splash Plate he found on the seabed after the storm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kai-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 3
+       },
+       {
+        "kind": "item",
+        "id": "splash-plate",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-swimmer-kai"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-kai-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The fishermen on the harbour wall are quieter than they used to be. One mooring post stands empty.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Visit the fishermen.\"",
+       "success": {
+        "text": "The fishermen are quieter now. They press free fish and three Berries on you anyway. Then one of them, an old woman, asks if you will lay a wreath for the boat that did not come back. You lay it on the water together, and Kai gives you a Splash Plate.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-kai-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "item",
+          "id": "oran-berry",
+          "count": 3
+         },
+         {
+          "kind": "moment",
+          "text": "You laid a wreath for the boat that never came home",
+          "importance": 60
+         },
+         {
+          "kind": "item",
+          "id": "splash-plate",
+          "count": 1
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-swimmer-kai"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

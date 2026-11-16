@@ -1,0 +1,5306 @@
+{
+ "catalogOverhaul": "new-events",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ne76-bridge-that-sings",
+   "name": "The Bridge That Sings",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "tags": [
+    "Exploration",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "types": [
+    "flying",
+    "rock",
+    "dragon",
+    "ground",
+    "dark"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "flying",
+      "rock",
+      "dragon",
+      "ground",
+      "dark"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne76-bridge-that-sings-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#14243a",
+    "effect": "float"
+   },
+   "intro": "A rope bridge hangs over the gorge, and it hums. The wind runs through it like a bow across strings, and every plank answers in its own note.\n\nSome planks are missing. Where they should be there is only air, and the tune stumbles over each gap like someone forgetting the words to a song they loved.\n\nBridge mender Winifred: \"Built by a musician. Walk it right and it plays her song. Walk it wrong and it throws you.\"\nWinifred: \"I replace planks. I can't tune them.\"\n\nShe knocks a new plank with her knuckle. It is pale and sound and gives back a dull, flat nothing.\nShe looks at it the way you look at a word you cannot remember.",
+   "choices": [
+    {
+     "label": "Walk by ear.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You stand at the first plank with your eyes shut and listen. The wind plays a note. You step where the note is.\n\nPlank by plank the melody rises up through your boots. Where a plank is missing you hum the gap, and somehow your feet find the far side of it.\n\nOn the last post a Metronome hangs from a string, swinging in the wind, keeping time for a musician who is not here to hear it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "metronome",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne76-bridge-that-sings-done",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your foot comes down on the wrong note. It is a sour, cracked sound, and the whole bridge bucks under you like something stung.\n\nYour lead is thrown against the ropes. Winifred hauls you both back to the start by your collars. \"Again,\" she says. \"Listen this time.\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne76-the-bridge-again"
+       },
+       {
+        "kind": "flag",
+        "key": "ne76-bridge-that-sings-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a sound-move Pokémon first.",
+     "pick": {
+      "moveFlag": "sound"
+     },
+     "success": {
+      "text": "Your Pokémon steps out onto the first plank, listens, and sings. Where a note is missing it sings the missing note, clear and sure.\n\nPlank by plank the path lights up under its voice. Winifred stops halfway through tying a knot and just listens, her mouth open.\n\nYou cross behind it on a song. On the last post a Metronome swings on a string. Your Pokémon looks back at you, very pleased with itself.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "item",
+        "id": "metronome",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne76-bridge-that-sings-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help her tune the new planks (a node).",
+     "pick": {
+      "moveFlag": "sound"
+     },
+     "success": {
+      "text": "It takes the whole afternoon. Your Pokémon sings each pitch, one at a time, and Winifred shaves each new plank until it sings the same note back.\n\nWhen the last plank goes in, the wind comes up the gorge and the bridge plays her song. All of it. No gaps.\nWinifred sits down on the edge of the gorge and cries.\n\nWinifred: \"Forty years I've kept it standing. I'd forgotten how it went.\"\nShe presses a Metronome into your hands. \"She'd want it used.\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bridge-tuned",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "metronome",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne76-bridge-that-sings-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "exploud-on-cue",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "exploud-healed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Halfway across there is a gap where the deepest note should be.\nAnd then, from far off over the forest, a roar comes rolling in, exactly on cue, exactly that note. The Exploud has not forgotten you."
+    }
+   ]
+  },
+  {
+   "id": "ne76-the-bridge-again",
+   "name": "The Bridge That Sings",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#14243a",
+    "effect": "float"
+   },
+   "intro": "The bridge settles. The wind tries the planks again, one note at a time, as if it is giving you the tune slowly.\n\nWinifred: \"Feet where the note is. Not where the wood is.\"",
+   "choices": [
+    {
+     "label": "Walk by ear.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "You stand at the first plank with your eyes shut and listen. The wind plays a note. You step where the note is.\n\nPlank by plank the melody rises up through your boots. Where a plank is missing you hum the gap, and somehow your feet find the far side of it.\n\nOn the last post a Metronome hangs from a string, swinging in the wind, keeping time for a musician who is not here to hear it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "metronome",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your foot comes down on the wrong note. It is a sour, cracked sound, and the whole bridge bucks under you like something stung.\n\nYour lead is thrown against the ropes. Winifred hauls you both back to the start by your collars. \"Again,\" she says. \"Listen this time.\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne76-the-bridge-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne76-the-whistled-song",
+   "name": "The Whistled Song",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "bridge-tuned",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "bridge-tuned",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne76-the-whistled-song-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#14243a",
+    "effect": "none"
+   },
+   "intro": "A carter goes by on the road, whistling. You know the tune before you know why you know it.\n\nIt is the bridge's song. The whole of it, no gaps.\nIt has got out into the world, and people are carrying it from town to town without knowing where it came from.",
+   "choices": [
+    {
+     "label": "Whistle the next bar back.",
+     "success": {
+      "text": "The carter grins and whistles the bar after that, and you go on together a while, two strangers finishing a dead musician's song.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Travellers whistle the bridge's song now. You helped tune it.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "ne76-the-whistled-song-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne77-fog-that-asks",
+   "name": "The Fog That Asks Questions",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "tags": [
+    "Mystery",
+    "Exploration"
+   ],
+   "stop": "event",
+   "types": [
+    "ghost",
+    "psychic",
+    "dark"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "ghost",
+      "psychic",
+      "dark"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne77-fog-that-asks-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "froslass",
+    "tint": "#202428",
+    "effect": "fog"
+   },
+   "intro": "The fog here is thick enough to lean on. It beads on your sleeves and fills your mouth with the taste of cold stone. You cannot see your own boots.\n\nThen it speaks. Its voice is soft and very polite, like someone knocking at a door they are not sure they should knock on.\n\nThe fog: \"Excuse me. Who goes there?\"\nThe fog: \"I ask everybody. Nobody answers properly.\"\n\nShapes drift in it. A Froslass, perhaps, turning slowly on the cold air. Or only weather, pretending to be someone.",
+   "choices": [
+    {
+     "label": "Give my name.",
+     "success": {
+      "text": "You tell it. Your real name, said plainly into the white.\n\nThe fog: \"Thank you.\"\nIt says it the way people say it when they have stopped expecting anyone to be kind.\n\nThe fog draws back like a curtain, and the moor is there, wet and green and ordinary. Behind you, very softly, it says your name once, to keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-named",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne77-fog-that-asks-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give a false name.",
+     "success": {
+      "text": "You give it a name that isn't yours. It comes out easily. That is the worst part.\n\nThe fog: \"Thank you.\"\nIt says the false name back to you, carefully, as if it were something precious it had been handed to hold.\n\nIt parts. You walk through. You do not look back, and you feel it watching you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-lied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fog-lied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne77-fog-that-asks-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who it is.",
+     "success": {
+      "text": "You ask it who it is. The fog goes very still, and very quiet, for so long you think it has gone.\n\nThe fog: \"I've forgotten.\"\nThe fog: \"I was hoping one of you would know.\"\n\nThe white around you thins a little, waiting. Nobody has ever asked it that before.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne77-a-name-for-the-fog"
+       },
+       {
+        "kind": "flag",
+        "key": "ne77-fog-that-asks-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne77-a-name-for-the-fog",
+   "name": "A Name for the Fog",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "froslass",
+    "tint": "#202428",
+    "effect": "fog"
+   },
+   "intro": "The fog waits, and you understand it is waiting for you.\n\nYou could give it a name. Nobody ever has. You go through the names you know, looking for one that fits something soft and cold and lonely and polite.",
+   "choices": [
+    {
+     "label": "\"I'll call you Mistral.\"",
+     "success": {
+      "text": "\"Mistral,\" it says. Then again, trying it on: \"Mistral.\"\n\nThe fog lifts all at once, delighted, rolling up the hillside in long happy swirls. You hear it saying its name to the heather all the way across the moor.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-given-name",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll call you Haar.\"",
+     "success": {
+      "text": "\"Haar,\" it says. \"Haar. Like the sea fog. Was I the sea once?\"\n\nIt does not wait for an answer. It goes rolling off over the moor, delighted, trying its name on every rock it passes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-given-name",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll call you Brume.\"",
+     "success": {
+      "text": "\"Brume,\" it says, and it laughs, a small damp laugh like rain starting.\n\nThe fog lifts in a single sweep, delighted, and for a moment the whole moor is full of light. Somewhere in it a Froslass is laughing too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fog-given-name",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne77-the-fog-remembers",
+   "name": "The Fog Remembers",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fog-lied",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "fog-lied",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "ghost",
+      "psychic",
+      "dark"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne77-the-fog-remembers-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "froslass",
+    "tint": "#16181c",
+    "effect": "fog"
+   },
+   "intro": "The fog is back, and it is thicker this time. It presses close and cold, and it does not ask who you are.\n\nIt already knows. It says the false name you gave it, quietly, and the way it says it tells you it has found out. It sounds hurt.",
+   "choices": [
+    {
+     "label": "Push through.",
+     "success": {
+      "text": "You put your head down and walk. The fog does not part for you this time. Your lead stumbles on a rock it never saw.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "lead",
+        "except": []
+       },
+       {
+        "kind": "flag",
+        "key": "ne77-the-fog-remembers-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for it to thin (a node).",
+     "success": {
+      "text": "You sit and wait. It takes a long time. When it finally thins it does so without a word, and it does not say goodbye.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne77-the-fog-remembers-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne78-orchard-after-fire",
+   "name": "The Orchard After the Fire",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "fire",
+    "ground",
+    "grass",
+    "bug"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "fire",
+      "ground",
+      "grass",
+      "bug"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne78-orchard-after-fire-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "leavanny",
+    "tint": "#2a1c10",
+    "effect": "glint"
+   },
+   "intro": "Black trunks stand in rows, all the way to the hedge. The ground is grey ash. Nothing grows. Nothing sings.\n\nIn the very middle one tree is green, untouched, as if the fire walked round it. A Leavanny sits in its branches, sewing.\n\nIt reaches out from the green tree to the black ones beside it and stitches fresh leaves onto the dead twigs, one leaf at a time, very neatly.\n\nOrchardist Cuthbert: \"Fire took the lot. It's stitching leaves on dead trees.\"\nCuthbert: \"I haven't the heart to stop it.\"",
+   "choices": [
+    {
+     "label": "Help it.",
+     "pick": {
+      "types": [
+       "bug",
+       "grass"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon climbs up beside the Leavanny and starts to sew. The Leavanny watches it work, then shows it a better stitch.\n\nBy evening the orchard looks alive from the road. It isn't.\nBut from the road, for one golden hour, it is beautiful, and Cuthbert stands at the gate and looks at it for a long time.\n\nHe gives you a Miracle Seed from his coat pocket. \"Off the last tree,\" he says. \"The live one.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne78-orchard-after-fire-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Plant new trees (a node, three Berries).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "You dig three holes in the ash with Cuthbert, and put a Berry in each, and cover them over, and water them from his can.\n\nThe Leavanny climbs down from the green tree and watches. Then it takes the can from Cuthbert, very politely, and starts watering. It stops sewing.\n\nCuthbert: \"There. That's the first thing it's let go of since the fire.\"\nHe gives you a Miracle Seed. His hands are shaking.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "loseItem",
+        "id": "oran-berry",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "orchard-planted",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne78-orchard-after-fire-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it gently.",
+     "success": {
+      "text": "You stand under the green tree and tell the Leavanny, as gently as you know how, that the others are gone.\n\nIt listens. It looks at the leaf in its hands. Then it sews that one last leaf on, very carefully, and puts its needle away.\n\nCuthbert gives you a Miracle Seed and doesn't say anything at all.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne78-orchard-after-fire-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne78-the-orchard-green",
+   "name": "The Orchard, Green",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "orchard-planted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "orchard-planted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne78-the-orchard-green-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "leavanny",
+    "tint": "#1c3a1c",
+    "effect": "none"
+   },
+   "intro": "On the map there is a green square where the black one used to be. You go and look.\n\nThree young trees stand in the ash, already fruiting, absurdly early. A Leavanny is asleep in the middle one. Cuthbert waves from the gate with a basket.",
+   "choices": [
+    {
+     "label": "Pick your Berries.",
+     "success": {
+      "text": "Your three Berries came back as nine. Cuthbert fills your bag and will not take a thing for it. \"They're yours,\" he says. \"You planted them.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 9
+       },
+       {
+        "kind": "flag",
+        "key": "ne78-the-orchard-green-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne79-lighthouse-two-keepers",
+   "name": "The Lighthouse With Two Keepers",
+   "group": "Biome Hazards",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Exploration"
+   ],
+   "stop": "event",
+   "types": [
+    "water"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne79-lighthouse-two-keepers-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#0c1c30",
+    "effect": "glint"
+   },
+   "intro": "The lighthouse flashes twice as fast as it should. From the shore it looks like something panicking.\n\nInside, up the long spiral stair, two keepers each have a hand on the lamp, and each is turning it their own way.\n\nKeeper Aloysius: \"Slow and steady. Ships expect it.\"\nKeeper Benedicta: \"Fast. There's a wreck on the shoal. They need to see it.\"\n\nOut at sea, through the salt-smeared glass, a ship's lights. Coming in.",
+   "choices": [
+    {
+     "label": "Slow.",
+     "success": {
+      "text": "You put your hand on Aloysius's side. The lamp settles into its old slow sweep. The ship reads it, and turns for harbour the way it always has.\n\nIt misses the shoal by a boat's width, by luck and nothing else. Benedicta watches it go by in silence. Aloysius doesn't look at her.\n\nIn the morning the captain climbs the stair with a gift for the lighthouse and no idea how close it was.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne79-lighthouse-two-keepers-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fast.",
+     "success": {
+      "text": "You put your hand on Benedicta's side. The light races. Out at sea the ship's lights hesitate, then stop altogether.\n\nIt sits out there all night, confused, going nowhere. Safe. At dawn the captain rows in to ask what on earth the light was playing at.\n\nBenedicta shows him the wreck from the gallery. He goes pale, and gives you something from his locker to say thank you.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne79-lighthouse-two-keepers-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Pokémon out to the shoal with a light.",
+     "pick": {
+      "types": [
+       "water",
+       "flying",
+       "electric"
+      ]
+     },
+     "success": {
+      "text": "You send your Pokémon out into the dark with a lantern. It finds the wreck on the shoal and stays there, a small brave light marking the danger exactly.\n\nThe ship sees it, and steers round it, wide and slow. Both keepers let go of the lamp at the same moment and go to the window together.\n\nThe captain comes ashore at dawn to shake your hand, and your Pokémon's. The whole harbour has heard by noon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lighthouse-marked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne79-lighthouse-two-keepers-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne79-the-small-lamp",
+   "name": "The Small Lamp on the Shoal",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lighthouse-marked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "lighthouse-marked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne79-the-small-lamp-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#0c1c30",
+    "effect": "none"
+   },
+   "intro": "Out on the shoal where the wreck lies there is a second light now: a small lamp on an iron post, steady and low.\n\nA fisherman tells you the two keepers put it up together. They named it after a Pokémon that stood out there all night with a lantern.\nThey still argue about everything else.",
+   "choices": [
+    {
+     "label": "Watch it shine a while.",
+     "success": {
+      "text": "It does not flash fast or slow. It just stays lit, like your Pokémon did.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "The keepers named the small lamp on the shoal after your Pokémon.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "ne79-the-small-lamp-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne80-snow-that-wont-stop",
+   "name": "The Snow That Won't Stop",
+   "group": "Biome Hazards",
+   "rarity": "rare",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "ice",
+    "flying",
+    "rock",
+    "dragon"
+   ],
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "ice",
+      "flying",
+      "rock",
+      "dragon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne80-snow-that-wont-stop-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.snow_worker_m"
+    ],
+    "pokemon": "vanilluxe",
+    "tint": "#1c2a3a",
+    "effect": "snow"
+   },
+   "intro": "It has been snowing on this pass for a month. Not the soft kind. The kind that comes sideways and fills your boots and your ears and your sleep.\n\nFar up at the summit, so high you can only just see it, a Vanilluxe is crying. Every tear is a blizzard.\n\nGuide Halden Vey: \"Its trainer left it at the summit to 'toughen it.' Didn't come back.\"\nHalden: \"It thinks if it makes enough snow, he'll be stuck up here and have to return.\"\n\nThe wind brings you the sound of it, thin and high, over and over. It has been calling for a month.",
+   "choices": [
+    {
+     "label": "Climb to it (two hazard nodes).",
+     "success": {
+      "text": "You climb into the whiteout. Two days of it. The snow scours your lead raw unless it was built for cold or carries its own fire.\n\nAt the top the Vanilluxe is sitting in a nest of its own snow, small and shaking. It looks past you, down the path, for someone else.\n\nYou crouch beside it. \"Come down with me,\" you say. It looks at you for a long time. Then it does.\nBehind you, for the first time in a month, the snow stops.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "damage",
+        "share": 0.2,
+        "who": "lead",
+        "except": [
+         "ice",
+         "fire"
+        ]
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "vanilluxe"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "snow-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne80-snow-that-wont-stop-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the trainer (a node back).",
+     "success": {
+      "text": "You go back down the path, out of the snow, all the way to the valley.\n\nYou find him in the inn, at the table nearest the fire, with a full cup gone cold in front of him. He knows why you've come.\nHe can't look at you.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "back": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne80-the-valley-inn"
+       },
+       {
+        "kind": "flag",
+        "key": "ne80-snow-that-wont-stop-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for it to tire.",
+     "success": {
+      "text": "You wait in Halden's hut. You wait three days. The snow goes on, and on, and then it thins, and then it stops.\n\nThe pass is clear. Up at the summit the Vanilluxe is still sitting where it was left. It has stopped crying. It is alone.\n\nHalden finds a lump of ice by the door that will not melt, and gives it to you without a word.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 3
+       },
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne80-snow-that-wont-stop-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne80-the-valley-inn",
+   "name": "The Valley Inn",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.snow_worker_m"
+    ],
+    "pokemon": "vanilluxe",
+    "tint": "#2a2016",
+    "effect": "snow"
+   },
+   "intro": "The trainer: \"I meant to go back the next day. Then it snowed. Then I was ashamed.\"\nThe trainer: \"Every day I didn't go, it was harder to go.\"\n\nOutside the window the pass is a white wall. You both know what is up there, calling.",
+   "choices": [
+    {
+     "label": "\"Go up yourself.\"",
+     "success": {
+      "text": "He looks at you for a long time. Then he stands, and puts his coat on, and goes out into it.\n\nYou watch from the inn window. A small dark shape climbing into the white. Hours.\nAnd then, all at once, the snow stops, as if someone had shut a door on it.\n\nHalden comes in stamping his boots and puts a lump of ice that will not melt into your hand. \"He got there,\" he says. \"It ran to him.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "snow-trainer-climbed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "item",
+        "id": "nevermeltice",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne80-the-rescue-hut",
+   "name": "The Rescue Hut",
+   "group": "Biome Hazards",
+   "rarity": "common",
+   "minStage": 6,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "snow-trainer-climbed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "snow-trainer-climbed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne80-the-rescue-hut-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "vanilluxe",
+    "tint": "#1c2a3a",
+    "effect": "none"
+   },
+   "intro": "A hut on a high pass, with a lamp in the window and a sign: RESCUE. KNOCK ANY HOUR.\n\nThe trainer from the valley inn opens the door, and behind him a Vanilluxe is making ice for the water jug. They run the pass together now.\nNobody gets left up here.",
+   "choices": [
+    {
+     "label": "Come in out of the cold.",
+     "success": {
+      "text": "They give you the warm seat and a hot drink and do not ask you for anything. The Vanilluxe sits against the trainer's leg all evening.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne80-the-rescue-hut-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "camp-one-who-wont-eat",
+   "name": "The One Who Won't Eat",
+   "group": "Rests, camp and bond",
+   "rarity": "uncommon",
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "partySize",
+     "atLeast": 2
+    },
+    {
+     "kind": "memberFainted",
+     "within": 6
+    },
+    {
+     "kind": "flag",
+     "key": "camp-one-who-wont-eat-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1c1c",
+    "effect": "fire"
+   },
+   "intro": "Dinner is done. The fire is low. One bowl is still full.\n\nIts owner is sitting with its back to the fire, facing the dark. It is the one that was beside the one who fell.\n\nIt keeps looking at the empty spot by the fire where its friend always lay.\nEvery so often it gets up, as if it has heard something, and then sits back down.",
+   "choices": [
+    {
+     "label": "Sit by it.",
+     "pick": {},
+     "success": {
+      "text": "You sit down beside it. You don't say anything. Neither does it.\n\nA long while goes by. The fire burns down. Then, so slowly you hardly feel it start, it leans against you, and stays leaning.\n\nIn the morning it is the first one at your side. It walks close, the whole day.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "picked"
+       },
+       {
+        "kind": "leadPicked"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Resolute: the one who would not eat may hold on at 1 HP once",
+        "effects": [
+         {
+          "kind": "survivalChance",
+          "chance": 0.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-one-who-wont-eat-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring it the bowl.",
+     "pick": {},
+     "success": {
+      "text": "You bring the bowl and set it down in front of it.\n\nIt looks at the food, and at you. Then it eats two bites, carefully, to be polite. It pushes the bowl back an inch with its nose. Thank you.\nThat's all.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "leadPicked"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Resolute: the one who would not eat may hold on at 1 HP once",
+        "effects": [
+         {
+          "kind": "survivalChance",
+          "chance": 0.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-one-who-wont-eat-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let another Pokémon go to it.",
+     "pick": {},
+     "success": {
+      "text": "You don't move. You wait. After a while the one on your team who is closest to you gets up, without being asked, and goes and sits down beside it.\n\nThey sit shoulder to shoulder, facing the dark together. In the morning they are still together, and they walk together all day. A pair now.",
+      "effects": [
+       {
+        "kind": "campBond",
+        "chemistry": 12,
+        "calm": 6,
+        "settle": false
+       },
+       {
+        "kind": "flag",
+        "key": "camp-pair",
+        "amount": 1
+       },
+       {
+        "kind": "leadPicked"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Resolute: the one who would not eat may hold on at 1 HP once",
+        "effects": [
+         {
+          "kind": "survivalChance",
+          "chance": 0.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-one-who-wont-eat-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "camp-the-argument",
+   "name": "The Argument",
+   "group": "Rests, camp and bond",
+   "rarity": "uncommon",
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "partySize",
+     "atLeast": 2
+    },
+    {
+     "kind": "flag",
+     "key": "camp-the-argument-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "rattle"
+   },
+   "intro": "There is one good spot by the fire. Warm, flat, out of the wind. Two of the team have arrived at it at exactly the same moment.\n\nThey are nose to nose over it now. One stamps. One hisses. Neither will give an inch.\n\nThe rest of the team stops eating and turns, very slowly, to look at you.",
+   "choices": [
+    {
+     "label": "Give the spot to the one who battled today.",
+     "pick": {},
+     "success": {
+      "text": "You point at the one who fought hardest today. Fair is fair. It settles into the warm spot with enormous dignity.\n\nThe other one sulks. It sulks with its whole body, at the edge of the light, facing away, until long after you are all asleep.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-argument",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "They're still not speaking. They fight well anyway.",
+        "importance": 50
+       },
+       {
+        "kind": "flag",
+        "key": "camp-the-argument-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make them share.",
+     "pick": {},
+     "success": {
+      "text": "You tell them both: share. They look at you as if you had suggested something disgusting.\n\nFor an hour they lie at the very edges of the spot, as far apart as it allows, rigid with offence.\n\nWhen you check on them later they are asleep in a heap, tangled together, one snoring into the other's ear.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "campBond",
+        "chemistry": 8,
+        "calm": 8,
+        "settle": true
+       },
+       {
+        "kind": "flag",
+        "key": "camp-argument",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "They're still not speaking. They fight well anyway.",
+        "importance": 50
+       },
+       {
+        "kind": "flag",
+        "key": "camp-the-argument-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the spot myself.",
+     "pick": {},
+     "success": {
+      "text": "You step between them and sit down in the warm spot yourself.\n\nThey are both so offended they completely forget about each other. They come and sit on you instead, one on each side, heavy and smug.\n\nYou do not get any rest for your back. You do not get much rest for anything. But they are not fighting.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "campBond",
+        "chemistry": 6,
+        "calm": 10,
+        "settle": false
+       },
+       {
+        "kind": "flag",
+        "key": "camp-argument",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "They're still not speaking. They fight well anyway.",
+        "importance": 50
+       },
+       {
+        "kind": "flag",
+        "key": "camp-the-argument-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-pair-is-here",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "camp-pair",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The pair from the fire watches from the side, ears up, tails still. They have opinions about this. They have been waiting to be asked.",
+     "addChoices": [
+      {
+       "label": "Ask the pair to sort it out.",
+       "success": {
+        "text": "You look at the pair from the fire and nod. They trot over, unhurried, and sit down right between the two of them.\n\nNobody says anything. The argument just runs out of air. A minute later all four are lying in the warm spot together, and nobody is sulking at all.",
+        "effects": [
+         {
+          "kind": "campBond",
+          "chemistry": 12,
+          "calm": 12,
+          "settle": true
+         },
+         {
+          "kind": "friendship",
+          "bond": 1,
+          "who": "party"
+         },
+         {
+          "kind": "flag",
+          "key": "camp-argument",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "camp-the-argument-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "camp-the-bath",
+   "name": "The Bath",
+   "group": "Rests, camp and bond",
+   "rarity": "uncommon",
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "stop": "rest",
+   "types": [
+    "water"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "camp-the-bath-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a30",
+    "effect": "rain"
+   },
+   "intro": "Let's be honest. The whole team smells. Days of road, mud, smoke and things nobody wants to name.\n\nA river is right there, clear and cold and chattering over the stones. Nobody volunteers.\n\nThe Fire-type has climbed a tree. The Ground-type is lying very still in the grass, pretending to be a rock. It is not a convincing rock.",
+   "choices": [
+    {
+     "label": "Everyone in.",
+     "success": {
+      "text": "It is a chase. It is a long, loud, undignified chase, through the camp and round the tree and twice across the river.\n\nIn the end everyone is in, and everyone is clean, and every sting of poison and burn has washed away downstream.\n\nThe Fire- and Rock-types sit on the bank afterwards, dripping and betrayed. The rest are splashing and won't come out.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "friendship",
+        "bond": -2,
+        "who": {
+         "types": [
+          "fire",
+          "rock"
+         ]
+        }
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Freshly washed: shopkeepers are friendlier (5% off)",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.95
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-the-bath-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only the ones who want to.",
+     "pick": {},
+     "success": {
+      "text": "You let them choose. About half the team wades in, shrieking at the cold, then refusing to get out.\n\nAfterwards they sit by the fire, clean and fluffy and very smug, and make a point of sitting upwind of the others.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Freshly washed: shopkeepers are friendlier (5% off)",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.95
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-the-bath-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go in first.",
+     "success": {
+      "text": "You take your boots off, and walk straight into the river, clothes and all. It is so cold you can't breathe.\n\nOne by one they follow you in. Every one.\nEven the Fire-type, in the end, climbs down and dips in, right up to its toes, and looks at you as if to say: there. For you.\n\nEveryone comes out clean. All the poison and burns wash away with the mud.",
+      "effects": [
+       {
+        "kind": "cure"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Freshly washed: shopkeepers are friendlier (5% off)",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.95
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-the-bath-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "camp-nightmare-watch",
+   "name": "The Nightmare Watch",
+   "group": "Rests, camp and bond",
+   "rarity": "uncommon",
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "partySize",
+     "atLeast": 2
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "camp-nightmare-watch-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#161a2e",
+    "effect": "float"
+   },
+   "intro": "In the middle of the night something wakes you. A small sound. A whimper.\n\nIt is one of the team, the one that took the worst of the last battle. It is fast asleep, and its feet are running.\n\nIts eyes are shut tight. Whatever it is running from, it has been running a long time, and it is not getting away.",
+   "choices": [
+    {
+     "label": "Wake it gently.",
+     "pick": {},
+     "success": {
+      "text": "You put a hand on it and say its name, softly, until its eyes open.\n\nIt stares at you, not knowing where it is. Then it knows, and it is embarrassed, and it tucks its face away.\n\nBut it shuffles closer to you before it sleeps again, and it stays close all night.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "nightmare-watched",
+        "amount": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-nightmare-watch-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the lead curl round it.",
+     "pick": {},
+     "success": {
+      "text": "You nudge your lead awake and nod at the dreamer. Your lead looks, understands, and moves over without being asked twice.\n\nIt curls itself all the way around the little runner. The running feet slow, and slow, and stop.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "nightmare-watched",
+        "amount": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-nightmare-watch-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay up beside it.",
+     "pick": {},
+     "success": {
+      "text": "You don't wake it. You sit beside it in the dark with a hand on its side, so that wherever it is running, it isn't running alone.\n\nYou don't sleep, and the rest you meant to have is gone; your lead's slot gets no healing from you tonight. You know that, and you stay.\n\nSomewhere near dawn the running stops. It sighs a long, shaky sigh and sleeps properly for the first time in days.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 3,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "nightmare-watched",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "camp-nightmare-watch-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne84-first-up-at-dawn",
+   "name": "First Up at Dawn",
+   "group": "Rests, camp and bond",
+   "rarity": "common",
+   "minStage": 3,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "nightmare-watched",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "morning"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne84-first-up-at-dawn-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "You open your eyes to grey morning light and something poking your cheek.\n\nIt is the one from the nightmare. It is the first one up, before anybody, and it has brought you a stick. A good stick.\nThe best one it could find.",
+   "choices": [
+    {
+     "label": "Take the stick.",
+     "success": {
+      "text": "You take it very seriously, and thank it, and put the stick in your bag. It is extremely pleased. It walks beside you all morning.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "After the nightmare, it was first up at dawn and brought you a stick.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "ne84-first-up-at-dawn-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "camp-photograph-nobody-posed",
+   "name": "The Photograph Nobody Posed For",
+   "group": "Rests, camp and bond",
+   "rarity": "uncommon",
+   "tags": [
+    "Relationship",
+    "Recovery"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 20,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "camp-photograph-nobody-posed-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "glint"
+   },
+   "intro": "Morning. A young woman with a camera round her neck is standing at the edge of the camp, looking sheepish.\n\nShe has been watching the camp from the road, and she has taken a picture without asking.\n\nPhotographer Philomena: \"Sorry. I couldn't not.\"\nPhilomena: \"Look.\"\n\nIt is the whole team, asleep, in one great warm pile. You are in the middle of it, mouth wide open. Somebody's tail is across your face.\nEveryone looks completely safe.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it. Of course you keep it.\n\nIt goes in the album, on the very first page, before everything else. On the hard days, later, you will open the album just to look at it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "camp-photo",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The photo of the whole team asleep in a pile goes first in the album.",
+        "importance": 50
+       },
+       {
+        "kind": "flag",
+        "key": "camp-photograph-nobody-posed-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it home.",
+     "success": {
+      "text": "You ask Philomena to send it home. She writes the address on the back in careful letters.\n\nIt goes on the wall at your house, in the hall, where you will see it the moment you open the door. A light left on for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "camp-photo-home",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A photo of the team asleep in a pile is on the wall at home.",
+        "importance": 50
+       },
+       {
+        "kind": "flag",
+        "key": "camp-photograph-nobody-posed-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take another, awake.",
+     "success": {
+      "text": "You wake everyone up and line them up for a proper one. Everybody poses. Nobody poses the same way. Someone sneezes.\n\nIt is worse. It is much, much worse. You all crowd round the camera to look at it and laugh until you can't breathe.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "camp-photo",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "camp-photograph-nobody-posed-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-two-in-the-photo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "camp-argument",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "And there, right at the front: the two who argued over the fire. Nose to nose, asleep, curled around each other as if nothing had ever happened."
+    }
+   ]
+  },
+  {
+   "id": "ne86-town-where-everyone-lies",
+   "name": "The Town Where Everyone Lies on Tuesdays",
+   "group": "Puzzles and mysteries",
+   "rarity": "uncommon",
+   "tags": [
+    "Mystery",
+    "Exploration"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne86-town-where-everyone-lies-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "sableye",
+    "tint": "#2a2234",
+    "effect": "flicker"
+   },
+   "intro": "A painted sign at the town gate: WELCOME. TODAY IS NOT TUESDAY.\n\nIt is Tuesday. You check twice.\n\nInnkeeper: \"We've no rooms.\"\nThere are rooms. You can see the keys on their hooks behind him, every one of them.\n\nA child on the fountain, Isidore: \"They do it for luck. An old Sableye asked them to, once.\"\nIsidore: \"I'm the only honest one. I'm too young.\"\n\nAnd somewhere in this town is the Gym key. You need it, and everyone you ask is going to lie to you about where it is.",
+   "choices": [
+    {
+     "label": "Ask three townsfolk where the Gym key is.",
+     "success": {
+      "text": "You ask three people. Each answers at once, cheerfully, with total confidence.\n\nThe baker: \"The bell tower. Definitely the bell tower.\"\nThe fishwife: \"Bottom of the old well, love.\"\nThe postmistress: \"At the inn. Under the counter.\"\n\nEvery one of them is lying. That is the rule here. So the key is not in any place they named.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne86-three-answers"
+       },
+       {
+        "kind": "flag",
+        "key": "ne86-town-where-everyone-lies-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Isidore.",
+     "success": {
+      "text": "You sit down beside him on the fountain. He looks at you sideways, deciding.\n\nIsidore: \"It's in the Gym's own letterbox. They put it there every Tuesday. Nobody thinks to look.\"\nIsidore: \"Now you tell me a secret. A true one. Fair's fair.\"\n\nYou tell him one. He nods seriously and keeps it. The innkeeper, when you come back with the key, suddenly finds he has a room after all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "isidore-secret",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tuesday-gym-key",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne86-town-where-everyone-lies-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for Wednesday (a node).",
+     "success": {
+      "text": "You give up and wait. You sleep in the stable, since there are no rooms.\n\nOn Wednesday morning the whole town comes to find you. They apologise for everything, at length, one after another, wringing their hats.\n\nThe baker brings you the key himself. The innkeeper gives you his best room and will not hear of payment.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tuesday-gym-key",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne86-town-where-everyone-lies-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne86-three-answers",
+   "name": "Three Answers",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2234",
+    "effect": "none"
+   },
+   "intro": "The baker said the bell tower. The fishwife said the well. The postmistress said the inn.\nToday, everyone lies.\n\nWhere is the one place none of them said?",
+   "choices": [
+    {
+     "label": "The bell tower.",
+     "success": {
+      "text": "You go and look. Nothing there. Not a key, not a hook where a key might hang.\n\nAcross the square, the one who sent you there is smiling and waving. Of course. It's Tuesday. Isidore, sitting on the fountain, shakes his head at you very slowly.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne86-three-answers"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The old well.",
+     "success": {
+      "text": "You go and look. Nothing there. Not a key, not a hook where a key might hang.\n\nAcross the square, the one who sent you there is smiling and waving. Of course. It's Tuesday. Isidore, sitting on the fountain, shakes his head at you very slowly.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne86-three-answers"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The inn.",
+     "success": {
+      "text": "You go and look. Nothing there. Not a key, not a hook where a key might hang.\n\nAcross the square, the one who sent you there is smiling and waving. Of course. It's Tuesday. Isidore, sitting on the fountain, shakes his head at you very slowly.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ne86-three-answers"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Somewhere none of them named: the Gym's own letterbox.",
+     "success": {
+      "text": "You go to the Gym door and lift the flap of its letterbox. Something cold and brass is lying on the mat inside.\n\nThe key. Behind you, Isidore whoops and claps. The innkeeper, very grudgingly, discovers that he has a room after all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tuesday-gym-key",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne86-the-sableye-in-the-cellar",
+   "name": "The Sableye in the Cellar",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne86-town-where-everyone-lies-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "ne86-town-where-everyone-lies-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne86-the-sableye-in-the-cellar-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "sableye",
+    "tint": "#16101e",
+    "effect": "none"
+   },
+   "intro": "Isidore finds you on the road. He has run a long way. \"I found the Sableye,\" he says. \"In the inn's cellar. It's still there.\"\n\nIt asked for lies because someone once told it a truth that hurt, he says. It has never told anyone what.\nIt just sits in the dark and listens to the town lying, and feels safe.",
+   "choices": [
+    {
+     "label": "Go down and tell it one kind true thing.",
+     "success": {
+      "text": "You sit on the cellar step in the dark. Two gem eyes watch you.\nYou tell it something true and kind: that the town still does this for it, every week, because they care.\n\nThe gem eyes blink. Very slowly the Sableye creeps out, and sits on the step beside you, and stays.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sableye-told-kind",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You told the Sableye in the cellar one kind true thing.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "ne86-the-sableye-in-the-cellar-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to its lies.",
+     "success": {
+      "text": "You let it be. Some things heal in their own time. Isidore nods, and doesn't argue.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne86-the-sableye-in-the-cellar-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne87-painting-missing-person",
+   "name": "The Painting With a Missing Person",
+   "group": "Puzzles and mysteries",
+   "rarity": "uncommon",
+   "tags": [
+    "Mystery",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "types": [
+    "normal",
+    "steel",
+    "electric",
+    "poison",
+    "ghost",
+    "psychic",
+    "dark"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "normal",
+      "steel",
+      "electric",
+      "poison",
+      "ghost",
+      "psychic",
+      "dark"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne87-painting-missing-person-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "smeargle",
+    "tint": "#2a2016",
+    "effect": "flicker"
+   },
+   "intro": "A family portrait hangs in the hall: mother, father, two children in their best clothes, all very stiff.\n\nAnd a gap. Beside the younger child there is a space, painted round, where a fifth figure used to stand. You can see the outline under the paint.\n\nHousekeeper Mrs. Thackeray: \"The dog. They had it painted out when it was stolen.\"\nMrs. Thackeray: \"Couldn't bear to look at it.\"\n\nIn the corner, a Smeargle with paint on its tail is sitting quite still, watching the gap.",
+   "choices": [
+    {
+     "label": "Search for the dog's trail.",
+     "success": {
+      "text": "You ask Mrs. Thackeray for everything. The day it went. The gate. The road. She tells you, and her voice keeps catching.\n\nThe trail is cold, but it is there. You set off with the first clue in your head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "portrait-searching",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "ne87-the-collar",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne87-painting-missing-person-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the Smeargle to paint it back.",
+     "success": {
+      "text": "The family gather round and describe their dog to the Smeargle, all at once. Big. Small. Brown. Grey. Ears up. Ears down.\n\nEach of them remembers it differently. The Smeargle paints all of it. The dog in the portrait now has three kinds of ears and a very kind face.\n\nThe younger child laughs for the first time in a year. Mrs. Thackeray gives you a Silk Scarf. \"It was his,\" she says. \"The dog's.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne87-painting-missing-person-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the gap.",
+     "success": {
+      "text": "You look at the gap a long time, and the Smeargle looks with you. Some gaps are not yours to fill. You leave the house quietly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne87-painting-missing-person-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne87-the-collar",
+   "name": "The First Clue: a Collar",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2016",
+    "effect": "none"
+   },
+   "intro": "In a ditch by the road, half sunk in the mud, a leather collar. The tag is worn smooth, but you can still read the family's name on it.\n\nIt was dropped, not lost. Somebody took it off.",
+   "choices": [
+    {
+     "label": "Follow the trail on.",
+     "success": {
+      "text": "You put the collar in your pocket and follow the road the way the collar was facing.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "ne87-the-kennel",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne87-the-kennel",
+   "name": "The Second Clue: a Kennel",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2016",
+    "effect": "none"
+   },
+   "intro": "Behind a farm, an empty kennel. Inside, the boards are worn smooth by a big dog lying in the same place for a long time.\n\nThe farmer says a man sold the dog on, a year ago. To a pen in the next town, where they keep animals nobody claims.",
+   "choices": [
+    {
+     "label": "Follow the trail on.",
+     "success": {
+      "text": "You thank the farmer and walk to the next town, faster than you meant to.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "ne87-the-pen-list",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne87-the-pen-list",
+   "name": "The Third Clue: the Holding Pen List",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "stoutland",
+    "tint": "#2a2016",
+    "effect": "none"
+   },
+   "intro": "The holding pen keeps a list on a nail by the gate. You run your finger down it. There. A Stoutland. Brought in a year ago. Unclaimed.\n\nAt the end of the row of pens a big grey Stoutland lifts its head off its paws and looks at you. It is alive. It is old now.\nIts tail starts, very slowly, to wag.",
+   "choices": [
+    {
+     "label": "Take it home.",
+     "success": {
+      "text": "You walk it all the way back.\nWhen the front door opens the younger child screams, and the dog knocks him flat, and nobody can say anything for a long time.\n\nMrs. Thackeray presses a Silk Scarf into your hands. Her eyes are streaming. \"His,\" she says. \"We kept it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "portrait-found",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne87-the-repainted-portrait",
+   "name": "The Portrait, Repainted",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "portrait-found",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ne87-the-repainted-portrait-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "smeargle",
+    "tint": "#2a2016",
+    "effect": "none"
+   },
+   "intro": "A letter finds you on the road, in a careful hand: Mrs. Thackeray's. Inside, a small sketch of the new portrait.\n\nThe family, repainted. The children are grown, in the painting, tall and grinning. And beside them stands the Stoutland, old and grey, exactly where it belongs.",
+   "choices": [
+    {
+     "label": "Keep the sketch.",
+     "success": {
+      "text": "You fold it into your bag carefully. The Smeargle has signed it with a pawprint.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "The Thackerays' portrait was repainted with the dog in it, old, and the children grown.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "ne87-the-repainted-portrait-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne88-well-with-two-bottoms",
+   "name": "The Well With Two Bottoms",
+   "group": "Puzzles and mysteries",
+   "rarity": "uncommon",
+   "tags": [
+    "Mystery",
+    "Exploration"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne88-well-with-two-bottoms-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "shellos",
+    "tint": "#14242a",
+    "effect": "glint"
+   },
+   "intro": "An old stone well in the village square. A woman lowers a bucket into it. It goes down dry. It comes up dry.\n\nShe lowers it again, the same rope, the same well. It comes up full, slopping over. She tips it out. It is sea water. Salt. Weed in it.\n\nThe sea is a hundred miles off.\n\nWell-keeper Hildegard: \"Depends how you lower it. Granddad knew.\"\nHildegard: \"He didn't write it down.\"",
+   "choices": [
+    {
+     "label": "Lower it fast.",
+     "success": {
+      "text": "You let the rope run, fast, hand over hand. The bucket hits water with a slap and comes up heavy, and smelling of the sea.\n\nThere is a Shellos in it, looking up at you, extremely surprised. It has never seen a village before. It decides to stay and see more.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "shellos"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne88-well-with-two-bottoms-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lower it slowly.",
+     "success": {
+      "text": "You lower it slowly, an arm's length at a time, feeling for the turn in the shaft.\n\nIt comes up clear and cold and sweet. Spring water. Hildegard fills three bottles for you and corks them herself.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fresh-water",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "ne88-well-with-two-bottoms-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Pokémon down.",
+     "pick": {
+      "types": [
+       "water",
+       "ghost"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon goes down the rope and out of sight. It is gone a long time. Hildegard holds the rope with you and doesn't breathe.\n\nIt comes back up wet and pleased with itself. It has found the fork: one shaft runs to a spring, the other to a cave under the sea.\n\nHildegard draws the whole thing in chalk on the well's lip as you tell her. Fast for sea, slow for spring. And down there, a way through.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "well-mapped",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne88-the-sea-cave"
+       },
+       {
+        "kind": "flag",
+        "key": "ne88-well-with-two-bottoms-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne88-the-sea-cave",
+   "name": "Under the Well",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "gastrodon",
+    "tint": "#0c1c24",
+    "effect": "glint"
+   },
+   "intro": "There is a ladder down the inside of the well, rusted, but it holds. At the bottom the shaft forks, just as your Pokémon said.\n\nOne way smells of moss and fresh water. The other smells of salt, and from far down it you can hear waves where no waves should be.",
+   "choices": [
+    {
+     "label": "Take the sea shaft.",
+     "success": {
+      "text": "It opens into a cave under the sea, green-lit and dripping. Something big and soft slides out of a pool to see who has come.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "shellos",
+        "gastrodon"
+       ],
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Take the spring shaft.",
+     "success": {
+      "text": "It ends in a still, cold pool so clear you can count the stones on the bottom. You fill every bottle you have.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fresh-water",
+        "count": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne88-written-down",
+   "name": "Written Down at Last",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne88-well-with-two-bottoms-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "ne88-well-with-two-bottoms-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne88-written-down-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "shellos",
+    "tint": "#14242a",
+    "effect": "none"
+   },
+   "intro": "A traveller from Hildegard's village passes you on the road, and tells you the news.\n\nShe has written it down at last. A brass plate on the well, polished every morning: FAST FOR THE SEA. SLOW FOR THE SPRING.\nThe whole village knows it by heart now.",
+   "choices": [
+    {
+     "label": "Smile at that.",
+     "success": {
+      "text": "Her granddad would have been glad. You are sure of it.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Hildegard wrote the well's rule down at last.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "ne88-written-down-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne89-thief-who-returns-things",
+   "name": "The Thief Who Returns Things",
+   "group": "Puzzles and mysteries",
+   "rarity": "uncommon",
+   "tags": [
+    "Mystery",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne89-thief-who-returns-things-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "thievul",
+    "tint": "#2a1c14",
+    "effect": "flicker"
+   },
+   "intro": "People in the square are standing about holding things and looking baffled.\n\nA woman with a ring she lost twenty years ago. A man with one small child's shoe, turning it over and over. An old soldier with a watch.\n\nConstable Peverell: \"Reverse burglary. Every house. Somebody's breaking in and leaving things.\"\nPeverell: \"I don't even know what to charge them with.\"\n\nOn a roof above the square, a Thievul sits with a sack over its shoulder. It looks very, very tired.",
+   "choices": [
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "The Thievul doesn't run. It puts the sack down carefully, and then it fights you as if it has somewhere else to be.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne89-thief-who-returns-things-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "thievul"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "thief-sack-spilled",
+         "amount": 1
+        }
+       ],
+       "friendly": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Follow it (a node).",
+     "success": {
+      "text": "You follow it at a distance, over roofs and through gardens, out of town, to a small house with one lit window.\n\nInside, an old man is in bed. A retired burglar, Peverell tells you later. He is dying. He sent his Thievul out to put everything back before he goes.\n\nThe Thievul takes something from the bottom of its sack and gives it to you. Freely. It is the only thing in there that was ever meant for anyone.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "thief-followed",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ne89-the-den"
+       },
+       {
+        "kind": "flag",
+        "key": "ne89-thief-who-returns-things-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave something out for it.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You leave a Berry on a windowsill where it will see. In the night it comes, and takes it, and in its place it leaves something from its sack.\n\nA gift, given freely. You suspect it has been waiting forty years for somebody to leave it something first.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ne89-thief-who-returns-things-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne89-the-den",
+   "name": "The Den",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "thievul",
+    "tint": "#2a1c14",
+    "effect": "none"
+   },
+   "intro": "Behind the house is its den, and in the den is everything it ever took, in neat piles. Sorted by owner. Labelled in the old man's shaky hand.\n\nMost of the piles are gone now. The Thievul looks at the few that are left, and at you, and at the window where the old man is sleeping.",
+   "choices": [
+    {
+     "label": "Help it finish (a node).",
+     "success": {
+      "text": "You carry the last of it round the town with the Thievul, all night, house by house, window by window.\n\nThe very last thing in the sack is a brooch. You read the label twice. It goes to Constable Peverell's house. It was his mother's.\n\nPeverell opens the door in his nightshirt and holds the brooch in his palm and doesn't say anything for a very long time.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "thief-finished",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it finish alone.",
+     "success": {
+      "text": "You leave it to its work. It nods at you, the way one professional nods to another, and shoulders its sack.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne89-the-porch",
+   "name": "The Constable's Porch",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne89-thief-who-returns-things-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "ne89-thief-who-returns-things-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne89-the-porch-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "thievul",
+    "tint": "#2a1c14",
+    "effect": "none"
+   },
+   "intro": "Passing back through the town, you see Constable Peverell on his porch with a pipe.\n\nCurled at his feet, asleep in the sun with no sack anywhere, is the Thievul. Retired. Peverell says it keeps an eye on the street. Nothing has gone missing since.",
+   "choices": [
+    {
+     "label": "Wave to them both.",
+     "success": {
+      "text": "Peverell raises his pipe. The Thievul opens one eye, sees it's you, and closes it again, content.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "The Thievul retired to the constable's porch.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "ne89-the-porch-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne90-door-in-the-tree",
+   "name": "The Door in the Tree",
+   "group": "Puzzles and mysteries",
+   "rarity": "uncommon",
+   "tags": [
+    "Mystery",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne90-door-in-the-tree-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "flabebe",
+    "tint": "#1c2a1c",
+    "effect": "sparkle"
+   },
+   "intro": "At the foot of an old oak, between two roots, there is a door. It is the size of your hand.\nIt has hinges, and a keyhole, and a very small brass knocker.\n\nYou crouch down. Behind it, faintly, you can hear the sound of very small furniture being moved.",
+   "choices": [
+    {
+     "label": "Knock.",
+     "pick": {},
+     "success": {
+      "text": "You knock, very gently, with one fingertip. The furniture stops.\n\nThe door opens. A Flabébé looks out, and up, and up, a very long way, at you. It shuts the door.\n\nA moment later it opens again. The Flabébé holds out a thimble full of nectar, with both arms, very formally.\nYour Pokémon drinks it, and every hurt it had is gone.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne90-door-in-the-tree-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a gift on the step.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You leave an Oran Berry on the tiny step, the way you would leave something on the step of a neighbour you hadn't met yet.\n\nNothing happens. You walk on. But you have the feeling, all the way out of the wood, that you have been noticed.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "tree-gifted",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne90-door-in-the-tree-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Peek.",
+     "success": {
+      "text": "You lean down and put your eye to the keyhole. The furniture stops. Nothing moves. Nothing more happens, however long you wait.\nYou have the uncomfortable feeling it is waiting for you to leave.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne90-door-in-the-tree-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne90-a-gift-on-your-bag",
+   "name": "A Gift on Your Bag",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "minStage": 1,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-gifted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne90-a-gift-on-your-bag-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "flabebe",
+    "tint": "#1c2a1c",
+    "effect": "none"
+   },
+   "intro": "You wake at the rest stop to find something sitting on top of your bag, placed very precisely in the middle.\n\nAn Oran Berry. The same kind you left. Smaller, a little lopsided, and polished until it shines.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You put it in your bag next to the others. It is the smallest Berry you own and you will never eat it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne90-a-gift-on-your-bag-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne90-another-small-door",
+   "name": "Another Small Door",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-gifted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "tree-gifted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne90-another-small-door-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "flabebe",
+    "tint": "#1c2a1c",
+    "effect": "none"
+   },
+   "intro": "Another old forest. Another oak. And at its foot, between two roots, another very small door.\n\nIt is a different door, but the knocker is the same, and on the step, waiting, is a Sitrus Berry with a tiny ribbon round it.",
+   "choices": [
+    {
+     "label": "Leave an Oran Berry and take the Sitrus.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "A fair exchange, and then a little more. Behind the door, something small claps.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tree-gifted-twice",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne90-another-small-door-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just knock, and say thank you.",
+     "success": {
+      "text": "The door opens a crack. A Flabébé waves. It shuts again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne90-another-small-door-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne90-a-third-small-door",
+   "name": "A Third Small Door",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "minStage": 3,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-gifted-twice",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "tree-gifted-twice",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "grass",
+      "bug"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne90-a-third-small-door-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "flabebe",
+    "tint": "#1c2a1c",
+    "effect": "none"
+   },
+   "intro": "The doors are expecting you now. This one is already open, just a crack, and a light is on inside.\n\nOn the step is a Lum Berry, wrapped in a leaf and tied with grass. Each exchange is a little better than the last.",
+   "choices": [
+    {
+     "label": "Leave a Sitrus Berry and take the Lum.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "sitrus-berry"
+      }
+     ],
+     "success": {
+      "text": "You trade. Somewhere inside, very small voices are singing.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "sitrus-berry"
+       },
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne90-a-third-small-door-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just knock, and say thank you.",
+     "success": {
+      "text": "A thimble of nectar is passed out to you, formally, and the door closes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne90-a-third-small-door-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne90-the-last-door",
+   "name": "The Last Door",
+   "group": "Puzzles and mysteries",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tree-gifted",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "runPlace",
+     "lastRegion": true,
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne90-the-last-door-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "flabebe",
+    "tint": "#1c2a1c",
+    "effect": "sparkle"
+   },
+   "intro": "Near the very end of your journey, one more small door, in one more old tree.\n\nIt is standing open. Inside there is a tiny room with tiny chairs.\nOn a shelf above the tiny fireplace, kept like a treasure, is the Oran Berry you left on the very first step. Dried, and polished, and kept.",
+   "choices": [
+    {
+     "label": "Close the door softly.",
+     "success": {
+      "text": "You close it very gently. Behind it someone small says something that might be goodbye.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "At the last small door, your first gift was on a shelf.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "ne90-the-last-door-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne91-shop-with-no-shopkeeper",
+   "name": "The Shop With No Shopkeeper",
+   "group": "Shops, services and games",
+   "rarity": "uncommon",
+   "tags": [
+    "Shop",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne91-shop-with-no-shopkeeper-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "By the road, a wooden shed full of shelves. Potions, Balls, Berries in a basket, all neatly priced in pencil.\n\nThere is a tin with a slot in the lid, and a card propped against it in large letters: PAY WHAT IT SAYS. I'M AT MY SISTER'S.\n\nThe prices are fair. Nobody is watching. On the counter a Meowth is asleep in the sun, with one eye very slightly open.",
+   "choices": [
+    {
+     "label": "Buy and pay.",
+     "success": {
+      "text": "You take what you need, add it up twice, and push the coins through the slot one at a time. They clink into the tin.\n\nThe Meowth's open eye closes. It goes properly to sleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-shop",
+        "amount": 1
+       },
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "flag",
+        "key": "ne91-shop-with-no-shopkeeper-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take without paying.",
+     "success": {
+      "text": "You take what you want and walk out without paying. Nobody stops you.\n\nThe Meowth watches you go, with that one open eye. Nothing happens. Nothing at all.\n\nBut word travels on a road like this one, faster than you do. The next shops will have heard. They will charge you more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-took",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "hyper-potion",
+         "full-heal",
+         "revive"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "poke-ball",
+         "great-ball"
+        ]
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Word travels: shops charge you 10% more",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.1
+         }
+        ],
+        "battles": 3,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "ne91-shop-with-no-shopkeeper-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay extra.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You pay what it says, and then a little more, for the trust of it.\n\nThe Meowth opens both eyes. It gets up, stretches, walks the length of the shelf and pushes something off the end of it with one paw.\nIt lands at your feet.\n\nA held item, from the top shelf. The Meowth sits back down and looks at you as if to say: well, pick it up.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "life-orb",
+         "choice-band",
+         "lucky-punch",
+         "macho-brace",
+         "smoke-ball"
+        ]
+       },
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "flag",
+        "key": "ne91-shop-with-no-shopkeeper-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne91-the-shopkeeper",
+   "name": "The Shopkeeper Back From Her Sister's",
+   "group": "Shops, services and games",
+   "rarity": "common",
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne91-shop-with-no-shopkeeper-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "ne91-shop-with-no-shopkeeper-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne91-the-shopkeeper-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "At a market stall you meet a woman with a Meowth on her shoulder. She looks at you, and then at the Meowth.\n\nShopkeeper: \"My Meowth says you're all right.\" She smiles. \"It doesn't say that about many.\"",
+   "choices": [
+    {
+     "label": "Buy something from her.",
+     "success": {
+      "text": "She sells to you at a fair price, and throws in a Berry.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "flag",
+        "key": "ne91-the-shopkeeper-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "counts-it-twice",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "honest-took",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "At a market stall you meet a woman with a Meowth on her shoulder. The Meowth looks at you, and says something in her ear.\n\nShe serves you politely. And she counts your change twice, slowly, right in front of you, every coin."
+    }
+   ]
+  },
+  {
+   "id": "ne92-tutor-who-forgot-the-move",
+   "name": "The Move Tutor Who Forgot the Move",
+   "group": "Shops, services and games",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "normal",
+    "steel",
+    "electric",
+    "poison"
+   ],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "fighting"
+     ]
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "normal",
+      "steel",
+      "electric",
+      "poison"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne92-tutor-who-forgot-the-move-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a1c1c",
+    "effect": "none"
+   },
+   "intro": "In the middle of an empty dojo an old man is standing in a fighting stance, frowning at nothing.\n\nHe has been standing in it, you are told, for an hour.\n\nTutor Maximilian: \"Taught it forty years. This morning, gone.\"\nMaximilian: \"The body knows. The head doesn't.\"\n\nHe doesn't move out of the stance. His eyes flick to you.\nMaximilian: \"Attack me. Properly. It might come back.\"",
+   "choices": [
+    {
+     "label": "Attack him (a battle).",
+     "pick": {},
+     "success": {
+      "text": "He bows, and his Pokémon steps up, and halfway through the fight it does something without being told. A move.\nHe shouts out loud, a great bark of joy, and after the fight he teaches it to one of yours for nothing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne92-tutor-who-forgot-the-move-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "teachMove",
+         "move": "aura-sphere",
+         "who": "picked"
+        }
+       ],
+       "name": "Tutor Maximilian",
+       "classId": "black-belt",
+       "size": 2,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "teachMove",
+         "move": "aura-sphere",
+         "who": "picked"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Show him the move from one of mine.",
+     "requires": [
+      {
+       "kind": "partyMoveType",
+       "type": "fighting"
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "You have one of your Pokémon go through a move it learned from a tutor, slowly, in front of him.\n\nMaximilian: \"Not that one. But close.\"\nHe watches it again. His hands start to move on their own.\n\nThen it is there, all at once, and he is laughing, and he is teaching it to your Pokémon before he can lose it again.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "aura-sphere",
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne92-tutor-who-forgot-the-move-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with him.",
+     "pick": {},
+     "success": {
+      "text": "You sit down on the dojo floor. After a while, stiffly, he comes out of the stance and sits down too.\n\nHe talks about his teacher. A small fierce woman who could knock him across this room with one hand. Her name was Aura.\n\nHe stops. \"Aura,\" he says again. Then: \"Aura Sphere.\" He wipes his eyes and teaches it to your Pokémon, and he names her the whole time.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "teachMove",
+        "move": "aura-sphere",
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne92-tutor-who-forgot-the-move-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne92-the-first-copy",
+   "name": "The First Copy",
+   "group": "Shops, services and games",
+   "rarity": "common",
+   "minStage": 5,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne92-tutor-who-forgot-the-move-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "ne92-tutor-who-forgot-the-move-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne92-the-first-copy-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a1c1c",
+    "effect": "none"
+   },
+   "intro": "A parcel catches up with you on the road. Inside is a thick, hand-bound book: every move Maximilian ever taught, written down, with drawings.\n\nThe note inside says: \"So I never lose one again. You get the first copy.\" Folded into the first page is a lesson he wants you to have.",
+   "choices": [
+    {
+     "label": "Read the first lesson to one of yours.",
+     "pick": {},
+     "success": {
+      "text": "You read it aloud by the fire. By the end of the evening your Pokémon has it.",
+      "effects": [
+       {
+        "kind": "teachMove",
+        "move": "drain-punch",
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne92-the-first-copy-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne93-honest-fortune-machine",
+   "name": "The Honest Fortune Machine",
+   "group": "Shops, services and games",
+   "rarity": "uncommon",
+   "tags": [
+    "Shop",
+    "Mystery"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne93-honest-fortune-machine-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "xatu",
+    "tint": "#2a2016",
+    "effect": "glint"
+   },
+   "intro": "A brass machine with a glass dome, polished by a lot of hands. Inside the dome sits a mechanical Xatu, its painted eyes staring at nothing.\n\nA plate on the front: TELLS ONE TRUE THING. ₽100. DOES NOT TELL NICE THINGS ON PURPOSE.\n\nYou feed it a coin. It whirs, and ticks, and the Xatu's head turns very slowly to look straight at you. A card drops into the tray.",
+   "choices": [
+    {
+     "label": "Ask about the road.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "The card is printed in small, neat type. It names the Gym Leader ahead, the Pokémon they save for last, and the item it holds.\n\nNo warning. No advice. Just what is true. The Xatu's head turns back to the front.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "flag",
+        "key": "ne93-honest-fortune-machine-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about my team.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "The card says: {lowestBond}. The bond there is the thinnest on your team.\n\nUnderneath, in smaller type: {least} is the one you have sent out least. Some of the why is in that.\n\nYou look over at {lowestBond}. It is pretending not to be listening.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "ne93-honest-fortune-machine-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about me.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "The card says: YOU STOP MORE THAN YOU WALK PAST.\n\nIt is true. You have stopped for everyone, all the way here. The Xatu's painted eyes do not blink. You keep the card.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "flag",
+         "key": "fortune-told",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ne93-honest-fortune-machine-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ],
+       "text": "The card says: YOU WALK PAST MORE THAN YOU STOP.\n\nIt is true. You know every face you passed. The Xatu's painted eyes do not blink. You keep the card anyway.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "flag",
+         "key": "fortune-told",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ne93-honest-fortune-machine-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 1,
+         "atMost": 2
+        }
+       ],
+       "text": "The card says: YOU WALK PAST MORE THAN YOU STOP. NOT ALWAYS.\n\nYou think of the few times you did stop. The Xatu's painted eyes do not blink. You keep the card.",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "flag",
+         "key": "fortune-told",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "ne93-honest-fortune-machine-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The card says something true about you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "fortune-told",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne93-honest-fortune-machine-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne94-auction-of-useless-things",
+   "name": "The Auction of Useless Things",
+   "group": "Shops, services and games",
+   "rarity": "uncommon",
+   "tags": [
+    "Shop",
+    "Story"
+   ],
+   "stop": "event",
+   "types": [
+    "normal",
+    "steel",
+    "electric",
+    "poison"
+   ],
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "stageTypes",
+     "types": [
+      "normal",
+      "steel",
+      "electric",
+      "poison"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne94-auction-of-useless-things-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "In a tent at the back of the market, an auctioneer in a tall hat holds up a bent spoon, as if it were a crown.\n\nAuctioneer Mr. Montague-Stokes: \"Lot one: a spoon. It's bent. Opening at ₽5.\"\nMr. Montague-Stokes: \"Every lot is exactly what it looks like. That's the house rule.\"\n\nLot two, on the table behind him, is a rock. Lot three is a jar of air, with a label: FROM A NICE DAY.",
+   "choices": [
+    {
+     "label": "Bid on the spoon.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "There is a short and surprisingly vicious bidding war with a woman in a green hat. You win it at ₽50.\n\nIt is a TwistedSpoon. A real one, humming faintly with psychic power. \"I said it was bent,\" says Mr. Montague-Stokes, with perfect calm.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne94-auction-of-useless-things-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bid on the rock.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 20
+      }
+     ],
+     "success": {
+      "text": "Nobody else bids on the rock. You get it for ₽20.\n\nIt is a Hard Stone. Dense and dark and very useful. \"I said it was a rock,\" says Mr. Montague-Stokes, and bangs his gavel.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -20
+       },
+       {
+        "kind": "item",
+        "id": "hard-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne94-auction-of-useless-things-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bid on the air.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 5
+      }
+     ],
+     "success": {
+      "text": "You buy the air for ₽5. The crowd applauds, slightly ironically.\n\nIt is a jar of air. That is all it is. But it is from a nice day, and you can feel that, somehow, through the glass.\nYou decide to save it for a rest.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -5
+       },
+       {
+        "kind": "flag",
+        "key": "jar-of-air",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne94-auction-of-useless-things-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne94-the-jar-of-air",
+   "name": "A Jar of Air From a Nice Day",
+   "group": "Shops, services and games",
+   "rarity": "common",
+   "minStage": 1,
+   "stop": "rest",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "jar-of-air",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne94-the-jar-of-air-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3040",
+    "effect": "sparkle"
+   },
+   "intro": "The fire is going and everyone is settled. You take out the jar of air from a nice day.\n\nThe whole team gathers round to look at it. It looks like nothing. It looks like a jar.",
+   "choices": [
+    {
+     "label": "Open the jar.",
+     "success": {
+      "text": "You unscrew the lid. And for a moment, just a moment, it smells of cut grass and warm stone and somebody laughing a long way off.\nEveryone breathes it in, eyes closed.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ne94-the-jar-of-air-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne94-a-hole",
+   "name": "Lot One: a Hole",
+   "group": "Shops, services and games",
+   "rarity": "common",
+   "minStage": 4,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne94-auction-of-useless-things-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "ne94-auction-of-useless-things-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ne94-a-hole-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "In another market, another tent. Mr. Montague-Stokes, tall hat and all, is holding up an empty frame.\n\nMr. Montague-Stokes: \"Lot one: a hole. Ground not included. Opening at ₽5.\"",
+   "choices": [
+    {
+     "label": "Bid ₽5 on the hole.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 5
+      }
+     ],
+     "success": {
+      "text": "You win. He hands you the frame with great ceremony. It contains a hole. It is exactly what it looks like.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -5
+       },
+       {
+        "kind": "flag",
+        "key": "ne94-a-hole-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Laugh, and walk on.",
+     "success": {
+      "text": "He tips his hat to you as you go. He remembers a good customer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne94-a-hole-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne95-pokemon-barber",
+   "name": "The Pokémon Barber",
+   "group": "Shops, services and games",
+   "rarity": "uncommon",
+   "tags": [
+    "Shop",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne95-pokemon-barber-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "scyther",
+    "tint": "#2a1c24",
+    "effect": "none"
+   },
+   "intro": "A red and white striped pole turns slowly outside a small shop. Through the window you can see a barber's chair.\n\nIn the chair is a Mareep, perfectly still.\nStanding over it, in a tiny striped apron, a Scyther is giving it a very neat fringe with the tip of one blade.\n\nBarber Aurelius: \"It does the cutting. I do the conversation.\"\nAurelius: \"A trim? ₽100.\"",
+   "choices": [
+    {
+     "label": "Pick a Pokémon for a trim.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "Your Pokémon climbs into the chair, nervous. The Scyther looks at it from every side, very professionally. Then the blades move, too fast to see.\n\nIt comes out of the chair looking like a whole new Pokémon. It catches sight of itself in the mirror and can't stop looking.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "ne95-pokemon-barber-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A trim for me.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You sit down. You close your eyes. There is a whisper of air past both ears.\n\nWhen you open them your hat fits differently. Better. The whole rest of the day, people you pass keep looking twice.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "barber-trim",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Scyther in an apron cut your hair. Your hat fits differently now.",
+        "importance": 60
+       },
+       {
+        "kind": "flag",
+        "key": "ne95-pokemon-barber-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask how they started.",
+     "success": {
+      "text": "Aurelius: \"Battle, years ago. It missed me, mostly. Took the top off my hair.\"\nAurelius: \"Best haircut I'd ever had. I gave up battling the next day.\"\n\nThe Scyther, without looking up from the Mareep, gives a small and modest bow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne95-pokemon-barber-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne95-a-trim-for-furfrou",
+   "name": "A Trim for Furfrou",
+   "group": "Shops, services and games",
+   "rarity": "common",
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne95-pokemon-barber-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partySpecies",
+     "species": "furfrou"
+    },
+    {
+     "kind": "flag",
+     "key": "ne95-a-trim-for-furfrou-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "furfrou",
+    "tint": "#2a1c24",
+    "effect": "none"
+   },
+   "intro": "You pass the striped pole again. Aurelius is outside, sweeping, and stops dead when he sees your Furfrou.\n\nInside, the Scyther puts down its comb, comes to the door, and bows to the Furfrou. Low. One master to another.",
+   "choices": [
+    {
+     "label": "Let Furfrou have the chair.",
+     "success": {
+      "text": "It is a free trim, Aurelius insists, an honour for the shop. Your Furfrou walks out looking magnificent and knowing it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "species": [
+          "furfrou"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ne95-a-trim-for-furfrou-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne96-festival-of-first-catches",
+   "name": "The Festival of First Catches",
+   "group": "Festivals and whole-run events",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "runPlace",
+     "stage": [
+      4,
+      5
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ne96-festival-of-first-catches-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2410",
+    "effect": "confetti"
+   },
+   "intro": "Bunting across every street. A band playing slightly out of time. The whole town is out.\n\nEvery trainer in town is walking with the first Pokémon they ever caught. Some are huge now. Some are very, very old, and are being carried.\n\nOne old man is carrying an empty Poké Ball, held out in front of him in both hands, respectfully, like something that still matters.\n\nFestival marshal Guinevere: \"First catch only. It leads the parade.\"\nGuinevere: \"Where's yours?\"",
+   "choices": [
+    {
+     "label": "Walk with my first catch.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "bondLevel",
+         "atLeast": 1,
+         "who": "firstCatch"
+        }
+       ],
+       "text": "Your first catch steps out in front of you, and Guinevere waves you right up to the front of the parade.\n\nIt leads the whole town down the main street. People cheer. It has no idea why, and doesn't care, and walks like a king.\n\nYou remember the day you caught it. It remembers too. You can tell by the way it keeps looking back at you.",
+       "effects": [
+        {
+         "kind": "friendship",
+         "bond": 3,
+         "who": "firstCatch"
+        },
+        {
+         "kind": "flag",
+         "key": "festival-first",
+         "amount": 1
+        },
+        {
+         "kind": "tempEffect",
+         "label": "Festival: shops are 10% off",
+         "effects": [
+          {
+           "kind": "priceMultiplier",
+           "group": "all",
+           "value": 0.9
+          }
+         ],
+         "battles": 5,
+         "until": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "ne96-festival-of-first-catches-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You look for your first catch, and it isn't there. You walk alone, near the back, with your hands empty.\n\nNobody asks why. People are kind. An old woman falls into step beside you for a while, and so does a boy, and you are not alone after all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "festival-first",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Festival: shops are 10% off",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.9
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "ne96-festival-of-first-catches-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk with my starter.",
+     "success": {
+      "text": "Guinevere: \"That's chosen, not caught.\"\nShe looks at your starter, and at you, for a long moment. Then she smiles and lifts the rope. \"Go on, then.\"\n\nYour starter walks the whole parade at your side with its head up, as if it had always known it would.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "starter"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Festival: shops are 10% off",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.9
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "ne96-festival-of-first-catches-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk with the empty-Ball man.",
+     "success": {
+      "text": "You fall into step beside the old man. He doesn't mind. He tells you about a Pidgey, fifty years ago, the first thing he ever caught.\n\nIt rode on his hat. It woke him every morning by pulling his hair. It got old, and he got old, and one spring it didn't wake up.\n\n\"I still bring the Ball,\" he says. \"Every year. It always liked a parade.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Festival: shops are 10% off",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.9
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "flag",
+        "key": "ne96-festival-of-first-catches-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne97-day-the-run-is-half-over",
+   "name": "The Day the Run Is Half Over",
+   "group": "Festivals and whole-run events",
+   "rarity": "rare",
+   "tags": [
+    "Story",
+    "Mystery"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 40,
+   "requires": [
+    {
+     "kind": "runPlace",
+     "region": [
+      5,
+      5
+     ],
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne97-day-the-run-is-half-over-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#24201c",
+    "effect": "none"
+   },
+   "intro": "A milestone by the road, half sunk in the grass and green with moss. One word cut into it, deep: HALFWAY.\n\nSomeone is sitting on it, eating an apple. It is the Hooded Traveller. The hood is down, for once. The face underneath is younger than you expected, and very tired.\n\nThe traveller: \"Everyone stops here. Most don't notice they have.\"\nThe traveller: \"Tell me one thing you'd undo. I'm collecting.\"",
+   "choices": [
+    {
+     "label": "The lie I told.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "honest-lied",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You tell them about the lie. They listen to all of it, and nod.\n\nThe traveller: \"It can't be undone.\"\nThe traveller: \"But I'll carry a little of it for you. That's what the collection is for.\"\n\nThey write it down in a small book that is nearly full.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "halfway-regret-honest-lied",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne97-day-the-run-is-half-over-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What I took from the shop with no shopkeeper.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "honest-took",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You tell them about the shed, and the tin, and the Meowth with one eye open. They listen to all of it, and nod.\n\nThe traveller: \"It can't be undone.\"\nThe traveller: \"But I'll carry a little of it for you.\"\n\nThey write it down in the small book.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "halfway-regret-honest-took",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne97-day-the-run-is-half-over-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nothing.",
+     "success": {
+      "text": "The traveller: \"Lucky.\"\nThey take another bite of the apple and look at you.\nThe traveller: \"Or not paying attention.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne97-day-the-run-is-half-over-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what they'd undo.",
+     "success": {
+      "text": "They are quiet for a long time. The apple is finished. They turn the core over in their fingers.\n\nThe traveller: \"I'd have stopped at this stone the first time.\"\nThey pull the hood back up. \"I walked straight past it. I didn't know what it was. I've been coming back ever since.\"",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "At the halfway stone, the Hooded Traveller told you the one thing they would undo.",
+        "importance": 70
+       },
+       {
+        "kind": "flag",
+        "key": "ne97-day-the-run-is-half-over-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ne98-regions-thank-you",
+   "name": "The Region's Thank-You",
+   "group": "Festivals and whole-run events",
+   "rarity": "uncommon",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "types": [],
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "runPlace",
+     "regionEnd": true
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "At the border, by the gate out of the region, someone has set up a table.\n\nOn it are things. Little parcels, jars, a basket, a pair of mittens, each one with a paper tag tied on with string.\n\nBorder guard Leofric: \"They've been coming all morning. People you helped.\"\nLeofric: \"I've had to get a second table.\"",
+   "choices": [
+    {
+     "label": "Take everything.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 6,
+         "atMost": 99
+        }
+       ],
+       "text": "You gather it all up. It takes both arms and a borrowed sack.\n\nThere is a parcel for every kindness you did, near enough: six of them, each tied with string.\nYou cross the border loaded down and lighter than you have felt in weeks.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "ne98-regions-thank-you"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 4,
+         "atMost": 99
+        }
+       ],
+       "text": "You gather it all up. It takes both arms.\n\nA parcel for each kindness, near enough. You cross the border loaded down and lighter than you have felt in weeks.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "ne98-regions-thank-you"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "You gather them up. Only a couple, but each one was carried here on foot.\n\nYou cross the border holding them carefully.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "ne98-regions-thank-you"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You gather it all up. It takes both arms.\n\nThere is a parcel for every kindness you did in this region, near enough. You walk across the border loaded down and lighter than you have felt in weeks.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "fresh-water",
+         "moomoo-milk",
+         "super-potion",
+         "great-ball"
+        ]
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "ne98-regions-thank-you"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take one, leave the rest for the next traveller.",
+     "success": {
+      "text": "You take one small parcel, the one with the shakiest handwriting on its tag, and leave the rest.\n\nLeofric: \"For the next one through?\"\nYou nod. He straightens the table so it looks nice for them.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "fresh-water",
+         "moomoo-milk",
+         "super-potion",
+         "great-ball"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "border-left",
+        "amount": 1
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "ne98-regions-thank-you"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the tags.",
+     "success": {
+      "text": "You read every tag before you touch anything. Each one is a line from someone you helped, and the place you met them.\n\n\"For the one who stopped.\" \"Thank you for the Berries.\" \"My Pokémon is well now.\" Your team crowds round to read over your shoulder, very proud of themselves.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "seeAgain",
+        "eventId": "ne98-regions-thank-you"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "one-table",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kind-total",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "At the border, by the gate out of the region, there is one small table, and one thing on it.\n\nBorder guard Leofric: \"From me. Nobody else came.\"\nHe doesn't say it unkindly. He pushes it toward you. \"Safe travels, anyway.\"",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Take the guard's gift.",
+       "success": {
+        "text": "You take it, and thank him. He nods, and opens the gate.",
+        "effects": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "oran-berry",
+           "sitrus-berry",
+           "lum-berry",
+           "pecha-berry",
+           "fresh-water",
+           "moomoo-milk",
+           "super-potion",
+           "great-ball"
+          ]
+         },
+         {
+          "kind": "seeAgain",
+          "eventId": "ne98-regions-thank-you"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne99-longest-night",
+   "name": "The Longest Night",
+   "group": "Festivals and whole-run events",
+   "rarity": "rare",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "stop": "rest",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "runPlace",
+     "lastRegion": true,
+     "regionEnd": true
+    },
+    {
+     "kind": "flag",
+     "key": "ne99-longest-night-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#0c0c18",
+    "effect": "fire"
+   },
+   "intro": "The fire won't stay lit. You feed it, and it gutters, and you feed it again. It is the darkest night of the whole journey.\n\nSomething is moving out beyond the light. The team draws in close around you, every one of them, and waits.\n\nOne by one, the eyes beyond the light come closer. They are the wild Pokémon you were kind to, all this long way.\nThey have come to sit at the edge of your fire.",
+   "choices": [
+    {
+     "label": "Make room.",
+     "success": {
+      "text": "You shift over. The team shifts over. The circle opens, and they come in out of the dark and sit down among you, close and warm.\n\nThe fire catches, all at once, and burns high and gold all night. In the morning everyone is whole.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ne99-longest-night-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share the food.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 5,
+         "atMost": 99
+        }
+       ],
+       "text": "You share out everything you have, a little to each guest. Nobody gets much. Everyone gets some.\n\nAt dawn they are gone. Where each one sat, something has been left for you. Five gifts, in a ring around the cold fire.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne99-longest-night-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "You share out what you have with each guest who came.\n\nAt dawn they are gone, and where each one sat, a small gift has been left for you.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne99-longest-night-done",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You share your supper with the one who came.\n\nAt dawn it is gone, and where it sat there is a small gift, set down carefully.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "oran-berry",
+          "sitrus-berry",
+          "lum-berry",
+          "pecha-berry",
+          "fresh-water",
+          "moomoo-milk",
+          "super-potion",
+          "great-ball"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "ne99-longest-night-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You share what there is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne99-longest-night-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them the story so far.",
+     "success": {
+      "text": "You tell them the story. All of it, from the very first step. Every place, every face, every fight, in order, one at a time.\n\nThe team listens as if they weren't there for all of it. The guests listen with their eyes shining.\nWhen you finish, the sky is getting light, and the album is finished.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "On the longest night, you told the whole story so far, in order, to everyone at the fire.",
+        "importance": 80
+       },
+       {
+        "kind": "flag",
+        "key": "ne99-longest-night-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-team-is-enough",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kind-total",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "intro": "The fire won't stay lit. You feed it, and it gutters, and you feed it again. It is the darkest night of the whole journey.\n\nNothing comes out of the dark. The dark stays empty. The team draws in close around you, every one of them, warm and breathing.\n\nIt is enough. It is more than enough.",
+     "hide": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ne100-road-home",
+   "name": "The Road Home",
+   "group": "Festivals and whole-run events",
+   "rarity": "rare",
+   "tags": [
+    "Story"
+   ],
+   "disabled": true,
+   "stop": "event",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ne100-road-home-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "The road you came by, walked the other way. Everything is smaller than it was.\n\nEach region goes by in a line. The bridge that sings. The pond shaped like a foot. A shed by the road with a sign on it.\nPeople you helped stand at the places where you met them, and wave.\n\nThen a gate, and a lane, and your house. There is a light on.",
+   "choices": [
+    {
+     "label": "Again.",
+     "success": {
+      "text": "You stand at the door a long moment, with the light on your face. Then you turn round and look back down the road.\n\nYour team looks at you, and at the road, and back at you. Nobody says anything. Nobody needs to. Again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne100-road-home-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet. Stay a while.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "camp-photo-home",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You go inside. You stay. In the hall is the photograph from the road: the whole team asleep in a pile, you in the middle, mouth open.\n\n{starter} sleeps all morning in the warm spot by the stove.\n{most} spends the afternoon at the window, watching the road.\n{least} finds the garden, and the garden finds it.\nIn the evening everyone is in a heap on the rug under the photo, and nobody moves till morning.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "ne100-road-home-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You go inside. You stay.\n\n{starter} sleeps all morning in the warm spot by the stove.\n{most} spends the afternoon at the window, watching the road.\n{least} finds the garden, and the garden finds it.\nIn the evening everyone is in a heap on the rug, and nobody moves till morning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne100-road-home-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring everyone inside.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "camp-photo-home",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Everyone comes in. The team. Whoever walked with you. It is far too many for one small house.\n\nSomebody's Snorlax is stuck in the doorway and has decided it lives there now. On the wall, the photograph from the road watches over all of it.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "ne100-road-home-done",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Everyone comes in. The team. Whoever walked with you. It is far too many for one small house.\n\nSomebody's Snorlax is stuck in the doorway and has decided it lives there now. Nobody minds. Somebody puts the kettle on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ne100-road-home-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rival-friend",
+     "when": [
+      {
+       "kind": "rivalPath",
+       "path": "friend"
+      }
+     ],
+     "notice": "Your rival falls into step beside you on the last stretch, grinning, bumping your shoulder.\nRival: \"So. Again next year?\""
+    },
+    {
+     "id": "rival-rival",
+     "when": [
+      {
+       "kind": "rivalPath",
+       "path": "rival"
+      }
+     ],
+     "notice": "Your rival catches up on the last stretch, hands in pockets, not looking at you.\nRival: \"So. Again next year? I'll win next time.\""
+    },
+    {
+     "id": "rival-between",
+     "when": [
+      {
+       "kind": "rivalPath",
+       "path": "between"
+      }
+     ],
+     "notice": "Your rival walks beside you for the last stretch without saying anything. At the gate they stop.\nRival: \"So. Again next year?\""
+    }
+   ]
+  }
+ ]
+}

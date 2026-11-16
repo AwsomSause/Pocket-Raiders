@@ -7,6 +7,8 @@ import { chestReady, idleHintDue, interactionLog, isShake, loadingTip, NoticeSta
 import type { Settings } from '../core/state';
 import { AERO } from './aero';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from './theme';
+import { reduxOn } from './redux/stage';
+import { rxCaption, rxLog, rxNotices } from './redux/system';
 
 const stack = new NoticeStack();
 let game: Phaser.Game | null = null;
@@ -24,6 +26,13 @@ export function notify(text: string): void {
 }
 
 function redraw(): void {
+  // New UI: the stack is drawn by the layer over every screen (the canvas one would sit under the screens).
+  if (game && reduxOn()) {
+    layer?.destroy();
+    layer = null;
+    rxNotices(game, stack.visible(performance.now()), (id) => { stack.dismiss(id); redraw(); });
+    return;
+  }
   const scene = activeScene();
   if (!scene) return;
   if (layerScene !== scene || !layer?.active) {
@@ -58,6 +67,7 @@ function redraw(): void {
 
 /** A lyric-style caption at the bottom of the screen for songs and jingles (I480). Fades itself. */
 export function showCaption(text: string, ms = 2200): void {
+  if (game && reduxOn()) return void rxCaption(game, text, ms + 360);
   const scene = activeScene();
   if (!scene) return;
   const t = scene.add.text(GAME_WIDTH / 2, GAME_HEIGHT - 14, `♪ ${text} ♪`, textStyle(18, '#ffe9a8', { stroke: '#201020', strokeThickness: 4 })).setOrigin(0.5, 1).setDepth(26500).setScrollFactor(0).setData('noJuice', true).setName('caption');
@@ -68,7 +78,13 @@ export function showCaption(text: string, ms = 2200): void {
 // --- Interaction log ----------------------------------------------------------------------------------------------
 
 let logView: Phaser.GameObjects.Container | null = null;
+let rxLogOpen = false;
 function toggleLog(): void {
+  if (game && (rxLogOpen || reduxOn())) {
+    rxLogOpen = !rxLogOpen && reduxOn();
+    rxLog(game, rxLogOpen ? interactionLog.recent(14) : null, () => { if (rxLogOpen) toggleLog(); });
+    return;
+  }
   if (logView?.active) {
     logView.destroy();
     logView = null;

@@ -1,9 +1,10 @@
 // Map events ("?" stops): placement, choices, checks, battles, event items and saves.
 
+import { CO_BUDGET, positioned } from '../../src/core/co/placement';
 import { describe, expect, it } from 'vitest';
 import { applyCatalog, getCatalogEntry } from '../../src/core/catalog';
 import { addEventStops, eligibleEvents, choiceRisk, chooseEvent, eventView, stopIsHidden } from '../../src/core/events';
-import { EventChoiceSchema } from '../../src/core/contentSchema';
+import { EventChoiceSchema, EventDefSchema } from '../../src/core/contentSchema';
 import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { chooseStarter, createRun, takeTurn, type TurnResult } from '../../src/core/run';
@@ -68,7 +69,10 @@ describe('placing event stops', () => {
     expect(rests).toHaveLength(content.balance.events.restPerStage);
     expect(stops.length - rests.length).toBeGreaterThanOrEqual(content.balance.events.perStage[0]);
     const quotaMax = Object.values(content.balance.events.stopQuotas).reduce((sum, [, hi]) => sum + hi, 0);
-    expect(stops.length - rests.length).toBeLessThanOrEqual(content.balance.events.perStage[1] + quotaMax);
+    // Catalog Overhaul: events with a placement block are placed on their own step on top of the draws, inside the pack's own budget.
+    const placed = stops.filter((s) => { const p = content.coPlacement?.get(s.side.eventId!); return !!p && positioned(p); });
+    expect(new Set(placed.map((s) => s.side.eventId)).size).toBeLessThanOrEqual(CO_BUDGET.events);
+    expect(stops.length - rests.length - placed.length).toBeLessThanOrEqual(content.balance.events.perStage[1] + quotaMax);
     for (const s of stops) expect(s.node.kind).not.toBe('gym');
     expect(JSON.stringify(newRun('place').stage!.map)).toBe(JSON.stringify(run.stage!.map));
   });
@@ -146,12 +150,34 @@ describe('map stop types (events and map stops plan)', () => {
 
 describe('recruit events', () => {
   it('stop appearing for a trainer you already own', () => {
-    const fresh = newRun('own');
-    const owned = structuredClone(fresh);
-    owned.itemCounters = { ...owned.itemCounters, 'owned:npc-youngster-joey': 1 };
-    const has = (r: RunState) => eligibleEvents(content, r).some((e) => e.id === 'npc-meet-youngster-joey');
-    expect(has(fresh)).toBe(true);
-    expect(has(owned)).toBe(false);
+    // A plain recruit event (the old npc-meet shape): owning the trainer hides it.
+    const event = EventDefSchema.parse({
+      id: 'test-recruit', name: 'Test recruit', group: 'Trainers and challenges', intro: 'A trainer waves.',
+      choices: [{ label: 'Join me', success: { text: 'They join.', effects: [{ kind: 'recruit', trainer: 'npc-youngster-joey' }] } }],
+    });
+    content.events.set(event.id, event);
+    try {
+      const fresh = newRun('own');
+      const owned = structuredClone(fresh);
+      owned.itemCounters = { ...owned.itemCounters, 'owned:npc-youngster-joey': 1 };
+      const has = (r: RunState, id: string) => eligibleEvents(content, r).some((e) => e.id === id);
+      expect(has(fresh, 'test-recruit')).toBe(true);
+      expect(has(owned, 'test-recruit')).toBe(false);
+      // The Road Roster arc (Catalog Overhaul, ROAD_ROSTER.md) recruits Joey only when it finishes, so owning him never hides the arc.
+      expect(has(fresh, 'npc-meet-youngster-joey')).toBe(true);
+      expect(has(owned, 'npc-meet-youngster-joey')).toBe(true);
+    } finally {
+      content.events.delete(event.id);
+    }
+  });
+
+  it('a Road Roster arc recruits its trainer from every outcome that finishes it', () => {
+    const last = content.events.get('npc-meet-youngster-joey-m3')!;
+    const fight = last.choices.find((c) => c.success.battle)!;
+    expect(fight.success.effects).toContainEqual({ kind: 'recruit', trainer: 'npc-youngster-joey' });
+    for (const room of ['npc-meet-youngster-joey-contest', 'npc-meet-youngster-joey-speech']) {
+      for (const c of content.events.get(room)!.choices) expect(c.success.effects, room).toContainEqual({ kind: 'recruit', trainer: 'npc-youngster-joey' });
+    }
   });
 });
 
@@ -211,7 +237,7 @@ describe('choosing at an event', () => {
   });
 
   it('a held-item gift goes to a Pokémon that can hold it', () => {
-    const run = atEvent(newRun('gift'), 'card-key-silph');
+    const run = atEvent(newRun('gift'), 'deliver-parcel');
     const result = chooseEvent(content, run, 'test-event', 0);
     expect(result.changes[0]).toMatch(/for |sold for/);
   });

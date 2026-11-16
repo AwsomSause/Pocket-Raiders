@@ -13,17 +13,44 @@ export function scaleAt(stageIndex: number, column: number, regionIndex = 0, c: 
 }
 
 /** On the map, walks into the first normal (not harder) next node; otherwise returns the run unchanged. */
-export function toBattle(run: RunState, c: Content = content): RunState {
+export function toBattle(run: RunState, c: Content = content, depth = 0): RunState {
   if (run.phase !== 'map') return run;
+  // An event placed before (or instead of) this node's battle plays first: take its first open choice.
+  // Back on the map with no battle (the event was the node, or called the fight off): walk on, so a call still ends in a battle.
+  const waiting = waitingStop(c, run) ?? requiredMenuEvent(run);
+  if (waiting) {
+    const pick = eventView(c, run, waiting).choices.findIndex((ch) => !ch.locked);
+    const played = chooseEvent(c, run, waiting, Math.max(0, pick)).run;
+    return played.phase === 'map' && !played.battle && depth < 6 ? toBattle(played, c, depth + 1) : played;
+  }
   const choices = mapChoices(c, run);
+  // A chain pseudo-stage (the Kanto lines, R23's race) walks room to room: a room still waiting here is played, not walked past.
+  if (choices.length === 0 && run.stage?.pseudo?.chain && run.stage.current !== null) {
+    const room = run.stage.map.nodes.find((n) => n.id === run.stage!.current)?.sides.find((x) => x.kind === 'event' && !x.used);
+    if (room) {
+      const pick = eventView(c, run, room.id).choices.findIndex((ch) => !ch.locked);
+      return chooseEvent(c, run, room.id, Math.max(0, pick)).run;
+    }
+  }
   const node = choices.find((n) => !n.harder) ?? choices[0]!;
   const next = chooseNode(c, run, node.id);
+  if (next.phase === 'map' && !next.battle && waitingStop(c, next) && depth < 6) return toBattle(next, c, depth + 1);
   // Scripted fights in tests expect one foe: an SOS call is marked as already used (tests/unit/sos.test.ts covers calls).
   if (next.battle) next.battle.sos = { ...freshSos(), answered: 1 };
   return next;
 }
 
 import { freshSos } from '../../src/core/battle/sos';
+import { attachedStops, waitingStop } from '../../src/core/co/attach';
+import { chooseEvent, eventView } from '../../src/core/events';
+import { currentMenu, entryDone } from '../../src/core/nodeMenu/flow';
+
+/** With node menus on: a must-see event the player has to finish before leaving the node (its side stop), or null. */
+function requiredMenuEvent(run: RunState): string | null {
+  const menu = currentMenu(run);
+  const open = menu?.entries.find((e) => e.required && e.kind === 'side' && e.sideId && !entryDone(run, e));
+  return open?.sideId ?? null;
+}
 import { rewardTargetProblem } from '../../src/core/rewards';
 
 /**
@@ -55,6 +82,18 @@ export function takeAnyReward(run: RunState, c: Content = content): RunState {
     }
     if (!picked) throw new Error('No reward in the draft can be taken');
     run = picked;
+  }
+  return run;
+}
+
+/**
+ * Takes the Catalog Overhaul events placed before or instead of a battle off every node of the current stage (mutates `run`).
+ * For tests whose subject is the node's battle (an item that changes it), not the events that can sit in front of it.
+ */
+export function plainNodes(run: RunState, c: Content = content): RunState {
+  for (const node of run.stage?.map.nodes ?? []) {
+    const held = new Set(attachedStops(c, node).map((s) => s.side.id));
+    if (held.size > 0) node.sides = node.sides.filter((s) => !held.has(s.id));
   }
   return run;
 }
