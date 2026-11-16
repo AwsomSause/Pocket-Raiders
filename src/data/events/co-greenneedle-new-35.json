@@ -1,0 +1,1900 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-35-s1",
+   "name": "The Storyteller's Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "An old woman at a rest is telling a story to the children. It's about a trainer. The trainer has your starter.\n\n**The Storyteller:** \"...and at the fork, the trainer went left, because they'd heard crying.\"\n\n*The fork is ahead, at Step 11. Nobody's crying yet.*",
+   "choices": [
+    {
+     "label": "Sit and listen.",
+     "success": {
+      "text": "You sit at the edge of the ring. The children shuffle over to make room, without looking away from her.\n\nShe tells the rest of it quietly. The trainer, the road, the scarf. You are not wearing a scarf.\n\nShe sees you looking, and winks, and does not stop.\n\nAt the end she says: \"The trainer will **take the left fork.**\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       },
+       {
+        "kind": "flag",
+        "key": "sr-begun",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who the trainer is.",
+     "success": {
+      "text": "\"Who is it?\" you ask. \"I'm glad you asked,\" she says. \"Nobody ever does. They all want to know how it ends.\"\n\n\"It's a trainer. It's always a trainer. It might be anyone with a Pokémon and a road.\"\n\nShe smiles at the starter by your boot. She is kind about not looking at it.\n\n\"For now,\" she says, \"the trainer will **take the left fork.**\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       },
+       {
+        "kind": "flag",
+        "key": "sr-begun",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-s2",
+   "name": "The Storyteller's Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "rare",
+   "callback": true,
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sr-n",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "sr-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "sr-told",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "matched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "*She tells it a little more slowly this time, the way you tell a story to someone who is already living in it.*"
+    },
+    {
+     "id": "defied",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "*She is already adjusting her story. Under her breath: \"Not the fork, then. The *other* thing.\"*"
+    },
+    {
+     "id": "quiet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-n",
+       "atLeast": 2,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*She looks at you the way she looks at the weather before she speaks.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "An old woman at the rest, with a ring of children. A different ring; the same her.\n\n\"Last time I told you the trainer would **take the left fork**,\" she says. \"Well? Did they?\"",
+   "choices": [
+    {
+     "label": "It happened, just so.",
+     "success": {
+      "text": "\"Just so,\" she says, and writes nothing down, because there is nothing to write on. She looks very pleased.\n\nThe children look at you as if you were a page they had just turned.\n\nShe settles the children. \"Now. This stage, the trainer will **catch something blue.**\"\n\nShe says the blue thing was a Pokémon from the water. She says the water twice, as though it matters.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-matched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I did the opposite.",
+     "success": {
+      "text": "\"The *opposite!*\" She claps once, delighted. \"Then I have to change it. Good. That's better. Stories that can't be changed are only walls.\"\n\nThe children whisper about it.\n\nShe settles the children. \"Now. This stage, the trainer will **catch something blue.**\"\n\nShe says the blue thing was a Pokémon from the water. She says the water twice, as though it matters.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-defied",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. She studies you for a moment, then nods as if that were an answer, and a good one.\n\n\"Quiet roads make quiet stories,\" she says. \"Those are the long ones.\"\n\nShe settles the children. \"Now. This stage, the trainer will **catch something blue.**\"\n\nShe says the blue thing was a Pokémon from the water. She says the water twice, as though it matters.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-s3",
+   "name": "The Storyteller's Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "rare",
+   "callback": true,
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sr-n",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "sr-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "sr-told",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "matched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "*She tells it a little more slowly this time, the way you tell a story to someone who is already living in it.*"
+    },
+    {
+     "id": "defied",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "*She is already adjusting her story. Under her breath: \"Not the fork, then. The *other* thing.\"*"
+    },
+    {
+     "id": "quiet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-n",
+       "atLeast": 2,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*She looks at you the way she looks at the weather before she speaks.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "An old woman at the rest, with a ring of children. A different ring; the same her.\n\n\"Last time I told you the trainer would **catch something blue**,\" she says. \"Well? Did they?\"",
+   "choices": [
+    {
+     "label": "It happened, just so.",
+     "success": {
+      "text": "\"Just so,\" she says, and writes nothing down, because there is nothing to write on. She looks very pleased.\n\nThe children look at you as if you were a page they had just turned.\n\nShe settles the children. \"Now. This stage, the trainer will **lose once, and laugh.**\"\n\nShe says the trainer laughed at the end, out loud. She has the loser right and the laugh slightly too loud.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-matched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I did the opposite.",
+     "success": {
+      "text": "\"The *opposite!*\" She claps once, delighted. \"Then I have to change it. Good. That's better. Stories that can't be changed are only walls.\"\n\nThe children whisper about it.\n\nShe settles the children. \"Now. This stage, the trainer will **lose once, and laugh.**\"\n\nShe says the trainer laughed at the end, out loud. She has the loser right and the laugh slightly too loud.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-defied",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. She studies you for a moment, then nods as if that were an answer, and a good one.\n\n\"Quiet roads make quiet stories,\" she says. \"Those are the long ones.\"\n\nShe settles the children. \"Now. This stage, the trainer will **lose once, and laugh.**\"\n\nShe says the trainer laughed at the end, out loud. She has the loser right and the laugh slightly too loud.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-s4",
+   "name": "The Storyteller's Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "rare",
+   "callback": true,
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sr-n",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "sr-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "sr-told",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "matched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "*She tells it a little more slowly this time, the way you tell a story to someone who is already living in it.*"
+    },
+    {
+     "id": "defied",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "*She is already adjusting her story. Under her breath: \"Not the fork, then. The *other* thing.\"*"
+    },
+    {
+     "id": "quiet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-n",
+       "atLeast": 2,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*She looks at you the way she looks at the weather before she speaks.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "An old woman at the rest, with a ring of children. A different ring; the same her.\n\n\"Last time I told you the trainer would **lose once, and laugh**,\" she says. \"Well? Did they?\"",
+   "choices": [
+    {
+     "label": "It happened, just so.",
+     "success": {
+      "text": "\"Just so,\" she says, and writes nothing down, because there is nothing to write on. She looks very pleased.\n\nThe children look at you as if you were a page they had just turned.\n\nShe settles the children. \"Now. This stage, the trainer will **give something away.**\"\n\nShe says the gift was wrapped in a leaf. It would have been, in her day.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-matched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I did the opposite.",
+     "success": {
+      "text": "\"The *opposite!*\" She claps once, delighted. \"Then I have to change it. Good. That's better. Stories that can't be changed are only walls.\"\n\nThe children whisper about it.\n\nShe settles the children. \"Now. This stage, the trainer will **give something away.**\"\n\nShe says the gift was wrapped in a leaf. It would have been, in her day.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-defied",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. She studies you for a moment, then nods as if that were an answer, and a good one.\n\n\"Quiet roads make quiet stories,\" she says. \"Those are the long ones.\"\n\nShe settles the children. \"Now. This stage, the trainer will **give something away.**\"\n\nShe says the gift was wrapped in a leaf. It would have been, in her day.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-s5",
+   "name": "The Storyteller's Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "rare",
+   "callback": true,
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sr-n",
+     "atLeast": 4,
+     "atMost": 4
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "sr-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "sr-told",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "matched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "*She tells it a little more slowly this time, the way you tell a story to someone who is already living in it.*"
+    },
+    {
+     "id": "defied",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "*She is already adjusting her story. Under her breath: \"Not the fork, then. The *other* thing.\"*"
+    },
+    {
+     "id": "quiet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-n",
+       "atLeast": 2,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*She looks at you the way she looks at the weather before she speaks.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "An old woman at the rest, with a ring of children. A different ring; the same her.\n\n\"Last time I told you the trainer would **give something away**,\" she says. \"Well? Did they?\"",
+   "choices": [
+    {
+     "label": "It happened, just so.",
+     "success": {
+      "text": "\"Just so,\" she says, and writes nothing down, because there is nothing to write on. She looks very pleased.\n\nThe children look at you as if you were a page they had just turned.\n\nShe settles the children. \"Now. This stage, the trainer will **meet an old friend.**\"\n\nShe says the old friend had a limp. She seems very sure. She may be thinking of someone else.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-matched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I did the opposite.",
+     "success": {
+      "text": "\"The *opposite!*\" She claps once, delighted. \"Then I have to change it. Good. That's better. Stories that can't be changed are only walls.\"\n\nThe children whisper about it.\n\nShe settles the children. \"Now. This stage, the trainer will **meet an old friend.**\"\n\nShe says the old friend had a limp. She seems very sure. She may be thinking of someone else.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-defied",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. She studies you for a moment, then nods as if that were an answer, and a good one.\n\n\"Quiet roads make quiet stories,\" she says. \"Those are the long ones.\"\n\nShe settles the children. \"Now. This stage, the trainer will **meet an old friend.**\"\n\nShe says the old friend had a limp. She seems very sure. She may be thinking of someone else.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-s6",
+   "name": "The Storyteller's Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "rare",
+   "callback": true,
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sr-n",
+     "atLeast": 5,
+     "atMost": 5
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "sr-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "sr-told",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "matched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "*She tells it a little more slowly this time, the way you tell a story to someone who is already living in it.*"
+    },
+    {
+     "id": "defied",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "*She is already adjusting her story. Under her breath: \"Not the fork, then. The *other* thing.\"*"
+    },
+    {
+     "id": "quiet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-n",
+       "atLeast": 2,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*She looks at you the way she looks at the weather before she speaks.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "An old woman at the rest, with a ring of children. A different ring; the same her.\n\n\"Last time I told you the trainer would **meet an old friend**,\" she says. \"Well? Did they?\"",
+   "choices": [
+    {
+     "label": "It happened, just so.",
+     "success": {
+      "text": "\"Just so,\" she says, and writes nothing down, because there is nothing to write on. She looks very pleased.\n\nThe children look at you as if you were a page they had just turned.\n\nShe settles the children. \"Now. This stage, the trainer will **turn back for someone.**\"\n\nShe says the trainer turned back in the rain. It isn't raining. Perhaps it will.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-matched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I did the opposite.",
+     "success": {
+      "text": "\"The *opposite!*\" She claps once, delighted. \"Then I have to change it. Good. That's better. Stories that can't be changed are only walls.\"\n\nThe children whisper about it.\n\nShe settles the children. \"Now. This stage, the trainer will **turn back for someone.**\"\n\nShe says the trainer turned back in the rain. It isn't raining. Perhaps it will.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-defied",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. She studies you for a moment, then nods as if that were an answer, and a good one.\n\n\"Quiet roads make quiet stories,\" she says. \"Those are the long ones.\"\n\nShe settles the children. \"Now. This stage, the trainer will **turn back for someone.**\"\n\nShe says the trainer turned back in the rain. It isn't raining. Perhaps it will.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-s7",
+   "name": "The Storyteller's Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "rare",
+   "callback": true,
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sr-n",
+     "atLeast": 6,
+     "atMost": 6
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "sr-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "sr-told",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "matched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "*She tells it a little more slowly this time, the way you tell a story to someone who is already living in it.*"
+    },
+    {
+     "id": "defied",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "*She is already adjusting her story. Under her breath: \"Not the fork, then. The *other* thing.\"*"
+    },
+    {
+     "id": "quiet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-n",
+       "atLeast": 2,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*She looks at you the way she looks at the weather before she speaks.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "An old woman at the rest, with a ring of children. A different ring; the same her.\n\n\"Last time I told you the trainer would **turn back for someone**,\" she says. \"Well? Did they?\"",
+   "choices": [
+    {
+     "label": "It happened, just so.",
+     "success": {
+      "text": "\"Just so,\" she says, and writes nothing down, because there is nothing to write on. She looks very pleased.\n\nThe children look at you as if you were a page they had just turned.\n\nShe settles the children. \"Now. This stage, the trainer will **tell a lie, kindly.**\"\n\nShe says the lie was about the weather. It is such a small, gentle lie that the children nod.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-matched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 7
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I did the opposite.",
+     "success": {
+      "text": "\"The *opposite!*\" She claps once, delighted. \"Then I have to change it. Good. That's better. Stories that can't be changed are only walls.\"\n\nThe children whisper about it.\n\nShe settles the children. \"Now. This stage, the trainer will **tell a lie, kindly.**\"\n\nShe says the lie was about the weather. It is such a small, gentle lie that the children nod.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-defied",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 7
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. She studies you for a moment, then nods as if that were an answer, and a good one.\n\n\"Quiet roads make quiet stories,\" she says. \"Those are the long ones.\"\n\nShe settles the children. \"Now. This stage, the trainer will **tell a lie, kindly.**\"\n\nShe says the lie was about the weather. It is such a small, gentle lie that the children nod.\n\n*The road goes on. Nobody has said anything yet that can be checked.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-n",
+        "n": 7
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "sr-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-end",
+   "name": "The Storyteller's Road: The Last Telling",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "rare",
+   "callback": true,
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sr-n",
+     "atLeast": 7,
+     "atMost": 7
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "sr-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "sr-told",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "matched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "*She tells it a little more slowly this time, the way you tell a story to someone who is already living in it.*"
+    },
+    {
+     "id": "defied",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "*She is already adjusting her story. Under her breath: \"Not the fork, then. The *other* thing.\"*"
+    },
+    {
+     "id": "quiet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-n",
+       "atLeast": 2,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sr-last",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*She looks at you the way she looks at the weather before she speaks.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "The Storyteller is at the last rest of the region, with every child she has ever told a story to, it seems. They are of every age.\n\n\"Last time I told you the trainer would **tell a lie, kindly**,\" she says. \"Well? Did they?\"",
+   "choices": [
+    {
+     "label": "It happened, just so.",
+     "success": {
+      "text": "\"Just so.\" She folds her hands. The children are quiet. \"That's the last of mine,\" she says.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-matched",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-who"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I did the opposite.",
+     "success": {
+      "text": "\"Ha!\" She laughs, and it is a young laugh. \"That's the last of mine, then. It always ends a little wrong.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "story-defied",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-who"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "You say nothing. She nods slowly. \"That's the last of mine,\" she says, and the children turn, one by one, to look at you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "sr-last",
+        "n": 0
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-who"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-who",
+   "name": "The Last Telling",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "The children are looking at you. The old woman is looking at you, too. Her eyes are very bright.\n\n\"Well,\" she says. \"That's all of mine. Is there anything you want?\"",
+   "choices": [
+    {
+     "label": "Who are you?",
+     "success": {
+      "text": "\"I'm your grandmother's grandmother,\" she says. \"I'm nobody. I'm what's left when the road's walked.\"\n\n\"Two of those are lies.\"\n\nShe doesn't say which two. The children don't seem to need her to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sr-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-who2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let me tell one.",
+     "success": {
+      "text": "\"*Oh,*\" says the Storyteller. \"Oh, I would like that very much.\" She moves over on the stone and pats the place beside her.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-who2",
+   "name": "The Last Telling",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "She is quiet, the way someone is quiet after they have said the true thing at last.\n\n\"Anything else?\" she says. \"No? Then, if you like. The floor is yours.\"",
+   "choices": [
+    {
+     "label": "Let me tell one.",
+     "success": {
+      "text": "\"*Oh,*\" says the Storyteller. \"Oh, I would like that very much.\" She moves over on the stone and pats the place beside her.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You wish her well. She lifts one hand without looking up. Behind you, someone small asks for the one about the fork.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sr-told",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "sr-region"
+       },
+       {
+        "kind": "moment",
+        "text": "The Storyteller said who she was, and two of it were lies. You never found out which.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-t1",
+   "name": "Tell It: Who",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "\"Start where I start,\" she says. \"Who?\"\n\n*The children shuffle closer. The littlest one has her thumb in her mouth and is not breathing.*",
+   "choices": [
+    {
+     "label": "A trainer, with a starter.",
+     "success": {
+      "text": "\"A trainer,\" you begin. \"There's always a trainer.\" The children nod. \"And a Pokémon who didn't know any better.\" They nod harder.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tale",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Pokémon that waited.",
+     "success": {
+      "text": "\"A Pokémon. It sat by the side of a road and waited for someone who was already walking toward it.\" No one moves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tale",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Somebody.",
+     "success": {
+      "text": "\"Somebody,\" you say. The children frown at that. \"Somebody went down a road.\" A pause. \"It's a short story.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-t2",
+   "name": "Tell It: Where",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "\"And where?\" she asks, very softly. \"Where were they, when it began?\"",
+   "choices": [
+    {
+     "label": "At a fork.",
+     "success": {
+      "text": "\"At a fork.\" A gasp from the back. Someone says \"*her* fork.\" You go on anyway. \"One way was loud. One way was quiet.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tale",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "At a rest, like this one.",
+     "success": {
+      "text": "\"At a rest, with a fire, and strangers, and a woman telling a story.\" The children look at her, then at you. She is hiding a smile.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tale",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Somewhere.",
+     "success": {
+      "text": "\"Somewhere on a road.\" The children wait for more. There isn't any more, yet.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-t3",
+   "name": "Tell It: What They Wanted",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "\"What did they want?\" she asks. \"Everyone wants something. What did they want?\"",
+   "choices": [
+    {
+     "label": "To be home by dark.",
+     "success": {
+      "text": "\"To be home by dark.\" The children murmur. Every one of them knows that feeling. \"They never made it. They never minded.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tale",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "To be forgiven.",
+     "success": {
+      "text": "\"To be forgiven by someone who hadn't asked for it.\" The old woman breathes in sharply. The children don't know why. She does.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tale",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "To win.",
+     "success": {
+      "text": "\"To win.\" A boy at the front nods hard. It is the only honest answer a child has ever been given, and he takes it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-t4",
+   "name": "Tell It: What It Cost",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "\"And it cost something,\" she says. \"Every story does. What did it cost?\"",
+   "choices": [
+    {
+     "label": "A season of their life.",
+     "success": {
+      "text": "\"A whole season. They spent it on a road. They don't regret it.\" You say it plainly. She nods as if you had said her own name.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tale",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "A friend's trust.",
+     "success": {
+      "text": "\"A friend's trust, for a while.\" The littlest child takes her thumb out of her mouth. \"It came back. Slowly. They had to walk to it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tale",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nothing.",
+     "success": {
+      "text": "\"Nothing. That's the trick.\" The children look at one another, and then at you, and then at the fire. They do not believe you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-t5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-t5",
+   "name": "Tell It: How It Ended",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "\"And how did it end?\" she asks. \"Slowly. You have to say it slowly.\"",
+   "choices": [
+    {
+     "label": "They kept walking.",
+     "success": {
+      "text": "\"They kept walking.\" You let it stand. The fire pops. Nobody asks what happened after. That is how you know it worked.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tale",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-vote"
+       }
+      ]
+     }
+    },
+    {
+     "label": "They sat down and told it to someone.",
+     "success": {
+      "text": "\"They sat down at a rest, and an old woman asked them to tell a story. So they did.\" The old woman puts her hand over her mouth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tale",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-vote"
+       }
+      ]
+     }
+    },
+    {
+     "label": "They stopped.",
+     "success": {
+      "text": "\"They stopped.\" You say no more. The children wait. Eventually a small voice says, \"But *why*?\" and you don't have a good answer.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-35-vote"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-vote",
+   "name": "The Children Vote",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "You stop. There is a long silence. Then the old woman stands, with a hand on your shoulder, and says, \"Hands. Whose was better? Mine, or theirs?\"\n\n*The children go quiet to think. It is the most serious vote in the region.*",
+   "choices": [
+    {
+     "label": "Wait for the count.",
+     "success": {
+      "text": "They vote for yours. Not by a hair: by a wall of small hands, and the littlest one on her feet.\n\n\"Well,\" says the Storyteller. \"Well.\" She sits down very slowly. She is smiling the way people do when they are given back something they lost.\n\nAt the very back of the ring, something large and slow and patient stands up, shakes off its blanket of hay, and waddles toward you.\n\nA Slowking. It has been sitting there the whole time. It has heard everything.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "slowking"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "direct": true
+       },
+       {
+        "kind": "gn",
+        "op": "markLast",
+        "key": "twice-told",
+        "species": [
+         "slowking"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "sr-won",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sr-told",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "sr-region"
+       },
+       {
+        "kind": "moment",
+        "text": "The children voted for the story you told over the Storyteller's own. A Slowking that had been listening at the back got up and followed you.",
+        "importance": 70
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tale",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Wait for the count.",
+     "success": {
+      "text": "They vote for hers.\n\nBy a few hands. A child says, \"It had a better fork.\" The others nod. It is, in fairness, a very good fork.\n\nThe old woman takes your hand in both of hers. \"Mine was the better story,\" she says. \"Yours was the truer. They're not the same, and you can tell them both.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sr-told",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "sr-region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tale",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Wait for the count.",
+     "success": {
+      "text": "They vote for hers.\n\nBy one hand. A child says, \"It had a better fork.\" Another says, \"Theirs had the *quiet*.\" They argue. It is, in fairness, a good fork.\n\nThe old woman takes your hand in both of hers. \"Mine was the better story,\" she says. \"Yours was the truer. They're not the same, and you can tell them both.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sr-told",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "sr-region"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tale",
+       "atLeast": 1,
+       "atMost": 2
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-35-after",
+   "name": "A Different Old Woman",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "stop": "rest",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "sr-told",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "sr-region"
+    },
+    {
+     "kind": "flag",
+     "key": "sr-after",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-won",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The children are asking for \"the one where the Slowking stood up.\" Someone has put the Slowking in a different story. She hasn't noticed.*"
+    },
+    {
+     "id": "lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-asked",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "sr-won",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*She tells the one about the grandmother's grandmother. She has the lies the wrong way round.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b5a3a",
+    "effect": "sparkle"
+   },
+   "intro": "A different old woman, at a different rest, is telling a story to different children. It's about a trainer. It is about **you.**\n\n*It is the story you told at the last rest. She has it nearly right. She has the ending wrong. It makes a better ending, to be fair.*",
+   "choices": [
+    {
+     "label": "Correct her.",
+     "success": {
+      "text": "\"It was the other way round,\" you say, as gently as you can. She stops. She looks at you. She laughs.\n\n\"Is it? Then tell it right, and I'll tell it *your* way. That's how it gets so far.\"\n\nBy the end of the night the children can tell it both ways.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sr-after",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let her tell it.",
+     "success": {
+      "text": "You let her. She gets the ending wrong, and the children love it, and it is *better.*\n\nSomewhere down the road, a boy is already telling it the wrong way, to someone else.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sr-after",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A different old woman, in a different region, was telling the story you told. She had the ending wrong. It was better.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
