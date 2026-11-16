@@ -149,7 +149,6 @@ test('New UI: a Trainer battle opens on the mock-up versus card; a click moves o
   await expect(card).toBeVisible();
   // The card names the Trainer; the battle's own boxes are not out yet.
   await expect(stages.filter({ has: page.locator('.vsx') })).toContainText(trainer);
-  await page.screenshot({ path: 'test-results/newui-versus.png' });
   await expect(stages.locator('.win.glass')).toHaveCount(0);
   await stages.locator('[data-act="next"]').click();
   await expect(card).toHaveCount(0);
@@ -183,7 +182,6 @@ test('New UI: a Gym Leader enters on the mock-up cutscene card (a click skips it
   await expect(cut).toContainText(boss.name);
   await expect(cut.locator('.beat i')).toHaveCount(5);
   await expect(cut.locator('kbd')).toHaveText('Esc');
-  await page.screenshot({ path: 'test-results/newui-cut-gym.png' });
   await expect(stages.locator('.vsx')).toHaveCount(0);
   await expect(stages.locator('.win.glass')).toHaveCount(0);
   // The card is redrawn on every beat, so the click goes to the layer (which stays) rather than to one drawing of it.
@@ -213,7 +211,6 @@ test('New UI: a Gym Leader enters on the mock-up cutscene card (a click skips it
   await expect(cut).toBeVisible();
   await expect(cut.locator('.plate')).toHaveText('Legendary Pokémon');
   await expect(cut).toContainText('Rayquaza');
-  await page.screenshot({ path: 'test-results/newui-cut-legend.png' });
   await page.waitForTimeout(250);
   await page.keyboard.press('Escape');
   await expect(cut).toHaveCount(0);
