@@ -32,6 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
+import { alleyStart } from './alley';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -786,6 +787,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.54: the serious man's six Magikarp (seven, once he's been beaten).
   // gn.55: the Angry Bidoof, tripled.
   if (rule === 'bidoof') bidoofStart(content, run, battle);
+  // gn.new.22: the Alley Court's challenge, with the player's three calls.
+  if (rule === 'alley') alleyStart(run, battle);
   if (rule === 'quillfeather') quillfeatherStart(content, run, battle, makeFull(content));
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {

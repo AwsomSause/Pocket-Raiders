@@ -1,0 +1,673 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-22-court",
+   "name": "The Alley Court",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "normal",
+    "dark"
+   ],
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "court-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#8a7a6a",
+    "effect": "none"
+   },
+   "intro": "*A coin drops on the stones in front of you. A Meowth, on purpose, looking you dead in the eye. Then it runs.*\n\nYou follow. Over a fence, up a drainpipe, onto the roof.\n\n*A rooftop. Thirty strays in a ring, shoulder to shoulder. A Persian on a water tank, still as a statue. A young Meowth in the middle, with half a fish.*\n\n*The Persian looks at you, and flicks its tail at the accused. Judge.*\n\n*An Alley Purrloin acts out the charge, with great drama: the Meowth caught a fish, and gave half away.*",
+   "choices": [
+    {
+     "label": "\"Rule for the Persian.\"",
+     "success": {
+      "text": "The Persian dips its head. Order holds. The ring breaks up, quietly, and nobody looks at the Meowth.\n\nThe Meowth sits with half a fish, and does not eat it.\n\nA sack is pushed over to you, heavy and clinking. Stolen, and everyone knows it. You take it. You also take the Meowth, because it has followed you down the pipe.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "meowth"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "direct": true,
+        "ability": "fair-share",
+        "mark": "alley-meowth"
+       },
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "item",
+        "id": "great-ball",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "court-persian",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bought-stolen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "court-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "court-region"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "court-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rule for the Meowth.\"",
+     "success": {
+      "text": "The ring goes silent. The Persian stands up on its tank, slowly, all the way. It was never going to let this go.\n\nA challenge, cat against cat. The Meowth steps forward, small, shaking, and does not step back.\n\nThe Persian looks at you. You may call the moves.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "meowth"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "direct": true,
+        "ability": "fair-share",
+        "mark": "alley-meowth"
+       },
+       {
+        "kind": "flag",
+        "key": "court-meowth",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-22-call-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask what the kittens think.\"",
+     "success": {
+      "text": "Six kittens are fetched from a box. They are asked. They hold a vote, by sitting on things: the Purrloin, the Persian's tail, the fish.\n\nIt is chaos. It works. Somehow the fish is shared out, bone by bone, thirty ways, and the Persian takes the head with great dignity.\n\nThe little Meowth looks at you as if you had hung the moon.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "meowth"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1,
+        "direct": true,
+        "ability": "fair-share",
+        "mark": "alley-meowth"
+       },
+       {
+        "kind": "flag",
+        "key": "court-kittens",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "court-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "court-region"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "court-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-22-call-1",
+   "name": "The Alley Court: Call 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#8a7a6a",
+    "effect": "none"
+   },
+   "intro": "The Persian drops from the tank. The first call is yours: how does the Meowth open?",
+   "choices": [
+    {
+     "label": "\"Pounce!\"",
+     "success": {
+      "text": "The Meowth crouches, wiggles, and is ready.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "alley-call-1",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-22-call-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Dodge!\"",
+     "success": {
+      "text": "The Meowth goes light on its feet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "alley-call-1",
+        "n": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-22-call-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Steady!\"",
+     "success": {
+      "text": "The Meowth breathes out, and sets its paws.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "alley-call-1",
+        "n": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-22-call-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-22-call-2",
+   "name": "The Alley Court: Call 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#8a7a6a",
+    "effect": "none"
+   },
+   "intro": "Halfway through, when both are breathing hard. The second call is yours.",
+   "choices": [
+    {
+     "label": "\"Pounce!\"",
+     "success": {
+      "text": "The Meowth crouches, wiggles, and is ready.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "alley-call-2",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-22-call-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Dodge!\"",
+     "success": {
+      "text": "The Meowth goes light on its feet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "alley-call-2",
+        "n": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-22-call-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Steady!\"",
+     "success": {
+      "text": "The Meowth breathes out, and sets its paws.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "alley-call-2",
+        "n": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-22-call-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-22-call-3",
+   "name": "The Alley Court: Call 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#8a7a6a",
+    "effect": "none"
+   },
+   "intro": "When it is nearly over, and neither of them will give way. The third call is yours.",
+   "choices": [
+    {
+     "label": "\"Pounce!\"",
+     "success": {
+      "text": "The Meowth crouches, wiggles, and is ready.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "alley-call-3",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-22-fight"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Dodge!\"",
+     "success": {
+      "text": "The Meowth goes light on its feet.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "alley-call-3",
+        "n": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-22-fight"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Steady!\"",
+     "success": {
+      "text": "The Meowth breathes out, and sets its paws.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "alley-call-3",
+        "n": 3
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-22-fight"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-22-fight",
+   "name": "The Alley Court: The Challenge",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#8a7a6a",
+    "effect": "none"
+   },
+   "intro": "*Thirty strays, not breathing. The Meowth on the stones, the Persian above it.*\n\nYou have called your three. Now the Meowth does the rest.",
+   "choices": [
+    {
+     "label": "Let them fight.",
+     "success": {
+      "text": "The Persian does not hold back. Neither does the Meowth.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-22-lost"
+        }
+       ],
+       "rule": {
+        "gn": "alley",
+        "leadMark": "alley-meowth",
+        "noCatch": true
+       },
+       "team": [
+        "persian"
+       ],
+       "name": "The Persian",
+       "size": 1,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-new-22-won"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-22-won",
+   "name": "The Alley Court: The Verdict",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#8a7a6a",
+    "effect": "none"
+   },
+   "intro": "The Persian stops. Its chest heaves. It looks at the Meowth for a long time, and then, deliberately, it lies down.\n\nThe ring breaks into yowling. Someone sets the other half of the fish at the Meowth's feet.",
+   "choices": [
+    {
+     "label": "Take the Meowth home.",
+     "success": {
+      "text": "It has already decided. It jumps onto your shoulder, fish and all, and falls asleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "court-meowth-won",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "court-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "court-region"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "court-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-22-lost",
+   "name": "The Alley Court: The Verdict",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "persian",
+    "tint": "#8a7a6a",
+    "effect": "none"
+   },
+   "intro": "The Meowth is flat on the stones. The Persian stands over it. And then, with a great sigh, the Persian steps back.\n\nIt was never about winning. It wanted to see if the Meowth would get up. It did.",
+   "choices": [
+    {
+     "label": "Take the Meowth home.",
+     "success": {
+      "text": "The Persian flicks its tail at the door. Go. The Meowth limps after you, with the fish.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "court-meowth-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "court-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "court-region"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "court-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-22-coin-5",
+   "name": "Coins on a Windowsill",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "court-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "court-region"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "court-at"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "court-coin-5-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#8a7a6a",
+    "effect": "none"
+   },
+   "intro": "*On a windowsill, a coin. Then another, polished, set in a neat row. The strays have been here.*\n\nThe Meowth on your shoulder sniffs once, and purrs.",
+   "choices": [
+    {
+     "label": "Take one.",
+     "success": {
+      "text": "You take a single coin. The Meowth watches, and decides you can be trusted with the rest.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "court-coin-5-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-22-coin-15",
+   "name": "Coins on a Windowsill",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "court-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "court-region"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "court-at"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "court-coin-15-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#8a7a6a",
+    "effect": "none"
+   },
+   "intro": "*On a windowsill, a coin. Then another, polished, set in a neat row. The strays have been here.*\n\nThe Meowth on your shoulder sniffs once, and purrs.",
+   "choices": [
+    {
+     "label": "Take one.",
+     "success": {
+      "text": "You take a single coin. The Meowth watches, and decides you can be trusted with the rest.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 100
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "court-coin-15-at"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

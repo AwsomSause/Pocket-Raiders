@@ -25,6 +25,7 @@ import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
 import { draftTurn } from '../greenneedle/draft';
 import { snorlaxTurn } from '../greenneedle/snorlax';
 import { bidoofTurn, NO_FLINCH } from '../greenneedle/bidoof';
+import { alleyTurn, fairShare } from '../greenneedle/alley';
 import { champPower, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
@@ -1175,6 +1176,8 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
   }
   // The Angry Bidoof (gn.55): its trainer explains, throughout, that it's a perfectly ordinary Bidoof.
   if (rule.gn === 'bidoof' && content) bidoofTurn(content, battle, party, events as Parameters<typeof bidoofTurn>[3], (text) => events.push({ type: 'raid', tone: 'info', text }));
+  // The Alley Court (gn.new.22): the player's three calls; and the Fair Share ability.
+  if (rule.gn === 'alley' && content && mine) alleyTurn(content, battle, mine, (text) => events.push({ type: 'raid', tone: 'info', text }));
   // The Polluted Factory (gn.17): burst pipes, the Molten Sludge, the splitting Magmuk and the burning floor.
   if (content && rule.gn && FACTORY_RULES.has(rule.gn)) factoryTurnEnd(content, battle, mine, events);
   if (rule.thinLight && content && battle.turn > 0 && battle.turn % 3 === 0) {
@@ -7124,6 +7127,12 @@ export function weatherCut(content: Content, mon: PokemonInstance, weather: Weat
 }
 
 function applyWeather(ctx: BattleContext, sides: Combatant[], events: BattleEvent[], tick = true): void {
+  // Fair Share (gn.new.22): the holder's most hurt party-mate recovers a little.
+  if (tick) {
+    const me = sides.find((c) => c.side === 'player');
+    const helped = me && fairShare(ctx.content, ctx.party, me.mon);
+    if (me && helped) events.push({ type: 'raid', tone: 'info', text: 'Fair Share: a bite of its supper goes to the most hurt in the party.' });
+  }
   const weather = ctx.battle.weather;
   if (!weather) return;
   const negated = weatherNow(ctx) === null;
