@@ -43,7 +43,7 @@ import { bidoofJoin, bidoofStart } from './bidoof';
 import { alleyStart } from './alley';
 import { leftFates, leftFreeze, leftHas, leftTake, leftTokens } from './left';
 import { isLastStage, ltArrive, ltDawn, ltPage, ltSit, ltTokens } from './longtable';
-import { impClaim, impJoin, impersonatorStart } from './impersonator';
+import { impClaim, impJoin, impersonatorStart, impTokens } from './impersonator';
 import { shedNinjask, shedRest } from './shedinja';
 import { lsAddress, lsDeal, lsTake, lsTicket } from './laststop';
 import { tyrEven, tyrEvolve, tyrLead, tyrResult, tyrTally, tyrogueJoin, tyrogueMon } from './tyrogue';
@@ -102,6 +102,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{draft:')) text = draftTokens(content, run, text);
   if (text.includes('{borrow:')) text = borrowTokens(content, run, text);
   if (text.includes('{reunion:')) text = reunionTokens(run, text);
+  if (text.includes('{imp:')) text = impTokens(content, run, text);
   // gn.50: the defector.
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
@@ -838,7 +839,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'impJoin':
       return impJoin(run, host);
     case 'impClaim':
-      return impClaim(run);
+      // Beaten, it comes: caught in the fight, it takes Many Faces; knocked out, it joins all the same ("It'll come.").
+      return impClaim(run) || impJoin(run, host);
     case 'shedRest':
       return shedRest(content, run, host, e.key ?? '');
     case 'shedNinjask':

@@ -1,7 +1,9 @@
 // Greenneedle gn.57, The Pokémon Impersonator (doc GREENNEEDLE_REWORKED_PLACED_12.md lines 283–368).
 // A Zoroark as a famous Champion. Exposed, its Illusion opens as the player's own lead. Beaten and caught, or befriended, it joins
 // with Many Faces (an ability that forms its Illusion on entry and re-forms it once per battle on a switch back in: engine.ts).
+import type { Content } from '../contentSchema';
 import type { BattleState, PokemonInstance, RunState } from '../state';
+import { lessonChampion } from './champion';
 
 export const MANY_FACES = 'many-faces';
 export const FACE_MARK = 'many-faces';
@@ -44,3 +46,18 @@ export function impJoin(run: RunState, host: { apply: (e: unknown) => string }):
   if (mon) claim(mon);
   return words;
 }
+
+/** The real ace of this region's Champion, and a species that Champion has never used (the Zoroark's slip). */
+export function impAce(content: Content, run: RunState): { ace: string; wrong: string } {
+  const boss = content.bosses.get(lessonChampion(content, run, run.regionId ?? ''));
+  const sig = boss?.signature ?? [];
+  const ace = content.species.get(sig[0] ?? '')?.name ?? 'Garchomp';
+  const wrong = ['poochyena', 'rattata', 'bidoof'].find((id) => !sig.includes(id)) ?? 'poochyena';
+  return { ace, wrong: content.species.get(wrong)?.name ?? 'Poochyena' };
+}
+
+/** Text tokens: `{imp:ace}` (the Champion's real ace) and `{imp:wrong}` (the name it says first). */
+export const impTokens = (content: Content, run: RunState, text: string): string => {
+  const { ace, wrong } = impAce(content, run);
+  return text.replace(/\{imp:ace\}/g, ace).replace(/\{imp:wrong\}/g, wrong);
+};
