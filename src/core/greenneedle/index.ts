@@ -32,6 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
+import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -640,6 +641,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return kcEvolve(run);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
+    case 'ferrisArrive':
+      return ferrisArrive(content, run);
+    case 'ferrisBest':
+      return ferrisBest(run);
+    case 'ferrisHand':
+      return ferrisHand(content, run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
@@ -786,6 +793,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.54: the serious man's six Magikarp (seven, once he's been beaten).
   // gn.55: the Angry Bidoof, tripled.
   if (rule === 'bidoof') bidoofStart(content, run, battle);
+  // gn.59: Old Ferris's five: no items, no switching.
+  if (rule === 'ferris') ferrisStart(battle);
   if (rule === 'quillfeather') quillfeatherStart(content, run, battle, makeFull(content));
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {
@@ -939,7 +948,13 @@ export function trainAce(content: Content, ace: PokemonInstance | undefined, plu
 }
 
 /** Before the player's command is played: a Greenneedle rule may answer it. Returns the action to play and lines to show first. */
+/** gn.59: the 5th region's look is answered before any rule applies. */
 export function gnShape(content: Content, run: RunState, action: PlayerAction): { action: PlayerAction; events: Cue[] } {
+  const r = gnShapeRule(content, run, action);
+  return { action: r.action, events: [...ferrisShape(content, run, action), ...r.events] };
+}
+
+function gnShapeRule(content: Content, run: RunState, action: PlayerAction): { action: PlayerAction; events: Cue[] } {
   const battle = run.battle;
   const rule = battle?.eventRule?.gn;
   const mon = battle ? run.party[battle.activeIndex] : undefined;
@@ -979,10 +994,11 @@ function countForest(content: Content, run: RunState, battle: BattleState): void
 /** After a turn: once a fight is won, the stories that count fights take their count (once per fight). */
 export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   const battle = run.battle;
-  if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return [];
+  const seen = ferrisTurn(content, run);
+  if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return seen;
   battle.storyEffects.push('gn-counted');
   countForest(content, run, battle);
-  return [];
+  return seen;
 }
 
 export { cue as gnCue };

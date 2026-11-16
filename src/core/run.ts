@@ -20,6 +20,7 @@ import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
 import { bidoofPeace } from './greenneedle/bidoof';
+import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenneedle/ferris';
 import { ridgeCatch } from './greenneedle/ridge';
 import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
@@ -2494,6 +2495,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
       if (narrativeDef) run.battle.narrative = { id: narrativeDef.id, maxTurns: narrativeDef.maxTurns };
     }
     const role = node.kind === 'gym' || node.kind === 'elite' || node.kind === 'champion' ? node.kind : null;
+    if (role) ferrisBossMark(run, role);
     // Bosses hold items, from their own generator so no other roll changes.
     if (role) giveBossItems(content, team, role, run.regionIndex, new Rng(hashSeed(`${run.seed}::boss-items::${run.regionIndex}::${stage.index}::${node.id}`)));
     // Gym number counted from the start of the run (1 = the first gym).
@@ -3121,7 +3123,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     rng: eliteDuelist(run.rules) ? Rng.steady(rng.state) : rng,
     captureRng,
     speciesCaught: run.log.speciesCaught,
-    catchMultiplier: captureMultiplier(archetype) * attributes.catchRate * throwMultiplier(content, run, currentEnemy(run.battle!)) * wildCatchMultiplier(content, run) * mutatorCatch(run) * (run.battle!.eventRule?.catchTimes ?? 1) * ridgeCatch(run, run.battle!),
+    catchMultiplier: captureMultiplier(archetype) * attributes.catchRate * throwMultiplier(content, run, currentEnemy(run.battle!)) * wildCatchMultiplier(content, run) * mutatorCatch(run) * (run.battle!.eventRule?.catchTimes ?? 1) * ridgeCatch(run, run.battle!) * ferrisCatch(content, run, run.battle!),
     healMultiplier: healingMultiplier(archetype) * attributes.healing,
     typeModifiers: typeModifiers(archetype, badgeTypesOf(content, run.badges), content.balance.badgePower),
     perks: blessingPerks(run).length > 0 ? [...archetype.modifiers, ...blessingPerks(run)] : archetype.modifiers,
@@ -3511,6 +3513,13 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     narrativeDefeatEnd(content, run, def);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, narrativeDefeat: { id: def.id, defeatLine: def.defeatLine, victoryLine: def.victoryLine } };
+  }
+  // Greenneedle gn.59: Ferris's 4th-region advice: the region's hardest battle, lost, costs nothing.
+  if (battle.outcome === 'lose' && ferrisFree(battle)) {
+    ferrisFreeEnd(run);
+    softLossEnd(content, run, false);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, storyLoss: true };
   }
   if (battle.outcome === 'lose' && storyLossApplies(run, battle, content, Boolean(battle.event) && isStoryEventBattle(content, battle.event!))) {
     // A rival questline fight lost: its `lose` effects apply too (the story goes on with the loss).

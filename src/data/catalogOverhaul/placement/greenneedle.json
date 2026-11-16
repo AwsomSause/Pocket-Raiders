@@ -2341,6 +2341,54 @@
   ],
   "tags": []
  },
+ "gn-59-fire": {
+  "gn": "gn.59",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 10,
+  "window": [
+   8,
+   13
+  ],
+  "sits": "must-see",
+  "attaches": "rest",
+  "level": "The optional battle: A+1, against a team that is one Pokémon short",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Former Champion",
+   "elsewhere": "The Former Champion"
+  },
+  "note": "Badge: a worn hat. At a + node, once per region. Story and advice by region (6th and on: the empty clip); the request in the last region. Advice pays off in the same region (core/greenneedle/ferris.ts). No cross-run memory: \"a later run\" is not read.",
+  "kinds": [
+   "Region Story"
+  ],
+  "tags": []
+ },
+ "gn-59-stop": {
+  "gn": "gn.59",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 6,
+  "window": [
+   2,
+   12
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "Fog on the Road",
+   "elsewhere": "Fog on the Road"
+  },
+  "note": "The 2nd region's advice: a fog stop this region where \"Stop\" shows the hidden thing, free.",
+  "kinds": [
+   "Region Story"
+  ],
+  "tags": []
+ },
  "gn-26-door": {
   "gn": "gn.26",
   "shape": "Door",

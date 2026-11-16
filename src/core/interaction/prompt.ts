@@ -192,6 +192,8 @@ export const PROMPTS: readonly PromptDef[] = [
   // Greenneedle gn.35, Thunderstorm Ridge: the Counting Path (cross in the long gap) and the Iron Bridge (cross while it's dark).
   { id: 'ridge-gap', kind: 'timing', label: 'Go!', hint: 'Long, short, short. Press as the ring closes: go in the long gap.', landMs: 1400, windowsMs: W(80, 160, 300) },
   { id: 'bridge-dark', kind: 'timing', label: 'Cross!', hint: 'Press as the ring closes: cross while the bridge is dark.', landMs: 1200, windowsMs: W(80, 160, 300) },
+  // Greenneedle gn.59: Ferris's throw, steadied together.
+  { id: 'ferris-steady', kind: 'timing', label: 'Steady!', hint: 'Press as the ring closes: throw with Ferris.', landMs: 1500, windowsMs: W(120, 220, 380) },
   { id: 'museum-jigsaw', kind: 'rhythm', label: 'Fit the pieces', hint: 'Twelve pieces. Press as each one turns to fit: early or late, and it is forced.', beatsMs: [500, 900, 1300, 1700, 2100, 2500, 2900, 3300, 3700, 4100, 4500, 4900], windowsMs: W(90, 170, 300) },
 ];
 
