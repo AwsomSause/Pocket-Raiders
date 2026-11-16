@@ -80,7 +80,7 @@ export const EvilTeamSchema = z.object({
   inside: z.object({ op: z.string(), half: z.boolean().default(false) }).optional(),
   /** Volume III: the inside route's six rank titles, per region (Rocket has one set in Kanto and another in Johto). */
   /** Volume III: the inside route's six rank titles in a region. `steps`: the Standing that reaches ranks 2 to 6 (default 2, 4, 6, 8, 10; Hoenn 3, 8, 15, 25, 40), `max` Standing's top (default 10), `test`/`out` the Suspicion of the loyalty test and of being found out (default 7 and 10). */
-  routes: z.array(z.object({ region: z.string(), ranks: z.array(z.string().min(1)).length(6), steps: z.array(z.number().int().min(1)).min(1).max(5).optional(), max: z.number().int().min(10).max(60).optional(), test: z.number().int().min(1).max(10).optional(), out: z.number().int().min(1).max(10).optional() })).default([]),
+  routes: z.array(z.object({ region: z.string(), ranks: z.array(z.string().min(1)).length(6), steps: z.array(z.number().int().min(1)).min(1).max(5).optional(), max: z.number().int().min(10).max(60).optional(), test: z.number().int().min(1).max(10).optional(), out: z.number().int().min(1).max(10).optional(), /** Pay per stage by rank while inside (HOENN_TEAMS 7.1). */ pay: z.array(z.number().int().min(0)).length(6).optional() })).default([]),
   /** Story Overhaul Part IV: one of the six original teams. Only Story Runs draw it, and Story Runs draw only these (Classic rolls never move). */
   storyOnly: z.boolean().default(false),
   /** Beta 0.6 Grand Arc: a roaming team (Cipher, Rocket Remnants, Team Snag'em). It is never drawn as a run's team; events field it with `evilTeam` on a trainer battle. */

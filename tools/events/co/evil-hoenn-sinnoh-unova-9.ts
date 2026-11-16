@@ -176,5 +176,11 @@ const SKY_END: Json[] = [
   ], { cast: [M.LEADER, A.LEADER] }),
 ];
 
+// 6.6: grunts at Loyalty 8 or more stand in the line (the roster's count is kept in `sky-loyal-line` by core/evil/teamSky.ts).
+for (const e of SKY_END) if ((e as { id?: string }).id === 'sky-between') (e as Json).remembers = [
+  { id: 'line-many', when: [flagIs('sky-loyal-line', 5)], notice: `Most of your roster is in the line, in green, shoulder to shoulder. The ones with cracked feathers stand a little apart, and then step in.` },
+  { id: 'line-few', when: [flagIs('sky-loyal-line', 1, 4)], notice: `A handful of your grunts are in the line. The rest watch from the rock, and you can't blame them.` },
+  { id: 'line-none', when: [flagIs('sky-loyal-line', 0, 0), flagIs('sky-roster', 1)], notice: `None of your grunts is loyal enough to stand in the line. It's you and your party, and Lowen.` },
+];
 export const EVENTS: Json[] = [...draconid, ...founding, ...s2, ...s3, ...s4, ZENITH, climax, ...SKY_END];
 export const REMOVE: string[] = [];

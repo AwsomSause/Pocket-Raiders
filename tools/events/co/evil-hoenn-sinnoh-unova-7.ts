@@ -178,13 +178,13 @@ function teamEvents(t: T): Json[] {
     E('act4', 'Mt. Pyre', { callback: true, requires: inside(t, { beat: 5 }), cast: ['boss.npc_gentleman', 'boss.npc_lady'], effect: 'fog' },
       `The briefing: two orbs sit at the top of Mt. Pyre, guarded by an old couple. The leader needs one. Fog, gravestones, and Pokémon mourning at them. The climb goes past people leaving flowers. At the summit, two very old people sit on a bench with a table between them, and an orb in each lap. ${say('The old man', `Sixty years on this bench. We've turned away kings.`)} ${say('The old woman', `You've a kind face under that. They always send a kind face.`)} ${say('The old man', `Take one orb and you wake one. Then somebody has to take the other, to stop it. That's the trick of it. They come as a pair, like us.`)}`, [
         ch('Take the orb.', out(`They don't fight. The old woman wraps ${ORB} in her scarf, "so it doesn't get cold."`, meters(6, 0, 5), flag('hoenn-orb-taken'), flag('hoenn-inside-act4'), beat)),
-        ch('Take the wrong orb on purpose.', out(`${t.id === 'magma' ? `The Blue Orb, in a red hood's hands.` : `The Red Orb, in a blue bandana's hands.`} The plan will go wrong in the leader's hands, and somebody will be hurt by it.`, meters(6, 0, 5), flag('hoenn-orb-wrong'), flag('hoenn-orb-taken'), flag('hoenn-inside-act4'), beat)),
+        ch('Take the wrong orb on purpose. (40% chance the leader notices before the cavern)', out(`${t.id === 'magma' ? `The Blue Orb, in a red hood's hands.` : `The Red Orb, in a blue bandana's hands.`} The plan will go wrong in the leader's hands, and somebody will be hurt by it.`, meters(6, 0, 5), flag('hoenn-orb-wrong'), flag('hoenn-orb-taken'), flag('hoenn-inside-act4'), beat), { chance: 0.6, fail: out(`${t.leader} turns the orb over in his hands the night before the cavern. ${say(t.leader, `Interesting choice.`)} He swaps it for the right one himself, and says nothing else. Suspicion +3.`, meters(6, 3, 5), flag('hoenn-orb-noticed'), flag('hoenn-orb-taken'), flag('hoenn-inside-act4'), beat) }),
         ch('Sit with them a while first.', out(`They tell you what the last awakening did, from the stories. ${say('The old man', `Whatever you pick, come back and tell us.`)}`, flag('hoenn-pyre-story'), go('act4-2'))),
         ch('Refuse.', out(`${t.lt} takes it instead, roughly. The old man falls. He's all right; you hear it after.`, meters(-3, 0, 5), flag('hoenn-orb-refused'), flag('hoenn-inside-act4'), beat)),
       ]),
     R('act4-2', 'Mt. Pyre', `The fog's thinner. The orbs are still in their laps.`, [
       ch('Take the orb.', out(`The old woman wraps ${ORB} in her scarf, "so it doesn't get cold."`, meters(6, 0, 5), flag('hoenn-orb-taken'), flag('hoenn-inside-act4'), beat)),
-      ch('Take the wrong orb on purpose.', out(`The plan will go wrong in the leader's hands.`, meters(6, 0, 5), flag('hoenn-orb-wrong'), flag('hoenn-orb-taken'), flag('hoenn-inside-act4'), beat)),
+      ch('Take the wrong orb on purpose. (40% chance the leader notices before the cavern)', out(`The plan will go wrong in the leader's hands.`, meters(6, 0, 5), flag('hoenn-orb-wrong'), flag('hoenn-orb-taken'), flag('hoenn-inside-act4'), beat), { chance: 0.6, fail: out(`${t.leader} turns the orb over in his hands the night before the cavern. ${say(t.leader, `Interesting choice.`)} He swaps it for the right one himself, and says nothing else. Suspicion +3.`, meters(6, 3, 5), flag('hoenn-orb-noticed'), flag('hoenn-orb-taken'), flag('hoenn-inside-act4'), beat) }),
       ch('Refuse.', out(`${t.lt} takes it instead, roughly. The old man falls. He's all right; you hear it after.`, meters(-3, 0, 5), flag('hoenn-orb-refused'), flag('hoenn-inside-act4'), beat)),
     ], { cast: ['boss.npc_gentleman', 'boss.npc_lady'], effect: 'fog' }),
     E('confides', 'The Leader Confides', { requires: [...inside(t, { after: 5, standing: 40, lacks: 'confided', ends: ['none'] })], cast: [t.LEADER], effect: 'none' },
@@ -234,11 +234,16 @@ function teamEvents(t: T): Json[] {
 // ---------- Volume III C: six new Operations (one per Hoenn stage from 3, optional; both teams) ----------
 function opsFor(t: T): Json[] {
   const op = (id: string, name: string, after: number, intro: string, book: string, quiet: string, o: Json = {}): Json =>
-    ev(`${t.p}-op-${id}`, `Operation: ${name}`, 'Evil Teams', { requires: inside(t, { after, ends: ['none'] }), cast: [t.GRUNT], tint: t.tint, ...o }, intro, [
+    Object.assign(ev(`${t.p}-op-${id}`, `Operation: ${name}`, 'Evil Teams', { requires: inside(t, { after, ends: ['none'] }), cast: [t.GRUNT], tint: t.tint, ...o }, intro, [
       ch(`By the Book: ${book}`, out(`It's done the team's way.`, meters(3, -1), flag(`hoenn-saw-${t.id}`))),
       quietly(`Quietly: ${quiet}`, 0.25, `The job looks done. The harm isn't.`, [meters(2), ...kind(1), flag(`hoenn-saw-${t.id}`)], `Somebody checks.`),
-      ch('Refuse.', out(`You say no.`, meters(-2))),
-    ]);
+      ch('Refuse.', out(`You say no. Somebody else will do it.`, meters(-2), flag(`hoenn-refused-${id}`))),
+    ]), {
+      // 3.9 / 7.3: a double agent gets a fourth way, in the other team's colour.
+      remembers: [{ id: 'tip', when: [flagIs('hoenn-double-agent')], notice: `A fourth way, in ${t.otherName}'s colour: tip them off.`, addChoices: [
+        ch(`Tip Them Off (to ${t.otherName}).`, out(`A note under a door, in the wrong colour. ${t.otherName} is there first; the job falls through, and nobody can say why. Yet.`, meters(1, 2), ...kind(1), flag('hoenn-tipped'), flag(`hoenn-saw-${t.id}`))),
+      ] }],
+    }) as Json;
   return [
     op('weather-vane', 'The Weather Vane', 2, `The order: misreport a forecast, so a town doesn't batten down.`, 'misreport it.', 'correct it.', { pokemon: 'castform' }),
     op('dive-bell', 'The Dive Bell', 3, `The order: salvage a wreck off Route 124.`, 'salvage it.', 'mark it as a grave.', { pokemon: 'relicanth' }),

@@ -2418,6 +2418,50 @@
       ]
      }
     }
+   ],
+   "remembers": [
+    {
+     "id": "line-many",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sky-loyal-line",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ],
+     "notice": "Most of your roster is in the line, in green, shoulder to shoulder. The ones with cracked feathers stand a little apart, and then step in."
+    },
+    {
+     "id": "line-few",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sky-loyal-line",
+       "atLeast": 1,
+       "atMost": 4
+      }
+     ],
+     "notice": "A handful of your grunts are in the line. The rest watch from the rock, and you can't blame them."
+    },
+    {
+     "id": "line-none",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sky-loyal-line",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "sky-roster",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "None of your grunts is loyal enough to stand in the line. It's you and your party, and Lowen."
+    }
    ]
   },
   {

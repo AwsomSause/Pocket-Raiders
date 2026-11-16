@@ -104,7 +104,7 @@ const LASTING: Record<string, Json> = {
 };
 
 // Volume III: the inside route's six rank titles, per region (core/evil/inside.ts).
-const ROUTES: Record<string, { region: string; ranks: string[]; steps?: number[]; max?: number; test?: number; out?: number }[]> = {
+const ROUTES: Record<string, { region: string; ranks: string[]; steps?: number[]; max?: number; test?: number; out?: number; pay?: number[] }[]> = {
   rocket: [
     { region: 'kanto', ranks: ['Recruit', 'Grunt', 'Field Agent', 'Section Chief', 'Executive', `The Boss's Right Hand`] },
     { region: 'johto', ranks: ['Hopeful', 'Grunt', 'Operative', 'Cell Leader', 'Executive (the fifth)', 'The Voice'] },
@@ -112,8 +112,8 @@ const ROUTES: Record<string, { region: string; ranks: string[]; steps?: number[]
   // Row 9 (evil-hoenn-sinnoh-unova): Volume III A and B, HOENN_TEAMS 2.1 to 2.5.
   galactic: [{ region: 'sinnoh', ranks: ['Applicant', 'Grunt', 'Technician', 'Adjutant', 'Commander (the fifth)', 'Witness'] }],
   plasma: [{ region: 'unova', ranks: ['Listener', 'Knight', 'Liberator', 'The Seventh Seat', "Keeper of the King's Room", "The King's Friend"] }],
-  magma: [{ region: 'hoenn', ranks: ['Recruit', 'Grunt', 'Surveyor', 'Foreman', 'Admin', 'The Right Hand'], steps: [3, 8, 15, 25], max: 60, test: 6, out: 9 }],
-  aqua: [{ region: 'hoenn', ranks: ['Deckhand', 'Grunt', 'Diver', 'Bosun', 'Admin', 'The First Mate'], steps: [3, 8, 15, 25], max: 60, test: 6, out: 9 }],
+  magma: [{ region: 'hoenn', ranks: ['Recruit', 'Grunt', 'Surveyor', 'Foreman', 'Admin', 'The Right Hand'], steps: [3, 8, 15, 25], max: 60, test: 6, out: 9, pay: [100, 200, 300, 400, 500, 600] }],
+  aqua: [{ region: 'hoenn', ranks: ['Deckhand', 'Grunt', 'Diver', 'Bosun', 'Admin', 'The First Mate'], steps: [3, 8, 15, 25], max: 60, test: 6, out: 9, pay: [100, 200, 300, 400, 500, 600] }],
 };
 
 const COUNTERS: Record<string, string> = {

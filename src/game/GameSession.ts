@@ -6,6 +6,8 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import { applyEvilEffect, evilTeam } from '../core/evil/teams';
+import { skyAct, type SkyAction } from '../core/evil/teamSky';
 import * as NodeMenu from '../core/nodeMenu/flow';
 import { playSpecialEntry } from '../core/nodeMenu/special/menu';
 import { playerTrainerFor } from '../core/archetypes';
@@ -948,6 +950,26 @@ export class GameSession {
     this.run = result.run;
     this.persistRun();
     return result.message;
+  }
+
+  /** The Team Hub's Hand In Uniform (HOENN_TEAMS 7.1): leave the team; the inside meters go and the outside story resumes. */
+  handInUniform(): string {
+    const run = structuredClone(this.requireRun());
+    const team = evilTeam(this.content, run);
+    if (!team) return 'You are not in a team.';
+    applyEvilEffect(this.content, run, { kind: 'evil', leave: true, beat: false, heat: 0, defect: false } as Parameters<typeof applyEvilEffect>[2]);
+    this.run = run;
+    this.persistRun();
+    return `You hand in ${team.name}'s uniform.`;
+  }
+
+  /** Team Sky's screens (core/evil/teamSky): one action, saved; the message says what happened. */
+  skyAct(action: SkyAction): string {
+    const run = structuredClone(this.requireRun());
+    const message = skyAct(this.content, run, action);
+    this.run = run;
+    this.persistRun();
+    return message;
   }
 
   depositToBox(partyIndex: number): void {

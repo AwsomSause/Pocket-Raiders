@@ -26,7 +26,7 @@ import { evilConfig, HIDEOUT_AT_LEAGUE } from '../campaign/circuit';
 import { recordChoice } from './choices';
 import { beatTeamLeaders } from '../expansion/cast/dossier';
 import { trackOnClimax, trackOnOperation } from '../expansion/trackRun';
-import { applyInside, clearInside, crossInside, insideLine, insideMet, insideOn, replacedByInside, routeOf } from './inside';
+import { applyInside, clearInside, crossInside, insideLine, insideMet, insideOn, rankOf, replacedByInside, routeOf } from './inside';
 import { freshEvil, type EvilRank, type EvilState, type EvilTeam, type VillainRecord } from './schema';
 
 type EvilCondition = Extract<EventCondition, { kind: 'evil' }>;
@@ -141,6 +141,16 @@ export function evilStageStart(content: Content, run: RunState): void {
   const s = evilOf(run);
   const cfg = evilConfig(content, run);
   s.stages += 1;
+  // HOENN_TEAMS 7.1: the uniform pays each stage, by rank, while you're inside (routes with `pay`).
+  const payTeam = s.teamId ? content.evilTeams.teams.find((t) => t.id === s.teamId) : undefined;
+  const payRoute = payTeam && insideOn(run, payTeam.id) ? routeOf(payTeam, run.regionOrder[run.regionIndex]) : undefined;
+  if (payTeam && payRoute?.pay) {
+    const wage = payRoute.pay[rankOf(run, payTeam.id, payRoute) - 1] ?? 0;
+    if (wage > 0) {
+      run.money += wage;
+      tell(content, run, 'evil-pay', `${payTeam.name} pays you ₽${wage} for the stage.`, 30);
+    }
+  }
   if (regionalStory(content, run)) {
     if (s.teamId && s.region !== run.regionIndex) closeRegionStory(content, run, s);
     dropRegionMods(run, s);

@@ -1718,7 +1718,8 @@
      }
     },
     {
-     "label": "Take the wrong orb on purpose.",
+     "label": "Take the wrong orb on purpose. (40% chance the leader notices before the cavern)",
+     "chance": 0.6,
      "success": {
       "text": "The Blue Orb, in a red hood's hands. The plan will go wrong in the leader's hands, and somebody will be hurt by it.",
       "effects": [
@@ -1730,6 +1731,36 @@
        {
         "kind": "flag",
         "key": "hoenn-orb-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     },
+     "failure": {
+      "text": "Maxie turns the orb over in his hands the night before the cavern. Maxie: \"Interesting choice.\" He swaps it for the right one himself, and says nothing else. Suspicion +3.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "suspicion": 3,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-noticed",
         "amount": 1
        },
        {
@@ -1838,7 +1869,8 @@
      }
     },
     {
-     "label": "Take the wrong orb on purpose.",
+     "label": "Take the wrong orb on purpose. (40% chance the leader notices before the cavern)",
+     "chance": 0.6,
      "success": {
       "text": "The plan will go wrong in the leader's hands.",
       "effects": [
@@ -1850,6 +1882,36 @@
        {
         "kind": "flag",
         "key": "hoenn-orb-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     },
+     "failure": {
+      "text": "Maxie turns the orb over in his hands the night before the cavern. Maxie: \"Interesting choice.\" He swaps it for the right one himself, and says nothing else. Suspicion +3.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "suspicion": 3,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-noticed",
         "amount": 1
        },
        {
@@ -3602,7 +3664,8 @@
      }
     },
     {
-     "label": "Take the wrong orb on purpose.",
+     "label": "Take the wrong orb on purpose. (40% chance the leader notices before the cavern)",
+     "chance": 0.6,
      "success": {
       "text": "The Red Orb, in a blue bandana's hands. The plan will go wrong in the leader's hands, and somebody will be hurt by it.",
       "effects": [
@@ -3614,6 +3677,36 @@
        {
         "kind": "flag",
         "key": "hoenn-orb-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     },
+     "failure": {
+      "text": "Archie turns the orb over in his hands the night before the cavern. Archie: \"Interesting choice.\" He swaps it for the right one himself, and says nothing else. Suspicion +3.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "suspicion": 3,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-noticed",
         "amount": 1
        },
        {
@@ -3722,7 +3815,8 @@
      }
     },
     {
-     "label": "Take the wrong orb on purpose.",
+     "label": "Take the wrong orb on purpose. (40% chance the leader notices before the cavern)",
+     "chance": 0.6,
      "success": {
       "text": "The plan will go wrong in the leader's hands.",
       "effects": [
@@ -3734,6 +3828,36 @@
        {
         "kind": "flag",
         "key": "hoenn-orb-wrong",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     },
+     "failure": {
+      "text": "Archie turns the orb over in his hands the night before the cavern. Archie: \"Interesting choice.\" He swaps it for the right one himself, and says nothing else. Suspicion +3.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 6,
+        "suspicion": 3,
+        "rank": 5
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orb-noticed",
         "amount": 1
        },
        {
@@ -4373,14 +4497,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-weather-vane",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Aqua's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Aqua).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Aqua is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-magma",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -4488,14 +4666,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-dive-bell",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Aqua's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Aqua).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Aqua is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-magma",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -4603,14 +4835,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-ash-round",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Aqua's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Aqua).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Aqua is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-magma",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -4718,14 +5004,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-ferry-dues",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Aqua's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Aqua).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Aqua is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-magma",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -4833,14 +5173,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-meteor-shard",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Aqua's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Aqua).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Aqua is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-magma",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -4947,14 +5341,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-recruiting",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Aqua's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Aqua).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Aqua is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-magma",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -5062,14 +5510,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-weather-vane",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Magma's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Magma).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Magma is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-aqua",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -5177,14 +5679,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-dive-bell",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Magma's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Magma).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Magma is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-aqua",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -5292,14 +5848,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-ash-round",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Magma's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Magma).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Magma is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-aqua",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -5407,14 +6017,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-ferry-dues",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Magma's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Magma).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Magma is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-aqua",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -5522,14 +6186,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-meteor-shard",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Magma's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Magma).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Magma is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-aqua",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   },
@@ -5636,14 +6354,68 @@
     {
      "label": "Refuse.",
      "success": {
-      "text": "You say no.",
+      "text": "You say no. Somebody else will do it.",
       "effects": [
        {
         "kind": "evil",
         "standing": -2
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-refused-recruiting",
+        "amount": 1
        }
       ]
      }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A fourth way, in Team Magma's colour: tip them off.",
+     "addChoices": [
+      {
+       "label": "Tip Them Off (to Team Magma).",
+       "success": {
+        "text": "A note under a door, in the wrong colour. Team Magma is there first; the job falls through, and nobody can say why. Yet.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 1,
+          "suspicion": 2
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-tipped",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "hoenn-saw-aqua",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
     }
    ]
   }

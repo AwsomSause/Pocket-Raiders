@@ -72,6 +72,7 @@ import { storyTeamTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { storyAssetId } from '../core/storyAudio';
 import { evilTeam } from '../core/evil/teams';
+import { barkLine } from '../core/evil/barks';
 import { setAmbience, setMusicState, setRegionKey, playMotif, stopProceduralAudio } from '../ui/procAudio';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { GALAR_STADIUM, galarGymNumber, galarHost, galarPerformance, hostLine, isGalarStadiumBattle } from '../core/galarStadium';
@@ -4088,7 +4089,8 @@ export class BattleScene extends Phaser.Scene {
     const content = services().session.content;
     const run = this.run;
     this.clearMenus();
-    this.message.setText(forced ? 'Choose a Pokémon to send out.' : '');
+    const faintBark = forced ? barkLine(content, run, 'faint', `${run.regionIndex}-${run.stage?.current ?? ''}-${run.battle?.turn ?? 0}`) : null;
+    this.message.setText(forced ? `${faintBark ? `${faintBark} ` : ''}Choose a Pokémon to send out.` : '');
     if (this.duo) {
       // Double battles: neither Pokémon in battle, nor one the other spot is already sending out.
       const view = { battle: run.battle!, party: run.party };
@@ -4301,6 +4303,11 @@ export class BattleScene extends Phaser.Scene {
       const v2 = this.run.story.v2;
       const me = content.archetypes.get(this.run.archetypeId);
       await this.bigMoment('bossDefeat', `hallOfFame.${this.run.seed}.${this.run.regionIndex}`, 'Champion', 'Hall of Fame', true, { name: v2?.protagonist?.name || me?.name || 'You', role: 'Champion', line: 'Your name goes on the wall.', cast: this.rxMe() });
+    }
+    // Barks (catalog row 9): the leader beside you on the inside route says one line after a win.
+    if (end.outcome === 'win') {
+      const bark = barkLine(content, this.run, 'win', `${this.run.regionIndex}-${this.run.stage?.index ?? 0}-${this.run.stage?.current ?? ''}`);
+      if (bark) await this.say(bark);
     }
     if (end.outcome === 'win' && this.assistAfter) {
       await this.say(this.assistAfter);
