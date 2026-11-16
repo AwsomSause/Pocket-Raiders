@@ -20,3 +20,10 @@ Source: `catalog_overhaul_pack/catalog_overhaul/QUESTLINES_ALPHAS_AND_ANOMALIES.
 ### Whole Run Events and Arceus
 - About one run in three now follows one long story from Stage 2 to the Champion: Guidance of Giratina, the Weather War, the Made One, the Seven Days, or the Weapon and the Flower. Ten beats each, choices that change how it ends, and an ending that changes the League. Switch it off under Settings > Gameplay > Whole Run Events.
 - Arceus (the Sixteen Pedestals) can now appear at the last rest before the League, if your Mythical Guest is still with you and you never broke its Promise.
+
+### Legendary keys and Communion upgrades (batch 5, row A)
+- Tickets, wings and stones are earned, never bought: pass a Legendary's Trial (or reach Influence 5 with its blessing) and its key arrives; its place opens on the next stage for a second meeting. Hear of a Mythical three times and its ticket arrives: a sure door to its Visit.
+- The Flute Maker and the Old Collector no longer sell keys; they tell you how each one is earned.
+- Form items are Communion upgrades: the Reveal Glass (Forces of Nature in Communion), Kyurem's fusions after the Tao Trial, the Meteorite's Forme stance while Deoxys is your Guest, and the Odd Keystone (108 Ghost spirits, then Spiritomb).
+- A researcher now reacts when you travel with a Legendary or a Mythical Guest.
+- Limits: blessings not yet in the roster only earn keys through their questlines; Speed Forme is a Speed stance.

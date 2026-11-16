@@ -924,7 +924,7 @@ export function addEventStops(content: Content, run: RunState): void {
   const rests = [...content.events.values()].filter((e) => e.stop === 'rest' && e.minStage <= stageNumber(content, run));
   for (let i = 0; i < cfg.restPerStage && rests.length > 0 && candidates.length > 0; i++) place(rng.pick(rests).id, false);
   for (const e of content.events.values()) {
-    if (e.keyItem && conditionMet(content, run, { kind: 'item', id: e.keyItem }) && e.minStage <= stageNumber(content, run) && !run.itemCounters?.[`event-seen:${e.id}`]) place(e.id, false);
+    if (e.keyItem && !e.disabled && conditionMet(content, run, { kind: 'item', id: e.keyItem }) && e.minStage <= stageNumber(content, run) && !run.itemCounters?.[`event-seen:${e.id}`] && e.requires.every((c) => conditionMet(content, run, c))) place(e.id, false);
   }
   if (effectiveAttributes(content, run).intelligence >= cfg.revealIntelligence) {
     const hidden = stage.map.nodes.flatMap((n) => n.sides).find((s) => s.kind === 'event' && s.hidden);

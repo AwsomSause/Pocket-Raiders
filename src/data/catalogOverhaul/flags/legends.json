@@ -1273,6 +1273,22 @@
   {
    "key": "chi-yu-beaten",
    "about": "L15 questline (co-legends-6)"
+  },
+  {
+   "key": "key-<item>",
+   "about": "row A: a Legendary key, Mythical key or Communion upgrade was earned this run (core/legends/keys.ts; meteorite: region + 1) -> its place event requires it"
+  },
+  {
+   "key": "odd-spirits",
+   "about": "row A: Ghost-type foes knocked out in battles won (core/legends/keys.ts noteSpirits) -> Odd Keystone at 108"
+  },
+  {
+   "key": "guest-any",
+   "about": "row A: a Mythical Guest walks with you (signs.ts mirror) -> researcher-recognizes-mythical"
+  },
+  {
+   "key": "<legend>-key-met",
+   "about": "row A: the Legendary was fought at its key place"
   }
  ],
  "external": {

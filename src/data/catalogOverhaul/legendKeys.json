@@ -1,0 +1,87 @@
+{
+  "note": "Catalog Overhaul row A (legends): the old tickets, wings, stones and form items are earned, never bought. Each row: the key item, the place it opens (an event with keyItem), and the ways to earn it this run (any group whose conditions all hold). Legendary keys are the Trial (its questline passed, or its blessing at Influence 5); Mythical keys are the Visit condition (three Tellings heard); the rest are Communion upgrades. core/legends/keys.ts gives each once per run (once per region with \"region\").",
+  "keys": [
+    { "item": "oaks-letter", "place": "oaks-letter-birds", "kind": "trial", "earn": [
+      [{ "kind": "flag", "key": "birds-passed" }],
+      [{ "kind": "flag", "key": "blessing-bird" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+    ] },
+    { "item": "works-key", "place": "works-key-plant", "kind": "trial", "earn": [
+      [{ "kind": "flag", "key": "birds-trial-zapdos" }],
+      [{ "kind": "flag", "key": "blessing-zapdos" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }],
+      [{ "kind": "flag", "key": "blessing-raikou" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+    ] },
+    { "item": "secret-key", "place": "secret-key-volcano", "kind": "trial", "earn": [
+      [{ "kind": "flag", "key": "birds-trial-moltres" }],
+      [{ "kind": "flag", "key": "blessing-moltres" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }],
+      [{ "kind": "flag", "key": "blessing-entei" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+    ] },
+    { "item": "magma-stone", "place": "magma-stone-heatran", "kind": "trial", "earn": [
+      [{ "kind": "flag", "key": "blessing-heatran" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }],
+      [{ "kind": "flag", "key": "sign-heatran", "atLeast": 3 }],
+      [{ "kind": "flag", "key": "sign-fire", "atLeast": 5 }]
+    ] },
+    { "item": "silver-wing", "place": "silver-wing-islands", "kind": "trial", "earn": [
+      [{ "kind": "flag", "key": "lugia-beaten" }],
+      [{ "kind": "flag", "key": "lugia-offered" }],
+      [{ "kind": "flag", "key": "blessing-lugia" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+    ] },
+    { "item": "rainbow-wing", "place": "rainbow-wing-tower", "kind": "trial", "earn": [
+      [{ "kind": "flag", "key": "hooh-ended" }],
+      [{ "kind": "flag", "key": "blessing-ho-oh" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+    ] },
+    { "item": "mysticticket", "place": "mysticticket-rock", "kind": "trial", "earn": [
+      [{ "kind": "eventSeen", "id": "silver-wing-islands" }],
+      [{ "kind": "eventSeen", "id": "rainbow-wing-tower" }],
+      [{ "kind": "flag", "key": "blessing-lugia" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 7 }],
+      [{ "kind": "flag", "key": "blessing-ho-oh" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 7 }]
+    ] },
+    { "item": "eon-ticket", "place": "eon-ticket-island", "kind": "trial", "earn": [
+      [{ "kind": "flag", "key": "eon-both-lived" }],
+      [{ "kind": "flag", "key": "eon-latios-gone" }],
+      [{ "kind": "flag", "key": "blessing-eon" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+    ] },
+    { "item": "light-stone", "place": "light-stone-reshiram", "kind": "trial", "earn": [
+      [{ "kind": "flag", "key": "tao-done" }],
+      [{ "kind": "flag", "key": "blessing-reshiram" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+    ] },
+    { "item": "dark-stone", "place": "dark-stone-zekrom", "kind": "trial", "earn": [
+      [{ "kind": "flag", "key": "tao-done" }],
+      [{ "kind": "flag", "key": "blessing-zekrom" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+    ] },
+    { "item": "auroraticket", "place": "auroraticket-island", "kind": "visit", "earn": [
+      [{ "kind": "flag", "key": "believed-deoxys" }, { "kind": "flag", "key": "mythical-visited", "atLeast": 0, "atMost": 0 }]
+    ] },
+    { "item": "old-sea-map", "place": "old-sea-map-island", "kind": "visit", "earn": [
+      [{ "kind": "flag", "key": "believed-mew" }, { "kind": "flag", "key": "mythical-visited", "atLeast": 0, "atMost": 0 }]
+    ] },
+    { "item": "liberty-pass", "place": "liberty-pass-garden", "kind": "visit", "earn": [
+      [{ "kind": "flag", "key": "believed-victini" }, { "kind": "flag", "key": "mythical-visited", "atLeast": 0, "atMost": 0 }]
+    ] },
+    { "item": "azure-flute", "place": "azure-flute-hall", "kind": "visit", "earn": [
+      [{ "kind": "flag", "key": "promises-on" }, { "kind": "flag", "key": "guest-true" }, { "kind": "regionsLeft", "atMost": 0 }, { "kind": "flag", "key": "arceus-judged", "atLeast": 0, "atMost": 0 }]
+    ] },
+    { "item": "meteorite", "place": "meteorite-deoxys", "kind": "communion", "once": "region", "earn": [
+      [{ "kind": "flag", "key": "promise-deoxys" }]
+    ] },
+    { "item": "kyurem-black", "place": "kyurem-black", "kind": "communion", "earn": [
+      [{ "kind": "partySpecies", "species": "kyurem" }, { "kind": "partySpecies", "species": "zekrom" }, { "kind": "flag", "key": "tao-done" }],
+      [{ "kind": "flag", "key": "blessing-kyurem" }, { "kind": "flag", "key": "blessing-communion" }, { "kind": "partySpecies", "species": "zekrom" }]
+    ] },
+    { "item": "kyurem-white", "place": "kyurem-white", "kind": "communion", "earn": [
+      [{ "kind": "partySpecies", "species": "kyurem" }, { "kind": "partySpecies", "species": "reshiram" }, { "kind": "flag", "key": "tao-done" }],
+      [{ "kind": "flag", "key": "blessing-kyurem" }, { "kind": "flag", "key": "blessing-communion" }, { "kind": "partySpecies", "species": "reshiram" }]
+    ] },
+    { "item": "tornadus-therian", "place": "tornadus-mirror", "kind": "communion", "earn": [
+      [{ "kind": "flag", "key": "blessing-forces" }, { "kind": "flag", "key": "blessing-communion" }, { "kind": "partySpecies", "species": "tornadus" }]
+    ] },
+    { "item": "thundurus-therian", "place": "thundurus-mirror", "kind": "communion", "earn": [
+      [{ "kind": "flag", "key": "blessing-forces" }, { "kind": "flag", "key": "blessing-communion" }, { "kind": "partySpecies", "species": "thundurus" }]
+    ] },
+    { "item": "landorus-therian", "place": "landorus-mirror", "kind": "communion", "earn": [
+      [{ "kind": "flag", "key": "blessing-forces" }, { "kind": "flag", "key": "blessing-communion" }, { "kind": "partySpecies", "species": "landorus" }]
+    ] },
+    { "item": "odd-keystone", "place": "odd-keystone-spiritomb", "kind": "communion", "earn": [
+      [{ "kind": "flag", "key": "odd-spirits" }]
+    ] }
+  ]
+}
