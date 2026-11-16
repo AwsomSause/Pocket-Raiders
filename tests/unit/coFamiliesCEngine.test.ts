@@ -58,3 +58,46 @@ describe('gym of this region (GL2 Janitor)', () => {
     }
   });
 });
+
+describe('Mystery Dungeon (SF73)', () => {
+  it('plays every room of a floor before going down, then the Spring, then walks out', async () => {
+    const { dungeonNext, dungeonStart } = await import('../../src/core/events/coDungeon');
+    const run = start();
+    dungeonStart(run, false);
+    const seen: string[] = [];
+    let from = 'md-entrance';
+    for (let i = 0; i < 12; i++) {
+      const r = dungeonNext(run, from);
+      if (r.out || !r.next) break;
+      seen.push(r.next);
+      from = r.next;
+    }
+    expect(seen.slice(0, 3).sort()).toEqual(['md-1-item-room', 'md-1-monster-house', 'md-1-trap-corridor']);
+    expect(seen.slice(3, 6).sort()).toEqual(['md-2-fork', 'md-2-shop', 'md-2-sleeping-den']);
+    expect(seen.slice(6, 8).sort()).toEqual(['md-3-ambush', 'md-3-boss-door']);
+    expect(seen[8]).toBe('md-3-spring');
+    expect(seen).toHaveLength(9);
+  });
+
+  it('out of Luck: pushed back up, one held item lost, the rest kept', async () => {
+    const { dropOneHeld, dungeonNext, dungeonStart } = await import('../../src/core/events/coDungeon');
+    const run = start();
+    dungeonStart(run, true);
+    expect(run.story.flags['ev:dungeon-luck']).toBe(4);
+    run.story.flags['ev:dungeon-luck'] = 0;
+    run.party[0]!.held = { 'silk-scarf': 1, charcoal: 1 };
+    expect(dungeonNext(run, 'md-1-item-room')).toEqual({ out: true });
+    expect(dropOneHeld(run)).toBe('charcoal');
+    expect(run.party[0]!.held).toEqual({ 'silk-scarf': 1 });
+  });
+
+  it('a thief finds the NO room where the shop was', async () => {
+    const { dungeonNext, dungeonStart } = await import('../../src/core/events/coDungeon');
+    const run = start();
+    dungeonStart(run, false);
+    run.story.flags['co:md-done'] = 'md-1-item-room,md-1-monster-house,md-1-trap-corridor,md-2-fork,md-2-sleeping-den';
+    run.story.flags['ev:md-stole'] = 1;
+    expect(dungeonNext(run, 'md-2-fork')).toEqual({ out: false, next: 'md-2-no' });
+    expect(dungeonNext(run, 'md-2-no')).toEqual({ out: false, next: expect.stringMatching(/^md-3-(ambush|boss-door)$/) });
+  });
+});

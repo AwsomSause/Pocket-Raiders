@@ -3329,6 +3329,8 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('boxBond'), key: z.string().min(1) }),
   /** GL2: the item `<prefix>-<type>` for this region's Gym (the last one beaten here, else the first not yet met). */
   z.object({ kind: z.literal('gymTypeItem'), prefix: z.string().min(1) }),
+  /** SF73 Mystery Dungeon (core/events/coDungeon.ts): `start` resets the rooms and Luck (+1 with `scarf`); `next` ends room `from` and opens the next (or, out of Luck, drops a held item and walks out). */
+  z.object({ kind: z.literal('dungeon'), action: z.enum(['start', 'next']), from: z.string().optional(), scarf: z.boolean().default(false) }),
   /** SF63: a Pokémon the player helped; one comes back once a region at the worst moment (`rare`: SF63.8's, the one that returns). */
   z.object({ kind: z.literal('helped'), species: z.string().min(1), rare: z.boolean().default(false) }),
   /** Clone Core (New Island): your lead's moves are copied onto the other party Pokémon you pick (the lowest-level one when none is picked). */

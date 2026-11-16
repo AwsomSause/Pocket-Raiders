@@ -1,0 +1,3160 @@
+{
+ "catalogOverhaul": "families-c",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "md-entrance",
+   "name": "A Stair That Wasn't Here",
+   "group": "Mystery Dungeon",
+   "rarity": "rare",
+   "gameEvent": "mystery-dungeon-week",
+   "callback": false,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "A stairway down that wasn't here a moment ago. The rooms below change every time. A Bidoof in an explorer's scarf sits on the top step. Bidoof (subtitled): \"You're going down? Take a scarf. Everyone needs a scarf.\" Bidoof: \"The only way out is through. Or back up, before it's too late.\"",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "The stair is longer than it looks. The light behind you gets small. You have 3 Luck.",
+      "effects": [
+       {
+        "kind": "dungeon",
+        "action": "start"
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-entrance"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the scarf.",
+     "success": {
+      "text": "The Bidoof ties it round your lead's neck with great care. It's just a scarf. You feel luckier anyway: 4 Luck.",
+      "effects": [
+       {
+        "kind": "dungeon",
+        "action": "start",
+        "scarf": true
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-entrance"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You step back. When you look again, the stair is gone.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "md-1-item-room",
+   "name": "The Item Room",
+   "group": "Mystery Dungeon",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "A pedestal. One item. A sign: \"TAKE ONE.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You take it. Nothing happens. You were braced for something.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silk-scarf",
+         "charcoal",
+         "mystic-water",
+         "miracle-seed",
+         "magnet",
+         "soft-sand"
+        ]
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-1-item-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it on the pedestal. Somewhere, the dungeon seems to approve. The dungeon likes manners. +1 Luck.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dungeon-luck",
+        "amount": 1
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-1-item-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look under the pedestal.",
+     "success": {
+      "text": "A second item, tucked underneath. And a click. A trap snaps shut an inch from your fingers. -1 Luck.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silk-scarf",
+         "charcoal",
+         "mystic-water",
+         "miracle-seed",
+         "magnet",
+         "soft-sand"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silk-scarf",
+         "charcoal",
+         "mystic-water",
+         "miracle-seed",
+         "magnet",
+         "soft-sand"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "dungeon-luck",
+        "amount": -1
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-1-item-room"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "md-1-monster-house",
+   "name": "The Monster House",
+   "group": "Mystery Dungeon",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "A room full of sleeping Pokémon. A stair on the far side. Every step is a gamble.",
+   "choices": [
+    {
+     "label": "Tiptoe.",
+     "chance": 0.5,
+     "success": {
+      "text": "One step. Another. Nobody stirs. You reach the stair and breathe out.",
+      "effects": [
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-1-monster-house"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A floorboard creaks. Every eye in the room opens at once.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "triples",
+       "chain": 2,
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-1-monster-house"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-1-monster-house"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wake them and fight.",
+     "success": {
+      "text": "You clap your hands. The whole room wakes up angry.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "triples",
+       "chain": 2,
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-1-monster-house"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-1-monster-house"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Throw a Berry to the corner.",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [],
+       "count": 1,
+       "suffix": "-berry",
+       "label": "a Berry"
+      }
+     ],
+     "success": {
+      "text": "The Berry lands in the corner. Every sleeper wakes, sniffs, and runs for it. You walk through the middle of the room and nobody looks at you.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [],
+        "count": 1,
+        "suffix": "-berry"
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-1-monster-house"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "md-1-trap-corridor",
+   "name": "The Trap Corridor",
+   "group": "Mystery Dungeon",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "A floor that clicks. Some tiles are clearly safe. Some aren't.",
+   "choices": [
+    {
+     "label": "Step on the dusty tiles.",
+     "success": {
+      "text": "Dust means nobody has set them off, and they're stable. You cross without a sound.",
+      "effects": [
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-1-trap-corridor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step on the clean ones.",
+     "success": {
+      "text": "Clean means somebody set them off, often. Click. Something swings past your ear. -1 Luck.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dungeon-luck",
+        "amount": -1
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-1-trap-corridor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Pokémon first.",
+     "pick": {},
+     "success": {
+      "text": "It goes first, carefully. A dart catches it on the way, but it waves you across.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "picked"
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-1-trap-corridor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "md-2-fork",
+   "name": "The Fork",
+   "group": "Mystery Dungeon",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "Three ways, each marked by a smell: smoke, salt, flowers.",
+   "choices": [
+    {
+     "label": "Smoke.",
+     "success": {
+      "text": "A room full of embers, and a Charcoal on a ledge. Something hot guards it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "fire"
+       ],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "charcoal",
+         "count": 1
+        },
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-2-fork"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-2-fork"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Salt.",
+     "success": {
+      "text": "A cool pool of sea water, far underground. You rest your feet in it. +1 Luck.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dungeon-luck",
+        "amount": 1
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-2-fork"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Flowers.",
+     "success": {
+      "text": "A room of Berry bushes growing in the dark. You pick three.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "cheri-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "chesto-berry",
+        "count": 1
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-2-fork"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "md-2-shop",
+   "name": "Kecleon's Shop",
+   "group": "Mystery Dungeon",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "A shop in the middle of nowhere, run by a Kecleon who never changes colour. Kecleon: \"Welcome! Fair prices, fixed prices, no haggling, no stealing. Stealing makes me cross.\"",
+   "choices": [
+    {
+     "label": "Buy.",
+     "success": {
+      "text": "Every price is printed, and every one is fair. Kecleon watches you shop with great approval.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-2-shop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why don't you change colour?",
+     "success": {
+      "text": "Kecleon: \"Customers like to know where I am.\" It beams at you.",
+      "effects": [
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-2-shop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Steal something.",
+     "success": {
+      "text": "You pocket something. Kecleon's eyes swivel. Then it grows, and grows, until it fills the shop.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dungeon-luck",
+        "amount": -2
+       },
+       {
+        "kind": "flag",
+        "key": "md-stole",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kecleon"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "life-orb",
+          "choice-scarf",
+          "expert-belt"
+         ]
+        },
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-2-shop"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-2-shop"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "md-2-no",
+   "name": "An Empty Room",
+   "group": "Mystery Dungeon",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "Where Kecleon's shop was, an empty room. A single sign on the wall: \"NO.\"",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. You can feel it watching you from somewhere.",
+      "effects": [
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-2-no"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "md-2-sleeping-den",
+   "name": "The Sleeping Den",
+   "group": "Mystery Dungeon",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "Something asleep on a pile of treasure: a Snorlax.",
+   "choices": [
+    {
+     "label": "Take one coin.",
+     "success": {
+      "text": "One Nugget, lifted very, very slowly. The Snorlax snores on.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-2-sleeping-den"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a handful.",
+     "success": {
+      "text": "Three Nuggets, and the pile shifts. One eye opens. Then the other.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 3
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "snorlax"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-2-sleeping-den"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-2-sleeping-den"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "You let it sleep. It smiles in its sleep. +1 Luck.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dungeon-luck",
+        "amount": 1
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-2-sleeping-den"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "md-3-ambush",
+   "name": "The Ambush",
+   "group": "Mystery Dungeon",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "A hall that smells of many Pokémon. The doors lock behind you.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "They come at you from every side. Three fights, back to back.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-3-ambush"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-3-ambush"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Find the other exit.",
+     "success": {
+      "text": "You feel along the wall for a long time. A stone gives. A hidden door, and a scrape on your arm. -1 Luck.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dungeon-luck",
+        "amount": -1
+       },
+       {
+        "kind": "dungeon",
+        "action": "next",
+        "from": "md-3-ambush"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You stand still. They come one at a time, unsure of you. Easier. Slower.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-3-ambush"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-3-ambush"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "md-3-boss-door",
+   "name": "The Boss Door",
+   "group": "Mystery Dungeon",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "A big door, a bigger lock, and the sound of something heavy on the other side.",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "The door swings in. The floor's boss turns to look at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "eviolite",
+          "assault-vest",
+          "weakness-policy"
+         ]
+        },
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-3-boss-door"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-3-boss-door"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Knock.",
+     "success": {
+      "text": "You knock. The door opens by itself. The boss inside is curious, not angry.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "eviolite",
+          "assault-vest",
+          "weakness-policy"
+         ]
+        },
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-3-boss-door"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "dungeon",
+         "action": "next",
+         "from": "md-3-boss-door"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Go round.",
+     "success": {
+      "text": "A long way round, past the door and its treasure. The air gets fresher.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "md-3-spring"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "md-3-spring",
+   "name": "The Spring",
+   "group": "Mystery Dungeon",
+   "rarity": "rare",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "bidoof",
+    "tint": "#1d1a2a",
+    "effect": "none"
+   },
+   "intro": "A spring at the bottom, glowing softly. An exit stair on the far side. The Bidoof is waiting. Bidoof: \"You made it! Drink! Everybody drinks!\"",
+   "choices": [
+    {
+     "label": "Drink.",
+     "success": {
+      "text": "Cold and bright. Your whole team drinks, and every ache goes out of them.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dungeon-rank",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fill a bottle.",
+     "success": {
+      "text": "You fill a bottle. It glows in your bag all the way up the stairs.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spring-water",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dungeon-rank",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just leave.",
+     "success": {
+      "text": "You nod to the Bidoof and climb. Explorers know when to go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dungeon-rank",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gold",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "dungeon-rank",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Bidoof takes off its own scarf and holds it out to you. Bidoof: \"You're a real explorer now.\"",
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "mr-cursed-idol",
+   "name": "The Cursed Idol",
+   "group": "Mysteries & Ruins",
+   "stop": "treasure",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a10",
+    "effect": "glint"
+   },
+   "intro": "A small golden idol on a pedestal in a ruin. The air around it is wrong. Carved on the pedestal: \"IT PAYS. IT KEEPS COUNT.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It's heavier than gold should be. Somewhere, very faintly, something starts counting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "idol-carried",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the carving again.",
+     "success": {
+      "text": "Under the first line, smaller, worn almost smooth: \"IT WANTS TO GO HOME.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "idol-read"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it where it is. The air feels better the further you walk.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ghosts",
+     "when": [
+      {
+       "kind": "partyType",
+       "type": "ghost"
+      }
+     ],
+     "notice": "Your Ghost-type turns its back on the idol and will not look at it.",
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "idol-read",
+   "name": "The Cursed Idol",
+   "group": "Mysteries & Ruins",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a10",
+    "effect": "glint"
+   },
+   "intro": "IT PAYS. IT KEEPS COUNT. IT WANTS TO GO HOME.",
+   "choices": [
+    {
+     "label": "Take it anyway.",
+     "success": {
+      "text": "It's heavier than gold should be. Somewhere, very faintly, something starts counting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "idol-carried",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it. It's been waiting this long.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-idol-return",
+   "name": "Its Shrine",
+   "group": "Mysteries & Ruins",
+   "stop": "shrine",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "idol-carried",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a10",
+    "effect": "glint"
+   },
+   "intro": "The idol is heavy in your bag. A small shrine on the road has a pedestal the exact size of it. A child is sweeping the shrine. She looks at your bag. Child, Suki: \"Oh. You found it. Grandma said somebody would bring it back one day.\"",
+   "choices": [
+    {
+     "label": "Return it.",
+     "success": {
+      "text": "You set it on the pedestal. The counting stops. The curse lifts all at once, like a held breath let go. The money stays. Suki's grandma comes out with a Cleanse Tag and presses it into your hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "idol-carried",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "idol-curse",
+        "amount": -99
+       },
+       {
+        "kind": "item",
+        "id": "cleanse-tag",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it a while longer.",
+     "success": {
+      "text": "Suki nods like she expected that. \"It'll come back here,\" she says. \"They always do.\" The idol feels heavier already.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mr-idol-return"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why was it taken?",
+     "success": {
+      "text": "Suki: \"A man took it to pay a debt. He died rich and alone.\" She leans on her broom and waits.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "idol-why"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "face",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "idol-curse",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "The face in every reflection, all this time: Suki's grandfather. When the idol touches the pedestal you see him once more, in the shrine's bell, smiling.",
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "idol-why",
+   "name": "Its Shrine",
+   "group": "Mysteries & Ruins",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a10",
+    "effect": "glint"
+   },
+   "intro": "Suki waits, broom in hand.",
+   "choices": [
+    {
+     "label": "Return it.",
+     "success": {
+      "text": "You set it on the pedestal. The counting stops. The curse lifts all at once. The money stays. Suki's grandma gives you a Cleanse Tag.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "idol-carried",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "idol-curse",
+        "amount": -99
+       },
+       {
+        "kind": "item",
+        "id": "cleanse-tag",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it a while longer.",
+     "success": {
+      "text": "Suki: \"Rich and alone,\" she says again, quietly. The idol feels heavier.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mr-idol-return"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-story-page-a",
+   "name": "A Torn Page",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A page drifts across the road, covered in old handwriting. It's about a trainer with a {starter}. \"...and the trainer stopped at the bridge, though nobody asked them to...\"",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You fold it carefully and put it somewhere it won't crease.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pages-a",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it blow away.",
+     "success": {
+      "text": "The wind takes it over the hedge. You have a feeling you'll see it again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "page-a-blown",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-story-page-a-again",
+   "name": "A Torn Page",
+   "group": "Mysteries & Ruins",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "page-a-blown",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "pages-a",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A region later, the same page catches on your boot. \"...and the trainer stopped at the bridge, though nobody asked them to...\"",
+   "choices": [
+    {
+     "label": "Keep it this time.",
+     "success": {
+      "text": "You keep it. It seems to have come a long way to find you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pages-a",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go again.",
+     "success": {
+      "text": "You let it go. Some pages want to wander.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-story-page-b",
+   "name": "A Torn Page",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Another page, the same old hand. \"...the second time, the trainer chose differently, and the Pokémon noticed...\"",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write a note on the back: \"Thank you.\"",
+     "success": {
+      "text": "You write it small, in the corner. It looks like it belongs there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "page-note",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write a note on the back: \"Keep going.\"",
+     "success": {
+      "text": "You write it small, in the corner. It looks like it belongs there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "page-note",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-story-page-c",
+   "name": "A Torn Page",
+   "group": "Mysteries & Ruins",
+   "stop": "detour",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "The last page you find. \"...and at the end, nobody remembered the battles. They remembered the—\" It's torn there.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it, and the missing word stays missing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Guess the last word.",
+     "success": {
+      "text": "You hold the page and think about it for a long time.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "page-guess"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "page-guess",
+   "name": "A Torn Page",
+   "group": "Mysteries & Ruins",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "\"They remembered the—\"",
+   "choices": [
+    {
+     "label": "\"...kindness.\"",
+     "success": {
+      "text": "You write it in pencil, lightly, so it can be rubbed out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "page-guess-kindness",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"...friendship.\"",
+     "success": {
+      "text": "You write it in pencil, lightly, so it can be rubbed out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "page-guess-other",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"...each other.\"",
+     "success": {
+      "text": "You write it in pencil, lightly, so it can be rubbed out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "torn-page",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "page-guess-other",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-story-archive",
+   "name": "The Collector",
+   "group": "Mysteries & Ruins",
+   "stop": "library",
+   "rarity": "rare",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "torn-page",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A scholar spots the pages in your hand and gasps. Archivist Hume: \"Those belong together! I've been looking for thirty years.\" Hume: \"It's a story told on this road for a century. Every teller changes it. These are the oldest pages anyone's found.\"",
+   "choices": [
+    {
+     "label": "Give them to him.",
+     "success": {
+      "text": "Hume reads them aloud, right there on the road. Halfway through he stops. \"The old woman. The Storyteller. She's in it, by name.\" His hands shake. \"Then her road is real.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "storyteller-road",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "telling-mew",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read them together.",
+     "success": {
+      "text": "You read them side by side. The trainer at the bridge. The second choice. And the end: \"...nobody remembered the battles. They remembered the kindness.\" Hume: \"The Storyteller's road. It starts further along than I thought.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "storyteller-road",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "telling-mew",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep them.",
+     "success": {
+      "text": "Hume understands. He copies them by hand, slowly, while you wait. In the margin of his copy he draws a small pink shape, without knowing why.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "telling-mew",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "right",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "page-guess-kindness",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Hume sees your pencilled word and goes very still. \"That's it. That's exactly what it says.\"",
+     "addChoices": []
+    },
+    {
+     "id": "guess",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "page-guess-other",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Hume reads your pencilled word. \"That's not what it says.\" A pause. \"But it should be.\" He writes your word in, beside the old one.",
+     "addChoices": []
+    },
+    {
+     "id": "note",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "page-note",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the back of the second page, in your own handwriting: your note. Hume reads it out too, as if it was always part of the story.",
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-gates",
+   "name": "The Great Berry Festival",
+   "group": "Berry Festival",
+   "gameEvent": "berry-festival",
+   "scene": {
+    "cast": [],
+    "pokemon": "skwovet",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "intro": "Bunting, music, the smell of a thousand Berries. A banner: THE GREAT BERRY FESTIVAL. Festival mayor, Pudding: \"Welcome, welcome! Taste everything! Well. Taste what there is.\" Half the stalls are empty.",
+   "choices": [
+    {
+     "label": "What happened?",
+     "success": {
+      "text": "Pudding's smile slips.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "berry-fest",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "berry-fest-shortage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Taste what there is.",
+     "success": {
+      "text": "Small, sour, and wonderful. Your team eats until they can't. Pudding presses one more Berry into your hand for the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "berry-fest",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 0.1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "pecha-berry",
+         "cheri-berry"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the contest.",
+     "success": {
+      "text": "Pudding points you to a big tent with a hand-painted sign.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "berry-fest",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "berry-fest-contest"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "abner",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "farmer-end",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "An old seed packet on Pudding's table, faded: ABNER'S SEEDS. Pudding: \"He bought his first seeds here. Decades ago.\"",
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-shortage",
+   "name": "The Shortage",
+   "group": "Berry Festival",
+   "gameEvent": "berry-festival",
+   "scene": {
+    "cast": [],
+    "pokemon": "skwovet",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "room": true,
+   "intro": "Pudding: \"A drought hit the orchards. The grove behind the grounds is all we've got left, and something's living in it.\"",
+   "choices": [
+    {
+     "label": "I'll look at the grove.",
+     "success": {
+      "text": "Pudding: \"Bless you. Bless you. Mind the roots.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "berry-fest-grove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring Berries from my bag (five).",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [],
+       "count": 5,
+       "suffix": "-berry",
+       "label": "five Berries"
+      }
+     ],
+     "success": {
+      "text": "One stall, two, five. The empty tables fill up one by one, and people start to come back to them. Pudding cries a little, then hands you something rare from her own pocket.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [],
+        "count": 5,
+        "suffix": "-berry"
+       },
+       {
+        "kind": "item",
+        "id": "starf-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the drought.",
+     "success": {
+      "text": "Pudding: \"The spring under the Guardian Tree dried up. Nobody knows why.\" She looks up the hill. \"Nobody's been up there in years.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-thief",
+   "name": "The Thief",
+   "group": "Berry Festival",
+   "gameEvent": "berry-festival",
+   "scene": {
+    "cast": [],
+    "pokemon": "skwovet",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "berry-fest",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "A Pokémon bolts from a stall, cheeks stuffed with Berries. The vendor wails. It's a Skwovet, very thin. It runs toward the grove.",
+   "choices": [
+    {
+     "label": "Chase it.",
+     "success": {
+      "text": "You follow it through the stalls and over a fence. It leads you into the grove, to a hollow in the roots. Its family is there, starving.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "berry-fest-grove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay the vendor.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You pay. The vendor is so grateful she hugs you. Later, on the road, a thin Skwovet steps out of the hedge and leaves a Berry at your feet.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "You let it go. It looked so thin.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-grove",
+   "name": "The Grove",
+   "group": "Berry Festival",
+   "rarity": "rare",
+   "minStage": 2,
+   "gameEvent": "berry-festival",
+   "secret": [
+    {
+     "kind": "partyType",
+     "type": "grass"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "skwovet",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "berry-fest",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "Behind the festival, Berry trees grow wild and heavy. Something nests in the roots: a family of Skwovet and Greedent, hoarding everything. Their own grove up the hill dried up.",
+   "choices": [
+    {
+     "label": "Share the grove with them.",
+     "success": {
+      "text": "You sit down between the festival and the family and work it out: half the trees for the stalls, half for them. The Greedent thinks about it, and then nods, once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "berry-shared",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Drive them off.",
+     "success": {
+      "text": "The Greedent puffs up to twice its size and comes at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "greedent"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "berry-drove",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "berry-drove",
+         "amount": 1,
+         "stamp": "region"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Find out why their grove dried.",
+     "success": {
+      "text": "The smallest Skwovet tugs your sleeve and leads you up the hill.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "berry-fest-guardian"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-merchant",
+   "name": "The Merchant",
+   "group": "Berry Festival",
+   "stop": "merchant",
+   "gameEvent": "berry-festival",
+   "scene": {
+    "cast": [],
+    "pokemon": "skwovet",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "berry-fest",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "A wagon of rare Berries from far regions. Berry merchant, Sabba: \"Never tasted anything like them, friend. Kee, Maranga, Roseli. Fair prices.\"",
+   "choices": [
+    {
+     "label": "Buy.",
+     "success": {
+      "text": "Sabba spreads them out, each with its price on a little card.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "berry-fest-wagon"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Donate some to the festival.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "You buy a basket and carry it straight to the contest tent. The judges add a whole new category: Rare Berries.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "flag",
+        "key": "berry-rare-category",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask where they're from.",
+     "success": {
+      "text": "Sabba names the regions on her fingers. The last one she names is {nextRegion}. \"You'll see,\" she says. \"They grow them big there.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-wagon",
+   "name": "The Merchant",
+   "group": "Berry Festival",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "skwovet",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "intro": "Kee Berry, ₽400. Maranga Berry, ₽400. Roseli Berry, ₽300. Fair prices, printed.",
+   "choices": [
+    {
+     "label": "A Kee Berry (₽400).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "Sabba wraps it in a leaf.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "item",
+        "id": "kee-berry",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Maranga Berry (₽400).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "Sabba wraps it in a leaf.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "item",
+        "id": "maranga-berry",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "A Roseli Berry (₽300).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "Sabba wraps it in a leaf.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "roseli-berry",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nothing today.",
+     "success": {
+      "text": "Sabba waves. \"Next region, friend.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-contest",
+   "name": "The Contest",
+   "group": "Berry Festival",
+   "gameEvent": "berry-festival",
+   "scene": {
+    "cast": [],
+    "pokemon": "skwovet",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "room": true,
+   "intro": "Judges grade Berries on size, flavour and shine. Judge Plumridge: \"Enter one Berry. We'll know if it's bought or grown.\"",
+   "choices": [
+    {
+     "label": "Enter a Berry I found.",
+     "requires": [
+      {
+       "kind": "bagHas",
+       "ids": [],
+       "count": 1,
+       "suffix": "-berry",
+       "label": "a Berry"
+      }
+     ],
+     "success": {
+      "text": "Plumridge turns it over twice. \"Middling. Honest, though.\" A small prize: a ribbon and a bag of seeds.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [],
+        "count": 1,
+        "suffix": "-berry"
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Enter one I grew.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "berry-grown",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Plumridge holds it up to the light for a long time. \"Grown. With care.\" First prize: a Berry Pouch, and your name on the board.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "berry-pouch",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "berry-won",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just watch.",
+     "success": {
+      "text": "You watch. An old man wins with a Berry the size of his head. Everyone cheers.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rare",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "berry-rare-category",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A new table at the end of the tent, under a new sign: RARE BERRIES. Your donation, sorted and labelled.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Enter a Berry I found.",
+       "requires": [
+        {
+         "kind": "bagHas",
+         "ids": [],
+         "count": 1,
+         "suffix": "-berry",
+         "label": "a Berry"
+        }
+       ],
+       "success": {
+        "text": "Plumridge turns it over. \"Middling. But the Rare table needs entries.\" Second prize in the new category: a Starf Berry.",
+        "effects": [
+         {
+          "kind": "spendBag",
+          "ids": [],
+          "count": 1,
+          "suffix": "-berry"
+         },
+         {
+          "kind": "item",
+          "id": "starf-berry",
+          "count": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-guardian",
+   "name": "The Guardian Tree",
+   "group": "Berry Festival",
+   "rarity": "rare",
+   "minStage": 2,
+   "gameEvent": "berry-festival",
+   "scene": {
+    "cast": [],
+    "pokemon": "tsareena",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "berry-fest",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "A great old Berry tree. A Pokémon in its branches watches you with calm eyes: a Tsareena. The spring at its roots is dry. A stone has fallen into it, wedged tight.",
+   "choices": [
+    {
+     "label": "Move the stone.",
+     "pick": {
+      "types": [
+       "fighting",
+       "ground"
+      ]
+     },
+     "success": {
+      "text": "Your Pokémon sets its feet and heaves. The stone grinds, rocks, and rolls clear. Water bubbles up, then runs. The Tsareena comes down from the branches and touches your Pokémon's head.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "berry-spring",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the guardian.",
+     "success": {
+      "text": "The Tsareena looks at you, then points one long leg at the stone.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "berry-fest-stone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Water the tree yourself.",
+     "pick": {
+      "types": [
+       "water"
+      ]
+     },
+     "success": {
+      "text": "Your Water-type fills the spring at every node you pass. It holds. For a region, at least.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-stone",
+   "name": "The Guardian Tree",
+   "group": "Berry Festival",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tsareena",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "intro": "The Tsareena points at the stone. Then it waits.",
+   "choices": [
+    {
+     "label": "Move the stone.",
+     "pick": {
+      "types": [
+       "fighting",
+       "ground"
+      ]
+     },
+     "success": {
+      "text": "The stone grinds, rocks, and rolls clear. Water bubbles up. The Tsareena comes down from the branches.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "berry-spring",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "The Tsareena goes back to watching.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-research",
+   "name": "The Seedling",
+   "group": "Berry Festival",
+   "gameEvent": "berry-festival",
+   "scene": {
+    "cast": [],
+    "pokemon": "skwovet",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "berry-fest",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "Botanists compare mutations under glass. One offers you a seedling in a pot. Botanist, Dr. Fennimore: \"Would you grow this? It needs a trainer's care. Talk to it.\" Fennimore: \"It's a new Berry. It'll be named after whoever grows it.\"",
+   "choices": [
+    {
+     "label": "Grow it.",
+     "success": {
+      "text": "You take the pot. It's very small. You water it at every rest, and talk to it when nobody's looking. (It fruits after 4 rests.)",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "berry-seedling",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What kind of Berry?",
+     "success": {
+      "text": "Fennimore: \"We don't know yet. That's the fun.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "No time.",
+     "success": {
+      "text": "Fennimore nods and puts the pot back under the glass.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-fruit",
+   "name": "The Seedling Fruits",
+   "group": "Berry Festival",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "berry-grown",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "berry-won",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "skwovet",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "intro": "Your seedling has fruited: one Berry, a colour nobody has a name for yet. The festival's contest is still on.",
+   "choices": [
+    {
+     "label": "Take it to the contest.",
+     "success": {
+      "text": "You carry it all the way back with both hands.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "berry-fest-contest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it for yourself.",
+     "success": {
+      "text": "You keep it. It's yours. You grew it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "lum-berry",
+         "sitrus-berry"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-full",
+   "name": "The Festival, Full",
+   "group": "Berry Festival",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "berry-spring",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "berry-shared",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "skwovet",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "intro": "Next region, the festival again: every stall stocked, the spring running, the Greedent family asleep on a full larder. On a new board by the gate, a new Berry, and your name on it.",
+   "choices": [
+    {
+     "label": "Taste everything.",
+     "success": {
+      "text": "Everything. Pudding refuses your money.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "lum-berry",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-fest-raid",
+   "name": "The Raid",
+   "group": "Berry Festival",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "berry-drove",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "greedent",
+    "tint": "#3a2a18",
+    "effect": "none"
+   },
+   "intro": "In the night, something big gets into your bag. In the morning: a Greedent, very fat, waddling away into the trees. It looks back once. It remembers you.",
+   "choices": [
+    {
+     "label": "Check the bag.",
+     "success": {
+      "text": "Your Berries are gone. Most of them.",
+      "effects": [
+       {
+        "kind": "spendBag",
+        "ids": [],
+        "count": 3,
+        "suffix": "-berry"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "black-market",
+   "name": "Behind the Curtain",
+   "group": "Merchants and deals",
+   "stop": "merchant",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "A curtain parts. Goods no shop would sell. Dealer, Silk: \"Everything's half price. Everything's stolen. I'm honest about that.\"",
+   "choices": [
+    {
+     "label": "Buy (a Choice Band, ₽1500, half price).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "Silk wraps it in newspaper. Somewhere, the evil team's next plan gets a little closer.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "item",
+        "id": "choice-band",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-choice-band",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "black-bought",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "evil-funded",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Who from?",
+     "success": {
+      "text": "Silk: \"Trainers who didn't lock their bags.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Report you.",
+     "success": {
+      "text": "Silk sighs. \"Fair.\" Officers come for her before the stage is out. One of them writes down what you saw: a lead on the Smuggling Ring.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lead-smuggling-ring",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reported-crime",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stolen-goods-stall",
+   "name": "Questionable Bargains",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "A street stall. Vendor: \"Cheap, cheap! Don't ask where it came from.\"",
+   "choices": [
+    {
+     "label": "Buy something (a Scope Lens, ₽1200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "He wraps it fast and looks over his shoulder twice.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "item",
+        "id": "scope-lens",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-scope-lens",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-funded",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask where it came from.",
+     "success": {
+      "text": "Vendor (very quietly): \"...A Rocket fella. Don't tell him I said.\" You have a name for the owner now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "stall-lead",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lead-smuggling-ring",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "smugglers-crate",
+   "name": "The Crate",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "A smuggler pats a stencilled crate. \"Unopened. May include a banned item. No refunds.\" He shows you a card: Life Orb 20%. Eviolite 20%. Assault Vest 20%. Weakness Policy 20%. Muscle Band 20%. \"I'm a smuggler, not a liar.\"",
+   "choices": [
+    {
+     "label": "Buy (₽800).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "You pry the lid off.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "life-orb",
+         "eviolite",
+         "assault-vest",
+         "weakness-policy",
+         "muscle-band"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open it here.",
+     "success": {
+      "text": "He puts a hand flat on the lid. \"No refunds means no peeking.\" Then he waits.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "smugglers-crate-closed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report it.",
+     "success": {
+      "text": "The officers open it. Inside, wrapped in a towel: one Poké Ball, scratched, with a name on it. It goes back to its owner through the Lost and Found. You never see their face, but you hear about it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "reported-crime",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "smugglers-crate-closed",
+   "name": "The Crate",
+   "group": "Merchants & Deals",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "The card again: Life Orb 20%. Eviolite 20%. Assault Vest 20%. Weakness Policy 20%. Muscle Band 20%.",
+   "choices": [
+    {
+     "label": "Buy (₽800).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "You pry the lid off.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "life-orb",
+         "eviolite",
+         "assault-vest",
+         "weakness-policy",
+         "muscle-band"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "He shrugs. \"Your loss. Twenty percent, each.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "back-alley-deal",
+   "name": "Want Something Nobody Else Has?",
+   "group": "One event for every type",
+   "types": [
+    "dark"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "An alley. A voice: \"Want something nobody else has?\" It's a rare held item: a Focus Sash. The tag says it was a Gym Leader's.",
+   "choices": [
+    {
+     "label": "Buy (₽1200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "You buy it. It's a good item. The tag is still on it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "item",
+        "id": "focus-sash",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-focus-sash",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "leader-item-bought",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Whose is it?",
+     "success": {
+      "text": "The tag says it belonged to the {gymType} Leader. The voice laughs. \"Not any more.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "I'll take it back to them.",
+     "success": {
+      "text": "\"Over my body.\" The seller steps out of the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [],
+       "name": "Alley Seller",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "leader-item-returned",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "stolen-goods-reclaim",
+   "name": "That Was Ours",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "black-bought",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "reclaim-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#1a1420",
+    "effect": "none"
+   },
+   "intro": "A Grunt steps in front of you. Grunt: \"That item you bought. It was ours. Hand it over.\"",
+   "choices": [
+    {
+     "label": "Hand it over.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "choice-band"
+      }
+     ],
+     "success": {
+      "text": "He takes the Choice Band and walks off without a word.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "choice-band"
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-choice-band",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "reclaim-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Grunt: \"Fine. The hard way.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "reclaim-done",
+         "amount": 1
+        }
+       ],
+       "name": "Grunt",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "reclaim-done",
+         "amount": 1
+        }
+       ],
+       "evil": "grunt"
+      }
+     }
+    },
+    {
+     "label": "It was someone's before it was yours.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "stall-lead",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "item",
+       "id": "choice-band"
+      }
+     ],
+     "success": {
+      "text": "Grunt: \"...Huh.\" You name the owner from the stall. He stares at you, then shrugs. \"Fine. Give it back to them, then. Not my problem.\" You do.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "choice-band"
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-choice-band",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "reclaim-done",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "estate-sale",
+   "name": "The Estate Sale",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "A house full of things, and a sign: EVERYTHING MUST GO. A relative in the doorway, arms crossed. Relative, Dora: \"Take what you want. Prices are on the tags. Don't haggle. I can't today.\"",
+   "choices": [
+    {
+     "label": "Buy cheaply (₽400).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "Fair prices, all of them low. You find a held item in a drawer of old ribbons.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silk-scarf",
+         "charcoal",
+         "mystic-water",
+         "miracle-seed",
+         "magnet",
+         "hard-stone"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the owner.",
+     "success": {
+      "text": "Dora: \"My uncle. He ran a Gym. Forty years ago. Nobody remembers.\" She looks at a small leather case on the mantel. \"That's his badge case.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "estate-owner"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave her to it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "estate-owner",
+   "name": "The Estate Sale",
+   "group": "Merchants & Deals",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Dora holds the badge case in both hands.",
+   "choices": [
+    {
+     "label": "Buy the badge case (₽300).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "She lets it go slowly. Inside: eight old badges, and a photograph of a young man with a Machop on his shoulder.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "flag",
+        "key": "estate-badge-case",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it for him.",
+     "success": {
+      "text": "You close her hands around it. Dora: \"...Thank you. Nobody asked about him. Not once, all week.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell me about his Gym.",
+     "success": {
+      "text": "She does. A small Gym, a Fighting Gym, forty years ago, where everybody knew everybody. She tells you his name. You won't forget it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "estate-uncle-named",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

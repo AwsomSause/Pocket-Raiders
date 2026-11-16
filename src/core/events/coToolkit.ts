@@ -289,6 +289,13 @@ export function coBattleEnd(run: Run, battle: NonNullable<Run['battle']>): void 
 export function coHealStop(content: Content, run: Run, before: readonly number[]): void {
   put(run, 'oath-rests', num(run, 'oath-rests') + 1);
   if (num(run, 'oath-speed') > 0 && num(run, 'oath-rests') >= 2) put(run, 'oath-broken', 1);
+  // SF76.8: the festival seedling is watered at every rest and fruits after a few.
+  if (num(run, 'berry-seedling') > 0 && num(run, 'berry-grown') === 0) {
+    put(run, 'berry-seedling-rests', num(run, 'berry-seedling-rests') + 1);
+    if (num(run, 'berry-seedling-rests') >= data.festival.seedlingRests) put(run, 'berry-grown', 1);
+  }
+  // SF84: the Elder asks whether a fainted Pokémon was ever left unhealed at a rest.
+  if (run.party.some((m) => m.hp <= 0)) put(run, 'left-fainted', 1);
   if (idolCurse(run) < IDOL.restCurse) return;
   run.party.forEach((m, i) => {
     const was = before[i] ?? 0;

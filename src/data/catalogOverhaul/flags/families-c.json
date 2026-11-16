@@ -206,6 +206,61 @@
    "key": "telling-deoxys",
    "setBy": "r141-starlit-cave-loomians",
    "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "dungeon-luck",
+   "setBy": "md-* rooms",
+   "readBy": "engine: coDungeon.ts (out of Luck: pushed back up)"
+  },
+  {
+   "key": "md-stole",
+   "setBy": "md-2-shop",
+   "readBy": "engine: coDungeon.ts (the shop becomes the NO room)"
+  },
+  {
+   "key": "berry-seedling",
+   "setBy": "berry-fest-research",
+   "readBy": "engine: coToolkit coHealStop (fruits after 4 rests, sets berry-grown)"
+  },
+  {
+   "key": "storyteller-road",
+   "setBy": "mr-story-archive",
+   "readBy": "The Storyteller's Road (MDD Part 9 event 35; 2 = starts at its second beat). Not built yet."
+  },
+  {
+   "key": "telling-mew",
+   "setBy": "mr-story-archive",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "evil-funded",
+   "setBy": "black-market, stolen-goods-stall",
+   "readBy": "evil-story / markets (the team's next plan a stage sooner)"
+  },
+  {
+   "key": "lead-smuggling-ring",
+   "setBy": "black-market, stolen-goods-stall",
+   "readBy": "evil-story / markets (Smuggling Ring lead)"
+  },
+  {
+   "key": "leader-item-bought",
+   "setBy": "back-alley-deal",
+   "readBy": "people (the Leader's later scene: it was stolen, and they look at you)"
+  },
+  {
+   "key": "leader-item-returned",
+   "setBy": "back-alley-deal",
+   "readBy": "people (+1 with that Leader)"
+  },
+  {
+   "key": "estate-badge-case",
+   "setBy": "estate-owner",
+   "readBy": "people GL6 (counts as its reward if not already earned)"
+  },
+  {
+   "key": "estate-uncle-named",
+   "setBy": "estate-owner",
+   "readBy": "people GL9 (his name goes into the bracket)"
   }
  ]
 }

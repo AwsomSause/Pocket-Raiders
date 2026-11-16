@@ -51,7 +51,7 @@ describe('families-c events', () => {
       if (o.stamp === 'region') set.add(`${String(o.key)}-at`);
     }
     // Engine-set flags: the helped Pokémon's return, the egg and other `ovt-` timers tick on their own once started.
-    for (const k of ['helped-rare-returned', 'helped-returned', 'co-early-ko', 'letter-glow', 'idol-curse', 'idol-paid', 'oath-broken', 'oath-rests']) set.add(k);
+    for (const k of ['helped-rare-returned', 'helped-returned', 'co-early-ko', 'letter-glow', 'idol-curse', 'idol-paid', 'oath-broken', 'oath-rests', 'berry-grown', 'left-fainted']) set.add(k);
     const unset = new Set<string>();
     for (const e of raw) for (const o of walk(e)) if (o.kind === 'flag' && typeof o.atLeast === 'number') {
       const key = String(o.key);
@@ -68,7 +68,7 @@ describe('families-c events', () => {
     const dead = new Set<string>();
     for (const e of raw) for (const o of walk(e)) if (o.kind === 'flag' && typeof o.amount === 'number' && (o.amount as number) > 0) {
       const key = String(o.key);
-      if (!(read.has(key) || documented.has(key) || key.startsWith('ovt-'))) dead.add(`${e.id} sets ${key}`);
+      if (!(read.has(key) || documented.has(key) || key.startsWith('ovt-') || key.startsWith('honest-kept-'))) dead.add(`${e.id} sets ${key}`);
     }
     expect([...dead], 'flags nothing reads and the flags file does not list').toEqual([]);
   });

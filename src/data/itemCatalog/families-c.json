@@ -448,5 +448,22 @@
         }
       ]
     }
+  },
+  {
+    "id": "spring-water",
+    "name": "Spring Water",
+    "family": "Gifts from people",
+    "description": "From the spring at the bottom of the Mystery Dungeon. Heals one Pokémon fully, out of battle, once",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": null,
+    "how": "use",
+    "icon": "fresh-water",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "care",
+      "heal": 999
+    }
   }
 ]

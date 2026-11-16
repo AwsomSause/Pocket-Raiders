@@ -15,6 +15,7 @@ import { modifierEventWeight } from './runModifiers';
 import { FORCED_STOPS_PER_STAGE, LEGENDARY_PER_REGION, LEGENDARY_PER_RUN, priorityOf, stepQueue } from './events/priority';
 import { rememberPick, rememberedPick } from './co/pickMemory';
 import { PSEUDO, enterPseudoStage, leavePseudoStage, routeChainEvent } from './dungeon/pseudo';
+import { dropOneHeld, dungeonNext, dungeonStart } from './events/coDungeon';
 import { addMark, overhaulOf, type FeelingKey } from './rivals/overhaul';
 import { friendName, friendTeam, pseudoRivalBeat } from './rivals/live';
 import { repAtLeast } from './rivals/reputation';
@@ -1273,6 +1274,8 @@ export function effectWords(content: Content, e: EventEffect): string {
       return coEffectWords(e);
     case 'friendshipLine':
       return `${content.species.get(e.species)?.name ?? e.species}: friendship ${e.amount >= 0 ? '+' : ''}${e.amount}`;
+    case 'dungeon':
+      return e.action === 'start' ? 'into the dungeon' : 'on to the next room';
     case 'regionJoin':
       return e.shadow ? 'a Shadow Pokémon of legend' : 'a Pokémon of legend joins';
     case 'cast':
@@ -1722,6 +1725,16 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       // Shadow II: a story flag may be exactly the key a Shadow in your party or PC has been waiting for.
       for (const line of checkFlagKeys(content, run)) recordChoice(content, run, { id: `shadow-key-${e.key}`, pick: 'yes', text: line, weight: 2 });
       return '';
+    case 'dungeon': {
+      if (e.action === 'start') { dungeonStart(run, e.scarf); return ''; }
+      const r = dungeonNext(run, e.from ?? '');
+      if (r.out) {
+        const lost = dropOneHeld(run);
+        leavePseudoStage(run);
+        return `out of luck: pushed back up the stairs${lost ? `, and the ${content.items.get(lost)?.name ?? content.catalog.get(lost)?.name ?? lost} is lost` : ''}`;
+      }
+      return r.next ? applyEffect(content, run, EventEffectSchema.parse({ kind: 'addEvent', eventId: r.next }), rng, tradeUid) : '';
+    }
     case 'regionJoin':
       return applyEffect(content, run, EventEffectSchema.parse({ kind: 'join', species: [coRegionPick(run, e.table, currentRegion(content, run).id)], shadow: e.shadow, levelBonus: e.levelBonus }), rng, tradeUid);
     case 'ruleRead':

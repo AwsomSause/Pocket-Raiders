@@ -8,9 +8,9 @@
    "favours": 0.75
   },
   "words": {
+   "1": "This rule is even for both sides: prize ×1",
    "2": "This rule is very bad for you: double prize",
    "1.5": "This rule is bad for you: prize ×1.5",
-   "1": "This rule is even for both sides: prize ×1",
    "0.75": "This rule favours you: prize ×0.75"
   }
  },
@@ -213,5 +213,32 @@
     "suicune"
    ]
   }
+ },
+ "dungeon": {
+  "_note": "SF73 Mystery Dungeon: three floors; each floor plays all its rooms in a seeded random order, then the Spring. Luck starts at 3 (+1 with the scarf); at 0 the party is pushed back up and drops one held item.",
+  "floors": [
+   [
+    "md-1-item-room",
+    "md-1-monster-house",
+    "md-1-trap-corridor"
+   ],
+   [
+    "md-2-fork",
+    "md-2-shop",
+    "md-2-sleeping-den"
+   ],
+   [
+    "md-3-ambush",
+    "md-3-boss-door"
+   ]
+  ],
+  "spring": "md-3-spring",
+  "noShop": "md-2-no",
+  "startLuck": 3,
+  "scarfLuck": 1
+ },
+ "festival": {
+  "_note": "SF76.8: the seedling fruits after this many rests.",
+  "seedlingRests": 4
  }
 }
