@@ -11,11 +11,15 @@
   "starter-home": "a starter's visit home (gn.new)",
   "border-united": "new-events row, NE73 The Border Dispute (united both sides)",
   "team-raid-moon-won": "Evil Team row: the Mt. Moon raid (read by gn.04)",
-  "team-raid-moon-lost": "Evil Team row: the Mt. Moon raid (read by gn.04)"
+  "team-raid-moon-lost": "Evil Team row: the Mt. Moon raid (read by gn.04)",
+  "roux-met": "SF92 Madame Roux (side-content row; read by gn.27's bill)",
+  "magician-met": "SF138 The Magician (side-content row; read by gn.27's bill)",
+  "understudy-went-on": "gn.new.08 The Understudy"
  },
  "flags": [
   { "key": "safari-photo-best", "rule": "core/greenneedle/safariEnd.ts (gn.18 Safari Land)" },
   { "key": "partner-was-ball", "rule": "core/greenneedle gn op `partner` (gn.24)" },
-  { "key": "pidgey-backed-spearow", "rule": "core/sky/spectate.ts (gn.02 Sky finale)" }
+  { "key": "pidgey-backed-spearow", "rule": "core/sky/spectate.ts (gn.02 Sky finale)" },
+  { "key": "partner-story", "rule": "core/greenneedle gn op `partner` (gn.24: the story by the partner's nature)" }
  ]
 }

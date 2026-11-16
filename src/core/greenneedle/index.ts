@@ -6,11 +6,16 @@ import type { Content } from '../contentSchema';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
-import { addLevels, getSpecies, isUsableMove, maxHp } from '../pokemon';
+import { addLevels, calcStats, createPokemon, getSpecies, isUsableMove, maxHp } from '../pokemon';
+import { levelScale } from '../encounters';
+import { getCampaign } from '../regions';
 import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
 import type { TypeName } from '../contentSchema';
 import { SLUDGE_TURNS } from './factory';
+import { bondLevel, firstCatch } from '../co/who';
+import { NATURE_IDS } from '../natures';
+import { fnv1a } from '../expansion/hash';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -23,6 +28,15 @@ export const setGnFlag = (run: Pick<RunState, 'story'>, k: string, v: number): v
 
 /** The main-series regions' generations (the region pool of a `cast`). */
 const REGION_GENERATION: Record<string, number> = { kanto: 1, johto: 2, hoenn: 3, sinnoh: 4, unova: 5, kalos: 6, alola: 7, galar: 8, paldea: 9 };
+
+const PET_NAMES = ['Dumpling', 'Biscuit', 'Pickle', 'Button', 'Pebble', 'Sprout', 'Mochi', 'Waffles', 'Bramble', 'Nugget', 'Toffee', 'Puddle', 'Crumpet', 'Bean', 'Muffin', 'Pip'];
+/** gn.24: `{petname}` (the old name a past trainer gave it) and `{partner}` (its species) in event text, for the partner Pokémon. */
+export function gnTokens(content: Content, run: RunState, text: string): string {
+  if (!text.includes('{')) return text;
+  const mon = [...run.party, ...run.box].find((m) => m.gn?.includes('old-partner')) ?? firstCatch(run);
+  if (!mon) return text.replaceAll('{petname}', 'Dumpling').replaceAll('{partner}', 'Pokémon');
+  return text.replaceAll('{petname}', PET_NAMES[fnv1a(`petname:${mon.uid}`) % PET_NAMES.length]!).replaceAll('{partner}', content.species.get(mon.speciesId)?.name ?? 'Pokémon');
+}
 
 /** The species a story Pokémon was cast as (gn op `cast`), or null before it is cast. */
 export function castOf(run: Pick<RunState, 'story'>, name: string): string | null {
@@ -106,6 +120,15 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'notThisRegion') return stamped !== run.regionIndex + 1;
   if (c.test === 'thisRegion') return stamped === run.regionIndex + 1;
   // gn.22: the guest carrying mark `key` is down (fainted, or no longer in the party).
+  if (c.test === 'oldCatch') return !!firstCatch(run);
+  // gn.27: the party's best Attack beats `n`% of a `key` Pokémon's at this point of the stage (the Machamp uses two of its four arms).
+  if (c.test === 'strength') {
+    const column = run.stage?.map.nodes.find((x) => x.id === run.stage!.current)?.column ?? 1;
+    const sc = levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage?.index ?? 0, column);
+    const level = Math.max(1, Math.round(sc.start + (sc.end - sc.start) * sc.t));
+    const bar = (calcStats(content, createPokemon(content, c.key!, level, 'gn-bar')).atk * (c.n ?? 100)) / 100;
+    return run.party.some((m) => m.hp > 0 && calcStats(content, m).atk > bar);
+  }
   if (c.test === 'holdsItem') return run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && !id.endsWith('-berry')));
   if (c.test === 'hasMark') return run.party.some((m) => m.gn?.includes(c.key!));
   if (c.test === 'markDown') return !run.party.some((m) => m.gn?.includes(c.key!) && m.hp > 0);
@@ -302,6 +325,40 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
         if (n > 0) lines.push(host.apply({ kind: 'item', id: k.slice(prefix.length), count: n }));
       }
       return lines.filter(Boolean).join(', ');
+    }
+    case 'partner': {
+      const mon = firstCatch(run);
+      if (!mon) return '';
+      for (const m of [...run.party, ...run.box]) if (m.gn) m.gn = m.gn.filter((t) => t !== e.key);
+      mon.gn = [...(mon.gn ?? []), e.key!];
+      const nature = mon.nature ? NATURE_IDS.indexOf(mon.nature) : fnv1a(mon.uid);
+      setGnFlag(run, 'partner-story', (Math.max(0, nature) % 3) + 1);
+      setGnFlag(run, 'partner-bond', bondLevel(content, mon));
+      // gn.new.03's Ball That Wouldn't Open marks its Pokémon `wouldnt-open`: if that is the partner, it has had three trainers.
+      setGnFlag(run, 'partner-was-ball', mon.gn.includes('wouldnt-open') ? 1 : 0);
+      return '';
+    }
+    case 'oldMove': {
+      const mon = run.party.find((m) => m.gn?.includes(e.key!));
+      if (!mon) return '';
+      const known = new Set(mon.moves.map((m) => m.id));
+      const dropped = getSpecies(content, mon.speciesId).learnset.filter((x) => x.level <= mon.level && !known.has(x.move) && isUsableMove(content, x.move)).map((x) => x.move);
+      // The oldest move it has dropped: the one it used back then.
+      const id = dropped[0];
+      if (!id) return '';
+      const slot = { id, pp: content.moves.get(id)!.pp };
+      // A full moveset gives up its last move, never Two Trainers (taught just before, at high Bond).
+      if (mon.moves.length < 4) mon.moves.push(slot);
+      else mon.moves[mon.moves[3]!.id === 'two-trainers' ? 2 : 3] = slot;
+      return `${nameOf(content, mon)} remembered ${content.moves.get(id)!.name}!`;
+    }
+    case 'castBase': {
+      const mon = [...run.party, ...run.box].find((m) => m.gn?.includes(e.type!));
+      if (!mon || castOf(run, e.key!)) return '';
+      let base = getSpecies(content, mon.speciesId);
+      for (let i = 0; i < 4 && base.evolvesFrom && content.species.has(base.evolvesFrom); i++) base = getSpecies(content, base.evolvesFrom);
+      run.story.flags[`${key(`cast-${e.key}`)}:${base.id}`] = 1;
+      return '';
     }
     case 'castItem': {
       const sp = castOf(run, e.key!);

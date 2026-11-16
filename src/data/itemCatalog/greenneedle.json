@@ -263,5 +263,32 @@
       "mode": "hm",
       "move": "moonblast"
     }
+  },
+  {
+    "id": "giants-mark",
+    "name": "Giant's Mark",
+    "family": "Held items",
+    "description": "Pressed into it by something very large. The holder's max HP is 25% higher, and its Speed 15% lower.",
+    "rarity": "epic",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "library/commonstone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "maxHp",
+          "percent": 25
+        },
+        {
+          "hook": "stat",
+          "stat": "spe",
+          "multiplier": 0.85
+        }
+      ]
+    }
   }
 ]

@@ -287,6 +287,8 @@ export const MoveSchema = z.object({
       haunting: z.literal(true).optional(),
       /** Proof (Greenneedle gn.21): the user's own first type; +20% against a target that can't evolve any further. */
       proof: z.literal(true).optional(),
+      /** Two Trainers (Greenneedle gn.24): the user's own first type; 100 power at maximum Bond. */
+      twoTrainers: z.literal(true).optional(),
       /** Magnet Rise: the user floats for five turns. */
       magnetRise: z.literal(true).optional(),
       /** Smack Down / Thousand Arrows: the target is brought to the ground. */
@@ -1301,6 +1303,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   /** The holder's first move aimed at a foe each battle can't miss (Ravi's Bell). */
   z.object({ hook: z.literal('firstMoveSure') }),
   /** Wild Pokémon's status moves aimed at the holder miss this much more often, in percent (Pure Incense). */
+  /** The holder's max HP is this many percent higher (Greenneedle gn.26, the Giant's Mark). */
+  z.object({ hook: z.literal('maxHp'), percent: z.number().int().min(1).max(100) }),
   z.object({ hook: z.literal('statusShield'), percent: z.number().positive().max(100) }),
   /** The holder can't get these statuses (Lunar Wing: sleep). */
   /** Takes no damage from these weathers (Go-Goggles: sandstorm). */
@@ -2202,7 +2206,7 @@ export const BalanceSchema = z.object({
   /** Beta 0.7 L3 Rewinds (core/rewind.ts): how far back a battle rewind may go, and how many rewinds a stage allows. */
   rewind: z.object({ maxTurnsBack: z.number().int().min(1), usesPerStage: z.number().int().min(0) }).default({ maxTurnsBack: 5, usesPerStage: 1 }),
   /** Catalog Overhaul Pack words: "+1 Bond" on one Pokémon is `bondFriendship` friendship (`bondFriendshipParty` each for the whole party); Bond level N is friendship N x `bondLevelStep`. */
-  co: z.object({ bondFriendship: z.number().int().min(1), bondFriendshipParty: z.number().int().min(1), bondLevelStep: z.number().int().min(1), /** new events: weight of a wild species while its type is quiet (an Alpha left, the river emptied). */ quietWildWeight: z.number().min(0).max(1).default(0.1) }).default({ bondFriendship: 5, bondFriendshipParty: 3, bondLevelStep: 50, quietWildWeight: 0.1 }),
+  co: z.object({ bondFriendship: z.number().int().min(1), bondFriendshipParty: z.number().int().min(1), bondLevelStep: z.number().int().min(1), /** new events: weight of a wild species while its type is quiet (an Alpha left, the river emptied). */ quietWildWeight: z.number().min(0).max(1).default(0.1), /** Greenneedle gn.26: a giant's max HP boost (percent) and Speed multiplier. */ giantHpPercent: z.number().int().min(0).max(300).default(100), giantSpeed: z.number().min(0.1).max(1).default(0.75) }).default({ bondFriendship: 5, bondFriendshipParty: 3, bondLevelStep: 50, quietWildWeight: 0.1, giantHpPercent: 100, giantSpeed: 0.75 }),
   badgePower: z.object({ damagePerBadge: z.number().min(0).default(0.03), weaknessCutPerBadge: z.number().min(0).default(0.03), maxStacks: z.number().int().min(1).default(4) }).default({ damagePerBadge: 0.03, weaknessCutPerBadge: 0.03, maxStacks: 4 }),
   /** Item rework (Kice, 2026-11-07): charm odds in the draft, and how much of each Luck gain a run keeps. */
   itemRework: z
@@ -3197,7 +3201,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** The lead learns one of its family's egg moves it doesn't know yet. */
   z.object({ kind: z.literal('eggMove') }),
   /** A party Pokémon learns a move: the first conscious one of `type`, else the lead. A full moveset loses its last move. */
-  z.object({ kind: z.literal('teachMove'), move: z.string().min(1), /** Catalog Overhaul: teach this Pokémon (`picked`, `starter`...). */ who: CoWhoSchema.optional(), type: TypeNameSchema.optional(), /** Greenneedle gn.21: a Pokémon that can still evolve learns it. */ unevolved: z.boolean().optional(), /** Teach this species instead (the Clefairy you just got). */ species: z.string().optional(), /** A full moveset loses the move in this slot (0-3) instead of the last one. */ slot: z.number().int().min(0).max(3).optional() }),
+  z.object({ kind: z.literal('teachMove'), move: z.string().min(1), /** Catalog Overhaul: teach this Pokémon (`picked`, `starter`...). */ who: CoWhoSchema.optional(), type: TypeNameSchema.optional(), /** Greenneedle gn.21: a Pokémon that can still evolve learns it. */ unevolved: z.boolean().optional(), /** Greenneedle gn.24: the Pokémon carrying this mark learns it. */ mark: z.string().optional(), /** Teach this species instead (the Clefairy you just got). */ species: z.string().optional(), /** A full moveset loses the move in this slot (0-3) instead of the last one. */ slot: z.number().int().min(0).max(3).optional() }),
   /** The next reward draft uses the gym leader's odds and offers `extra` more choices. */
   z.object({ kind: z.literal('betterDraft'), extra: z.number().int().min(0).default(0) }),
   /** The map shows this stage's gym leader's whole team. */
@@ -3469,6 +3473,8 @@ export const EventRuleSchema = z.object({
   noSwitchFirstTurn: z.boolean().optional(),
   /** Beta 0.7 Route 25: the foe stands guard and does not attack for this many turns (the fifth Mankey, in front of the other four). */
   foeStands: z.number().int().min(1).max(3).optional(),
+  /** Greenneedle gn.26 (Island of Giants): the foes have grown, not Dynamaxed: double HP, three-quarter Speed. */
+  giant: z.boolean().optional(),
   /** Catalog Overhaul new events: the foe has lost every move with this flag (the Alpha that lost its voice: no sound moves). */
   foeNoFlag: z.enum(CO_MOVE_FLAGS).optional(),
   /** Catalog Overhaul new events: the foe's side starts with Tailwind for this many turns (an Alpha fight in the wind off a cliff). */
@@ -3556,7 +3562,7 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Battles in a row at this stop without healing in between (a detour); `win` pays after the last. */
     chain: z.number().int().min(1).max(3).default(1),
     /** The wild Pokémon knows these moves (replacing its last ones): Route 25's Primeape uses Rage. */
-    foeMoves: z.array(z.string()).max(2).optional(),
+    foeMoves: z.array(z.string()).max(3).optional(),
     /** Catalog Overhaul (Greenneedle): the wild Pokémon holds this item (gn.15's third Mankey carries a stolen Berry, and eats it). */
     held: z.string().optional(),
     /** Anime Forms art for the foe (core/animeLooks.ts; the Squirtle Squad). Presentation only. */
@@ -3586,7 +3592,7 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** A fixed foe team (species ids) instead of one drawn by `types`. */
     team: z.array(z.string()).optional(),
     /** Catalog Overhaul (people): the foe's first Pokémon knows these moves, replacing its last ones (Joey's Rattata and Hyper Fang). */
-    foeMoves: z.array(z.string()).max(2).optional(),
+    foeMoves: z.array(z.string()).max(3).optional(),
     /** With `team`: this team instead when your lead is weak to `weakTo` (the Samurai counters your Bug-type). */
     counter: z.object({ weakTo: TypeNameSchema, team: z.array(z.string()).min(1) }).optional(),
     /** A trainer class from trainers.json, or a boss id (its signature team). */

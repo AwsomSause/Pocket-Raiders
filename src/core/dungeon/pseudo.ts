@@ -176,7 +176,8 @@ export function chainRooms(content: Content, chain: PseudoChain): { event: strin
   const depth = new Map<string, number>();
   const order: string[] = [];
   // A room is never another chain's entry, nor a canon space's gate (a gate stands on the map: Route 25's last rooms open the Tournament's).
-  const stops = (id: string): boolean => !!chainOfEntry(id) || !!content.events.get(id)?.canon;
+  // A canon event that is itself a room (the Sevii network's islands) is a room.
+  const stops = (id: string): boolean => !!chainOfEntry(id) || (!!content.events.get(id)?.canon && !content.events.get(id)?.room);
   let level = opensNext(entry, chain.team).filter((id) => content.events.has(id) && !stops(id));
   for (let d = 1; level.length > 0; d++) {
     const nextLevel: string[] = [];

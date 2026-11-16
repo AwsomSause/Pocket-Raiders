@@ -42,6 +42,16 @@ export function hpLevelMultiplier(content: Content, level: number): number {
   return 1 + (content.balance.hpLevelBonus ?? 0) * Math.min(1, Math.max(0, level) / 100);
 }
 
+/** Max HP percent from held items with a `maxHp` hook. */
+function heldHpPercent(content: Content, mon: PokemonInstance): number {
+  let pct = 0;
+  for (const id of Object.keys(mon.held ?? {})) {
+    const effect = content.catalog.get(id)?.effect;
+    if (effect?.kind === 'held') for (const h of effect.hooks) if (h.hook === 'maxHp') pct += h.percent;
+  }
+  return pct;
+}
+
 export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
   const species = getSpecies(content, mon.speciesId);
   const perStack = content.balance.vitaminMultiplierPerStack;
@@ -59,6 +69,9 @@ export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
     const boost = ((mon.statBoosts?.[stat] ?? 0) + (mon.eventBoosts?.[stat] ?? 0) + (mon.evoDeclineBoost ?? 0) + (stat === 'hp' ? mon.perkHp ?? 0 : 0)) / 100;
     stats[stat] = Math.floor(raw * (1 + perStack * stacks + boost) * (content.balance.careEffects ? careMultiplier(mon.care, stat) : 1));
   }
+  // A held item that raises max HP (the Giant's Mark).
+  const heldHp = heldHpPercent(content, mon);
+  if (heldHp) stats.hp = Math.floor(stats.hp * (1 + heldHp / 100));
   // Dynamax doubles HP for its turns (battle/transform.ts).
   if (mon.dynamaxed) stats.hp *= 2;
   // Overcharged (Beta 0.6 Pokémon moments): HP x1.5, every other stat doubled, until the battle ends.

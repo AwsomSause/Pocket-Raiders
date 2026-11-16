@@ -179,6 +179,12 @@ export const PROMPTS: readonly PromptDef[] = [
   { id: 'copycat-claps', kind: 'rhythm', label: 'Copy her claps', hint: 'She claps four times. Press on each beat to copy her.', beatsMs: [500, 950, 1500, 1950], windowsMs: W(100, 180, 320) },
   // Beta 0.7: the first screen that uses the microphone (Sleeping Snorlax).
   { id: 'snorlax-shout', kind: 'shout', label: 'Wake the Snorlax!', hint: 'Shout, or press the button, to wake it.', listenMs: 5000 },
+  { id: 'breath-walk', kind: 'rhythm', label: 'Walk with its breath', hint: 'Press on each breath to step across its shoulders.', beatsMs: [900, 1800, 2700, 3600], windowsMs: W(100, 190, 330) },
+  { id: 'trench-dash', kind: 'timing', label: 'Run!', hint: 'Press as the ring closes: run while it turns at the far end.', landMs: 1200, windowsMs: W(80, 160, 300) },
+  { id: 'track-jumps', kind: 'rhythm', label: 'Jump!', hint: 'Press on each beat to clear the three jumps.', beatsMs: [700, 1400, 2100], windowsMs: W(90, 170, 300) },
+  { id: 'juggle-three', kind: 'rhythm', label: 'Keep the beat', hint: 'Press on each beat while three Aipom juggle.', beatsMs: [600, 1200, 1800], windowsMs: W(100, 180, 320) },
+  { id: 'juggle-five', kind: 'rhythm', label: 'Keep the beat', hint: 'Press on each beat while five Aipom juggle.', beatsMs: [500, 1000, 1500, 2000, 2500], windowsMs: W(90, 170, 300) },
+  { id: 'juggle-seven', kind: 'rhythm', label: 'Keep the beat', hint: 'Press on each beat while seven Aipom juggle.', beatsMs: [450, 900, 1350, 1800, 2250, 2700, 3150], windowsMs: W(80, 160, 280) },
   { id: 'pull-hold', kind: 'hold', label: 'Pull together', hint: 'Hold, and let go as the ring fills to pull them free.', targetMs: 1100, windowsMs: W(90, 180, 320) },
 ];
 

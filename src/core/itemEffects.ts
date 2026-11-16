@@ -204,6 +204,8 @@ function hookText(hook: HeldHook, copies: number): HookText {
     case 'berryRetaliate':
       if (hook.stat) return { text: `Hit by a ${hook.category} move: ${cap(statName(hook.stat))} +${hook.stages}. Used up.`, when: `on a ${hook.category} hit`, once: true };
       return { text: `Hurts a ${hook.category} attacker for ${pct((hook.fraction ?? 0) * 100)} of its max HP. Used up.`, when: `on a ${hook.category} hit`, once: true };
+    case 'maxHp':
+      return { text: `Max HP +${hook.percent}%.` };
     case 'terrainSeed':
       return { text: `Under ${cap(hook.terrain)} Terrain, ${cap(statName(hook.stat))} +${hook.stages}. Used up.`, when: `${cap(hook.terrain)} Terrain`, once: true };
     default: {

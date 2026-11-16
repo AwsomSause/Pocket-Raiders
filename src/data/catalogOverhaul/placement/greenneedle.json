@@ -1649,5 +1649,93 @@
   "stages": [
    8
   ]
+ },
+ "gn-24-bench": {
+  "gn": "gn.24",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 13,
+  "window": [
+   11,
+   16
+  ],
+  "sits": "must-see",
+  "attaches": "before",
+  "level": "no battle",
+  "often": "run",
+  "badge": "none",
+  "note": "The town, until towns exist: step 13. Needs a wild-caught Pokémon owned at least a region. Three visits are follow-ups on later stages of the region.",
+  "kinds": [
+   "Interrupting Episode",
+   "Reunion Episode"
+  ],
+  "tags": []
+ },
+ "gn-25-heap": {
+  "gn": "gn.25",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 7,
+  "window": [
+   5,
+   10
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "A+0",
+  "often": "run",
+  "badge": "own",
+  "note": "Badge: two small shapes, back to back. The node's wild battle becomes the pack fight.",
+  "kinds": [
+   "Miniature Episode",
+   "Companion Story"
+  ],
+  "tags": []
+ },
+ "gn-26-door": {
+  "gn": "gn.26",
+  "shape": "Door",
+  "earliest": "A7",
+  "home": 15,
+  "window": [
+   13,
+   18
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "Giants A+1; the guardian A+2",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "Off Vermilion: the Island of Giants",
+   "elsewhere": "The Island of Giant Pokémon"
+  },
+  "note": "Badge: a very large footprint. Six nodes. Kanto has no older Island of Giants space to replace.",
+  "kinds": [
+   "Pseudo Stage"
+  ],
+  "tags": [
+   "water"
+  ]
+ },
+ "gn-27-gate": {
+  "gn": "gn.27",
+  "shape": "Single",
+  "earliest": "A4",
+  "home": 10,
+  "window": [
+   8,
+   13
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "The arena and the owner A+0",
+  "often": "region",
+  "badge": "own",
+  "note": "Badge: a striped tent. At a Town or Hub node; until towns exist, step 10. Returns in later regions with new acts (the trapeze and fire-eater, then the water show and the evolved ace).",
+  "kinds": [
+   "Hub Destination"
+  ],
+  "tags": []
  }
 }

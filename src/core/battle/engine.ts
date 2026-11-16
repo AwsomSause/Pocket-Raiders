@@ -2111,6 +2111,8 @@ function doublesDamageMultiplier(ctx: BattleContext, user: Combatant, target: Co
   if (user.side !== target.side || user.mon.uid !== target.mon.uid) {
     const theirs = moveIgnoresAbility ? null : allyAbility(ctx, target);
     if (theirs === 'friend-guard') m *= 0.75;
+    // Truce (Greenneedle gn.25): side by side, each takes 25% less from a move that hits both.
+    if (turn.spread && theirs === 'truce' && abilityIn(ctx, target) === 'truce') m *= 0.75;
     if (theirs === 'flower-gift' && sun && !physical) m /= 1.5;
   }
   return m;
@@ -2299,6 +2301,12 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
   const ability = abilityIn(ctx, c);
   if (!ability) return;
   syncForms(ctx, c, events, false);
+  if (ability === 'truce' && ctx.battle.storyEffects.includes(`truce-due:${c.mon.uid}`)) {
+    ctx.battle.storyEffects.splice(ctx.battle.storyEffects.indexOf(`truce-due:${c.mon.uid}`), 1, `truce-used:${c.mon.uid}`);
+    announce(c, ability, events);
+    applyStageChange(ctx, c, 'atk', 1, events);
+    applyStageChange(ctx, c, 'spe', 1, events);
+  }
   if (ability === 'delta-stream') {
     announce(c, ability, events);
     const old = ctx.battle.weather;
@@ -2582,6 +2590,8 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
   if (c.side === 'player') speed = Math.floor(speed * growthSpeedMultiplier(content.balance.overhaulGrowth, c.mon, { firstOfDay: ctx.battle.firstOfDay === true, weather: ctx.battle.weather?.id ?? null, tailwind: ctx.battle.sideEffects.player.tailwind > 0, koed: (ctx.battle.growthMarks ?? []).includes(`ko:${c.mon.uid}`) }));
   if ((ability === 'surge-surfer' || ability === 'grid-surfer') && ctx.battle.terrain?.id === 'electric') speed *= 2;
   if (ability === 'slow-start' && c.vol.turnsOut < 5) speed = Math.floor(speed / 2);
+  // Greenneedle gn.26: a giant moves at three-quarter Speed.
+  if (c.side === 'enemy' && ctx.battle.eventRule?.giant) speed = Math.floor(speed * ctx.content.balance.co.giantSpeed);
   return speed * (c.side === 'player' ? (ctx.attributes?.speed ?? 1) : 1);
 }
 
@@ -4172,6 +4182,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       let power = fx.lowHpPower ? lowHpPower(user.mon.hp, userStats.hp) : (move.power ?? 0);
       if (fx.beatUp && beaters.length > 0) power = Math.floor(getSpecies(content, beaters[Math.min(hit, beaters.length - 1)]!.speciesId).baseStats.atk / 10) + 5;
       if (fx.powerRule) power = powerFromRule(ctx, fx.powerRule, power, user, target, userStats, targetStats, movedFirst, hit) ?? power;
+      if (fx.twoTrainers && user.mon.friendship >= content.balance.friendship.max) power = 100;
       power = teraPower(ctx.battle, user.mon, { ...move, type: moveType }, power);
       let stab = move.flags.includes('typeless') ? 1 : stabMultiplier(content, ctx.battle, user.mon, moveType);
       if (stab === 1 && user.vol.typeShift === moveType) stab = content.ruleset.stabMultiplier;
@@ -5459,7 +5470,7 @@ function specialMoveType(ctx: BattleContext, user: Combatant, move: Move, _weath
   const fx = move.effects;
   if (fx.terrainPulse) return ctx.battle.terrain ? TERRAIN_TYPE[ctx.battle.terrain.id] : 'normal';
   if (fx.teraBlast) return ctx.battle.transform.teraTypes[user.mon.uid] ?? move.type;
-  if (fx.proof) return battleTypes(ctx.content, ctx.battle, user.mon)[0] ?? move.type;
+  if (fx.proof || fx.twoTrainers) return battleTypes(ctx.content, ctx.battle, user.mon)[0] ?? move.type;
   if (fx.formType) {
     const id = user.mon.speciesId;
     switch (fx.formType) {
@@ -6936,6 +6947,12 @@ function recordFaints(ctx: BattleContext, player: Combatant, enemy: Combatant, e
     if (events.some((e) => e.type === 'faint' && e.uid === c.mon.uid)) continue;
     const participants = c.side === 'enemy' ? ctx.battle.participants.filter((uid) => ctx.party.some((p) => p.uid === uid && p.hp > 0)) : [];
     ctx.battle.extra.allyFaintedTurn[c.side] = ctx.battle.turn;
+    // Truce (Greenneedle gn.25): when one faints, its partner next to it in the party gets Attack +1 and Speed +1 when it comes in. Once a battle.
+    if (c.side === 'player' && abilityIn(ctx, c) === 'truce') {
+      const i = ctx.party.findIndex((m) => m.uid === c.mon.uid);
+      const mate = [ctx.party[i - 1], ctx.party[i + 1]].find((m) => m && m.hp > 0 && m.fixedAbility === 'truce');
+      if (mate && !ctx.battle.storyEffects.some((t) => t.startsWith('truce'))) ctx.battle.storyEffects.push(`truce-due:${mate.uid}`);
+    }
     for (const o of [player, enemy]) {
       if (o !== c && o.mon.hp > 0 && abilityIn(ctx, o) === 'soul-heart') {
         announce(o, 'soul-heart', events);

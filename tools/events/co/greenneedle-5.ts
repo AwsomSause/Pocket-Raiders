@@ -473,8 +473,8 @@ const PARTNER = 'old-partner';
 const hasPartner: Json = { kind: 'gn', test: 'hasMark', key: PARTNER };
 /** What Rosabel gives back: a move it used to know, and Two Trainers at high Bond. */
 const REMEMBERED: Json[] = [
-  gn('oldMove', { key: PARTNER }),
   when('partner-bond', { min: 4 }, [{ kind: 'teachMove', move: 'two-trainers', mark: PARTNER }], 'Something the two of them used to do together comes back to it: Two Trainers.'),
+  gn('oldMove', { key: PARTNER }),
   flag('partner-done'),
 ];
 const VISIT_ON = (n: number): Json => ch("We'll come back.", out('Rosabel nods. **Rosabel:** "I\'ll be here. I\'m always here."', setTo('partner-visits', n + 1), stampStage('partner-visit-at')));

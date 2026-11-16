@@ -107,6 +107,42 @@
    "effects": {
     "proof": true
    }
+  },
+  {
+   "id": "two-trainers",
+   "name": "Two Trainers",
+   "type": "normal",
+   "category": "physical",
+   "power": 75,
+   "accuracy": 100,
+   "pp": 10,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "contact"
+   ],
+   "effects": {
+    "twoTrainers": true
+   }
+  },
+  {
+   "id": "stamp",
+   "name": "Stamp",
+   "type": "ground",
+   "category": "physical",
+   "power": 70,
+   "accuracy": 100,
+   "pp": 10,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "contact"
+   ],
+   "effects": {
+    "flinchChance": 100
+   }
   }
  ]
 }

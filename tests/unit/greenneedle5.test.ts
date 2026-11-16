@@ -1,9 +1,13 @@
-// Greenneedle part 5: gn.21 The Pokémon That Wouldn't Evolve (tools/events/co/greenneedle-5.ts).
+// Greenneedle part 5: gn.21 to gn.25 (tools/events/co/greenneedle-5.ts).
+import { NATURE_IDS } from '../../src/core/natures';
 import { describe, expect, it } from 'vitest';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
-import { eligibleEvents } from '../../src/core/events';
+import { conditionMet, eligibleEvents } from '../../src/core/events';
+import { createBattle, resolveTurn, type BattleContext, type BattleEvent } from '../../src/core/battle/engine';
+import { hashSeed, Rng } from '../../src/core/rng';
+import type { PokemonInstance } from '../../src/core/state';
 import { castOf } from '../../src/core/greenneedle';
 import { blocksEvolution, heldStatMultiplier } from '../../src/core/battle/held';
 import { choose, flagOf, gnRun, lose, open, scene, setFlag, win } from './helpers/gnPlay';
@@ -383,5 +387,267 @@ describe('gn.23 The Magikarp That Could', () => {
 
   it('in Kanto the canon Magikarp Salesman is this scene', () => {
     expect(content.events.get('cs-kanto-pewter-magikarp')!.choices.map((c) => c.label)).toEqual(['Buy it (₽500).', 'Offer ₽200.', 'No.']);
+  });
+});
+
+// ---------------------------------------------------------------------------------------------------------------------
+const PET_NAMES = ['Dumpling', 'Biscuit', 'Pickle', 'Button', 'Pebble', 'Sprout', 'Mochi', 'Waffles', 'Bramble', 'Nugget', 'Toffee', 'Puddle', 'Crumpet', 'Bean', 'Muffin', 'Pip'];
+/** A run with a wild-caught Pokémon (not the starter) at this friendship. */
+const withPartner = (seed: string, friendship: number, species = 'raticate'): { run: RunState; mon: PokemonInstance } => {
+  const run = gnRun(seed);
+  const mon = createPokemon(content, species, 30, 'p-old');
+  mon.caughtBall = 'poke-ball';
+  mon.friendship = friendship;
+  run.party.push(mon);
+  return { run, mon };
+};
+const benchDone = (seed: string, friendship: number, species?: string): RunState => {
+  const { run } = withPartner(seed, friendship, species);
+  open(run, 'gn-24-bench');
+  return choose(run, 'gn-24-bench', 'Wait.').run;
+};
+/** The outcome text plus its follow-on lines (a `when` line shows in the result list). */
+const said = (r: { text: string; changes: string[] }): string => [r.text, ...r.changes].join(' ');
+const partnerOf = (run: RunState) => run.party.find((m) => m.gn?.includes('old-partner'));
+
+describe('gn.24 The Forgotten Partner', () => {
+  it('must-see at step 13 before the battle (A8, once a run); it needs a wild-caught Pokémon that is not the starter', () => {
+    expect(content.coPlacement!.get('gn-24-bench')).toMatchObject({ home: 13, window: [11, 16], sits: 'must-see', attaches: 'before', earliest: 8 });
+    const req = content.events.get('gn-24-bench')!.requires;
+    const bare = gnRun('t24-req');
+    expect(req.every((c) => conditionMet(content, bare, c))).toBe(false);
+    expect(req.every((c) => conditionMet(content, withPartner('t24-req2', 70).run, c))).toBe(true);
+  });
+
+  it('the old trainer calls it by an old pet name; the intro names your Pokémon', () => {
+    const { run } = withPartner('t24-name', 70);
+    open(run, 'gn-24-bench');
+    const intro = scene(run, 'gn-24-bench').intro;
+    expect(PET_NAMES.some((n) => intro.includes(`${n}?`))).toBe(true);
+    expect(intro).toContain('Raticate');
+    expect(intro).not.toContain('{');
+  });
+
+  it('one of three stories, by its nature; its reaction follows its Bond (high: back to your side; low: it stays a while)', () => {
+    const hiRun = withPartner('t24-hi', 220).run;
+    open(hiRun, 'gn-24-bench');
+    const high = choose(hiRun, 'gn-24-bench', 'Wait.');
+    const stories = new Set<number>();
+    for (const [i, seed] of ['a', 'b', 'c', 'd', 'e', 'f'].entries()) {
+      const { run, mon } = withPartner(`t24-story-${seed}`, 70);
+      mon.nature = NATURE_IDS[i]!;
+      open(run, 'gn-24-bench');
+      stories.add(flagOf(choose(run, 'gn-24-bench', 'Wait.').run, 'partner-story'));
+    }
+    expect([...stories].every((n) => n >= 1 && n <= 3)).toBe(true);
+    expect(stories.size).toBeGreaterThan(1);
+    expect(partnerOf(high.run)?.uid).toBe('p-old');
+    expect(flagOf(high.run, 'partner-bond')).toBeGreaterThanOrEqual(4);
+    if (!flagOf(high.run, 'partner-flinch')) expect(said(high)).toMatch(/comes back to your side/);
+    const loRun = withPartner('t24-lo', 0).run;
+    open(loRun, 'gn-24-bench');
+    const low = choose(loRun, 'gn-24-bench', 'Wait.');
+    if (!flagOf(low.run, 'partner-flinch')) expect(said(low)).toMatch(/stays there a while/);
+  });
+
+  it('the doc\'s choices; "Let them have some time": Bond +1, a node passes, it relearns a dropped move, and Two Trainers at high Bond', () => {
+    const run = benchDone('t24-time', 220);
+    expect(scene(run, 'gn-24-choose').labels).toEqual(['Let them have some time.', 'No. Come on.', 'Can I ask you something?', 'Let it decide.']);
+    expect(scene(run, 'gn-24-choose').intro).toMatch(/might not choose you/);
+    const before = partnerOf(run)!;
+    const after = choose(run, 'gn-24-choose', 'Let them have some time.').run;
+    const mon = partnerOf(after)!;
+    expect(mon.friendship).toBeGreaterThan(before.friendship);
+    expect(mon.moves.map((m) => m.id)).toContain('two-trainers');
+    expect(mon.moves.some((m) => !before.moves.some((b) => b.id === m.id) && m.id !== 'two-trainers')).toBe(true);
+    expect(flagOf(after, 'partner-time')).toBe(1);
+    expect(flagOf(after, 'partner-done')).toBe(1);
+  });
+
+  it('at middling Bond it relearns a move but not Two Trainers', () => {
+    const after = choose(benchDone('t24-mid', 120), 'gn-24-choose', 'Let them have some time.').run;
+    expect(partnerOf(after)!.moves.map((m) => m.id)).not.toContain('two-trainers');
+  });
+
+  it('"No. Come on.": it follows, looking back', () => {
+    const r = choose(benchDone('t24-no', 120), 'gn-24-choose', 'No. Come on.');
+    expect(r.text).toMatch(/looks back twice/);
+    expect(flagOf(r.run, 'partner-refused')).toBe(1);
+  });
+
+  it('three questions, each showing a gap between the two stories; then back to the choice', () => {
+    let run = choose(benchDone('t24-ask', 120), 'gn-24-choose', 'Can I ask you something?').run;
+    expect(scene(run, 'gn-24-ask').labels).toEqual(['How long were you together?', 'Did you say goodbye?', 'Did you ever go back?', "We'll come back."]);
+    run = choose(run, 'gn-24-ask', 'How long were you together?').run;
+    expect(scene(run, 'gn-24-ask').labels).toEqual(['Did you say goodbye?', 'Did you ever go back?', "We'll come back."]);
+    run = choose(run, 'gn-24-ask', 'Did you say goodbye?').run;
+    const last = choose(run, 'gn-24-ask', 'Did you ever go back?');
+    expect(last.text).toMatch(/It was there. It waited/);
+    expect(scene(last.run, 'gn-24-choose').labels).toHaveLength(4);
+  });
+
+  it('"Let it decide" at the lowest Bond: it goes home, and the trainer gives you a young Pokémon of its line', () => {
+    const run = choose(benchDone('t24-home', 0), 'gn-24-choose', 'Let it decide.').run;
+    const home = choose(run, 'gn-24-home', 'Take the little one.').run;
+    expect(home.party.some((m) => m.uid === 'p-old')).toBe(false);
+    expect(home.pending.length + home.party.length).toBeGreaterThan(0);
+    const young = [...home.party, ...home.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.speciesId === 'rattata');
+    expect(young).toBeTruthy();
+    expect(flagOf(home, 'partner-went-home')).toBe(1);
+  });
+
+  it('"Let it decide" at higher Bond: it chooses you', () => {
+    const r = choose(benchDone('t24-stay', 120), 'gn-24-choose', 'Let it decide.');
+    expect(said(r)).toMatch(/comes back to you/);
+    expect(partnerOf(r.run)?.uid).toBe('p-old');
+  });
+
+  it('"We\'ll come back": up to three visits on later stages of the region; the third says the thing by its story', () => {
+    let run = choose(benchDone('t24-visit', 120), 'gn-24-choose', 'Can I ask you something?').run;
+    run = choose(run, 'gn-24-ask', "We'll come back.").run;
+    expect(flagOf(run, 'partner-visits')).toBe(1);
+    const req = content.events.get('gn-24-visit1')!.requires;
+    expect(req.every((c) => conditionMet(content, run, c))).toBe(false); // same stage
+    setFlag(run, 'partner-visits', 3);
+    setFlag(run, 'partner-story', 2);
+    open(run, 'gn-24-visit3');
+    expect(scene(run, 'gn-24-visit3').intro).toContain("I'm sorry I shouted.");
+    const done = choose(run, 'gn-24-visit3', 'Thank you, Rosabel.').run;
+    expect(flagOf(done, 'partner-peace')).toBe(1);
+  });
+});
+
+/** A one-on-one battle context for engine tests. */
+function duel(player: PokemonInstance[], enemy: PokemonInstance, seed: string): BattleContext {
+  const battle = createBattle('wild', [enemy], 0, player[0]!.uid);
+  return { content, battle, party: player, inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}-c`)), catchMultiplier: 1 };
+}
+const withMoves = (species: string, level: number, uid: string, ...moves: string[]): PokemonInstance => {
+  const m = createPokemon(content, species, level, uid);
+  m.moves = moves.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
+  return m;
+};
+const damageTo = (events: BattleEvent[], side: 'player' | 'enemy') => events.filter((e): e is Extract<BattleEvent, { type: 'damage' }> => e.type === 'damage' && e.side === side).reduce((n, e) => n + e.amount, 0);
+
+describe('Two Trainers (gn.24)', () => {
+  it('takes the user\'s own type; 75 power, 100 at maximum Bond', () => {
+    expect(content.moves.get('two-trainers')).toMatchObject({ power: 75, type: 'normal', category: 'physical' });
+    const hit = (friendship: number) => {
+      const me = withMoves('machop', 40, 'p1', 'two-trainers');
+      me.friendship = friendship;
+      const ctx = duel([me], withMoves('snorlax', 40, 'e1', 'splash'), 't-two');
+      return { events: resolveTurn(ctx, { kind: 'move', index: 0 }) };
+    };
+    const low = damageTo(hit(70).events, 'enemy');
+    const max = damageTo(hit(content.balance.friendship.max).events, 'enemy');
+    expect(max).toBeGreaterThan(low * 1.2);
+    // A Fighting-type user: the move is Fighting, so a Ghost isn't hit... (it is Normal on paper)
+    const me = withMoves('machop', 40, 'p2', 'two-trainers');
+    const ctx = duel([me], withMoves('gastly', 40, 'e2', 'splash'), 't-two-ghost');
+    expect(damageTo(resolveTurn(ctx, { kind: 'move', index: 0 }), 'enemy')).toBe(0);
+  });
+});
+
+describe('gn.25 The Unlikely Friendship', () => {
+  const heap = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
+    const run = gnRun(seed);
+    run.party.push(createPokemon(content, 'snorlax', run.party[0]!.level + 5, 'p-big'));
+    setup(run);
+    open(run, 'gn-25-heap');
+    return run;
+  };
+  const truce = (run: RunState) => [...run.party, ...run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].filter((m) => m.fixedAbility === 'truce').map((m) => m.speciesId);
+
+  it('step 7, optional, before the battle (A5); the doc\'s three choices', () => {
+    expect(content.coPlacement!.get('gn-25-heap')).toMatchObject({ home: 7, window: [5, 10], sits: 'optional', attaches: 'before', earliest: 5 });
+    expect(scene(heap('t25-l'), 'gn-25-heap').labels).toEqual(['Watch.', 'Step closer.', 'Back away quietly.']);
+  });
+
+  it('if the Border Dispute was settled by uniting both sides, they take to you at once: no "Step closer."', () => {
+    const run = heap('t25-border', (r) => setFlag(r, 'border-united'));
+    expect(scene(run, 'gn-25-heap').labels).toEqual(['Watch.', 'Back away quietly.']);
+    expect(scene(run, 'gn-25-heap').intro).toMatch(/aren't afraid of you/);
+  });
+
+  it('watching: three beats, then the pack: two double battles with the Zangoose, then the Seviper, beside you', () => {
+    const watched = choose(heap('t25-pack'), 'gn-25-heap', 'Watch.');
+    expect(watched.text).toMatch(/bigger half/);
+    expect(watched.text).toMatch(/collide/);
+    const first = choose(watched.run, 'gn-25-pack', 'Fight beside them.').run;
+    expect(first.battle!.doubles).toBeTruthy();
+    expect(first.party.some((m) => m.speciesId === 'zangoose')).toBe(true);
+    expect(first.battle!.enemyTeam.every((m) => m.speciesId === 'mightyena')).toBe(true);
+    const between = win(first);
+    expect(between.party.some((m) => m.speciesId === 'zangoose')).toBe(false); // the ally goes home after the fight
+    const second = choose(between, 'gn-25-pack-2', 'Hold together.').run;
+    expect(second.party.some((m) => m.speciesId === 'seviper')).toBe(true);
+    const after = win(second);
+    expect(scene(after, 'gn-25-after').labels).toEqual(['Come with me.', 'Both of you.', 'Stay together. Good luck.']);
+  });
+
+  it('losing to the pack ends nothing: the pair finish it, and the story goes on', () => {
+    const fight = choose(choose(heap('t25-lose'), 'gn-25-heap', 'Watch.').run, 'gn-25-pack', 'Fight beside them.').run;
+    const after = lose(fight);
+    expect(after.phase).toBe('map');
+    expect(flagOf(after, 'truce-pack-lost')).toBe(1);
+  });
+
+  const afterPack = (seed: string): RunState => {
+    const a = win(choose(choose(heap(seed), 'gn-25-heap', 'Step closer.').run, 'gn-25-pack', 'Fight beside them.').run);
+    return win(choose(a, 'gn-25-pack-2', 'Hold together.').run);
+  };
+
+  it('both of you: they take two Balls, and both have Truce', () => {
+    const run = choose(afterPack('t25-both'), 'gn-25-after', 'Both of you.').run;
+    const joined = [...run.party, ...run.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].filter((m) => m.fixedAbility === 'truce').map((m) => m.speciesId).sort();
+    expect(joined).toEqual(['seviper', 'zangoose']);
+  });
+
+  it('leave them together: a Berry on the path, split in two', () => {
+    const run = choose(afterPack('t25-left'), 'gn-25-after', 'Stay together. Good luck.').run;
+    expect(flagOf(run, 'truce-left')).toBe(1);
+  });
+
+  it('recruit one: the other is glimpsed on later stages, closer each time, and joins at the third sighting', () => {
+    let run = win(choose(choose(afterPack('t25-one'), 'gn-25-after', 'Come with me.').run, 'gn-25-which', 'The Zangoose.').run);
+    expect(truce(run)).toEqual(['zangoose']);
+    expect(content.events.get('gn-25-sight1')!.requires.every((c) => conditionMet(content, run, c))).toBe(false); // not on the same stage
+    setFlag(run, 'truce-sight', 2);
+    open(run, 'gn-25-sight3');
+    expect(scene(run, 'gn-25-sight3').labels).toEqual(['Come in.', 'Go home.']);
+    run = choose(run, 'gn-25-sight3', 'Go home.').run;
+    expect(truce(run).sort()).toEqual(['seviper', 'zangoose']);
+    expect(flagOf(run, 'truce-reunited')).toBe(1);
+  });
+});
+
+describe('Truce (gn.25)', () => {
+  const pair = (): PokemonInstance[] => {
+    const z = withMoves('zangoose', 40, 'p-z', 'tackle');
+    const s = withMoves('seviper', 40, 'p-s', 'tackle');
+    z.fixedAbility = 'truce';
+    s.fixedAbility = 'truce';
+    return [z, s];
+  };
+
+  it('in a single battle, when one faints, its partner next to it in the party comes in with Attack +1 and Speed +1', () => {
+    const party = pair();
+    party[0]!.hp = 1;
+    const ctx = duel(party, withMoves('machamp', 60, 'e1', 'cross-chop'), 't-truce');
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    expect(party[0]!.hp).toBe(0);
+    resolveTurn(ctx, { kind: 'switch', partyIndex: 1 });
+    expect(ctx.battle.playerStages.atk).toBe(1);
+    expect(ctx.battle.playerStages.spe).toBe(1);
+  });
+
+  it('not when the partner is not next to it in the party', () => {
+    const [z, s] = pair();
+    const party = [z!, withMoves('rattata', 40, 'p-r', 'tackle'), s!];
+    z!.hp = 1;
+    const ctx = duel(party, withMoves('machamp', 60, 'e1', 'cross-chop'), 't-truce2');
+    resolveTurn(ctx, { kind: 'move', index: 0 });
+    resolveTurn(ctx, { kind: 'switch', partyIndex: 2 });
+    expect(ctx.battle.playerStages.atk).toBe(0);
   });
 });

@@ -23085,6 +23085,14 @@
       "flash": null,
       "hitStopMs": 60,
       "telegraph": "normal"
+    },
+    "stamp": {
+      "anim": "stomp",
+      "source": "type",
+      "shake": 3,
+      "flash": null,
+      "hitStopMs": 70,
+      "telegraph": "normal"
     }
   },
   "commonPack": {

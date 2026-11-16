@@ -656,6 +656,14 @@ function placeEarnedCoBeats(content: Content, run: RunState): void {
   coPut(run, planCoStage(stage.map, moved, `${run.seed}::co-beat::${stageKey(run)}`, ahead));
 }
 
+/** Greenneedle gn.26: a giant has double HP (a +100% HP boost), at full HP. Its Speed is cut in the engine (battle rule `giant`). */
+function growGiants(content: Content, team: PokemonInstance[]): void {
+  for (const mon of team) {
+    mon.statBoosts = { ...mon.statBoosts, hp: (mon.statBoosts?.hp ?? 0) + content.balance.co.giantHpPercent };
+    mon.hp = maxHp(content, mon);
+  }
+}
+
 /** An event fight's rule may open it with stat stages: `stages` on both sides, `myStages` on the player's, `foeStages` on the foe's. */
 function ruleStages(battle: NonNullable<RunState['battle']>, rule: { stages?: Partial<Record<string, number>>; myStages?: Partial<Record<string, number>>; foeStages?: Partial<Record<string, number>> }): void {
   for (const [stat, n] of Object.entries(rule.stages ?? {})) {
@@ -1633,7 +1641,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const move = content.moves.get(e.move);
       // A Pokémon that has just joined waits in `pending` until the player confirms it, so look there first for a species.
       const incoming = e.species ? run.pending.flatMap((p) => (p.kind === 'caught' && p.mon.speciesId === e.species ? [p.mon] : []))[0] : undefined;
-      const learner = (e.who ? whoOf(content, run, e.who, pickedUid)[0] : undefined) ?? (e.species ? incoming ?? run.party.find((m) => m.speciesId === e.species) : e.type ? run.party.find((m) => m.hp > 0 && getSpecies(content, m.speciesId).types.includes(e.type!)) : e.unevolved ? run.party.find((m) => m.hp > 0 && getSpecies(content, m.speciesId).evolutions.length > 0) : undefined) ?? (e.unevolved ? undefined : run.party.find((m) => m.hp > 0));
+      const learner = (e.who ? whoOf(content, run, e.who, pickedUid)[0] : undefined) ?? (e.mark ? run.party.find((m) => !!m.gn?.includes(e.mark!)) : undefined) ?? (e.mark ? undefined : (e.species ? incoming ?? run.party.find((m) => m.speciesId === e.species) : e.type ? run.party.find((m) => m.hp > 0 && getSpecies(content, m.speciesId).types.includes(e.type!)) : e.unevolved ? run.party.find((m) => m.hp > 0 && getSpecies(content, m.speciesId).evolutions.length > 0) : undefined) ?? (e.unevolved ? undefined : run.party.find((m) => m.hp > 0)));
       if (!move || !learner || learner.moves.some((m) => m.id === e.move)) return '';
       const slot = { id: move.id, pp: move.pp };
       if (learner.moves.length < 4) learner.moves.push(slot);
@@ -2011,6 +2019,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (b.special) assignSpecialTrait(run.battle.extra.traits, [enemy, ...others], b.special);
     if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
     if (b.rule) { run.battle.eventRule = b.rule; ruleStages(run.battle, b.rule); }
+    if (b.rule?.giant) growGiants(content, run.battle.enemyTeam);
     if (b.aura) for (const s of ['atk', 'def', 'spa', 'spd', 'spe'] as const) run.battle.enemyStages[s] = 1;
   } else {
     const boss = b.bossId ? content.bosses.get(b.bossId) : undefined;
@@ -2032,7 +2041,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const mirrored = b.mirror ? [run.party[activeIndex]!, ...run.party.filter((p, i) => i !== activeIndex && p.hp > 0)].slice(0, Math.max(1, b.kind === 'trainer' ? b.size : 1)) : [];
     const leadTypes = getSpecies(content, run.party[activeIndex]!.speciesId).types as TypeName[];
     const fixedIds = b.counter && typeEffectiveness(content.typeChart, b.counter.weakTo, leadTypes) > 1 ? b.counter.team : b.team ?? [];
-    const team = fixedIds.length > 0 ? fixedIds.map((id) => newMon(content, run, id, Math.min(cap, Math.max(1, base)), 'e')) : mirrored.length > 0 ? mirrored.map((src) => {
+    const team = fixedIds.length > 0 ? resolveCast(run, fixedIds).map((id) => newMon(content, run, id, Math.min(cap, Math.max(1, base)), 'e')) : mirrored.length > 0 ? mirrored.map((src) => {
       const copy = newMon(content, run, src.speciesId, Math.min(cap, Math.max(1, src.level + b.levelBonus)), 'e');
       copy.moves = src.moves.map((s) => ({ id: s.id, pp: content.moves.get(s.id)?.pp ?? s.pp }));
       if (b.kind === 'trainer' && b.clone) {
@@ -2122,6 +2131,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       if (b.rule.foeNoFlag) for (const mon of team) stripFoeMoves(content, mon, b.rule.foeNoFlag);
       if (b.rule.foeTailwind) run.battle.sideEffects.enemy.tailwind = b.rule.foeTailwind;
       ruleStages(run.battle, b.rule);
+      if (b.rule.giant) growGiants(content, run.battle.enemyTeam);
     }
     const allyId = b.ally === 'rival' ? rivalAllySpecies(content, run) : b.ally === 'fellow' ? (run.mentor ? pickSpecies(content, run, [], run.mentor.fellow.types, rng) : undefined) : b.ally;
     if (allyId && content.species.has(allyId) && team.length >= 2) {

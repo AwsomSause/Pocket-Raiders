@@ -4752,6 +4752,1717 @@
     }
    ],
    "canon": "cs.kanto.pewter.magikarp"
+  },
+  {
+   "id": "gn-24-bench",
+   "name": "The Forgotten Partner",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "oldCatch"
+    },
+    {
+     "kind": "flag",
+     "key": "partner-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "*An old trainer on a bench drops their walking stick.*\n\n**Rosabel Verey:** \"...{petname}? No. It can't. {petname}?\"\n\n*Your {partner} has stopped walking.*",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "Rosabel picks up the stick, and doesn't lean on it. Rosabel can't stop looking.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "partner",
+        "key": "old-partner"
+       },
+       {
+        "kind": "flag",
+        "key": "partner-met",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "partner-at"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-story",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "**Rosabel:** \"I got ill. Couldn't keep up. I let it go where there was good grass. I thought that was kind.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-story",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "**Rosabel:** \"We lost. A lot. I said things. I opened the Ball in a field and I walked off, before I could change my mind.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-story",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "**Rosabel:** \"It ran. In a storm. I looked for a month. I've always thought it ran *from* me.\""
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "partner-flinch",
+        "n": 10
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-flinch",
+        "min": 1,
+        "then": [],
+        "text": "*It flinches.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-flinch",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "partner-bond",
+          "min": 4,
+          "then": [],
+          "text": "*It greets Rosabel warmly: a nuzzle, a cry. Then it comes back to your side, and sits.*"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "partner-bond",
+          "min": 2,
+          "max": 3,
+          "then": [],
+          "text": "*It goes to Rosabel slowly. It lets Rosabel touch its head. It looks back at you.*"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "partner-bond",
+          "min": 0,
+          "max": 1,
+          "then": [],
+          "text": "*It goes to Rosabel, and stays there a while.*"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-24-choose"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-choose",
+   "name": "The Forgotten Partner",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "remembers": [
+    {
+     "id": "third",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "partner-was-ball",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Rosabel isn't the child from the tape. This is somebody from before even that. It has had three trainers.*"
+    },
+    {
+     "id": "home",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "starter-home",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*You have let a Pokémon visit home before. You know how long it takes. It doesn't take long.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "Rosabel is looking at it the way you look at the last page of a book.\n\n*If you let it decide, it might not choose you.*",
+   "choices": [
+    {
+     "label": "Let them have some time.",
+     "success": {
+      "text": "They sit on the bench together. You walk on a little way, and come back later.\n\nRosabel is asleep. It is keeping watch.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-time",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "firstCatch"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "starter-home",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "takeNode",
+          "nodes": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-bond",
+        "min": 4,
+        "then": [
+         {
+          "kind": "teachMove",
+          "move": "two-trainers",
+          "mark": "old-partner"
+         }
+        ],
+        "text": "Something the two of them used to do together comes back to it: Two Trainers."
+       },
+       {
+        "kind": "gn",
+        "op": "oldMove",
+        "key": "old-partner"
+       },
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No. Come on.",
+     "success": {
+      "text": "It follows you. It looks back twice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Can I ask you something?",
+     "success": {
+      "text": "**Rosabel:** \"Anything. Ask anything.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-asked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-24-ask"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it decide.",
+     "success": {
+      "text": "You step back. You leave it room.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-decided",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-bond",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-home"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-bond",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "partner-bond",
+          "min": 4,
+          "then": [
+           {
+            "kind": "teachMove",
+            "move": "two-trainers",
+            "mark": "old-partner"
+           }
+          ],
+          "text": "Something the two of them used to do together comes back to it: Two Trainers."
+         },
+         {
+          "kind": "gn",
+          "op": "oldMove",
+          "key": "old-partner"
+         },
+         {
+          "kind": "flag",
+          "key": "partner-done",
+          "amount": 1
+         }
+        ],
+        "text": "It looks at the bench. It looks at you. It comes back to you, and sits down on your foot."
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-ask",
+   "name": "The Forgotten Partner: Questions",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "Rosabel waits. It waits too, ears turned towards you both.",
+   "choices": [
+    {
+     "label": "How long were you together?",
+     "success": {
+      "text": "**Rosabel:** \"Two years. Good ones.\"\n\n*It turns its head away. Two years was most of its life.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-q1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "partner-asked-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "partner-q1",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q2",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q3",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-choose"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-ask"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "partner-q1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Did you say goodbye?",
+     "success": {
+      "text": "**Rosabel:** \"Of course I did.\"\n\n*It looks at the ground. It doesn't remember a goodbye.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-q2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "partner-asked-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "partner-q1",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q2",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q3",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-choose"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-ask"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "partner-q2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Did you ever go back?",
+     "success": {
+      "text": "**Rosabel:** \"...Once. It wasn't there.\"\n\n*It lifts its head, sharply. It was there. It waited. It can't have been far.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-q3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "partner-asked-all",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "partner-q1",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q2",
+          "atLeast": 1,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "partner-q3",
+          "atLeast": 1,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-choose"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-asked-all",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-24-ask"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "partner-q3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "We'll come back.",
+     "success": {
+      "text": "Rosabel nods. **Rosabel:** \"I'll be here. I'm always here.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "partner-visits",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "partner-visit-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-home",
+   "name": "The Forgotten Partner: Home",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "*It looks at you. It looks at the bench.*\n\n*It goes home.*\n\nRosabel lifts a small one out of a basket by the bench.\n\n**Rosabel:** \"It's a good one. It hasn't got a name yet. I was waiting. I didn't know what for.\"",
+   "choices": [
+    {
+     "label": "Take the little one.",
+     "success": {
+      "text": "It settles into your arms as if it knew it would. Behind you, on the bench, two old friends sit very close.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "castBase",
+        "key": "partner-young",
+        "type": "old-partner"
+       },
+       {
+        "kind": "gn",
+        "op": "dropMarked",
+        "key": "old-partner"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@partner-young"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "partner-went-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You let your oldest friend choose, and it went home.",
+        "importance": 90
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-visit1",
+   "name": "The Bench",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "partner-visits",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "partner-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "partner-visit-at"
+    },
+    {
+     "kind": "gn",
+     "test": "hasMark",
+     "key": "old-partner"
+    },
+    {
+     "kind": "flag",
+     "key": "partner-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "The bench again. Rosabel is there.\n\nThey sit at opposite ends of it, not looking at each other. Neither moves away.",
+   "choices": [
+    {
+     "label": "We'll come back.",
+     "success": {
+      "text": "Rosabel nods. **Rosabel:** \"I'll be here. I'm always here.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "partner-visits",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "partner-visit-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it here.",
+     "success": {
+      "text": "You go. It follows, slower than usual.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-visit2",
+   "name": "The Bench",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "partner-visits",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "partner-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "partner-visit-at"
+    },
+    {
+     "kind": "gn",
+     "test": "hasMark",
+     "key": "old-partner"
+    },
+    {
+     "kind": "flag",
+     "key": "partner-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "Rosabel has brought the food it used to like. It remembers the food.\n\nIt eats from Rosabel's hand.",
+   "choices": [
+    {
+     "label": "We'll come back.",
+     "success": {
+      "text": "Rosabel nods. **Rosabel:** \"I'll be here. I'm always here.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "partner-visits",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "partner-visit-at"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it here.",
+     "success": {
+      "text": "You go. It follows, licking its mouth.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-24-visit3",
+   "name": "The Bench",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "partner-visits",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "partner-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "partner-visit-at"
+    },
+    {
+     "kind": "gn",
+     "test": "hasMark",
+     "key": "old-partner"
+    },
+    {
+     "kind": "flag",
+     "key": "partner-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "a",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "partner-story",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "**Rosabel:** \"I should've kept you.\""
+    },
+    {
+     "id": "b",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "partner-story",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "**Rosabel:** \"I'm sorry I shouted.\""
+    },
+    {
+     "id": "c",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "partner-story",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "**Rosabel:** \"I never stopped looking.\""
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#9a7b5f",
+    "effect": "none"
+   },
+   "intro": "The third visit. Rosabel says the thing they didn't say then.\n\nIt leans against Rosabel. Then it gets up, and comes to you, and looks back. And it's all right.",
+   "choices": [
+    {
+     "label": "Thank you, Rosabel.",
+     "success": {
+      "text": "Rosabel shows it something it used to know, and it remembers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "partner-peace",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "partner-bond",
+        "min": 4,
+        "then": [
+         {
+          "kind": "teachMove",
+          "move": "two-trainers",
+          "mark": "old-partner"
+         }
+        ],
+        "text": "Something the two of them used to do together comes back to it: Two Trainers."
+       },
+       {
+        "kind": "gn",
+        "op": "oldMove",
+        "key": "old-partner"
+       },
+       {
+        "kind": "flag",
+        "key": "partner-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your oldest friend made peace with the trainer who lost it.",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-heap",
+   "name": "The Unlikely Friendship",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "normal",
+    "poison"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "truce-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "border",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "border-united",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*You settled the border by uniting both sides. Somehow they know. They open their eyes, and they aren't afraid of you.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "*A Zangoose and a Seviper, asleep in a heap. Its tail is across its neck. Its paw is on its coils.*\n\n*Every book says these two fight on sight.*",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "They wake. The Zangoose splits a Berry in two with one claw. It gives the Seviper the bigger half, and then looks as if it regrets it.\n\nThey set off. They squabble over who walks in front. The Seviper wins by being longer.\n\nA branch cracks. Each puts itself between the other and the sound, and they collide.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "truce-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "truce-watched",
+        "amount": 1
+       },
+       {
+        "kind": "nodeBattle",
+        "skip": true
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-25-pack"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step closer.",
+     "success": {
+      "text": "Two heads come up at once. They look at you, then at each other, and close ranks: the snake in front, the claws behind.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "truce-met",
+        "amount": 1
+       },
+       {
+        "kind": "nodeBattle",
+        "skip": true
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-25-pack"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "border-united",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back away quietly.",
+     "success": {
+      "text": "You back away. Neither of them wakes. You leave them to it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "truce-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-pack",
+   "name": "The Unlikely Friendship: The Pack",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mightyena",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "*A pack comes out of the grass. Mightyena, six, and they've done this before.*\n\nThe Zangoose and the Seviper are already back to back. There's room beside them. Just.",
+   "choices": [
+    {
+     "label": "Fight beside them.",
+     "success": {
+      "text": "The first three come in low. The Zangoose takes the place beside you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "truce-pack-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-25-after"
+        }
+       ],
+       "team": [
+        "mightyena",
+        "mightyena",
+        "mightyena"
+       ],
+       "format": "doubles",
+       "name": "The Pack",
+       "ally": "zangoose",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-25-pack-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-pack-2",
+   "name": "The Unlikely Friendship: The Pack",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "seviper",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "Three more. When the Zangoose is hit hard, the Seviper goes straight for whatever did it.\n\nNow the Seviper slides in beside you, and the Zangoose watches its back.",
+   "choices": [
+    {
+     "label": "Hold together.",
+     "success": {
+      "text": "The last of the pack circle, and come in.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "truce-pack-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-25-after"
+        }
+       ],
+       "team": [
+        "mightyena",
+        "mightyena",
+        "mightyena"
+       ],
+       "format": "doubles",
+       "name": "The Pack",
+       "ally": "seviper",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-25-after"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-after",
+   "name": "The Unlikely Friendship",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "The grass goes still.\n\nThey check each other for injuries before they look at you.",
+   "choices": [
+    {
+     "label": "Come with me.",
+     "success": {
+      "text": "You crouch, and hold out your hand. Both of them look at it. Only one of them can take it first.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-25-which"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Both of you.",
+     "success": {
+      "text": "They try to get into the same Ball, if you let them. They don't fit.\n\nThey take two.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "zangoose"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "truce"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "seviper"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "truce"
+       },
+       {
+        "kind": "flag",
+        "key": "truce-both",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "truce-region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay together. Good luck.",
+     "success": {
+      "text": "They go. The Zangoose looks back, and lifts a paw.\n\nOn the path where they slept: a Berry, split neatly in two.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "sitrus-berry",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "truce-left",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "truce-region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-which",
+   "name": "The Unlikely Friendship",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "Which one?",
+   "choices": [
+    {
+     "label": "The Zangoose.",
+     "success": {
+      "text": "It comes. It looks back.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "zangoose"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "truce"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-one",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "truce-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "truce-region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Seviper.",
+     "success": {
+      "text": "It comes. It looks back.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "seviper"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "truce"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-one",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "truce-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "truce-region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-sight1",
+   "name": "A Shape on a Ridge",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "truce-one",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "truce-sight",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "truce-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "A shape on a ridge, against the sky.\n\nThe one you recruited stops dead, and stares.",
+   "choices": [
+    {
+     "label": "Keep going.",
+     "success": {
+      "text": "When you look again, the ridge is empty.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-sight",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "truce-sight1-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-sight2",
+   "name": "Closer",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "truce-one",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "truce-sight",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "truce-sight1-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "Closer, this time. At the edge of the trees.\n\nIt's thin. It's been following you.",
+   "choices": [
+    {
+     "label": "Keep going.",
+     "success": {
+      "text": "It keeps its distance. It doesn't stop following.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-sight",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "truce-sight2-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-sight3",
+   "name": "The Edge of the Firelight",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "truce-one",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "truce-sight",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "truce-sight2-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "You make camp. It's at the edge of the firelight.\n\nThe one you recruited is sitting up, very straight, not looking at it. Trying very hard not to look at it.",
+   "choices": [
+    {
+     "label": "Come in.",
+     "success": {
+      "text": "It comes in. It lies down beside the other one as if it had never been anywhere else.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "truce-one",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "seviper"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "truce"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "truce-one",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "zangoose"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "truce"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-sight",
+        "n": 3
+       },
+       {
+        "kind": "flag",
+        "key": "truce-reunited",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go home.",
+     "success": {
+      "text": "It doesn't go home. It comes in anyway, and lies down beside the other one, and that's that.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "truce-one",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "seviper"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "truce"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "truce-one",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "zangoose"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "ability": "truce"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "truce-sight",
+        "n": 3
+       },
+       {
+        "kind": "flag",
+        "key": "truce-reunited",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-25-kits",
+   "name": "A Ditch",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "truce-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "truce-region"
+    },
+    {
+     "kind": "flag",
+     "key": "truce-kits",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zangoose",
+    "tint": "#7a6b8f",
+    "effect": "none"
+   },
+   "intro": "In a ditch by the road, a Zangoose kit and a small Seviper are playing.\n\nNobody has told them yet.",
+   "choices": [
+    {
+     "label": "Don't tell them.",
+     "success": {
+      "text": "You walk on quietly, and let them play.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "truce-kits",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

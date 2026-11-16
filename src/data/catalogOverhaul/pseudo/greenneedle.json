@@ -118,6 +118,15 @@
    "tint": "#6f6a5a",
    "mood": "grey woods",
    "start": "opened"
+  },
+  {
+   "id": "ps_gn_giants",
+   "name": "The Island of Giant Pokémon",
+   "entry": "gn-26-door",
+   "themeId": "water-grass",
+   "tint": "#5f7f6a",
+   "mood": "giant island",
+   "start": "opened"
   }
  ]
 }
