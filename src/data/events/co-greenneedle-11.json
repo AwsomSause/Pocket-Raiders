@@ -3025,6 +3025,794 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-48-door",
+   "name": "The Pokémon Draft",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "draft-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "*A hall with a long table. Thirty Poké Balls in rows, each with a card.*\n\n**Draft marshal, Mr. Lucian Ashcombe:** \"Your own stay on the bench. You pick one of ours. You fight. You pick another. Six picks.\"\n\n\"Then the bracket, with only what you drafted. Every one of these belongs to somebody. They've lent them. Treat them accordingly.\"",
+   "choices": [
+    {
+     "label": "Sit at the table.",
+     "success": {
+      "text": "Three others sit down with you. A woman who looks at the Balls like a butcher. A monk. A boy of nine, already laughing at a card.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "draft-at"
+       },
+       {
+        "kind": "gn",
+        "op": "draftStart"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-48-table-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Through the window, the boy holds a card up to the light and laughs so hard he has to sit down.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-table-a",
+   "name": "The Pokémon Draft: The Table",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "Pick {draft:round} of six. Five on the table. The other three drafters are watching your hand.\n\n1. {draft:card:1}\n\n2. {draft:card:2}\n\n3. {draft:card:3}",
+   "choices": [
+    {
+     "label": "{draft:label:1}",
+     "success": {
+      "text": "You take the Ball. The card goes in your pocket. You read it again anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "draftPick",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "draft-round",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-48-bracket-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "draft-round",
+        "min": 1,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-48-fight"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "{draft:label:2}",
+     "success": {
+      "text": "You take the Ball. The card goes in your pocket. You read it again anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "draftPick",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "draft-round",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-48-bracket-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "draft-round",
+        "min": 1,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-48-fight"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "{draft:label:3}",
+     "success": {
+      "text": "You take the Ball. The card goes in your pocket. You read it again anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "draftPick",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "draft-round",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-48-bracket-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "draft-round",
+        "min": 1,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-48-fight"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Further along the table.",
+     "success": {
+      "text": "You walk down to the other end of the table.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-48-table-b"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-table-b",
+   "name": "The Pokémon Draft: The Table",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "The far end of the table. Two more Balls, two more cards.\n\n4. {draft:card:4}\n\n5. {draft:card:5}",
+   "choices": [
+    {
+     "label": "{draft:label:4}",
+     "success": {
+      "text": "You take the Ball. The card goes in your pocket. You read it again anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "draftPick",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "draft-round",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-48-bracket-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "draft-round",
+        "min": 1,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-48-fight"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "{draft:label:5}",
+     "success": {
+      "text": "You take the Ball. The card goes in your pocket. You read it again anyway.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "draftPick",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "draft-round",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-48-bracket-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "draft-round",
+        "min": 1,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-48-fight"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back along the table.",
+     "success": {
+      "text": "You walk back up the table. Cosima hasn't taken her eyes off you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-48-table-a"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-fight",
+   "name": "The Pokémon Draft: A Battle",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "A battle, {draft:round} on {draft:round}, against another table's drafter. Your borrowed team doesn't know you yet. It's waiting to see what you're like.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The marshal drops his hand.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "draftEnd"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-48-out"
+        }
+       ],
+       "rule": {
+        "gn": "draft"
+       },
+       "name": "Drafter",
+       "classId": "ace-trainer",
+       "size": 5,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "draftWon"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-48-table-a"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-bracket-1",
+   "name": "The Pokémon Draft: Bracket, Round 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "The bracket. Only what you drafted. Six Pokémon who met you this afternoon, and are still deciding about you.\n\nAcross the ring: **{draft:vs:1}**.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The marshal drops his hand.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "draftEnd"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-48-out"
+        }
+       ],
+       "rule": {
+        "gn": "draft",
+        "slot": 1
+       },
+       "name": "Drafter",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "draftWon"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-48-bracket-2"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-bracket-2",
+   "name": "The Pokémon Draft: Bracket, Round 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "The second round of the bracket. Your drafted team is starting to look at you before each move.\n\nAcross the ring: **{draft:vs:2}**.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The marshal drops his hand.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "draftEnd"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-48-out"
+        }
+       ],
+       "rule": {
+        "gn": "draft",
+        "slot": 2
+       },
+       "name": "Drafter",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "draftWon"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-48-bracket-3"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-bracket-3",
+   "name": "The Pokémon Draft: Bracket, Round 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Trainer",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "aldhelm",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "draft-misused",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "**Brother Aldhelm:** \"I took what everyone passed on. I've been watching why they passed. You've been reading the cards. I've been reading you.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "The last round. Brother Aldhelm's team of leftovers. Everything the others passed on, chosen for exactly why they passed.\n\nAcross the ring: **{draft:vs:3}**.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Brother Aldhelm bows, and sends out the one you passed on first.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "draftEnd"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-48-out"
+        }
+       ],
+       "rule": {
+        "gn": "draft",
+        "slot": 3
+       },
+       "name": "Drafter",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "draftWon"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "draft-misused",
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "draftAldhelm"
+          }
+         ],
+         "text": "Brother Aldhelm finds you after: \"You read them. All of them. Nobody reads them.\" He hands over his own first pick."
+        },
+        {
+         "kind": "moment",
+         "text": "Won the Pokémon Draft with six borrowed Pokémon.",
+         "importance": 70
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-48-recruit"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-recruit",
+   "name": "The Pokémon Draft: Winner's Privilege",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "**Mr. Ashcombe:** \"Winner's privilege. One of the six may go with you, if its trainer agrees. And if it does.\"\n\nThe six trainers who lent them are in the front row. Every one of them is looking at their own Pokémon, not at you.",
+   "choices": [
+    {
+     "label": "Choose one.",
+     "pick": {},
+     "success": {
+      "text": "You walk your choice over to its trainer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "draftRecruit"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-48-answer"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them all go home.",
+     "success": {
+      "text": "You hand back six Poké Balls, one by one. Each trainer says thank you. Two of them cry a little.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "draftEnd"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-answer",
+   "name": "The Pokémon Draft: The Answer",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "joined",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "draft-result",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "Its trainer watches you go, and doesn't look away until you're out of the door."
+    },
+    {
+     "id": "egg",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "draft-result",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "Its trainer holds the egg out with both hands. \"Bring this one back too, one day. Just to visit.\""
+    },
+    {
+     "id": "no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "draft-result",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "It goes back to its trainer. At the door it looks over its shoulder at you, once."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "Your own team comes off the bench, all at once, and checks you over like you've been somewhere dangerous.",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Mr. Ashcombe is already setting out thirty new cards for tomorrow.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-out",
+   "name": "The Pokémon Draft: Out",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "Out. The borrowed Pokémon go home to the front row. Each trainer checks theirs over, and then, surprisingly, thanks you.\n\nYour own team comes off the bench, all at once.",
+   "choices": [
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "Wilf waves at you all the way to the door, still holding the funny card.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-48-letter",
+   "name": "A Letter from the Draft",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "draftFriend"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "draft-letter"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3d4a3a",
+    "effect": "none"
+   },
+   "intro": "A letter, forwarded twice, with a smudged postmark. It's from {draft:from}.\n\n*\"How is {draft:friend}? Does it still do the thing? You know the thing. Write back if you have a minute. Or don't. I just wanted to ask.\"*",
+   "choices": [
+    {
+     "label": "Write back.",
+     "success": {
+      "text": "You write two pages. {draft:friend} sits on the second page while you finish it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "draft-letter"
+       },
+       {
+        "kind": "gn",
+        "op": "draftLetter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't.",
+     "success": {
+      "text": "You fold it into your bag. {draft:friend} watches you do it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "draft-letter"
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

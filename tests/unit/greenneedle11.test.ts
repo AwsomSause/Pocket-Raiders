@@ -527,3 +527,130 @@ describe('gn.47 The Pokémon League Exhibition', () => {
     expect(exRipple(content, r)).toBe('');
   });
 });
+
+// ---------- gn.48 The Pokémon Draft ----------
+import { COVER, DRAFT_BENCH, DRAFTED, draftOf, draftTurn, weakness } from '../../src/core/greenneedle/draft';
+
+/** At the table, round one. */
+function table(seed: string, prep?: (run: RunState) => void): RunState {
+  const run = gnRun(seed);
+  run.party = [...run.party, createPokemon(content, 'pidgey', 20, 'own-2')];
+  prep?.(run);
+  open(run, 'gn-48-door');
+  return choose(run, 'gn-48-door', 'Sit at the table.').run;
+}
+/** Takes card 1 of the round and wins its battle (or, at round six, goes to the bracket). */
+function pickAndWin(run: RunState): RunState {
+  const label = scene(run, 'gn-48-table-a').labels[0]!;
+  run = choose(run, 'gn-48-table-a', label).run;
+  if (opened(run, 'gn-48-fight')) run = win(choose(run, 'gn-48-fight', 'Battle.').run);
+  return run;
+}
+
+describe('gn.48 The Pokémon Draft', () => {
+  it('the table: five cards in full (species, level, moves, nature, its trainer\'s line); your own go to the bench with the first pick', () => {
+    let run = table('t48-table');
+    const d = draftOf(run)!;
+    expect(d.cards).toHaveLength(5);
+    const a = scene(run, 'gn-48-table-a');
+    expect(a.intro).toContain(`**${content.species.get(d.cards[0]!.sp)!.name}**, Lv. ${d.level}`);
+    expect(a.intro).toContain(d.cards[0]!.line);
+    expect(a.labels).toEqual([`${content.species.get(d.cards[0]!.sp)!.name}, from ${d.cards[0]!.by}.`, expect.any(String), expect.any(String), 'Further along the table.']);
+    expect(scene(run, 'gn-48-table-b').labels).toHaveLength(3);
+    run = choose(run, 'gn-48-table-a', a.labels[1]!).run;
+    expect(run.party).toHaveLength(1);
+    expect(run.party[0]!.speciesId).toBe(d.cards[1]!.sp);
+    expect(run.party[0]!.gn).toContain(DRAFTED);
+    expect(run.party[0]!.friendship).toBe(0);
+    expect(run.box.filter((m) => m.gn?.includes(DRAFT_BENCH))).toHaveLength(2);
+    const after = draftOf(run)!;
+    expect(after.cosima).toHaveLength(1);
+    expect(after.wilf).toHaveLength(1);
+    expect(after.aldhelm).toHaveLength(1);
+    expect(opened(run, 'gn-48-fight')).toBe(true);
+    const fight = choose(run, 'gn-48-fight', 'Battle.');
+    expect(fight.run.battle!.enemyTeam).toHaveLength(1);
+  });
+
+  it('six picks, five battles (n on n), Bond earned by winning; the sixth table covers the team\'s biggest weakness; then the bracket', () => {
+    let run = table('t48-loop');
+    for (let i = 1; i <= 5; i++) {
+      run = pickAndWin(run);
+      expect(draftOf(run)!.round).toBe(i + 1);
+    }
+    const d = draftOf(run)!;
+    const weak = weakness(content, d.picks.map((c) => c.sp));
+    const cover = weak ? COVER[weak] : undefined;
+    if (cover && !d.picks.some((c) => c.sp === cover) && !d.cosima.concat(d.wilf, d.aldhelm).some((c) => c.sp === cover)) expect(d.cards.map((c) => c.sp)).toContain(cover);
+    run = pickAndWin(run);
+    expect(run.party).toHaveLength(6);
+    expect(opened(run, 'gn-48-bracket-1')).toBe(true);
+    expect(run.party[0]!.friendship).toBeGreaterThanOrEqual(content.balance.co.bondLevelStep * 5);
+    const b1 = choose(run, 'gn-48-bracket-1', 'Battle.');
+    expect(b1.run.battle!.enemyTeam).toHaveLength(6);
+    expect(['Cosima Achebe-Lund', 'Wilf']).toContain(b1.run.battle!.trainer!.name);
+    run = win(b1.run);
+    run = win(choose(run, 'gn-48-bracket-2', 'Battle.').run);
+    const b3 = choose(run, 'gn-48-bracket-3', 'Battle.');
+    expect(b3.run.battle!.trainer!.name).toBe('Brother Aldhelm');
+    expect(b3.run.battle!.enemyTeam.every((m) => Object.keys(m.held ?? {}).length > 0)).toBe(true);
+    run = win(b3.run);
+    expect(opened(run, 'gn-48-recruit')).toBe(true);
+  });
+
+  it('the cards come true: hit the shy one and it stops being shy; Protect the one that hates it and it sulks', () => {
+    const run = gnRun('t48-cards');
+    const shy = createPokemon(content, 'jolteon', 20, 'shy');
+    shy.gn = [DRAFTED, 'draft-trait:shy'];
+    const battle = { activeIndex: 0, storyEffects: [], playerStages: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0, acc: 0, eva: 0 }, playerVolatile: { turnsOut: 0 } } as unknown as NonNullable<RunState['battle']>;
+    const lines: string[] = [];
+    draftTurn(battle, [shy], [{ type: 'damage', side: 'player' }], (t) => lines.push(t));
+    expect(battle.playerStages.atk).toBe(1);
+    expect(lines[0]).toContain('isn\'t shy any more');
+    shy.gn = [DRAFTED, 'draft-trait:protect'];
+    draftTurn(battle, [shy], [{ type: 'move', side: 'player', moveId: 'protect' }], (t) => lines.push(t));
+    expect(battle.playerStages.spe).toBe(-1);
+    expect(battle.storyEffects).toContain('draft-misused:shy');
+    void run;
+  });
+
+  it('winner\'s privilege: its trainer agrees and it does (Bond 3); "first one I ever caught" says no and offers its egg; below Bond 3 it goes home', () => {
+    let run = table('t48-recruit');
+    run = choose(run, 'gn-48-table-a', scene(run, 'gn-48-table-a').labels[0]!).run;
+    const mon = run.party[0]!;
+    mon.gn = [DRAFTED, 'draft-trait:shy', 'draft-by:Hesper Quill'];
+    mon.friendship = content.balance.co.bondLevelStep * 3;
+    open(run, 'gn-48-recruit');
+    let r = choose(run, 'gn-48-recruit', 'Choose one.');
+    expect(flagOf(r.run, 'draft-result')).toBe(1);
+    expect(said(r)).toContain('You read the card. All right. Go on, then.');
+    expect(r.run.party.some((m) => m.uid === mon.uid && m.gn?.includes('draft-from:Hesper Quill'))).toBe(true);
+    expect(r.run.party.some((m) => m.uid === 'own-2')).toBe(true);
+    expect(scene(r.run, 'gn-48-letter').intro).toContain('It\'s from Hesper Quill.');
+    const letter = r.run.party.find((m) => m.uid === mon.uid)!.friendship;
+    open(r.run, 'gn-48-letter');
+    const w = choose(r.run, 'gn-48-letter', 'Write back.');
+    expect(w.run.party.find((m) => m.uid === mon.uid)!.friendship).toBe(letter + 5);
+    mon.friendship = 0;
+    r = choose(run, 'gn-48-recruit', 'Choose one.');
+    expect(flagOf(r.run, 'draft-result')).toBe(3);
+    expect(r.run.party.some((m) => m.uid === mon.uid)).toBe(false);
+    mon.gn = [DRAFTED, 'draft-trait:first', 'draft-by:Hesper Quill'];
+    r = choose(run, 'gn-48-recruit', 'Choose one.');
+    expect(flagOf(r.run, 'draft-result')).toBe(2);
+    expect(said(r)).toContain('She\'s my first.');
+    expect(r.run.party.some((m) => m.gn?.includes(DRAFTED))).toBe(false);
+  });
+
+  it('lose a draft battle: the borrowed ones go home, your own come off the bench', () => {
+    let run = table('t48-lose');
+    run = choose(run, 'gn-48-table-a', scene(run, 'gn-48-table-a').labels[0]!).run;
+    const f = choose(run, 'gn-48-fight', 'Battle.');
+    for (const foe of f.run.battle!.enemyTeam) Object.assign(foe, makeStrong(foe));
+    const out = lose(f.run);
+    expect(opened(out, 'gn-48-out')).toBe(true);
+    expect(out.party.map((m) => m.uid)).toEqual(expect.arrayContaining(['own-2']));
+    expect(out.party.some((m) => m.gn?.includes(DRAFTED))).toBe(false);
+    expect([...out.party, ...out.box].some((m) => m.gn?.includes(DRAFT_BENCH))).toBe(false);
+  });
+});

@@ -562,6 +562,22 @@
   {
    "key": "ex-ripple-done",
    "rule": "core/greenneedle/exhibition.ts (gn.47)"
+  },
+  {
+   "key": "draft-round",
+   "rule": "core/greenneedle/draft.ts (gn.48)"
+  },
+  {
+   "key": "draft-misused",
+   "rule": "core/greenneedle/draft.ts (gn.48)"
+  },
+  {
+   "key": "draft-result",
+   "rule": "core/greenneedle/draft.ts (gn.48)"
+  },
+  {
+   "key": "draft-asked",
+   "rule": "core/greenneedle/draft.ts (gn.48)"
   }
  ]
 }

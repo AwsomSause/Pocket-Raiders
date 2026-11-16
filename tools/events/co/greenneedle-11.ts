@@ -330,7 +330,80 @@ const gn47: Json[] = [
   ), [ch('Leave.', out('The crowd claps you all the way back up to row nine. You sit down. Your hands are still shaking.'))]),
 ];
 
-export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47];
+// =====================================================================================================================
+// gn.48  THE POKÉMON DRAFT  (a Town or Hub event; until towns exist, step 14, optional, window 12–17; once per region, from A7).
+// Your own team on the bench. Six rounds: five lent Pokémon on the table, each with its trainer's card; pick one, the other three
+// drafters take the rest, then an n-on-n battle. Then a bracket against the three drafters with only what you drafted. Win, and one
+// may go with you, if its trainer agrees, and if it does (Bond 3). Rules in core/greenneedle/draft.ts.
+// =====================================================================================================================
+const DRAFT_TINT = '#3d4a3a';
+const hallD = (o: Json = {}): Json => ({ tint: DRAFT_TINT, tags: ['Combat', 'Trainer', 'Story'], effect: 'none', ...o });
+const draftOut: Json[] = [gn('draftEnd'), scene('gn-48-out')];
+/** A card picked from the table: then a battle (rounds 1-5), or the bracket (round 6). */
+const takeCard = (n: number): Json => ch(`{draft:label:${n}}`, out('You take the Ball. The card goes in your pocket. You read it again anyway.', gn('draftPick', { n }),
+  when('draft-round', { min: 6, max: 6 }, [scene('gn-48-bracket-1')]), when('draft-round', { min: 1, max: 5 }, [scene('gn-48-fight')])));
+const bracket = (i: number): Json => rm(`gn-48-bracket-${i}`, `The Pokémon Draft: Bracket, Round ${i}`, hallD(i === 3 ? { remembers: [
+  { id: 'aldhelm', when: [is('draft-misused', 0, 0)], notice: '**Brother Aldhelm:** "I took what everyone passed on. I\'ve been watching why they passed. You\'ve been reading the cards. I\'ve been reading you."' },
+] } : {}), say(
+  i === 1 ? 'The bracket. Only what you drafted. Six Pokémon who met you this afternoon, and are still deciding about you.' : i === 2 ? 'The second round of the bracket. Your drafted team is starting to look at you before each move.' : 'The last round. Brother Aldhelm\'s team of leftovers. Everything the others passed on, chosen for exactly why they passed.',
+  'Across the ring: **{draft:vs:' + i + '}**.',
+), [
+  ch('Battle.', fight(i === 3 ? 'Brother Aldhelm bows, and sends out the one you passed on first.' : 'The marshal drops his hand.', { ...trainer('Drafter', { cls: 'ace-trainer', size: 6, lv: 1, friendly: true, rule: { gn: 'draft', slot: i },
+    win: i < 3 ? [gn('draftWon'), scene(`gn-48-bracket-${i + 1}`)] : [gn('draftWon'), when('draft-misused', { max: 0 }, [gn('draftAldhelm')], 'Brother Aldhelm finds you after: "You read them. All of them. Nobody reads them." He hands over his own first pick.'), moment('Won the Pokémon Draft with six borrowed Pokémon.', 70), scene('gn-48-recruit')],
+    lose: draftOut }) })),
+]);
+
+const gn48: Json[] = [
+  gev('gn-48-door', 'The Pokémon Draft', hallD({ stop: 'event', rarity: 'uncommon', requires: [notThisRegion('draft-at')] }), say(
+    '*A hall with a long table. Thirty Poké Balls in rows, each with a card.*',
+    '**Draft marshal, Mr. Lucian Ashcombe:** "Your own stay on the bench. You pick one of ours. You fight. You pick another. Six picks."',
+    '"Then the bracket, with only what you drafted. Every one of these belongs to somebody. They\'ve lent them. Treat them accordingly."',
+  ), [
+    ch('Sit at the table.', out('Three others sit down with you. A woman who looks at the Balls like a butcher. A monk. A boy of nine, already laughing at a card.', stampRegion('draft-at'), gn('draftStart'), scene('gn-48-table-a'))),
+    ch('Walk on.', out('Through the window, the boy holds a card up to the light and laughs so hard he has to sit down.')),
+  ]),
+  rm('gn-48-table-a', 'The Pokémon Draft: The Table', hallD({ tags: ['Story'] }), say(
+    'Pick {draft:round} of six. Five on the table. The other three drafters are watching your hand.',
+    '1. {draft:card:1}', '2. {draft:card:2}', '3. {draft:card:3}',
+  ), [takeCard(1), takeCard(2), takeCard(3), ch('Further along the table.', out('You walk down to the other end of the table.', scene('gn-48-table-b')))]),
+  rm('gn-48-table-b', 'The Pokémon Draft: The Table', hallD({ tags: ['Story'] }), say(
+    'The far end of the table. Two more Balls, two more cards.',
+    '4. {draft:card:4}', '5. {draft:card:5}',
+  ), [takeCard(4), takeCard(5), ch('Back along the table.', out('You walk back up the table. Cosima hasn\'t taken her eyes off you.', scene('gn-48-table-a')))]),
+  rm('gn-48-fight', 'The Pokémon Draft: A Battle', hallD(), say(
+    'A battle, {draft:round} on {draft:round}, against another table\'s drafter. Your borrowed team doesn\'t know you yet. It\'s waiting to see what you\'re like.',
+  ), [
+    ch('Battle.', fight('The marshal drops his hand.', { ...trainer('Drafter', { cls: 'ace-trainer', size: 5, lv: 0, friendly: true, rule: { gn: 'draft' }, win: [gn('draftWon'), scene('gn-48-table-a')], lose: draftOut }) })),
+  ]),
+  ...[1, 2, 3].map(bracket),
+  rm('gn-48-recruit', 'The Pokémon Draft: Winner\'s Privilege', hallD({ tags: ['Story'] }), say(
+    '**Mr. Ashcombe:** "Winner\'s privilege. One of the six may go with you, if its trainer agrees. And if it does."',
+    'The six trainers who lent them are in the front row. Every one of them is looking at their own Pokémon, not at you.',
+  ), [
+    ch('Choose one.', out('You walk your choice over to its trainer.', gn('draftRecruit'), scene('gn-48-answer')), { pick: {} }),
+    ch('Let them all go home.', out('You hand back six Poké Balls, one by one. Each trainer says thank you. Two of them cry a little.', gn('draftEnd'))),
+  ]),
+  rm('gn-48-answer', 'The Pokémon Draft: The Answer', hallD({ tags: ['Story'], remembers: [
+    { id: 'joined', when: [is('draft-result', 1, 1)], notice: 'Its trainer watches you go, and doesn\'t look away until you\'re out of the door.' },
+    { id: 'egg', when: [is('draft-result', 2, 2)], notice: 'Its trainer holds the egg out with both hands. "Bring this one back too, one day. Just to visit."' },
+    { id: 'no', when: [is('draft-result', 3, 3)], notice: 'It goes back to its trainer. At the door it looks over its shoulder at you, once.' },
+  ] }), say(
+    'Your own team comes off the bench, all at once, and checks you over like you\'ve been somewhere dangerous.',
+  ), [ch('Leave.', out('Mr. Ashcombe is already setting out thirty new cards for tomorrow.'))]),
+  rm('gn-48-out', 'The Pokémon Draft: Out', hallD({ tags: ['Story'] }), say(
+    'Out. The borrowed Pokémon go home to the front row. Each trainer checks theirs over, and then, surprisingly, thanks you.',
+    'Your own team comes off the bench, all at once.',
+  ), [ch('Leave.', out('Wilf waves at you all the way to the door, still holding the funny card.'))]),
+  gev('gn-48-letter', 'A Letter from the Draft', hallD({ tags: ['Story'], stop: 'event', rarity: 'common', requires: [gnc('draftFriend'), notThisRegion('draft-letter')] }), say(
+    'A letter, forwarded twice, with a smudged postmark. It\'s from {draft:from}.',
+    '*"How is {draft:friend}? Does it still do the thing? You know the thing. Write back if you have a minute. Or don\'t. I just wanted to ask."*',
+  ), [
+    ch('Write back.', out('You write two pages. {draft:friend} sits on the second page while you finish it.', stampRegion('draft-letter'), gn('draftLetter'))),
+    ch('Don\'t.', out('You fold it into your bag. {draft:friend} watches you do it.', stampRegion('draft-letter'))),
+  ]),
+];
+
+export const EVENTS: Json[] = [...gn44, ...gn45, ...gn46, ...gn47, ...gn48];
 export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
@@ -351,6 +424,18 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'If invited: A+2, with no loss cost', often: 'region', badge: 'own',
     dressing: { kanto: 'The Pokémon League Exhibition', elsewhere: 'The Pokémon League Exhibition' },
     note: 'Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is told in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.',
+  },
+  'gn-48-door': {
+    gn: 'gn.48', shape: 'Hub', earliest: 'A7', home: 14, window: [12, 17], sits: 'optional', attaches: 'town', tags: ['Tournament Episode'],
+    level: 'A+0; the bracket A+1', often: 'region', badge: 'own',
+    dressing: { kanto: 'The Pokémon Draft', elsewhere: 'The Pokémon Draft' },
+    note: 'Badge: a clipboard. Once per region. Until towns exist it sits on step 14. Six picks from cards (core/greenneedle/draft.ts), five battles, a bracket of three; one drafted Pokémon may stay. Its trainer writes once a region (gn-48-letter).',
+  },
+  'gn-48-letter': {
+    gn: 'gn.48', shape: 'Single', earliest: 'A7', home: 3, window: [1, 6], sits: 'optional', attaches: 'after', tags: ['Tournament Episode'],
+    level: 'None', often: 'region', badge: 'own',
+    dressing: { kanto: 'A Letter', elsewhere: 'A Letter' },
+    note: 'Once a region, while a drafted Pokémon that stayed is with you: its first trainer writes. "Write back." gives it Bond +1.',
   },
   'gn-45-field': {
     gn: 'gn.45', shape: 'Single', earliest: 'A10', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Companion Story'],

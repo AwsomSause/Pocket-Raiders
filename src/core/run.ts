@@ -24,6 +24,7 @@ import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
 import { lessonAfterstory } from './greenneedle/champion';
 import { allstarRecord, allstarTurn } from './greenneedle/allstar';
+import { draftRecord } from './greenneedle/draft';
 import { exRipple } from './greenneedle/exhibition';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
@@ -3436,6 +3437,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   }
   // R6 The Post-Mortem: a loss to anyone but the rival is remembered (what went wrong, and to whom) for the rival's notebook.
   if (battle.outcome === 'lose') notePlayerLoss(content, run, battle, run.party[0]);
+  // Greenneedle gn.46: a trainer who beat you is remembered too.
+  if (battle.outcome === 'lose') allstarRecord(run);
   if (battle.outcome === 'lose' && battle.expedition && run.expedition) {
     buryFallen(content, run, battleCause(content, battle));
     run.expedition.battleResult = 'lose';
@@ -3744,6 +3747,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (battle.transform?.used.player.includes('zmove') && !run.story.flags['ev:z-move-used']) run.story.flags['ev:z-move-used'] = 1;
   // Greenneedle gn.46: every trainer met this run, and how it went (the All-Star Tournament draws from it).
   allstarRecord(run);
+  // Greenneedle gn.48: what each drafted Pokémon did this battle, kept on it for the win's Bond.
+  draftRecord(run);
   // Nuzlocke: the fallen are lost for good.
   buryFallen(content, run, battleCause(content, battle));
   const archetype = runArchetype(content, run);

@@ -22,6 +22,7 @@ import { unflinching } from '../greenneedle/daycare';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
 import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
+import { draftTurn } from '../greenneedle/draft';
 import { champPower, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
@@ -1221,6 +1222,8 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
     const line = earthLine(battle.turn - 1, rule.surviveTurns);
     if (line) events.push({ type: 'raid', tone: 'info', text: line });
   }
+  // Greenneedle gn.48, the Pokémon Draft: the cards' lines come true.
+  if (rule.gn === 'draft' && party) draftTurn(battle, party, events, (text) => events.push({ type: 'raid', tone: 'info', text }));
   // Greenneedle gn.45, the Champion's lesson: the Champion explains each decision; it ends once all three of theirs have been out.
   if (rule.gn === 'champlesson' && content) {
     lessonTurn(content, battle, mine, events, (text) => events.push({ type: 'raid', tone: 'info', text }), (m) => maxHp(content, m));
