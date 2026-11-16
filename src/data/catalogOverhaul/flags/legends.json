@@ -1409,6 +1409,10 @@
   {
    "key": "rival-traded",
    "about": "old-rival-old-friend honest trade with the rival"
+  },
+  {
+   "key": "wre-giratina",
+   "rule": "core/legends/wholeRun.ts: set at run start when the run's Whole-Run Event is Guidance of Giratina (row B's rift doors and the Rift Whisper read it)"
   }
  ],
  "external": {
