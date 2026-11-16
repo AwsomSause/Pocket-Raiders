@@ -2,15 +2,15 @@
 // backup note. Every page is a list; none of it changes how a run plays.
 
 import { CHANGELOG, entriesSince, latestChangelogId } from '../core/tools/changelog';
-import { contentStatuses, problemEntries, statusLines } from '../core/tools/contentStatusView';
-import { localStats } from '../core/tools/localStats';
+import { contentStatuses, problemEntries, statusBoard, statusLines } from '../core/tools/contentStatusView';
+import { localStats, statTiles } from '../core/tools/localStats';
 import { buildBugReport, bugReportHeadline } from '../core/tools/bugReport';
 import { berryEntries, berryLines } from '../core/tools/berryBestiary';
 import { boardCode, mergedBoard } from '../core/tools/seedBoard';
 import { installPack, removePack, removeProblem } from '../core/tools/modPacks';
 import { bracketLines, makeBracket, parseNames } from '../core/tools/bracket';
 import { inspectSave, reportLines } from '../save/saveInspector';
-import { categoryLabel, parseSplits, splitLines } from '../core/tools/speedrun';
+import { categoryLabel, parseSplits, speedrunTiles, splitLines } from '../core/tools/speedrun';
 import { peekStreams } from '../core/tools/rngView';
 import { flagList, flagOn, setFlag } from '../core/tools/featureFlags';
 import { botReportLines } from '../core/tools/botReport';
@@ -42,6 +42,10 @@ import { device, packStore, recentErrors } from '../game/deviceTools';
 import { services } from '../game/services';
 import { COLORS, textStyle } from '../ui/theme';
 import type { Picker, PickerRow } from '../ui/partyPanel';
+import type { AskOptions } from '../ui/redux/ask';
+import { bracketView, friendsPage, friendsPages } from '../ui/redux/screens/bracket';
+import type { ReduxCtx } from '../ui/redux/stage';
+import { statsView } from '../ui/redux/templates';
 
 type PickerConfig = ConstructorParameters<typeof Picker>[1];
 
@@ -50,6 +54,8 @@ export interface ToolsHost {
   close(): void;
   /** Reopens the Hub (with a notice) on the Tools room. */
   restart(notice: string | undefined): void;
+  /** New UI only: asks for a typed answer on the mock-ups' form page (the Old look uses the browser's own box). */
+  ask?: (o: AskOptions) => Promise<string | null>;
 }
 
 const row = (label: string, sub: string, right = '', color: string = COLORS.textLight): PickerRow => ({
@@ -121,7 +127,11 @@ function openContentStatus(host: ToolsHost): void {
   const { session, assets } = services();
   const missing = new Set(assets.missing.flatMap((m) => m.files));
   const statuses = contentStatuses(session.content, { assetExists: (p) => !missing.has(p) });
-  const rows: PickerRow[] = statusLines(statuses).map((l) => row(`${l.kind}  ·  ${l.total}`, `supported ${l.counts.supported} · limited ${l.counts.limited} · disabled ${l.counts.disabled} · invalid ${l.counts.invalid}`, l.counts.invalid ? 'Check' : ''));
+  // New UI: each kind is a board row with a bar (how much is fully supported) and an OK or Check tag.
+  const rows: PickerRow[] = statusLines(statuses).map((l) => ({
+    ...row(`${l.kind}  ·  ${l.total}`, `supported ${l.counts.supported} · limited ${l.counts.limited} · disabled ${l.counts.disabled} · invalid ${l.counts.invalid}`, l.counts.invalid ? 'Check' : ''),
+    board: statusBoard(l),
+  }));
   const bad = problemEntries(statuses).slice(0, 40);
   rows.push(row(`Not fully supported (first ${bad.length})`, 'Limited means it works with notes; disabled means switched off for now.', '', COLORS.gold));
   for (const e of bad) rows.push(row(`${e.kind} ${e.id}  ·  ${e.status}`, e.notes[0] ?? ''));
@@ -141,7 +151,8 @@ function openStats(host: ToolsHost): void {
     ...s.topKillers.map((k) => row(`Beaten by ${mon(k.id)}`, '', `${k.count}×`)),
     ...s.topPartyMembers.map((m) => row(`Most used: ${mon(m.id)}`, '', `${m.count} runs`)),
   ];
-  page(host, 'My stats', rows);
+  const t = statTiles(s, name, mon);
+  host.open({ title: 'My stats', rows, columns: 1, rowHeight: 56, onSelect: () => undefined, onBack: () => openTools(host), page: (c) => statsView(c, { title: 'My stats', tiles: t.tiles, text: t.text, hints: [['Esc', 'back']] }) });
 }
 
 function openSeedBoard(host: ToolsHost): void {
@@ -185,29 +196,49 @@ function openPacks(host: ToolsHost): void {
   });
 }
 
-function openBracket(host: ToolsHost): void {
-  const text = window.prompt('Names, separated by commas (2 to 32):', '');
+async function openBracket(host: ToolsHost): Promise<void> {
+  const form = { title: 'Tournament bracket', area: 'run' } as const;
+  const text = host.ask ? await host.ask({ ...form, heading: 'Type the names, with commas between them', text: 'Two to 32 names. The same names and seed always draw the same bracket. Works offline.', ok: 'Next' }) : window.prompt('Names, separated by commas (2 to 32):', '');
   if (text === null) return openTools(host);
-  const seed = window.prompt('Seed for the draw (anything; same names + seed = same bracket):', String(Date.now() % 100000)) ?? '';
+  const start = String(Date.now() % 100000);
+  const seed = host.ask ? await host.ask({ ...form, heading: 'Type a seed for the draw', text: 'Anything works. The same names and seed always draw the same bracket.', ok: 'Draw', value: start }) : (window.prompt('Seed for the draw (anything; same names + seed = same bracket):', start) ?? '');
+  if (seed === null) return openTools(host);
   const result = makeBracket(parseNames(text), seed);
   if (!result.ok) return host.restart(result.reason);
   const lines = bracketLines(result.rounds);
-  page(host, `Bracket  ·  ${result.names.length} players`, [...lines.map((l) => row(l, '')), row('Copy as text', 'For pasting into a chat.', 'Copy')], (n) => {
-    if (n === lines.length) { void navigator.clipboard?.writeText(lines.join('\n')).catch(() => undefined); host.restart('Bracket copied.'); }
+  const copy = (): void => { void navigator.clipboard?.writeText(lines.join('\n')).catch(() => undefined); host.restart('Bracket copied.'); };
+  const size = (result.rounds[0]?.length ?? 0) * 2, pages = friendsPages(size);
+  // New UI: the mock-ups' bracket page (groups of eight as tabs); Enter copies it as text.
+  const show = (tab: number): void => host.open({
+    title: `Bracket  ·  ${result.names.length} players`, columns: 1, rowHeight: 56, onBack: () => openTools(host),
+    rows: [...lines.map((l) => row(l, '')), row('Copy as text', 'For pasting into a chat.', 'Copy')],
+    onSelect: (n) => { if (host.ask || n === lines.length) copy(); },
+    ...(host.ask ? {
+      tabs: pages.length ? { labels: pages, index: tab, onChange: show } : undefined,
+      page: (c: ReduxCtx) => bracketView(c, friendsPage(result.rounds, tab, `${result.names.length} players, seed ${seed || 'none'}. Enter copies the bracket as text.`)),
+    } : {}),
   });
+  show(0);
 }
 
-function openSaveCheck(host: ToolsHost): void {
-  pickTextFile((text) => {
-    // An exported save holds records inside it; a plain record is checked as is.
-    let parts: { name: string; raw: string }[] = [{ name: 'File', raw: text }];
-    try {
-      const file = JSON.parse(text) as { kind?: string; profile?: unknown; settings?: unknown };
-      if (file.kind === 'export') parts = [file.profile ? { name: 'Profile', raw: JSON.stringify(file.profile) } : null, file.settings ? { name: 'Settings', raw: JSON.stringify(file.settings) } : null].filter((x): x is { name: string; raw: string } => !!x);
-    } catch { /* inspectSave reports it */ }
-    const rows = parts.flatMap((p) => reportLines(inspectSave(p.raw)).map((l, i) => row(i === 0 ? `${p.name}: ${l}` : l, '', '', l.startsWith('!') ? COLORS.gold : COLORS.textLight)));
-    page(host, 'Save check', rows.length ? rows : [row('Nothing to check', 'That file has no save records.')]);
-  });
+/** Checks a save's text: an exported save holds records inside it; a plain record is checked as is. */
+function showSaveCheck(host: ToolsHost, text: string): void {
+  let parts: { name: string; raw: string }[] = [{ name: 'File', raw: text }];
+  try {
+    const file = JSON.parse(text) as { kind?: string; profile?: unknown; settings?: unknown };
+    if (file.kind === 'export') parts = [file.profile ? { name: 'Profile', raw: JSON.stringify(file.profile) } : null, file.settings ? { name: 'Settings', raw: JSON.stringify(file.settings) } : null].filter((x): x is { name: string; raw: string } => !!x);
+  } catch { /* inspectSave reports it */ }
+  const rows = parts.flatMap((p) => reportLines(inspectSave(p.raw)).map((l, i) => row(i === 0 ? `${p.name}: ${l}` : l, '', '', l.startsWith('!') ? COLORS.gold : COLORS.textLight)));
+  page(host, 'Save check', rows.length ? rows : [row('Nothing to check', 'That file has no save records.')]);
+}
+
+async function openSaveCheck(host: ToolsHost): Promise<void> {
+  if (!host.ask) return pickTextFile((text) => showSaveCheck(host, text));
+  // New UI: the mock-ups' form page. Pasted save text is checked as it is; an empty box opens the file picker.
+  const text = await host.ask({ title: 'Check a save file', heading: 'Paste a save code to check it', text: 'Paste the text of a save, or leave the box empty and press Check to pick a save file. Nothing is changed.', ok: 'Check' });
+  if (text === null) return openTools(host);
+  if (text.trim()) showSaveCheck(host, text.trim());
+  else pickTextFile((file) => showSaveCheck(host, file));
 }
 
 function openSpeedrun(host: ToolsHost): void {
@@ -216,7 +247,12 @@ function openSpeedrun(host: ToolsHost): void {
   const sp = parseSplits(device.splits());
   const rules = session.run?.rules;
   const rows = [row(`Timer is ${on ? 'on' : 'off'}`, 'Enter switches it. Times stay on this device, never in your save.', on ? 'Turn off' : 'Turn on'), ...(rules ? [row(`Category: ${categoryLabel(rules)}`, 'Only compare times in the same category.')] : []), ...(sp ? splitLines(sp, Date.now()).map((l) => row(l, '')) : [row('No splits yet', 'Turn the timer on and start a run.')])];
-  page(host, 'Speedrun timer', rows, (n) => { if (n === 0) { device.setSpeedrun(!on); host.restart(`Speedrun timer ${on ? 'off' : 'on'}.`); } });
+  const tiles = speedrunTiles(on, sp, Date.now(), rules ? categoryLabel(rules) : null);
+  host.open({
+    title: 'Speedrun timer', rows, columns: 1, rowHeight: 56, onBack: () => openTools(host),
+    onSelect: (n) => { if (n === 0) { device.setSpeedrun(!on); host.restart(`Speedrun timer ${on ? 'off' : 'on'}.`); } },
+    page: (c) => statsView(c, { title: 'Speedrun timer', area: 'run', tiles, press: 0, text: `Enter turns the timer ${on ? 'off' : 'on'}. Times stay on this device, never in your save.`, hints: [['Enter', on ? 'turn off' : 'turn on'], ['Esc', 'back']] }),
+  });
 }
 
 function openRngView(host: ToolsHost): void {
@@ -383,7 +419,7 @@ function openReplayDiff(host: ToolsHost): void {
 
 function openBerries(host: ToolsHost): void {
   const berries = berryEntries(services().session.content);
-  page(host, 'Berry Bestiary', berries.map((b) => row(b.name, b.effect, b.rarity)), (n) => {
+  page(host, 'Berry Bestiary', berries.map((b) => ({ ...row(b.name, b.effect, b.rarity), art: b.icon ?? undefined })), (n) => {
     const b = berries[n];
     if (b) page(host, b.name, textRows(berryLines(b)), () => undefined, () => openBerries(host));
   });

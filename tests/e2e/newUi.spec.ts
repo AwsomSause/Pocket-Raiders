@@ -278,9 +278,15 @@ test('New UI: the Hub is the dock (two tabs of six buttons); its Town page walks
   await expect(view(page, 'Hub').first().locator('[data-act="pick"]')).toHaveCount(6);
   await expect.poll(() => page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Hub').town))).toBe(false);
   // The dock remembers its button (Town); the keys walk back to New Run, which starts a run.
+  const lit = view(page, 'Hub').first().locator('.btn.on');
+  await expect(lit).toHaveText('Town');
   await page.waitForTimeout(400);
-  for (let i = 0; i < 3; i++) await page.keyboard.press('ArrowLeft');
-  await expect(view(page, 'Hub').first().locator('.btn.on')).toHaveText('New Run');
+  // One step per press, checked each time: on a loaded machine a press right after the scene change can be dropped,
+  // so a press that did not move the cursor is sent again.
+  for (const want of ['Unlocks', 'Events', 'New Run']) {
+    for (let tries = 0; tries < 4 && (await lit.textContent()) !== want; tries++) { await page.keyboard.press('ArrowLeft'); await page.waitForTimeout(200); }
+    await expect(lit).toHaveText(want);
+  }
   await page.keyboard.press('Enter');
   await waitForScene(page, 'TrainerSelect');
   expect(errors).toEqual([]);
@@ -2277,5 +2283,121 @@ test('New UI: the hub Trainer Card is the mock-up card page (picture, name and r
   await page.keyboard.press('Escape');
   await expect(page.locator('#rx .hd', { hasText: 'Trainer Card' })).toHaveCount(0);
   await expect(view(page, 'Hub').first()).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('New UI: the Tools pages follow the mock-ups (number tiles for My stats and the Speedrun timer, berry pictures, Content status bars, a typed bracket, the save check form)', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-tools');
+  await open(page, 'Hub');
+  await page.waitForTimeout(500);
+  const hub = view(page, 'Hub').last();
+  const tools = async (row: string) => {
+    await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Hub').enter('tools'));
+    await expect(hub.locator('.hd')).toContainText('Tools & Community');
+    await page.waitForTimeout(250);
+    // The list scrolls: step down until the row is the lit one, then open it.
+    for (let k = 0; k < 30 && !(await hub.locator('.btn.on', { hasText: row }).count()); k++) { await page.keyboard.press('ArrowDown'); await page.waitForTimeout(60); }
+    await expect(hub.locator('.btn.on')).toContainText(row);
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(250);
+  };
+  const band = () => hub.locator('.hd').getAttribute('style');
+
+  // My stats: eight number tiles, no list.
+  await tools('My stats');
+  await expect(hub.locator('.hd')).toContainText('My stats');
+  for (const t of ['Runs', 'Wins', 'Win rate', 'Longest run', 'Average run', 'Regions per run', 'Top trainer', 'Most used']) await expect(hub.locator('.win', { hasText: t })).toHaveCount(1);
+  await expect(hub.locator('.btn')).toHaveCount(0);
+  await expect(hub.locator('.txt')).toContainText('Assisted runs: 0.');
+  const hubBand = await band();
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(250);
+
+  // Speedrun timer: tiles on the run's teal band; Enter switches the timer.
+  await tools('Speedrun timer');
+  await expect(hub.locator('.win', { hasText: 'Timer' })).toContainText('Off');
+  expect(await band()).not.toBe(hubBand);
+  await page.screenshot({ path: 'test-results/newui-tools-timer.png' });
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(600);
+  await tools('Speedrun timer');
+  await expect(view(page, 'Hub').last().locator('.win', { hasText: 'Timer' })).toContainText('On');
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(600);
+
+  // Berry Bestiary: every cell on the first page is a picture.
+  await tools('Berry Bestiary');
+  await expect(hub.locator('.hd')).toContainText('Berry Bestiary');
+  await expect(hub.locator('[data-act="pick"] i.im')).toHaveCount(18);
+  await expect(hub.locator('[data-act="pick"] i.im').first()).toHaveAttribute('style', /items\/gen5\/.+-berry\.png/);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(250);
+
+  // Content status: board rows with a bar and an OK tag.
+  await tools('Content status');
+  await expect(hub.locator('.hd')).toContainText('Content status');
+  await expect(hub.locator('[data-act="pick"]').first()).toContainText('Species');
+  await expect(hub.locator('[data-act="pick"]').first()).toContainText(/\d+ of \d+ supported/);
+  await expect(hub.locator('[data-act="pick"]').first().locator('.tg')).toHaveText(/OK|Check/);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(250);
+
+  // Tournament bracket: two form pages (names, seed), then the bracket page with groups as chips.
+  await tools('Tournament bracket');
+  const form = page.locator('#rx .stage[data-scene="Hub"]').last();
+  await expect(form.locator('.hd')).toContainText('Tournament bracket');
+  await expect(form).toContainText('Type the names, with commas between them');
+  const box = page.locator('[data-testid="ask-input"]');
+  await expect(box).toBeFocused();
+  // Typing goes into the box (and not to the list under the form); the rest is filled in one go to keep the test short.
+  await page.keyboard.type('Ann,');
+  await expect(box).toHaveValue('Ann,');
+  await box.fill('Ann, Bob, Cy, Dee, Eve, Fay, Gus, Hal, Ian, Jo, Kim');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#rx .stage[data-scene="Hub"]').last()).toContainText('Type a seed for the draw');
+  await expect(box).toBeFocused();
+  await box.fill('fixed');
+  await page.keyboard.press('Enter');
+  await page.waitForTimeout(400);
+  const br = view(page, 'Hub').last();
+  await expect(br.locator('.hd')).toContainText('Tournament bracket');
+  await expect(br.locator('[data-act="bracketPage"]')).toHaveCount(3);
+  await expect(br.locator('.txt')).toContainText('11 players, seed fixed.');
+  const groupA = await br.innerText();
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(300);
+  const groupB = await view(page, 'Hub').last().innerText();
+  expect(groupB).not.toBe(groupA);
+  // Every name is in one of the two groups, once.
+  for (const n of ['Ann', 'Bob', 'Cy', 'Dee', 'Eve', 'Fay', 'Gus', 'Hal', 'Ian', 'Jo', 'Kim']) expect((groupA + groupB).includes(n)).toBe(true);
+  await page.screenshot({ path: 'test-results/newui-tools-bracket.png' });
+  await view(page, 'Hub').last().locator('[data-act="bracketPage"]').nth(2).click();
+  await page.waitForTimeout(300);
+  await expect(view(page, 'Hub').last()).toContainText('Winner');
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(250);
+
+  // A bracket form left with Esc goes back to the Tools list and draws nothing.
+  await tools('Tournament bracket');
+  await expect(box).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(box).toHaveCount(0);
+  await expect(view(page, 'Hub').last().locator('.hd')).toContainText('Tools & Community');
+
+  // Check a save file: the form page; text that is no save is reported, nothing breaks.
+  await tools('Check a save file');
+  await expect(page.locator('#rx .stage[data-scene="Hub"]').last()).toContainText('Paste a save code to check it');
+  await expect(box).toBeFocused();
+  // The on-screen keys type too.
+  await page.locator('#rx .stage[data-scene="Hub"]').last().locator('[data-act="key"]', { hasText: /^A$/ }).click();
+  await expect(box).toHaveValue('A');
+  await page.keyboard.type('B');
+  await expect(box).toHaveValue('AB');
+  await page.screenshot({ path: 'test-results/newui-tools-savecheck.png' });
+  await page.locator('#rx .stage[data-scene="Hub"]').last().locator('[data-act="btn"]', { hasText: 'Check' }).click();
+  await page.waitForTimeout(400);
+  await expect(view(page, 'Hub').last().locator('.hd')).toContainText('Save check');
+  await expect(view(page, 'Hub').last()).toContainText('Not valid JSON');
   expect(errors).toEqual([]);
 });

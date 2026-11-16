@@ -58,6 +58,7 @@ import { HUB_TOWN, type HubPlace } from '../core/hubTown/schema';
 import { chooseHubPokemon, hubPokemon, hubPokemonChoices, placeById } from '../core/hubTown/world';
 import { pokemonHeightM } from '../core/heights';
 import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { askText } from '../ui/redux/ask';
 import { runCardView } from '../ui/redux/screens/over';
 import { playerPortrait } from '../ui/redux/templates';
 import { dockView, type DockFigure } from '../ui/redux/screens/hub';
@@ -986,7 +987,7 @@ export class HubScene extends Phaser.Scene {
         this.scene.start('Town');
         break;
       case 'tools':
-        openTools({ open: (c) => this.openPicker(c), close: () => this.closePicker(), restart: (n) => this.restart(n, 'tools') });
+        openTools({ open: (c) => this.openPicker(c), close: () => this.closePicker(), restart: (n) => this.restart(n, 'tools'), ask: reduxOn() ? (o) => askText(this, o) : undefined });
         break;
       case 'back':
         this.scene.start('MainMenu');
@@ -1010,6 +1011,11 @@ export class HubScene extends Phaser.Scene {
   }
 
   private openPicker(config: ConstructorParameters<typeof Picker>[1]): void {
+    // One list at a time: a page opened from a list (Tools, a quest line) takes its place. A list left open under
+    // the new one would stay drawn for the rest of the visit and slow the hub down.
+    const old = this.picker;
+    this.picker = null;
+    old?.close();
     this.picker = new Picker(this, { screen: this.roomScreen, ...config });
   }
 

@@ -45,6 +45,8 @@ export interface PickerRow {
   mon?: { speciesId: string; shiny: boolean; hp: number; mark: string };
   /** A board row said outright (the New UI's Bond screen): the line under the name, a bar (0 to 100) and a tag. */
   board?: { title: string; sub: string; pct: number; tag: string };
+  /** The row's picture by asset id, for a row that draws none (the New UI's grid cells show it). */
+  art?: string;
 }
 
 export interface PickerConfig {
@@ -279,6 +281,7 @@ export class Picker implements PickerLike {
         problem: (i) => config.rows[i]?.problem ?? null,
         hint: (i) => config.rows[i]?.hint ?? '',
         item: (i) => config.rows[i]?.item,
+        art: (i) => config.rows[i]?.art,
         mon: (i) => config.rows[i]?.mon,
         board: (i) => config.rows[i]?.board,
         top: win?.top,
@@ -456,6 +459,7 @@ export class Picker implements PickerLike {
   }
 
   close(): void {
+    if (this.closed) return;
     this.closed = true;
     this.rx?.destroy();
     this.rx = null;

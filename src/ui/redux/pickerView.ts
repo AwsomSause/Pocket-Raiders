@@ -7,6 +7,7 @@ import type { AssetManifest } from '../../assets/catalog';
 import { rxFileOf } from './assets';
 import { mountRedux, type ReduxCtx, type ReduxView } from './stage';
 import { act, type Area, esc, H, isArtPlaceholder, TX, W } from './kit';
+import { areaOf, pickerBand, pickerKind, type PickerKind } from './pickerNames';
 import { boardProgress, type BoardRow, boardView, gridStart, gridView, menuView, scrollStart, tabsBar } from './templates';
 import { bagCols, bagUseNote, bagView } from './screens/bag';
 import { battleListView, windowTitle } from './screens/battle';
@@ -28,6 +29,8 @@ export interface PickerBridge {
   board?: (i: number) => { title: string; sub: string; pct: number; tag: string } | undefined;
   /** The item a row stands for, if any (Bag). */
   item?: (i: number) => string | undefined;
+  /** A row's picture by asset id, for rows that draw none themselves (the Berry Bestiary's icons). */
+  art?: (i: number) => string | undefined;
   tabs?: { labels: readonly string[]; index: number; onChange: (index: number) => void };
   canBack: boolean;
   backLabel?: string;
@@ -42,38 +45,7 @@ export interface PickerBridge {
   back: () => void;
 }
 
-/** `window` is the battle's small Party or Item window over the field; the rest are full screens. */
-export type PickerKind = 'menu' | 'grid' | 'board' | 'bag' | 'window';
-
-/** Which template a list uses, by its title: the mock-ups' own rule for hub rooms (redux-07.js `kind`). */
-const KIND_BY_NAME: [RegExp, PickerKind][] = [
-  [/^bag$/i, 'bag'],
-  [/^bonds?$/i, 'board'],
-  // The mock-up catalogue names these screens outright (redux-explorer.js SETS); the rule below covers the rest.
-  [/^(lore|story|remembrance) archive|^tales|^run history|^trainer quests|^event hall|^content status|^seed board|run journal|memory lane|fallen trainers|battle replays|leaderboard|^bonds|story journal|^rival|^people|relationships|field notes|^notes/i, 'board'],
-  [/^bank|^mentors|^mod packs|district|preparation desk|^camp|in this run|raid prep|^menu$/i, 'menu'],
-  [/^trainer (archive|select)|species mastery|keepsakes|character database|moment codex|wardrobe|legacy gallery|berry bestiary|hall of memories|heirlooms|pok[eé]dex|^pc\b|^album/i, 'grid'],
-];
-
-export function pickerKind(title: string): PickerKind {
-  for (const [re, kind] of KIND_BY_NAME) if (re.test(title)) return kind;
-  if (/archive|gallery|museum|wardrobe|album|codex|dex|mastery|keepsake|heirloom|bestiary|database|legacy/i.test(title)) return 'grid';
-  if (/achiev|quest|history|journal|news|event|leader|status|replay|memor|fallen|seed|hall|contract|bounty|mentor/i.test(title)) return 'board';
-  return 'menu';
-}
-
-/** Header colour by title: run menus teal, party green, shop orange, Memories purple, the rest hub blue. */
-function areaOf(title: string): Area {
-  if (/^bag$/i.test(title)) return 'shop';
-  // The Memories pages are story pages; the replays are battles (the mock-up catalogue's own bands).
-  if (/^memories/i.test(title)) return /battle replays/i.test(title) ? 'battle' : 'story';
-  // The Legacy Gallery keeps finished runs: the run end's gold band, as in the catalogue.
-  if (/^legacy gallery/i.test(title)) return 'end';
-  if (/party|pok[eé]mon|team|summary|bond/i.test(title)) return 'party';
-  if (/shop|mart|merchant|exchange|bank/i.test(title)) return 'shop';
-  if (/bag|item|camp|map|route|journal|notes/i.test(title)) return 'run';
-  return 'hub';
-}
+export { areaOf, pickerBand, pickerKind, type PickerKind } from './pickerNames';
 
 /** How many columns the cursor moves across in each template and layout (the Picker steers by this in the New UI). */
 export function pickerCols(kind: PickerKind, c: Pick<ReduxCtx, 'v'>): number {
@@ -124,6 +96,9 @@ function bagNotes(itemId: string | undefined): string[] | undefined {
   return run.party.map((m) => bagUseNote(m.held?.[item.id] ?? 0, !!item.usableOutside, item.usableOutside ? itemUseProblem(content, item, m, regionId) : null, m.hp));
 }
 
+/** The header band is a Back button for the mouse and touch. */
+const BACK_HIT = `<div class="abs hit" style="left:0;top:0;width:330px;height:48px;z-index:4"${act('back')}></div>`;
+
 function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerKind): string {
   if (kind === 'window') {
     const sum = p.summary();
@@ -138,15 +113,18 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
     }) + over;
   }
   // "Bank · 0 credits · 0 candies": the name goes in the band, the rest becomes chips beside it.
-  const [name = '', ...extra] = p.title.split(/\s+·\s+/);
+  const { name, chips: extra } = pickerBand(p.title);
   const n = p.rows, index = p.index(), area = areaOf(name);
   const chips = extra.length ? `<div class="abs row" style="left:350px;top:13px;gap:6px;z-index:4">${extra.map((x, k) => `<span class="tg${k ? ' no' : ''}">${esc(x)}</span>`).join('')}</div>` : '';
   const hints: [string, string][] = [['Enter', 'choose'], ...(p.tabs ? [['←→', 'tab'] as [string, string]] : []), ...(p.canBack ? [['Esc', p.backLabel ?? 'back'] as [string, string]] : [])];
-  const row = (i: number): Scraped => scrapeRow(scene, p.box(i));
+  const row = (i: number): Scraped => {
+    const r = scrapeRow(scene, p.box(i)), id = r.art ? undefined : p.art?.(i);
+    return id ? { ...r, art: fileOf(scene, id) } : r;
+  };
   const text = n ? p.problem(index) ?? p.hint(index) : p.canBack ? 'Nothing here yet. Press Esc to go back.' : 'Nothing here yet.';
   // The Bag draws its pockets as its own row of tabs under the header.
   const tabs = p.tabs && kind !== 'bag' ? tabsBar(p.tabs.labels, p.tabs.index) : '';
-  const back = p.canBack ? `<div class="abs hit" style="left:0;top:0;width:330px;height:48px;z-index:4"${act('back')}></div>` : '';
+  const back = p.canBack ? BACK_HIT : '';
   const sum = p.summary();
   const over = sum === null ? '' : '<div class="shade" style="z-index:8"></div>' + W(`<div style="white-space:pre-wrap;line-height:22px;font-size:16px">${esc(sum)}</div><div class="sm acc">Press I, Enter or Esc to go back to the list</div>`, 'position:absolute;left:120px;right:120px;top:40px;bottom:50px;display:flex;flex-direction:column;gap:10px;padding:16px 20px;overflow:hidden;z-index:9', '', act('back'));
   let body: string;
@@ -185,14 +163,16 @@ function render(c: ReduxCtx, scene: Phaser.Scene, p: PickerBridge, kind: PickerK
 export interface PickerView extends ReduxView { cols: number }
 
 /** Mounts the New UI picture of a Picker. The Picker calls `refresh()` when its cursor, tab or summary changes. */
-export function mountPickerView(scene: Phaser.Scene, p: PickerBridge, kind: PickerKind = pickerKind(p.title.split(/\s+·\s+/)[0] ?? '')): PickerView {
+export function mountPickerView(scene: Phaser.Scene, p: PickerBridge, kind: PickerKind = pickerKind(pickerBand(p.title).name)): PickerView {
   let cols = 1;
+  const tab = (k: string): void => { if (p.tabs && Number(k) !== p.tabs.index) p.tabs.onChange(Number(k)); };
   const view = mountRedux(scene, {
     render: (c) => {
-      cols = pickerCols(kind, c);
-      return p.page ? p.page(c) : render(c, scene, p, kind);
+      // A room's own page has no list to steer across: the cursor steps one row at a time.
+      cols = p.page ? 1 : pickerCols(kind, c);
+      return p.page ? p.page(c) + (p.canBack ? BACK_HIT : '') : render(c, scene, p, kind);
     },
-    acts: { pick: (i) => p.pick(Number(i)), tab: (k) => p.tabs && Number(k) !== p.tabs.index && p.tabs.onChange(Number(k)), back: () => p.back() },
+    acts: { pick: (i) => p.pick(Number(i)), tab, bracketPage: tab, back: () => p.back() },
     overs: { over: (i) => p.hover(Number(i)) },
     clear: kind === 'window',
   });

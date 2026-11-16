@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 import { isArtPlaceholder } from '../../src/ui/redux/kit';
-import { boardProgress, boardSize, boardView, gridStart, gridView, menuView, type BoardModel, type BoardRow } from '../../src/ui/redux/templates';
+import { boardProgress, boardSize, boardView, gridStart, gridView, menuView, rowNote, statsView, type BoardModel, type BoardRow } from '../../src/ui/redux/templates';
 
 // The mock-ups' board (quests, chains, tasks): rows with a progress bar and a state tag, in two layouts.
 
@@ -149,5 +149,46 @@ describe('New UI grid page and row reading', () => {
     expect(isArtPlaceholder('Red The Balanced Trainer')).toBe(false);
     expect(isArtPlaceholder('The art missing from the hall')).toBe(false);
     expect(isArtPlaceholder('')).toBe(false);
+  });
+});
+
+describe('New UI menu rows with a long note', () => {
+  it('a short name keeps its whole note', () => {
+    expect(rowNote('Lucian', 'Locked · beat the Elite Four')).toBe('Locked · beat the Elite Four');
+    expect(rowNote('Bank', '')).toBe('');
+  });
+  it('a long name with a long note keeps the first part of the note, so the name is not cut', () => {
+    expect(rowNote('Captain Ravi Ironhand', 'Newcomer · trust 0 · 0 graduated')).toBe('Newcomer');
+  });
+  it('a long note with no parts is left alone', () => {
+    expect(rowNote('Captain Ravi Ironhand', 'Raises the level cap by fifty')).toBe('Raises the level cap by fifty');
+  });
+  it('the list row shows the short note and the detail card the whole one', () => {
+    const html = menuView(ctx(0), { title: 'Mentors', items: [{ label: 'Captain Ravi Ironhand', note: 'Newcomer · trust 0 · 0 graduated' }], index: 0, text: '' });
+    expect(count(html, 'Newcomer · trust 0 · 0 graduated')).toBe(1);
+    expect(html).toContain('>Newcomer<');
+  });
+});
+
+describe('New UI number tiles (My stats, Speedrun timer)', () => {
+  const tiles: [string, string][] = [['Runs', '128'], ['Wins', '31'], ['Win rate', '24%'], ['Best streak', '4'], ['Caught', '412'], ['Shinies', '6'], ['Megas used', '58'], ['Play time', '86 h'], ['Extra', 'x']];
+  it('draws eight tiles at most, four across, the first one lit', () => {
+    const html = statsView(ctx(0), { title: 'My stats', tiles, text: 'Your lifetime numbers.' });
+    expect(count(html, 'class="sm"')).toBe(8);
+    expect(html).toContain('repeat(4,1fr)');
+    expect(count(html, 'class="acc"')).toBe(1);
+    expect(html).not.toContain('Extra');
+    expect(html).toContain('Your lifetime numbers.');
+  });
+  it('three across when asked, and long values use smaller letters', () => {
+    const html = statsView(ctx(0), { title: 'My stats', cols: 3, tiles: [['Most used', 'Galarian Zigzagoon']], text: '' });
+    expect(html).toContain('repeat(3,1fr)');
+    expect(html).toContain('font-size:18px');
+  });
+  it('only the tile named as a button can be pressed', () => {
+    expect(statsView(ctx(0), { title: 'Speedrun timer', tiles, text: '' })).not.toContain('data-act="pick"');
+    const html = statsView(ctx(0), { title: 'Speedrun timer', tiles, press: 0, text: '' });
+    expect(count(html, 'data-act="pick"')).toBe(1);
+    expect(html).toContain('data-arg="0"');
   });
 });
