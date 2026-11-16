@@ -85,3 +85,32 @@ export function briefView(_c: ReduxCtx, d: BriefModel): string {
   const first = W(`<b class="acc" style="font-size:21px">First stage</b><div style="position:relative;height:40px;flex:none">${d.nodes.map((kind, k) => nodeDot(kind, 22 + k * 52, 20)).join('')}</div><div class="sm" style="line-height:20px">${esc(d.stage)}</div><div class="col sm" style="gap:3px;overflow:auto;flex:1;min-height:0;line-height:17px;font-size:13px">${notes.map(([a, b]) => `<div><b class="acc">${esc(a)}</b> ${esc(b)}</div>`).join('')}</div><div class="row"><span class="sm grow">Seed</span><b>${esc(d.seed)}</b><span class="tg${d.index === 1 ? '' : ' no'}"${act('copy')}>Copy</span></div>`, `flex:1;display:flex;flex-direction:column;gap:${tall ? 7 : 10}px;min-width:0`);
   return H(d.title, 'run', [['←→', 'choose'], ['Enter', 'select']]) + `<div class="abs row" style="left:24px;right:24px;top:76px;height:${h}px;gap:20px;align-items:stretch">${plan}${first}</div><div class="abs row" style="left:24px;right:24px;top:${tall ? 392 : 330}px;gap:12px">${d.party.slice(0, 3).map((p) => W(`<div class="row">${p.file ? mini(p.file, 44) : ''}<b>${esc(p.name)}</b></div>`, 'width:232px;padding:6px 12px')).join('')}<span class="grow"></span>${B('Depart', d.index === 0, 'width:180px;justify-content:center', '', act('go'))}</div>` + TX(esc(d.text));
 }
+
+/** The Preparation Desk as the mock-ups' seven-row menu: what each row is set to, read from the run being set up. */
+export const DESK_ROWS = ['campaign', 'mode', 'token', 'modifier', 'seed', 'load', 'start'] as const;
+export interface DeskInput {
+  campaign: string;
+  mode: string;
+  difficulty: string;
+  /** The preparation taken (null: none). */
+  prep: string | null;
+  modifiers: number;
+  deathBlock: boolean;
+  /** A fixed seed (null: random). */
+  seed: string | null;
+  /** Preset slots in use, and how many there are. */
+  saved: number;
+  slots: number;
+}
+export function deskItems(d: DeskInput): { label: string; note: string }[] {
+  const seed = d.seed === null || d.seed === '' ? 'Random' : d.seed.length > 20 ? `${d.seed.slice(0, 19)}…` : d.seed;
+  return [
+    { label: 'Campaign', note: d.campaign },
+    { label: 'Mode', note: d.mode === d.difficulty ? d.mode : `${d.mode} · ${d.difficulty}` },
+    { label: 'Preparation', note: d.prep ?? 'None' },
+    { label: 'Modifiers', note: `${Math.max(0, d.modifiers) + (d.deathBlock ? 1 : 0)} on` },
+    { label: 'Seed & Codes', note: seed },
+    { label: 'Loadout presets', note: `${Math.min(d.saved, d.slots)} of ${d.slots} saved` },
+    { label: 'Depart', note: 'Pick your starter' },
+  ];
+}

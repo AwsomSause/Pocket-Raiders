@@ -107,7 +107,7 @@ import { townRollPages } from '../core/expansion/townRoll';
 import { trackPage } from '../core/expansion/trackView';
 import { FIELD_TABS, FIELD_TAB_NAMES, fieldNotesView } from '../core/expansion/fieldNotes';
 import { drawFieldNotes, type FieldNotesPage } from '../ui/fieldNotesPage';
-import { drawNodeMenu, type NodeMenuPanel } from '../ui/nodeMenuPanel';
+import { CATEGORY_LOOK, drawNodeMenu, status as menuStatus, type NodeMenuPanel } from '../ui/nodeMenuPanel';
 import { menuBlocker, menuSideIds, type MenuEntryView } from '../core/nodeMenu/flow';
 import { nodeMenuData } from '../core/nodeMenu/data';
 import { drawTrackPage } from '../ui/trackPage';
@@ -116,11 +116,12 @@ import { dossierFolders } from '../core/expansion/cast/dossier';
 import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { askText } from '../ui/redux/ask';
 import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
 import type { BattlePanel } from '../ui/redux/screens/battle';
 import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
 import { confirmBox } from '../ui/redux/screens/saves';
-import { bookRows, bookView, dossierView, pauseView, reportView, rollView, trackView } from '../ui/redux/screens/popups';
+import { bookRows, bookView, dossierView, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
 import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
 import { artOf, monFile, rivalArt } from '../ui/redux/game';
 import { nodeStyle } from '../ui/redux/kit';
@@ -244,6 +245,8 @@ export class MapScene extends Phaser.Scene {
   private rxPop: MapPop | null = null;
   /** New UI: the pause menu (Esc on the map) and its cursor; `ask` is the cursor of the "End this run?" box while it is open. */
   private rxPause: { index: number; ask: number | null } | null = null;
+  /** New UI: the node event menu while it is open (the cards, the cursor, and what a pick does). */
+  private rxMenu: { header: string; cards: NodeMenuCard[]; index: number; pick: (k: number) => void } | null = null;
   /** New UI: a tournament match is being watched (drawn on the canvas, so the layer steps aside). */
   private rxWatching = false;
   /** New UI: when a pop-up last opened or closed. Its key can also be a direction (D is "right"), and that same press must not move anything. */
@@ -643,8 +646,14 @@ export class MapScene extends Phaser.Scene {
       const cur = run.stage?.current;
       const node = run.stage?.map.nodes.find((x) => x.id === cur);
       if (!node || typeof window === 'undefined' || typeof window.prompt !== 'function') return;
-      const text = window.prompt('Name this place (up to 24 letters, empty clears):', node.name ?? '');
-      if (text === null) return;
+      // The New look asks on the mock-ups' entry page; the Old look in the browser's own box.
+      if (reduxOn()) void askText(this, { title: 'Name this place', area: 'run', heading: 'Name this place', text: 'Up to 24 letters. Leave it empty to clear the name.', value: node.name ?? '' }).then((text) => { if (text !== null) named(node, text); });
+      else {
+        const text = window.prompt('Name this place (up to 24 letters, empty clears):', node.name ?? '');
+        if (text !== null) named(node, text);
+      }
+    };
+    const named = (node: NonNullable<typeof run.stage>['map']['nodes'][number], text: string): void => {
       const renamed = renameNode(run, node.id, text);
       node.name = renamed.stage!.map.nodes.find((x) => x.id === node.id)!.name;
       const names = { ...(session.profile.nook?.nodeNames ?? {}) };
@@ -1193,6 +1202,7 @@ export class MapScene extends Phaser.Scene {
     this.rxLegend = null;
     this.rxPop = null;
     this.rxPause = null;
+    this.rxMenu = null;
     this.rxWatching = false;
     if (reduxOn() && !mapSkin) {
       const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
@@ -1216,7 +1226,7 @@ export class MapScene extends Phaser.Scene {
       };
       const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll') };
       this.rxView = mountRedux(this, {
-        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }) + this.pauseHtml(),
+        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : ''),
         acts: {
           pick: (i) => { if (this.busy || this.picker) return; if (Number(i) !== this.index) this.focus(Number(i)); this.activate(Number(i)); },
           go: () => { if (!this.busy && !this.picker) this.activate(this.index); },
@@ -1224,6 +1234,7 @@ export class MapScene extends Phaser.Scene {
           legend: () => this.toggleLegend(),
           pop: () => this.popClose(),
           pause: (k) => this.pausePick(Number(k)),
+          menu: (k) => this.menuPick(Number(k)),
           confirm: (k) => this.pauseAsk(Number(k)),
           popTab: (i) => this.popPick('tab', Number(i)),
           popPick: (i) => this.popPick('pick', Number(i)),
@@ -1231,7 +1242,7 @@ export class MapScene extends Phaser.Scene {
           bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
           bracketWatch: () => this.watchLast(),
         },
-        overs: { over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
+        overs: { menuOver: (i) => this.menuFocus(Number(i)), over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
         // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
         tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
       });
@@ -1246,6 +1257,7 @@ export class MapScene extends Phaser.Scene {
     onInputAction(this, (action) => {
       if (this.rxView && this.time.now === this.rxPopAt && action !== 'back' && action !== 'confirm') return;
       if (this.rxPause) return this.pauseInput(action);
+      if (this.rxMenu) return this.menuInput(action);
       if (this.rxPop) {
         if (!this.rxWatching) this.popInput(action);
         return;
@@ -2269,6 +2281,12 @@ export class MapScene extends Phaser.Scene {
       this.busy = false;
       return;
     }
+    if (this.rxMenu) {
+      this.rxMenu = null;
+      this.busy = false;
+      this.rxView?.refresh();
+      return;
+    }
     if (this.report || this.busy || this.picker || this.legend || this.fieldNotes) return;
     const { session } = services();
     const view = session.nodeMenu();
@@ -2306,8 +2324,47 @@ export class MapScene extends Phaser.Scene {
       }
       this.scene.restart({ notice: res.text ?? undefined, focus: this.index });
     };
-    this.nodeMenuPanel = drawNodeMenu(this, view, label, blurb, pick, () => this.toggleNodeMenu());
     this.busy = true;
+    if (this.rxView) {
+      // New UI: the same cards, drawn by the New layer over the map.
+      const header = view.entries.find((v) => v.entry.kind === 'encounter');
+      const cards = view.entries.filter((v) => v.entry.kind !== 'encounter');
+      this.rxCard = null;
+      this.rxMenu = {
+        header: header?.entry.label ?? '',
+        cards: cards.map((v) => ({ kind: CATEGORY_LOOK[v.entry.category].word, color: `#${CATEGORY_LOOK[v.entry.category].color.toString(16).padStart(6, '0')}`, name: label(v), text: blurb(v), status: menuStatus(v), off: v.done || v.locked, must: !!v.entry.required })),
+        index: Math.max(0, cards.findIndex((v) => !v.done && !v.locked)),
+        pick: (k) => { const v = cards[k]; if (v && !v.done && !v.locked) pick(v); },
+      };
+      this.rxView.refresh();
+      return;
+    }
+    this.nodeMenuPanel = drawNodeMenu(this, view, label, blurb, pick, () => this.toggleNodeMenu());
+  }
+
+  private menuFocus(k: number): void {
+    const m = this.rxMenu;
+    if (!m || !(k >= 0 && k < m.cards.length) || k === m.index) return;
+    m.index = k;
+    this.rxView?.refresh();
+  }
+
+  /** A click: a card picks its stop (a done or locked one only takes the cursor); beside the cards closes the menu. */
+  private menuPick(k: number): void {
+    const m = this.rxMenu;
+    if (!m) return;
+    if (k < 0) return this.toggleNodeMenu();
+    this.menuFocus(k);
+    m.pick(k);
+  }
+
+  private menuInput(action: InputAction): void {
+    const m = this.rxMenu;
+    if (!m) return;
+    if (action === 'back') return this.toggleNodeMenu();
+    if (action === 'confirm') return m.pick(m.index);
+    const n = Math.max(1, m.cards.length);
+    this.menuFocus((m.index + (action === 'left' || action === 'up' ? n - 1 : 1)) % n);
   }
   private bracket: Phaser.GameObjects.Container | null = null;
 

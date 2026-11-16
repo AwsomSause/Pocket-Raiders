@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { CHANGELOG, ChangelogSchema, entriesSince, latestChangelogId, shouldShowChangelog } from '../../src/core/tools/changelog';
 import { applyPerfPreset, nextPerfPreset, PERF_ORDER } from '../../src/core/tools/perfPreset';
 import { buildBugReport, bugReportHeadline } from '../../src/core/tools/bugReport';
-import { localStats } from '../../src/core/tools/localStats';
+import { localStats, statTiles } from '../../src/core/tools/localStats';
 import { runDigest, validateReplay } from '../../src/core/tools/replay';
 import { isAssisted, markAssisted } from '../../src/core/tools/assisted';
 import { updateAvailable } from '../../src/core/tools/updateCheck';
@@ -13,7 +13,7 @@ import { backupDue } from '../../src/core/tools/backup';
 import { BOARD, boardCode, mergedBoard } from '../../src/core/tools/seedBoard';
 import { installPack, loadStoredPacks, MAX_PACKS, removePack, type PackStore } from '../../src/core/tools/modPacks';
 import { packSeeds, parseConfigPack } from '../../src/core/configPack';
-import { contentStatuses, problemEntries, statusLines } from '../../src/core/tools/contentStatusView';
+import { contentStatuses, problemEntries, statusBoard, statusLines } from '../../src/core/tools/contentStatusView';
 import { PreloadTracker, packOf } from '../../src/core/tools/preload';
 import { dashboardHtml, parseLines, summarize } from '../../src/quality/playtestDashboard';
 import { decodeSeedCode } from '../../src/core/seedCode';
@@ -116,6 +116,25 @@ describe('local stats (F221)', () => {
   it('is all zeros with no runs', () => {
     expect(localStats({ runHistory: [] })).toMatchObject({ runs: 0, winRate: 0, avgEncounters: 0, topTrainers: [] });
   });
+  it('lays the numbers out as eight tiles and one line of text', () => {
+    const up = (id: string) => id.toUpperCase();
+    const t = statTiles(localStats({ runHistory: [rec({ victory: true, encounters: 30 }), rec({}), rec({ assisted: true, archetypeId: 'blue' })] }), up, up);
+    expect(t.tiles).toHaveLength(8);
+    expect(t.tiles[0]).toEqual(['Runs', '3']);
+    expect(t.tiles[2]).toEqual(['Win rate', '33.3%']);
+    expect(t.tiles[3]).toEqual(['Longest run', '30']);
+    expect(t.tiles[6]).toEqual(['Top trainer', 'RED']);
+    expect(t.tiles[7]).toEqual(['Most used', 'PIKACHU']);
+    expect(t.text).toContain('Beaten most by RATTATA (3×).');
+    expect(t.text).toContain('Assisted runs: 1.');
+  });
+  it('with no runs the tiles show zeros and dashes', () => {
+    const t = statTiles(localStats({ runHistory: [] }), String, String);
+    expect(t.tiles[0]).toEqual(['Runs', '0']);
+    expect(t.tiles[6]).toEqual(['Top trainer', '–']);
+    expect(t.tiles[7]).toEqual(['Most used', '–']);
+    expect(t.text).not.toContain('Beaten most');
+  });
 });
 
 describe('update notice (F222) and backup reminder (F208)', () => {
@@ -198,6 +217,12 @@ describe('content status viewer (F210)', () => {
     const rank = { invalid: 0, disabled: 1, limited: 2, supported: 3 };
     for (let i = 1; i < bad.length; i++) expect(rank[bad[i - 1]!.status]).toBeLessThanOrEqual(rank[bad[i]!.status]);
     expect(bad.every((e) => e.status !== 'supported')).toBe(true);
+  });
+  it('a kind as a board row: a bar of what is supported and an OK or Check tag', () => {
+    const counts = { supported: 30, limited: 8, disabled: 2, invalid: 0 };
+    expect(statusBoard({ kind: 'species', counts, total: 40 })).toEqual({ title: 'Species', sub: '30 of 40 supported · limited 8 · disabled 2 · invalid 0', pct: 75, tag: 'OK' });
+    expect(statusBoard({ kind: 'move', counts: { ...counts, invalid: 1 }, total: 41 }).tag).toBe('Check');
+    expect(statusBoard({ kind: 'item', counts: { supported: 0, limited: 0, disabled: 0, invalid: 0 }, total: 0 }).pct).toBe(0);
   });
 });
 

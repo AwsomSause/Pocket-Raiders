@@ -29,7 +29,7 @@ import { paintBackdrop, type Skin as DSkin } from './dSkins';
 
 const DEPTH = 100;
 
-import { reduxOn } from './redux/stage';
+import { reduxOn, type ReduxCtx } from './redux/stage';
 import { mountPickerView, type PickerView } from './redux/pickerView';
 
 export interface PickerRow {
@@ -45,9 +45,17 @@ export interface PickerRow {
   mon?: { speciesId: string; shiny: boolean; hp: number; mark: string };
   /** A board row said outright (the New UI's Bond screen): the line under the name, a bar (0 to 100) and a tag. */
   board?: { title: string; sub: string; pct: number; tag: string };
+  /** A grid cell said outright (the New UI's Pokédex): its picture (atlas file) and the detail card's title and line. `off` is a "?" cell, `sil` a shadow. */
+  cell?: { file: string | null; title: string; body: string; off?: boolean; sil?: boolean };
+  /** The row's picture by asset id, for a row that draws none (the New UI's grid cells show it). */
+  art?: string;
 }
 
 export interface PickerConfig {
+  /** New UI: the room's own page, drawn in place of the rows (the Old look still draws the rows). */
+  page?: (c: ReduxCtx, index: number) => string;
+  /** New UI: how many columns the cursor moves across on the room's own page (1 unless said). */
+  pageCols?: number;
   /** Draw depth; scenes with lively layers (the Plaza crowd) put the menu above them. */
   depth?: number;
   title: string;
@@ -277,12 +285,16 @@ export class Picker implements PickerLike {
         problem: (i) => config.rows[i]?.problem ?? null,
         hint: (i) => config.rows[i]?.hint ?? '',
         item: (i) => config.rows[i]?.item,
+        art: (i) => config.rows[i]?.art,
         mon: (i) => config.rows[i]?.mon,
         board: (i) => config.rows[i]?.board,
+        cell: (i) => config.rows[i]?.cell,
         top: win?.top,
         tabs: config.tabs,
         canBack: Boolean(config.onBack),
         backLabel: config.backLabel,
+        page: config.page,
+        pageCols: config.pageCols,
         summary: () => (this.summary && config.inspect ? config.inspect(this.index) : null),
         pick: (i) => { if (this.closed) return; this.focus(i); this.confirm(); },
         hover: (i) => { if (!this.closed && !this.summary && i !== this.index && !config.rows[i]?.problem) this.focus(i, false); },
@@ -453,6 +465,7 @@ export class Picker implements PickerLike {
   }
 
   close(): void {
+    if (this.closed) return;
     this.closed = true;
     this.rx?.destroy();
     this.rx = null;

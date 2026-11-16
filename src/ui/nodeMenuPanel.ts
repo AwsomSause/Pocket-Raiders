@@ -27,7 +27,8 @@ export interface NodeMenuPanel {
   handle(action: InputAction): void;
 }
 
-function status(v: MenuEntryView): string {
+/** The word under a card: where the stop stands. */
+export function status(v: MenuEntryView): string {
   if (v.done) return 'Done';
   if (v.entry.required) return 'Required';
   if (v.locked) return 'Locked';

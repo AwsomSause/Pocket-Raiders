@@ -1,5 +1,5 @@
 import { BERRIES } from '../berries';
-import type { Content } from '../contentSchema';
+import { catalogIconId, type Content } from '../contentSchema';
 
 // Berry Bestiary (S422): every berry's effect, rarity, garden growing time and whether it only comes from cross-breeding.
 
@@ -14,6 +14,8 @@ export interface BerryEntry {
   crossBred: boolean;
   /** Holders can carry this many. */
   max: number | null;
+  /** The berry's picture (asset id), or null when the icon pack has none. */
+  icon: string | null;
 }
 
 const RANK = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
@@ -29,6 +31,7 @@ export function berryEntries(content: Content): BerryEntry[] {
       growStages: BERRIES.growStages[e.rarity] ?? null,
       crossBred: BERRIES.crossPool.includes(e.id),
       max: e.max,
+      icon: e.icon ? catalogIconId(e.icon) : null,
     }))
     .sort((a, b) => RANK.indexOf(a.rarity) - RANK.indexOf(b.rarity) || a.name.localeCompare(b.name));
 }

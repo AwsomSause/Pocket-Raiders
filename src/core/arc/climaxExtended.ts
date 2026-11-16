@@ -57,6 +57,60 @@ const dirOf = (run: RunState): Dir => {
 };
 const save = (run: RunState, d: Dir): void => { cutOf(run).director = d; };
 
+export interface ClimaxBoardRow {
+  name: string;
+  /** What the phase is ("Blackout · 2–3 fights", "Heal, revive one, save"), or the count so far while its fights run. */
+  sub: string;
+  state: 'done' | 'now' | 'next' | 'ahead';
+  /** 100 when done; the share of its fights won while a battle phase runs; else 0. */
+  pct: number;
+}
+export interface ClimaxBoard { region: string; rows: ClimaxBoardRow[]; /** Losses so far, and how many end the climax. */ shots: number; tries: number }
+
+/**
+ * The phase list as the player reads it, while an Extended Cut climax runs: every phase this run will play, in order,
+ * with where the run stands. Null for a Standard Cut run, before the climax begins and once it is over. Reads only.
+ */
+export function climaxBoard(run: Pick<RunState, 'expansion'>): ClimaxBoard | null {
+  const cut = run.expansion?.cut as Record<string, unknown> | undefined;
+  const dir = cut?.director as Partial<Dir> | undefined;
+  if (climaxCutOf(run) !== 'extended' || !dir) return null;
+  const region = typeof cut!.region === 'string' ? cut!.region : 'kanto';
+  const idx = Math.max(0, Number(dir.idx) || 0);
+  // A format that is not built is skipped by `nextStep`, so it is not a phase of this run.
+  const steps = climaxPhases(region).map((s, k) => ({ s, k })).filter(({ s }) => s.kind.kind !== 'format' || FORMATS[s.kind.id]);
+  const now = steps.findIndex(({ k }) => k >= idx);
+  if (now < 0) return null;
+  const rows = steps.map(({ s }, q): ClimaxBoardRow => {
+    const count = s.battles === '0' ? '' : s.battles === '1' ? '1 fight' : `${s.battles} fights`;
+    const what = s.label === '—' ? 'Story' : s.label === 'Rest' ? 'Heal, revive one, save' : s.label;
+    const need = q === now && typeof dir.need === 'number' && dir.need > 0 ? dir.need : 0;
+    const fought = need ? Math.max(0, Math.min(need, Number(dir.fought) || 0)) : 0;
+    return {
+      name: s.name,
+      sub: need ? `${what} · ${fought} of ${need} fights won` : [what, count].filter(Boolean).join(' · '),
+      state: q < now ? 'done' : q === now ? 'now' : q === now + 1 ? 'next' : 'ahead',
+      pct: q < now ? 100 : need ? Math.round((fought / need) * 100) : 0,
+    };
+  });
+  return { region, rows, shots: Math.max(0, Number(dir.shots) || 0), tries: SECOND_SHOT_TRIES };
+}
+
+export interface ShotNotice { title: string; body: string; button: string }
+
+/**
+ * What a lost climax battle means, for the screen to tell the player: the run before the loss and after it. Null when
+ * the loss spent no shot (a Standard Cut run, or a battle outside the climax). Reads only.
+ */
+export function secondShotNotice(before: Pick<RunState, 'expansion'>, after: Pick<RunState, 'expansion'>): ShotNotice | null {
+  if (climaxCutOf(after) !== 'extended') return null;
+  const shots = (run: Pick<RunState, 'expansion'>): number => Math.max(0, Number(((run.expansion?.cut as Record<string, unknown> | undefined)?.director as Partial<Dir> | undefined)?.shots) || 0);
+  const now = shots(after);
+  if (now <= shots(before)) return null;
+  if (now >= SECOND_SHOT_TRIES) return { title: 'The climax is lost', body: 'That was the Second Shot. The climax ends here with its worst ending, and the run goes on.', button: 'Go on' };
+  return { title: 'Second Shot', body: 'You lost, but the climax is not over. You go back to the last save point with your team patched up. One more loss ends the climax.', button: 'Try again' };
+}
+
 /** The climax begins: forgets the last climax's formats and starts at phase 0. Standard-cut runs do nothing. */
 /** Regions whose Extended Cut is wired. Formats with no content for a region skip themselves (`canStart`). */
 export const EXTENDED_REGIONS: readonly string[] = ['kanto', 'alola', 'paldea', 'kalos', 'galar', 'sinnoh', 'hoenn', 'johto', 'unova'];
