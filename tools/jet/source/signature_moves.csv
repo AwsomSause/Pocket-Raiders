@@ -38,3 +38,134 @@ galarian_steelix,Molten Coil,MOLTEN_COIL,Fire,Physical,90,100,10,0,single_adjace
 galarian_magcargo,Froth Burst,FROTH_BURST,Water,Special,85,100,10,0,single_adjacent,false,,Blasts the target with a churning burst of foam. 30% chance to raise the user's Defense by 1 stage.
 galarian_serperior,Regal Ribbon,REGAL_RIBBON,Fairy,Special,130,90,5,0,single_adjacent,false,,Lashes the target with shimmering ribbons. Lowers the user's Sp. Atk by 2 stages after use.
 hoopno,Ring Toss,RING_TOSS,Psychic,Physical,80,100,10,0,single_adjacent,false,,"Hurls its spinning hoop, which hypnotizes the target as it flies. 30% chance to make the target drowsy, so it falls asleep at the end of the next turn."
+skyrake,Rake Dive,RAKE_DIVE,Flying,Physical,70,100,15,0,single_adjacent,false,,Dives talons-first. High critical-hit ratio.
+mega_fearow,Drill Gale,DRILL_GALE,Flying,Physical,100,95,10,0,single_adjacent,false,,Spins beak-first like a drill. Ignores the target's stat changes.
+venomcoil,Fang Coil,FANG_COIL,Poison,Physical,90,100,10,0,single_adjacent,false,,"Bites and coils around the target. Traps it for 4–5 turns, dealing 1/8 of its max HP each turn."
+mega_sandslash,Tunnel Drill,TUNNEL_DRILL,Ground,Physical,90,100,10,0,single_adjacent,false,,Drills through the ground and the target. Ignores Protect.
+mega_nidoqueen,Royal Decree,ROYAL_DECREE,Fairy,Special,90,100,10,0,single_adjacent,false,,Raises the Defense and Sp. Def of the user's allies by 1 stage.
+mega_nidoking,Venom Horn Charge,VENOM_HORN_CHARGE,Poison,Physical,100,100,10,0,single_adjacent,false,,Charges horn-first. 30% chance to badly poison the target.
+mega_ninetales,Ninefold Flame,NINEFOLD_FLAME,Fire,Special,90,100,10,0,all_adjacent_foes,false,,Nine tongues of flame strike at once. Hits all opponents. 20% chance to burn each target.
+serenatuff,Dream Ballad,DREAM_BALLAD,Fairy,Special,85,100,10,0,single_adjacent,false,sound,Sings a drowsy ballad. Sound-based. 20% chance to make the target fall asleep.
+mega_vileplume,Corpse Bloom,CORPSE_BLOOM,Poison,Special,100,90,10,0,all_adjacent_foes,false,,Releases a choking stench. Hits all opponents. 30% chance to poison each target.
+mycelord,Spore Grave,SPORE_GRAVE,Ghost,Physical,90,100,10,0,single_adjacent,false,,Buries the target in ghostly spores. The user restores HP equal to half the damage dealt.
+mega_mycelord,Spore Cathedral,SPORE_CATHEDRAL,Ghost,Physical,110,90,5,0,single_adjacent,false,,Raises a cathedral of ghostly mushrooms around the target. 30% chance to make the target fall asleep.
+mega_venomoth,Eye-Spot Flash,EYE_SPOT_FLASH,Psychic,Special,90,100,10,0,single_adjacent,false,,Flashes the eye patterns on its wings. 30% chance to confuse the target.
+imperion,Panther Strike,PANTHER_STRIKE,Dark,Physical,85,100,10,0,single_adjacent,false,,Pounces from the shadows. High critical-hit ratio.
+arcanox,Mane Inferno,MANE_INFERNO,Fire,Physical,100,100,10,0,single_adjacent,false,,Charges wrapped in its burning mane. 20% chance to burn the target.
+mega_arcanox,Solar Charge,SOLAR_CHARGE,Fire,Physical,120,100,5,0,single_adjacent,false,,"A blazing charge. Its power isn't reduced in rain, and it thaws the user."
+mega_poliwrath,Whirlpool Punch,WHIRLPOOL_PUNCH,Water,Physical,90,100,10,0,single_adjacent,false,punch,A punch wrapped in a spinning current. Punching move. Lowers the target's Speed by 1 stage.
+dynamax_tentacruel,G-Max Toxitide,G_MAX_TOXITIDE,Water,Max,varies,never misses,NaN,0,single_adjacent,false,,Floods the field with toxic water. Damages and poisons every opponent for 4 turns.
+mega_golem,Avalanche Roll,AVALANCHE_ROLL,Rock,Physical,100,90,10,0,single_adjacent,false,,Rolls through the target like a landslide. 30% chance to make the target flinch.
+solstallion,Sunrise Gallop,SUNRISE_GALLOP,Fire,Physical,90,100,10,0,single_adjacent,false,,A blazing charge at dawn's speed. Raises the user's Speed by 1 stage.
+mega_solstallion,Corona Lance,CORONA_LANCE,Psychic,Physical,110,100,5,0,single_adjacent,false,,Charges horn-first wreathed in sunfire. Sets harsh sunlight for 3 turns.
+katanetch_d,Leek Katana,LEEK_KATANA,Fighting,Physical,90,100,10,0,single_adjacent,false,,Draws its katana-sharp leek in one swift cut. Slicing move. High critical-hit ratio.
+mega_katanetch_d,Daishō Strike,DAISH_STRIKE,Fighting,Physical,50,100,10,0,single_adjacent,false,,Strikes once with each blade. Slicing move. Hits twice. High critical-hit ratio.
+glacierge,Tusk Floe,TUSK_FLOE,Ice,Physical,85,100,10,0,single_adjacent,false,,Rams with its ice tusk. Sets snow for 3 turns.
+mega_glacierge,Aurora Crash,AURORA_CRASH,Ice,Special,100,100,5,0,single_adjacent,false,,Crashes down like a falling aurora. Sets Aurora Veil for 3 turns.
+abysshell,Abyss Lash,ABYSS_LASH,Dark,Physical,90,100,10,0,single_adjacent,false,,Lashes out with its long tongue. Pulls the target closer: the target can't switch out next turn.
+cryostone,Glacier Shard,GLACIER_SHARD,Ice,Physical,90,100,10,0,single_adjacent,false,,Launches a jagged shard of glacier ice. High critical-hit ratio.
+somnambulor,Night Terror,NIGHT_TERROR,Ghost,Special,90,100,10,0,single_adjacent,false,,Haunts the target's dreams. Double power if the target is asleep.
+mesmerian,Golden Pendulum,GOLDEN_PENDULUM,Psychic,Special,85,100,10,0,single_adjacent,false,,Swings a glowing pendulum. 30% chance to confuse the target.
+crustar,Claw Haymaker,CLAW_HAYMAKER,Fighting,Physical,100,90,10,0,single_adjacent,false,punch,A huge swinging punch. Punching move. 30% chance to make the target flinch.
+mega_crustar,Iron Haymaker,IRON_HAYMAKER,Steel,Physical,110,90,5,0,single_adjacent,false,punch,A punch from armored gauntlets. Punching move. Breaks through Protect.
+abysskrab,Abyss Pincer,ABYSS_PINCER,Dark,Physical,90,100,10,0,single_adjacent,false,,Clamps with a scythe-like claw. High critical-hit ratio.
+mega_abysskrab,Abyssal Bite,ABYSSAL_BITE,Dark,Physical,100,100,10,0,single_adjacent,false,bite,Bites with its toothed claw. Biting move. 20% chance to lower the target's Defense by 1 stage.
+electrolux,Ring Discharge,RING_DISCHARGE,Electric,Special,90,100,10,0,all_adjacent_foes,false,,Fires a charged ring. Hits all opponents. 20% chance to paralyze each target.
+ancient_exeggutor,Petrified Timber,PETRIFIED_TIMBER,Rock,Physical,100,90,10,0,single_adjacent,false,,Crushes the target with a stone-hard branch. 30% chance to lower the target's Speed.
+nightmare_exeggutor,Hollow Wail,HOLLOW_WAIL,Ghost,Special,90,100,10,0,single_adjacent,false,sound,Its three heads wail together. Sound-based. 30% chance to lower the target's Sp. Def.
+bonemaw,Ossuary Crush,OSSUARY_CRUSH,Ghost,Physical,90,100,10,0,single_adjacent,false,,Swings a bone wreathed in ghost-fire. 20% chance to make the target flinch.
+mega_bonemaw,Soulfire Bone,SOULFIRE_BONE,Ghost,Physical,110,95,5,0,single_adjacent,false,,Throws a bone burning with blue soulfire. 30% chance to burn the target.
+fumegon,Smokestack Blast,SMOKESTACK_BLAST,Fire,Special,90,100,10,0,single_adjacent,false,,Belches flaming smog. 30% chance to poison or burn the target.
+dynamax_rhyperior,G-Max Magma Drill,G_MAX_MAGMA_DRILL,Rock,Max,varies,never misses,NaN,0,single_adjacent,false,,A drill strike from a volcano. Lava flows onto the opponent's side and damages non-Rock-types for 4 turns.
+mega_blissey,Halo Blessing,HALO_BLESSING,Fairy,Status,varies,never misses,5,0,self_or_field,false,,Restores half of the max HP of the user and its allies and cures their status conditions.
+dynamax_tangrowth,G-Max Overgrowth,G_MAX_OVERGROWTH,Grass,Max,varies,never misses,NaN,0,single_adjacent,false,,Vines erupt across the field. Sets Grassy Terrain and traps the opponents for 4 turns.
+dracoral,Coral Bloom,CORAL_BLOOM,Fairy,Special,85,100,10,0,single_adjacent,false,,Coral bursts from the water around the target. The user restores 1/4 of its max HP.
+venomdra,Toxic Typhoon,TOXIC_TYPHOON,Poison,Special,90,100,10,0,single_adjacent,false,,A spiraling torrent of venom. 30% chance to badly poison the target.
+mega_kingdra,Royal Maelstrom,ROYAL_MAELSTROM,Water,Special,100,100,10,0,single_adjacent,false,,Summons a whirlpool crowned with spray. Traps the target for 4–5 turns.
+kingfisher,Antler Dive,ANTLER_DIVE,Water,Physical,95,100,10,0,single_adjacent,false,,Dives from the air antlers-first. High critical-hit ratio.
+mimejest,Jester's Juggle,JESTER_S_JUGGLE,Fairy,Special,80,100,10,0,single_adjacent,false,,Throws glowing juggling balls. Hits 2 times. 20% chance to confuse the target.
+pantomime,Invisible Wall,INVISIBLE_WALL,Ghost,Special,90,100,10,0,single_adjacent,false,,Slams the target with a wall nobody can see. Lowers the target's Speed by 1 stage.
+mimeguard,Crystal Bulwark,CRYSTAL_BULWARK,Steel,Status,varies,never misses,10,0,self_or_field,false,,Raises a crystal shield. Sets Reflect and Light Screen for 3 turns.
+empressia,Frozen Decree,FROZEN_DECREE,Ice,Special,90,100,10,0,single_adjacent,false,,Freezes the air with a royal command. 20% chance to freeze the target.
+tauradon,Stampede Charge,STAMPEDE_CHARGE,Ground,Physical,100,100,10,0,single_adjacent,false,,Charges like a whole herd. The user takes 1/4 of the damage dealt as recoil.
+kabutyrant,Fossil Scythe,FOSSIL_SCYTHE,Rock,Physical,95,100,10,0,single_adjacent,false,,Slashes with scythes of ancient stone. Slicing move. High critical-hit ratio.
+snowman_snorlax,Snowball Slam,SNOWBALL_SLAM,Ice,Physical,90,100,10,0,single_adjacent,false,,Body-slams like a falling snowdrift. Sets snow for 3 turns.
+snorlord,Landslide Nap,LANDSLIDE_NAP,Ground,Physical,100,100,10,0,all_adjacent_foes,false,,Rolls over in its sleep like a landslide. Hits all adjacent Pokémon.
+mega_articuno,Aurora Wing,AURORA_WING,Ice,Special,100,100,5,0,all_adjacent_foes,false,,Sweeps a wing of frozen light. Hits all opponents. 20% chance to freeze each target.
+mega_zapdos,Storm Crown,STORM_CROWN,Electric,Special,110,90,5,0,single_adjacent,false,,Calls down a crown of lightning. Never misses in rain. 30% chance to paralyze the target.
+mega_moltres,Phoenix Flare,PHOENIX_FLARE,Fire,Special,110,90,5,0,single_adjacent,false,,Engulfs the target in sunfire. 30% chance to burn the target.
+mega_mewtwo_z,Psyblade Rush,PSYBLADE_RUSH,Psychic,Physical,100,100,5,0,single_adjacent,false,,Slashes with blades of psychic power. Slicing move. High critical-hit ratio.
+mega_mew_z,Genesis Spiral,GENESIS_SPIRAL,Dragon,Special,110,100,5,0,single_adjacent,false,,Spins a nebula around the target. Raises the user's highest stat by 1 stage.
+ferretitan,Burrow Slam,BURROW_SLAM,Normal,Physical,90,100,10,0,single_adjacent,false,,Bursts up from underground. +1 priority on the first turn after it switches in.
+mega_ferretitan,Spiral Burrow,SPIRAL_BURROW,Ground,Physical,100,100,10,0,single_adjacent,false,,Burrows with its drill tail and strikes from below. Ignores Protect.
+astraladin,Four-Star Barrage,FOUR_STAR_BARRAGE,Fighting,Physical,25,100,10,0,single_adjacent,false,punch,Throws four starlit punches. Punching move. Hits 4 times.
+mega_astraladin,Supernova Fist,SUPERNOVA_FIST,Fighting,Physical,100,100,5,0,single_adjacent,false,punch,A punch that bursts like a star. Punching move. Hits the target's weaker defense.
+widowraith,Lantern Snare,LANTERN_SNARE,Ghost,Special,85,100,10,0,single_adjacent,false,,Lures the target with ghostly light and snares it in silk. The target can't switch out for 3 turns.
+mega_widowraith,Wraith Brood,WRAITH_BROOD,Ghost,Special,100,100,10,0,single_adjacent,false,,Releases ghostly spiderlings. Sets Sticky Web on the opponent's side.
+mega_crobat,Echo Screech,ECHO_SCREECH,Flying,Special,90,100,10,0,single_adjacent,false,sound,Fires rings of ultrasonic sound. Sound-based. Never misses.
+abyssolume,Lure Overload,LURE_OVERLOAD,Electric,Special,95,100,10,0,all_adjacent_foes,false,,Overloads its lure with power. Hits all opponents. 20% chance to paralyze each target.
+togemuse,Muse Ribbon,MUSE_RIBBON,Fairy,Special,85,100,10,0,single_adjacent,false,,Wraps the target in glowing ribbons. Raises the Sp. Atk of the user and its allies by 1 stage.
+mega_togemuse,Celestial Verse,CELESTIAL_VERSE,Psychic,Special,110,100,5,0,single_adjacent,false,,Recites a verse written in starlight. Raises the user's Sp. Def by 1 stage.
+oculatu,Prophet's Gaze,PROPHET_S_GAZE,Psychic,Special,90,100,10,0,single_adjacent,false,,"Stares through time at the target. Can't miss, and ignores the target's stat changes."
+mega_oculatu,Thousand Eyes,THOUSAND_EYES,Psychic,Special,100,100,10,0,single_adjacent,false,,Every eye on its wings flashes at once. Lowers the target's evasion by 1 stage.
+mega_bellossom,Blossom Waltz,BLOSSOM_WALTZ,Grass,Special,90,100,10,0,single_adjacent,false,,Dances in a whirl of petals. Dance move. Raises the user's Sp. Atk by 1 stage.
+petrarbor,Root Slam,ROOT_SLAM,Grass,Physical,100,100,10,0,single_adjacent,false,,Slams down with root-like arms. The user restores 1/4 of its max HP.
+mega_politoed,Kingdom Chorus,KINGDOM_CHORUS,Water,Special,95,100,10,0,single_adjacent,false,sound,Croaks a royal anthem. Sound-based. Sets rain for 3 turns.
+zephyloom,Pollen Gust,POLLEN_GUST,Fairy,Special,80,100,15,0,all_adjacent_foes,false,,A gust full of glittering pollen. Hits all opponents. 10% chance to put each target to sleep.
+mega_jumpluff,Cotton Storm,COTTON_STORM,Grass,Special,90,100,10,0,all_adjacent_foes,false,,A storm of cotton spores. Lowers the Speed of all opponents by 1 stage.
+heliolux,Solar Bloom,SOLAR_BLOOM,Fire,Special,90,100,10,0,single_adjacent,false,,Blooms with the power of the sun. Fires instantly in harsh sunlight.
+mega_heliolux,Noon Flare,NOON_FLARE,Fire,Special,110,100,5,0,single_adjacent,false,,Releases the full heat of noon. Sets harsh sunlight for 3 turns.
+dracoptera,Wyrm Buzz,WYRM_BUZZ,Dragon,Special,90,100,10,0,single_adjacent,false,sound,Buzzes its wings at dragon frequency. Sound-based. 10% chance to lower the target's Sp. Def.
+mega_dracoptera,Dragonstorm Wings,DRAGONSTORM_WINGS,Dragon,Special,110,90,5,0,all_adjacent_foes,false,,Whips up a storm with its wings. Hits all opponents.
+mirejaw,Mire Chomp,MIRE_CHOMP,Grass,Physical,90,100,10,0,single_adjacent,false,,Bites and drags the target into the swamp. Lowers the target's Speed by 1 stage.
+mega_mirejaw,Swamp Island,SWAMP_ISLAND,Grass,Physical,110,100,10,0,single_adjacent,false,,Rises from the swamp like an island and crashes down. Sets Grassy Terrain.
+noctivane,Omen Plume,OMEN_PLUME,Ghost,Special,90,100,10,0,single_adjacent,false,,Scatters feathers of ill omen. 30% chance to lower the target's accuracy.
+mega_noctivane,Sigil Curse,SIGIL_CURSE,Ghost,Special,100,100,10,0,single_adjacent,false,,Burns a cursed sigil into the target. It can't use the same move twice in a row for 3 turns.
+mega_honchkrow,Boss's Order,BOSS_S_ORDER,Dark,Physical,100,100,10,0,single_adjacent,false,,"Strikes, then orders the target away: forces it to switch out."
+lamentra,Lament,LAMENT,Ghost,Special,90,100,10,0,single_adjacent,false,sound,Sings a sorrowful lament. Sound-based. Lowers the target's Sp. Atk by 1 stage.
+mega_lamentra,Requiem Aria,REQUIEM_ARIA,Ghost,Special,110,100,5,0,all_adjacent_foes,false,sound,Sings a requiem. Sound-based. Hits all opponents.
+eniglyph,Glyph Burst,GLYPH_BURST,Psychic,Special,85,100,10,0,single_adjacent,false,,Fires glowing letters at the target. Its type matches the user's most effective type against the target.
+mega_eniglyph,Rune Orbit,RUNE_ORBIT,Rock,Special,100,100,10,0,single_adjacent,false,,Glyphs spin around it and strike. Raises the user's Defense by 1 stage.
+rebounder,Rebound Blow,REBOUND_BLOW,Psychic,Physical,varies,100,10,0,single_adjacent,false,,-4 priority. Deals 1.5× the damage of the last attack that hit the user this turn.
+bastionox,Fortress Cannon,FORTRESS_CANNON,Steel,Physical,100,90,10,0,single_adjacent,false,,Fires shells from its battlements. Sets Stealth Rock on the opponent's side.
+mega_bastionox,Siege Barrage,SIEGE_BARRAGE,Steel,Physical,120,90,5,0,single_adjacent,false,,Fires every cannon at once. Breaks screens.
+dunescorpion,Dune Sting,DUNE_STING,Ground,Physical,90,100,10,0,single_adjacent,false,,Strikes from under the sand with its stinger. 30% chance to poison the target.
+mega_dunescorpion,Quicksand Sting,QUICKSAND_STING,Ground,Physical,100,100,10,0,single_adjacent,false,,Drags the target into quicksand. It can't switch out for 3 turns.
+razorwing,Razor Glide,RAZOR_GLIDE,Flying,Physical,85,100,10,0,single_adjacent,false,,Glides through the target with bladed wings. Slicing move. High critical-hit ratio.
+mega_razorwing,Scythe Wings,SCYTHE_WINGS,Flying,Physical,100,100,10,0,single_adjacent,false,,Slices with scythe-shaped wings. Slicing move. High critical-hit ratio.
+mega_gliscor,Moonlit Fang,MOONLIT_FANG,Ground,Physical,90,100,10,0,single_adjacent,false,,Bites from above. The user restores HP equal to half the damage dealt.
+fangmarshal,Marshal Bite,MARSHAL_BITE,Fairy,Physical,90,100,10,0,single_adjacent,false,bite,Bites with huge fangs. Biting move. Lowers the target's Attack by 1 stage.
+mega_fangmarshal,Glowing Fangs,GLOWING_FANGS,Fairy,Physical,110,100,5,0,single_adjacent,false,bite,Bites with glowing fangs. Biting move. Ignores the target's stat changes.
+thalassodon,Spine Tsunami,SPINE_TSUNAMI,Water,Physical,100,100,10,0,single_adjacent,false,,Rams with a wave of spines. Sets Spikes on the opponent's side.
+mega_thalassodon,Crystal Breaker,CRYSTAL_BREAKER,Dragon,Physical,120,90,5,0,single_adjacent,false,,Smashes with crystal spines. Removes the target's screens.
+bastuckle,Moss Ferment,MOSS_FERMENT,Grass,Status,varies,never misses,10,0,self_or_field,false,,Drinks fermented berry juice. Restores half its max HP and raises its Defense and Sp. Def by 1 stage.
+mega_bastuckle,Hillside Press,HILLSIDE_PRESS,Rock,Physical,varies,100,10,0,single_adjacent,false,,Presses down with its mountainous shell. Uses the user's Defense instead of Attack. Power 100.
+nightharrow,Phantom Frost,PHANTOM_FROST,Ice,Physical,80,100,10,0,single_adjacent,false,,Slashes with frozen ghost claws. Slicing move. +1 priority if the target is at full HP.
+mega_nightharrow,Whiteout Slash,WHITEOUT_SLASH,Ice,Physical,100,100,10,0,single_adjacent,false,,Slashes from inside a whiteout. Slicing move. Sets snow for 3 turns.
+mega_magcargo,Caldera Burst,CALDERA_BURST,Fire,Special,110,90,5,0,all_adjacent_foes,false,,Its shell erupts. Hits all opponents and sets Stealth Rock.
+mega_mamoswine,Glacial Stampede,GLACIAL_STAMPEDE,Ice,Physical,120,90,5,0,all_adjacent_foes,false,,Stampedes like a glacier breaking loose. Hits all opponents.
+atollord,Reef Mind,REEF_MIND,Psychic,Special,90,100,10,0,single_adjacent,false,,Its brain-coral core glows. Restores 1/4 of the max HP of the user and its allies.
+bombardier,Barrel Barrage,BARREL_BARRAGE,Steel,Special,90,100,10,0,single_adjacent,false,,Fires shells from every barrel. Pulse move. Hits 2 times.
+mega_bombardier,Broadside,BROADSIDE,Steel,Special,120,90,5,0,all_adjacent_foes,false,,Fires every cannon. Pulse move. Hits all opponents.
+abyssillery,Phantom Ink,PHANTOM_INK,Ghost,Special,90,100,10,0,single_adjacent,false,,Sprays glowing ink. 50% chance to lower the target's accuracy.
+mega_abyssillery,Kraken Vortex,KRAKEN_VORTEX,Water,Special,110,90,5,0,single_adjacent,false,,Drags the target into a dark whirlpool. Traps it for 4–5 turns.
+glaciargift,Frozen Present,FROZEN_PRESENT,Ice,Special,90,100,10,0,single_adjacent,false,,Throws a gift box of ice. 30% chance to freeze the target.
+mega_glaciargift,Diamond Dust,DIAMOND_DUST,Ice,Special,100,100,5,0,all_adjacent_foes,false,,Releases a shower of diamond dust. Hits all opponents. Sets snow for 3 turns.
+yuleflare,Gift Blaze,GIFT_BLAZE,Fire,Physical,90,100,10,0,single_adjacent,false,,Throws a burning gift sack. 20% chance to burn the target.
+mega_yuleflare,Yule Bonfire,YULE_BONFIRE,Fire,Physical,110,100,5,0,single_adjacent,false,,Dives wrapped in festive flames. Raises the user's Speed by 1 stage.
+sleighdrake,Sleigh Rush,SLEIGH_RUSH,Steel,Physical,90,100,10,0,single_adjacent,false,,Slides into the target on steel runners. Raises the user's Speed by 1 stage.
+mega_sleighdrake,Avalanche Run,AVALANCHE_RUN,Ice,Physical,110,100,5,0,single_adjacent,false,,Rides down on the target like an avalanche. Can't miss in snow.
+cerberound,Triple Inferno,TRIPLE_INFERNO,Fire,Special,30,100,10,0,single_adjacent,false,,Each head breathes fire. Hits 3 times. Each hit has a 10% chance to burn.
+mega_donphan,Tread Crush,TREAD_CRUSH,Ground,Physical,100,100,10,0,single_adjacent,false,,Rolls over the target on armored treads. Removes hazards from the user's side.
+spectant,Spirit Antlers,SPIRIT_ANTLERS,Ghost,Physical,90,100,10,0,single_adjacent,false,,Charges with ghost-flame antlers. 30% chance to confuse the target.
+mega_spectant,Phantom Crown,PHANTOM_CROWN,Psychic,Special,110,100,5,0,single_adjacent,false,,Its crystal antlers flare. Lowers the target's Sp. Def by 1 stage.
+masterpiece,Painted World,PAINTED_WORLD,Psychic,Special,90,100,10,0,single_adjacent,false,,Paints the battlefield. Changes the terrain to match the type of the user's last-used move.
+mega_masterpiece,Rainbow Stroke,RAINBOW_STROKE,Normal,Special,100,100,5,0,single_adjacent,false,,A sweeping stroke of every color. Its type changes to the type that's most effective against the target.
+mega_hitmontop,Cyclone Kick,CYCLONE_KICK,Fighting,Physical,90,100,10,0,single_adjacent,false,,Spins into a whirlwind of kicks. Removes hazards from the user's side.
+bovinia,Heartfelt Charge,HEARTFELT_CHARGE,Fairy,Physical,90,100,10,0,single_adjacent,false,,Charges with its curled horns. The user and its allies restore 1/8 of their max HP.
+mega_raikou,Thunder Fang Strike,THUNDER_FANG_STRIKE,Electric,Physical,100,100,10,0,single_adjacent,false,,Strikes at lightning speed. +1 priority on the turn it switches in.
+mega_entei,Eruption Charge,ERUPTION_CHARGE,Fire,Physical,110,100,5,0,single_adjacent,false,,Charges like a volcano erupting. Power is higher the more HP the user has.
+mega_suicune,Aurora Spring,AURORA_SPRING,Water,Special,100,100,10,0,single_adjacent,false,,Sprays purifying water. Removes the target's stat boosts and cures the user's status.
+mega_lugia,Abyssal Aeroblast,ABYSSAL_AEROBLAST,Flying,Special,110,95,5,0,single_adjacent,false,,Fires a vortex from the deep. High critical-hit ratio.
+mega_ho_oh,Rainbow Flare,RAINBOW_FLARE,Fire,Physical,120,100,5,0,single_adjacent,false,,Dives in rainbow flame. 50% chance to burn the target.
+chronoceli,Season's Turn,SEASON_S_TURN,Psychic,Special,100,100,5,0,single_adjacent,false,,Turns the season. Its type and effect change with the user's form.

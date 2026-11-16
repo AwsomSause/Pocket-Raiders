@@ -1,0 +1,1 @@
+{"textures": [{"image": "widowraith-mega.png", "format": "RGBA8888", "size": {"w": 115, "h": 120}, "scale": 1, "frames": [{"filename": "0001.png", "rotated": false, "trimmed": false, "sourceSize": {"w": 115, "h": 120}, "spriteSourceSize": {"x": 0, "y": 0, "w": 115, "h": 120}, "frame": {"x": 0, "y": 0, "w": 115, "h": 120}}]}], "meta": {"app": "tools/jet/make-jet-sprites.py"}}

@@ -976,6 +976,30 @@
         "corviknight-gmax"
       ],
       "type": "flying"
+    },
+    "g-max-toxitide": {
+      "forms": [
+        "tentacruel-gmax"
+      ],
+      "type": "water",
+      "effects": {
+        "status": "psn"
+      }
+    },
+    "g-max-magma-drill": {
+      "forms": [
+        "rhyperior-gmax"
+      ],
+      "type": "rock"
+    },
+    "g-max-overgrowth": {
+      "forms": [
+        "tangrowth-gmax"
+      ],
+      "type": "grass",
+      "effects": {
+        "bind": true
+      }
     }
   }
 }
