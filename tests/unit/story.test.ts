@@ -107,6 +107,7 @@ describe('story foundation: random streams', () => {
   const NO_W1 = { resonance: { minParty: 3, bonus: 1 }, bleed: { maxStacks: 1, perStack: 0, moves: ['none'] }, curse: { bonus: 1, followUpTypes: ['ghost'] }, hazardBurst: { fraction: 0 }, luck: { meterBonus: 0, meterCap: 1, chainBonus: 0, chainCap: 1, alphaChance: 0, alphaLevels: 0, alphaMoney: 1 }, bench: { minFriendship: 255 }, play: { combo: { bonus: 1 }, aim: { moves: ['none'], accuracy: { miss: 1, ok: 1, good: 1, perfect: 1 } }, shout: { damage: { miss: 1, ok: 1, good: 1, perfect: 1 } }, throw: { catch: { miss: 1, ok: 1, good: 1, perfect: 1 }, weakenedBelow: 0 }, deal: { below: 0, money: 1, classes: [] }, mindRead: { types: ['none'] }, grudge: { boost: {} }, spectator: { chance: 0, boost: {}, names: ['x'] }, arena: { every: 99, fraction: 0, interact: 0, types: {} } }, underdog: { levels: 99, xpBonus: 1 } };
   const noHyper = buildContent({
     ...structuredClone(RAW_CONTENT),
+    jetTeamSwaps: {}, // Jet Pokédex species in boss and Evil Team lists came later too
     // The ten Story Overhaul species (S15) join the wild pools and would change old seeds' encounters.
     species: (RAW_CONTENT.species as { id: string; evolutions?: { to: string }[]; evolvesFrom?: string | null }[])
       .filter((sp) => !STORY_SPECIES.has(sp.id))
