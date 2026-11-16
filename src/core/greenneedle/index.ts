@@ -32,6 +32,7 @@ import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
+import { isLastStage, ltArrive, ltDawn, ltPage, ltSit, ltTokens } from './longtable';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -73,6 +74,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{smuggle:')) text = smuggleTokens(content, run, text);
   if (text.includes('{siege:')) text = siegeTokens(content, run, text);
   if (text.includes('{karp:')) text = karpTokens(run, text);
+  if (text.includes('{lt:')) text = ltTokens(run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
   // gn.46: the All-Star bracket.
@@ -163,6 +165,7 @@ export interface GnHost {
 export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage: number): boolean {
   // gn.16: the fighter won from behind (the first Pokémon able to fight is at half its HP or less).
   // gn.33: the tide is low (the Sunken City's causeway is out of the water).
+  if (c.test === 'lastStage') { const camp = getCampaign(content, run.campaignId); return isLastStage(content, run, camp.stagesPerRegion, camp.regularRegions); }
   if (c.test === 'lowTide') return tideOf(content, run) === 'low';
   if (c.test === 'highTide') return tideOf(content, run) === 'high';
   if (c.test === 'hurtLead') { const lead = run.party.find((m) => m.hp > 0); return !!lead && lead.hp * 2 <= maxHp(content, lead); }
@@ -640,6 +643,14 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return kcEvolve(run);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
+    case 'ltArrive':
+      return ltArrive(run);
+    case 'ltPage':
+      return ltPage(run);
+    case 'ltSit':
+      return ltSit(run, e.n ?? 0);
+    case 'ltDawn':
+      return ltDawn(content, run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
