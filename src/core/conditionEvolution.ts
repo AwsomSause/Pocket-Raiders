@@ -7,6 +7,7 @@ import type { PokemonInstance, RunState } from './state';
 import { periodOf } from './clock';
 import { friendshipReady } from './friendship';
 import { bondOf } from './bond';
+import jetSpeciesJson from '../data/jetSpecies.json';
 import { heartbondLevel, heartbondScore } from './story2/heartbond';
 
 export type EvoCondition =
@@ -41,6 +42,8 @@ export interface ConditionEvolution {
   stones?: string[];
   /** The stone route also needs high friendship (Eevee to Espeon / Umbreon). */
   stoneFriendship?: boolean;
+  /** The stone route also needs this (Ancient Exeggutor: Exeggcute knowing Ancient Power). */
+  stoneCondition?: EvoCondition;
 }
 
 /** Toxel's nature groups (Jet Pokédex): Low Key becomes Vine Riff, Amped becomes Electric Oncore. */
@@ -100,6 +103,8 @@ export const CONDITION_EVOLUTIONS: ConditionEvolution[] = [
   { from: 'noctowl', to: 'oracowl-day', minLevel: 42, stones: ['sun-stone'] },
   { from: 'swellow', to: 'tempestwing', minLevel: 46, condition: { kind: 'weather', weather: 'rain' }, stones: ['water-stone'] },
   { from: 'kilowattrel', to: 'megawattrel', minLevel: 52, condition: { kind: 'weather', weather: 'rain' }, stones: ['water-stone'] },
+  // Jet Pokédex batch 5 (docs/status/jet-pokedex-batch5.md): built by tools/jet/build-jet-species.ts.
+  ...(jetSpeciesJson.conditionEvolutions as ConditionEvolution[]),
 ];
 
 /** Moves whose uses are counted on the Pokémon (`moveCounts`) because a route needs them. */
@@ -162,6 +167,6 @@ export function conditionEvolutionTarget(content: Content, mon: PokemonInstance,
 /** Species a stone from the Bag turns this Pokémon into through a time / weather route (Sun Stone: Eevee to Espeon at high friendship). */
 export function stoneRouteTargets(content: Content, mon: PokemonInstance, itemId: string): string[] {
   return CONDITION_EVOLUTIONS
-    .filter((e) => e.from === mon.speciesId && e.stones?.includes(itemId) && mon.level >= e.minLevel && content.species.has(e.to) && (!e.stoneFriendship || friendshipReady(content, mon)))
+    .filter((e) => e.from === mon.speciesId && e.stones?.includes(itemId) && mon.level >= e.minLevel && content.species.has(e.to) && (!e.stoneFriendship || friendshipReady(content, mon)) && (!e.stoneCondition || conditionMet(content, e.stoneCondition, mon, null, undefined)))
     .map((e) => e.to);
 }

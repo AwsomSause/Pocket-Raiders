@@ -252,11 +252,11 @@ export function mergeSpecies(base: unknown[], custom: unknown[], evolutions: { f
 }
 
 /** Small field changes on existing species (Eevee now evolves from Tuftin). */
-export function patchSpecies(species: unknown[], patches: { id: string; evolvesFrom: string }[]): unknown[] {
+export function patchSpecies(species: unknown[], patches: { id: string; evolvesFrom: string; evolutionStage?: number }[]): unknown[] {
   const by = new Map(patches.map((p) => [p.id, p]));
   return species.map((s) => {
     const p = by.get((s as { id: string }).id);
-    return p ? { ...(s as object), evolvesFrom: p.evolvesFrom } : s;
+    return p ? { ...(s as object), evolvesFrom: p.evolvesFrom, ...(p.evolutionStage ? { evolutionStage: p.evolutionStage } : {}) } : s;
   });
 }
 
@@ -303,7 +303,7 @@ export function applySpeciesFixes(species: unknown[], fixes: SpeciesFixes): unkn
 
 export const RAW_CONTENT: RawContent = {
   species: applySpeciesFixes(
-    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species, ...jetSpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions, ...jetSpeciesJson.evolutions]), storySpeciesJson.patches),
+    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species, ...jetSpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions, ...jetSpeciesJson.evolutions]), [...storySpeciesJson.patches, ...jetSpeciesJson.patches]),
     speciesFixesJson,
   ),
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).

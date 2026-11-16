@@ -32,5 +32,5 @@
   "evolutionGifts": [
     { "from": "nincada", "to": "ninjask", "species": "shedinja", "needsItem": "poke-ball" }
   ],
-  "removeEvolutions": { "dartrix": ["decidueye"] }
+  "removeEvolutions": { "dartrix": ["decidueye"], "spearow": ["fearow"] }
 }
