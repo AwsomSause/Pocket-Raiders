@@ -1,0 +1,2839 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "st-final-choice",
+   "name": "The Final Choice",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.pr/mela",
+     "boss.giacomo"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "glint"
+   },
+   "intro": "The Academy's yard. Sunday night. Five trucks, in a row, engines idling. Forty helmets. The clock over the door. On five bonnets: Giacomo, Mela, Atticus, Ortega, Eri. In rows: forty, in helmets. Odin, eleventh. A gap, where a thirteen-year-old with a volcano was. At the gate: the Director. No wig. A folder. At the back, hood up: Penny. A laptop, shut. In the doorway, with a mop: Mr. Upshaw. In the dorm windows: faces. A great many. In pyjamas. On the road outside: a van with no plates. The Director: \"I'm required to read this. It's dated Monday. I've read it to myself eleven times and I don't believe a word of it.\" He holds up the notice. He doesn't read it. The Director: \"I've a folder. It was empty. It's got one sheet in it now, and that sheet says you're the aggressors, and it's signed by a man who isn't here. I can't find anybody who was.\" Mela, from the truck: \"We were.\" The Director: \"Yes. I know. I believe you. I'm not allowed to believe you. I need it on paper.\" At the back, a laptop opens. Shuts. Giacomo: \"Rule five. Nobody's talked out of it. We're here. We're loud. Somebody beat us or somebody look.\" Everybody turns to the squad of one. Fulu's the only one who's been on both sides of the gate.",
+   "choices": [
+    {
+     "label": "Step into the yard. \"By your rules, then. All five.\"",
+     "success": {
+      "text": "You step into the yard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-final-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-plan-giacomo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk to the gate. Hand the Director a map.",
+     "success": {
+      "text": "You cross the yard. To the gate.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-turn-warn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk to the doorway. \"Mr. Upshaw. Would you tell him?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "upshaw-seen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You walk to the doorway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-final-academy",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-academy-mop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb onto a sixth bonnet: your own.",
+     "requires": [
+      {
+       "kind": "evil",
+       "rank": 5,
+       "has": "confided"
+      }
+     ],
+     "success": {
+      "text": "\"You don't want it ended.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-final-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-bonnet"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "penny",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-told-penny",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Penny's not at the back. She's on a bonnet, with the five. Hood down."
+    },
+    {
+     "id": "wants",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-told-wants",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The five know she wants it ended. They've not decided whether they do."
+    },
+    {
+     "id": "odin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "odin-walked-in",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Odin's been in the building once. His legs know they can."
+    }
+   ]
+  },
+  {
+   "id": "st-plan-giacomo",
+   "name": "Phase 1: Giacomo",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giacomo"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "One after another. In the yard. Under the clock. Each boss fights from the bonnet; each Starmobile's the last of the team. Giacomo: \"Segin Squad! Drop the beat!\"",
+   "choices": [
+    {
+     "label": "Battle Giacomo.",
+     "success": {
+      "text": "Giacomo's Starmobile idles behind.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.giacomo",
+       "team": [
+        "murkrow",
+        "pawniard",
+        "kingambit",
+        "revavroom"
+       ],
+       "name": "Giacomo",
+       "size": 4,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "st-plan-mela"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-plan-mela",
+   "name": "Phase 1: Mela",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/mela"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Giacomo, beaten: \"...That's the last verse, then. I know how it goes now.\" Between each, a rest. Arven, at the wall, with foil parcels: Arven: \"I'm not with them. I made too much.\" Mela: \"I was the one who shouted. So I go second. I'm not hiding behind anybody.\"",
+   "choices": [
+    {
+     "label": "Battle Mela.",
+     "success": {
+      "text": "Mela's Starmobile idles behind.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/mela",
+       "team": [
+        "torkoal",
+        "houndoom",
+        "armarouge",
+        "revavroom"
+       ],
+       "name": "Mela",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "st-plan-atticus"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-plan-atticus",
+   "name": "Phase 1: Atticus",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/atticus"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Mela, beaten: \"Good. Good. I've been wanting somebody to make me sit down for a year and a half.\" Between each, a rest. Arven, at the wall, with foil parcels: Arven: \"I'm not with them. I made too much.\" Atticus: \"Forty helmets. By hand. Don't scratch them.\"",
+   "choices": [
+    {
+     "label": "Battle Atticus.",
+     "success": {
+      "text": "Atticus's Starmobile idles behind.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/atticus",
+       "team": [
+        "skuntank",
+        "muk",
+        "toxtricity",
+        "revavroom"
+       ],
+       "name": "Atticus",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "st-plan-ortega"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-plan-ortega",
+   "name": "Phase 1: Ortega",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ortega"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Atticus, beaten: \"I'll need to know where to put them.\" Between each, a rest. Arven, at the wall, with foil parcels: Arven: \"I'm not with them. I made too much.\" Ortega: \"I could've bought this right! I never did! Remember that!\"",
+   "choices": [
+    {
+     "label": "Battle Ortega.",
+     "success": {
+      "text": "Ortega's Starmobile idles behind.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.ortega",
+       "team": [
+        "azumarill",
+        "dachsbun",
+        "wigglytuff",
+        "revavroom"
+       ],
+       "name": "Ortega",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "st-plan-eri"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-plan-eri",
+   "name": "Phase 1: Eri",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/eri"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Ortega, beaten: \"Torque was awful.\" He's crying. He's fourteen-and-a-half. Between each, a rest. Arven, at the wall, with foil parcels: Arven: \"I'm not with them. I made too much.\" Eri: \"I'm the big one. I stand at the front. Come on, then.\"",
+   "choices": [
+    {
+     "label": "Battle Eri.",
+     "success": {
+      "text": "Eri's Starmobile idles behind.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/eri",
+       "team": [
+        "toxicroak",
+        "passimian",
+        "lucario",
+        "annihilape",
+        "revavroom"
+       ],
+       "name": "Eri",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "st-plan-rule4"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-plan-rule4",
+   "name": "Phase 2: Rule Four",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.penny",
+     "boss.giacomo",
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Eri, beaten: \"...I'm tired. Can I say that now? I'm so tired.\" Five bosses. Beaten. By the Code, each steps down. They take off their helmets. One at a time. Atticus last. Giacomo: \"That's it. That's the rule. We're done.\" Forty kids, in rows. Nobody's told them what to do next. There's never been a next. Odin: \"...Do we go in?\" The Director, at the gate, with a notice he's not read: \"If you'd like to. It's your school.\" Odin: \"Is it?\" They go home. Not in. Home. They aren't happy. They're done. It's forty children walking out of a yard in the dark, carrying helmets. At the gate: a girl in a hood. She watches every one of them go past. She doesn't come in. Penny, to you, very low: \"I got what I planned. They're safe. They've stopped.\" A pause. Penny: \"I didn't plan for what it'd look like.\"",
+   "choices": [
+    {
+     "label": "Turn round.",
+     "success": {
+      "text": "The engines are in the yard. Unattended.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-plan-buyers"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rang",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "penny-rang",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mela's the first to reach her. At the gate. She doesn't make her come in."
+    }
+   ]
+  },
+  {
+   "id": "st-plan-buyers",
+   "name": "Phase 3: The Buyers",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-office-worker-man",
+     "trainer.pr/rich_m"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "The engines are in the yard. Unattended. A van's waiting for exactly this. Nascour, stepping through the gate, unhurried: \"Thank you. You've done what I couldn't: you've parted them from their engines, by their own consent. I'd offered to buy. This is cleaner.\" Harrow first. Nascour doesn't fight. He doesn't need to.",
+   "choices": [
+    {
+     "label": "Hold the yard.",
+     "success": {
+      "text": "You hold the yard alone. Five trucks; one of you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.drive/paldean-sv-office-worker-man",
+       "team": [
+        "oranguru",
+        "farigiraf",
+        "kingambit"
+       ],
+       "name": "Harrow",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "st-plan-engines"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "boots",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-boots",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Thirty pairs of the wrong boots, at the gate. You can tell them at a glance: there's a Q inside every heel. Nothing in a Star helmet can surprise you tonight."
+    },
+    {
+     "id": "file",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "unova-sealed",
+        "spikemuth-bought",
+        "potown-empty"
+       ]
+      }
+     ],
+     "notice": "Harrow, to you, pleasantly: \"I've read your file. You understand institutions. We should talk.\""
+    }
+   ]
+  },
+  {
+   "id": "st-plan-engines",
+   "name": "Phase 3: The Engines",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-worker"
+    ],
+    "pokemon": "revavroom",
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Up to three Starmobiles: yours to save, in the time there is. The rest: whoever comes back.",
+   "choices": [
+    {
+     "label": "Save what you can.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "mela-thanked",
+         "atLeast": 1,
+         "atMost": 99
+        },
+        {
+         "kind": "flag",
+         "key": "eri-asked",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You get three. Mela's first over the wall. Eri's second. The bases come down. Tents, folded. A banner, rolled. Odin's homework's marked. At last. The Director does it himself, over a week, with Mr. Upshaw's box on his desk. Full marks. Eighteen months late. There's a comment: \"See me. Not for a telling-off. — C.\" Paldea's quiet. The hills have no banners. The forty go back to class, in ones and twos, over a month. Not as a team. As forty first-years, a year and a half late. Penny is at the gate. She doesn't come in. Giacomo: \"I know how it goes now.\" He finishes the song. Mela: \"I've been wanting somebody to make me sit down.\" Atticus: \"I'll need to know where to put them.\" Ortega: \"Torque was awful.\" Eri: \"I'm so tired.\" Odin: full marks, eighteen months late. Yusuf does his volcano. It works. Mr. Upshaw: nobody asks him. The Director marks seventy-one Fridays himself. Harrow was beaten in the yard. The first-year is still in the stall. Arven: \"I made too much.\" The box is on the Director's desk. The engines: up to three saved.",
+       "effects": [
+        {
+         "kind": "evil",
+         "beat": true
+        },
+        {
+         "kind": "evil",
+         "end": "allied"
+        },
+        {
+         "kind": "flag",
+         "key": "star-ending-plan",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "star-dissolved",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "engines-saved",
+         "amount": 3
+        },
+        {
+         "kind": "flag",
+         "key": "paldea-quiet",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "mela-thanked",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You get three. Mela's first over the wall. The bases come down. Tents, folded. A banner, rolled. Odin's homework's marked. At last. The Director does it himself, over a week, with Mr. Upshaw's box on his desk. Full marks. Eighteen months late. There's a comment: \"See me. Not for a telling-off. — C.\" Paldea's quiet. The hills have no banners. The forty go back to class, in ones and twos, over a month. Not as a team. As forty first-years, a year and a half late. Penny is at the gate. She doesn't come in. Giacomo: \"I know how it goes now.\" He finishes the song. Mela: \"I've been wanting somebody to make me sit down.\" Atticus: \"I'll need to know where to put them.\" Ortega: \"Torque was awful.\" Eri: \"I'm so tired.\" Odin: full marks, eighteen months late. Yusuf does his volcano. It works. Mr. Upshaw: nobody asks him. The Director marks seventy-one Fridays himself. Harrow was beaten in the yard. The first-year is still in the stall. Arven: \"I made too much.\" The box is on the Director's desk. The engines: up to three saved.",
+       "effects": [
+        {
+         "kind": "evil",
+         "beat": true
+        },
+        {
+         "kind": "evil",
+         "end": "allied"
+        },
+        {
+         "kind": "flag",
+         "key": "star-ending-plan",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "star-dissolved",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "engines-saved",
+         "amount": 3
+        },
+        {
+         "kind": "flag",
+         "key": "paldea-quiet",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "eri-asked",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You get three. Eri comes back over the wall. The bases come down. Tents, folded. A banner, rolled. Odin's homework's marked. At last. The Director does it himself, over a week, with Mr. Upshaw's box on his desk. Full marks. Eighteen months late. There's a comment: \"See me. Not for a telling-off. — C.\" Paldea's quiet. The hills have no banners. The forty go back to class, in ones and twos, over a month. Not as a team. As forty first-years, a year and a half late. Penny is at the gate. She doesn't come in. Giacomo: \"I know how it goes now.\" He finishes the song. Mela: \"I've been wanting somebody to make me sit down.\" Atticus: \"I'll need to know where to put them.\" Ortega: \"Torque was awful.\" Eri: \"I'm so tired.\" Odin: full marks, eighteen months late. Yusuf does his volcano. It works. Mr. Upshaw: nobody asks him. The Director marks seventy-one Fridays himself. Harrow was beaten in the yard. The first-year is still in the stall. Arven: \"I made too much.\" The box is on the Director's desk. The engines: up to three saved.",
+       "effects": [
+        {
+         "kind": "evil",
+         "beat": true
+        },
+        {
+         "kind": "evil",
+         "end": "allied"
+        },
+        {
+         "kind": "flag",
+         "key": "star-ending-plan",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "star-dissolved",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "engines-saved",
+         "amount": 3
+        },
+        {
+         "kind": "flag",
+         "key": "paldea-quiet",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You get three. Captain Zeb, fourteen, comes over the wall with a spanner; he never went home, because he lives in the garage. The bases come down. Tents, folded. A banner, rolled. Odin's homework's marked. At last. The Director does it himself, over a week, with Mr. Upshaw's box on his desk. Full marks. Eighteen months late. There's a comment: \"See me. Not for a telling-off. — C.\" Paldea's quiet. The hills have no banners. The forty go back to class, in ones and twos, over a month. Not as a team. As forty first-years, a year and a half late. Penny is at the gate. She doesn't come in. Giacomo: \"I know how it goes now.\" He finishes the song. Mela: \"I've been wanting somebody to make me sit down.\" Atticus: \"I'll need to know where to put them.\" Ortega: \"Torque was awful.\" Eri: \"I'm so tired.\" Odin: full marks, eighteen months late. Yusuf does his volcano. It works. Mr. Upshaw: nobody asks him. The Director marks seventy-one Fridays himself. Harrow was beaten in the yard. The first-year is still in the stall. Arven: \"I made too much.\" The box is on the Director's desk. The engines: up to three saved.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "star-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-dissolved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "engines-saved",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "paldea-quiet",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-engine-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ortega's Revavroom won't be linked against her will. The Cassiopeia Engine's a ring of four, at most."
+    }
+   ]
+  },
+  {
+   "id": "st-turn-warn",
+   "name": "By Post",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Forty children will be expelled, by post. It's the ending the man who deleted the reports would've wanted. The file stays empty.",
+   "choices": [
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "You read it again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-turn-warn-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back.",
+     "success": {
+      "text": "You put the map back in your pocket.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-turn-warn-2",
+   "name": "By Post",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Forty children will be expelled, by post. It's the ending the man who deleted the reports would've wanted. The file stays empty. Are you sure?",
+   "choices": [
+    {
+     "label": "I'm sure.",
+     "success": {
+      "text": "A folded map: five hills, five crosses.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-turn-map"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back.",
+     "success": {
+      "text": "You put the map back in your pocket.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-turn-map",
+   "name": "Phase 1: The Map",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "You cross the yard. To the gate. A folded map: five hills, five crosses. The Director: \"What's this.\" \"Where they are.\" The Director: \"I didn't ask for—\" He looks at it. The Director: \"With this, the notices can be served. That's what's been stopping it; there was no address.\" He looks at you. The Director: \"You were in there. Six weeks. They gave you a helmet.\" From the trucks: Mela: \"...Fulu?\"",
+   "choices": [
+    {
+     "label": "Turn round.",
+     "success": {
+      "text": "She's the one who comes down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-turn-eri"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-turn-eri",
+   "name": "Phase 2: Eri",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/eri"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "She's the one who comes down. She stands at the front. That's what she's for. Eri: \"Somebody took our stuff. For a year. Rule one. And you've just handed him the only thing we had that was ours. Where we are.\"",
+   "choices": [
+    {
+     "label": "Battle her.",
+     "success": {
+      "text": "She's frightened. She's always frightened. She's very good.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/eri",
+       "team": [
+        "toxicroak",
+        "passimian",
+        "lucario",
+        "annihilape",
+        "revavroom"
+       ],
+       "name": "Eri",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "st-turn-post"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-turn-post",
+   "name": "Phase 3: By Post",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Eri, beaten: \"...I thought you were somebody who stayed after.\" A letterbox. Forty of them. A white envelope through each. \"The Academy regrets to inform you that, following the incident of [DATE] and continued non-attendance—\" It's a form letter. It's the one Harrow drafted, eighteen months ago, and left in a drawer. The Director signs them. He has to. There's a record; there's an address; there's no evidence on the other side. He signs forty, and then he sits with the pen in his hand for a long time. The Director: \"I came here to find out what happened. I've just finished what the last man started. With his stationery.\"",
+   "choices": [
+    {
+     "label": "Go to the gate.",
+     "success": {
+      "text": "The bases are known.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-turn-buyers"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-turn-buyers",
+   "name": "Phase 4: The Buyers",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m",
+     "trainer.gentleman"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "The bases are known. The engines are in them. The children have been sent home. Nascour, at the Director's shoulder, with a brochure: \"A full scholarship. For each. My organisation prizes exactly the initiative your school's just punished. I believe I'll find them receptive.\" Some are. One in three. The game doesn't say which.",
+   "choices": [
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "The forty are out for good. The file stays empty. Odin keeps doing the work. He posts it anyway, under a door he's not allowed through. Your Pokémon are each a step less sure of you, for now; it recovers. You've a Spare Helmet: \"For whoever's next. — A.\" It was yours. Atticus doesn't ask for it back. The Cassiopeia Engine's in the Region of Doom, whole. It was built from all five. Penny is abroad again. Giacomo writes nothing. Mela shouts at a letterbox. Atticus has forty helmets, in a cupboard. Ortega buys nothing. Still. Eri: \"Somebody who stayed after.\" Odin posts it anyway. Yusuf does his volcano at home. Mr. Upshaw: still nobody asks. Until you do. The Director signs forty, with the last man's stationery. Harrow is \"Head of Admissions,\" with receptive applicants. Tully recruits. The first-year gets a brochure. Arven makes forty; there's nowhere to take them. The box is in a cupboard, still. The engines are taken.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": -1,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "star-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-expelled",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "spare-helmet",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-box-rescind",
+   "name": "The Box",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "star-ending-turn",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "star-rescinded",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-janitor",
+     "trainer.gentleman"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "A janitor's cupboard. Mr. Upshaw still has the box. He still hasn't been asked.",
+   "choices": [
+    {
+     "label": "Ask him.",
+     "success": {
+      "text": "Mr. Upshaw: \"Eighteen months. I thought somebody'd come. I'd it all in order.\" He lifts the box. Mr. Upshaw: \"It's schoolwork. It's got their names on. Top right. Every sheet, every Friday. That's attendance. They never missed a week.\" The Director, with the box, reading the dates: \"They weren't absent. They were outside.\" He rescinds forty letters. By hand. He takes each one himself.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "star-rescinded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "upshaw-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "door",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-door",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Director: \"They're on my staff's mark sheets. You can't expel someone you gave a seven.\""
+    }
+   ]
+  },
+  {
+   "id": "st-academy-mop",
+   "name": "Phase 1: The Mop",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-janitor",
+     "trainer.gentleman"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "\"Mr. Upshaw. Would you tell him?\" The yard's silent. Forty helmets turn. Mr. Upshaw: \"...Tell him what.\" \"What you saw.\" Mr. Upshaw: \"Nobody's asked.\" The Director, from the gate: \"I'm asking. I didn't know there was anyone to ask. I'm so sorry. I've walked past you every morning for a year. I said 'good morning.' I never said 'were you here.'\" He leans the mop on the wall. Carefully. It's a good mop.",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "He talks.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-academy-hours"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-academy-hours",
+   "name": "Phase 2: Two Hours",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-janitor",
+     "trainer.gentleman",
+     "trainer.pr/mela"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "He talks. It's the longest speech there is, and it isn't shortened. You may sit. Mr. Upshaw: \"I do the east corridor at eight. So I saw the bags. Every morning, a bag in the bin by 1-G. Different bag. I'd fish it out and put it on the peg.\" Mr. Upshaw: \"I do the canteen at one. So I saw who wasn't in it. There's a lad ate in the boiler room for a term. I left the light on for him.\" Mr. Upshaw: \"I do the hall on Fridays, late. So I was outside Mr. Harrow's door, the night. The light was on. I looked in, to say I'd lock up. He'd the reports up. I know the form; it's green. He was going down them. Click. Click. Nineteen minutes. I counted, 'cause the buffer's on a timer.\" Mr. Upshaw: \"And I was in the yard. The day. Emptying the bins. Forty of 'em, in rows. They never touched those three. The little one with the big boots said one thing.\" The Director: \"What did she say?\" He looks at Mela. She nods. Mr. Upshaw: \"She said: 'We told the school. We're telling you. That's everybody told.'\" Silence. Mr. Upshaw: \"That's all it was. It wasn't a threat. It was a receipt.\" And then he fetches the box. Mr. Upshaw: \"Seventy-one Fridays. Under the staffroom door. I'd nowhere to send it. It's got names on.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "The Director takes the box.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-academy-apology"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-academy-apology",
+   "name": "Phase 3: The Apology",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "The Director: \"That's a record. A witness, and seventy-one weeks of dated work. I can act on that.\" He tears the notice in half. He doesn't make a show of it. He reads it himself, to the yard. He's written it on the back of the notice, in pencil, just now: \"On behalf of this Academy. You told us forty-one times. We deleted it. You warned us what you'd do. We deleted that. You did it, and harmed nobody, and we wrote you down as the ones at fault. Every part of that was ours. None of it was yours. You're reinstated. All of you. As of eighteen months ago.\" He looks up. The Director: \"And you may keep the helmets. I'd not ask you to pretend it didn't happen.\" Odin: \"...As us?\" The Director: \"As you.\"",
+   "choices": [
+    {
+     "label": "The gate.",
+     "success": {
+      "text": "They come anyway.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-academy-buyers"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "seventh",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-seventh",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Penny's hood comes down. Atticus hands her a helmet. It's the forty-second. It's got Achird on."
+    }
+   ]
+  },
+  {
+   "id": "st-academy-buyers",
+   "name": "Phase 4: The Buyers",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "boss.drive/paldean-sv-office-worker-man",
+     "trainer.pr/rich_m"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "They come anyway. The engines are in the yard. But the yard's not empty. Nascour: \"A touching scene. I'd hoped to arrive after it.\" The Director, taking off his cardigan: \"You're on school grounds without a visitor's badge. Sup.\" The five bosses hold the trucks. They fight beside you. Harrow, to the Director, reasonably: \"You'll understand, as a head. One protects the reputation.\" The Director: \"I've just read out the school's reputation in a yard. It was two paragraphs. You wrote most of it.\"",
+   "choices": [
+    {
+     "label": "Battle beside the Director.",
+     "success": {
+      "text": "You and the Director, side by side. It's won. Team Star's a school club. It's got a room: the old 1-G. It's got a budget. It's got a truck in the car park, with a permit. The five bases stay up as field classrooms. Giacomo's maths is on the timetable; he teaches it, to the Academy's first-years, in four-four. Mr. Upshaw is asked. For two hours. And then for his opinion on the new anti-bullying form, which he gives: \"Make it paper. So there's a copy.\" The forty-one are restored from Penny's copies and the server's originals. They're read. Each one's answered. In writing. Eighteen months late. Penny is in the yard. Hood down. Report no. 40's read aloud. She wrote it. Giacomo teaches double maths. In four-four. What Mela shouted is on the record. It was a receipt. Atticus makes the club's kit. Ortega has a permit for a truck. Eri stands at the front. Somebody stands next to her. Odin is back in class. In the helmet. Nobody says a word. Yusuf wins the fair. Star's in the front row, loud. Mr. Upshaw: two hours. And a box. The Director read it himself. In pencil. Harrow: \"You wrote most of it.\" Tully gives a statement. Nobody made him. The first-year sits in 1-G. Arven is the club's cook, and denies it. The box is evidence. The engines are parked, with a permit.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "star-ending-academy",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-reinstated",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "upshaw-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-club",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.drive/paldean-sv-office-worker-man",
+       "team": [
+        "farigiraf",
+        "kingambit",
+        "gardevoir",
+        "metagross"
+       ],
+       "format": "doubles",
+       "name": "Harrow, and Nascour's lead",
+       "ally": "oranguru",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "boots",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-boots",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Thirty pairs of the wrong boots, at the gate. You can tell them at a glance: there's a Q inside every heel. Nothing in a Star helmet can surprise you tonight."
+    }
+   ]
+  },
+  {
+   "id": "st-own-bonnet",
+   "name": "Phase 1: A Sixth Bonnet",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.penny",
+     "boss.giacomo"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "\"You don't want it ended.\" To the back of the yard. To a hood. \"You want it kept. You just can't be the one who keeps it. Give it to me. I'll be the one in the building.\" Penny: \"...You'd be Big Boss? In daylight?\" Giacomo: \"Hang on. Rule four. Nobody's Big Boss unless they've—\" \"Then I'll earn it. By your rules. All five. And her.\"",
+   "choices": [
+    {
+     "label": "Step down off the bonnet.",
+     "success": {
+      "text": "The five. But they're not fighting to lose. They're fighting to see.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-giacomo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-own-giacomo",
+   "name": "Phase 2: Giacomo",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giacomo"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Giacomo: \"Segin Squad! Drop the beat!\"",
+   "choices": [
+    {
+     "label": "Battle Giacomo.",
+     "success": {
+      "text": "They're not fighting to lose. They're fighting to see.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.giacomo",
+       "team": [
+        "murkrow",
+        "pawniard",
+        "kingambit",
+        "revavroom"
+       ],
+       "name": "Giacomo",
+       "size": 4,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "st-own-mela"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-own-mela",
+   "name": "Phase 2: Mela",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/mela"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Mela: \"If you're going to stand in front of us, I want to know you can.\"",
+   "choices": [
+    {
+     "label": "Battle Mela.",
+     "success": {
+      "text": "They're not fighting to lose. They're fighting to see.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/mela",
+       "team": [
+        "torkoal",
+        "houndoom",
+        "armarouge",
+        "revavroom"
+       ],
+       "name": "Mela",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "st-own-atticus"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-own-atticus",
+   "name": "Phase 2: Atticus",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/atticus"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Atticus: \"Forty helmets. By hand. Don't scratch them.\"",
+   "choices": [
+    {
+     "label": "Battle Atticus.",
+     "success": {
+      "text": "They're not fighting to lose. They're fighting to see.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/atticus",
+       "team": [
+        "skuntank",
+        "muk",
+        "toxtricity",
+        "revavroom"
+       ],
+       "name": "Atticus",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "st-own-ortega"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-own-ortega",
+   "name": "Phase 2: Ortega",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ortega"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Ortega: \"I could've bought this right! I never did! Remember that!\"",
+   "choices": [
+    {
+     "label": "Battle Ortega.",
+     "success": {
+      "text": "They're not fighting to lose. They're fighting to see.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.ortega",
+       "team": [
+        "azumarill",
+        "dachsbun",
+        "wigglytuff",
+        "revavroom"
+       ],
+       "name": "Ortega",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "st-own-eri"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-own-eri",
+   "name": "Phase 2: Eri",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/eri"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Eri: \"I'm the big one. I stand at the front. Come on, then.\"",
+   "choices": [
+    {
+     "label": "Battle Eri.",
+     "success": {
+      "text": "They're not fighting to lose. They're fighting to see.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/eri",
+       "team": [
+        "toxicroak",
+        "passimian",
+        "lucario",
+        "annihilape",
+        "revavroom"
+       ],
+       "name": "Eri",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 0.5
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "st-own-penny"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-own-penny",
+   "name": "Phase 2: Penny",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "pokemon": "sylveon",
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "And then the sixth. Penny, coming forward. Hood down. No voice changer. A laptop under one arm, and she puts it on the ground: Penny: \"I'm not good at this part. I wrote a speech. It was eleven pages. Giacomo said cut it to one line. So: we were here first, and you looked away.\" Penny: \"I'm going to battle you now. I've planned for you to be better than me.\"",
+   "choices": [
+    {
+     "label": "Battle Penny.",
+     "success": {
+      "text": "Her Sylveon's last.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.penny",
+       "team": [
+        "umbreon",
+        "vaporeon",
+        "jolteon",
+        "flareon",
+        "leafeon",
+        "sylveon"
+       ],
+       "name": "Penny",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "st-own-nascour"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "seventh",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-seventh",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Penny's hood's down. Atticus hands her a helmet. It's the forty-second. It's got Achird on."
+    },
+    {
+     "id": "rang",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "penny-rang",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mela's the first to reach her."
+    }
+   ]
+  },
+  {
+   "id": "st-own-nascour",
+   "name": "Phase 3: The Buyers",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Penny, beaten: \"Okay. Yeah. Okay.\" She's smiling at the ground. Penny: \"I've wanted to give this to someone since the ferry.\" Nascour, at the gate: \"A change of management. I've a standing offer. It transfers.\" \"They're not for sale.\" Nascour: \"The last one who told me that was fourteen and shouting. I'd hoped you'd have a different answer.\" Forty kids. Five bosses. One Director, in a cardigan, who's just worked out which side of the gate he's on: they stand behind you. It's the one battle in the nine regions where he fights himself.",
+   "choices": [
+    {
+     "label": "Battle Nascour.",
+     "success": {
+      "text": "He doesn't hurry.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/rich_m",
+       "team": [
+        "gardevoir",
+        "xatu",
+        "dusclops",
+        "walrein",
+        "blaziken",
+        "metagross"
+       ],
+       "name": "Nascour",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "st-own-rule5"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "boots",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-boots",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Thirty pairs of the wrong boots, at the gate. You can tell them at a glance: there's a Q inside every heel. Nothing in a Star helmet can surprise you tonight."
+    }
+   ]
+  },
+  {
+   "id": "st-own-rule5",
+   "name": "Phase 4: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Nascour, beaten, unhurried: \"I'm not angry. I said that. I find I'm something. I'll have to look up the word.\" A yard. Forty kids. Five trucks. A school with its doors open. Four decisions. The first: rule five.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "Nobody gets talked out of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-rule5-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-helmets"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Strike it.",
+     "success": {
+      "text": "It comes off the permission slip. Penny watches it go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-rule5-struck",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-helmets"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rewrite it: \"Nobody gets talked out of it. Anybody can be asked.\"",
+     "success": {
+      "text": "No member can be ordered. Every Operation's put to a vote of the squad that'd do it. It's slow. It's never once betrayed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-rule5-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-helmets"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-own-helmets",
+   "name": "Phase 4: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/atticus"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "The second: the helmets.",
+   "choices": [
+    {
+     "label": "On.",
+     "success": {
+      "text": "On.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-helmets-on",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-engines"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Off.",
+     "success": {
+      "text": "Off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-helmets-off",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-engines"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Whoever wants.",
+     "success": {
+      "text": "Each one's got a \"legs\" meter now: how near the building they can get. The team's judged on whether it goes up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-helmets-whoever",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-engines"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-own-engines",
+   "name": "Phase 4: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ortega",
+     "boss.drive/paldean-sv-worker"
+    ],
+    "pokemon": "revavroom",
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "The third: the engines.",
+   "choices": [
+    {
+     "label": "Keep them linked.",
+     "success": {
+      "text": "The ring holds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-engines-linked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-building"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Unlink them. Ask the five Revavroom if they want to keep going.",
+     "success": {
+      "text": "They rev. Five Revavroom that chose it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-engines-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-building"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sell one.",
+     "success": {
+      "text": "Funds for a long time. Ortega never speaks to you again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-engines-sold",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-building"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-own-building",
+   "name": "Phase 4: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "The fourth: the building.",
+   "choices": [
+    {
+     "label": "Stay out.",
+     "success": {
+      "text": "The hills.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-building-out",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-star"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back in.",
+     "success": {
+      "text": "The old 1-G.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-building-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-star"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Both: a school with tents, and tents with a school.",
+     "success": {
+      "text": "The only headquarters there is with a bell, a timetable, and a Director who's nominally in charge of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-building-both",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-own-star"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-own-star",
+   "name": "Phase 4: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/atticus"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Atticus, with a tape measure: \"I'll need your head again. The forty-first was a spare. A Big Boss's wants a star on.\"",
+   "choices": [
+    {
+     "label": "\"Same as theirs.\"",
+     "success": {
+      "text": "He nods. He's pleased. He'd have made it the same anyway. Team Star's yours: the smallest team in the game, and the one that'd follow anywhere. Funds: Ortega's allowance and a sandwich fund. Heat: almost none; they're children, and nobody raids a school. Loyalty: the highest there is. They don't follow orders. They follow whoever stayed after. Five bases; one room in a school; a car park. And the flaw: they're kids. There's homework. There's a bedtime. It's the oddest team there's ever been: one that can't lie, won't steal, and has to be back by nine. Penny is your Executive. On the phone, mostly. Giacomo: Music and Sums. Mela: Fire. Atticus makes a forty-second. With a star. Ortega: Engines. Eri: the Front. Odin: your first Lead, and head boy. Yusuf: the Workshop's youngest. Never sent on a job. Mr. Upshaw: the Listening Post. The Director is nominally in charge. Harrow was beaten. Reasonably. Tully: not let in, not turned away. The first-year has a helmet two sizes too big. Arven: the Mess. He denies it. The box is in the base, on a shelf, labelled. The engines were asked. They rev.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "star-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-paldea",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No star.\"",
+     "success": {
+      "text": "He nods, and puts the tape measure away. Team Star's yours: the smallest team in the game, and the one that'd follow anywhere. Funds: Ortega's allowance and a sandwich fund. Heat: almost none; they're children, and nobody raids a school. Loyalty: the highest there is. They don't follow orders. They follow whoever stayed after. Five bases; one room in a school; a car park. And the flaw: they're kids. There's homework. There's a bedtime. It's the oddest team there's ever been: one that can't lie, won't steal, and has to be back by nine. Penny is your Executive. On the phone, mostly. Giacomo: Music and Sums. Mela: Fire. Atticus makes a forty-second. With a star. Ortega: Engines. Eri: the Front. Odin: your first Lead, and head boy. Yusuf: the Workshop's youngest. Never sent on a job. Mr. Upshaw: the Listening Post. The Director is nominally in charge. Harrow was beaten. Reasonably. Tully: not let in, not turned away. The first-year has a helmet two sizes too big. Arven: the Mess. He denies it. The box is in the base, on a shelf, labelled. The engines were asked. They rev.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "star-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-paldea",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You choose.\"",
+     "success": {
+      "text": "He looks at you a long time. He doesn't say what he's chosen. Team Star's yours: the smallest team in the game, and the one that'd follow anywhere. Funds: Ortega's allowance and a sandwich fund. Heat: almost none; they're children, and nobody raids a school. Loyalty: the highest there is. They don't follow orders. They follow whoever stayed after. Five bases; one room in a school; a car park. And the flaw: they're kids. There's homework. There's a bedtime. It's the oddest team there's ever been: one that can't lie, won't steal, and has to be back by nine. Penny is your Executive. On the phone, mostly. Giacomo: Music and Sums. Mela: Fire. Atticus makes a forty-second. With a star. Ortega: Engines. Eri: the Front. Odin: your first Lead, and head boy. Yusuf: the Workshop's youngest. Never sent on a job. Mr. Upshaw: the Listening Post. The Director is nominally in charge. Harrow was beaten. Reasonably. Tully: not let in, not turned away. The first-year has a helmet two sizes too big. Arven: the Mess. He denies it. The box is in the base, on a shelf, labelled. The engines were asked. They rev.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "star-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-paldea",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-gate-outside",
+   "name": "The Thing with the Beans",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "star-offer-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "star-volcano",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m",
+     "boss.drive/paldean-sv-youngster"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "Schedar base. A truck on a rise. A gate. You're the \"challenger.\" On the gate: a boy of thirteen, with a helmet under his arm and a shoebox under the other. \"Who goes— um. Who goes there?\" Then, up the path behind you: a boy in Academy uniform, by himself, carrying a casserole dish with a tea towel over it. \"I'm not here to fight. Yusuf, your mum's asking. She's made the thing with the beans.\" He holds it out. It's still warm. He's walked it up a hill. Yusuf's looking at his shoes. \"And Mr. Jacq says the science fair's Thursday and there's still a table with your name on. He's not taken the card off.\"",
+   "choices": [
+    {
+     "label": "\"Yusuf. What do you want?\"",
+     "success": {
+      "text": "Yusuf: \"...I want to do the science fair. I've a volcano. It's a good volcano.\" He opens the shoebox. It is. It's got a village round the bottom, with little flags. Yusuf: \"I've not said. Everybody here got— I didn't get it as bad. I came after. I just didn't want to be the one who went back. Like it was fine.\" A boot, on the truck roof. She's heard all of it. Mela: \"Oi. New kid.\" Yusuf: \"...Yeah.\" Mela: \"Is it a good volcano?\" Yusuf: \"It erupts.\" Mela: \"Then go and do your volcano, kid. Nobody stays here 'cause they've got to. That's not the rule. That's the opposite of the rule.\" A pause. Mela: \"We'll come and watch. Loudly.\" He goes down the hill with a schoolmate, a shoebox and an empty casserole dish.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-volcano",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-yusuf-home",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the gate.",
+     "success": {
+      "text": "\"Who goes there.\" A battle. You go through. Behind you, the schoolmate puts the dish down on the path and goes.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Yusuf Lightfoot",
+       "size": 2,
+       "levelBonus": -1,
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-founding",
+   "name": "Team Homeroom",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "star-offer-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "star-clive-friend",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "star-volcano",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m",
+     "boss.drive/paldean-sv-schoolkid-girl",
+     "trainer.pr/mela"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "The Academy's science fair, in the hall. Trestle tables. Card. A table at the end with a name on it, and a volcano, and a village with little flags. Yusuf Lightfoot: \"You came! It erupts at half past. I've done it nine times in the sink.\" Round his table: four kids who aren't looking at the volcano. A first-year who eats in a toilet stall. A girl with her bag held in front of her like a shield. Two more. Yusuf: \"These are— I don't know all their names. They just come and stand at my table. I think 'cause I was in Star. They think I know how.\" Yusuf: \"There's more of us. Who it's happening to now. Not like before; not three big ones. Just— nobody sits. Star's out there. We're still in here.\" The first-year: \"I got a flyer. 'You can sit with us.' I can't. It's on a hill. I've got double maths.\" At half past, it erupts. It's a very good volcano. From the back of the hall: a noise like a football crowd. Mela, on a chair, in boots: \"GO ON, YUSUF!\" Five bosses. In the hall. In the building. They said they'd come and watch. Loudly. Mela, to the room, defiant, terrified: \"What? It's a science fair. It's open to the public.\" The creed, on the back of Yusuf's display card, in felt tip: SOMEBODY SITS WITH YOU AT LUNCH.",
+   "choices": [
+    {
+     "label": "Pull up a chair.",
+     "success": {
+      "text": "Team Homeroom: Yusuf, who's been out and come back; he's the only one who knows both doors. The first-year, who knows every place in the building a person can eat alone. There are eleven. It's got no trucks. It's got a table.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "homeroom-founded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who else?\"",
+     "success": {
+      "text": "The schoolmate with the casserole: he walks things up hills. Mr. Jacq: a table; he never took the card off. Mr. Upshaw: keys, a box, the light in the boiler room. Arven: \"I'm not with you. I've made too much.\" Miriam, the nurse: her office has been where they go. She's kept a list. It isn't of injuries. It's of who comes in at lunch with \"a headache.\" And \"Clive\": \"Sup. I should like to 'join.' As a fellow student.\" They let him. Nobody has the heart.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "homeroom-founded",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tully",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tully-note",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Tully doesn't join. He leaves a note in a locker: \"I was one of the three. I'm sorry. I know a note's not much. I'll say it to her face if she'll let me.\""
+    }
+   ]
+  },
+  {
+   "id": "hr-lunch-1",
+   "name": "Lunch 1: Eleven Places",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 4,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-schoolkid-girl"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "Homeroom's got no trucks. It's got a table. Each Lunch is one lunch hour, in the canteen, in daylight. The game: get somebody to it. The first-year's map. Eleven places a person eats alone. You go round them.",
+   "choices": [
+    {
+     "label": "A toilet stall.",
+     "success": {
+      "text": "A second-year. Crisps, quietly.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-l1-stall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-l1-stall",
+   "name": "A Toilet Stall",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "A toilet stall. A second-year. Crisps, quietly.",
+   "choices": [
+    {
+     "label": "Sit down outside. Wait.",
+     "success": {
+      "text": "A sandwich comes under the door. Then the door.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-l1-boiler"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-l1-boiler",
+   "name": "The Boiler Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "The boiler room. A lad. The light's on. Then the library's far end: a girl, with a book held up.",
+   "choices": [
+    {
+     "label": "\"Mr. Upshaw leaves that on for you.\"",
+     "success": {
+      "text": "\"...He knows?\" \"He's always known.\" And the girl with the book: you ask what it is. She'll tell you. For twenty minutes. She walks to the canteen still telling.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-l1-nurse"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-l1-nurse",
+   "name": "The Nurse's Office",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/doctor_f"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "The nurse's office. Four, with \"headaches.\" Miriam: \"They're not ill. I've nothing for what they've got. You might.\" And then the roof. Nobody. A lunchbox, old. A name inside the lid. It's Eri's. From two years ago. She ate up here a term.",
+   "choices": [
+    {
+     "label": "Go down to the canteen.",
+     "success": {
+      "text": "A table of nine. It's by the bins. It's the worst table. It's theirs.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "homeroom-lunch1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-lunch-2",
+   "name": "Lunch 2: Double Maths",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "homeroom-lunch1",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m",
+     "boss.giacomo"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "The flyer said \"you can sit with us.\" Us is on a hill. Homeroom brings the hill down. Yusuf, at the Segin gate, with the first-year behind him: \"Giacomo. There's nine kids in the canteen who got your flyer and can't come. They've got double maths.\" Giacomo: \"...I teach double maths.\" Yusuf: \"I know. Come and do it there.\" Giacomo: \"In the building?\" Yusuf: \"You came for my volcano.\"",
+   "choices": [
+    {
+     "label": "Walk down with him.",
+     "success": {
+      "text": "It's a walk.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-l2-walk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-l2-walk",
+   "name": "The Walk",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giacomo"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "It's a walk. Giacomo, from a hill to a canteen, with a speaker under his arm. His legs. You don't push. You walk beside.",
+   "choices": [
+    {
+     "label": "Walk beside.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "The canteen doors.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-l2-canteen"
+       }
+      ]
+     },
+     "failure": {
+      "text": "He stops twice. You stop with him. The canteen doors.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-l2-canteen"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-l2-canteen",
+   "name": "The Canteen",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giacomo"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "The canteen. One o'clock. Four hundred students. A table by the bins. A boy in a star helmet sits down at it. He takes the helmet off. He puts a speaker on the table. Giacomo, to nine first-years, very quietly, in four-four: \"Negative b—\"",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "By the end of the hour it's a table of thirty, and a maths teacher's standing at the back with her arms folded, taking notes. One boss has been in the building, at lunch, in daylight, and nothing happened.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "homeroom-lunch2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-lunch-3",
+   "name": "Lunch 3: Her Face",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "homeroom-lunch2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "tully-note",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/eri"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "Tully's note. Homeroom carries it. Eri, reading it, in the dojo: \"'I'll say it to her face if she'll let me.'\" Eri: \"I'm the big one. I stand at the front. D'you know why? 'Cause he'd pick whoever looked most scared, and I thought: if I'm at the front, I'll be the one he looks at. I did that every day for a year. I was eleven.\"",
+   "choices": [
+    {
+     "label": "\"You don't have to.\"",
+     "success": {
+      "text": "Eri: \"I know.\" She folds the note. Eri: \"I'm going anyway.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-l3-canteen"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do you want?\"",
+     "success": {
+      "text": "Eri: \"...I want him to see I'm still frightened. And I came anyway. I want him to know it didn't work.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-l3-canteen"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll come with you.\"",
+     "success": {
+      "text": "She nods. She doesn't say anything.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-l3-canteen"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-l3-canteen",
+   "name": "The Table by the Bins",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/eri",
+     "trainer.roughneck"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "The canteen. The table by the bins. It's thirty, now. A boy in a Cipher Peon's uniform with the badge torn off, who can't look up. Tully: \"I went along with it. That's all I— no. That's not 'all.' That's the thing. I went along with it. Every day. I could've not.\" Eri, a long time: Eri: \"Yeah. You could've.\" Tully: \"I'm sorry.\" Eri: \"I know. I'm not saying it's all right.\" She pulls out a chair. Not for him. For herself. She sits. At a table. In the canteen. Eri: \"I'm saying I'm having my lunch.\"",
+   "choices": [
+    {
+     "label": "Sit with her.",
+     "success": {
+      "text": "He doesn't sit. He's not asked to. He goes. It's the first time he's walked out of that room without the other two.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "homeroom-lunch3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-lunch-3-helmets",
+   "name": "Lunch 3: Forty Hats",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "homeroom-lunch2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "tully-note",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/atticus"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "There was no note. This Lunch is Atticus's instead. He brings forty helmets to the canteen and puts them on the tables, one each, like hats at a party.",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "Nobody has to wear one. Everybody does.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "homeroom-lunch3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-pyjamas",
+   "name": "Pyjamas",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "beat": 6,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "boss.drive/paldean-sv-schoolkid-girl"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "glint"
+   },
+   "intro": "The yard. Sunday night. Five trucks. Forty helmets. The Director, with a notice. The Director: \"I'm required to read this.\" A door. Behind him. The dormitory's. A first-year in pyjamas. With a torch. Then another. Then the table by the bins: thirty of them, in dressing gowns and odd socks. Then the ones from the eleven places. Then people nobody's counted: the ones who watched, eighteen months ago, and said nothing, and have thought about it since. They walk out into the yard. They don't go to the Director. They go and stand with Star. In the rows. In the gaps. The first-year, to Mela, in a whisper that carries: \"You said we could sit with you. We can't get up the hill. So we thought we'd stand.\"",
+   "choices": [
+    {
+     "label": "Stand with them.",
+     "success": {
+      "text": "The Director starts counting.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-pj-count"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-pj-count",
+   "name": "The Count",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.pr/school_kid_m"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "The Director: \"One. Two. ...Eleven. ...Thirty.\" He's counting pyjamas. The Director: \"Forty. Forty-one.\" He stops counting. The Director: \"That's every first-year I've got.\" Yusuf, in a dressing gown, holding a volcano, because he couldn't think what else to bring: \"It's not just them it happened to, sir. It's just them that said.\" The Director: \"I've a notice to expel forty children for standing in a yard. There are now two hundred children standing in a yard.\" He folds it. He puts it in his cardigan pocket. The Director: \"I find I've a staffing problem.\"",
+   "choices": [
+    {
+     "label": "The doorway.",
+     "success": {
+      "text": "A man with a mop.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-pj-mop"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-pj-mop",
+   "name": "The Mop",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-janitor",
+     "trainer.gentleman"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Mr. Upshaw, in the doorway: \"Is somebody going to ask me, then?\" He talks. It's the longest speech there is, and it isn't shortened. You may sit. Mr. Upshaw: \"I do the east corridor at eight. So I saw the bags. Every morning, a bag in the bin by 1-G. Different bag. I'd fish it out and put it on the peg.\" Mr. Upshaw: \"I do the canteen at one. So I saw who wasn't in it. There's a lad ate in the boiler room for a term. I left the light on for him.\" Mr. Upshaw: \"I do the hall on Fridays, late. So I was outside Mr. Harrow's door, the night. The light was on. I looked in, to say I'd lock up. He'd the reports up. I know the form; it's green. He was going down them. Click. Click. Nineteen minutes. I counted, 'cause the buffer's on a timer.\" Mr. Upshaw: \"And I was in the yard. The day. Emptying the bins. Forty of 'em, in rows. They never touched those three. The little one with the big boots said one thing.\" The Director: \"What did she say?\" He looks at Mela. She nods. Mr. Upshaw: \"She said: 'We told the school. We're telling you. That's everybody told.'\" Silence. Mr. Upshaw: \"That's all it was. It wasn't a threat. It was a receipt.\" And then he fetches the box. Mr. Upshaw: \"Seventy-one Fridays. Under the staffroom door. I'd nowhere to send it. It's got names on.\"",
+   "choices": [
+    {
+     "label": "The gate.",
+     "success": {
+      "text": "A man at the gate.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "hr-pj-buyers"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-pj-buyers",
+   "name": "The Buyers",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m",
+     "boss.drive/paldean-sv-office-worker-man",
+     "trainer.pr/mela"
+    ],
+    "tint": "#1a1a2a",
+    "effect": "none"
+   },
+   "intro": "Nascour, at the gate: \"I'd understood there were forty.\" Two hundred children in pyjamas turn round. Mela: \"Oi. Shampoo advert.\" Nascour: \"...I see.\" Nascour: \"Not here. In front of children. I have some standards.\" He leaves. There are too many children. He's got no brochure for two hundred. Harrow stays.",
+   "choices": [
+    {
+     "label": "Battle Harrow.",
+     "success": {
+      "text": "Harrow, alone. Beaten. Homeroom doesn't disband. It becomes a thing the Academy has: a table by the bins. It's the worst table. There's a waiting list. Penny is on a bonnet with five friends who always knew. Giacomo sat down in the canteen and took the helmet off. Mela: \"It's a science fair.\" Atticus: forty hats at a party. Ortega lends the shed. Eri had her lunch. Odin walked in. Twice. Yusuf: a dressing gown. A volcano. Mr. Upshaw: \"Is somebody going to ask me, then?\" The Director stops counting. Harrow was beaten, alone. The first-year: \"We thought we'd stand.\" Arven denies it. The box was fetched. The engines are in a yard with two hundred children round them.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "star-ending-homeroom",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "two-hundred",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.drive/paldean-sv-office-worker-man",
+       "team": [
+        "oranguru",
+        "farigiraf",
+        "kingambit"
+       ],
+       "name": "Harrow",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "hr-chair",
+   "name": "A Chair Pulled Out",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "star-ending-homeroom",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "Homeroom doesn't disband. It becomes a thing the Academy has: a table by the bins. It's the worst table. There's a waiting list. Here, a chair pulled out, at a café table.",
+   "choices": [
+    {
+     "label": "Sit.",
+     "success": {
+      "text": "Your party sits. Somebody sat with each of them.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

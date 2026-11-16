@@ -1,0 +1,2979 @@
+{
+ "catalogOverhaul": "families-a",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "dog-walker",
+   "name": "Dog Walker (Growlithe)",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "pokemon": "growlithe",
+    "effect": "none"
+   },
+   "intro": "A woman in a crumpled work suit comes half-running down the street with a lead in one hand and a briefcase in the other, and at the end of the lead a Growlithe is trying to go in every direction at once. Della: \"Please. Walk my Growlithe for a few stages? He needs the exercise.\" She pushes her hair out of her face. \"I'm working doubles. I can't, I just can't, and he's going stir crazy in the flat. I'll pay when you come back!\" The Growlithe, Biscuit, sees your team and wags so hard he falls over.",
+   "choices": [
+    {
+     "label": "Of course.",
+     "success": {
+      "text": "You take the lead. Biscuit is at your side before you have even closed your hand, looking up at you as if you invented walks. Della watches you go, and you can see her shoulders come down for the first time. He will battle with your team, she says, he loves it, just bring him back in one piece.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "growlithe"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-on",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You took Della's Growlithe, Biscuit, out on the road for three stages",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's the pay?",
+     "success": {
+      "text": "Della: \"Five hundred. And a tip, if he's happy.\" Biscuit is already happy. Biscuit is the happiest anyone has ever been. You take the lead.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "growlithe"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-on",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "dog-paid",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I can't.",
+     "success": {
+      "text": "Della nods, and her face does something brave. Biscuit howls as you leave, one long sad note, all the way to the end of the street.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "dog-walker-pays",
+   "name": "Growlithe's Owner Pays Up",
+   "group": "Helpers, gifts and kindness",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "dog-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "dog-on",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "dog-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_camper"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "Three stages on. Della is waiting at the town gate in the same crumpled suit, and before you can wave, Biscuit has seen her. He goes off like a shot and hits her at the knees, and she sits down hard in the road laughing with her arms full of him. Della: \"Look at you. Look at you!\" She looks up. \"Here's your payment, with a tip. He looks wonderful.\"",
+   "choices": [
+    {
+     "label": "Hand him back.",
+     "success": {
+      "text": "You hand over the lead. Biscuit licks your hand once, very thoroughly, and then trots off at Della's side, looking back every few steps until they turn the corner.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "Biscuit goes home",
+         "species": [
+          "growlithe",
+          "arcanine"
+         ]
+        }
+       },
+       {
+        "kind": "money",
+        "amount": 600
+       },
+       {
+        "kind": "flag",
+        "key": "dog-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "dog-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gone",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "growlithe",
+       "bond": 0,
+       "absent": true
+      }
+     ],
+     "intro": "Three stages on. Della is waiting at the town gate in the same crumpled suit, looking past you, and past you again, for a small orange shape that is not there. Her face changes. Della: \"...Where is he?\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Tell her the truth.",
+       "success": {
+        "text": "You tell her. All of it. She listens with both hands over her mouth. When you are done she does not shout. She does not say anything. She just turns and walks away up the street, and you stand there at the gate for a long time.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "dog-lost",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "dog-done",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "happy",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "growlithe",
+       "bond": 4
+      }
+     ],
+     "intro": "Three stages on. Della is waiting at the town gate, and Biscuit hits her at the knees and she sits down in the road with her arms full of him. Then he wriggles free, and runs back to you, and sits at your feet, and looks up at her. Della goes very still. Della: \"Look at him. He's… he's never been this happy.\" She is quiet for a long time. \"Should he stay with you? I mean it. I'm never home. He deserves someone who's home.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "He's yours.",
+       "success": {
+        "text": "You put the lead in her hand and close her fingers round it. Della is crying. Biscuit licks you goodbye, all over your face, and goes home with her. The tip is enormous. You would give it back in a heartbeat.",
+        "effects": [
+         {
+          "kind": "tradeAway",
+          "want": {
+           "label": "Biscuit goes home",
+           "species": [
+            "growlithe",
+            "arcanine"
+           ]
+          }
+         },
+         {
+          "kind": "money",
+          "amount": 1000
+         },
+         {
+          "kind": "flag",
+          "key": "dog-home",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "dog-done",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You gave Biscuit back to Della, though he would have stayed",
+          "importance": 70
+         }
+        ]
+       }
+      },
+      {
+       "label": "If you're sure.",
+       "success": {
+        "text": "She is sure. She kneels and holds Biscuit's face in her hands and tells him to be good, and he licks her nose, and she laughs and cries at the same time. Then she hugs you, briefly and fiercely, and walks away without looking back, because if she looks back she will not go.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "dog-kept",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "dog-done",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "Della let Biscuit stay with you, because he was happiest on the road",
+          "importance": 75
+         }
+        ]
+       }
+      },
+      {
+       "label": "Let him choose.",
+       "success": {
+        "text": "You both step back. Biscuit sits between you in the road, looking from one to the other. Then he goes to Della, and leans on her legs. Then he comes back to you. Then he goes to Della again. In the end he stays with you, and Della laughs through her tears and makes you promise to bring him to visit. You will.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "dog-chose",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "dog-done",
+          "amount": 1
+         },
+         {
+          "kind": "friendship",
+          "bond": 1,
+          "who": {
+           "species": [
+            "growlithe",
+            "arcanine"
+           ]
+          }
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ev-lost-pokemon",
+   "name": "A Lost Pokémon",
+   "group": "Helpers, gifts and kindness",
+   "rarity": "uncommon",
+   "tags": [
+    "Pokémon",
+    "Recovery",
+    "Relationship"
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A small Lillipup trembles under a signpost, soaked, too frightened to run. It has a collar with a brass tag, and on the tag, in a child's careful capitals: \"IF FOUND, PLEASE RETURN.\" And an address, two stops on.",
+   "choices": [
+    {
+     "label": "Return it.",
+     "success": {
+      "text": "You scoop it up inside your coat and carry it. It stops shaking about a mile on, and goes to sleep against you.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "lost-pet-home",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "lost-pet-carried",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed it first.",
+     "success": {
+      "text": "You crouch and hold out a little food. It eats from your hand, slowly, and then climbs into your lap as if it has decided something. When you set off to find the address, it trots at your heel the whole way.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "lost-pet-home",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "lost-pet-carried",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "It is someone's. You know it is someone's. You take it anyway. In every town after this one there is a poster on the noticeboard, in a child's handwriting: \"HAVE YOU SEEN MY LILLIPUP.\" You stop looking at noticeboards.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lillipup"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-lost",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lost-pet-home",
+   "name": "Home",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lost-pet-carried",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "The address is a small house with a red door. Before you have reached the gate, the door flies open and a little boy is running down the path in his socks, and the Lillipup is out of your arms and into his, and the boy is sobbing with relief into its fur. His mother stands in the doorway with her hand over her mouth.",
+   "choices": [
+    {
+     "label": "Give him a minute.",
+     "success": {
+      "text": "You wait at the gate. When the boy can talk again, he comes back with a Berry from the kitchen, held out in both hands, the most important thing he owns. You take it. You would not dream of not taking it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-lillipup",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "flooded-basement",
+   "name": "Flooded Basement Rescue",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [],
+    "effect": "rain"
+   },
+   "intro": "Water is pouring into a cellar through a broken wall, brown and fast, and from somewhere down in the dark comes a thin high crying. A woman at the top of the steps is holding a torch and cannot make herself go down. Woman: \"The Rattata. The mother moved her nest down there last week. The pups can't swim.\"",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "You go down. The water is up to your chest and cold enough to stop your breath. You find the nest on a shelf by touch, three small wet bodies, and carry them up one by one, holding them over your head. The mother is waiting at the top. She looks at you for a long moment before she takes them.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "flag",
+        "key": "found-rattata",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Water-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Water-type dives into the dark without hesitating. It comes back up with a pup in its mouth, and goes again, and again. Three pups, a mother, and an old Pidove nobody knew was down there. The woman hugs your Pokémon, wet as it is.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "water"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "found-rattata",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pump it out. (a node)",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "electric"
+       ]
+      }
+     ],
+     "success": {
+      "text": "There is an old electric pump in the shed with a dead battery. Your Electric-type puts its paws on the terminals and holds them there for an hour, gritting its teeth, while the water goes down an inch at a time. It is slow. Every one of them is saved.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "electric"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "found-rattata",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "midnight-lullaby",
+   "name": "Midnight Lullaby",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [],
+    "effect": "float"
+   },
+   "intro": "Night, and you cannot sleep for crying. At the edge of camp a baby Pichu is wailing, and wailing, and its mother Pikachu is sitting beside it with her eyes closed, swaying, so tired she cannot lift her head. She has clearly been at this for days.",
+   "choices": [
+    {
+     "label": "Sing to it.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "One of your team knows a song, the kind that is also a move, and it sings, very softly, and the Pichu hiccups and goes quiet and listens, and is asleep before the end. Its mother opens her eyes and looks at your Pokémon as if it has given her the moon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "found-pichu",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the parent sleep; hold the baby.",
+     "success": {
+      "text": "You pick up the Pichu and walk it round and round the camp, all night, while its mother sleeps for the first time in days. Somewhere before dawn it stops crying and starts sucking your thumb. At sunrise the mother wakes, comes over, and presses her nose into your hand. You are exhausted. It was worth it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "found-pichu",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give the parent a Berry.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry",
+       "count": 1
+      }
+     ],
+     "success": {
+      "text": "You put a Berry down in front of the mother. She eats it slowly, and some colour comes back to her cheeks, and she picks up the Pichu and manages, somehow, the way parents do.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "found-pichu",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "missing-cat-poster",
+   "name": "Missing Cat Poster",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_lass"
+    ],
+    "effect": "none"
+   },
+   "intro": "A poster on a lamp post, hand-drawn, a little faded from rain. LOST: MEOWTH. ANSWERS TO COINS. VERY FRIENDLY (NOT TRUE). REWARD. Below it, a photo of a Meowth looking at the camera with deep contempt, and an address.",
+   "choices": [
+    {
+     "label": "Look for Coins. (two nodes)",
+     "success": {
+      "text": "You look for two days, roof to roof, alley to alley, and on the second evening you hear a very particular, very annoyed meow.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "coins-found"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask around.",
+     "success": {
+      "text": "A bin man leaning on his cart: \"That one? Behind the fish shop. Has been for a week.\" He shrugs. \"Wouldn't say friendly.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "coins-found"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the bins.",
+     "success": {
+      "text": "You check the bins. Coins is in the third bin, sitting on a fish skeleton, entirely unashamed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "coins-found"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "coins-found",
+   "name": "Coins",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.npc_lass"
+    ],
+    "effect": "none"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "Coins is on a roof behind the fish shop, or in a bin, or under a cart: it does not matter, because the important thing is that Coins is not alone. Three kittens, tiny, round, with Coins's exact expression of contempt, are tucked up against it. The owner, when you bring them home, sits down on her own doorstep. Owner: \"Coins is a girl? Coins is a GIRL?\" She laughs until she has to wipe her eyes. \"Take one. Please. Take one. I've no room for four.\"",
+   "choices": [
+    {
+     "label": "Return them all.",
+     "success": {
+      "text": "You hand them all over. She pays the reward, every coin of it, honestly, and the kittens follow Coins inside in a line, tails up.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "flag",
+        "key": "found-meowth",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep a kitten.",
+     "success": {
+      "text": "You pick the smallest, the one that bit you. The owner pays the reward anyway, every coin, and waves until you are round the corner, holding Coins up to wave too. Coins does not wave.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "meowth"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-meowth",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stray-kitten",
+   "name": "Stray Kitten",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [],
+    "pokemon": "skitty",
+    "effect": "hearts"
+   },
+   "intro": "A hungry little cat Pokémon follows you out of town, mewing at your heels, all ribs and eyes. It is not wearing a collar. It is not anyone's. When you stop, it stops, and sits, and looks at you with enormous hope.",
+   "choices": [
+    {
+     "label": "Feed it.",
+     "success": {
+      "text": "You feed it. It eats like it has never eaten, and then, full and round, washes its face, looks at you once, and trots off into the hedge. You hope it remembers where you were.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Take it to a shelter. (two nodes)",
+     "success": {
+      "text": "You carry it back two towns to a shelter with a kind volunteer. Two days later there is a letter at a Pokémon Center: it has been adopted by an old couple with a fireplace. There is a photo. It is asleep in front of the fire.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "found-purrloin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it follow.",
+     "success": {
+      "text": "You let it follow. It is scrawny, and nervous, and sleeps in your hood. It will grow. You will see to that.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "purrloin",
+         "skitty"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-purrloin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stuck-pokemon",
+   "name": "Stuck Pokémon",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "A young Pokémon is caught in a wire fence at the edge of a field, wrapped up in it, crying with the hopeless thin sound of something that has been crying a while. The more it struggles the tighter it gets.",
+   "choices": [
+    {
+     "label": "Untangle it.",
+     "success": {
+      "text": "You do it slowly, a strand at a time, talking the whole time. It bites you once, hard, out of fear. You keep going. When the last wire comes away it stands for a moment, shaking, and then it pushes its head into your hand.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "flag",
+        "key": "found-fence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cut the fence. (₽100)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You cut it out, quick and clean. The farmer comes running across the field shouting, and when he sees what you did he stops shouting, but he still charges you for the fence, honestly, a hundred and not a coin more.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "found-fence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call the farmer.",
+     "success": {
+      "text": "You run for the farmer. He comes, a big quiet man, and kneels in the mud and frees it with his hands. Then he fixes the fence, and leaves a gap at the bottom, just big enough. Farmer: \"For them. They were here first.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "found-fence",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "found-count",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fortune-three-cards",
+   "name": "Three Cards",
+   "group": "NPC Stories",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#301848",
+    "effect": "float"
+   },
+   "intro": "A fortune teller's tent, purple and patched, smelling of incense and wet canvas. Three cards lie face down on black velvet. The woman behind them has rings on every finger and eyes that do not blink enough. Madame Ostra: \"Pick one. It'll follow you a while, whether you like it or not.\" She turns them over, one, two, three. Every card's effect is printed plainly on its face. Madame Ostra: \"No tricks. People always expect tricks.\"",
+   "choices": [
+    {
+     "label": "The Sun: every heal this region is stronger.",
+     "success": {
+      "text": "You pick the Sun. Ostra nods, as if you have confirmed something about yourself. The card is warm in your hand. For the rest of the region, every rest, every Berry, every kindness seems to mend a little more.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Sun: healing is 10% stronger this region",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "cards-sun",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Tower: every foe this region is two levels higher.",
+     "success": {
+      "text": "You pick the Tower, knowing exactly what it says. Ostra's eyebrows go up, very slightly. Madame Ostra: \"Brave. Or foolish. I like both.\" She presses a Lucky Egg into your hand, warm, as if she had been holding it. \"You'll want this.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Tower: foes are two levels higher this region",
+        "effects": [
+         {
+          "kind": "enemyLevelOffset",
+          "value": 2
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cards-tower",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Wheel: rare Pokémon come more often this region.",
+     "success": {
+      "text": "You pick the Wheel. Ostra spins it on the velvet with one finger. Madame Ostra: \"Round and round. Luck turns.\" For the rest of the region, the long grass seems a little stranger, and a little kinder.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Wheel: rare Pokémon are 20% more likely this region",
+        "effects": [
+         {
+          "kind": "encounterWeightMultiplier",
+          "group": "rare",
+          "value": 1.2
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "cards-wheel",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "None.",
+     "success": {
+      "text": "Madame Ostra: \"Clever. Or scared.\" She sweeps the cards back into the deck. \"Same thing, most days.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "funeral-respects",
+   "name": "A Quiet Funeral",
+   "group": "NPC Stories",
+   "stop": "shrine",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#1c1c24",
+    "effect": "float"
+   },
+   "intro": "A small funeral at the edge of a meadow. Candles in jam jars, a mound of fresh earth, a few words already said. A family: a mother, a father, and a child of about seven holding an empty Poké Ball against their chest with both hands. The family looks up as you stop. The father: \"Would one of yours stand with us?\" His voice catches. \"She'd have liked that. She liked company.\" The child, Jory, says nothing at all.",
+   "choices": [
+    {
+     "label": "Ask my starter to stand with them.",
+     "success": {
+      "text": "Your starter walks over without being told and stands beside Jory, close, not touching, the way you stand beside someone at a time like this. After a while Jory reaches out and takes its paw. They stand like that until the candles burn down. Someone at the back hums the old song, the one about the Jigglypuff that sang a whole stadium to sleep and then tucked every sleeper in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lore-last-lullaby",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "funeral-stood",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Your starter stood with a family at their Pokémon's funeral, and Jory held its paw",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand with them myself.",
+     "success": {
+      "text": "You stand with them. Nobody speaks. The wind moves the grass. It is enough. When you leave, the mother touches your arm, once, and you nod, and that is all. Afterwards an old woman at the gate tells you about a bell with no clapper in a ruined tower, that rings only when a trainer who has never lied walks beneath it. \"It rang for her once,\" she says.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lore-hollow-bell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "funeral-stood",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave quietly.",
+     "success": {
+      "text": "You leave them to it, quietly, the way you would want to be left.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "funeral-jory",
+   "name": "Jory",
+   "group": "NPC Stories",
+   "stop": "shrine",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#1c1c24",
+    "effect": "float"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "funeral-stood",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "funeral-stood",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "funeral-jory",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A young trainer stops you on the road in a new region, and it takes you a moment. Older. Taller. But you know the eyes. Jory, with a Pokémon at their side, young and bright, of the same kind as the one in the empty Ball. Jory: \"You stood with us.\" They swallow. \"Her egg. Mum and Dad kept it. She hatched in the spring. I wanted you to meet her.\"",
+   "choices": [
+    {
+     "label": "A battle.",
+     "success": {
+      "text": "Jory grins, and for a moment looks seven again. Jory: \"She's really good. You'll see.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Jory",
+       "classId": "youngster",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "funeral-jory",
+         "amount": 1
+        },
+        {
+         "kind": "friendship",
+         "amount": 5,
+         "who": "party"
+        },
+        {
+         "kind": "moment",
+         "text": "Jory battled you with the Pokémon hatched from their old friend's egg",
+         "importance": 70
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "funeral-jory",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "A handshake.",
+     "success": {
+      "text": "You shake hands. Jory's grip is very firm, as if they practised. Their Pokémon sniffs your starter, and then leans against it, the way the empty Ball's Pokémon might have once. Jory: \"Thanks. For then. I never said.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "funeral-jory",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "gift-the-keeper",
+   "name": "A Gift for the Back Room",
+   "group": "NPC Stories",
+   "stop": "merchant",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shop-loyalty",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A small shop, tidy, nearly empty of customers. Mrs. Arden, the shopkeeper, is polishing a shelf behind the counter. There is nothing on it. She polishes it anyway, slowly, all the way along. Mrs. Arden: \"Someone's missing from this shelf.\" She does not look up. \"My son kept his trophies here. He left a year ago. He sends money.\" The cloth stops. \"He doesn't say from where.\" On the counter is an envelope. The stamp has a logo on it, faint, as if someone had tried to rub it off with a thumb. You know that logo.",
+   "choices": [
+    {
+     "label": "I'll look for him.",
+     "success": {
+      "text": "She stops polishing. She looks at you for a long time. Then she takes a photo from under the till and gives it to you: a boy of about sixteen with a lopsided grin, holding up a ribbon. On the back, in her handwriting: Kit Arden.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shelf-kit",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the money.",
+     "success": {
+      "text": "Mrs. Arden: \"Too much. Too often.\" She opens a drawer. It is full of envelopes, unopened. \"I've stopped spending it.\" She shows you a photo of him, a boy with a lopsided grin. Kit Arden. You remember the face.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shelf-kit",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'm sorry.",
+     "success": {
+      "text": "She nods, and keeps polishing. As you leave, the shop bell rings, and she looks up at the door, quickly, the way she must have looked up every time it rang for a year.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shelf-kit-hideout",
+   "name": "Kit",
+   "group": "NPC Stories",
+   "stop": "merchant",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shelf-kit",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "shelf-kit",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "evil",
+     "after": 2
+    },
+    {
+     "kind": "flag",
+     "key": "shelf-kit-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Deep in a hideout, in a corridor that smells of machine oil, a Grunt steps out to stop you, and stops. He has a lopsided face under the uniform cap. The same face as the photo, older, thinner, tireder. He looks at you, and at the way you are looking at him. Kit: \"...You've been to the shop.\"",
+   "choices": [
+    {
+     "label": "Your mum's waiting.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "after": 5
+        }
+       ],
+       "text": "Kit's hand shakes on his Poké Ball. He looks at you, and past you, at the way you came in, the way that should have been guarded by the one who commands this place, and is not, because you dealt with them. Kit: \"You beat them.\" Slowly, he takes off the cap. \"...Is she alright?\" He walks out of the hideout at your side, and does not look back once.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "shelf-kit-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "shelf-kit-home",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 2
+        },
+        {
+         "kind": "flag",
+         "key": "kind-helped-stranger",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Kit Arden walked out of the hideout beside you, to go home to his mother",
+         "importance": 85
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Kit's hand shakes on his Poké Ball. Kit: \"They'd find me.\" He says it like a thing he has said to himself a thousand times. \"They'd find me, and then they'd find the shop.\" He steps back into the shadows and is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shelf-kit-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Kit: \"Don't make me.\" But he sends it out anyway.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Kit Arden",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "shelf-kit-met",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "shelf-kit-letter",
+         "amount": 1
+        }
+       ],
+       "evil": "grunt",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "shelf-kit-met",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Why?",
+     "success": {
+      "text": "Kit: \"The shop was going under.\" He says it to the floor. \"Mum would never have told you. Three months behind on the rent, the bank calling. They paid. They pay a lot.\" He looks up. \"Is she… is she spending it?\" You tell him about the drawer of envelopes. Kit: \"...Mum.\" He turns, very fast, and walks away down the corridor.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shelf-kit-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "shelf-home",
+   "name": "The Shelf",
+   "group": "NPC Stories",
+   "stop": "merchant",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shelf-kit-home",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "shelf-kit-home",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "shelf-home",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "You pass the shop again, later, and something makes you go in. Mrs. Arden is behind the counter. Kit is up a ladder, painting the ceiling, badly. The shelf is no longer empty. There is one thing on it: a photo in a frame, Kit and his mother, both grinning the same lopsided grin. In the corner of the frame, in her handwriting, is your name. Mrs. Arden: \"Couldn't think what else to put.\"",
+   "choices": [
+    {
+     "label": "It's perfect.",
+     "success": {
+      "text": "Kit comes down the ladder with paint in his hair and shakes your hand, and does not let go for a while. His mother pretends not to be watching. She is.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "shelf-home",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "shelf-letter",
+   "name": "A Letter",
+   "group": "NPC Stories",
+   "stop": "merchant",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shelf-kit-letter",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "shelf-kit-letter",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "shelf-letter-read",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "You pass Mrs. Arden's shop again. She is behind the counter, and there is a letter on the counter, unfolded, read so many times the creases have gone soft. Mrs. Arden: \"No money this month.\" She touches the letter. \"He wrote instead. First time in a year. He says he's thinking.\" She looks at the empty shelf. \"That's something. Isn't it?\"",
+   "choices": [
+    {
+     "label": "It's something.",
+     "success": {
+      "text": "She nods. She keeps polishing the shelf, but slower, and once, you think, she smiles.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shelf-letter-read",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "gym-eve-tone",
+   "name": "Eve of the Gym",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2830",
+    "effect": "none"
+   },
+   "intro": "The night before a Gym. You are sitting on the steps outside, not ready to go to sleep yet, when a stranger sits down beside you. A young man, older than you, with a badge case on his belt that has one badge in it. Just the one. Wil: \"Nervous?\" He does not wait for an answer. \"You can walk in loud, or quiet, or ask for advice.\" He looks up at the Gym's dark doors. \"I walked in loud. Lost in four turns. Never went back.\"",
+   "choices": [
+    {
+     "label": "Loud.",
+     "success": {
+      "text": "Wil: \"Ha.\" He slaps your shoulder and gets up. \"Good luck.\" You watch him go. He does not look back at the doors once. Tomorrow your lead is going to open with everything it has.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Walking in loud: your first attack hits harder",
+        "effects": [
+         {
+          "kind": "firstAttackDamage",
+          "first": 1.1,
+          "later": 1
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       },
+       {
+        "kind": "flag",
+        "key": "wil-loud",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quiet.",
+     "success": {
+      "text": "Wil looks at you for a long moment. Wil: \"Huh.\" He looks at the doors. \"Maybe I should've tried that.\" Tomorrow your team walks in calm, and nothing they do on turn one is going to rattle them.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Walking in quiet: no flinching on turn one",
+        "effects": [
+         {
+          "kind": "noFlinchTurnOne"
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       },
+       {
+        "kind": "flag",
+        "key": "wil-tries",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "wil-quiet",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask advice.",
+     "success": {
+      "text": "You ask him. He blinks, then tells you everything he remembers about the Leader's ace, which is a lot, because he has been thinking about it for three years. At the end he goes quiet. Wil: \"You asked.\" He laughs, shakily. \"I never asked.\"",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "flag",
+        "key": "wil-tries",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "wil-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wil-badge",
+   "name": "Wil, Again",
+   "group": "NPC Stories",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2830",
+    "effect": "none"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wil-tries",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wil-tries",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "wil-badge",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Outside the next Gym, someone waves at you from the steps. Wil, grinning so hard it looks painful, holding up his badge case. Two badges. Wil: \"I asked.\" He shakes his head, still not quite believing it. \"I asked, and I listened, and I went back.\"",
+   "choices": [
+    {
+     "label": "I knew you would.",
+     "success": {
+      "text": "You did not, but you say it anyway, and he hears that you are glad, and he walks you all the way to the Gym doors and slaps your shoulder there for luck.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "wil-badge",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true,
+   "remembers": [
+    {
+     "id": "quiet",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "wil-quiet",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Outside the next Gym, someone waves at you from the steps. Wil, grinning so hard it looks painful, holding up his badge case. Two badges. Wil: \"Quiet.\" He shakes his head. \"Like you said. I walked in quiet.\""
+    }
+   ]
+  },
+  {
+   "id": "ledge-riolu",
+   "name": "A Stranded Riolu",
+   "group": "Lasting Choices",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "riolu",
+    "tint": "#20304a",
+    "effect": "none"
+   },
+   "intro": "A crumbling ledge above a fast brown river, and on it, pressed back against the cliff, a small Riolu crying for help. Every time it moves, a bit more of the ledge breaks away and falls, and falls, and is swallowed by the water a long way down.",
+   "choices": [
+    {
+     "label": "Climb down.",
+     "success": {
+      "text": "You climb down. Your fingers find holds you did not know were there. You reach it, and it grabs your arm with both paws, and the ledge goes out from under you both. For one long second there is nothing. Then your lead has your wrist, and is pulling, and you are up, all three of you, lying on the grass. The Riolu looks at you, and at your lead, and runs off into the trees.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-saved",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Flying-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type drops off the cliff edge and comes back up with the Riolu held carefully in its feet, and sets it down in the grass. It stares at your Pokémon, and at you, for a long moment. Then it runs off into the trees.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "flying"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-saved",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it to jump.",
+     "success": {
+      "text": "You hold your arms out and tell it to jump. It looks at you, and at the drop, and at you. Then it jumps. You catch it, and the weight carries you both straight over the edge and into the river. You come up gasping, still holding it. On the bank it shakes itself off, looks at you very hard, and runs off into the trees.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-saved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-splash",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-watch",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "riolu-watch-1",
+   "name": "Something in the Branches",
+   "group": "Lasting Choices",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "riolu",
+    "tint": "#20304a",
+    "effect": "none"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "riolu-saved",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "riolu-saved",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "riolu-seen-1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "After a hard battle, your team is battered and you are tending to them by the fire. You feel eyes on you. Up in a tree above the camp, on a branch, the Riolu from the ledge is sitting very still, watching how you treat them.",
+   "choices": [
+    {
+     "label": "Wave.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "You wave. It ducks behind the trunk. Then, slowly, a paw comes round and waves back. It watched you look after every one of them. It saw.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "riolu-seen-1",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "riolu-watch",
+         "amount": 2
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You wave. It ducks behind the trunk. Then, slowly, a paw comes round and waves back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "riolu-seen-1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-watch",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ignore it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "You ignore it and go on with your team, one by one, gently. When you look up again, the branch is empty, but it watched every moment.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "riolu-seen-1",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "riolu-watch",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You ignore it and go on with your team. When you look up again, the branch is empty.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "riolu-seen-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it a Berry.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "You put a Berry on a flat stone at the foot of the tree and go back to the fire. In the morning the Berry is gone, and in its place is a smooth white pebble. It saw how you are with them.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "riolu-seen-1",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "riolu-watch",
+         "amount": 2
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You put a Berry on a flat stone at the foot of the tree and go back to the fire. In the morning the Berry is gone, and in its place is a smooth white pebble.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "riolu-seen-1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-watch",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "riolu-watch-2",
+   "name": "At the Edge of the Fight",
+   "group": "Lasting Choices",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "pokemon": "riolu",
+    "tint": "#20304a",
+    "effect": "none"
+   },
+   "room": false,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "riolu-seen-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "riolu-seen-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "riolu-seen-2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "Mid-battle, you catch a movement at the edge of your eye. The Riolu, at the edge of the clearing, half-hidden in the ferns. It is standing exactly the way your lead is standing: the feet, the shoulders, the tilt of the head. Copying every move.",
+   "choices": [
+    {
+     "label": "Show it a move.",
+     "success": {
+      "text": "After the battle you have your lead show it one move, slowly, again and again. The Riolu copies it, badly, and then better, and then nearly right. It is so pleased with itself it falls over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "riolu-seen-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-watch",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it watch.",
+     "success": {
+      "text": "You let it watch, and fight the rest of the battle a little more carefully, a little more kindly, knowing you are being seen. When you look round, it is gone, but the ferns are still moving.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "riolu-seen-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-watch",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shoo it.",
+     "success": {
+      "text": "You wave it away. It flinches, and goes, and you feel something you did not expect to feel.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "riolu-seen-2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-watch",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true
+  },
+  {
+   "id": "ledge-riolu-return",
+   "name": "Riolu Remembers",
+   "group": "Lasting Choices",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "riolu-seen-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "riolu-seen-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "riolu-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "riolu",
+    "tint": "#20406a",
+    "effect": "sparkle"
+   },
+   "intro": "Something small drops out of a tree and lands in front of you on the path, light as a leaf. The Riolu from the ledge. Bigger now. It stands in front of you the way your lead stands: feet planted, shoulders square, chin up. Then, very seriously, it holds out a paw.",
+   "choices": [
+    {
+     "label": "Come with me.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "riolu-watch",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "It takes your hand, and as it does, you feel something: a warmth that runs up your arm and settles somewhere behind your ribs. Aura. It has been learning it, watching you with your team. It already knows how to throw it. It walks beside you, and every so often looks up at you, and you can feel that it is glad.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "riolu"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "teachMove",
+         "move": "aura-sphere",
+         "species": "riolu"
+        },
+        {
+         "kind": "flag",
+         "key": "riolu-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "riolu-joined",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Riolu from the ledge chose you, and already knew Aura Sphere from watching you",
+         "importance": 85
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It takes your hand. Its paw is warm. It walks beside you the rest of the day, copying your stride.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "riolu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-joined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Are you sure?",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "riolu-watch",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "It nods, very seriously, once. Then it takes your hand, and you feel the warmth of its aura run up your arm. It has been learning, watching you with your team. It already knows how to throw it.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "riolu"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "teachMove",
+         "move": "aura-sphere",
+         "species": "riolu"
+        },
+        {
+         "kind": "flag",
+         "key": "riolu-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "riolu-joined",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "The Riolu from the ledge chose you, and already knew Aura Sphere from watching you",
+         "importance": 85
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It nods, very seriously, once. Then it takes your hand.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "riolu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-joined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go home.",
+     "success": {
+      "text": "It looks at you for a long moment, and it looks hurt, and then it nods, and goes. You will wonder about it. Somewhere, a long way from here, it is going to grow up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "riolu-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "riolu-home",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lost-child",
+   "name": "Lost Child",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "Two preschoolers are crying outside a shop, holding hands so tight their knuckles are white. The older one, maybe five, is trying very hard to be brave for the younger one and failing. The older one: \"We lost Dad.\" A hiccup. \"He's got a hat.\"",
+   "choices": [
+    {
+     "label": "Find Dad.",
+     "success": {
+      "text": "You hold their hands and walk them up the street, looking for a hat. There are a lot of hats. Then a man comes running out of a side street with his hat in his hand and his face white, and the children let go of you and run, and he goes down on his knees in the road and holds them both. He looks up at you over their heads and cannot say anything at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-child",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take them to a guard.",
+     "success": {
+      "text": "You take them to the guard at the town hall, who gives them a sweet each and sits them on the desk. Their dad arrives ten minutes later, at a run. He shakes your hand so hard it hurts.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-child",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy them ice cream and wait. (₽50)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "success": {
+      "text": "You buy them each an ice cream and sit on the kerb with them, right where they were, because that is where Dad will come back to. He does. He sees you, and the ice creams, and his face crumples. Afterwards he buys you a Lemonade and will not hear a word against it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "item",
+        "id": "lemonade",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-child",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lost-ring",
+   "name": "Lost Ring",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_beauty"
+    ],
+    "effect": "glint"
+   },
+   "intro": "A ring glimmers in the grass of the park, gold, old, worn thin on one side. You pick it up, and four people are suddenly very close. A: \"My engagement ring!\" B: \"My grandmother's!\" C: \"It fell off at lunch!\" And D, a young man standing a little apart, quietly: \"It's mine.\" He looks at the others, and back at the ring. \"But I think he needs it more.\"",
+   "choices": [
+    {
+     "label": "Ask what's engraved inside.",
+     "success": {
+      "text": "You hold it up. Nobody says anything. Then D, quietly: \"For Lise, from J.\" You look. It is. A, B and C slink off in three directions. D takes the ring and holds it in his fist against his chest. D: \"She's gone. It's all I've got.\" You did not need to hear that to know.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-ring",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-returned-wallet",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to D.",
+     "success": {
+      "text": "You hold it out to D. He stares at you. D: \"How did you…\" You do not know how. You just did. He looks inside the ring, and his face breaks, and he puts it on a chain round his neck, and walks away very fast.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-ring",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-returned-wallet",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You put it in your pocket and walk away from all four of them. You sell it in the next town for two thousand. The money feels heavier than it should.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 2000
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-wallet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-ring",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lost-umbrella",
+   "name": "Lost Umbrella",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "effect": "rain"
+   },
+   "intro": "Rain again, and on a bench, a big black umbrella, soaked, with a paper name tag tied to the handle. Across the road a woman is huddled under a shop awning, wet through, watching the rain like it has done something to her personally.",
+   "choices": [
+    {
+     "label": "Take it to her.",
+     "success": {
+      "text": "You take it across. It is hers. She thanks you, and opens it, and holds it over both of you all the way to the station, telling you about her day, which was a bad one, and is now slightly less bad.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-umbrella",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the tag first.",
+     "success": {
+      "text": "You check the tag. It is not her name on it. You take it to her anyway, because she is the only person in the street, and she reads the tag, and puts her hand over her mouth. It is her husband's name. He died in the spring. She thought she had lost it on the train. She holds the umbrella like it is him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-umbrella",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use it myself.",
+     "success": {
+      "text": "You put it up and walk on, dry. Across the road, she watches you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-kept-umbrella",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lost-wallet",
+   "name": "Lost Wallet",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A wallet on the path, fat with cash. You open it. An ID card: a nurse, two towns on, smiling in her photo the way people smile when the photographer has told a bad joke. There is a picture of two children in the back.",
+   "choices": [
+    {
+     "label": "Return it. (two towns on)",
+     "success": {
+      "text": "You put it in your inside pocket and go. Two towns on, you find the hospital.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "wallet-nurse",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "honest-returned-wallet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-wallet",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand it in.",
+     "success": {
+      "text": "You hand it in at the next guard post. The guard writes your name down. Weeks later a thank-you letter finds you at a Pokémon Center, with a drawing from each of the two children in the photograph.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-returned-wallet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-wallet",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the cash.",
+     "success": {
+      "text": "You take the cash and drop the wallet back on the path. A thousand. It does not feel like a thousand.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1000
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-wallet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept-wallet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honest-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wallet-nurse",
+   "name": "The Nurse",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "The hospital, two towns on. The nurse from the photo is at the desk, and when you put the wallet down in front of her she stares at it and then bursts into tears. Nurse: \"That's the rent.\" She laughs, and wipes her eyes, and laughs again. \"That's the rent. I've been sick about it all week.\" She pulls two notes out and pushes them across the desk. \"Please. Take something.\"",
+   "choices": [
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You push it back. She looks at you for a long moment and then comes round the desk and hugs you, hard, in front of the whole waiting room. Word gets around.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Accept. (₽200)",
+     "success": {
+      "text": "You take it, because she needs you to. She smiles properly for the first time, the way she did in her ID photo.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-helped-stranger",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pokemon-hospice",
+   "name": "Pokémon Hospice",
+   "group": "Helpers, gifts and kindness",
+   "stop": "rest",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A quiet stone house on a cliff, with a sign by the gate in faded paint: A REST FOR OLD FRIENDS. Inside, it is warm and smells of hay and clean water, and in every room there is an old Pokémon sleeping. The caretaker, Ruthanne, a small woman with enormous hands, invites you to stay the night. Ruthanne: \"Old ones. Very old. They like visitors.\" She shows you the last room. An ancient Lapras, her shell grey and cracked, in a pool far too small for her, and in a chair beside the pool an old man asleep with his hand resting on her neck. Ruthanne, very softly: \"He comes every day. She's near the end.\" She looks at them for a long time. \"She used to carry him across the bay when he was a boy.\"",
+   "choices": [
+    {
+     "label": "Stay the night.",
+     "success": {
+      "text": "You stay. You sit in the corridor outside the last room with your team asleep in a heap around you, and listen to the house breathe. In the night you get up once and look in. The old man is still asleep. The Lapras is awake, watching him. In the morning she is still here. Nothing else happens. That is the whole of it, and it is enough.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hospice-stayed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring her outside to see the sea.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water",
+        "psychic"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You ask Ruthanne. She thinks about it for a long time, and then she fetches a cart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hospice-sea",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "hospice-ned"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You leave them be, quietly, and close the door behind you. Ruthanne nods, as if that was right too.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "hospice-ned",
+   "name": "She Sings",
+   "group": "Helpers, gifts and kindness",
+   "stop": "rest",
+   "rarity": "uncommon",
+   "types": [],
+   "scene": {
+    "cast": [
+     "boss.npc_aromalady"
+    ],
+    "effect": "hearts"
+   },
+   "room": true,
+   "requires": [],
+   "intro": "It takes all of you. Your Water-type carries the pool's water in, a wave at a time, to keep her wet. Ruthanne's old cart, a borrowed horse, the long slow path to the cliff above the bay. The Lapras is so light. At the top, you set her down where she can see the water, and she looks at the sea for a long time. Then she lifts her head, and she sings. One long note, out over the bay. Her trainer wakes up in the cart behind you, and sees her, and hears it. Old Ned: \"She hasn't sung in ten years.\" He climbs down, slowly, and stands beside her with his hand on her neck. Later he presses something into your hand: a Mystic Water, worn smooth as a sea stone. Old Ned: \"Take this. She'd want it to go somewhere.\"",
+   "choices": [
+    {
+     "label": "Thank you.",
+     "success": {
+      "text": "You take it. It is warm from his hand. He nods, and turns back to her, and the two of them watch the sea until the sun goes down.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "An old Lapras sang once more at the sea, and her trainer heard it",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it for her.",
+     "success": {
+      "text": "You fold his fingers back over it. Old Ned looks at you, and his eyes fill, and he nods. He puts it back round her neck. You get nothing, and that is the right answer too.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "An old Lapras sang once more at the sea, and you let her keep her Mystic Water",
+        "importance": 85
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the bay.",
+     "success": {
+      "text": "Old Ned tells it. How she found him, a boy who could not swim, clinging to a log a mile out. How she carried him in. How she carried him across every summer after that, until he was too big, and then kept on anyway. He talks until it is dark. Then he gives you the Mystic Water.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "An old Lapras sang once more at the sea, and Old Ned told you how she saved him",
+        "importance": 85
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lapras-answers",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "lapras",
+       "bond": 0
+      }
+     ],
+     "notice": "From your belt, a Poké Ball shakes. Your own Lapras comes out on its own, and looks at the old one, and lifts its head, and sings back. Two notes over the bay, one old, one young."
+    }
+   ]
+  }
+ ]
+}

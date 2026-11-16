@@ -16,6 +16,8 @@ const DATA = JSON.parse(readFileSync(joinPath(import.meta.dirname, '../../../src
 export const teamJson = (id: string): TeamJson => DATA.teams.find((t) => t.id === id)!;
 
 const say = (who: string, line: string): string => `${who}: "${line}"`;
+/** Teams with a Volume III inside route (their Offer comes after The Files). */
+const OFFERS = ['rocket', 'galactic', 'plasma', 'magma', 'aqua', 'flare', 'skull', 'aether', 'yell', 'star'];
 const gate = (t: TeamStory, o: Json): Json => ({ kind: 'evil', team: t.id, ...o });
 const mark = (m: string): Json => story({ mark: m });
 const has = (m: string): Json => ({ kind: 'evil', has: m });
@@ -66,6 +68,11 @@ function storyline(t: TeamStory): Json[] {
       addChoices: [ch(`Keep the files, and Kit's address.`, keep([flag('shelf-kit-address')], ` You read Kit's line three times. Now you know where they took him.`))],
     }],
   });
+  // Volume III: a team with an inside route makes its Offer here, once, in the regions it has one (`evil-<team>-offer-<region>`).
+  if (OFFERS.includes(t.id)) {
+    const files = events[events.length - 1] as { choices: { success: Json }[]; remembers: { addChoices: { success: Json }[] }[] };
+    for (const c of [...files.choices, ...files.remembers.flatMap((r) => r.addChoices)]) c.success = { ...c.success, effects: [...(c.success.effects as Json[]), room(`evil-${t.id}-offer-{region}`)] };
+  }
 
   // ---------- A3. Known ----------
   events.push({

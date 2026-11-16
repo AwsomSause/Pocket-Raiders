@@ -1,0 +1,4109 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "evil-yell-offer-galar",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#1a141c",
+    "effect": "glint"
+   },
+   "intro": "After they've blocked a road. A Yeller, hoarse: \"You're dead good. Not as good as our Marnie. Nobody's as good as our Marnie. D'you want a horn? We've spare horns.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "\"Get in! Mind the shutter!\" A horn, pressed into your hands. You're in Team Yell now, on the inside. Nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-side-yell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "\"Fair enough. You're still dead good.\" He goes off to find his coach. Team Yell goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-yell-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would I be doing?\"",
+     "success": {
+      "text": "\"Shoutin'. Mostly shoutin'. Bein' her crowd. Everywhere.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "evil-yell-offer-galar-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes. That night, in a Wyndon café, you say it again to a man in a brown coat who calls himself Looker. Looker: \"So. You will be my eyes. Be careful.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-side-yell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-yell-offer-galar-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "\"So. You in?\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "\"Get in! Mind the shutter!\" A horn, pressed into your hands. You're in Team Yell now, on the inside. Nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-side-yell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "\"Fair enough. You're still dead good.\" He goes off to find his coach. Team Yell goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-yell-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes. That night, in a Wyndon café, you say it again to a man in a brown coat who calls himself Looker. Looker: \"So. You will be my eyes. Be careful.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-side-yell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-mc-offer-galar",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": false,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-mc-refused",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana"
+    ],
+    "tint": "#1e2430",
+    "effect": "glint"
+   },
+   "intro": "After the first stadium. Oleana, not looking up from a tablet: Oleana: \"The Chairman's noticed you. He notices forty people a day. He's remembered you. That's the rarer thing. There's a lanyard. Don't lose the lanyard.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "A lanyard, on a ribbon. Oleana: \"Don't lose the lanyard.\" You're in Macro Cosmos now: Junior Executive, Future Planning. Nobody outside knows what that means.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-side-mc",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Oleana: \"Noted.\" She doesn't look up. The lanyard goes back in a drawer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-mc-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would I be doing?\"",
+     "success": {
+      "text": "Oleana: \"Future Planning. It's a department of one. He invented it on Tuesday.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "evil-mc-offer-galar-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes. That night, in a Wyndon café, you say it again to a man in a brown coat who calls himself Looker. Looker: \"So. You will be my eyes. Be careful.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-side-mc",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-mc-offer-galar-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Oleana: \"Well?\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "A lanyard, on a ribbon. Oleana: \"Don't lose the lanyard.\" You're in Macro Cosmos now: Junior Executive, Future Planning. Nobody outside knows what that means.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-side-mc",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Oleana: \"Noted.\" She doesn't look up. The lanyard goes back in a drawer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-mc-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes. That night, in a Wyndon café, you say it again to a man in a brown coat who calls himself Looker. Looker: \"So. You will be my eyes. Be careful.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-side-mc",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-act1",
+   "name": "Thursday",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana"
+    ],
+    "tint": "#1e2430",
+    "effect": "glint"
+   },
+   "intro": "A lobby. Marble. A wall of logos. A printer by reception, running. Oleana: \"Floor thirty-one. Future Planning. It's a department of one; he invented it on Tuesday. You've a desk, a lanyard and a mug. You've not earned the mug. He's given it you on account.\" The mug: \"There's never time. There's only whether you're the one who did it.\"",
+   "choices": [
+    {
+     "label": "Go up to thirty-one.",
+     "success": {
+      "text": "Floor 31. Night. Forty desks. Thirty-eight lit.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-act1-desk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-act1-desk",
+   "name": "Floor Thirty-One",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Zane Ingleby, twenty-six, at the next desk, with four screens and the look of someone who last saw daylight through glass: Zane: \"You're Future Planning. I'm present planning. It's called 'the energy problem.' I've done eighteen-hour days on it for three years. I've never been told what it is.\" Zane: \"It's a thousand years off. The shortage. I ran it. A thousand. He wants it solved by Thursday. I said, 'Sir, there's time.' He said, 'There's never time, Ingleby, there's only whether you're the one who did it.' I've got that on a mug now. He gave me the mug.\"",
+   "choices": [
+    {
+     "label": "\"Which Thursday?\"",
+     "success": {
+      "text": "Zane: \"Every Thursday. It's always Thursday. I asked once why Thursday. Oleana said, 'It's the day the seam ran out.' I don't know what that means. I didn't ask twice.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-zane",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-act1-rose"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why stay?\"",
+     "success": {
+      "text": "Zane: \"He knows my name. He knows my mum's name. He sent flowers when she was ill; he did, not an assistant; the card was in his writing. D'you know how hard it is to leave a man who's wrong about one thing and right about your mum?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-zane",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-act1-rose"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show me the graph.\"",
+     "success": {
+      "text": "A line, gently falling, for a very long way. It touches the axis off the edge of the screen. He has to scroll. Zane: \"There. Year three thousand and something. I check it every morning in case it's moved. It's never moved.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-zane",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-graph-seen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-act1-rose"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-act1-rose",
+   "name": "The Chairman",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose",
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "The Chairman comes down. In shirtsleeves. He does this. Rose: \"Future Planning! Splendid. Do you know, I've never had anyone to talk to about the year three thousand. They glaze. You'll not glaze. I can tell.\" Rose: \"Ingleby, go home. No; you'll not. I never did either. Then have this.\" A sandwich, from his own pocket, in paper. Rose: \"Cheese and pickle. My mother's way. She'd be ashamed of a man who kept another man late and didn't feed him.\"",
+   "choices": [
+    {
+     "label": "Take the lanyard.",
+     "success": {
+      "text": "A lanyard. It opens every floor but fifty.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "macro-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-act1",
+   "name": "The Away End",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "A shutter. Half up. A street that's a tunnel. Neon, some of it working. Cheer Captain Gaz, a foghorn with feelings: Gaz: \"OI! It's the dead good one! Get in! Mind the shutter; it sticks! Somebody get 'em a towel!\" A towel. Black and pink. It's not new. It's been to every stadium in Galar. Gaz: \"That one's been to Wyndon. Twice. Don't wash it.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "A lock-up behind the Gym. Camp beds. Banners, drying.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-act1-lockup"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-act1-lockup",
+   "name": "The Lock-Up",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "Beck Gallowglass, forty, folding a banner the size of a sail: Beck: \"I were a Gym trainer here. When there were sixty in on a Tuesday. I'd come out under the lights and they'd know me name. 'Go on, Beck!' You never forget that. Somebody you've never met, knowin' your name.\" Beck: \"No Power Spot, see. Can't Dynamax here. League says no Dynamax, no telly. No telly, no crowd. Town's dyin' on a technicality. So we go be her crowd. Everywhere. Loud. Is it daft? It's daft. It's all I've got.\"",
+   "choices": [
+    {
+     "label": "\"Who decided no telly?\"",
+     "success": {
+      "text": "Beck: \"Nobody. That's what does me head in. I went up to Wyndon to ask. Sat in a lobby four hours. Nice lass on the desk said, 'It's in the contract.' I said, whose contract? She said, 'The League's.' I said, who's the League? She give me a leaflet.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-beck",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-act1-chants"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What was it like, under the lights?\"",
+     "success": {
+      "text": "He stops folding. Beck: \"Like bein' somebody. Sixty folk. Every one of 'em knew me name.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-beck",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-act1-chants"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why her?\"",
+     "success": {
+      "text": "Beck: \"'Cause she's from here an' she's goin' to leave. She should. An' when she's on that pitch in Wyndon with sixty thousand shoutin' for some lad from Postwick, I want her to look up an' see one towel. That's it. One.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-beck",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-act1-chants"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-act1-chants",
+   "name": "The Chant Book",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/musician",
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "pokemon": "linoone-galar",
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "Chant Leader Shaz, hoarse, with a ring binder: Shaz: \"One for every Pokémon in the town. By name. That's the rule; you don't chant 'Linoone,' you chant Stripes. Learn 'em. There's a hundred and twelve.\" Three chants, call and response.",
+   "choices": [
+    {
+     "label": "\"Stripes!\"",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "\"STRIPES!\" Then a Morpeko called Biscuit. Then a Scraggy called Our Kev. You learn three names. They'll matter. A towel. A horn. A seat on the coach: fourteen, by the window that doesn't shut.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "yell-names",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     },
+     "failure": {
+      "text": "You come in a beat late on the first. Shaz doesn't mind. By the third you've got it: Stripes, Biscuit, Our Kev. Three names. They'll matter. A towel. A horn. A seat on the coach: fourteen, by the window that doesn't shut.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "yell-names",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-act2",
+   "name": "Contingency",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-woman",
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor 44. Accounts. A woman with a printout as long as a scarf. Shay Brisbane: \"You're the new department. Good. You've no history. Look at this and tell me I'm wrong.\" Shay: \"It says 'contingency.' It's four billion. That's not a contingency. That's a thing. Somebody's building a thing. It's bigger than the League's whole budget and it's on one line and the line's got no cost centre.\" Zane, who's come up with her: Zane: \"It's the problem. That's what I've been costing. I never saw the total. Nobody on thirty-one's seen the total; we each do a slice.\" A memo. From fifty. \"Reroute Hammerlocke's supply to the Plant, 02:00–02:20, for a test. Routine. — R.\" Shay: \"Twenty minutes. What's on Hammerlocke's supply at two in the morning?\" Zane, pulling it up: Zane: \"The vault. The station. Street lighting. ...And the infirmary. It's on the same bus. It's got a generator; it's rated for—\" He checks. Zane: \"Fifteen minutes.\"",
+   "choices": [
+    {
+     "label": "Reroute it.",
+     "success": {
+      "text": "Twenty minutes. The generator cuts out at fifteen. From the street: a ward's lights, going out, and coming back five minutes on. Nobody's lost. A night sister writes it in the book. Shay, after: \"He's never once asked what's on the line. He asks how much. I've eleven years of his memos. 'How much.' 'By when.' Never 'who's on it.'\" Zane: \"He'd care. If he knew. That's the mad part. He'd send the infirmary flowers.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "macro-fourbillion",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-infirmary-cut",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-shay",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Reroute it, and leave the infirmary's feeder.",
+     "success": {
+      "text": "The test's nine per cent short. Rose, by memo: \"Disappointing. Find the nine.\" Shay, after: \"He's never once asked what's on the line. He asks how much.\" Zane: \"He'd care. If he knew. He'd send the infirmary flowers.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "macro-fourbillion",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-infirmary-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-shay",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ring the infirmary first.",
+     "success": {
+      "text": "The night sister: \"Twenty minutes? Our set does fifteen. Who is this? ...Right. Give me an hour. I'll have the theatre on batteries.\" She's the first person outside the tower who's been told anything. Shay, after: \"He's never once asked what's on the line. 'How much.' 'By when.' Never 'who's on it.'\" Zane: \"He'd care. If he knew. That's the mad part.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 2,
+        "rank": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-fourbillion",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-infirmary-rung",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-shay",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-act2",
+   "name": "Route 9",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.marnie-masters4"
+    ],
+    "pokemon": "wooloo",
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "A coach, parked across Route 9. Forty people in black and pink, arms linked. Horns. Gaz: \"Right! Three challengers comin' through to Circhester! All of 'em drawn before our Marnie! They're late, they forfeit! Nobody passes!\" Kaya, nineteen, with a banner still wet: Kaya: \"I did a new one.\" It says NONE SHALL PASS (EXCEPT MARNIE). The brackets are very neat. A challenger arrives: a boy from Postwick, fourteen, with a Wooloo, out of breath. The boy: \"I've a match at two. Please. I've never got this far.\" Gaz: \"BOO!\" Forty people: \"BOOOO!\" The Wooloo rolls behind his legs. And then, behind the line, a quiet voice. Marnie, arriving, mortified: Marnie: \"Stop it. I never asked. If I win 'cause they were late, I've not won. Go home.\" She looks at them. Forty people who came on a coach. Marnie: \"...Have you eaten? Go home and eat.\"",
+   "choices": [
+    {
+     "label": "\"Clear the road.\"",
+     "success": {
+      "text": "They do. Sulkily. Marnie nods.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "yell-road-cleared",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-kaya",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Clear it, and cheer for everybody.\"",
+     "success": {
+      "text": "\"What's the Wooloo's name?\" The boy: \"...Bobbin.\" Shaz, who's got a pencil out before anyone's told her: Shaz: \"Bobbin. Two syllables. Right. One, two, three—\" Forty people: \"BOB-BIN! BOB-BIN! BOB-BIN!\" The Wooloo comes out from behind his legs. It's twice the size it was. Not Dynamaxed. Just: stood up. The boy's crying. He's fourteen and he's from Postwick and forty strangers know his Wooloo's name. Gaz, baffled, delighted: Gaz: \"That were louder than booin'. Did you hear that? We were louder.\" They do it for all three. It's deafening. Marnie pretends not to see, and is seen smiling.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-cheered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-road-cheered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-kaya",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"She's wrong. She needs the help.\"",
+     "success": {
+      "text": "The line holds. The boy forfeits. Marnie doesn't speak to anyone on the coach home.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "marnie-cross",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-road-held",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-kaya",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-act3",
+   "name": "The Flicker",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#14181c",
+    "effect": "none"
+   },
+   "intro": "Under Hammerlocke. The lift. It goes down for a long time.",
+   "choices": [
+    {
+     "label": "Step out.",
+     "success": {
+      "text": "A hall.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-flicker-plant"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-flicker-plant",
+   "name": "The Plant",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose",
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "pokemon": "eternatus",
+    "tint": "#2a1420",
+    "effect": "glint"
+   },
+   "intro": "A hall. A cage of light. Something in it that's the size of the room, and mostly ribs, and awake. Rose, warm, in shirtsleeves, a hard hat on that he wears as if he'd never taken one off: Rose: \"There it is! A thousand years of power. It only wants waking. A little test. Tonight, during the match; nobody'll notice a flicker.\" Zane's looking at a dial. It isn't a flicker. Zane: \"Sir. That's every stadium. That's the whole grid. If it wakes during the final, with sixty thousand— sir, it's a thousand years off.\" Rose: \"And I shan't be here in a thousand years, shall I? Somebody has to mind.\"",
+   "choices": [
+    {
+     "label": "Go to the board.",
+     "success": {
+      "text": "Feeders. Lights.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-flicker-board"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-flicker-board",
+   "name": "The Board",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#14181c",
+    "effect": "none"
+   },
+   "intro": "Feeders. Lights. One, at the bottom, older than the rest: brass, not plastic. EAST COAST (R&B). Nobody on thirty-one knows what it feeds.",
+   "choices": [
+    {
+     "label": "Run the test.",
+     "success": {
+      "text": "The dials go over. The thing in the cage turns its head. Across Galar, for nine seconds, every Pokémon on a pitch is the size of a house. The brass feeder goes dark and stays dark.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galar-test-full",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-brass-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run it at a tenth.",
+     "success": {
+      "text": "A tremor. One Wooloo, in one stadium, briefly enormous. The brass feeder flickers.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galar-test-tenth",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-brass-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Zane. Pull the breaker.\"",
+     "success": {
+      "text": "Zane's hand is on it. A man in a blazer steps out from behind the board.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-flicker-hollis"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-flicker-hollis",
+   "name": "The Breaker",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-leaguestaff-man"
+    ],
+    "tint": "#14181c",
+    "effect": "none"
+   },
+   "intro": "Director Hollis, who announces it like a delay: \"We apologise for the interruption to your service.\"",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "Steelix first.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 4,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galar-test-off",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-breaker",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-brass-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.drive/galarian-swsh-leaguestaff-man",
+       "team": [
+        "steelix",
+        "klinklang",
+        "copperajah"
+       ],
+       "name": "Director Hollis",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "after",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-zane",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Afterwards, the test's off. Rose isn't angry. Rose: \"Ingleby. I'd hoped you'd be the one who did it.\" It's worse than angry."
+    }
+   ]
+  },
+  {
+   "id": "yl-act3",
+   "name": "The Flicker",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.piers",
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "The Gym. A Tuesday. Eleven in. Piers is on. The neon goes. Then the street lights. Then the amp. He goes on singing. Without it. The street knows the words. Beck, in the dark: Beck: \"That's it, then. That's the last of the leccy. Somebody up top's usin' us.\" Kaya: \"It's come back before.\" Beck: \"It's come back less, every time. I've been countin' the bulbs.\" Then, between the shopfronts, a Yeller's Linoone swells. It's the size of a house, and frightened.",
+   "choices": [
+    {
+     "label": "Lead the chant: \"Stripes.\"",
+     "success": {
+      "text": "Forty people, low, in time: \"Stripes. Stripes. Stripes.\" It gets smaller.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-chant-led",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-act3-dark"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-act3-dark",
+   "name": "The Flicker",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "trainer.pr/veteran_m"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "The street, by candle. Stripes, ordinary-sized, asleep across Beck's boots.",
+   "choices": [
+    {
+     "label": "\"Where's the power come from?\"",
+     "success": {
+      "text": "An old man at the back, Mr. Talbot Oldroyd, who was the substation's engineer: \"East coast spur. Oldest cable in Galar. There's a plate on the box; I used to polish it. 'R. & B., Lamps.' Whoever R and B were, they lit this town before the League were thought of.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "yell-spur-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay here. Keep the Gym open on candles.\"",
+     "success": {
+      "text": "Candles on every sill. Piers plays the second half. Eleven people stay to the end.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "yell-candles",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go to Wyndon. All of us. Ask.\"",
+     "success": {
+      "text": "Forty people on a coach at midnight. A lobby. A nice lass on the desk, who gives them a leaflet each. Gaz reads his out loud on the way home, very slowly, all of it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "yell-asked-wyndon",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-act4",
+   "name": "Forty-One",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "beat": 5,
+     "rank": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Floor fifty. An office. A window that looks north, at hills. A desk. A miner's lamp, brass, dented, unlit. Rose: \"Future Planning. Come in. Don't sit there; that's Oleana's. Sit there. That was my brother's, when he'd come up. He'd put his boots on the desk.\" Rose: \"My father went down a pit at fourteen. I went down beside him at fifteen. He came up at sixty with a cough and a clock. I said: never again. Not one more boy down one more hole for one more lump of anything. I built all this so there'd be enough.\" Rose: \"And they tell me: 'A thousand years, Chairman, there's time.' There was time when my father was fourteen. Nobody spent it. I'll not be the man who knew and waited.\" Rose: \"They'll call it reckless. I've been called worse by people who never lit a town.\"",
+   "choices": [
+    {
+     "label": "\"And Spikemuth?\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "rose-notice",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "He doesn't blink. He takes a folded notice out of his breast pocket: SUPPLY ISSUES — EAST COAST. Rose: \"I've had this a stage. I keep reading it.\" \"There's a brass feeder. R and B.\" Rose: \"...R and B. We laid that. Peony and I. With a hand winch. It was the first place after home.\" A long time. Rose: \"Have they been dark?\" \"Come and look.\" He writes it in his diary, in pencil: Spikemuth. It's the first entry in forty years that isn't a deadline. You're Vice-Chair, beside Oleana.",
+       "effects": [
+        {
+         "kind": "evil",
+         "standing": 2,
+         "rank": 5
+        },
+        {
+         "kind": "evil",
+         "mark": "confided"
+        },
+        {
+         "kind": "flag",
+         "key": "macro-rose-confided",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "macro-inside-act4",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rose-knows-spur",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rose-came",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "He blinks. Rose: \"Spikemuth? It hasn't a Power Spot. It doesn't— I didn't think it was on the grid.\" \"East coast spur. There's a brass feeder. R and B.\" Rose: \"...R and B.\" He turns the lamp over in his hands. Rose: \"That's— we laid that. Peony and I. With a hand winch. It was the first— it was the first place after home.\" A long time. Rose: \"Have they been dark?\" \"Come and look.\" He writes it in his diary, in pencil: Spikemuth. It's the first entry in forty years that isn't a deadline. You're Vice-Chair, beside Oleana.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "macro-rose-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-knows-spur",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-came",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who told you it had to be tonight?\"",
+     "success": {
+      "text": "Rose: \"Nobody. That's the point. Nobody was ever going to. Somebody has to say Thursday, or it's never Thursday.\" You're Vice-Chair, beside Oleana.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "macro-rose-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What does Leon think?\"",
+     "success": {
+      "text": "Rose: \"Leon thinks it's a thousand years. He's twenty-four. Everything's a thousand years when you're twenty-four.\" You're Vice-Chair, beside Oleana.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "macro-rose-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Whose lamp is that?\"",
+     "success": {
+      "text": "He picks it up. He knows its weight. Rose: \"Number forty-one. The last one up. A lad called Thackray; he'd stopped to help a pony. I stood there with forty counted and I thought: I've lost one. Four minutes. Then he came up the cage whistling.\" He sets it down. Rose: \"I've never lit it since. I don't know what I'm keeping it for.\" You're the Chairman's Protégé. Oleana, in the doorway, having heard: Oleana: \"He's never told me whose it was. I've dusted it for eleven years.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "macro-rose-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-lamp-41",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-act4",
+   "name": "Not the Leader",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "beat": 5,
+     "rank": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "yell-chant-led",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.piers"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "The Spikemuth Gym, empty. A stage made of pallets. A thin man on the edge of it, tuning a guitar by candle. Piers: \"I'm not their leader. I'll say it first so it's said. They've no leader. They've a coach.\" Piers: \"I could move the Gym. They've offered. Nice site. Power Spot. Telly. And leave this lot here in the dark with nowt. I'll not. So I'm the Leader who killed his own town by lovin' it. Write that on me stone.\" Piers: \"Marnie'll be better than me. She'll leave. She should. I've told Yell to follow her, so somebody from here's there when she does it.\" Piers: \"They block roads now. That's not what I meant. I said follow. I never said get in the way.\"",
+   "choices": [
+    {
+     "label": "\"Play something.\"",
+     "success": {
+      "text": "He does. It's not cheerful. The candle doesn't flicker; there's no draught; the shutters are down. Piers: \"That were for eleven people on a Tuesday. It's the best gig I've done in a year.\" You're in Marnie's Corner.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "yell-piers-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What if the power came to you?\"",
+     "success": {
+      "text": "Piers: \"It'll not. There's nowt here they want. No Spot. That's the whole—\" He stops. Piers: \"Unless they don't know we're on the wire.\" You're in Marnie's Corner.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "yell-piers-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"She won't leave.\"",
+     "success": {
+      "text": "Piers: \"She will. An' I'll stand in an away end with a towel. First time. I've never been to an away game. I've always been the home.\" You're in Marnie's Corner.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "yell-piers-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "piers-away",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"They know every Pokémon's name. D'you know what that does?\"",
+     "success": {
+      "text": "Piers: \"Brings 'em down. The big 'uns. I've seen it. Stripes. Our Marnie says they forget who they are.\" He looks at the guitar. Piers: \"...That's the only thing this town's got that Wyndon's not. Sixty thousand in that stadium an' not one knows what the Pokémon's called.\" You're Piers's Opening Act. It's a real slot. Ten minutes. Your party, on a pallet stage, and forty people who learn all six names before the first chorus.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "yell-piers-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-names-all",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-act5",
+   "name": "A Chip Shop",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man",
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A chip shop, on the road between Hammerlocke and Spikemuth. The only one open. One table. Two people at it who've never met: a man in a lanyard, a man with a towel. Zane: \"Is this seat— sorry. I've not eaten off a plate in three years.\" Beck: \"Sit down, lad. You look like you've been kept in a drawer.\" They get talking. It's a chip shop. That's what it's for. Zane: \"—so there's this feeder nobody can place. Brass. Old. 'East coast.' It browns out first, every test. I've been trying to find what's on it for a month.\" Beck puts his fork down. Beck: \"...Say that again.\" Zane: \"R and B. It's—\" Beck: \"It's us. That's us. That's Spikemuth. You've been turnin' us off.\" Zane: \"I didn't— it's not on the map—\" Beck: \"I know it's not on the map, lad. I've had eight years of it not bein' on the map.\" A long silence. The fryer. Zane: \"He's got the power and no idea where it goes.\" Beck: \"We've a town and no power.\" Zane: \"There'll be others. Off the map. I could find them. I've the feeders.\" Beck: \"An' I've a coach.\"",
+   "choices": [
+    {
+     "label": "Finish your chips.",
+     "success": {
+      "text": "At the tower, the same night. Shay: \"I've printed the four billion. I've left it on Oleana's chair. She'll either sack me or read it.\" Oleana, later, finding you by the lifts: Oleana: \"I read it. I've known for a year. I grew up in a town with no lights. He found me there. I'd do it again. I'm telling you so there's one person who knows I knew.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oleana-knew",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-act5-told"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-act5-told",
+   "name": "A Chip Shop",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana",
+     "boss.drive/galarian-swsh-office-worker-woman"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Your last choice of the night: who's told.",
+   "choices": [
+    {
+     "label": "Nobody.",
+     "success": {
+      "text": "Tomorrow goes as planned.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-chipshop",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-told-none",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The squads.",
+     "success": {
+      "text": "Zane, Shay, Beck and Kaya know: about the spur, about \"if low.\" Whatever happens tomorrow, they'll act on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-chipshop",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-told-squads",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Floor thirty-one.",
+     "success": {
+      "text": "You read the Draft Release aloud, to forty desks. \"Insert casualty figure if low.\" Nobody shouts. Somebody, at the back, puts down a mug. Then another. By two in the morning there are forty mugs in the bin by the lift, and the lights on thirty-one are off for the first time in three years.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-chipshop",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-told-floor",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mc-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-act5",
+   "name": "A Chip Shop",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man",
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A chip shop, on the road between Hammerlocke and Spikemuth. The only one open. One table. Two people at it who've never met: a man in a lanyard, a man with a towel. Zane: \"Is this seat— sorry. I've not eaten off a plate in three years.\" Beck: \"Sit down, lad. You look like you've been kept in a drawer.\" They get talking. It's a chip shop. That's what it's for. Zane: \"—so there's this feeder nobody can place. Brass. Old. 'East coast.' It browns out first, every test. I've been trying to find what's on it for a month.\" Beck puts his fork down. Beck: \"...Say that again.\" Zane: \"R and B. It's—\" Beck: \"It's us. That's us. That's Spikemuth. You've been turnin' us off.\" Zane: \"I didn't— it's not on the map—\" Beck: \"I know it's not on the map, lad. I've had eight years of it not bein' on the map.\" A long silence. The fryer. Zane: \"He's got the power and no idea where it goes.\" Beck: \"We've a town and no power.\" Zane: \"There'll be others. Off the map. I could find them. I've the feeders.\" Beck: \"An' I've a coach.\"",
+   "choices": [
+    {
+     "label": "Finish your chips.",
+     "success": {
+      "text": "In Spikemuth, the same night. Marnie, on the coach steps, with her bag: Marnie: \"It's the final tomorrow. I'm in it. I've told 'em: no blockin'. No booin'. If you come, you come an' you watch.\" A pause. Marnie: \"Are they comin'?\" Forty people, loading a coach, pretending they weren't going to.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-act5-told"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-act5-told",
+   "name": "A Chip Shop",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.marnie-masters4",
+     "trainer.pr/musician"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Your last choice of the night: who's told.",
+   "choices": [
+    {
+     "label": "Nobody.",
+     "success": {
+      "text": "Tomorrow goes as planned.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-chipshop",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-told-none",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The squads.",
+     "success": {
+      "text": "Zane, Shay, Beck and Kaya know: about the spur, about \"if low.\" Whatever happens tomorrow, they'll act on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-chipshop",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-told-squads",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The coach.",
+     "success": {
+      "text": "You tell them what the names do. \"You're the cure. When it goes red tomorrow: don't block. Don't boo. Chant.\" Gaz: \"For who?\" \"Whoever's on the pitch.\" Shaz, with the ring binder: Shaz: \"I've a hundred and twelve. There's five stadiums. I'll need to know what they're called.\" She starts writing. She doesn't stop all night.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galar-chipshop",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-told-coach",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "yl-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-op-sponsorship",
+   "name": "Operation: The Sponsorship",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-pokemon-breeder-woman",
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "The order: a struggling Gym, a minor-division one, behind on its rates. Sign it. Exclusive. Macro Cosmos logos on everything; no other backer; a clause on fixtures. The Gym's Leader, a woman in her fifties with a clipboard and a whistle: \"I know what it is. I've read it. I'll sign. I've eleven kids on the youth side and the roof's coming in.\"",
+   "choices": [
+    {
+     "label": "Sign it.",
+     "success": {
+      "text": "She signs. Logos on everything by Friday. The clause on fixtures goes in the drawer with the others.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sign it. Cross out \"exclusive.\"",
+     "success": {
+      "text": "You turn the contract round. A pen. One word, with a line through it. And initials. The Leader: \"...You can't do that. Can you do that?\" Zane: \"They're Future Planning. Nobody knows what they can do. That's the beauty of the department.\" It goes through. Legal doesn't read past the signature. The Gym's got Macro Cosmos money and can take anyone else's too. A stage on, there's a second logo on the roof: a chip shop's.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-sponsor-crossed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zane-low",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "yell",
+       "inside": true,
+       "suspicion": 0,
+       "suspicionBelow": 4
+      }
+     ],
+     "notice": "Zane: \"Sorry: are you on the Thursday list?\""
+    }
+   ]
+  },
+  {
+   "id": "mc-op-meter-round",
+   "name": "Operation: The Meter Round",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man",
+     "trainer.pr/veteran_m"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "The order: read Wyndon's meters. A sample of forty, for the forecast.",
+   "choices": [
+    {
+     "label": "Read Wyndon's.",
+     "success": {
+      "text": "Forty meters. Forty numbers. They go in the forecast.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read Spikemuth's. Nobody has in years.",
+     "success": {
+      "text": "Zane: \"It's not on the round. There's no route for it.\" \"There's a meter.\" The green box at the end of the street. A dial, behind glass, behind dust. Zane: \"That's— that can't be right. That's nothing. A town this size should draw forty times that.\" He taps the glass. The needle doesn't move. Zane: \"They're not using it because it's not there. We've been sending them a tenth and billing them for— we've been billing them?\" Mr. Oldroyd, behind you, with a tin of polish: \"Every quarter. Estimated. I've a drawer full.\" Zane writes it up. It's the first document in Macro Cosmos with the word \"Spikemuth\" in it in eight years. It goes to Shay. Shay finds eight years of estimated bills, and refunds them, and puts it under \"contingency,\" where there's room.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-meter-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galar-power-east",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zane-mid",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "yell",
+       "inside": true,
+       "standing": 5
+      }
+     ],
+     "notice": "Zane: \"You go home at night. How d'you do that?\""
+    },
+    {
+     "id": "zane-sus",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "yell",
+       "inside": true,
+       "suspicion": 4,
+       "suspicionBelow": 7
+      }
+     ],
+     "notice": "Zane: \"Oleana asked what Future Planning's planned. I said it was confidential. Is it?\""
+    }
+   ]
+  },
+  {
+   "id": "mc-op-lanyard",
+   "name": "Operation: The Lanyard",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#2a2a30",
+    "effect": "none"
+   },
+   "intro": "The order: escort the Chairman to a ribbon-cutting at Hammerlocke. Car to the door. Twenty minutes.",
+   "choices": [
+    {
+     "label": "Car to the door.",
+     "success": {
+      "text": "Twenty minutes. He makes the speech. It's a good speech.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk him the long way.",
+     "success": {
+      "text": "Rose: \"This isn't the route.\" \"It's a route.\" Rose: \"Oleana will be— well. I've not walked anywhere in years. They put me in cars.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mc-op-lanyard-walk"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zane-high",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "yell",
+       "inside": true,
+       "standing": 8
+      }
+     ],
+     "notice": "Zane: \"If he's wrong, I'd rather you told him than me. He'd listen to you. You're the future.\""
+    },
+    {
+     "id": "zane-7",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "yell",
+       "inside": true,
+       "suspicion": 7
+      }
+     ],
+     "notice": "Zane: \"He'll ask you to cut a line. 'A rounding error.' Ask him to come and look at it.\""
+    }
+   ]
+  },
+  {
+   "id": "mc-op-lanyard-walk",
+   "name": "The Long Way",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#2a2a30",
+    "effect": "none"
+   },
+   "intro": "A street off the main road. It could be anywhere. It's not Spikemuth; it's just somewhere his cars don't go. A row of shops. Every third one shut. Rose: \"That's a baker's. Was. They go fourth.\" He doesn't explain. A bus shelter with a Macro Cosmos Rail poster: SERVICE RATIONALISED. Rose: \"That's mine.\" He reads it as a stranger would. A kiosk: DARKEST DAY COVER. A woman's buying a policy. She recognises him. \"Chairman! Is it really coming? Only I've put my holiday money in.\" He can't answer her. A street light, out. A child under it, doing homework by a torch. He stops for a long time. Rose: \"How long's that been out?\" The child: \"Dunno. Always.\"",
+   "choices": [
+    {
+     "label": "Walk on to the ribbon.",
+     "success": {
+      "text": "Rose, at the ribbon-cutting, with the scissors, to nobody: Rose: \"I paid for a street's lights myself, once. I knew every lamp.\" He cuts the ribbon. He doesn't make the speech. He sends an engineer to the street light that afternoon. Himself. By name. It's one bulb. It's the first thing he's done in forty years that wasn't for a thousand people at once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rose-street-light",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-op-blockade",
+   "name": "Operation: The Blockade",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man",
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "The order: a hotel lobby in Motostoke. Marnie's rivals are staying. Block the doors. Make a racket. Nobody gets a night's sleep. Gaz: \"Right! Link arms! Nobody gets to the lift!\" A family. A mother, a challenger of twelve, two cases and a Pokémon carrier.",
+   "choices": [
+    {
+     "label": "Link arms.",
+     "success": {
+      "text": "Nobody gets to the lift. Nobody sleeps. The challenger of twelve sits on a case in the lobby till two.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry everyone's bags.",
+     "success": {
+      "text": "You pick up a case. \"Which floor?\" The mother: \"...Fourth?\" Gaz: \"What're you doin'?\" \"They'll not get to the lift without us now.\" It catches. Forty people in black and pink, in a hotel lobby, being very loud and extremely helpful. Beck, with a pram on his shoulder: Beck: \"Mind your backs!\" Shaz: \"One, two, three: Room! Four! Twelve!\" Forty people: \"ROOM! FOUR! TWELVE!\" The night manager, to the day manager, on the telephone: \"No, they're— I don't know what they're doing. They've carried a wardrobe.\" The rivals sleep well. The hotel gives Yell breakfast. It's the first time anybody's fed them at an away ground.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-breakfast",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "beck-low",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "yell",
+       "inside": true,
+       "suspicion": 0,
+       "suspicionBelow": 4
+      }
+     ],
+     "notice": "Beck: \"Hold that end.\""
+    }
+   ]
+  },
+  {
+   "id": "yl-op-chant",
+   "name": "Operation: The Chant",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/musician",
+     "boss.marnie-masters4"
+    ],
+    "pokemon": "eldegoss",
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "The order: a rival's doing a press interview before a match. Drown it out. A girl from Turffield, fifteen, in front of a microphone, terrified. A reporter. A camera. Gaz: \"Horns ready!\"",
+   "choices": [
+    {
+     "label": "Horns.",
+     "success": {
+      "text": "Nobody hears a word she says. Neither does she.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's she called?\"",
+     "success": {
+      "text": "Kaya: \"Dunno. 'The Turffield lass.'\" \"Find out.\" Shaz has a programme out. A pencil. Shaz: \"Nellie. Nellie Aldersley. An' the Eldegoss is Thistle.\" Forty people, as the camera rolls, to a tune they use for Marnie: \"NEL-LIE! NEL-LIE! AN' THIS-TLE!\" The girl looks round. She doesn't know them. They don't know her. They're wearing somebody else's colours and they're singing her name. The reporter: \"And you've brought quite a following from Turffield!\" Nellie: \"I've— they're not— I came on the bus.\" Marnie, at the back, arms folded: Marnie: \"They're mine. They're on loan.\" Marnie beats her, that afternoon. Fairly. Nellie asks for a towel. She's given one.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-nellie",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "beck-mid",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "yell",
+       "inside": true,
+       "standing": 5
+      }
+     ],
+     "notice": "Beck: \"You learn the names. I've noticed.\""
+    },
+    {
+     "id": "beck-sus",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "yell",
+       "inside": true,
+       "suspicion": 4,
+       "suspicionBelow": 7
+      }
+     ],
+     "notice": "Beck: \"Gaz says you're soft on the away lot. I said aye. An'?\""
+    }
+   ]
+  },
+  {
+   "id": "yl-op-shutters",
+   "name": "Operation: The Shutters",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-leaguestaff-man"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "The order: guard Spikemuth's gate. Nobody in. \"They only come to look.\" The shutter. Down. It's been down, more or less, for five years. It started as a way to keep the wind out. A knock. A man in a League blazer, with a rolled-up plan, and the look of someone who's rung from outside three times. Mr. Midgley: \"I only wanted to see it. I've a model. I've never—\"",
+   "choices": [
+    {
+     "label": "(Keep it shut.)",
+     "success": {
+      "text": "He goes. He builds what's on the model.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Open it.)",
+     "success": {
+      "text": "He comes in. He stands in the street. It's narrower than he drew it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Open it, and walk him through.)",
+     "success": {
+      "text": "You open it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "yl-op-shutters-walk"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "beck-high",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "yell",
+       "inside": true,
+       "standing": 8
+      }
+     ],
+     "notice": "Beck: \"When there's sixty in again on a Tuesday, I want you stood next to me.\""
+    },
+    {
+     "id": "beck-7",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "yell",
+       "inside": true,
+       "suspicion": 7
+      }
+     ],
+     "notice": "Beck: \"They'll want you to boo a Pokémon. Don't. Marnie'd never speak to you.\""
+    }
+   ]
+  },
+  {
+   "id": "yl-op-shutters-walk",
+   "name": "The Shutters",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-leaguestaff-man",
+     "boss.drive/galarian-swsh-mom"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "You show him: the Gym, which is a street. Mrs. Gallowglass's front step, where the away fans used to sit. The chip shop. The green box, with a brass plate. Forty people, who look at a man in a blazer, and don't boo. Gaz's mam: \"You're the one wi' the model.\" Mr. Midgley: \"I— yes.\" Gaz's mam: \"Is there a step on it?\" Mr. Midgley: \"No.\" Gaz's mam: \"Put a step on it. Folk need somewhere to sit that's not a seat.\"",
+   "choices": [
+    {
+     "label": "See him to the gate.",
+     "success": {
+      "text": "He goes home. He takes the tiny trees off. The shutter's left up, after. Nobody decides it. It just isn't pulled down that night, and then it isn't the next.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-shutter-up",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-midnight-3",
+   "name": "Past Midnight",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor thirty-one. After twelve. You're one of those still there. Thirty-eight of forty still at a desk. Rose comes round with sandwiches. Cheese and pickle. He knows who's vegetarian.",
+   "choices": [
+    {
+     "label": "Go home.",
+     "success": {
+      "text": "You go home. It's the strangest thing anyone on thirty-one does all week.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-midnight-4",
+   "name": "Past Midnight",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor thirty-one. After twelve. You're one of those still there. Thirty-six. Two have been sent on leave: \"exhaustion.\" Their mugs are still on their desks. Nobody's moved them.",
+   "choices": [
+    {
+     "label": "Go home.",
+     "success": {
+      "text": "You go home. It's the strangest thing anyone on thirty-one does all week.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-midnight-5",
+   "name": "Past Midnight",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor thirty-one. After twelve. You're one of those still there. Zane, asleep on his keyboard. The graph's on his screen.",
+   "choices": [
+    {
+     "label": "Put a coat over him.",
+     "success": {
+      "text": "He wakes at four with a line of j's across a spreadsheet and somebody's coat on. Zane: \"Whose— nobody's done that since my mum.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zane-coat",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake him.",
+     "success": {
+      "text": "He sits up. Zane: \"Thursday?\" \"Go home.\" He doesn't.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-midnight-6",
+   "name": "Past Midnight",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor thirty-one. After twelve. You're one of those still there. Shay, who doesn't work on this floor. She's reading the mugs. Shay: \"Four hundred of these. I've found the invoice. He pays for them himself. Not the company. It's the only thing in the building that isn't on a cost centre.\"",
+   "choices": [
+    {
+     "label": "Go home.",
+     "success": {
+      "text": "You go home. It's the strangest thing anyone on thirty-one does all week.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-midnight-7",
+   "name": "Past Midnight",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-office-worker-man"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "Floor thirty-one. After twelve. You're one of those still there. The night before.",
+   "choices": [
+    {
+     "label": "Go home.",
+     "success": {
+      "text": "You go home. It's the strangest thing anyone on thirty-one does all week.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "floor",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-told-floor",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It's dark. Forty mugs in a bin."
+    },
+    {
+     "id": "lit",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-told-floor",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Forty desks, lit, the night before, and Rose, with sandwiches, and nobody eating. Rose: \"Eat. Somebody eat. My mother'd be ashamed.\""
+    }
+   ]
+  },
+  {
+   "id": "yl-seat-14-3",
+   "name": "Seat Fourteen",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "The coach, coming home. You're in fourteen: the window that doesn't shut. In thirteen: Kaya, with a banner on her knee, redoing a letter. Kaya: \"I get the S's right. Gaz never did. I do 'em backwards on one, every time, for luck. See if you can spot which.\"",
+   "choices": [
+    {
+     "label": "Look out of the window.",
+     "success": {
+      "text": "Galar goes by in the dark.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-seat-14-4",
+   "name": "Seat Fourteen",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "The coach, coming home. You're in fourteen: the window that doesn't shut. In thirteen: Marnie. She's never been on the coach. Marnie: \"Don't tell 'em I got on. I just— I wanted to see what it were like. From inside.\" She's got a towel. She's holding it as if it might be someone else's.",
+   "choices": [
+    {
+     "label": "Look out of the window.",
+     "success": {
+      "text": "Galar goes by in the dark.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bobbin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-cheered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Gaz: \"Bobbin. I can't get it out me head. Bob-bin.\""
+    }
+   ]
+  },
+  {
+   "id": "yl-seat-14-5",
+   "name": "Seat Fourteen",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "The coach, coming home. You're in fourteen: the window that doesn't shut. In thirteen: nobody. It's got a coat on it. Big Daz, from the front: \"That's Dennis's. He passed. Two year back. Seat thirteen were his. We keep his coat on it. He comes to every match.\"",
+   "choices": [
+    {
+     "label": "Look out of the window.",
+     "success": {
+      "text": "Galar goes by in the dark.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "hood",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galar-cheered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Big Daz: \"Somebody were in thirteen wi' a hood up, last time. I'm sayin' nowt.\""
+    }
+   ]
+  },
+  {
+   "id": "yl-seat-14-6",
+   "name": "Seat Fourteen",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "The coach, coming home. You're in fourteen: the window that doesn't shut. In thirteen: Beck, counting on his fingers.",
+   "choices": [
+    {
+     "label": "\"How many bulbs?\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "galar-power-east",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Beck: \"I counted the bulbs again. There's more. I don't know who's doin' it. More. First time in eight year the number's gone up.\"",
+       "effects": []
+      }
+     ],
+     "success": {
+      "text": "Beck: \"Fewer.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-seat-14-7",
+   "name": "Seat Fourteen",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "The coach, coming home. You're in fourteen: the window that doesn't shut. Everybody's awake. Nobody's singing. Shaz is writing. Big Daz: \"Who's got seat one? Somebody's to write in the book on the way home tomorrow.\" Nobody takes it. They leave it for you.",
+   "choices": [
+    {
+     "label": "Look out of the window.",
+     "success": {
+      "text": "Galar goes by in the dark.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-forty-a-day",
+   "name": "Forty a Day",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "The Chairman walks the building, mornings. He greets forty people by name. Future Planning's asked along. Rose, to a cleaner: \"Doreen! How's the knee? Did the cream help?\" Doreen: \"It did, Chairman.\" Rose: \"Splendid. Splendid.\" Rose, to a post boy: \"Kevin. Your sister passed her exams? Tell her well done from me. Tell her.\" He's extraordinary at it. He doesn't check a note. Forty people. Forty names. A fact about each. Rose, to you, walking: \"Do you know why? When I was fifteen the manager came down the pit once a year and called every man 'you there.' I said: I'll know them. All of them. Whatever it gets to.\" On a notice-board by the lift, between a fire drill and a five-a-side sign-up: \"SUPPLY ISSUES — EAST COAST. Customers at the following postcodes may experience intermittent—\" He walks past it. He's greeting Kevin.",
+   "choices": [
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "He walks on. The notice stays where it is.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Chairman. The notice.\"",
+     "success": {
+      "text": "He stops. He reads it. It takes him four seconds. Rose: \"East coast. That'll be— what's on the east coast?\" \"People you've not met.\" He takes the notice down. He folds it. He puts it in his breast pocket, with the sandwiches.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rose-notice",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"How many do you know?\"",
+     "success": {
+      "text": "Rose: \"Four thousand, in this building. I've a system.\" A pause. Rose: \"There are forty thousand in the company. I've stopped being able to. I find I mind that more than anything on the accounts.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-opening-act",
+   "name": "Opening Act",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 5,
+     "rank": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.piers",
+     "trainer.pr/musician"
+    ],
+    "tint": "#1a141c",
+    "effect": "none"
+   },
+   "intro": "Ten minutes. A pallet stage. Before Piers. Piers, from the wings, flat: \"You're on. Don't thank 'em for comin'. They live here.\" The street. Forty. Then sixty; word's gone round. A candle on every sill, because the lights are off again. It isn't a battle. It's a turn. You send out each of your party, one at a time, onto a stage, in front of a street. For each: one move, shown off; and its name, said into a microphone. Shaz, at the front, with a pencil: Shaz: \"Say it clear. I'm writin' 'em down.\"",
+   "choices": [
+    {
+     "label": "Say the first name.",
+     "success": {
+      "text": "One name. A pause. \"One, two, three—\" Sixty people, by candle. It's the first time anyone but you has said it. Then the next, and the next. Something that's been \"the Corviknight\" on every road in Galar hears a street say what it's called. Piers, coming on after, to the microphone, deadpan: Piers: \"Follow that. Cheers.\" He does. It's the best set he's played in a year. He'd never say so.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "yell-opening",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-oleana-alone",
+   "name": "Oleana, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana"
+    ],
+    "tint": "#1e1e24",
+    "effect": "none"
+   },
+   "intro": "The tower's car park. She's in the car, not driving. Oleana: \"I was nine. No lights in the whole street. He came to open a plant, and he shook my hand, and the lights came on behind him. I thought he'd done it by shaking my hand.\"",
+   "choices": [
+    {
+     "label": "\"He didn't.\"",
+     "success": {
+      "text": "Oleana: \"I know. I found out at twelve. It didn't help.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Would you stop him?\"",
+     "success": {
+      "text": "Oleana: \"No. I'd stand between him and whoever tried, and I'd hate it, and I'd do it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oleana-stands",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do you want, yourself?\"",
+     "success": {
+      "text": "She looks at the steering wheel a long time. Oleana: \"To drive somewhere. Nobody's ever asked.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oleana-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-bede-alone",
+   "name": "Bede, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.bede"
+    ],
+    "tint": "#1e2430",
+    "effect": "none"
+   },
+   "intro": "A corridor. He's holding a Wishing Star. Bede: \"The Chairman chose me. Out of an orphanage. I collect these for him. If I collect enough, he'll— I don't know what he'll. I've never asked what happens if I finish.\"",
+   "choices": [
+    {
+     "label": "\"He'll need more.\"",
+     "success": {
+      "text": "Bede: \"...Yes. He always does.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"You're good without him.\"",
+     "success": {
+      "text": "Bede: \"...Say it again. I didn't— say it once more.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bede-heard",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did the orphanage call you?\"",
+     "success": {
+      "text": "Bede: \"'The quiet one.' I wasn't. I just didn't say anything they could use.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "yl-marnie-alone",
+   "name": "Marnie, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.marnie-masters4"
+    ],
+    "pokemon": "morpeko",
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "Behind a stadium. She's taking off her jacket to give to a cold Yeller. Marnie: \"They follow us about. It's dead embarrassin'. An' if they stopped, I'd have nobody. Don't tell 'em.\"",
+   "choices": [
+    {
+     "label": "\"They know.\"",
+     "success": {
+      "text": "Marnie: \"...Aye. Probably.\" She gives the jacket over anyway.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What's it for, the winning?\"",
+     "success": {
+      "text": "Marnie: \"So somebody on the telly's from Spikemuth. That's all. So some kid there sees it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "marnie-heard",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go home and see your brother.\"",
+     "success": {
+      "text": "Marnie: \"He's always in. That's the trouble with him.\" She goes anyway, that night.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "mc-loyalty-test",
+   "name": "The Loyalty Test",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "suspicion": 7,
+     "suspicionBelow": 10,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rose"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Rose: \"Cut Spikemuth's line. For the test. One night. It's a rounding error.\"",
+   "choices": [
+    {
+     "label": "\"It's a town.\"",
+     "success": {
+      "text": "Rose: \"It's a line on a board, Future Planning.\" He waits. You don't cut it. He writes something down.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Cut it.)",
+     "success": {
+      "text": "You cut it. Somewhere on the east coast, a street goes dark. It's a rounding error.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-cut-spikemuth",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come and look at it first.\"",
+     "success": {
+      "text": "He comes. He's never been. He stands in the dark street for a long time.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "rose-came",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zane",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-zane",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zane: \"He'll ask you to cut a line. 'A rounding error.' Ask him to come and look at it.\""
+    }
+   ]
+  },
+  {
+   "id": "yl-loyalty-test",
+   "name": "The Loyalty Test",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "suspicion": 7,
+     "suspicionBelow": 10,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "A Yeller: \"Boo that lad's Pokémon. Go on. Proper loud. It's what we do.\"",
+   "choices": [
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "\"No?\" He looks at you. He looks at the others. Nobody boos.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Cheer it instead.)",
+     "success": {
+      "text": "You ask the lad what it's called. You chant it. It's a Rookidee called Pip. By the third time, forty people are chanting it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-cheered-test",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's it done to you?\"",
+     "success": {
+      "text": "He opens his mouth. He shuts it. \"...Nowt.\" He doesn't boo either.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -2
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "beck",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-beck",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Beck: \"They'll want you to boo a Pokémon. Don't. Marnie'd never speak to you.\""
+    }
+   ]
+  },
+  {
+   "id": "mc-found-out",
+   "name": "Found Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "suspicion": 10,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-mc",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/oleana",
+     "boss.drive/galarian-swsh-leaguestaff-man"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Your lanyard doesn't open the lift. Oleana is waiting in the lobby, with Director Hollis and a clipboard. Oleana: \"Future Planning. The Chairman is disappointed. I'm not; I never expected anything else.\" You've been found out. The only way back outside is through them, with your own party, on worse ground than you'd have chosen.",
+   "choices": [
+    {
+     "label": "Fight your way out.",
+     "success": {
+      "text": "They come at you two at once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "macro-found-out",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Oleana and Director Hollis",
+       "size": 6,
+       "levelBonus": 2,
+       "format": "doubles",
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zane",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-zane",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zane is by the lifts. He catches your eye, and takes one step sideways, out of their line."
+    }
+   ]
+  },
+  {
+   "id": "yl-found-out",
+   "name": "Found Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "yell",
+     "inside": true,
+     "suspicion": 10,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galar-side-yell",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-yell-grunt-man"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "The shutter's down when you come back, and there are six Yellers in front of it who won't meet your eye. \"Somebody's been talkin' to the League. There's a sheet wi' your name on it. I'm not sayin' it's you. I'm sayin' you're goin' out the long way.\" You've been found out. The only way back outside is through them, with your own party, on worse ground than you'd have chosen.",
+   "choices": [
+    {
+     "label": "Fight your way out.",
+     "success": {
+      "text": "They come at you two at once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galar-ending-yell-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "yell-found-out",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Two Yellers",
+       "size": 6,
+       "levelBonus": 2,
+       "format": "doubles",
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "beck",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-beck",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Beck is by the chip shop. He catches your eye, and takes one step sideways, out of their line."
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,405 @@
+{
+ "note": "Catalog Overhaul placement for the evil-hoenn-sinnoh-unova row: the scenes any player can meet, from TEAM_GALACTIC_SINNOH_FULL_3 part E and TEAM_PLASMA_UNOVA_FULL_3 part E. The inside route's Acts, Operations and endings follow the team's beats (core/evil), as row 8's Rocket route does, so they have no block here. Keyed by event id; shape: docs/catalog-overhaul.md.",
+ "gx-lights-on": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3
+  ],
+  "attaches": "town",
+  "home": 5
+ },
+ "gx-regulation-cut": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3
+  ],
+  "attaches": "town",
+  "home": 7
+ },
+ "gx-garage-band": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3,
+   4
+  ],
+  "attaches": "+ node"
+ },
+ "gx-fish-after": {
+  "shape": "Single",
+  "sits": "side-branch",
+  "often": "run",
+  "stages": [
+   4,
+   5,
+   6
+  ],
+  "home": 10,
+  "window": [
+   8,
+   12
+  ]
+ },
+ "gx-all-in-order": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "home": 9
+ },
+ "gx-unlabelled-pan": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "home": 9
+ },
+ "gx-thursdays": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "+ node"
+ },
+ "gx-checking-sky": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "+ node",
+  "tags": [
+   "night"
+  ]
+ },
+ "gx-his-card": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6
+  ],
+  "attaches": "town",
+  "home": 9
+ },
+ "gx-thirteen": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "home": 9
+ },
+ "gx-barber": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "home": 9
+ },
+ "gx-board-ainsley": {
+  "shape": "Visit",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town"
+ },
+ "gx-board-quillan": {
+  "shape": "Visit",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town"
+ },
+ "gx-board-nettleship": {
+  "shape": "Visit",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town"
+ },
+ "gx-board-islay": {
+  "shape": "Visit",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town"
+ },
+ "px-kennel-row": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "home": 5,
+  "window": [
+   3,
+   8
+  ]
+ },
+ "px-walking-fence": {
+  "shape": "Single",
+  "sits": "side-branch",
+  "often": "run",
+  "stages": [
+   4,
+   5,
+   6,
+   7
+  ],
+  "home": 8,
+  "window": [
+   6,
+   12
+  ],
+  "attaches": "instead"
+ },
+ "px-forty-chairs": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "+ node"
+ },
+ "px-twelfth-draft": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "home": 9
+ },
+ "px-a-tenth": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "home": 7
+ },
+ "px-too-clean": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "home": 10
+ },
+ "px-wick-snuff-tallow": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "+ node",
+  "tags": [
+   "night"
+  ]
+ },
+ "px-man-thirsty": {
+  "shape": "Single",
+  "sits": "side-branch",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7
+  ],
+  "home": 11,
+  "window": [
+   9,
+   14
+  ],
+  "attaches": "instead",
+  "tags": [
+   "hot"
+  ]
+ },
+ "px-three-mouths": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   4,
+   5
+  ],
+  "attaches": "+ node"
+ },
+ "px-came-back": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   3,
+   4,
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town"
+ },
+ "px-snow-in-july": {
+  "shape": "Single",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "home": 12,
+  "tags": [
+   "snow"
+  ]
+ },
+ "px-gate-1": {
+  "shape": "Visit",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "chain": "px-gate",
+  "beat": 1
+ },
+ "px-gate-2": {
+  "shape": "Visit",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "chain": "px-gate",
+  "beat": 2
+ },
+ "px-gate-3": {
+  "shape": "Visit",
+  "sits": "optional",
+  "often": "run",
+  "stages": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "attaches": "town",
+  "chain": "px-gate",
+  "beat": 3
+ }
+}

@@ -1,0 +1,1372 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ps-green-form",
+   "name": "The Green Form",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-schoolkid-girl"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "A row of terminals. On each, in the corner of the school's home page, a small green button: TELL US. WE'LL LISTEN. A second-year at the next screen, not looking round: \"Don't bother. It doesn't go anywhere. I did one in the autumn. You get the message and then nothing.\"",
+   "choices": [
+    {
+     "label": "(Send one.)",
+     "success": {
+      "text": "A form. Name. Year. \"What happened?\" A box. You type a line. Anything. SEND. A reply, at once: \"Thank you. Your report has been received and will be reviewed by the Vice-Principal.\" The second-year: \"There isn't a vice-principal. There's not been one for a year. It's still going to his inbox.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-form-sent",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did yours say?\"",
+     "success": {
+      "text": "The second-year: \"That nobody sits next to me. I felt stupid typing it. It's not a thing. Nobody's done anything.\" A pause. The second-year: \"I'd have liked somebody to write back 'that sounds rubbish.' That's all.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Who'd know where it goes?\"",
+     "success": {
+      "text": "The second-year: \"It says the Vice-Principal. There isn't a vice-principal. There's not been one for a year. It's still going to his inbox.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-green-form-reply",
+   "name": "The Green Form",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "star-form-sent",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "star-form-found",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "A second reply. Not automatic. Sent at ten to three in the morning. \"I am so sorry. I have only this week discovered where this form delivers. There are, I find, sixty-three unread. I am reading every one. Yours is the first I have answered. That sounds rubbish, and I should like to hear more. — C. (Director. Not Clive.)\"",
+   "choices": [
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "From then on, the green button works. The second-year gets a reply the same night. It says: \"That sounds rubbish.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-form-found",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-forty-desks",
+   "name": "Forty Desks",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-scientist"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "A classroom. Morning. Forty desks. Nobody at them. A teacher in a lab coat at the front, with a register, reading aloud. Mr. Jacq: \"Fenwright, Odin.\" Silence. Mr. Jacq, making a mark: \"Lightfoot, Yusuf. ...Ah. No. Here, as of Thursday. Good.\" A different mark. He sees you. He isn't embarrassed. Mr. Jacq: \"I take it every morning. Forty names. I was told to stop. I was told to put a line through the room. I found I couldn't.\" Mr. Jacq: \"There's a code for 'absent' and a code for 'present.' I've made one up. I put 'O.' For outside. It's not in the handbook. But 'absent' means they're not doing the work, and I've reason to think they are.\"",
+   "choices": [
+    {
+     "label": "\"Why keep the desks?\"",
+     "success": {
+      "text": "Mr. Jacq: \"The site manager wanted the room for storage. I said: those are assigned. He said, to whom? I read him the register. He went away.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-desks-kept",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What reason?\"",
+     "success": {
+      "text": "Mr. Jacq: \"I can't prove it. But there's a janitor who knows my students' handwriting better than I do, and he once told me Fenwright's quadratics were coming on. Where would he have seen them?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-desks-kept",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Did you teach them?\"",
+     "success": {
+      "text": "Mr. Jacq: \"Science. Every Tuesday. I still have the Tuesday.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-desks-kept",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lift a lid.",
+     "success": {
+      "text": "In each desk, whatever was left, eighteen months ago. A pencil case. A half-eaten pack of mints, fossilised. In one: a helmet. Small. An early one. The star's on crooked. Mr. Jacq: \"That's the first. He made it in my lesson. Under the desk. I pretended not to see. It was the only thing I did that year that was any use.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-desks-kept",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-the-shed",
+   "name": "The Shed",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m"
+    ],
+    "tint": "#1e2a1a",
+    "effect": "none"
+   },
+   "intro": "A very large lawn. A very small shed at the bottom of it. A gardener with a wheelbarrow, who's stopped. The gardener, Señor Basilio Montoya: \"The young master's shed. I'm not to touch it. His father thinks it's for croquet.\" Inside: a workbench. A hairdryer, melted at the nozzle. A scorch on the ceiling, in the shape of a flower, and it's pink. Señor Montoya: \"Six of them. Every day after school, for a month. I'd bring lemonade. They'd stop talking when I came in. Not rudely. Like people who'd got used to stopping.\" Señor Montoya: \"Then one evening: whoomp. The whole garden lit up pink. And screaming. I ran. I thought they'd been hurt.\" Señor Montoya: \"They were laughing. All six. On the lawn, on their backs. I'd not heard one of them laugh in the month. The little one with the fox bag was laughing so hard she'd the hiccups.\" On the bench: six mugs. One's got a fox on. It's been washed. He washes it every week.",
+   "choices": [
+    {
+     "label": "\"Does his father know?\"",
+     "success": {
+      "text": "Señor Montoya: \"He knows his son's 'not attending.' He's had letters. He thinks it's a phase. He's offered to ring someone. The boy said: don't you dare. I heard it through the hedge. 'Don't you dare fix it. It's ours.'\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "star-lore-shed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What was it, that went whoomp?\"",
+     "success": {
+      "text": "Señor Montoya: \"I don't know. Something with wheels, and the hairdryer. It came out pink. They named it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "star-lore-shed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Did they come back?\"",
+     "success": {
+      "text": "Señor Montoya: \"Once. All six. The night before the— before the yard. They wrote something. On the back of a school form. They each signed it. Then the little one left on a ferry and the shed's been shut since.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "star-lore-shed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-use-your-words",
+   "name": "Use Your Words",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-waitress"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A counter. A woman making coffee with great care, as if it might be marked. The café's owner, Señora Jimena Carrasco: \"I was the Academy's counsellor. Two years ago. I'd a room with beanbags. I was very well trained.\" Señora Carrasco: \"A girl came. First-year. Enormous backpack; a fox. She sat on a beanbag for forty minutes and didn't say a word. I said what you're taught to say. 'Use your words.' 'I can't help unless you tell me.'\" Señora Carrasco: \"She got up. She said, very politely, 'I did tell you. I filled in the form.' And she left. I didn't know what form. Nobody'd shown me a form. They went to the vice-principal.\" Señora Carrasco: \"I've thought about that every day. She'd used her words. Forty-one times, I found out later; the whole room had. And then she came and sat with me, to see if a person'd do better than a form, and I asked her to do it again.\"",
+   "choices": [
+    {
+     "label": "\"What should you have said?\"",
+     "success": {
+      "text": "Señora Carrasco: \"Nothing. I should've sat on the other beanbag and said nothing for forty minutes. She wasn't there to talk. She was there to see if anyone'd stay.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Why'd you leave?\"",
+     "success": {
+      "text": "Señora Carrasco: \"Everyone left. That summer. It was suggested. I didn't know why until I saw the ranking.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"She's by the fountain, most evenings.\"",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "star-penny-confided",
+        "star-penny-known",
+        "star-penny-trusted"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Señora Carrasco takes off her apron. She makes a hot chocolate. She puts it in a paper cup.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-use-your-words-bench"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-use-your-words-bench",
+   "name": "The Bench",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.penny",
+     "boss.drive/paldean-sv-waitress"
+    ],
+    "pokemon": "eevee",
+    "tint": "#141424",
+    "effect": "none"
+   },
+   "intro": "The bench. A hood. A woman sits down at the other end. She puts a cup between them. She doesn't say anything. Forty minutes.",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "Penny, at the end of it, to the fountain: \"...You stayed.\" Señora Carrasco: \"I'm late. I'm eighteen months late.\" Penny: \"Yeah.\" She takes the cup. Penny: \"It's gone cold.\" She drinks it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "penny-stayed-with",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-outstanding",
+   "name": "Outstanding",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-office-worker-woman"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A desk. A framed certificate. A woman with a red pen and a stack of school files. The inspector, Doña Remedios Valverde: \"The Academy? I graded it. Eighteen months ago. Outstanding. I remember, because it was the only school that year with nothing in the incidents column. Not a line.\" Doña Valverde: \"I thought: how lovely. I wrote that. 'A notably harmonious community.' It's in the report.\" Doña Valverde: \"I've inspected two hundred schools. Do you know how many have no incidents? In a building with a thousand children?\" She puts the pen down. Doña Valverde: \"None. There's always something. A fight. A lost coat. Nought isn't harmony. Nought's a column that's been cleaned.\" Doña Valverde: \"I knew that. I've known it thirty years. And I looked at a nought and I wrote 'how lovely,' because it was a Friday and the vice-principal'd been charming and there was a train.\"",
+   "choices": [
+    {
+     "label": "\"Can a grade be withdrawn?\"",
+     "success": {
+      "text": "Doña Valverde: \"Corrected. Nobody's ever asked me to.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What would you have asked?\"",
+     "success": {
+      "text": "Doña Valverde: \"'Who mops your floors?' I always ask. The caretaker knows more than the head. I didn't ask, that time. I'd a train.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"He deleted forty-one.\"",
+     "success": {
+      "text": "She's very still. Doña Valverde: \"...In one night?\" \"Nineteen minutes.\" She pulls a file. She opens it. She takes the red pen. Doña Valverde: \"Then I've a correction to issue. It's eighteen months late. It'll say: 'Not inspected. The inspector did not look.'\" By the next stage, the Academy's ranked \"Not Inspected.\" The Director, reading it: The Director: \"Good. That's the first honest thing on the file.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-ranking-withdrawn",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-the-ferry",
+   "name": "The Ferry",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#1e3040",
+    "effect": "none"
+   },
+   "intro": "A boat. A steward with a tray, on his break, by the rail. The steward, Señor Fermín Olmedo: \"The Galar run. Eleven hours. You see all sorts. I remember one, though. A year and a half back. A girl. Fourteen, maybe. By herself; her father'd put her on and gone.\" Señor Olmedo: \"She sat at that table. The one bolted by the window. She'd a laptop. She typed the whole crossing. Eleven hours. And she cried the whole crossing. Not loud. Just: it ran down, and she kept typing.\" Señor Olmedo: \"I brought her a tea. She said thank you. I brought her another at midnight. She said, 'I'm writing the rules so they'll be all right without me.' I said, who? She said, 'Forty people.' I said, that's a lot of people to be all right. She said, 'That's why it's taking eleven hours.'\"",
+   "choices": [
+    {
+     "label": "\"What was she typing?\"",
+     "success": {
+      "text": "Señor Olmedo: \"I didn't look. It wasn't mine to look at.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-lore-ferry",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Did she come back?\"",
+     "success": {
+      "text": "Señor Olmedo: \"Three months on. Same table. She didn't type. She looked at the sticker for eleven hours.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-lore-ferry",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is the table still there?\"",
+     "success": {
+      "text": "Under it, where a hand would rest: a sticker. A star. Five points. Peeling. Señor Olmedo: \"She left that. I've not let them scrape it off.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-lore-ferry",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-lightfoot-pot",
+   "name": "Mrs. Lightfoot's Pot",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/galarian-swsh-mom"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A kitchen. A pot the size of a drum. A woman stirring it with both hands. Mrs. Lightfoot: \"It's the thing with the beans. My mother's. It's for Yusuf. He's up on that hill with his cousin.\" It's a great deal of beans for a boy of thirteen. Mrs. Lightfoot: \"I know what you're thinking. I'm not a fool. I know he's not eating all of this. There's forty of them. I've counted the tents from the road.\" Mrs. Lightfoot: \"The school says they're delinquents. I went up, the first week, to fetch him home. There was a girl on a lorry, shouting at a first-year. I thought: there, you see. Then I listened. She was shouting, 'Have you had a hot meal today?'\" Mrs. Lightfoot: \"I came home and I got the big pot down.\"",
+   "choices": [
+    {
+     "label": "\"Does Yusuf know it's for all of them?\"",
+     "success": {
+      "text": "Mrs. Lightfoot: \"He knows. He's not daft.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"I'll carry it.\"",
+     "success": {
+      "text": "A pot, up a hill. Mela, at the top, looking in: \"That's— who's this from?\" \"Yusuf's mum.\" Mela: \"For Yusuf?\" \"She counted the tents.\" Mela doesn't say anything. She gets forty bowls. There's one for you. From the next stage, there's a second pot. And a third. Three mothers. They've started a rota. None of them's told the school.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-pot",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do you want for him?\"",
+     "success": {
+      "text": "Mrs. Lightfoot: \"For him to do his volcano. And for the forty to be fed while he decides. Both. I don't see why I've to choose.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-wrong-boots",
+   "name": "The Wrong Boots",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "track",
+     "atLeast": 4
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-worker",
+     "trainer.pr/clerk_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A workshop. Lasts on the wall. A boy of fourteen, in a boiler suit, arguing with a man in an apron. Captain Zeb: \"Thirty pairs. Black. Steel toe. Who bought them?\" The cobbler, Maestro Leandro Quiroga: \"I don't discuss customers.\" Captain Zeb: \"They're wearing our helmets! They've got our star on! But they've got your boots, and we don't wear those; we wear whatever we've got. Mela's are her dad's. Eri's are two different sizes!\" Maestro Quiroga, slowly: \"...Somebody's dressing up as children?\"",
+   "choices": [
+    {
+     "label": "\"Who paid?\"",
+     "success": {
+      "text": "Maestro Quiroga: \"A gentleman. Silver hair. Cash. He said they were for a 'school production.'\" He looks at the boy. At his boots: one's got tape round it. Maestro Quiroga: \"He asked me to scuff them. I did. I'm good at scuffing. I thought it was for the stage.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-wrong-boots-q"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's wrong with the boots?\"",
+     "success": {
+      "text": "Zeb: \"Nothing! That's what's wrong! They match!\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-wrong-boots-q"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show him yours, Zeb.\"",
+     "success": {
+      "text": "Zeb puts a boot on the counter. Tape, and string, and a toe that's been mended twice. Maestro Quiroga looks at it for a long time.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-wrong-boots-q"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-wrong-boots-q",
+   "name": "The Wrong Boots",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-worker",
+     "trainer.pr/clerk_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Maestro Quiroga does one thing. He goes to a drawer. A die-stamp. A small one. Maestro Quiroga: \"I mark my work. Inside the heel. Nobody looks.\" He shows it: a tiny Q. Maestro Quiroga: \"Thirty pairs. Every one. You want to know who's not yours? Take the boot off.\"",
+   "choices": [
+    {
+     "label": "Take the stamp to heart.",
+     "success": {
+      "text": "In every ending, a Cipher Peon in a Star helmet can be told at a glance. In the climax, no ambush by \"Star Grunts\" can surprise you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "star-boots",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-the-box",
+   "name": "The Box",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-janitor"
+    ],
+    "tint": "#1a1a14",
+    "effect": "none"
+   },
+   "intro": "A door marked CLEANING. A bulb on a string. Mops. A kettle. A box that held floor polish, with a lid. Mr. Bertrand Upshaw: \"You'll be wanting the lost property. It's the other door.\" You don't go. Mr. Upshaw: \"...No. You've the look of somebody who's come to ask. Have you? I'll not get my hopes up.\"",
+   "choices": [
+    {
+     "label": "\"What's in the box?\"",
+     "success": {
+      "text": "He takes the lid off. Folders. Seventy-one. In date order. A name on each sheet, top right. Mr. Upshaw: \"Under the staffroom door. Fridays. I'd nowhere to send it. It's schoolwork. You don't bin schoolwork.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-the-box-light"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Were you here? Eighteen months ago?\"",
+     "success": {
+      "text": "Mr. Upshaw: \"Aye.\" He doesn't tell it all, here. That's for a yard, and a Director. He tells one thing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-the-box-light"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nobody's asked you. Have they.\"",
+     "success": {
+      "text": "He sits down on an upturned bucket. He's been standing for a year and a half. Mr. Upshaw: \"No. I thought somebody would. The old lot went in a summer. The new lot came in the autumn. Nobody was here for both but me and the building.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-the-box-light"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ember",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ember-founded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the box, a postcard. From a cleaner in Kalos: \"We just didn't do Tuesday.\" He's put it on the box."
+    }
+   ]
+  },
+  {
+   "id": "ps-the-box-light",
+   "name": "The Box",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-janitor"
+    ],
+    "tint": "#1a1a14",
+    "effect": "none"
+   },
+   "intro": "Mr. Upshaw: \"There was a lad ate his lunch in my boiler room. A whole term. Big lad; you'd think he'd nothing to fear. I never said a word to him. I left the light on. I've thought, since: I should've said a word.\"",
+   "choices": [
+    {
+     "label": "\"The light was the word.\"",
+     "success": {
+      "text": "Mr. Upshaw: \"...Was it.\" He lends you one folder: Odin's.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "upshaw-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "odin-folder",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-box-jacq",
+   "name": "Fenwright's Folder",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "odin-folder",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "odin-marked-green",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-scientist"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "You've Odin's folder, lent from a box that held floor polish. Mr. Jacq's at his desk.",
+   "choices": [
+    {
+     "label": "Hand it to Mr. Jacq.",
+     "success": {
+      "text": "He marks it at his desk, in forty minutes, in green.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "odin-marked-green",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-radical",
+   "name": "Radical",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "eventSeen",
+     "id": "xe.paldea.clive"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A car park. Three Star Grunts. A skateboard. A sixty-year-old man in a pompadour wig, lying on the tarmac. Clive, from the ground: \"I am— fine. That was a 'wipe-out.' As we say.\" A Grunt: \"You've got to bend your knees, Clive.\" Clive: \"My knees have not bent since the previous administration.\" They pick him up. They put him back on. One holds each arm. They've clearly done this before. Another Grunt, to you, behind a hand: \"We know. Everyone knows. He's trying, though. Nobody old's ever tried.\"",
+   "choices": [
+    {
+     "label": "(Hold the board.)",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "A man, a board, ten feet. He does it. Ten feet. He doesn't fall. Clive: \"Radical!\" Three Grunts: \"YEAH, CLIVE!\" He's sixty. Nobody's cheered him since his appointment. He gives you a detention slip, blank, signed: \"For use at your discretion. I find I've stopped issuing them.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-clive-friend",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "clive-slip",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A man, a board, ten feet. He wobbles at six. You hold the board. He does it. Clive: \"Radical!\" Three Grunts: \"YEAH, CLIVE!\" He's sixty. Nobody's cheered him since his appointment. He gives you a detention slip, blank, signed: \"For use at your discretion. I find I've stopped issuing them.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-clive-friend",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "clive-slip",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why skateboards?\"",
+     "success": {
+      "text": "Clive: \"I asked my secretary what the young people enjoy. She said skateboards. I've since been told that was true in her day.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Clive. What have you learned?\"",
+     "success": {
+      "text": "He stops trying to balance. He sits on the kerb. The wig's slipped. Clive: \"That they do their homework. That they've a timetable. That they feed each other. That when I fell, three of them ran. I came to find delinquents. I've found the best-run house in my school, and it's in a car park.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-third-one",
+   "name": "The Third One",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "star-tully-cracking",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#202028",
+    "effect": "none"
+   },
+   "intro": "A shelter. A boy of seventeen in a uniform that's a size too new, with a badge in his hand, not on. Tully: \"I'm waiting for the van. They pick us up here. Brask and Odette went on ahead; they like to be first.\" Tully: \"I got a job. That's what you do, isn't it. After school. He found us one. Mr. Harrow. He said we'd 'shown initiative.'\" Tully: \"I didn't show initiative. I showed up. That's all I ever did. They'd say 'come on' and I'd come on. I never thought of one thing we did. I never said one of the things. I just stood there so it was three.\"",
+   "choices": [
+    {
+     "label": "\"Three's what made it work.\"",
+     "success": {
+      "text": "He flinches. Tully: \"...Yeah. Two's a couple of idiots. Three's a crowd. I was the difference between two and three. I've worked that out. It took me a year and a half.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-third-one-van"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why not walk away?\"",
+     "success": {
+      "text": "Tully: \"From a van? To where? I left school. I've a reference from a man who's wanted by the—\" He stops. Tully: \"I don't even know who he's wanted by.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-third-one-van"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's the badge for?\"",
+     "success": {
+      "text": "He turns it over. Tully: \"You wear it in the van. That's all I know.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ps-third-one-van"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-third-one-van",
+   "name": "The Third One",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#202028",
+    "effect": "none"
+   },
+   "intro": "The van comes round the bend.",
+   "choices": [
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "He gets in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tully-van",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"There's a bus, too.\"",
+     "success": {
+      "text": "There is. It's behind the van. It goes to Mesagoza. He looks at one. At the other. He gets on the bus. He puts the badge in the bin by the shelter. It's the first decision he's made.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tully-bus",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tully-note",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Write it down. What you did. Put your name on it.\"",
+     "success": {
+      "text": "He's got a pen. Tully: \"Who'd I give it to?\" \"There's a green form.\" He fills it in on his phone, at a bus stop. It's the forty-third. It's the first one from that side.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tully-wrote",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tully-note",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ps-door-1",
+   "name": "Under the Door",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "A door. A gap under it, about the width of a folder. A Friday. A folder, half under. A teacher's stepped over it, coffee in hand, and gone in. Then another. They've been stepping over it for seventy Fridays; it's part of the floor.",
+   "choices": [
+    {
+     "label": "Pick it up. Knock.",
+     "success": {
+      "text": "It's Ms. Tyme. Maths. Ms. Tyme: \"Whose is— oh. These are good. Who set this?\" \"You did. It's your scheme of work.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-door-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Step over it.",
+     "success": {
+      "text": "It's part of the floor.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "nothing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-form-found",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "star-flag-raised",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "A first-year, passing: \"Team Star? Delinquents. It was in a report.\""
+    },
+    {
+     "id": "form",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-form-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A first-year, passing: \"I got a reply. From the Director. At three in the morning. He said it sounded rubbish. It does sound rubbish!\""
+    },
+    {
+     "id": "flag",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-flag-raised",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A first-year, passing: \"There's a star on the hill. You can see it from Maths.\""
+    }
+   ]
+  },
+  {
+   "id": "ps-door-2",
+   "name": "Under the Door",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "star-door-1",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "The next Friday. The folder's there. And beside it, pushed out the other way: last week's. Marked. In red. \"7/10. Show your working on Q4. — T.\"",
+   "choices": [
+    {
+     "label": "Carry it up a hill.",
+     "success": {
+      "text": "Odin, holding it: \"Seven. Out of ten. Somebody's given me a seven.\" He's never been so happy to lose three marks. Odin: \"Show my working. Right. Right.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-door-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "canteen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-canteen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A first-year, passing: \"There was one of them in here. He had chips. He looked sort of normal.\""
+    }
+   ]
+  },
+  {
+   "id": "ps-door-3",
+   "name": "Under the Door",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "after": 5,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "star-door-2",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "A Friday. Two piles. One going in. One coming out. And a note on the door, in six hands: \"Please use the pigeonholes. — The Staff.\" There are forty new pigeonholes. Each has a name. Ms. Tyme, in the corridor, to nobody in particular: \"They were never absent. I've been marking 'absent' for a year and a half for the most punctual class I've ever taught. They've handed in every Friday. I never showed up.\"",
+   "choices": [
+    {
+     "label": "Nothing. It's working.",
+     "success": {
+      "text": "In every ending, the forty have marks.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-door",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "night",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "star",
+       "after": 6,
+       "anyRoute": true
+      }
+     ],
+     "notice": "A first-year, at a dormitory window, in pyjamas, to another: \"Are you going down?\" \"...Are you?\""
+    }
+   ]
+  }
+ ]
+}

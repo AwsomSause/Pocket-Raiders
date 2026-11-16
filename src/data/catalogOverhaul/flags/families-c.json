@@ -1,0 +1,451 @@
+{
+ "category": "families-c",
+ "_note": "Run flags families-c sets that other families (or later systems) read. Same run only. key = the `ev:<key>` run flag.",
+ "flags": [
+  {
+   "key": "saved-trainer",
+   "setBy": "stranded-trainer",
+   "readBy": "registry (Final Reunion, people)"
+  },
+  {
+   "key": "robbed-trainer",
+   "setBy": "stranded-trainer",
+   "readBy": "registry (Final Reunion, people)"
+  },
+  {
+   "key": "trouble-amends",
+   "setBy": "stranded-trainer-revenge",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-tag",
+   "setBy": "stranded-trainer-friend",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-let-him",
+   "setBy": "stranded-trainer-friend",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-watched",
+   "setBy": "stranded-trainer-friend",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-revenge",
+   "setBy": "stranded-trainer-revenge",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-apology",
+   "setBy": "stranded-trainer-revenge",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "trouble-handshake",
+   "setBy": "stranded-trainer-handshake",
+   "readBy": "Final Reunion (Tobin)"
+  },
+  {
+   "key": "apprentice-copy",
+   "setBy": "stranded-trainer, wounded-rare, stolen goods",
+   "readBy": "families-a SF2 (Tib)"
+  },
+  {
+   "key": "apprentice-copy-robbed",
+   "setBy": "stranded-trainer",
+   "readBy": "families-a SF2 (Tib)"
+  },
+  {
+   "key": "kind-helped-stranger",
+   "setBy": "helping scenes",
+   "readBy": "registry"
+  },
+  {
+   "key": "barter-traded",
+   "setBy": "Nix's board",
+   "readBy": "markets (Nix as a trader)"
+  },
+  {
+   "key": "barter-delivered",
+   "setBy": "barter-keepsake",
+   "readBy": "Final Reunion (Nix)"
+  },
+  {
+   "key": "renny-stopped",
+   "setBy": "renny-question",
+   "readBy": "Final Reunion (Renny)"
+  },
+  {
+   "key": "valley-funded",
+   "setBy": "valley-miners-dividend",
+   "readBy": "Final Reunion (Ivy)"
+  },
+  {
+   "key": "valley-asked",
+   "setBy": "valley-miners-dividend",
+   "readBy": "Final Reunion (Gault)"
+  },
+  {
+   "key": "valley-grudge-ended",
+   "setBy": "valley-miners-grudge",
+   "readBy": "Final Reunion (Gault)"
+  },
+  {
+   "key": "valley-relocated",
+   "setBy": "valley-rangers-grudge",
+   "readBy": "Final Reunion (Ivy)"
+  },
+  {
+   "key": "took-egg",
+   "setBy": "abandoned-nest",
+   "readBy": "registry"
+  },
+  {
+   "key": "egg-watched",
+   "setBy": "abandoned-nest",
+   "readBy": "Final Reunion (Pom)"
+  },
+  {
+   "key": "egg-kept",
+   "setBy": "the Staraptor fight, the hatch",
+   "readBy": "Final Reunion (Pom)"
+  },
+  {
+   "key": "egg-pom-cried",
+   "setBy": "ovc-abandoned-egg-s2",
+   "readBy": "Final Reunion (Pom)"
+  },
+  {
+   "key": "honest-lied",
+   "setBy": "ovc-abandoned-egg-s2",
+   "readBy": "registry"
+  },
+  {
+   "key": "kind-total",
+   "setBy": "every scene with a pack Kindness +1",
+   "readBy": "the record condition (coToolkit recordOf), shared board"
+  },
+  {
+   "key": "rep",
+   "setBy": "pack Reputation +1",
+   "readBy": "the record condition, valley-dispute (Reputation 3), shared board"
+  },
+  {
+   "key": "rep-lost",
+   "setBy": "pack Reputation -1",
+   "readBy": "the record condition, shared board"
+  },
+  {
+   "key": "renny-listened",
+   "setBy": "trainers-therapy",
+   "readBy": "Final Reunion (Renny)"
+  },
+  {
+   "key": "valley-shared",
+   "setBy": "valley-dispute",
+   "readBy": "Final Reunion (Ivy and Gault)"
+  },
+  {
+   "key": "valley-wild-angry",
+   "setBy": "valley-rangers-grudge",
+   "readBy": "engine: coHelpers.sideBattleBegin (wild +1 Attack this region)"
+  },
+  {
+   "key": "cruelty-act",
+   "setBy": "dark-deal",
+   "readBy": "legends (breaks the Volcanion and Zeraora promises), registry"
+  },
+  {
+   "key": "dark-reported",
+   "setBy": "dark-deal",
+   "readBy": "evil-story (Vreel reported to the League)"
+  },
+  {
+   "key": "reported-crime",
+   "setBy": "dark-deal",
+   "readBy": "registry (Final Reunion, people)"
+  },
+  {
+   "key": "evil-plan-revealed",
+   "setBy": "dark-deal",
+   "readBy": "evil-story (an Admin plan known early)"
+  },
+  {
+   "key": "dark-won-back",
+   "setBy": "dark-deal-admin, dark-deal-admin-again",
+   "readBy": "Final Reunion (the given Pokémon came home)"
+  },
+  {
+   "key": "dark-left",
+   "setBy": "dark-deal-admin, dark-deal-admin-again",
+   "readBy": "Final Reunion (the given Pokémon stayed with the Admin)"
+  },
+  {
+   "key": "ditto-lurking",
+   "setBy": "ditto-reveal",
+   "readBy": "engine: coHelpers sideBattleBegin puts a Ditto copy of your lead on the next foe team"
+  },
+  {
+   "key": "kind-walked-past",
+   "setBy": "injured-wild-pokemon, starving-wild, trapped-pokemon, trapped-pokemon-net, unlikely-ally, wounded-rare",
+   "readBy": "registry (Kindness board)"
+  },
+  {
+   "key": "apprentice-copy-caught-weak",
+   "setBy": "wounded-rare",
+   "readBy": "families-a SF2 (The Apprentice copies it)"
+  },
+  {
+   "key": "sign-dialga",
+   "setBy": "r169-hoothoot-clock-tower",
+   "readBy": "legends (core/legends/signs.ts, PR #1326)"
+  },
+  {
+   "key": "telling-deoxys",
+   "setBy": "r141-starlit-cave-loomians",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "dungeon-luck",
+   "setBy": "md-* rooms",
+   "readBy": "engine: coDungeon.ts (out of Luck: pushed back up)"
+  },
+  {
+   "key": "md-stole",
+   "setBy": "md-2-shop",
+   "readBy": "engine: coDungeon.ts (the shop becomes the NO room)"
+  },
+  {
+   "key": "berry-seedling",
+   "setBy": "berry-fest-research",
+   "readBy": "engine: coToolkit coHealStop (fruits after 4 rests, sets berry-grown)"
+  },
+  {
+   "key": "storyteller-road",
+   "setBy": "mr-story-archive",
+   "readBy": "The Storyteller's Road (MDD Part 9 event 35; 2 = starts at its second beat). Not built yet."
+  },
+  {
+   "key": "telling-mew",
+   "setBy": "mr-story-archive",
+   "readBy": "legends (Signs and Tellings API)"
+  },
+  {
+   "key": "evil-funded",
+   "setBy": "black-market, stolen-goods-stall",
+   "readBy": "evil-story / markets (the team's next plan a stage sooner)"
+  },
+  {
+   "key": "lead-smuggling-ring",
+   "setBy": "black-market, stolen-goods-stall",
+   "readBy": "evil-story / markets (Smuggling Ring lead)"
+  },
+  {
+   "key": "leader-item-bought",
+   "setBy": "back-alley-deal",
+   "readBy": "people (the Leader's later scene: it was stolen, and they look at you)"
+  },
+  {
+   "key": "leader-item-returned",
+   "setBy": "back-alley-deal",
+   "readBy": "people (+1 with that Leader)"
+  },
+  {
+   "key": "estate-badge-case",
+   "setBy": "estate-owner",
+   "readBy": "people GL6 (counts as its reward if not already earned)"
+  },
+  {
+   "key": "estate-uncle-named",
+   "setBy": "estate-owner",
+   "readBy": "people GL9 (his name goes into the bracket)"
+  },
+  {
+   "key": "vault-magearna",
+   "setBy": "dz-clockwork-door (SF79)",
+   "readBy": "legends (MY18 Magearna)"
+  },
+  {
+   "key": "vault-wound",
+   "setBy": "dz-clockwork-door (SF79)",
+   "readBy": "legends (MY18 Magearna)"
+  },
+  {
+   "key": "evil-skip",
+   "setBy": "faction-syndicate-high, faction-syndicate-coin (SF81)",
+   "readBy": "evil-story (one guard fight skipped)"
+  },
+  {
+   "key": "ranger-favour",
+   "setBy": "faction-rangers-high (SF81)",
+   "readBy": "engine: coBattleEnd rangerRescue (one fainted Pokémon back after a lost fight)"
+  },
+  {
+   "key": "oath-speed-paid",
+   "setBy": "oath-reckoning-speed (SF85)",
+   "readBy": "engine: coBattleStarted oathSpeedStart (+1 Speed at battle start)"
+  },
+  {
+   "key": "calmed-alpha",
+   "setBy": "alpha-noble-*-after (A1, a Noble calmed)",
+   "readBy": "new-events (future kid, {flag:calmed-alpha}); alphas Z7 (6 calms: the Alpha of Alphas notices)"
+  },
+  {
+   "key": "letter-ignored",
+   "setBy": "ovc-the-letter-to-future-you-s1 (FE1)",
+   "readBy": "ovc-the-letter-to-future-you-s2 (anyFlag)"
+  },
+  {
+   "key": "sign-raikou",
+   "setBy": "roamer-*/roamer-*-tower win (L1, sign effect)",
+   "readBy": "legends (core/legends/signs.ts, PR #1326); also raises Influence when it is the run blessing"
+  },
+  {
+   "key": "sign-entei",
+   "setBy": "roamer-*/roamer-*-tower win (L1, sign effect)",
+   "readBy": "legends (core/legends/signs.ts, PR #1326)"
+  },
+  {
+   "key": "sign-suicune",
+   "setBy": "roamer-*/roamer-*-tower win (L1, sign effect)",
+   "readBy": "legends (core/legends/signs.ts, PR #1326)"
+  },
+  {
+   "key": "sign-mesprit",
+   "setBy": "roamer-mesprit Wait (sign effect)",
+   "readBy": "legends (Lake guardians)"
+  },
+  {
+   "key": "sign-koraidon",
+   "setBy": "turo-machine (FE4, sign effect)",
+   "readBy": "legends"
+  },
+  {
+   "key": "sign-miraidon",
+   "setBy": "turo-machine (FE4, sign effect)",
+   "readBy": "legends"
+  },
+  {
+   "key": "roam-cresselia-left",
+   "setBy": "roamer-cresselia Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-cresselia-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "engine: coLegends roamFound (each try rolls differently)"
+  },
+  {
+   "key": "sign-cresselia",
+   "setBy": "roamer-cresselia Wait (with its blessing)",
+   "readBy": "legends (core/legends/signs.ts, PR #1326)"
+  },
+  {
+   "key": "roam-landorus-left",
+   "setBy": "roamer-landorus Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-landorus-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "engine: coLegends roamFound (each try rolls differently)"
+  },
+  {
+   "key": "sign-landorus",
+   "setBy": "roamer-landorus Wait (with its blessing)",
+   "readBy": "legends (core/legends/signs.ts, PR #1326)"
+  },
+  {
+   "key": "roam-latias-left",
+   "setBy": "roamer-latias Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-latias-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "legends L7 (the sightings are its clues)"
+  },
+  {
+   "key": "sign-latias",
+   "setBy": "roamer-latias Wait (with its blessing)",
+   "readBy": "legends (core/legends/signs.ts, PR #1326)"
+  },
+  {
+   "key": "roam-latios-left",
+   "setBy": "roamer-latios Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-latios-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "legends L7 (the sightings are its clues)"
+  },
+  {
+   "key": "sign-latios",
+   "setBy": "roamer-latios Wait (with its blessing)",
+   "readBy": "legends (core/legends/signs.ts, PR #1326)"
+  },
+  {
+   "key": "roam-mesprit-left",
+   "setBy": "roamer-mesprit Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-mesprit-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "engine: coLegends roamFound (each try rolls differently)"
+  },
+  {
+   "key": "sign-mesprit",
+   "setBy": "roamer-mesprit Wait (with its blessing)",
+   "readBy": "legends (core/legends/signs.ts, PR #1326)"
+  },
+  {
+   "key": "roam-thundurus-left",
+   "setBy": "roamer-thundurus Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-thundurus-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "engine: coLegends roamFound (each try rolls differently)"
+  },
+  {
+   "key": "sign-thundurus",
+   "setBy": "roamer-thundurus Wait (with its blessing)",
+   "readBy": "legends (core/legends/signs.ts, PR #1326)"
+  },
+  {
+   "key": "roam-tornadus-left",
+   "setBy": "roamer-tornadus Leave it be",
+   "readBy": "engine: coLegends roamPercent (next trail +leftBonus)"
+  },
+  {
+   "key": "roam-tornadus-chased",
+   "setBy": "engine: coLegends roamFound",
+   "readBy": "engine: coLegends roamFound (each try rolls differently)"
+  },
+  {
+   "key": "sign-tornadus",
+   "setBy": "roamer-tornadus Wait (with its blessing)",
+   "readBy": "legends (core/legends/signs.ts, PR #1326)"
+  },
+  {
+   "key": "co-calm-done",
+   "setBy": "engine",
+   "readBy": "alpha-noble-*-after",
+   "rule": "coBattleEnd (core/events/coToolkit.ts): 1 when the last battle ended with its Calm meter full (calm:done), else 0"
+  }
+ ],
+ "external": {
+  "quarry-in": "families-b (STORY_FAMILIES_6, the quarry)",
+  "cages-opened": "legends / alphas (QUESTLINES_ALPHAS_AND_ANOMALIES, freed.caged)",
+  "hospice-stayed": "families-b (STORY_FAMILIES_7, the hospice)",
+  "farmer-end": "Greenneedle (the farmer's ending)",
+  "promise-volcanion": "legends (Mythical Promises)",
+  "promise-zeraora": "legends (Mythical Promises)",
+  "promise-deoxys": "legends (Mythical Promises)"
+ }
+}

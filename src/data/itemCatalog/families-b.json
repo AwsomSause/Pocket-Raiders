@@ -1,0 +1,3 @@
+[
+  { "id": "never-melt-ice", "name": "Never-Melt Ice", "family": "Type boosters (held)", "description": "Ice moves +20%. A gift from the snow fox at Aiko's shrine (Story Families 6).", "rarity": "uncommon", "stacksOn": "pokemon", "max": 3, "how": "held", "icon": "nevermeltice", "status": "supported", "effect": { "kind": "held", "hooks": [{ "hook": "typePower", "types": ["ice"], "percent": 20 }] } }
+]

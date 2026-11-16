@@ -1,3 +1,4 @@
+import familiesC from '../../src/data/catalogOverhaul/familiesC.json';
 import { MENTORS } from '../../src/core/mentors';
 import { PSEUDO, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import { POKEMON_MOMENTS } from '../../src/core/moments/pokemonMoments';
@@ -243,7 +244,7 @@ describe('secret paths', () => {
 describe('follow-up scenes', () => {
   it('a kindness comes back on the next stage as a stop, once', () => {
     const run = newRun();
-    run.story.flags['ev:fed-wild'] = 1;
+    run.story.flags['ev:fed-poochyena'] = 1; // Catalog Overhaul SF63: feeding the thin Poochyena (was `fed-wild`)
     run.stage!.index = 3;
     run.stage!.map.nodes.forEach((n) => (n.sides = []));
     addEventStops(content, run);
@@ -274,10 +275,21 @@ describe('follow-up scenes', () => {
 
 describe('landmarks and dungeons', () => {
   it('a landmark opens its rooms one after another beside the same node', () => {
-    let run = atEvent(newRun(), 'lighthouse-entrance');
-    run = chooseEvent(content, run, 'test-event', 0).run;
+    // The pack's landmarks are pseudo-stage Doors now (Catalog Overhaul; a chain room walks into the Door's map), so the room
+    // mechanism is checked on a test landmark that opens a plain room.
+    const def = structuredClone(content.events.get('lighthouse-entrance')!);
+    def.stop = LANDMARK_STOP;
+    def.id = 'test-landmark';
+    def.pseudo = false;
+    def.choices[0]!.requires = [];
+    def.choices[0]!.branches = [];
+    delete def.choices[0]!.success.battle;
+    def.choices[0]!.success.effects = [{ kind: 'addEvent', eventId: 'fb-last-train-carriage' }];
+    const withRoom = { ...content, events: new Map(content.events).set(def.id, def) };
+    let run = atEvent(newRun(), def.id);
+    run = chooseEvent(withRoom, run, 'test-event', 0).run;
     const here = findNode(run.stage!.map, run.stage!.current!);
-    expect(here.sides.some((s) => s.eventId === 'lighthouse-1' && !s.used)).toBe(true);
+    expect(here.sides.some((s) => s.eventId === 'fb-last-train-carriage' && !s.used)).toBe(true);
   });
 
   it('rooms are never drawn on their own', () => {
@@ -313,7 +325,11 @@ describe('landmarks and dungeons', () => {
           // too), and the Game Corner opens its games, which are also drawn on their own (SF91).
           // An event that opens itself again ("Read it again.", "What's on?") re-shows the same stop; that is not a room.
           if (ef.kind === 'addEvent' && (ef.eventId === e.id || e.id === 'game-corner') && !content.events.get(ef.eventId)?.room) continue;
-          if (ef.kind === 'addEvent' && ef.eventId !== e.id) opened.add(ef.eventId);
+          // Volume III: `{region}` is filled in play (one Offer per region): every region's room counts as opened.
+          if (ef.kind === 'addEvent' && ef.eventId.includes('{region}')) {
+            const [head, tail] = ef.eventId.split('{region}') as [string, string];
+            for (const id of content.events.keys()) if (id.startsWith(head) && id.endsWith(tail)) opened.add(id);
+          } else if (ef.kind === 'addEvent' && ef.eventId !== e.id) opened.add(ef.eventId);
           if (ef.kind === 'gn' && ef.op === 'scene' && (ef.key !== e.id || content.events.get(ef.key!)?.room)) opened.add(ef.key!); // a scene beside the current node
           if (ef.kind === 'gn' && ef.op === 'ahead' && ef.key) opened.add(ef.key); // a stop on the nodes just ahead (gn.new.26)
           if (ef.kind === 'laterEvent') queued.add(ef.eventId);
@@ -354,6 +370,10 @@ describe('landmarks and dungeons', () => {
     for (const r of PSEUDO.records) for (const n of r.nodes) opened.add(`${r.id.replace(/_/g, '-')}-${n.id}`);
     // Catalog Overhaul: a chain pseudo-stage with a layout (the Evil Team Hideouts) places its rooms by column.
     for (const c of PSEUDO_CHAINS) for (const col of c.layout ?? []) for (const id of col) opened.add(c.team ? id.replaceAll('{teamId}', c.team) : id);
+    // Catalog Overhaul SF63: the helped rare Pokémon's thanks is queued by code after it strikes (core/events/coHelpers.ts `co:soon`).
+    opened.add('wounded-rare-thanks');
+    // Catalog Overhaul SF73: the Mystery Dungeon's rooms are drawn by code, floor by floor (core/events/coDungeon.ts).
+    for (const id of [...familiesC.dungeon.floors.flat(), familiesC.dungeon.spring, familiesC.dungeon.noShop]) opened.add(id);
     // Beta 0.7 U1: the code places each Ultra Beast Tear (core/ultra/run.ts placeTear).
     for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
     // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).

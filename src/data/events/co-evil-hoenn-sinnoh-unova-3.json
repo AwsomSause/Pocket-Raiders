@@ -1,0 +1,1667 @@
+{
+ "catalogOverhaul": "evil-hoenn-sinnoh-unova",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gx-lights-on",
+   "name": "Are the Lights On?",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#2e3440",
+    "effect": "none"
+   },
+   "intro": "A hall with five hundred chairs and eleven people on a platform. A sign: ANNUAL GENERAL MEETING. SHAREHOLDERS ONLY. One woman in the audience, in a wool hat, with a flask. The chair, reading: \"Item nine. Any other business.\" Mrs. Holmgren, standing: \"One question. Are the lights on?\" The chair, who's answered it four years running: \"The lights are on, Mrs. Holmgren.\" Mrs. Holmgren: \"Thank you.\" She sits. She unscrews the flask. To you, in the next seat, without lowering her voice: Mrs. Holmgren: \"You're not a shareholder. Nor's anyone; I've the only share that isn't his. Sit. They can't throw you out. They'd have to ask you something first, and that costs four minutes.\"",
+   "choices": [
+    {
+     "label": "\"Why that question?\"",
+     "success": {
+      "text": "Mrs. Holmgren: \"I was born by candle. The lines were down nine days. My father started the firm that spring with a ladder and a cousin. \"To keep the lights on.\" I ask so that somebody in this building has to say the old charter out loud once a year. He's never noticed that's what I'm doing.\" She offers you a sip from the flask. It's tea. It does nothing. She says it's medicinal.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-lore-holmgren",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why do you still come?\"",
+     "success": {
+      "text": "Mrs. Holmgren: \"Because one share's a seat. And a seat's a place to be asked from. I've sat in worse.\" She offers you a sip from the flask. It's tea. She says it's medicinal.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-lore-holmgren",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who voted for it? The new charter.\"",
+     "success": {
+      "text": "She points, along the platform, with the flask. Mrs. Holmgren: \"All eleven. Don't think badly of them. He was right. Every item. That's what I'd tell a young person: be careful of someone who's right about everything on the list and never asks who wrote the list.\" She offers you a sip. It's tea.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-lore-holmgren",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-garage-band",
+   "name": "The Garage Band",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman",
+     "boss.npc_lady"
+    ],
+    "tint": "#3a3428",
+    "effect": "sparkle"
+   },
+   "intro": "A roller door, half up. Inside: eleven people in their sixties, a van with no wheels, and the worst noise in Sinnoh. The bandmaster, Mr. Henrik Nyberg, lowering a cornet: \"Veilstone Light & Power Works Band. Regional champions, thirty years back. Disbanded by memorandum: \"eleven instruments, no measurable output.\" We've met every Tuesday since.\" A woman with a tuba: \"Out of spite.\" Mr. Nyberg: \"Out of habit, Birgit. The spite's extra.\" Mr. Nyberg: \"We're short a triangle. Young Tove had it. She joined the silver lot; she said she wanted to stop being nervous before concerts. I'd have told her: that is the concert.\"",
+   "choices": [
+    {
+     "label": "\"Play me the march.\"",
+     "success": {
+      "text": "They play it. It's dreadful. It's sixty. Birgit's tuba is flat and she doesn't care.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"I'll take the triangle.\"",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "One note, every eighth bar. It's harder than it sounds; the band's not together. You hit every one. Mr. Nyberg: \"There. That's the first time it's sounded like the march since Tove.\" He pins a Works Band Badge on you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-band",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You're off it. Birgit: \"Doesn't matter. I'm off it.\" Mr. Nyberg pins a Works Band Badge on you anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-band",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Was he ever in the band?\"",
+     "success": {
+      "text": "Mr. Nyberg: \"Cyrus? He came to one rehearsal. Nineteen. Stood at the back. I said, \"D'you play?\" He said, \"I've calculated the room's resonance. Your tuba's flat.\"\" Birgit: \"I was.\" Mr. Nyberg: \"He was right. He's always right. He left before the tea.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-tove",
+   "name": "Tove",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galactic-band",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#2e3440",
+    "effect": "none"
+   },
+   "intro": "A Grunt on the Windworks gate, standing very still. Her name tape says TOVE.",
+   "choices": [
+    {
+     "label": "Show her the Works Band Badge.",
+     "success": {
+      "text": "Tove: \"...They're still meeting? Without a triangle? That'll sound awful.\" She's nervous. It's the first thing she's felt in a year. She goes to rehearsal.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-tove",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past.",
+     "success": {
+      "text": "She doesn't look round.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-fish-after",
+   "name": "The Fish, After",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#2a3a48",
+    "effect": "fog"
+   },
+   "intro": "A lakebed. Mud to the horizon. A hundred Magikarp, and one old man with a rod he isn't using. Old Padraig Lachlan: \"Sixty years I've fished this water. Never once had them come to me.\" He's carrying them down. One at a time. He's eighty. Padraig: \"I'm not asking. You've somewhere to be. Everybody's somewhere to be, this year; I've noticed it. Nobody stops.\"",
+   "choices": [
+    {
+     "label": "(Pick one up. Stay till it's done.) (a node)",
+     "success": {
+      "text": "The party helps, each after its nature. A Water type ferries three. A Flying type's no use and knows it. Your lead stands in the shallows and nudges them out to deep water. By dusk there are none on the mud. Padraig: \"I'll remember which way round you did it.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-fish",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Pick one up, and go.)",
+     "success": {
+      "text": "Padraig: \"That's one more than the last hundred people.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Who did this?\"",
+     "success": {
+      "text": "He nods up at the sky, where a black airship was yesterday. Padraig: \"Folk in silver. They'd a van. One of them carried three, badly, in good shoes.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-fish-after-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You'll never get them all.\"",
+     "success": {
+      "text": "Padraig: \"No. I'll get this one.\" He does. Padraig: \"And now I'll get this one.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-fish-after-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-fish-after-2",
+   "name": "The Fish, After",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#2a3a48",
+    "effect": "fog"
+   },
+   "intro": "He bends for the next one.",
+   "choices": [
+    {
+     "label": "(Pick one up. Stay till it's done.) (a node)",
+     "success": {
+      "text": "Your party helps, each after its nature, until there are none on the mud. Padraig: \"I'll remember which way round you did it.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-fish",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Walk on.)",
+     "success": {
+      "text": "Nothing's said. He doesn't look up.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-regulation-cut",
+   "name": "The Regulation Cut",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#3a2a3a",
+    "effect": "none"
+   },
+   "intro": "A wigmaker's. A window of identical teal bowl-cuts on identical wooden heads. The wigmaker, Madame Solveig Drummond: \"Forty years I made hair for the theatre. Hamlets. Dowagers. A very good Father Time. This year I've made four hundred of those. One style. One colour. Nobody tries them on. Nobody looks in the glass. They pay, they put it on in the doorway, they go.\" Madame Drummond: \"I've started sewing a name in each. Inside the band. They never told me their names; I make one up. This one's Astrid. That's Leif. So that somebody knows which is which.\"",
+   "choices": [
+    {
+     "label": "\"Who was the oddest customer?\"",
+     "success": {
+      "text": "Madame Drummond: \"A gentleman with a great deal of his own hair and a very loud whisper. He wanted it \"to look as though it has always been there.\" I said: sir, it's on back to front. He said that was the disguise.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Has anyone ever come back?\"",
+     "success": {
+      "text": "Madame Drummond: \"One. A girl. She brought hers in to be let out; she said it was tight. It wasn't tight. She'd grown her own, underneath, an inch. She hadn't noticed. I said: that's yours, dear. She cried in my chair. I've not had anyone cry in my chair since the Dowager.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Make me one.\" (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The Honest Trade Card: a disguise; in Sinnoh, Galactic ambushes don't trigger for one stage. It itches. She sews a name in the band, and lets you choose it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-disguise",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-all-in-order",
+   "name": "All Is in Order",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A kitchen table. Twelve letters laid out in a row. A woman squaring their edges. The mother, Mrs. Runa Pruett: \"My son. He joined them a year ago; he said he was tired of \"being like this.\" He writes on the first. Look.\" Twelve letters. Each says: ALL IS IN ORDER. Five words, counting his name. Mrs. Pruett: \"I thought it was a code. I held them to the stove. I've a neighbour says lemon juice. It's not a code. It's what he's got to say.\" Mrs. Pruett: \"I write back four pages. The dog. The roof. Who's died. I don't know if he reads them.\"",
+   "choices": [
+    {
+     "label": "\"What was he like? Before?\"",
+     "success": {
+      "text": "Mrs. Pruett: \"Dreadful. Slammed doors. Cried at adverts. Rang me at midnight to say he'd seen a Starly with a bad wing and what should he do.\" A pause. Mrs. Pruett: \"I'd give a year's pension for a slammed door.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"I could carry one.\"",
+     "success": {
+      "text": "She gives you this month's four pages, folded twice. \"Eterna. The building with the G.\" You carry the letter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-pruett-letter",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Write him five words.\"",
+     "success": {
+      "text": "She thinks about it. She takes a clean sheet. She writes: \"The Starly's wing has mended.\" It's five. She counts them. You carry the letter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-pruett-letter",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pruett-five",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-eskil",
+   "name": "The Thirteenth Letter",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galactic-pruett-five",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#2e3440",
+    "effect": "none"
+   },
+   "intro": "A corridor in the Eterna building. A Grunt with a name tape: PRUETT.",
+   "choices": [
+    {
+     "label": "Give him his mother's letter.",
+     "success": {
+      "text": "Grunt Eskil Pruett, reading it: \"...It mended?\" A long pause. It's the first question he's asked in a year. Eskil: \"It— I'd splinted it with a lolly stick. I never knew if—\" He sits down on the floor. The thirteenth letter home is four pages.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-pruett",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-thursdays",
+   "name": "Thursdays",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#2e2e3a",
+    "effect": "none"
+   },
+   "intro": "A sorting bench. A clerk with a magnifying glass and a stamp album. The post clerk, Mr. Leif Maddox: \"I collect. Stamps. It's all I've ever been curious about, which is why they've let me stay: I'm not curious about the letters.\" Mr. Maddox: \"There's a Commander posts one envelope every Thursday. Plain. No return. I'd never have looked. But the stamp. It's franked here, and then it's got a second, underneath, half soaked off: a foreign one. A desert. An orange sun. I've not got that one. I've wanted that one for six years.\"",
+   "choices": [
+    {
+     "label": "\"Which Commander?\"",
+     "success": {
+      "text": "Mr. Maddox: \"The fourth. Nobody remembers the fourth. I do; she tips.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-thursdays-stove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where's the stamp from?\"",
+     "success": {
+      "text": "Mr. Maddox: \"Orre.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 4
+       },
+       {
+        "kind": "flag",
+        "key": "cipher-seen-sird",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-thursdays-stove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Steam one open.\"",
+     "success": {
+      "text": "He won't. Mr. Maddox: \"I've standards.\" But he'll look away. One sheet: a floor plan of the Veilstone basement, and a line: \"The chain holds the large ones. Tell him the dragon will fit.\" It's the Thread, a stage early.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-thread-early",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-thursdays-stove"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-thursdays-stove",
+   "name": "Thursdays",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f"
+    ],
+    "tint": "#2e2e3a",
+    "effect": "none"
+   },
+   "intro": "Outside, a camp stove. Sird, warming her hands. Sird: \"You've been in the post room. So've I. He wants the stamp; I've been meaning to give him a clean one. Would you? I'm always leaving.\" She hands over a small square of orange. Sird: \"Mondays I report to Cyrus. Thursdays, elsewhere. On the other five I'm my own. You've caught me on a Tuesday. Lucky.\"",
+   "choices": [
+    {
+     "label": "Take the stamp in to Mr. Maddox.",
+     "success": {
+      "text": "He holds it under the glass for a long time. He's got what he wanted. He gives you the Thursday envelope, unsteamed, whole.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-maddox-stamp",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep walking.",
+     "success": {
+      "text": "She shrugs, and pockets the stamp again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-unlabelled-pan",
+   "name": "The Unlabelled Pan",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_engineer",
+     "boss.npc_lady"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A back kitchen behind a substation. Six people in boiler suits round a pan the size of a cartwheel. A linewoman, Mrs. Ulla Truscott, stirring: \"Friday pan. We take it in, we leave it on the end of the counter, we go. No label. They've labelled the salt in there. If we put a name on this, somebody'd have to decide if it was allowed.\" A lineman: \"Thirty years ago, you came off a night on the lines, the office cooked you breakfast. Chairwoman and all. He stopped it. So we've turned it round. We cook for the office.\" Mrs. Truscott: \"They've never said thank you. Not once in four years. It's always gone by one.\"",
+   "choices": [
+    {
+     "label": "\"What's in it?\"",
+     "success": {
+      "text": "Mrs. Truscott: \"Whatever's going. Barley. Onions. What the allotment gave.\" She hands you a bowl. Your lead's bond goes up a step.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pan",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why feed them?\"",
+     "success": {
+      "text": "Mrs. Truscott: \"Because they're thin, love. I don't mean in the body.\" She hands you a bowl. Your lead's bond goes up a step.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pan",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Can I add something?\"",
+     "success": {
+      "text": "She holds out the spoon.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-unlabelled-pan-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-unlabelled-pan-2",
+   "name": "The Unlabelled Pan",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "What goes in?",
+   "choices": [
+    {
+     "label": "A Berry.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "It goes in. At one o'clock, in the canteen, somebody says: \"It's different.\" It's the first remark about food in four years. She hands you a bowl; your lead's bond goes up a step.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pan-berry",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Honey.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "honey"
+      }
+     ],
+     "success": {
+      "text": "It goes in. Three people in the canteen go back for more. Nobody's gone back before. She hands you a bowl; your lead's bond goes up a step.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "honey"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pan-honey",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Something from another region.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "lava-cookie"
+      }
+     ],
+     "success": {
+      "text": "A Lava Cookie, crumbled in. In the canteen, a Grunt stops with the spoon in the air. \"...I've had that. I had that on a holiday.\" He remembers the holiday. He's no use all afternoon. She hands you a bowl; your lead's bond goes up a step.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "lava-cookie"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pan-holiday",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Nothing, after all.",
+     "success": {
+      "text": "She hands you a bowl anyway. Your lead's bond goes up a step.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pan",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-checking-sky",
+   "name": "Checking the Sky",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_beauty"
+    ],
+    "tint": "#141a2e",
+    "effect": "none"
+   },
+   "intro": "A flat roof. A cheap telescope on a tripod with one leg taped. A woman with her hat off. Jupiter, not turning: \"If you tell anyone, I'll deny it, and they'll believe me, because I've never been interested in anything.\" Jupiter: \"I don't believe a word. New world. Please. I filled in the card: \"Nothing. I need the pay.\" It was true. It's four years. D'you know what happens when you pretend to believe something for four years, every day, in a hat?\" She puts her eye to it. Jupiter: \"You start checking. I bought this in a market. I come up here and I look at where he says it'll tear. And every night it hasn't, I'm—\" She doesn't say \"relieved.\" Jupiter: \"It's a clear night. That's all.\"",
+   "choices": [
+    {
+     "label": "\"What are you looking at, really?\"",
+     "success": {
+      "text": "She lets you look. The weather for the next stage shows on your map.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "jupiter-sky",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-sky-forecast",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"And if it does tear?\"",
+     "success": {
+      "text": "Jupiter: \"Then I'll've been wrong for four years in the other direction. I'd the pay either way.\" She lets you look. The weather for the next stage shows on your map.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "jupiter-sky",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-sky-forecast",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Which one's Jupiter?\"",
+     "success": {
+      "text": "She swings the tube. She doesn't need to look for it. Jupiter: \"That one. The bright one. It's got a storm on it that's older than the company. I looked that up.\" A pause. Jupiter: \"I looked that up. I've started looking things up. It's a disgrace.\" She lets you look. The weather for the next stage shows on your map.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "jupiter-sky",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-sky-forecast",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-thirteen",
+   "name": "Thirteen",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#22142e",
+    "effect": "fog"
+   },
+   "intro": "A clockmaker's. Forty clocks, all running, all right. A queue of people holding more. The clockmaker, Mr. Odhran Yorath: \"There's nothing wrong with it, madam. I've had it apart. It keeps time to the second.\" A customer: \"It chimed thirteen.\" Mr. Yorath: \"They all did. Tuesday. Once. Every clock in the town; I've forty on the wall and I counted with my own ears. And nobody said. That's what's brought you in, isn't it? Not the clock. That your husband heard thirteen and went on buttering his toast.\"",
+   "choices": [
+    {
+     "label": "\"What does thirteen mean?\"",
+     "success": {
+      "text": "Mr. Yorath: \"Nothing a clock means. That's what frightens them.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-thirteen-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is it the clocks or the people?\"",
+     "success": {
+      "text": "Mr. Yorath: \"I mend clocks. I've been asked that all week and I've given the clock answer.\" He takes his glass out of his eye. Mr. Yorath: \"It's the people. A clock's a thing you mind about. Nobody minds. So the hour's gone a bit loose. It's nobody's hour.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-thirteen-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Wind one back.\"",
+     "success": {
+      "text": "He puts a small clock in your hands. A slow dial.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-thirteen-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-thirteen-2",
+   "name": "Thirteen",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#22142e",
+    "effect": "none"
+   },
+   "intro": "A small clock in your hands, and a slow dial.",
+   "choices": [
+    {
+     "label": "Wind it with care.",
+     "success": {
+      "text": "It ticks. One person in the queue looks up at the sound. Then another. \"Is that the time? I'm late.\" It's the first hurry in the town for a week. The rest here heals in full, whatever the brownout.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-thirteen-wound",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "He gives you a small brass bell instead: a Thirteenth Chime. Held, its holder isn't touched by the Zero Hour.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-thirteenth-chime",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-barber",
+   "name": "The Barber of Sunyshore",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A barber's pole. One chair. One customer in forty years who walked out with half a haircut. The barber, Mr. Talfryn Hadleigh: \"You'll want to know about the boy. They all do, since the news. I've told it so often I've got it down to a size.\" Mr. Hadleigh: \"He'd have been seven. His grandfather brought him. Sat like a post. I'd the cape on, I'd the comb in, and I said what I say: \"And how's school?\"\" Mr. Hadleigh: \"He said: \"Why do you need to know?\" Not rude. He wanted the reason. I'd none. I said, \"Just making talk.\" He said, \"Then I needn't answer.\" And I laughed, and I said, \"Fair enough, and what's your favourite subject?\"\" Mr. Hadleigh: \"He got down. Half done. One side long. He walked home like that. His grandfather paid me the full cut and apologised, and I said no harm.\" Mr. Hadleigh: \"There was harm. I asked a child a second question after he'd told me plain he'd rather not have the first. I've cut hair in silence since. Forty years. People think it's a style.\"",
+   "choices": [
+    {
+     "label": "\"It was one question.\"",
+     "success": {
+      "text": "Mr. Hadleigh: \"It was one too many. That's the whole of it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-lore-barber",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would you say to him now?\"",
+     "success": {
+      "text": "Mr. Hadleigh: \"Nothing. I'd finish the other side.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-lore-barber",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"A cut, please. In silence.\" (a rest)",
+     "success": {
+      "text": "He does it without a word. It takes a rest. At the end, he holds up the mirror, and doesn't ask if that's all right.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-lore-barber",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-his-card",
+   "name": "His Card",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 5,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "The Intake Room. A cabinet. Five hundred and six tabs, alphabetical, in one hand. A drawer at the bottom with no letter on it. Wynn Oakeshott: \"That's not filed. It came in before there was a system. It's the first one. I've never known where it goes.\" One card. The print's the trial run: the question's slightly crooked. WHAT WOULD YOU LIKE TO STOP? One word, in a hand that's since got smaller: SUPPER.",
+   "choices": [
+    {
+     "label": "\"Supper?\"",
+     "success": {
+      "text": "Wynn: \"I thought it was a joke. He doesn't joke. I thought, then, it was a test of the pen.\" She turns it over. Nothing. Wynn: \"A person doesn't want supper stopped. A person wants— whatever happened at it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-his",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Whose is it?\"",
+     "success": {
+      "text": "She doesn't answer. She doesn't have to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-his",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Take it.)",
+     "success": {
+      "text": "It fits in a pocket. Wynn doesn't stop you. The drawer is empty again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-his",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Being called down. Being asked, across a table.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-lore-barber",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Wynn: \"...Then it's not \"supper.\" It's \"questions.\" He's built all this to get out of one meal.\" She takes a blank tab. She writes, slowly: C. She files it. First drawer. In order, at last.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-his",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-card-filed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-board-ainsley",
+   "name": "Four More: Mr. Ainsley",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#2e3440",
+    "effect": "none"
+   },
+   "intro": "Hearthome. Mr. Lowri Ainsley, finance: Mr. Ainsley: \"I voted for it because the numbers were right. They're still right. That's the horrible thing.\"",
+   "choices": [
+    {
+     "label": "Show him the pensions.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-next-of-kin",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You show him the pensions: five hundred and six, set up for people who aren't coming. He reads the total twice. He'll vote.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "board-ainsley",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to think.",
+     "success": {
+      "text": "They thank you for coming, and don't move.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-board-quillan",
+   "name": "Four More: Miss Quillan",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#2e3440",
+    "effect": "none"
+   },
+   "intro": "Canalave. Miss Kerensa Quillan, legal: Miss Quillan: \"\"To complete the world.\" I drafted that. I thought it was a slogan.\"",
+   "choices": [
+    {
+     "label": "Show her the last page.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-last-page",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You show her the last page of the plan. She reads \"No observer persists\" aloud, and puts her pen down. She'll vote.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "board-quillan",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to think.",
+     "success": {
+      "text": "They thank you for coming, and don't move.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-board-nettleship",
+   "name": "Four More: Mr. Nettleship",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#2e3440",
+    "effect": "none"
+   },
+   "intro": "Floaroma. Mr. Zennor Nettleship, the Windworks: Mr. Nettleship: \"I'd a brass band to disband. I signed it. My wife plays tuba.\"",
+   "choices": [
+    {
+     "label": "Show him the badge.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-band",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You show him the Works Band Badge. Mr. Nettleship: \"Birgit's still going? ...Don't tell her how I voted.\" She knows. He'll vote.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "board-nettleship",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to think.",
+     "success": {
+      "text": "They thank you for coming, and don't move.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-board-islay",
+   "name": "Four More: Dame Petronel",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#2e3440",
+    "effect": "none"
+   },
+   "intro": "Snowpoint. Dame Petronel Islay, the oldest: Dame Petronel: \"I voted yes because Signe voted no, and I'd been voting against Signe since school.\"",
+   "choices": [
+    {
+     "label": "Lend her Mrs. Holmgren's flask.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-lore-holmgren",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You give her Mrs. Holmgren's flask, lent. Dame Petronel: \"Oh, give it here. She's put too much sugar in. She always did.\" She'll vote.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "board-islay",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them to think.",
+     "success": {
+      "text": "They thank you for coming, and don't move.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-board-six",
+   "name": "Six Votes",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "board-ainsley",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "board-quillan",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "board-nettleship",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "board-islay",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "board-six",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_lady"
+    ],
+    "tint": "#2e3440",
+    "effect": "none"
+   },
+   "intro": "A tearoom, booked for the afternoon. Four board members, Mrs. Holmgren and her one share, and one more: your seat, if you have one, or Saturn's proxy in a sealed envelope. Six.",
+   "choices": [
+    {
+     "label": "Call the meeting.",
+     "success": {
+      "text": "The Windworks' draw is cut by a board order. The brownout eases. Cyrus's memo in reply: \"Noted. Insufficient.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "board-six",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "heat": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call the meeting, and revoke the licences.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sinnoh-licensed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The licences are revoked. The three go free. Charon: \"You've outvoted me on a mountain and now in a tearoom. I'm beginning to take it personally.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "board-six",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-three-freed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-other-side",
+   "name": "The Other Side",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 5,
+     "inside": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galactic-lore-barber",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "galactic-other-side",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "Cyrus, in a corridor, on his way somewhere, alone.",
+   "choices": [
+    {
+     "label": "\"He'd finish the other side.\"",
+     "success": {
+      "text": "Cyrus: \"...Hadleigh. I walked home lopsided. My mother asked eleven questions about it.\" A pause. Cyrus: \"He's not spoken since? Forty years.\" Another. Cyrus: \"That's disproportionate. I only wanted the one question fewer.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-other-side",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Let him pass.)",
+     "success": {
+      "text": "He passes.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -33,7 +33,7 @@ export const TypeNameSchema = z.enum(TYPE_NAMES);
 export type TypeName = z.infer<typeof TypeNameSchema>;
 
 /** Catalog Overhaul: which party Pokémon an event effect lands on (core/co/who.ts). A match is the first able Pokémon that fits. */
-export const CoMatchSchema = z.object({ types: z.array(TypeNameSchema).min(1).max(4).optional(), moveFlag: z.enum(CO_MOVE_FLAGS).optional(), species: z.array(z.string().min(1)).min(1).optional() }).refine((m) => m.types !== undefined || m.moveFlag !== undefined || m.species !== undefined, { message: 'a match needs types, a move flag or species' });
+export const CoMatchSchema = z.object({ types: z.array(TypeNameSchema).min(1).max(4).optional(), moveFlag: z.enum(CO_MOVE_FLAGS).optional(), species: z.array(z.string().min(1)).min(1).optional(), /** Catalog Overhaul (families-b): every able Pokémon that fits, not just the first ("+1 Bond with Water-types"). */ every: z.boolean().optional() }).refine((m) => m.types !== undefined || m.moveFlag !== undefined || m.species !== undefined, { message: 'a match needs types, a move flag or species' });
 export const CoWhoSchema = z.union([z.enum(CO_WHO_NAMES), CoMatchSchema]);
 
 export const STAT_NAMES = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'] as const;
@@ -2874,6 +2874,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('item'), id: z.string(), /** Copies needed (default 1). */ count: z.number().int().min(1).optional(), /** Greenneedle gn.12: holds only when the player does NOT have it (the Lady leaves HMs when you already hold her crystal). */ absent: z.boolean().optional() }),
   /** Catalog Overhaul markets: holds at least `count` items in total from `ids` (any Berry, two charms); `label` names them on the locked button. */
   z.object({ kind: z.literal('holdsAny'), ids: z.array(z.string()).min(1), count: z.number().int().min(1).default(1), label: z.string().min(1) }),
+  /** Catalog Overhaul (families-b): you hold at least one of these items ("Offer a gem", "a Berry for the key"). */
+  z.object({ kind: z.literal('itemAny'), ids: z.array(z.string()).min(1) }),
   /** Catalog Overhaul (families-b): the lead (the first Pokémon able to fight) is of this type. */
   z.object({ kind: z.literal('leadType'), type: TypeNameSchema }),
   /** Catalog Overhaul (families-b): the Pokémon the last "pick a Pokémon" choice named (remembered for the run, core/co/pickMemory.ts) is still in the party and is one of these types / is the starter. */
@@ -2956,7 +2958,8 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   /** Pokémon Moments (PA11): a party member from one of the moment groups in pokemonMoments.json (ultra-beasts, starters...). */
   z.object({ kind: z.literal('partyGroup'), group: z.string().min(1), atLeast: z.number().int().min(1).max(6).default(1) }),
   /** The Pokémon you started with (still in the party) has this type, species or species tag: starter-tagged events. */
-  z.object({ kind: z.literal('starter'), type: TypeNameSchema.optional(), species: z.string().optional(), tag: z.enum(SPECIES_TAGS).optional() }).refine((c) => c.type !== undefined || c.species !== undefined || c.tag !== undefined, { message: 'a starter condition needs a type, species or tag' }),
+  // A starter condition: the run's starter is still in the party, and (when given) has this type, species or tag.
+  z.object({ kind: z.literal('starter'), type: TypeNameSchema.optional(), species: z.string().optional(), tag: z.enum(SPECIES_TAGS).optional() }),
   /** Mentors (spec section 15): you train under a mentor, optionally this one / this category, with enough trust or loyalty, having learned a lesson, or at a mission state. */
   z.object({
     kind: z.literal('mentor'),
@@ -3015,6 +3018,20 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('flag'), key: z.string(), atLeast: z.number().int().min(0).default(1), atMost: z.number().int().min(0).default(99), /** Catalog Overhaul (people): also needs the flag to have been stamped (`stamp: 'region'`) at least this many regions ago (a three-meeting arc's "one region later"). */ regionsAgo: z.number().int().min(1).max(9).optional(), /** At most this many regions since the stamp (0 = still in the region it was set in: "for the region"). */ regionsAgoMost: z.number().int().min(0).max(9).optional() }),
   /** Catalog Overhaul SF83: how the road judges the player (pack Reputation, kindness, kept finds). */
   z.object({ kind: z.literal('record'), is: z.enum(['high', 'middle', 'low']) }),
+  /** Catalog Overhaul SF55: the player holds an item of this tier for Nix's board (and a Berry, with `berry`). */
+  /** Catalog Overhaul (families-c): the player kept stolen or found goods (any `honest-kept-*` flag). */
+  z.object({ kind: z.literal('keptGoods') }),
+  /** Catalog Overhaul SF59: the player still carries an unhatched Egg of this species. */
+  z.object({ kind: z.literal('eggOf'), species: z.string().min(1) }),
+  /** GL2: a Gym of the current region was beaten this run. */
+  z.object({ kind: z.literal('gymHere') }),
+  /** Catalog Overhaul families-c (L1, L16, roamers): the run has a Legendary Blessing (`has: false`: has none); `species` names whose; `atLeast` is its Influence. */
+  z.object({ kind: z.literal('blessed'), has: z.boolean().default(true), species: z.string().optional(), atLeast: z.number().int().min(0).default(0) }),
+  /** FE2: the party's HP, all together, is below this share of its max. */
+  z.object({ kind: z.literal('partyHpBelow'), share: z.number().gt(0).max(1) }),
+  z.object({ kind: z.literal('barterHas'), tier: z.enum(['common', 'uncommon', 'rare']), berry: z.boolean().default(false) }),
+  /** Catalog Overhaul (families-c): the bag holds `count` of these items (or of any item ending in `suffix`, like "-berry"). */
+  z.object({ kind: z.literal('bagHas'), ids: z.array(z.string()).default([]), suffix: z.string().optional(), count: z.number().int().min(1).default(1), label: z.string().optional() }),
   /** Recognized wild foe: a wild species beat one of your Pokémon earlier this run. */
   z.object({ kind: z.literal('oldFoe') }),
   /** Rival feud: two rivals who are enemies of each other have an unsettled feud. */
@@ -3059,6 +3076,14 @@ export const EventConditionSchema = z.discriminatedUnion('kind', [
     trouble: z.boolean().optional(),
     /** SF13 A7: with `op`, the Operation marked first at The Plan has been dealt with (or this is it). Until then the others wait. */
     afterFirst: z.boolean().optional(),
+    /** Volume III (core/evil/inside.ts): on the inside route or not; a rank, Standing or Suspicion at least this; Suspicion below this. */
+    inside: z.boolean().optional(),
+    rank: z.number().int().min(1).max(6).optional(),
+    standing: z.number().int().min(0).max(60).optional(),
+    suspicion: z.number().int().min(0).max(10).optional(),
+    suspicionBelow: z.number().int().min(1).max(10).optional(),
+    /** Volume III: a scene for any player, inside the team or out of it (`after`/`beat` still count; the inside route doesn't hide it). */
+    anyRoute: z.boolean().optional(),
   }),
   /** Beta 0.6 rival questlines: the featured rival's overhaul state (core/rivals/overhaul.ts): a feeling at least this (0 to 10), their Lead in a range (-3 to +3, rival ahead is positive), or a mark they hold. Never true without a rival. */
   z.object({
@@ -3181,7 +3206,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** One of these items, picked by the event's roll. */
   z.object({ kind: z.literal('itemFrom'), ids: z.array(z.string()).min(1), count: z.number().int().positive().default(1) }),
   /** A random item from the Bag is lost (never a key item). */
-  z.object({ kind: z.literal('loseItem'), id: z.string().optional(), /** With `id`: how many copies are used (default 1). */ count: z.number().int().min(1).optional() }),
+  z.object({ kind: z.literal('loseItem'), id: z.string().optional(), /** Catalog Overhaul (families-b): without `id`, one of these that you hold is given up. */ from: z.array(z.string()).min(1).optional(), /** With `id`: how many copies are used (default 1). */ count: z.number().int().min(1).optional() }),
   /** A trade: the lowest-level party Pokémon that fits `want` leaves with the partner. The choice stays locked without one (and while only one Pokémon is left). */
   z.object({ kind: z.literal('tradeAway'), want: TradeWantSchema }),
   /**
@@ -3267,13 +3292,15 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Catalog Overhaul: "+1 to a stat" for one Pokémon (5% per point; `best` = its highest stat), kept inside a per-stat cap of 15%. `until: 'region'` ends when the run moves to the next region. */
   z.object({ kind: z.literal('statBoost'), stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'best', 'all']), percent: z.number().int().min(1).max(15).default(5), who: z.union([z.literal('weakest'), CoWhoSchema]).default('lead'), until: z.enum(['run', 'region']).default('run') }),
   /** A Pokémon joins (or goes to storage when the party is full): a listed species, or one of the types, or the stage's theme. */
-  z.object({ kind: z.literal('join'), /** Catalog Overhaul (families-b): the wild Pokémon that beat your team earlier this run joins (the `oldFoe`), else `species` / `types`. */ recall: z.boolean().default(false), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false), /** Beta 0.7 Route 25: it joins fonder of you, with this much extra friendship (the troop's thanks when the food came back). */ friendship: z.number().int().min(1).max(100).optional(), /** Catalog Overhaul: it joins at this share of the event level (the worn-out Manectric at half). */ levelShare: z.number().min(0.1).max(1).optional(), /** Catalog Overhaul: its nature, quirk (core/co/quirks.ts), marks, original trainer and the line about its quirk. */ nature: z.enum(NATURE_IDS).optional(), quirk: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), marks: z.array(z.string().min(1)).max(8).optional(), ot: z.string().min(1).optional(), quirkNote: z.string().min(1).optional(), /** Catalog Overhaul: it joins as the listed species even at a level where it would have evolved (a juvenile Poipole). */ asIs: z.boolean().optional(), /** Catalog Overhaul (Alphas): it joins with the Alpha Mark (keeps its size, +10% HP) and never evolves on joining. */ alpha: z.boolean().default(false) , /** Catalog Overhaul, mentors: one of the starter's types instead of `types` (Brook's Recruit). */ starterType: z.boolean().default(false), /** Catalog Overhaul (Greenneedle gn.07): it joins carrying this held item (the rain Fire-type's Charcoal). */ held: z.string().optional(), /** Greenneedle gn.22: it joins carrying this mark (an afterstory finds it by the mark). */ mark: z.string().optional(), /** Greenneedle gn.23: it joins with this lasting stat boost (raced up the bank three times: Speed). */ boost: z.object({ stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe']), percent: z.number().int().min(1).max(50) }).optional(), /** Greenneedle gn.31: drawn from the rarer half of the pool (the lower-weight half). */ rarer: z.boolean().optional() }),
+  z.object({ kind: z.literal('join'), /** Catalog Overhaul (families-b): the wild Pokémon that beat your team earlier this run joins (the `oldFoe`), else `species` / `types`. */ recall: z.boolean().default(false), /** Catalog Overhaul (families-b): the most recent species you saw this run and never caught joins (The Mirror Lake's trade). */ uncaught: z.boolean().default(false), species: z.array(z.string()).default([]), types: z.array(TypeNameSchema).default([]), levelBonus: z.number().int().default(0), shinyMultiplier: z.number().min(1).default(1), shadow: z.boolean().default(false), blissful: z.boolean().default(false), hiddenAbility: z.boolean().default(false), /** It joins with this ability instead of its own (Squad Squirtle: Contrary). */ ability: z.string().optional(), /** Anime Forms art (core/animeLooks.ts; the Squad Squirtle). Presentation only. */ look: z.enum(ANIME_LOOKS).optional(), /** Beta 0.6 Vermilion: it joins at exactly this level (Flight North's Caterpie is level 5), not the stage's event level. */ level: z.number().int().min(1).max(100).optional(), /** Beta 0.6 Vermilion: it joins knowing these moves too (the Kaiju Tentacool's Liquidation); a full moveset loses its last move. */ moves: z.array(z.string()).max(4).default([]), /** Beta 0.6 Vermilion: it goes straight into the party with no accept prompt (a companion for a stage; the lone Bug-type of Flight North). */ direct: z.boolean().default(false), /** Beta 0.7 Route 25: it joins fonder of you, with this much extra friendship (the troop's thanks when the food came back). */ friendship: z.number().int().min(1).max(100).optional(), /** Catalog Overhaul: it joins at this share of the event level (the worn-out Manectric at half). */ levelShare: z.number().min(0.1).max(1).optional(), /** Catalog Overhaul: its nature, quirk (core/co/quirks.ts), marks, original trainer and the line about its quirk. */ nature: z.enum(NATURE_IDS).optional(), quirk: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(), marks: z.array(z.string().min(1)).max(8).optional(), ot: z.string().min(1).optional(), quirkNote: z.string().min(1).optional(), /** Catalog Overhaul: it joins as the listed species even at a level where it would have evolved (a juvenile Poipole). */ asIs: z.boolean().optional(), /** Catalog Overhaul (Alphas): it joins with the Alpha Mark (keeps its size, +10% HP) and never evolves on joining. */ alpha: z.boolean().default(false) , /** Catalog Overhaul, mentors: one of the starter's types instead of `types` (Brook's Recruit). */ starterType: z.boolean().default(false), /** Catalog Overhaul (Greenneedle gn.07): it joins carrying this held item (the rain Fire-type's Charcoal). */ held: z.string().optional(), /** Greenneedle gn.22: it joins carrying this mark (an afterstory finds it by the mark). */ mark: z.string().optional(), /** Greenneedle gn.23: it joins with this lasting stat boost (raced up the bank three times: Speed). */ boost: z.object({ stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe']), percent: z.number().int().min(1).max(50) }).optional(), /** Greenneedle gn.31: drawn from the rarer half of the pool (the lower-weight half). */ rarer: z.boolean().optional() }),
   /** A seedling grows in the Berry Garden (core/berries.ts): a held-berry plot, optionally mutated; the garden must have room. */
   z.object({ kind: z.literal('seedling'), berry: z.string().min(1), mutated: z.boolean().default(false) }),
   /** A sanctuary's blessing (shadowWorld.json): a few battles of a small, narrow boost. */
   z.object({ kind: z.literal('blessing'), id: z.string().min(1) }),
   /** A Blissful awakening: the healthiest, fondest party Pokémon that is not Shadow becomes Blissful for good (needs friendship 150). */
   z.object({ kind: z.literal('awaken') }),
+  /** Catalog overhaul SF16 (families-a): the last Pokémon released this run comes back and asks to join, at its old level (nothing without a release). */
+  z.object({ kind: z.literal('rejoinReleased') }),
   /** You get an Egg (core/eggs.ts) that hatches after `left` battles or stages; it carries up to two egg moves. */
   z.object({
     kind: z.literal('egg'),
@@ -3398,11 +3425,41 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** SF72: reads the team against a rule (`bad` and `good` team facts) and shows, or with `store` only keeps, the prize multiplier. */
   z.object({ kind: z.literal('ruleRead'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), bad: z.array(z.string().regex(/^(type|anyType|moveType|anyMoveType):[a-z]+$|^(status|noStatus|slow|fast|physical|special|frail|bulky|small|full|lastWeak|lastStrong)$/)).max(4).default([]), good: z.array(z.string().regex(/^(type|anyType|moveType|anyMoveType):[a-z]+$|^(status|noStatus|slow|fast|physical|special|frail|bulky|small|full|lastWeak|lastStrong)$/)).max(4).default([]), prize: z.number().int().positive(), store: z.boolean().default(false) }),
   /** SF72: pays `amount` times the multiplier the last `ruleRead` kept under `key` (×1 when none). */
-  z.object({ kind: z.literal('rulePrize'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().positive() }),
+  z.object({ kind: z.literal('rulePrize'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), amount: z.number().int().positive(), /** Roofer Jax: ×1.5 more after a knockout in the opening turns. */ earlyKo: z.boolean().default(false) }),
   /** On a `pick` choice: tests the Pokémon the player pointed at; `pass` or `fail` (flags) is counted. A wrong pick costs the picked Pokémon `sulk` friendship. */
   z.object({ kind: z.literal('pickTest'), test: z.enum(['leastUsed', 'impostor']), pass: z.string().regex(/^[a-z][a-z0-9-]*$/), fail: z.string().regex(/^[a-z][a-z0-9-]*$/), sulk: z.number().int().min(0).max(50).default(0) }),
   /** FE4: the lead fights its next battle as its Paradox counterpart, then snaps back. */
   z.object({ kind: z.literal('timeMachine'), era: z.enum(['past', 'future']) }),
+  /** SF55 Nix's board: trade one bag item of tier `give` (none: a free gift) and, with `berry`, a Berry, for Nix's item of tier `get`. */
+  z.object({ kind: z.literal('barter'), give: z.enum(['common', 'uncommon', 'rare']).optional(), get: z.enum(['common', 'uncommon', 'rare']), berry: z.boolean().default(false) }),
+  /** Spends up to `count` of these bag items (or any ending in `suffix`): "a Berry", "up to 3 healing items". */
+  z.object({ kind: z.literal('spendBag'), ids: z.array(z.string()).default([]), suffix: z.string().optional(), count: z.number().int().min(1).default(1) }),
+  /** SF61: remembers the picked Pokémon under `key` (with `take`, it leaves the party). */
+  z.object({ kind: z.literal('notePicked'), key: z.string().regex(/^[a-z][a-z0-9-]*$/), take: z.boolean().default(false) }),
+  /** SF61: the Pokémon noted under `key` comes home. */
+  z.object({ kind: z.literal('rejoin'), key: z.string().regex(/^[a-z][a-z0-9-]*$/) }),
+  /** SF60: a copy of an item this Pokémon holds. */
+  z.object({ kind: z.literal('copyHeld'), who: z.enum(['starter', 'lead']) }),
+  /** SF59: the newest unhatched Egg of this species leaves the party (given back; or `hatch`: it hatches now, as the story's scene). */
+  /** SF61: a Pokémon from the region's list in familiesC.json `regionJoin[table]` joins (as a Shadow with `shadow`). */
+  z.object({ kind: z.literal('regionJoin'), table: z.string().min(1), shadow: z.boolean().default(false), levelBonus: z.number().int().default(0) }),
+  z.object({ kind: z.literal('returnEgg'), species: z.string().min(1), hatch: z.boolean().default(false) }),
+  /** SF69: the newest party Pokémon is bound to `key`: once it is put in the PC it never evolves again this run. */
+  z.object({ kind: z.literal('boxBond'), key: z.string().min(1) }),
+  /** GL2: the item `<prefix>-<type>` for this region's Gym (the last one beaten here, else the first not yet met). */
+  z.object({ kind: z.literal('gymTypeItem'), prefix: z.string().min(1) }),
+  /** SF73 Mystery Dungeon (core/events/coDungeon.ts): `start` resets the rooms and Luck (+1 with `scarf`); `next` ends room `from` and opens the next (or, out of Luck, drops a held item and walks out). */
+  /** L1/L16/roamers: a Legendary's Sign: `sign-<species>` goes up, and so does the run blessing's Influence when it is that Legendary's. */
+  z.object({ kind: z.literal('sign'), species: z.string().min(1), amount: z.number().int().min(1).max(3).default(1) }),
+  /** The other roamers: following the trail finds it at the Influence chance (familiesC.json roam); a hit queues `found`. */
+  z.object({ kind: z.literal('roamChase'), species: z.string().min(1), found: z.string().min(1) }),
+  /** L16 floor 1: the bowl takes one bag item of this tier (the one you hold most of). */
+  z.object({ kind: z.literal('offer'), tier: z.enum(['common', 'uncommon', 'rare']) }),
+  /** L16 summit: the run's blessed Legendary comes down the stairs and joins (nothing without a blessing). */
+  z.object({ kind: z.literal('joinBlessed'), levelBonus: z.number().int().min(0).max(10).default(0) }),
+  z.object({ kind: z.literal('dungeon'), action: z.enum(['start', 'next']), from: z.string().optional(), scarf: z.boolean().default(false) }),
+  /** SF63: a Pokémon the player helped; one comes back once a region at the worst moment (`rare`: SF63.8's, the one that returns). */
+  z.object({ kind: z.literal('helped'), species: z.string().min(1), rare: z.boolean().default(false) }),
   // Catalog Overhaul, singles (core/events/coSingles.ts).
   /** SF138: advice read from the real party: `weakness` (types that hit two or more hard) or `habits` (most and least used Pokémon, favourite move). Changes nothing. */
   z.object({ kind: z.literal('coAdvice'), topic: z.enum(['weakness', 'habits']) }),
@@ -3494,9 +3551,18 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
     pen: z.boolean().optional(),
     /** SF130: the region's team takes this many party Pokémon (from the back, never below two) to its Holding Pen. Teams without a holding site take none. */
     steal: z.number().int().min(1).max(3).optional(),
+    /** Hoenn (HOENN_TEAMS 1.1, 3.9): the player joins this team, which becomes the region's team; with `demote` the inside route crosses one rank lower. */
+    side: z.string().regex(/^[a-z][a-z0-9-]*$/).optional(),
+    demote: z.boolean().optional(),
+    /** Hoenn 2.5: the player hands in the uniform (or is marked): the inside route's meters go, a `left` mark stays, and the outside story resumes. */
+    leave: z.boolean().optional(),
     /** SF130: run modifiers that last only while the run is in this region (like an Operation's lasting effect), with the words that say so. */
     mods: z.array(ArchetypeModifierSchema).min(1).max(3).optional(),
     modsText: z.string().min(1).optional(),
+    /** Volume III inside route: Standing and Suspicion change (0 to 10 each; Hoenn's Standing runs to 60), and a rank the player now holds at least. */
+    standing: z.number().int().min(-5).max(6).optional(),
+    suspicion: z.number().int().min(-5).max(10).optional(),
+    rank: z.number().int().min(1).max(6).optional(),
   }),
   /** Run events G (core/trainingEffects.ts): changes the lead's build: Nature, ability slot, weakest stat, or learns a move (of `type`). */
   z.object({ kind: z.literal('train'), what: z.enum(['natureReroll', 'natureNudge', 'abilitySwap', 'weakestStat', 'learnMove', 'evolutionHint', 'masteryShard', 'nap']), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe']).optional(), type: TypeNameSchema.optional() }),
@@ -3651,6 +3717,33 @@ export const EventRuleSchema = z.object({
   turnLimit: z.number().int().min(1).max(30).optional(),
   foeAsleep: z.boolean().optional(),
   reversed: z.boolean().optional(),
+  // Catalog Overhaul, families-c: SF72 rule battles (core/battle/coRules.ts). Every one applies to both sides.
+  /** Beginner's Luck: every critical-hit chance is multiplied by this. */
+  critMult: z.number().min(1).max(3).optional(),
+  /** Duel on the Train: every critical-hit chance gains this much. */
+  critBonus: z.number().min(0).max(0.5).optional(),
+  /** Beginner's Luck: all damage is this share of normal. */
+  damageMult: z.number().min(0.5).max(1.5).optional(),
+  /** Night Shift Guards: `accuracyMult` leaves Pokémon of these types alone. */
+  accuracyExempt: z.array(TypeNameSchema).max(4).optional(),
+  /** Bodybuilder Beach, Stage Fright: stat stages every Pokémon gets each time it comes in. */
+  entryStages: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(-2).max(2)).optional(),
+  /** Sleepwalker Brawl: every Pokémon dozes for one turn when it first comes in. */
+  entrySleep: z.boolean().optional(),
+  /** Sleepwalker Brawl: the first Pokémon to act gains +1 Speed. */
+  firstActBoost: z.boolean().optional(),
+  /** Blindfold Bout, Misdirection: the foe picks blind until your Pokémon has acted. */
+  blindBoth: z.boolean().optional(),
+  /** Slippery Slope: turn order is random every turn. */
+  randomOrder: z.boolean().optional(),
+  /** Dance-off, bike race: this side moves first on turn one. */
+  firstMover: z.enum(['player', 'enemy']).optional(),
+  /** Roofer Jax: Pokémon of this type are faster. */
+  typeSpeed: z.object({ type: TypeNameSchema, mult: z.number().min(1).max(1.5) }).optional(),
+  /** Forecaster Brio: a new weather from this list every turn. */
+  weatherRandom: z.array(WeatherSchema).min(2).max(5).optional(),
+  /** Roofer Jax: a knockout within this many turns is noted (the prize bonus reads it). */
+  earlyKo: z.number().int().min(1).max(3).optional(),
   stages: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(-6).max(6)).optional(),
 });
 export type EventRule = z.infer<typeof EventRuleSchema>;
@@ -3717,6 +3810,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     special: z.string().optional(),
     /** Beta 0.7 U1: special rules for this wild fight (the Ultra Rule of an Ultra Beast's home world). */
     rule: EventRuleSchema.optional(),
+    /** Catalog Overhaul L16: the foe is the run's blessed Legendary (none: one of `species`). */
+    blessed: z.boolean().optional(),
     /** Beta 0.7 U1: Ultra Aura: every foe starts with +1 to all its stats. */
     aura: z.boolean().optional(),
     /** Catalog Overhaul (Alphas): the foe is an Alpha: double HP, the Alpha look, and no evolving by level (the listed species is the Alpha). */
@@ -3743,6 +3838,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     team: z.array(z.string()).optional(),
     /** Catalog Overhaul (people): the foe's first Pokémon knows these moves, replacing its last ones (Joey's Rattata and Hyper Fang). */
     foeMoves: z.array(z.string()).max(4).optional(),
+    /** Catalog Overhaul (families-c): a team drawn to beat your lead or your most-used Pokémon (`against`), or with the Pokémon you gave away (`note`, SF61) as its last. */
+    coFoe: z.object({ against: z.enum(['lead', 'most']).optional(), note: z.string().optional() }).optional(),
     /** With `team`: this team instead when your lead is weak to `weakTo` (the Samurai counters your Bug-type). */
     counter: z.object({ weakTo: TypeNameSchema, team: z.array(z.string()).min(1) }).optional(),
     /** Greenneedle gn.28: one more Pokémon while run flag `key` is at least `at` (the Hideout's Alert meter at 10). */
@@ -3768,6 +3865,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     standWith: z.boolean().optional(),
     /** Shadow Boxing: the foe is a copy of your lead (same species, its level plus `levelBonus`); `size` is ignored. */
     mirror: z.boolean().optional(),
+    /** Catalog Overhaul (families-b, The Mirror Lake): the foe's team is the species you saw this run and never caught, most recent first (core/co/mirror.ts). */
+    uncaught: z.boolean().optional(),
     /** With `mirror`: the copies are clones (New Island): no ability, no items, every stat +10%. */
     clone: z.boolean().optional(),
     /** Mentors: the team is your fellow apprentice's (their preferred types; they take the name). A loss is friendly: nobody is out and the run goes on. */

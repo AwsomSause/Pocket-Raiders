@@ -1,0 +1,157 @@
+{
+  "status": "limited",
+  "limits": "HOENN_TEAMS parts 6 and 7.9-7.13. Fill-ins (the docs give none): names, the interview answers, the talk lines, report lines past the two written, Zinnia's window lines, the admins' standing orders, gadget effects (they help missions, not the player's own map), and the success formula's weights.",
+  "startFunds": 1000,
+  "heatMax": 10,
+  "doctrineCost": 2000,
+  "defaultTypes": ["flying", "dragon", "electric"],
+  "caps": [
+    { "renown": 0, "grunts": 3, "squads": 1, "admins": 0 },
+    { "renown": 5, "grunts": 6, "squads": 2, "admins": 1 },
+    { "renown": 12, "grunts": 10, "squads": 3, "admins": 2 },
+    { "renown": 22, "grunts": 16, "squads": 4, "admins": 3 },
+    { "renown": 36, "grunts": 24, "squads": 5, "admins": 3 }
+  ],
+  "ranks": [
+    { "id": "fledgling", "name": "Fledgling", "missions": 0, "loyalty": 0, "cost": 0, "mons": 1, "gap": 8, "gains": "One Pokémon." },
+    { "id": "flyer", "name": "Flyer", "missions": 2, "loyalty": 0, "cost": 0, "mons": 2, "gap": 6, "gains": "Two Pokémon; can go on any mission." },
+    { "id": "wingleader", "name": "Wingleader", "missions": 5, "loyalty": 5, "cost": 1000, "mons": 3, "gap": 4, "gains": "Three Pokémon; leads a squad; gets a nickname." },
+    { "id": "admin", "name": "Admin", "missions": 9, "loyalty": 7, "cost": 3000, "mons": 4, "gap": 2, "gains": "Four Pokémon with a chosen ace; standing orders while you're away." }
+  ],
+  "origins": [
+    { "id": "ex-magma", "name": "Ex-Magma", "why": ["You let me go. I owe.", "I read the last page. Nobody else would.", "I'm done digging for a man who won't look up."],
+      "answers": { "why": "Because you looked at the readings. Maxie never did.", "did": "Fenced a hot spring. Moved an old woman out of it. She called me dear.", "wont": "I won't go back down the drill. Don't ask me to." } },
+    { "id": "ex-aqua", "name": "Ex-Aqua", "why": ["The tide took my nerve. You didn't laugh.", "Archie talks about the sea. I'd rather somebody who listens to it.", "Heard you pay, and you don't sink boats."],
+      "answers": { "why": "You don't wear a bandana and you don't shout. That's two things.", "did": "Charged ferries a tax. One of them carried schoolchildren.", "wont": "I won't hold anybody under. Not even them." } },
+    { "id": "townsfolk", "name": "Townsfolk", "why": ["My spring's fenced off.", "You helped my street. I can carry things.", "Two gangs in town already. Figured I'd join the one that isn't."],
+      "answers": { "why": "You stopped on the road for us. Nobody stops.", "did": "Nothing. That's the point. I did nothing for anyone and I'd like to stop.", "wont": "I won't leave my mum's town to burn. If it's that or the job, it's that." } },
+    { "id": "ranger", "name": "Ranger", "why": ["The wild ones are getting caught in the middle.", "I've a patrol and no backing.", "The Rangers sent me to watch you. I'd rather help."],
+      "answers": { "why": "Because the Pokémon on Route 119 can't vote.", "did": "Counted Castform for the Institute. Then the Institute stopped answering.", "wont": "I won't take anything from the wild that it needs." } },
+    { "id": "drifter", "name": "Drifter", "why": ["Heard you pay.", "There was a kite. I followed it.", "I don't stay anywhere. I'll stay a while."],
+      "answers": { "why": "Honestly? You were the nearest.", "did": "A bit of everything. Some of it I'd tell you about.", "wont": "I won't be bored. If it's boring I'll go." } },
+    { "id": "draconid", "name": "Draconid", "why": ["Zinnia said you'd do. That's rare.", "The old songs say somebody stands under the sky. Might as well be us.", "My grandmother kept the Pillar. I'd like to keep something."],
+      "answers": { "why": "Zinnia says the sky's been waiting. I believe her, mostly.", "did": "Learned the songs. All of them. Nobody asks for them.", "wont": "I won't call the dragon for a quarrel. Never for a quarrel." } }
+  ],
+  "traits": [
+    { "id": "scout", "name": "Scout", "text": "Shows a mission's hidden risk.", "plus": 10, "on": [] },
+    { "id": "medic", "name": "Medic", "text": "A failed mission doesn't hurt the squad.", "plus": 0, "on": [] },
+    { "id": "climber", "name": "Climber", "text": "Bonus on high-ground missions.", "plus": 15, "on": ["high"] },
+    { "id": "diver", "name": "Diver", "text": "Bonus on sea missions.", "plus": 15, "on": ["sea"] },
+    { "id": "negotiator", "name": "Negotiator", "text": "Can end a mission by talking.", "plus": 15, "on": ["parley", "rescue"] },
+    { "id": "tinkerer", "name": "Tinkerer", "text": "Unlocks gadgets at the base.", "plus": 5, "on": ["workshop"] }
+  ],
+  "flaws": [
+    { "id": "loud", "name": "Loud", "text": "Heat +1 on stealth missions." },
+    { "id": "greedy", "name": "Greedy", "text": "Takes 10% of mission pay." },
+    { "id": "hot-headed", "name": "Hot-Headed", "text": "May turn a Quiet mission into a fight (−10 on Quiet)." },
+    { "id": "homesick", "name": "Homesick", "text": "Loyalty −1 each region away from Hoenn." },
+    { "id": "old-loyalties", "name": "Old Loyalties", "text": "Won't go on missions against their old team." },
+    { "id": "glory-hound", "name": "Glory-Hound", "text": "Loyalty −1 if not promoted in two stages." }
+  ],
+  "names": ["Hesper", "Old Bramwell", "Kestrel-Anne", "Finch-Abiodun", "Quillon", "Quince", "Tamsin", "Ruadh", "Pell", "Osric", "Wren", "Bly", "Corrie", "Idris", "Maudie", "Saffi", "Jory", "Nell", "Ambrose", "Tegan", "Halloran", "Pim", "Yusra", "Dunstan", "Effie", "Calloway", "Merrow", "Brannagh", "Lark", "Ottilie", "Sefton", "Ilse"],
+  "nicknames": ["The Diver", "The Kite", "Twice-Lucky", "The Quiet One", "Ledger", "The Gull", "Bootlace", "The Long Arm"],
+  "questions": [
+    { "id": "why", "label": "\"Why us?\"" },
+    { "id": "did", "label": "\"What did you do for them?\"" },
+    { "id": "wont", "label": "\"What won't you do?\"" }
+  ],
+  "aces": {
+    "scout": ["noctowl", "xatu", "swellow"],
+    "medic": ["altaria", "blissey", "florges"],
+    "climber": ["skarmory", "aerodactyl", "braviary"],
+    "diver": ["pelipper", "mantine", "gyarados"],
+    "negotiator": ["togekiss", "chatot", "gardevoir"],
+    "tinkerer": ["magnezone", "rotom", "klinklang"]
+  },
+  "archetypes": [
+    { "id": "flock", "name": "The Flock", "pool": ["taillow", "swellow", "wingull", "pelipper", "swablu", "altaria", "pidove", "unfezant", "rookidee", "corviknight", "starly", "staraptor"], "perk": "Squads move one node farther (missions take a node less)." },
+    { "id": "stormfront", "name": "The Stormfront", "pool": ["castform", "tropius", "pelipper", "manectric", "altaria", "drifblim"], "perk": "Missions ignore weather penalties (+5 on every mission)." },
+    { "id": "wyrms", "name": "The Wyrms", "pool": ["bagon", "shelgon", "salamence", "swablu", "trapinch", "vibrava", "flygon", "noibat", "noivern", "dratini", "axew"], "perk": "+1 Skill on combat missions; hiring costs +25%." },
+    { "id": "watchers", "name": "The Watchers", "pool": ["noctowl", "xatu", "natu", "hoothoot", "murkrow", "sigilyph"], "perk": "Shows the other teams' next Operation (Watch missions always succeed)." },
+    { "id": "kites", "name": "The Kites", "pool": ["drifloon", "drifblim", "hoppip", "jumpluff", "emolga", "gligar", "mantine"], "perk": "Stealth missions: Heat gain halved." },
+    { "id": "strays", "name": "The Strays", "pool": [], "perk": "Loyalty +1 for everyone; Skill varies wildly." },
+    { "id": "machines", "name": "The Machines", "pool": ["magnemite", "magneton", "porygon", "klink", "klang", "rotom", "bronzor", "bronzong"], "perk": "Gadgets cost half." },
+    { "id": "pack", "name": "The Pack", "pool": ["poochyena", "mightyena", "electrike", "manectric", "houndour", "houndoom", "rockruff", "growlithe"], "perk": "Squads of three get +1 Skill; a lone grunt gets −1." }
+  ],
+  "rooms": [
+    { "id": "roost", "name": "Roost", "cost": 1000, "text": "+4 grunt slots.", "line": "Somebody's hung their scarf on every peg. There are pegs to spare." },
+    { "id": "map", "name": "Map Room", "cost": 1500, "text": "Both teams' sites shown on the Hoenn map.", "line": "Red pins and blue pins. Somebody's added a green one, very small, on the base." },
+    { "id": "infirmary", "name": "Infirmary", "cost": 1500, "text": "Failed missions don't injure Pokémon.", "line": "A Chansey asleep on the spare bed. Nobody has the heart to move it." },
+    { "id": "workshop", "name": "Workshop", "cost": 2000, "text": "Gadgets: gliders, weather balloons, signal kites.", "line": "Glue, string, and a glider with one wing. \"It's fine. It's the other one that matters.\"" },
+    { "id": "mess", "name": "Mess Hall", "cost": 800, "text": "Loyalty +1 for all, once per region.", "line": "Stew. Somebody's arguing about the stew. Everyone's eating it." },
+    { "id": "window", "name": "The Long Window", "cost": 500, "text": "A place to stand and look out. No mechanical effect.", "line": "The whole of the sky, and nobody in it yet." }
+  ],
+  "gadgets": [
+    { "id": "glider", "name": "Gliders", "cost": 600, "text": "Missions take one node less." },
+    { "id": "balloon", "name": "Weather balloons", "cost": 400, "text": "+5 on Watch and Supply missions." },
+    { "id": "kite", "name": "Signal kites", "cost": 400, "text": "+10 on Parley missions; captured grunts are found faster." }
+  ],
+  "missions": [
+    { "type": "rescue", "name": "Rescue", "need": [2, 4], "nodes": [1, 2], "win": { "renown": 3, "loyalty": 1, "recruits": 1 }, "lose": "a grunt's Pokémon hurt for a stage",
+      "where": [{ "at": "Fallarbor, below the drill", "text": "Evacuate a village below a Magma drill.", "tags": ["high"], "against": "magma" }, { "at": "Route 105, the sandbar", "text": "Get a stranded family off a sandbar before the tide Aqua's pumping.", "tags": ["sea"], "against": "aqua" }, { "at": "Lavaridge, the spring", "text": "Bring the bathers out before the spring boils.", "tags": [], "against": "magma" }] },
+    { "type": "sabotage", "name": "Sabotage", "need": [2, 3], "nodes": [1, 1], "win": { "renown": 2, "heat": 2 }, "lose": "Heat gained, a grunt's Pokémon hurt",
+      "where": [{ "at": "Route 119, the Aqua pump", "text": "Jam an Aqua pump.", "tags": ["sea"], "against": "aqua" }, { "at": "Jagged Pass, the Magma bore", "text": "Foul a Magma bore with gravel.", "tags": ["high"], "against": "magma" }, { "at": "Slateport, the slipway", "text": "Loosen the chocks on an Aqua submarine.", "tags": ["sea"], "against": "aqua" }] },
+    { "type": "watch", "name": "Watch", "need": [1, 3], "nodes": [1, 2], "win": { "intel": 1 }, "lose": "Heat gained",
+      "where": [{ "at": "Mt. Chimney, the cable car", "text": "Shadow Tabitha for a stage.", "tags": ["high"], "against": "magma" }, { "at": "Lilycove, the dock", "text": "Shadow Shelly for a stage.", "tags": ["sea"], "against": "aqua" }] },
+    { "type": "supply", "name": "Supply", "need": [1, 2], "nodes": [1, 2], "win": { "funds": 600, "kind": 1 }, "lose": "Funds lost",
+      "where": [{ "at": "Pacifidlog, cut off", "text": "Run food to a cut-off town.", "tags": ["sea"], "against": "" }, { "at": "Fortree, the high walks", "text": "Carry medicine up to the tree houses.", "tags": ["high"], "against": "" }, { "at": "Verdanturf, the tunnel", "text": "Bring lamps to the miners' families.", "tags": [], "against": "" }] },
+    { "type": "raid", "name": "Raid", "need": [3, 5], "nodes": [1, 2], "win": { "funds": 1500, "heat": 3 }, "lose": "a grunt captured (a rescue opens)",
+      "where": [{ "at": "Magma's payroll, the hideout gate", "text": "Hit Magma's payroll.", "tags": ["high"], "against": "magma" }, { "at": "Aqua's paymaster, Lilycove", "text": "Hit Aqua's paymaster.", "tags": ["sea"], "against": "aqua" }] },
+    { "type": "parley", "name": "Parley", "need": [3, 4], "nodes": [1, 1], "win": { "trouble": 1 }, "lose": "Heat gained",
+      "where": [{ "at": "A message for Tabitha", "text": "Carry a message to a lieutenant.", "tags": [], "against": "magma" }, { "at": "A message for Shelly", "text": "Carry a message to a lieutenant.", "tags": ["sea"], "against": "aqua" }] }
+  ],
+  "how": {
+    "quiet": { "name": "Quiet", "text": "Lowers Heat and pay.", "chance": 0, "heat": -1, "pay": 0.5, "cost": 0 },
+    "bold": { "name": "Bold", "text": "Raises Heat and pay.", "chance": 5, "heat": 1, "pay": 1.5, "cost": 0 },
+    "kind": { "name": "Kind", "text": "Costs Funds; raises Loyalty and Reputation.", "chance": 0, "heat": 0, "pay": 1, "cost": 200 }
+  },
+  "reports": {
+    "win": {
+      "rescue": ["We got them all out. {mate} carried the old man. He wouldn't stop thanking the Pokémon.", "We got the food through! I got bit by a Poochyena! It's ours now! Can it be ours?"],
+      "sabotage": ["Pump's jammed. Nobody saw us. {mate} fell in. They're fine. They're embarrassed.", "Done. It'll take them a week. I left the bolts in a neat pile, out of spite."],
+      "watch": ["Followed all day. Wrote it down. They're moving next on {op}.", "Sat in a hedge for a stage. Saw everything. Want my notes or the short version?"],
+      "supply": ["Delivered. They gave us soup. {mate} had three.", "Medicine's up the trees. They let us use the rope bridge. Never again."],
+      "raid": ["Payroll's ours. They'll be counting for a week. So will we.", "Got it. Got chased. Got away. In that order."],
+      "parley": ["Message delivered. They read it twice. They didn't burn it.", "They listened. They didn't say yes. They didn't say no, either."]
+    },
+    "lose": {
+      "rescue": ["We couldn't get everyone. {mate}'s Pokémon took a hit getting the last kid out.", "Too late. We tried. I'm sorry."],
+      "sabotage": ["They had a guard on it. We ran. {mate}'s limping.", "It's still pumping. I'm still wet."],
+      "watch": ["Lost them in the fog. They saw us, I think.", "They knew. They waved."],
+      "supply": ["Lost the cart on the bridge. The town's still hungry.", "Robbed on the road. By grunts. Theirs, not ours."],
+      "raid": ["They were waiting. They've got {mate}.", "Bad. They took {mate}. We have to go back."],
+      "parley": ["They tore it up in front of us.", "They wouldn't see us. They sent a grunt to say so."]
+    }
+  },
+  "talk": {
+    "lines": ["\"You did well. I mean it.\"", "\"What do you need?\"", "\"I'm counting on you. Don't make me wrong.\""],
+    "works": { "loud": 0, "greedy": 1, "hot-headed": 2, "homesick": 1, "old-loyalties": 0, "glory-hound": 2 },
+    "yes": "They stand a bit straighter. \"...All right. All right, then.\"",
+    "no": "They nod, and it doesn't land. Maybe another day."
+  },
+  "cracked": {
+    "loud": "Nobody listens unless I shout.",
+    "greedy": "The pay's thin and the work isn't.",
+    "hot-headed": "We keep backing off. I didn't sign up to back off.",
+    "homesick": "It's a long way from home, this.",
+    "old-loyalties": "Some of them were my friends. Still are.",
+    "glory-hound": "Passed over twice."
+  },
+  "orders": [
+    { "id": "safe", "name": "Keep everyone safe", "text": "No grunt is captured on a failed mission while you're away." },
+    { "id": "pressure", "name": "Keep the pressure on", "text": "Renown +1 a stage, and Heat +1 with both teams." },
+    { "id": "judgement", "name": "Use your judgement", "text": "Funds +200 a stage." }
+  ],
+  "window": {
+    "none": "\"Nice view. You should stand here more. People think better standing up.\"",
+    "hire": "\"New face. Do they know what we are yet? Do we?\"",
+    "promote": "\"You pinned a badge on someone. They'll remember the hands, not the badge.\"",
+    "dismiss": "\"You let one go. The others watched how.\"",
+    "dispatch": "\"Sending them out without you. That's the hard part. It doesn't get easier.\"",
+    "win": "\"Good news from the board? Don't get used to it.\"",
+    "lose": "\"A bad report. Read it twice. Then put it down.\"",
+    "build": "\"More rooms. The more rooms, the more there is to lose. I'm not saying don't.\"",
+    "doctrine": "\"You told them what to carry. Now they'll carry it whether it suits them or not.\"",
+    "talk": "\"You talked to one of them. Properly. Good.\""
+  }
+}

@@ -1,0 +1,8 @@
+{
+ "category": "anime",
+ "note": "Door chains of tools/events/co/anime-10.ts (entry = the questline first event; rooms linked with addEvent).",
+ "chains": [
+  { "id": "ps_aq44_togepi_paradise", "name": "Togepi Paradise", "entry": "aq44-togepi-paradise", "themeId": "grass-fairy", "tint": "#2a2438", "mood": "hidden meadow", "start": "opened" },
+  { "id": "ps_aq44_togepi_leads", "name": "Togepi Paradise", "entry": "aq44-togepi-leads", "themeId": "grass-fairy", "tint": "#2a2438", "mood": "hidden meadow", "start": "opened" }
+ ]
+}

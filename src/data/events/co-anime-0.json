@@ -1,0 +1,1327 @@
+{
+ "catalogOverhaul": "anime",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "an09-rusted-anchor",
+   "name": "The Crew of the Rusted Anchor",
+   "group": "Anime-inspired questlines",
+   "rarity": "rare",
+   "minStage": 4,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "pokemon": "dhelmise",
+    "tint": "#1d3a4a",
+    "effect": "float"
+   },
+   "intro": "A small ship rides at the jetty. It has had three other names, and they all show through the paint. Coiled on the bow, draped in weed like a shawl, is a Dhelmise: a living anchor. A man stands on the rail with his arms flung wide. \"I'm Captain Marcellin Hathersage. Barnacle, to my crew. I'm going to find the island at the end of the map!\" He looks you up and down. \"I need a crew. You look like a crew.\" The Dhelmise creaks, long and low, like a door that has an opinion.",
+   "choices": [
+    {
+     "label": "Join.",
+     "success": {
+      "text": "\"HA!\" He nearly falls off the rail. You catch his coat. \"First act as crew: saving the captain. Promotion!\" The Dhelmise loops a strand of weed round your wrist, gently, the way it would test a rope. \"Three islands ahead. A crew is out there, they just don't know it yet. We sail when you reach the water.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an09-crew-joined",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an09-three-islands",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's at the end?",
+     "success": {
+      "text": "\"No idea! That's the point. If I knew, somebody would have been.\" He says it with his whole chest, and for a moment the old patched ship looks like the finest thing on the sea. The offer stands; he shouts it after you twice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an09-crew-asked-end",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an09-rusted-anchor-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "You can't swim?",
+     "success": {
+      "text": "He glances at the water the way other people glance at a debt. \"Neither can the anchor. We're fine.\" The Dhelmise creaks. It sounds a little like laughing. The offer stands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an09-crew-asked-swim",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an09-rusted-anchor-again"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an09-rusted-anchor-again",
+   "name": "The Crew of the Rusted Anchor",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "pokemon": "dhelmise",
+    "tint": "#1d3a4a",
+    "effect": "float"
+   },
+   "intro": "Captain Hathersage is still on the rail, still with his arms out, as if the answer might come in on the wind. \"Well? The map isn't getting any shorter!\"",
+   "choices": [
+    {
+     "label": "Join.",
+     "success": {
+      "text": "\"A crew of two!\" He counts on his fingers anyway. The Dhelmise loops weed round your wrist: you are tied on now. \"Three islands ahead. We sail when you reach the water.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an09-crew-joined",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an09-three-islands",
+        "nodes": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not this voyage.",
+     "success": {
+      "text": "\"Then wave when we pass!\" he calls. You do not doubt that he will pass, somewhere, shouting.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "an09-three-islands",
+   "name": "Three Islands",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an09-crew-joined",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m",
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "cramorant",
+    "tint": "#1d3a4a",
+    "effect": "float"
+   },
+   "intro": "The Rusted Anchor noses between three small islands. On the first, Miss Persimmon Yardley runs a food stall nobody visits. On the second, Mr. Valerian Underhill has drawn a map of somewhere he has never been. On the third, a Cramorant stands very still with a fish stuck in its throat. \"Crew!\" the captain whispers, far too loudly. \"Every one of them! Go and tell them!\"",
+   "choices": [
+    {
+     "label": "Eat what the cook makes.",
+     "success": {
+      "text": "It is very good, and it is very strange: something purple, something that hums. You eat all of it. Miss Yardley watches the empty bowl as if it were a letter. \"He said he'd eat anything. Nobody has ever said that to me as a compliment.\" She packs her knives. She was packed already; she only needed asking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an09-crew-cook",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an09-island-navigator"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an09-island-navigator",
+   "name": "The Navigator's Bet",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an09-crew-cook",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_m"
+    ],
+    "tint": "#1d3a4a",
+    "effect": "float"
+   },
+   "intro": "Mr. Valerian Underhill holds his map to his chest. The coastline on it is beautiful and belongs to nowhere. \"A battle. I bet the map. If I lose, I come. If I win, I come, and I bring the map.\" He frowns. \"I don't see a way I don't come.\"",
+   "choices": [
+    {
+     "label": "Take the bet.",
+     "success": {
+      "text": "He bows, very formally, to you and then to the sea.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Navigator Underhill",
+       "classId": "veteran",
+       "size": 2,
+       "types": [
+        "water",
+        "flying"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an09-crew-navigator",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an09-island-bird"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "an09-crew-navigator",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "an09-crew-navigator-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an09-island-bird"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "an09-island-bird",
+   "name": "A Bird With a Problem",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an09-crew-navigator",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cramorant",
+    "tint": "#1d3a4a",
+    "effect": "float"
+   },
+   "intro": "Mr. Underhill is already aboard, map and all. On the third island the Cramorant has not moved. Its eyes are wide. The tail of a fish sticks out of its beak and waves, faintly.",
+   "choices": [
+    {
+     "label": "Pat it on the back.",
+     "success": {
+      "text": "One good pat. The fish shoots out, lands in the sea and swims off, offended. The Cramorant looks at you. It looks at the ship. It has nowhere else to be, so it walks up the gangplank as if it had a ticket. The captain counts: \"A cook! A navigator! A bird! And you! That's a crew! That's four more than I had!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an09-crew-bird",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an09-crew-whole",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "an09-the-storm",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an09-the-storm",
+   "name": "The Storm",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "an09-crew-whole",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "chest-brother",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "captains-chest-dived",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The anchor has been watching you all voyage. It knows the diver who opened its brother's chest. It goes very still, and then it holds on tighter."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "pokemon": "gyarados",
+    "tint": "#143028",
+    "effect": "rain"
+   },
+   "intro": "The sky goes green. The sea stands up. Captain Hathersage goes over the side with the first wave, and he cannot swim. The anchor goes in after him. It cannot swim either. It sinks on purpose, chain run out, and comes up underneath him like a floor. Then the wave that took him opens its eyes: a Gyarados, as angry as the weather. Miss Yardley is already throwing something from her pot. Mr. Underhill is shouting what it will do next. The Cramorant has a fish ready.",
+   "choices": [
+    {
+     "label": "Fight for the ship!",
+     "success": {
+      "text": "The deck pitches. The crew is at your back, every one of them, shouting.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The crew at your back",
+        "effects": [
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 0.85
+         }
+        ],
+        "battles": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "gyarados"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "an09-crew-storm-won",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "an09-after-the-storm"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Haul the captain in first.",
+     "success": {
+      "text": "You get the rope round him while the Gyarados circles. The anchor heaves; the cook and the navigator heave; the bird helps by standing on your head. The great serpent looks at the five of you, soaked and shouting on a ship that should have sunk three names ago, and decides the storm is company enough. It dives.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "an09-crew-storm-hauled",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "an09-after-the-storm"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an09-after-the-storm",
+   "name": "As a Crew",
+   "group": "Anime-inspired questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/veteran_m"
+    ],
+    "pokemon": "dhelmise",
+    "tint": "#1d3a4a",
+    "effect": "sparkle"
+   },
+   "intro": "Captain Hathersage is hauled aboard upside down. \"Did you see that? We nearly died! As a crew!\" He is crying, or it is the sea. The anchor settles back on the bow and, very carefully, breaks off a young cutting of itself: a small Dhelmise, still soft, that it sets on the deck in front of you. The cook presses a folded flag into your hands. It has five badly sewn figures on it. One is a bird.",
+   "choices": [
+    {
+     "label": "Take the cutting and the flag.",
+     "success": {
+      "text": "The little Dhelmise winds itself round your arm and holds on. The flag smells of salt and purple stew. \"Not the end!\" the captain shouts as the ship pulls away. \"There's more map! Come!\" You can hear him for a long time.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "dhelmise"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "relic",
+        "id": "crews-flag",
+        "name": "The Crew's Flag",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "an09-crew-flag",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You sailed with the crew of the Rusted Anchor, and nearly died. As a crew.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the flag. The cutting belongs at sea.",
+     "success": {
+      "text": "The anchor considers this, and tucks the cutting back among its weed. It dips its whole great weight toward you, once: a bow. The flag is yours. \"Not the end!\" the captain shouts. \"There's more map!\"",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "crews-flag",
+        "name": "The Crew's Flag",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 1.1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "an09-crew-flag",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "You sailed with the crew of the Rusted Anchor, and nearly died. As a crew.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "an11-camp-at-the-lake",
+   "name": "The Camp at the Lake",
+   "group": "Anime-inspired questlines",
+   "rarity": "uncommon",
+   "minStage": 1,
+   "types": [
+    "water"
+   ],
+   "stop": "event",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "sizzlipede",
+    "tint": "#1c2a3c",
+    "effect": "fire"
+   },
+   "intro": "A girl sits by a tiny camp stove at the edge of a lake. A Sizzlipede is curled around the stove for warmth, or the stove is curled around the Sizzlipede. \"You camp too? Solo or group?\" She does not wait for the answer. \"I always go solo. But this lake is better with someone to show it to.\" She lifts a lid, and the steam makes your eyes water. \"Stay for curry. It's very spicy.\"",
+   "choices": [
+    {
+     "label": "Stay.",
+     "success": {
+      "text": "The curry is very spicy. Your Pokémon eat in a ring round the stove, and for once nobody is watching the dark for the next thing. The lake goes black, then silver. The stars come out one at a time, as if somebody were counting them. Nobody battles. Nobody needs to. In the morning she has packed a pot of curry into your bag, still warm, and she is already gone.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "item",
+        "id": "camp-curry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an11-camp-stayed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show me the lake.",
+     "success": {
+      "text": "She walks you round it with a lantern. The water is so cold it rings when a stone goes in. \"I come here every year,\" she says. \"I've never shown anybody. It looked like this the whole time. I just needed a witness.\" You eat curry on the far shore, under more stars than the sky should hold. In the morning there is a warm pot in your bag.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "item",
+        "id": "camp-curry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an11-camp-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "an11-camp-lake-shown",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go.",
+     "success": {
+      "text": "\"Next time, then.\" She says it easily, like someone who is used to it. Behind you the little stove glows, one orange point beside a very large lake.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq16-shiny-owl",
+   "name": "The Shiny Owl",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "pokemon": "hoothoot",
+    "tint": "#14201a",
+    "effect": "net"
+   },
+   "intro": "A wood at night, full of swinging lamps. On a low branch sits a Hoothoot that is the wrong colour for hiding: gold and red, so every lamp finds it. It is smaller than it should be. It stands on one foot, then the other, and each time it swaps, three lamps swing. \"A shiny! Worth a fortune,\" a hunter hisses. \"Left side, Dunstan. Left.\" The Hoothoot looks at you and hoots once, as if asking.",
+   "choices": [
+    {
+     "label": "Stop the hunters.",
+     "success": {
+      "text": "You step into the lamplight. Up on the branch, the Hoothoot turns its head right round to keep both hunters in view.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Hunters Dunstan and Crake",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [
+        "dark",
+        "poison"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq16-owl-saved",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq16-owl-follows"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq16-owl-lost-fight",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq16-owl-follows"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Catch it first.",
+     "success": {
+      "text": "It fights the Ball. It fights it twice. When the Ball finally clicks shut the hunters curse and go, and the wood is dark and quiet. You let it out at once. It will not look at you. One wing is held a little away from its body. It can still come round; it has decided, for now, that you are one more lamp.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "hoothoot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 9999
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "hoothoot",
+        "amount": -30
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-caught",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hide it.",
+     "success": {
+      "text": "You take off your hat. It gets in. It is very warm, and it is holding its breath. A hunter stops a foot away. \"Seen a bird? Gold?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq16-owl-hidden",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq16-owl-in-the-hat"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq16-owl-in-the-hat",
+   "name": "A Hat With a Heartbeat",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#14201a",
+    "effect": "net"
+   },
+   "intro": "The hunter lifts his lamp. Your hat is on your head. Your hat has a heartbeat. \"Well? Seen a bird? Gold?\"",
+   "choices": [
+    {
+     "label": "No.",
+     "success": {
+      "text": "He looks at you for a long moment. Lying has never felt so much like holding something. Then he grunts and the lamps move off between the trees. The Hoothoot stays in your hat until morning. When the sun comes up, it is still there.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "hoothoot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 9999,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "That way.",
+     "success": {
+      "text": "You point the wrong way with great confidence. \"Left side, Dunstan!\" They crash off into the brambles. Inside the hat there is one very small, very relieved hoot. It stays on your hat until morning. When the sun comes up, it is still there.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "hoothoot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 9999,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "What's it worth to you?",
+     "success": {
+      "text": "\"A fortune,\" he says, and names it. It is a lot. Inside your hat, the heartbeat stops for one whole second. \"Not enough,\" you say, and he laughs, not understanding, and goes. The Hoothoot stays on your hat until morning. It keeps checking that you are still under it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "hoothoot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 9999
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-priced",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq16-owl-follows",
+   "name": "At a Distance",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hoothoot",
+    "tint": "#14201a",
+    "effect": "glint"
+   },
+   "intro": "The hunters are gone, lamps and all. You walk on. Behind you, a branch dips. Then a nearer one. The gold Hoothoot is following you: at a distance, for a while. Then nearer.",
+   "choices": [
+    {
+     "label": "Hold out an arm.",
+     "success": {
+      "text": "It thinks about the arm for the length of one foot-swap. Then it lands, lightly, as if it might have to leave at once. It does not leave.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "hoothoot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 9999,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it follow as it likes.",
+     "success": {
+      "text": "You do not look back. That seems to be the right thing. By the next rise it is on your shoulder, facing backwards, watching the dark for both of you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "hoothoot"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 9999,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave it home.",
+     "success": {
+      "text": "It watches you go from a high branch, a small gold lamp of its own. It will remember that someone stepped into the light for it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq16-owl-watch",
+   "name": "It Won't Sleep",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq16-owl-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "hoothoot",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq16-owl-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "hoothoot",
+    "tint": "#14201a",
+    "effect": "none"
+   },
+   "intro": "Camp, late. Everyone is asleep except the Hoothoot. It sits bolt upright on one foot, watching the dark between the trees, the way you watch a door someone once came through.",
+   "choices": [
+    {
+     "label": "Let your lead sit up with it.",
+     "success": {
+      "text": "Your lead Pokémon gets up without being asked and sits down beside it. Neither of them looks at the other. They watch the dark together until it is only dark. Near dawn, the Hoothoot swaps feet, and its eyes close.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "hoothoot",
+        "amount": 5
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit up with it yourself.",
+     "success": {
+      "text": "You pull your blanket over and sit. It glances at you, once, as if checking a sum. The night is long and nothing comes out of it. That is the whole point, and the Hoothoot is beginning to believe it.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "hoothoot",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq16-owl-hat",
+   "name": "\"Look at That\"",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq16-owl-watch"
+    },
+    {
+     "kind": "partyLine",
+     "species": "hoothoot",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "hoothoot",
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "On the road somebody points and says, \"Look at that.\" They mean a cloud. The Hoothoot is behind your legs before the sentence ends, wings tight, trying to be a brown bird by force of will.",
+   "choices": [
+    {
+     "label": "Put the hat on it.",
+     "success": {
+      "text": "You set your hat down over it. The hat walks along the road for a while on two small feet. Then one gold eye looks out from under the brim, at the cloud everyone is admiring, and stays out.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "hoothoot",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand between it and the road.",
+     "success": {
+      "text": "You stand there until the strangers have gone. It leans on your ankle, very slightly: the weight of a bird that has decided where the safe side is.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "hoothoot",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq16-owl-sun",
+   "name": "A Little Sun",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq16-owl-hat"
+    },
+    {
+     "kind": "partyLine",
+     "species": "hoothoot",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "hoothoot",
+    "tint": "#3a3420",
+    "effect": "sparkle"
+   },
+   "intro": "A child at a Pokémon Center stops dead in front of you. \"It's GOLD!\" The Hoothoot flinches so hard it nearly leaves the perch. The child does not reach for it. The child only stares, delighted. \"It's like a little sun.\"",
+   "choices": [
+    {
+     "label": "\"It is, isn't it.\"",
+     "success": {
+      "text": "It has been called a fortune. It has been called the gold one, the left side, a shiny. It has never been called that. It thinks about it for the whole of the next road, turning the words over, standing a little taller on each foot.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "hoothoot",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-scene-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-little-sun",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it answer for itself.",
+     "success": {
+      "text": "It looks at the child for a long time. Then, very slowly, it opens its wings, all the way, so the light can find every feather. The child claps. It thinks about that for the whole of the next road.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "hoothoot",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-scene-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-little-sun",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq16-owl-lamps",
+   "name": "The Same Lamps",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq16-owl-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq16-owl-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "hoothoot",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "remembers": [
+    {
+     "id": "little-sun",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq16-owl-little-sun",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Somewhere a child once called it a little sun. It has not forgotten. It is standing very tall."
+    },
+    {
+     "id": "caught-first",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq16-owl-caught",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You caught it in a wood like this one, with lamps like these. It looks at the lamps. It looks at you. It stays on your shoulder."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "pokemon": "hoothoot",
+    "tint": "#14201a",
+    "effect": "net"
+   },
+   "intro": "A wood, at night. The same lamps. The hunters have brought a third, with a bigger net. \"It's the gold one. You'll not miss it. It can't hide; that's the beauty.\" The Hoothoot is on your shoulder. It is shaking. Then it isn't. It flies up, into the open, into every lamp at once. And it glows. The light does not find it now. It is making its own.",
+   "choices": [
+    {
+     "label": "Fight beside it.",
+     "success": {
+      "text": "The hunters cannot look away from it. None of them can.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "The Three Hunters",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [
+        "dark",
+        "poison"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "formChange",
+         "from": "hoothoot",
+         "to": "noctowl"
+        },
+        {
+         "kind": "friendshipLine",
+         "species": "hoothoot",
+         "amount": 10
+        },
+        {
+         "kind": "flag",
+         "key": "aq16-owl-turned",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq16-owl-gold"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq16-owl-turned",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq16-owl-lamps-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq16-owl-gold"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let it show them alone.",
+     "success": {
+      "text": "You stay where you are. It hangs in the air above the three of them, blazing, and it does not attack. It only lets them look. One by one the lamps go down. A net is dropped. The third hunter says, quietly, \"I never saw one fly at the light before,\" and they go. It comes back to your shoulder lit from the inside, and something in it has finished growing.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "hoothoot",
+        "to": "noctowl"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "hoothoot",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-turned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-alone",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq16-owl-gold"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq16-owl-gold",
+   "name": "The Gold Doesn't Dull",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "noctowl",
+    "tint": "#3a3420",
+    "effect": "sparkle"
+   },
+   "intro": "The wood is dark again, except for one thing. It sits on the highest branch it can find, where anybody at all could see it, and it does not stand on one foot.",
+   "choices": [
+    {
+     "label": "Call it down.",
+     "success": {
+      "text": "It comes, in its own time, in a long gold curve through the trees. It lands on your shoulder, heavier than it was. It does not hide when the next traveller says, \"Look at that.\" It lets them look.",
+      "effects": [
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "The gold owl flew into every lamp at once, and made its own light.",
+        "importance": 75
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-shiny-owl",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq16-owl-seen-again",
+   "name": "Gold in the Trees",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq16-owl-saved",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq16-owl-met",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq16-owl-saved",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "hoothoot",
+     "absent": true
+    }
+   ],
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "noctowl",
+    "tint": "#14201a",
+    "effect": "glint"
+   },
+   "intro": "High in a wood, at night, something gold crosses the moon. No lamps follow it. It circles once over your camp, lower than it needs to.",
+   "choices": [
+    {
+     "label": "Raise a hand.",
+     "success": {
+      "text": "It dips one wing, the way a ship dips a flag, and is gone over the trees: bigger now, and not hiding. On your blanket in the morning there is one gold feather and a Nugget it must have taken from somebody who deserved it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "flag",
+        "key": "aq16-owl-thanked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

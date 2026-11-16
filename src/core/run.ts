@@ -12,6 +12,8 @@
 // (Elite Four, then the champion); beating the champion moves the run to the
 // next region, or wins the run after the last one.
 
+import { noteReleased } from './co/familiesA';
+import { regionGifts, regionInterest } from './flagPerks';
 import { noteBattle } from './expansion/fieldNotes';
 import { settleSky } from './sky/story';
 import { finishSpectate } from './sky/spectate';
@@ -163,7 +165,8 @@ import { timeOfDay } from './arenaStyle';
 import { recordAftermath } from './overhaul/aftermath';
 import { assignGrowthPaths, noteMapGrowth } from './overhaul/growth';
 import { tickChainTimers } from './overhaul/chains';
-import { coBattleBegin, coFled, coHealStop, coNodeEnter, coStageStart, coWildKo } from './events/coToolkit';
+import { boxedNoEvolve, noteBoxed } from './events/coHelpers';
+import { coBattleBegin, coBattleEnd, coBattleStarted, coFled, coHealStop, coNodeEnter, coStageStart, coWildKo } from './events/coToolkit';
 import { kantoSweetAir } from './expansion/canonKantoRules';
 import { endHyperMoves, grantHyperMoves } from './battle/hyperMove';
 import { endLastResort } from './battle/lastResort';
@@ -334,6 +337,7 @@ import { memoryPick } from './memories/encounters';
 import { noteReplayTurn, sealReplay } from './memories/replay';
 import { noteSkips, worldStageStart } from './memories/world';
 import { evilStageStart, evilTeam } from './evil/teams';
+import { skyNodeTick, skyStageStart } from './evil/teamSky';
 import { isStoryCampaign, leagueAfterRegion } from './campaign/circuit';
 import { StoryV2Schema } from './story2/schema';
 import type { PronounSet } from './story2/identity';
@@ -797,6 +801,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   tellAct(content, run);
   worldStageStart(content, run);
   evilStageStart(content, run);
+  skyStageStart(content, run);
   worldTick(content, run);
   applyGrandInfluence(content, run);
   growCrisis(content, run);
@@ -1010,6 +1015,12 @@ function enterNextRegion(content: Content, run: RunState): void {
   const orbMoney = regionMoneyFromItems(content, run);
   run.money += orbMoney;
   count(run, 'moneyEarned', orbMoney);
+  // Catalog overhaul SF1.6: Faulk's account pays interest between regions.
+  const interest = regionInterest(run);
+  run.money += interest;
+  count(run, 'moneyEarned', interest);
+  // Catalog overhaul SF8.3: Oswin's bedroll is back in the bag for the new region.
+  for (const id of regionGifts(run)) addItem(run.inventory, id, 1);
   // Linden's Notebook works in the region after the one it was given in.
   startWildMovesRegion(content, run);
   enterStage(content, run, 0);
@@ -1109,6 +1120,7 @@ function moveToNode(content: Content, current: RunState, nodeId: string, onCross
   stage.current = nodeId;
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
+  skyNodeTick(content, run);
   stepClock(content, run);
   coStep(content, run);
   followedStep(content, run);
@@ -1197,6 +1209,7 @@ function moveInPseudo(content: Content, run: RunState, nodeId: string): RunState
   stage.current = nodeId;
   stage.visited.push(nodeId);
   tickChainTimers(run.story.flags);
+  skyNodeTick(content, run);
   stepClock(content, run);
   coStep(content, run);
   if (node.roomEvent && !node.sides.some((x) => x.eventId === node.roomEvent)) {
@@ -3218,6 +3231,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   bidoofPeace(run, FOE_WAITS);
   const rivalNotice = followedRival(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
+  events.push(...coBattleStarted(content, run));
   if (afterstory) events.push({ type: 'raid', tone: 'info', text: afterstory });
   if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
   if (friendHelp) events.push({ type: 'raid', tone: 'info', text: friendHelp });
@@ -4016,7 +4030,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   }
 
   const evolutions: BattleEndResult['evolutions'] = [];
-  for (const mon of noEvolution(run.rules) ? [] : run.party) {
+  for (const mon of noEvolution(run.rules) ? [] : run.party.filter((m) => !boxedNoEvolve(run, m))) {
     // Fenwick's lesson: held back from an evolution it was ready for, it grows a little stronger instead.
     noteDeclinedEvolution(content, runPerks(content, run), mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon));
     for (const evo of evolveFully(content, mon, run.regionOrder[run.regionIndex], evolutionLevelOffset(runArchetype(content, run).modifiers), bondEvolves(content, run, mon))) {
@@ -4183,6 +4197,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (run.log.starterUid && run.party.some((m) => m.uid === run.log.starterUid)) count(run, 'regionsClearedWithStarter');
     if (run.regionIndex + 1 >= run.regionOrder.length && !extendEndless(run)) run.victory = true;
   }
+  coBattleEnd(content, run, battle);
   run.battle = null;
   delete run.recorder;
   if ((run.itemCounters?.['squirt-exp'] ?? 0) > 0) run.itemCounters = { ...run.itemCounters, 'squirt-exp': 0 };
@@ -4507,6 +4522,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       count(run, 'caughtToCandies');
       message = `${name} was released. You got ${candies} cand${candies === 1 ? 'y' : 'ies'}. ${markDecided(run, caught, false)}`.trim();
       recordReleased(content, run, caught);
+      noteReleased(run, caught);
       noteLeft(run, caught);
       // Greenneedle gn.58: who, where and why; the friend turns up again two or more stages on.
       recordRelease(content, run, caught, choice.reason, stageNumber(content, run));
@@ -4727,6 +4743,7 @@ export function depositToBox(content: Content, current: RunState, partyIndex: nu
   if (current.party.length <= 1) throw new Error('The party needs at least one Pokémon');
   if (current.box.length >= boxCapacity(runPerks(content, current))) throw new Error('The PC is full');
   const run = structuredClone(current);
+  noteBoxed(run, run.party[partyIndex]!);
   run.box.push(run.party.splice(partyIndex, 1)[0]!);
   return run;
 }

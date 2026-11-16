@@ -437,7 +437,31 @@
    "inside": {
     "op": "radio-tower",
     "half": false
-   }
+   },
+   "routes": [
+    {
+     "region": "kanto",
+     "ranks": [
+      "Recruit",
+      "Grunt",
+      "Field Agent",
+      "Section Chief",
+      "Executive",
+      "The Boss's Right Hand"
+     ]
+    },
+    {
+     "region": "johto",
+     "ranks": [
+      "Hopeful",
+      "Grunt",
+      "Operative",
+      "Cell Leader",
+      "Executive (the fifth)",
+      "The Voice"
+     ]
+    }
+   ]
   },
   {
    "id": "aqua",
@@ -609,7 +633,37 @@
    "inside": {
     "op": "submarine-theft",
     "half": false
-   }
+   },
+   "routes": [
+    {
+     "region": "hoenn",
+     "ranks": [
+      "Deckhand",
+      "Grunt",
+      "Diver",
+      "Bosun",
+      "Admin",
+      "The First Mate"
+     ],
+     "steps": [
+      3,
+      8,
+      15,
+      25
+     ],
+     "max": 60,
+     "test": 6,
+     "out": 9,
+     "pay": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600
+     ]
+    }
+   ]
   },
   {
    "id": "magma",
@@ -774,7 +828,37 @@
    "inside": {
     "op": "magma-survey",
     "half": true
-   }
+   },
+   "routes": [
+    {
+     "region": "hoenn",
+     "ranks": [
+      "Recruit",
+      "Grunt",
+      "Surveyor",
+      "Foreman",
+      "Admin",
+      "The Right Hand"
+     ],
+     "steps": [
+      3,
+      8,
+      15,
+      25
+     ],
+     "max": 60,
+     "test": 6,
+     "out": 9,
+     "pay": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600
+     ]
+    }
+   ]
   },
   {
    "id": "galactic",
@@ -942,7 +1026,20 @@
    "inside": {
     "op": "spirit-lab",
     "half": false
-   }
+   },
+   "routes": [
+    {
+     "region": "sinnoh",
+     "ranks": [
+      "Applicant",
+      "Grunt",
+      "Technician",
+      "Adjutant",
+      "Commander (the fifth)",
+      "Witness"
+     ]
+    }
+   ]
   },
   {
    "id": "plasma",
@@ -1106,7 +1203,20 @@
    "inside": {
     "op": "frigate-build",
     "half": false
-   }
+   },
+   "routes": [
+    {
+     "region": "unova",
+     "ranks": [
+      "Listener",
+      "Knight",
+      "Liberator",
+      "The Seventh Seat",
+      "Keeper of the King's Room",
+      "The King's Friend"
+     ]
+    }
+   ]
   },
   {
    "id": "flare",
@@ -1280,7 +1390,20 @@
    "inside": {
     "op": "stone-mining",
     "half": false
-   }
+   },
+   "routes": [
+    {
+     "region": "kalos",
+     "ranks": [
+      "Subscriber",
+      "Member",
+      "Stylist",
+      "Patron",
+      "Chosen",
+      "The Last Guest"
+     ]
+    }
+   ]
   },
   {
    "id": "skull",
@@ -1438,7 +1561,20 @@
    "inside": {
     "op": "trial-crash",
     "half": false
-   }
+   },
+   "routes": [
+    {
+     "region": "alola",
+     "ranks": [
+      "Numbskull",
+      "Grunt",
+      "Big Sib",
+      "Enforcer",
+      "Admin",
+      "Guzma's Second"
+     ]
+    }
+   ]
   },
   {
    "id": "aether",
@@ -1603,7 +1739,20 @@
    "inside": {
     "op": "preservation-lab",
     "half": false
-   }
+   },
+   "routes": [
+    {
+     "region": "alola",
+     "ranks": [
+      "Volunteer",
+      "Employee",
+      "Researcher",
+      "Branch Deputy",
+      "Branch Chief",
+      "The President's Favourite"
+     ]
+    }
+   ]
   },
   {
    "id": "yell",
@@ -1765,7 +1914,20 @@
    "inside": {
     "op": "route-chant",
     "half": false
-   }
+   },
+   "routes": [
+    {
+     "region": "galar",
+     "ranks": [
+      "Supporter",
+      "Yeller",
+      "Road Crew",
+      "Head of the Queue",
+      "Marnie's Corner",
+      "Piers's Opening Act"
+     ]
+    }
+   ]
   },
   {
    "id": "star",
@@ -1924,7 +2086,20 @@
    "inside": {
     "op": "base-blockade",
     "half": false
-   }
+   },
+   "routes": [
+    {
+     "region": "paldea",
+     "ranks": [
+      "New Kid",
+      "Grunt",
+      "Squad Second",
+      "Sixth Boss",
+      "Cassiopeia's Voice",
+      "The One She Meets"
+     ]
+    }
+   ]
   },
   {
    "id": "marauders",
@@ -2096,7 +2271,8 @@
    "inside": {
     "op": "engine-works",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "choir",
@@ -2275,7 +2451,8 @@
    "inside": {
     "op": "tolling-bells",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "ironvein",
@@ -2446,7 +2623,8 @@
    "inside": {
     "op": "power-buyout",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "cartographers",
@@ -2603,7 +2781,8 @@
    "inside": {
     "op": "map-theft",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "wildfire",
@@ -2773,7 +2952,8 @@
    "inside": {
     "op": "pylon-strike",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "gilt",
@@ -2933,7 +3113,8 @@
    "inside": {
     "op": "betting-ring",
     "half": false
-   }
+   },
+   "routes": []
   },
   {
    "id": "cipher",

@@ -73,6 +73,10 @@ function changeRow(t: string): string {
 export function eventView(c: ReduxCtx, d: EventModel): string {
   if (d.bracket) return bracketView(c, d.bracket);
   if (d.honest) return honestView(c, d.honest);
+  if (d.codeCard && d.outcome?.step === 'text') {
+    const text = d.lines.map((l) => (l.who ? `${l.who}: ${l.text}` : l.text)).join(' ');
+    return runCardView(c, { ...d.codeCard, title: 'Code Name', team: [], text, hints: [['Enter', 'next']], area: 'story', save: false, tap: 'next' });
+  }
   if (d.team) return teamView(c, d.team);
   if (d.codeCard && d.outcome?.step === 'text') {
     const text = d.lines.map((l) => (l.who ? `${l.who}: ${l.text}` : l.text)).join(' ');
