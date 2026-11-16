@@ -125,6 +125,7 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLOR
 import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
+import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, type BattleLevel, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
 import { artOf, monFile } from '../ui/redux/game';
@@ -490,6 +491,8 @@ export class BattleScene extends Phaser.Scene {
     // The same battle always gets the same look (salted by the run and how far it has come), so a reload never changes it.
     this.skinId = screenStyleOf('battle', session.settings.screenStyles, `${run.seed}:${run.log.battlesWon}:${run.log.rewardsTaken.length}`);
     this.skin = battleSkinFor(this.skinId);
+    // New look with the mock-up battle screen: the words that pop up over a Pokémon (stat changes, damage) use the skin's font too.
+    if (!this.skin) useLookFont(this);
     const gameTrack = battleTrack({
       raidTrack: this.raidTrack(battle),
       trainer: battle.kind === 'trainer',

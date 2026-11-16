@@ -10,13 +10,13 @@
 - **Outcomes land.** Each result line has an icon, bad news is red, and the scene bursts with what happened (coins, hearts, a healing glow, a new Pokémon). A failure or a fight shows with the text; anything won shows only after the text is read, as before.
 - **The old scene effects all work now.** Shake, float, rattle, spin, confetti and net were not drawn in the New look before; a sparkle is now a few twinkles, not a sheet of dots.
 - **Legendary Blessing opening:** the spotlight and the podium are gone (Kice, Nov 16). The blessing's item floats on plain black. Both looks.
-- **Mock-up fonts on the screens still drawn the old way (New look).** The Blessing opening, Hub Town on foot and Pocket Town had no page in the mock-ups and still used the old game font. Their text now uses the font of the skin you picked (Raiders: Pixelify Sans). The Old look keeps the game font.
+- **Mock-up fonts on the screens still drawn the old way (New look).** The Blessing opening, Hub Town on foot and Pocket Town had no page in the mock-ups and still used the old game font. Their text now uses the font of the skin you picked (Raiders: Pixelify Sans). So do the words that pop up over a Pokémon in battle ("SP. DEF +", damage numbers); the battle's name plates, level and HP already did. The Old look keeps the game font.
 - **Battle:** a long move name ("Struggle Bug", "Parabolic Charge") fits its button beside the PP.
 
 **Save:** none.
 
 **Limits:**
-- Font check (New look; walked: title, Hub dock, Hub Town, Pocket Town, Legacy Gallery, trainer select, run prep, starter, Blessing, briefing, stage map, party, summary, an event, a shop, a battle, settings, save slots): the only old-font text left is the battle screen's own (name plates, level, HP, stat arrows). It belongs to the battle styles, which stay as they are in both looks (Kice, Nov 14). A screen style picked by hand also keeps the game font.
+- Font check (New look; walked: title, Hub dock, Hub Town, Pocket Town, Legacy Gallery, trainer select, run prep, starter, Blessing, briefing, stage map, party, summary, an event, a shop, a battle, settings, save slots): no old-font text is left on these. A battle or screen style picked by hand keeps the game font, as those styles stay as they are in both looks (Kice, Nov 14).
 - The Old look keeps its eight event styles as they were. The prologue, story, tutorial and stadium broadcast pages keep the mock-ups' talk page.
 - A department store floor, the tournament bracket, the Honest Trade Card, the code-name card, a rival's team page and the Team Magma/Aqua team screens keep their own pages.
 - People are added from the text only when the event pictures nobody, and only for trades the game has art for (a Hiker, a Fisherman, a nurse and so on).
