@@ -2,6 +2,7 @@
 // The lead is a level-500 cheat and every foe is left at 1 HP, so the walk measures the story (Stops, Acts, ending), not the fights.
 
 import { isStoryCampaign } from '../../src/core/campaign/circuit';
+import { waitingStop } from '../../src/core/co/attach';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { chooseNodeWithNotes, chooseStarter, createRun, debugHealParty, mapChoices, resolveDecision, takeTurn } from '../../src/core/run';
@@ -42,6 +43,9 @@ export function walkStoryRun(bot: BotKind, seed: string, archetypeId = 'red'): W
   try {
     for (; actions < 20000 && run.phase !== 'over'; actions++) {
       if (run.phase === 'map') {
+        // The bots never play side events: one placed before or instead of this node's battle (Catalog Overhaul attach) is passed by.
+        const held = waitingStop(content, run);
+        if (held) { run.stage!.map.nodes.flatMap((n) => n.sides).find((sd) => sd.id === held)!.used = true; continue; }
         const choices = mapChoices(content, run);
         if (choices.length === 0) { error = `no map choices at stage ${run.stage?.index}`; break; }
         const done = new Set(run.story.v2?.stops.done ?? []);

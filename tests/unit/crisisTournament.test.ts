@@ -159,7 +159,8 @@ describe('Rival feud', () => {
     expect(f.openFeud(run)).toBeNull();
     run.story.rivalGraph.push({ a: 'a', b: 'b', kind: 'enemies' });
     expect(f.openFeud(run)!.map((r) => r.id)).toEqual(['b', 'a']);
-    expect(eligibleEvents(content, run).map((e) => e.id)).toContain('rival-feud');
+    // Catalog Overhaul row 12: the feud's scene is now R11 Two Rivals, One Argument, drawn by the rival questline schedule (it needs a second rival).
+    expect(content.events.get('rival-feud')!.requires).toContainEqual({ kind: 'rivalQuest', beat: 'R11.open' });
     expect(f.settleFeud(content, run, 'second')).toContain('is your ally');
     const [a, b] = [run.story.rivals[0]!, run.story.rivals[1]!];
     expect(a.state).toBe('ally');

@@ -141,3 +141,28 @@ describe('one-Pokémon selectors and Bond levels', () => {
     expect(done.run.party[0]!.friendship).toBe(60);
   });
 });
+
+describe('"+N Bond" from balance', () => {
+  it('turns pack Bond points into friendship at play time: 5 a point on one Pokémon, 3 each for the party', () => {
+    const bond = EventDefSchema.parse({ id: 'test-co-bond', name: 'Bond', group: 'Test', intro: 'A quiet moment.', choices: [
+      { label: 'Sit with your lead.', success: { text: 'It leans on you.', effects: [{ kind: 'friendship', bond: 2, who: 'lead' }] } },
+      { label: 'Sit with everyone.', success: { text: 'They pile on.', effects: [{ kind: 'friendship', bond: 1, who: 'party' }] } },
+    ] });
+    const plain = EventDefSchema.parse({ ...bond, id: 'test-co-bond-plain', choices: [
+      { label: 'Sit with your lead.', success: { text: 'It leans on you.', effects: [{ kind: 'friendship', amount: 10, who: 'lead' }] } },
+      { label: 'Sit with everyone.', success: { text: 'They pile on.', effects: [{ kind: 'friendship', amount: 3, who: 'party' }] } },
+    ] });
+    content.events.set(bond.id, bond);
+    content.events.set(plain.id, plain);
+    for (const choice of [0, 1]) {
+      const a = setup(); const b = setup();
+      a.stage!.map.nodes.find((n) => n.id === a.stage!.current)!.sides.push({ id: 'bd', kind: 'event', used: false, eventId: bond.id });
+      b.stage!.map.nodes.find((n) => n.id === b.stage!.current)!.sides.push({ id: 'bd', kind: 'event', used: false, eventId: plain.id });
+      const ra = chooseEvent(content, a, 'bd', choice);
+      const rb = chooseEvent(content, b, 'bd', choice);
+      expect(ra.run.party.map((m) => m.friendship)).toEqual(rb.run.party.map((m) => m.friendship));
+      if (choice === 0) expect(ra.changes.join(' ')).toContain('Bond +2');
+    }
+    content.events.delete(bond.id); content.events.delete(plain.id);
+  });
+});

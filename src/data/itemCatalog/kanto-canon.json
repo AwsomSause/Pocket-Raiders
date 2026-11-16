@@ -1,0 +1,51 @@
+[
+ {
+  "id": "soul-dew-shard",
+  "name": "Soul Dew Shard",
+  "family": "Type boosters (held)",
+  "description": "A sliver of Soul Dew left by the ghosts of Pokémon Tower: Ghost and Psychic moves +10%",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "soul-dew",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "ghost",
+      "psychic"
+     ],
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "charizard-feather",
+  "name": "Charizard Feather",
+  "family": "Type boosters (held)",
+  "description": "A feather from the Charizard of the Kanto road, still warm: Fire moves +5%",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 3,
+  "how": "held",
+  "icon": "charcoal",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "fire"
+     ],
+     "percent": 5
+    }
+   ]
+  }
+ }
+]

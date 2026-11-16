@@ -1,0 +1,2560 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "mentor-celeste-ribbon-lesson",
+   "name": "Celeste: The Audience Is Watching",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "celeste-ribbon"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "An empty contest hall, every seat folded up, dust turning slowly in the stage lights somebody left on. Celeste stands alone in the middle of the boards in a sequinned coat that throws little stars across the walls, and she is bowing, deeply and gracefully, to nobody at all. Celeste: \"Chin up. The audience is watching, even when it's empty.\" She straightens, and catches your eye in the mirror at the back of the hall. Celeste: \"Status moves are how you control the stage. Make them look at what you want them to see.\"",
+   "choices": [
+    {
+     "label": "\"Show me.\"",
+     "success": {
+      "text": "Celeste claps once, delighted, and the afternoon becomes a performance: a wave of the hand that makes your eyes slide left, a sparkle that hides a step, a song timed to the half-beat. By the end you can feel the stage tilt your way. For the run, your status moves land more often.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I just want to win.\"",
+     "success": {
+      "text": "Celeste laughs, not unkindly, and taps your chin up with one gloved finger. Celeste: \"Darling, winning is a performance.\" She teaches you anyway, every trick of misdirection she knows. For the run, your status moves land more often.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bow with you.\"",
+     "success": {
+      "text": "You step onto the boards beside her and bow to the empty seats, and your Pokémon bow too, a little crooked. Celeste's eyes go bright. She teaches you everything after that like you were family, and your team glows from the attention. For the run, your status moves land more often.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-celeste-ribbon-recruit",
+   "name": "Celeste: A Pokémon That Dances",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "celeste-ribbon"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Celeste watched the whole battle from the fence, and she applauded every turn, even the bad ones. When it is over she sweeps over in the sequinned coat, eyes shining like the hall lights. Celeste: \"Darling, that was a performance. I know someone with a Pokémon that dances.\"",
+   "choices": [
+    {
+     "label": "\"Meet them.\"",
+     "success": {
+      "text": "Celeste's friend runs a little dance studio above a bakery, and the Pokémon is already mid-twirl when you come up the stairs. It finishes the turn, looks straight at you, and bows. It has chosen its next partner, and it is you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lopunny",
+         "primarina",
+         "gardevoir"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Celeste blows a kiss at the air. Celeste: \"Then they'll keep rehearsing until you're ready.\" The offer will come round again.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-celeste-ribbon-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-celeste-ribbon-story",
+   "name": "Celeste: Shaking Is Allowed",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "celeste-ribbon"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "Backstage at a small-town contest, after everyone has gone. Celeste sits on an upturned crate with the coat across her knees, and without the lights on her she looks smaller, older, more real. She holds up one hand and watches it. Celeste: \"I won my third Festival with a shaking hand. Nobody saw. I teach so others know shaking is allowed.\" She folds the hand away in her lap. Celeste: \"They've asked me to judge the Grand Festival this year. I'm terrified.\"",
+   "choices": [
+    {
+     "label": "\"Judge it.\"",
+     "success": {
+      "text": "Celeste breathes out slowly, then nods, and something steadies in her face. She will sit at the judges' table at the Grand Festival, and she promises you one thing: when you take the stage, she will score you honestly, even if it breaks her heart.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "celeste-judge",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Perform instead.\"",
+     "success": {
+      "text": "Celeste stares at you, then bursts out laughing, and the laugh turns into something fierce. She will not judge. She will enter. If you reach the end of the Grand Festival, the last performer standing between you and the ribbon will be her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "celeste-perform",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Say no.\"",
+     "success": {
+      "text": "For a long moment Celeste says nothing at all. Then she reaches over and squeezes your hand, and hers is shaking, and she lets you feel it. Celeste: \"Thank you for letting me.\" She writes the refusal that night, and sleeps well.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "celeste-rest",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Celeste gives you a narrow look. Celeste: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-celeste-ribbon-final",
+   "name": "Celeste: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "Celeste brings you back to the empty contest hall, and this time every stage light is on. She takes her place at centre stage in the sequinned coat, six Poké Balls at her belt, and bows to the seats before she bows to you. Celeste: \"Chin up, darling. The audience is watching.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Celeste sends out her Gardevoir with a flourish, and the hall fills with glitter that hides as much as it shows. Every move she makes is meant to make you look the wrong way.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Celeste's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-celeste-ribbon-farewell"
+        }
+       ],
+       "team": [
+        "gardevoir",
+        "togekiss",
+        "milotic",
+        "sylveon",
+        "mimikyu",
+        "lopunny"
+       ],
+       "name": "Celeste Ribbon",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Celeste's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-celeste-ribbon-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-celeste-ribbon-farewell",
+   "name": "Celeste: Wonderful",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "When the last glitter settles, Celeste calls back her Lopunny and stands very still in the light. Then she crosses the stage to you and takes your hand, the one that held your Poké Balls, and holds it between both of hers. Celeste: \"Your hand shook on turn two. I saw. Nobody else did. Wonderful.\" She unpins a faded ribbon from inside her coat, her own Festival ribbon, and presses it into your palm with a Pretty Feather.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "You pin the ribbon on, and Celeste fixes it so it sits straight, and then she bows to you, deeply, the way she bowed to the empty seats. Your hand is shaking a little. That is allowed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "pretty-feather",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Celeste gave you her own Festival ribbon",
+        "importance": 70
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-dax-corvane-lesson",
+   "name": "Dax: This Is a Rivalry",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "dax-corvane"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.blue"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "A field gate at the edge of town. A lanky trainer in a battered cap sits on the top rail of the fence, swinging one boot, and you have never seen him before, but he is looking at you like he has been waiting. Dax: \"Don't smile. This is a rivalry, not a lesson.\" He drops off the fence and lands lightly. Dax: \"We battle. You lose. You learn. Again.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Dax grins for half a second, then hides it. He sends out his team and does not hold back, not even a little.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Dax beat you, and told you to learn from it",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "scraggy",
+        "mankey"
+       ],
+       "name": "Dax",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Dax the first time you met",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Why don't you lose?\"",
+     "success": {
+      "text": "Dax looks at you for a long moment, like the question is a door he did not know was there. He does not answer it. He just sends out his team.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Dax beat you, and told you to learn from it",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "scraggy",
+        "mankey"
+       ],
+       "name": "Dax",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Dax the first time you met",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"I'll win.\"",
+     "success": {
+      "text": "Dax's face lights up, fierce and glad, like you finally said something worth hearing. He sends out his team before you finish the sentence.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Dax beat you, and told you to learn from it",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "scraggy",
+        "mankey"
+       ],
+       "name": "Dax",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Dax the first time you met",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-dax-corvane-recruit",
+   "name": "Dax: Too Stubborn for Her",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "dax-corvane"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.blue"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Dax is waiting by the route sign after your battle, arms crossed, cap pulled low. He kicks a stone. He clearly hates what he is about to say. Dax: \"Fine. That was… good. Don't let it go to your head. There's a kid with a Pokémon too stubborn for her. It'd suit you.\"",
+   "choices": [
+    {
+     "label": "\"Meet her.\"",
+     "success": {
+      "text": "The kid is about nine and very tired, and her Pokémon is sitting in the middle of the path refusing to move for anyone. It looks at you. You look at it. Neither of you blinks. Then it gets up and walks to your side like that was its idea all along, and it was.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "tauros",
+         "pangoro",
+         "scrafty"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "friendship": 25
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Dax shrugs like he does not care, which means he does. Dax: \"It's not going anywhere. It's too stubborn.\" The offer will come round again.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-dax-corvane-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-dax-corvane-story",
+   "name": "Dax: Real",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "dax-corvane"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.blue"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "A rooftop above a battle club, late, the city lights coming on below. Dax sits on the edge with his cap in his hands, turning it round and round. He does not look at you while he talks. Dax: \"I lost to you and I was furious for a week. Then I realised I'd never been that interested in anything before.\" The cap stops turning. Dax: \"I've been asked to coach a team. Real. I'd have to stop battling you.\"",
+   "choices": [
+    {
+     "label": "\"Take the job.\"",
+     "success": {
+      "text": "Dax lets out a breath that sounds like it hurts. Then he puts the cap back on, and when he looks at you his eyes are wet and he is grinning. He takes the job. One day, his students will be the ones standing across the field from you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dax-coach",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Keep battling me.\"",
+     "success": {
+      "text": "Dax goes very still, and then he grins, the real one, all teeth. He turns the job down that night. When the Final Lesson comes, he will bring the hardest battle he has ever built, and he will build it just for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dax-rival",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do both.\"",
+     "success": {
+      "text": "Dax laughs out loud, like you dared him. He takes the job and keeps battling you, and within a week he is so tired he falls asleep standing up. When the Final Lesson comes he will be one Pokémon short, and he will laugh about it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dax-both",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Dax gives you a narrow look. Dax: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-dax-corvane-final",
+   "name": "Dax: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.blue"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "The same field gate where you met, the same fence. Dax is sitting on the top rail again, and when he sees you he drops off it without a word. Six Poké Balls at his belt. He has been studying your team for weeks. Dax: \"Don't smile. We battle. You lose. Again.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Dax sends out his team, and your stomach drops: it is your team, every one of them, one level stronger, mirrored move for move. He learned you by heart.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Dax's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-dax-corvane-farewell"
+        }
+       ],
+       "name": "Dax",
+       "mirror": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Dax's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-dax-corvane-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rival",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "dax-rival",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The same field gate, the same fence, and Dax is waiting with his cap on backwards, the way he wears it when he means it. He turned down a real job for this battle, and it shows in every line of him. Dax: \"Don't smile. This is a rivalry, not a lesson.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Ready.\"",
+       "success": {
+        "text": "Dax sends out his team, and it is yours, every one of them, mirrored and pushed past anything you have faced from him. This is the hardest battle he has ever built.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Dax's Final Lesson beat you, and you still graduated",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-dax-corvane-farewell"
+          }
+         ],
+         "name": "Dax",
+         "mirror": true,
+         "size": 6,
+         "types": [],
+         "levelBonus": 3,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You passed Dax's Final Lesson",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-dax-corvane-farewell"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    },
+    {
+     "id": "both",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "dax-both",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The field gate. Dax is half asleep on the fence, a clipboard from his coaching job still under one arm. He jerks awake when you arrive and counts the Poké Balls on his belt, and frowns, and counts again. Five. Dax: \"Don't smile. Five is plenty.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Ready.\"",
+       "success": {
+        "text": "Dax sends out his team: your own Pokémon, mirrored, one level stronger, and one short. He laughs about it the whole way through, and he is still dangerous.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Dax's Final Lesson beat you, and you still graduated",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-dax-corvane-farewell"
+          }
+         ],
+         "name": "Dax",
+         "mirror": true,
+         "size": 5,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You passed Dax's Final Lesson",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-dax-corvane-farewell"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mentor-dax-corvane-farewell",
+   "name": "Dax: Not the Last Time",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.blue"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "When it is over, Dax stands for a long time with his hands in his pockets, looking at the ground between you. Then he pulls off his battered old cap and jams it on your head, and drops a Choice Band into your hand like it is nothing. Dax: \"That's the last time I teach you. Not the last time I beat you.\"",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "The cap is too big and smells of field grass. Dax climbs back onto the fence and does not look at you as you go, but you hear him laugh, once, behind you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "choice-band",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Dax gave you his old cap",
+        "importance": 70
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-fenwick-eon-lesson",
+   "name": "Fenwick: A Wall of Strings",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "fenwick-eon"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "A cottage at the end of a lane, smelling of tea and old paper. One whole wall is covered in pinned strings, dozens of them, every one a different colour, and most have a little knot tied somewhere along their length. Fenwick, grey-haired and soft-spoken, is watching your Pokémon with the patience of someone watching a kettle. Fenwick: \"There's a form in there. Be patient with it.\" He runs a finger along the strings. Fenwick: \"Each string's a Pokémon I've known. Each knot's when it evolved. Some have no knot.\"",
+   "choices": [
+    {
+     "label": "\"Show me how to time it.\"",
+     "success": {
+      "text": "Fenwick pulls up two chairs and shows you the strings one by one: this one evolved too early and was always a little sorry, this one waited and grew strong in the waiting. By the time the tea is cold you understand. For the run, a Pokémon you hold back from evolving grows stronger while it waits.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why no knot?\"",
+     "success": {
+      "text": "Fenwick touches a pale blue string with no knot on it, and his voice goes very gentle. Fenwick: \"Some don't need to.\" He does not say more, but he teaches you the rest of it kindly. For the run, a Pokémon you hold back from evolving grows stronger while it waits.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tie a string for mine.\"",
+     "success": {
+      "text": "Fenwick's face lights up. He chooses a colour for your starter with great care, pins a new string to the wall, and leaves room on it for a knot. Your starter watches the whole thing and leans against your leg. For the run, a Pokémon you hold back from evolving grows stronger while it waits.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "Fenwick pinned a string for your starter on his wall",
+        "importance": 60
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-fenwick-eon-recruit",
+   "name": "Fenwick: Ready to Choose",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "fenwick-eon"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Fenwick has been watching one of your Pokémon all through the battle, and when it ends he grabs your sleeve, eyes wide behind his glasses. Fenwick: \"Oh! It's starting. Do you see? I know a breeder with an Eevee who's ready to choose.\"",
+   "choices": [
+    {
+     "label": "\"Meet it.\"",
+     "success": {
+      "text": "The breeder's yard is full of stones and leaves and little dishes of water, and in the middle of it all an Eevee sits looking at each one in turn, like it cannot decide. Then it looks at you, and stops looking at anything else.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "eevee"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Fenwick smiles and lets go of your sleeve. Fenwick: \"It'll wait. They're good at waiting.\" The offer will come round again.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-fenwick-eon-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-fenwick-eon-story",
+   "name": "Fenwick: Some Have No Knot",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "fenwick-eon"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "Evening in the cottage, the lamp lit, the wall of strings throwing long shadows. Fenwick stands in front of the pale blue string, the one with no knot, and touches it with two fingers like it might still be warm. Fenwick: \"My Eevee never evolved. I used to think I failed it. Now I think it just didn't need to.\" He turns, and he is looking at your Eevee, and his voice cracks a little. Fenwick: \"Yours. The Eevee I found you. Would you… would you let it stay as it is? For me? You don't have to.\"",
+   "choices": [
+    {
+     "label": "\"I won't evolve it.\"",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "eevee"
+      }
+     ],
+     "pick": {
+      "types": [
+       "normal"
+      ]
+     },
+     "success": {
+      "text": "Fenwick covers his mouth with his hand and nods, and nods. He kneels and holds your Eevee for a long time, and when he lets go it carries itself differently, taller, sure of itself. He teaches it Last Resort before you leave, the move his own Eevee loved best.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fenwick-kept",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "statBoost",
+        "stat": "all",
+        "percent": 10,
+        "who": "picked",
+        "until": "run"
+       },
+       {
+        "kind": "teachMove",
+        "move": "last-resort",
+        "species": "eevee"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's its choice.\"",
+     "success": {
+      "text": "Fenwick goes quiet, and then he smiles, the slow, wondering smile of someone who has just been taught something. Fenwick: \"Yes. Of course. It's its choice.\" When the next chance to evolve comes, your Eevee will decide for itself: to grow into what your party needs, or to stay.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fenwick-choice",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll evolve it.\"",
+     "success": {
+      "text": "Fenwick does not flinch. He just nods, and reaches for a new string. Fenwick: \"Of course. It's yours.\" He is not hurt, and you can see that he means it. He ties a knot in it, ready for the day, and pins it next to the pale blue one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fenwick-evolved",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Fenwick tied a knot for your Eevee",
+        "importance": 60
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Fenwick gives you a narrow look. Fenwick: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-fenwick-eon-final",
+   "name": "Fenwick: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "Fenwick leads you out into the cottage garden at dusk, past the window where the strings hang. He carries seven Poké Balls, not six, and he holds the last one in both hands before he clips it to his belt. Fenwick: \"Every form there is. And one that never needed one. Show me yours.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Fenwick sends out his Eeveelutions one by one, each a different answer to the same question. And last of all, waiting at his feet, his own old Eevee, grey around the muzzle, unevolved.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Fenwick's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-fenwick-eon-farewell"
+        }
+       ],
+       "team": [
+        "espeon",
+        "umbreon",
+        "vaporeon",
+        "jolteon",
+        "flareon",
+        "sylveon",
+        "eevee"
+       ],
+       "name": "Fenwick Eon",
+       "size": 7,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Fenwick's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-fenwick-eon-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-fenwick-eon-farewell",
+   "name": "Fenwick: It Never Needed To",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.bug_catcher"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "His old Eevee lies down in the grass beside him when it is over, tired and content, and Fenwick sits down with it and strokes its ears. When he looks up at you his eyes are full. Fenwick: \"It never needed to. Neither do you. But you can.\" He holds out an Everstone, a length of pale blue string knotted round it.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "You take the stone, and the string is soft from years of handling. Fenwick goes back inside to pin a new string on his wall. When you look back through the window, there is a knot in it already.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "everstone",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Fenwick tied a knot of string round an Everstone for you",
+        "importance": 70
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-juno-trailwind-lesson",
+   "name": "Juno: The Road Doesn't Wait",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "juno-trailwind"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "A trailhead at dawn, a wooden sign pointing three directions, mist still lying in the valley below. Juno is sitting on a rock re-lacing her boots, sun-browned and wind-creased, her pack already on. She does not look up. Juno: \"Boots on. The road doesn't wait.\" She yanks the laces tight and stands, squinting at the path. Juno: \"Look down, look up, look sideways. Treasure hides in all three.\"",
+   "choices": [
+    {
+     "label": "\"Show me.\"",
+     "success": {
+      "text": "Juno sets off at a pace that makes your calves burn, and the whole way she points: a bent branch, a scuffed stone, a glint under a root. By noon you are seeing them before she points. For the run, the map shows you where hidden things lie once you are within two steps of them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Race you.\"",
+     "success": {
+      "text": "Juno grins and is gone before you finish the word. You lose, badly, but on the way you trip over three things she left for you to find, and you start to see how she sees. For the run, the map shows you where hidden things lie once you are within two steps of them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's the best thing you ever found?\"",
+     "success": {
+      "text": "Juno stops on the path, and for a second her face goes somewhere far away. Juno: \"A way out.\" She does not explain yet. She just walks on, and teaches you to look. For the run, the map shows you where hidden things lie once you are within two steps of them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-juno-trailwind-recruit",
+   "name": "Juno: Only to People Who Look",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "juno-trailwind"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Juno crouches at the edge of a valley after your battle, running her fingers over a mark in the mud too fresh to be old and too strange to be ordinary. She looks up at you with something like pride. Juno: \"Now you're reading the ground. Good. There's a Pokémon in this valley that only shows itself to people who look.\"",
+   "choices": [
+    {
+     "label": "\"Find it.\"",
+     "success": {
+      "text": "You look down, up and sideways, and on the third hour, in a hollow under a fallen tree, you find it, watching you like it has been waiting for someone to notice. It does not run. It steps out of the shadow and comes to you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "absol",
+         "lapras",
+         "dratini",
+         "larvitar",
+         "riolu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Juno shrugs and stands. Juno: \"It'll still be hiding. That's what it does.\" The offer will come round again.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-juno-trailwind-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-juno-trailwind-story",
+   "name": "Juno: Nine Days",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "juno-trailwind"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "A campfire on a ridge, the last light going purple. Juno is tracing a route in the dirt with a stick, the same route, over and over, and she does not seem to know she is doing it. Juno: \"I was lost for nine days once. A wild Pokémon walked me out. I've been paying it back ever since.\" The stick stops. Juno: \"It was a Stoutland. Old. I think it's still up there. I've never gone back. Scared it won't be.\"",
+   "choices": [
+    {
+     "label": "\"Let's go look.\"",
+     "success": {
+      "text": "Juno looks at you for a long time across the fire. Then she rubs out the route in the dirt with her boot and picks up her pack. Juno: \"First light.\" The mountain is three days of climbing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-juno-trailwind-mountain-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go alone.\"",
+     "success": {
+      "text": "Juno nods slowly, like she knew that was the answer. She is gone before you wake. Three days later she comes back down the trail, eyes red and smiling, with a sleepy pup tucked inside her jacket, and she does not say a word about what she found. She does not need to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "juno-alone",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave it as a good memory.\"",
+     "success": {
+      "text": "Juno is quiet for a long time, watching the fire. Juno: \"...Yeah.\" She puts the stick down. She does not say thank you, but she sits a little closer, and she is grateful.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "juno-memory",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Juno gives you a narrow look. Juno: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-juno-trailwind-mountain-1",
+   "name": "Juno: The Scree Slope",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "The first day is loose stone and thin air, the path Juno took nine days lost twenty years ago gone under rockfall. She stops at a fork and stares at it, and for the first time since you have known her, she does not know which way to go. Juno: \"It was different then. Everything was.\"",
+   "choices": [
+    {
+     "label": "\"Look down.\"",
+     "success": {
+      "text": "You crouch and find it: an old claw scrape on the stone, worn almost smooth, pointing left. Juno touches it and has to look away. You climb on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-juno-trailwind-mountain-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Follow the stream.\"",
+     "success": {
+      "text": "You follow the sound of water, because a lost thing goes downhill and a guide goes up it. Juno laughs, startled. Juno: \"That's what I'd have said.\" You climb on.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-juno-trailwind-mountain-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-juno-trailwind-mountain-2",
+   "name": "Juno: The Cold Night",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "The second night you camp under an overhang while the wind howls past, and Juno cannot sleep. She sits at the mouth of the shelter with her arms round her knees, looking up at the dark peak. Juno: \"What if it's gone? What if I'm too late?\"",
+   "choices": [
+    {
+     "label": "\"Then you came anyway.\"",
+     "success": {
+      "text": "Juno does not answer. But after a while she lies down, and she sleeps, and in the morning she is the first one up, boots already laced.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-juno-trailwind-mountain-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit with her.",
+     "success": {
+      "text": "You sit beside her and say nothing at all, and your Pokémon curl up against you both. Some time before dawn her head drops onto your shoulder. In the morning she does not mention it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mentor-juno-trailwind-mountain-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-juno-trailwind-mountain-3",
+   "name": "Juno: It Knows Her",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "The third day, near the top, the path opens into a high meadow full of wind and little white flowers. There is a den under a leaning pine. And lying in front of it in the sun, grey to the tips of its ears, is a very old Stoutland, with three tumbling grandpups climbing over its back. Its head comes up. Its nose works. Juno stops dead, and her pack slides off one shoulder.",
+   "choices": [
+    {
+     "label": "\"Go on.\"",
+     "success": {
+      "text": "Juno walks forward, one step, two, and the old Stoutland gets up, slow and stiff, and walks to meet her. It puts its great grey head against her chest. It knows her. Juno sinks down into the flowers and holds on, and the grandpups pile into her lap.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "juno-found",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You found the old Stoutland that walked Juno out of the mountains",
+        "importance": 60
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay back.",
+     "success": {
+      "text": "You stay at the edge of the meadow and let her go alone. You watch the old Stoutland get up and cross the grass to her, slow and certain. It knows her. When she finally looks back at you, she is laughing and crying at once, a pup chewing her bootlace.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "juno-found",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You found the old Stoutland that walked Juno out of the mountains",
+        "importance": 60
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-juno-trailwind-final",
+   "name": "Juno: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "Juno meets you at a trailhead in the last region, a wooden sign pointing three ways, boots already laced. Six Poké Balls ride on the straps of her pack, every one of them fast and hard to pin down. Juno: \"Boots on. Show me what you've learned to see.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Juno sends out her Talonflame in a streak of fire, and from the first turn her team is everywhere you are not looking.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Juno's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-juno-trailwind-farewell"
+        }
+       ],
+       "team": [
+        "talonflame",
+        "zoroark",
+        "lycanroc",
+        "whimsicott",
+        "noivern",
+        "crobat"
+       ],
+       "name": "Juno Trailwind",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Juno's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-juno-trailwind-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "found",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "juno-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Juno meets you at a trailhead in the last region, and at her side, moving slow but sure, is the old grey Stoutland from the mountain, come down to see her off. Six Poké Balls on her pack straps; the first one is new. Juno: \"It wanted to come. Boots on.\"",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "\"Ready.\"",
+       "success": {
+        "text": "Juno sends out the old Stoutland first, and it plants its feet and looks at you with tired, knowing eyes. Behind it, her fast team waits to strike from every side.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Juno's Final Lesson beat you, and you still graduated",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-juno-trailwind-farewell"
+          }
+         ],
+         "team": [
+          "stoutland",
+          "talonflame",
+          "zoroark",
+          "lycanroc",
+          "whimsicott",
+          "noivern"
+         ],
+         "name": "Juno Trailwind",
+         "size": 6,
+         "types": [],
+         "levelBonus": 2,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You passed Juno's Final Lesson",
+           "importance": 60
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "mentor-juno-trailwind-farewell"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "mentor-juno-trailwind-farewell",
+   "name": "Juno: Where to Look",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "When it is over, Juno sits down on the trailhead rock and starts re-lacing her boots, the way she did the first morning. She does not look up for a while. When she does, she is smiling. Juno: \"You found the way. I just showed you where to look.\" She digs in her pack and tosses you a battered Itemfinder, its casing scratched from a hundred trails.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "The Itemfinder hums in your hand, already pointing somewhere. Juno shoulders her pack, nods once, and sets off up the trail without saying goodbye. The road doesn't wait.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "itemfinder",
+        "count": 1
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-linden-vale-lesson",
+   "name": "Linden: Watch the Feet",
+   "group": "Mentors",
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "linden-vale"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.oak"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "rarity": "uncommon",
+   "minStage": 1,
+   "intro": "A long grass field, bees in the clover. A man in a rumpled coat lies on his stomach in the grass with a sketchbook, pencil flying, utterly absorbed in a wild Pokémon twenty paces off. He holds up one hand without looking round. Linden: \"Hold still, I want to sketch that stance.\" The pencil scratches. Then he rolls over and grins at you, grass in his hair. Linden: \"Every Pokémon tells you what it'll do before it does it. Watch the feet.\"",
+   "choices": [
+    {
+     "label": "\"Teach me.\"",
+     "success": {
+      "text": "Linden hands you a spare pencil and makes you sketch until your hand cramps: the shift of weight before a leap, the tail that lifts before a charge. By evening you are seeing it before it happens. For the run, you see the move each opponent means to open with before you choose your own.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Sketch my starter.\"",
+     "success": {
+      "text": "Linden's eyes light up. He sketches your starter from six angles, muttering, and shows you every one: the little tell before it attacks, the one before it dodges. Your starter is very proud of its portrait. For the run, you see the move each opponent means to open with before you choose your own.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is this about the Deltas?\"",
+     "success": {
+      "text": "Linden goes still, then laughs, and taps the pencil against his teeth. Linden: \"Everything's about the Deltas, eventually.\" He does not explain. He teaches you to watch the feet, and his notebook stays closed. For the run, you see the move each opponent means to open with before you choose your own.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-lesson",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentorLesson",
+        "again": false
+       },
+       {
+        "kind": "mentor",
+        "trust": 4,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-linden-vale-recruit",
+   "name": "Linden: Hard to Predict",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "linden-vale"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-recruit",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.oak"
+    ],
+    "tint": "#2a2a44",
+    "effect": "sparkle"
+   },
+   "rarity": "uncommon",
+   "intro": "Linden watched your whole battle with his notebook open, ticking things off, and by the end he is practically bouncing. Linden: \"Fascinating! You did exactly what the data said you would. Here, a colleague found a Pokémon that's hard to predict. It'll keep you honest.\"",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "Linden's colleague hands the Pokémon over with visible relief and a page of notes that just says \"???\" in three different inks. It looks at you, and you have no idea what it will do next. Linden is delighted.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "ditto",
+         "porygon"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-recruit",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 1,
+        "loyalty": 2,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Not yet.\"",
+     "success": {
+      "text": "Linden scribbles a note. Linden: \"Predictable. I like it.\" The offer will come round again.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "mentor-linden-vale-recruit"
+       },
+       {
+        "kind": "mentor",
+        "trust": 0,
+        "loyalty": 1,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-linden-vale-story",
+   "name": "Linden: Results and Answers",
+   "group": "Mentors",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "mentor",
+     "id": "linden-vale"
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-lesson",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "flag",
+     "key": "mentor-story",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.oak"
+    ],
+    "tint": "#44301a",
+    "effect": "fire"
+   },
+   "rarity": "uncommon",
+   "intro": "Linden's field camp at night, a lantern hanging from a branch, pages of notes held down with stones. He closes the notebook slowly, both hands flat on its cover, like he is keeping something in. Linden: \"The lab wanted results. I wanted answers. They weren't the same thing, so I left.\" He looks at the lantern, not at you. Linden: \"They want me back. They've funded the Delta work. If I go, it'll be published. Properly. With their name on it.\"",
+   "choices": [
+    {
+     "label": "\"Go back.\"",
+     "success": {
+      "text": "Linden is quiet a long time. Then he nods, once, and opens the notebook again. Linden: \"Then you should have this now.\" He gives you the Delta Lens from his study, early, no matter how far along you are, so the work goes on even if he goes back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "linden-lab",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Publish it yourself.\"",
+     "success": {
+      "text": "Linden blinks at you, then laughs, startled and young. He writes it himself, by lantern light, and when he shows you the first page your name is in it, in the thanks, in his own careful hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "linden-self",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Don't publish.\"",
+     "success": {
+      "text": "Linden looks down at the notebook for a long time. Linden: \"Some answers should be kept.\" He ties the cover shut with a string. Every place the Deltas live stays a secret, and stays safe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "linden-kept",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "mentor-story",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "mentor",
+        "trust": 5,
+        "loyalty": 3,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "bram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mentor-bram-told",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Linden gives you a narrow look. Linden: \"Bram told you. Of course he did.\""
+    }
+   ]
+  },
+  {
+   "id": "mentor-linden-vale-final",
+   "name": "Linden: The Final Lesson",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.oak"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "Linden waits in the long grass field where you met, the sketchbook under his arm, six Poké Balls at his belt. He has been watching you for a whole run, and the notebook is full. Linden: \"I've predicted every move you'll make. Prove me wrong.\"",
+   "choices": [
+    {
+     "label": "\"Ready.\"",
+     "success": {
+      "text": "Linden sends out his Alakazam with the notebook open in his other hand, and every move his team makes is an answer to a question you have not asked yet.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Linden's Final Lesson beat you, and you still graduated",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-linden-vale-farewell"
+        }
+       ],
+       "team": [
+        "alakazam",
+        "porygon-z",
+        "metagross",
+        "bronzong",
+        "reuniclus",
+        "magnezone"
+       ],
+       "name": "Dr. Linden Vale",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You passed Linden's Final Lesson",
+         "importance": 60
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "mentor-linden-vale-farewell"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentor-linden-vale-farewell",
+   "name": "Linden: Don't Tell Me",
+   "group": "Mentors",
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.oak"
+    ],
+    "tint": "#2a2a44",
+    "effect": "glint"
+   },
+   "intro": "When it is over, Linden closes the notebook and stands looking at it for a while. Then he holds it out to you, the whole thing, every page of sketches and tells and scribbled answers. Linden: \"I predicted you'd win. Don't tell me if I was wrong.\"",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "The notebook is heavy and warm from his hands. On the first page, in careful pencil, is a sketch of you, watching the feet. Linden waves you off and lies back down in the grass to sketch the next thing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mentor-graduated",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "lindens-notebook",
+        "count": 1
+       },
+       {
+        "kind": "mentor",
+        "trust": 40,
+        "loyalty": 5,
+        "rivalry": 0
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

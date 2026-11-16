@@ -238,16 +238,20 @@ describe('Landmark Dungeons (S9)', () => {
     const sides = run.stage!.map.nodes.flatMap((n) => n.sides).filter((s) => content.events.get(s.eventId ?? '')?.stop === 'dungeon');
     expect(sides).toHaveLength(1);
     const ev = content.events.get(sides[0]!.eventId!)!;
+    // A Landmark Delve (STORY_FAMILIES_8.md C6) is a run of rooms: its first scene opens the next; the puzzle dungeons chain trainer rooms.
     const battle = ev.choices[0]!.success?.battle;
-    expect(battle?.chain).toBeGreaterThanOrEqual(3);
+    const opensRoom = ev.choices.every((c) => c.success.effects.some((e) => e.kind === 'addEvent'));
+    expect(opensRoom || (battle?.chain ?? 0) >= 3).toBe(true);
     const other = start('standard', 'dg-1');
     other.stage!.index = 0;
     placeDungeon(content, other);
     expect(other.stage!.map.nodes.flatMap((n) => n.sides).some((s) => content.events.get(s.eventId ?? '')?.stop === 'dungeon')).toBe(false);
   });
-  it('eight dungeons exist (four landmarks, four puzzle dungeons) and are never drawn as ordinary events', () => {
+  it('seven dungeons exist (three Landmark Delves, four puzzle dungeons) and are never drawn as ordinary events', () => {
+    // Victory Hall is now a room the Hall of Past Champions opens (QUESTLINES PC6, STORY_FAMILIES_8.md C4), not a stage-three dungeon.
     const all = [...content.events.values()].filter((e) => e.stop === 'dungeon');
-    expect(all.map((e) => e.id).sort()).toEqual(['dungeon-pokemon-tower', 'dungeon-power-plant', 'dungeon-seafoam-depths', 'dungeon-victory-hall', 'dz-clockwork', 'dz-crypt', 'dz-dive', 'dz-mansion']);
+    expect(all.map((e) => e.id).sort()).toEqual(['dungeon-pokemon-tower', 'dungeon-power-plant', 'dungeon-seafoam-depths', 'dz-clockwork', 'dz-crypt', 'dz-dive', 'dz-mansion']);
+    expect(content.events.get('dungeon-victory-hall')?.room).toBe(true);
   });
 });
 

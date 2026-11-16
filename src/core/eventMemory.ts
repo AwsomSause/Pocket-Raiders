@@ -4,6 +4,7 @@
 
 import type { Content, EventChoice, EventDef, EventVariant } from './contentSchema';
 import { conditionMet } from './events';
+import { fillEventText } from './evil/text';
 import type { RunState } from './state';
 
 /** `kind.helped_stranger` -> `kind-helped-stranger` (the key format the `flag` effect accepts). */
@@ -41,10 +42,12 @@ export function visibleChoices(content: Content, run: RunState, event: EventDef)
   return base;
 }
 
-/** The event as the player sees it now: remembered intro, hidden and added choices applied (indices are positions in the view). */
+/** The event as the player sees it now: remembered intro, hidden and added choices applied (indices are positions in the view), and the region's team named where a scene uses tokens (core/evil/text.ts). */
 export function effectiveEvent(content: Content, run: RunState, event: EventDef): EventDef {
   const v = activeVariant(content, run, event);
-  if (!v) return event;
-  const intro = [v.intro ?? event.intro, v.notice].filter(Boolean).join(' ');
-  return { ...event, intro, choices: visibleChoices(content, run, event).map((c) => c.choice) };
+  const say = (text: string): string => fillEventText(content, run, text);
+  const tokens = event.intro.includes('{') || event.choices.some((c) => c.label.includes('{')) || event.remembers.some((r) => JSON.stringify(r).includes('{'));
+  if (!v) return tokens ? { ...event, intro: say(event.intro), choices: event.choices.map((c) => ({ ...c, label: say(c.label) })) } : event;
+  const intro = say([v.intro ?? event.intro, v.notice].filter(Boolean).join(' '));
+  return { ...event, intro, choices: visibleChoices(content, run, event).map((c) => ({ ...c.choice, label: say(c.choice.label) })) };
 }
