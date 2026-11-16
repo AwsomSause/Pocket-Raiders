@@ -51,27 +51,36 @@ describe('six original Evil Teams', () => {
 const STORY_EVENTS = () => [...content.events.values()].filter((e) => e.id.startsWith('story-alpha-') || e.id === 'story-tour-registration');
 
 describe('Alphas and the Exhibition Bracket', () => {
-  it('ten Alphas, each with the five outcomes', () => {
+  // The Catalog Overhaul Pack rebuilt the ten Alphas (tools/events/co/legends-1.ts): they are live in every run, placed by
+  // placement/legends.json, and calmed rather than beaten. Their outcomes are tested in coLegendsAlphas.test.ts.
+  it('ten Alphas, each with a calm fight that never ends the run', () => {
     const alphas = [...content.events.values()].filter((e) => e.id.startsWith('story-alpha-'));
     expect(alphas).toHaveLength(10);
     for (const a of alphas) {
-      const flags = JSON.stringify(a.choices);
-      for (const o of ['subdued', 'befriended', 'relocated', 'left']) expect(flags, a.id).toContain(`-${o}"`);
-      const fight = a.choices[0]!.success.battle!;
-      expect(fight.kind).toBe('wild');
-      expect(fight.pseudo, `${a.id}: a loss never ends the run`).toBe(true);
+      // The entry and every room it opens, however deep.
+      const seen = new Set([a.id]);
+      const parts: string[] = [];
+      for (const id of seen) {
+        const t = JSON.stringify(content.events.get(id)?.choices ?? []);
+        parts.push(t);
+        for (const m of t.matchAll(/"kind":"addEvent","eventId":"([^"]+)"/g)) seen.add(m[1]!);
+      }
+      const all = parts.join('');
+      expect(all, a.id).toContain('"alpha":true');
+      for (const m of all.matchAll(/"battle":\{"kind":"wild"[^}]*?"pseudo":(true|false)/g)) expect(m[1], `${a.id}: a loss never ends the run`).toBe('true');
     }
   });
 
-  it('are never eligible in Classic, and are in a Story Run', () => {
+  it('the Exhibition Bracket registration is never eligible in Classic, and is in a Story Run', () => {
+    const reg = STORY_EVENTS().filter((e) => !e.id.startsWith('story-alpha-'));
+    expect(reg.length).toBeGreaterThan(0);
     const c = classic('design-elig');
     c.regionIndex = 3;
     const ids = new Set(eligibleEvents(content, c).map((e) => e.id));
-    for (const e of STORY_EVENTS()) expect(ids.has(e.id), e.id).toBe(false);
+    for (const e of reg) expect(ids.has(e.id), e.id).toBe(false);
     const s = story('design-elig');
     const sid = new Set(eligibleEvents(content, s).map((e) => e.id));
-    // Stage 1: only the early Alphas' minStage would gate; the gate itself is the Story Run check.
-    for (const e of STORY_EVENTS().filter((x) => x.minStage <= 1)) expect(sid.has(e.id), e.id).toBe(true);
+    for (const e of reg.filter((x) => x.minStage <= 1)) expect(sid.has(e.id), e.id).toBe(true);
   });
 
   it('the bracket chains registration, round of eight, semifinal and final; every fight is friendly', () => {

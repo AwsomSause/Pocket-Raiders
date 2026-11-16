@@ -1,0 +1,4 @@
+[
+  { "id": "keepers-lamp", "name": "Keeper's Lamp", "type": "water", "category": "special", "power": 80, "accuracy": 100, "pp": 10, "priority": 0, "critStage": 0, "target": "enemy", "flags": [], "effects": {} },
+  { "id": "last-winter", "name": "Last Winter", "type": "ice", "category": "special", "power": 75, "accuracy": 90, "pp": 10, "priority": 0, "critStage": 0, "target": "enemy", "flags": [], "effects": { "sureIn": "hail" } }
+]

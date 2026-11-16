@@ -1,6 +1,6 @@
 // The 100 new events, Part 3 (NE51 to NE75): Pokémon-anime stories, evil teams, road people and town stories, wild scenes.
 // Script: catalog_overhaul/NEW_EVENTS_3.md. Placement: NEW_EVENTS_PLACED.md, categories 11 to 15.
-// The trades (NE61 to NE65) need the markets thread's Honest Trade Card: they wait, fully written, in _ne-trades.ts.
+// The trades (NE61 to NE65) use the markets thread's Honest Trade Card (`honestTrade`, core/co/tradeCard.ts): the card shows both sides and fair value before you agree.
 // Build: npm run co:build -- new-events-3
 import { $, anyType, bondIs, bondUp, fight, flag, flagAgo, flagAt, flagIs, heal, item, br, join, money, out, ptype, room, scout, stopHere, takeNode, trainer, wild, reveal, type Json } from '../dsl.ts';
 import { GROUP, L, P, after, anyFlag, ch, has, kind, kindFull, lose, ne, not, place, rep, step, teach, telling, variant } from './_ne.ts';
@@ -456,7 +456,207 @@ const NE60: Json[] = [
 ];
 
 // =====================================================================================================================
-// CATEGORY 14. ROAD PEOPLE AND TOWN STORIES (the trades, category 13, are in _ne-trades.ts)
+// CATEGORY 13. TRADES (every trade shows the Honest Trade Card; TRADES.md)
+// =====================================================================================================================
+
+/** An Honest Trade Card. `gives` is shown in full before the player agrees; `gift`: nothing is taken. */
+const honest = (id: string, o: Json): Json => ({ kind: 'honestTrade', id, ...o });
+
+const NE61: Json[] = [
+  ne(61, 'the-trade-across-a-fence', 'The Trade Across a Fence', GROUP.trade, {
+    place: { earliest: 'A2', home: 19, window: [17, 19], sits: 'optional', attaches: 'after', note: 'A border town: the seam between two stages, or Step 1 of the next. "Walk them round (a node)" takes the next node.' },
+    tags: ['Pokémon', 'Relationship'], cast: ['trainer.youngster_m'], pokemon: 'vulpix', tint: '#2a2418',
+  },
+  P(
+    'Two children are kneeling on opposite sides of a tall border fence, red in the face. They are trying to push a Poké Ball through a gap that is far too small for it.',
+    L('Teodoro: "My Sandshrew for her Vulpix. We agreed. The fence didn\'t."', 'Ingeborg: "Could you walk them round? It\'s four miles. My mum won\'t let me go that far."'),
+    'They look at you as if you are the answer to everything. Both of them are holding their Poké Balls very carefully, the way you do with something you have promised away.',
+  ), [
+    ch('Walk them round (a node).', out(P(
+      'You take a Poké Ball from each of them and set off along the fence. Four miles, there and back, and the fence never ends.',
+      'When you hand the Balls over, both of them cheer so loudly that a Pidgey falls off the fence. They swap addresses through the gap and promise to write every week.',
+      'Teodoro presses a Fire Stone into your hand. Ingeborg pushes an Ice Stone through the gap after it. "From both of us," they say together.',
+    ), takeNode(1), ...kind(1), flag('fence-trade'), item('fire-stone'), item('ice-stone'))),
+    ch('Trade with one of them myself.', out(P(
+      'You crouch down by the fence. Maybe you could make one of them a better offer, and save the long walk for someone.',
+      'They look at each other through the wire. "We still want ours done," says Ingeborg. "But you can ask."',
+    ), room('ne61-a-better-offer'))),
+    ch('Lift one over (a Flying-type).', out(P(
+      'Your Flying-type takes one Ball in its claws, then comes back for the other. Up, over, down, as gentle as anything.',
+      'Both children burst into applause. A few grown-ups watching from a garden join in. Your Pokémon lands looking enormously pleased with itself.',
+      'Teodoro gives you a Fire Stone. Ingeborg pushes an Ice Stone through the gap. "One from each of us. That was the best thing I\'ve ever seen."',
+    ), bondUp(1, 'picked'), flag('fence-trade'), item('fire-stone'), item('ice-stone')), { pick: { types: ['flying'] }, requires: [anyType('flying')] }),
+  ]),
+  step(61, 'ne61-a-better-offer', 'A Better Offer', GROUP.trade, { tint: '#2a2418' },
+    P(
+      'Teodoro holds up his Sandshrew. It is curled into a tight ball, peeking out at you. "It digs. Everywhere. Mum\'s garden is all holes."',
+      'Ingeborg holds up her Vulpix. It is warm even through the Poké Ball. "She\'s always warm. It\'s nice in winter."',
+      'Whichever you take, the other one still waits for their swap. They make you promise to tell the other one where it went.',
+    ), [
+      ch('Trade with Teodoro for his Sandshrew.', out('Teodoro looks at your Pokémon for a long time, then nods, very seriously, and hands his Sandshrew over the fence the long way: up, and over, and into your arms. It immediately tries to dig into your coat.', honest('ne61-sandshrew', { gives: { species: 'sandshrew', nature: 'jolly', quirk: 'burrower', why: 'It digs. Everywhere. It needs somewhere bigger than a garden.', ot: 'Teodoro', marks: ['traded across a border fence'] } }), flag('fence-traded'))),
+      ch('Trade with Ingeborg for her Vulpix.', out('Ingeborg hugs her Vulpix, once, hard, then lifts it over the fence to you. It is as warm as a cup of tea. It settles into your arms as if it has always been there.', honest('ne61-vulpix', { gives: { species: 'vulpix', nature: 'timid', quirk: 'warm', why: 'She\'s always warm. She should see the world, not just my garden.', ot: 'Ingeborg', marks: ['traded across a border fence'] } }), flag('fence-traded'))),
+      ch('Leave their trade be.', out('You tell them it was their trade first, and it should stay theirs. They both look very relieved.')),
+    ]),
+  after(61, 'ne61-a-letter-with-a-drawing', 'A Letter With a Drawing', GROUP.trade, [anyFlag('fence-trade', 'fence-traded'), age('ne61-the-trade-across-a-fence-done', 2)], { minStage: 4, tint: '#2a2418' },
+    P(
+      'A letter finds you at a rest stop, addressed in two different handwritings, one large and one very neat.',
+      'Teodoro\'s Sandshrew has evolved. Ingeborg\'s Vulpix keeps his whole house warm now. They still write every week, through the fence.',
+      'Folded inside is a drawing: two children, a very long fence, and a small figure that must be you, walking along it with a Poké Ball in each hand.',
+    ), [ch('Keep the drawing.', out('You fold it carefully and put it somewhere safe. It is not a good drawing. It is the best one you have.'))]),
+];
+
+/** Grandmother Eulalia's three: each knows a move the old way. */
+const EULALIA = [
+  { id: 'doduo', name: 'Doduo', label: 'Take Paddington (Doduo).', nature: 'jolly', moves: ['peck', 'fury-attack', 'growl', 'pursuit'], why: 'He named it after a station. It ran the platform every morning to meet his train.' },
+  { id: 'lickitung', name: 'Lickitung', label: 'Take Waverley (Lickitung).', nature: 'docile', moves: ['lick', 'stomp', 'supersonic', 'wrap'], why: 'Waverley. He liked trains. It liked him. It still waits by the door at six.' },
+  { id: 'clefairy', name: 'Clefairy', label: 'Take Euston (Clefairy).', nature: 'gentle', moves: ['pound', 'sing', 'double-slap', 'minimize'], why: 'Euston. It sang him to sleep for forty years. It needs someone new to sing to.' },
+] as const;
+const eulaliaPick = (e: (typeof EULALIA)[number]): Json => ch(e.label, out(P(
+  `Eulalia lifts the Ball off its doily and holds it a moment. "${e.why.split('. ')[0]}." She puts it in your hands. "Now. Where will you take it?"`,
+  'You tell her: {nextRegion}. She writes it down on the label, under the name, in her careful hand. "Good. He always wanted to go there."',
+), honest(`ne62-${e.id}`, { gift: true, gives: { species: e.id, nature: e.nature, moves: [...e.moves], why: e.why, ot: 'Eulalia', marks: ['named after a railway station', 'promised to {nextRegion}'] } }), flagAt('eulalia-promise')));
+
+const NE62: Json[] = [
+  ne(62, 'the-grandmothers-collection', 'The Grandmother\'s Collection', GROUP.trade, {
+    place: { earliest: 'A2', home: 8, window: [5, 11], sits: 'optional', attaches: 'town', note: 'The town; else Step 8. The gift asks only for a promise: the next region\'s name.' },
+    tags: ['Pokémon', 'Relationship'], tint: '#2c2420',
+  },
+  P(
+    'A small parlour, warm and dim. Thirty Poké Balls sit on thirty lace doilies on every surface: the mantel, the piano, the windowsill. Each has a paper label in careful, looping handwriting.',
+    L('Grandmother Eulalia: "My late husband\'s. All of them. I can\'t walk them all any more, dear. My knees."', 'Eulalia: "They should go to people who\'ll go places. One each. And you must tell me where you\'ll take it."'),
+  ), [
+    ch('Pick one.', out('She takes you round the room, one Ball at a time, telling you each name. She stops at three of them and waits.', room('ne62-three-on-the-mantel'))),
+    ch('Take none; walk them for her today (a node).', out(P(
+      'You offer to walk them. All of them. She looks at you as if you have offered her the moon.',
+      'Thirty Pokémon on thirty leads, in a small village, all at once. It is chaos. A Doduo goes through a hedge. A Lickitung licks the postman. Nobody, at any point, is in charge.',
+      'When you bring them home at dusk, every one of them is tired and happy, and so is she.',
+    ), takeNode(1), ...kind(2))),
+    ch('Ask about him.', out(P(
+      '"Ask about him?" She sits down, slowly, and smiles at the nearest Ball. "Nobody asks."',
+      '"He named every one of them after a railway station. Paddington. Waverley. Euston. He liked trains. He liked the idea that you could get on one and go anywhere at all."',
+      '"He never went anywhere. Not once. That\'s why they should." She looks at you. "Would you like to pick one, dear?"',
+    ), room('ne62-three-on-the-mantel'))),
+  ]),
+  step(62, 'ne62-three-on-the-mantel', 'Three on the Mantel', GROUP.trade, { tint: '#2c2420' },
+    P(
+      'Three Balls on the mantel, side by side, their labels turned to face you: Paddington, Waverley, Euston.',
+      '"These three liked him best," says Eulalia. "They know their moves the old way. He taught them himself, out of a book older than me."',
+    ), [...EULALIA.map(eulaliaPick), ch('I can\'t take one from you.', out('She pats your hand. "That\'s why you could have." She puts the kettle on instead, and you stay for tea.'))]),
+  after(62, 'ne62-a-card-for-eulalia', 'A Card for Eulalia', GROUP.trade, [flagAgo('eulalia-promise', 1)], { minStage: 1, tint: '#2c2420' },
+    P(
+      'You are here. {nextRegion} was a name on a paper label, in looping handwriting, and now it is the ground under your feet.',
+      'There is a little shop by the station selling postcards of the trains.',
+    ), [
+      ch('Send Eulalia a card.', out(P(
+        'You buy the one with the biggest train on it and write on the back: "We made it." You let your Pokémon put its footprint in the corner.',
+        'Weeks later a parcel catches up with you: a knitted scarf in railway colours, far too long, with a note. "He would have been so pleased. So am I."',
+      ), bondUp(2, { species: ['doduo', 'dodrio', 'lickitung', 'lickilicky', 'clefairy', 'clefable'] }), flag('eulalia-card'))),
+      ch('Keep the promise quietly.', out('You don\'t send anything. But you look at the trains for a long time, and your Pokémon looks with you.', bondUp(2, { species: ['doduo', 'dodrio', 'lickitung', 'lickilicky', 'clefairy', 'clefable'] }))),
+    ]),
+];
+
+const NE63: Json[] = [
+  ne(63, 'the-trade-that-goes-wrong-honestly', 'The Trade That Goes Wrong Honestly', GROUP.trade, {
+    place: { earliest: 'A3', home: 11, window: [8, 14], sits: 'optional', attaches: 'town', tags: ['city'], note: 'The town; else Step 11. Ivo Ternary is the honest trader from TRADES.md.' },
+    tags: ['Shop', 'Relationship'], pokemon: 'houndour', tint: '#24201c',
+  },
+  P(
+    'At the edge of the market a man in a wide-brimmed hat is trying to hand a Poké Ball back to a trader. The trader, very politely, will not take it.',
+    L('Florentyn: "It doesn\'t like me. Three days. It sits facing the wall. It won\'t even eat if I\'m in the room."', 'Ivo Ternary: "The Trade-Back is for seven days, sir. It\'s been three. Give it four more."'),
+    'Ivo glances at you, and then, quietly: "Or someone it does like could take it."',
+  ), [
+    ch('Offer a trade for it.', out(P(
+      'Ivo sets the Honest Card on his table: your Pokémon on one side, the Houndour on the other, and the fair value of each, plain for anyone to read.',
+      'Florentyn looks at it for a long time. "It isn\'t a bad Pokémon," he says. "I think it was just let down before." He hands it over, and lifts his hat to it, sadly.',
+    ), honest('ne63-houndour', { wants: { label: 'A Pokémon of similar value', minTier: 2 }, gives: { species: 'houndour', nature: 'sassy', quirk: 'slow-to-trust', why: 'It faces the wall. It was let down before, and it is waiting to see if you will too.', ot: 'Florentyn', marks: ['traded back once'] } }))),
+    ch('Help Florentyn with it (a node).', out(P(
+      'You spend the afternoon with them both, in a quiet yard behind the market. Houndour sits facing the wall, the whole time.',
+      'Then you notice: it flinches every time Florentyn turns his head. Not at him. At the hat. Its last owner, Ivo tells you, wore one just like it.',
+      'Florentyn takes the hat off. Houndour turns round, slowly, and looks at him properly for the first time. Then it walks over and puts its head on his knee.',
+    ), takeNode(1), ...kind(1), flag('florentyn-hat'))),
+    ch('Let Ivo handle it.', out('You leave them to it. Ivo keeps his word: on day seven, Houndour is traded back, and Ivo finds it someone who doesn\'t wear hats. You hear about it later. It is doing well.')),
+  ]),
+  after(63, 'ne63-the-houndour-in-the-hat', 'The Houndour in the Hat', GROUP.trade, [flagIs('florentyn-hat'), age('florentyn-hat', 1)], { minStage: 4, tint: '#24201c' },
+    P(
+      'On a busy street you see them again: Florentyn, bareheaded, walking with a spring in his step, and beside him a Houndour trotting proudly along.',
+      'The Houndour is wearing the hat. It is far too big for it. Nobody has the heart to tell it.',
+    ), [ch('Wave.', out('Florentyn waves back with his whole arm. The Houndour does not wave. But it does stop, and look at you, and wag once.', ...kind(1)))]),
+];
+
+const NE64: Json[] = [
+  ne(64, 'the-blind-trade-booth', 'The Blind Trade Booth', GROUP.trade, {
+    place: { earliest: 'A3', home: 13, window: [10, 16], sits: 'optional', attaches: 'town', note: 'The town, on a festival stage; else Step 13. On a festival stage it joins the draw (NE96).' },
+    tags: ['Shop', 'Mystery'], tint: '#2a1c2e',
+  },
+  P(
+    'A booth with a heavy velvet curtain and a hand-painted sign: BLIND SWAP. YOU DON\'T SEE. THEY DON\'T SEE. ODDS ON THE BOARD.',
+    L('Quintessa: "The board\'s the law, love. You put one in, you get one out, from the pool on the board."', 'Quintessa: "And before you say yes, you see what\'s coming. Nature, quirk, the lot. I\'m blind, not crooked."'),
+  ), [
+    ch('Put one in.', out(P(
+      'You pass a Poké Ball through the curtain. Somewhere behind it, a hand takes it, and another hand pushes a different Ball back out.',
+      'Quintessa lays the Honest Card on the counter first: what went in, what is coming out, its nature, its quirk, and the fair value of both. "Last chance, love."',
+    ), honest('ne64-blind-swap', { pool: 'city-market' }), flag('blind-swap'))),
+    ch('Read the board.', out(P(
+      'The board is chalked in a careful hand. Common, the most likely. Uncommon, less so. Rare, now and then. Very rare, almost never, but not never.',
+      'Every name in the pool is written there, with its chance next to it. Nothing is hidden. Nothing is rubbed out.',
+      'Quintessa watches you read all of it. "Most people don\'t," she says. "They should."',
+    ), room('ne64-the-booth-again'))),
+    ch('Ask who else is in the booth.', out(P(
+      '"Today? A farmer, a sailor," Quintessa says, and then, with a little smile, "and a young trainer who looked a lot like you. Same look in the eye."',
+      'Your rival. Somewhere behind that curtain is one of your rival\'s own Pokémon. If it comes out, it will know you.',
+    ), flag('rival-blind-swap'), room('ne64-the-booth-again'))),
+  ]),
+  step(64, 'ne64-the-booth-again', 'The Booth, Again', GROUP.trade, { tint: '#2a1c2e' },
+    'The curtain stirs. Quintessa taps the counter. "Well, love? In or out?"', [
+      ch('Put one in.', out('You pass a Poké Ball through the curtain. Quintessa lays the Honest Card on the counter before anything else. "Look at it properly. Then decide."', honest('ne64-blind-swap', { pool: 'city-market' }), flag('blind-swap'))),
+      ch('Walk on.', out('You thank her and walk on. Behind you, the curtain sways, and somebody else steps up to try their luck.')),
+    ]),
+  after(64, 'ne64-doing-well', 'Doing Well', GROUP.trade, [flagIs('blind-swap'), age('blind-swap', 2)], { minStage: 5, tint: '#2a1c2e' },
+    P(
+      'At a crossroads you pass a farmer with a cart, and riding on top of the hay, looking very at home, is the Pokémon you put through the curtain.',
+      'It sees you. It doesn\'t jump down. But it watches you all the way past, and it looks well. It looks happy.',
+    ), [ch('Let it be.', out('You raise a hand. The farmer, puzzled, raises one back. The Pokémon settles down in the hay again, exactly where it belongs now.'))]),
+];
+
+const NE65: Json[] = [
+  ne(65, 'the-last-trade-of-a-retiring-trader', 'The Last Trade of a Retiring Trader', GROUP.trade, {
+    place: { earliest: 'A8', home: 16, window: [13, 18], sits: 'optional', attaches: 'after', note: 'The pack says once per save; the same-run memory rule makes it once per run. The bell is told, not kept: there is no shop-bell key item yet.' },
+    tags: ['Pokémon', 'Story'], pokemon: 'farfetchd', rarity: 'rare', tint: '#2a2218',
+  },
+  P(
+    'A trader\'s cart stands at the roadside with everything marked down to almost nothing, and a hand-painted sign nailed to the side: FORTY YEARS. LAST DAY.',
+    L('Trader Balthasar: "I\'ve one left I never could trade. Forty years. Nobody wanted it."', 'Balthasar: "I\'m not selling it. I\'m placing it. There\'s a difference."'),
+    'On the cart\'s seat, holding the reins in its wings as if it is the one driving, sits a very old Farfetch\'d. It looks at you over its leek like a magistrate.',
+  ), [
+    ch('Take it.', out(P(
+      'Balthasar sets the Honest Card on the seat: nothing on your side at all. On his, the old Farfetch\'d, every year of it written down.',
+      '"It\'s slow," he says. "It\'s clever. It\'s been on every road in this region twice." The Farfetch\'d gets down off the cart, looks back once, and walks over to stand beside you.',
+      'Balthasar watches it go. He doesn\'t say anything else. He doesn\'t have to.',
+    ), honest('ne65-farfetchd', { gift: true, gives: { species: 'farfetchd', nature: 'brave', quirk: 'old-hand', why: 'It\'s slow. It\'s clever. Nobody wanted it, and it was the best of the lot.', ot: 'Balthasar', marks: ['forty years on the road'] } }), flag('balthasar-placed'))),
+    ch('Ask why nobody wanted it.', out(P(
+      'Balthasar looks at the Farfetch\'d. The Farfetch\'d looks at Balthasar.',
+      '"It bit a duke," he says. "In nineteen-something. Word gets round."',
+      'The Farfetch\'d does not look sorry in the least.',
+    ), room('ne65-the-cart-seat'))),
+    ch('Offer to take the cart, too.', out(P(
+      'He laughs. He laughs for a long time, leaning on the cart, wiping his eyes.',
+      'Then he reaches up and unhooks the little brass bell from the front of it, and puts it in your hand. "Forty years that rang every time I got a good deal. Let it ring for you now."',
+    ), flag('balthasar-bell'), room('ne65-the-cart-seat'))),
+  ]),
+  step(65, 'ne65-the-cart-seat', 'The Cart Seat', GROUP.trade, { tint: '#2a2218' },
+    'The old Farfetch\'d is still on the cart seat, still holding the reins. Balthasar waits.', [
+      ch('Take it.', out('Balthasar sets the Honest Card on the seat, nothing on your side of it. The Farfetch\'d climbs down, slow and careful, and comes to stand beside you as if it always meant to.', honest('ne65-farfetchd', { gift: true, gives: { species: 'farfetchd', nature: 'brave', quirk: 'old-hand', why: 'It\'s slow. It\'s clever. Nobody wanted it, and it was the best of the lot.', ot: 'Balthasar', marks: ['forty years on the road'] } }), flag('balthasar-placed'))),
+      ch('Leave it with him.', out('"No," says Balthasar, when you say it should stay with him. "But thank you." He climbs up beside it, and they drive off together, slowly, into the last day.')),
+    ]),
+  after(65, 'ne65-balthasar-at-the-inn', 'Balthasar at the Inn', GROUP.trade, [anyFlag('balthasar-placed', 'balthasar-bell'), age('ne65-the-last-trade-of-a-retiring-trader-done', 2)], { minStage: 10, tint: '#2a2218' },
+    P(
+      'In the corner of an inn, at a table by the fire, sits Balthasar. He has a cup of tea in front of him and nobody to trade with.',
+      'He is giving advice to a young trader at the next table, who did not ask for it, about the price of Pecha Berries in a dry year. He is enjoying himself enormously.',
+    ), [ch('Sit with him.', out('He sees you and lights up. You hear about the duke. You hear about all forty years. You leave much later than you meant to, and it is worth every minute.'))]),
+];
+
+// =====================================================================================================================
+// CATEGORY 14. ROAD PEOPLE AND TOWN STORIES
 // =====================================================================================================================
 
 const NE66: Json[] = [
@@ -805,4 +1005,4 @@ const NE75: Json[] = [
     ]),
 ];
 
-export const EVENTS: Json[] = [...NE51, ...NE52, ...NE53, ...NE54, ...NE55, ...NE56, ...NE57, ...NE58, ...NE59, ...NE60, ...NE66, ...NE67, ...NE68, ...NE69, ...NE70, ...NE71, ...NE72, ...NE73, ...NE74, ...NE75];
+export const EVENTS: Json[] = [...NE51, ...NE52, ...NE53, ...NE54, ...NE55, ...NE56, ...NE57, ...NE58, ...NE59, ...NE60, ...NE61, ...NE62, ...NE63, ...NE64, ...NE65, ...NE66, ...NE67, ...NE68, ...NE69, ...NE70, ...NE71, ...NE72, ...NE73, ...NE74, ...NE75];

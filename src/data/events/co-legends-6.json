@@ -1,0 +1,3359 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "co-l9-lake-1",
+   "name": "The Spear and the Pearl: Lake 1",
+   "group": "Story: Legendary",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "uxie",
+    "tint": "#e0d060",
+    "effect": "none"
+   },
+   "intro": "Three lakes light up in sequence, one after another, across the region.\n\nAt the first lake, Uxie, eyes closed, a subtitle: I will ask you a question. If you lie, you will forget your answer.\nUxie: What is the one thing your team cannot do?",
+   "choices": [
+    {
+     "label": "\"We can't beat Ground-types.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "water",
+         "absent": true
+        },
+        {
+         "kind": "partyType",
+         "type": "grass",
+         "absent": true
+        },
+        {
+         "kind": "partyType",
+         "type": "ice",
+         "absent": true
+        }
+       ],
+       "text": "Uxie: \"True.\" It closes its eyes again. The first lake goes still.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "lake-uxie",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "lake-done-1",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Uxie opens its eyes. You lied, and it knows. Your team forgets the weakness instead: something about a move goes vague.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lake-uxie-lie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lake-done-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"We can't beat Fire-types.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "water",
+         "absent": true
+        },
+        {
+         "kind": "partyType",
+         "type": "ground",
+         "absent": true
+        },
+        {
+         "kind": "partyType",
+         "type": "rock",
+         "absent": true
+        }
+       ],
+       "text": "Uxie: \"True.\" It closes its eyes again. The first lake goes still.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "lake-uxie",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "lake-done-1",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Uxie opens its eyes. You lied, and it knows. Your team forgets the weakness instead: something about a move goes vague.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lake-uxie-lie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lake-done-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"We can't beat Dragon-types.\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "partyType",
+         "type": "ice",
+         "absent": true
+        },
+        {
+         "kind": "partyType",
+         "type": "dragon",
+         "absent": true
+        },
+        {
+         "kind": "partyType",
+         "type": "fairy",
+         "absent": true
+        }
+       ],
+       "text": "Uxie: \"True.\" It closes its eyes again. The first lake goes still.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "lake-uxie",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "lake-done-1",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Uxie opens its eyes. You lied, and it knows. Your team forgets the weakness instead: something about a move goes vague.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lake-uxie-lie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lake-done-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "The lake stays lit behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l9-lake-2",
+   "name": "The Spear and the Pearl: Lake 2",
+   "group": "Story: Legendary",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lake-done-1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "lake-done-2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mesprit",
+    "tint": "#e080a0",
+    "effect": "none"
+   },
+   "intro": "The second lake. Mesprit floats over the water.\n\nMesprit: If one of them had to stay here with me, who would you leave?\nEvery Pokémon in your party turns to look at you.",
+   "choices": [
+    {
+     "label": "\"None of them.\"",
+     "success": {
+      "text": "Mesprit laughs, delighted, and lets you all go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lake-mesprit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lake-done-2",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"My starter.\"",
+     "success": {
+      "text": "Mesprit: \"Good. You know.\" Your starter looks at you for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lake-mesprit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lake-done-2",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "starter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The newest one.\"",
+     "success": {
+      "text": "Mesprit: \"Good. You know.\" The newest one looks at its feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lake-mesprit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lake-done-2",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "newest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The strongest one.\"",
+     "success": {
+      "text": "Mesprit: \"Good. You know.\" Your strongest looks away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lake-mesprit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lake-done-2",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l9-lake-3",
+   "name": "The Spear and the Pearl: Lake 3",
+   "group": "Story: Legendary",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lake-done-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "lake-done-3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "azelf",
+    "tint": "#6080e0",
+    "effect": "none"
+   },
+   "intro": "The third lake. Azelf, already in the air above you.\n\nAzelf: Lose to me. Then get up.",
+   "choices": [
+    {
+     "label": "Fight it.",
+     "success": {
+      "text": "It is far stronger than you. That is the point.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "azelf"
+       ],
+       "types": [],
+       "levelBonus": 8,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-l9-again"
+        }
+       ],
+       "pseudo": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-l9-again"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l9-again",
+   "name": "The Spear and the Pearl: Get Up",
+   "group": "Story: Legendary",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "azelf",
+    "tint": "#6080e0",
+    "effect": "none"
+   },
+   "intro": "You are on the ground. Azelf waits.",
+   "choices": [
+    {
+     "label": "\"Again.\"",
+     "success": {
+      "text": "Azelf: \"Good.\" It gives you the last link of the Red Chain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lake-azelf",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lake-done-3",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "red-chain",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-lake",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You limp away. The third lake goes dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lake-done-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l9-pillar",
+   "name": "The Spear and the Pearl: Spear Pillar",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lake-azelf",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "lake-mesprit",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "pillar-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "recognition-dialga",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-dialga",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Dialga knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Dialga.",
+       "success": {
+        "text": "Dialga lowers its head. Time goes very slow, and kind, and it comes with you.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "dialga"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "dialga-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition-palkia",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-palkia",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Palkia knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Palkia.",
+       "success": {
+        "text": "Palkia folds the space between you to nothing, and is beside you, and stays.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "palkia"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "palkia-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "dialga",
+    "tint": "#8080c0",
+    "effect": "sparkle"
+   },
+   "intro": "Spear Pillar. The Red Chain glows; two crests burn in the sky.",
+   "choices": [
+    {
+     "label": "Call the Keeper of Time.",
+     "success": {
+      "text": "Dialga comes, and the seconds bend around it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pillar-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "dialga"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "dialga-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Call the Keeper of Space.",
+     "success": {
+      "text": "Palkia comes, and the pillar seems very far away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pillar-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "palkia"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "palkia-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Call both.",
+     "success": {
+      "text": "They fight each other, and you are in between. Survive eight turns.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pillar-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "dialga",
+        "palkia"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "pillar-both",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-giratina",
+         "amount": 2
+        },
+        {
+         "kind": "moment",
+         "text": "Giratina's shadow crossed Spear Pillar, and both Keepers retreated.",
+         "importance": 85
+        }
+       ],
+       "pseudo": true,
+       "lose": [],
+       "rule": {
+        "surviveTurns": 8
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l10-stone",
+   "name": "Truth and Ideals",
+   "group": "Story: Legendary",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "partyType",
+     "type": "fire"
+    },
+    {
+     "kind": "partyType",
+     "type": "water"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "kyurem",
+    "tint": "#404040",
+    "effect": "none"
+   },
+   "intro": "A dark stone, in a field, speaks as you walk past with two things on your team that hate each other.\n\nThe stone: \"You carry two things that hate each other. How?\"",
+   "choices": [
+    {
+     "label": "\"They don't hate each other.\"",
+     "success": {
+      "text": "The stone is silent a long time. Then it gives you a road to a divided town.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tao-started",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "dark-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I make them get along.\"",
+     "success": {
+      "text": "The stone hums. It gives you a road to a divided town.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tao-started",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "dark-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't know.\"",
+     "success": {
+      "text": "The stone: \"Good. Find out.\" A road opens to a divided town.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tao-started",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "dark-stone",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l10-town",
+   "name": "Truth and Ideals: The Divided Town",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tao-started",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "tao-town",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#808080",
+    "effect": "none"
+   },
+   "intro": "Half white, half black; a line painted down the street.\n\nN, in the square: \"I ask everyone the same thing. Which side of the line do you live on?\"\nN: \"Nobody has said 'both' yet.\"",
+   "choices": [
+    {
+     "label": "\"White.\"",
+     "success": {
+      "text": "N nods, a little sadly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tao-town",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "light-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Black.\"",
+     "success": {
+      "text": "N nods, a little sadly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tao-town",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "light-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Both.\"",
+     "success": {
+      "text": "N looks up, and smiles, for the first time. \"Then I will come and watch.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tao-town",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tao-both",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "light-stone",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l10-tower",
+   "name": "Truth and Ideals: Dragonspiral Tower",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "tao-town",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "tao-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "n",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tao-both",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "N has followed you to the tower. He will watch."
+    },
+    {
+     "id": "recognition-reshiram",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-reshiram",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Reshiram knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Reshiram.",
+       "success": {
+        "text": "Reshiram comes down and does not fight. It already knows what you believe.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "reshiram"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "reshiram-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition-zekrom",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-zekrom",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zekrom knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Zekrom.",
+       "success": {
+        "text": "Zekrom comes down and does not fight. It already knows what you believe.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "zekrom"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "zekrom-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "reshiram",
+    "tint": "#a0a0a0",
+    "effect": "sparkle"
+   },
+   "intro": "Two stones in your bag, both warm.\n\nN: \"It will ask what you believe. Not what's true. What you believe.\"",
+   "choices": [
+    {
+     "label": "\"I believe what I can prove.\"",
+     "success": {
+      "text": "The light stone burns white. Reshiram descends.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tao-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "reshiram"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "reshiram-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "\"I believe what should be true.\"",
+     "success": {
+      "text": "The dark stone burns black. Zekrom descends.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tao-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "zekrom"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "zekrom-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "\"I believe my Pokémon.\"",
+     "success": {
+      "text": "Both stones crack. Both dragons appear for one turn, look at your Pokémon, and leave. Far away, something cold turns over in its sleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tao-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tao-both-dragons",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-kyurem",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l11-valley",
+   "name": "Life and Destruction",
+   "group": "Story: Legendary",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "pokemon": "yveltal",
+    "tint": "#605050",
+    "effect": "none"
+   },
+   "intro": "The forests are going grey from the edges in. At the bottom of a valley, a black cocoon throbs. On the far ridge, a dead tree has one green leaf.\n\nA Lysandre Labs scientist, setting up instruments: \"You're not supposed to be here. This is the most important energy source in the world.\"\nScientist: \"It's asleep. When it wakes up, everything near it dies. We'd like to be the ones who decide what 'near' means.\"",
+   "choices": [
+    {
+     "label": "Wake the tree.",
+     "success": {
+      "text": "You put your hand on the dead tree. It wakes. The forests heal from the ridge down. At the same moment, the cocoon hatches, furious.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "life-xerneas",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-l11-both"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stop the scientists.",
+     "success": {
+      "text": "The lab crew turns on you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Lysandre Labs Crew",
+       "size": 3,
+       "types": [
+        "fire",
+        "dark"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "life-unwatched",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-l11-night"
+        }
+       ],
+       "evil": "grunt"
+      }
+     }
+    },
+    {
+     "label": "Find out what the green lights are.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "zygarde-cells",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Zygarde's Cells assemble out of the grass. Zygarde decides, and the other two go back to sleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "life-zygarde",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-l11-zygarde"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l11-both",
+   "name": "Life and Destruction: Both Awake",
+   "group": "Story: Legendary",
+   "room": true,
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "recognition-xerneas",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-xerneas",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Xerneas knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Xerneas.",
+       "success": {
+        "text": "Xerneas comes down off the ridge and stands beside you. It offers itself.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "xerneas"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "xerneas-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition-yveltal",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-yveltal",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Yveltal knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Yveltal.",
+       "success": {
+        "text": "Yveltal lands. It does not strike. It offers itself.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "yveltal"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "yveltal-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "xerneas",
+    "tint": "#80a0c0",
+    "effect": "none"
+   },
+   "intro": "Xerneas on the ridge, Yveltal over the valley. Yveltal strikes first.",
+   "choices": [
+    {
+     "label": "Stand between them.",
+     "success": {
+      "text": "Life and destruction, both at once.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "xerneas",
+        "yveltal"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "life-ended",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l11-night",
+   "name": "Life and Destruction: Unwatched",
+   "group": "Story: Legendary",
+   "room": true,
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "recognition-yveltal",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-yveltal",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Yveltal knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Yveltal.",
+       "success": {
+        "text": "Yveltal lands. It does not strike. It offers itself.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "yveltal"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "yveltal-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "yveltal",
+    "tint": "#302020",
+    "effect": "none"
+   },
+   "intro": "With nobody watching, the cocoon hatches at night. Yveltal strikes first.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "The grey comes down the valley with it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "yveltal"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "life-ended",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l11-zygarde",
+   "name": "Life and Destruction: The Green Lights",
+   "group": "Story: Legendary",
+   "room": true,
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "recognition-zygarde",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-zygarde",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zygarde knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Zygarde.",
+       "success": {
+        "text": "Zygarde coils at your feet. It has decided. It offers itself.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "zygarde"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "zygarde-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zygarde",
+    "tint": "#40a040",
+    "effect": "none"
+   },
+   "intro": "Zygarde stands in the valley, made of a thousand green lights. It has decided.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "It wants to see whether you are part of the balance.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "zygarde"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "life-ended",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l12-lillie",
+   "name": "The Sun and Moon Altars",
+   "group": "Story: Legendary",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "cosmog",
+    "tint": "#f0f0ff",
+    "effect": "none"
+   },
+   "intro": "A girl in a white hat runs past with a bag that is glowing. Two people in white coats run after her.\n\nLillie, stopping, out of breath: \"Please. Please don't tell them which way I went.\"\nThe bag wriggles. A small star-shaped face pokes out.\nLillie: \"Nebby, get back in the bag!\"",
+   "choices": [
+    {
+     "label": "\"Go. I'll stall them.\"",
+     "success": {
+      "text": "Two Aether staff come round the corner.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Aether Staff",
+       "size": 2,
+       "types": [
+        "psychic",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "nebby-trust",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Who are they?\"",
+     "success": {
+      "text": "Lillie: \"My mother's people.\" She runs. You follow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give me the bag.\"",
+     "success": {
+      "text": "She hesitates. Nebby teleports into your arms anyway, and giggles.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "nebby-chose",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l12-attempt-1",
+   "name": "The Sun and Moon Altars: Aether, Again",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "nebby-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "nebby-attempts",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "cosmog",
+    "tint": "#e0e0f0",
+    "effect": "none"
+   },
+   "intro": "Two people in white coats, again. Lillie holds the bag tight.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "Aether staff.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Aether Staff",
+       "size": 2,
+       "types": [
+        "psychic",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "nebby-attempts",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Hide.",
+     "success": {
+      "text": "You pull Lillie into an alley. They run past.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-attempts",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let Nebby teleport.",
+     "success": {
+      "text": "Pew. You are all somewhere else, a node away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-attempts",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l12-attempt-2",
+   "name": "The Sun and Moon Altars: Aether, Again",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "nebby-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "nebby-attempts",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "cosmog",
+    "tint": "#e0e0f0",
+    "effect": "none"
+   },
+   "intro": "Two people in white coats, again. Lillie holds the bag tight.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "Aether staff.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Aether Staff",
+       "size": 2,
+       "types": [
+        "psychic",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "nebby-attempts",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Hide.",
+     "success": {
+      "text": "You pull Lillie into an alley. They run past.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-attempts",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let Nebby teleport.",
+     "success": {
+      "text": "Pew. You are all somewhere else, a node away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-attempts",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l12-attempt-3",
+   "name": "The Sun and Moon Altars: Aether, Again",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "nebby-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "nebby-attempts",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "cosmog",
+    "tint": "#e0e0f0",
+    "effect": "none"
+   },
+   "intro": "Two people in white coats, again. Lillie holds the bag tight.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "Aether staff.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Aether Staff",
+       "size": 2,
+       "types": [
+        "psychic",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "nebby-attempts",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Hide.",
+     "success": {
+      "text": "You pull Lillie into an alley. They run past.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-attempts",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let Nebby teleport.",
+     "success": {
+      "text": "Pew. You are all somewhere else, a node away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-attempts",
+        "amount": 1
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l12-altars",
+   "name": "The Sun and Moon Altars: The Altars",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "nebby-attempts",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "nebby-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "cosmoem",
+    "tint": "#f0e0a0",
+    "effect": "sparkle"
+   },
+   "intro": "The altars. Lillie plays the flute. Nebby glows, and closes up hard as a star (Cosmoem), and opens again, enormous.\n\nLillie: \"It grew up. It grew up and I wasn't ready.\"",
+   "choices": [
+    {
+     "label": "\"It's yours, Lillie.\"",
+     "success": {
+      "text": "Lillie holds it, crying, laughing. She gives you both flutes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-done",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "sun-flute",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "moon-flute",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-light",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "Nebby grew up at the altars, and went with Lillie.",
+        "importance": 85
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come with us.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "nebby-chose",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "period",
+         "in": [
+          "evening",
+          "night"
+         ]
+        }
+       ],
+       "text": "It chose you, back when it teleported into your arms. Lillie lets it. Lunala, wings full of night, comes with you.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "nebby-done",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "species": [
+          "lunala"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "item",
+         "id": "moon-flute",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-light",
+         "amount": 2
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "It chose you, back when it teleported into your arms. Lillie lets it. Solgaleo, blazing, comes with you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "nebby-done",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "solgaleo"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "item",
+        "id": "sun-flute",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-light",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l13-dim",
+   "name": "The Light That Would Not Return",
+   "group": "Story: Legendary",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "pokemon": "necrozma",
+    "tint": "#606070",
+    "effect": "none"
+   },
+   "intro": "The day is dimmer than yesterday. Every day, a little dimmer.\n\nAn astronomer: \"The sun hasn't changed. The light is being taken before it gets here.\"\nA beam falls from the clear sky and burns a line across the road.\nAstronomer: \"That was light. It's being thrown away. Something up there is in pain.\"",
+   "choices": [
+    {
+     "label": "Climb the fallen-light mountain.",
+     "success": {
+      "text": "You climb toward where the beams come from.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "necrozma-started",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-necrozma",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-l13-summit"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "The light keeps dimming.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l13-summit",
+   "name": "The Light That Would Not Return: The Summit",
+   "group": "Story: Legendary",
+   "room": true,
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "megalopolis",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "faller-rank",
+       "atLeast": 5,
+       "atMost": 99
+      }
+     ],
+     "notice": "The people of Ultra Megalopolis are watching from a rift above the summit."
+    },
+    {
+     "id": "recognition-necrozma",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-necrozma",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Necrozma knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Necrozma.",
+       "success": {
+        "text": "Necrozma folds its prisms in, and the light comes back all at once. It offers itself.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "necrozma"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "necrozma-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ],
+     "hide": [
+      0
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "necrozma",
+    "tint": "#303040",
+    "effect": "flicker"
+   },
+   "intro": "At the summit, Necrozma, black and splintered, swallowing the light.",
+   "choices": [
+    {
+     "label": "Fight it.",
+     "success": {
+      "text": "A very hard battle.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "necrozma"
+       ],
+       "types": [],
+       "levelBonus": 7,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "necrozma-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-l13-after"
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Give it light.",
+     "success": {
+      "text": "Six turns: you throw light at it, fire and flash, while it attacks. At the end it becomes Ultra Necrozma for one moment, and gives the light back.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "necrozma"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "necrozma-given",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "species": [
+          "necrozma"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "co-l13-after"
+        }
+       ],
+       "pseudo": true,
+       "lose": [],
+       "rule": {
+        "surviveTurns": 6
+       }
+      }
+     }
+    },
+    {
+     "label": "Let it take Solgaleo's light.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "solgaleo"
+      }
+     ],
+     "success": {
+      "text": "Solgaleo steps forward and lets Necrozma take its light. The region's light returns. Necrozma comes with you, carrying both.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "necrozma-fused",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "necrozma"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-l13-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it take Lunala's light.",
+     "requires": [
+      {
+       "kind": "partySpecies",
+       "species": "lunala"
+      }
+     ],
+     "success": {
+      "text": "Lunala steps forward and lets Necrozma take its light. The region's light returns. Necrozma comes with you, carrying both.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "necrozma-fused",
+        "amount": 1
+       },
+       {
+        "kind": "join",
+        "species": [
+         "necrozma"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-l13-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l13-after",
+   "name": "The Light That Would Not Return: Light",
+   "group": "Story: Legendary",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "necrozma",
+    "tint": "#f0f0d0",
+    "effect": "sparkle"
+   },
+   "intro": "The day is bright again. The astronomer is laughing on the road below.",
+   "choices": [
+    {
+     "label": "Walk down.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "faller-rank",
+         "atLeast": 5,
+         "atMost": 99
+        }
+       ],
+       "text": "At the foot of the mountain, the people of Ultra Megalopolis give you a small purple Pokémon in thanks: Poipole.",
+       "effects": [
+        {
+         "kind": "join",
+         "species": [
+          "poipole"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "research",
+         "amount": 20
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "The light is back.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l14-ruin",
+   "name": "The Sword and the Shield",
+   "group": "Story: Legendary",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "zacian",
+    "tint": "#806050",
+    "effect": "none"
+   },
+   "intro": "In a ruin, a rusted sword and a rusted shield lie side by side. When you pick one up, the other hums.\n\nSordward, bursting out from behind a pillar: \"Unhand the relics! They belong to our ancestors!\"\nShielbert: \"Probably.\"\nSordward: \"DEFINITELY.\"",
+   "choices": [
+    {
+     "label": "Carry the sword.",
+     "success": {
+      "text": "You take the sword. Sordward splutters.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-carried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "relic-sword",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "rusted-sword",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-hero",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry the shield.",
+     "success": {
+      "text": "You take the shield. Shielbert sighs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-carried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "relic-shield",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "rusted-shield",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-hero",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry both.",
+     "success": {
+      "text": "You take both. They are heavy. Both brothers splutter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-carried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "relic-sword",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "relic-shield",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "rusted-sword",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "rusted-shield",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-hero",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l14-hum-1",
+   "name": "The Sword and the Shield: The Darkest Day 1",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "relic-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "relic-hum",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#802020",
+    "effect": "none"
+   },
+   "intro": "The sky reddens at night. A Power Spot erupts by the road. The relic in your bag hums louder.",
+   "choices": [
+    {
+     "label": "Keep going.",
+     "success": {
+      "text": "It hums.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-hum",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l14-hum-2",
+   "name": "The Sword and the Shield: The Darkest Day 2",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "relic-carried",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "relic-hum",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#802020",
+    "effect": "none"
+   },
+   "intro": "Another red night. The relic hums so loud your Pokémon can hear it.",
+   "choices": [
+    {
+     "label": "Keep going.",
+     "success": {
+      "text": "It hums.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-hum",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l14-weald",
+   "name": "The Sword and the Shield: The Slumbering Weald",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "relic-hum",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "relic-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "recognition-zacian",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-zacian",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zacian knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Zacian.",
+       "success": {
+        "text": "Zacian sets its jaw on the sword and looks at you. It comes.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "zacian"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "zacian-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "recognition-zamazenta",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-zamazenta",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "blessing-influence",
+       "atLeast": 7,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zamazenta knows you. It does not want a battle.",
+     "addChoices": [
+      {
+       "label": "Hold out your hand to Zamazenta.",
+       "success": {
+        "text": "Zamazenta sets its jaw on the shield and looks at you. It comes.",
+        "effects": [
+         {
+          "kind": "join",
+          "species": [
+           "zamazenta"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1
+         },
+         {
+          "kind": "flag",
+          "key": "zamazenta-offered",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "zamazenta",
+    "tint": "#6070a0",
+    "effect": "fog"
+   },
+   "intro": "Mist. A statue of two heroes. The relics glow.\nTwo wolves walk out of the mist. They look at the relic in your hand.\n\nShielbert, quietly, for once: \"They came back.\"",
+   "choices": [
+    {
+     "label": "Hold up the sword.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "relic-sword",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "relic-shield",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Zacian steps forward.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "zacian"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "zacian-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Hold up the shield.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "relic-shield",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "relic-sword",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Zamazenta steps forward.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "zamazenta"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "zamazenta-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Hold up both.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "relic-sword",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "relic-shield",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Both step forward, and both stand with you, against the first form of the thing that made the darkest day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relic-done",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "eternatus"
+       ],
+       "types": [],
+       "levelBonus": 6,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "co-l14-choose"
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l14-choose",
+   "name": "The Sword and the Shield: One Wolf",
+   "group": "Story: Legendary",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "pokemon": "zacian",
+    "tint": "#8090c0",
+    "effect": "none"
+   },
+   "intro": "The darkest day is over. Both wolves look at you. One may come.",
+   "choices": [
+    {
+     "label": "Zacian.",
+     "success": {
+      "text": "Zacian comes. Zamazenta howls once and returns to sleep.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "zacian"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Zamazenta.",
+     "success": {
+      "text": "Zamazenta comes. Zacian howls once and returns to sleep.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "zamazenta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l15-shrine",
+   "name": "The Four Sealed Wards",
+   "group": "Story: Legendary",
+   "rarity": "rare",
+   "remembers": [
+    {
+     "id": "tablets",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "wards-tablets",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You read the old tablets. You know why they are angry: each was made from something used to condemn a person who was innocent.",
+     "addChoices": [
+      {
+       "label": "Apologise.",
+       "success": {
+        "text": "You kneel at the shrine and say it out loud, for everyone who never did. The stakes go back in by themselves. The curse lifts. No one has to fight.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "wards-sealed",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "wards-apologised",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "sign-ruin",
+          "amount": 2
+         },
+         {
+          "kind": "moment",
+          "text": "You apologised at the shrine of the Ruinous ones. The curse lifted.",
+          "importance": 90
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "ruin-blessing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "blessing-ruin",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your blessing's stake is already out. Its keeper asks you, quietly, not to put it back."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "pokemon": "ting-lu",
+    "tint": "#503050",
+    "effect": "none"
+   },
+   "intro": "Four purple stakes around a sealed shrine. Two are pulled out and lying in the grass.\n\nA shrine keeper: \"Someone is pulling them. Every one that comes out, the whole region gets a little weaker.\"\nShrine keeper: \"People say the Ruinous ones are evil. They're not. They're just angry for a reason no one remembers.\"",
+   "choices": [
+    {
+     "label": "Put the stakes back.",
+     "success": {
+      "text": "The freed ones' anger comes at you as you work.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "wo-chien",
+        "chien-pao",
+        "ting-lu",
+        "chi-yu"
+       ],
+       "types": [],
+       "levelBonus": 4,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "wards-sealed",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 25
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Find who's pulling them.",
+     "success": {
+      "text": "Two stakes out. The region feels it. You go looking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wards-seller",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Ruinous curse (2 stakes out)",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.8
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the rest.",
+     "success": {
+      "text": "You pull the last two. The ground shudders. All four are loose now, and the region is cursed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wards-broken",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Ruinous curse (4 stakes out)",
+        "effects": [
+         {
+          "kind": "healingMultiplier",
+          "value": 0.6
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l15-clue-1",
+   "name": "The Four Sealed Wards: Clue 1",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wards-seller",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wards-clues",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#806040",
+    "effect": "none"
+   },
+   "intro": "A gold coin in the grass by a pulled stake, stamped with a circle.",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "One more piece.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wards-clues",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l15-clue-2",
+   "name": "The Four Sealed Wards: Clue 2",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wards-seller",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wards-clues",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#806040",
+    "effect": "none"
+   },
+   "intro": "A trader in a gilt collar, asking a farmer whether his neighbour has \"enemies\".",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "One more piece.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wards-clues",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l15-clue-3",
+   "name": "The Four Sealed Wards: Clue 3",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wards-seller",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wards-clues",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#806040",
+    "effect": "none"
+   },
+   "intro": "An order book left on a bench: \"One stake, region-wide. Delivery by night.\"",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "It leads to a man in a gilt collar, selling the curse as a weapon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wards-clues",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "co-l15-seller"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l15-seller",
+   "name": "The Four Sealed Wards: The Seller",
+   "group": "Story: Legendary",
+   "room": true,
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#806030",
+    "effect": "none"
+   },
+   "intro": "Gilt Circle man: \"A curse is just a product. Somebody wants their rival weaker, I sell it to them. Region-wide, even. Very popular.\"",
+   "choices": [
+    {
+     "label": "Stop him.",
+     "success": {
+      "text": "His guards step in.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Gilt Circle Guards",
+       "size": 3,
+       "types": [
+        "dark",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "wards-sealed",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "evil-op-shut",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 25
+        }
+       ],
+       "evil": "grunt"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l15-wo-chien",
+   "name": "The Four Sealed Wards: Wo-Chien",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wards-broken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "wo-chien-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "wo-chien",
+    "tint": "#503060",
+    "effect": "none"
+   },
+   "intro": "Wo-Chien, free of its stake, in the open. It is angry for a reason nobody remembers.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "Its anger fills the field.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wo-chien-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "wo-chien"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "wo-chien-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l15-chien-pao",
+   "name": "The Four Sealed Wards: Chien-Pao",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wards-broken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "chien-pao-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "chien-pao",
+    "tint": "#503060",
+    "effect": "none"
+   },
+   "intro": "Chien-Pao, free of its stake, in the open. It is angry for a reason nobody remembers.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "Its anger fills the field.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chien-pao-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "chien-pao"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "chien-pao-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l15-ting-lu",
+   "name": "The Four Sealed Wards: Ting-Lu",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wards-broken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ting-lu-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "ting-lu",
+    "tint": "#503060",
+    "effect": "none"
+   },
+   "intro": "Ting-Lu, free of its stake, in the open. It is angry for a reason nobody remembers.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "Its anger fills the field.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ting-lu-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ting-lu"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ting-lu-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l15-chi-yu",
+   "name": "The Four Sealed Wards: Chi-Yu",
+   "group": "Story: Legendary",
+   "callback": true,
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "wards-broken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "chi-yu-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "chi-yu",
+    "tint": "#503060",
+    "effect": "none"
+   },
+   "intro": "Chi-Yu, free of its stake, in the open. It is angry for a reason nobody remembers.",
+   "choices": [
+    {
+     "label": "Face it.",
+     "success": {
+      "text": "Its anger fills the field.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chi-yu-met",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "chi-yu"
+       ],
+       "types": [],
+       "levelBonus": 5,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "chi-yu-beaten",
+         "amount": 1
+        }
+       ],
+       "pseudo": true,
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-l15-tablets",
+   "name": "The Four Sealed Wards: The Old Tablets",
+   "group": "Story: Legendary",
+   "rarity": "rare",
+   "requires": [],
+   "scene": {
+    "cast": [],
+    "tint": "#605040",
+    "effect": "none"
+   },
+   "intro": "Behind the shrine, under ivy, a row of old tablets nobody reads any more.",
+   "choices": [
+    {
+     "label": "Read them.",
+     "success": {
+      "text": "Four names, four accusations, four people who were innocent. The things used to condemn them were made into the stakes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wards-tablets",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

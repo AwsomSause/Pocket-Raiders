@@ -40,10 +40,14 @@ describe('Pokémon moments data', () => {
   });
 
   it('matches by species, evolution line, group and type', () => {
-    const ids = (s: string, t: Parameters<typeof momentsFor>[2]) => momentsFor(content, { speciesId: s }, t).map((m) => m.id);
+    // Individual moments (PI) match any Pokémon and pick theirs by requirement, so they are left out here.
+    const ids = (s: string, t: Parameters<typeof momentsFor>[2]) => momentsFor(content, { speciesId: s }, t).filter((m) => !m.scope.all).map((m) => m.id);
+    expect(momentsFor(content, { speciesId: 'rotom' }, 'runEnd').map((m) => m.id)[0]).toBe('pi1-the-first-one');
     expect(ids('rotom', 'runEnd')).toEqual(['failure-not-tolerated']);
     expect(ids('golurk', 'runEnd')).toEqual(['failure-not-tolerated']);
-    expect(ids('pikachu', 'runEnd')).toEqual([]);
+    // The pack gave Pikachu run-end moments of its own: a partner starter (PA10, only if chosen) and a mascot (PA16).
+    expect(ids('pikachu', 'runEnd')).toEqual(['pa10-the-starters', 'pa16-the-mascots']);
+    expect(ids('caterpie', 'runEnd')).toEqual([]);
     expect(ids('golem', 'lethal')).toContain('stone-sturdy');
     expect(ids('charizard', 'lethal')).toEqual(expect.arrayContaining(['starter-fire', 'fire-last-blaze']));
   });
@@ -224,19 +228,11 @@ describe('Battle-start and switch-in moments (batch 2)', () => {
     throw new Error('no seed played Static Cling');
   });
 
-  it("Eevee's Bond needs two Eeveelutions in the party", () => {
-    const alone = lead('eevee', 'bond-alone');
-    for (let i = 0; i < 80; i++) {
-      const s = lead('eevee', `bond-${i}`);
-      expect(startEvents(turn(s.ctx)).some((e) => e.type === 'pmoment' && e.id === 'eevee-bond')).toBe(false);
-    }
-    void alone;
-    let played = 0;
-    for (let i = 0; i < 200; i++) {
-      const s = lead('eevee', `bond2-${i}`, {}, [createPokemon(content, 'vaporeon', 40, 'vap-p')]);
-      if (startEvents(turn(s.ctx)).some((e) => e.type === 'pmoment' && e.id === 'eevee-bond')) { played++; expect(s.battle.playerStages.spe).toBe(1); }
-    }
-    expect(played).toBeGreaterThan(0);
+  it("Sibling Rivalry (PG1, which replaced Eevee's Bond) needs two Eeveelutions in the party", () => {
+    expect(startEvents(turn(lead('eevee', 'bond-alone').ctx)).some((e) => e.type === 'pmoment' && e.id === 'pg1-sibling-rivalry')).toBe(false);
+    expect(startEvents(turn(lead('jolteon', 'bond-one').ctx)).some((e) => e.type === 'pmoment' && e.id === 'pg1-sibling-rivalry')).toBe(false);
+    const s = lead('jolteon', 'bond-two', {}, [createPokemon(content, 'vaporeon', 40, 'vap-p')]);
+    expect(startEvents(turn(s.ctx)).some((e) => e.type === 'pmoment' && e.id === 'pg1-sibling-rivalry')).toBe(true);
   });
 
   it('a switch-in moment plays for the Pokémon that comes out, and never for a fainted one', () => {
@@ -597,15 +593,10 @@ describe('Batch 6: rest and catch moments (run layer)', () => {
     expect(off).toEqual([]);
   });
 
-  it('Snorlax at a rest: +8 friendship and a berry, claimed once per run', () => {
-    const run = withParty('rest-snorlax', 'snorlax');
-    const before = run.party[0]!.friendship;
-    const lines = restMoments(content, run);
-    expect(lines.length).toBe(1);
-    expect(run.party[0]!.friendship).toBe(before + 8);
-    expect((run.inventory['oran-berry'] ?? 0) + (run.inventory['sitrus-berry'] ?? 0)).toBe(1);
-    expect(run.story.flags['pm:snorlax-rest']).toBe(1);
-    expect(restMoments(content, run)).toEqual([]);
+  it('Snorlax at a rest: Just Five More Minutes (PS8) replaced Lazy Afternoon', () => {
+    expect(pokemonMoment('snorlax-rest')).toBeUndefined();
+    expect(pokemonMoment('ps8-just-five-more-minutes')?.effect?.openEvent).toBe('ps8-just-five-more-minutes');
+    expect(content.events.get('ps8-just-five-more-minutes')?.room).toBe(true);
   });
 
   it('Ghost Story names the leader\'s weak types; Dream Walk gives experience; Water Song warms the team', () => {

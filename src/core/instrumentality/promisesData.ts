@@ -28,7 +28,7 @@ export interface MythicalDef {
 }
 
 const T = (a: string, b: string, c: string): [string, string, string] => [a, b, c];
-const LIMITED = 'The visit trigger and the Wonder are not built yet; the Promise rule is checked by tests only, so it never visits.';
+const LIMITED = 'The Wonder is not built yet and the Promise rule is checked by tests only. It never visits at random; it comes only through its Visit scene (Catalog Overhaul legends questlines).';
 const CROSS = 'Needs cross-run memory (cut for Beta 0.7), so it cannot come in a single run.';
 
 export const MYTHICALS: readonly MythicalDef[] = [

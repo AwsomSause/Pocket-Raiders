@@ -1,0 +1,2136 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "market-week",
+   "name": "Market Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "market-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Everything must go!\"** Stalls line both sides of the road, and every merchant in the region has come to shout about it.",
+   "choices": [
+    {
+     "label": "Shop.",
+     "success": {
+      "text": "You walk the whole row with your team at your heels, haggling for fun. Everything is 10% off all week, and now you know where every stall is.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "black-friday-sale",
+   "name": "Black Friday Sale",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "black-friday-sale",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Doors open at dawn. Limited stock!\"** A queue is already forming outside the department store, and it is still dark.",
+   "choices": [
+    {
+     "label": "Queue early.",
+     "success": {
+      "text": "You queue in the cold with your team huddled around you, and when the doors open you are third in. One thing in every shop is 30% off for you this region: the best deal on each shelf.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Black Friday: one item in every shop −30%",
+        "effects": [
+         {
+          "kind": "shopDeal",
+          "value": 0.7
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You sleep in, and walk past the crush at noon. The early deals are gone, but the signs have changed: 20% off everything, all region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Black Friday: everything −20%",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.8
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "grand-opening-sale",
+   "name": "Grand Opening Sale",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "grand-opening-sale",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Grand Opening! First customers get first pick!\"** Ribbon on the door, balloons on the sign, a nervous new owner on the step.",
+   "choices": [
+    {
+     "label": "Visit.",
+     "success": {
+      "text": "You are the first customer through the door. The owner nearly cries. Every shop this region puts one extra item on its shelves early, just for you.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Grand Opening: one new item in every shop",
+        "effects": [
+         {
+          "kind": "shopEarlyStock",
+          "count": 1
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-bonanza",
+   "name": "Berry Bonanza",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "berry-bonanza",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Berries by the barrel!\"** Carts piled so high with Berries that they roll off into the road, and your team chases every one.",
+   "choices": [
+    {
+     "label": "Stock up.",
+     "success": {
+      "text": "You fill your bag, and your team fills their cheeks. Berries are half price in every shop this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Berry Bonanza: Berries half price",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "items": [
+           "oran-berry",
+           "sitrus-berry",
+           "leppa-berry",
+           "cheri-berry",
+           "pecha-berry",
+           "rawst-berry",
+           "persim-berry"
+          ],
+          "value": 0.5
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "held-item-hurricane",
+   "name": "Held-Item Hurricane",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "held-item-hurricane",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Hold onto your hats!\"** A freak wind is blowing through the markets, and it is raining held items. Printed on the warning sign: 3 in 4 uncommon, 1 in 4 rare.",
+   "choices": [
+    {
+     "label": "Catch one.",
+     "success": {
+      "text": "You run into the wind with your arms out and catch something as it tumbles past. The wind is not done: it will blow through again further down the road.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "quick-claw",
+         "wide-lens",
+         "scope-lens",
+         "leftovers",
+         "life-orb"
+        ]
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "wk-hurricane-again",
+        "nodes": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "coupon-week",
+   "name": "Coupon Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "coupon-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Every purchase comes with a coupon for the next!\"** The shopkeepers are handing out slips of paper with everything, and your pockets fill up fast.",
+   "choices": [
+    {
+     "label": "Collect.",
+     "success": {
+      "text": "You collect the coupons in a little book, and your team helps by sitting on the pile so it does not blow away. Every purchase this region is 10% cheaper, thanks to the last one.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Coupon Week: 10% off with your coupons",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.9
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "bankruptcy-sale",
+   "name": "Bankruptcy Sale",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "bankruptcy-sale",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"EVERYTHING MUST GO. Closing for good.\"** An old shopkeeper stands in an empty doorway, trying to smile, and failing.",
+   "choices": [
+    {
+     "label": "Buy cheaply.",
+     "success": {
+      "text": "You buy at half price. He thanks you, quietly, and starts taking the sign down. Everything on this stretch is half price until the stage ends.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Bankruptcy sale: half price this stage",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.5
+         }
+        ],
+        "until": "boss"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay full price.",
+     "success": {
+      "text": "You pay the full price on the tag. He stares at the money, then at you. \"That... that is the rent. That is next month.\" He puts the sign back up. \"I'll still be here. You come back.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kindness",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bankrupt-shop-kept",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "prize-wheel-weekend",
+   "name": "Prize Wheel Weekend",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "prize-wheel-weekend",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Spin to win! Every winner spins!\"** A huge painted wheel, and the odds printed in big honest letters on the side: 1 in 4 pays a bonus prize.",
+   "choices": [
+    {
+     "label": "Spin.",
+     "success": {
+      "text": "The wheel clacks round and round. All weekend, after every battle you win, you get a spin: 1 in 4 pays a bonus prize, just as it says on the side.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Prize Wheel: a spin after every win (1 in 4 bonus prize)",
+        "effects": [
+         {
+          "kind": "bonusRewardChance",
+          "chance": 0.25
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lottery-draw",
+   "name": "Lottery Draw",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "lottery-draw",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Tonight's draw: a Rare item for one lucky ticket!\"** The odds are written under the price: 1 in 20.",
+   "choices": [
+    {
+     "label": "Buy a ticket (₽100).",
+     "chance": 0.05,
+     "success": {
+      "text": "Your number is called. You stand there, holding the ticket, while the crowd cheers and your team jumps on you. One in twenty, and it was yours.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "life-orb",
+         "choice-band",
+         "expert-belt",
+         "focus-sash"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "The numbers are called. None of them are yours. One in twenty, the sign said; your team pats you on the leg anyway.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "black-market-week",
+   "name": "Black Market Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "black-market-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Psst. Strong stuff. No questions.\"** A coat full of items that should not be for sale, and a dealer who keeps looking over his shoulder.",
+   "choices": [
+    {
+     "label": "Browse.",
+     "success": {
+      "text": "He shows you the good stuff and, to his credit, the warnings: the orb hits hard and hurts the holder; the band is strong but locks you into one move. You buy one.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "life-orb",
+         "choice-band"
+        ]
+       },
+       {
+        "kind": "money",
+        "amount": -300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report them.",
+     "success": {
+      "text": "You walk to the nearest Officer and tell them everything. By evening the coat is gone and the town knows your name, for the right reasons.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "inflation-day",
+   "name": "Inflation Day",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "inflation-day",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Prices up 20%, effective immediately.\"** The shopkeepers apologise as they change the tags. The goods are better, at least.",
+   "choices": [
+    {
+     "label": "Shop anyway.",
+     "success": {
+      "text": "You pay more, and grumble about it with your team. But the goods are a cut above: your next reward comes one tier better.",
+      "effects": [
+       {
+        "kind": "betterDraft",
+        "extra": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "loyalty-points-week",
+   "name": "Pokémart Loyalty Points",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "loyalty-points-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Sign up for points! Spend ₽1,000 and a Rare gift is yours.\"** A clerk holds out a shiny little card.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "You sign up, and the clerk stamps the first box with a flourish. \"Spend enough, and come back for the gift!\" Your team guards the card like treasure.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "wk-loyalty-gift",
+        "nodes": 6
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "trade-in-week",
+   "name": "Trade-In Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "trade-in-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Trade in, trade up!\"** Every town has a trading post open, and the traders are honest this week.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "You find the trading post, and the trader shows you an Honest Trade Card: what you give, what you get, no tricks. A trading post opens on every stage this region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "honest-trade-week",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Trade-In Week: a trading post on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "trading-post"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tm-tuesday",
+   "name": "TM Tuesday",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "tm-tuesday",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"It's Tuesday! The TM vendors are in town!\"** Discs glitter on every stall.",
+   "choices": [
+    {
+     "label": "Browse TMs.",
+     "success": {
+      "text": "You flick through the discs while your team argues over which move they want. A TM Vendor sets up on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "TM Tuesday: a TM Vendor on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "tm-vendor"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "campfire-tales-week",
+   "name": "Campfire Tales",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "campfire-tales-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Gather round. Everyone has a story.\"** A fire in the clearing and a circle of trainers, faces orange in the light.",
+   "choices": [
+    {
+     "label": "Tell a story.",
+     "pick": {},
+     "success": {
+      "text": "You tell the story of this one: where you found it, the day it nearly gave up, the day it did not. It sits beside you and listens to the whole thing, and leans on you at the end. Campfires burn on every stage this region.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "moment",
+        "text": "Told the story of a teammate at the campfire.",
+        "importance": 35
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Campfire Tales: a campfire on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "tale-storyteller"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You listen with your team in your lap, and the stories go on until the fire is embers. Campfires burn on every stage this region.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Campfire Tales: a campfire on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "tale-storyteller"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "hidden-path-week",
+   "name": "Hidden Path Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "hidden-path-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The secret routes are open.\"** Signposts point at walls, and the walls are not walls.",
+   "choices": [
+    {
+     "label": "Look for them.",
+     "success": {
+      "text": "You look, and your team sniffs, and one by one the hidden paths show themselves. A secret path waits on every stage this region.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Hidden Path Week: a secret path on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "secret-route-path"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mystery-dungeon-week",
+   "name": "Mystery Dungeon Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "mystery-dungeon-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The dungeons have opened.\"** A stair in the ground that was not there yesterday, going down further than you can see.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "You go down the first steps with your team pressed close, and the dungeon breathes. A dungeon entrance opens on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Mystery Dungeon Week: an entrance on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "md-entrance"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gen-1-throwback",
+   "name": "Gen 1 Throwback",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "gen-1-throwback",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Just like the old days!\"** The grass is full of Pokémon from Kanto, the way it was when everything began.",
+   "choices": [
+    {
+     "label": "Go find them.",
+     "success": {
+      "text": "You wade into the grass and something old and familiar jumps out at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "pidgey",
+        "rattata",
+        "caterpie",
+        "weedle",
+        "spearow",
+        "oddish",
+        "bellsprout",
+        "abra"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gen-3-throwback",
+   "name": "Gen 3 Throwback",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "gen-3-throwback",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Hoenn, all week!\"** Warm wind, tall grass, and the Pokémon of Hoenn everywhere you look.",
+   "choices": [
+    {
+     "label": "Go find them.",
+     "success": {
+      "text": "You wade into the grass and something from Hoenn jumps out at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "zigzagoon",
+        "wurmple",
+        "poochyena",
+        "taillow",
+        "seedot",
+        "lotad",
+        "ralts",
+        "shroomish"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gen-5-throwback",
+   "name": "Gen 5 Throwback",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "gen-5-throwback",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Unova, all week!\"** City lights on the horizon and the Pokémon of Unova in the grass.",
+   "choices": [
+    {
+     "label": "Go find them.",
+     "success": {
+      "text": "You wade into the grass and something from Unova jumps out at you.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "patrat",
+        "lillipup",
+        "purrloin",
+        "pidove",
+        "sewaddle",
+        "venipede",
+        "roggenrola",
+        "woobat"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "treasure-map-week",
+   "name": "Treasure Map Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "treasure-map-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Map scraps! Every one a piece of something bigger!\"** A sailor with a sack of torn parchment, ₽150 a scrap.",
+   "choices": [
+    {
+     "label": "Buy a map scrap.",
+     "success": {
+      "text": "You pay, and unfold it on your knee. A coastline, a cross, and the start of a trail. Your team crowds round to look. The trail starts somewhere on every stage this region.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -150
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Treasure Map Week: the trail starts on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "th-map-1"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "caravan-week",
+   "name": "Caravan Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "caravan-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The caravans are on the road!\"** A line of carts with painted wheels and bells, heading the way you are going.",
+   "choices": [
+    {
+     "label": "Travel with it.",
+     "success": {
+      "text": "You walk beside the carts, and the merchants share their lunch with your team. A merchant cart stops on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Caravan Week: a merchant cart on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "convoy-merchant-cart"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "weather-map-week",
+   "name": "Weather Map Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "weather-map-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The forecast, for every stage!\"** A big board in the square, painted with clouds and suns.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You read it twice. Now you know what the sky will do ahead of you, and a weather vane stands on every stage this region.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Weather Map Week: a weather vane on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "weather-vane"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cave-expedition-week",
+   "name": "Cave Expedition Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "cave-expedition-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Lamps, ropes, and nerve.\"** Expedition tents at every cave mouth.",
+   "choices": [
+    {
+     "label": "Go under.",
+     "success": {
+      "text": "You go under with a borrowed lamp and your team close. The caves go deeper this week, and a crystal cave waits on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Cave Expedition: a crystal cave on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "crystal-cave"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "island-hopping-week",
+   "name": "Island Hopping Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "island-hopping-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"All aboard! Every island, every day!\"** Ferries in every harbour, horns going.",
+   "choices": [
+    {
+     "label": "Take a ferry.",
+     "success": {
+      "text": "You stand at the rail with your team, the spray in your faces. A ferry waits on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Island Hopping: a ferry on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "ss-ticket-ferry"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "volcano-eruption",
+   "name": "Volcano Eruption",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "volcano-eruption",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The mountain is waking!\"** Smoke on the horizon, ash on the wind, families on the road with everything they own.",
+   "choices": [
+    {
+     "label": "Help evacuate.",
+     "success": {
+      "text": "You carry, and your team carries, until the last family is out of the valley. A grandmother kisses your Pokémon on the head, one by one. The whole region hears about it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go see.",
+     "success": {
+      "text": "You climb toward the glow. Fire-types are everywhere, and the rim of the volcano waits on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Eruption: Fire Pokémon about, the Volcano Rim on every stage",
+        "effects": [
+         {
+          "kind": "typeEncounterWeight",
+          "type": "fire",
+          "value": 2
+         },
+         {
+          "kind": "placeEvent",
+          "eventId": "volcano-rim"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "earthquake-tremors",
+   "name": "Earthquake Tremors",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "earthquake-tremors",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Hold on to something.\"** The ground shudders, and the map in your hand is wrong by the time you look at it.",
+   "choices": [
+    {
+     "label": "Steady on.",
+     "success": {
+      "text": "You steady yourself, and your team steadies you. The stops ahead keep shifting this week, but you have seen how they lie now.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "flood-event",
+   "name": "Flood Event",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "flood-event",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The river's over the bank!\"** Water in the streets, and townsfolk filling sandbags as fast as they can.",
+   "choices": [
+    {
+     "label": "Help sandbag.",
+     "success": {
+      "text": "You fill bags until your arms give out, and your team drags them into the wall. The water stops at the last row. Nobody forgets who helped.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wade on.",
+     "success": {
+      "text": "You wade on through the flood. The water is high all week, and the spring flood waits on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Flood: the Spring Flood on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "w4-spring-flood"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "blizzard-week",
+   "name": "Blizzard Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "blizzard-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Nobody crosses the pass without a guide.\"** Snow sideways, and the mountain gone white.",
+   "choices": [
+    {
+     "label": "Wait for a guide.",
+     "success": {
+      "text": "You wait by the fire for the guide, and your team curls up around you. When she comes, she takes you through safely, and everyone arrives warm.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Blizzard: the Blizzard Pass on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "blizzard-pass"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push through.",
+     "success": {
+      "text": "You push into the snow, shielding your team as best you can. It is hard going, and the pass will be waiting on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Blizzard: the Blizzard Pass on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "blizzard-pass"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "heat-wave",
+   "name": "Heat Wave",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "heat-wave",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Too hot to move.\"** The road shimmers, and every Pokémon is panting in the shade.",
+   "choices": [
+    {
+     "label": "Travel at night.",
+     "success": {
+      "text": "You rest through the heat and walk under the stars. The night is full of things you never see by day.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Push on.",
+     "success": {
+      "text": "You push on through the heat with your team in your shadow. The heatwave scorches every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Heat Wave: the heat on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "heatwave"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aurora-night",
+   "name": "Aurora Night",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "aurora-night",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The sky is on fire, and it's green.\"** The aurora is out, and everyone is heading north to see it.",
+   "choices": [
+    {
+     "label": "Head north.",
+     "success": {
+      "text": "You lie in the snow with your team and watch the sky ripple. Nobody says anything for a long time. An aurora rest waits on every stage this region.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Aurora Night: an aurora rest on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "wx-aurora-night"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "safari-zone-week",
+   "name": "Safari Zone Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "safari-zone-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Free entry, all week!\"** The Safari Zone gate is wide open, and the warden is waving people through.",
+   "choices": [
+    {
+     "label": "Get a pass.",
+     "success": {
+      "text": "The warden hands you a pass with a wink. \"No charge this week.\" Safari Land is free to enter, and its gate stands on every stage this region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "safari-pass",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Safari Zone Week: the Safari Zone on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "safari-zone"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "bug-contest-day",
+   "name": "Bug Contest Day",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "bug-contest-day",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The Bug-Catching Contest starts at noon!\"** Nets and jars and very serious children.",
+   "choices": [
+    {
+     "label": "Enter.",
+     "success": {
+      "text": "You sign the form and get your net. The judge points at the park. \"Biggest bug wins. Go!\" The contest park is open on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Bug Contest Day: the contest on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "bug-contest"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pokeathlon-day",
+   "name": "Pokéathlon Day",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "pokeathlon-day",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Run, jump, throw!\"** The Pokéathlon dome is open, and the crowd is already roaring.",
+   "choices": [
+    {
+     "label": "Compete.",
+     "success": {
+      "text": "You sign your team up. They bounce on their toes at the starting line. The Pokéathlon dome is open on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Pokéathlon Day: the dome on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "pokeathlon"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "underground-week",
+   "name": "Underground Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "underground-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Dig deep!\"** Tunnels everywhere, and diggers coming up grinning with stones in their hands.",
+   "choices": [
+    {
+     "label": "Dig.",
+     "success": {
+      "text": "You borrow a pick and dig with your team until you hit something hard. Dig sites open on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Underground Week: a fossil dig on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "fossil-dig"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ruins-expedition",
+   "name": "Ruins Expedition",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "ruins-expedition",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The expedition leaves at dawn.\"** A professor with a lantern and a list of ruins nobody has mapped.",
+   "choices": [
+    {
+     "label": "Join.",
+     "success": {
+      "text": "You join, and the professor gives your team a job each. The rune tiles wait on every stage this region, and somewhere past them, an island nobody can find.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lost-island-lead",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Ruins Expedition: rune tiles on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "rf-rune-tiles"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sunken-ship-dive",
+   "name": "Sunken Ship Dive",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "sunken-ship-dive",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The tide is out further than anyone has ever seen.\"** A wreck lies in the shallows, and below it, rooftops.",
+   "choices": [
+    {
+     "label": "Dive.",
+     "success": {
+      "text": "You dive with your Water-types, down past the wreck to streets under the sea. There is a whole city down here. The wreck waits on every stage this region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sunken-city-open",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Sunken Ship Dive: the ghost ship on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "ghost-ship"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sky-tower-climb",
+   "name": "Sky Tower Climb",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "sky-tower-climb",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The spire is open for the climb.\"** A tower so tall the top is in the clouds, and the wind howls round it.",
+   "choices": [
+    {
+     "label": "Climb.",
+     "success": {
+      "text": "You take the first step, and your team follows you up, into the wind. The spire stands on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Sky Tower Climb: the spire on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "windswept-spire-entrance"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "magical-forest-week",
+   "name": "Magical Forest Maze",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "magical-forest-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The forest is moving again.\"** Paths that loop back on themselves, and laughter in the trees.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You step under the trees and they close behind you. The looping forest waits on every stage this week, and you have seen the way it turns.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ghost-town-week",
+   "name": "Ghost Town Visit",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "ghost-town-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Nobody lives here. Somebody is still here.\"** An empty town, every window lit.",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You stand in the square and listen. Footsteps, a music box, someone saying your name. Your team presses against your legs. Ghosts are about, and the haunted house waits on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Ghost Town: Ghost Pokémon about, the haunted house on every stage",
+        "effects": [
+         {
+          "kind": "typeEncounterWeight",
+          "type": "ghost",
+          "value": 2
+         },
+         {
+          "kind": "placeEvent",
+          "eventId": "haunted-house"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "festival-street-week",
+   "name": "Festival Street",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "festival-street-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Games! Prizes! Candy floss!\"** A street of stalls and lights, and music from every one.",
+   "choices": [
+    {
+     "label": "Browse.",
+     "success": {
+      "text": "You go from stall to stall with your team, winning nothing and laughing the whole time. Fairground stalls set up on every stage this region.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Festival Street: fairground stalls on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "fun-and-games"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lighthouse-beacon-week",
+   "name": "Lighthouse Beacon",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "lighthouse-beacon-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The beacon is lit!\"** A beam sweeps the land at night, and where it falls, paths appear.",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "You follow the beam across the dark. It lights the hidden ways ahead of you, and the lighthouse stands on every stage this region.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Lighthouse Beacon: the lighthouse on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "lighthouse-entrance"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "map-mutator-week",
+   "name": "Map Mutator Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "map-mutator-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The map is being strange this week.\"** Roads that were not there, a tower in a field, signs pointing at the sky.",
+   "choices": [
+    {
+     "label": "Embrace it.",
+     "success": {
+      "text": "You throw the old map away and walk where your feet take you. Something odd stands on every stage this region: a lookout tower that should not be there.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Map Mutator: an oddity on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "lookout-tower"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "train-ride-special",
+   "name": "Train Ride Special",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "train-ride-special",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"All aboard the Express!\"** A steam train with gold trim, whistle screaming.",
+   "choices": [
+    {
+     "label": "Ride.",
+     "success": {
+      "text": "You get a window seat and your team presses their faces to the glass. The Express stops on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Train Ride Special: the Express on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "w4-express-train"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "friendship-level-week",
+   "name": "Friendship Level Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "friendship-level-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"This week is for them.\"** No battles in the square, just trainers and their Pokémon, sitting together.",
+   "choices": [
+    {
+     "label": "Spend time together.",
+     "success": {
+      "text": "You spend the whole afternoon with your team: brushing, playing, doing nothing at all. Bond grows twice as fast this week.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evolution-festival",
+   "name": "Evolution Festival",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "evolution-festival",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Everything wants to grow up!\"** Lights, dancing, and Pokémon glowing all over the square.",
+   "choices": [
+    {
+     "label": "Celebrate.",
+     "success": {
+      "text": "You celebrate with your team, and one of them glows for a second, just a flicker, as if trying it on. Evolution comes 2 levels sooner this week.",
+      "effects": [
+       {
+        "kind": "celebrate"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "move-tutor-tour",
+   "name": "Move Tutor Tour",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "move-tutor-tour",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The tutors are touring!\"** A bus full of teachers, stopping in every town.",
+   "choices": [
+    {
+     "label": "Learn.",
+     "success": {
+      "text": "A tutor climbs down and sets up right here. A tutor waits on every stage this region.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "tutor"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Move Tutor Tour: a tutor on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "move-tutor"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ev-boot-camp",
+   "name": "EV Boot Camp",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "ev-boot-camp",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Drop and give me twenty!\"** A drill sergeant with a whistle, and a field full of Pokémon doing push-ups. \"Pick your focus, recruit!\"",
+   "choices": [
+    {
+     "label": "Attack and Sp. Atk.",
+     "success": {
+      "text": "Your team trains until they are seeing double. This region, every one of them hits harder.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "atk",
+        "percent": 10,
+        "who": "party",
+        "until": "region"
+       },
+       {
+        "kind": "statBoost",
+        "stat": "spa",
+        "percent": 10,
+        "who": "party",
+        "until": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Defence and Sp. Def.",
+     "success": {
+      "text": "Your team trains until nothing can knock them down. This region, every one of them takes hits better.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "def",
+        "percent": 10,
+        "who": "party",
+        "until": "region"
+       },
+       {
+        "kind": "statBoost",
+        "stat": "spd",
+        "percent": 10,
+        "who": "party",
+        "until": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Speed.",
+     "success": {
+      "text": "Your team runs laps until the sergeant runs out of whistle. This region, every one of them is quicker.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "spe",
+        "percent": 15,
+        "who": "party",
+        "until": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "HP.",
+     "success": {
+      "text": "Your team trains until they can go all day. This region, every one of them is tougher.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "hp",
+        "percent": 15,
+        "who": "party",
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "contest-spectacular",
+   "name": "Contest Spectacular",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "contest-spectacular",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Beauty! Cool! Cute! Clever! Tough!\"** The contest halls are lit up in every town.",
+   "choices": [
+    {
+     "label": "Enter.",
+     "success": {
+      "text": "You sign your team up. They preen all the way to the stage. A contest hall opens on every stage this region.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Contest Spectacular: a contest hall on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "contest-hall"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "photography-week",
+   "name": "Pokémon Photography Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "photography-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Say cheese!\"** Cameras everywhere, and a photo corner in every town.",
+   "choices": [
+    {
+     "label": "Take photos.",
+     "success": {
+      "text": "You take a hundred photos of your team, and one of them is perfect: everyone looking, everyone happy. A photo corner waits on every stage this region.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "A perfect photo of the whole team.",
+        "importance": 45
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Photography Week: a photo corner on every stage",
+        "effects": [
+         {
+          "kind": "placeEvent",
+          "eventId": "rest-photo"
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wk-hurricane-again",
+   "name": "The Wind Returns",
+   "group": "Calendar weeks",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The wind is back, and it is raining held items again. Same odds: 3 in 4 uncommon, 1 in 4 rare.",
+   "choices": [
+    {
+     "label": "Catch one.",
+     "success": {
+      "text": "You catch another one as it whirls past. That is the last of the storm.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "quick-claw",
+         "wide-lens",
+         "scope-lens",
+         "leftovers",
+         "life-orb"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wk-loyalty-gift",
+   "name": "Loyalty Card Full",
+   "group": "Calendar weeks",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "The clerk from the Pokémart waves you down. \"Your card! It's full! Here, here, your gift!\"",
+   "choices": [
+    {
+     "label": "Take the gift.",
+     "success": {
+      "text": "A Rare gift, wrapped in a ribbon. Your team insists on opening it.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "life-orb",
+         "choice-band",
+         "expert-belt",
+         "focus-sash"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wk-bankrupt-shop-open",
+   "name": "Still Open",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "bankrupt-shop-kept",
+     "atLeast": 1,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "bankrupt-shop-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A little shop on the corner, the sign freshly painted. The old shopkeeper looks up, sees you, and comes out from behind the counter with both hands out. \"You came back. I'm still here. Because of you.\"",
+   "choices": [
+    {
+     "label": "Shop with him.",
+     "success": {
+      "text": "He will not hear of full price this time. \"Friends' rate.\" Everything here is 10% off until the stage ends, and he slips something extra into your bag.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Friends' rate: 10% off this stage",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.9
+         }
+        ],
+        "until": "boss"
+       },
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bankrupt-shop-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just say hello.",
+     "success": {
+      "text": "You stay for tea instead. He shows your team the photo on the wall: the shop, the day it opened, forty years ago. \"Still open,\" he says, and taps the glass.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "bankrupt-shop-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

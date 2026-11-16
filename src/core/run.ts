@@ -19,8 +19,13 @@ import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
+import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
+import { revivalFee } from './battle/revivalStatus';
+import { bondFriendship } from './co/who';
 import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug } from './instrumentality/flightNorth';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
+import { syncLegendFlags, weekInfluence } from './legends/signs';
+import { drawWholeRun } from './legends/wholeRun';
 import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
@@ -90,7 +95,7 @@ import { changeFriendship } from './friendship';
 import { joinMoments, restMoments } from './moments/runMoments';
 import { followStep } from './followMode';
 import { addItem, applyItemToPokemon, consumeItem, getItem, itemCount, itemUseProblem, STACK_MAX } from './items';
-import { addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
+import { ALPHA_MARK_HP, addLevels, createPokemon, gainXp, getSpecies, MAX_PP_UPS, maxHp, maxPp, xpForDefeat, xpForLevel } from './pokemon';
 import { addEvs, evYield } from './ivs';
 import { bankShopEntries, runLicenses } from './bank';
 import { withTokenAttribute } from './runPrep';
@@ -367,7 +372,7 @@ export interface NewRunOptions {
   /** Story Run: the player's name, pronouns and Look from the prologue (profile.story.protagonist). */
   protagonist?: { look: string; name: string; pronouns: string | PronounSet; backstory?: string };
   /** Beta 0.6: which expansion settings were on at run start (settings.expansion). Each flag is stored in `run.expansion` once and never changes. */
-  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; ultraBeasts?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; rewinds?: boolean; nodeMenus?: boolean; blessings?: boolean; secondChancePct?: number; heatedMoments?: boolean; mythicalPromises?: boolean; finale?: boolean; doomEpilogue?: boolean; labyrinthResume?: boolean };
+  expansion?: { stagePacing?: boolean; evolutionEncounters?: boolean; leagueCounterPick?: boolean; kantoCanon?: boolean; grandArc?: boolean; worldTracks?: boolean; ultraBeasts?: boolean; eventsDensity?: 'low' | 'normal' | 'full'; climaxCut?: 'standard' | 'extended'; storyTraits?: boolean; rewinds?: boolean; nodeMenus?: boolean; blessings?: boolean; secondChancePct?: number; heatedMoments?: boolean; mythicalPromises?: boolean; finale?: boolean; doomEpilogue?: boolean; labyrinthResume?: boolean; wholeRunEvents?: boolean };
 }
 
 export function createRun(content: Content, opts: NewRunOptions): RunState {
@@ -474,6 +479,8 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     if (e.secondChancePct || e.heatedMoments || e.mythicalPromises) run.expansion = { ...run.expansion, ...(e.secondChancePct ? { secondChancePct: e.secondChancePct } : {}), ...(e.heatedMoments ? { heated: true } : {}), ...(e.mythicalPromises ? { promises: true } : {}) };
     if (e.blessings) assignBlessing(run);
+    if (e.wholeRunEvents) drawWholeRun(run); // Catalog Overhaul (legends): a Whole Run Event, 35% of runs, own stream
+    weekInfluence(run); // Catalog Overhaul (legends): Legend weeks raise the blessing's starting Influence, or tell of a Mythical
     // Beta 0.7 Node Event Menus: on for this run when the setting is on, except in speedrun, boss rush and time attack.
     if (e.nodeMenus && nodeMenusAllowed(run.rules.modifierIds)) run.expansion = { ...run.expansion, nodeMenus: freshNodeMenuState() };
     setClimaxCut(run, e.climaxCut);
@@ -787,6 +794,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   placeStoryStops(content, run); // Story Run: last, so it can adopt the evil beat's stop
   // Beta 0.7 M1: one Telling of a Mythical per new stage (in-run only; never on a run's very first stage, which keeps its plan empty), and a Visit offer at the first stage of a region.
   const telling = run.regionIndex === 0 && index === 0 ? null : hearTelling(run, run.regionIndex * 100 + index);
+  syncLegendFlags(run); // Catalog Overhaul (legends): read-only mirror flags of the blessing, Guest and Promise for event conditions
   const planLines = [themeLine, ...tailorStage(content, run, signals), telling].filter((l): l is string => !!l);
   snapshotStagePlan(run, planLines);
   run.battle = null;
@@ -887,6 +895,11 @@ export function endRegionTempEffects(run: RunState): void {
     for (const effect of temp.effects) {
       const at = run.perkEffects.findIndex((m) => JSON.stringify(m) === JSON.stringify(effect));
       if (at >= 0) run.perkEffects.splice(at, 1);
+      // A challenge's run rule (SF98) ends with its region, unless the player had chosen it for the run.
+      if (effect.kind === 'runRule' && run.story.flags[`rule-temp:${effect.id}`]) {
+        delete run.story.flags[`rule-temp:${effect.id}`];
+        run.rules.modifierIds = run.rules.modifierIds.filter((id) => id !== effect.id);
+      }
     }
   }
   run.tempEffects = kept;
@@ -3036,6 +3049,8 @@ function pokemonMomentHooks(content: Content, run: RunState): MomentHooks {
     flags: run.story.flags,
     cinematic: (tier) => momentAllowed(content, run, tier),
     noteCinematic: (tier) => noteMoments(run, tier),
+    starterUid: run.log.starterUid,
+    finalBoss: run.battle?.trainer?.classId === CHAMPION_CLASS && isFinalBoss(content, run),
     // Only a wipe with nothing left to catch it ends the run: no checkpoint to return to, no Safety Net, no VS Recorder.
     runWouldEnd: () => {
       const battle = run.battle;
@@ -3690,6 +3705,14 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (share > 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * share));
   }
   noteSwapFaint(run);
+  // Pack Pokémon Moments (PA4 The Little Ones): a scared baby that landed a move gains Bond, win or lose, and counts it.
+  for (const tag of battle.storyEffects.filter((t) => t.startsWith(BRAVE_HIT))) {
+    const [uid, bond] = tag.slice(BRAVE_HIT.length).split(':') as [string, string];
+    const baby = run.party.find((m) => m.uid === uid);
+    if (!baby) continue;
+    changeFriendship(content, baby, bondFriendship(content, Number(bond), 'picked'));
+    run.story.flags[`${BRAVE_COUNT}${uid}`] = Number(run.story.flags[`${BRAVE_COUNT}${uid}`] ?? 0) + 1;
+  }
   // Catalog Overhaul (new events): the run's first Z-Move is remembered (NE8's old man in the crowd waits for it).
   if (battle.transform?.used.player.includes('zmove') && !run.story.flags['ev:z-move-used']) run.story.flags['ev:z-move-used'] = 1;
   // Nuzlocke: the fallen are lost for good.
@@ -3732,6 +3755,12 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (battle.extra?.payout) moneyGained *= 2; // Jackpot's Payout (Kanto): its holder knocked out a foe this battle
   if (battle.alpha) moneyGained = Math.floor(moneyGained * content.balance.w1.luck.alphaMoney);
   if (battle.deal) moneyGained = Math.floor(moneyGained * content.balance.w1.play.deal.money);
+  // Collected (PA21 The Contract): the Collector takes its fee from this battle's prize money, as it said it would.
+  const collectorFee = Math.floor((moneyGained * revivalFee(battle)) / 100);
+  if (collectorFee > 0) {
+    moneyGained -= collectorFee;
+    run.story.flags['pm-collector-paid'] = Number(run.story.flags['pm-collector-paid'] ?? 0) + collectorFee;
+  }
   run.money += moneyGained;
   count(run, 'moneyEarned', moneyGained);
   // Powder Jar and Gooey Mulch: every Berry your side ate this battle.
@@ -3753,6 +3782,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     if (battle.ball) caught.caughtBall = battle.ball;
     // A raid boss's extra HP pool belongs to the fight, not to the Pokémon you take home.
     if (battle.raid) delete caught.statBoosts;
+    // An Alpha's doubled HP belongs to the wild fight too (events.ts startEventBattle); it keeps only the Alpha Mark (pokemon.ts ALPHA_MARK_HP).
+    if (caught.alpha && caught.statBoosts?.hp) caught.statBoosts = { ...caught.statBoosts, hp: Math.max(0, caught.statBoosts.hp - (100 - ALPHA_MARK_HP)) };
     shiftLevel(content, run, caught, catchLevelOffset(runPerks(content, run)) + palPadLevels(content, run));
     // Friend, Luxury and Heal Ball.
     const ball = battle.ball ? content.items.get(battle.ball)?.effect : undefined;
@@ -3882,6 +3913,16 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       const evo = evolve(content, mon, special);
       evolutions.push({ ...evo, uid: mon.uid });
       for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+    }
+    // Pokémon Moments (PS1 Magikarp, PS20 Bisharp, PS28 Farfetch'd): a moment promised it would evolve when the battle ends, if it is still standing.
+    const owed = battle.storyEffects.find((t) => t.startsWith(`${MOMENT_EVOLVE_AFTER}${mon.uid}:`));
+    if (owed && mon.hp > 0 && !evolutions.some((e) => e.uid === mon.uid)) {
+      const [, , to, at] = owed.split(':') as [string, string, string, string];
+      if (battle.turn >= Number(at) && mon.speciesId !== to && content.species.has(to)) {
+        const evo = evolve(content, mon, to);
+        evolutions.push({ ...evo, uid: mon.uid });
+        for (const moveId of evo.wantsToLearn) run.pending.push({ kind: 'learnMove', uid: mon.uid, moveId });
+      }
     }
   }
   count(run, 'evolutions', evolutions.length);
@@ -4053,7 +4094,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   if (leadAsk) run.pending.push({ kind: 'askLead', ...leadAsk });
   // An event battle you won pays its own rewards.
   const chained = outcome === 'win' && !!battle.event && eventChainNext(content, run, battle.event);
-  const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1)) : [];
+  const eventRewards = outcome === 'win' && battle.event && !chained ? (battle.event.eventId === 'plaza:club' ? plazaClubWon(content, run) : eventBattleWon(content, run, battle.event, battle.turn - 1, battle.calm?.done === true)) : [];
   // The Betrayal: beating an Evil Team's leader sends you straight into a catchable fight with the Legendary they chased.
   const evilT = outcome === 'win' && battle.trainer ? evilTeam(content, run) : null;
   const betrayal = !!evilT && battle.trainer?.name === evilT.ranks.leader.name && run.story.flags[BETRAYAL_FLAG] === undefined && (run.story.evil?.end === 'defeated' || run.story.evil?.end === 'exposed');
@@ -4314,6 +4355,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       const old = run.party[choice.partyIndex];
       if (!old) throw new Error('Choose a party member to replace');
       if (old.care?.favourite) throw new Error('A favourite cannot be swapped out. Unmark it in Care first.');
+      if (old.vowed) throw new Error('You made a vow with this Pokémon. It stays.');
       if (shadowTierOf(caught)?.countsAgainstCap && heavyShadowCount(run.party.filter((m) => m.uid !== old.uid)) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
       const problem = joinProblem(content, run, caught.speciesId, old.uid);
       if (problem) throw new Error(problem);

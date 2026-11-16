@@ -1,0 +1,1733 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "battle-replay-theater",
+   "name": "Battle Replay Theater",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#1e1e33",
+    "effect": "flicker"
+   },
+   "intro": "A little cinema with one screen and twelve seats. **The usher**, tearing tickets that nobody bought: \"Free for trainers. Tonight's feature: the Leader up the road, last week, start to finish.\"",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You sit in the dark with your team in the seats beside you, popcorn everywhere, and watch the Leader send out their lead, and then everything after it.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "library",
+   "name": "Library",
+   "group": "Training and growth",
+   "stop": "library",
+   "scene": {
+    "cast": [],
+    "effect": "float"
+   },
+   "intro": "Quiet shelves, dust in the light, rows and rows of Pokédex entries bound in green. Somewhere a clock ticks. A librarian puts a finger to her lips, and then points you toward the Gym section.",
+   "choices": [
+    {
+     "label": "Read.",
+     "success": {
+      "text": "You read until the lamps come on. By the end you know the Leader's ace, and the move it opens with, and a good deal more.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mastery-quiz",
+   "name": "Mastery Quiz",
+   "group": "Training and growth",
+   "stop": "library",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#33292a",
+    "effect": "glint"
+   },
+   "intro": "**A quiz host** behind a podium, with a stack of cards: \"Species questions! About your own lead! Get them right, and you take home a Mastery Shard, and a tip about the Leader's ace.\"",
+   "choices": [
+    {
+     "label": "Answer.",
+     "check": "intelligence",
+     "success": {
+      "text": "You know your lead better than you know yourself. Every answer right. The host hands over a Mastery Shard, and leans in to whisper the name of the Leader's ace.",
+      "effects": [
+       {
+        "kind": "train",
+        "what": "masteryShard"
+       },
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You fumble one question about your own lead, who looks at you with enormous disappointment. \"Next time!\" says the host.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "study-hall",
+   "name": "Study Hall",
+   "group": "Training and growth",
+   "stop": "library",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "A quiet room of books and long tables, students bent over notes. A whiteboard at the front has the Gym Leader's name on it, and a lot of arrows.",
+   "choices": [
+    {
+     "label": "Study (a node).",
+     "success": {
+      "text": "You sit down and study, properly, all afternoon. When you stand up, stiff, you know the Leader's ace and how to answer it.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tactical-chalkboard",
+   "name": "Tactical Chalkboard",
+   "group": "Training and growth",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#222d22",
+    "effect": "glint"
+   },
+   "intro": "**A coach** at a chalkboard, chalk in one hand and a whistle in the other: \"Know the enemy's lead. Everything else follows.\"",
+   "choices": [
+    {
+     "label": "Analyse.",
+     "success": {
+      "text": "He draws the Leader's lead on the board, badly, and then explains it, very well.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "veterans-notebook",
+   "name": "Veteran's Notebook",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "glint"
+   },
+   "intro": "A battered notebook lying on a bench. On the open page, in big angry capitals: \"WEAK TO SURF!!\" Inside the cover, a name and an address, two streets away.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You read one page, the one it fell open at. One fact about the Leader up the road, underlined three times.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Return it to the name.",
+     "success": {
+      "text": "An old woman opens the door, sees the notebook, and puts her hand on her heart. \"My husband's. I thought it was gone.\" She makes you tea and tells you everything in it: the Leader's lead, the ace, and the one move to fear.",
+      "effects": [
+       {
+        "kind": "gymPreview"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Returned a veteran's notebook to his widow.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "graduation-ceremony",
+   "name": "Graduation Ceremony",
+   "group": "Training and growth",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "tint": "#2a2d33",
+    "effect": "sparkle"
+   },
+   "intro": "**An examiner** in a gown, two Mastery Shards on a velvet cushion beside her: \"Pass the final, and these are yours. Fail, and you sit it again next year.\"",
+   "choices": [
+    {
+     "label": "Take the assessment.",
+     "success": {
+      "text": "She sets down the cushion and stands. The final is a battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Examiner",
+       "classId": "veteran",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "train",
+         "what": "masteryShard"
+        },
+        {
+         "kind": "train",
+         "what": "masteryShard"
+        },
+        {
+         "kind": "moment",
+         "text": "Graduated: two Mastery Shards.",
+         "importance": 45
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "field-hidden-cave",
+   "name": "Blocked Path: Hidden Cave",
+   "group": "Field moves",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A dark cave mouth, a rock wedged across a gap, and a cliff with handholds worn into it. Each leads somewhere small and hidden, if a Pokémon knows the way.",
+   "choices": [
+    {
+     "label": "Flash.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "flash"
+      }
+     ],
+     "success": {
+      "text": "Light fills the cave. In the dust at the back, a Max Ether, left by someone who never came back for it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "max-ether",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rock Smash.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "rock-smash"
+      }
+     ],
+     "success": {
+      "text": "The rock splits. Behind it, a little hollow, and a PP Up.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "pp-up",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rock Climb.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "rock-climb"
+      }
+     ],
+     "success": {
+      "text": "Up the cliff, hand over hand, your Pokémon ahead of you. At the top, a nest of old feathers and a Star Piece.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "star-piece",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "field-overgrowth",
+   "name": "Blocked Path: Overgrowth",
+   "group": "Field moves",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A tree grown across the path, a boulder in a gap, a pond with an island in the middle. Each hides a little something, if a Pokémon knows the move.",
+   "choices": [
+    {
+     "label": "Cut.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "cut"
+      }
+     ],
+     "success": {
+      "text": "The tree comes down clean. In its hollow trunk, a Miracle Seed.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "miracle-seed",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Strength.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "strength"
+      }
+     ],
+     "success": {
+      "text": "The boulder rolls aside. Under it, flat and gleaming, a Hard Stone.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "hard-stone",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Surf.",
+     "requires": [
+      {
+       "kind": "partyMove",
+       "move": "surf"
+      }
+     ],
+     "success": {
+      "text": "You ride out to the island. On it, washed up in the reeds, a Mystic Water.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "mystic-water",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-contraband-detector",
+   "name": "Contraband Detector",
+   "group": "Villain Teams",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2024",
+    "effect": "flicker"
+   },
+   "intro": "A gate across the road with a scanner arch, and a guard in a uniform you do not quite trust. **\"Anything shady in the bag?\"**",
+   "choices": [
+    {
+     "label": "No.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "evil-key",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The arch shrieks. The guard's eyes go to your bag, and stay there.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "vt-contraband-gate"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You walk through. The arch stays quiet. The guard waves you on, bored.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Show him.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "evil-key",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The arch shrieks. The guard's eyes go to your bag, and stay there.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "vt-contraband-gate"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You open your bag. He pokes through it, finds nothing, and waves you through.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-contraband-gate",
+   "name": "The Arch Beeps",
+   "group": "Evil-team pressure",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The arch shrieks. The guard's hand goes to his belt, and then he smiles, slowly. \"That key. I know where that's from. ₽200 and I didn't see it. Or we do this the other way.\"",
+   "choices": [
+    {
+     "label": "Pay the bribe (₽200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You count it out. He pockets it without looking at you. \"Have a nice day.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"The other way, then.\" He is not a gate guard at all.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Disguised Grunt",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        }
+       ],
+       "evil": "grunt",
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-gadget-sabotage",
+   "name": "Gadget Sabotage",
+   "group": "Villain Teams",
+   "rarity": "uncommon",
+   "types": [
+    "steel",
+    "electric"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2430",
+    "effect": "flicker"
+   },
+   "intro": "A small humming drone has been following you for three stops, keeping just out of reach, a red light blinking under it. Someone, somewhere, is watching.",
+   "choices": [
+    {
+     "label": "Knock it down (a Flying- or Electric-type).",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "flying",
+        "electric"
+       ]
+      }
+     ],
+     "success": {
+      "text": "One hit, and it spins into the grass, sparking, and the red light goes out. Whoever was watching has lost you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "evil-trail-lost",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Knocked down the evil team's drone.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wave at it.",
+     "success": {
+      "text": "You wave. The drone hangs there for a second, as if surprised, then darts away. Somewhere, someone has written down exactly which Pokémon leads your team.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "evil-knows-lead",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-mind-control-helmet",
+   "name": "Mind Control Helmet",
+   "group": "Heists & Hideouts",
+   "stop": "lab",
+   "rarity": "rare",
+   "types": [
+    "psychic"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#241c34",
+    "effect": "flicker"
+   },
+   "intro": "A Pokémon in a flashing helmet stands in the corridor, eyes glazed, perfectly still. Behind it, a grunt sits at a console, typing. The Pokémon does not want to be here. You can see it in its shoulders.",
+   "choices": [
+    {
+     "label": "Break the console first.",
+     "success": {
+      "text": "You go for the console. The grunt goes for you. Behind him, the helmet sparks, and the Pokémon shakes its head, and blinks, and looks around as if waking from a long, bad dream.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Console Grunt",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rescued",
+         "amount": 1
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Broke the mind-control console; the Pokémon woke up confused and grateful.",
+         "importance": 55
+        }
+       ],
+       "evil": "grunt",
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Battle the Pokémon.",
+     "success": {
+      "text": "It comes at you with its eyes empty, and every move it makes is somebody else's. You have to fight it. You hate it. When it falls, the helmet cracks and falls off, and the Pokémon is free.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rescued",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Had to fight a mind-controlled Pokémon to free it.",
+         "importance": 55
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-ransom-note",
+   "name": "Villain Ransom Note",
+   "group": "Villain Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "A note pinned to a tree at eye level, in cut-out letters: \"WE HAVE YOUR NUGGET. ₽700, OR COME AND GET IT.\" Below, a crude map with an X on it. You check your bag. It is gone.",
+   "choices": [
+    {
+     "label": "Pay ₽700.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 700
+      }
+     ],
+     "success": {
+      "text": "You leave the money under the stone they asked for. When you come back, the Nugget is there instead, with a note: \"PLEASURE DOING BUSINESS.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -700
+       },
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come and get it.",
+     "success": {
+      "text": "You follow the map to the X. They are waiting, and they did not expect you to come.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ransom Grunt",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "nugget",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Took back a stolen Nugget from the evil team.",
+         "importance": 40
+        }
+       ],
+       "evil": "grunt",
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rescued-callback",
+   "name": "A Familiar Face",
+   "group": "Shadow Pokémon",
+   "stop": "wild",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "rescued",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c2030",
+    "effect": "float"
+   },
+   "callback": true,
+   "intro": "A Pokémon steps onto the road with a keeper behind it, and stops dead when it sees you. It is the one you freed. It remembers. It comes straight to you and presses its head into your chest.",
+   "choices": [
+    {
+     "label": "Say hello.",
+     "success": {
+      "text": "You hold it for a long time. Your lead comes up and touches noses with it, very gently. The keeper says it has been waiting by this road every day. It will be at the Final Reunion, she says; it would not miss it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "rescued",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "final-reunion-rescued",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Pokémon you freed came back to say hello.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-sky-route",
+   "name": "Sky Route",
+   "group": "Dungeon Puzzles",
+   "rarity": "uncommon",
+   "types": [
+    "flying"
+   ],
+   "minStage": 2,
+   "secret": [
+    {
+     "kind": "partyType",
+     "type": "flying"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#7ac0ff",
+    "effect": "float"
+   },
+   "intro": "Updrafts rise from the cliff edge, strong enough to hold a Pokémon up without a single wingbeat. Far out, they make a road in the sky: three long rises, three long glides.",
+   "choices": [
+    {
+     "label": "Ride them (a Flying-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "flying"
+      }
+     ],
+     "success": {
+      "text": "Your Flying-type takes you up, and up, and the ground falls away. You ride the first rise, and the second, and the third, and come down three stops further on with your hair full of sky.",
+      "effects": [
+       {
+        "kind": "skipAhead",
+        "nodes": 3
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "flying"
+         ]
+        }
+       },
+       {
+        "kind": "moment",
+        "text": "Rode the sky route on the updrafts.",
+        "importance": 40
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay on the ground.",
+     "success": {
+      "text": "You watch the updrafts for a while, and then take the long way round.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-bingo-1",
+   "name": "Treasure Hunt Bingo",
+   "group": "Games and Puzzles",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#3a2a10",
+    "effect": "sparkle"
+   },
+   "intro": "**An organiser** with a stack of cards and a fat pen: \"Tick off events as you travel! Three in a row, a prize. The whole card, a big prize.\" The card, in nine squares: Berry Tree, Pokémon Center, Training Ground; Meadow Rest, Hot Spring, Gym Scout; Tide Pools, Street Tailor, Second Square.",
+   "choices": [
+    {
+     "label": "Take a card.",
+     "success": {
+      "text": "You take one. He ticks nothing yet: \"You have to earn them.\" The card goes in your pocket, and you find yourself looking forward to the next Berry Tree.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bingo-card",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "rf-bingo-2",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-bingo-2",
+   "name": "Second Square",
+   "group": "Puzzles",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Another stand, another organiser, the same fat pen. \"Card? Let's see.\" The card, in nine squares: Berry Tree, Pokémon Center, Training Ground; Meadow Rest, Hot Spring, Gym Scout; Tide Pools, Street Tailor, Second Square.",
+   "choices": [
+    {
+     "label": "Mark it.",
+     "success": {
+      "text": "She ticks this square, and every square you have already passed, and hands it back with a wink. \"The prize table is a little further on.\"",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "rf-bingo-3",
+        "nodes": 3
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-bingo-3",
+   "name": "Bingo!",
+   "group": "Puzzles",
+   "stop": "treasure",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Bingo?\"** the organiser at the prize table asks hopefully, holding out a hand for your card.",
+   "choices": [
+    {
+     "label": "Claim it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "berry-tree"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "pokemon-center"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "training-ground"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "rest-meadow"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "hot-spring"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "gym-scout"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "tide-pools"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "street-tailor"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "rf-bingo-2"
+        }
+       ],
+       "text": "He checks every square, and then checks them again, and then stands on his chair and shouts \"THE WHOLE CARD!\" The whole tent applauds. The big prize is yours.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "comet-shard",
+          "sacred-ash",
+          "poke-radar",
+          "super-rod",
+          "x-attack-6",
+          "x-speed-6"
+         ]
+        },
+        {
+         "kind": "moment",
+         "text": "Filled a whole bingo card.",
+         "importance": 50
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "berry-tree"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "pokemon-center"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "training-ground"
+        }
+       ],
+       "text": "\"Bingo!\" he shouts. A line, straight across. The prize is yours.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf"
+         ]
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "rest-meadow"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "hot-spring"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "gym-scout"
+        }
+       ],
+       "text": "\"Bingo!\" he shouts. A line, straight across. The prize is yours.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf"
+         ]
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "tide-pools"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "street-tailor"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "rf-bingo-2"
+        }
+       ],
+       "text": "\"Bingo!\" he shouts. A line, straight across. The prize is yours.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf"
+         ]
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "berry-tree"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "rest-meadow"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "tide-pools"
+        }
+       ],
+       "text": "\"Bingo!\" he shouts. A line, straight down. The prize is yours.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf"
+         ]
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "pokemon-center"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "hot-spring"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "street-tailor"
+        }
+       ],
+       "text": "\"Bingo!\" he shouts. A line, straight down. The prize is yours.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf"
+         ]
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "eventSeen",
+         "id": "training-ground"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "gym-scout"
+        },
+        {
+         "kind": "eventSeen",
+         "id": "rf-bingo-2"
+        }
+       ],
+       "text": "\"Bingo!\" he shouts. A line, straight down. The prize is yours.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "choice-specs",
+          "choice-scarf"
+         ]
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "He checks the card twice. Not a line. \"Keep travelling!\" He gives you a pen as a consolation prize, which is something.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-crossword-cave",
+   "name": "Crossword Cave",
+   "group": "Games and Puzzles",
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c2a",
+    "effect": "glint"
+   },
+   "intro": "A cave wall carved with a crossword, and one clue glowing: **\"Eight letters: a long-dead guardian.\"** Below it, eight empty squares, each one big enough for a hand.",
+   "choices": [
+    {
+     "label": "Guardian.",
+     "success": {
+      "text": "You press the letters one by one: G, U, A, R, D, I, A, N. Nothing. A little dust falls. It was never going to be that easy.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Kabutops.",
+     "success": {
+      "text": "K, A, B, U, T, O, P, S. The squares light up one after another, and the whole wall grinds aside.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-crossword-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Omastar.",
+     "success": {
+      "text": "O, M, A, S, T, A, R, and then one empty square, staring at you. Seven letters. You count again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-crossword-room",
+   "name": "The Hidden Room",
+   "group": "Puzzles",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "Behind the wall, a room nobody has stood in for a very long time. Long-forgotten things on shelves: lamps, jars, and, in a case, two fossils.",
+   "choices": [
+    {
+     "label": "Search.",
+     "success": {
+      "text": "You search it slowly and carefully, the way it deserves. In the case: a Dome Fossil and an Old Amber, labelled in a hand so old the ink has gone brown.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "dome-fossil",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "old-amber",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Found a hidden room behind a crossword.",
+        "importance": 45
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-fossil-puzzle",
+   "name": "Fossil Puzzle",
+   "group": "Games and Puzzles",
+   "stop": "fossil",
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "glint"
+   },
+   "intro": "A heap of bones on a tarp, and a scientist on her knees beside them, labelling. \"If you can put it together, the Lab will revive it. I can't make the ribs work.\"",
+   "choices": [
+    {
+     "label": "Assemble.",
+     "check": "intelligence",
+     "success": {
+      "text": "You lay the ribs out, and turn one over, and it clicks. By evening, a whole skeleton lies on the tarp. The Lab revives it overnight, and in the morning it is waiting for you, blinking at the sun for the first time in a very long time.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "omanyte",
+         "kabuto",
+         "aerodactyl",
+         "lileep",
+         "anorith"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Assembled a fossil the Lab revived.",
+        "importance": 55
+       }
+      ]
+     },
+     "failure": {
+      "text": "You try for hours. There is always one bone left over. The scientist thanks you anyway, kindly, and goes on labelling.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-gear-box",
+   "name": "Gear Box Puzzle",
+   "group": "Games and Puzzles",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "rattle"
+   },
+   "intro": "A drawbridge stuck halfway up over a river, and beside it an open gearbox with half its gears missing, a pile of mismatched ones on the ground.",
+   "choices": [
+    {
+     "label": "Fit the gears.",
+     "check": "intelligence",
+     "success": {
+      "text": "Big one, little one, the one with the chipped tooth. It turns. The bridge comes down with a boom, and on the far side, a road nobody has been able to use for weeks.",
+      "effects": [
+       {
+        "kind": "express"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You fit them, and they jam, and you try again, and they jam. In the end you go the long way round.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-jigsaw-legend",
+   "name": "Jigsaw Legend",
+   "group": "Games and Puzzles",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1c2a",
+    "effect": "glint"
+   },
+   "intro": "A table in a village hall, and on it a jigsaw of a thousand pieces, half done. The box shows the region's Legendary. The old man who started it has fallen asleep in his chair.",
+   "choices": [
+    {
+     "label": "Assemble.",
+     "success": {
+      "text": "You sit down and work on it, quietly, so as not to wake him. Piece by piece, the Legendary comes together under your hands, and when you set the last piece in, you could swear its painted eye moves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-region",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Finished a jigsaw of the region's Legendary.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-lantern-riddle",
+   "name": "Lantern Riddle",
+   "group": "Games and Puzzles",
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#2a1a10",
+    "effect": "flicker"
+   },
+   "intro": "Three doors, three lanterns. A plaque: **\"Behind the door whose lantern doesn't lie.\"** The left lantern gutters. The right one flickers. The middle one burns perfectly still.",
+   "choices": [
+    {
+     "label": "Left.",
+     "success": {
+      "text": "You open the left door. A broom cupboard. The lantern gutters as if laughing.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Middle.",
+     "success": {
+      "text": "The middle door. Its flame never moved. Behind it, on a little shelf, something left for whoever looked closely enough.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rare-candy",
+         "pp-up",
+         "star-piece",
+         "heart-scale"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Right.",
+     "success": {
+      "text": "You open the right door. A wall. The lantern flickers, delighted with itself.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-map-sudoku",
+   "name": "Treasure Map Sudoku",
+   "group": "Games and Puzzles",
+   "stop": "treasure",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#3a2a10",
+    "effect": "glint"
+   },
+   "intro": "A stone table carved into nine squares of nine, each square full of little symbols: a tree, a wave, a flame. Some are missing. It is a map, if you can finish it.",
+   "choices": [
+    {
+     "label": "Solve.",
+     "check": "intelligence",
+     "success": {
+      "text": "You fill in the last symbol, and the squares rearrange themselves in your head into a map of this very stage. One square, the one that would not fit any other way, is a treasure.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You get two thirds of the way, and then two wave symbols end up in the same row, and you have to start again, and the light is going.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-mirror-beam",
+   "name": "Lighthouse Mirror Puzzle",
+   "group": "Games and Puzzles",
+   "scene": {
+    "cast": [
+     "trainer.sailor"
+    ],
+    "tint": "#1a2a3a",
+    "effect": "glint"
+   },
+   "intro": "A dark lighthouse at the end of a spit, and its keeper wringing his hands: \"The lamp's fine. It's the mirrors. Three of them, and I can't get the angles any more.\" Out at sea, a ship's horn sounds, worried.",
+   "choices": [
+    {
+     "label": "Angle the mirrors.",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You turn the first, and the second, and the third, and the beam leaps out across the water. The ship's horn sounds again, relieved. The keeper gives you a Bright Powder, his own.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "bright-powder",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The beam hits the ceiling. Then the floor. The keeper pats your shoulder: \"It took me years too.\" You leave him trying.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-mole-hunt",
+   "name": "Mole Hunt",
+   "group": "Games and Puzzles",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "pokemon": "diglett",
+    "tint": "#3a2a1a",
+    "effect": "shake"
+   },
+   "intro": "Three burrows in a field. A prize is buried in one of them, says the sign. Two of the other burrows have very annoyed Diglett in them. The middle burrow has fresh, dark soil heaped at its mouth; the others are dry and crusted.",
+   "choices": [
+    {
+     "label": "Left.",
+     "success": {
+      "text": "You dig. A Diglett pops up, extremely annoyed.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "diglett"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Middle.",
+     "success": {
+      "text": "Fresh soil: someone dug here recently, and filled it in again. You dig, and there it is.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "rare-candy",
+         "pp-up"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Right.",
+     "success": {
+      "text": "You dig. A Diglett pops up, extremely annoyed.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "diglett"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-move-trivia-1",
+   "name": "Move Trivia",
+   "group": "Games and Puzzles",
+   "stop": "library",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "A signboard with a question and three buttons: **\"Surf is what type?\"**",
+   "choices": [
+    {
+     "label": "Water.",
+     "success": {
+      "text": "Ding! A light turns green. Further down the path, another signboard lights up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "trivia-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rf-move-trivia-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Normal.",
+     "success": {
+      "text": "Buzz. A light turns red. Further down the path, another signboard lights up anyway.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-move-trivia-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ice.",
+     "success": {
+      "text": "Buzz. A light turns red. Further down the path, another signboard lights up anyway.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-move-trivia-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-move-trivia-2",
+   "name": "Move Trivia: Question Two",
+   "group": "Games and Puzzles",
+   "stop": "library",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "none"
+   },
+   "intro": "Another signboard: **\"Shadow Ball is what type?\"**",
+   "choices": [
+    {
+     "label": "Dark.",
+     "success": {
+      "text": "Buzz. A light turns red. One signboard left, just ahead.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-move-trivia-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ghost.",
+     "success": {
+      "text": "Ding! A light turns green. One signboard left, just ahead.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "trivia-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rf-move-trivia-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Psychic.",
+     "success": {
+      "text": "Buzz. A light turns red. One signboard left, just ahead.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rf-move-trivia-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rf-move-trivia-3",
+   "name": "Move Trivia: Final Question",
+   "group": "Games and Puzzles",
+   "stop": "library",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2a1c",
+    "effect": "sparkle"
+   },
+   "intro": "The last signboard: **\"Earthquake is what type?\"** Below it, a little hatch.",
+   "choices": [
+    {
+     "label": "Rock.",
+     "success": {
+      "text": "Buzz. The hatch stays shut.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Ground.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "trivia-right",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "Ding! Three green lights in a row. The hatch drops open, and a TM slides out into your hand.",
+       "effects": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "tm-normal",
+          "tm-fighting",
+          "tm-flying",
+          "tm-poison",
+          "tm-ground",
+          "tm-rock",
+          "tm-bug"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "trivia-right",
+         "amount": -2
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Ding! A light turns green.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "trivia-right",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fighting.",
+     "success": {
+      "text": "Buzz. The hatch stays shut.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

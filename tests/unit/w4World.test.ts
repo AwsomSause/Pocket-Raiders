@@ -298,9 +298,9 @@ describe('W9 live events that waited on W4', () => {
     expect(run.stage!.map.nodes.some((n) => n.sides.some((x) => x.eventId === 'w4-forest-maze'))).toBe(true);
     expect(newRun().stage!.map.nodes.some((n) => n.sides.some((x) => x.eventId === 'w4-forest-maze'))).toBe(false);
     const mazeSides = (r: RunState) => r.stage!.map.nodes[0]!.sides.filter((x) => x.eventId === 'w4-forest-maze' && !x.used).length;
-    const lost = chooseEvent(content, atEvent(newRun(), 'w4-forest-maze'), 'w4-test', 0).run;
+    const lost = chooseEvent(content, atEvent(newRun(), 'w4-forest-maze'), 'w4-test', 1).run;
     expect(mazeSides(lost)).toBe(1);
-    const out = chooseEvent(content, atEvent(newRun(), 'w4-forest-maze'), 'w4-test', 2).run;
+    const out = chooseEvent(content, atEvent(newRun(), 'w4-forest-maze'), 'w4-test', 0).run;
     expect(mazeSides(out)).toBe(0);
   });
 

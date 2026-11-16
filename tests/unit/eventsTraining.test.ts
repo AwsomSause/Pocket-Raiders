@@ -13,7 +13,8 @@ describe('training events', () => {
   });
   for (const e of ids) {
     it(`${e.id}: every choice resolves`, () => {
-      for (let i = 0; i < e.choices.length; i++) {
+      // Loop over the live event (a catalog row may have rebuilt it with a different number of choices).
+      for (let i = 0; i < content.events.get(e.id)!.choices.length; i++) {
         const run = chooseStarter(content, createRun(content, { runId: 'r', seed: `tr-${e.id}`, archetypeId: 'red' }), 0);
         run.money = 5000;
         const node = run.stage!.map.nodes[0]!;
@@ -62,7 +63,11 @@ describe('batch 3', () => {
     run.inventory['machine-part'] = 2;
     expect(eventView(content, run, 'test-event').choices[0]!.locked).toBeTruthy();
     run.inventory['machine-part'] = 3;
-    const after = chooseEvent(content, run, 'test-event', 0).run;
+    // The rebuilt workshop (catalog markets row) opens Fidget's list first; the parts are spent on the disc you pick.
+    const list = chooseEvent(content, run, 'test-event', 0).run;
+    expect(list.inventory['machine-part']).toBe(3);
+    const room = list.stage!.map.nodes[0]!.sides.find((x) => x.kind === 'event' && x.eventId === 'tm-workshop-list')!;
+    const after = chooseEvent(content, list, room.id, 0).run;
     expect(after.inventory['machine-part']).toBeUndefined();
     const { accuracyPerk } = await import('../../src/core/trainerPerks');
     expect(accuracyPerk([{ kind: 'accuracyMultiplier', value: 1.2 }, { kind: 'accuracyMultiplier', value: 1.5 }])).toBeCloseTo(1.8);
@@ -85,6 +90,8 @@ describe('batch 4: hints, naps, shadows and shards', () => {
     run.stage!.current = node.id;
     run.stage!.visited = [node.id];
     node.sides.push({ id: 'test-event', kind: 'event', used: false, eventId });
+    // The rebuilt Training Ground (catalog markets row) opens its drills through the Sergeant, who sets this flag.
+    run.story.flags['ev:drill-open'] = 1;
     return run;
   };
 
