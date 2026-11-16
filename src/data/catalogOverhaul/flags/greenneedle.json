@@ -23,7 +23,8 @@
   "lantern-boat": "gn.new.36 The Lantern Sea (read by gn.33)",
   "sunken-bell": "SF41.1 The Sunken City, the ovc-sunken-bell chain (overhaul/event_chains.json; read by gn.33)",
   "night-shift-sneasel": "gn.new.24 The Night Shift (the Sneasel stayed; read by gn.40)",
-  "egg-listened-hatched": "gn.new.05 The Egg That Listened (it hatched for you; read by gn.40)"
+  "egg-listened-hatched": "gn.new.05 The Egg That Listened (it hatched for you; read by gn.40)",
+  "museum-relics-returned": "SF129 \"Return to the Museum\" (the museum's relics returned; read by gn.41)"
  },
  "flags": [
   {
@@ -217,6 +218,14 @@
   {
    "key": "daycare-at",
    "rule": "core/greenneedle/daycare.ts (gn.40 The Pokémon Day-Care Village)"
+  },
+  {
+   "key": "museum-region",
+   "rule": "core/greenneedle/museum.ts (gn.41 The Pokémon Museum)"
+  },
+  {
+   "key": "museum-wrong",
+   "rule": "core/greenneedle/museum.ts (gn.41 The Pokémon Museum)"
   }
  ]
 }

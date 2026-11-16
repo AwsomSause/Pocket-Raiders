@@ -1,8 +1,8 @@
-// Greenneedle, part 9: gn.39 The Travelling Pokémon Market, gn.40 The Pokémon Day-Care Village (doc GREENNEEDLE_REWORKED_PLACED_9.md).
+// Greenneedle, part 9: gn.39 The Travelling Pokémon Market, gn.40 The Pokémon Day-Care Village, gn.41 The Pokémon Museum (doc GREENNEEDLE_REWORKED_PLACED_9.md).
 // Build: npm run co:build -- greenneedle-9   then   npm run co:gn
 import { any, br, ch, egg, fight, flag, item, join, out, trade, wild, type Json } from '../dsl.ts';
 import { anyFlag } from './_ne.ts';
-import { bondAll, chIf, exactly, gev, gn, is, not, notThisRegion, pick, rm, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
+import { bondAll, chIf, exactly, gev, gn, is, moment, not, notThisRegion, pick, rm, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -415,7 +415,169 @@ const gn40: Json[] = [
   ), [ch('Take them home.', out('They wake up, and see you, and are out of the cart before it\'s stopped.', gn('daycareReturn')))]),
 ];
 
-export const EVENTS: Json[] = [...gn39, ...gn40];
+// =====================================================================================================================
+// gn.41  THE POKÉMON MUSEUM  (Hub Destination at a Town node; until towns exist, step 15, optional; once per region, each region's its own).
+// Four halls, three activities (fossil identification, the jigsaw, three hidden items), the label that's wrong on purpose (always one
+// the player could know from this run: core/greenneedle/museum.ts), the locked gallery and its resident, and the Legendary hall's Sign.
+// =====================================================================================================================
+const MUSEUM_TINT = '#6b6a75';
+const marble = (o: Json = {}): Json => ({ tint: MUSEUM_TINT, tags: ['Mystery', 'Treasure', 'Story'], effect: 'none', ...o });
+const toHalls = (label = 'Back to the halls.'): Json => ch(label, out('Back through the marble arch.', scene('gn-41-halls')));
+const toFoyer = (label = 'Back to the foyer.'): Json => ch(label, out('Back to the foyer, under the sign.', scene('gn-41-foyer')));
+
+/** The labels: the right one, and the one Dr. Winterbourne wrote wrong eleven years ago (museum.ts picks which, 1 to 6). */
+const LABELS: { k: number; id: string; exhibit: string; right: string; wrong: string; hall: string }[] = [
+  { k: 1, id: 'bell', hall: 'gn-41-artifacts', exhibit: 'A cracked bronze bell on a cushion.', right: '*"Bell, signal. Rung to call the boats in through fog."*', wrong: '*"Bell, ceremonial. Purpose unknown."* You know its purpose. You\'ve rung one like it, and something answered.' },
+  { k: 2, id: 'net', hall: 'gn-41-artifacts', exhibit: 'A net, folded in a case. There\'s a stamp on the float.', right: '*"Net, fishing. Hand-knotted, local hemp."*', wrong: '*"Net, fishing."* The stamp on the float is a factory\'s. You\'ve seen that stamp before, and what that factory did.' },
+  { k: 3, id: 'portrait', hall: 'gn-41-history', exhibit: 'A portrait of a woman in a veil, looking out to sea.', right: '*"Portrait of the founder\'s sister, who kept the lighthouse."*', wrong: '*"Portrait of an unknown woman."* You know her face. It\'s on a statue, on a cliff, above a town where it is always festival week.' },
+  { k: 4, id: 'footprint', hall: 'gn-41-fossils', exhibit: 'A plaster cast of a footprint, mounted on the wall. It\'s the size of a door.', right: '*"Footprint cast: Rhydon. A large one."*', wrong: '*"Footprint cast: Rhydon."* No Rhydon made that. You\'ve seen what did, on an island where everything is too big.' },
+  { k: 5, id: 'tablet', hall: 'gn-41-artifacts', exhibit: 'A clay tablet covered in small marks.', right: '*"Tablet. A tally of grain, by the look of it."*', wrong: '*"Tablet. Decorative marks."* They aren\'t decoration. They\'re letters. You learned to read them in a cavern that was much too large.' },
+  { k: 6, id: 'date', hall: 'gn-41-history', exhibit: 'A brass plate under the first settlers\' boat.', right: '*"The boat that brought the first families, the year the History wall says."*', wrong: '*"The boat that brought the first families, a hundred years before anyone came."* The History wall, two rooms back, gives the year. This is a hundred years out.' },
+];
+const labelRoom = (l: (typeof LABELS)[number]): Json => rm(`gn-41-label-${l.id}`, 'A Label', marble({ remembers: [
+  { id: 'wrong', when: [exactly('museum-wrong', l.k)], notice: `The label: ${l.wrong}` },
+  { id: 'right', when: [is('museum-region')], notice: `The label: ${l.right}` },
+] }), l.exhibit, [
+  ch('Read it.', out('You read it twice. Dr. Winterbourne, across the hall, pretends not to watch you reading it.', scene(l.hall))),
+  ch('Tell the curator it\'s wrong.', out('**Dr. Winterbourne:** "No, dear. I checked that one."', scene(l.hall)), { branches: [
+    br([gnc('thisRegion', { key: 'museum-label-at' })], '**Dr. Winterbourne:** "Yes, yes. You told me. I\'ve had a cup of tea about it."', scene(l.hall)),
+    br([exactly('museum-wrong', l.k)], say(
+      '**Dr. Winterbourne:** "...Yes. Yes, it is. I wrote it wrong eleven years ago, to see if anyone read them. You\'re the first. I\'d nearly forgotten which it was."',
+      '*A key from her own pocket. A door painted the same colour as the wall.*',
+    ), stampRegion('museum-label-at'), stampRegion('museum-gallery-at'), stampRegion('museum-reader-at'), flag('museum-reader'), flag('museum-label-found'), moment('You found the one label in the museum that was wrong on purpose.', 55), scene('gn-41-gallery')),
+  ] }),
+]);
+const labelCh = (id: string, text: string): Json => ch(text, out('You lean in to the label.', scene(`gn-41-label-${id}`)));
+
+/** The fossil tray: five bones, three guesses each; the clues are on the Fossil hall's skeletons. A right answer: the museum's lab revives it. */
+const BONES: { n: number; bone: string; options: string[]; right: string; fossil: string }[] = [
+  { n: 1, bone: 'A spiral of shell, coiled to the right, with ridges like a staircase.', options: ['Omanyte.', 'Lileep.', 'Kabuto.'], right: 'Omanyte.', fossil: 'helix-fossil' },
+  { n: 2, bone: 'A smooth dome with two pits underneath, like eyes looking up.', options: ['Shieldon.', 'Kabuto.', 'Tirtouga.'], right: 'Kabuto.', fossil: 'dome-fossil' },
+  { n: 3, bone: 'A jaw full of needle teeth, in a chunk of orange amber.', options: ['Tyrunt.', 'Archen.', 'Aerodactyl.'], right: 'Aerodactyl.', fossil: 'old-amber' },
+  { n: 4, bone: 'A claw like a pair of shears, jointed in three places.', options: ['Anorith.', 'Kabuto.', 'Archen.'], right: 'Anorith.', fossil: 'claw-fossil' },
+  { n: 5, bone: 'A skull as thick as a door, flat on top, scarred from a hundred collisions.', options: ['Shieldon.', 'Cranidos.', 'Tyrunt.'], right: 'Cranidos.', fossil: 'skull-fossil' },
+];
+const boneRoom = (b: (typeof BONES)[number]): Json => rm(`gn-41-bone-${b.n}`, `The Tray: Bone ${b.n}`, marble(), say(b.bone, '"Which Pokémon?" says the card. Three answers, in Dr. Winterbourne\'s hand.'), [
+  ...b.options.map((o) => ch(o, o === b.right
+    ? out(`"${o.replace('.', '')}! Yes!" She takes it to the back, and comes out with it revived, blinking.`, item(b.fossil), stampRegion(`museum-bone-${b.n}`), scene('gn-41-tray'))
+    : out('"Not quite, dear. Have another look at the skeletons." She puts it back in the tray, face down.', stampRegion(`museum-bone-${b.n}`), scene('gn-41-tray')))),
+  ch('Put it back.', out('You put it back in the tray.', scene('gn-41-tray'))),
+]);
+const boneCh = (n: number): Json => chIf([once(`museum-bone-${n}`)], `Bone ${['one', 'two', 'three', 'four', 'five'][n - 1]}.`, out('You pick it up. It\'s lighter than you thought.', scene(`gn-41-bone-${n}`)));
+
+/** Three hidden items, behind exhibits: a Relic each. "Take it." / "Tell the curator." */
+const HIDDEN: { n: number; id: string; find: string; relic: string; back: string }[] = [
+  { n: 1, id: 'case', find: 'The case of small fossils nobody\'s identified slides an inch when you lean on it. Behind it, in the dust: a gold coin with a Pokémon on it.', relic: 'relic-gold', back: 'gn-41-fossils' },
+  { n: 2, id: 'tile', find: 'A loose tile, by the Tyrantrum\'s foot. Under it, wrapped in oilcloth: a little stone statue.', relic: 'relic-statue', back: 'gn-41-fossils' },
+  { n: 3, id: 'painting', find: 'The painting of the harbour swings out on a hinge. Behind it, on a hook: a silver band.', relic: 'relic-band', back: 'gn-41-history' },
+];
+const hiddenRoom = (h: (typeof HIDDEN)[number]): Json => rm(`gn-41-hidden-${h.id}`, 'Behind the Exhibit', marble(), h.find, [
+  ch('Take it.', out('It goes in your bag. Nobody saw. The Tyrantrum\'s eye sockets look at you anyway.', item(h.relic), stampRegion(`museum-hidden-${h.n}`), scene(h.back))),
+  ch('Tell the curator.', out('Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*', flag('museum-hidden-returned'), stampRegion(`museum-hidden-${h.n}`), scene(h.back))),
+]);
+const hiddenCh = (n: number, label: string): Json => chIf([once(`museum-hidden-${n}`)], label, out('You look closer.', scene(`gn-41-hidden-${HIDDEN[n - 1]!.id}`)));
+
+/** The Hall of Legendary Pokémon, by region: three or four of the region's legends, and the plinth that's always empty. */
+const LEGEND_HALL: { region: string; shown: [string, string][]; empty: [string, string] }[] = [
+  { region: 'kanto', shown: [['articuno', 'Articuno'], ['zapdos', 'Zapdos'], ['moltres', 'Moltres']], empty: ['mewtwo', 'Mewtwo'] },
+  { region: 'johto', shown: [['raikou', 'Raikou'], ['entei', 'Entei'], ['suicune', 'Suicune'], ['lugia', 'Lugia']], empty: ['ho-oh', 'Ho-Oh'] },
+  { region: 'hoenn', shown: [['groudon', 'Groudon'], ['kyogre', 'Kyogre'], ['latias', 'Latias']], empty: ['rayquaza', 'Rayquaza'] },
+  { region: 'sinnoh', shown: [['dialga', 'Dialga'], ['palkia', 'Palkia'], ['uxie', 'Uxie']], empty: ['giratina', 'Giratina'] },
+  { region: 'unova', shown: [['reshiram', 'Reshiram'], ['zekrom', 'Zekrom'], ['cobalion', 'Cobalion']], empty: ['kyurem', 'Kyurem'] },
+  { region: 'kalos', shown: [['xerneas', 'Xerneas'], ['yveltal', 'Yveltal']], empty: ['zygarde', 'Zygarde'] },
+  { region: 'alola', shown: [['tapu-koko', 'Tapu Koko'], ['solgaleo', 'Solgaleo'], ['lunala', 'Lunala']], empty: ['necrozma', 'Necrozma'] },
+  { region: 'galar', shown: [['zacian', 'Zacian'], ['zamazenta', 'Zamazenta']], empty: ['eternatus', 'Eternatus'] },
+  { region: 'paldea', shown: [['koraidon', 'Koraidon'], ['miraidon', 'Miraidon']], empty: ['terapagos', 'Terapagos'] },
+];
+const legendRoom = (h: (typeof LEGEND_HALL)[number], i: number): Json => {
+  const names = h.shown.map(([, n]) => n);
+  return rm(`gn-41-legends-${i + 1}`, 'The Hall of Legendary Pokémon', marble(), say(
+    `Statues and paintings: ${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}. The light comes down on them from a high window.`,
+    `One plinth is empty, with a card: *"Not yet seen."* It's where ${h.empty[1]} would stand.`,
+  ), [
+    chIf([anyFlag(...h.shown.map(([id]) => `blessing-${id}`)), not('museum-blessing-given')], 'Stand in front of the statue.', out(
+      '*Your lead looks at the statue. Then at you. Then at the statue. It\'s seen that shape. Not in stone.*',
+      ...h.shown.map(([id]) => flag(`sign-${id}`)), flag('museum-blessing-given'), scene(`gn-41-legends-${i + 1}`))),
+    chIf([is(`blessing-${h.empty[0]}`), not(`museum-card-${h.region}`)], 'I\'ve seen it.', out(
+      'Dr. Winterbourne doesn\'t believe you. She writes it down anyway, very neatly, on the back of the card.', flag(`museum-card-${h.region}`), scene(`gn-41-legends-${i + 1}`))),
+    chIf([is(`blessing-${h.empty[0]}`), not(`museum-card-${h.region}`)], 'Leave the card.', out('*"Not yet seen."* You leave it. It isn\'t your card to change.', flag(`museum-card-${h.region}`), scene(`gn-41-legends-${i + 1}`))),
+    toHalls(),
+  ]);
+};
+
+const gn41: Json[] = [
+  gev('gn-41-door', 'The Pokémon Museum', marble({ stop: 'event', rarity: 'common', requires: [notThisRegion('museum-at')] }), say(
+    '*Marble. Cool air. A sign: PLEASE DO NOT TOUCH. Below it, in a child\'s hand: (the fossils like it though).*',
+    '**Curator, Dr. Mathilde Winterbourne:** "Welcome. Four halls. Everything\'s labelled. I wrote most of the labels myself. I\'m very proud of the labels."',
+  ), [
+    ch('Go in.', out('Your footsteps are very loud on the marble. Everyone\'s are.', stampRegion('museum-at'), flag('museum-visits'), gn('museumArrive'), when('museum-relics-returned', { min: 1 }, [stampRegion('museum-gallery-at')], 'Dr. Winterbourne recognises you. "You brought our relics home. The back gallery\'s open for you. It\'s the least we can do."'), scene('gn-41-foyer'))),
+    ch('Walk on.', out('Through the window, a child is touching a fossil. The fossil seems fine with it.')),
+  ]),
+  rm('gn-41-foyer', 'The Museum: The Foyer', marble({ remembers: [{ id: 'reader', when: [is('museum-reader'), notThisRegion('museum-reader-at')], notice: 'On one label in every hall, below the curator\'s writing, a new line: *Reader:* and your name.' }] }), say(
+    'The foyer. Four halls off it. An activities desk with a bell on it. And a door painted exactly the same colour as the wall.',
+  ), [
+    ch('The halls.', out('Through the marble arch.', scene('gn-41-halls'))),
+    ch('The activities desk.', out('You ring the bell. Dr. Winterbourne appears from nowhere.', scene('gn-41-desk'))),
+    chIf([gnc('thisRegion', { key: 'museum-gallery-at' })], 'The door the colour of the wall.', out('She unlocks it with the key from her pocket.', scene('gn-41-gallery'))),
+    ch('Leave the museum.', out('"Come back," says Dr. Winterbourne. "The labels will still be here. That\'s the point of labels."', flag('museum-left'))),
+  ]),
+  rm('gn-41-halls', 'The Museum: The Halls', marble(), 'Four halls, each with a brass sign over the arch.', [
+    ch('Fossils.', out('Into the Fossil hall.', scene('gn-41-fossils'))),
+    ch('Artifacts.', out('Into the Artifacts hall.', scene('gn-41-artifacts'))),
+    ch('The Hall of Legendary Pokémon.', out('Into the hall with the high window.', ...Array.from({ length: 9 }, (_, i) => when('museum-region', { min: i + 1, max: i + 1 }, [scene(`gn-41-legends-${i + 1}`)])))),
+    ch('Regional History.', out('Along the painted wall.', scene('gn-41-history'))),
+  ]),
+  rm('gn-41-fossils', 'The Fossil Hall', marble({ pokemon: 'tyrantrum' }), say(
+    'Skeletons. A Tyrantrum that fills the room. Small plaques under the others: *Omanyte, the shell coils right. Kabuto, a dome, two pits beneath. Aerodactyl, needle teeth, kept in amber. Anorith, a claw jointed three times. Cranidos, a skull as thick as a door.*',
+    'A case of small ones nobody\'s identified. And on the wall, a plaster footprint.',
+  ), [
+    labelCh('footprint', 'Read the footprint\'s label.'),
+    hiddenCh(1, 'Lean on the case of small ones.'),
+    hiddenCh(2, 'The tile by the Tyrantrum\'s foot.'),
+    toHalls(),
+  ]),
+  rm('gn-41-artifacts', 'The Artifacts Hall', marble(), 'Old Poké Balls made of Apricorns. A cracked bell. A net. Keys, a whole wall of them, for doors nobody can find.', [
+    labelCh('bell', 'Read the bell\'s label.'),
+    labelCh('net', 'Read the net\'s label.'),
+    labelCh('tablet', 'Read the tablet\'s label.'),
+    toHalls(),
+  ]),
+  rm('gn-41-history', 'Regional History', marble(), 'A long painted wall: how this region was settled, by whom, and what they found here. The year the first boat landed is painted in gold, very large.', [
+    labelCh('portrait', 'Read the portrait\'s label.'),
+    labelCh('date', 'Read the plate under the boat.'),
+    hiddenCh(3, 'The painting of the harbour.'),
+    toHalls(),
+  ]),
+  ...LABELS.map(labelRoom),
+  ...HIDDEN.map(hiddenRoom),
+  ...LEGEND_HALL.map(legendRoom),
+  rm('gn-41-desk', 'The Activities Desk', marble({ remembers: [{ id: 'trophy', when: [is('trophy-kept'), not('museum-trophy')], notice: 'Dr. Winterbourne sees the trophy in your bag. "Oh. Oh, we\'d give that a case. With a blank plate. Somebody should have their name on it one day."',
+    addChoices: [ch('Give it a case.', out('It goes in a case by the door, with a blank brass plate under it. She polishes the plate with her sleeve.', flag('museum-trophy'), scene('gn-41-desk')))] }] }), 'Two activities, chalked on a board: FOSSIL IDENTIFICATION. FOSSIL RESTORATION.', [
+    ch('Fossil identification.', out('A tray of five bones, and a card for each.', scene('gn-41-tray'))),
+    chIf([once('museum-jigsaw-at')], 'Fossil restoration.', out('A broken skull in a sandbox. Twelve pieces.', scene('gn-41-jigsaw'))),
+    toFoyer(),
+  ]),
+  rm('gn-41-tray', 'Fossil Identification', marble(), '"Which Pokémon?" Five bones, three answers each. The clues are on the skeletons in the Fossil hall.', [boneCh(1), boneCh(2), boneCh(3), ch('The other two bones.', out('The far end of the tray.', scene('gn-41-tray-2')))]),
+  rm('gn-41-tray-2', 'Fossil Identification', marble(), 'The last two bones.', [boneCh(4), boneCh(5), ch('Back to the desk.', out('You leave the tray as you found it, nearly.', scene('gn-41-desk')))]),
+  ...BONES.map(boneRoom),
+  rm('gn-41-jigsaw', 'Fossil Restoration', marble(), say('A broken skull in a sandbox, in twelve pieces. A brush, a pot of glue, and a card: *Don\'t force them.*', 'The museum pays for the work.'), [
+    ch('Fit the pieces.', out('Twelve pieces, and not one forced. Dr. Winterbourne holds it up to the light. "*Perfect.*" She pays you, and then, from a drawer, gives you a Rare Bone. "For a good pair of hands."', { kind: 'money', amount: 800 }, item('rare-bone'), stampRegion('museum-jigsaw-at'), scene('gn-41-desk')), {
+      prompt: { id: 'museum-jigsaw', needs: 'perfect' },
+      fail: out('It\'s together. One piece went in with a crack you\'ll both pretend not to have heard. She pays you for the work, kindly.', { kind: 'money', amount: 800 }, stampRegion('museum-jigsaw-at'), scene('gn-41-desk')),
+    }),
+    ch('Leave it.', out('The skull stays in twelve pieces. It\'s been in twelve pieces a long time.', scene('gn-41-desk'))),
+  ]),
+  rm('gn-41-gallery', 'The Locked Gallery', marble({ remembers: [{ id: 'met', when: [gnc('thisRegion', { key: 'museum-secret-at' })], notice: 'The gallery\'s resident is back where it was, among the things nobody looks at.', hide: [0, 1] }] }), say(
+    '*Inside: the things the museum can\'t explain, and doesn\'t show.* A Poké Ball that\'s warm. A photograph of this museum, with a hall it doesn\'t have. A map of the region with one more town on it.',
+    'And something alive, that\'s been living here among the things nobody looks at.',
+  ), [
+    ch('Battle it.', fight('It comes off its shelf.', { ...wild({ species: ['@museum-secret'], lv: 1 }), exact: true, caught: [stampRegion('museum-secret-at'), scene('gn-41-gallery')], lose: [stampRegion('museum-secret-at'), scene('gn-41-gallery')] }, stampRegion('museum-secret-at'), scene('gn-41-gallery'))),
+    ch('Ask it.', out('You hold out your hand. It looks at you a long time. Then it comes, the way it came to the museum: as if it had always meant to.', { ...join({ species: ['@museum-secret'], lv: 1 }) }, stampRegion('museum-secret-at'), flag('museum-secret-asked'), scene('gn-41-gallery')), { requires: [is('museum-hidden-returned')] }),
+    toFoyer('Leave it be.'),
+  ]),
+];
+
+export const EVENTS: Json[] = [...gn39, ...gn40, ...gn41];
 
 export const REMOVE: string[] = [];
 
@@ -431,6 +593,11 @@ export const PLACEMENT: Record<string, Placement> = {
     note: 'Badge: an egg. Once per region; the same village, and it remembers (within the run). Until towns exist it sits on step 5. The pair left there comes home in the next region (gn-40-return).',
   },
   'gn-40-return': { gn: 'gn.40', shape: 'Single', earliest: 'A4', home: 3, window: [1, 20], sits: 'optional', tags: ['Afterstory'], level: 'none', often: 'run', note: 'Only while two Pokémon are at the village, in a later region.' },
+  'gn-41-door': {
+    gn: 'gn.41', shape: 'Hub', earliest: 'A3', home: 15, window: [13, 17], sits: 'optional', attaches: 'town', tags: ['Hub Destination', 'Mystery Episode'],
+    level: 'The secret encounter at A+1', often: 'region', badge: 'own', dressing: { kanto: 'The Pokémon Museum', elsewhere: 'The Pokémon Museum' },
+    note: "Badge: a column. Once per region; each region's museum is different. In Kanto it is separate from Pewter's Museum of Science (cs.kanto.pewter.museum). Until towns exist it sits on step 15.",
+  },
 };
 
 export const CHAINS: Json[] = [];

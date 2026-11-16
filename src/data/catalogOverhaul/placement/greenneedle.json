@@ -2085,5 +2085,30 @@
    "Afterstory"
   ],
   "tags": []
+ },
+ "gn-41-door": {
+  "gn": "gn.41",
+  "shape": "Hub",
+  "earliest": "A3",
+  "home": 15,
+  "window": [
+   13,
+   17
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "The secret encounter at A+1",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Pokémon Museum",
+   "elsewhere": "The Pokémon Museum"
+  },
+  "note": "Badge: a column. Once per region; each region's museum is different. In Kanto it is separate from Pewter's Museum of Science (cs.kanto.pewter.museum). Until towns exist it sits on step 15.",
+  "kinds": [
+   "Hub Destination",
+   "Mystery Episode"
+  ],
+  "tags": []
  }
 }

@@ -24048,6 +24048,3870 @@
      }
     }
    ]
+  },
+  {
+   "id": "gn-41-door",
+   "name": "The Pokémon Museum",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "museum-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "*Marble. Cool air. A sign: PLEASE DO NOT TOUCH. Below it, in a child's hand: (the fossils like it though).*\n\n**Curator, Dr. Mathilde Winterbourne:** \"Welcome. Four halls. Everything's labelled. I wrote most of the labels myself. I'm very proud of the labels.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "Your footsteps are very loud on the marble. Everyone's are.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-at"
+       },
+       {
+        "kind": "flag",
+        "key": "museum-visits",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "museumArrive"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-relics-returned",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "stampRegion",
+          "key": "museum-gallery-at"
+         }
+        ],
+        "text": "Dr. Winterbourne recognises you. \"You brought our relics home. The back gallery's open for you. It's the least we can do.\""
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-foyer"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Through the window, a child is touching a fossil. The fossil seems fine with it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-foyer",
+   "name": "The Museum: The Foyer",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "reader",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-reader",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "museum-reader-at"
+      }
+     ],
+     "notice": "On one label in every hall, below the curator's writing, a new line: *Reader:* and your name."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "The foyer. Four halls off it. An activities desk with a bell on it. And a door painted exactly the same colour as the wall.",
+   "choices": [
+    {
+     "label": "The halls.",
+     "success": {
+      "text": "Through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The activities desk.",
+     "success": {
+      "text": "You ring the bell. Dr. Winterbourne appears from nowhere.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-desk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The door the colour of the wall.",
+     "success": {
+      "text": "She unlocks it with the key from her pocket.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-gallery"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "thisRegion",
+       "key": "museum-gallery-at"
+      }
+     ]
+    },
+    {
+     "label": "Leave the museum.",
+     "success": {
+      "text": "\"Come back,\" says Dr. Winterbourne. \"The labels will still be here. That's the point of labels.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-halls",
+   "name": "The Museum: The Halls",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Four halls, each with a brass sign over the arch.",
+   "choices": [
+    {
+     "label": "Fossils.",
+     "success": {
+      "text": "Into the Fossil hall.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Artifacts.",
+     "success": {
+      "text": "Into the Artifacts hall.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-artifacts"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Hall of Legendary Pokémon.",
+     "success": {
+      "text": "Into the hall with the high window.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-region",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-legends-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-region",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-legends-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-region",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-legends-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-region",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-legends-4"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-region",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-legends-5"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-region",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-legends-6"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-region",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-legends-7"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-region",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-legends-8"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "museum-region",
+        "min": 9,
+        "max": 9,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-legends-9"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Regional History.",
+     "success": {
+      "text": "Along the painted wall.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-fossils",
+   "name": "The Fossil Hall",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tyrantrum",
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Skeletons. A Tyrantrum that fills the room. Small plaques under the others: *Omanyte, the shell coils right. Kabuto, a dome, two pits beneath. Aerodactyl, needle teeth, kept in amber. Anorith, a claw jointed three times. Cranidos, a skull as thick as a door.*\n\nA case of small ones nobody's identified. And on the wall, a plaster footprint.",
+   "choices": [
+    {
+     "label": "Read the footprint's label.",
+     "success": {
+      "text": "You lean in to the label.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-label-footprint"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lean on the case of small ones.",
+     "success": {
+      "text": "You look closer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-hidden-case"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "museum-hidden-1"
+      }
+     ]
+    },
+    {
+     "label": "The tile by the Tyrantrum's foot.",
+     "success": {
+      "text": "You look closer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-hidden-tile"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "museum-hidden-2"
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-artifacts",
+   "name": "The Artifacts Hall",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Old Poké Balls made of Apricorns. A cracked bell. A net. Keys, a whole wall of them, for doors nobody can find.",
+   "choices": [
+    {
+     "label": "Read the bell's label.",
+     "success": {
+      "text": "You lean in to the label.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-label-bell"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the net's label.",
+     "success": {
+      "text": "You lean in to the label.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-label-net"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the tablet's label.",
+     "success": {
+      "text": "You lean in to the label.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-label-tablet"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-history",
+   "name": "Regional History",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A long painted wall: how this region was settled, by whom, and what they found here. The year the first boat landed is painted in gold, very large.",
+   "choices": [
+    {
+     "label": "Read the portrait's label.",
+     "success": {
+      "text": "You lean in to the label.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-label-portrait"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the plate under the boat.",
+     "success": {
+      "text": "You lean in to the label.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-label-date"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The painting of the harbour.",
+     "success": {
+      "text": "You look closer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-hidden-painting"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "museum-hidden-3"
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-label-bell",
+   "name": "A Label",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "wrong",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-wrong",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "notice": "The label: *\"Bell, ceremonial. Purpose unknown.\"* You know its purpose. You've rung one like it, and something answered."
+    },
+    {
+     "id": "right",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-region",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The label: *\"Bell, signal. Rung to call the boats in through fog.\"*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A cracked bronze bell on a cushion.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You read it twice. Dr. Winterbourne, across the hall, pretends not to watch you reading it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-artifacts"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator it's wrong.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "gn",
+         "test": "thisRegion",
+         "key": "museum-label-at"
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"Yes, yes. You told me. I've had a cup of tea about it.\"",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-artifacts"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "museum-wrong",
+         "atLeast": 1,
+         "atMost": 1
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"...Yes. Yes, it is. I wrote it wrong eleven years ago, to see if anyone read them. You're the first. I'd nearly forgotten which it was.\"\n\n*A key from her own pocket. A door painted the same colour as the wall.*",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-label-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-gallery-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-reader-at"
+        },
+        {
+         "kind": "flag",
+         "key": "museum-reader",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "museum-label-found",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You found the one label in the museum that was wrong on purpose.",
+         "importance": 55
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-gallery"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "**Dr. Winterbourne:** \"No, dear. I checked that one.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-artifacts"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-label-net",
+   "name": "A Label",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "wrong",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-wrong",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "notice": "The label: *\"Net, fishing.\"* The stamp on the float is a factory's. You've seen that stamp before, and what that factory did."
+    },
+    {
+     "id": "right",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-region",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The label: *\"Net, fishing. Hand-knotted, local hemp.\"*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A net, folded in a case. There's a stamp on the float.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You read it twice. Dr. Winterbourne, across the hall, pretends not to watch you reading it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-artifacts"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator it's wrong.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "gn",
+         "test": "thisRegion",
+         "key": "museum-label-at"
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"Yes, yes. You told me. I've had a cup of tea about it.\"",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-artifacts"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "museum-wrong",
+         "atLeast": 2,
+         "atMost": 2
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"...Yes. Yes, it is. I wrote it wrong eleven years ago, to see if anyone read them. You're the first. I'd nearly forgotten which it was.\"\n\n*A key from her own pocket. A door painted the same colour as the wall.*",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-label-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-gallery-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-reader-at"
+        },
+        {
+         "kind": "flag",
+         "key": "museum-reader",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "museum-label-found",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You found the one label in the museum that was wrong on purpose.",
+         "importance": 55
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-gallery"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "**Dr. Winterbourne:** \"No, dear. I checked that one.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-artifacts"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-label-portrait",
+   "name": "A Label",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "wrong",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-wrong",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "notice": "The label: *\"Portrait of an unknown woman.\"* You know her face. It's on a statue, on a cliff, above a town where it is always festival week."
+    },
+    {
+     "id": "right",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-region",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The label: *\"Portrait of the founder's sister, who kept the lighthouse.\"*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A portrait of a woman in a veil, looking out to sea.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You read it twice. Dr. Winterbourne, across the hall, pretends not to watch you reading it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator it's wrong.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "gn",
+         "test": "thisRegion",
+         "key": "museum-label-at"
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"Yes, yes. You told me. I've had a cup of tea about it.\"",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-history"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "museum-wrong",
+         "atLeast": 3,
+         "atMost": 3
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"...Yes. Yes, it is. I wrote it wrong eleven years ago, to see if anyone read them. You're the first. I'd nearly forgotten which it was.\"\n\n*A key from her own pocket. A door painted the same colour as the wall.*",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-label-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-gallery-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-reader-at"
+        },
+        {
+         "kind": "flag",
+         "key": "museum-reader",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "museum-label-found",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You found the one label in the museum that was wrong on purpose.",
+         "importance": 55
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-gallery"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "**Dr. Winterbourne:** \"No, dear. I checked that one.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-label-footprint",
+   "name": "A Label",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "wrong",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-wrong",
+       "atLeast": 4,
+       "atMost": 4
+      }
+     ],
+     "notice": "The label: *\"Footprint cast: Rhydon.\"* No Rhydon made that. You've seen what did, on an island where everything is too big."
+    },
+    {
+     "id": "right",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-region",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The label: *\"Footprint cast: Rhydon. A large one.\"*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A plaster cast of a footprint, mounted on the wall. It's the size of a door.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You read it twice. Dr. Winterbourne, across the hall, pretends not to watch you reading it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator it's wrong.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "gn",
+         "test": "thisRegion",
+         "key": "museum-label-at"
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"Yes, yes. You told me. I've had a cup of tea about it.\"",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-fossils"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "museum-wrong",
+         "atLeast": 4,
+         "atMost": 4
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"...Yes. Yes, it is. I wrote it wrong eleven years ago, to see if anyone read them. You're the first. I'd nearly forgotten which it was.\"\n\n*A key from her own pocket. A door painted the same colour as the wall.*",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-label-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-gallery-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-reader-at"
+        },
+        {
+         "kind": "flag",
+         "key": "museum-reader",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "museum-label-found",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You found the one label in the museum that was wrong on purpose.",
+         "importance": 55
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-gallery"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "**Dr. Winterbourne:** \"No, dear. I checked that one.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-label-tablet",
+   "name": "A Label",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "wrong",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-wrong",
+       "atLeast": 5,
+       "atMost": 5
+      }
+     ],
+     "notice": "The label: *\"Tablet. Decorative marks.\"* They aren't decoration. They're letters. You learned to read them in a cavern that was much too large."
+    },
+    {
+     "id": "right",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-region",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The label: *\"Tablet. A tally of grain, by the look of it.\"*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A clay tablet covered in small marks.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You read it twice. Dr. Winterbourne, across the hall, pretends not to watch you reading it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-artifacts"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator it's wrong.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "gn",
+         "test": "thisRegion",
+         "key": "museum-label-at"
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"Yes, yes. You told me. I've had a cup of tea about it.\"",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-artifacts"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "museum-wrong",
+         "atLeast": 5,
+         "atMost": 5
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"...Yes. Yes, it is. I wrote it wrong eleven years ago, to see if anyone read them. You're the first. I'd nearly forgotten which it was.\"\n\n*A key from her own pocket. A door painted the same colour as the wall.*",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-label-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-gallery-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-reader-at"
+        },
+        {
+         "kind": "flag",
+         "key": "museum-reader",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "museum-label-found",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You found the one label in the museum that was wrong on purpose.",
+         "importance": 55
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-gallery"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "**Dr. Winterbourne:** \"No, dear. I checked that one.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-artifacts"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-label-date",
+   "name": "A Label",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "wrong",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-wrong",
+       "atLeast": 6,
+       "atMost": 6
+      }
+     ],
+     "notice": "The label: *\"The boat that brought the first families, a hundred years before anyone came.\"* The History wall, two rooms back, gives the year. This is a hundred years out."
+    },
+    {
+     "id": "right",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-region",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The label: *\"The boat that brought the first families, the year the History wall says.\"*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A brass plate under the first settlers' boat.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "You read it twice. Dr. Winterbourne, across the hall, pretends not to watch you reading it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator it's wrong.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "gn",
+         "test": "thisRegion",
+         "key": "museum-label-at"
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"Yes, yes. You told me. I've had a cup of tea about it.\"",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-history"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "museum-wrong",
+         "atLeast": 6,
+         "atMost": 6
+        }
+       ],
+       "text": "**Dr. Winterbourne:** \"...Yes. Yes, it is. I wrote it wrong eleven years ago, to see if anyone read them. You're the first. I'd nearly forgotten which it was.\"\n\n*A key from her own pocket. A door painted the same colour as the wall.*",
+       "effects": [
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-label-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-gallery-at"
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-reader-at"
+        },
+        {
+         "kind": "flag",
+         "key": "museum-reader",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "museum-label-found",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You found the one label in the museum that was wrong on purpose.",
+         "importance": 55
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-gallery"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "**Dr. Winterbourne:** \"No, dear. I checked that one.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-hidden-case",
+   "name": "Behind the Exhibit",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "The case of small fossils nobody's identified slides an inch when you lean on it. Behind it, in the dust: a gold coin with a Pokémon on it.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It goes in your bag. Nobody saw. The Tyrantrum's eye sockets look at you anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "relic-gold",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator.",
+     "success": {
+      "text": "Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-hidden-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-hidden-tile",
+   "name": "Behind the Exhibit",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A loose tile, by the Tyrantrum's foot. Under it, wrapped in oilcloth: a little stone statue.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It goes in your bag. Nobody saw. The Tyrantrum's eye sockets look at you anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "relic-statue",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator.",
+     "success": {
+      "text": "Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-hidden-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-fossils"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-hidden-painting",
+   "name": "Behind the Exhibit",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "The painting of the harbour swings out on a hinge. Behind it, on a hook: a silver band.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It goes in your bag. Nobody saw. The Tyrantrum's eye sockets look at you anyway.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "relic-band",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the curator.",
+     "success": {
+      "text": "Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-hidden-returned",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-hidden-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-history"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-legends-1",
+   "name": "The Hall of Legendary Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Statues and paintings: Articuno, Zapdos and Moltres. The light comes down on them from a high window.\n\nOne plinth is empty, with a card: *\"Not yet seen.\"* It's where Mewtwo would stand.",
+   "choices": [
+    {
+     "label": "Stand in front of the statue.",
+     "success": {
+      "text": "*Your lead looks at the statue. Then at you. Then at the statue. It's seen that shape. Not in stone.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-articuno",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-zapdos",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-moltres",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-blessing-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "blessing-articuno",
+        "blessing-zapdos",
+        "blessing-moltres"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "museum-blessing-given",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "I've seen it.",
+     "success": {
+      "text": "Dr. Winterbourne doesn't believe you. She writes it down anyway, very neatly, on the back of the card.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-kanto",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-mewtwo",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-kanto",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the card.",
+     "success": {
+      "text": "*\"Not yet seen.\"* You leave it. It isn't your card to change.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-kanto",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-mewtwo",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-kanto",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-legends-2",
+   "name": "The Hall of Legendary Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Statues and paintings: Raikou, Entei, Suicune and Lugia. The light comes down on them from a high window.\n\nOne plinth is empty, with a card: *\"Not yet seen.\"* It's where Ho-Oh would stand.",
+   "choices": [
+    {
+     "label": "Stand in front of the statue.",
+     "success": {
+      "text": "*Your lead looks at the statue. Then at you. Then at the statue. It's seen that shape. Not in stone.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-raikou",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-entei",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-suicune",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-lugia",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-blessing-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "blessing-raikou",
+        "blessing-entei",
+        "blessing-suicune",
+        "blessing-lugia"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "museum-blessing-given",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "I've seen it.",
+     "success": {
+      "text": "Dr. Winterbourne doesn't believe you. She writes it down anyway, very neatly, on the back of the card.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-johto",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-ho-oh",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-johto",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the card.",
+     "success": {
+      "text": "*\"Not yet seen.\"* You leave it. It isn't your card to change.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-johto",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-ho-oh",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-johto",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-legends-3",
+   "name": "The Hall of Legendary Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Statues and paintings: Groudon, Kyogre and Latias. The light comes down on them from a high window.\n\nOne plinth is empty, with a card: *\"Not yet seen.\"* It's where Rayquaza would stand.",
+   "choices": [
+    {
+     "label": "Stand in front of the statue.",
+     "success": {
+      "text": "*Your lead looks at the statue. Then at you. Then at the statue. It's seen that shape. Not in stone.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-groudon",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-kyogre",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-latias",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-blessing-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "blessing-groudon",
+        "blessing-kyogre",
+        "blessing-latias"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "museum-blessing-given",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "I've seen it.",
+     "success": {
+      "text": "Dr. Winterbourne doesn't believe you. She writes it down anyway, very neatly, on the back of the card.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-hoenn",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-rayquaza",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-hoenn",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the card.",
+     "success": {
+      "text": "*\"Not yet seen.\"* You leave it. It isn't your card to change.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-hoenn",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-rayquaza",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-hoenn",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-legends-4",
+   "name": "The Hall of Legendary Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Statues and paintings: Dialga, Palkia and Uxie. The light comes down on them from a high window.\n\nOne plinth is empty, with a card: *\"Not yet seen.\"* It's where Giratina would stand.",
+   "choices": [
+    {
+     "label": "Stand in front of the statue.",
+     "success": {
+      "text": "*Your lead looks at the statue. Then at you. Then at the statue. It's seen that shape. Not in stone.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-dialga",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-palkia",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-uxie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-blessing-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "blessing-dialga",
+        "blessing-palkia",
+        "blessing-uxie"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "museum-blessing-given",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "I've seen it.",
+     "success": {
+      "text": "Dr. Winterbourne doesn't believe you. She writes it down anyway, very neatly, on the back of the card.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-sinnoh",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-giratina",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-sinnoh",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the card.",
+     "success": {
+      "text": "*\"Not yet seen.\"* You leave it. It isn't your card to change.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-sinnoh",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-giratina",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-sinnoh",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-legends-5",
+   "name": "The Hall of Legendary Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Statues and paintings: Reshiram, Zekrom and Cobalion. The light comes down on them from a high window.\n\nOne plinth is empty, with a card: *\"Not yet seen.\"* It's where Kyurem would stand.",
+   "choices": [
+    {
+     "label": "Stand in front of the statue.",
+     "success": {
+      "text": "*Your lead looks at the statue. Then at you. Then at the statue. It's seen that shape. Not in stone.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-reshiram",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-zekrom",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-cobalion",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-blessing-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "blessing-reshiram",
+        "blessing-zekrom",
+        "blessing-cobalion"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "museum-blessing-given",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "I've seen it.",
+     "success": {
+      "text": "Dr. Winterbourne doesn't believe you. She writes it down anyway, very neatly, on the back of the card.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-unova",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-kyurem",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-unova",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the card.",
+     "success": {
+      "text": "*\"Not yet seen.\"* You leave it. It isn't your card to change.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-unova",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-kyurem",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-unova",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-legends-6",
+   "name": "The Hall of Legendary Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Statues and paintings: Xerneas and Yveltal. The light comes down on them from a high window.\n\nOne plinth is empty, with a card: *\"Not yet seen.\"* It's where Zygarde would stand.",
+   "choices": [
+    {
+     "label": "Stand in front of the statue.",
+     "success": {
+      "text": "*Your lead looks at the statue. Then at you. Then at the statue. It's seen that shape. Not in stone.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-xerneas",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-yveltal",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-blessing-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-6"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "blessing-xerneas",
+        "blessing-yveltal"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "museum-blessing-given",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "I've seen it.",
+     "success": {
+      "text": "Dr. Winterbourne doesn't believe you. She writes it down anyway, very neatly, on the back of the card.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-kalos",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-6"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-zygarde",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-kalos",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the card.",
+     "success": {
+      "text": "*\"Not yet seen.\"* You leave it. It isn't your card to change.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-kalos",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-6"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-zygarde",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-kalos",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-legends-7",
+   "name": "The Hall of Legendary Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Statues and paintings: Tapu Koko, Solgaleo and Lunala. The light comes down on them from a high window.\n\nOne plinth is empty, with a card: *\"Not yet seen.\"* It's where Necrozma would stand.",
+   "choices": [
+    {
+     "label": "Stand in front of the statue.",
+     "success": {
+      "text": "*Your lead looks at the statue. Then at you. Then at the statue. It's seen that shape. Not in stone.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-tapu-koko",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-solgaleo",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-lunala",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-blessing-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-7"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "blessing-tapu-koko",
+        "blessing-solgaleo",
+        "blessing-lunala"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "museum-blessing-given",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "I've seen it.",
+     "success": {
+      "text": "Dr. Winterbourne doesn't believe you. She writes it down anyway, very neatly, on the back of the card.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-alola",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-7"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-necrozma",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-alola",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the card.",
+     "success": {
+      "text": "*\"Not yet seen.\"* You leave it. It isn't your card to change.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-alola",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-7"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-necrozma",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-alola",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-legends-8",
+   "name": "The Hall of Legendary Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Statues and paintings: Zacian and Zamazenta. The light comes down on them from a high window.\n\nOne plinth is empty, with a card: *\"Not yet seen.\"* It's where Eternatus would stand.",
+   "choices": [
+    {
+     "label": "Stand in front of the statue.",
+     "success": {
+      "text": "*Your lead looks at the statue. Then at you. Then at the statue. It's seen that shape. Not in stone.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-zacian",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-zamazenta",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-blessing-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-8"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "blessing-zacian",
+        "blessing-zamazenta"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "museum-blessing-given",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "I've seen it.",
+     "success": {
+      "text": "Dr. Winterbourne doesn't believe you. She writes it down anyway, very neatly, on the back of the card.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-galar",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-8"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-eternatus",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-galar",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the card.",
+     "success": {
+      "text": "*\"Not yet seen.\"* You leave it. It isn't your card to change.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-galar",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-8"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-eternatus",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-galar",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-legends-9",
+   "name": "The Hall of Legendary Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Statues and paintings: Koraidon and Miraidon. The light comes down on them from a high window.\n\nOne plinth is empty, with a card: *\"Not yet seen.\"* It's where Terapagos would stand.",
+   "choices": [
+    {
+     "label": "Stand in front of the statue.",
+     "success": {
+      "text": "*Your lead looks at the statue. Then at you. Then at the statue. It's seen that shape. Not in stone.*",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-koraidon",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-miraidon",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "museum-blessing-given",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-9"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "blessing-koraidon",
+        "blessing-miraidon"
+       ]
+      },
+      {
+       "kind": "flag",
+       "key": "museum-blessing-given",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "I've seen it.",
+     "success": {
+      "text": "Dr. Winterbourne doesn't believe you. She writes it down anyway, very neatly, on the back of the card.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-paldea",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-9"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-terapagos",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-paldea",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Leave the card.",
+     "success": {
+      "text": "*\"Not yet seen.\"* You leave it. It isn't your card to change.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-card-paldea",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-legends-9"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "blessing-terapagos",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-card-paldea",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the halls.",
+     "success": {
+      "text": "Back through the marble arch.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-halls"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-desk",
+   "name": "The Activities Desk",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "trophy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trophy-kept",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "museum-trophy",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Dr. Winterbourne sees the trophy in your bag. \"Oh. Oh, we'd give that a case. With a blank plate. Somebody should have their name on it one day.\"",
+     "addChoices": [
+      {
+       "label": "Give it a case.",
+       "success": {
+        "text": "It goes in a case by the door, with a blank brass plate under it. She polishes the plate with her sleeve.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "museum-trophy",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-41-desk"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "Two activities, chalked on a board: FOSSIL IDENTIFICATION. FOSSIL RESTORATION.",
+   "choices": [
+    {
+     "label": "Fossil identification.",
+     "success": {
+      "text": "A tray of five bones, and a card for each.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fossil restoration.",
+     "success": {
+      "text": "A broken skull in a sandbox. Twelve pieces.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-jigsaw"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "museum-jigsaw-at"
+      }
+     ]
+    },
+    {
+     "label": "Back to the foyer.",
+     "success": {
+      "text": "Back to the foyer, under the sign.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-foyer"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-tray",
+   "name": "Fossil Identification",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "\"Which Pokémon?\" Five bones, three answers each. The clues are on the skeletons in the Fossil hall.",
+   "choices": [
+    {
+     "label": "Bone one.",
+     "success": {
+      "text": "You pick it up. It's lighter than you thought.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-bone-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "museum-bone-1"
+      }
+     ]
+    },
+    {
+     "label": "Bone two.",
+     "success": {
+      "text": "You pick it up. It's lighter than you thought.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-bone-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "museum-bone-2"
+      }
+     ]
+    },
+    {
+     "label": "Bone three.",
+     "success": {
+      "text": "You pick it up. It's lighter than you thought.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-bone-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "museum-bone-3"
+      }
+     ]
+    },
+    {
+     "label": "The other two bones.",
+     "success": {
+      "text": "The far end of the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-tray-2",
+   "name": "Fossil Identification",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "The last two bones.",
+   "choices": [
+    {
+     "label": "Bone four.",
+     "success": {
+      "text": "You pick it up. It's lighter than you thought.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-bone-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "museum-bone-4"
+      }
+     ]
+    },
+    {
+     "label": "Bone five.",
+     "success": {
+      "text": "You pick it up. It's lighter than you thought.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-bone-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "notThisRegion",
+       "key": "museum-bone-5"
+      }
+     ]
+    },
+    {
+     "label": "Back to the desk.",
+     "success": {
+      "text": "You leave the tray as you found it, nearly.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-desk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-1",
+   "name": "The Tray: Bone 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A spiral of shell, coiled to the right, with ridges like a staircase.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Omanyte.",
+     "success": {
+      "text": "\"Omanyte! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "helix-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lileep.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Kabuto.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-1"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-2",
+   "name": "The Tray: Bone 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A smooth dome with two pits underneath, like eyes looking up.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Shieldon.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Kabuto.",
+     "success": {
+      "text": "\"Kabuto! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "dome-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tirtouga.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-2"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-3",
+   "name": "The Tray: Bone 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A jaw full of needle teeth, in a chunk of orange amber.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Tyrunt.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Archen.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Aerodactyl.",
+     "success": {
+      "text": "\"Aerodactyl! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "old-amber",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-3"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-4",
+   "name": "The Tray: Bone 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A claw like a pair of shears, jointed in three places.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Anorith.",
+     "success": {
+      "text": "\"Anorith! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "claw-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-4"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Kabuto.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-4"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Archen.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-4"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-bone-5",
+   "name": "The Tray: Bone 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A skull as thick as a door, flat on top, scarred from a hundred collisions.\n\n\"Which Pokémon?\" says the card. Three answers, in Dr. Winterbourne's hand.",
+   "choices": [
+    {
+     "label": "Shieldon.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-5"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cranidos.",
+     "success": {
+      "text": "\"Cranidos! Yes!\" She takes it to the back, and comes out with it revived, blinking.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "skull-fossil",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-5"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tyrunt.",
+     "success": {
+      "text": "\"Not quite, dear. Have another look at the skeletons.\" She puts it back in the tray, face down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-bone-5"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You put it back in the tray.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-tray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-jigsaw",
+   "name": "Fossil Restoration",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "A broken skull in a sandbox, in twelve pieces. A brush, a pot of glue, and a card: *Don't force them.*\n\nThe museum pays for the work.",
+   "choices": [
+    {
+     "label": "Fit the pieces.",
+     "prompt": {
+      "id": "museum-jigsaw",
+      "needs": "perfect"
+     },
+     "success": {
+      "text": "Twelve pieces, and not one forced. Dr. Winterbourne holds it up to the light. \"*Perfect.*\" She pays you, and then, from a drawer, gives you a Rare Bone. \"For a good pair of hands.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 800
+       },
+       {
+        "kind": "item",
+        "id": "rare-bone",
+        "count": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-jigsaw-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-desk"
+       }
+      ]
+     },
+     "failure": {
+      "text": "It's together. One piece went in with a crack you'll both pretend not to have heard. She pays you for the work, kindly.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 800
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-jigsaw-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-desk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "The skull stays in twelve pieces. It's been in twelve pieces a long time.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-desk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-41-gallery",
+   "name": "The Locked Gallery",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Treasure",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "met",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "thisRegion",
+       "key": "museum-secret-at"
+      }
+     ],
+     "notice": "The gallery's resident is back where it was, among the things nobody looks at.",
+     "hide": [
+      0,
+      1
+     ]
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#6b6a75",
+    "effect": "none"
+   },
+   "intro": "*Inside: the things the museum can't explain, and doesn't show.* A Poké Ball that's warm. A photograph of this museum, with a hall it doesn't have. A map of the region with one more town on it.\n\nAnd something alive, that's been living here among the things nobody looks at.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It comes off its shelf.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-secret-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-gallery"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@museum-secret"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [],
+       "exact": true,
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-secret-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-gallery"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "museum-secret-at"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-41-gallery"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "museum-hidden-returned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You hold out your hand. It looks at you a long time. Then it comes, the way it came to the museum: as if it had always meant to.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "@museum-secret"
+        ],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "museum-secret-at"
+       },
+       {
+        "kind": "flag",
+        "key": "museum-secret-asked",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-gallery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it be.",
+     "success": {
+      "text": "Back to the foyer, under the sign.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-41-foyer"
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

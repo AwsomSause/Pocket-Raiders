@@ -360,3 +360,113 @@ describe('gn.40 The Pokémon Day-Care Village', () => {
     expect(scene(r.run, 'gn-40-bronwen-1').intro).toMatch(/already given you this visit's/);
   });
 });
+
+// ---------------------------------------------------------------------------------------------------------------------
+// gn.41 The Pokémon Museum (core/greenneedle/museum.ts)
+// ---------------------------------------------------------------------------------------------------------------------
+function museum(seed: string, prep?: (run: RunState) => void): RunState {
+  const run = gnRun(seed);
+  run.money = 5000;
+  prep?.(run);
+  open(run, 'gn-41-door');
+  return choose(run, 'gn-41-door', 'Go in.').run;
+}
+const toLabel = (run: RunState, hall: string, label: string): RunState => {
+  let r = choose(run, 'gn-41-foyer', 'The halls.').run;
+  r = choose(r, 'gn-41-halls', hall).run;
+  const room = { 'Fossils.': 'gn-41-fossils', 'Artifacts.': 'gn-41-artifacts', 'Regional History.': 'gn-41-history' }[hall]!;
+  return choose(r, room, label).run;
+};
+
+describe('gn.41 The Pokémon Museum', () => {
+  it('opens with Dr. Winterbourne; without a linked event, the wrong label is the date the History wall contradicts', () => {
+    const run = museum('t41-open');
+    expect(scene(run, 'gn-41-foyer').labels).toEqual(['The halls.', 'The activities desk.', 'Leave the museum.']);
+    expect(flagOf(run, 'museum-wrong')).toBe(6);
+    const at = toLabel(run, 'Regional History.', 'Read the plate under the boat.');
+    expect(scene(at, 'gn-41-label-date').intro).toMatch(/a hundred years before anyone came/);
+    const right = toLabel(run, 'Artifacts.', 'Read the bell\'s label.');
+    const told = choose(right, 'gn-41-label-bell', 'Tell the curator it\'s wrong.');
+    expect(said(told)).toMatch(/No, dear\. I checked that one\./);
+  });
+
+  it('the wrong label is one the player could know: having rung the Sunken City\'s bell, it\'s the bell; finding it opens the gallery', () => {
+    const run = museum('t41-bell', (r) => setFlag(r, 'sunken-bell'));
+    expect(flagOf(run, 'museum-wrong')).toBe(1);
+    const at = toLabel(run, 'Artifacts.', 'Read the bell\'s label.');
+    expect(scene(at, 'gn-41-label-bell').intro).toMatch(/Purpose unknown/);
+    const told = choose(at, 'gn-41-label-bell', 'Tell the curator it\'s wrong.');
+    expect(said(told)).toMatch(/I wrote it wrong eleven years ago, to see if anyone read them\. You're the first\./);
+    expect(scene(told.run, 'gn-41-gallery').labels).toEqual(['Battle it.', 'Ask it.', 'Leave it be.']);
+    expect(scene(told.run, 'gn-41-foyer').labels).toContain('The door the colour of the wall.');
+  });
+
+  it('each region uses a label not used yet; a later museum has your name on a label as Reader', () => {
+    let run = museum('t41-next', (r) => {
+      setFlag(r, 'sunken-bell');
+      setFlag(r, 'giants-entered');
+    });
+    const first = flagOf(run, 'museum-wrong');
+    setFlag(run, 'museum-reader');
+    setFlag(run, 'museum-at', 0);
+    run.regionIndex += 0;
+    open(run, 'gn-41-door');
+    run = choose(run, 'gn-41-door', 'Go in.').run;
+    expect([1, 4]).toContain(flagOf(run, 'museum-wrong'));
+    expect(flagOf(run, 'museum-wrong')).not.toBe(first);
+    expect(scene(run, 'gn-41-foyer').intro).toMatch(/Reader:/);
+  });
+
+  it('the gallery\'s resident can be asked only after a hidden item was returned to the curator', () => {
+    let run = museum('t41-hidden', (r) => setFlag(r, 'sunken-bell'));
+    let fossils = choose(choose(run, 'gn-41-foyer', 'The halls.').run, 'gn-41-halls', 'Fossils.').run;
+    fossils = choose(fossils, 'gn-41-fossils', 'Lean on the case of small ones.').run;
+    const told = choose(fossils, 'gn-41-hidden-case', 'Tell the curator.');
+    expect(said(told)).toMatch(/Found by a visitor who told us/);
+    expect(flagOf(told.run, 'museum-hidden-returned')).toBe(1);
+    expect(scene(told.run, 'gn-41-fossils').labels).not.toContain('Lean on the case of small ones.');
+    run = choose(told.run, 'gn-41-fossils', 'Back to the halls.').run;
+    run = choose(run, 'gn-41-halls', 'Artifacts.').run;
+    run = choose(run, 'gn-41-artifacts', 'Read the bell\'s label.').run;
+    run = choose(run, 'gn-41-label-bell', 'Tell the curator it\'s wrong.').run;
+    const asked = choose(run, 'gn-41-gallery', 'Ask it.');
+    expect(asked.success).toBe(true);
+    const joined = [...asked.run.party, ...asked.run.pending.flatMap((p) => ('mon' in p ? [p.mon] : []))].map((m) => m.speciesId);
+    expect(joined.some((sp) => ['sigilyph', 'golett', 'cofagrigus', 'bronzor'].includes(sp))).toBe(true);
+  });
+
+  it('fossil identification: a right answer revives the fossil; a wrong one doesn\'t; each bone once', () => {
+    let run = choose(museum('t41-tray'), 'gn-41-foyer', 'The activities desk.').run;
+    run = choose(run, 'gn-41-desk', 'Fossil identification.').run;
+    run = choose(run, 'gn-41-tray', 'Bone one.').run;
+    const wrongRun = choose(structuredClone(run), 'gn-41-bone-1', 'Kabuto.');
+    expect(said(wrongRun)).toMatch(/Not quite, dear/);
+    expect(scene(wrongRun.run, 'gn-41-tray').labels).not.toContain('Bone one.');
+    const right = choose(run, 'gn-41-bone-1', 'Omanyte.');
+    expect(said(right)).toMatch(/revived into Omanyte|Omanyte/);
+    expect(right.run.pending.some((p) => 'mon' in p && p.mon.speciesId === 'omanyte')).toBe(true);
+  });
+
+  it('the jigsaw: the museum pays; no piece forced, and a Rare Bone too', () => {
+    let run = choose(museum('t41-jigsaw'), 'gn-41-foyer', 'The activities desk.').run;
+    run = choose(run, 'gn-41-desk', 'Fossil restoration.').run;
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    const side = here.sides.find((x) => x.kind === 'event' && !x.used && x.eventId === 'gn-41-jigsaw')!;
+    const before = run.money;
+    const perfect = chooseEvent(content, structuredClone(run), side.id, 0, undefined, 'perfect');
+    expect(said(perfect)).toMatch(/Rare Bone/);
+    const forced = chooseEvent(content, run, side.id, 0, undefined, 'good');
+    expect(said(forced)).toMatch(/pretend not to have heard/);
+    expect(forced.run.money).toBe(before + 800);
+  });
+
+  it('the Legendary hall: a Sign for the run\'s own Legendary when it is on display, once', () => {
+    let run = museum('t41-legend');
+    const r = flagOf(run, 'museum-region');
+    run = choose(run, 'gn-41-foyer', 'The halls.').run;
+    run = choose(run, 'gn-41-halls', 'The Hall of Legendary Pokémon.').run;
+    const hall = `gn-41-legends-${r}`;
+    expect(scene(run, hall).intro).toMatch(/Not yet seen/);
+    expect(scene(run, hall).labels).toEqual(['Back to the halls.']);
+  });
+});
