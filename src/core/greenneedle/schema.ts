@@ -30,7 +30,7 @@ export const bindGnEffects = (schema: z.ZodType, conditions?: z.ZodType): void =
  *  - `stampStage`: the run flag `key` remembers the stage number now (read with the `gn` conditions `laterStage`, `sameStage`, `notThisStage`).
  *  - `partyHas`: the run flag `key` becomes 1 when a party Pokémon is one of `species`, else 0 (a Clefairy or Clefable sees the secret dance).
  */
-export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp', 'natureLast', 'markLead', 'crystal', 'crystalDrop', 'crystalMost', 'lightning', 'labCast', 'labForm', 'marketArrive', 'marketBuy', 'marketOffer', 'marketUndercut', 'daycareLeave', 'daycareReturn', 'eggShape', 'museumArrive'] as const;
+export const GN_OPS = ['duelist', 'capFlag', 'setFlag', 'unmark', 'roll', 'pick', 'when', 'route', 'scene', 'stageMod', 'fossil', 'stampRegion', 'partyHas', 'stampStage', 'leadBoost', 'itemEach', 'noFaint', 'clampFlag', 'stash', 'unstash', 'markLook', 'setLook', 'payBerry', 'ahead', 'check', 'addParty', 'markParty', 'dropUnmarked', 'minigame', 'releaseLast', 'cast', 'hpCap', 'castItem', 'markLast', 'dropMarked', 'lendHeld', 'returnLent', 'partner', 'oldMove', 'castBase', 'nextOp', 'natureLast', 'markLead', 'crystal', 'crystalDrop', 'crystalMost', 'lightning', 'labCast', 'labForm', 'marketArrive', 'marketBuy', 'marketOffer', 'marketUndercut', 'daycareLeave', 'daycareReturn', 'eggShape', 'museumArrive', 'frontierClear', 'brainRecord', 'swapIn', 'bench', 'unbench', 'bagLeave', 'bagBack', 'rent', 'bring'] as const;
 export const GnEffectSchema = z.object({
   kind: z.literal('gn'),
   op: z.enum(GN_OPS),
@@ -93,6 +93,8 @@ export const GnEffectSchema = z.object({
   // markLook: marks (`key`) every party Pokémon wearing anime look `type` (the Squad recruit, before its challenge). setLook: marked ones now wear `type`.
   .refine((e) => (e.op === 'markLook' || e.op === 'setLook' ? !!e.key && !!e.type : true), { message: 'markLook / setLook need `key` (the mark) and `type` (the look)' })
   // gn.35. lightning: `n` percent that a bolt strikes the lead and paralyses it (core/greenneedle/ridge.ts says what stops it).
+  // gn.42: a Frontier building cleared (`key` the building, `n` the points); a Brain's result (`key`, `n` 1 won / 2 lost); a Factory swap or rental (`key` the species).
+  .refine((e) => (e.op === 'frontierClear' || e.op === 'brainRecord' ? !!e.key && (e.n ?? 0) > 0 : e.op === 'swapIn' || e.op === 'rent' ? !!e.key : true), { message: 'a Frontier op needs `key` (and `n` for a clear or a Brain)' })
   .refine((e) => (e.op === 'lightning' ? e.n !== undefined && e.n >= 1 && e.n <= 100 : true), { message: 'a lightning needs `n` (1 to 100)' })
   .refine((e) => (e.op === 'clampFlag' ? !!e.key && e.min !== undefined && e.max !== undefined : true), { message: 'a clampFlag needs `key`, `min` and `max`' });
 export type GnEffect = z.infer<typeof GnEffectSchema>;
@@ -112,8 +114,8 @@ export type GnEffect = z.infer<typeof GnEffectSchema>;
  *  - `noMoveType`: no party Pokémon knows a move of any of `types` (the mine's pickaxe is for a party with no Fighting, Steel or Ground move).
  *  - `hurtLead`: the first party Pokémon able to fight is at half its HP or less (gn.16: a win from behind).
  */
-export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead', 'heavy', 'markDown', 'hasMark', 'holdsItem', 'oldCatch', 'strength', 'lowTide', 'highTide', 'holds', 'hasAbility', 'parentAndChild', 'eggMoveKnown', 'natureIs', 'pairGetsOn', 'partyBond']), key: Key.optional(), /** gn.27 strength: percent of the `key` Pokémon's Attack to beat. */ n: z.number().int().min(1).max(200).optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
-  .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'holdsBerry' || c.test === 'hurtLead' || c.test === 'heavy' || c.test === 'holdsItem' || c.test === 'oldCatch' || c.test === 'lowTide' || c.test === 'highTide' || c.test === 'parentAndChild' || c.test === 'eggMoveKnown' || c.test === 'pairGetsOn' || c.test === 'partyBond' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
+export const GnCondSchema = z.object({ kind: z.literal('gn'), test: z.enum(['regionChanged', 'notThisRegion', 'laterStage', 'sameStage', 'notThisStage', 'noMoveType', 'moveType', 'cutter', 'holdsBerry', 'notRegion', 'thisRegion', 'lookAtLevel', 'hurtLead', 'heavy', 'markDown', 'hasMark', 'holdsItem', 'oldCatch', 'strength', 'lowTide', 'highTide', 'holds', 'hasAbility', 'aceHere', 'leadInitiative', 'parentAndChild', 'eggMoveKnown', 'natureIs', 'pairGetsOn', 'partyBond']), key: Key.optional(), /** gn.27 strength: percent of the `key` Pokémon's Attack to beat. */ n: z.number().int().min(1).max(200).optional(), types: z.array(z.string().min(1)).min(1).max(6).optional() })
+  .refine((c) => (c.test === 'noMoveType' || c.test === 'moveType' || c.test === 'notRegion' ? !!c.types : c.test === 'lookAtLevel' ? !!c.types && !!c.key : c.test === 'cutter' || c.test === 'holdsBerry' || c.test === 'hurtLead' || c.test === 'heavy' || c.test === 'holdsItem' || c.test === 'oldCatch' || c.test === 'lowTide' || c.test === 'highTide' || c.test === 'parentAndChild' || c.test === 'leadInitiative' || c.test === 'eggMoveKnown' || c.test === 'pairGetsOn' || c.test === 'partyBond' ? true : !!c.key), { message: 'noMoveType and notRegion need `types` (move types / region ids), the others need `key`' });
 export type GnCond = z.infer<typeof GnCondSchema>;
 
 /**
@@ -124,8 +126,11 @@ export type GnCond = z.infer<typeof GnCondSchema>;
  *  - `bex`: Damian's friend Bex (gn.05). She spends the first turn looking for the attack button.
  *  - `damian`: Damian himself (gn.05). His last Pokémon is the ace he actually trained: `ace` levels higher, a held item that fits its type,
  *    and two moves that cover its weaknesses.
+ *  - `palace` (gn.42): your Pokémon choose their own moves, by nature (core/greenneedle/frontier.ts). `arena`: with `surviveTurns`, the judges
+ *    decide after that many turns. `brain-<building>`: a Frontier Brain (their answer to your old ace; held items at Gold); the Palace and
+ *    Arena Brains keep their building's rule.
  */
-export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing', 'desert', 'mansion', 'lab'] as const;
+export const GN_RULES = ['samurai', 'tully', 'bex', 'damian', 'lastflame', 'hawlucha', 'final', 'lastExchange', 'pipes', 'sludge', 'furnace', 'core', 'savanna', 'herd', 'jungle', 'tsareena', 'slowking', 'forest', 'golem', 'ridge', 'overcharged', 'earthing', 'desert', 'mansion', 'lab', 'palace', 'arena', 'brain-tower', 'brain-factory', 'brain-arena', 'brain-pike', 'brain-dome', 'brain-palace', 'brain-pyramid'] as const;
 export const GnRuleSchema = z.enum(GN_RULES);
 export type GnRule = z.infer<typeof GnRuleSchema>;
 

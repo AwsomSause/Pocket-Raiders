@@ -108,6 +108,31 @@
    "forest"
   ]
  },
+ "gn-42-door": {
+  "gn": "gn.42",
+  "shape": "Hub",
+  "earliest": "A9",
+  "home": 12,
+  "window": [
+   10,
+   15
+  ],
+  "sits": "optional",
+  "attaches": "town",
+  "level": "By rank: Brains bring 3 Pokémon at A+0 (Bronze), 4 at A+1 (Silver), 5 at A+1 with held items (Gold), 6 at A+2 (Platinum)",
+  "often": "region",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Battle Frontier",
+   "elsewhere": "The Battle Frontier"
+  },
+  "note": "Badge: a crossed-swords crest. Once per region, from the second region. SF114 (ps-battle-frontier-gate) is its front gate, with the same clerk. The rank and the Brains' memory last the run (no memory across runs).",
+  "kinds": [
+   "Hub Destination",
+   "Tournament Episode"
+  ],
+  "tags": []
+ },
  "pp-cold-open": {
   "gn": "gn.01",
   "shape": "Chain",

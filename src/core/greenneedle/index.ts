@@ -25,6 +25,7 @@ import { museumArrive } from './museum';
 import { daycareLeave, daycareReturn, eggShape, parentAndChild } from './daycare';
 import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
+import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench } from './frontier';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -41,6 +42,11 @@ const REGION_GENERATION: Record<string, number> = { kanto: 1, johto: 2, hoenn: 3
 const PET_NAMES = ['Dumpling', 'Biscuit', 'Pickle', 'Button', 'Pebble', 'Sprout', 'Mochi', 'Waffles', 'Bramble', 'Nugget', 'Toffee', 'Puddle', 'Crumpet', 'Bean', 'Muffin', 'Pip'];
 /** gn.24: `{petname}` (the old name a past trainer gave it) and `{partner}` (its species) in event text, for the partner Pokémon. */
 export function gnTokens(content: Content, run: RunState, text: string): string {
+  if (!text.includes('{')) return text;
+  // {cast:<name>}: the species a story Pokémon was cast as (gn.42: the ace a Brain remembers).
+  text = text.replace(/\{cast:([a-z0-9-]+)\}/g, (_, name: string) => content.species.get(castOf(run, name) ?? '')?.name ?? 'that one');
+  // {flag:<key>}: a run flag's number (gn.42: the marks the Arena's judge gave you).
+  text = text.replace(/\{flag:([a-z0-9-]+)\}/g, (_, k: string) => String(gnFlag(run, k)));
   if (!text.includes('{')) return text;
   const mon = [...run.party, ...run.box].find((m) => m.gn?.includes('old-partner')) ?? firstCatch(run);
   if (!mon) return text.replaceAll('{petname}', 'Dumpling').replaceAll('{partner}', 'Pokémon');
@@ -147,6 +153,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'holds') return run.party.some((m) => (m.held?.[c.key!] ?? 0) > 0);
   // gn.40, the Day-Care Village's board and Bronwen's pairs.
   if (c.test === 'parentAndChild') return parentAndChild(run);
+  // gn.42: last time's ace is in the party (a Brain's answer has something to answer); the lead takes the initiative (SF161).
+  if (c.test === 'aceHere') return aceHere(run, c.key!);
+  if (c.test === 'leadInitiative') return leadInitiative(run);
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
   if (c.test === 'natureIs') return run.party.some((m) => m.nature === c.key);
   if (c.test === 'pairGetsOn') return run.party.some((a, i) => run.party.some((b, j) => j > i && pairBondLevel(run, a.uid, b.uid) >= 1));
@@ -175,6 +184,13 @@ const fossilsElsewhere = (region: string): string[] => {
 };
 
 /** One Greenneedle story step. Returns the line the outcome shows (may be empty). */
+/** A new Pokémon at full HP (the Frontier's rentals and its Brains' answers). */
+const makeFull = (content: Content) => (speciesId: string, level: number, uid: string): PokemonInstance => {
+  const mon = createPokemon(content, speciesId, level, uid);
+  mon.hp = maxHp(content, mon);
+  return mon;
+};
+
 export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host: GnHost): string {
   switch (e.op) {
     case 'duelist':
@@ -416,6 +432,27 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return eggShape(run, e.key!);
     case 'museumArrive':
       return museumArrive(run, host.region);
+    // gn.42 The Battle Frontier (frontier.ts).
+    case 'frontierClear':
+      return frontierClear(run, e.key!, e.n!);
+    case 'brainRecord':
+      return brainRecord(run, e.key!, e.n!);
+    case 'swapIn':
+      return swapIn(content, run, host.picked, e.key!, makeFull(content));
+    case 'rent': {
+      const team = (run.expansion?.canon?.stash as PokemonInstance[] | undefined) ?? run.party;
+      return rent(content, run, e.key!, Math.max(1, ...team.map((m) => m.level)), makeFull(content));
+    }
+    case 'bring':
+      return bring(content, run, host.picked);
+    case 'bench':
+      return bench(run);
+    case 'unbench':
+      return unbench(run);
+    case 'bagLeave':
+      return bagLeave(run);
+    case 'bagBack':
+      return bagBack(run);
     case 'marketUndercut':
       return marketUndercut(run, e.key!, e.n!);
     case 'markLead': {
@@ -506,6 +543,9 @@ export function gnBattleStart(content: Content, run: RunState): void {
   const battle = run.battle;
   if (!battle) return;
   if (gnFlag(run, FOREST.inside) > 0 && gnFlag(run, FOREST.fog) > 0) battle.accuracyMult = 0.9;
+  // gn.42: a Frontier Brain brings the answer to the ace you brought last time.
+  const rule = battle.eventRule?.gn;
+  if (rule?.startsWith('brain-')) brainStart(content, run, battle, rule.slice('brain-'.length), makeFull(content));
   // gn.32: the Crystal Golem takes the type of the colour you carry most.
   if (battle.eventRule?.gn === 'golem') golemStart(run, battle);
   // gn.35: a friendly follower, drawn by a charged crystal: it walks alongside you, and is easier to catch (ridge.ts ridgeCatch).
@@ -538,7 +578,6 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // The final: at Crowd 5 the hall chants its name, and its first move goes first.
   if (battle.eventRule?.gn === 'final' && lead && gnFlag(run, 'tournament-crowd') >= 5) battle.storyEffects.push(`kind:${lead.uid}`);
   // The Polluted Factory (gn.17).
-  const rule = battle.eventRule?.gn;
   if (rule === 'pipes' || rule === 'sludge' || rule === 'furnace' || rule === 'core') factoryStart(content, run, battle, rule);
   // The Deep Savanna (gn.19): a sandstorm on the first turn; with no water left the party starts at 90% HP; a Donphan takes a blow.
   if (rule === 'savanna' || rule === 'herd') {
@@ -663,6 +702,12 @@ export function gnShape(content: Content, run: RunState, action: PlayerAction): 
   // gn.35: earthing the overcharged one. Your Ground-type won't strike it: it stands there, because it's needed there.
   if (rule === 'earthing' && action.kind === 'move' && action.index >= 0 && (content.moves.get(mon.moves[action.index]?.id ?? '')?.category ?? 'status') !== 'status') {
     return { action: { kind: 'idle' }, events: [cue('player', `${nameOf(content, mon)} doesn't strike. It plants its feet, and stands there. It's needed there.`, mon.uid)] };
+  }
+  // gn.42: the Palace. Your Pokémon choose their own moves, by nature; a Bond 4 one (or a lead that takes the initiative) picks well.
+  if ((rule === 'palace' || rule === 'brain-palace') && action.kind === 'move') {
+    const types = foe ? (content.species.get(foe.speciesId)?.types ?? []) as TypeName[] : [];
+    const r = palaceShape(content, run, battle, action, (t) => (types.length ? typeEffectiveness(content.typeChart, t as TypeName, types) : 1), leadInitiative(run));
+    return { action: r.action, events: r.line ? [cue('player', r.line, mon.uid)] : [] };
   }
   if (rule === 'samurai' && foe?.speciesId === 'pinsir' && foe.hp > 0 && action.kind === 'move' && guards(content, mon, action.index)) {
     battle.storyEffects.push(`${FOE_WAITS}Pinsir lowers its horns. It will not strike a foe that is not looking at it.`);

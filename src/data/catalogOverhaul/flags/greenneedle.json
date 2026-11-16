@@ -226,6 +226,106 @@
   {
    "key": "museum-wrong",
    "rule": "core/greenneedle/museum.ts (gn.41 The Pokémon Museum)"
+  },
+  {
+   "key": "frontier-cleared",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-rank",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-tower",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-factory",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-arena",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-pike",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-dome",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-palace",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "frontier-cleared-pyramid",
+   "rule": "core/greenneedle/frontier.ts frontierClear (gn.42)"
+  },
+  {
+   "key": "brain-tower-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-factory-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-arena-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-pike-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-dome-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-palace-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-pyramid-met",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-tower-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-factory-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-arena-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-pike-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-dome-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-palace-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-pyramid-won",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42)"
+  },
+  {
+   "key": "brain-arena-marks",
+   "rule": "core/greenneedle/frontier.ts brainRecord (gn.42 Arena)"
+  },
+  {
+   "key": "dome-picked",
+   "rule": "core/greenneedle/frontier.ts bring (gn.42 Dome)"
   }
  ]
 }

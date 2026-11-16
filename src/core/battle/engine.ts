@@ -19,6 +19,7 @@
 import { ownTypes } from '../co/typeShift';
 import { golemBlueType, golemColour } from '../greenneedle/crystals';
 import { unflinching } from '../greenneedle/daycare';
+import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { earthLine, overchargeSelfHurt } from '../greenneedle/ridge';
 import { foresightBegin } from './foresight';
 import { CARE } from '../care/mods';
@@ -1216,6 +1217,18 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
   if (rule.gn === 'earthing' && rule.surviveTurns && !battle.outcome) {
     const line = earthLine(battle.turn - 1, rule.surviveTurns);
     if (line) events.push({ type: 'raid', tone: 'info', text: line });
+  }
+  // Greenneedle gn.42, the Battle Frontier's Arena: the judges keep a tally each turn, and after the last one they decide.
+  if ((rule.gn === 'arena' || rule.gn === 'brain-arena') && content && party) {
+    arenaTurn(battle, events, (side) => {
+      const m = side === 'player' ? party[battle.activeIndex] : currentEnemy(battle);
+      return m ? maxHp(content, m) : 1;
+    });
+    if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) {
+      const v = arenaVerdict(battle);
+      events.push({ type: 'raid', tone: 'phase', text: v.line });
+      battle.outcome = v.outcome;
+    }
   }
   if (!battle.outcome && rule.surviveTurns && battle.turn > rule.surviveTurns) battle.outcome = 'win';
   if (!battle.outcome && rule.calm && !events.some((e) => e.type === 'damage' && e.side === 'enemy')) {
