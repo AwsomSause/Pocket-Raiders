@@ -79,13 +79,6 @@ test('the healing spot and the shop work from the map', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await startRun(page, 'e2e-heal-shop');
-  // A run takes on the dated game events of the day it starts (Market Week: every shop 10% off). They are taken off
-  // this run, so the amounts below do not change with the calendar.
-  await page.evaluate(() => {
-    const { run } = (window as any).__pkr.session;
-    run.perkEffects = [];
-    run.gameEvents = [];
-  });
   await mapReady(page);
 
   // Jump next to the gym (the column before it always has a healing spot), hurt the party, add a shop.

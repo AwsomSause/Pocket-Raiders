@@ -165,13 +165,6 @@ test('shop items: a Coupon halves a price and the Member Card sells an item earl
   page.on('pageerror', (e) => errors.push(e.message));
   page.on('requestfailed', (r) => errors.push(`failed: ${r.url()}`));
   await startRun(page, 'e2e-shop-items');
-  // A run takes on the dated game events of the day it starts (Market Week: every shop 10% off). They are taken off
-  // this run, so the prices below do not change with the calendar.
-  await page.evaluate(() => {
-    const { run } = (window as any).__pkr.session;
-    run.perkEffects = [];
-    run.gameEvents = [];
-  });
 
   for (const id of ['item:coupon-3', 'item:member-card']) {
     await showDraft(page, [id, 'item:heart-scale', 'item:big-pearl', 'item:stardust', 'item:pearl']);

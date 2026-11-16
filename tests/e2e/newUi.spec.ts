@@ -2622,3 +2622,79 @@ test('New UI: a nickname is typed on the code entry page from the Summary\'s Car
   expect(boxes).toBe(0);
   expect(errors).toEqual([]);
 });
+
+test('New UI: an honest trade shows the Trade page: the card can be read with T, both sides show every line, a worse deal is asked once more, and the trade happens', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new&seed=newui-honest');
+  await toMap(page);
+  // A strong Pokémon (worth more than the Krabby on offer) and a small one (an even trade).
+  await page.evaluate(() => {
+    const run = (window as any).__pkr.session.run;
+    const big = run.party[0];
+    big.speciesId = 'charizard';
+    big.level = 30;
+    const small = JSON.parse(JSON.stringify(big));
+    small.uid = 'e2e-small';
+    small.speciesId = 'caterpie';
+    small.level = 5;
+    run.party.push(small);
+  });
+  await addSide(page, { id: 'nu-trade', kind: 'event', used: false, eventId: 'trade-t001' });
+  await page.evaluate(() => void (window as any).__pkr.game.scene.getScene('Map').scene.start('Event', { sideId: 'nu-trade' }));
+  await waitForScene(page, 'Event');
+  const ev = view(page, 'Event');
+  await expect(ev).toContainText('Net-mender Effie');
+  // Read to the last page: the choices and the card tag show.
+  for (let k = 0; k < 12 && !(await ev.locator('[data-act="pick"]').count()); k++) { await page.keyboard.press('Enter'); await page.waitForTimeout(350); }
+  await expect(ev.locator('[data-act="pick"]').first()).toContainText('Trade.');
+  await expect(ev.locator('[data-act="card"]')).toContainText('Trade card');
+
+  // T: the card before choosing. Their side only, with what they want; Esc closes it.
+  await page.keyboard.press('t');
+  await expect(ev.locator('.hd')).toContainText('Trade');
+  for (const t of ['Effie', 'Krabby', 'Adamant', 'Collector', 'Their offer', 'They want: any non-Water Pokémon', 'ruined forty nets']) await expect(ev).toContainText(t);
+  await expect(ev.locator('[data-act="trade"]')).toHaveCount(0);
+  await page.screenshot({ path: 'test-results/newui-honest-read.png' });
+  await page.keyboard.press('Escape');
+  await expect(ev.locator('[data-act="pick"]').first()).toContainText('Trade.');
+
+  // "Trade.": both sides. The list goes from the lowest level up, so the small one is first: an even trade.
+  await page.waitForTimeout(250);
+  await ev.locator('[data-act="pick"]').first().click();
+  await expect(ev.locator('[data-act="trade"]')).toHaveCount(2);
+  await expect(ev.locator('[data-act="trade"].on')).toContainText('Caterpie');
+  await expect(ev).toContainText('Fair trade');
+  await expect(ev).toContainText('Shield Dust');
+  await expect(ev).toContainText('Hyper Cutter');
+  await expect(ev.locator('[data-value]')).toHaveCount(2);
+  await expect(ev.locator('.txt')).toContainText('ruined forty nets');
+  // The Charizard is worth more than the Krabby, and the card says so.
+  await page.keyboard.press('ArrowDown');
+  await expect(ev.locator('[data-act="trade"].on')).toContainText('Charizard');
+  await expect(ev).toContainText('You give more');
+  await page.screenshot({ path: 'test-results/newui-honest-card.png' });
+  // The level on the card is the level it arrives at (never above the run's level cap).
+  const shown = Number(/Krabby Lv (\d+)/.exec(await ev.innerText())?.[1]);
+  expect(shown).toBeGreaterThan(0);
+  // The first Enter does not trade: the trader asks once more.
+  await page.keyboard.press('Enter');
+  await expect(ev.locator('.txt')).toContainText('You sure?');
+  await expect(ev.locator('[data-act="trade"].on')).toContainText('Yes, trade');
+  expect(await page.evaluate(() => (window as any).__pkr.session.run.party[0].speciesId)).toBe('charizard');
+  // Moving to the small one takes the question back.
+  await page.keyboard.press('ArrowUp');
+  await expect(ev).toContainText('Fair trade');
+  await expect(ev.locator('.txt')).toContainText('ruined forty nets');
+  // Back down, and yes twice: the Charizard goes and Effie's Krabby arrives as the card showed.
+  await page.keyboard.press('ArrowDown');
+  await page.waitForTimeout(150);
+  await page.keyboard.press('Enter');
+  await expect(ev.locator('.txt')).toContainText('You sure?');
+  await page.waitForTimeout(250);
+  await page.keyboard.press('Enter');
+  await expect(ev.locator('[data-act="next"]')).toBeVisible({ timeout: 10_000 });
+  const party = await page.evaluate(() => (window as any).__pkr.session.run.party.map((m: any) => ({ id: m.speciesId, level: m.level, ot: m.ot ?? null, nature: m.nature })));
+  expect(party.some((m: any) => m.id === 'charizard')).toBe(false);
+  expect(party.find((m: any) => m.id === 'krabby')).toMatchObject({ level: shown, ot: 'Effie', nature: 'adamant' });
+  expect(errors).toEqual([]);
+});

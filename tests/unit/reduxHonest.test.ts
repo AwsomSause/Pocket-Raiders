@@ -1,92 +1,78 @@
 import { describe, expect, it } from 'vitest';
-import { honestLine, honestVerdict, honestView, type HonestModel, type HonestSide } from '../../src/ui/redux/screens/stops';
+import { honestLine, honestVerdict, honestView, type HonestModel, type HonestSide } from '../../src/ui/redux/screens/honest';
 import type { ReduxCtx } from '../../src/ui/redux/stage';
 
-// New UI: the Honest Trade Card (Catalog Overhaul TRADES.md 1.1-1.3) drawn on the mock-ups' trade page. The page is
-// a pure function from a model to HTML, so what it must always tell the player is checked here without a browser.
+// New UI: the Honest Trade Card page (Catalog Overhaul, TRADES.md 1.1): both sides with the same lines, the fair
+// values compared in one word, the trader's words in the text box, and the second yes when theirs is worth less.
 
-const ctx = (layout: number): ReduxCtx => ({ k: layout, skin: {} as ReduxCtx['skin'], v: (n) => layout % n });
+const ctx: ReduxCtx = { k: 0, skin: {} as ReduxCtx['skin'], v: () => 0 };
 const count = (html: string, bit: string): number => html.split(bit).length - 1;
-const mon = (over: Partial<HonestSide> = {}): HonestSide => ({
-  file: null, name: 'Haunter', level: 28, types: ['ghost', 'poison'], nature: 'Timid', ability: 'Levitate', hidden: false,
-  moves: ['Shadow Ball', 'Hypnosis', 'Lick', 'Curse'], quirk: { name: 'Night singer', line: 'It sings at night.' }, marks: ['hatched on a ferry', 'survived a flood'],
-  held: null, shiny: false, value: 5, evolvesTo: null, ...over,
-});
-const card = (over: Partial<HonestModel> = {}): HonestModel => ({
-  title: 'Harbour Trade', you: null, trader: 'Marlo', traderArt: null, wants: 'a Water type', gift: false,
-  give: mon({ name: 'Psyduck', level: 24, types: ['water'], nature: 'Calm', ability: 'Damp', moves: ['Water Gun', 'Confusion'], quirk: null, marks: [], value: 4 }),
-  get: mon(), warn: null, why: 'It keeps the whole dock awake.', asking: false, at: 0, count: 1, focus: 0, readOnly: false, ...over,
-});
+const side = (over: Partial<HonestSide> = {}): HonestSide => ({ name: 'Krabby', file: null, level: 12, nature: 'adamant', ability: 'Hyper Cutter', hidden: false, moves: ['Bubble', 'Leer', 'Vise Grip', 'Harden'], quirk: { name: 'Collector', line: 'Picks things up.' }, marks: ['raised on a pier'], held: null, evolvesTo: null, value: 2, shiny: false, ...over });
+const card = (over: Partial<HonestModel> = {}): HonestModel => ({ trader: 'Effie', why: 'It chews my nets.', wants: 'any non-Water Pokémon', yours: side({ name: 'Charmander', value: 2 }), theirs: side(), warn: null, gift: false, picks: ['Charmander Lv12'], at: 0, asking: false, ...over });
 
-describe('Honest Trade Card', () => {
-  for (const layout of [0, 1]) {
-    describe(`layout ${layout}`, () => {
-      it('tells both sides in full: name, level, nature, ability, all four moves, quirk, history and one fair value each', () => {
-        const html = honestView(ctx(layout), card());
-        for (const bit of ['Haunter', 'Lv 28', 'Timid', 'Levitate', 'Shadow Ball', 'Hypnosis', 'Lick', 'Curse', 'Night singer', 'It sings at night.', 'hatched on a ferry', 'survived a flood', 'Fair value 5']) expect(html).toContain(bit);
-        for (const bit of ['Psyduck', 'Lv 24', 'Calm', 'Damp', 'Water Gun', 'Confusion', 'Fair value 4']) expect(html).toContain(bit);
-        expect(html).toContain('Marlo');
-        expect(html).toContain('It keeps the whole dock awake.');
-      });
-      it('always shows four move slots, with a dash for an empty one', () => {
-        const html = honestView(ctx(layout), card({ give: null, gift: true, get: mon({ moves: ['Lick'] }) }));
-        expect(count(html, '>—</span>')).toBe(3);
-      });
-      it('marks a hidden ability, a held item, a shiny and a trade evolution', () => {
-        const html = honestView(ctx(layout), card({ get: mon({ hidden: true, held: 'Spell Tag', shiny: true, evolvesTo: 'Gengar' }) }));
-        expect(html).toContain('(Hidden)');
-        expect(html).toContain('Spell Tag');
-        expect(html).toContain('✦');
-        expect(html).toContain('Evolves into Gengar when traded');
-        const plain = honestView(ctx(layout), card());
-        for (const bit of ['(Hidden)', 'Holds', '✦', 'Evolves into']) expect(plain).not.toContain(bit);
-      });
-      it('has one Trade and one Back button; stepping through your Pokémon only when there are several', () => {
-        const one = honestView(ctx(layout), card());
-        expect(count(one, 'data-act="accept"')).toBe(1);
-        expect(count(one, 'data-act="back"')).toBe(1);
-        expect(one).not.toContain('data-act="step"');
-        const many = honestView(ctx(layout), card({ count: 3, at: 1 }));
-        expect(count(many, 'data-act="step"')).toBe(2);
-        expect(many).toContain('2/3');
-      });
-      it('"Ask about it" only shows the card: no Trade button, one button to close', () => {
-        const html = honestView(ctx(layout), card({ readOnly: true, count: 3 }));
-        expect(html).not.toContain('data-act="accept"');
-        expect(html).not.toContain('data-act="step"');
-        expect(count(html, 'data-act="back"')).toBe(1);
-      });
-      it('with nothing that fits, the Trade button is dimmed and the page says what is wanted', () => {
-        const html = honestView(ctx(layout), card({ give: null }));
-        expect(html).toMatch(/opacity:\.5"[^>]*data-act="accept"/);
-        expect(html).toContain('a Water type');
-      });
-      it('never injects text as HTML', () => {
-        const html = honestView(ctx(layout), card({ trader: '<b>x</b>', why: '<i>y</i>', get: mon({ name: '<u>z</u>', moves: ['<s>m</s>'], marks: ['<em>k</em>'] }) }));
-        for (const bit of ['<b>x</b>', '<i>y</i>', '<u>z</u>', '<s>m</s>', '<em>k</em>']) expect(html).not.toContain(bit);
-      });
-    });
-  }
-
-  it('the verdict: a gift, a fair trade, a worse one (in red), a much better one, or what is needed', () => {
-    expect(honestVerdict(card())).toEqual({ text: 'Fair trade', bad: false });
-    expect(honestVerdict(card({ warn: 'worse' }))).toEqual({ text: 'You give more than you get', bad: true });
-    expect(honestVerdict(card({ warn: 'much-better' }))).toEqual({ text: 'Much better for you', bad: false });
-    expect(honestVerdict(card({ gift: true, give: null }))).toEqual({ text: 'A gift', bad: false });
-    expect(honestVerdict(card({ give: null }))).toEqual({ text: 'Needs a Water type', bad: true });
-    expect(honestView(ctx(0), card({ warn: 'worse' }))).toContain('color:#f08080');
-    expect(honestView(ctx(0), card())).not.toContain('color:#f08080');
+describe('Honest Trade Card: the word between the sides', () => {
+  it('compares the two fair values', () => {
+    expect(honestVerdict(card())).toBe('Fair trade');
+    expect(honestVerdict(card({ theirs: side({ value: 3 }) }))).toBe('You get more');
+    expect(honestVerdict(card({ theirs: side({ value: 5 }), warn: 'much-better' }))).toBe('You get much more');
+    expect(honestVerdict(card({ yours: side({ value: 4 }), warn: 'worse' }))).toBe('You give more');
+    // A higher value on your side reads the same even if the warning was not passed on.
+    expect(honestVerdict(card({ yours: side({ value: 4 }) }))).toBe('You give more');
   });
+  it('a gift and a card with no Pokémon picked have their own words', () => {
+    expect(honestVerdict(card({ gift: true, yours: null }))).toBe('A gift');
+    expect(honestVerdict(card({ yours: null }))).toBe('Their offer');
+  });
+  it('the trader says why, and asks once when theirs is worth less', () => {
+    expect(honestLine(card())).toBe('It chews my nets.');
+    expect(honestLine(card({ asking: true }))).toContain('You sure?');
+  });
+});
 
-  it('the trader says why; after a warning they ask once more, and the button says so', () => {
-    expect(honestLine(card())).toBe('It keeps the whole dock awake.');
-    expect(honestLine(card({ warn: 'much-better' }))).toBe('It keeps the whole dock awake.');
-    expect(honestLine(card({ asking: true, warn: 'worse' }))).toBe('Mine’s worth less than yours. You sure?');
-    expect(honestLine(card({ give: null }))).toBe('I’m looking for a Water type. It keeps the whole dock awake.');
-    const asking = honestView(ctx(0), card({ asking: true, warn: 'worse', count: 3 }));
-    expect(asking).toContain('Yes, trade');
-    expect(asking).toContain('Mine’s worth less than yours. You sure?');
-    // While the trader waits for the answer, the offer cannot be switched.
-    expect(asking).not.toContain('data-act="step"');
+describe('Honest Trade Card page', () => {
+  it('shows every line of the card on both sides', () => {
+    const html = honestView(ctx, card({ theirs: side({ hidden: true, held: 'Mystic Water', evolvesTo: 'Kingler', shiny: true }) }));
+    for (const t of ['Trade', 'You', 'Effie', 'Charmander', 'Krabby', 'Lv 12', 'Adamant', 'Hyper Cutter (hidden)', 'Bubble', 'Vise Grip', 'Collector: Picks things up.', 'Raised on a pier', 'Mystic Water', 'Evolves into Kingler', '★ Krabby', 'It chews my nets.', 'They want: any non-Water Pokémon', 'Fair trade']) expect(html, t).toContain(t);
+    expect(count(html, 'data-value')).toBe(2);
+    expect(count(html, 'data-act="trade"')).toBe(1);
+  });
+  it('a side with nothing to tell says so, and four moves at most are listed', () => {
+    const html = honestView(ctx, card({ theirs: side({ ability: null, quirk: null, marks: [], moves: ['A', 'B', 'C', 'D', 'E'] }) }));
+    expect(html).toContain('Nothing yet');
+    expect(html).toContain('>None<');
+    expect(html).not.toContain('>E<');
+    expect(honestView(ctx, card({ theirs: side({ moves: [] }) }))).toContain('No moves');
+  });
+  it('while the trader waits for the second yes, the lit button says so and the warning is in the text box', () => {
+    const html = honestView(ctx, card({ yours: side({ value: 5 }), warn: 'worse', asking: true, picks: ['Charizard Lv30', 'Caterpie Lv5'] }));
+    expect(html).toContain('Yes, trade');
+    expect(html).not.toContain('Charizard Lv30');
+    expect(html).toContain('Caterpie Lv5');
+    expect(html).toContain('You sure?');
+    expect(html).toContain('You give more');
+  });
+  it('a long list of Pokémon scrolls with the lit one and says where it is', () => {
+    const picks = Array.from({ length: 9 }, (_, i) => `Mon ${i + 1}`);
+    const top = honestView(ctx, card({ picks, at: 0 }));
+    expect(count(top, 'data-act="trade"')).toBe(6);
+    expect(top).toContain('1 of 9');
+    const end = honestView(ctx, card({ picks, at: 8 }));
+    expect(end).toContain('Mon 9');
+    expect(end).toContain('data-act="trade" data-arg="8"');
+    expect(end).not.toContain('Mon 1<');
+  });
+  it('read before choosing (no Pokémon picked): the offer, what they want, and a Close button; a gift asks for nothing', () => {
+    const html = honestView(ctx, card({ yours: null, picks: [] }));
+    expect(count(html, 'data-act="trade"')).toBe(0);
+    expect(html).toContain('data-act="tradeBack"');
+    expect(html).toContain('Their offer');
+    expect(html).toContain('They want: any non-Water Pokémon');
+    const gift = honestView(ctx, card({ yours: null, picks: [], gift: true, wants: 'Nothing: a gift' }));
+    expect(gift).toContain('This one is a gift.');
+    expect(gift).toContain('A gift');
+  });
+  it('never lets text in as HTML', () => {
+    const html = honestView(ctx, card({ trader: '<b>x</b>', why: 'a <i>b</i>', theirs: side({ name: '<u>k</u>', moves: ['<s>m</s>'], marks: ['<em>z</em>'] }) }));
+    for (const bad of ['<b>x</b>', '<i>b</i>', '<u>k</u>', '<s>m</s>', '<em>z</em>']) expect(html).not.toContain(bad);
   });
 });

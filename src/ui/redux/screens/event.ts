@@ -8,6 +8,7 @@ import type { ReduxCtx } from '../stage';
 import { priceOf } from '../storeFloors';
 import { figure, type Art } from '../templates';
 import { bracketView, type BracketModel, type RoundChip } from './bracket';
+import { honestView, type HonestModel } from './honest';
 
 export interface EventChoice { label: string; sub: string; chance: string; locked: boolean }
 export interface EventModel {
@@ -41,6 +42,10 @@ export interface EventModel {
   rounds?: RoundChip[] | null;
   bracket?: BracketModel | null;
   title?: string | null;
+  /** Catalog Overhaul: the Honest Trade Card as a page of its own (while a Pokémon is picked for the trade, or when the card is read with T). */
+  honest?: HonestModel | null;
+  /** The event has a trade card to read: a tag on the tag row opens it (T). */
+  cardHint?: boolean;
   /** A department store floor (mock-up `store`): the floor directory with this floor lit, the party, and a note per Pokémon for each choice (who a good helps). */
   store?: { title: string; clerk: string; floors: { tag: string; name: string; on: boolean }[]; party: PartyChip[]; notes: string[][] } | null;
 }
@@ -60,6 +65,7 @@ function changeRow(t: string): string {
 
 export function eventView(c: ReduxCtx, d: EventModel): string {
   if (d.bracket) return bracketView(c, d.bracket);
+  if (d.honest) return honestView(c, d.honest);
   const v = c.v(4), out = d.outcome, more = d.page.at < d.page.of - 1, ch = out || more ? [] : d.choices;
   const talk = d.lines.some((l) => l.who !== null);
   /** The page as HTML. `plated`: the layout shows the speaker on a name plate, so their own lines need no name. */
@@ -82,7 +88,7 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
   const back = d.art ? bg(d.art) : '<div class="bg" style="background:var(--p2)"></div>';
   const who = (px: number): string => figure(d.cast, px);
   const star = (x: number): string => (d.mon ? foot(x, 330, mon(d.mon, 3, '', true)) : '');
-  const q = `<span class="tg">${esc(d.tag)}</span>${d.money === null ? '' : `<span class="tg no" style="margin-left:6px">₽ ${d.money.toLocaleString('en-US')}</span>`}${d.countdown ? `<span class="tg" style="margin-left:6px;background:#e84838;color:#fff">${esc(d.countdown)}</span>` : ''}`;
+  const q = `<span class="tg">${esc(d.tag)}</span>${d.money === null ? '' : `<span class="tg no" style="margin-left:6px">₽ ${d.money.toLocaleString('en-US')}</span>`}${d.countdown ? `<span class="tg" style="margin-left:6px;background:#e84838;color:#fff">${esc(d.countdown)}</span>` : ''}${d.cardHint ? `<span class="tg no" style="margin-left:6px;cursor:pointer;position:relative;z-index:9"${act('card')}><kbd>T</kbd> Trade card</span>` : ''}`;
   const sub = (x: EventChoice): string => x.sub;
   const outcome = out?.step === 'rewards' ? W(`<b class="acc">Outcome</b>${out.changes.map(changeRow).join('')}`, 'position:absolute;right:24px;top:70px;width:290px;display:flex;flex-direction:column;gap:6px;z-index:8', 'glass') : '';
   const cont = out ? [{ label: more ? 'Next' : out.step === 'text' && out.changes.length ? 'Continue' : out.next, sub: '', chance: '', locked: false }] : [];

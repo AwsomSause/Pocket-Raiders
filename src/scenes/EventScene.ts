@@ -13,7 +13,8 @@
 import { stopArtFor } from '../ui/stopArt';
 import Phaser from 'phaser';
 import { clockLabel, periodOf, PERIOD_LOOK, seasonOf, specialDateToday } from '../core/clock';
-import { eventView, type ChoiceView, type EventResult, type TradePick } from '../core/events';
+import { eventView, tradeCard as eventTradeCard, type ChoiceView, type EventResult, type TradePick } from '../core/events';
+import type { CardSide, HonestCard } from '../core/co/tradeCard';
 import { promptById, type Grade } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
 import { arenaFor, getTheme } from '../core/themes';
@@ -36,10 +37,12 @@ import { pageSpeaker, scriptPages, type ScriptPage } from '../ui/redux/script';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
 import { eventView as rxEventView } from '../ui/redux/screens/event';
+import type { HonestModel, HonestSide } from '../ui/redux/screens/honest';
 
 
 const BOTTOM_H = 168;
 const PICK_W = 420;
+const PICK_HEAD = 'Pick a Pokémon (Esc: back)';
 
 interface Card {
   box: Phaser.GameObjects.Container;
@@ -64,11 +67,16 @@ export class EventScene extends Phaser.Scene {
   /** New UI, tournament events: the bracket page on show, or null while the bracket is closed. */
   private rxBracket: number | null = null;
   private toggleBracket: (() => void) | null = null;
+  private toggleCard: (() => void) | null = null;
   private inputReady = false;
   private leaving = false;
   private outcomeBox: Phaser.GameObjects.Container | null = null;
   private outcomeHint: Phaser.GameObjects.Text | null = null;
-  private picker: { box: Phaser.GameObjects.Container; rows: Phaser.GameObjects.Text[]; picks: TradePick[]; at: number } | null = null;
+  private picker: { box: Phaser.GameObjects.Container; head: Phaser.GameObjects.Text; rows: Phaser.GameObjects.Text[]; picks: TradePick[]; at: number } | null = null;
+  /** Honest Trade Card: the Pokémon the trader has warned about ("mine's worth less"); a second yes on it trades. */
+  private pickSure: string | null = null;
+  /** New UI: the event's trade card is open to read (T), before a choice is made. */
+  private rxCard = false;
   private result: EventResult | null = null;
   private calm = false;
   private moneyText: Phaser.GameObjects.Text | null = null;
@@ -99,7 +107,10 @@ export class EventScene extends Phaser.Scene {
     this.rxStartClock = null;
     this.rxBracket = null;
     this.toggleBracket = null;
+    this.toggleCard = null;
     this.picker = null;
+    this.pickSure = null;
+    this.rxCard = false;
     this.result = null;
     this.leaving = false;
     this.fullLayer = null;
@@ -199,6 +210,28 @@ export class EventScene extends Phaser.Scene {
         const got = p.gets ? content.species.get(p.gets) : undefined;
         return { give: { name: p.label, file: mine ? monFile(this, mine.speciesId, 'front', mine.shiny) : null }, get: got ? { name: got.name, file: monFile(this, got.id) } : null };
       };
+      // Catalog Overhaul: the Honest Trade Card (both sides with every line of TRADES.md 1.1), as its own page.
+      const eventCard = eventTradeCard(content, run, this.sideId);
+      const cardSide = (x: CardSide): HonestSide => ({
+        name: x.name, file: monFile(this, x.species, 'front', x.shiny), level: x.level, nature: x.nature, ability: x.ability ? content.abilities.get(x.ability)?.name ?? x.ability : null, hidden: x.hidden,
+        moves: x.moves.map((id) => content.moves.get(id)?.name ?? id), quirk: x.quirk ? { name: x.quirk.name, line: x.quirk.line } : null, marks: x.marks,
+        held: x.held ? content.items.get(x.held)?.name ?? x.held : null, evolvesTo: x.evolvesTo ? content.species.get(x.evolvesTo)?.name ?? x.evolvesTo : null, value: x.value, shiny: x.shiny,
+      });
+      const honestOf = (card: HonestCard, picks: string[], at: number, asking: boolean): HonestModel => ({ trader: card.trader ?? 'Trader', why: card.why, wants: card.wants, yours: card.yours ? cardSide(card.yours) : null, theirs: cardSide(card.theirs), warn: card.warn, gift: card.gift, picks, at, asking });
+      const honest = (): HonestModel | null => {
+        const pk = this.picker, p = pk?.picks[pk.at];
+        if (pk && p?.card) return honestOf(p.card, pk.picks.map((x) => x.label), pk.at, this.pickSure === p.uid);
+        return this.rxCard && eventCard && this.phase === 'choose' ? honestOf(eventCard, [], 0, false) : null;
+      };
+      if (eventCard) {
+        this.toggleCard = (): void => {
+          if (this.phase !== 'choose' || this.rxBracket !== null) return;
+          this.rxCard = !this.rxCard;
+          playSfx(this, 'ui.select', 0.4);
+          this.rx?.refresh();
+        };
+        this.input.keyboard?.on('keydown-T', this.toggleCard);
+      }
       const tag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
       // A department store floor: the directory, and who each good on the shelf helps (a stone that evolves it, medicine for the hurt).
       const store = storeOf(view.event.id);
@@ -237,6 +270,8 @@ export class EventScene extends Phaser.Scene {
             timer: this.rxClock && view.event.countdown ? this.rxLeft / view.event.countdown : null,
             standing: view.standing ?? null,
             rounds,
+            honest: honest(),
+            cardHint: eventCard !== null && this.phase === 'choose' && !out,
             bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
             title: champion ? 'CHAMPION' : null,
             store: store ? { ...store, party: partyChips(this), notes: helps(r?.run ?? run) } : null,
@@ -248,7 +283,9 @@ export class EventScene extends Phaser.Scene {
           bracket: () => this.toggleBracket?.(),
           bracketPage: (k) => { this.rxBracket = Number(k); this.rx?.refresh(); },
           next: () => this.advanceOutcome(),
-          trade: (k) => { const uid = this.picker?.picks[Number(k)]?.uid; if (uid) void this.commit(uid); },
+          trade: (k) => { if (!this.picker?.picks[Number(k)]) return; this.pickAt(Number(k)); this.tryTrade(); },
+          tradeBack: () => this.handle('back'),
+          card: () => this.toggleCard?.(),
         },
         overs: { over: (k) => this.focus(Number(k)), tradeOver: (k) => this.pickAt(Number(k)) },
       });
@@ -363,6 +400,10 @@ export class EventScene extends Phaser.Scene {
       this.rx?.refresh();
       return;
     }
+    if (this.rxCard) {
+      if (action === 'confirm' || action === 'back') this.toggleCard?.();
+      return;
+    }
     if (this.fullLayer) {
       if (action === 'confirm' || action === 'back') this.toggleFull('');
       return;
@@ -411,7 +452,8 @@ export class EventScene extends Phaser.Scene {
     // A trade with more than one fitting Pokémon: the player picks which one goes.
     const picks = card.view.tradePicks;
     // New UI: a swap always shows its card (both sides) first, even when only one Pokémon fits.
-    if (picks && (picks.length > 1 || (this.rx && picks.length === 1 && picks[0]!.gets !== undefined))) this.openPicker(picks);
+    // Old look: one fitting Pokémon trades straight away, unless the trader has to warn that theirs is worth less.
+    if (picks && (picks.length > 1 || (picks.length === 1 && (this.rx ? picks[0]!.gets !== undefined : picks[0]!.card?.warn === 'worse')))) this.openPicker(picks);
     else this.commit(picks?.[0]?.uid);
   }
 
@@ -425,15 +467,17 @@ export class EventScene extends Phaser.Scene {
     const bg = this.add.graphics();
     paintGlass(bg, -w / 2, -BOTTOM_H / 2, w, BOTTOM_H, { tint: AERO.glassLow, glow: false, alpha: 0.98, radius: 14 });
     box.add(bg);
-    box.add(this.add.text(0, -BOTTOM_H / 2 + 12, 'Pick a Pokémon (Esc: back)', textStyle(12, '#f8e8a0')).setOrigin(0.5, 0.5));
+    const head = this.add.text(0, -BOTTOM_H / 2 + 12, PICK_HEAD, textStyle(12, '#f8e8a0')).setOrigin(0.5, 0.5);
+    box.add(head);
     const rows = picks.map((p, i) => {
       const t = this.add.text(0, -BOTTOM_H / 2 + 34 + i * rowH, p.label, textStyle(14, COLORS.textLight)).setOrigin(0.5, 0).setInteractive({ useHandCursor: true });
       t.on('pointerover', () => this.pickAt(i));
-      t.on('pointerdown', () => this.commit(p.uid));
+      t.on('pointerdown', () => { this.pickAt(i); this.tryTrade(); });
       box.add(t);
       return t;
     });
-    this.picker = { box, rows, picks, at: 0 };
+    this.pickSure = null;
+    this.picker = { box, head, rows, picks, at: 0 };
     this.pickAt(0);
     this.rx?.refresh();
   }
@@ -441,6 +485,11 @@ export class EventScene extends Phaser.Scene {
   private pickAt(i: number): void {
     const pk = this.picker;
     if (!pk) return;
+    // Moving to another Pokémon takes the trader's question back.
+    if (i !== pk.at && this.pickSure !== null) {
+      this.pickSure = null;
+      pk.head.setText(PICK_HEAD);
+    }
     pk.at = i;
     pk.rows.forEach((t, j) => t.setColor(j === i ? '#f8e8a0' : COLORS.textLight).setText(`${j === i ? '▶ ' : ''}${pk.picks[j]!.label}`));
     this.rx?.refresh();
@@ -452,19 +501,35 @@ export class EventScene extends Phaser.Scene {
     const n = pk.picks.length;
     if (action === 'up' || action === 'left') this.pickAt((pk.at - 1 + n) % n);
     else if (action === 'down' || action === 'right') this.pickAt((pk.at + 1) % n);
-    else if (action === 'confirm') this.commit(pk.picks[pk.at]!.uid);
+    else if (action === 'confirm') this.tryTrade();
     else if (action === 'back') {
       pk.box.destroy();
       this.picker = null;
+      this.pickSure = null;
       this.phase = 'choose';
       this.rx?.refresh();
     }
+  }
+
+  /** Trades the picked Pokémon. TRADES.md 1.2: when the player would give more than they get, the trader says so and asks once more. */
+  private tryTrade(): void {
+    const pk = this.picker, p = pk?.picks[pk.at];
+    if (!pk || !p) return;
+    if (p.card?.warn === 'worse' && this.pickSure !== p.uid) {
+      this.pickSure = p.uid;
+      playSfx(this, 'ui.select', 0.4);
+      pk.head.setText('"Mine\'s worth less than yours. You sure?" Enter: yes');
+      this.rx?.refresh();
+      return;
+    }
+    void this.commit(p.uid);
   }
 
   private async commit(tradeUid?: string): Promise<void> {
     if (this.busy) return;
     this.picker?.box.destroy();
     this.picker = null;
+    this.pickSure = null;
     const { session } = services();
     // Ideas W5: a choice with a skill prompt plays it first; the grade alone decides the outcome.
     const def = eventView(session.content, session.run!, this.sideId).event.choices[this.index]?.prompt;
