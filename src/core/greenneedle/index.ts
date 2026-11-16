@@ -53,6 +53,7 @@ import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, oldfriendTokens, 
 import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
 import { followedJoin } from './followed';
 import { ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
+import { reunionArrive, reunionFar, reunionTokens } from './reunion';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
 import { finalRest, xatuDraw, xatuTokens, xatuTrue } from './cartographer';
@@ -97,6 +98,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{xatu:')) text = xatuTokens(content, run, text);
   if (text.includes('{draft:')) text = draftTokens(content, run, text);
   if (text.includes('{borrow:')) text = borrowTokens(content, run, text);
+  if (text.includes('{reunion:')) text = reunionTokens(run, text);
   // gn.50: the defector.
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
@@ -852,6 +854,11 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return ballHatched(run);
     case 'ballForce':
       return ballForce(run);
+    // gn.61: the Final Reunion.
+    case 'reunionArrive':
+      return reunionArrive(content, run);
+    case 'reunionFar':
+      return reunionFar(run, e.n ?? 3);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':

@@ -1,0 +1,910 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-61-field",
+   "name": "The Final Reunion",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "epic",
+   "forced": true,
+   "tags": [
+    "Story",
+    "Relationship"
+   ],
+   "requires": [
+    {
+     "kind": "runPlace",
+     "regionEnd": true,
+     "lastRegion": true
+    },
+    {
+     "kind": "flag",
+     "key": "reunion-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a6b",
+    "effect": "none"
+   },
+   "intro": "*A field outside the last city. Evening.*\n\n*You come over the rise, and stop.*\n\n*There are a lot of people in the field.*",
+   "choices": [
+    {
+     "label": "Walk down into the field.",
+     "success": {
+      "text": "The grass is long, and flattened in places where people have been standing a while, waiting. They turn, one at a time, as you come down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "reunionArrive"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-61-hub",
+   "name": "The Final Reunion: The Field",
+   "group": "Greenneedle",
+   "remembers": [
+    {
+     "id": "few",
+     "when": [
+      {
+       "kind": "meter",
+       "key": "goodEvil",
+       "side": "negative",
+       "atLeast": 3
+      },
+      {
+       "kind": "flag",
+       "key": "reunion-count",
+       "atLeast": 0,
+       "atMost": 6
+      }
+     ],
+     "notice": "*There are six people in the field. They have each brought two chairs, to make it look fuller. It is the kindest thing in the game.*"
+    },
+    {
+     "id": "taken",
+     "when": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-took-all",
+        "called-it-for-us"
+       ]
+      }
+     ],
+     "notice": "*The field is full. Nobody is talking. They came because they were told to. Only your rival walks up.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a6b",
+    "effect": "none"
+   },
+   "intro": "{reunion:crowd}\n\n*No one is asking for a speech. There are rugs on the grass and lanterns in the trees, and the evening is going slowly.*\n\n*Nobody has to fight tonight. Nobody has to win. They all got here by walking.*",
+   "choices": [
+    {
+     "label": "Walk among them and talk.",
+     "success": {
+      "text": "You go in. People make room without being asked, and then close up behind you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-walk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Introduce two people who should meet.",
+     "success": {
+      "text": "You look around the field for two who have never been in a room together.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-intro"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "reunion-pair-1",
+        "reunion-pair-2",
+        "reunion-pair-3"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Give something back.",
+     "success": {
+      "text": "You have things that were never yours. You find the people they belong to.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-give"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "psyduck-hat",
+        "psyduck-ibuprofen"
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Sit down where you are.",
+     "success": {
+      "text": "Somebody has left a chair empty beside you. You sit in it. Where you sat is where you will be remembered at the table.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-farvisit",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "reunion-sat",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-farvisit",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "reunion-sat",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 1,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-help-1"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-end"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-61-walk",
+   "name": "The Final Reunion: Everyone Has One Line",
+   "group": "Greenneedle",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a6b",
+    "effect": "none"
+   },
+   "intro": "{reunion:lines}",
+   "choices": [
+    {
+     "label": "Stand at the far edge.",
+     "success": {
+      "text": "You walk past the lanterns, and past the last of the chairs, to where the grass is long and nobody is standing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-far"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "reunion-farleft",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Go back to the middle.",
+     "success": {
+      "text": "The crowd makes room, and closes up again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-61-far",
+   "name": "The Final Reunion: The Far Edge",
+   "group": "Greenneedle",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a6b",
+    "effect": "none"
+   },
+   "intro": "*They came. They aren't coming closer. They can be walked up to.*\n\n{reunion:far}",
+   "choices": [
+    {
+     "label": "I'm sorry.",
+     "success": {
+      "text": "You say it, plainly, and without anything after it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "reunionFar",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-farleft",
+        "min": 1,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-far"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-farleft",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-walk"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'd do it again.",
+     "success": {
+      "text": "You say it. It is true, and it sounds worse out loud than it did in your head.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "reunionFar",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-farleft",
+        "min": 1,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-far"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-farleft",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-walk"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing, and stay.)",
+     "success": {
+      "text": "You stand there. The wind moves the grass.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "reunionFar",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-farleft",
+        "min": 1,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-far"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-farleft",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-walk"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back to the others.",
+     "success": {
+      "text": "You leave them the quiet. It is the only thing you have left to give them.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-walk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-61-intro",
+   "name": "The Final Reunion: Introductions",
+   "group": "Greenneedle",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a6b",
+    "effect": "none"
+   },
+   "intro": "*Two people in the crowd keep looking at each other, and not at each other, the way people do who have heard a great deal and never met.*\n\n*Nothing is gained by it. That is the point.*",
+   "choices": [
+    {
+     "label": "Introduce Idris and Ferris.",
+     "success": {
+      "text": "Idris holds up a boot. Ferris, with a Pokémon asleep in their lap, nods at it gravely. \"Left,\" says Idris. \"Right,\" says Ferris. They have a great deal to discuss.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-pair-1",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-introduced-1",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "reunion-pair-1",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Introduce the Samurai and the Duelist.",
+     "success": {
+      "text": "The Samurai bows. The Duelist bows lower, then wrongly, then tries again. Neither will say who won. Both of them are smiling.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-pair-2",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-introduced-2",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "reunion-pair-2",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Introduce the Cubone and the Mimikyu.",
+     "success": {
+      "text": "The Cubone looks at the Mimikyu's coat, and the Mimikyu looks at the skull. Neither says a word. The Mimikyu makes room on the chair.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-pair-3",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-introduced-3",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "reunion-pair-3",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Go back to the middle.",
+     "success": {
+      "text": "You leave them to it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-61-give",
+   "name": "The Final Reunion: Giving Something Back",
+   "group": "Greenneedle",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a6b",
+    "effect": "none"
+   },
+   "intro": "*You had a few things that weren't yours. You kept them carefully.*\n\n*Every one of them is going to be refused.*",
+   "choices": [
+    {
+     "label": "Give back the mayor's hat.",
+     "success": {
+      "text": "**The mayor:** \"Keep it. I've another. It's worse. Keep it.\" He puts it back on your head himself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-gave-hat",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "psyduck-hat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Give back the ibuprofen.",
+     "success": {
+      "text": "**Its owner:** \"No, no. Half of it was for me. Keep it, for the next headache.\" They look at you, and laugh, and are glad.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-gave-ibuprofen",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-hub"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "psyduck-ibuprofen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Go back to the middle.",
+     "success": {
+      "text": "You keep them. They were meant for you to keep.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-hub"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-61-help-1",
+   "name": "The Final Reunion: Who Stands With You",
+   "group": "Greenneedle",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a6b",
+    "effect": "none"
+   },
+   "intro": "*A figure steps out of the crowd, and then stops, as if it wasn't sure it was allowed.*\n\n**{reunion:offer:1}** is one of the three the field remembers best. Yours to ask, or not.\n\n{reunion:ask:1}",
+   "choices": [
+    {
+     "label": "Ask them to stand with you.",
+     "success": {
+      "text": "They nod once. It is not a small thing to be asked, and they know it. They will be there when you call.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-help-1",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 2,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-help-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-end"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them rest.",
+     "success": {
+      "text": "They look relieved, and a little hurt, and then relieved again. \"Another time,\" they say. \"Whichever time that is.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-help-1",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 2,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-help-2"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 0,
+        "max": 1,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-end"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-61-help-2",
+   "name": "The Final Reunion: Who Stands With You",
+   "group": "Greenneedle",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a6b",
+    "effect": "none"
+   },
+   "intro": "*A figure steps out of the crowd, and then stops, as if it wasn't sure it was allowed.*\n\n**{reunion:offer:2}** is one of the three the field remembers best. Yours to ask, or not.\n\n{reunion:ask:2}",
+   "choices": [
+    {
+     "label": "Ask them to stand with you.",
+     "success": {
+      "text": "They nod once. It is not a small thing to be asked, and they know it. They will be there when you call.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-help-2",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 3,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-help-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-end"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them rest.",
+     "success": {
+      "text": "They look relieved, and a little hurt, and then relieved again. \"Another time,\" they say. \"Whichever time that is.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-help-2",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 3,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-help-3"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 0,
+        "max": 2,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-end"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-61-help-3",
+   "name": "The Final Reunion: Who Stands With You",
+   "group": "Greenneedle",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a6b",
+    "effect": "none"
+   },
+   "intro": "*A figure steps out of the crowd, and then stops, as if it wasn't sure it was allowed.*\n\n**{reunion:offer:3}** is one of the three the field remembers best. Yours to ask, or not.\n\n{reunion:ask:3}",
+   "choices": [
+    {
+     "label": "Ask them to stand with you.",
+     "success": {
+      "text": "They nod once. It is not a small thing to be asked, and they know it. They will be there when you call.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-help-3",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 4,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-help-4"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 0,
+        "max": 3,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-end"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them rest.",
+     "success": {
+      "text": "They look relieved, and a little hurt, and then relieved again. \"Another time,\" they say. \"Whichever time that is.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-help-3",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 4,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-help-4"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "reunion-offers",
+        "min": 0,
+        "max": 3,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-61-end"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-61-end",
+   "name": "The Final Reunion: The Night",
+   "group": "Greenneedle",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#5a4a6b",
+    "effect": "none"
+   },
+   "intro": "*The lanterns go on being lit, one at a time, by whoever is nearest.*\n\n*Somebody has begun setting out chairs. A great many chairs. Somebody is carrying a very long table.*",
+   "choices": [
+    {
+     "label": "Go to the table.",
+     "success": {
+      "text": "The table is long enough for all of you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "reunion-done",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

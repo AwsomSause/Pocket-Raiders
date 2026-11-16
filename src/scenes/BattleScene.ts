@@ -11,6 +11,7 @@ import { gimmickContext } from '../core/gimmicks';
 import { aeroMood, autoInterruption, cameraFocus, capFlash, hapticPattern, interactionLog, TOOLTIP_DELAY_MS } from '../core/presentation/uiPrefs';
 import { fitBlock, fitLine } from '../ui/fitText';
 import { cheerDue } from '../core/sky/spectate';
+import { helperButtons } from '../core/greenneedle/reunion';
 import { FINALE_ASK, chunkLines } from '../core/sky/text';
 import { HazardFloor, bossCinematic, critFreeze, critLetterbox, runScan, tossArc, weaknessesOf } from '../ui/battleFx/skillMoments';
 import { defaultMoveIndex } from '../core/battle/rememberChoice';
@@ -3678,6 +3679,10 @@ export class BattleScene extends Phaser.Scene {
     const cheerAt = raid && raid.cheersLeft > 0 && !this.duo ? options.length : -1;
     if (cheerAt >= 0) options.push({ label: `Cheer ×${raid!.coop ? raid!.coop.cheers[coopOwner(raid!, this.activeMon().uid)] : raid!.cheersLeft}` });
     // S397 Boss Weak Spots: choose where to aim (the exposed zone takes the bonus).
+    // Greenneedle gn.61: each helper from the Final Reunion, once ("[Name]!").
+    const helperAt = options.length;
+    const helpers = this.duo ? [] : helperButtons(this.run.battle!);
+    for (const h of helpers) options.push({ label: `${h.name}!` });
     const aimAt = raid && !this.duo && raidDef(content, raid).modifiers.weakSpots ? options.length : -1;
     if (aimAt >= 0) options.push({ label: `Aim: ${(raid!.aim ?? 'auto').toUpperCase()}` });
     const rallyAt = canRally ? options.length : -1;
@@ -3754,7 +3759,8 @@ export class BattleScene extends Phaser.Scene {
         } else if (i === featAt) {
           armFeat(this.run);
           this.showRootMenu();
-        } else if (i === cheerAt) this.showCheerMenu();
+        } else if (helpers.length > 0 && i >= helperAt && i < helperAt + helpers.length) this.submit({ kind: 'helper', slot: helpers[i - helperAt]!.slot });
+        else if (i === cheerAt) this.showCheerMenu();
         else if (i === 0) this.showMoveMenu();
         else if (i === 1) this.openBag();
         else if (i === 2) this.openPartyPicker(false);

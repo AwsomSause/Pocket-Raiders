@@ -29,6 +29,7 @@ import { ridgeCatch } from './greenneedle/ridge';
 import { noteLeft } from './greenneedle/left';
 import { unflinchingStart } from './greenneedle/daycare';
 import { gavelStart } from './greenneedle/auction';
+import { reunionBattleStart } from './greenneedle/reunion';
 import { lessonAfterstory } from './greenneedle/champion';
 import { allstarRecord, allstarTurn } from './greenneedle/allstar';
 import { listenedPass, listenedTurn, listenedWin } from './greenneedle/listened';
@@ -3200,6 +3201,8 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   // Greenneedle gn.40: a hatchling that saw you weren't afraid can't be made to flinch in its first battle.
   unflinchingStart(run);
   gavelStart(run);
+  // Greenneedle gn.61: the helpers called at the Final Reunion stand ready in the last region's final battle.
+  reunionBattleStart(run);
   // Greenneedle gn.45: the Champion who taught your ace a move opens with it.
   const afterstory = lessonAfterstory(content, run) || duelAfterstory(run);
   // Greenneedle gn.47: a trainer of a later stage talks about the Exhibition, and copied a move from it.

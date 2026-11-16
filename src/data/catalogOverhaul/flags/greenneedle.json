@@ -22,7 +22,26 @@
   "ranch-moved": "gn.new.20 The Bibarel Dam: moved the colony (read by gn.new.38 Long Table)",
   "well-lifted": "gn.new.16 The Thing in the Well: lifted the Feebas out (read by gn.new.38 Long Table)",
   "lantern-boat-floated": "gn.new.36 (the Lantern Sea boat)",
-  "lost-mon": "another row's permanent-loss scene (read by gn.59: the first catch is lost)"
+  "lost-mon": "another row's permanent-loss scene (read by gn.59: the first catch is lost)",
+  "ffion-pier": "Captain Ffion's pier (the Hoenn/water row; read by gn.61)",
+  "ffion-pier-gap": "Captain Ffion: the gap in the pier (read by gn.61)",
+  "ferris-belt": "Ferris and the belt (read by gn.61)",
+  "ferris-six": "Ferris, six on the belt (read by gn.61)",
+  "tamsel-out": "Granny Tamsel out of the gorge (read by gn.61)",
+  "holloways-ok": "The Holloways (read by gn.61)",
+  "wicker-ok": "Old Wicker (read by gn.61)",
+  "oldfriend-parted": "gn.58 Old Friend Returns: parted well (read by gn.61)",
+  "slowpoke-agency-solved": "gn.56 The Slowpoke Detective Agency (read by gn.61)",
+  "well-pebble": "the well with a pebble (read by gn.61)",
+  "storm-grey-coat": "The Storm-Grey Coat (read by gn.61)",
+  "robbed-trainer": "a robbery scene (read by gn.61 far edge)",
+  "cubone-trusted-stayed": "gn.22 Cubone ending (read by gn.61)",
+  "psyduck-hat": "gn.29 (set there; read by gn.61)",
+  "mural-walls": "gn.new.25 The Mural: walls painted (read by gn.61; PR #1360)",
+  "impersonator-joined": "gn.57 The Impersonator joined (read by gn.61; PR #1351)",
+  "cheer-split": "gn.new.30 The Cheer Squad: one joined (read by gn.61; PR #1363)",
+  "cheer-both": "gn.new.30 (read by gn.61; PR #1363)",
+  "cheer-truth": "gn.new.30 (read by gn.61; PR #1363)"
  },
  "flags": [
   {
@@ -892,6 +911,90 @@
   {
    "key": "ball-waited",
    "rule": "core/greenneedle/ball.ts (gn.new.03: you waited it out; gn.51 needs one rest fewer)"
+  },
+  {
+   "key": "reunion-count",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-offers",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-fartotal",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-farleft",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-farvisit",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-done",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-sat",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-pair-1",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-pair-2",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-pair-3",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-introduced-1",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-introduced-2",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-introduced-3",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-gave-hat",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-gave-ibuprofen",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-help-1",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-help-2",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-help-3",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-offer-1",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-offer-2",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "reunion-offer-3",
+   "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
   }
  ]
 }
