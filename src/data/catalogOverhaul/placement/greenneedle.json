@@ -2477,7 +2477,7 @@
    "kanto": "The Pokémon Prison",
    "elsewhere": "The Pokémon Prison"
   },
-  "note": "Only in a region with an evil-team story, as an ambush at a team node (the doc's 10%); not in a run where Flight North's theft happened. The doc's other trigger (a loss to the lieutenant or boss, instead of the usual loss cost) is not wired: it needs a hook in the loss path. Four wings, a clock of six steps, the warden.",
+  "note": "Only in a region with an evil-team story, as an ambush at a team node (the doc's 10%); not in a run where Flight North's theft happened. The doc's other trigger, a loss to a team's lieutenant or boss, opens the cell too (core/greenneedle/prison.ts prisonOnLoss, called from eventBattleLost). Four wings, a clock of six steps, the warden.",
   "kinds": [
    "Evil Team"
   ],
@@ -2497,7 +2497,7 @@
   "level": "None",
   "often": "run",
   "badge": "None",
-  "note": "The doc's \"inside the team\" version: posted here as a guard for one mission. Opens only once the inside-the-team route exists (flag inside-team, not built yet).",
+  "note": "The doc's \"inside the team\" version: posted here as a guard for one mission. Opens when the player is inside a team (any run flag team-<id>-inside, from the inside route in #1336 / #1339; works whether or not they have merged).",
   "kinds": [
    "Evil Team"
   ],

@@ -8,6 +8,7 @@ export { CATEGORY } from './_gn.ts';
 
 const TINT = '#3a3d45';
 const jail = (o: Json = {}): Json => ({ tint: TINT, tags: ['Evil Team', 'Story'], effect: 'none', ...o });
+const gnc = (test: string): Json => ({ kind: 'gn', test });
 const pr = (key: string, o: Json = {}): Json => gn('prison', { key, ...o });
 const next = pr('next');
 const toHub = (...fx: Json[]): Json[] => [...fx, next];
@@ -18,7 +19,7 @@ const toHub = (...fx: Json[]): Json[] => [...fx, next];
 const ENTRY: Json[] = [
   gev('gn-62-cell', 'The Pokémon Prison', jail({
     stop: 'event', rarity: 'rare', forced: true,
-    requires: [{ kind: 'evil', after: 3 }, not('prison-seen'), not('kanto-flight-stolen'), not('inside-team')],
+    requires: [{ kind: 'evil', after: 3 }, not('prison-seen'), not('kanto-flight-stolen'), gnc('notInsideTeam')],
     remembers: [
       { id: 'defector', when: [is('defector-trust', 3)], notice: 'The cell door is already unlatched. Someone left it that way. On the cot lies a guard\'s cap and jacket, folded, with a note that says only: "Sorry it\'s late."' },
     ],
@@ -263,7 +264,7 @@ const guardCell = (n: number, name: string, text: string, nextId: string): Json 
   ]);
 const guardPost: Json[] = [
   gev('gn-62-guard', 'The Pokémon Prison: Posted', jail({
-    stop: 'event', rarity: 'rare', forced: true, requires: [{ kind: 'evil', after: 3 }, not('prison-seen'), is('inside-team')],
+    stop: 'event', rarity: 'rare', forced: true, requires: [{ kind: 'evil', after: 3 }, not('prison-seen'), gnc('insideTeam')],
   }), say(
     '*A grey uniform. A ring of keys. A mission order with the team\'s seal.*',
     'You\'ve been posted to the prison for one shift, as a guard. Nobody here knows what you are.',
@@ -291,12 +292,12 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.62', shape: 'Pseudo Stage', earliest: 'A7', home: 12, window: [9, 15], sits: 'must-see', attaches: 'instead', tags: ['Evil Team'],
     level: 'Guards A+0; the warden A+2', often: 'run', badge: 'None',
     dressing: { kanto: 'The Pokémon Prison', elsewhere: 'The Pokémon Prison' },
-    note: 'Only in a region with an evil-team story, as an ambush at a team node (the doc\'s 10%); not in a run where Flight North\'s theft happened. The doc\'s other trigger (a loss to the lieutenant or boss, instead of the usual loss cost) is not wired: it needs a hook in the loss path. Four wings, a clock of six steps, the warden.',
+    note: 'Only in a region with an evil-team story, as an ambush at a team node (the doc\'s 10%); not in a run where Flight North\'s theft happened. The doc\'s other trigger, a loss to a team\'s lieutenant or boss, opens the cell too (core/greenneedle/prison.ts prisonOnLoss, called from eventBattleLost). Four wings, a clock of six steps, the warden.',
   },
   'gn-62-guard': {
     gn: 'gn.62', shape: 'Pseudo Stage', earliest: 'A7', home: 12, window: [9, 15], sits: 'must-see', attaches: 'instead', tags: ['Evil Team'],
     level: 'None', often: 'run', badge: 'None',
-    note: 'The doc\'s "inside the team" version: posted here as a guard for one mission. Opens only once the inside-the-team route exists (flag inside-team, not built yet).',
+    note: 'The doc\'s "inside the team" version: posted here as a guard for one mission. Opens when the player is inside a team (any run flag team-<id>-inside, from the inside route in #1336 / #1339; works whether or not they have merged).',
   },
   'gn-62-stranger': { gn: 'gn.62', shape: 'Single', earliest: 'A8', home: 6, window: [2, 16], sits: 'optional', attaches: 'after', tags: ['Evil Team'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: one per later stage, for as many strangers\' Pokémon as were freed.' },
 };

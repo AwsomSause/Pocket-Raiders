@@ -294,3 +294,21 @@ export function prisonTokens(content: Content, run: RunState, text: string): str
     .replaceAll('{prison:status}', `${done.length ? `Done: ${done.join(', ')}.` : 'No wing done yet.'} ${gear.length ? `You have: ${gear.join(', ')}.` : 'You have nothing yet.'}`)
     .replaceAll('{prison:gear}', gear.join(', ') || 'nothing');
 }
+
+/** The player works for a team: any run flag `team-<id>-inside` is set (the Evil Team inside route; true or false whether or not it has merged). */
+export function insideTeam(run: Pick<RunState, 'story'>): boolean {
+  return Object.keys(run.story.flags).some((k) => /^ev:team-[a-z0-9-]+-inside$/.test(k) && Number(run.story.flags[k]) > 0);
+}
+
+/**
+ * Lost to a team's lieutenant or boss: the prison comes instead of the loss's usual road (once per run; never inside a team, after Flight North's
+ * theft, or while a prison is running). Returns true when the cell was opened beside the node the player stands on.
+ */
+export function prisonOnLoss(content: Content, run: RunState, rank: string | undefined): boolean {
+  if (rank !== 'executive' && rank !== 'leader') return false;
+  if (f(run, 'prison-seen') > 0 || f(run, 'prison-offered') > 0 || f(run, 'pr-in') > 0 || f(run, 'kanto-flight-stolen') > 0 || insideTeam(run)) return false;
+  if (!content.events.has('gn-62-cell') || !here(run)) return false;
+  set(run, 'prison-offered', 1);
+  openScene(content, run, 'gn-62-cell');
+  return true;
+}

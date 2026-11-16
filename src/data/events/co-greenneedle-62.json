@@ -32,10 +32,8 @@
      "atMost": 0
     },
     {
-     "kind": "flag",
-     "key": "inside-team",
-     "atLeast": 0,
-     "atMost": 0
+     "kind": "gn",
+     "test": "notInsideTeam"
     }
    ],
    "remembers": [
@@ -1807,10 +1805,8 @@
      "atMost": 0
     },
     {
-     "kind": "flag",
-     "key": "inside-team",
-     "atLeast": 1,
-     "atMost": 99
+     "kind": "gn",
+     "test": "insideTeam"
     }
    ],
    "scene": {

@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 import type { RunState } from '../../src/core/state';
 import { createPokemon } from '../../src/core/pokemon';
-import { watched, WINGS } from '../../src/core/greenneedle/prison';
+import { insideTeam, prisonOnLoss, watched, WINGS } from '../../src/core/greenneedle/prison';
 import { content } from './helpers';
 import { choose, flagOf, gnRun, lose, open, scene, setFlag, win } from './helpers/gnPlay';
 
@@ -147,5 +147,29 @@ describe('gn.62 The Pokémon Prison', () => {
     expect(run.phase).not.toBe('over');
     expect(flagOf(run, 'prison-warden')).toBe(2);
     expect(run.box.some((m) => m.gn?.includes('pr-held'))).toBe(false);
+  });
+
+  it('losing to a lieutenant or boss opens the cell, once; not inside a team, not after the Flight North theft', () => {
+    const run = gnRun('t62-loss');
+    expect(prisonOnLoss(content, run, 'grunt')).toBe(false);
+    expect(prisonOnLoss(content, run, 'executive')).toBe(true);
+    expect(here(run)).toBe('gn-62-cell');
+    expect(prisonOnLoss(content, run, 'leader')).toBe(false);
+    const inside = gnRun('t62-inside');
+    setFlag(inside, 'team-rocket-inside', 1);
+    expect(insideTeam(inside)).toBe(true);
+    expect(prisonOnLoss(content, inside, 'leader')).toBe(false);
+    const stolen = gnRun('t62-stolen');
+    setFlag(stolen, 'kanto-flight-stolen', 1);
+    expect(prisonOnLoss(content, stolen, 'leader')).toBe(false);
+  });
+
+  it('inside a team the player is posted as a guard instead: every cell is a choice', () => {
+    let run = gnRun('t62-post');
+    setFlag(run, 'team-rocket-inside', 1);
+    open(run, 'gn-62-guard');
+    run = choose(run, 'gn-62-guard', 'Take the keys.').run;
+    run = choose(run, 'gn-62-guard-1', 'Leave it unlatched.').run;
+    expect(flagOf(run, 'prison-guard-freed-1')).toBe(1);
   });
 });

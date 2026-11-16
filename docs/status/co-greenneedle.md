@@ -67,7 +67,7 @@ Branch `claude/project-thread-uehq47`, draft PR #1314 into `ui-mockups`.
 | gn.new.01–38 | not started | |
 
 ## Limits (documented)
-- gn.62: the doc's loss trigger (losing to the lieutenant or boss instead of the usual loss cost) is not wired (it needs a hook in the loss path); only the 10% ambush at a team node starts it. The inside-the-team post waits for the Volume III route (flag `inside-team`). Osei's key is the flag `prison-trench-key`; the Hideout room it opens is not built. Five buttons don't fit one room, so the cell block is three halls.
+- gn.62: a loss to a team's lieutenant or boss opens the cell, but the loss's usual cost (the old path) still applies first; the prison follows it rather than replacing it. The inside-the-team post reads any run flag `team-<id>-inside` (#1336, #1339), so it works before and after they merge. Osei's key is the flag `prison-trench-key`; the Hideout room it opens is not built. Five buttons don't fit one room, so the cell block is three halls.
 - gn.06 "a later run finds a signpost": cross-run memory is not allowed (Kice 2026-11-14), so a later bridge in the same run shows the sign and the village stall instead.
 
 - gn.07 "permanent night": shown by the stage's dark tint; the rule that matters (rain: Fire halved, Water boosted) is on every fight. The Barn's "Ask [Fire-type] to sit with it." reads "Ask your Fire-type to sit with it." (labels can't hold a name).
