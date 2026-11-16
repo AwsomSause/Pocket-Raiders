@@ -1,0 +1,784 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-18-door",
+   "name": "The Day the Center Closed",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gn18-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "*The Pokémon Center's doors are locked from inside. Through the glass, a Chansey is running the desk, the phones and the healing machine, all at once.*\n\nIt sees you. It does not stop what it is doing. It looks at you the way a person looks at a lifeboat.",
+   "choices": [
+    {
+     "label": "Knock on the glass.",
+     "success": {
+      "text": "The Chansey unlocks the door with its foot, and hauls you in by the sleeve.\n\n*Behind the desk, the nurse is asleep sitting up, pen still in hand.*\n\nSix patients on the bench. A clipboard with six names. The Chansey puts it in your hands.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn18-mess",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn18-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "gn18-region"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-warm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Through the glass, the Chansey watches you go. The phone rings. It answers with its other hand.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-warm",
+   "name": "The Day the Center Closed: Patient 1: Warming",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "The first patient is a Growlithe pup curled on the bench, shivering so hard the bench hums.\n\nThe Chansey points at it, then at the clipboard. It needs warming.",
+   "choices": [
+    {
+     "label": "Send a Fire-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fire"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type lies down against the pup. The shivering slows, then stops. The pup sighs, enormous for something so small.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-calm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send your strongest.",
+     "success": {
+      "text": "Your strongest is a wonderful sort of cold. The pup shivers harder. The Chansey sighs and adds a name to the queue.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-calm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send the one who loves you most.",
+     "success": {
+      "text": "It tries, with everything it has. It is not warm. The pup is grateful and still cold, and the queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-calm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do it yourself.",
+     "success": {
+      "text": "You give it your jacket. It helps, a little. Not enough, and the queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-calm"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-calm",
+   "name": "The Day the Center Closed: Patient 2: Calming",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "The second patient is a Gloom hiding under a chair, shaking at every phone that rings.\n\nThe Chansey mimes a deep, slow breath. It needs calming.",
+   "choices": [
+    {
+     "label": "Send a Psychic- or Fairy-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "psychic",
+        "fairy"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Yours hums, low and strange. The shaking eases. The Gloom crawls out, and falls asleep against your shoe.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-carry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Fire-type.",
+     "success": {
+      "text": "Warm, kind, and very bright. The Gloom bolts under a different chair. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-carry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send your strongest.",
+     "success": {
+      "text": "It stands guard, tall and serious. The Gloom takes that as bad news. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-carry"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do it yourself.",
+     "success": {
+      "text": "You whisper. It listens, mostly. It is still shaking when you stop, and the queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-carry"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-carry",
+   "name": "The Day the Center Closed: Patient 3: Carrying",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "The third patient is a Machop with a sprained leg, and a hundred and fifty pounds of apologies.\n\nThe Chansey tugs the gurney. It cannot move him alone. He needs carrying.",
+   "choices": [
+    {
+     "label": "Send your strongest.",
+     "success": {
+      "text": "Yours lifts him like laundry, gently, and sets him on the gurney. The Machop says thank you six times in a row.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-cool"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Psychic- or Fairy-type.",
+     "success": {
+      "text": "It tries to calm him down. He is calm. He is also still on the floor. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-cool"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Water- or Ice-type.",
+     "success": {
+      "text": "It is very cool and very small. He does not move. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-cool"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do it yourself.",
+     "success": {
+      "text": "You get him halfway. Your back has opinions. The Chansey takes over, and the queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-cool"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-cool",
+   "name": "The Day the Center Closed: Patient 4: Cooling",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "The fourth patient is a Numel with a fever, steaming softly on the linoleum. The floor has started to smoke.\n\nThe Chansey fans herself, then points. It needs cooling.",
+   "choices": [
+    {
+     "label": "Send a Water- or Ice-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water",
+        "ice"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Yours breathes out a cool mist. The steam thins. The Numel opens one eye, and then both.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-company"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Fire-type.",
+     "success": {
+      "text": "Your Fire-type means well. The Numel gets warmer, so does the room, and the queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-company"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send the one who loves you most.",
+     "success": {
+      "text": "It sits close, which is lovely, and which makes the heat worse. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-company"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do it yourself.",
+     "success": {
+      "text": "You fan it with a magazine. It enjoys the magazine. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-company"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-company",
+   "name": "The Day the Center Closed: Patient 5: Company",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "The fifth patient is a Pidgey with nothing wrong at all, except that no one has come to pick it up.\n\nThe Chansey points to the empty chair beside it. It needs company.",
+   "choices": [
+    {
+     "label": "Send the one who loves you most.",
+     "success": {
+      "text": "Yours hops up beside it and stays. They do not talk. The Pidgey leans, a little, and keeps leaning.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-bandage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send your strongest.",
+     "success": {
+      "text": "It stands at attention beside the chair. The Pidgey does not feel any less alone. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-bandage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Fire-type.",
+     "success": {
+      "text": "It sits, and then it fidgets, and then it wanders to the vending machine. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-bandage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do it yourself.",
+     "success": {
+      "text": "You sit with it, but you keep looking at your watch, and it knows. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-bandage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-bandage",
+   "name": "The Day the Center Closed: Patient 6: A bandage",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "The last patient is a small Oddish with a scraped leaf, and a very serious face.\n\nThe Chansey holds up a roll of gauze, and then holds it out to you. This one is yours.",
+   "choices": [
+    {
+     "label": "Do it yourself.",
+     "success": {
+      "text": "You wrap the leaf, carefully, with your own two hands. The Oddish inspects it, and nods, and is fine.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send your strongest.",
+     "success": {
+      "text": "It is gentle, and enormous, and has no thumbs. The gauze ends up on the wrong leaf. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Water- or Ice-type.",
+     "success": {
+      "text": "The gauze gets wet and slides off. The Oddish is very patient about it. The queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Fire-type.",
+     "success": {
+      "text": "The gauze catches. Briefly. Everybody is fine, and the queue grows.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn18-mess",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-18-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-end",
+   "name": "The Day the Center Closed: Waking",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "The last name is crossed off. The waiting room is quiet. The Chansey puts a blanket over the nurse, and then, very carefully, taps her shoulder.",
+   "choices": [
+    {
+     "label": "Let her wake.",
+     "success": {
+      "text": "**Nurse, waking:** \"What time... who did... oh.\"\n\n*She looks at the clipboard, every line neatly crossed off. She cries a little, and laughs at herself.*\n\n\"Standing Welcome,\" she says, writing something in the ledger. \"Any Center this region. Tell them I said.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "standing-welcome"
+       },
+       {
+        "kind": "moment",
+        "text": "Took a shift at a Pokémon Center, and the nurse woke to find everything done.",
+        "importance": 60
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn18-mess",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Let her wake.",
+     "success": {
+      "text": "*The nurse wakes, sees the clipboard, sees the bench, sees the Numel's scorch mark on the floor. She sighs, and fixes all of it in two minutes.*\n\n**Nurse, waking:** \"Thank you. Really. Sit down, you look awful.\"\n\n\"Standing Welcome,\" she adds, writing it down. \"Any Center this region. You earned it twice over.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "standing-welcome"
+       },
+       {
+        "kind": "moment",
+        "text": "Took a messy shift at a Pokémon Center. The nurse thanked them just as much.",
+        "importance": 60
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn18-mess",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-18-parcel",
+   "name": "The Chansey's Parcel",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 1,
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gn18-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "gn18-region"
+    },
+    {
+     "kind": "flag",
+     "key": "gn18-parcel-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "npc.nurse"
+    ],
+    "pokemon": "chansey",
+    "tint": "#e8d5d9",
+    "effect": "none"
+   },
+   "intro": "*A parcel is waiting at the first Center of the new region, with your name on it in a hand you know. The Chansey's.*\n\nIt is mostly bandages. Rolls and rolls of them. Tucked between two, a folded drawing.",
+   "choices": [
+    {
+     "label": "Unfold the drawing.",
+     "success": {
+      "text": "A Chansey. A trainer. Six very small patients in a row, each with a helper beside it.\n\nThe trainer is smiling, and so is the Chansey. At the bottom, in careful crayon: *thank you for the shift.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "gn18-parcel-done",
+        "n": 1
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "A parcel of bandages arrived from a Chansey, with a drawing tucked inside.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
