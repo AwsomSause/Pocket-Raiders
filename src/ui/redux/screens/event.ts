@@ -78,6 +78,10 @@ export function eventView(c: ReduxCtx, d: EventModel): string {
     return runCardView(c, { ...d.codeCard, title: 'Code Name', team: [], text, hints: [['Enter', 'next']], area: 'story', save: false, tap: 'next' });
   }
   if (d.team) return teamView(c, d.team);
+  if (d.codeCard && d.outcome?.step === 'text') {
+    const text = d.lines.map((l) => (l.who ? `${l.who}: ${l.text}` : l.text)).join(' ');
+    return runCardView(c, { ...d.codeCard, title: 'Code Name', team: [], text, hints: [['Enter', 'next']], area: 'story', save: false, tap: 'next' });
+  }
   const v = c.v(4), out = d.outcome, more = d.page.at < d.page.of - 1, ch = out || more ? [] : d.choices;
   const talk = d.lines.some((l) => l.who !== null);
   /** The page as HTML. `plated`: the layout shows the speaker on a name plate, so their own lines need no name. */
