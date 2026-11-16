@@ -36,6 +36,7 @@ import { bidoofJoin, bidoofStart } from './bidoof';
 import { alleyStart } from './alley';
 import { leftFates, leftHas, leftTake, leftTokens } from './left';
 import { isLastStage, ltArrive, ltDawn, ltPage, ltSit, ltTokens } from './longtable';
+import { impClaim, impJoin, impersonatorStart } from './impersonator';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
@@ -676,6 +677,10 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return ltSit(run, e.n ?? 0);
     case 'ltDawn':
       return ltDawn(content, run);
+    case 'impJoin':
+      return impJoin(run, host);
+    case 'impClaim':
+      return impClaim(run);
     case 'exDraw':
       return exDraw(run);
     case 'exBack':
@@ -824,6 +829,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (rule === 'bidoof') bidoofStart(content, run, battle);
   // gn.new.22: the Alley Court's challenge, with the player's three calls.
   if (rule === 'alley') alleyStart(run, battle);
+  // gn.57: the Impersonator's Illusion opens as the player's lead.
+  if (rule === 'impersonator') impersonatorStart(run, battle);
   if (rule === 'quillfeather') quillfeatherStart(content, run, battle, makeFull(content));
   if (rule === 'draft') draftBattleStart(content, run, battle, battle.eventRule?.slot, makeFull(content));
   if (rule === 'allstar-final') {

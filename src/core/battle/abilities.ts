@@ -200,6 +200,8 @@ const SUPPORTED = new Set<string>([
   'thorn-ballad', 'encore-amp', 'adaptive-plating', 'plague-bulwark', 'soul-kindling', 'neon-circuit',
   // Catalog Overhaul legends (Alphas): the Hushed One's Hush, the Unwelcome Guest's Three Faces (engine.ts).
   'hush', 'three-faces', 'pack-call',
+  // Greenneedle gn.57: the Impersonator's Many Faces (engine.ts entryAbility).
+  'many-faces',
   // Beta 0.7 batch (Galarian lines).
   'basalt-shell', 'scavenger', 'parcel-guard', 'landfill', 'kitchen-heat', 'neon-camouflage', 'ripe-bloom', 'thunderhead', 'venom-jaws', 'foam-shell', 'royal-disdain', 'hoop-focus',
   ...Object.keys(PINCH),

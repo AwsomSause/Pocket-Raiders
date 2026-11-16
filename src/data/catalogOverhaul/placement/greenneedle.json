@@ -3563,5 +3563,65 @@
    "Finale"
   ],
   "tags": []
+ },
+ "gn-57-crowd": {
+  "gn": "gn.57",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 8,
+  "window": [
+   6,
+   11
+  ],
+  "sits": "optional",
+  "attaches": "before",
+  "level": "A+1 if exposed",
+  "often": "run",
+  "badge": "own",
+  "note": "Badge: a laurel that looks exactly like the Champion's Training Session's. Once per run, then it recurs.",
+  "kinds": [
+   "Mystery Episode"
+  ],
+  "tags": []
+ },
+ "gn-57-fire": {
+  "gn": "gn.57",
+  "shape": "Single",
+  "earliest": "A6",
+  "home": 4,
+  "window": [
+   1,
+   8
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "At the next rest after playing along.",
+  "kinds": [
+   "Mystery Episode"
+  ],
+  "tags": []
+ },
+ "gn-57-later": {
+  "gn": "gn.57",
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 6,
+  "window": [
+   2,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "rest",
+  "level": "None",
+  "often": "region",
+  "badge": "own",
+  "note": "Once a region after it joins: it imitates the rival, a Champion or the player.",
+  "kinds": [
+   "Mystery Episode"
+  ],
+  "tags": []
  }
 }
