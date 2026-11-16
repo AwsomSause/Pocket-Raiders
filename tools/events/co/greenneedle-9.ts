@@ -39,12 +39,12 @@ function lotRooms(v: V, stall: string, lot: Lot): Json[] {
     { id: 'honest-took', when: [is('honest-took')], notice: '*Word has travelled from the shop with no shopkeeper. They count your change twice, and there\'s no haggling with you at all.*', hide: RIVAL[v] ? [1, 3] : [1] },
   ];
   if (RIVAL[v]) remembers.push({ id: 'caught', when: [is('market-rivals-caught')], notice: '**Both, from behind one stall:** "Full price. For a month."', hide: [3] });
-  const haggle = [90, 78, 70].map((pct) => ch(`Offer ${fmt(Math.round((lot.price * pct) / 100))}.`, out('You name it.', gn('marketOffer', { key: v, n: lot.price, min: pct, type: id, then: [...lot.give, scene(stall)] }))));
+  const haggle = [90, 80, 75].map((pct) => ch(`Offer ${fmt(Math.round((lot.price * pct) / 100))}.`, out('You name it.', gn('marketOffer', { key: v, n: lot.price, min: pct, type: id, then: [...lot.give, scene(stall)] }))));
   return [
-    rm(id, lot.name, wagons({ remembers }), say(lot.blurb, `The asking price: **${fmt(lot.price)}**.`), choices),
+    rm(id, lot.name, wagons({ remembers }), say(lot.blurb, `The asking price: **${fmt(lot.price)}**. Your price today: **{market:${v}:${lot.price}}**.`), choices),
     rm(`${id}-haggle`, `${lot.name}: Haggling`, wagons({ remembers: [{ id: 'honest-shop', when: [is('honest-shop')], notice: '*Word has travelled from the shop with no shopkeeper. The wince comes later than it used to.*' }] }), say(
       'You think of a number. They watch your mouth.',
-      `At ${fmt(Math.round(lot.price * 0.9))}, nothing. At ${fmt(Math.round(lot.price * 0.78))}, a wince. At ${fmt(Math.round(lot.price * 0.7))}, they stop breathing.`,
+      `At ${fmt(Math.round(lot.price * 0.9))}, nothing. At ${fmt(Math.round(lot.price * 0.8))}, a wince. At ${fmt(Math.round(lot.price * 0.75))}, they stop breathing.`,
     ), [...haggle, ch('Walk away.', back('You put your money away. Their face goes back to normal.'))]),
   ];
 }
@@ -132,6 +132,10 @@ const VETERAN: Lot[] = [
   { id: 'vet-barb', name: 'A Sticky Barb', price: 400, give: [item('sticky-barb')], blurb: 'A Sticky Barb in a jar. "Hurts the holder. Jumps to whoever touches it. We used to put them in the new lads\' bunks."' },
 ];
 
+const FARFETCHD = 'Your Farfetch\'d is recognised. Three vendors come out from behind their stalls, wiping their hands, to say hello to it. "Balthasar\'s," says one. "He\'d be glad."';
+const TOOK = '*Word has travelled from the shop with no shopkeeper. Every vendor here counts your change twice.*';
+const SHOP = '*Word has travelled from the shop with no shopkeeper. People here smile at you a moment longer.*';
+
 const gn39: Json[] = [
   gev('gn-39-door', 'The Travelling Pokémon Market', wagons({ stop: 'event', rarity: 'common', requires: [notThisRegion('market-region')] }), say(
     '*Wagons in a ring. Awnings going up. A smell of frying dough and lamp oil.*',
@@ -157,9 +161,8 @@ const gn39: Json[] = [
     ch('Further round the ring.', out('Past a wagon selling rope, and a wagon selling nothing but bells.', scene('gn-39-ring-2'))),
   ]),
   rm('gn-39-ring-2', 'The Market: The Far Wagons', wagons({ remembers: [
-    { id: 'farfetchd', when: [anyFlag('balthasar-placed', 'balthasar-bell')], notice: 'Your Farfetch\'d is recognised. Three vendors come out from behind their stalls, wiping their hands, to say hello to it. "Balthasar\'s," says one. "He\'d be glad."' },
-    { id: 'took', when: [is('honest-took')], notice: '*Word has travelled from the shop with no shopkeeper. Every vendor here counts your change twice.*' },
-    { id: 'shop', when: [is('honest-shop')], notice: '*Word has travelled from the shop with no shopkeeper. People here smile at you a moment longer.*' },
+    // A room shows its first matching note only, so the shop's word is told at the pens (gn-39-ring-3), not here under the Farfetch'd.
+    { id: 'farfetchd', when: [anyFlag('balthasar-placed', 'balthasar-bell')], notice: FARFETCHD },
   ] }), say(
     'The far wagons: Ivo Ternary\'s trading table, Nan Okafor\'s nest of eggs under a quilt, and a stall with a hooded figure and a stack of parcels.',
   ), [
@@ -168,7 +171,10 @@ const gn39: Json[] = [
     ch('Mystery Items.', out('The hooded stallholder says nothing. It points at the card.', ...byStock('gn-39-hooded'))),
     ch('On round the ring.', out('Round the ring, where the wagons are older.', scene('gn-39-ring-3'))),
   ]),
-  rm('gn-39-ring-3', 'The Market: The Pens', wagons(), say(
+  rm('gn-39-ring-3', 'The Market: The Pens', wagons({ remembers: [
+    { id: 'took', when: [is('honest-took')], notice: TOOK },
+    { id: 'shop', when: [is('honest-shop')], notice: SHOP },
+  ] }), say(
     'The pens, at the end of the ring. Josune Arregi\'s wagon has a pen with one Pokémon in it, and a sign: MEET IT. BATTLE IT. CATCH IT. FEE FOR THE MEETING.',
   ), [
     ch('Rare Encounters.', out('Josune nods at the pen.', scene('gn-39-josune'))),
@@ -178,7 +184,7 @@ const gn39: Json[] = [
   ]),
   rm('gn-39-back', 'The Market: Behind the Wagons', wagons(), 'Behind the wagons: washing lines, a dog asleep under a cart, two tables nobody\'s advertising.', [
     chIf([is('market-fossil')], 'The Fossil Stall.', out('Two people at one table, arguing about a price card.', scene('gn-39-fossil'))),
-    chIf([anyFlag('market-vet-1', 'market-vet-2', 'market-vet-3')], 'The Veteran\'s Stall.', out('A man in half a uniform, selling the other half.', scene('gn-39-veteran'))),
+    chIf([anyFlag('market-vet-1', 'market-vet-2', 'market-vet-3', 'hideout-reward')], 'The Veteran\'s Stall.', out('A man in half a uniform, selling the other half.', scene('gn-39-veteran'))),
     chIf([not('market-found')], 'Something in the mud by a wheel.', out('You pick it up and wipe it off. You know whose it is.', flag('market-found'),
       when('market-stock', { min: 1, max: 1 }, [], 'Carmela\'s loupe, the one she weighs stones by eye with. She snatches it, then catches herself, and thanks you properly.'),
       when('market-stock', { min: 2, max: 2 }, [], 'Tanager\'s ledger. He goes white, then red, then hugs you, which neither of you expected.'),
@@ -345,11 +351,11 @@ const gn40: Json[] = [
     ch('Just the one.', out('"One\'s fine. One gets spoilt."', scene('gn-40-daycare'))),
   ]),
   ...[0, 1, 2].map(eggRoom),
-  rm('gn-40-eggmove', 'Mrs. Holloway\'s Egg Moves', village(), say(
+  rm('gn-40-eggmove', 'Mrs. Holloway\'s Egg Moves', village({ remembers: [{ id: 'nothing', when: [gnc('eggMoveKnown', { key: 'none-to-learn' })], notice: 'She looks your lead over, and shakes her head. "Nothing it could have hatched with that it doesn\'t know already. I won\'t take your money for that. Bring me another one at the front."' }] }), say(
     '**Mrs. Holloway** teaches one egg move a visit, to a Pokémon that could have hatched knowing it. She looks at your lead for a long time first.',
     '"I don\'t take Heart Scales, love. You use those the minute you find them. Coins."',
   ), [
-    ch(`Pay ${fmt(1000)}.`, out('She takes your lead\'s face in both hands and says something to it you don\'t catch. It practises the move all afternoon.', { kind: 'money', amount: -1000 }, { kind: 'eggMove' }, stampRegion('daycare-move-at'), scene('gn-40-daycare')), { requires: [{ kind: 'money', atLeast: 1000 }] }),
+    ch(`Pay ${fmt(1000)}.`, out('She takes your lead\'s face in both hands and says something to it you don\'t catch. It practises the move all afternoon.', { kind: 'money', amount: -1000 }, { kind: 'eggMove' }, stampRegion('daycare-move-at'), scene('gn-40-daycare')), { requires: [{ kind: 'money', atLeast: 1000 }, gnc('eggMoveKnown', { key: 'to-learn' })] }),
     ch('Not this time.', out('"It\'ll keep. They always keep."', scene('gn-40-daycare'))),
   ]),
   // ---- Village life ----
@@ -449,33 +455,71 @@ const labelRoom = (l: (typeof LABELS)[number]): Json => rm(`gn-41-label-${l.id}`
 ]);
 const labelCh = (id: string, text: string): Json => ch(text, out('You lean in to the label.', scene(`gn-41-label-${id}`)));
 
-/** The fossil tray: five bones, three guesses each; the clues are on the Fossil hall's skeletons. A right answer: the museum's lab revives it. */
-const BONES: { n: number; bone: string; options: string[]; right: string; fossil: string }[] = [
-  { n: 1, bone: 'A spiral of shell, coiled to the right, with ridges like a staircase.', options: ['Omanyte.', 'Lileep.', 'Kabuto.'], right: 'Omanyte.', fossil: 'helix-fossil' },
-  { n: 2, bone: 'A smooth dome with two pits underneath, like eyes looking up.', options: ['Shieldon.', 'Kabuto.', 'Tirtouga.'], right: 'Kabuto.', fossil: 'dome-fossil' },
-  { n: 3, bone: 'A jaw full of needle teeth, in a chunk of orange amber.', options: ['Tyrunt.', 'Archen.', 'Aerodactyl.'], right: 'Aerodactyl.', fossil: 'old-amber' },
-  { n: 4, bone: 'A claw like a pair of shears, jointed in three places.', options: ['Anorith.', 'Kabuto.', 'Archen.'], right: 'Anorith.', fossil: 'claw-fossil' },
-  { n: 5, bone: 'A skull as thick as a door, flat on top, scarred from a hundred collisions.', options: ['Shieldon.', 'Cranidos.', 'Tyrunt.'], right: 'Cranidos.', fossil: 'skull-fossil' },
+/**
+ * The fossil tray: five bones, three guesses each; the clues are on the Fossil hall's skeletons. A right answer: the museum's lab revives it.
+ * Each region's museum is different: three collections (`museum-set` 1 to 3, by the region's place in the run; museum.ts), each with its
+ * own tray, its own plaques, and its own three Relics behind the exhibits.
+ */
+interface Bone { n: number; bone: string; options: string[]; right: string; fossil: string }
+const BONE_SETS: { plaques: string; bones: Bone[] }[] = [
+  { plaques: '*Omanyte, the shell coils right. Kabuto, a dome, two pits beneath. Aerodactyl, needle teeth, kept in amber. Anorith, a claw jointed three times. Cranidos, a skull as thick as a door.*', bones: [
+    { n: 1, bone: 'A spiral of shell, coiled to the right, with ridges like a staircase.', options: ['Omanyte.', 'Lileep.', 'Kabuto.'], right: 'Omanyte.', fossil: 'helix-fossil' },
+    { n: 2, bone: 'A smooth dome with two pits underneath, like eyes looking up.', options: ['Shieldon.', 'Kabuto.', 'Tirtouga.'], right: 'Kabuto.', fossil: 'dome-fossil' },
+    { n: 3, bone: 'A jaw full of needle teeth, in a chunk of orange amber.', options: ['Tyrunt.', 'Archen.', 'Aerodactyl.'], right: 'Aerodactyl.', fossil: 'old-amber' },
+    { n: 4, bone: 'A claw like a pair of shears, jointed in three places.', options: ['Anorith.', 'Kabuto.', 'Archen.'], right: 'Anorith.', fossil: 'claw-fossil' },
+    { n: 5, bone: 'A skull as thick as a door, flat on top, scarred from a hundred collisions.', options: ['Shieldon.', 'Cranidos.', 'Tyrunt.'], right: 'Cranidos.', fossil: 'skull-fossil' },
+  ] },
+  { plaques: '*Lileep, a stalk of rings, rooted. Shieldon, a face behind a plate. Tirtouga, a shell with flipper notches. Archen, feathers pressed in slate. Tyrunt, a jaw too big for its head.*', bones: [
+    { n: 1, bone: 'A stalk of stone rings, stacked like coins, with a root at one end.', options: ['Omanyte.', 'Lileep.', 'Anorith.'], right: 'Lileep.', fossil: 'root-fossil' },
+    { n: 2, bone: 'A flat plate of bone, wide as a tray, with two small eye-holes near the bottom edge.', options: ['Shieldon.', 'Cranidos.', 'Kabuto.'], right: 'Shieldon.', fossil: 'armor-fossil' },
+    { n: 3, bone: 'A curved slab of shell, with a notch on each side where a flipper went.', options: ['Kabuto.', 'Omanyte.', 'Tirtouga.'], right: 'Tirtouga.', fossil: 'cover-fossil' },
+    { n: 4, bone: 'A piece of slate. Pressed into it, a feather, every barb showing.', options: ['Aerodactyl.', 'Archen.', 'Amaura.'], right: 'Archen.', fossil: 'plume-fossil' },
+    { n: 5, bone: 'A lower jaw, far too big for the skull it must have hung from, with teeth like tent pegs.', options: ['Tyrunt.', 'Cranidos.', 'Aerodactyl.'], right: 'Tyrunt.', fossil: 'jaw-fossil' },
+  ] },
+  { plaques: '*Amaura, a sail of thin bone along the neck. Omanyte, the shell coils right. Shieldon, a face behind a plate. Aerodactyl, needle teeth, kept in amber. Tyrunt, a jaw too big for its head.*', bones: [
+    { n: 1, bone: 'A fan of bone as thin as paper, ribbed like a sail.', options: ['Archen.', 'Amaura.', 'Lileep.'], right: 'Amaura.', fossil: 'sail-fossil' },
+    { n: 2, bone: 'Half a shell, broken clean across. What is left of it coils to the right.', options: ['Kabuto.', 'Tirtouga.', 'Omanyte.'], right: 'Omanyte.', fossil: 'helix-fossil' },
+    { n: 3, bone: 'A chip of a flat bone plate, with one small eye-hole near its edge.', options: ['Shieldon.', 'Tyrunt.', 'Anorith.'], right: 'Shieldon.', fossil: 'armor-fossil' },
+    { n: 4, bone: 'A lump of amber the colour of tea. Inside it, one needle of a tooth.', options: ['Tyrunt.', 'Aerodactyl.', 'Amaura.'], right: 'Aerodactyl.', fossil: 'old-amber' },
+    { n: 5, bone: 'A single tooth, as long as your hand, shaped like a tent peg.', options: ['Cranidos.', 'Aerodactyl.', 'Tyrunt.'], right: 'Tyrunt.', fossil: 'jaw-fossil' },
+  ] },
 ];
-const boneRoom = (b: (typeof BONES)[number]): Json => rm(`gn-41-bone-${b.n}`, `The Tray: Bone ${b.n}`, marble(), say(b.bone, '"Which Pokémon?" says the card. Three answers, in Dr. Winterbourne\'s hand.'), [
+/** Room ids: the first collection keeps the plain ids; the others carry the collection's number. */
+const setId = (base: string, set: number): string => (set === 1 ? base : `${base}-s${set}`);
+/** Goes to the room for this museum's collection. */
+const bySet = (base: string): Json[] => [1, 2, 3].map((k) => when('museum-set', { min: k === 1 ? 0 : k, max: k }, [scene(setId(base, k))]));
+const boneRoom = (b: Bone, set: number): Json => rm(setId(`gn-41-bone-${b.n}`, set), `The Tray: Bone ${b.n}`, marble(), say(b.bone, '"Which Pokémon?" says the card. Three answers, in Dr. Winterbourne\'s hand.'), [
   ...b.options.map((o) => ch(o, o === b.right
     ? out(`"${o.replace('.', '')}! Yes!" She takes it to the back, and comes out with it revived, blinking.`, item(b.fossil), stampRegion(`museum-bone-${b.n}`), scene('gn-41-tray'))
     : out('"Not quite, dear. Have another look at the skeletons." She puts it back in the tray, face down.', stampRegion(`museum-bone-${b.n}`), scene('gn-41-tray')))),
   ch('Put it back.', out('You put it back in the tray.', scene('gn-41-tray'))),
 ]);
-const boneCh = (n: number): Json => chIf([once(`museum-bone-${n}`)], `Bone ${['one', 'two', 'three', 'four', 'five'][n - 1]}.`, out('You pick it up. It\'s lighter than you thought.', scene(`gn-41-bone-${n}`)));
+const boneCh = (n: number): Json => chIf([once(`museum-bone-${n}`)], `Bone ${['one', 'two', 'three', 'four', 'five'][n - 1]}.`, out('You pick it up. It\'s lighter than you thought.', ...bySet(`gn-41-bone-${n}`)));
 
-/** Three hidden items, behind exhibits: a Relic each. "Take it." / "Tell the curator." */
-const HIDDEN: { n: number; id: string; find: string; relic: string; back: string }[] = [
-  { n: 1, id: 'case', find: 'The case of small fossils nobody\'s identified slides an inch when you lean on it. Behind it, in the dust: a gold coin with a Pokémon on it.', relic: 'relic-gold', back: 'gn-41-fossils' },
-  { n: 2, id: 'tile', find: 'A loose tile, by the Tyrantrum\'s foot. Under it, wrapped in oilcloth: a little stone statue.', relic: 'relic-statue', back: 'gn-41-fossils' },
-  { n: 3, id: 'painting', find: 'The painting of the harbour swings out on a hinge. Behind it, on a hook: a silver band.', relic: 'relic-band', back: 'gn-41-history' },
+/** Three hidden items, behind exhibits: a Relic each, a different three in each collection. "Take it." / "Tell the curator." */
+interface Hidden { n: number; id: string; find: string; relic: string; back: string }
+const HIDDEN_SETS: Hidden[][] = [
+  [
+    { n: 1, id: 'case', find: 'The case of small fossils nobody\'s identified slides an inch when you lean on it. Behind it, in the dust: a gold coin with a Pokémon on it.', relic: 'relic-gold', back: 'gn-41-fossils' },
+    { n: 2, id: 'tile', find: 'A loose tile, by the Tyrantrum\'s foot. Under it, wrapped in oilcloth: a little stone statue.', relic: 'relic-statue', back: 'gn-41-fossils' },
+    { n: 3, id: 'painting', find: 'The painting of the harbour swings out on a hinge. Behind it, on a hook: a silver band.', relic: 'relic-band', back: 'gn-41-history' },
+  ],
+  [
+    { n: 1, id: 'case', find: 'The case of small fossils nobody\'s identified slides an inch when you lean on it. Behind it, standing on its edge: a silver coin, black with age.', relic: 'relic-silver', back: 'gn-41-fossils' },
+    { n: 2, id: 'tile', find: 'A loose tile, by the Tyrantrum\'s foot. Under it, packed in straw: a small painted vase, not even chipped.', relic: 'relic-vase', back: 'gn-41-fossils' },
+    { n: 3, id: 'painting', find: 'The painting of the harbour swings out on a hinge. Behind it, on a nail: a thin crown of beaten metal, child-sized.', relic: 'relic-crown', back: 'gn-41-history' },
+  ],
+  [
+    { n: 1, id: 'case', find: 'The case of small fossils nobody\'s identified slides an inch when you lean on it. Behind it, in a crack in the floor: a copper coin, green at the edges.', relic: 'relic-copper', back: 'gn-41-fossils' },
+    { n: 2, id: 'tile', find: 'A loose tile, by the Tyrantrum\'s foot. Under it, in a tobacco tin: a band of worn metal, too small for any finger here.', relic: 'relic-band', back: 'gn-41-fossils' },
+    { n: 3, id: 'painting', find: 'The painting of the harbour swings out on a hinge. Behind it, in a niche in the wall: a stone figure of a Pokémon nobody has drawn since.', relic: 'relic-statue', back: 'gn-41-history' },
+  ],
 ];
-const hiddenRoom = (h: (typeof HIDDEN)[number]): Json => rm(`gn-41-hidden-${h.id}`, 'Behind the Exhibit', marble(), h.find, [
+const hiddenRoom = (h: Hidden, set: number): Json => rm(setId(`gn-41-hidden-${h.id}`, set), 'Behind the Exhibit', marble(), h.find, [
   ch('Take it.', out('It goes in your bag. Nobody saw. The Tyrantrum\'s eye sockets look at you anyway.', item(h.relic), stampRegion(`museum-hidden-${h.n}`), scene(h.back))),
   ch('Tell the curator.', out('Dr. Winterbourne is delighted. She puts it in a case of its own, and writes the card herself, with your name on it: *Found by a visitor who told us.*', flag('museum-hidden-returned'), stampRegion(`museum-hidden-${h.n}`), scene(h.back))),
 ]);
-const hiddenCh = (n: number, label: string): Json => chIf([once(`museum-hidden-${n}`)], label, out('You look closer.', scene(`gn-41-hidden-${HIDDEN[n - 1]!.id}`)));
+const hiddenCh = (n: number, label: string): Json => chIf([once(`museum-hidden-${n}`)], label, out('You look closer.', ...bySet(`gn-41-hidden-${HIDDEN_SETS[0]![n - 1]!.id}`)));
 
 /** The Hall of Legendary Pokémon, by region: three or four of the region's legends, and the plinth that's always empty. */
 const LEGEND_HALL: { region: string; shown: [string, string][]; empty: [string, string] }[] = [
@@ -527,8 +571,8 @@ const gn41: Json[] = [
     ch('The Hall of Legendary Pokémon.', out('Into the hall with the high window.', ...Array.from({ length: 9 }, (_, i) => when('museum-region', { min: i + 1, max: i + 1 }, [scene(`gn-41-legends-${i + 1}`)])))),
     ch('Regional History.', out('Along the painted wall.', scene('gn-41-history'))),
   ]),
-  rm('gn-41-fossils', 'The Fossil Hall', marble({ pokemon: 'tyrantrum' }), say(
-    'Skeletons. A Tyrantrum that fills the room. Small plaques under the others: *Omanyte, the shell coils right. Kabuto, a dome, two pits beneath. Aerodactyl, needle teeth, kept in amber. Anorith, a claw jointed three times. Cranidos, a skull as thick as a door.*',
+  rm('gn-41-fossils', 'The Fossil Hall', marble({ pokemon: 'tyrantrum', remembers: BONE_SETS.map((b, i) => ({ id: `plaques-${i + 1}`, when: [i === 0 ? is('museum-set', 0, 1) : exactly('museum-set', i + 1)], notice: `The plaques under the smaller skeletons: ${b.plaques}` })) }), say(
+    'Skeletons. A Tyrantrum that fills the room. Smaller ones along the walls, each with a small plaque.',
     'A case of small ones nobody\'s identified. And on the wall, a plaster footprint.',
   ), [
     labelCh('footprint', 'Read the footprint\'s label.'),
@@ -549,7 +593,7 @@ const gn41: Json[] = [
     toHalls(),
   ]),
   ...LABELS.map(labelRoom),
-  ...HIDDEN.map(hiddenRoom),
+  ...HIDDEN_SETS.flatMap((set, i) => set.map((h) => hiddenRoom(h, i + 1))),
   ...LEGEND_HALL.map(legendRoom),
   rm('gn-41-desk', 'The Activities Desk', marble({ remembers: [{ id: 'trophy', when: [is('trophy-kept'), not('museum-trophy')], notice: 'Dr. Winterbourne sees the trophy in your bag. "Oh. Oh, we\'d give that a case. With a blank plate. Somebody should have their name on it one day."',
     addChoices: [ch('Give it a case.', out('It goes in a case by the door, with a blank brass plate under it. She polishes the plate with her sleeve.', flag('museum-trophy'), scene('gn-41-desk')))] }] }), 'Two activities, chalked on a board: FOSSIL IDENTIFICATION. FOSSIL RESTORATION.', [
@@ -559,7 +603,7 @@ const gn41: Json[] = [
   ]),
   rm('gn-41-tray', 'Fossil Identification', marble(), '"Which Pokémon?" Five bones, three answers each. The clues are on the skeletons in the Fossil hall.', [boneCh(1), boneCh(2), boneCh(3), ch('The other two bones.', out('The far end of the tray.', scene('gn-41-tray-2')))]),
   rm('gn-41-tray-2', 'Fossil Identification', marble(), 'The last two bones.', [boneCh(4), boneCh(5), ch('Back to the desk.', out('You leave the tray as you found it, nearly.', scene('gn-41-desk')))]),
-  ...BONES.map(boneRoom),
+  ...BONE_SETS.flatMap((set, i) => set.bones.map((b) => boneRoom(b, i + 1))),
   rm('gn-41-jigsaw', 'Fossil Restoration', marble(), say('A broken skull in a sandbox, in twelve pieces. A brush, a pot of glue, and a card: *Don\'t force them.*', 'The museum pays for the work.'), [
     ch('Fit the pieces.', out('Twelve pieces, and not one forced. Dr. Winterbourne holds it up to the light. "*Perfect.*" She pays you, and then, from a drawer, gives you a Rare Bone. "For a good pair of hands."', { kind: 'money', amount: 800 }, item('rare-bone'), stampRegion('museum-jigsaw-at'), scene('gn-41-desk')), {
       prompt: { id: 'museum-jigsaw', needs: 'perfect' },

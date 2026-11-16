@@ -135,9 +135,9 @@ describe('gn.42 The Factory', () => {
     expect(run.party.every((m) => m.gn?.includes('frontier-rental'))).toBe(true);
     expect(opened(run, 'gn-42-factory-1')).toBe('gn-42-factory-1');
     run = win(choose(run, 'gn-42-factory-1', 'Battle.').run);
-    expect(scene(run, 'gn-42-factory-swap-1').labels).toEqual(['Trade one of yours for their Cloyster.', 'Keep your three.']);
+    expect(scene(run, 'gn-42-factory-swap-1').labels).toEqual(['Trade one of yours for their Raichu.', 'Trade one of yours for their Sandslash.', 'Trade one of yours for their Cloyster.', 'Keep your three.']);
     const side = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.find((x) => !x.used && x.eventId === 'gn-42-factory-swap-1')!;
-    const swapped = chooseEvent(content, run, side.id, 0, run.party[0]!.uid);
+    const swapped = chooseEvent(content, run, side.id, 2, run.party[0]!.uid);
     expect(swapped.run.party[0]!.speciesId).toBe('cloyster');
     run = choose(swapped.run, 'gn-42-factory-2', 'Retire.').run;
     expect(run.party.some((m) => m.gn?.includes('frontier-rental'))).toBe(false);

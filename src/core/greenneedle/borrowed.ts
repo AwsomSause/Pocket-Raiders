@@ -117,6 +117,8 @@ export function borrowEnd(content: Content, run: RunState, won: number): string 
   else run.party = run.party.filter((m) => !m.gn?.includes(BORROWED));
   set(run, 'borrow-live', 0);
   set(run, 'borrow-result', won ? 1 : 2);
+  // The swap is heard about (gn.42's Foreman, the rival's later lines read it).
+  set(run, 'x-rival-swapped-teams', 1);
   set(run, 'borrow-knows', 1);
   set(run, 'borrow-specific', 1);
   borrowArm(run);

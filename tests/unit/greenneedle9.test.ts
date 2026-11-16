@@ -76,13 +76,13 @@ describe('gn.39 The Travelling Pokémon Market', () => {
   it('haggling: at or above the floor it is taken; below it, a warning, then "out of stock" for one appearance', () => {
     let run = choose(toStones(market('t39-haggle')), 'gn-39-carmela-1', 'Fire Stone (₽800).').run;
     run = choose(run, 'gn-39-carmela-1-fire-stone', 'Offer less.').run;
-    expect(scene(run, 'gn-39-carmela-1-fire-stone-haggle').labels).toEqual(['Offer ₽720.', 'Offer ₽624.', 'Offer ₽560.', 'Walk away.']);
-    const low = choose(run, 'gn-39-carmela-1-fire-stone-haggle', 'Offer ₽624.');
+    expect(scene(run, 'gn-39-carmela-1-fire-stone-haggle').labels).toEqual(['Offer ₽720.', 'Offer ₽640.', 'Offer ₽600.', 'Walk away.']);
+    const low = choose(run, 'gn-39-carmela-1-fire-stone-haggle', 'Offer ₽600.');
     expect(said(low)).toMatch(/They've stopped smiling/);
     expect(flagOf(low.run, 'market-carmela-bought')).toBe(0);
     // Refused: still at the counter.
     run = choose(low.run, 'gn-39-carmela-1-fire-stone', 'Offer less.').run;
-    const lower = choose(run, 'gn-39-carmela-1-fire-stone-haggle', 'Offer ₽560.');
+    const lower = choose(run, 'gn-39-carmela-1-fire-stone-haggle', 'Offer ₽600.');
     expect(said(lower)).toMatch(/nothing on this stall for you/);
     run = again(lower.run);
     expect(flagOf(run, 'market-carmela-out')).toBe(1);
@@ -106,8 +106,8 @@ describe('gn.39 The Travelling Pokémon Market', () => {
     honest = choose(honest, 'gn-39-carmela-1-fire-stone', 'Offer less.').run;
     expect(scene(honest, 'gn-39-carmela-1-fire-stone-haggle').intro).toMatch(/wince comes later/);
     const paid = honest.money;
-    const ok = choose(honest, 'gn-39-carmela-1-fire-stone-haggle', 'Offer ₽624.');
-    expect(paid - ok.run.money).toBe(624);
+    const ok = choose(honest, 'gn-39-carmela-1-fire-stone-haggle', 'Offer ₽600.');
+    expect(paid - ok.run.money).toBe(600);
   });
 
   it('took from the Shop With No Shopkeeper: no haggling at all', () => {

@@ -20,7 +20,7 @@ import { crystalOp, golemStart } from './crystals';
 import { tideOf } from '../clock';
 import { lightning } from './ridge';
 import { labCast, labForm } from './lab';
-import { marketArrive, marketBuy, marketOffer, marketUndercut } from './market';
+import { marketArrive, marketBuy, marketOffer, marketPriceToken, marketUndercut } from './market';
 import { museumArrive } from './museum';
 import { listenedHatch, listenedTake, listenedWord } from './listened';
 import { daycareLeave, daycareReturn, eggShape, parentAndChild } from './daycare';
@@ -67,7 +67,7 @@ import { lcBring, lcEligible, lcEnd, lcEvolver, lcMany, lcStart, lcStartBattle, 
 import { CHAMPION_NAME, onevoneChampion, onevoneEnd, onevoneEnter, onevoneStart, entrantOf } from './onevone';
 import { eeveeEnd, eeveeStart } from './eevee';
 import { GAVEL, auctionArrive, auctionOpen, auctionReturn, auctionRound, lotToken } from './auction';
-import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench } from './frontier';
+import { aceHere, bagBack, bagLeave, bench, brainRecord, brainStart, bring, frontierClear, leadInitiative, palaceShape, rent, swapIn, unbench, lastTeamToken } from './frontier';
 
 type Cue = { type: 'spectacle'; kind: 'arena'; side: 'player' | 'enemy'; text: string; uid?: string };
 const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ type: 'spectacle', kind: 'arena', side, text, ...(uid ? { uid } : {}) });
@@ -96,6 +96,10 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   text = text.replace(/\{lot:([1-6]):([a-z]+)\}/g, (_, n: string, part: string) => lotToken(run, Number(n), part));
   text = text.replaceAll('{duelist}', duelName(content, run));
   text = text.replace(/\{money:([a-z0-9-]+)\}/g, (_, k: string) => `₽${gnFlag(run, k).toLocaleString('en-GB')}`);
+  // gn.42: the team a Brain remembers you bringing last time ({brainteam:<building>}).
+  text = text.replace(/\{brainteam:([a-z]+)\}/g, (_, b: string) => lastTeamToken(content, run, b));
+  // gn.39: a market lot's price for this player, after the vendor's discounts ({market:<vendor>:<asking price>}).
+  text = text.replace(/\{market:([a-z]+):(\d+)\}/g, (_, v: string, n: string) => marketPriceToken(run, v, Number(n)));
   // gn.44: the reigning 1v1 champion, a different trainer each region.
   // gn.48: the Draft's table.
   if (text.includes('{xatu:')) text = xatuTokens(content, run, text);
@@ -301,6 +305,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'sgOrdered') return waiting(run) < 0;
   if (c.test === 'rehabWaiting') return gnFlag(run, 'smuggle-rehab') > 0 && gnFlag(run, 'smuggle-rehab') < restsNeeded(run);
   if (c.test === 'rivalAhead') return run.story.rivals.some((r) => (r.world?.lead ?? 0) >= 2);
+  // gn.40: Mrs. Holloway only takes the coins when the lead has an egg move still to learn (`key: 'to-learn'`; `'none-to-learn'` is its opposite).
+  if (c.test === 'eggMoveKnown' && (c.key === 'to-learn' || c.key === 'none-to-learn')) { const lead = run.party.find((m) => m.hp > 0); const can = !!lead && eggMoveOptions(content, familyId(content, lead.speciesId)).some((o) => o.active && !lead.moves.some((mv) => mv.id === o.id)); return c.key === 'to-learn' ? can : !can; }
   if (c.test === 'eggMoveKnown') return run.party.some((m) => { const egg = new Set(eggMoveOptions(content, familyId(content, m.speciesId)).map((o) => o.id)); return m.moves.some((mv) => egg.has(mv.id)); });
   if (c.test === 'natureIs') return run.party.some((m) => m.nature === c.key);
   if (c.test === 'pairGetsOn') return run.party.some((a, i) => run.party.some((b, j) => j > i && pairBondLevel(run, a.uid, b.uid) >= 1));
@@ -579,7 +585,7 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       const r = daycareReturn(content, run, host.stage, (mon, n) => void addLevels(content, mon, n));
       if (!r.eggOf) return r.line;
       const laid = host.apply({ kind: 'egg', species: [familyId(content, r.eggOf.speciesId)], types: [], levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' });
-      eggShape(run, 'habit-daycare', r.parents);
+      eggShape(run, r.habit?.shape ?? 'habit-daycare', r.parents, r.habit?.move);
       return [r.line, laid].filter(Boolean).join(' · ');
     }
     case 'eggShape':
