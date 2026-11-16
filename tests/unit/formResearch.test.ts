@@ -15,17 +15,13 @@ function runAt(clues: number, stageIndex = 4, met = 0) {
 }
 const ids = (clues: number) => eligibleEvents(content, runAt(clues)).map((e) => e.id).filter((id) => id.startsWith('form-'));
 
+// The Catalog Overhaul Pack merged the Form Research clues and battle into Linden's Delta Study (D1); its own tests are in
+// coLegendsDelta.test.ts. The Secret route still opens on the old \`form-met\` flag.
 describe('Form Research chain', () => {
-  it('offers the three clues first, never the battle', () => {
-    expect(ids(0).sort()).toEqual(['form-clue-fur', 'form-clue-sketch', 'form-clue-tracks']);
-    expect(ids(2)).not.toContain('form-research-battle');
-  });
-  it('after three clues only the research battle remains, and its foes are regional forms', () => {
-    expect(ids(3)).toEqual(['form-research-battle']);
-    const battle = content.events.get('form-research-battle')!;
-    const species = JSON.stringify(battle).match(/"species":\[([^\]]*)\]/)![1]!.replace(/"/g, '').split(',');
-    expect(species.length).toBeGreaterThan(3);
-    for (const id of species) expect(specialFamily(content.species.get(id)!), id).toBe('regional');
+  it('is merged into the Delta Study: the old ids are disabled and their replacements exist', () => {
+    for (const id of ['form-clue-fur', 'form-clue-sketch', 'form-clue-tracks', 'form-research-battle']) expect(content.events.get(id)?.disabled ?? true, id).toBe(true);
+    for (const id of ['delta-clue-nest', 'delta-clue-scales', 'delta-clue-song', 'delta-research-battle']) expect(content.events.has(id), id).toBe(true);
+    expect(ids(0)).toEqual([]);
   });
 });
 

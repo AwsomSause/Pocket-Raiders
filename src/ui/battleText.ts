@@ -1,6 +1,6 @@
 // Turns battle events into the sentences shown in the battle message box.
 
-import { pokemonMoment } from '../core/moments/pokemonMoments';
+import { pokemonMoment, REVIVAL_STATUSES } from '../core/moments/pokemonMoments';
 import type { Side } from '../core/battle/engine';
 import type { Content, Terrain, Weather } from '../core/contentSchema';
 import type { RunEvent } from '../core/run';
@@ -119,10 +119,12 @@ export function eventText(content: Content, names: Names, e: RunEvent, details =
       // A Pokémon moment (core/moments): its name and one line; a refused cinematic is told this same way.
       const def = pokemonMoment(e.id);
       // A full-screen scene already told its story; the box only says what happened.
-      if (e.scene) return `${who(e.side)} rises again, Overcharged!`;
-      const line = (def?.presentation.split(' | ').pop() ?? '').replace(/^"|"$/g, '');
+      if (e.scene) return def?.scene?.after && def.scene.after !== 'overcharged' ? `${who(e.side)} rises again: ${REVIVAL_STATUSES[def.scene.after]?.name ?? def.name}!` : `${who(e.side)} rises again, Overcharged!`;
+      // Pack lines name the Pokémon as [Name].
+      const line = (def?.presentation.split(' | ').pop() ?? '').replace(/^"|"$/g, '').replace(/\[Name\]/g, content.species.get(e.speciesId)?.name ?? 'It');
       // Battle-start and switch-in moments: their flavour line, then what it did.
-      if (e.trigger !== 'lethal' && e.trigger !== 'runEnd') return `${e.name}! ${line ? `${line} ` : ''}${def?.effectText ?? ''}`.trim();
+      if (e.trigger === 'runEnd') return `${e.name}! ${who(e.side)} gets back up!${line ? ` ${line}` : ''}`;
+      if (e.trigger !== 'lethal') return `${e.name}! ${line ? `${line} ` : ''}${def?.effectText ?? ''}`.trim();
       return `${e.name}! ${who(e.side)} hangs on!${line ? ` ${line}` : ''}`;
     }
     case 'hyper':

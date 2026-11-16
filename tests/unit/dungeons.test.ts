@@ -56,7 +56,8 @@ describe('W6 compiled rooms', () => {
     for (const id of [...BASIC_ENTRANCES(), ...THEMED_ENTRANCES()]) expect(content.events.get(id)?.room).toBe(true);
     const gate = content.events.get('ev-abandoned-expedition')!;
     expect(gate.disabled).toBe(false);
-    expect(content.events.get('ev-hidden-dungeon')!.secret.length).toBeGreaterThan(0);
+    // Catalog Overhaul SF135: the Hidden Dungeon door is in plain sight and opens with three Torn Pages.
+    expect(JSON.stringify(content.events.get('ev-hidden-dungeon')!.choices[0]!.requires)).toContain('torn-page');
   });
 });
 

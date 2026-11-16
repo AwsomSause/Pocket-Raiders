@@ -175,6 +175,9 @@ test('shop items: a Coupon halves a price and the Member Card sells an item earl
   await page.evaluate(() => {
     const { session, game } = (window as any).__pkr;
     const run = session.run;
+    // Dated game events (a Market Week's sale) change prices by the calendar; this test is about the Coupon and the Member Card.
+    run.gameEvents = [];
+    run.perkEffects = [];
     const node = run.stage.map.nodes[0];
     node.sides = [{ id: 'e2e-shop', kind: 'shop', used: false }];
     run.stage.current = node.id;

@@ -1,0 +1,4 @@
+[
+  {"id":"shed-horn","name":"Shed Horn","family":"Legends: Alpha keepsakes (held)","description":"The Quarry King's old horn. Rock moves +10%.","rarity":"rare","stacksOn":"pokemon","max":1,"how":"held","icon":"hard-stone","status":"supported","effect":{"kind":"held","hooks":[{"hook":"typePower","types":["rock"],"percent":10}]}},
+  {"id":"straight-spoon","name":"Straight Spoon","family":"Legends: Alpha keepsakes (held)","description":"A spoon the Great Pello's Abra bent back. Psychic moves +10%.","rarity":"rare","stacksOn":"pokemon","max":1,"how":"held","icon":"twistedspoon","status":"supported","effect":{"kind":"held","hooks":[{"hook":"typePower","types":["psychic"],"percent":10}]}}
+]

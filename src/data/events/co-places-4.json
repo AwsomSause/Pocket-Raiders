@@ -1,0 +1,922 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [
+  "dg-ancient-ruin-steps-a",
+  "dg-ancient-ruin-steps-b",
+  "dg-ancient-ruin-steps-c",
+  "dg-ancient-ruin-steps-d",
+  "dg-ancient-ruin-steps-e",
+  "dg-ancient-ruins-a",
+  "dg-ancient-ruins-b",
+  "dg-ancient-ruins-c",
+  "dg-ancient-ruins-d",
+  "dg-ancient-ruins-e",
+  "dg-ancient-ruins-f",
+  "dg-ancient-ruins-g",
+  "dg-ancient-ruins-h",
+  "dg-forgotten-lab-a",
+  "dg-forgotten-lab-b",
+  "dg-forgotten-lab-c",
+  "dg-forgotten-lab-d",
+  "dg-forgotten-lab-e",
+  "dg-forgotten-lab-f",
+  "dg-forgotten-lab-g",
+  "dg-forgotten-lab-h",
+  "dg-haunted-mansion-a",
+  "dg-haunted-mansion-b",
+  "dg-haunted-mansion-c",
+  "dg-haunted-mansion-d",
+  "dg-haunted-mansion-e",
+  "dg-haunted-mansion-f",
+  "dg-haunted-mansion-g",
+  "dg-haunted-mansion-h",
+  "dg-haunted-mansion-i"
+ ],
+ "events": [
+  {
+   "id": "delve-gate-celestial-observatory",
+   "name": "The Celestial Observatory",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "types": [
+    "psychic",
+    "fairy"
+   ],
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "delve-celestial-observatory-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#221c40",
+    "effect": "none"
+   },
+   "intro": "A dome of old glass stands on the hilltop over a brass map of the sky. The telescope inside is trained on one empty patch of stars, and by the worn floor round it, it has been for decades. Someone is waiting for something to come back.",
+   "choices": [
+    {
+     "label": "Go in under the dome.",
+     "success": {
+      "text": "Your footsteps ring on brass constellations. Overhead, through the cracked glass, the real ones look down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the stargazers to it.",
+     "success": {
+      "text": "You walk on down the hill. Behind you the great telescope does not move a hair.",
+      "effects": []
+     }
+    }
+   ],
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ]
+  },
+  {
+   "id": "dg-celestial-observatory-a",
+   "name": "Celestial Observatory",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#221c40"
+   },
+   "intro": "A dome of old glass over a map of the sky. A carved mechanism blocks the inner door, worn but readable: a brass orrery, its planets on rings, waiting to be set to a night that someone thought worth remembering.",
+   "choices": [
+    {
+     "label": "Set the planets to tonight's sky.",
+     "check": "intelligence",
+     "success": {
+      "text": "You look up through the dome and move each brass world to where its real one hangs. The last ring clicks. Somewhere a counterweight falls, and the inner door swings open on oiled hinges. Somebody still oils them.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-b"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You set them, and nothing moves. One planet is wrong. You look up through the cracked glass and start again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Force the door.",
+     "success": {
+      "text": "The door is brass a hand thick. It rings like a bell when you hit it, and does nothing else.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the plate on the orrery.",
+     "success": {
+      "text": "A small engraved plate, polished by a thumb: \"The night it came. Set the sky as it is NOW, not as it was. It will not come the same way twice.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-celestial-observatory-plate",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-a"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Celestial Observatory will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "plate",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-celestial-observatory-plate",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The plate says to set the sky as it is now.",
+     "hide": [
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "dg-celestial-observatory-b",
+   "name": "Celestial Observatory: wild",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "elgyem",
+    "effect": "none",
+    "tint": "#221c40"
+   },
+   "intro": "The stair winds up through the dome's machinery. An Elgyem hangs in the air between two great gears, fingers flickering red, yellow, green, as if counting something far away.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The lights stop. It turns to you, very slowly.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "elgyem"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-celestial-observatory-c"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Flicker a light back.",
+     "success": {
+      "text": "You cover and uncover your lamp: three short, like its last pattern. It stares. Then it answers, faster, delighted, and drifts up the stair ahead of you still signalling, as if you had said something very funny.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Slip past.",
+     "success": {
+      "text": "You climb past underneath it. It never stops counting.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-c"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Celestial Observatory will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-celestial-observatory-c",
+   "name": "Celestial Observatory: rare",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "minior",
+    "effect": "none",
+    "tint": "#221c40"
+   },
+   "intro": "An unusual cry, like gravel poured on glass. A Minior has come through a broken pane and lies in a crater of its own on the gallery floor, shell cracked, the bright core showing through, pulsing.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It lifts off the floor, spinning, shedding shell.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "minior"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 2
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-celestial-observatory-d"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Carry it to the broken pane.",
+     "success": {
+      "text": "It is warm and heavier than it looks. You hold it up to the gap in the glass. It hangs in your hands a moment, as if getting its bearings, then rises out into the night and is one more light among the rest.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You helped a fallen Minior back into the sky.",
+        "importance": 45
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You step round the crater. It pulses on, patient as a lighthouse, waiting for the sky to notice it is missing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-d"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Celestial Observatory will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-celestial-observatory-d",
+   "name": "Celestial Observatory: trap",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#221c40"
+   },
+   "intro": "The floor ahead looks wrong: the gallery here is glass, an old skylight for the room below, and it is starred with cracks. There are chalk marks where someone tested each pane.",
+   "choices": [
+    {
+     "label": "Follow the chalk marks.",
+     "success": {
+      "text": "A tick means safe. A cross means not. Somebody small and careful did this, pane by pane, years ago. You walk on ticks all the way across.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run across.",
+     "chance": 0.5,
+     "success": {
+      "text": "You run. Glass sings under you, and holds.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-e"
+       }
+      ]
+     },
+     "failure": {
+      "text": "A crossed pane goes under your heel. You catch the frame; your team hauls you up, all of you cut and shaking.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lay a plank from the stair.",
+     "success": {
+      "text": "You pull a loose tread from the stair and bridge the worst of it. It is slow, undignified, and nobody bleeds.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-e"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Celestial Observatory will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-celestial-observatory-e",
+   "name": "Celestial Observatory: hidden",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#221c40"
+   },
+   "intro": "A sealed chamber off the gallery, its lock cold and old: a star chart cut into the door, with one star missing, a small square hole where it should be.",
+   "choices": [
+    {
+     "label": "Fit a Star Piece in the hole.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "star-piece"
+      }
+     ],
+     "success": {
+      "text": "The Star Piece sits in the gap as if cut for it. The chart turns, the door opens. Inside: the observatory's strongroom, and what its keepers thought worth locking up.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "star-piece"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "stardust",
+        "count": 2
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-f"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Force it.",
+     "success": {
+      "text": "The door does not notice you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-f"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the chart one star short.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-f"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Celestial Observatory will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-celestial-observatory-f",
+   "name": "Celestial Observatory: wild",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefairy",
+    "effect": "none",
+    "tint": "#221c40"
+   },
+   "intro": "The top gallery, open to the sky. A ring of Clefairy is dancing round the base of the telescope, slowly, solemnly, in the dust of a path worn by a hundred nights of the same dance.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The dance breaks. They are very cross.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "pseudo": true,
+       "species": [
+        "clefairy"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "chain": 2,
+       "win": [
+        {
+         "kind": "research",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-celestial-observatory-g"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait for the dance to end.",
+     "success": {
+      "text": "You sit on the stair and watch. It takes a long time, and at the end they all look up at the same empty patch of stars, and sigh, and file away. One pats your knee as it passes.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-g"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join the ring.",
+     "success": {
+      "text": "You take a place in the ring and shuffle round with them, getting the steps wrong. Nobody minds. When it ends, every one of them looks up at the same empty patch of stars. So do you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "delve-celestial-observatory-danced",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-g"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Celestial Observatory will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-celestial-observatory-g",
+   "name": "Celestial Observatory: boss",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#221c40"
+   },
+   "intro": "The deepest room is the highest: the telescope's cradle. An old woman sits at the eyepiece in a coat stitched with constellations. \"Star Keeper. Forty years I've held this glass on one spot. It came once. If you've come to move my telescope, you'll have to move me.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Good. I was getting stiff.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "The Star Keeper",
+       "team": [
+        "beheeyem",
+        "clefable",
+        "starmie",
+        "lunatone",
+        "solrock"
+       ],
+       "size": 5,
+       "types": [],
+       "levelBonus": 3,
+       "classId": "psychic",
+       "win": [
+        {
+         "kind": "flag",
+         "key": "delve-celestial-observatory-resident-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 900
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "dg-celestial-observatory-h"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask what came.",
+     "success": {
+      "text": "\"A light that changed shape as it fell. Red and green, like nothing born here. It looked at me through this glass. Looked BACK.\" She laughs at herself. \"I was nineteen. I've been waiting to be looked at again ever since.\" She waves you to the roof stair. \"Go and see my sky.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-celestial-observatory-resident-asked",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-h"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer to keep watch.",
+     "success": {
+      "text": "You take the eyepiece. She stands, creaking, and for the first time in forty years walks away from it: makes tea, eats something, sleeps an hour in her chair. You watch one empty patch of sky. Nothing comes. When she wakes she takes your hands in both of hers and cannot speak.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-celestial-observatory-resident-watched",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "You kept the Star Keeper's watch so she could rest.",
+        "importance": 60
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dg-celestial-observatory-h"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back toward the daylight.",
+     "success": {
+      "text": "You keep everything you carry and walk back out. The Celestial Observatory will wait.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dg-celestial-observatory-h",
+   "name": "Celestial Observatory: exit",
+   "group": "Dungeons",
+   "stop": "delve",
+   "rarity": "rare",
+   "tags": [
+    "Dungeon",
+    "Exploration"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none",
+    "tint": "#221c40"
+   },
+   "intro": "The roof. Open sky from edge to edge, more stars than dark. The telescope below you points at its one empty patch.",
+   "choices": [
+    {
+     "label": "Look where the telescope looks.",
+     "success": {
+      "text": "You look at the empty patch until your eyes water. And then it is not empty. One point, red and green, that was not there. It does not fall. It turns, the way a head turns. Down below, the Star Keeper cries out. She has seen it too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-celestial-observatory-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "telling-deoxys",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "moment",
+        "text": "Something in the sky looked back at the Celestial Observatory.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lie back and watch them all.",
+     "success": {
+      "text": "You lie on the warm lead of the roof with your team in a row beside you and watch the whole sky wheel. Nobody speaks. It is one of the good nights.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-celestial-observatory-done",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "You take the outside stair down the dome and leave the sky to the people who wait for it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "delve-celestial-observatory-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tear",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "faller-rank",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "The sky above the dome is wrong. A crack hangs in it, thin as a hair, with a different dark behind: a Tear. You have looked through such things before, and this one knows you.",
+     "addChoices": [
+      {
+       "label": "Stand under the Tear.",
+       "success": {
+        "text": "You stand beneath it and it widens, a little, the way a pupil does. Something on the far side is deciding about you. Then the stars slide back over it like a lid. Your hands will not stop shaking for an hour.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "delve-celestial-observatory-done",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "tear-observatory",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "telling-deoxys",
+          "amount": 1
+         },
+         {
+          "kind": "research",
+          "amount": 4
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "watched",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "delve-celestial-observatory-resident-watched",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Star Keeper has come up to the roof behind you, wrapped in a blanket, rested for the first time in years."
+    }
+   ]
+  }
+ ]
+}

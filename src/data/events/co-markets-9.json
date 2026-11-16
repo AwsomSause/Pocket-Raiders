@@ -1,0 +1,559 @@
+{
+ "catalogOverhaul": "markets",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "trade-chain-long",
+   "name": "The Long Chain",
+   "group": "Trades",
+   "intro": "A market stall, a girl standing on a crate to see over it. Market child Bea: \"I'll trade you this Oran Berry for your shiniest pebble!\" She means a Hard Stone, or anything rocky.",
+   "choices": [
+    {
+     "label": "Trade the pebble.",
+     "requires": [
+      {
+       "kind": "holdsAny",
+       "ids": [
+        "hard-stone",
+        "rock-gem",
+        "everstone",
+        "smooth-rock",
+        "rare-bone"
+       ],
+       "count": 1,
+       "label": "a Hard Stone or a Rock-type item"
+      }
+     ],
+     "success": {
+      "text": "Bea holds it up to the sun, gasps, and gives you the Oran Berry. Then a hug, around the middle, very hard. \"Best trade ever.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "payItem",
+        "only": [
+         "hard-stone",
+         "rock-gem",
+         "everstone",
+         "smooth-rock",
+         "rare-bone"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "chain-long",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "trade-chain-long-2",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "No pebble today.",
+     "success": {
+      "text": "\"Next time!\" Bea goes back to polishing her own pebbles.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "trade-chain-long-2",
+   "name": "The Long Chain",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "chain-long",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "intro": "A hiker sitting on his pack, stomach growling. Hungry hiker Gus: \"I'd swap my compass for a Berry. I mean it. Any Berry. That Oran would do.\"",
+   "choices": [
+    {
+     "label": "Trade the Oran Berry.",
+     "requires": [
+      {
+       "kind": "holdsAny",
+       "ids": [
+        "oran-berry"
+       ],
+       "count": 1,
+       "label": "an Oran Berry"
+      }
+     ],
+     "success": {
+      "text": "Gus eats it in two bites, sighs, and presses a brass compass into your hand. \"Points true. Always has.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "payItem",
+        "only": [
+         "oran-berry"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "chain-compass",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "chain-long",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "trade-chain-long-3",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep what I have.",
+     "success": {
+      "text": "\"That's alright,\" Gus says, and means it. \"It's yours to keep.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "trade-chain-long-3",
+   "name": "The Long Chain",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "chain-long",
+     "atLeast": 2,
+     "atMost": 2
+    }
+   ],
+   "intro": "An old sailor squinting at the sky, turning in a slow circle. Lost sailor Brinner: \"A compass! I'll give you my spare Pokémon for it. I've been lost three days.\"",
+   "choices": [
+    {
+     "label": "Trade the compass.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "chain-compass",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Brinner kisses the compass, gets his bearings, and hands you a Wingull. \"She's a natural flyer. Better than me at finding home.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "chain-compass",
+        "amount": -1
+       },
+       {
+        "kind": "honestTrade",
+        "id": "chain-wingull",
+        "gift": true,
+        "gives": {
+         "species": "wingull",
+         "nature": "jolly",
+         "quirk": "loves-rain",
+         "marks": [
+          "traded for a compass"
+         ],
+         "why": "I've been lost three days. A compass is worth more to me now.",
+         "ot": "Brinner"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "chain-long",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "trade-chain-long-4",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep what I have.",
+     "success": {
+      "text": "\"That's alright,\" Brinner says, and means it. \"It's yours to keep.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "trade-chain-long-4",
+   "name": "The Long Chain",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "chain-long",
+     "atLeast": 3,
+     "atMost": 3
+    }
+   ],
+   "intro": "A man with a feather in his hat and three birds on his arm. Bird-keeper Perry: \"That Wingull's a natural. I'll swap my Swablu's egg for it. I'll hold the egg for you until you decide.\"",
+   "choices": [
+    {
+     "label": "Trade the Wingull.",
+     "success": {
+      "text": "Perry takes the Wingull onto his arm with the others. It fits right in. He shows you the Swablu egg, warm in a nest of feathers. \"Yours. I'll carry it till the next stop.\"",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "the Wingull",
+         "species": [
+          "wingull",
+          "pelipper"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "chain-long",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "trade-chain-long-5",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep what I have.",
+     "success": {
+      "text": "\"That's alright,\" Perry says, and means it. \"It's yours to keep.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "trade-chain-long-5",
+   "name": "The Long Chain",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "chain-long",
+     "atLeast": 4,
+     "atMost": 4
+    }
+   ],
+   "intro": "Perry catches you up, the Swablu egg in his hands. Beside him, a woman with dragon scales sewn into her coat. Dragon fancier Ysra: \"A Swablu egg! I'll give you a Dragon Scale and a story.\"",
+   "choices": [
+    {
+     "label": "Trade the egg.",
+     "success": {
+      "text": "Ysra cradles the egg and tells you the story: a Swablu that sang until it grew into a dragon of the clouds. Then a Dragon Scale, cool and heavy, in your palm.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "dragon-scale",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "chain-long",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "trade-chain-long-6",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the egg.",
+     "success": {
+      "text": "Perry hands the egg to you. It is warm, and something inside it shifts. \"Good choice too,\" Ysra says. \"Every choice is.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "swablu"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "chain-long",
+        "amount": -4
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "trade-chain-long-6",
+   "name": "The Long Chain",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "chain-long",
+     "atLeast": 5,
+     "atMost": 5
+    }
+   ],
+   "intro": "An old man in robes by a mountain shrine. Dragon clan elder Ryuen: \"A scale freely traded all this way. Pebble, Berry, compass, wing, egg. That is worth a Dratini.\"",
+   "choices": [
+    {
+     "label": "Trade the Dragon Scale.",
+     "requires": [
+      {
+       "kind": "holdsAny",
+       "ids": [
+        "dragon-scale"
+       ],
+       "count": 1,
+       "label": "the Dragon Scale"
+      }
+     ],
+     "success": {
+      "text": "Ryuen bows. A Dratini uncoils from his sleeve and looks up at you. \"It began with a child's pebble. Remember that.\"",
+      "effects": [
+       {
+        "kind": "market",
+        "action": "payItem",
+        "only": [
+         "dragon-scale"
+        ]
+       },
+       {
+        "kind": "honestTrade",
+        "id": "chain-dratini",
+        "gift": true,
+        "askedFirst": true,
+        "gives": {
+         "species": "dratini",
+         "nature": "modest",
+         "quirk": "gentle",
+         "marks": [
+          "the end of the long chain"
+         ],
+         "why": "A scale freely traded all this way is worth a Dratini.",
+         "ot": "Ryuen"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "chain-long",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep what I have.",
+     "success": {
+      "text": "\"That's alright,\" Ryuen says, and means it. \"It's yours to keep.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "trade-chain-short",
+   "name": "The Short Chain",
+   "group": "Trades",
+   "intro": "A boy in a too-big cap with a Bellsprout on his shoulder. Kid Rocco: \"Grass beats you! Swap? I want a Fire-type. A real one, level 5 or more.\"",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Rocco whoops and hands over the Bellsprout. \"Look after it! It likes being watered at night.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "chain-bellsprout",
+        "wants": {
+         "label": "a Fire-type at level 5 or more",
+         "species": [],
+         "types": [
+          "fire"
+         ],
+         "minLevel": 5
+        },
+        "gives": {
+         "species": "bellsprout",
+         "nature": "jolly",
+         "marks": [
+          "Rocco's Bellsprout"
+         ],
+         "why": "Grass beats you! I want a Fire-type.",
+         "ot": "Rocco"
+        }
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "trade-chain-short-2",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "No thanks.",
+     "success": {
+      "text": "\"Your loss!\" Rocco says, and his Bellsprout waves at you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "trade-chain-short-2",
+   "name": "The Short Chain",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "trade-chain-bellsprout",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "A treehouse, a girl hanging upside down from the ladder. Kid Ivy-May: \"Bellsprout for Leafy's sister! She's a Fomantis. She's very fancy.\"",
+   "choices": [
+    {
+     "label": "Trade the Bellsprout.",
+     "success": {
+      "text": "Ivy-May climbs down and solemnly swaps. \"Leafy will be so happy. Say hello to Bodhi for me, he's by the sea.\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "chain-fomantis",
+        "wants": {
+         "label": "the Bellsprout",
+         "species": [
+          "bellsprout",
+          "weepinbell",
+          "victreebel"
+         ]
+        },
+        "gives": {
+         "species": "fomantis",
+         "nature": "hasty",
+         "quirk": "show-off",
+         "marks": [
+          "Leafy's sister"
+         ],
+         "why": "Bellsprout for Leafy's sister!",
+         "ot": "Ivy-May"
+        }
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "trade-chain-short-3",
+        "nodes": 3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep what I have.",
+     "success": {
+      "text": "\"That's alright,\" Ivy-May says, and means it. \"It's yours to keep.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "group": "Trades",
+   "callback": false,
+   "id": "trade-chain-short-3",
+   "name": "The Short Chain",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "trade-chain-fomantis",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "intro": "A lighthouse, a boy waving from the bottom step. Kid Bodhi: \"Fomantis has never seen the sea! I'll swap my Chinchou. She's got a ribbon.\"",
+   "choices": [
+    {
+     "label": "Trade the Fomantis.",
+     "success": {
+      "text": "Bodhi shows the Fomantis the sea. It stares for a full minute. Then he hands you the Chinchou, ribbon and all. \"All three of us traded. That's a chain!\"",
+      "effects": [
+       {
+        "kind": "honestTrade",
+        "id": "chain-chinchou",
+        "wants": {
+         "label": "the Fomantis",
+         "species": [
+          "fomantis",
+          "lurantis"
+         ]
+        },
+        "gives": {
+         "species": "chinchou",
+         "nature": "calm",
+         "quirk": "sings-at-night",
+         "marks": [
+          "wears a ribbon",
+          "the end of the short chain"
+         ],
+         "why": "Fomantis has never seen the sea!",
+         "ot": "Bodhi"
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "short-chain-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep what I have.",
+     "success": {
+      "text": "\"That's alright,\" Bodhi says, and means it. \"It's yours to keep.\"",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  }
+ ]
+}

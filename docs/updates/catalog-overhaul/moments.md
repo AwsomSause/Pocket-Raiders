@@ -1,0 +1,5 @@
+# Pokémon Moments (Catalog Overhaul row 17)
+
+**What players get.** Pokémon now have moments that fit who they are. Every type, many kinds of Pokémon (machines, ghosts, babies, fossils, pseudo-legendaries, Ultra Beasts, Legendaries) and many single species react in battle or at camp: a Magikarp facing a Gym Leader that refuses to give up, a Snorlax who won't wake, Shedinja's empty shell, Lucario seeing who comes next, a starter who was there first. Fifteen new last-stand revivals bring a Pokémon back from the end of a run with a status of its own (The Grave Refuses, The Old Blood, Supernova, Eclipse...), each with a price. Groups in the party help each other: Eeveelution siblings, the legendary birds, the starter trio from one lab, Palkia with Dialga. Some moments open a small camp scene with a choice.
+
+**Known limits.** See `docs/status/co-moments.md`: a few moments need systems that don't exist yet (in-battle choices, a run album, trades, sea and beach nodes) and are left out; the revival sound clips come from Kice.

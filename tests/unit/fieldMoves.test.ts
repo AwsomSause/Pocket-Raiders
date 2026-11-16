@@ -30,7 +30,7 @@ describe('field moves (S416)', () => {
     const run = atEvent('field-overgrowth');
     run.party[0]!.moves.push({ id: 'cut', pp: 10 });
     chooseEvent(content, structuredClone(run), 'fm', 0);
-    expect(chooseEvent(content, run, 'fm', 0).changes).toContain('Heart Scale');
+    expect(chooseEvent(content, run, 'fm', 0).changes.join(' ')).toMatch(/Miracle Seed/);
     const walk = atEvent('field-hidden-cave');
     expect(() => chooseEvent(content, walk, 'fm', 3)).not.toThrow();
   });

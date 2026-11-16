@@ -53,6 +53,18 @@
       "name": "Old Hand",
       "line": "It's slow. It's clever. Its first move after coming out has +1 priority.",
       "hooks": [{ "kind": "firstMovePriority", "amount": 1 }]
+    },
+    {
+      "id": "burrower",
+      "name": "Burrower",
+      "line": "It still digs a hole to sleep in every night. In a sandstorm it comes out tougher (+1 Defense).",
+      "hooks": [{ "kind": "weatherStage", "weather": "sand", "stat": "def", "stages": 1 }]
+    },
+    {
+      "id": "warm",
+      "name": "Warm",
+      "line": "It is always warm to hold, even in the snow. Its Fire moves are 10% stronger.",
+      "hooks": [{ "kind": "moveTypeDamage", "type": "fire", "pct": 10 }]
     }
   ]
 }

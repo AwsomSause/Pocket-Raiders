@@ -47,12 +47,14 @@ import { clampStage } from './damage';
 import { teraTypeOf } from '../items';
 import type { Perks } from '../archetypes';
 import { abilityOf, calcStats, getSpecies } from '../pokemon';
+import { ownTypes } from '../co/typeShift';
 import { effectiveHeld } from './held';
 import { zMoveDelayTurns, megaDelayTurns, megaPartyLimit, permanentMegaFriendship } from '../trainerPerks';
 import type { BattleState, PokemonInstance } from '../state';
 import { grantMegaMove, endMegaMoves } from './megaMove';
 import { gimmickLevel, stoneKey, type GimmickContext } from '../gimmicks';
 import { variantGimmickDue } from '../expansion/variantLines';
+import { endRevivalStatus } from './revivalStatus';
 
 type Side = 'player' | 'enemy';
 export type FormChangeKind = 'mega' | 'primal' | 'gigantamax' | 'tera' | 'ability';
@@ -581,7 +583,7 @@ export function battleTypes(content: Content, battle: BattleState, mon: PokemonI
   const tera = battle.transform.teraTypes[mon.uid];
   if (tera) return [tera];
   const vol = battle.enemyTeam.includes(mon) ? battle.enemyVolatile : battle.playerVolatile;
-  const base: readonly TypeName[] = vol?.typeList ? (vol.typeList as TypeName[]) : vol?.typeShift ? [vol.typeShift] : getSpecies(content, mon.speciesId).types;
+  const base: readonly TypeName[] = vol?.typeList ? (vol.typeList as TypeName[]) : vol?.typeShift ? [vol.typeShift] : ownTypes(content, mon);
   const mimic = battle.terrain && abilityOf(content, mon) === 'mimicry' ? ({ electric: 'electric', grassy: 'grass', misty: 'fairy', psychic: 'psychic' } as Record<string, TypeName>)[battle.terrain.id] : undefined;
   if (mimic && !vol?.typeList) return [mimic];
   if (abilityOf(content, mon) === 'multitype' && !vol?.typeList) {
@@ -599,7 +601,7 @@ export function battleTypes(content: Content, battle: BattleState, mon: PokemonI
 /** The STAB multiplier for a move of this type (1 = none), counting Terastallization. */
 export function stabMultiplier(content: Content, battle: BattleState, mon: PokemonInstance, moveType: TypeName): number {
   const base = content.ruleset.stabMultiplier;
-  const own = getSpecies(content, mon.speciesId).types.includes(moveType);
+  const own = ownTypes(content, mon).includes(moveType);
   const tera = battle.transform.teraTypes[mon.uid];
   if (tera === moveType) return own ? 2 : base;
   return own ? base : 1;
@@ -649,6 +651,8 @@ export function revertTransformations(content: Content, battle: BattleState, par
       delete mon.overcharged;
       if (mon.hp > 0) mon.hp = Math.max(1, Math.min(calcStats(content, mon).hp, Math.round((mon.hp * calcStats(content, mon).hp) / before)));
     }
+    // A revival status (PA17 to PA31) ends the same way.
+    endRevivalStatus({ content }, mon);
     endDynamax(content, battle, 'player', mon);
   }
   for (const mon of battle.enemyTeam) endDynamax(content, battle, 'enemy', mon);
