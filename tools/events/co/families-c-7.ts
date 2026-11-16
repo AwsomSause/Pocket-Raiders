@@ -204,7 +204,7 @@ const TOWER_EVENTS: Json[] = [
       { id: 'week', when: [flagIs('tower-week')], hide: [0], notice: 'Tower Week: a Legendary has come to the summit, a different one every year. It turns to look at you.',
         addChoices: [ch('Battle it.', fight('It cries out. Every climber below hears it.', wf({ species: LEGENDS, lv: 3 }))), ch('Bow, and go down.', out('It bows back. You will never forget that.', good(1)))] },
       { id: 'empty', when: [blessed({ has: false })], hide: [0], notice: 'Nobody waits for you. But on the wall, freshly carved, there\'s a Telling: a figure with a golden wheel, and a thousand arms.',
-        addChoices: [ch('Read the Telling.', out('"Before all of them, one. After all of them, one." You trace the carving with a finger. Arceus has been here.', flag('telling-arceus'), good(1)))] },
+        addChoices: [ch('Read the Telling.', out('"Before all of them, one. After all of them, one." You trace the carving with a finger. Arceus has been here.', good(1)))] },
       { id: 'blessed', when: [blessed({ atLeast: 9 })], hide: [0], notice: 'It\'s here. Your blessed Legendary, waiting at the top. A subtitle under its cry: "I have watched every one who climbed. You came up the stairs."',
         addChoices: [
           ch('Battle it.', fight('It spreads itself across the summit. The Presence.', { ...wf({ species: LEGENDS, lv: 4 }), blessed: true })),
@@ -221,7 +221,7 @@ const VAULT: Json[] = [
     [
       ch('Yes.', out('You say it out loud, to the grave. "Yes. Mostly. They fight in Gyms now, with rules, and shake hands after." It feels true when you say it.', done('first-gym-vault'), good(1))),
       ch('No.', out('"No. Not all of it." The honest answer. You fold the letter and put it back. Somebody has to keep trying. It might as well be you.', done('first-gym-vault'), bondUp(1))),
-      ch('Leave the badges.', out('You lay the three badges on the grave. They were hers. The stone warms under your hand, and a Telling appears in the dust on the wall: a figure with a golden wheel. (The badges\' bonus stays with your team: the Gym remembers who came.)', done('first-gym-vault'), flag('telling-arceus'), good(1))),
+      ch('Leave the badges.', out('You lay the three badges on the grave. They were hers. The stone warms under your hand, and a Telling appears in the dust on the wall: a figure with a golden wheel. (The badges\' bonus stays with your team: the Gym remembers who came.)', done('first-gym-vault'), good(1))),
     ]),
 ];
 

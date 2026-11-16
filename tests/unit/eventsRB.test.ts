@@ -19,10 +19,11 @@ describe('Run events B (trainer battles)', () => {
     expect(relay.kind === 'trainer' && relay.chainHeal).toBe(0.1);
     expect(relay.chain).toBe(3);
   });
-  it('batch 2 uses the next-fight modifiers and a three-rung ladder', () => {
-    const bike = JSON.stringify(content.events.get('trainer-on-a-bike')!.choices[0]!.success);
-    expect(bike).toContain('tempEffect');
-    expect(bike).toContain('firstStrike');
+  it('batch 2: the bike race decides who moves first, and a three-rung ladder', () => {
+    const bike = JSON.stringify(content.events.get('trainer-on-a-bike')!.choices[0]);
+    // Catalog Overhaul SF72: the race is a timing game (dodge-tap); winning it means you move first on turn one.
+    expect(bike).toContain('dodge-tap');
+    expect(bike).toContain('firstMover');
     expect(content.events.get('ranked-ladder-3')!.requires.length).toBeGreaterThan(0);
   });
 });

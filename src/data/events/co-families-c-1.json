@@ -35,7 +35,7 @@
     {
      "label": "Why won't you cheat me?",
      "success": {
-      "text": "Nix is quiet for a while. \"I got cheated once. Lost a friend's keepsake for a bag of nothing.\" The gloves tighten. \"Never again. Not for me, not for you. Either way.\"",
+      "text": "Nix is quiet for a while. \"I got cheated once. Lost a friend's keepsake for a bag of nothing.\" The gloves tighten. \"Never again. Not for me, not for you. Either way.\" Then she turns the board toward you.",
       "effects": [
        {
         "kind": "flag",
@@ -45,7 +45,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "secret-market-barter"
+        "eventId": "barter-table"
        }
       ]
      }
@@ -774,6 +774,13 @@
         "amount": 1
        },
        {
+        "kind": "choice",
+        "id": "stranded-trainer",
+        "pick": "helped",
+        "text": "Helped Tobin and his fainted team",
+        "weight": 2
+       },
+       {
         "kind": "flag",
         "key": "saved-trainer",
         "amount": 1
@@ -811,6 +818,13 @@
         "amount": 1
        },
        {
+        "kind": "choice",
+        "id": "stranded-trainer",
+        "pick": "helped",
+        "text": "Walked Tobin and his team to a Center",
+        "weight": 2
+       },
+       {
         "kind": "flag",
         "key": "saved-trainer",
         "amount": 1
@@ -846,6 +860,13 @@
         "kind": "flag",
         "key": "trouble-robbed",
         "amount": 1
+       },
+       {
+        "kind": "choice",
+        "id": "stranded-trainer",
+        "pick": "robbed",
+        "text": "Robbed Tobin on the road",
+        "weight": 2
        },
        {
         "kind": "flag",

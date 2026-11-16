@@ -7287,11 +7287,6 @@
         "text": "\"Before all of them, one. After all of them, one.\" You trace the carving with a finger. Arceus has been here.",
         "effects": [
          {
-          "kind": "flag",
-          "key": "telling-arceus",
-          "amount": 1
-         },
-         {
           "kind": "attribute",
           "key": "goodEvil",
           "amount": 1
@@ -7491,11 +7486,6 @@
        {
         "kind": "flag",
         "key": "first-gym-vault",
-        "amount": 1
-       },
-       {
-        "kind": "flag",
-        "key": "telling-arceus",
         "amount": 1
        },
        {

@@ -9,7 +9,7 @@
    "group": "Mystery Dungeon",
    "rarity": "rare",
    "gameEvent": "mystery-dungeon-week",
-   "callback": false,
+   "callback": true,
    "scene": {
     "cast": [],
     "pokemon": "bidoof",
@@ -1672,13 +1672,8 @@
     {
      "label": "I'll look at the grove.",
      "success": {
-      "text": "Pudding: \"Bless you. Bless you. Mind the roots.\"",
-      "effects": [
-       {
-        "kind": "addEvent",
-        "eventId": "berry-fest-grove"
-       }
-      ]
+      "text": "Pudding: \"Bless you. Bless you. Mind the roots. It's past the last stall, up the hill.\"",
+      "effects": []
      }
     },
     {
@@ -1747,13 +1742,8 @@
     {
      "label": "Chase it.",
      "success": {
-      "text": "You follow it through the stalls and over a fence. It leads you into the grove, to a hollow in the roots. Its family is there, starving.",
-      "effects": [
-       {
-        "kind": "addEvent",
-        "eventId": "berry-fest-grove"
-       }
-      ]
+      "text": "You follow it through the stalls and over a fence. It leads you into the grove, to a hollow in the roots. Its family is there, starving. You mark the place, to come back with food.",
+      "effects": []
      }
     },
     {
@@ -1878,13 +1868,8 @@
     {
      "label": "Find out why their grove dried.",
      "success": {
-      "text": "The smallest Skwovet tugs your sleeve and leads you up the hill.",
-      "effects": [
-       {
-        "kind": "addEvent",
-        "eventId": "berry-fest-guardian"
-       }
-      ]
+      "text": "The smallest Skwovet tugs your sleeve and points up the hill, to an old tree with no leaves. You'll go up there next.",
+      "effects": []
      }
     }
    ]

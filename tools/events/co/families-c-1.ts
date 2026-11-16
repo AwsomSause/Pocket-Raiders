@@ -61,7 +61,7 @@ const SF55: Json[] = [
     intro: 'A cellar under a bakery, warm with the smell of bread. Nobody down here takes money. A chalk sign over the counter reads THINGS FOR THINGS. A figure in a cloak points one gloved finger at your bag. Nix: "Show me what you carry. I\'ll show you what I\'ve got. Every trade shows both sides\' worth." Nix: "I don\'t cheat. And I won\'t let you cheat yourself."',
     choices: [
       ch('Offer a trade.', out('Nix pulls the lamp closer and turns the board toward you. Every item has its tier printed beside it: Common, Uncommon, Rare.', room('barter-table'))),
-      ch("Why won't you cheat me?", out('Nix is quiet for a while. "I got cheated once. Lost a friend\'s keepsake for a bag of nothing." The gloves tighten. "Never again. Not for me, not for you. Either way."', stamped('barter-asked'), room('secret-market-barter'))),
+      ch("Why won't you cheat me?", out('Nix is quiet for a while. "I got cheated once. Lost a friend\'s keepsake for a bag of nothing." The gloves tighten. "Never again. Not for me, not for you. Either way." Then she turns the board toward you.', stamped('barter-asked'), room('barter-table'))),
       ch('Leave.', leave('You climb back up into the bakery light. Behind you, the lamp goes on burning.')),
     ],
     remembers: [
@@ -95,9 +95,9 @@ const SF56: Json[] = [
     id: 'stranded-trainer',
     intro: 'A young trainer kneels on the road beside three fainted Pokémon, shaking one of them gently by the shoulder. His name is Tobin. Tobin: "I pushed them too hard. I don\'t have any Potions left." His voice cracks. Tobin: "My Riolu\'s breathing funny. Please. Please, can you help?" His bag lies open beside him: ₽300 and a TM, all he has.',
     choices: [
-      ch('Give them Potions (up to 3 healing items).', out('You kneel and work through them one by one. The Riolu opens its eyes last. Tobin thanks you with shaking hands, then can\'t stop thanking you, then just hugs his Riolu and cries into its fur.', spend(HEAL_ITEMS, 3), flag('trouble-helped'), flag('saved-trainer'), ...kindness()), { requires: [bagHas(HEAL_ITEMS, 1, 'a healing item')] }),
-      ch('Walk them to a Center (a node).', out('You carry the Riolu. Tobin carries the other two. He talks the whole way, about how he\'ll never push them again, never, not once, until Nurse Joy takes the Riolu from your arms and the doors slide shut.', takeNode(), flag('trouble-helped'), flag('trouble-walked'), flag('saved-trainer'), ...kindness())),
-      ch('Take their stuff.', out('You take the ₽300 and the TM out of his bag while he watches. He doesn\'t try to stop you. He just stares. Somewhere behind a fence, a kid who follows you around saw it too.', $(300), item(TOBIN_GEAR), flag('trouble-robbed'), flag('robbed-trainer'), repDown(2), evil(2), ...apprenticeCopies('robbed'))),
+      ch('Give them Potions (up to 3 healing items).', out('You kneel and work through them one by one. The Riolu opens its eyes last. Tobin thanks you with shaking hands, then can\'t stop thanking you, then just hugs his Riolu and cries into its fur.', spend(HEAL_ITEMS, 3), flag('trouble-helped'), { kind: 'choice', id: 'stranded-trainer', pick: 'helped', text: 'Helped Tobin and his fainted team', weight: 2 }, flag('saved-trainer'), ...kindness()), { requires: [bagHas(HEAL_ITEMS, 1, 'a healing item')] }),
+      ch('Walk them to a Center (a node).', out('You carry the Riolu. Tobin carries the other two. He talks the whole way, about how he\'ll never push them again, never, not once, until Nurse Joy takes the Riolu from your arms and the doors slide shut.', takeNode(), flag('trouble-helped'), flag('trouble-walked'), { kind: 'choice', id: 'stranded-trainer', pick: 'helped', text: 'Walked Tobin and his team to a Center', weight: 2 }, flag('saved-trainer'), ...kindness())),
+      ch('Take their stuff.', out('You take the ₽300 and the TM out of his bag while he watches. He doesn\'t try to stop you. He just stares. Somewhere behind a fence, a kid who follows you around saw it too.', $(300), item(TOBIN_GEAR), flag('trouble-robbed'), { kind: 'choice', id: 'stranded-trainer', pick: 'robbed', text: 'Robbed Tobin on the road', weight: 2 }, flag('robbed-trainer'), repDown(2), evil(2), ...apprenticeCopies('robbed'))),
     ],
   },
   {

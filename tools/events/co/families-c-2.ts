@@ -46,20 +46,23 @@ const SF60: Json[] = [
 // ---------- SF61 Dark Deal ----------
 
 const VREEL = { cast: ['trainer.scientist'], tint: '#180820', effect: 'flicker' };
+const DEAL: Json = ch('Deal.', out('You point. Vreel takes the Ball without a word and puts it in the machine, and the hum climbs, and the lights flicker, and the door at the back of the lab opens. What walks out is a legend, and its eyes are dark, and it does not look at you. It must be purified before it will truly fight for you. Using it is up to you.', { kind: 'notePicked', key: 'dark-deal', take: true }, { kind: 'regionJoin', table: 'darkDeal', shadow: true }, stamped('dark-dealt'), evil(3), flag('cruelty-act')), { pick: {}, requires: [party(2)] });
+const REPORT: Json = ch('Report you.', out('You run for the nearest phone. When the officers break the door down, the lab is empty, the device gone, Vreel gone. But his notes are still on the desk, and one page lays out the next step of his employers\' plan.', flag('dark-reported'), flag('reported-crime'), flag('evil-plan-revealed'), good(1), repUp(1)));
 const SF61: Json[] = [
   {
     id: 'dark-deal',
     intro: 'A dim lab behind a door that should have been locked. A scientist in a stained coat holds a humming device against his chest like a baby. Dr. Vreel: "Give me one Pokémon. I\'ll give you a legend. Maybe." Dr. Vreel: "The device closes a heart and opens a door. What comes through is very strong, and very unhappy." A screen behind him reads: SHADOW CONVERSION: 4 OF 4 SUCCESSFUL.',
     choices: [
-      ch('What happens to the one I give you?', out('Vreel doesn\'t even look up. "It goes to my employers. You\'ll see it again, probably." He finally meets your eyes. "On the other side."', room('dark-deal'))),
-      ch('Deal.', out('You point. Vreel takes the Ball without a word and puts it in the machine, and the hum climbs, and the lights flicker, and the door at the back of the lab opens. What walks out is a legend, and its eyes are dark, and it does not look at you. It must be purified before it will truly fight for you. Using it is up to you.', { kind: 'notePicked', key: 'dark-deal', take: true }, { kind: 'regionJoin', table: 'darkDeal', shadow: true }, stamped('dark-dealt'), evil(3), flag('cruelty-act')), { pick: {}, requires: [party(2)] }),
-      ch('Report you.', out('You run for the nearest phone. When the officers break the door down, the lab is empty, the device gone, Vreel gone. But his notes are still on the desk, and one page lays out the next step of his employers\' plan.', flag('dark-reported'), flag('reported-crime'), flag('evil-plan-revealed'), good(1), repUp(1))),
+      ch('What happens to the one I give you?', out('Vreel doesn\'t even look up. "It goes to my employers. You\'ll see it again, probably." He finally meets your eyes. "On the other side."', room('dark-deal-ask'))),
+      DEAL,
+      REPORT,
     ],
     remembers: [
       { id: 'volcanion', when: [flagIs('promise-volcanion')], notice: 'Steam drifts through the vent above the door. Volcanion is watching. It promised to walk with someone who would never be cruel.', hide: [], addChoices: [] },
       { id: 'zeraora', when: [flagIs('promise-zeraora')], notice: 'A crackle of lightning in the hall, and gone. Zeraora is watching. It promised to walk with someone who would never be cruel.', hide: [], addChoices: [] },
     ],
   },
+  ev('dark-deal-ask', 'Dr. Vreel', 'PokeRogue-style encounters', { room: true, ...VREEL }, 'Vreel goes back to the device, humming along with it. The offer stands.', [DEAL, REPORT, ch('Walk out.', leave('You walk out. The hum follows you down the corridor.'))]),
   ev('dark-deal-admin', 'Dark Deal: The Other Side', 'PokeRogue-style encounters', { callback: true, minStage: 2, requires: [flagAgo('dark-dealt', 1), notYet('dark-admin-done')], cast: ['boss.npc_teamrocket_m'], tint: '#180820', effect: 'flicker' },
     'An Admin of the Evil Team blocks the road, bored, a Ball spinning on one finger. Then the Ball opens, and {note:dark-deal} comes out. Your {note:dark-deal}. It sees you. Its whole body goes still. Admin: "Oh, you know this one? Funny. It\'s the best thing that lab ever sent us."',
     [

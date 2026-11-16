@@ -14,7 +14,7 @@ const mdWild = (id: string, o: NonNullable<Parameters<typeof wf>[0]>, extra: Jso
 const FOUND = ['silk-scarf', 'charcoal', 'mystic-water', 'miracle-seed', 'magnet', 'soft-sand'];
 
 const SF73: Json[] = [
-  ev('md-entrance', "A Stair That Wasn't Here", 'Mystery Dungeon', { ...MD, callback: false, rarity: 'rare' },
+  ev('md-entrance', "A Stair That Wasn't Here", 'Mystery Dungeon', { ...MD, rarity: 'rare' },
     'A stairway down that wasn\'t here a moment ago. The rooms below change every time. A Bidoof in an explorer\'s scarf sits on the top step. Bidoof (subtitled): "You\'re going down? Take a scarf. Everyone needs a scarf." Bidoof: "The only way out is through. Or back up, before it\'s too late."',
     [
       ch('Go down.', out('The stair is longer than it looks. The light behind you gets small. You have 3 Luck.', { kind: 'dungeon', action: 'start' }, next('md-entrance'))),
@@ -170,14 +170,14 @@ const SF76: Json[] = [
   ev('berry-fest-shortage', 'The Shortage', 'Berry Festival', { ...FEST, room: true },
     'Pudding: "A drought hit the orchards. The grove behind the grounds is all we\'ve got left, and something\'s living in it."',
     [
-      ch("I'll look at the grove.", out('Pudding: "Bless you. Bless you. Mind the roots."', room('berry-fest-grove'))),
+      ch("I'll look at the grove.", out('Pudding: "Bless you. Bless you. Mind the roots. It\'s past the last stall, up the hill."')),
       ch('Bring Berries from my bag (five).', out('One stall, two, five. The empty tables fill up one by one, and people start to come back to them. Pudding cries a little, then hands you something rare from her own pocket.', spend([], 5, '-berry'), item('starf-berry'), good(1)), { requires: [bagHas([], 5, 'five Berries', '-berry')] }),
       ch('Ask about the drought.', out('Pudding: "The spring under the Guardian Tree dried up. Nobody knows why." She looks up the hill. "Nobody\'s been up there in years."')),
     ]),
   ev('berry-fest-thief', 'The Thief', 'Berry Festival', { ...FEST, requires: [flagIs('berry-fest')] },
     'A Pokémon bolts from a stall, cheeks stuffed with Berries. The vendor wails. It\'s a Skwovet, very thin. It runs toward the grove.',
     [
-      ch('Chase it.', out('You follow it through the stalls and over a fence. It leads you into the grove, to a hollow in the roots. Its family is there, starving.', room('berry-fest-grove'))),
+      ch('Chase it.', out('You follow it through the stalls and over a fence. It leads you into the grove, to a hollow in the roots. Its family is there, starving. You mark the place, to come back with food.')),
       ch('Pay the vendor.', out('You pay. The vendor is so grateful she hugs you. Later, on the road, a thin Skwovet steps out of the hedge and leaves a Berry at your feet.', $(-200), any('oran-berry', 'sitrus-berry'), good(1)), { requires: [money(200)] }),
       ch('Let it go.', leave('You let it go. It looked so thin.')),
     ]),
@@ -186,7 +186,7 @@ const SF76: Json[] = [
     [
       ch('Share the grove with them.', out('You sit down between the festival and the family and work it out: half the trees for the stalls, half for them. The Greedent thinks about it, and then nods, once.', flag('berry-shared'), good(1))),
       ch('Drive them off.', fight('The Greedent puffs up to twice its size and comes at you.', wf({ species: ['greedent'], lv: 1, win: [stamped('berry-drove')] }, [stamped('berry-drove')]))),
-      ch('Find out why their grove dried.', out('The smallest Skwovet tugs your sleeve and leads you up the hill.', room('berry-fest-guardian'))),
+      ch('Find out why their grove dried.', out('The smallest Skwovet tugs your sleeve and points up the hill, to an old tree with no leaves. You\'ll go up there next.')),
     ]),
   ev('berry-fest-merchant', 'The Merchant', 'Berry Festival', { ...FEST, requires: [flagIs('berry-fest')] },
     'A wagon of rare Berries from far regions. Berry merchant, Sabba: "Never tasted anything like them, friend. Kee, Maranga, Roseli. Fair prices."',

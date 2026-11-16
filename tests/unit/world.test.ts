@@ -1,3 +1,4 @@
+import familiesC from '../../src/data/catalogOverhaul/familiesC.json';
 import { MENTORS } from '../../src/core/mentors';
 import { PSEUDO, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import { canonKantoPlaced } from '../../src/data/expansion';
@@ -239,7 +240,7 @@ describe('secret paths', () => {
 describe('follow-up scenes', () => {
   it('a kindness comes back on the next stage as a stop, once', () => {
     const run = newRun();
-    run.story.flags['ev:fed-wild'] = 1;
+    run.story.flags['ev:fed-poochyena'] = 1; // Catalog Overhaul SF63: feeding the thin Poochyena (was `fed-wild`)
     run.stage!.index = 3;
     run.stage!.map.nodes.forEach((n) => (n.sides = []));
     addEventStops(content, run);
@@ -332,6 +333,10 @@ describe('landmarks and dungeons', () => {
     for (const r of PSEUDO.records) for (const n of r.nodes) opened.add(`${r.id.replace(/_/g, '-')}-${n.id}`);
     // Catalog Overhaul: a chain pseudo-stage with a layout (the Evil Team Hideouts) places its rooms by column.
     for (const c of PSEUDO_CHAINS) for (const col of c.layout ?? []) for (const id of col) opened.add(c.team ? id.replaceAll('{teamId}', c.team) : id);
+    // Catalog Overhaul SF63: the helped rare Pokémon's thanks is queued by code after it strikes (core/events/coHelpers.ts `co:soon`).
+    opened.add('wounded-rare-thanks');
+    // Catalog Overhaul SF73: the Mystery Dungeon's rooms are drawn by code, floor by floor (core/events/coDungeon.ts).
+    for (const id of [...familiesC.dungeon.floors.flat(), familiesC.dungeon.spring, familiesC.dungeon.noShop]) opened.add(id);
     // Beta 0.7 U1: the code places each Ultra Beast Tear (core/ultra/run.ts placeTear).
     for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
     // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).

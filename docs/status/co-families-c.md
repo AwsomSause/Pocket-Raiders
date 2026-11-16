@@ -45,13 +45,16 @@ so every id keeps its old placement (`oldPlacement.json`).
   and Darkrai's Guest are not linked (no Guest system yet).
 - L16: Influence starts at 0 to 2 and only Signs raise it, so the blessed summit (Influence 9+) is rare. Tower Week
   uses the existing `tower-of-legends` game event. A rival carved at the summit is not built.
-- GL3 vault: "Leave the badges" gives the Telling; the badges' +5% (people's relics) stays, since relics can't be removed.
+- GL3 vault and the L16 empty summit: the Arceus Telling is text only (Arceus Tellings are off; legends' MY11 uses the
+  run's Guest instead). The badges' +5% (people's relics) stays, since relics can't be removed.
+- Signs: the `sign` effect sets `sign-<species>` directly and raises Influence itself. Legends' PR #1326 raises
+  Influence from a plain `sign-*` flag (core/legends/signs.ts); once both are in, `sign` can become a plain flag.
 - FE4: the Paradox stage door for Koraidon/Miraidon is not built (their blessings don't exist yet); the Sign is.
 - FE6: the five later bosses come through one at a time, one region after Giovanni.
 - Final Reunion / All-Star flags are set; nothing reads them yet.
 
 ## Flags for other families (also in the flags file)
-- legends: `sign-*`, `telling-*`, `vault-magearna`, `vault-wound`, `cruelty-act` / `dark-dealt` (should break the
+- legends: `sign-*`, `telling-deoxys`, `telling-mew`, `vault-magearna`, `vault-wound`, `cruelty-act` / `dark-dealt` (should break the
   Volcanion and Zeraora promises), `roam-latias-chased` / `roam-latios-chased` (L7 clues).
 - evil-story: `evil-plan-revealed`, `dark-reported`, `evil-funded`, `lead-smuggling-ring`, `evil-skip`.
 - people: `leader-item-bought` / `-returned`, `estate-badge-case` (GL6), `estate-uncle-named` (GL9).

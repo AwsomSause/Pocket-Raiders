@@ -248,7 +248,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "dark-deal"
+        "eventId": "dark-deal-ask"
        }
       ]
      }
@@ -356,6 +356,103 @@
      "notice": "A crackle of lightning in the hall, and gone. Zeraora is watching. It promised to walk with someone who would never be cruel.",
      "hide": [],
      "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "dark-deal-ask",
+   "name": "Dr. Vreel",
+   "group": "PokeRogue-style encounters",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.scientist"
+    ],
+    "tint": "#180820",
+    "effect": "flicker"
+   },
+   "intro": "Vreel goes back to the device, humming along with it. The offer stands.",
+   "choices": [
+    {
+     "label": "Deal.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "You point. Vreel takes the Ball without a word and puts it in the machine, and the hum climbs, and the lights flicker, and the door at the back of the lab opens. What walks out is a legend, and its eyes are dark, and it does not look at you. It must be purified before it will truly fight for you. Using it is up to you.",
+      "effects": [
+       {
+        "kind": "notePicked",
+        "key": "dark-deal",
+        "take": true
+       },
+       {
+        "kind": "regionJoin",
+        "table": "darkDeal",
+        "shadow": true
+       },
+       {
+        "kind": "flag",
+        "key": "dark-dealt",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": -3
+       },
+       {
+        "kind": "flag",
+        "key": "cruelty-act",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report you.",
+     "success": {
+      "text": "You run for the nearest phone. When the officers break the door down, the lab is empty, the device gone, Vreel gone. But his notes are still on the desk, and one page lays out the next step of his employers' plan.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dark-reported",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reported-crime",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-plan-revealed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk out.",
+     "success": {
+      "text": "You walk out. The hum follows you down the corridor.",
+      "effects": []
+     }
     }
    ]
   },
