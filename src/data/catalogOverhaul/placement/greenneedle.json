@@ -1764,6 +1764,32 @@
   ],
   "tags": []
  },
+ "gn-30-door": {
+  "gn": "gn.30",
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 11,
+  "window": [
+   9,
+   14
+  ],
+  "sits": "optional",
+  "attaches": "instead",
+  "level": "A+0; the grove's guards A+1; the Slowking A+1",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "Off the coast: the Island of Pink Pokémon",
+   "elsewhere": "The Island of Pink Pokémon"
+  },
+  "note": "Badge: a pink dot. Five nodes. A side branch from step 11.",
+  "kinds": [
+   "Pseudo Stage"
+  ],
+  "tags": [
+   "water"
+  ]
+ },
  "gn-27-gate": {
   "gn": "gn.27",
   "shape": "Single",

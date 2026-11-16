@@ -594,8 +594,124 @@ const gn29: Json[] = [
   ]),
 ];
 
+// =====================================================================================================================
+// gn.30  THE ISLAND OF PINK POKÉMON  (a door, then a Pseudo Stage of five nodes; needs water; step 11, optional, instead of the
+// battle; A6; once a run). A real population: pink because of the island's fruit. What you notice on nodes 1 to 3 answers the
+// Slowking's three questions. Nothing on nodes 1 to 3 has to be fought; fighting there makes the islanders keep their distance.
+// =====================================================================================================================
+const PINK_TINT = '#e48fb4';
+const pinkOpts = (o: Json = {}): Json => ({ tint: PINK_TINT, tags: ['Pokémon', 'Exploration', 'Mystery'], effect: 'none', ...o });
+const isle5 = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, pinkOpts(o), intro, choices);
+/** A thing you noticed: counted, and remembered for the quiz. */
+const notice = (key: string, text: string, back: string): Json => chIf([not(key)], NOTICE_LABEL[key]!, out(text, flag(key), flag('pink-noticed'), scene(back)));
+const NOTICE_LABEL: Record<string, string> = {
+  'pink-saw-sand': 'Look at the sand.',
+  'pink-saw-fruit': 'Offer an Oran Berry.',
+  'pink-saw-young': 'Watch the young ones.',
+  'pink-saw-stones': 'Follow the stream to the sea.',
+};
+/** A fight with islanders (A+0). Fighting on nodes 1 to 3 makes them keep their distance. */
+const islanders = (species: string[], next: string): Json => fight('They don\'t understand at first. Then they do.',
+  inside({ ...wild({ species, lv: 0, win: [{ kind: 'addEvent', eventId: next }] }), exact: true, lose: [{ kind: 'addEvent', eventId: next }] }), setTo('pink-battled', 1));
+/** Calm around wild things: kept Quiet in Safari Land, or passed the canopy village's test (gn.20). */
+const PINK_CALM: Json[] = [gn('check', { key: 'pink-calm', if: [is('safari-quiet', 7)] }), when('jungle-village', { min: 1 }, [setTo('pink-calm', 1)])];
+const KEEP_AWAY = { id: 'away', when: [is('pink-battled')], notice: '*The islanders watch you from further off now. Nobody comes to sniff the bag.*' };
+const RIDER = { id: 'rider', when: [is('pink-calm'), not('pink-battled')], notice: '*A small pink Paras has climbed into your hood. It rides there, quite happy, eating.*' };
+/** The Slowking's quiz: one room per question; a right answer counts. */
+const question = (n: number, q: string, right: string, wrong: [string, string], next: Json): Json =>
+  isle5(`gn-30-q${n}`, 'Island of Pink Pokémon: The Hilltop', { pokemon: 'slowking' }, `**The Slowking:** "${q}"`, [
+    ch(right, out('It writes something on its shell, slowly.', flag('pink-quiz'), next)),
+    ch(wrong[0], out('It writes something on its shell, slowly, and then crosses it out.', next)),
+    ch(wrong[1], out('It looks at you for some time. Then it writes something down.', next)),
+  ]);
+const PINK_DONE: Json[] = [flag('pink-done'), stampRegion('pink-at'), leavePseudo()];
+const PINK_ISLANDERS = ['rhyhorn', 'nidoran-f', 'nidoran-m', 'paras', 'mareep', 'slowpoke', 'exeggcute'];
 
-export const EVENTS: Json[] = [...gn26, ...gn27, ...gn28, ...gn29];
+const gn30: Json[] = [
+  gev('gn-30-door', 'The Island of Pink Pokémon', pinkOpts({ stop: 'event', rarity: 'rare', types: ['water'], pokemon: 'rhyhorn', requires: [not('pink-done'), not('pink-entered')] }), say(
+    'Out past the point, an island. From here, the whole of it looks faintly pink.',
+    'A fisherman mending nets shrugs. "The fruit," he says, as if that explained it. "I\'ll row you, if you like."',
+  ), [
+    ch('Row across.', out('The water goes clear, then pale, then pink over the sand.', flag('pink-entered'), ...PINK_CALM, { kind: 'addEvent', eventId: 'gn-30-landing' })),
+    ch('Walk on.', out('You walk on. The island stays pink on the horizon all afternoon.')),
+  ]),
+  // ---- Node 1. The Landing ----
+  isle5('gn-30-landing', 'Island of Pink Pokémon: The Landing', { pokemon: 'rhyhorn' }, say(
+    'A beach of pale pink sand. A pink Rhyhorn watches the boat come in.',
+    'It decides you aren\'t food, and goes back to eating.',
+  ), [
+    notice('pink-saw-sand', 'You crouch. The sand\'s pink too, all the way down. It isn\'t just the animals.', 'gn-30-landing'),
+    ch('Walk up the beach.', out('The Rhyhorn doesn\'t look up.', { kind: 'addEvent', eventId: 'gn-30-orchard' })),
+    ch('Battle the Rhyhorn.', islanders(['rhyhorn'], 'gn-30-orchard')),
+  ]),
+  // ---- Node 2. The Orchard ----
+  isle5('gn-30-orchard', 'Island of Pink Pokémon: The Orchard', { pokemon: 'nidoran-f', remembers: [KEEP_AWAY, RIDER] }, say(
+    'Low trees with round pink fruit. Underneath, a Rhyhorn, two Nidoran, a Paras and a Mareep, all pink, eating together.',
+    'They\'ve never seen a trainer. They walk right up and sniff your bag.',
+  ), [
+    notice('pink-saw-fruit', 'A pink Nidoran sniffs your Oran Berry, and turns its nose up. They only eat the fruit.', 'gn-30-orchard'),
+    ch('Walk on.', out('They follow you to the edge of the trees, and stop there.', { kind: 'addEvent', eventId: 'gn-30-stream' })),
+    ch('Battle them.', islanders(['nidoran-f', 'paras', 'mareep'], 'gn-30-stream')),
+  ]),
+  // ---- Node 3. The Stream ----
+  isle5('gn-30-stream', 'Island of Pink Pokémon: The Stream', { pokemon: 'rhyhorn', remembers: [KEEP_AWAY, RIDER] }, say(
+    'Clear water over pink stones. Pink Pokémon drink upstream.',
+    'Downstream, at the mouth, a few Pokémon of ordinary colours.',
+  ), [
+    notice('pink-saw-young', 'A grey-pink Rhyhorn calf, still drinking milk. The young ones are paler.', 'gn-30-stream'),
+    notice('pink-saw-stones', 'The stones get smaller toward the sea, until they\'re sand. Pink sand.', 'gn-30-stream'),
+    ch('Walk on.', out('The path climbs into big, old trees.', { kind: 'addEvent', eventId: 'gn-30-grove' })),
+    ch('Battle them.', islanders(['rhyhorn', 'slowpoke'], 'gn-30-grove')),
+  ]),
+  // ---- Node 4. The Old Grove ----
+  isle5('gn-30-grove', 'Island of Pink Pokémon: The Old Grove', { pokemon: 'kangaskhan', effect: 'shake' }, say(
+    'Huge trees, the oldest on the island. Three pink Nidoking and a pink Kangaskhan stand across the path.',
+    '*They don\'t charge. They stand. The Kangaskhan\'s young one looks out of the pouch, holding a fruit in both hands.*',
+  ), [
+    ch('Battle through.', fight('The Nidoking come first, one after another.', inside({ ...wild({ species: ['nidoking'], lv: 1, win: [scene('gn-30-grove-2')] }), exact: true, chain: 3, lose: [{ kind: 'addEvent', eventId: 'gn-30-high' }] }), setTo('pink-grove', 1))),
+    ch('Put down my own food, and step back.', out(say(
+      'They sniff it. They don\'t want it. But the offer\'s understood.',
+      'The Kangaskhan steps aside. Its young one leans out of the pouch and holds out a fruit. Then two more.',
+    ), setTo('pink-grove', 2), setTo('pink-fruit', 3), moment('A pink Kangaskhan\'s young one gave you three fruit.', 70), { kind: 'addEvent', eventId: 'gn-30-high' })),
+    ch('Go round.', out('Along the cliffs. It takes the rest of the day.', setTo('pink-grove', 3), takeNode(1), { kind: 'addEvent', eventId: 'gn-30-high' })),
+  ]),
+  isle5('gn-30-grove-2', 'Island of Pink Pokémon: The Old Grove', { pokemon: 'kangaskhan', effect: 'shake' }, say(
+    'The last Nidoking backs off. The Kangaskhan puts its young one down behind a root, and comes forward.',
+  ), [
+    ch('Battle.', fight('It fights the way mothers fight.', inside({ ...wild({ species: ['kangaskhan'], lv: 1, win: [{ kind: 'addEvent', eventId: 'gn-30-high' }] }), exact: true, lose: [{ kind: 'addEvent', eventId: 'gn-30-high' }] }))),
+  ]),
+  // ---- Node 5. The Hilltop ----
+  isle5('gn-30-high', 'Island of Pink Pokémon: The Hilltop', {
+    pokemon: 'slowking',
+    remembers: [{ id: 'trampled', when: [is('pink-battled')], notice: '**The Slowking:** "You have *trampled* across my study."' }],
+  }, say(
+    '*A flat rock. A pink Slowking, writing on a shell with a stick dipped in fruit juice. It looks up, some time after you arrive.*',
+    '**The Slowking, slowly, and very well:** "A visitor. You have walked across my study. I have three questions. They are things you could have seen."',
+    '"Then, if you like, we shall fight. I am told that is customary."',
+  ), [ch('Answer its questions.', out('It turns to a clean part of the shell.', setTo('pink-quiz', 0), scene('gn-30-q1')))]),
+  question(1, 'Why are they pink?', 'The fruit.', ['The water.', 'They\'re born that way.'], scene('gn-30-q2')),
+  question(2, 'Why is the sand pink?', 'The fruit\'s stones, ground down.', ['Coral.', 'The sunsets.'], scene('gn-30-q3')),
+  question(3, 'Are the young ones pink?', 'Not yet. It takes time.', ['Yes, from the egg.', 'Only the old ones.'], scene('gn-30-after')),
+  isle5('gn-30-after', 'Island of Pink Pokémon: The Hilltop', {
+    pokemon: 'slowking',
+    remembers: [
+      { id: 'three', when: [is('pink-quiz', 3)], notice: '**The Slowking:** "You looked. So few look. They arrive, and they say \'how odd,\' and they leave. Sit. I shall tell you what I think it is *for.*" *It has eleven theories. It tells you four of them before it loses its thread.*' },
+      { id: 'some', when: [is('pink-quiz', 0, 2)], notice: '**The Slowking:** "Hm. You saw some of it." *It underlines something twice.*' },
+    ],
+  }, say('A pink Slowbro and a pink Exeggutor wander up the hill and stand beside it.'), [
+    ch('Fight, as is customary.', fight('**The Slowking:** "For the exercise, then."', { ...trainer('The Pink Slowking', { team: ['slowking', 'slowbro', 'exeggutor'], lv: 1, win: [scene('gn-30-gift')] }), pseudo: true, rule: { gn: 'slowking' }, lose: [scene('gn-30-gift')] })),
+    ch('Decline, politely.', out('**The Slowking:** "Very sensible." It goes back to its shell.', scene('gn-30-gift'))),
+  ]),
+  isle5('gn-30-gift', 'Island of Pink Pokémon: Leaving', { pokemon: 'mareep' }, say(
+    'The boat is where you left it. The islanders have come down to the beach to watch you go.',
+  ), [
+    ch('A pink islander comes with you.', out('One of them walks down the sand and gets into the boat, and that is that.', { ...join({ species: PINK_ISLANDERS }), marks: ['pink from the island fruit'] }, setTo('pink-reward', 1), ...PINK_DONE)),
+    ch('Let your lead try the fruit.', out('It eats the fruit for a day. By evening it\'s a very pale pink, and very pleased with itself.', gn('markLead', { text: 'pink from the island fruit' }), setTo('pink-reward', 2), ...PINK_DONE)),
+  ]),
+];
+
+
+export const EVENTS: Json[] = [...gn26, ...gn27, ...gn28, ...gn29, ...gn30];
 
 export const REMOVE: string[] = [];
 
@@ -614,6 +730,11 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.29', shape: 'Single', earliest: 'A2', home: 5, window: [3, 8], sits: 'optional', attaches: 'instead', tags: ['Hub Destination', 'Minigame'], level: 'No battle', often: 'region', badge: 'own',
     note: 'Badge: a small duck. At the town; until towns exist, step 5. Snake in three rounds (core/greenneedle/snake.ts).',
   },
+  'gn-30-door': {
+    gn: 'gn.30', shape: 'Door', earliest: 'A6', home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', tags: ['Pseudo Stage'], needs: ['water'],
+    level: 'A+0; the grove\'s guards A+1; the Slowking A+1', often: 'run', badge: 'own', dressing: { kanto: 'Off the coast: the Island of Pink Pokémon', elsewhere: 'The Island of Pink Pokémon' },
+    note: 'Badge: a pink dot. Five nodes. A side branch from step 11.',
+  },
   'gn-27-gate': {
     gn: 'gn.27', shape: 'Single', earliest: 'A4', home: 10, window: [8, 13], sits: 'optional', attaches: 'town', tags: ['Hub Destination'], level: 'The arena and the owner A+0', often: 'region', badge: 'own',
     note: 'Badge: a striped tent. At a Town or Hub node; until towns exist, step 10. Returns in later regions with new acts (the trapeze and fire-eater, then the water show and the evolved ace).',
@@ -622,5 +743,6 @@ export const PLACEMENT: Record<string, Placement> = {
 
 export const CHAINS: Json[] = [
   { id: 'ps_gn_hideout', name: 'The Hideout', entry: 'gn-28-door', themeId: 'dark-steel', tint: HIDE_TINT, mood: 'evil team hideout', start: 'opened' },
+  { id: 'ps_gn_pink', name: 'The Island of Pink Pokémon', entry: 'gn-30-door', themeId: 'water-grass', tint: PINK_TINT, mood: 'pink island', start: 'opened' },
   { id: 'ps_gn_giants', name: 'The Island of Giant Pokémon', entry: 'gn-26-door', themeId: 'water-grass', tint: GIANT_TINT, mood: 'giant island', start: 'opened' },
 ];

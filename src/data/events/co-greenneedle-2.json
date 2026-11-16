@@ -13569,7 +13569,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -13626,7 +13627,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -13768,7 +13770,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -13827,7 +13830,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -14225,7 +14229,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -14448,7 +14453,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -14505,7 +14511,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -14647,7 +14654,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -14706,7 +14714,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -15104,7 +15113,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -15341,7 +15351,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -15398,7 +15409,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -15540,7 +15552,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -15599,7 +15612,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -15997,7 +16011,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -16219,7 +16234,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -16276,7 +16292,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -16418,7 +16435,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -16477,7 +16495,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -16875,7 +16894,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -17098,7 +17118,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -17155,7 +17176,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -17297,7 +17319,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -17356,7 +17379,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -17754,7 +17778,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -17978,7 +18003,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -18035,7 +18061,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -18177,7 +18204,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -18236,7 +18264,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -18634,7 +18663,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -18857,7 +18887,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -18914,7 +18945,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -19056,7 +19088,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -19115,7 +19148,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -19513,7 +19547,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -19741,7 +19776,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -19798,7 +19834,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -19940,7 +19977,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -19999,7 +20037,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -20397,7 +20436,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -20620,7 +20660,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -20677,7 +20718,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -20819,7 +20861,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -20878,7 +20921,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -21276,7 +21320,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -21514,7 +21559,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -21571,7 +21617,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -21713,7 +21760,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -21772,7 +21820,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -22170,7 +22219,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -22408,7 +22458,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -22465,7 +22516,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -22607,7 +22659,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -22666,7 +22719,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -23064,7 +23118,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -23301,7 +23356,8 @@
         "similar": {
          "region": true,
          "bst": 40
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -23358,7 +23414,8 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "flag",
@@ -23500,7 +23557,8 @@
          "voltorb": "voltorb-hisui",
          "electrode": "electrode-hisui",
          "qwilfish": "qwilfish-hisui"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -23559,7 +23617,8 @@
           "qwilfish-hisui"
          ],
          "bst": 200
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",
@@ -23957,7 +24016,8 @@
          "meloetta": "meloetta-delta",
          "hoopa": "hoopa-delta",
          "elgyem": "elgyem-delta"
-        }
+        },
+        "honest": "region"
        },
        {
         "kind": "flag",

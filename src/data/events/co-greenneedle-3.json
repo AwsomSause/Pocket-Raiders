@@ -4267,12 +4267,13 @@
         "similar": {
          "region": true,
          "bst": 20
-        }
+        },
+        "honest": true
        },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-12-swap"
+        "key": "gn-12-nature"
        }
       ]
      }
@@ -4290,12 +4291,13 @@
         "similar": {
          "region": true,
          "bst": 60
-        }
+        },
+        "honest": true
        },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-12-swap"
+        "key": "gn-12-nature"
        }
       ]
      }
@@ -4313,12 +4315,13 @@
         "similar": {
          "region": true,
          "bst": 200
-        }
+        },
+        "honest": true
        },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-12-swap"
+        "key": "gn-12-nature"
        }
       ]
      }
@@ -4332,6 +4335,93 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-12-square-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-12-nature",
+   "name": "Swap Alley: A Choice of Nature",
+   "group": "Greenneedle",
+   "tags": [
+    "Mystery",
+    "Shop",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "meowth",
+    "tint": "#3b2f52",
+    "effect": "none"
+   },
+   "intro": "The trader's apprentice looks your new Pokémon over. \"First day with you. It could go a few ways. Which way do you want it to go?\"",
+   "choices": [
+    {
+     "label": "Bold and steady (Adamant).",
+     "success": {
+      "text": "It squares its shoulders.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "adamant"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Quick on its feet (Jolly).",
+     "success": {
+      "text": "It bounces, twice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "jolly"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Clever and careful (Modest).",
+     "success": {
+      "text": "It sits down and thinks about it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "natureLast",
+        "key": "modest"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it as it is.",
+     "success": {
+      "text": "\"Good answer,\" says the apprentice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-12-swap"
        }
       ]
      }

@@ -105,7 +105,7 @@ import { climaxCutOf } from './arc/climaxExtended';
 import { addMercy, changeRep, joinInsideMan, joinProblem, resolveVerdict, standWithClimaxWon, standWithOf, standWithPlayable, verdictsOpen } from './arc/standWithExtended';
 import { checkFlagKeys } from './shadow2/keys';
 import { bondFriendship, bondLevel, bondLevelMet, fitsMatch, whoOf, whoWords } from './co/who';
-import { fitsWant, honestCardFor, honestOffer, honestWant, shapeArrival, TRADE_HELD_ITEMS, tradeEvolution, type HonestCard } from './co/tradeCard';
+import { fitsWant, honestCardFor, honestOffer, honestWant, shapeArrival, theirSide, TRADE_HELD_ITEMS, tradeEvolution, warnOf, yourSide, type HonestCard } from './co/tradeCard';
 import { oweNodes } from './co/takeNode';
 import { clearNodeHold, setNodeBattle } from './co/attach';
 import { noteSpecial } from './expansion/fieldNotes';
@@ -396,6 +396,11 @@ function tradePicksOf(content: Content, run: RunState, choice: EventChoice): Tra
     });
   }
   if (!e || (e.kind !== 'tradeAway' && e.kind !== 'tradeFor')) return null;
+  // Greenneedle: an honest swap carries its full card, worked out before you commit.
+  if (e.kind === 'tradeFor' && e.honest) return tradeCandidates(content, run, e.want).map((m) => {
+    const card = tradeForCard(content, run, e, m, `trade-for-${m.uid}`);
+    return { uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}`, gets: card?.theirs.species ?? null, ...(card ? { card } : {}) };
+  });
   // A swap from a fixed table says what comes back before the player commits (the Honest Trade Card). A "similar strength" swap is rolled, so it stays unknown.
   const table = e.kind === 'tradeFor' ? e.table : {};
   return tradeCandidates(content, run, e.want).map((m) => ({ uid: m.uid, label: `${content.species.get(m.speciesId)?.name ?? m.speciesId} Lv${m.level}`, ...(e.kind === 'tradeFor' ? { gets: table[m.speciesId] && content.species.has(table[m.speciesId]!) ? table[m.speciesId]! : null } : {}) }));
@@ -718,6 +723,30 @@ function ruleStages(battle: NonNullable<RunState['battle']>, rule: { stages?: Pa
 const REGION_GENERATION: Record<string, number> = { kanto: 1, johto: 2, hoenn: 3, sinnoh: 4, unova: 5, kalos: 6, alola: 7, galar: 8, paldea: 9 };
 
 /** Ordinary (not Legendary or Mythical) species of the region the run is in; a region of the game's own uses every generation. */
+type TradeFor = Extract<EventEffect, { kind: 'tradeFor' }>;
+/** What a tradeFor swap gives for this Pokémon: the table's species, or a seeded draw of similar strength, and a seeded nature. */
+function tradeForArrival(content: Content, run: RunState, e: TradeFor, mon: PokemonInstance): { species: string; nature: (typeof NATURE_IDS)[number] | null } | null {
+  const given = content.species.get(mon.speciesId);
+  // A swap rolls from its own seeded generator, so no event roll moves (and the card can show it before you commit).
+  const swap = new Rng(hashSeed(`${run.seed}::trade-for::${mon.uid}:${run.encountersCompleted}`));
+  const near = e.similar && given ? (e.similar.region ? regionTradePool(content, run) : e.similar.pool).filter((id) => { const sp = content.species.get(id); return sp && id !== mon.speciesId && Math.abs(bstOf(sp) - bstOf(given)) <= e.similar!.bst; }) : [];
+  const species = e.table[mon.speciesId] ?? (near.length > 0 ? swap.pick(near) : undefined);
+  if (!species || !content.species.has(species)) return null;
+  return { species, nature: e.similar || e.honest ? swap.pick([...NATURE_IDS]) : null };
+}
+
+/** Greenneedle: the Honest Trade Card for a tradeFor swap (both sides, fair value, the warning). */
+function tradeForCard(content: Content, run: RunState, e: TradeFor, mon: PokemonInstance, id: string): HonestCard | null {
+  const got = tradeForArrival(content, run, e, mon);
+  if (!got) return null;
+  const why = e.honest === 'region' ? 'Like for like: same level, and it keeps what it is holding.' : 'A fair swap: much the same strength.';
+  const gives = { species: got.species, levelOffset: 0, nature: got.nature ?? mon.nature ?? 'hardy', moves: [], hidden: false, marks: [], why, ot: 'A passenger', shiny: mon.shiny, ...(e.honest === 'region' && mon.held ? { held: Object.keys(mon.held)[0] } : {}) };
+  // "Same level": the card never caps below the Pokémon you hand over.
+  const theirs = theirSide(content, run, { gives, trader: null, wants: e.want }, mon.level, Math.max(mon.level, runLevelCap(content, run)));
+  const yours = yourSide(content, mon);
+  return { id, trader: null, why, wants: e.want.label, theirs, yours, warn: warnOf(theirs, yours, content.balance.co.tradeMuchBetter), gift: false };
+}
+
 function regionTradePool(content: Content, run: RunState): string[] {
   const gen = REGION_GENERATION[run.regionOrder[run.regionIndex] ?? ''];
   return [...content.species.values()].filter((sp) => (gen === undefined || sp.generation === gen) && !sp.tags.includes('legendary') && !sp.tags.includes('mythical')).map((sp) => sp.id);
@@ -1535,17 +1564,24 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const mon = fits.find((m) => m.uid === tradeUid) ?? fits[0];
       if (!mon) return '';
       const given = content.species.get(mon.speciesId);
-      // A swap rolls from its own seeded generator, so no event roll moves.
-      const swap = new Rng(hashSeed(`${run.seed}::trade-for::${mon.uid}:${run.encountersCompleted}`));
-      const near = e.similar && given ? (e.similar.region ? regionTradePool(content, run) : e.similar.pool).filter((id) => { const sp = content.species.get(id); return sp && id !== mon.speciesId && Math.abs(bstOf(sp) - bstOf(given)) <= e.similar!.bst; }) : [];
-      const gotId = e.table[mon.speciesId] ?? (near.length > 0 ? swap.pick(near) : undefined);
+      const arrival = tradeForArrival(content, run, e, mon);
+      const gotId = arrival?.species;
       const got = gotId ? content.species.get(gotId) : undefined;
       if (!gotId || !got) return '';
+      // An honest swap is exactly its card (worked out before the fresh Pokémon is made, so nothing else moves it).
+      const card = e.honest ? tradeForCard(content, run, e, mon, 'trade') : null;
       const fresh = newMon(content, run, gotId, mon.level, 'p');
-      if (mon.held) fresh.held = { ...mon.held };
-      fresh.friendship = Math.min(255, mon.friendship + 1);
+      const region = e.honest === 'region';
+      if (mon.held && (!e.honest || region)) fresh.held = { ...mon.held };
+      fresh.friendship = e.honest ? (region ? Math.min(content.balance.friendship.max, mon.friendship + content.balance.co.bondFriendship) : fresh.friendship) : Math.min(255, mon.friendship + 1);
       fresh.shiny = mon.shiny;
-      if (e.similar) fresh.nature = swap.pick([...NATURE_IDS]);
+      if (arrival?.nature) fresh.nature = arrival.nature;
+      if (card) {
+        fresh.abilitySlot = 0;
+        fresh.moves = card.theirs.moves.map((id) => ({ id, pp: content.moves.get(id)!.pp }));
+        // gn.12 Swap Alley: the nature can be chosen after (gn op `natureLast`).
+        run.story.flags['ev:last-trade-uid'] = fresh.uid;
+      }
       run.party.splice(run.party.indexOf(mon), 1, fresh);
       discover(run, gotId, true);
       return `Traded ${given?.name ?? mon.speciesId} for ${got.name}`;

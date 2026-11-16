@@ -129,6 +129,15 @@
    "start": "opened"
   },
   {
+   "id": "ps_gn_pink",
+   "name": "The Island of Pink Pokémon",
+   "entry": "gn-30-door",
+   "themeId": "water-grass",
+   "tint": "#e48fb4",
+   "mood": "pink island",
+   "start": "opened"
+  },
+  {
    "id": "ps_gn_giants",
    "name": "The Island of Giant Pokémon",
    "entry": "gn-26-door",

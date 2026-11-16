@@ -352,6 +352,22 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       else mon.moves[mon.moves[3]!.id === 'two-trainers' ? 2 : 3] = slot;
       return `${nameOf(content, mon)} remembered ${content.moves.get(id)!.name}!`;
     }
+    case 'markLead': {
+      // gn.30: a history mark on the lead (the pink one that ate the island fruit for a day).
+      const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
+      if (!lead) return '';
+      const mark = e.text ?? e.key!;
+      lead.marks = [...(lead.marks ?? []).filter((m) => m !== mark), mark].slice(-8);
+      return `${nameOf(content, lead)}: ${mark}`;
+    }
+    case 'natureLast': {
+      // gn.12: Swap Alley's choice of nature, for the Pokémon that just arrived by an honest trade.
+      const uid = run.story.flags['ev:last-trade-uid'];
+      const mon = run.party.find((m) => m.uid === uid);
+      if (!mon || !(NATURE_IDS as readonly string[]).includes(e.key!)) return '';
+      mon.nature = e.key as (typeof NATURE_IDS)[number];
+      return `${nameOf(content, mon)} is ${e.key![0]!.toUpperCase()}${e.key!.slice(1)} now.`;
+    }
     case 'nextOp': {
       // gn.28: the turned scientist's note names the team's next operation (the one after those already drawn).
       const s = run.story.evil;
@@ -430,6 +446,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   }
   // Damian's friends (gn.05): Tully uses Splash twice, on purpose; Bex spends a turn finding the attack button.
   if (battle.eventRule?.gn === 'tully') battle.storyEffects.push(`${FOE_WAITS}Tully's Pokémon uses Splash! On purpose.`, `${FOE_WAITS}Tully's Pokémon uses Splash again! Tully looks very pleased.`);
+  // gn.30: three right answers, and the Pink Slowking fights "for the exercise": it uses only half its moves.
+  if (battle.eventRule?.gn === 'slowking' && gnFlag(run, 'pink-quiz') >= 3) for (const foe of battle.enemyTeam) if (foe.speciesId === 'slowking') foe.moves = foe.moves.slice(0, Math.max(1, Math.ceil(foe.moves.length / 2)));
   if (battle.eventRule?.gn === 'bex') battle.storyEffects.push(`${FOE_WAITS}Bex is looking for the attack one. "TOP LEFT!" shouts Damian, from the back.`);
   if (battle.eventRule?.gn === 'damian') trainAce(content, battle.enemyTeam[battle.enemyTeam.length - 1], battle.eventRule.ace ?? 1);
   const lead = run.party[battle.activeIndex];

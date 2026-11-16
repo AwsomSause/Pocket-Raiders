@@ -130,7 +130,7 @@ describe('S.S. Anne', () => {
     expect(got.speciesId).toBe('raichu-alola');
     expect(got.level).toBe(17);
     expect(got.held).toEqual({ 'mystic-water': 1 });
-    expect(got.friendship).toBe(71);
+    expect(got.friendship).toBe(70 + content.balance.co.bondFriendship); // the doc: "the new Pokémon starts with Bond +1"
     expect(out.party).toHaveLength(2);
   });
   it('trade A stays within 40 base stats, from the region the run is in, and picks a Nature', () => {

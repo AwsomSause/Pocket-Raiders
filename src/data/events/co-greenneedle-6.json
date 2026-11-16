@@ -7985,6 +7985,1092 @@
      ]
     }
    ]
+  },
+  {
+   "id": "gn-30-door",
+   "name": "The Island of Pink Pokémon",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pink-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "pink-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "Out past the point, an island. From here, the whole of it looks faintly pink.\n\nA fisherman mending nets shrugs. \"The fruit,\" he says, as if that explained it. \"I'll row you, if you like.\"",
+   "choices": [
+    {
+     "label": "Row across.",
+     "success": {
+      "text": "The water goes clear, then pale, then pink over the sand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "pink-calm",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "safari-quiet",
+          "atLeast": 7,
+          "atMost": 99
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "jungle-village",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "pink-calm",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-landing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. The island stays pink on the horizon all afternoon.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-landing",
+   "name": "Island of Pink Pokémon: The Landing",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "A beach of pale pink sand. A pink Rhyhorn watches the boat come in.\n\nIt decides you aren't food, and goes back to eating.",
+   "choices": [
+    {
+     "label": "Look at the sand.",
+     "success": {
+      "text": "You crouch. The sand's pink too, all the way down. It isn't just the animals.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-saw-sand",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pink-noticed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-landing"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-saw-sand",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk up the beach.",
+     "success": {
+      "text": "The Rhyhorn doesn't look up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-orchard"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the Rhyhorn.",
+     "success": {
+      "text": "They don't understand at first. Then they do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-battled",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rhyhorn"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-orchard"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-orchard"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-orchard",
+   "name": "Island of Pink Pokémon: The Orchard",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "away",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The islanders watch you from further off now. Nobody comes to sniff the bag.*"
+    },
+    {
+     "id": "rider",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-calm",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "pink-battled",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*A small pink Paras has climbed into your hood. It rides there, quite happy, eating.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "nidoran-f",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "Low trees with round pink fruit. Underneath, a Rhyhorn, two Nidoran, a Paras and a Mareep, all pink, eating together.\n\nThey've never seen a trainer. They walk right up and sniff your bag.",
+   "choices": [
+    {
+     "label": "Offer an Oran Berry.",
+     "success": {
+      "text": "A pink Nidoran sniffs your Oran Berry, and turns its nose up. They only eat the fruit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-saw-fruit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pink-noticed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-orchard"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-saw-fruit",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "They follow you to the edge of the trees, and stop there.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-stream"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "They don't understand at first. Then they do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-battled",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "nidoran-f",
+        "paras",
+        "mareep"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-stream"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-stream"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-stream",
+   "name": "Island of Pink Pokémon: The Stream",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "away",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The islanders watch you from further off now. Nobody comes to sniff the bag.*"
+    },
+    {
+     "id": "rider",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-calm",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "pink-battled",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*A small pink Paras has climbed into your hood. It rides there, quite happy, eating.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "Clear water over pink stones. Pink Pokémon drink upstream.\n\nDownstream, at the mouth, a few Pokémon of ordinary colours.",
+   "choices": [
+    {
+     "label": "Watch the young ones.",
+     "success": {
+      "text": "A grey-pink Rhyhorn calf, still drinking milk. The young ones are paler.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-saw-young",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pink-noticed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-stream"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-saw-young",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Follow the stream to the sea.",
+     "success": {
+      "text": "The stones get smaller toward the sea, until they're sand. Pink sand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-saw-stones",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pink-noticed",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-stream"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-saw-stones",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The path climbs into big, old trees.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-grove"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "They don't understand at first. Then they do.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-battled",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "rhyhorn",
+        "slowpoke"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-grove"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-grove"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-grove",
+   "name": "Island of Pink Pokémon: The Old Grove",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kangaskhan",
+    "tint": "#e48fb4",
+    "effect": "shake"
+   },
+   "intro": "Huge trees, the oldest on the island. Three pink Nidoking and a pink Kangaskhan stand across the path.\n\n*They don't charge. They stand. The Kangaskhan's young one looks out of the pouch, holding a fruit in both hands.*",
+   "choices": [
+    {
+     "label": "Battle through.",
+     "success": {
+      "text": "The Nidoking come first, one after another.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-grove",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "nidoking"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-30-grove-2"
+        }
+       ],
+       "exact": true,
+       "chain": 3,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-high"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Put down my own food, and step back.",
+     "success": {
+      "text": "They sniff it. They don't want it. But the offer's understood.\n\nThe Kangaskhan steps aside. Its young one leans out of the pouch and holds out a fruit. Then two more.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-grove",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-fruit",
+        "n": 3
+       },
+       {
+        "kind": "moment",
+        "text": "A pink Kangaskhan's young one gave you three fruit.",
+        "importance": 70
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-high"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round.",
+     "success": {
+      "text": "Along the cliffs. It takes the rest of the day.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-grove",
+        "n": 3
+       },
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-30-high"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-grove-2",
+   "name": "Island of Pink Pokémon: The Old Grove",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "kangaskhan",
+    "tint": "#e48fb4",
+    "effect": "shake"
+   },
+   "intro": "The last Nidoking backs off. The Kangaskhan puts its young one down behind a root, and comes forward.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It fights the way mothers fight.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kangaskhan"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-high"
+        }
+       ],
+       "exact": true,
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-30-high"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-high",
+   "name": "Island of Pink Pokémon: The Hilltop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "trampled",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-battled",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "**The Slowking:** \"You have *trampled* across my study.\""
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowking",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "*A flat rock. A pink Slowking, writing on a shell with a stick dipped in fruit juice. It looks up, some time after you arrive.*\n\n**The Slowking, slowly, and very well:** \"A visitor. You have walked across my study. I have three questions. They are things you could have seen.\"\n\n\"Then, if you like, we shall fight. I am told that is customary.\"",
+   "choices": [
+    {
+     "label": "Answer its questions.",
+     "success": {
+      "text": "It turns to a clean part of the shell.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-quiz",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-q1",
+   "name": "Island of Pink Pokémon: The Hilltop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowking",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "**The Slowking:** \"Why are they pink?\"",
+   "choices": [
+    {
+     "label": "The fruit.",
+     "success": {
+      "text": "It writes something on its shell, slowly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-quiz",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The water.",
+     "success": {
+      "text": "It writes something on its shell, slowly, and then crosses it out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "They're born that way.",
+     "success": {
+      "text": "It looks at you for some time. Then it writes something down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-q2",
+   "name": "Island of Pink Pokémon: The Hilltop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowking",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "**The Slowking:** \"Why is the sand pink?\"",
+   "choices": [
+    {
+     "label": "The fruit's stones, ground down.",
+     "success": {
+      "text": "It writes something on its shell, slowly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-quiz",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Coral.",
+     "success": {
+      "text": "It writes something on its shell, slowly, and then crosses it out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The sunsets.",
+     "success": {
+      "text": "It looks at you for some time. Then it writes something down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-q3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-q3",
+   "name": "Island of Pink Pokémon: The Hilltop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowking",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "**The Slowking:** \"Are the young ones pink?\"",
+   "choices": [
+    {
+     "label": "Not yet. It takes time.",
+     "success": {
+      "text": "It writes something on its shell, slowly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-quiz",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Yes, from the egg.",
+     "success": {
+      "text": "It writes something on its shell, slowly, and then crosses it out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Only the old ones.",
+     "success": {
+      "text": "It looks at you for some time. Then it writes something down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-after",
+   "name": "Island of Pink Pokémon: The Hilltop",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "remembers": [
+    {
+     "id": "three",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-quiz",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "notice": "**The Slowking:** \"You looked. So few look. They arrive, and they say 'how odd,' and they leave. Sit. I shall tell you what I think it is *for.*\" *It has eleven theories. It tells you four of them before it loses its thread.*"
+    },
+    {
+     "id": "some",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pink-quiz",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ],
+     "notice": "**The Slowking:** \"Hm. You saw some of it.\" *It underlines something twice.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "slowking",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "A pink Slowbro and a pink Exeggutor wander up the hill and stand beside it.",
+   "choices": [
+    {
+     "label": "Fight, as is customary.",
+     "success": {
+      "text": "**The Slowking:** \"For the exercise, then.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "slowking",
+        "slowbro",
+        "exeggutor"
+       ],
+       "name": "The Pink Slowking",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-30-gift"
+        }
+       ],
+       "pseudo": true,
+       "rule": {
+        "gn": "slowking"
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-30-gift"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Decline, politely.",
+     "success": {
+      "text": "**The Slowking:** \"Very sensible.\" It goes back to its shell.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-30-gift"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-gift",
+   "name": "Island of Pink Pokémon: Leaving",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mareep",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "The boat is where you left it. The islanders have come down to the beach to watch you go.",
+   "choices": [
+    {
+     "label": "A pink islander comes with you.",
+     "success": {
+      "text": "One of them walks down the sand and gets into the boat, and that is that.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rhyhorn",
+         "nidoran-f",
+         "nidoran-m",
+         "paras",
+         "mareep",
+         "slowpoke",
+         "exeggcute"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "marks": [
+         "pink from the island fruit"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-reward",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pink-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "pink-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your lead try the fruit.",
+     "success": {
+      "text": "It eats the fruit for a day. By evening it's a very pale pink, and very pleased with itself.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "markLead",
+        "text": "pink from the island fruit"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "pink-reward",
+        "n": 2
+       },
+       {
+        "kind": "flag",
+        "key": "pink-done",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "pink-at"
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
   }
  ]
 }

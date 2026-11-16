@@ -289,10 +289,19 @@ const gn12: Json[] = [
     'The trading district. Three traders hold up cards: what they will take, and roughly what they give. Each card is honest.',
     'Ask anyone who the lady is, and they will tell you. Ask two, and you will get two names.',
   ), [
-    ch('The first card: something of similar strength.', out('A handshake, a swap of Poké Balls.', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 20 } }, scene('gn-12-swap'))),
-    ch('The second card: a little further off.', out('The trader grins. "A little gamble. Not much of one."', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 60 } }, scene('gn-12-swap'))),
-    ch('The third card: anything goes.', out('"No promises," says the third trader, "except that it\'s alive and it\'s yours."', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 200 } }, scene('gn-12-swap'))),
+    ch('The first card: something of similar strength.', out('A handshake, a swap of Poké Balls.', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 20 }, honest: true }, scene('gn-12-nature'))),
+    ch('The second card: a little further off.', out('The trader grins. "A little gamble. Not much of one."', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 60 }, honest: true }, scene('gn-12-nature'))),
+    ch('The third card: anything goes.', out('"No promises," says the third trader, "except that it\'s alive and it\'s yours."', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 200 }, honest: true }, scene('gn-12-nature'))),
     toSquare(2),
+  ]),
+  // Swap Alley: each trade comes with a choice of nature (the doc). The trader's apprentice knows four tricks.
+  rm('gn-12-nature', 'Swap Alley: A Choice of Nature', peak({ pokemon: 'meowth' }), say(
+    'The trader\'s apprentice looks your new Pokémon over. "First day with you. It could go a few ways. Which way do you want it to go?"',
+  ), [
+    ch('Bold and steady (Adamant).', out('It squares its shoulders.', gn('natureLast', { key: 'adamant' }), scene('gn-12-swap'))),
+    ch('Quick on its feet (Jolly).', out('It bounces, twice.', gn('natureLast', { key: 'jolly' }), scene('gn-12-swap'))),
+    ch('Clever and careful (Modest).', out('It sits down and thinks about it.', gn('natureLast', { key: 'modest' }), scene('gn-12-swap'))),
+    ch('Leave it as it is.', out('"Good answer," says the apprentice.', scene('gn-12-swap'))),
   ]),
   rm('gn-12-eggs', 'Egg Row', peak({ pokemon: 'togepi' }), say('Mystery eggs in straw. A warm-sand hatchery. Egg traders. And the Egg Move Tutor, who teaches one egg move a visit and charges by how rare it is.', 'Above the row, on a stone bridge, somebody laughs.'), [
     buy('A mystery Egg', 1500, 'It is warm in your hands, and it moves once.', 'gn-12-eggs', egg({ left: 3, unit: 'battle' })),
