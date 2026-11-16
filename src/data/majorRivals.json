@@ -358,7 +358,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Manga Red": {
       "home": "Kanto",
@@ -375,7 +375,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary",
+      "poolClass": "primary",
       "sprite": "red"
     },
     "Ethan": {
@@ -393,7 +393,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Manga Gold": {
       "home": "Johto",
@@ -410,7 +410,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary",
+      "poolClass": "primary",
       "sprite": "ethan"
     },
     "Dawn": {
@@ -428,7 +428,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Lucas": {
       "home": "Sinnoh",
@@ -445,7 +445,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Hilbert": {
       "home": "Unova",
@@ -462,7 +462,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Rosa": {
       "home": "Unova",
@@ -479,7 +479,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Serena": {
       "home": "Kalos",
@@ -496,7 +496,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Marnie": {
       "home": "Galar",
@@ -513,7 +513,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Tracey Sketchit": {
       "home": "Kanto",
@@ -530,7 +530,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Alain": {
       "home": "Kalos",
@@ -547,7 +547,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Kris": {
       "home": "Johto",
@@ -564,7 +564,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Lyra": {
       "home": "Johto",
@@ -581,7 +581,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     },
     "Green": {
       "home": "Kanto",
@@ -599,7 +599,7 @@
         "studied": "{rival} has been replaying your {move}. Now {ace} uses it too.",
         "counter": "{rival} trained {ace} for one job: {move} for your {target}."
       },
-      "poolClass": "secondary"
+      "poolClass": "primary"
     }
   },
   "config": {
