@@ -2256,7 +2256,7 @@
     {
      "label": "Take what you like.",
      "success": {
-      "text": "He means it, so you do. He fills your arms himself, far past what you would have taken: berries off three different bushes, and a great knotted root he pulls up with a grunt and knocks the soil from. \"Lucky,\" he says again, shaking his head at his own fields. \"Can't think what I did to earn it.\"",
+      "text": "He means it, so you do. He fills your arms himself, far past what you would have taken: berries off three different bushes, and a great knotted root he pulls up with a grunt and knocks the soil from. \"Lucky,\" he says again, shaking his head at his own fields. \"Can't think what I did to earn it.\" At the gate he tells you the oldest story he knows, the one his own grandmother told him: before gyms, before ranks, one trainer lit a fire on a bare hill and asked a stray Charmander to stay.",
       "effects": [
        {
         "kind": "flag",
@@ -2266,6 +2266,11 @@
        {
         "kind": "flag",
         "key": "farmer-took",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lore-first-ember",
         "amount": 1
        },
        {
@@ -4028,7 +4033,7 @@
     {
      "label": "And Tam?",
      "success": {
-      "text": "Wicker: \"Still walking his road. Won't ride. Stubborn.\" She says \"stubborn\" the way other people say a pet name. Then she throws the tarp back.",
+      "text": "Wicker: \"Still walking his road. Won't ride. Stubborn.\" She says \"stubborn\" the way other people say a pet name. \"He keeps a ledger, you know. Every Pokémon he ever let go instead of selling. His granddad kept one too, fishing the old coast. Last page says: They remember kindness longer than we do.\" Then she throws the tarp back.",
       "effects": [
        {
         "kind": "flag",
@@ -4040,6 +4045,11 @@
         "key": "wicker-second-at",
         "amount": 1,
         "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "lore-ledger-tide",
+        "amount": 1
        },
        {
         "kind": "addEvent",
@@ -4787,8 +4797,13 @@
     {
      "label": "Who are you?",
      "success": {
-      "text": "You send the question back. The answer, when it comes, is one line: \"Someone ahead of you on the road. That's all for now.\" Under it, rubbed out but not quite, another line that began \"My\" and stopped.",
+      "text": "You send the question back. The answer, when it comes, is one line: \"Someone ahead of you on the road. That's all for now.\" Under it, rubbed out but not quite, another line that began \"My\" and stopped. Folded inside the envelope is a paper crane with a route drawn on its wings.",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "lore-paper-crane",
+        "amount": 1
+       },
        {
         "kind": "flag",
         "key": "penpal-1",

@@ -345,6 +345,12 @@
    ],
    "requires": [
     {
+     "kind": "region",
+     "ids": [
+      "galar"
+     ]
+    },
+    {
      "kind": "flag",
      "key": "kubfu-on",
      "atLeast": 1,

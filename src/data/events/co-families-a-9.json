@@ -83,7 +83,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Pokémon goes first, one careful step at a time, pausing, turning, sniffing the stone. Wherever it steps, the floor is cool. The team walks in its footprints and comes out the far side without a mark. The geologist, behind you, is writing very fast. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Pokémon goes first, one careful step at a time, pausing, turning, sniffing the stone. Wherever it steps, the floor is cool. The team walks in its footprints and comes out the far side without a mark. The geologist, behind you, is writing very fast. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -105,6 +105,13 @@
          "kind": "flag",
          "key": "hazard-ancient-lava-tube-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "charcoal",
+          "hard-stone"
+         ]
         },
         {
          "kind": "relic",
@@ -132,7 +139,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon goes first, one careful step at a time, pausing, turning, sniffing the stone. Wherever it steps, the floor is cool. The team walks in its footprints and comes out the far side without a mark. The geologist, behind you, is writing very fast.",
+      "text": "Your Pokémon goes first, one careful step at a time, pausing, turning, sniffing the stone. Wherever it steps, the floor is cool. The team walks in its footprints and comes out the far side without a mark. The geologist, behind you, is writing very fast. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -154,6 +161,13 @@
         "kind": "flag",
         "key": "hazard-ancient-lava-tube-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charcoal",
+         "hard-stone"
+        ]
        }
       ]
      }
@@ -273,7 +287,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Fire-type breathes on the road, slowly, walking backwards, and a dark wet path opens up behind it all the way to the top. The bus follows at a crawl, every face pressed to the glass. At the top, the driver toots the horn three times. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Fire-type breathes on the road, slowly, walking backwards, and a dark wet path opens up behind it all the way to the top. The bus follows at a crawl, every face pressed to the glass. At the top, the driver toots the horn three times. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -294,6 +308,12 @@
          "kind": "flag",
          "key": "hazard-black-ice-road-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "charcoal"
+         ]
         },
         {
          "kind": "relic",
@@ -321,7 +341,7 @@
       }
      ],
      "success": {
-      "text": "Your Fire-type breathes on the road, slowly, walking backwards, and a dark wet path opens up behind it all the way to the top. The bus follows at a crawl, every face pressed to the glass. At the top, the driver toots the horn three times.",
+      "text": "Your Fire-type breathes on the road, slowly, walking backwards, and a dark wet path opens up behind it all the way to the top. The bus follows at a crawl, every face pressed to the glass. At the top, the driver toots the horn three times. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -342,6 +362,12 @@
         "kind": "flag",
         "key": "hazard-black-ice-road-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charcoal"
+        ]
        }
       ]
      }
@@ -372,7 +398,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Ice-type looks at the road the way a child looks at a frozen pond, and then it is off, gliding, turning circles, towing your team across one at a time. The bus passengers clap. The driver shakes his head, laughing, and pours himself another cup. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Ice-type looks at the road the way a child looks at a frozen pond, and then it is off, gliding, turning circles, towing your team across one at a time. The bus passengers clap. The driver shakes his head, laughing, and pours himself another cup. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -393,6 +419,12 @@
          "kind": "flag",
          "key": "hazard-black-ice-road-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "ice-stone"
+         ]
         },
         {
          "kind": "relic",
@@ -420,7 +452,7 @@
       }
      ],
      "success": {
-      "text": "Your Ice-type looks at the road the way a child looks at a frozen pond, and then it is off, gliding, turning circles, towing your team across one at a time. The bus passengers clap. The driver shakes his head, laughing, and pours himself another cup.",
+      "text": "Your Ice-type looks at the road the way a child looks at a frozen pond, and then it is off, gliding, turning circles, towing your team across one at a time. The bus passengers clap. The driver shakes his head, laughing, and pours himself another cup. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -441,6 +473,12 @@
         "kind": "flag",
         "key": "hazard-black-ice-road-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "ice-stone"
+        ]
        }
       ]
      }
@@ -544,7 +582,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Pokémon goes straight into the base of it and does the one thing a dust devil cannot stand: it disagrees. The column wobbles, leans, and comes apart in a sigh of falling sand. In the sudden quiet, a tent peg drops out of the sky and lands at your feet. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Pokémon goes straight into the base of it and does the one thing a dust devil cannot stand: it disagrees. The column wobbles, leans, and comes apart in a sigh of falling sand. In the sudden quiet, a tent peg drops out of the sky and lands at your feet. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -566,6 +604,13 @@
          "kind": "flag",
          "key": "hazard-dust-devil-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "soft-sand",
+          "sharp-beak"
+         ]
         },
         {
          "kind": "relic",
@@ -593,7 +638,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon goes straight into the base of it and does the one thing a dust devil cannot stand: it disagrees. The column wobbles, leans, and comes apart in a sigh of falling sand. In the sudden quiet, a tent peg drops out of the sky and lands at your feet.",
+      "text": "Your Pokémon goes straight into the base of it and does the one thing a dust devil cannot stand: it disagrees. The column wobbles, leans, and comes apart in a sigh of falling sand. In the sudden quiet, a tent peg drops out of the sky and lands at your feet. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -615,6 +660,13 @@
         "kind": "flag",
         "key": "hazard-dust-devil-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "soft-sand",
+         "sharp-beak"
+        ]
        }
       ]
      }
@@ -728,7 +780,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Pokémon goes ahead, and the fog parts around it, or it sees through the grey with something other than its eyes. Either way, it walks you down the right path without a single wrong turn. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Pokémon goes ahead, and the fog parts around it, or it sees through the grey with something other than its eyes. Either way, it walks you down the right path without a single wrong turn. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -750,6 +802,12 @@
          "kind": "flag",
          "key": "hazard-fog-bank-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sharp-beak"
+         ]
         },
         {
          "kind": "relic",
@@ -777,7 +835,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon goes ahead, and the fog parts around it, or it sees through the grey with something other than its eyes. Either way, it walks you down the right path without a single wrong turn.",
+      "text": "Your Pokémon goes ahead, and the fog parts around it, or it sees through the grey with something other than its eyes. Either way, it walks you down the right path without a single wrong turn. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -799,6 +857,12 @@
         "kind": "flag",
         "key": "hazard-fog-bank-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sharp-beak"
+        ]
        }
       ]
      }
@@ -917,7 +981,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Pokémon walks out into it and lets the hail ring off its back, and the rest of the team walks in its shadow, single file, untouched. It does not flinch once. You have never been so proud of something for standing still. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Pokémon walks out into it and lets the hail ring off its back, and the rest of the team walks in its shadow, single file, untouched. It does not flinch once. You have never been so proud of something for standing still. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -939,6 +1003,13 @@
          "kind": "flag",
          "key": "hazard-hailstorm-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "ice-stone",
+          "metal-coat"
+         ]
         },
         {
          "kind": "relic",
@@ -966,7 +1037,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon walks out into it and lets the hail ring off its back, and the rest of the team walks in its shadow, single file, untouched. It does not flinch once. You have never been so proud of something for standing still.",
+      "text": "Your Pokémon walks out into it and lets the hail ring off its back, and the rest of the team walks in its shadow, single file, untouched. It does not flinch once. You have never been so proud of something for standing still. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -988,6 +1059,13 @@
         "kind": "flag",
         "key": "hazard-hailstorm-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "ice-stone",
+         "metal-coat"
+        ]
        }
       ]
      }
@@ -1110,7 +1188,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Pokémon spends the whole climb taking care of the others, a fine mist over their heads or a wide leaf held up like a parasol. Halfway up, your team starts walking in a tight little knot around it, nobody wanting to leave its shade. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Pokémon spends the whole climb taking care of the others, a fine mist over their heads or a wide leaf held up like a parasol. Halfway up, your team starts walking in a tight little knot around it, nobody wanting to leave its shade. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -1132,6 +1210,13 @@
          "kind": "flag",
          "key": "hazard-heat-wave-trek-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "mystic-water",
+          "miracle-seed"
+         ]
         },
         {
          "kind": "relic",
@@ -1159,7 +1244,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon spends the whole climb taking care of the others, a fine mist over their heads or a wide leaf held up like a parasol. Halfway up, your team starts walking in a tight little knot around it, nobody wanting to leave its shade.",
+      "text": "Your Pokémon spends the whole climb taking care of the others, a fine mist over their heads or a wide leaf held up like a parasol. Halfway up, your team starts walking in a tight little knot around it, nobody wanting to leave its shade. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -1181,6 +1266,13 @@
         "kind": "flag",
         "key": "hazard-heat-wave-trek-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "mystic-water",
+         "miracle-seed"
+        ]
        }
       ]
      }
@@ -1296,7 +1388,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Ground-type puts its head down and goes, and a tunnel opens through the slide as neat as a pipe. You all walk through it in the dark, holding the tail of the one in front. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Ground-type puts its head down and goes, and a tunnel opens through the slide as neat as a pipe. You all walk through it in the dark, holding the tail of the one in front. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -1317,6 +1409,12 @@
          "kind": "flag",
          "key": "hazard-mudslide-pass-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "soft-sand"
+         ]
         },
         {
          "kind": "relic",
@@ -1344,7 +1442,7 @@
       }
      ],
      "success": {
-      "text": "Your Ground-type puts its head down and goes, and a tunnel opens through the slide as neat as a pipe. You all walk through it in the dark, holding the tail of the one in front.",
+      "text": "Your Ground-type puts its head down and goes, and a tunnel opens through the slide as neat as a pipe. You all walk through it in the dark, holding the tail of the one in front. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -1365,6 +1463,12 @@
         "kind": "flag",
         "key": "hazard-mudslide-pass-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "soft-sand"
+        ]
        }
       ]
      }
@@ -1395,7 +1499,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Fighting-type looks at the wall of mud the way it looks at an opponent, sets its feet, and starts shovelling with its hands. It does not stop until there is a road again. Afterwards it sits on a rock, filthy and enormously pleased with itself. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Fighting-type looks at the wall of mud the way it looks at an opponent, sets its feet, and starts shovelling with its hands. It does not stop until there is a road again. Afterwards it sits on a rock, filthy and enormously pleased with itself. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -1416,6 +1520,12 @@
          "kind": "flag",
          "key": "hazard-mudslide-pass-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "black-belt"
+         ]
         },
         {
          "kind": "relic",
@@ -1443,7 +1553,7 @@
       }
      ],
      "success": {
-      "text": "Your Fighting-type looks at the wall of mud the way it looks at an opponent, sets its feet, and starts shovelling with its hands. It does not stop until there is a road again. Afterwards it sits on a rock, filthy and enormously pleased with itself.",
+      "text": "Your Fighting-type looks at the wall of mud the way it looks at an opponent, sets its feet, and starts shovelling with its hands. It does not stop until there is a road again. Afterwards it sits on a rock, filthy and enormously pleased with itself. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -1464,6 +1574,12 @@
         "kind": "flag",
         "key": "hazard-mudslide-pass-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "black-belt"
+        ]
        }
       ]
      }
@@ -1578,7 +1694,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Pokémon goes in front and the green parts before it, burned back or snipped through, neatly, like a gardener with an appointment. Nothing wild bothers you. Nothing wild wants to. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Pokémon goes in front and the green parts before it, burned back or snipped through, neatly, like a gardener with an appointment. Nothing wild bothers you. Nothing wild wants to. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -1600,6 +1716,12 @@
          "kind": "flag",
          "key": "hazard-overgrown-trail-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "charcoal"
+         ]
         },
         {
          "kind": "relic",
@@ -1627,7 +1749,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon goes in front and the green parts before it, burned back or snipped through, neatly, like a gardener with an appointment. Nothing wild bothers you. Nothing wild wants to.",
+      "text": "Your Pokémon goes in front and the green parts before it, burned back or snipped through, neatly, like a gardener with an appointment. Nothing wild bothers you. Nothing wild wants to. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -1649,6 +1771,12 @@
         "kind": "flag",
         "key": "hazard-overgrown-trail-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charcoal"
+        ]
        }
       ]
      }
@@ -1679,7 +1807,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Grass-type walks up to the wall of vines and stands there, very still, for a long moment. Then, slowly, with a sound like a breath going out, the vines draw back from the path. You walk through a green tunnel. When you look back, they have closed again behind you, gently. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Grass-type walks up to the wall of vines and stands there, very still, for a long moment. Then, slowly, with a sound like a breath going out, the vines draw back from the path. You walk through a green tunnel. When you look back, they have closed again behind you, gently. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -1700,6 +1828,12 @@
          "kind": "flag",
          "key": "hazard-overgrown-trail-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "miracle-seed"
+         ]
         },
         {
          "kind": "relic",
@@ -1727,7 +1861,7 @@
       }
      ],
      "success": {
-      "text": "Your Grass-type walks up to the wall of vines and stands there, very still, for a long moment. Then, slowly, with a sound like a breath going out, the vines draw back from the path. You walk through a green tunnel. When you look back, they have closed again behind you, gently.",
+      "text": "Your Grass-type walks up to the wall of vines and stands there, very still, for a long moment. Then, slowly, with a sound like a breath going out, the vines draw back from the path. You walk through a green tunnel. When you look back, they have closed again behind you, gently. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -1748,6 +1882,12 @@
         "kind": "flag",
         "key": "hazard-overgrown-trail-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "miracle-seed"
+        ]
        }
       ]
      }
@@ -1862,7 +2002,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Pokémon walks into the yellow like it is walking into a warm bath, and the team follows close behind it, breathing where it breathes. Nobody sneezes once. The hiker watches you go, open-mouthed, and sneezes. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Pokémon walks into the yellow like it is walking into a warm bath, and the team follows close behind it, breathing where it breathes. Nobody sneezes once. The hiker watches you go, open-mouthed, and sneezes. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -1884,6 +2024,13 @@
          "kind": "flag",
          "key": "hazard-pollen-season-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "miracle-seed",
+          "poison-barb"
+         ]
         },
         {
          "kind": "relic",
@@ -1911,7 +2058,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon walks into the yellow like it is walking into a warm bath, and the team follows close behind it, breathing where it breathes. Nobody sneezes once. The hiker watches you go, open-mouthed, and sneezes.",
+      "text": "Your Pokémon walks into the yellow like it is walking into a warm bath, and the team follows close behind it, breathing where it breathes. Nobody sneezes once. The hiker watches you go, open-mouthed, and sneezes. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -1933,6 +2080,13 @@
         "kind": "flag",
         "key": "hazard-pollen-season-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "miracle-seed",
+         "poison-barb"
+        ]
        }
       ]
      }
@@ -2051,7 +2205,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Water-type is out the door before you can stop it, turning its face up into the rain, splashing in every puddle. The stallholders crowd the doorway to watch, laughing. One of them runs after you with a paper bag. Stallholder: \"For the show! On the house!\" On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Water-type is out the door before you can stop it, turning its face up into the rain, splashing in every puddle. The stallholders crowd the doorway to watch, laughing. One of them runs after you with a paper bag. Stallholder: \"For the show! On the house!\" On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -2082,6 +2236,12 @@
          ]
         },
         {
+         "kind": "itemFrom",
+         "ids": [
+          "mystic-water"
+         ]
+        },
+        {
          "kind": "relic",
          "id": "pathfinder",
          "name": "The Pathfinder Ribbon",
@@ -2107,7 +2267,7 @@
       }
      ],
      "success": {
-      "text": "Your Water-type is out the door before you can stop it, turning its face up into the rain, splashing in every puddle. The stallholders crowd the doorway to watch, laughing. One of them runs after you with a paper bag. Stallholder: \"For the show! On the house!\"",
+      "text": "Your Water-type is out the door before you can stop it, turning its face up into the rain, splashing in every puddle. The stallholders crowd the doorway to watch, laughing. One of them runs after you with a paper bag. Stallholder: \"For the show! On the house!\" On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -2135,6 +2295,12 @@
          "oran-berry",
          "sitrus-berry",
          "lum-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "mystic-water"
         ]
        }
       ]
@@ -2240,7 +2406,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Water-type swims out under you and everyone climbs on, and it carries you all to the lighthouse on the swell of the tide, as easy as a ferry. The lighthouse keeper is waiting on the steps with towels. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Water-type swims out under you and everyone climbs on, and it carries you all to the lighthouse on the swell of the tide, as easy as a ferry. The lighthouse keeper is waiting on the steps with towels. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -2261,6 +2427,12 @@
          "kind": "flag",
          "key": "hazard-rising-tide-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "mystic-water"
+         ]
         },
         {
          "kind": "relic",
@@ -2288,7 +2460,7 @@
       }
      ],
      "success": {
-      "text": "Your Water-type swims out under you and everyone climbs on, and it carries you all to the lighthouse on the swell of the tide, as easy as a ferry. The lighthouse keeper is waiting on the steps with towels.",
+      "text": "Your Water-type swims out under you and everyone climbs on, and it carries you all to the lighthouse on the swell of the tide, as easy as a ferry. The lighthouse keeper is waiting on the steps with towels. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -2309,6 +2481,12 @@
         "kind": "flag",
         "key": "hazard-rising-tide-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "mystic-water"
+        ]
        }
       ]
      }
@@ -2339,7 +2517,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Flying-type carries them over one at a time, back and forth, back and forth, the tide rising under its wings each trip. It does not stop until the last of you is on the grass. Then it lies down flat and will not move for a while. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Flying-type carries them over one at a time, back and forth, back and forth, the tide rising under its wings each trip. It does not stop until the last of you is on the grass. Then it lies down flat and will not move for a while. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -2360,6 +2538,12 @@
          "kind": "flag",
          "key": "hazard-rising-tide-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sharp-beak"
+         ]
         },
         {
          "kind": "relic",
@@ -2387,7 +2571,7 @@
       }
      ],
      "success": {
-      "text": "Your Flying-type carries them over one at a time, back and forth, back and forth, the tide rising under its wings each trip. It does not stop until the last of you is on the grass. Then it lies down flat and will not move for a while.",
+      "text": "Your Flying-type carries them over one at a time, back and forth, back and forth, the tide rising under its wings each trip. It does not stop until the last of you is on the grass. Then it lies down flat and will not move for a while. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -2408,6 +2592,12 @@
         "kind": "flag",
         "key": "hazard-rising-tide-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sharp-beak"
+        ]
        }
       ]
      }
@@ -2515,7 +2705,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Pokémon ignores the town completely. It turns its head, and turns it again, feeling for something you cannot, and then sets off at an angle you would never have chosen. An hour later, the real road is under your feet. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Pokémon ignores the town completely. It turns its head, and turns it again, feeling for something you cannot, and then sets off at an angle you would never have chosen. An hour later, the real road is under your feet. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -2537,6 +2727,12 @@
          "kind": "flag",
          "key": "hazard-salt-flats-mirage-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "soft-sand"
+         ]
         },
         {
          "kind": "relic",
@@ -2564,7 +2760,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon ignores the town completely. It turns its head, and turns it again, feeling for something you cannot, and then sets off at an angle you would never have chosen. An hour later, the real road is under your feet.",
+      "text": "Your Pokémon ignores the town completely. It turns its head, and turns it again, feeling for something you cannot, and then sets off at an angle you would never have chosen. An hour later, the real road is under your feet. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -2586,6 +2782,12 @@
         "kind": "flag",
         "key": "hazard-salt-flats-mirage-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "soft-sand"
+        ]
        }
       ]
      }
@@ -2700,7 +2902,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Pokémon walks into the yellow without a cough and the team follows it in a line, a hand or a paw on the one in front. At the far side a woman in the café window raises her cup to you. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Pokémon walks into the yellow without a cough and the team follows it in a line, a hand or a paw on the one in front. At the far side a woman in the café window raises her cup to you. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -2722,6 +2924,13 @@
          "kind": "flag",
          "key": "hazard-smog-alert-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "poison-barb",
+          "metal-coat"
+         ]
         },
         {
          "kind": "relic",
@@ -2749,7 +2958,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon walks into the yellow without a cough and the team follows it in a line, a hand or a paw on the one in front. At the far side a woman in the café window raises her cup to you.",
+      "text": "Your Pokémon walks into the yellow without a cough and the team follows it in a line, a hand or a paw on the one in front. At the far side a woman in the café window raises her cup to you. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -2771,6 +2980,13 @@
         "kind": "flag",
         "key": "hazard-smog-alert-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "poison-barb",
+         "metal-coat"
+        ]
        }
       ]
      }
@@ -2801,7 +3017,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Flying-type beats its wings in the middle of the street, steady, steady, until a clear tunnel opens through the smog and the sun comes down it. People come out of doorways to stand in the light. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Flying-type beats its wings in the middle of the street, steady, steady, until a clear tunnel opens through the smog and the sun comes down it. People come out of doorways to stand in the light. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -2822,6 +3038,12 @@
          "kind": "flag",
          "key": "hazard-smog-alert-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sharp-beak"
+         ]
         },
         {
          "kind": "relic",
@@ -2849,7 +3071,7 @@
       }
      ],
      "success": {
-      "text": "Your Flying-type beats its wings in the middle of the street, steady, steady, until a clear tunnel opens through the smog and the sun comes down it. People come out of doorways to stand in the light.",
+      "text": "Your Flying-type beats its wings in the middle of the street, steady, steady, until a clear tunnel opens through the smog and the sun comes down it. People come out of doorways to stand in the light. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -2870,6 +3092,12 @@
         "kind": "flag",
         "key": "hazard-smog-alert-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sharp-beak"
+        ]
        }
       ]
      }
@@ -3059,7 +3287,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Electric-type puts a paw on the PokéNav and draws the wild charge out of it like drawing out a splinter. The map flickers back to life. Your Pokémon looks very full of itself, and very slightly fizzy. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Electric-type puts a paw on the PokéNav and draws the wild charge out of it like drawing out a splinter. The map flickers back to life. Your Pokémon looks very full of itself, and very slightly fizzy. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -3080,6 +3308,12 @@
          "kind": "flag",
          "key": "hazard-solar-flare-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "magnet"
+         ]
         },
         {
          "kind": "relic",
@@ -3107,7 +3341,7 @@
       }
      ],
      "success": {
-      "text": "Your Electric-type puts a paw on the PokéNav and draws the wild charge out of it like drawing out a splinter. The map flickers back to life. Your Pokémon looks very full of itself, and very slightly fizzy.",
+      "text": "Your Electric-type puts a paw on the PokéNav and draws the wild charge out of it like drawing out a splinter. The map flickers back to life. Your Pokémon looks very full of itself, and very slightly fizzy. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -3128,6 +3362,12 @@
         "kind": "flag",
         "key": "hazard-solar-flare-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "magnet"
+        ]
        }
       ]
      }
@@ -3158,7 +3398,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Steel-type curls round the gear and takes the flare on its own back, and the static breaks against it like waves on a sea wall. When the light dims, the map is steady. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Steel-type curls round the gear and takes the flare on its own back, and the static breaks against it like waves on a sea wall. When the light dims, the map is steady. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -3179,6 +3419,12 @@
          "kind": "flag",
          "key": "hazard-solar-flare-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "metal-coat"
+         ]
         },
         {
          "kind": "relic",
@@ -3206,7 +3452,7 @@
       }
      ],
      "success": {
-      "text": "Your Steel-type curls round the gear and takes the flare on its own back, and the static breaks against it like waves on a sea wall. When the light dims, the map is steady.",
+      "text": "Your Steel-type curls round the gear and takes the flare on its own back, and the static breaks against it like waves on a sea wall. When the light dims, the map is steady. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -3227,6 +3473,12 @@
         "kind": "flag",
         "key": "hazard-solar-flare-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "metal-coat"
+        ]
        }
       ]
      }
@@ -3337,7 +3589,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Water-type takes everyone across, two at a time, patient as a ferryman. On the last trip it carries you, and it swims a little slower than it needs to, so you can see the fish under the water. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Water-type takes everyone across, two at a time, patient as a ferryman. On the last trip it carries you, and it swims a little slower than it needs to, so you can see the fish under the water. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -3358,6 +3610,12 @@
          "kind": "flag",
          "key": "hazard-sunken-road-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "mystic-water"
+         ]
         },
         {
          "kind": "relic",
@@ -3385,7 +3643,7 @@
       }
      ],
      "success": {
-      "text": "Your Water-type takes everyone across, two at a time, patient as a ferryman. On the last trip it carries you, and it swims a little slower than it needs to, so you can see the fish under the water.",
+      "text": "Your Water-type takes everyone across, two at a time, patient as a ferryman. On the last trip it carries you, and it swims a little slower than it needs to, so you can see the fish under the water. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -3406,6 +3664,12 @@
         "kind": "flag",
         "key": "hazard-sunken-road-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "mystic-water"
+        ]
        }
       ]
      }
@@ -3597,7 +3861,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Ghost-type drifts into the mist and you hear it talking, low, in a voice you have never heard it use. The shapes gather round it. Then they move aside, and you walk through a corridor of quiet watchers who do not lift a hand. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Ghost-type drifts into the mist and you hear it talking, low, in a voice you have never heard it use. The shapes gather round it. Then they move aside, and you walk through a corridor of quiet watchers who do not lift a hand. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -3618,6 +3882,12 @@
          "kind": "flag",
          "key": "hazard-swampy-mist-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "spell-tag"
+         ]
         },
         {
          "kind": "relic",
@@ -3645,7 +3915,7 @@
       }
      ],
      "success": {
-      "text": "Your Ghost-type drifts into the mist and you hear it talking, low, in a voice you have never heard it use. The shapes gather round it. Then they move aside, and you walk through a corridor of quiet watchers who do not lift a hand.",
+      "text": "Your Ghost-type drifts into the mist and you hear it talking, low, in a voice you have never heard it use. The shapes gather round it. Then they move aside, and you walk through a corridor of quiet watchers who do not lift a hand. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -3666,6 +3936,12 @@
         "kind": "flag",
         "key": "hazard-swampy-mist-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "spell-tag"
+        ]
        }
       ]
      }
@@ -3696,7 +3972,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Fire-type breathes out a long warm breath, and the mist curls back from it and burns away to nothing. The shapes in it were only reeds after all. Probably. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Fire-type breathes out a long warm breath, and the mist curls back from it and burns away to nothing. The shapes in it were only reeds after all. Probably. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -3717,6 +3993,12 @@
          "kind": "flag",
          "key": "hazard-swampy-mist-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "charcoal"
+         ]
         },
         {
          "kind": "relic",
@@ -3744,7 +4026,7 @@
       }
      ],
      "success": {
-      "text": "Your Fire-type breathes out a long warm breath, and the mist curls back from it and burns away to nothing. The shapes in it were only reeds after all. Probably.",
+      "text": "Your Fire-type breathes out a long warm breath, and the mist curls back from it and burns away to nothing. The shapes in it were only reeds after all. Probably. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -3765,6 +4047,12 @@
         "kind": "flag",
         "key": "hazard-swampy-mist-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charcoal"
+        ]
        }
       ]
      }
@@ -3879,7 +4167,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Ground-type walks out into the middle of the field and stands there, and when the lightning comes it comes for it, and goes into it, and goes into the earth. The rest of you cross behind it. It does not even blink. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Ground-type walks out into the middle of the field and stands there, and when the lightning comes it comes for it, and goes into it, and goes into the earth. The rest of you cross behind it. It does not even blink. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -3900,6 +4188,12 @@
          "kind": "flag",
          "key": "hazard-thunderstorm-crossing-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "soft-sand"
+         ]
         },
         {
          "kind": "relic",
@@ -3927,7 +4221,7 @@
       }
      ],
      "success": {
-      "text": "Your Ground-type walks out into the middle of the field and stands there, and when the lightning comes it comes for it, and goes into it, and goes into the earth. The rest of you cross behind it. It does not even blink.",
+      "text": "Your Ground-type walks out into the middle of the field and stands there, and when the lightning comes it comes for it, and goes into it, and goes into the earth. The rest of you cross behind it. It does not even blink. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -3948,6 +4242,12 @@
         "kind": "flag",
         "key": "hazard-thunderstorm-crossing-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "soft-sand"
+        ]
        }
       ]
      }
@@ -3978,7 +4278,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Electric-type runs out into the field to meet the storm. The strikes come down to it like dogs to a whistle, and it drinks them in, and comes back to you crackling, eyes bright, hardly able to keep still. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Electric-type runs out into the field to meet the storm. The strikes come down to it like dogs to a whistle, and it drinks them in, and comes back to you crackling, eyes bright, hardly able to keep still. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -4014,6 +4314,12 @@
          "until": "battle"
         },
         {
+         "kind": "itemFrom",
+         "ids": [
+          "magnet"
+         ]
+        },
+        {
          "kind": "relic",
          "id": "pathfinder",
          "name": "The Pathfinder Ribbon",
@@ -4039,7 +4345,7 @@
       }
      ],
      "success": {
-      "text": "Your Electric-type runs out into the field to meet the storm. The strikes come down to it like dogs to a whistle, and it drinks them in, and comes back to you crackling, eyes bright, hardly able to keep still.",
+      "text": "Your Electric-type runs out into the field to meet the storm. The strikes come down to it like dogs to a whistle, and it drinks them in, and comes back to you crackling, eyes bright, hardly able to keep still. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -4073,6 +4379,12 @@
         ],
         "battles": 1,
         "until": "battle"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "magnet"
+        ]
        }
       ]
      }
@@ -4175,7 +4487,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Flying-type goes up into the squall like an arrow and comes back, buffeted and determined, with the whole bunch of balloons in its beak. The child cries with joy and hugs it, wet feathers and all, and presses something into your hand. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Flying-type goes up into the squall like an arrow and comes back, buffeted and determined, with the whole bunch of balloons in its beak. The child cries with joy and hugs it, wet feathers and all, and presses something into your hand. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -4205,6 +4517,12 @@
          ]
         },
         {
+         "kind": "itemFrom",
+         "ids": [
+          "sharp-beak"
+         ]
+        },
+        {
          "kind": "relic",
          "id": "pathfinder",
          "name": "The Pathfinder Ribbon",
@@ -4230,7 +4548,7 @@
       }
      ],
      "success": {
-      "text": "Your Flying-type goes up into the squall like an arrow and comes back, buffeted and determined, with the whole bunch of balloons in its beak. The child cries with joy and hugs it, wet feathers and all, and presses something into your hand.",
+      "text": "Your Flying-type goes up into the squall like an arrow and comes back, buffeted and determined, with the whole bunch of balloons in its beak. The child cries with joy and hugs it, wet feathers and all, and presses something into your hand. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -4257,6 +4575,12 @@
         "ids": [
          "oran-berry",
          "sitrus-berry"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sharp-beak"
         ]
        }
       ]
@@ -4288,7 +4612,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Water-type runs out into the storm and plays in it, rolling in the surf, spinning in the rain, and the children come out from under the hut to watch, and then to join in, and the party becomes a different, better party. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Water-type runs out into the storm and plays in it, rolling in the surf, spinning in the rain, and the children come out from under the hut to watch, and then to join in, and the party becomes a different, better party. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -4309,6 +4633,12 @@
          "kind": "flag",
          "key": "hazard-tropical-squall-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "mystic-water"
+         ]
         },
         {
          "kind": "relic",
@@ -4336,7 +4666,7 @@
       }
      ],
      "success": {
-      "text": "Your Water-type runs out into the storm and plays in it, rolling in the surf, spinning in the rain, and the children come out from under the hut to watch, and then to join in, and the party becomes a different, better party.",
+      "text": "Your Water-type runs out into the storm and plays in it, rolling in the surf, spinning in the rain, and the children come out from under the hut to watch, and then to join in, and the party becomes a different, better party. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -4357,6 +4687,12 @@
         "kind": "flag",
         "key": "hazard-tropical-squall-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "mystic-water"
+        ]
        }
       ]
      }
@@ -4467,7 +4803,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Pokémon walks through the ash like it was born in it, and maybe it was. It finds the road under the grey by feel and the team follows its tracks, eyes shut, one paw on the one in front. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Pokémon walks through the ash like it was born in it, and maybe it was. It finds the road under the grey by feel and the team follows its tracks, eyes shut, one paw on the one in front. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -4489,6 +4825,13 @@
          "kind": "flag",
          "key": "hazard-volcanic-ash-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "charcoal",
+          "hard-stone"
+         ]
         },
         {
          "kind": "relic",
@@ -4516,7 +4859,7 @@
       }
      ],
      "success": {
-      "text": "Your Pokémon walks through the ash like it was born in it, and maybe it was. It finds the road under the grey by feel and the team follows its tracks, eyes shut, one paw on the one in front.",
+      "text": "Your Pokémon walks through the ash like it was born in it, and maybe it was. It finds the road under the grey by feel and the team follows its tracks, eyes shut, one paw on the one in front. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -4538,6 +4881,13 @@
         "kind": "flag",
         "key": "hazard-volcanic-ash-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "charcoal",
+         "hard-stone"
+        ]
        }
       ]
      }
@@ -4568,7 +4918,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Flying-type beats its wings and the ash lifts and swirls away from the road in a long grey wave, and the trail is clear for as far as you can see. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Flying-type beats its wings and the ash lifts and swirls away from the road in a long grey wave, and the trail is clear for as far as you can see. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -4589,6 +4939,12 @@
          "kind": "flag",
          "key": "hazard-volcanic-ash-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sharp-beak"
+         ]
         },
         {
          "kind": "relic",
@@ -4616,7 +4972,7 @@
       }
      ],
      "success": {
-      "text": "Your Flying-type beats its wings and the ash lifts and swirls away from the road in a long grey wave, and the trail is clear for as far as you can see.",
+      "text": "Your Flying-type beats its wings and the ash lifts and swirls away from the road in a long grey wave, and the trail is clear for as far as you can see. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -4637,6 +4993,12 @@
         "kind": "flag",
         "key": "hazard-volcanic-ash-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sharp-beak"
+        ]
        }
       ]
      }
@@ -4752,7 +5114,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your heaviest Pokémon goes first and everyone holds on to it, a line of paws and tails, and the wind screams and pulls and cannot shift it one inch. You come out the far side in a single unbroken chain. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your heaviest Pokémon goes first and everyone holds on to it, a line of paws and tails, and the wind screams and pulls and cannot shift it one inch. You come out the far side in a single unbroken chain. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -4774,6 +5136,13 @@
          "kind": "flag",
          "key": "hazard-windstorm-gap-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "metal-coat",
+          "hard-stone"
+         ]
         },
         {
          "kind": "relic",
@@ -4801,7 +5170,7 @@
       }
      ],
      "success": {
-      "text": "Your heaviest Pokémon goes first and everyone holds on to it, a line of paws and tails, and the wind screams and pulls and cannot shift it one inch. You come out the far side in a single unbroken chain.",
+      "text": "Your heaviest Pokémon goes first and everyone holds on to it, a line of paws and tails, and the wind screams and pulls and cannot shift it one inch. You come out the far side in a single unbroken chain. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -4823,6 +5192,13 @@
         "kind": "flag",
         "key": "hazard-windstorm-gap-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "metal-coat",
+         "hard-stone"
+        ]
        }
       ]
      }
@@ -4853,7 +5229,7 @@
          "atMost": 0
         }
        ],
-       "text": "Your Flying-type opens its wings and lets the gale have them, and rides it like a kite, and drops a rope back to the rest of you, and hauls. It is the best afternoon of its life. On the far side, someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
+       "text": "Your Flying-type opens its wings and lets the gale have them, and rides it like a kite, and drops a rope back to the rest of you, and hauls. It is the best afternoon of its life. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself. Then someone you have never met stops you with a hand on your arm. \"That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it.\" They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.",
        "effects": [
         {
          "kind": "friendship",
@@ -4874,6 +5250,12 @@
          "kind": "flag",
          "key": "hazard-windstorm-gap-used",
          "amount": 1
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "sharp-beak"
+         ]
         },
         {
          "kind": "relic",
@@ -4901,7 +5283,7 @@
       }
      ],
      "success": {
-      "text": "Your Flying-type opens its wings and lets the gale have them, and rides it like a kite, and drops a rope back to the rest of you, and hauls. It is the best afternoon of its life.",
+      "text": "Your Flying-type opens its wings and lets the gale have them, and rides it like a kite, and drops a rope back to the rest of you, and hauls. It is the best afternoon of its life. On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.",
       "effects": [
        {
         "kind": "friendship",
@@ -4922,6 +5304,12 @@
         "kind": "flag",
         "key": "hazard-windstorm-gap-used",
         "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "sharp-beak"
+        ]
        }
       ]
      }
@@ -6658,8 +7046,14 @@
     {
      "label": "Describe something that isn't there.",
      "success": {
-      "text": "You tell her there is a dragon on the far hill, sunning itself. She laughs, a big surprising laugh. Marguerite: \"There's no dragon. But thank you.\" She pats your hand.",
-      "effects": []
+      "text": "You tell her there is a dragon on the far hill, sunning itself. She laughs, a big surprising laugh. Marguerite: \"There's no dragon. But thank you.\" She pats your hand. Then she tells you about a wood where the trees repeat what trainers say, a season late. \"Go and say something good there,\" she says.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lore-whisper-wood",
+        "amount": 1
+       }
+      ]
      }
     }
    ]

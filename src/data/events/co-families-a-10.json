@@ -1148,8 +1148,13 @@
     {
      "label": "Ask my starter to stand with them.",
      "success": {
-      "text": "Your starter walks over without being told and stands beside Jory, close, not touching, the way you stand beside someone at a time like this. After a while Jory reaches out and takes its paw. They stand like that until the candles burn down.",
+      "text": "Your starter walks over without being told and stands beside Jory, close, not touching, the way you stand beside someone at a time like this. After a while Jory reaches out and takes its paw. They stand like that until the candles burn down. Someone at the back hums the old song, the one about the Jigglypuff that sang a whole stadium to sleep and then tucked every sleeper in.",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "lore-last-lullaby",
+        "amount": 1
+       },
        {
         "kind": "friendship",
         "bond": 1,
@@ -1172,8 +1177,13 @@
     {
      "label": "Stand with them myself.",
      "success": {
-      "text": "You stand with them. Nobody speaks. The wind moves the grass. It is enough. When you leave, the mother touches your arm, once, and you nod, and that is all.",
+      "text": "You stand with them. Nobody speaks. The wind moves the grass. It is enough. When you leave, the mother touches your arm, once, and you nod, and that is all. Afterwards an old woman at the gate tells you about a bell with no clapper in a ruined tower, that rings only when a trainer who has never lied walks beneath it. \"It rang for her once,\" she says.",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "lore-hollow-bell",
+        "amount": 1
+       },
        {
         "kind": "flag",
         "key": "funeral-stood",

@@ -98,9 +98,11 @@ const NOBODY: Json[] = [
 // visits. The home is seen again two regions after the first visit.
 // =====================================================================================================================
 const OWN = 'roots-own';
+// The root scenes are for the starter: they wait while it is still in the party (any type; its own scene is its home).
+const STARTER_HERE: Json = { kind: 'starter' };
 const ROOTS: Json[] = [
   {
-    id: 'starter-ember-shrine', requires: [not('roots-shrine')],
+    id: 'starter-ember-shrine', requires: [STARTER_HERE, not('roots-shrine')],
     intro: 'A small stone shrine on a hill, the stone scorched black in long sweeping marks: the shapes of tails. Fire-types have prayed here a long time. When your starter steps onto the hilltop, the stone glows where it stands. The shrine keeper, an old woman called Ama, gets up off her stool. Ama: "Not one of ours." She smiles. "But it\'s welcome. Fire\'s for warming strangers too."',
     choices: [
       ch('Let it sit.', out('Your starter walks to the oldest tail-mark, the biggest, and sits in it. It fits. It stays there a long time with its eyes half closed.', bondUp(2, 'starter'), flag('roots-shrine'))),
@@ -114,7 +116,7 @@ const ROOTS: Json[] = [
     ],
   },
   {
-    id: 'starter-first-pal', requires: [not('roots-nest')],
+    id: 'starter-first-pal', requires: [STARTER_HERE, not('roots-nest')],
     intro: 'A hollow under a hedge, lined with soft fur. Small toys lie in it, worn smooth: a stick, a pebble, a ribbon. Your starter sniffs the ribbon. A breeder passing with a basket stops. Hollen: "That\'s where they\'re born round here. Normal-types, Eevee, the soft ones." She smiles at your starter. "Not one of them, is it. It\'s welcome all the same."',
     choices: [
       ch('Sit with it.', out('You sit by the nest. Your starter curls up in it, too big, and does not care. You rest there until the light changes.', heal(1), bondUp(2, 'starter'), flag('roots-nest')), { branches: [br([{ kind: 'mentor', id: 'fenwick-eon' }], 'You sit by the nest, and Fenwick Eon sits down beside you without a word. Fenwick: "My Eevee was born here." He reaches out and touches the ribbon. You rest there until the light changes.', heal(1), bondUp(2, 'starter'), flag('roots-nest'))] }),
@@ -128,7 +130,7 @@ const ROOTS: Json[] = [
     ],
   },
   {
-    id: 'starter-old-orchard', requires: [not('roots-orchard')],
+    id: 'starter-old-orchard', requires: [STARTER_HERE, not('roots-orchard')],
     intro: 'An orchard of very old trees, gnarled and silver-barked, and as your starter walks between the rows, every tree leans a little toward it, the way leaves turn to the sun. The orchard keeper, Brae, leans on her rake. Brae: "The trees know their own. That one\'s not, quite." She shrugs. "They\'re polite to guests."',
     choices: [
       ch('Let it plant something.', out('Your starter digs a hole with great seriousness and puts a seed in it and pats the earth down. Brae marks the place with a stick. Brae: "I\'ll water it." The trees rustle.', bondUp(1, 'starter'), flag('roots-orchard'), flag('roots-planted'))),
@@ -142,7 +144,7 @@ const ROOTS: Json[] = [
     ],
   },
   {
-    id: 'starter-power-hum', requires: [not('roots-pylon')],
+    id: 'starter-power-hum', requires: [STARTER_HERE, not('roots-pylon')],
     intro: 'A pylon hums in a field, tall and old, its steel gone brown. Every wild Electric-type for a mile is standing in the grass, facing it, quite still. Your starter\'s fur, or skin, or leaves, lifts and sparks. A line worker on a ladder looks down. Odalys: "They come once a year. Like a pilgrimage. It\'s the oldest pylon in the region." She pats the steel. "It was a lightning tree first."',
     choices: [
       ch('Let it charge.', out('Your starter walks up to the pylon and touches it with its nose. A crack, a smell like rain. It comes back standing taller, and quicker on its feet.', stat('spe', { who: 'starter' }), flag('roots-pylon'))),
@@ -155,7 +157,7 @@ const ROOTS: Json[] = [
     ],
   },
   {
-    id: 'starter-tide-pool', requires: [not('roots-pool')],
+    id: 'starter-tide-pool', requires: [STARTER_HERE, not('roots-pool')],
     intro: 'A still pool by the sea, clear to the bottom. It reflects your starter perfectly. Something below the water is curious about it. A Wishiwashi rises, looks, and sinks. A diver sitting on the rocks with her mask pushed up: Marisol: "It\'s a nursery. Everything water-born starts in a pool like this." She looks at your starter. "Visitors welcome."',
     choices: [
       ch('Let it swim.', out('Your starter wades in and swims with the little one in slow circles until it is tired and happy.', bondUp(2, 'starter'), flag('roots-pool'))),
@@ -192,7 +194,7 @@ const RECIPES: Json[] = [
     id: 'chef-cook-together',
     intro: 'A street kitchen under a striped awning, everything hissing. A chef in a bright headscarf has two pans going and is holding out a third. Chef Tolu: "Fast hands, steady heart. Can you keep up?" She does not wait for an answer. "Two pans, one dish. You fry, I sauce."',
     choices: [
-      ch('Fry.', out('You fry. You burn the first lot and Tolu laughs and throws it to a Lickitung that has been waiting for exactly this. The second lot is perfect. Tolu teaches you Pan-Fried Oran.', flag('recipe-oran'), flag('recipe-known'), flag('cook-tolu'), WIN), { chance: 0.75, fail: out('You fry. You burn it twice, and Tolu laughs, and sends you off with a full stomach and no recipe. Tolu: "Come back with steadier hands."', heal(0.5), flag('cook-tolu')) }),
+      ch('Fry.', out('You fry. You burn the first lot and Tolu laughs and throws it to a Lickitung that has been waiting for exactly this. The second lot is perfect. Tolu teaches you Pan-Fried Oran.', flag('recipe-oran'), flag('recipe-known'), flag('cook-tolu'), WIN), { prompt: { id: 'throw-ring', needs: 'good' }, fail: out('You fry. You burn it twice, and Tolu laughs, and sends you off with a full stomach and no recipe. Tolu: "Come back with steadier hands."', heal(0.5), flag('cook-tolu')) }),
       ch('Sauce.', out('You stir. Tolu shouts times at you like a drill sergeant. It comes together all at once, glossy and bright, and she kisses her fingers. Tolu teaches you Pan-Fried Oran.', flag('recipe-oran'), flag('recipe-known'), flag('cook-tolu'), WIN), { chance: 0.75, fail: out('The sauce splits. Tolu sighs and fixes it in two seconds with a whisk. Tolu: "Next time, darling." You eat well. You learn nothing.', heal(0.5), flag('cook-tolu')) }),
       ch('Let my Pokémon help.', out('Your Fire-type takes the heat under both pans and holds it exactly, without being told, the whole time. Tolu stares. Tolu: "Can I hire it?" She teaches you Pan-Fried Oran, and gives your Fire-type the burnt bits, which it loves.', flag('recipe-oran'), flag('recipe-known'), flag('cook-tolu'), WIN, fr(4, { types: ['fire'] })), { requires: [anyType('fire')] }),
     ],

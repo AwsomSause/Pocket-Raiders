@@ -972,8 +972,13 @@
     {
      "label": "Tell him about a kindness.",
      "success": {
-      "text": "He nods slowly through it. When you're done he reaches into his coat and puts three berries in your hand, still cold from the night air. Oswin: \"For the next one.\"",
+      "text": "He nods slowly through it. When you're done he reaches into his coat and puts three berries in your hand, still cold from the night air. Oswin: \"For the next one.\" Then he tells you the campers' oath, the one nobody ever wrote down: no one is left behind on the trail.",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "lore-lantern-oath",
+        "amount": 1
+       },
        {
         "kind": "item",
         "id": "oran-berry",

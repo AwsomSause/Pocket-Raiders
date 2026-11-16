@@ -75,13 +75,14 @@ describe('story foundation: random streams', () => {
   // Re-pinned for starters drawn from Remembrances (all seven change: the starter draw is new). Re-pinned for the boss teams (custom forms, lore Legendaries; #1063/#1066/boss-forms fix): STORY1, 2, 5 and 8 meet a changed gym. Re-pinned three seeds (STORY2/0, STORY5/0 and one more) for the Beta 0.6 boss item budget (bosses and rivals now heal up to 10 times and revive fallen teammates; verified it is the only cause by switching the budget off, which restored the old hash).
   // Re-pinned STORY6/0 for Shadow II (Shadow tiers replace the flat Shadow damage and the old Sealed ignore roll; a player Shadow fights in that seed). Re-pinned STORY1, 2, 4-8 for Catalog Overhaul places (new and rebuilt run events in the draw pool). Re-pinned STORY1, 2 and 4-8 again in the batch-2 combine (places and singles together; 7 and 8 equal the places pins).
   // Re-pinned STORY1, 2, 5 and 6 for the Catalog Overhaul singles row (SF155 fossil dig): Plume, Root and Claw Fossils are uncommon, as the doc's fossil dig names them the common fossils, so reward and shop draws that hold a fossil pick differently.
+  // Re-pinned STORY1 and 4 to 7 for Catalog Overhaul families-a (rebuilt story-family events in the draw pool; hazards answered by a Pokémon give a typed item).
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': '76620216e74baf2d',
+    'STORY1/0': 'f6d87023062d411e',
     'STORY2/0': 'f1731ee4f116e125', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
-    'STORY4/0': 'adfc8d9502fc389a',
-    'STORY5/0': 'a6099f4ca8eccf94',
-    'STORY6/0': '8a764ab2419fbb33', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
-    'STORY7/0': '930225c642d5d246',
+    'STORY4/0': 'ed7be324c68dd80c',
+    'STORY5/0': 'e4b23b579decb106',
+    'STORY6/0': '320e09f757ac25a2', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
+    'STORY7/0': '78130c8fd7e0f94a',
     'STORY8/0': '53d45581a33a0825',
   };
   // Hyper moments (M8.9 Phase 1) do change battles on purpose, so the check runs without their definitions:

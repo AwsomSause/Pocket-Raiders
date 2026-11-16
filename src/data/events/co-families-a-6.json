@@ -843,6 +843,9 @@
    "minStage": 2,
    "requires": [
     {
+     "kind": "starter"
+    },
+    {
      "kind": "flag",
      "key": "roots-shrine",
      "atLeast": 0,
@@ -1046,6 +1049,9 @@
    ],
    "minStage": 2,
    "requires": [
+    {
+     "kind": "starter"
+    },
     {
      "kind": "flag",
      "key": "roots-nest",
@@ -1322,6 +1328,9 @@
    "minStage": 2,
    "requires": [
     {
+     "kind": "starter"
+    },
+    {
      "kind": "flag",
      "key": "roots-orchard",
      "atLeast": 0,
@@ -1556,6 +1565,9 @@
    "minStage": 2,
    "requires": [
     {
+     "kind": "starter"
+    },
+    {
      "kind": "flag",
      "key": "roots-pylon",
      "atLeast": 0,
@@ -1733,6 +1745,9 @@
    ],
    "minStage": 2,
    "requires": [
+    {
+     "kind": "starter"
+    },
     {
      "kind": "flag",
      "key": "roots-pool",
@@ -2118,7 +2133,10 @@
    "choices": [
     {
      "label": "Fry.",
-     "chance": 0.75,
+     "prompt": {
+      "id": "throw-ring",
+      "needs": "good"
+     },
      "success": {
       "text": "You fry. You burn the first lot and Tolu laughs and throws it to a Lickitung that has been waiting for exactly this. The second lot is perfect. Tolu teaches you Pan-Fried Oran.",
       "effects": [

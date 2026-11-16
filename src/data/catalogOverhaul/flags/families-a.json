@@ -4865,6 +4865,62 @@
    "note": "SF19 Village That Repeats record flags (how it went). Kept in the run log."
   },
   {
+   "key": "lore-first-ember",
+   "setBy": [
+    "farmers-quest-3"
+   ],
+   "readBy": [],
+   "note": "Lore fragments (data/npcStory.json lore): the journal reads every lore-<id> flag."
+  },
+  {
+   "key": "lore-hollow-bell",
+   "setBy": [
+    "funeral-respects"
+   ],
+   "readBy": [],
+   "note": "Lore fragments (data/npcStory.json lore): the journal reads every lore-<id> flag."
+  },
+  {
+   "key": "lore-lantern-oath",
+   "setBy": [
+    "ranger-trust-2"
+   ],
+   "readBy": [],
+   "note": "Lore fragments (data/npcStory.json lore): the journal reads every lore-<id> flag."
+  },
+  {
+   "key": "lore-last-lullaby",
+   "setBy": [
+    "funeral-respects"
+   ],
+   "readBy": [],
+   "note": "Lore fragments (data/npcStory.json lore): the journal reads every lore-<id> flag."
+  },
+  {
+   "key": "lore-ledger-tide",
+   "setBy": [
+    "peddler-2"
+   ],
+   "readBy": [],
+   "note": "Lore fragments (data/npcStory.json lore): the journal reads every lore-<id> flag."
+  },
+  {
+   "key": "lore-paper-crane",
+   "setBy": [
+    "pen-pal-letter"
+   ],
+   "readBy": [],
+   "note": "Lore fragments (data/npcStory.json lore): the journal reads every lore-<id> flag."
+  },
+  {
+   "key": "lore-whisper-wood",
+   "setBy": [
+    "blind-describer"
+   ],
+   "readBy": [],
+   "note": "Lore fragments (data/npcStory.json lore): the journal reads every lore-<id> flag."
+  },
+  {
    "key": "lost-pet-carried",
    "setBy": [
     "ev-lost-pokemon"
@@ -4876,7 +4932,7 @@
   {
    "key": "map-champion-met",
    "setBy": [
-    "dg-treasure-dig-c"
+    "th-dig-c"
    ],
    "readBy": [],
    "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
@@ -4884,7 +4940,7 @@
   {
    "key": "map-knew",
    "setBy": [
-    "dg-treasure-dig-a"
+    "th-dig-a"
    ],
    "readBy": [],
    "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
@@ -4892,7 +4948,7 @@
   {
    "key": "map-note",
    "setBy": [
-    "dg-treasure-dig-b"
+    "th-dig-b"
    ],
    "readBy": [],
    "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
@@ -4920,7 +4976,7 @@
   {
    "key": "map-took-all",
    "setBy": [
-    "dg-treasure-dig-b"
+    "th-dig-b"
    ],
    "readBy": [],
    "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
@@ -4928,7 +4984,7 @@
   {
    "key": "map-took-one",
    "setBy": [
-    "dg-treasure-dig-b"
+    "th-dig-b"
    ],
    "readBy": [],
    "note": "SF23 Treasure Map record flags (how it went). Kept in the run log."
@@ -5098,6 +5154,14 @@
    "readBy": [
     "mom-second-parcel"
    ]
+  },
+  {
+   "key": "mudslide-saved",
+   "setBy": [
+    "mudslide-rescue"
+   ],
+   "readBy": [],
+   "note": "Read by the places row: mudslide-thanks (co-places-17) thanks you a stage later."
   },
   {
    "key": "nobody-caught",
@@ -6986,6 +7050,14 @@
    "readBy": [
     "wil-badge"
    ]
+  },
+  {
+   "key": "won-circuit",
+   "setBy": [
+    "tournament-final"
+   ],
+   "readBy": [],
+   "note": "Read by the places row: circuit-fans (co-places-5) after you win the Rival Circuit."
   },
   {
    "key": "zygarde-cells",

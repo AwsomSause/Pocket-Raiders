@@ -96,5 +96,8 @@
  "rep-lost": "Shared board: Reputation -1 (families-c owns Reputation and reads it).",
  "shop-loyalty": "Set by the older shopkeeper-loyalty events (eventsW5.json; core/npcShop.ts reads it for discounts). The Empty Shelf keeps its old placement: Mrs. Arden opens up to a loyal customer.",
  "spooky-met": "Read by code: services/flow.ts FORM_FAMILY_FLAGS opens Spooky forms to eggs and trades.",
- "th-*": "Treasure Hunt Season flags: the season engine folds th-piece-N and th-claimed (existing S150 feature)."
+ "th-*": "Treasure Hunt Season flags: the season engine folds th-piece-N and th-claimed (existing S150 feature).",
+ "lore-*": "Lore fragments (data/npcStory.json lore): the journal reads every lore-<id> flag.",
+ "mudslide-saved": "Read by the places row: mudslide-thanks (co-places-17) thanks you a stage later.",
+ "won-circuit": "Read by the places row: circuit-fans (co-places-5) after you win the Rival Circuit."
 }

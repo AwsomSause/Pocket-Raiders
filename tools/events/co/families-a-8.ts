@@ -55,7 +55,7 @@ const DISCIPLE: Json[] = [
     ch('Not today.', out('Not today. Kubfu looks at the one you never use, and then at you, and sighs like an old man.', TRIED)),
   ], { callback: true, requires: [is('kubfu-on'), not('kubfu-test-3')] }),
   {
-    id: 'galar-kubfu-tower', room: false, callback: true, requires: [is('kubfu-on'), is('kubfu-tests', 3), not('kubfu-done')],
+    id: 'galar-kubfu-tower', room: false, callback: true, requires: [inRegion('galar'), is('kubfu-on'), is('kubfu-tests', 3), not('kubfu-done')],
     intro: 'Two towers above the mist, one black as a closed eye, one with water pouring down every side of it like a waterfall standing up. Hiro stands between them. He will not choose. Hiro: "Kubfu learns from the tower it climbs. Dark teaches it to strike once and end it. Water teaches it to keep coming." He looks at you. "It\'ll climb the one you walk to. Don\'t think about what\'s stronger. Think about what you are."',
     choices: [
       ch('The Tower of Darkness.', out('You walk to the dark tower. Kubfu runs ahead of you to the door.', room('kubfu-dark-1'))),

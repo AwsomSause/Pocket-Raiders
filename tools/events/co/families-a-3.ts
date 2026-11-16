@@ -97,7 +97,7 @@ const RANGER: Json[] = [
     intro: 'The same clearing, somehow, though you are a whole region away. A different season in the trees. Oswin puts a kettle on without asking, and moves his pack off the log so there is room. Oswin: "Back again." He settles. "Tell me about the road."',
     choices: [
       ch('Tell him about a hard battle.', out('He listens to all of it without interrupting, the way people only listen when they have been in a few. When you finish he says one thing, about the next Gym Leader, and the way they open. It is exactly the right thing.', gym(), flag('ranger-v2'))),
-      ch('Tell him about a kindness.', out('He nods slowly through it. When you\'re done he reaches into his coat and puts three berries in your hand, still cold from the night air. Oswin: "For the next one."', item('oran-berry', 3), flag('ranger-v2'))),
+      ch('Tell him about a kindness.', out('He nods slowly through it. When you\'re done he reaches into his coat and puts three berries in your hand, still cold from the night air. Oswin: "For the next one." Then he tells you the campers\' oath, the one nobody ever wrote down: no one is left behind on the trail.', flag('lore-lantern-oath'), item('oran-berry', 3), flag('ranger-v2'))),
       ch('Ask about his road.', out('Oswin is quiet for so long you think he hasn\'t heard. Oswin: "Forty years with an Arcanine called Ember." He watches the fire. "She went last winter. I\'ve been sitting here since." The Ursaring, asleep, shifts closer to him.', flag('ranger-v2'), flag('ranger-ember'))),
     ],
   },

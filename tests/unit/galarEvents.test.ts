@@ -13,12 +13,13 @@ describe('Galar events', () => {
     }
   });
   it('Kubfu: joins via trial or trust, then the tower gives either Urshifu style', () => {
-    const disciple = JSON.stringify(content.events.get('galar-kubfu-disciple'));
-    expect(disciple).toContain('"eventId":"galar-kubfu-tower"');
+    // Catalog Overhaul (SF41): the tower is a later stop once Kubfu has passed three tests, and each tower's top floor
+    // brings the Urshifu of that style to join you.
     const tower = content.events.get('galar-kubfu-tower')!;
-    expect(tower.room).toBe(true);
-    const forms = JSON.stringify(tower).match(/"to":"([a-z-]+)"/g);
-    expect(forms).toEqual(['"to":"urshifu"', '"to":"urshifu-rapid-strike"']);
+    expect(tower.callback).toBe(true);
+    expect(JSON.stringify(tower.requires)).toContain('"key":"kubfu-tests","atLeast":3');
+    const joins = ['kubfu-dark-2', 'kubfu-water-2'].map((id) => JSON.stringify(content.events.get(id)).match(/"kind":"join"[^}]*"species":\["([a-z-]+)"\]/)?.[1]);
+    expect(joins).toEqual(['urshifu', 'urshifu-rapid-strike']);
   });
   it('every species, boss and item an event names exists', () => {
     for (const id of IDS) {

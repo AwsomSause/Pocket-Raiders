@@ -104,6 +104,6 @@ describe('Alphas and the Exhibition Bracket', () => {
     run.stage!.visited = [node.id];
     node.sides.push({ id: 'test-event', kind: 'event', used: false, eventId: 'story-tour-registration' });
     const after = chooseEvent(content, run, 'test-event', 0);
-    expect(after.run.story.flags['ev:story-tour-entered']).toBe(1);
+    expect(after.run.story.flags['ev:exhibit-in']).toBe(1); // Catalog Overhaul (SF20): the Exhibition Bracket's entry flag
   });
 });

@@ -2,6 +2,9 @@
  "catalogOverhaul": "families-a",
  "override": true,
  "remove": [
+  "dg-treasure-dig-a",
+  "dg-treasure-dig-b",
+  "dg-treasure-dig-c",
   "ovc-treasure-map-s1",
   "ovc-treasure-map-s2"
  ],
@@ -433,7 +436,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "dg-treasure-dig-a"
+        "eventId": "th-dig-a"
        }
       ]
      }
@@ -441,22 +444,18 @@
    ]
   },
   {
-   "id": "dg-treasure-dig-a",
+   "id": "th-dig-a",
    "name": "The Mechanism",
    "group": "Treasure Hunt",
    "stop": "treasure",
    "rarity": "rare",
-   "tags": [
-    "Dungeon",
-    "Exploration"
-   ],
-   "room": true,
+   "types": [],
    "scene": {
     "cast": [],
     "tint": "#5a4a14",
     "effect": "sparkle"
    },
-   "types": [],
+   "room": true,
    "requires": [],
    "intro": "Five symbols on five stone dials, worn smooth by hands or water. The compass rose on the fifth piece of the map shows an order.",
    "choices": [
@@ -467,7 +466,7 @@
       "effects": [
        {
         "kind": "addEvent",
-        "eventId": "dg-treasure-dig-b"
+        "eventId": "th-dig-b"
        }
       ]
      }
@@ -491,7 +490,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "dg-treasure-dig-b"
+        "eventId": "th-dig-b"
        }
       ]
      }
@@ -508,7 +507,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "dg-treasure-dig-b"
+        "eventId": "th-dig-b"
        }
       ]
      }
@@ -516,22 +515,18 @@
    ]
   },
   {
-   "id": "dg-treasure-dig-b",
+   "id": "th-dig-b",
    "name": "The Chest",
    "group": "Treasure Hunt",
    "stop": "treasure",
    "rarity": "rare",
-   "tags": [
-    "Dungeon",
-    "Exploration"
-   ],
-   "room": true,
+   "types": [],
    "scene": {
     "cast": [],
     "tint": "#5a4a14",
     "effect": "sparkle"
    },
-   "types": [],
+   "room": true,
    "requires": [],
    "intro": "A side room. A battered chest with iron corners. On top of it, under a stone, a note in a Champion's hand. \"I won. It was lonely. I put my best things here for whoever came looking, because whoever came looking is curious, and that's the best kind of trainer. Take what you need. Leave a note for the next one.\"",
    "choices": [
@@ -586,7 +581,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "dg-treasure-dig-c"
+        "eventId": "th-dig-c"
        }
       ]
      }
@@ -616,7 +611,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "dg-treasure-dig-c"
+        "eventId": "th-dig-c"
        }
       ]
      }
@@ -646,7 +641,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "dg-treasure-dig-c"
+        "eventId": "th-dig-c"
        }
       ]
      }
@@ -654,22 +649,18 @@
    ]
   },
   {
-   "id": "dg-treasure-dig-c",
+   "id": "th-dig-c",
    "name": "Daylight",
    "group": "Treasure Hunt",
    "stop": "treasure",
    "rarity": "rare",
-   "tags": [
-    "Dungeon",
-    "Exploration"
-   ],
-   "room": true,
+   "types": [],
    "scene": {
     "cast": [],
     "tint": "#5a4a14",
     "effect": "sparkle"
    },
-   "types": [],
+   "room": true,
    "requires": [],
    "intro": "Daylight again, and the way out open. At the cave mouth, sitting on a rock with their hands round their knees, is an old trainer. You know the face. You saw it in bronze, younger.",
    "choices": [

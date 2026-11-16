@@ -5,7 +5,7 @@ import { grunt, is, later, moment, not, safe, sub, v, withRooms } from './_fa.ts
 
 export const CATEGORY = 'families-a';
 /** The Torn Treasure Map chain is the map's pieces 3 and 4 (see _fa-retired.json). */
-export const REMOVE = ['ovc-treasure-map-s1', 'ovc-treasure-map-s2'];
+export const REMOVE = ['ovc-treasure-map-s1', 'ovc-treasure-map-s2', 'dg-treasure-dig-a', 'dg-treasure-dig-b', 'dg-treasure-dig-c'];
 
 const soon = (eventId: string, nodes: number): Json => ({ kind: 'laterEvent', eventId, nodes });
 const again = (eventId: string): Json => ({ kind: 'seeAgain', eventId });
@@ -60,20 +60,20 @@ const MAP: Json[] = [
     id: 'th-treasure', requires: [is('th-piece-1'), is('th-piece-2'), is('th-piece-3'), is('th-piece-4'), is('th-piece-5'), not('th-claimed')],
     intro: 'All five pieces, laid out on a flat rock and weighed down with stones, fit together at last. The torn corner, the faded edge, the two halves, the compass rose. An X, in faded ink. You look up from it, and around, and realise the X is here: this exact spot. The ground is soft.',
     choices: [
-      ch('Dig.', out('You dig. Your team digs. Something that digs better than you digs best of all. Two feet down: a carved stone, worn but readable. A mechanism.', flag('th-claimed'), room('dg-treasure-dig-a'))),
+      ch('Dig.', out('You dig. Your team digs. Something that digs better than you digs best of all. Two feet down: a carved stone, worn but readable. A mechanism.', flag('th-claimed'), room('th-dig-a'))),
     ],
   },
-  sub('th-treasure', 'dg-treasure-dig-a', 'The Mechanism', 'Five symbols on five stone dials, worn smooth by hands or water. The compass rose on the fifth piece of the map shows an order.', [
-    ch('Set it by the compass.', out('You turn the dials one by one, in the compass rose\'s order. On the fifth, a deep click, and a breath of cold air from below. It opens.', room('dg-treasure-dig-b'))),
-    ch('Force it.', out('Your strongest Fighting-type puts its shoulder to it and the stone cracks. So does the roof. A cave-in, a roar of dust; when it clears, the way is open and one of your team is bruised and coughing.', hurt(0.2), room('dg-treasure-dig-b')), { requires: [anyType('fighting')] }),
-    ch('Look at piece one again.', out('The torn corner. "...not for the Ch..." You turn it over. On the back, faint: "Not for the Champion. For whoever comes after." You set the dials. It opens. And you know whose this is.', flag('map-knew'), room('dg-treasure-dig-b'))),
+  sub('th-treasure', 'th-dig-a', 'The Mechanism', 'Five symbols on five stone dials, worn smooth by hands or water. The compass rose on the fifth piece of the map shows an order.', [
+    ch('Set it by the compass.', out('You turn the dials one by one, in the compass rose\'s order. On the fifth, a deep click, and a breath of cold air from below. It opens.', room('th-dig-b'))),
+    ch('Force it.', out('Your strongest Fighting-type puts its shoulder to it and the stone cracks. So does the roof. A cave-in, a roar of dust; when it clears, the way is open and one of your team is bruised and coughing.', hurt(0.2), room('th-dig-b')), { requires: [anyType('fighting')] }),
+    ch('Look at piece one again.', out('The torn corner. "...not for the Ch..." You turn it over. On the back, faint: "Not for the Champion. For whoever comes after." You set the dials. It opens. And you know whose this is.', flag('map-knew'), room('th-dig-b'))),
   ]),
-  sub('th-treasure', 'dg-treasure-dig-b', 'The Chest', 'A side room. A battered chest with iron corners. On top of it, under a stone, a note in a Champion\'s hand. "I won. It was lonely. I put my best things here for whoever came looking, because whoever came looking is curious, and that\'s the best kind of trainer. Take what you need. Leave a note for the next one."', [
-    ch('Take everything.', out('Three things, wrapped in oilcloth, each one rare. You take them all.', any(...RARE_HELD), any(...RARE_HELD), any(...RARE_HELD), flag('map-took-all'), room('dg-treasure-dig-c'))),
-    ch('Take one thing.', out('You take one thing, the one that seems most like yours, and close the lid on the rest. Someone else will come looking.', any(...RARE_HELD), flag('map-took-one'), room('dg-treasure-dig-c'))),
-    ch('Leave a note.', out('You take one thing. Then you sit on the chest and write a note for whoever comes after you, the way they did. It takes a long time. You put it under the stone with theirs.', any(...RARE_HELD), flag('map-note'), room('dg-treasure-dig-c'))),
+  sub('th-treasure', 'th-dig-b', 'The Chest', 'A side room. A battered chest with iron corners. On top of it, under a stone, a note in a Champion\'s hand. "I won. It was lonely. I put my best things here for whoever came looking, because whoever came looking is curious, and that\'s the best kind of trainer. Take what you need. Leave a note for the next one."', [
+    ch('Take everything.', out('Three things, wrapped in oilcloth, each one rare. You take them all.', any(...RARE_HELD), any(...RARE_HELD), any(...RARE_HELD), flag('map-took-all'), room('th-dig-c'))),
+    ch('Take one thing.', out('You take one thing, the one that seems most like yours, and close the lid on the rest. Someone else will come looking.', any(...RARE_HELD), flag('map-took-one'), room('th-dig-c'))),
+    ch('Leave a note.', out('You take one thing. Then you sit on the chest and write a note for whoever comes after you, the way they did. It takes a long time. You put it under the stone with theirs.', any(...RARE_HELD), flag('map-note'), room('th-dig-c'))),
   ]),
-  sub('th-treasure', 'dg-treasure-dig-c', 'Daylight', 'Daylight again, and the way out open. At the cave mouth, sitting on a rock with their hands round their knees, is an old trainer. You know the face. You saw it in bronze, younger.', [
+  sub('th-treasure', 'th-dig-c', 'Daylight', 'Daylight again, and the way out open. At the cave mouth, sitting on a rock with their hands round their knees, is an old trainer. You know the face. You saw it in bronze, younger.', [
     ch('It was yours?', out('Champion: "Was." They smile. "Now yours." They stand, stiffly, and shake your hand, and their grip is still strong.', flag('map-champion-met'))),
     ch('Thank you.', out('They nod, once, and look out at the view, and do not say anything. They do not need to.', flag('map-champion-met'))),
     ch('Why hide it?', out('Champion: "So I\'d have a reason to come back," they say, "and see who found it." They look at you for a long moment. "I\'m glad it was you."', flag('map-champion-met'))),

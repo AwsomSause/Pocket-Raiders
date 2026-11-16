@@ -533,7 +533,7 @@ export function conditionText(content: Content, c: EventCondition): string {
     case 'partyGroup':
       return c.atLeast > 1 ? `Needs ${c.atLeast} of the ${c.group.replace(/-/g, ' ')} in your party` : `Needs one of the ${c.group.replace(/-/g, ' ')} in your party`;
     case 'starter':
-      return 'Needs a particular starter';
+      return c.type || c.species || c.tag ? 'Needs a particular starter' : 'Needs your starter in the party';
     case 'photos':
       return `Needs ${c.atLeast} camp photo${c.atLeast === 1 ? '' : 's'}`;
     case 'bond':

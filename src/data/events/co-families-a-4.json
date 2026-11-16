@@ -2633,6 +2633,11 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "won-circuit",
+        "amount": 1
+       },
+       {
         "kind": "addEvent",
         "eventId": "rq-circuit-final"
        }
@@ -2658,6 +2663,11 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "won-circuit",
+        "amount": 1
+       },
+       {
         "kind": "addEvent",
         "eventId": "rq-circuit-final"
        }
@@ -2680,6 +2690,11 @@
        {
         "kind": "flag",
         "key": "rcircuit-final",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "won-circuit",
         "amount": 1
        },
        {
@@ -3128,6 +3143,11 @@
         "kind": "flag",
         "key": "contest-super",
         "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 3
        }
       ],
       "battle": {
@@ -3165,6 +3185,11 @@
         "kind": "flag",
         "key": "contest-super",
         "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 3
        },
        {
         "kind": "friendship",
@@ -3207,6 +3232,11 @@
         "kind": "flag",
         "key": "contest-super",
         "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 3
        }
       ],
       "battle": {
@@ -4219,6 +4249,11 @@
         "kind": "flag",
         "key": "contest-super",
         "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 3
        }
       ],
       "battle": {
@@ -4256,6 +4291,11 @@
         "kind": "flag",
         "key": "contest-super",
         "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 3
        },
        {
         "kind": "friendship",
@@ -4298,6 +4338,11 @@
         "kind": "flag",
         "key": "contest-super",
         "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 3
        }
       ],
       "battle": {

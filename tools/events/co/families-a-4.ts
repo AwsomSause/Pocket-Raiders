@@ -197,9 +197,9 @@ const CIRCUIT: Json[] = [
     id: 'tournament-final',
     intro: 'The final. The best of the circuit stands across the field from you, and the whole plaza has gone quiet. Then the Champion herself walks out between you, and the quiet gets deeper. The Champion: "I arranged this circuit because I wanted to see who you\'d all become." She looks from one of you to the other. "Thank you for showing me."',
     choices: [
-      ch('Thank you.', out('She smiles, and steps back, and the final purse of ₽1,200 is set on the table between the two tunnels, for whoever walks out last.', $(1200), { kind: 'tournament', round: 9 }, flag('rcircuit-final'), room('rq-circuit-final'))),
-      ch('Let\'s begin.', out('The Champion nods once and steps back. The purse is on the table. The crowd leans in.', $(1200), { kind: 'tournament', round: 9 }, flag('rcircuit-final'), room('rq-circuit-final'))),
-      ch('Why us?', out('The Champion: "Because you kept meeting each other," she says. "That\'s how rivals are made." She steps back, and the purse of ₽1,200 is on the table, and it does not seem very important any more.', $(1200), { kind: 'tournament', round: 9 }, flag('rcircuit-final'), room('rq-circuit-final'))),
+      ch('Thank you.', out('She smiles, and steps back, and the final purse of ₽1,200 is set on the table between the two tunnels, for whoever walks out last.', $(1200), { kind: 'tournament', round: 9 }, flag('rcircuit-final'), flag('won-circuit'), room('rq-circuit-final'))),
+      ch('Let\'s begin.', out('The Champion nods once and steps back. The purse is on the table. The crowd leans in.', $(1200), { kind: 'tournament', round: 9 }, flag('rcircuit-final'), flag('won-circuit'), room('rq-circuit-final'))),
+      ch('Why us?', out('The Champion: "Because you kept meeting each other," she says. "That\'s how rivals are made." She steps back, and the purse of ₽1,200 is on the table, and it does not seem very important any more.', $(1200), { kind: 'tournament', round: 9 }, flag('rcircuit-final'), flag('won-circuit'), room('rq-circuit-final'))),
     ],
   },
 ];
@@ -212,6 +212,8 @@ const RIBBON = flag('contest-ribbons');
 /** The Contest Partner: picked at the first contest (remembered for the run; the scenes after read it as `picked`). */
 const PARTNER = { pick: { types: [] } };
 const STARTER_PARTNER: Json = { kind: 'picked', types: [], starter: true };
+// A Contest stage builds Charisma (a Prop Case doubles it at a Contest stop).
+const CHARM: Json = { kind: 'attribute', key: 'charisma', amount: 3 };
 const show = (name: string, moves: number, o: { lv?: number; win?: Json[]; format?: 'doubles'; cls?: string } = {}): Json =>
   safe(trainer(name, { cls: o.cls ?? 'aroma-lady', size: 3, lv: o.lv ?? 0, rule: { contest: moves }, ...(o.format ? { format: o.format } : {}), win: o.win ?? [] }));
 
@@ -250,9 +252,9 @@ const CONTESTS: Json[] = [
     id: 'contest-pass-hall',
     intro: 'Your Contest Pass gets you through a gold door onto the biggest stage you have seen, and the crowd is already there, waiting, in the hush before something. Vivienne sweeps out in a new set of sequins. Vivienne: "Super Contest! An appeal round, then a battle round where nobody faints, darling. We only score."',
     choices: [
-      ch('Go.', fight('Two rounds: appeal, then battle. Your partner leads both.', show('Super Contest', 4, { lv: 1, win: [RIBBON, $(600)] }), flag('contest-super'))),
-      ch('Calm my partner first.', fight('You crouch down in the wings and put your forehead to your partner\'s, and stay there until you are both breathing the same. The appeal round goes better for it.', show('Super Contest', 4, { lv: 0, win: [RIBBON, $(600)] }), flag('contest-super'), bondUp(1, 'picked'))),
-      ch('Look for a familiar face.', fight('You scan the crowd. If Beauty Bianca came, she is out there somewhere in the dark, watching you; if her story is done, she is at the judges\' table, and she winks.', show('Super Contest', 4, { lv: 1, win: [RIBBON, $(600)] }), flag('contest-super'))),
+      ch('Go.', fight('Two rounds: appeal, then battle. Your partner leads both.', show('Super Contest', 4, { lv: 1, win: [RIBBON, $(600)] }), flag('contest-super'), CHARM)),
+      ch('Calm my partner first.', fight('You crouch down in the wings and put your forehead to your partner\'s, and stay there until you are both breathing the same. The appeal round goes better for it.', show('Super Contest', 4, { lv: 0, win: [RIBBON, $(600)] }), flag('contest-super'), CHARM, bondUp(1, 'picked'))),
+      ch('Look for a familiar face.', fight('You scan the crowd. If Beauty Bianca came, she is out there somewhere in the dark, watching you; if her story is done, she is at the judges\' table, and she winks.', show('Super Contest', 4, { lv: 1, win: [RIBBON, $(600)] }), flag('contest-super'), CHARM)),
     ],
     remembers: [
       v('organiser', [is('contest-organiser-hurt'), not('contest-sorry')], {

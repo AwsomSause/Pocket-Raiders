@@ -13,7 +13,7 @@ Docs: `STORY_FAMILIES_1.md`, `_2`, `_3`, `_4`, `_7` in `/mnt/project-files/catal
 ## Where this stopped (resumed 2026-11-16, batch 3)
 - Done: docs 1 to 4 and 7 (built, re-read, tested). Doc 3 is `families-a-4` and `-5`; doc 4 is `-6` (Village, Nobody, Roots, Cooking), `-7` (Treasure Map, Last Shift, Egg in the Fire, Courier) and `-8` (Disciple, Readings, Fog Bell, Storm-Grey Coat).
 - `starter-fever-week` (listed under doc 4) is a game-event week in `gameEvents.json`, not an event: its rework (the weeks rule) is left pending for whoever reworks the weeks.
-- Still to do: placement file; update notes; browser test; `npm run check`; mark PR #1315 ready (the catalog lead combines the batch).
+- Done since: update notes (`docs/updates/catalog-overhaul/families-a.md`), browser test (`tests/e2e/coFamiliesA.spec.ts`), old systems wired back in (below). Still to do: placement on the 20-step map (catalog lead's step); the catalog lead combines the batch.
 
 ## Known limits (honest list)
 Doc 1 (SF1 to SF6)
@@ -47,7 +47,7 @@ Doc 4 (SF19 to SF30)
 - Village That Repeats: each noon costs a node; leaving keeps it looping (it can be drawn again). Hesk's bread is a full heal now (no rest node "for the save"); Nim's apple is a Sitrus Berry. Celebi gives `sign-celebi`; counting it as a Telling is legends' to wire.
 - The Nobody: the key is a stop four nodes on. `nobody-told` is read but only other rows could set it (no share-a-secret line exists yet), so the dock ambush never happens yet. "Jenny's arc is good" is not checked: Nell always goes. "They caught the quiet one" is a line in the No outcome. Nell's second Pokémon is a Dark-type.
 - Starter's Roots: every place can be visited; the starter's own type (and the doc's closest types) gives the home version and stamps `roots-own`; the Home scene comes two regions later. "Stays home" is not built (no effect removes a chosen party Pokémon): the starter always comes back. The visit gifts that are cross-run (the orchard tree "in a later run") are flags. The pylon's charge for Electric starters is +10% to Electric moves for the region; others get +1 Speed point.
-- Cooking: recipes are cooked at a rest stop (`cook-at-rest`, drawn at rest stops once a recipe is known): one dish, two with the Golden Spoon. The timing and cook-off minigames are chance rolls (75% and 60%); "scored by flavour by nature" is a 60% roll. The pie and draft dishes are +10% to one stat for the next battle. The final needs three wins (`cook-wins`).
+- Cooking: recipes are cooked at a rest stop (`cook-at-rest`, drawn at rest stops once a recipe is known): one dish, two with the Golden Spoon. Tolu's cook-along is the timing prompt; the cook-off is a 60% roll; "scored by flavour by nature" is a 60% roll. The pie and draft dishes are +10% to one stat for the next battle. The final needs three wins (`cook-wins`).
 - Treasure Map: pieces 3 and 4 absorb the Torn Treasure Map chain. "One Rare item of the player's choice" is a random rare held item. The Past Champion's questline beat is the flag `map-champion-met`. Cross-run chest notes are not built.
 - Last Shift: the three stations are one choice (a Steel-type, an Electric-type, or a node by hand and a Klink). The Crestline Bell is a held Covert Cloak (blocks moves' extra effects, flinching among them). The Baxter museum (cross-run) is not built.
 - Egg in the Fire: the egg (Larvesta) hatches after three stages. Keeping it warm is a rest-stop scene for the rest of that region (`eggWarm`: sooner hatch, more friendship); devoted/normal/resentful temperaments and Morning Sun are not built. Heatran's Sign is `sign-heatran`.
@@ -61,7 +61,7 @@ Doc 7 (SF42 to SF54)
 - Hazards: "Wait" takes the next node. A few push costs are simplified: Pollen and Smog poison only the lead (a coin flip); Heat Wave's burn and the thunderstorm's paralysis hit the lead on a coin flip; the Solar Flare's hidden map is a small static shock instead (no map-hiding effect exists); the windstorm's lost turn is a slower next battle; Volcanic Ash is 15% lower accuracy for one battle. "Answered 3 this region" is three answered in the run with the last one this region. The Pathfinder ribbon is a party relic (+5% Speed everywhere, not only on hazard nodes).
 - Kindness Ledger: `kind-total` counts the whole run, not one region. The helpers come once per run, the night before a crisis climax (`kind-helpers`): 3+ a full heal, 5+ also less damage taken for two battles (stands in for "the split battle costs nothing"), 7+ also saves both places at the climax (it sets the climax ally's split flag). Mrs. Pryor's sandwich and the hiker's thanks are flags only. Gifts that were Potions are Berries or Sweet Berry Juice (no in-battle healing items). Hettie's drawing is a run moment and a flag (no hub picture yet). "Any amount" for the orphanage is ₽200 or ₽1,000.
 - Strangers: the Tellers are flags (`teller-<name>`); the Legendary and Mythical questlines (other rows) read them. "That Pokémon can't battle for a node" (the monk) is not built; the Pokémon gains Bond only.
-- Camp: four choices fit, so the checkpoint is Prepare (morning), Council (morning), Talk about the road (evening: the mentor if you have one; night: the rival) and Sit by the fire (any time: a 25% heal, then the quiet talk). "The oldest" is your first catch; "the least-bonded" and "the newest" are the newest. Sort the bag gives a Berry or a Great Ball (no item upgrades); Mend gear restores PP. The rival-in-trouble +2 Trust and "anyone under Bond 3" are not built. The rival-trail Pokémon going first next rival battle is a flag (`trail-first`).
+- Camp: the checkpoint has four choices: Make camp (rest: heal, cure, chemistry rest), Prepare (scout; sort in the afternoon; mend at night; celebrate on a milestone day), Hold council (morning or afternoon: Train, Play, Sleep) and Talk by the fire (evening or night: where they came from, home, the rival, the mentor). The old camp systems still run behind it: chemistry bonds and settled grudges (Play), the mentor's trust and mission (mentor talk), the rival Pokémon trail. "The oldest" is your first catch.
 - Borrowed Dog: Biscuit joins like any Pokémon (party limit applies; no seventh slot). Fainting is not tracked: if Biscuit is no longer with you, Della's "where is he?" scene plays; Bond 4 is the "never this happy" scene. The Arcanine and Oswin lines are not built.
 - Lost and Found: the lost pet is a Lillipup; the stray is Purrloin or Skitty; the fence Pokémon is `found-fence`. The AQ59 Meowth line is not built. Tib's "rescued one too" shows when 3+ rescues happened in the run.
 - Three Cards: three fixed cards with their effect printed on the button: The Sun (healing +10%), The Tower (foes two levels higher; "one more Pokémon per trainer" has no effect behind it) with Ostra's Lucky Egg, The Wheel (rare Pokémon 20% more likely).
@@ -70,6 +70,15 @@ Doc 7 (SF42 to SF54)
 - Riolu: the hidden watch count comes from the two return scenes (and +1 when your Kindness total is 3+), not from every camp choice. Aura Sphere is taught when the count is 2+; it evolves the normal way (friendship).
 - Honesty Tests: keeping sets `honest-kept-<what>` and `honest-kept`, Reputation -1/-2 (`rep-lost`) and Kindness down; the Apprentice's next scene becomes the Sly one. The ring also sets the shared `honest-kept-wallet` / `honest-returned-wallet` (MEMORY_AND_FORMAT 2.1). The Final Reunion owner (two keeps) is another row's.
 - Hospice: "The Lapras Who Waited is her mother" is not built (no such flag yet). A Lapras in your party sings back.
+
+Integration (kept so older systems keep working)
+- Spooky: Spooky Mode opens with `spooky-lantern-finds-you` (the mode's stop) and Spooky Season with `spooky-season-lantern`; the rest of the Hollow Lantern is mode-free follow-up scenes. Clues, the Keeper (boss) and the finale add to the mode's objective counters. The Coven detour battle uses Spooky forms and sets `spooky-met` (opens Spooky forms to eggs and trades).
+- Treasure Map pieces are `th-piece-N` and `th-claimed`, the flags the Treasure Hunt Season already reads.
+- Crisis reports need the region's crisis meter at 1 or more (the code places them at 2 or more).
+- A scene that sends you back to a stop that is also drawn on its own (or to itself, "ask first, then choose") opens a room copy `<id>-room` (`withRooms` in `_fa.ts`), because rooms are never drawn on their own.
+- The five Starter's Roots scenes need the starter still in the party (a bare `starter` condition).
+- Gifts the old hazards and the Treasure Dig gave are kept in the new shape: a lead that answers a hazard finds an item of its type (Charcoal, Miracle Seed and so on); the dig scenes are `th-dig-a/b/c` and the old `dg-treasure-dig-*` ids are retired into them. The mudslide rescue sets `mudslide-saved` and the Circuit final sets `won-circuit` (the places row's callbacks read them).
+- Old lore fragments that rebuilt events used to give are kept: First Ember (farmer), Tide Ledger (Wicker), Hollow Bell and Last Lullaby (funeral), Paper Crane (pen pal), Whisper Wood (the describer), Lantern Oath (Oswin). Tolu's cook-along is the timing prompt again.
 
 ## Re-read table
 Every row was re-read against its doc section after building (date = the re-read).
@@ -297,9 +306,9 @@ Every row was re-read against its doc section after building (date = the re-read
 | `spooky-pumpkin-king` | STORY_FAMILIES_3 SF16.12 The Pumpkin King and the Midnight Parade | built, re-read 2026-11-16 |
 | `spooky-pumpkin-patch` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
 | `spooky-trick-or-treat` | STORY_FAMILIES_3 SF16.10 The Festival Stops | built, re-read 2026-11-16 |
-| `dg-treasure-dig-a` | STORY_FAMILIES_4 SF23.6 X Marks the Spot | built, re-read 2026-11-16 |
-| `dg-treasure-dig-b` | STORY_FAMILIES_4 The Chest ( | built, re-read 2026-11-16 |
-| `dg-treasure-dig-c` | STORY_FAMILIES_4 Daylight ( | built, re-read 2026-11-16 |
+| `dg-treasure-dig-a` | STORY_FAMILIES_4 SF23.6 X Marks the Spot | merged into `th-dig-a`, re-read 2026-11-16 |
+| `dg-treasure-dig-b` | STORY_FAMILIES_4 The Chest ( | merged into `th-dig-b`, re-read 2026-11-16 |
+| `dg-treasure-dig-c` | STORY_FAMILIES_4 Daylight ( | merged into `th-dig-c`, re-read 2026-11-16 |
 | `ovc-treasure-map-s1` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | merged into `th-map-3`, re-read 2026-11-16 |
 | `ovc-treasure-map-s2` | STORY_FAMILIES_4 SF23.1–23.5 The Five Pieces | merged into `th-map-4`, re-read 2026-11-16 |
 | `starter-fever-week` | STORY_FAMILIES_4 STORY FAMILIES, PART 4 | pending |

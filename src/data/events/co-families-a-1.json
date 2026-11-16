@@ -9336,6 +9336,11 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "mudslide-saved",
+        "amount": 1
+       },
+       {
         "kind": "friendship",
         "amount": 8,
         "who": "lead"
@@ -9375,6 +9380,11 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "mudslide-saved",
+        "amount": 1
+       },
+       {
         "kind": "friendship",
         "amount": 8,
         "who": "lead"
@@ -9405,6 +9415,11 @@
        {
         "kind": "flag",
         "key": "rescue-mud-child",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mudslide-saved",
         "amount": 1
        },
        {
@@ -9462,6 +9477,11 @@
        {
         "kind": "flag",
         "key": "rescue-mud-child",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mudslide-saved",
         "amount": 1
        },
        {

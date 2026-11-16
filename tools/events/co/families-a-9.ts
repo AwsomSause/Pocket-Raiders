@@ -31,13 +31,18 @@ interface Hazard {
 }
 const PATHFINDER = relic('pathfinder', 'The Pathfinder Ribbon', [{ kind: 'statMultiplier', stat: 'spe', value: 1.05 }]);
 const answered = (key: string, types: string[]): Json[] => [bondUp(1, { types }), flagAt('hazard-answered'), flag(`hazard-${key}-used`)];
+// What a lead that answered a hazard noses out on the far side: an item of its own type.
+const TYPE_FIND: Record<string, string> = { fire: 'charcoal', grass: 'miracle-seed', water: 'mystic-water', ground: 'soft-sand', rock: 'hard-stone', electric: 'magnet', flying: 'sharp-beak', normal: 'silk-scarf', ghost: 'spell-tag', fighting: 'black-belt', poison: 'poison-barb', steel: 'metal-coat', dragon: 'dragon-fang', ice: 'ice-stone' };
+const FOUND = ' On the far side, your lead noses something out of the ground and brings it to you, very pleased with itself.';
 function hazard(h: Hazard): Json {
   const key = h.id.replace(/^wx-/, '');
   const use = (u: Use): Json => {
-    const fx = [...answered(key, u.types), ...(u.fx ?? [])];
-    return ch(`${u.label} (${u.types.map((t) => t.charAt(0).toUpperCase() + t.slice(1)).join(' or ')})`, out(u.text, ...fx), {
+    const finds = u.types.map((t) => TYPE_FIND[t]).filter((x): x is string => !!x);
+    const fx = [...answered(key, u.types), ...(u.fx ?? []), ...(finds.length ? [any(...finds)] : [])];
+    const text = finds.length ? u.text + FOUND : u.text;
+    return ch(`${u.label} (${u.types.map((t) => t.charAt(0).toUpperCase() + t.slice(1)).join(' or ')})`, out(text, ...fx), {
       requires: [anyType(...u.types)],
-      branches: [br([is('hazard-answered', 9), not('pathfinder')], `${u.text} On the far side, someone you have never met stops you with a hand on your arm. "That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it." They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.`, ...fx, PATHFINDER, flag('pathfinder'), moment('Your lead earned the Pathfinder ribbon: ten hazards answered, and everyone walked through', 70))],
+      branches: [br([is('hazard-answered', 9), not('pathfinder')], `${text} Then someone you have never met stops you with a hand on your arm. "That's ten. Ten times I've heard of a trainer letting their Pokémon lead people through the worst of it." They pin a faded ribbon to your lead: the Pathfinder ribbon. Your lead stands a little straighter, and from now on it is quicker on its feet.`, ...fx, PATHFINDER, flag('pathfinder'), moment('Your lead earned the Pathfinder ribbon: ten hazards answered, and everyone walked through', 70))],
     });
   };
   const push = (label: string, extraFx: Json[]): Json => ch(label, out(h.pushText, flag(`hazard-${key}-push`), ...h.pushFx, ...extraFx),
@@ -441,7 +446,7 @@ const STRANGERS: Json[] = [
     choices: [
       ch('Describe the view. (a node)', out('You sit down and tell her. You do it badly at first, and then better, the river like a dropped ribbon, the town like spilled sugar, the shadow of a cloud walking over the fields. She listens with her whole face. Marguerite: "You\'ve a good eye." In return she tells you a story her grandmother told her, about something small and bright that lives in this valley and is only seen by people who are not looking for it.', takeNode(1), flag('teller-marguerite'))),
       ch('Describe my team. (a node)', out('You describe your team instead, one by one. She asks each one\'s name, and says it back to them, slowly, getting it right. Each of them comes and puts its head under her hand when she says it. At the end she tells you a story about this valley that her grandmother told her, and you think the team listens as hard as you do.', takeNode(1), bondUp(1, 'party'), flag('teller-marguerite'))),
-      ch('Describe something that isn\'t there.', out('You tell her there is a dragon on the far hill, sunning itself. She laughs, a big surprising laugh. Marguerite: "There\'s no dragon. But thank you." She pats your hand.')),
+      ch('Describe something that isn\'t there.', out('You tell her there is a dragon on the far hill, sunning itself. She laughs, a big surprising laugh. Marguerite: "There\'s no dragon. But thank you." She pats your hand. Then she tells you about a wood where the trees repeat what trainers say, a season late. "Go and say something good there," she says.', flag('lore-whisper-wood'))),
     ],
   },
   {
