@@ -33,7 +33,7 @@ import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHo
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { bidoofJoin, bidoofStart } from './bidoof';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
-import { finalRest, xatuDraw, xatuTokens, xatuTrue } from './cartographer';
+import { finalRest, xatuBlur, xatuDraw, xatuPeek, xatuTokens, xatuTrue } from './cartographer';
 import { fluteReady, foodReady, snorlaxCaught, snorlaxFeed, snorlaxFollow, snorlaxFond, snorlaxStart } from './snorlax';
 import { allstarChampion, allstarDraw, allstarReady, allstarStart, allstarTokens, allstarUnbeaten, rivalTrustMax } from './allstar';
 import { lessonArrive, lessonBonus, lessonChampion, lessonEnd, lessonStart, lessonTeach } from './champion';
@@ -587,6 +587,11 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'draftLetter':
       return draftLetter(content, run);
     // gn.new.12: the Xatu's image (drawn from the stop's seeded roll); `xatuRedraw`: the second draw after Communion.
+    case 'xatuPeek':
+      return xatuPeek(content, run);
+    case 'xatuBlur':
+      xatuBlur(run);
+      return '';
     case 'xatuDraw':
     case 'xatuRedraw':
       return xatuDraw(content, run, host.float, e.op === 'xatuRedraw');

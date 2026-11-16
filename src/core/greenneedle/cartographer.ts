@@ -6,6 +6,7 @@
 // Only a Legendary Blessing's Communion can change the image (the Xatu's second visit). Flags live in `run.story.flags` as `ev:xatu-*`.
 import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
+import { scoutAhead } from '../world';
 import { isNative, wildEligibleSpecies } from '../themes';
 
 const f = (run: Pick<RunState, 'story'>, k: string): number => Number(run.story.flags[`ev:${k}`] ?? 0);
@@ -81,4 +82,20 @@ export function xatuTokens(content: Content, run: RunState, text: string): strin
     }
     return `A number, in a child's chalk: ${f(run, 'xatu-number')}. It is a level. It is yours.`;
   });
+}
+
+/** The whole map goes on show (every column); the map scene blurs it after ten seconds (`xatuBlur`). Does nothing if it is already on show. */
+export function xatuPeek(content: Content, run: RunState): string {
+  const stage = run.stage;
+  if (!stage || stage.peekFrom !== undefined) return '';
+  stage.peekFrom = stage.scoutedTo;
+  scoutAhead(content, run, stage.map.columns);
+  return '';
+}
+/** The map blurs: the columns shown go back into the fog (nodes already visited stay known). */
+export function xatuBlur(run: Pick<RunState, 'stage'>): void {
+  const stage = run.stage;
+  if (!stage || stage.peekFrom === undefined) return;
+  stage.scoutedTo = stage.peekFrom;
+  delete stage.peekFrom;
 }

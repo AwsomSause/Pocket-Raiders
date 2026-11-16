@@ -1,7 +1,7 @@
 // gn.new.12 The Cartographer: the image is drawn from the run's seed, it comes true, the Natu waits at the final rest.
 import { describe, expect, it } from 'vitest';
 import { gnTokens } from '../../src/core/greenneedle';
-import { finalRest, xatuKind, xatuTrue, xatuWildWeight } from '../../src/core/greenneedle/cartographer';
+import { finalRest, xatuBlur, xatuKind, xatuTrue, xatuWildWeight } from '../../src/core/greenneedle/cartographer';
 import { content } from './helpers';
 import { choose, flagOf, gnRun, open, openSide, scene, setFlag } from './helpers/gnPlay';
 
@@ -31,7 +31,15 @@ describe('gn.new.12 The Cartographer', () => {
   });
 
   it('refusing shows the map but draws nothing; leaving changes nothing', () => {
-    expect(xatuKind(played('xatu-r', 'Look, and refuse to listen.'))).toBe(0);
+    const refused = played('xatu-r', 'Look, and refuse to listen.');
+    expect(xatuKind(refused)).toBe(0);
+    // The whole map is on show, then it blurs: the fog is back and nothing else changed.
+    expect(refused.stage!.peekFrom).toBeDefined();
+    expect(refused.stage!.scoutedTo).toBe(refused.stage!.map.columns);
+    const before = refused.stage!.peekFrom!;
+    xatuBlur(refused);
+    expect(refused.stage!.scoutedTo).toBe(before);
+    expect(refused.stage!.peekFrom).toBeUndefined();
     const run = gnRun('xatu-l');
     open(run, XATU);
     const after = choose(run, XATU, 'Leave.').run;
