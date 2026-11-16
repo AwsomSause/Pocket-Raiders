@@ -36,6 +36,7 @@ import { stAssign, stEnd, stStart, strandingTokens } from './stranding';
 import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens } from './prison';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
+import { lanternArrive, lanternHasStory, lanternLetGo, lanternLost, lanternPearl, lanternTokens } from './lantern';
 import { karpTokens, kcArrive, kcEvolve, kcJump, mineRises, notchRises, quillfeatherStart, regularRises } from './karpcon';
 import { applianceRepair } from './appliance';
 import { bidoofJoin, bidoofStart } from './bidoof';
@@ -109,6 +110,7 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{karp:')) text = karpTokens(run, text);
   if (text.includes('{lt:')) text = ltTokens(run, text);
   if (text.includes('{ball:')) text = ballTokens(run, text);
+  if (text.includes('{lsea:')) text = lanternTokens(run, text);
   // gn.47: the Exhibition.
   if (text.includes('{ex:')) text = exTokens(content, run, text);
   // gn.46: the All-Star bracket.
@@ -282,6 +284,9 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.51: rests of patience enough for it to climb in by itself.
   if (c.test === 'rehabDone') return gnFlag(run, 'smuggle-rehab') >= restsNeeded(run);
   if (c.test === 'kcNotch') return notchRises(run);
+  if (c.test === 'lsLost') return lanternLost(run);
+  if (c.test === 'lsLetGo') return lanternLetGo(run);
+  if (c.test === 'lsStory') return lanternHasStory(run, c.n ?? 1);
   if (c.test === 'kcMine') return mineRises(run);
   if (c.test === 'kcRegular') return regularRises(run);
   if (c.test === 'sgWaiting') return waiting(run) >= 0;
@@ -788,6 +793,10 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return tyrEvolve(content, run, e.key!);
     case 'applianceRepair':
       return applianceRepair(run, host.picked);
+    case 'lsArrive':
+      return lanternArrive(run);
+    case 'lsPearl':
+      return lanternPearl(run, e.n ?? 1);
     case 'bidoofJoin':
       return bidoofJoin(content, run, host);
     case 'leftTake':

@@ -125,6 +125,8 @@ export interface Placement {
   often?: 'run' | 'region';
   /** Map tags the stage needs (water, forest, cave, high); several = any one of them. */
   needs?: string[];
+  /** More stage tags that must ALL hold as well (`needs` is any-one; the Lantern Sea wants water, and night). */
+  needsAll?: string[];
   /** Its name and place when the region is Kanto, and its name elsewhere. */
   dressing?: { kanto: string; kantoStage?: string; elsewhere?: string };
   /** A story in several beats, each with its own stage, home and window. */

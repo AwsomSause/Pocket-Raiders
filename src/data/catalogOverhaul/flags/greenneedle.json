@@ -15,7 +15,6 @@
   "aqua-flooded": "Evil Team row: helped Aqua flood something, or carried out the plan in Hoenn (read by gn.33's high-water marks)",
   "hoenn-took-all": "Evil Team row: chose \"Take it all\" in Hoenn (read by gn.38's researchers)",
   "called-it-for-us": "Evil Team row: chose \"Call it for us\" (read by gn.38's researchers)",
-  "lantern-boat": "gn.new.36 The Lantern Sea (read by gn.33)",
   "sunken-bell": "SF41.1 The Sunken City, the ovc-sunken-bell chain (overhaul/event_chains.json; read by gn.33)",
   "museum-relics-returned": "SF129 \"Return to the Museum\" (the museum's relics returned; read by gn.41)",
   "ranch-dug": "gn.new.20 The Bibarel Dam: dug a channel (read by gn.new.38 Long Table)",
@@ -995,6 +994,10 @@
   {
    "key": "reunion-offer-3",
    "rule": "core/greenneedle/reunion.ts (gn.61 The Final Reunion)"
+  },
+  {
+   "key": "ls-visits",
+   "rule": "core/greenneedle/lantern.ts (gn.new.36 The Lantern Sea: visits this run)"
   }
  ]
 }

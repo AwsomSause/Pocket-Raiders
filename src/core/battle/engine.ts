@@ -4313,6 +4313,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       // Greenneedle gn.47: a move copied from the Exhibition doesn't quite work yet (10% less accurate).
       if (ctx.battle.storyEffects.includes(`ex-copied:${user.mon.uid}:${move.id}`)) accuracy *= 0.9;
       if (userAbility === 'compound-eyes') accuracy *= 1.3;
+      // Greenneedle gn.new.36: Guiding Light, a Chinchou that lit a boat's way; it never loses sight of its target.
+      if (userAbility === 'guiding-light') accuracy *= 1.2;
       if (userAbility === 'victory-star') accuracy *= 1.1;
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;
       if (foeAbility && weather && WEATHER_EVASION[foeAbility]?.includes(weather)) accuracy *= 0.8;

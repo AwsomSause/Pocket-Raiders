@@ -7,7 +7,7 @@ const root = join(import.meta.dirname, '../..');
 const dir = join(root, 'tools/events/co');
 const placement: Record<string, unknown> = {};
 type Beat = { event?: string; stage?: string; home?: number; window?: [number, number] };
-type Raw = Record<string, unknown> & { tags?: string[]; needs?: string[]; beats?: Beat[]; stages?: number[] };
+type Raw = Record<string, unknown> & { tags?: string[]; needs?: string[]; needsAll?: string[]; beats?: Beat[]; stages?: number[] };
 /** Doc stage text ("S1", "S3, S6", "S2-S7") as in-region stage numbers. */
 const stagesOf = (t = ''): number[] => {
   const range = /S(\d)\s*-\s*S(\d)/.exec(t);
@@ -19,13 +19,13 @@ const stagesOf = (t = ''): number[] => {
  * and `needs` becomes `tags` (several needs = any one of them, written "cave|high"). The key event's own beat gives its step.
  */
 function normalise(id: string, raw: Raw): Raw {
-  const { tags, needs, ...rest } = raw;
+  const { tags, needs, needsAll, ...rest } = raw;
   const own = raw.beats?.find((b) => b.event === id);
   const stages = raw.stages ?? (own ? stagesOf(own.stage) : []);
   return {
     ...rest,
     kinds: tags ?? [],
-    tags: needs && needs.length > 1 ? [needs.join('|')] : (needs ?? []),
+    tags: [...(needs && needs.length > 1 ? [needs.join('|')] : (needs ?? [])), ...(needsAll ?? [])],
     ...(own?.home !== undefined && raw.home === undefined ? { home: own.home, window: own.window } : {}),
     ...(stages.length > 0 ? { stages } : {}),
   };
