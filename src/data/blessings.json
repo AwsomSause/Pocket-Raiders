@@ -143,7 +143,7 @@
       "objectText": "a pearl with a fold in it that the eye cannot follow",
       "passage": "It set the near beside the far and called it a road. Ask, and the mountain shall stand behind you that stood before.",
       "headline": "REARRANGE THE ROAD",
-      "summary": "Once per region, before you set out on a stage, rearrange it: any two nodes may change places, as often as you like (run menu, \"Rearrange the road\"). The paths stay; the final node stays last.",
+      "summary": "Once per region, before you set out on a stage, rearrange it: any two nodes may change places, as often as you like (run menu, \"Rearrange the road\"). The paths stay; the last node stays last.",
       "effect": {
         "kind": "fold"
       },
