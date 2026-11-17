@@ -3097,9 +3097,6 @@ export class BattleScene extends Phaser.Scene {
       if (!isGalarStadiumBattle(content, this.run)) return null;
       const st = session.settings;
       const alive = (team: readonly { hp: number }[]): number => team.filter((m) => m.hp > 0).length;
-      const rxOn = (): boolean => this.rx !== null;
-      const rxCard: NonNullable<StadiumHooks['card']> = (plan, cut) =>
-        playCutMoment(this, plan, this.rxCut('stadiumCut', cut.role, cut.name, { name: cut.name, role: cut.role, line: cut.line, cast: cut.castId ? artOf(this, cut.castId) : null })).then(() => undefined);
       return new StadiumDirector(this, {
         runSeed: this.run.seed,
         battleId: `${this.run.seed}:${this.run.badges.length}:${this.run.log.battlesWon}`,
@@ -3128,10 +3125,6 @@ export class BattleScene extends Phaser.Scene {
         announce: (text) => this.speakWithArt('Reporter', INTERVIEWERS_SPRITE, text, 'crowd'),
         opponentSays: (name, assetId, text) => this.speakWithArt(name, assetId, text, 'crowd'),
         tag: (text) => { this.rxAirTag = text; },
-        // Read when a moment plays (the New layer is mounted after this director is made).
-        get card() {
-          return rxOn() ? rxCard : undefined;
-        },
         portrait: (id, x, y) => {
           // Fit the picture to the card so no character is cropped, whatever size its sprite is.
           const v = trainerVisual(this, id, 'Trainer', x, y, 2) as unknown as { height: number; setScale: (n: number) => unknown };
@@ -3175,8 +3168,6 @@ export class BattleScene extends Phaser.Scene {
   /** Galar gym entrance: the Champion's one-time Dynamax Band scene (first gym), then a line for this gym. Presentation; the Band itself is granted by the core. */
   private async stadiumIntro(): Promise<void> {
     if (!this.stadium) return;
-    // Each line fades its own dim out and the next one in: this steady dim sits under them so the lit field never flashes between lines.
-    const steady = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.55).setOrigin(0).setDepth(1500);
     try {
       const { session } = services();
       const content = session.content;
@@ -3204,9 +3195,6 @@ export class BattleScene extends Phaser.Scene {
       }
     } catch (e) {
       console.warn('Galar stadium intro failed', e);
-    } finally {
-      // Let the last line's own fade finish first so the dim never jumps.
-      this.time.delayedCall(260, () => steady.destroy());
     }
   }
 

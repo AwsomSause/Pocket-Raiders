@@ -2432,7 +2432,6 @@ export class MapScene extends Phaser.Scene {
 
   /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */
   private toggleBracket(): void {
-    if (this.rxView) return this.popToggle('bracket');
     if (this.bracket) {
       this.bracket.destroy();
       this.bracket = null;
