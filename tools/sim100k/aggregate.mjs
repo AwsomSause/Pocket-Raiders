@@ -38,7 +38,7 @@ function take(r) {
   const lb = r.lastBattle; const lost = outcome === 'defeat';
   const deathCls = !lost ? '(not a defeat)' : lb ? (lb.kind === 'wild' ? 'wild Pokémon' : lb.classId ?? 'trainer') : '(no battle)';
   push('scn', D('scn', r.scn)); push('assist', D('assist', r.assist)); push('skill', D('skill', r.skill)); push('cur', D('cur', r.cur)); push('set', D('set', r.set));
-  push('arch', D('arch', r.arch)); push('starter', D('starter', r.starter)); push('bless', D('bless', r.bless?.id)); push('evil', D('evil', r.evil?.team));
+  push('arch', D('arch', r.arch)); push('starter', D('starter', r.starter)); push('bless', D('bless', r.bless?.id)); push('evil', D('evil', r.evil?.team ?? 'not picked yet (run ended in stage 1)'));
   push('region0', D('region0', r.regionOrder?.[0])); push('outcome', D('outcome', outcome)); push('deathCls', D('deathCls', deathCls)); push('bs', D('bs', r.bs));
   push('rival', D('rival', r.xrival?.find((x) => x.role === 'main')?.pers)); push('ub', D('ub', r.ultra?.contact));
   push('enc', r.enc); push('reg', r.regions.length); push('stage', Math.max(0, r.stage)); push('badges', r.badges.length); push('topLv', r.topLv); push('turns', r.turns); push('steps', r.steps);
@@ -73,7 +73,7 @@ function take(r) {
     add('deathTheme', r.theme);
   }
   const e = r.evil;
-  if (e) { add('evilTeam', e.team); add('evilBeat', `${e.team}|beat ${e.beat}`); add('evilEnd', `${e.team}|${e.end}`); addList('evilVillain', e.villains); addList('evilOp', e.opKinds.map(String)); addList('evilPast', e.past.map(String)); if (e.defector) add('evilDefector', e.team); add('evilHeat', e.team, e.heat); add('evilOps', e.team, e.ops); addList('evilMods', (e.mods ?? []).map((m) => (typeof m === 'string' ? m : m.id ?? JSON.stringify(m).slice(0, 40)))); add('evilPlan', e.planFirst && (typeof e.planFirst === 'string' ? e.planFirst : JSON.stringify(e.planFirst).slice(0, 40))); }
+  if (e) { add('evilTeam', e.team ?? 'not picked yet (run ended in stage 1)'); add('evilBeat', `${e.team}|beat ${e.beat}`); add('evilEnd', `${e.team}|${e.end}`); addList('evilVillain', e.villains); addList('evilOp', e.opKinds.map(String)); addList('evilPast', e.past.map(String)); if (e.defector) add('evilDefector', e.team); add('evilHeat', e.team, e.heat); add('evilOps', e.team, e.ops); addList('evilMods', (e.mods ?? []).map((m) => (typeof m === 'string' ? m : m.id ?? JSON.stringify(m).slice(0, 40)))); add('evilPlan', e.planFirst && (typeof e.planFirst === 'string' ? e.planFirst : JSON.stringify(e.planFirst).slice(0, 40))); }
   for (const v of r.rivals ?? []) { const role = v.id === 'rival-major' ? 'main rival' : v.cls; add('rivArch', `${v.arch}|${role === 'main rival' ? 'main' : 'other'}`); add('rivStyle', v.style); add('rivState', v.state); add('rivArc', `${v.arc}|${v.res ?? 'open'}`); add('rivFaction', v.fac); add('rivClass', v.cls); add('rivName', v.cls === 'rival' ? v.name : null); add('rivEnc', role === 'main rival' ? 'main rival' : 'other rivals', v.enc ?? 0); }
   for (const v of r.xrival ?? []) { add('xrPers', `${v.pers}|${v.role}`); add('xrStyle', `${v.style}|${v.role}`); add('xrArc', `${v.arc}|${v.role}`); for (const m of v.marks ?? []) add('xrMark', `${m}|${v.role}`); for (const f in v.feel ?? {}) add('xrFeel', `${f}|${v.role}`, v.feel[f]); add('xrN', v.role); add('xrLead', v.role, v.lead ?? 0); add('xrPity', v.role, v.pity ?? 0); }
   for (const q of r.nemeses ?? []) { add('nemSrc', q.src); add('nemPhase', q.phase); add('nemSettled', q.settled ?? 'not settled'); add('nemArch', q.arch); add('nemSpecies', q.sp); }
