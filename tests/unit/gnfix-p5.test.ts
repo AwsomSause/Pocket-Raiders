@@ -337,14 +337,14 @@ describe('gn.39 and gn.42 afterstories at the Final Reunion', () => {
     const none = gnRun('f61-none');
     reunionArrive(content, none);
     const ids = (run: RunState): string[] => gathering(run)!.att.map((a) => a.id);
-    expect(ids(none)).not.toContain('market');
+    expect(ids(none)).not.toContain('wicker');
     expect(ids(none)).not.toContain('brains');
     const run = gnRun('f61-guests');
-    setFlag(run, 'market-visits', 2);
+    setFlag(run, 'market-visited', 1);
     setFlag(run, 'frontier-symbols', 1);
     reunionArrive(content, run);
-    expect(ids(run)).toEqual(expect.arrayContaining(['market', 'brains']));
-    expect(gathering(run)!.att.find((a) => a.id === 'market')!.line).toMatch(/Nothing's for sale\. They've come as guests\./);
+    expect(ids(run)).toEqual(expect.arrayContaining(['wicker', 'brains']));
+    expect(gathering(run)!.att.find((a) => a.id === 'wicker')!.line).toMatch(/nothing is for sale: they have come as guests/);
     expect(gathering(run)!.att.find((a) => a.id === 'brains')!.line).toMatch(/arguing about whose building is hardest/);
   });
 });
