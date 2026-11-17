@@ -33,7 +33,7 @@ describe('gn.61 fixes: who comes', () => {
       ['freed-pens', [['freed-caged', 1]]],
       ['rosabel', [['partner-met', 1]]],
       ['brains', [['frontier-symbols', 1]]],
-      ['lenders', [['draft-round', 7]]],
+      ['lenders', [['draft-lent', 1]]],
       ['river', [['factory-valves', 1]]],
     ];
     for (const [id, prep] of cases) expect(ids(arrived(`who-${id}`, prep).run), id).toContain(id);

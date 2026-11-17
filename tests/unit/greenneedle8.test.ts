@@ -533,9 +533,10 @@ describe('gn.37 The Haunted Mansion', () => {
     const who = PEOPLE.find((x) => x.id === 'mimikyu')!;
     expect(who.flags).toContain('mansion-done');
     expect(who.good).toEqual(['mansion-end-waited']);
-    expect(who.line[0]).toMatch(/windows are all lit[\s\S]*coat is still on the chair/);
-    expect(who.line[1]).toMatch(/windows are all lit/);
-    expect(who.line[1]).not.toMatch(/still on the chair/);
+    expect(who.line[0]).toMatch(/coat is folded, on a chair/);
+    const lit = PEOPLE.find((x) => x.id === 'windows')!;
+    expect(lit.flags).toContain('mansion-done');
+    expect(lit.line[0]).toMatch(/windows are all lit/);
   });
 
   it('a Berry lights the first lamp; the last page lights the second; the far door opens onto the room you just left, then leads on', () => {

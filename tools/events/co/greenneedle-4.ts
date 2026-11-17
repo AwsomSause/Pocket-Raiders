@@ -267,14 +267,6 @@ const gn17: Json[] = [
     ch('Pull out three, then fight.', fight('One turn of pulling, with the Grimer coming on. Then you turn and face them.', HORDE(true), setTo('factory-pulls', 3))),
     ch('Fight the Grimer; leave the pits.', fight('The three Grimer come on together, slow and sure. Behind them, in the pits, something stops trying.', HORDE(false), setTo('factory-pulls', 0))),
   ]),
-  // The old second go at the pits (before the pulling moved into the fight): kept so a saved run standing on it still loads.
-  rm('gn-17-pits-2', 'The Polluted Factory: The Sludge Pits', plant({ pokemon: 'grimer' }), say(
-    'Some are out, shaking off the sludge on the walkway. Some are still in.',
-    'The Grimer are closing in.',
-  ), [
-    ch('Pull the rest out.', fight('One more heave, all together, with the Grimer at your back.', HORDE(true), setTo('factory-pulls', 6))),
-    ch("That's enough.", fight('You leave the rest. You turn to the Grimer.', HORDE(false), setTo('factory-pulls', 0))),
-  ]),
   rm('gn-17-muk', 'The Polluted Factory: The Muk in the Wall', plant({ pokemon: 'muk' }), say(
     'A Muk is pressed against a split in the pipe wall, holding a leak shut with its own body.',
     'It\'s been there for days. Its edges have dried and cracked. It doesn\'t look at you. It can\'t afford to.',

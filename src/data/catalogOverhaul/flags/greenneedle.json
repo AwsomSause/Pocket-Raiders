@@ -1003,6 +1003,18 @@
   {
    "key": "littlecup-cancelled",
    "rule": "core/greenneedle/littlecup.ts (gn.new.27 The Little Cup: an entrant cancelled its evolution)"
+  },
+  {
+   "key": "gn-forest-caterpie",
+   "rule": "core/greenneedle/index.ts (gn.03 Viridian Forest: the duelling Bug-type is a Caterpie)"
+  },
+  {
+   "key": "onevone-road-met",
+   "rule": "core/greenneedle/onevone.ts (gn.44: this opponent was met on the road earlier this run)"
+  },
+  {
+   "key": "flight-shiny-came",
+   "rule": "core/run.ts (gn.13 Flight North: the shiny one came down in the boss fight)"
   }
  ]
 }
