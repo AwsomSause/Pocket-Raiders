@@ -85,6 +85,9 @@ function addToLoader(scene: Phaser.Scene, entry: AssetEntry): void {
   }
 }
 
+/** How many times each asset failed to load (the first failure is retried once). */
+const failedOnce = new Map<string, number>();
+
 /** Ids each scene's loader has been given and not finished yet (so nothing is queued twice). */
 const queuedBy = new WeakMap<Phaser.Loader.LoaderPlugin, Set<string>>();
 
@@ -97,7 +100,10 @@ function queuedSet(scene: Phaser.Scene): Set<string> {
     const { assets } = services();
     scene.load.on(Phaser.Loader.Events.FILE_LOAD_ERROR, (file: Phaser.Loader.File) => {
       console.warn(`Failed to load asset ${file.key} (${String(file.url)})`);
-      assets.markFailed(file.key);
+      // A hosting hiccup (503) must not blank the art for the whole session: only the second failure counts.
+      const tries = (failedOnce.get(file.key) ?? 0) + 1;
+      failedOnce.set(file.key, tries);
+      if (tries >= 2) assets.markFailed(file.key);
     });
     // The loader forgets its queue when it finishes or the scene stops.
     scene.load.on(Phaser.Loader.Events.COMPLETE, () => ids.clear());
