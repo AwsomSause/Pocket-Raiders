@@ -2152,7 +2152,7 @@ function addPlayFeatures(content: Content, run: RunState, node: MapNode): void {
   if (!battle) return;
   const play = content.balance.w1.play;
   const arena = battle.raid || battle.totem ? null : arenaFor(content, run.stage?.themeId);
-  if (arena && new Rng(hashSeed(`${run.seed}:arena:${run.encountersCompleted}:${node.id}`)).chance(0.5)) battle.arena = { kind: arena, spent: false };
+  if (arena && new Rng(hashSeed(`${run.seed}:arena:${run.encountersCompleted}:${node.id}`)).chance(play.arena.chance)) battle.arena = { kind: arena, spent: false };
   const foeSpecies = new Set(battle.enemyTeam.map((m) => m.speciesId));
   const grudges = run.party.filter((p) => [...foeSpecies].some((sp) => (run.itemCounters?.[`grudge:${p.uid}:${sp}`] ?? 0) > 0)).map((p) => p.uid);
   if (grudges.length > 0) battle.grudgeMons = grudges;

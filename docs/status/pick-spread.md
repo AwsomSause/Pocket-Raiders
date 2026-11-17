@@ -15,3 +15,6 @@ From Kice's 100k-run sim tables. All numbers live in data (`balance.json`, `stor
 
 Not done yet: raising the other special battle tags (arena, grudge, echo, raid, event rule, spectate, nemesis, totem, narrative, rival).
 Blessing odds (Kyurem 8% vs ~3.7% each Greater) left as is: Kice's call.
+
+## Other battle tags (follow-up in the same PR)
+Arena chance 0.5 -> 0.85 (`w1.play.arena.chance`), spectator 0.15 -> 0.35, nemesis `maxActive` 3 / `perRegion` 2, Echo memory `skippedKeep` 10 / `perStage` 3. Not touched: grudge (set by your Pokémon fainting), raids, totems, event rules, narrative (placed by events and story, not a simple chance); raise those with the event odds if the next sim still shows them low.

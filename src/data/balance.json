@@ -619,8 +619,8 @@
    "combo": { "bonus": 1.25 },
    "mindRead": { "types": ["psychic"] },
    "grudge": { "boost": { "atk": 1, "spa": 1 } },
-   "spectator": { "chance": 0.15, "boost": { "atk": 1 }, "names": ["A passing hiker", "A kid on a bike", "An old fisher", "A traveling merchant", "A curious scientist"] },
-   "arena": { "every": 3, "fraction": 0.0625, "interact": 0.2, "types": { "rock": "rocks", "ground": "rocks", "fire": "lava", "water": "flood" } }
+   "spectator": { "chance": 0.35, "boost": { "atk": 1 }, "names": ["A passing hiker", "A kid on a bike", "An old fisher", "A traveling merchant", "A curious scientist"] },
+   "arena": { "every": 3, "fraction": 0.0625, "interact": 0.2, "chance": 0.85, "types": { "rock": "rocks", "ground": "rocks", "fire": "lava", "water": "flood" } }
   },
   "bench": { "minFriendship": 200 },
   "underdog": { "levels": 4, "xpBonus": 1.25 }

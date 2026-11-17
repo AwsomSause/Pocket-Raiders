@@ -5032,8 +5032,8 @@
   },
   "nemesis": {
     "enabled": true,
-    "maxActive": 2,
-    "perRegion": 1,
+    "maxActive": 3,
+    "perRegion": 2,
     "levelBonus": 2,
     "fallenAcePenalty": 2,
     "lowHpShare": 0.25,

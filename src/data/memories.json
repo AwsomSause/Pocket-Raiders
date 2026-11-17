@@ -7,7 +7,7 @@
  "ghosts": { "chance": 0.16, "perRun": 2, "levelBonus": 1, "moneyPerLevel": 40, "mementoFallback": "full-restore", "minEncounters": 6 },
  "gauntlet": { "teams": 3, "levelBonus": 1, "money": 2500, "item": "full-restore", "itemCount": 2 },
  "heirloom": { "keep": 5, "eggLevel": 5, "eggStages": 2, "minLevel": 20, "itemFallback": "everstone" },
- "world": { "skippedKeep": 6, "perStage": 2, "echoDelay": 1, "echoLevelBonus": 2, "echoMoneyPerLevel": 30, "echoItem": "super-potion", "thanksMoney": 400, "thanksDelay": 2, "grudgeMoney": 200, "moralityAt": 8 },
+ "world": { "skippedKeep": 10, "perStage": 3, "echoDelay": 1, "echoLevelBonus": 2, "echoMoneyPerLevel": 30, "echoItem": "super-potion", "thanksMoney": 400, "thanksDelay": 2, "grudgeMoney": 200, "moralityAt": 8 },
  "cameo": { "chance": 0.5, "money": 300, "friendship": 10 },
  "lostFound": { "chance": 0.5, "discount": 0.6 },
  "ops": { "start": 0.7, "clues": 2, "reward": 800, "loss": 0.15, "lossMax": 600 },
