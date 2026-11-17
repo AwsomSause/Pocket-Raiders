@@ -18,7 +18,7 @@ export const BeatSchema = z.enum(BEATS);
 export type Beat = z.infer<typeof BeatSchema>;
 
 /** The five gameplay streams (design Part 30 section 5). Slice 1 draws from none; counts start at 0. */
-export const STREAMS = ['evil-dispatch', 'evil-people', 'evil-mole', 'evil-gym', 'evil-neighbour', 'evil-line', 'evil-drift', 'evil-economy'] as const;
+export const STREAMS = ['evil-dispatch', 'evil-people', 'evil-mole', 'evil-gym', 'evil-neighbour', 'evil-line', 'evil-drift', 'evil-economy', 'evil-scheme'] as const;
 
 const StartSchema = z.object({ funds: z.number().int().min(0), heat: z.number().int().min(0).max(10), loyalty: z.number().int().min(1).max(10), regard: z.number().int().min(0).max(10), dread: z.number().int().min(0).max(10), roster: z.number().int().min(0) });
 
@@ -326,7 +326,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'base', 'raid', 'econ', 'neighbour'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'base', 'raid', 'econ', 'neighbour', 'scheme'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -437,7 +437,8 @@ export type Hero = z.infer<typeof HeroSchema>;
 export const FightSchema = z.object({
   /** Slice 13: 'chair' is the Boss against the neighbour's Boss for the Chair; 'legend' the catchable Legend after a Betrayal. */
   /** Slice 8: 'gym' is the Boss's Beat; 'challenge' an Officer's Replace challenge (their kit fights, the Boss's party waits in the box). */
-  kind: z.enum(['outplay', 'hold', 'gym', 'challenge', 'walk', 'raid', 'chair', 'legend']),
+  /** Slice 14: 'heist' is a room's battle inside a heist (a watchman, a dog, the other crew). */
+  kind: z.enum(['outplay', 'hold', 'gym', 'challenge', 'walk', 'raid', 'chair', 'legend', 'heist']),
   holdingId: z.string().min(1),
   /** Hold: who's standing there. */
   personId: z.string().min(1).optional(),
@@ -875,10 +876,155 @@ export const LawSchema = z.object({
   /** A Raid beaten in the Office holds Heat at 8 for the region. */
   heatHeld: z.object({ region: z.number().int().min(0), heat: z.number().int().min(0).max(10) }).strict().nullable(),
 }).strict();
+// ---- Slice 14: the Scheme (design Part 22; Part 5 section 7; Part 12 section 3; Part 13 section 3; Part 30 section 3.6) ----
+
+export const PARTS = ['means', 'place', 'key', 'moment'] as const;
+export const PartIdSchema = z.enum(PARTS);
+export type PartId = z.infer<typeof PartIdSchema>;
+const SI = z.number().int();
+const SS = z.string().min(1);
+const WayTextSchema = z.object({ takes: SS, from: SS, gives: SS, hero: SS, written: SS }).strict();
+export const SchemeWaySchema = z.object({
+  id: SS, name: SS,
+  /** job: days and money; heist: through a heist's plan and rooms; dig: a Dig; gyms: Gyms dealt with; wait: the Moment's own day; cause: the Moment, tomorrow; count: the Home's names. */
+  how: z.enum(['job', 'heist', 'dig', 'gyms', 'wait', 'cause', 'count']),
+  cost: SI.min(0).optional(), days: SI.min(1).optional(), heat: SI.optional(), dread: SI.optional(), regard: SI.optional(),
+  heist: SS.optional(), dig: SS.optional(), inPerson: z.boolean().optional(),
+  needs: z.object({ regard: SI.optional(), talents: z.array(TalentSchema).optional(), line: LineIdSchema.optional(), gymsClean: SI.optional(), gymsAny: SI.optional(), squads: SI.optional(), proof: SI.optional(), warm: SI.optional() }).strict().optional(),
+  tags: z.array(SS).optional(),
+  text: WayTextSchema,
+  status: EvilStatusSchema.optional(),
+}).strict();
+export type SchemeWay = z.infer<typeof SchemeWaySchema>;
+const SchemePartDefSchema = z.object({ what: SS, clean: SchemeWaySchema, dirty: SchemeWaySchema.optional(), second: SchemeWaySchema.optional(), ledger: z.boolean().optional() }).strict();
+export const SchemeFamilySchema = z.object({
+  id: SS, name: SS, says: SS,
+  pieces: z.object({ means: SS, place: SS, key: SS, moment: SS }).strict(),
+  faint: SS,
+  sentences: z.array(z.object({ at: SI.min(0).max(100), text: SS }).strict()).min(1),
+  legends: z.array(SS).optional(),
+  ground: z.object({ text: SS, sources: z.array(z.object({ kind: z.enum(['honest', 'straight', 'persuade', 'gym', 'dig', 'work', 'truth']), pct: SI.min(0) }).strict()).min(1) }).strict(),
+  parts: z.object({ means: SchemePartDefSchema, place: SchemePartDefSchema, key: SchemePartDefSchema, moment: SchemePartDefSchema }).strict(),
+  status: EvilStatusSchema,
+}).strict();
+export type SchemeFamily = z.infer<typeof SchemeFamilySchema>;
+const LedgerWaySchema = z.object({ name: SS, text: SS, cost: SI.min(0).optional(), days: SI.min(1).optional(), dread: SI.optional(), heat: SI.optional(), regard: SI.optional(), funds: SI.min(0).optional(), war: SI.optional(), heist: SS.optional(), needs: z.object({ sitDown: SI.optional(), truce: SI.optional(), line: LineIdSchema.optional() }).strict().optional() }).strict();
+export type LedgerWay = z.infer<typeof LedgerWaySchema>;
+const HeistDefSchema = z.object({
+  id: SS, name: SS, where: z.array(SI.min(0)), creeds: z.array(SS).optional(), neighbour: z.boolean().optional(),
+  takes: SS, from: SS, gives: SI.min(0), ground: SI.min(0).optional(), heat: SI.min(0), heatDown: SI.min(0).optional(), regard: SI.optional(),
+  war: z.boolean().optional(), notices: z.boolean().optional(), headline: z.string(), beside: SS, other: SS, tags: z.array(SS), status: EvilStatusSchema,
+}).strict();
+export type HeistDef = z.infer<typeof HeistDefSchema>;
+const PlanWaySchema = z.object({ id: SS, name: SS, talent: TalentSchema.optional(), cost: SI.min(0).optional(), odds: SI.min(0).max(100), heat: SI.optional(), outBy: SI.optional(), bribe: z.boolean().optional(), safehouse: z.boolean().optional() }).strict();
+export type PlanWay = z.infer<typeof PlanWaySchema>;
+export const ROOM_IDS = ['guard', 'dog', 'lock', 'floor', 'clerk', 'crew'] as const;
+const DigDefSchema = z.object({
+  id: SS, name: SS, on: z.array(SS).min(1), creeds: z.array(SS).optional(), ground: SI.min(0).optional(), funds: SI.min(0).optional(),
+  part: PartIdSchema.optional(), truth: z.boolean().optional(), confirm: z.boolean().optional(), shrine: z.boolean().optional(), fills: SS.optional(), found: SS, tags: z.array(SS), status: EvilStatusSchema,
+}).strict();
+export type DigDef = z.infer<typeof DigDefSchema>;
+export const SchemeFileSchema = z.object({
+  note: z.string(),
+  /** The slice's undo: false and the Scheme screen's hidden, nothing's stamped. */
+  on: z.boolean(),
+  rules: z.object({
+    part: SI.min(1), groundCap: SI.min(0), readyAt: SI.min(0).max(100), heroBadge: SI, reckoningLost: SI,
+    pace: z.object({ one: z.object({ means: SI.min(1), place: SI.min(1), key: SI.min(1), moment: SI.min(1) }).strict(), three: z.record(PartIdSchema, z.tuple([SI.min(0), SI.min(1)])) }).strict(),
+    momentDay: SI.min(1), noticeFrom: SI.min(0), homeNeed: SI.min(1),
+    homeWeights: z.object({ warm: SI.min(0), handshake: SI.min(0), work: SI.min(0), feedDay: SI.min(0), fed: SI.min(0) }).strict(),
+    giveBackDays: SI.min(0), heistHeatBy: SI.min(0), crewPay: SI.min(0), insideCost: SI.min(0), waitOdds: SI.min(0).max(100),
+  }).strict(),
+  words: z.record(z.string(), SS),
+  families: z.array(SchemeFamilySchema).min(1),
+  ledger: z.object({
+    id: SS, region: SI.min(0), from: SI.min(1), name: SS, says: SS, supplies: z.record(z.string(), PartIdSchema),
+    steps: z.array(z.object({ n: SI.min(1), name: SS, clean: LedgerWaySchema, dirty: LedgerWaySchema }).strict()).length(4),
+    status: EvilStatusSchema,
+  }).strict(),
+  heists: z.object({
+    plan: z.object({ in: z.array(PlanWaySchema).min(1), out: z.array(PlanWaySchema).min(1), empty: z.object({ in: SS, out: SS }).strict() }).strict(),
+    rooms: z.array(z.object({ id: z.enum(ROOM_IDS), name: SS, text: SS }).strict()).length(ROOM_IDS.length),
+    thing: z.object({ name: SS, text: SS }).strict(),
+    foes: z.object({ guard: z.array(SS).min(1), dog: z.array(SS).min(1), crew: z.array(SS).min(1) }).strict(),
+    noise: SI.min(1), guardTurns: SI.min(1), fail: z.object({ in: SI, early: SI }).strict(),
+    list: z.array(HeistDefSchema).min(1),
+  }).strict(),
+  digs: z.object({
+    tags: z.array(z.object({ match: SS, tag: SS }).strict()), days: SI.min(1), wonderDouble: z.boolean(),
+    putBack: z.object({ regard: SI, loyalty: SI }).strict(),
+    list: z.array(DigDefSchema).min(1),
+    notes: z.object({ eyes: z.array(SS).min(1), hands: z.array(SS).min(1), doubts: z.array(SS).min(1), after: z.object({ eyes: SS, hands: SS, doubts: SS }).strict() }).strict(),
+  }).strict(),
+}).strict();
+
+/** One part's slot (Part 30 section 3.6). `clean` is fixed when it's got and never edited; a part found again gets its new way's stamp. */
+export const SchemePartSchema = z.object({
+  state: z.enum(['empty', 'inHand', 'lost']),
+  clean: z.boolean().nullable(),
+  day: SI.min(1).nullable(),
+  /** The way it was got ('second' when found again), who got it, the Card it was got on. */
+  way: SS.nullable(), by: z.string().nullable(), cardId: z.string().nullable(),
+  /** Times lost (a part lost can be found again, by its second source). */
+  lostTimes: SI.min(0),
+}).strict();
+export type SchemePart = z.infer<typeof SchemePartSchema>;
+const PartsSchema = z.object({ means: SchemePartSchema, place: SchemePartSchema, key: SchemePartSchema, moment: SchemePartSchema }).strict();
+export const SchemeJobSchema = z.object({ part: z.union([PartIdSchema, z.literal('ledger')]), way: SS, since: SI.min(1), doneOn: SI.min(1), squad: z.array(z.string()), cardId: SS }).strict();
+export const HeistStateSchema = z.object({
+  id: SS, part: z.union([PartIdSchema, z.literal('ledger')]).nullable(), way: z.string().nullable(), day: SI.min(1), region: SI.min(0), district: SI.min(0),
+  plan: z.object({ in: z.string().nullable(), out: z.string().nullable(), watcher: z.string().nullable(), inside: z.boolean() }).strict(),
+  crew: z.array(z.string()),
+  stage: z.enum(['plan', 'rooms', 'done', 'failed']),
+  rooms: z.array(z.enum(ROOM_IDS)), at: SI.min(0), noise: SI.min(0), quiet: SI.min(0).max(2), warned: z.boolean(),
+  /** What it ended with: the take (Funds), and where it failed. */
+  took: SI.min(0), failedAt: z.enum(['in', 'early', 'thing', 'out']).nullable(), lines: z.array(z.string()),
+  cardId: SS,
+}).strict();
+export type HeistState = z.infer<typeof HeistStateSchema>;
+export const DigStateSchema = z.object({
+  id: SS, holdingId: SS, region: SI.min(0), district: SI.min(0), runner: z.string().nullable(), squad: z.array(z.string()),
+  since: SI.min(1), doneOn: SI.min(1), notes: z.array(z.string()),
+  /** Waiting on the choice at its end; then open (kept open) or put back. */
+  ended: z.enum(['running', 'choose', 'open', 'back']),
+  part: PartIdSchema.nullable(), cardId: SS,
+}).strict();
+export type DigState = z.infer<typeof DigStateSchema>;
+export const SchemeStateSchema = z.object({
+  /** A Creed id, or a fallen neighbour's team when taken up. */
+  family: SS,
+  parts: PartsSchema,
+  /** 0..20. The percentage isn't stored: it's four twenties and this. */
+  groundwork: SI.min(0).max(20),
+  inherited: z.boolean(),
+  /** The team's own Scheme, set aside when a fallen neighbour's was taken up. Nothing's dropped. */
+  aside: z.object({ family: SS, parts: PartsSchema, groundwork: SI.min(0).max(20) }).strict().nullable(),
+  /** Groundwork's sources already counted, by kind (so nothing's counted twice); Badges already cut for. */
+  credited: z.record(z.string(), SI.min(0)),
+  jobs: z.array(SchemeJobSchema),
+  heist: HeistStateSchema.nullable(),
+  /** Districts ("region:n") a heist has been done in (once a district); takes that can be given back. */
+  heists: z.array(z.string()),
+  takes: z.array(z.object({ id: SS, day: SI.min(1), amount: SI.min(0), back: z.boolean() }).strict()),
+  digs: z.array(DigStateSchema),
+  /** Kanto's own scheme: steps done (0..4), each step's stamp. */
+  ledger: z.object({ step: SI.min(0).max(4), clean: z.array(z.boolean()), forgave: z.boolean().nullable() }).strict(),
+  moment: z.object({ day: SI.min(1).nullable(), caused: z.boolean(), came: z.enum(['ready', 'passed']).nullable() }).strict(),
+  /** Wonder's eye (Part 22 section 5.1) and the run's Legend. */
+  eye: z.enum(['open', 'narrowed', 'shut']),
+  legend: z.string().nullable(),
+  /** Belonging's bought list: adds a thousand to the number and nobody arrives. */
+  bought: z.boolean(),
+  cards: z.array(z.object({ id: SS, day: SI.min(1), key: SS, clean: z.boolean(), fields: z.array(CardFieldSchema).length(13) }).strict()),
+}).strict();
+export type SchemeState = z.infer<typeof SchemeStateSchema>;
+const emptyPart = (): SchemePart => ({ state: 'empty', clean: null, day: null, way: null, by: null, cardId: null, lostTimes: 0 });
+export const emptyParts = () => ({ means: emptyPart(), place: emptyPart(), key: emptyPart(), moment: emptyPart() });
+export const emptyScheme = (family: string): SchemeState => ({ family, parts: emptyParts(), groundwork: 0, inherited: false, aside: null, credited: {}, jobs: [], heist: null, heists: [], takes: [], digs: [], ledger: { step: 0, clean: [], forgave: null }, moment: { day: null, caused: false, came: null }, eye: 'open', legend: null, bought: false, cards: [] });
 
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
-  v: z.literal(11),
+  v: z.literal(12),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -927,6 +1073,8 @@ const BlockV7Schema = z.object({
   base: BaseStateSchema.nullable(),
   raid: RaidStateSchema.nullable(),
   law: LawSchema,
+  /** Slice 14: the Grand Scheme: four parts and groundwork, heists and Digs, Kanto's Ledger. */
+  scheme: SchemeStateSchema,
 }).strict();
 
 /** A nameless Grunt (slices 2 and 3; a block migrated from v3 keeps its four). */
@@ -952,6 +1100,8 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * `evil-economy` stream at 0. Funds, takings and everything played stay as they were.
  * v9 -> v11 (slice 10's block; v10 is slice 11's): no neighbour yet. The next step makes Giovanni at Wary; ticks whose day
  * has already passed are marked as happened before the team was watching (none fire late, none fire twice).
+ * v11 -> v12 (slice 14's block): an empty Scheme for the team's Creed (nothing in hand, no groundwork, nothing credited:
+ * groundwork counts from the next Evening), and the `evil-scheme` stream at 0.
  */
 export function migrateEvilBlock(raw: unknown): unknown {
   if (!raw || typeof raw !== 'object') return raw;
@@ -971,6 +1121,7 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 9) b = { ...b, v: 10, economy: emptyEconomy(), draws: { ...(b.draws as object), 'evil-economy': 0 } };
   // Slice 11 puts its v9 -> v10 step above this line; a v9 block with no slice 11 goes straight on.
   if (b.v === 9 || b.v === 10) b = { ...b, v: 11, neighbour: null };
+  if (b.v === 11) b = { ...b, v: 12, scheme: emptyScheme(String((b.team as { creed?: unknown } | undefined)?.creed ?? 'profit')), draws: { ...(b.draws as object), 'evil-scheme': 0 } };
   return b;
 }
 

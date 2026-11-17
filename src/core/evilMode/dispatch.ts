@@ -8,6 +8,7 @@ import { EVIL_DATA, type EvilData } from './data';
 import { oddsFor, type JobDraft } from './odds';
 import { cardFor, unknownCount } from './card';
 import { appendLog, fill, lineFor, money, takingsAt } from './ledger';
+import { schemeBusy } from './scheme';
 import { econDistrictEnd, econEvening, econOn, shortLoyalty, tradeProblem } from './economy';
 import type { Crew, EvilModeBlock, Holding, Job, LogEntry, Sheet } from './schema';
 import { crossers, districtKey, inRoster, moveLoyalty, peopleText, talentDef, wageOf } from './people';
@@ -35,7 +36,7 @@ export function crewProblem(block: EvilModeBlock, id: string, ignoreHolding?: st
   if (block.queue.some((j) => j.holdingId !== ignoreHolding && j.squad.includes(id))) return `${c.name} is already going somewhere today.`;
   if (block.posted.some((p) => p.id === id)) return `${c.name} is posted somewhere today.`;
   if (inChair(block, id)) return `${c.name} holds the Gym's chair.`;
-  return tradeProblem(block, id);
+  return tradeProblem(block, id) ?? schemeBusy(block, id);
 }
 
 /** Why a job can't be queued, in plain words; null when it can. Checked by `step`, not only on screen. */

@@ -17,7 +17,8 @@ import { EVIL_DATA } from './data';
 import { baseDistrict, baseEvening, build, enlarge, guard, moveRoom, pickSite, place, sellRoom, setLatch, staff, standAtWindow, unplace, walkBase, type PieceDraft } from './base';
 import { closeWalk, walkedLine, walkIt, walkResult } from './walk';
 import { bail, raidDone, raidDoor, raidEvening, raidOffice, raidOn, raidOrder, raidQueue, raidResult, raidTurn, visit, warnChoice } from './raid';
-import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type Question, type RoomType, type TableThing, type WingId } from './schema';
+import { callOffHeist, endDig, giveBack, goHeist, heistBattle, heistRoom, ledgerStep, planHeist, reckoningLost, schemeEvening, schemeMorning, setPlan, startDig, takeUpScheme, takeWay, type PlanSlot, type RoomChoice, type WayKey } from './scheme';
+import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type PartId, type Question, type RoomType, type TableThing, type WingId } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
 export const BEAT_END: Record<Beat, BeatEndType> = {
@@ -52,7 +53,7 @@ export type EvilAction =
   | { type: 'post'; holdingId: string; id: string }
   | { type: 'unpost'; holdingId: string }
   | { type: 'goYourself'; holdingId: string }
-  | { type: 'battleResult'; won: boolean; fielded?: string[]; caught?: string }
+  | { type: 'battleResult'; won: boolean; fielded?: string[]; caught?: string; turns?: number }
   /** Slice 6: move the Line, once a region, at Night (Part 3 section 7.1). */
   | { type: 'moveLine'; to: LineId }
   /** Slice 8: one of the Gym's five ways, at the In person beat (Part 8a). */
@@ -99,6 +100,18 @@ export type EvilAction =
   | { type: 'raidDone' }
   | { type: 'bail'; id: string }
   | { type: 'visit'; id: string }
+  /** Slice 14: the Scheme. A part's way (from its Card); Kanto's Ledger, a step; a heist planned, filled, played room by room, called off; a Dig begun and ended; a take given back; a fallen team's Scheme taken up. */
+  | { type: 'schemeWay'; part: PartId; key: WayKey; holdingId?: string }
+  | { type: 'ledgerStep'; key: 'clean' | 'dirty' }
+  | { type: 'heist'; id: string }
+  | { type: 'heistPlan'; slot: PlanSlot; value: string | null }
+  | { type: 'heistGo' }
+  | { type: 'heistRoom'; choice: RoomChoice }
+  | { type: 'heistOff' }
+  | { type: 'dig'; id: string; holdingId?: string }
+  | { type: 'digEnd'; holdingId: string; back: boolean }
+  | { type: 'giveBack'; id: string }
+  | { type: 'takeUpScheme' }
   | { type: 'dismissOvernight' }
   | { type: 'send' }
   | { type: 'stayIn' }
@@ -122,7 +135,11 @@ export const nextBeat = (beat: Beat): Beat => BEATS[(BEATS.indexOf(beat) + 1) % 
 export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   const r = stepInner(block0, action);
   // Slice 13: the neighbour's Morning (messages, and each tick on its day) comes with every Morning, however it's reached.
-  return r.ok ? { ...r, block: neighbourMorning(settleRegion(neighbourDistrictEnd(r.block))) } : r;
+  if (!r.ok) return r;
+  let b = schemeMorning(neighbourMorning(settleRegion(neighbourDistrictEnd(r.block))));
+  // Slice 14: the Reckoning lost (the Hero reached the base) costs the Scheme groundwork, once a region.
+  if (b.district?.end?.how === 'reckoning' && b.scheme) b = reckoningLost(b).block;
+  return { ...r, block: b };
 }
 
 /** Slice 9: a district that's just ended is tallied once, and the region waits on the tally (Part 2 section 4.2). */
@@ -163,6 +180,10 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
       const r = f.kind === 'walk' ? walkResult(block, action.won) : raidResult(block, action.won);
       return r.problem ? no(r.problem) : { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...('fight' in r && r.fight ? [{ id: 'fight' as const }] : [])], ok: true };
     }
+    if (f.kind === 'heist') {
+      const r = heistBattle(block, action.won, action.turns ?? 1);
+      return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+    }
     if (f.kind === 'gym' || f.kind === 'challenge') {
       const r = gymResult(block, action.won);
       return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
@@ -171,6 +192,25 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     return { block: { ...block, queue, fight: null }, cues: [{ id: 'said', line: action.won ? 'Won fairly. It holds, from this Evening.' : 'Lost. The party is healed; nothing ends.' }], ok: true };
   }
   if (block.fight) return no('A battle is waiting.');
+  // Slice 14: inside a heist's rooms, only the rooms move anything.
+  if (block.scheme?.heist?.stage === 'rooms' && action.type !== 'heistRoom') return no('The Boss is inside. Finish the rooms first.');
+  if (action.type === 'schemeWay' || action.type === 'ledgerStep' || action.type === 'heist' || action.type === 'heistPlan' || action.type === 'heistGo' || action.type === 'heistRoom' || action.type === 'heistOff' || action.type === 'dig' || action.type === 'digEnd' || action.type === 'giveBack' || action.type === 'takeUpScheme') {
+    if (block.refusal) return no('Somebody is waiting on an answer in the yard.');
+    if (block.neighbour?.sitting) return no('A Sit-Down is going on.');
+    const r = action.type === 'schemeWay' ? takeWay(block, action.part, action.key, action.holdingId)
+      : action.type === 'ledgerStep' ? ledgerStep(block, action.key)
+      : action.type === 'heist' ? planHeist(block, action.id, null, null, null)
+      : action.type === 'heistPlan' ? setPlan(block, action.slot, action.value)
+      : action.type === 'heistGo' ? goHeist(block)
+      : action.type === 'heistRoom' ? heistRoom(block, action.choice)
+      : action.type === 'heistOff' ? callOffHeist(block)
+      : action.type === 'dig' ? startDig(block, action.id, null, action.holdingId, null)
+      : action.type === 'digEnd' ? endDig(block, action.holdingId, action.back)
+      : action.type === 'giveBack' ? giveBack(block, action.id)
+      : takeUpScheme(block);
+    if (r.problem) return no(r.problem);
+    return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.block.fight && !block.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+  }
   // Slice 13: a message can be answered at any beat. A Sit-Down going on takes the whole In person beat.
   if (action.type === 'answerPost') {
     const r = answerPost(block, action.id, action.i);
@@ -263,7 +303,7 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   let out: EvilModeBlock = { ...block, here: { ...block.here, day, beat: to } };
   // "Send them" fixes the odds; going into the Evening rolls every job once (design Part 30 section 5.2).
   if (action.type === 'send') out = fixOdds(out);
-  if (to === 'evening') out = raidEvening(baseEvening(neighbourEvening(gymEvening(resolveEvening(out)))));
+  if (to === 'evening') out = schemeEvening(raidEvening(baseEvening(neighbourEvening(gymEvening(resolveEvening(out))))));
   const cues: EvilCue[] = [{ id: 'beat', beat: to }];
   // Slice 4: Morning. Anyone at Loyalty 0 is gone, with a note; then the notice board (Part 30 section 6.2).
   // Slice 5: nobody stays posted overnight. The road's lines are shown at the Morning.

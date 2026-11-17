@@ -123,6 +123,25 @@ export function beginEvilFight(content: Content, current: RunState): RunState | 
     run.expansion = { ...(run.expansion ?? {}), evilMode: { ...block, fight: { ...f, begun: true } } };
     return run;
   }
+  if (f.kind === 'heist') {
+    // Slice 14: a heist's room: a watchman's one Pokémon, the dog, or the other crew's two, at the stage's level, drawn by the seed (no stream).
+    const hs = block.scheme?.heist;
+    const room = hs?.rooms[hs.at];
+    if (!hs || !room) return null;
+    const F = EVIL_DATA.scheme.heists.foes;
+    const pool = (room === 'dog' ? F.dog : room === 'crew' ? F.crew : F.guard).filter((x) => content.species.has(x));
+    if (!pool.length) return null;
+    const r = new Rng(hashSeed(`${block.district?.seed ?? 'heist'}::heist::${hs.id}::${hs.at}`));
+    const n = room === 'crew' ? 2 : 1;
+    const enemy = Array.from({ length: n }, () => newMon(content, run, pool[r.int(0, pool.length - 1)]!, Math.max(1, A), 'e'));
+    const active = Math.max(0, run.party.findIndex((m) => m.hp > 0));
+    if (!run.party[active]) return null;
+    const name = room === 'crew' ? `${block.neighbour ? defOf(block.neighbour).teamName : 'The other'} crew` : room === 'dog' ? 'Biscuit' : 'The watchman';
+    run.battle = createBattle('trainer', enemy, active, run.party[active]!.uid, { classId: EVIL_DATA.hero.classes.local, name, leaderId: null });
+    run.phase = 'battle';
+    run.expansion = { ...(run.expansion ?? {}), evilMode: { ...block, fight: { ...f, begun: true } } };
+    return run;
+  }
   if (f.kind === 'gym' || f.kind === 'challenge') {
     // Slice 8: Beat (the Boss's party) or the Officer's challenge (their kit, the Boss's party in the box), against the
     // Leader at A+2 with the main game's gimmick count (one after Stage 5 of Region 1, one more a region, to four).

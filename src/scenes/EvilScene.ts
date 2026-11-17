@@ -32,6 +32,8 @@ import { fileView } from '../ui/redux/screens/evilFile';
 import { lineModel } from '../core/evilMode/lineScreens';
 import { gymView } from '../ui/redux/screens/evilGym';
 import { neighbourView } from '../ui/redux/screens/evilNeighbour';
+import { schemeView } from '../ui/redux/screens/evilScheme';
+import { schemeModel } from '../core/evilMode/schemeScreens';
 import { neighbourModel } from '../core/evilMode/neighbourScreens';
 import { gymModel } from '../core/evilMode/gymScreens';
 import { newTrade, tradeModel, type TradeSel } from '../core/evilMode/tradeScreens';
@@ -79,6 +81,8 @@ export class EvilScene extends Phaser.Scene {
   /** Slice 10: the Base page's tab, square and option, or null when it's shut (Walk it and a Raid hold it open). */
   private base: BaseSel | null = null;
   private bgOf: (id: string) => string | null = () => null;
+  /** Slice 14: the Scheme page's chosen row, or null when it's shut. */
+  private sc: number | null = null;
 
   constructor() {
     super('Evil');
@@ -103,6 +107,7 @@ export class EvilScene extends Phaser.Scene {
     this.trade = null;
     this.nb = null;
     this.base = null;
+    this.sc = null;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
     session.evilEnsure();
@@ -141,12 +146,15 @@ export class EvilScene extends Phaser.Scene {
           const bsel = this.baseSel();
           const bm = bsel && (this.baseForced() || (!ledger && !roster && !file && !line && !gym)) ? baseModel(block, bsel) : null;
           const base = bm ? baseView(bm, this.notice, bm.bg ? this.bgOf(bm.bg) : null) : undefined;
+          // Slice 14: the Scheme page; a heist's rooms keep it open.
+          const smod = (this.sc !== null || block.scheme?.heist?.stage === 'rooms') && !block.fight && !ledger && !roster && !file && !line && !gym && !trade && !nbPage ? schemeModel(block, this.sc ?? 0) : null;
+          const scPage = smod ? schemeView(smod, this.notice) : undefined;
           if (block.fight) frame.button = 'Fight';
           // An order across a line is answered in the yard before anything else moves (Part 7 section 11.1).
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(base ? { base } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(base ? { base } : {}), ...(scPage ? { scheme: scPage } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -195,6 +203,8 @@ export class EvilScene extends Phaser.Scene {
         tpick: () => { if (this.trade) this.trade = { ...this.trade, pick: this.trade.pick + 1 }; this.view?.refresh(); },
         tbtn: (i) => this.tradeDo(Number(i)),
         nb: () => this.toggleNeighbour(),
+        scheme: () => this.toggleScheme(),
+        srow: (i) => { this.sc = Number(i); this.schemeDo(); },
         nrow: (i) => { this.nb = Number(i); this.neighbourDo(); },
         base: () => this.toggleBase(),
         btab: (i) => { if (this.base) { this.base = { ...this.base, tab: Number(i), opt: 0 }; this.view?.refresh(); } },
@@ -374,6 +384,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.trade !== null) return this.tradeKey(a);
     if (this.base !== null) return this.baseKey(a);
     if (this.nb !== null || this.block()?.neighbour?.sitting) return this.neighbourKey(a);
+    if (this.sc !== null || this.block()?.scheme?.heist?.stage === 'rooms') return this.schemeKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
     const d = this.disp;
@@ -543,6 +554,7 @@ export class EvilScene extends Phaser.Scene {
       const by: Record<string, string> = { KeyV: 'Waive', KeyE: 'End', KeyM: 'Make it honest', KeyB: 'back room' };
       if (by[e.code]) return this.tradeDo(-1, by[e.code]);
     }
+    if (e.code === 'KeyC' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleScheme();
     if (e.code === 'KeyK' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleNeighbour();
     if (e.code === 'KeyY' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleGym();
     if (e.code === 'KeyB' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleBase();
@@ -738,6 +750,7 @@ export class EvilScene extends Phaser.Scene {
     this.trade = null;
     if (this.block()?.neighbour?.sitting) this.base = null;
     this.nb = null;
+    this.sc = null;
     this.ledger = null;
     this.roster = null;
     this.file = null;
@@ -840,6 +853,58 @@ export class EvilScene extends Phaser.Scene {
     this.line = null;
     this.notice = null;
     this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  // ---- Slice 14: the Scheme page ----
+
+  private toggleScheme(): void {
+    if (this.card) return;
+    const block = this.block();
+    if (block?.scheme?.heist?.stage === 'rooms' || block?.neighbour?.sitting) return;
+    if (this.sc === null && (!block || !schemeModel(block, 0))) {
+      this.notice = 'The Scheme is switched off.';
+      return void this.view?.refresh();
+    }
+    this.sc = this.sc === null ? 0 : null;
+    if (!this.baseForced()) this.base = null;
+    this.ledger = null;
+    this.roster = null;
+    this.file = null;
+    this.line = null;
+    this.gym = null;
+    this.trade = null;
+    this.nb = null;
+    this.notice = null;
+    this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  private schemeKey(a: InputAction): void {
+    const block = this.block();
+    const m = block ? schemeModel(block, this.sc ?? 0) : null;
+    if (a === 'back') { if (block?.scheme?.heist?.stage !== 'rooms') this.sc = null; return void this.view?.refresh(); }
+    if (!m) { this.sc = null; return void this.view?.refresh(); }
+    const n = Math.max(1, m.rows.length);
+    if (a === 'up' || a === 'down' || a === 'left' || a === 'right') { this.sc = ((this.sc ?? 0) + (a === 'up' || a === 'left' ? n - 1 : 1)) % n; return void this.view?.refresh(); }
+    if (a === 'confirm') this.schemeDo();
+  }
+
+  /** Enter (or a tap) on the chosen row: the step refuses anything the page wouldn't allow. A heist's battle goes to the battle. */
+  private schemeDo(): void {
+    const block = this.block();
+    const m = block ? schemeModel(block, this.sc ?? 0) : null;
+    const row = m?.rows.find((r) => r.sel);
+    if (!row) return;
+    const cues = services().session.evilStep(row.action);
+    const refused = cues.find((c) => c.id === 'refused') as { reason?: string } | undefined;
+    const said = cues.filter((c) => c.id === 'said').map((c) => (c as { line: string }).line);
+    this.notice = refused?.reason ?? (said.length ? said.join(' ') : null);
+    if (cues.some((c) => c.id === 'fight')) { this.sc = 0; return this.startFight(); }
+    if (this.sc === null) this.sc = 0;
+    const after = this.block();
+    const rows = after ? schemeModel(after, 0)?.rows.length ?? 0 : 0;
+    if ((this.sc ?? 0) >= rows) this.sc = 0;
     this.view?.refresh();
   }
 
