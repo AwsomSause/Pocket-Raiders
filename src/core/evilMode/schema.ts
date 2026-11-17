@@ -224,7 +224,7 @@ export const RANKS = ['grunt', 'lead', 'specialist', 'officer', 'executive'] as 
 export const RankSchema = z.enum(RANKS);
 export type Rank = z.infer<typeof RankSchema>;
 /** Slice 6 adds three of the nine: the Line moved, with the Hero, arrested (Part 9 section 10). */
-export const LEAVE_WAYS = ['line', 'loyalty', 'letGo', 'lineMoved', 'hero', 'arrested'] as const;
+export const LEAVE_WAYS = ['line', 'loyalty', 'letGo', 'lineMoved', 'hero', 'arrested', 'reckoning'] as const;
 export const QUESTIONS = ['cant', 'wont', 'why', 'who'] as const;
 export const QuestionSchema = z.enum(QUESTIONS);
 export type Question = z.infer<typeof QuestionSchema>;
@@ -402,7 +402,7 @@ export const HeroFileSchema = z.object({
 });
 
 /** The Hero in the block (design Part 30 section 3.8, slice 5's part). The party isn't here: it's the rival record's (`rivalId`). */
-export const HeroSchema = z.object({
+const HeroBaseSchema = z.object({
   rivalId: z.string().min(1),
   name: z.string().min(1),
   look: z.string().min(1),
@@ -431,12 +431,11 @@ export const HeroSchema = z.object({
   /** Their personality has been seen in a line (the File shows the word from then). */
   met: z.boolean(),
 }).strict();
-export type Hero = z.infer<typeof HeroSchema>;
 
 /** A battle the day's waiting on (design Part 30 section 6.2 `battleResult`): Outplay in person, or a person posted against the Hero. */
 export const FightSchema = z.object({
   /** Slice 8: 'gym' is the Boss's Beat; 'challenge' an Officer's Replace challenge (their kit fights, the Boss's party waits in the box). */
-  kind: z.enum(['outplay', 'hold', 'gym', 'challenge', 'walk', 'raid']),
+  kind: z.enum(['outplay', 'hold', 'gym', 'challenge', 'walk', 'raid', 'room', 'practice']),
   holdingId: z.string().min(1),
   /** Hold: who's standing there. */
   personId: z.string().min(1).optional(),
@@ -672,9 +671,117 @@ export const LawSchema = z.object({
   heatHeld: z.object({ region: z.number().int().min(0), heat: z.number().int().min(0).max(10) }).strict().nullable(),
 }).strict();
 
+// ---- Slice 12: the fires, the other three, the letters, the Reckoning's rooms and the last room (Parts 19, 20, 21) ----
+
+const S12 = z.string().min(1);
+export const FIRE_NS = ['first', 'second', 'third', 'last', 'middle'] as const;
+export const FireNSchema = z.enum(FIRE_NS);
+export type FireN = z.infer<typeof FireNSchema>;
+export const LIE_KINDS = ['justWork', 'mislead', 'room'] as const;
+export const LetterSchema = z.object({
+  id: S12, region: z.number().int().min(0), district: z.number().int().min(0), day: z.number().int().min(1),
+  /** Her mood when she wrote it; 'none' when no letter came (Shut, or kept back). */
+  mood: z.enum(['warm', 'easy', 'wary', 'sullen', 'shut', 'none']),
+  /** The street's news that district, as the Log had it (stored, never re-rolled). */
+  news: z.string().nullable(),
+  /** The Hero's last reply home, by their temper when it was written. */
+  reply: z.number().int().min(0).max(4),
+  read: z.boolean(), keptBack: z.boolean(), steamedNote: z.boolean(),
+}).strict();
+export type Letter = z.infer<typeof LetterSchema>;
+export const HeroFireSchema = z.object({
+  region: z.number().int().min(0), district: z.number().int().min(0), day: z.number().int().min(0),
+  n: FireNSchema,
+  /** Choice ids picked, in order ("ex1:2", "andYou:look"...). Missed: none. */
+  picks: z.array(S12),
+  /** The player's own line, word for word; '' for silence; null when the fire was missed. */
+  own: z.string().max(120).nullable(),
+  listened: z.number().int().min(0), talked: z.number().int().min(0),
+  missed: z.boolean(),
+}).strict();
+export const HeroSlice12Schema = z.object({
+  /** The starter's name as the Hero says it, for lines only (the team itself stays in the rival record). */
+  starter: z.string(),
+  /** 0 Curious .. 4 Past talking (Part 18 section 5), and why it last moved, newest last. */
+  temper: z.number().int().min(0).max(4),
+  temperWhy: z.array(S12),
+  fires: z.array(HeroFireSchema),
+  /** Things said to them that weren't true (Part 19 section 2.2). Kept; `liedToHero` is read from these at the end. */
+  lies: z.array(z.object({ kind: z.enum(LIE_KINDS), day: z.number().int().min(1), region: z.number().int().min(0) }).strict()),
+  /** "I'm the one in charge", said at a fire. */
+  told: z.boolean(),
+  /** The Idealist's line for whoever wrote the sentence (chosen at the third fire). */
+  heroLine: z.string().nullable(),
+  /** The Office notebook: one line on the Night after a fire, 120 letters each. */
+  notebook: z.array(z.string().max(120)),
+  practiced: z.boolean(),
+  mother: z.object({
+    mood: z.enum(['warm', 'easy', 'wary', 'sullen', 'shut']),
+    letters: z.array(LetterSchema),
+    /** Regions written to her in (once a region), and her replies, word for word. */
+    written: z.array(z.number().int().min(0)),
+    replies: z.array(S12),
+    steamed: z.boolean(), keepNext: z.boolean(),
+    /** "Have something hot ready." */
+    hot: z.boolean(),
+  }).strict(),
+  /** The File's pages, written the night after a last room. */
+  pages: z.array(z.array(S12)),
+}).strict();
+export const HeroSchema = HeroBaseSchema.extend(HeroSlice12Schema.shape).strict();
+export type Hero = z.infer<typeof HeroSchema>;
+export const ROAD_ROLES = ['rival', 'friend', 'stray'] as const;
+export const RoadTrainerSchema = z.object({
+  id: S12, role: z.enum(ROAD_ROLES), name: S12, look: S12, personality: PersonalitySchema,
+  /** Every one of the four is a minor; every lock that covers the Hero covers them. */
+  minor: z.literal(true),
+  state: z.enum(['on', 'home']),
+  reason: z.string().nullable(),
+  /** The Friend's family's holding (a Lean there sends them home). */
+  family: z.string().nullable(),
+  today: z.string().nullable(),
+  /** Days helped or talked to, and whether they've been misled. */
+  helped: z.array(z.number().int().min(1)),
+  talked: z.array(z.number().int().min(1)),
+  misled: z.boolean(),
+}).strict();
+export type RoadTrainer = z.infer<typeof RoadTrainerSchema>;
+export const FireStateSchema = z.object({
+  n: FireNSchema,
+  mid: z.number().int().min(0).nullable(),
+  step: z.enum(['ex1', 'andYou', 'justWork', 'third', 'ex3', 'practice', 'own', 'done']),
+  lines: z.array(S12),
+  picks: z.array(S12),
+  listened: z.number().int().min(0), talked: z.number().int().min(0),
+  /** The temper falls by one whatever the count (the Strategist's "Ask them."). */
+  down: z.boolean(),
+  /** The Strategist's notebook, opened at this fire. */
+  notebook: z.boolean(),
+}).strict();
+export type FireState = z.infer<typeof FireStateSchema>;
+export const ROOM_OUTCOMES = ['talked', 'bossWon', 'heroWon', 'draw', 'window', 'away'] as const;
+export const ReckStateSchema = z.object({
+  region: z.number().int().min(0),
+  /** Day 2's last-day choice, and how many went home when told they could. */
+  lastDay: z.enum(['go', 'soup', 'chair', 'leave']).nullable(),
+  gone: z.number().int().min(0),
+  night: z.array(S12), gate: z.array(S12), walk: z.array(S12),
+  /** Room types the walk passed, most telling first (what they've seen). */
+  seen: z.array(S12),
+  room: z.object({
+    open: S12, speech: z.array(S12), lines: z.array(S12),
+    asked: z.boolean(), offered: z.boolean(), shown: z.array(S12),
+    answer: z.string().nullable(),
+    outcome: z.enum(ROOM_OUTCOMES).nullable(),
+    /** Who stepped in (line 31). */
+    stepped: z.string().nullable(),
+  }).strict().nullable(),
+}).strict();
+export type ReckState = z.infer<typeof ReckStateSchema>;
+
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
-  v: z.literal(9),
+  v: z.literal(10),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -705,6 +812,10 @@ const BlockV7Schema = z.object({
   refusal: RefusalSchema.nullable(),
   /** Slice 5: the Hero (null only until the session makes them: it needs the run's seed and the Boss's starter), a battle the day waits on, who's posted where today (Hold), and the holding the Boss went to in person today. */
   hero: HeroSchema.nullable(),
+  /** Slice 12: the other three on the road, a fire under way, the Reckoning's three days and the last room. */
+  road: z.array(RoadTrainerSchema),
+  fire: FireStateSchema.nullable(),
+  reck: ReckStateSchema.nullable(),
   fight: FightSchema.nullable(),
   posted: z.array(PostSchema),
   inPerson: z.object({ day: z.number().int().min(1), holdingId: z.string().min(1) }).strict().nullable(),
@@ -720,6 +831,12 @@ const BlockV7Schema = z.object({
   raid: RaidStateSchema.nullable(),
   law: LawSchema,
 }).strict();
+
+/** What a Hero made before slice 12 starts with (and what `makeHero` gives a new one). */
+export const heroSlice12Start = (starter = ''): z.infer<typeof HeroSlice12Schema> => ({
+  starter, temper: 0, temperWhy: [], fires: [], lies: [], told: false, heroLine: null, notebook: [], practiced: false,
+  mother: { mood: 'wary', letters: [], written: [], replies: [], steamed: false, keepNext: false, hot: false }, pages: [],
+});
 
 /** A nameless Grunt (slices 2 and 3; a block migrated from v3 keeps its four). */
 export const namelessGrunt = (i: number, loyalty: number): Crew => ({ id: `g${i}`, ref: null, name: `Grunt ${i}`, age: null, minor: false, talent: null, flaw: null, flawFound: false, line: null, lineHeard: false, rank: 'grunt', loyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null });
@@ -740,6 +857,9 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * becomes 2 (District 1 is Stage 2 now), its district keeps its days from day 1, nothing is behind it, and the tally's
  * changes count from the numbers it has now. The Hero's Arrival Badge isn't owed: the Arrival never happened.
  * v8 -> v9 (slice 9's block): no base yet (a site's offered on the next screen), no Raid, never raided.
+ * v9 -> v10 (slice 10's block): the Hero starts Curious with no fires, no lies, nothing told and a mother at Wary who
+ * hasn't written yet (her letters start with the next district); the other three are made on the next load (the
+ * session needs the run's seed); no fire under way; no Reckoning yet. The starter's read back from the rival record.
  */
 export function migrateEvilBlock(raw: unknown): unknown {
   if (!raw || typeof raw !== 'object') return raw;
@@ -756,6 +876,7 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 6) b = { ...b, v: 7, gyms: [] };
   if (b.v === 7) b = migrateToV8(b);
   if (b.v === 8) b = { ...b, v: 9, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } };
+  if (b.v === 9) b = { ...b, v: 10, hero: b.hero && typeof b.hero === 'object' ? { ...heroSlice12Start(), ...(b.hero as object) } : b.hero ?? null, road: [], fire: null, reck: null };
   return b;
 }
 
@@ -934,3 +1055,81 @@ export const BaseFileSchema = z.object({
   first: BS,
 }).strict();
 export type BaseFile = z.infer<typeof BaseFileSchema>;
+
+// ---- Slice 12's data files (fires.json, road.json, lastRoom.json) ----
+
+const T12 = z.string().min(1);
+const Tx = z.array(T12).min(1);
+const PersonalityRec = <S extends z.ZodTypeAny>(v: S) => z.record(PersonalitySchema, v);
+const CREED_IDS = ['profit', 'cause', 'power', 'wonder', 'belonging', 'spite'] as const;
+const CreedRec = <S extends z.ZodTypeAny>(v: S) => z.record(z.enum(CREED_IDS), v);
+export const FireChoiceSchema = z.object({ say: T12, kind: z.enum(['listen', 'talk']), reply: Tx, file: T12.optional(), fx: z.enum(['notebook', 'temperDown', 'practice', 'loyalty', 'heroLine']).optional(), id: T12.optional(), lie: z.boolean().optional() }).strict();
+const Three = z.array(FireChoiceSchema).length(3);
+const FireSchemaOne = z.object({ open: Tx, openNo: Tx.optional(), told: T12.optional(), awake: z.boolean().optional(), ex1: Three, ask: T12, ex3: Three }).strict();
+export const FiresFileSchema = z.object({
+  note: z.string(), on: z.boolean(),
+  rules: z.object({ district: z.number().int().min(1).max(6), day: z.number().int().min(1).max(7), noFlameAt: z.number().int().min(1).max(4), ownMax: z.number().int().min(1).max(120), noteMax: z.number().int().min(1).max(120) }).strict(),
+  flame: z.record(z.string(), T12), scene: z.record(z.string(), T12),
+  andYou: z.object({ ask: T12, answers: z.array(FireChoiceSchema).length(3), creed: CreedRec(z.object({ say: T12, reply: Tx }).strict()), justWorkThen: z.array(FireChoiceSchema).length(2) }).strict(),
+  third: z.object({ answers: z.array(FireChoiceSchema).length(4), sitBack: T12, leave: T12 }).strict(),
+  slots: z.record(z.string(), T12),
+  /** Every fire has text for all eight personalities (Part 30 section 15, test 18). */
+  personalities: PersonalityRec(z.object({ first: FireSchemaOne, second: FireSchemaOne, third: FireSchemaOne, last: FireSchemaOne }).strict()),
+  middle: z.array(z.object({ open: T12, ex1: Three }).strict()).length(8),
+  idealistDoing: CreedRec(T12), idealistChanged: z.object({ yes: T12, no: T12 }).strict(),
+  own: z.object({ always: z.array(T12).length(2), creed: CreedRec(z.array(T12).length(6)), line: z.record(LineIdSchema, z.array(T12).length(6)) }).strict(),
+  quoted: z.object({ said: T12, silence: T12, none: T12 }).strict(),
+  notebook: z.record(z.string(), z.union([z.string(), z.array(T12)])),
+  practice: z.record(z.string(), T12),
+  loyalty: T12, heroLine: T12,
+}).strict();
+const RoleSchema = z.object({
+  word: T12, ids: T12, personalities: z.array(PersonalitySchema).min(2), how: T12,
+  canon: z.record(z.string(), z.object({ name: T12, who: T12, look: T12 }).strict()).optional(),
+  reasons: z.record(z.string(), T12), home: T12,
+  lines: z.array(z.object({ text: T12, when: z.enum(['badge', 'replaced', 'mess', 'take', 'lean']).optional() }).strict()).min(6),
+  talk: z.object({ where: T12, says: T12 }).strict(), help: T12, mislead: T12,
+}).strict();
+export const RoadFileSchema = z.object({
+  note: z.string(), on: z.boolean(),
+  roles: z.object({ rival: RoleSchema, friend: RoleSchema, stray: RoleSchema }).strict(),
+  names: z.array(z.object({ name: T12, look: T12, raisedBy: T12 }).strict()).min(3),
+  board: z.record(z.string(), T12), approach: z.record(z.enum(ROAD_ROLES), T12),
+  mother: z.object({
+    start: z.enum(['warm', 'easy', 'wary', 'sullen', 'shut']),
+    lines: z.record(z.enum(['warm', 'easy', 'wary', 'sullen']), T12),
+    news: T12, noNews: T12, steamed: T12, reply: z.record(z.enum(['0', '1', '2', '3', '4']), T12), none: T12, sealed: T12,
+    open: z.record(z.string(), T12), readBy: T12, young: T12, keep: z.record(z.string(), T12),
+    write: z.object({ openings: z.array(T12).length(4), warm: z.array(T12).length(4), wary: z.array(T12).length(4), sullen: z.array(T12).length(4), once: T12, night: T12 }).strict(),
+  }).strict(),
+  temper: z.object({ words: z.array(T12).length(5), does: z.array(T12).length(5), why: z.record(z.string(), T12), angrySteps: z.number().int().min(1).max(3) }).strict(),
+}).strict();
+const WALL_STATES = ['drawings', 'posters', 'both', 'bare'] as const;
+export const WallStateSchema = z.enum(WALL_STATES);
+export type WallState = z.infer<typeof WallStateSchema>;
+export const LastRoomFileSchema = z.object({
+  note: z.string(), on: z.boolean(),
+  eighth: z.object({ giovanni: z.object({ regard: T12, dread: T12, level: T12 }).strict(), answers: PersonalityRec(T12), baker: T12 }).strict(),
+  lastDay: z.object({ title: T12, help: T12, options: z.record(z.enum(['go', 'soup', 'chair', 'leave']), z.record(z.string(), T12)), used: T12, notNow: T12 }).strict(),
+  night: z.object({ title: T12, bands: z.record(z.string(), T12), hot: T12, knock: T12, knockExec: T12 }).strict(),
+  gate: z.record(z.string(), T12),
+  walk: z.object({ exec: z.record(z.string(), T12), priority: z.array(T12).min(1) }).catchall(T12),
+  /** The last room has text for every Wall state (Part 30 section 15, test 19). */
+  wall: z.record(WallStateSchema, T12),
+  open: z.object({ fire: T12, knew: T12, told: T12, noFire: T12, lied: T12, away: T12 }).strict(),
+  awayLeaves: PersonalityRec(T12),
+  parts: z.record(z.string(), T12),
+  /** And for every Creed. */
+  creed: CreedRec(z.object({ door: T12, first: T12, held: T12, not: T12 }).strict()),
+  choices: z.record(z.enum(['answer', 'show', 'battle', 'ask', 'window', 'offer', 'nothing']), T12),
+  answers: z.record(z.enum(['creed', 'first', 'dontKnow', 'forThem', 'scheme', 'lie']), z.object({ name: T12, say: T12, hero: T12.optional() }).strict()),
+  show: z.record(z.enum(['ledger', 'pen', 'wall', 'window', 'notebook', 'someone', 'nothing']), z.object({ name: T12, hero: T12 }).strict()),
+  someone: z.record(z.string(), T12),
+  ask: PersonalityRec(T12),
+  heroLine: T12, offerRefused: T12, offerShut: T12, battleFirst: T12,
+  outcomes: z.record(z.enum(ROOM_OUTCOMES), z.object({ hero: T12, page: T12, stepIn: T12.optional() }).strict()),
+  evening: T12,
+  roster: z.record(z.string(), T12),
+  page: z.object({ title: T12, fire: T12, noFire: T12, asked: T12, noAnswer: T12, reason: T12, close: PersonalityRec(T12), soup: T12 }).strict(),
+  regionOver: T12,
+}).strict();

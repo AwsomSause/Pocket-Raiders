@@ -92,6 +92,7 @@ export function beginEvilFight(content: Content, current: RunState): RunState | 
   const f = block?.fight;
   // Slice 10: Walk it (the player's own base, with a Hero-built party) and the Raid's Office battle (the detective's six).
   if (block && f && !f.begun && !current.battle && (f.kind === 'walk' || f.kind === 'raid')) return beginBaseFight(content, current, block);
+  if (block && f && !f.begun && !current.battle && (f.kind === 'room' || f.kind === 'practice')) return beginRoadFight(content, current, block);
   const h = f ? block!.district?.holdings.find((x) => x.id === f.holdingId) : undefined;
   if (!block || !f || f.begun || !h || current.battle) return null;
   const run = structuredClone(current);
@@ -183,6 +184,44 @@ function beginBaseFight(content: Content, current: RunState, block: EvilModeBloc
   const active = Math.max(0, run.party.findIndex((m) => m.hp > 0));
   if (!enemy.length || !run.party[active]) return null;
   run.battle = createBattle('trainer', enemy, active, run.party[active]!.uid, { ...trainer, leaderId: null });
+  run.phase = 'battle';
+  run.expansion = { ...(run.expansion ?? {}), evilMode: { ...block, fight: { ...f, begun: true, ...(lent.length ? { lent } : {}) } } };
+  return run;
+}
+
+/**
+ * Slice 12. The last room's battle (Part 21 section 6.6): the Boss's own party against the Hero's six (four for an
+ * Idealist at Curious or Uneasy), by the rival rules: their ace at the Boss's level +2, the rest at the tier's level; at
+ * ten marks their AI goes up a tier. The fire's practice battle (Part 19 section 10.1): the Boss's weakest, lent alone,
+ * against their starter. No stakes; healed after.
+ */
+function beginRoadFight(content: Content, current: RunState, block: EvilModeBlock): RunState | null {
+  const f = block.fight!;
+  const hero = block.hero;
+  const rival = heroRival(current, block);
+  if (!hero || !rival) return null;
+  const run = structuredClone(current);
+  const A = stageLevel(content, run, block);
+  const tier = heroTier(hero);
+  let lent: string[] = [];
+  let enemy: PokemonInstance[];
+  if (f.kind === 'practice') {
+    const weakest = [...run.party].filter((m) => m.hp > 0).sort((a, b) => a.level - b.level)[0];
+    const starter = rivalFightTeam(content, rival)[0];
+    if (!weakest || !starter) return null;
+    lent = run.party.map((m) => m.uid);
+    run.box = [...(run.box ?? []), ...run.party];
+    run.party = [newMon(content, run, weakest.speciesId, weakest.level, 'p')];
+    enemy = [newMon(content, run, starter, Math.max(1, A + tier.level), 'e')];
+  } else {
+    const size = hero.personality === 'idealist' && hero.temper <= 1 ? 4 : 6;
+    const top = Math.max(1, ...run.party.map((m) => m.level));
+    enemy = rivalFightTeam(content, rival).slice(0, size).filter((s) => content.species.has(s)).map((s, i) => newMon(content, run, s, i === 0 ? top + 2 : Math.max(1, A + tier.level), 'e'));
+  }
+  const active = Math.max(0, run.party.findIndex((m) => m.hp > 0));
+  if (!enemy.length || !run.party[active]) return null;
+  run.battle = createBattle('trainer', enemy, active, run.party[active]!.uid, { classId: EVIL_DATA.hero.classes.hero, name: hero.name, leaderId: null });
+  if (f.kind === 'room') run.battle.ai = hero.marks >= 10 ? 1 : 0.5;
   run.phase = 'battle';
   run.expansion = { ...(run.expansion ?? {}), evilMode: { ...block, fight: { ...f, begun: true, ...(lent.length ? { lent } : {}) } } };
   return run;

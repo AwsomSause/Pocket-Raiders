@@ -98,10 +98,10 @@
     "tabs": ["The Report", "The Notebook", "The Dossier"],
     "unknown": "Not known yet.",
     "blank": "—",
-    "temper": "Not known yet. (Their temper comes with a later build.)",
-    "fires": "No fire yet. (The fires come with a later build.)",
-    "letters": "None yet. (Their mother's letters come with a later build.)",
-    "others": "Nobody else on the road yet. (The other three come with a later build.)",
+    "temper": "Not known yet.",
+    "fires": "No fire yet.",
+    "letters": "None yet.",
+    "others": "Nobody else on the road yet.",
     "seenNone": "Nothing yet.",
     "saidNone": "Nothing yet."
   }

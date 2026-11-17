@@ -13,6 +13,10 @@ import lineRaw from '../../data/evilMode/line.json';
 import gymRaw from '../../data/evilMode/gym.json';
 import regionRaw from '../../data/evilMode/region.json';
 import baseRaw from '../../data/evilMode/base.json';
+import firesRaw from '../../data/evilMode/fires.json';
+import roadRaw from '../../data/evilMode/road.json';
+import lastRoomRaw from '../../data/evilMode/lastRoom.json';
+import { FiresFileSchema, RoadFileSchema, LastRoomFileSchema } from './schema';
 import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FacesFileSchema, GymFileSchema, FoundingFileSchema, HeroFileSchema, LedgerFileSchema, BaseFileSchema, LineFileSchema, MethodsFileSchema, PeopleFileSchema, RegionFileSchema } from './schema';
 
 export const EVIL_DATA = {
@@ -29,6 +33,9 @@ export const EVIL_DATA = {
   gym: GymFileSchema.parse(gymRaw),
   region: RegionFileSchema.parse(regionRaw),
   base: BaseFileSchema.parse(baseRaw),
+  fires: FiresFileSchema.parse(firesRaw),
+  road: RoadFileSchema.parse(roadRaw),
+  lastRoom: LastRoomFileSchema.parse(lastRoomRaw),
 };
 export type EvilData = typeof EVIL_DATA;
 export type Creed = EvilData['creeds'][number];
