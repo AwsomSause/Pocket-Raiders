@@ -13073,7 +13073,7 @@
    "requires": [
     {
      "kind": "flag",
-     "key": "kc-evolved",
+     "key": "kc-visits",
      "atLeast": 1,
      "atMost": 99
     },
