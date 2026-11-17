@@ -38,8 +38,8 @@ export const SKY_BALANCE = {
   schedule: -1,
   /** Each spar puts Pidgey one level ahead of that schedule (no limit: one spar a stage is the limit). Each gift adds one too, to this cap. */
   giftLevelCap: 3,
-  /** Pidgeot is asked to be cheered when it is first under this share of its HP. */
-  cheerThreshold: 0.35,
+  /** Kice (2026-11-16): the cheer question always comes before the finale's first turn, whatever happens. 1 = asked at full HP. */
+  cheerThreshold: 1,
   /** Rematch (gn.02: at A+1): Pidgeot's level above the party's average. */
   rematchAbove: 1,
   /** gn.02: each spar adds this much (percent) to Pidgeot's stats in the finale, to the cap. */

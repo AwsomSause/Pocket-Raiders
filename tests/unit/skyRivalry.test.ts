@@ -314,7 +314,13 @@ describe('Pidgey\'s Resolve: the cliff', () => {
     const side = sideOf(run, 'sky.finale')!;
     run.stage!.current = run.stage!.map.nodes.find((n) => n.sides.some((x) => x.id === side.id))!.id;
     const started = chooseEvent(content, run, side.id, 0).run;
-    expect(started.battle!.spectate).toEqual({ kind: 'finale', cheerAt: 0.35 });
+    expect(started.battle!.spectate).toEqual({ kind: 'finale', cheerAt: 1 });
+    // Kice (2026-11-16): the question always comes before the first turn, whatever happens, and only once.
+    expect(started.battle!.turn).toBe(1);
+    expect(cheerDue(content, started)).toBe(true);
+    const asked = structuredClone(started);
+    cheerSky(content, asked, 'fearow');
+    expect(cheerDue(content, asked)).toBe(false);
     expect(started.party.map((m) => m.speciesId)).toEqual(['pidgeot']);
     expect(started.party[0]!.held).toEqual({ 'oran-berry': 1 });
     expect(started.party[0]!.fixedAbility).toBe('scrappy');

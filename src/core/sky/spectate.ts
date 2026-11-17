@@ -86,12 +86,12 @@ export function endOwnWatch(run: RunState): void {
   delete sky.stash;
 }
 
-/** True when the scene must ask the player who to cheer for now: the finale, not asked yet, and Pidgeot is under the threshold. */
+/** True when the scene must ask the player who to cheer for now: the finale, not asked yet, and Pidgeot is at or under the threshold (1: always, before the first turn). */
 export function cheerDue(content: Content, run: RunState): boolean {
   const spec = run.battle?.spectate;
   if (!spec || spec.cheerAt === undefined || spec.cheered !== undefined || run.battle!.outcome) return false;
   const mon = run.party[run.battle!.activeIndex];
-  return !!mon && mon.hp > 0 && mon.hp / maxHp(content, mon) < spec.cheerAt;
+  return !!mon && mon.hp > 0 && mon.hp / maxHp(content, mon) <= spec.cheerAt;
 }
 
 /** The player's cheer: Pidgeot Mega Evolves from resolve alone, or Pidgeot is furious (Attack +2). */

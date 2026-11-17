@@ -392,3 +392,4 @@ Tests: tests/unit/gnfix-p8.test.ts. Fixed lines are edited in place above; what 
 ## Doc-match pass (2026-11-17): gn.01 and gn.02
 - gn.01: return allies hit with real moves but are not on the field, cannot be hit, never knock out. Lessons are placed by the cold open (steps in `POND_STEPS`); a lesson not played that stage is still lost.
 - gn.02: birds at A−1; gifts keep their normal item effects and do not show on the sprite; the overhead scene also shows after a join.
+- gn.02 (Kice 2026-11-16): the finale's "Who are you cheering for?" is always asked before the first turn (`SKY_BALANCE.cheerThreshold` 1), not when Pidgeot is low.

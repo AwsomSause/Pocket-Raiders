@@ -102,7 +102,7 @@ export const FINALE_SETUP = [
   'Pidgeot stands on the high rock with its crest into the gale. Fearow lands across the gap from it. For a long moment they only look at each other. Then Fearow speaks, in the only way it ever has: it takes a step forward.',
 ];
 
-export const FINALE_ASK = 'Pidgeot is on one wing, and the whole cliff holds its breath. The Pokémon along the rocks look to you. You have been there since the beginning. It is yours to say. Who are you cheering for?';
+export const FINALE_ASK = 'Pidgeot and Fearow face each other across the wind, and the whole cliff holds its breath. The Pokémon along the rocks look to you. You have been there since the beginning. It is yours to say. Who are you cheering for?';
 
 export const CHEER_PIDGEOT_LINE = "Pidgeot's resolve is unwavering!";
 
