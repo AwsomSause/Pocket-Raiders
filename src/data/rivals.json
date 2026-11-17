@@ -2,10 +2,10 @@
  "maxRivals": 12,
  "activeTarget": 4,
  "spark": {
-  "ordinaryGain": 5,
-  "closeGain": 12,
+  "ordinaryGain": 8,
+  "closeGain": 16,
   "closeHpShare": 0.3,
-  "flawlessGain": 15,
+  "flawlessGain": 18,
   "threshold": 12,
   "dominantHpShare": 0.9,
   "dominantMaxTurns": 4,
@@ -15,17 +15,17 @@
  "traitSpread": 10,
  "states": {
   "recurringAt": 25,
-  "activeAt": 40,
-  "nemesisAt": 60,
-  "nemesisMinVindictiveness": 50,
-  "contenderAt": 80,
-  "contenderMinAmbition": 60
+  "activeAt": 30,
+  "nemesisAt": 40,
+  "nemesisMinVindictiveness": 35,
+  "contenderAt": 55,
+  "contenderMinAmbition": 40
  },
  "outcomes": {
-  "allyAt": 30,
+  "allyAt": 25,
   "allyMinEncounters": 2,
-  "allyMinEmpathy": 75,
-  "allyMaxPride": 40,
+  "allyMinEmpathy": 50,
+  "allyMaxPride": 60,
   "discourageMaxResilience": 35,
   "discourageLoss": 10,
   "retireAtSetbacks": 3

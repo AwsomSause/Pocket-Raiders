@@ -632,12 +632,12 @@
   },
   "monRival": {
     "note": "Persistent Pokémon rivalries (§11): one wild individual per run at a time; it takes the first wild battle of each later stage, can't be caught, and a hostile trainer rival may catch it and then always carries it.",
-    "chance": 0.35,
+    "chance": 0.6,
     "maxOpen": 1,
     "minTurns": 3,
     "levelBonus": 2,
     "atkBoost": 1,
-    "catchChance": 0.4,
+    "catchChance": 0.55,
     "catchAfterMeetings": 2,
     "marks": [
       "a torn ear",

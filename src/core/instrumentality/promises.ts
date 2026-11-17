@@ -2,7 +2,7 @@
 // (10% a region, +3% for each Telling past the third, to 25%; one Mythical per run), the Promise as a rule the game can check
 // with a warning before it is broken, and the Guest (a companion outside the party). Pure helpers over `run.expansion.promise`;
 // they use their own seeded streams (`mythical-telling`, `mythical-visit`) so no other roll moves. No Keepsakes, no Storybook,
-// nothing that outlives the run. Only Mythicals whose status is `supported` (promisesData.ts) ever visit.
+// nothing that outlives the run. Only Mythicals whose status is `supported` (promisesData.ts) visit at random; every non-disabled one can be told of (Visit scenes handle the rest).
 
 import type { Content } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
@@ -25,8 +25,10 @@ const save = (run: RunState, p: PromiseRun): void => { run.expansion = { ...run.
 export const tellingsHeard = (run: Pick<RunState, 'expansion'>, id: string): number => promiseState(run).tellings[id] ?? 0;
 export const believed = (run: Pick<RunState, 'expansion'>, id: string): boolean => tellingsHeard(run, id) >= TELLINGS_TO_BELIEVE;
 
-/** Only supported Mythicals can be told of, believed and visit. */
+/** Only supported Mythicals can visit at random (their Wonder is built). */
 const visitors = (): MythicalDef[] => MYTHICALS.filter((m) => m.status === 'supported');
+/** Every Mythical that is not disabled can be told of and believed: each has its own Visit scene (legends questlines), so the stage Telling no longer only ever names Zarude. */
+const tellable = (): MythicalDef[] => MYTHICALS.filter((m) => m.status !== 'disabled');
 
 /** What makes a visit possible this run ("Comes when"). Supported Mythicals only; the others have no trigger yet. */
 const COMES_WHEN: Record<string, (content: Content, run: RunState) => boolean> = {
@@ -39,7 +41,7 @@ export function hearTelling(run: RunState, stageKey: number): string | null {
   if (!run.expansion?.promises) return null;
   const p = promiseState(run);
   if (p.visited || p.guest) return null;
-  const open = visitors().filter((m) => (p.tellings[m.id] ?? 0) < TELLINGS_TO_BELIEVE);
+  const open = tellable().filter((m) => (p.tellings[m.id] ?? 0) < TELLINGS_TO_BELIEVE);
   if (open.length === 0) return null;
   const started = open.filter((m) => (p.tellings[m.id] ?? 0) > 0);
   const pool = started.length > 0 ? started : open;

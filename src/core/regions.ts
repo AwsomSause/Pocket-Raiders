@@ -4,7 +4,7 @@
 // Each region raises the level cap (director decision D14).
 
 import type { Boss, BossRole, Campaign, Content, Region, TypeName } from './contentSchema';
-import type { Rng } from './rng';
+import { Rng, hashSeed } from './rng';
 import { isHardcore } from './nuzlocke';
 import { modifierLevelCap } from './rules';
 import type { RunState } from './state';
@@ -22,12 +22,21 @@ export function getRegion(content: Content, id: string): Region {
 }
 
 /** A shuffled list of regular regions (as many as the campaign wants), then the Grand Region if it has one. */
-export function generateRegionOrder(content: Content, campaign: Campaign, rng: Rng, chosen: string | null = null): string[] {
+export function generateRegionOrder(content: Content, campaign: Campaign, rng: Rng, chosen: string | null = null, boost?: { seed: string; weights: Record<string, number> }): string[] {
   if (campaign.regions) return [...campaign.regions]; // a fixed order (the Orrery Circuit): no roll
   // Story-only regions are left out before the shuffle, so every Classic roll stays where it was.
   const all = [...content.regions.values()].filter((r) => !r.story);
   const shuffled = rng.shuffle(all.filter((r) => !r.grand).map((r) => r.id));
   // A chosen region (Regional Circuit) replaces the random pick, after the shuffle so no later roll moves.
+  // A Game Event can make some regions likelier to open the run: a weighted first pick from its own seed-derived
+  // generator (no map roll is spent), then the rest keep their shuffled order. Off (no weights) leaves every roll as it was.
+  if (boost && Object.keys(boost.weights).length > 0 && !(campaign.regularRegions === 1 && chosen) && shuffled.length > 1) {
+    const w = shuffled.map((id) => boost.weights[id] ?? 1);
+    let roll = new Rng(hashSeed(`${boost.seed}::first-region`)).float() * w.reduce((a, b) => a + b, 0);
+    let at = 0;
+    while (at < w.length - 1 && roll >= w[at]!) { roll -= w[at]!; at++; }
+    shuffled.unshift(...shuffled.splice(at, 1));
+  }
   const regular = campaign.regularRegions === 1 && chosen && shuffled.includes(chosen) ? [chosen] : shuffled.slice(0, campaign.regularRegions);
   const grand = campaign.grandRegion ? all.filter((r) => r.grand).map((r) => r.id) : [];
   return [...regular, ...grand];

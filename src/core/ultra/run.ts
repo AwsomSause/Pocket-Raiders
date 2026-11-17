@@ -128,15 +128,18 @@ function devour(content: Content, run: RunState): string[] {
   return [eaten ? `Devour: ${content.items.get(eaten)?.name ?? eaten} was eaten, and the party feels full.` : 'Devour: nothing left in the bag to eat, and the party feels full.'];
 }
 
-/** The Appetite fed most, if it is over its threshold: the Beast that comes. Ties go to the plan's order. */
-export function beastToCall(u: UltraRunState): UltraBeast | null {
+/**
+ * The Beast that comes: with a seed, a seeded pick among every Appetite over its threshold (the old "highest ratio"
+ * rule sent Symbiont to ~85% of runs); without one, the Appetite fed most, ties to the plan's order.
+ */
+export function beastToCall(u: UltraRunState, seed?: string): UltraBeast | null {
+  const ready = INVADERS.filter((b) => !u.met.includes(b.id) && (u.appetites[b.appetite!] ?? 0) >= b.threshold);
+  if (ready.length === 0) return null;
+  if (seed !== undefined) return ready[new Rng(hashSeed(`${seed}::ultra-beast::${u.met.length}`)).int(0, ready.length - 1)]!;
   let best: UltraBeast | null = null;
   let bestRatio = 0;
-  for (const b of INVADERS) {
-    if (u.met.includes(b.id)) continue;
-    const n = u.appetites[b.appetite!] ?? 0;
-    if (n < b.threshold) continue;
-    const ratio = n / b.threshold;
+  for (const b of ready) {
+    const ratio = (u.appetites[b.appetite!] ?? 0) / b.threshold;
     if (ratio > bestRatio) { best = b; bestRatio = ratio; }
   }
   return best;
@@ -192,7 +195,7 @@ export function stageTick(content: Content, run: RunState, stageNo: number, leag
   if (u.contact === 'incursion') { endContact(u); return; }
   // Nothing open: maybe a new Static.
   if (u.contact === 'none' && !league && stageNo >= EARLIEST_STATIC_STAGE && u.met.length === 0 && !heldBeast(run)) {
-    const beast = beastToCall(u);
+    const beast = beastToCall(u, run.seed);
     if (beast) {
       u.contact = 'static';
       u.beastId = beast.id;

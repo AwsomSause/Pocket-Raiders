@@ -54,11 +54,15 @@ describe('pack type moments: data', () => {
 });
 
 describe('pack type moments: battle', () => {
-  it('PT13 Still Standing: a super-effective hit that does not knock it out gives Defence +1, every time', () => {
-    const { ctx, battle } = fight('pt13', [mon('golem', 60, 'g', ['splash'])], [mon('squirtle', 5, 's', ['water-gun'])]);
-    const events = move(ctx);
-    expect(played(events, 'rock-hold')).toBe(true);
-    expect(battle.playerStages.def).toBe(1);
+  it('PT13 Still Standing: a super-effective hit that does not knock it out sometimes gives Defence +1 (about a quarter of the time)', () => {
+    let played13 = 0;
+    for (let i = 0; i < 60; i++) {
+      const { ctx, battle } = fight(`pt13-${i}`, [mon('golem', 60, 'g', ['splash'])], [mon('squirtle', 5, 's', ['water-gun'])]);
+      const events = move(ctx);
+      if (played(events, 'rock-hold')) { played13++; expect(battle.playerStages.def).toBe(1); }
+    }
+    expect(played13).toBeGreaterThan(3);
+    expect(played13).toBeLessThan(35);
   });
 
   it('PT17 Built to Last: from full HP a knockout hit leaves it at 1; from below full it does not', () => {

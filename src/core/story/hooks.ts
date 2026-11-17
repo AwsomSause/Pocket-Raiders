@@ -49,6 +49,7 @@ import { graduateMentorships } from './mentorship';
 import { awardLegacyTitles, recordEpitaph } from './legacy';
 import { noteStruggle, recordChampionMemory } from './highHype';
 import { clearMomentFlags, detectMoments } from './moments';
+import { momentCountKey } from './momentCaps';
 import { noteCodex } from './codex';
 import { noteRivalryLoss, noteRivalryWin } from './rivalryKinds';
 import { memoryAfterBattle } from '../memories/encounters';
@@ -617,6 +618,7 @@ function resolveTriggers(content: Content, run: RunState, triggers: StoryTrigger
       emotions: def.emotions,
     });
     advanceChains(content, run, def.id, t.side === 'player' ? actor : undefined);
+    if (!suppressed) run.story.flags[momentCountKey(def.id)] = Number(run.story.flags[momentCountKey(def.id)] ?? 0) + 1;
     if (!suppressed) noteCodex(run, def.id);
     // Effects the engine has not already applied (it decides every Hyper moment's effect itself).
     if (!suppressed && def.effect && !ENGINE_EFFECTS.has(def.effect.kind)) {
