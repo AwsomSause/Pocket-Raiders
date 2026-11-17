@@ -14,7 +14,10 @@ import { bondNewest, hasPink, markPink, oldEggMove, pinkFade, raiseMarked, truce
 import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
 import type { TypeName } from '../contentSchema';
-import { SLUDGE_TURNS } from './factory';
+import { PIT_PULL, SLUDGE_TURNS, pitsFreed, pitsStart } from './factory';
+import { aceEggSpecies, rememberAce } from './damian';
+import { tourneyAfterTurn, tourneyShape, tourneyStart } from './tournament';
+import { MOON_RAID_LOST, MOON_RAID_WON, moonRaid } from './moon';
 import { bondLevel, firstCatch } from '../co/who';
 import { NATURE_IDS } from '../natures';
 import { fnv1a } from '../expansion/hash';
@@ -109,6 +112,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   text = text.replace(/\{brainteam:([a-z]+)\}/g, (_, b: string) => lastTeamToken(content, run, b));
   // gn.39: a market lot's price for this player, after the vendor's discounts ({market:<vendor>:<asking price>}).
   text = text.replace(/\{market:([a-z]+):(\d+)\}/g, (_, v: string, n: string) => marketPriceToken(run, v, Number(n)));
+  // gn.19: a plain count kept in a run flag ({count:savanna-water}: the water flasks left).
+  text = text.replace(/\{count:([a-z0-9-]+)\}/g, (_, k: string) => String(gnFlag(run, k)));
   // gn.44: the reigning 1v1 champion, a different trainer each region.
   // gn.48: the Draft's table.
   if (text.includes('{xatu:')) text = xatuTokens(content, run, text);
@@ -187,13 +192,18 @@ export const JUNGLE_DOWN = 'gn-jungle-down:';
 
 export const FOREST = { inside: 'gn-forest-in', battles: 'gn-forest-battles', fought: 'gn-forest-fought', rank: 'gn-forest-rank', evolved: 'gn-forest-evolved', fog: 'gn-forest-fog', duelist: 'gn-forest-duelist', big: 'gn-forest-big' } as const;
 
-/** The newest conscious party Pokémon of the type becomes the forest's duelist (once; later calls do nothing). */
+/** Mark on every Pokémon the player owned on walking into the forest: only a Bug-type caught inside can be the duelist. */
+export const PRE_FOREST = 'pre-forest';
+
+/** The first conscious party Pokémon of the type that was caught in the forest becomes its duelist (once; later calls do nothing). */
 export function markDuelist(content: Content, run: RunState, type: string): string {
   if (markedMon(run, 'duelist')) return '';
-  const fits = run.party.filter((m) => m.hp > 0 && (content.species.get(m.speciesId)?.types as string[] | undefined)?.includes(type));
-  const mon = fits[fits.length - 1];
+  const fits = run.party.filter((m) => m.hp > 0 && !m.gn?.includes(PRE_FOREST) && (content.species.get(m.speciesId)?.types as string[] | undefined)?.includes(type));
+  const mon = fits[0];
   if (!mon) return '';
   mon.gn = [...(mon.gn ?? []), `duelist:${mon.speciesId}`];
+  // A Caterpie duelist: the forest's other Caterpie crowd round it (wild Caterpie may be walked through).
+  setGnFlag(run, 'gn-forest-caterpie', mon.speciesId === 'caterpie' ? 1 : 0);
   for (const k of [FOREST.battles, FOREST.fought, FOREST.rank, FOREST.evolved]) setGnFlag(run, k, 0);
   setGnFlag(run, FOREST.duelist, 1);
   setGnFlag(run, FOREST.big, ['pinsir', 'scyther', 'heracross'].includes(mon.speciesId) ? 1 : 0);
@@ -1054,6 +1064,19 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'stageMod':
       setGnFlag(run, e.key!, host.stage % e.n!);
       return '';
+    case 'damianEgg': {
+      // The egg of the ace he last sent out; a run that never saw it (an old save) gets the fallback in `then`.
+      const species = aceEggSpecies(content, run);
+      if (!species) return (e.then ?? []).map((x) => host.apply(x)).filter(Boolean).join(' · ');
+      return host.apply({ kind: 'egg', species: [species], types: [], levelBonus: 0, shinyMultiplier: 1, left: 3, unit: 'battle' });
+    }
+    case 'moonRaid': {
+      // Only ever raises the flags (a test or another row may have set them already).
+      const raid = moonRaid(run);
+      if (raid === 'won') setGnFlag(run, MOON_RAID_WON, 1);
+      if (raid === 'lost') setGnFlag(run, MOON_RAID_LOST, 1);
+      return '';
+    }
     case 'fossil': {
       const far = e.key === 'far' || (e.key === 'local' && host.float() >= 0.7);
       const table = (far ? fossilsElsewhere(host.region) : fossilsOf(host.region)).filter((id) => content.catalog.has(id) || content.items.has(id));
@@ -1139,6 +1162,7 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (battle.eventRule?.gn === 'slowking' && gnFlag(run, 'pink-quiz') >= 3) for (const foe of battle.enemyTeam) if (foe.speciesId === 'slowking') foe.moves = foe.moves.slice(0, Math.max(1, Math.ceil(foe.moves.length / 2)));
   if (battle.eventRule?.gn === 'bex') battle.storyEffects.push(`${FOE_WAITS}Bex is looking for the attack one. "TOP LEFT!" shouts Damian, from the back.`);
   if (battle.eventRule?.gn === 'damian') trainAce(content, battle.enemyTeam[battle.enemyTeam.length - 1], battle.eventRule.ace ?? 1);
+  if (battle.eventRule?.gn === 'damian') rememberAce(run, battle.enemyTeam[battle.enemyTeam.length - 1]?.speciesId);
   const lead = run.party[battle.activeIndex];
   // The Squirtle Squad (gn.08): the Leader's level is what a Lesser recruit has to reach before it may go back and challenge it.
   if (battle.event?.eventId === 'gn-08-leader' && battle.enemyTeam[0]) setGnFlag(run, 'squad-leader-level', battle.enemyTeam[0].level);
@@ -1187,8 +1211,11 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (battle.eventRule?.gn === 'lastExchange') {
     const foe = battle.enemyTeam[0];
     if (foe) foe.hp = Math.max(1, Math.floor(maxHp(content, foe) * 0.2));
-    if (lead && gnFlag(run, 'tc-you-choose') > 0 && lead.friendship >= BOND_THREE) battle.storyEffects.push(`kind:${lead.uid}`);
   }
+  // gn.17, the Sludge Pits: your Pokémon pull the stuck ones out while the Grimer horde goes on attacking.
+  if (battle.eventRule?.gn === 'pits') pitsStart(battle, gnFlag(run, 'factory-pulls'), gnFlag(run, 'factory-freed'));
+  // gn.16: the ring's own counts (first-turn hit, most-used move) and the last exchange's three calls.
+  tourneyStart(content, run, battle, lead, BOND_THREE);
 }
 
 /** gn.38's greenhouse: a Bellossom with Drought, a Raticate with Huge Power, a Pidgeotto that doesn't need to flap (Levitate). */
@@ -1271,6 +1298,24 @@ export function trainAce(content: Content, ace: PokemonInstance | undefined, plu
   ace.moves = [...kept, ...picked.map((id) => ({ id, pp: content.moves.get(id)!.pp }))];
 }
 
+/**
+ * gn.17, the Sludge Pits in a double or triple fight (called on the commands the turn will really play): each Pokémon told to attack pulls
+ * one out of the pit instead, while any are still stuck. In a single fight the engine's own `gn-you-wait` handling does the same.
+ */
+export function gnShapeDouble<T extends PlayerAction>(run: RunState, action: T): { action: T; events: Cue[] } {
+  const battle = run.battle;
+  if (!battle || battle.eventRule?.gn !== 'pits' || action.kind !== 'double') return { action, events: [] };
+  const events: Cue[] = [];
+  const commands = action.commands.map((cmd) => {
+    const at = battle.storyEffects.indexOf(PIT_PULL);
+    if (!cmd || cmd.action.kind !== 'move' || at < 0) return cmd;
+    battle.storyEffects.splice(at, 1);
+    events.push(cue('player', PIT_PULL.slice(YOU_WAIT.length)));
+    return { ...cmd, action: { kind: 'idle' as const } };
+  });
+  return { action: { ...action, commands }, events };
+}
+
 /** Before the player's command is played: a Greenneedle rule may answer it. Returns the action to play and lines to show first. */
 /** gn.59: the 5th region's look is answered before any rule applies. */
 export function gnShape(content: Content, run: RunState, action: PlayerAction): { action: PlayerAction; events: Cue[] } {
@@ -1282,8 +1327,16 @@ function gnShapeRule(content: Content, run: RunState, action: PlayerAction): { a
   const battle = run.battle;
   const rule = battle?.eventRule?.gn;
   const mon = battle ? run.party[battle.activeIndex] : undefined;
-  if (!battle || !rule || !mon || battle.needsSwitch) return { action, events: [] };
+  if (!battle || !rule || !mon || battle.needsSwitch) {
+    // gn.16 (bouts without a rule of their own still count the moves used).
+    if (battle && mon && !battle.needsSwitch && action.kind === 'move') tourneyShape(content, run, battle, mon, action.index, BOND_THREE);
+    return { action, events: [] };
+  }
   const foe = battle.enemyTeam[battle.enemyIndex];
+  if (action.kind === 'move') {
+    const t = tourneyShape(content, run, battle, mon, action.index, BOND_THREE);
+    if (t.index !== action.index) return { action: { ...action, index: t.index }, events: t.line ? [cue('player', t.line, mon.uid)] : [] };
+  }
   // gn.35: earthing the overcharged one. Your Ground-type won't strike it: it stands there, because it's needed there.
   if (rule === 'earthing' && action.kind === 'move' && action.index >= 0 && (content.moves.get(mon.moves[action.index]?.id ?? '')?.category ?? 'status') !== 'status') {
     return { action: { kind: 'idle' }, events: [cue('player', `${nameOf(content, mon)} doesn't strike. It plants its feet, and stands there. It's needed there.`, mon.uid)] };
@@ -1324,6 +1377,9 @@ export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   // gn.new.03: the Ball held through this battle answers as soon as it is decided.
   const ball = battle ? ballAnswer(run, battle) : '';
   if (ball) seen.push(cue('player', ball));
+  if (battle) tourneyAfterTurn(run, battle);
+  const out = battle ? pitsFreed(battle) : undefined;
+  if (out !== undefined && out > gnFlag(run, 'factory-freed')) setGnFlag(run, 'factory-freed', out);
   if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return seen;
   battle.storyEffects.push('gn-counted');
   countForest(content, run, battle);

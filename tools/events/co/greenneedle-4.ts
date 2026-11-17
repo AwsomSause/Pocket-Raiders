@@ -24,6 +24,8 @@ const room16 = (id: string, name: string, o: Json, intro: string, choices: Json[
 const crowd = (n = 1): Json[] => [flag('tournament-crowd', n), cap('tournament-crowd', 5)];
 /** Won from behind (the fighter at half HP or less): the crowd rises. */
 const FROM_BEHIND: Json[] = [gn('check', { key: 'tc-behind', if: [{ kind: 'gn', test: 'hurtLead' }] }), when('tc-behind', { min: 1 }, crowd(), 'It won from behind! The crowd is on its feet.')];
+/** A hit landed on the first turn of the bout (core/greenneedle/tournament.ts notes it): the crowd rises. */
+const FIRST_HIT: Json[] = [when('tc-first-hit', { min: 1 }, [...crowd(), setTo('tc-first-hit', 0)], 'First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars.')];
 /** Footwork: +1 Speed at the start of each match. */
 const FOOTWORK: Json = when('tournament-montage-footwork', { min: 1 }, [gn('leadBoost', { type: 'spe', n: 1 })]);
 /** Out in rounds 1 to 4: the team comes back, the prizes so far are kept. */
@@ -36,13 +38,13 @@ const CHAMPION: Json[] = [
 ];
 /** One round: a one-on-one bout, the foe scaled exactly to your fighter (level and stat total). */
 const bout = (name: string, species: string, rule: Json, win: Json[], o: Json = {}): Json =>
-  ({ ...trainer(name, { size: 1, types: ['fighting'], friendly: true, rule: { matchLead: true, bstMatch: true, noItems: true, ...rule }, win: [...FROM_BEHIND, heal(0.4), ...win], lose: OUT }), species: [species], levelBonus: -1, ...o });
+  ({ ...trainer(name, { size: 1, types: ['fighting'], friendly: true, rule: { matchLead: true, bstMatch: true, noItems: true, ...rule }, win: [...FROM_BEHIND, ...FIRST_HIT, heal(0.4), ...win], lose: OUT }), species: [species], levelBonus: -1, ...o });
 /** The montage: Power, Guard and Footwork, each once, for the rest of the bracket. */
 const TRAIN = (next: string): Json[] => [
   { ...ch('Power', out('It hits a sandbag until the bag gives up. Then it hits the floor where the bag was.', setTo('tournament-montage-power', 1),
     { kind: 'tempEffect', label: 'Training: Power', effects: [{ kind: 'statMultiplier', stat: 'atk', value: 1.1 }, { kind: 'statMultiplier', stat: 'spa', value: 1.1 }], battles: 5, until: 'battle' }, room(next))), showIf: [not('tournament-montage-power')] },
   { ...ch('Guard', out('You throw Berries at it. It learns to block them. It eats the ones it blocks, and looks at you for more.', setTo('tournament-montage-guard', 1),
-    { kind: 'tempEffect', label: 'Training: Guard', effects: [{ kind: 'statMultiplier', stat: 'def', value: 1.1 }, { kind: 'statMultiplier', stat: 'spd', value: 1.1 }], battles: 5, until: 'battle' }, room(next))), showIf: [not('tournament-montage-guard')] },
+    { kind: 'tempEffect', label: 'Training: Guard', effects: [{ kind: 'damageTakenMultiplier', value: 0.9 }], battles: 5, until: 'battle' }, room(next))), showIf: [not('tournament-montage-guard')] },
   { ...ch('Footwork', out('It chases its own shadow round a ring until it catches it. It doesn\'t know what to do then.', setTo('tournament-montage-footwork', 1), room(next))), showIf: [not('tournament-montage-footwork')] },
 ];
 const REST = (next: string): Json => ch('Rest.', out('It sits with its back against yours. Nobody says anything. It\'s the right call.', bond(1), room(next)));
@@ -71,7 +73,8 @@ const gn16: Json[] = [
     COMMENTARY_OPEN,
     'Round one: a **Machop**, with its twin coaching from the rail. The twin shouts every move a second before it happens.',
     '**Fane:** "You can read them like a menu, Hector."',
-  ), [ch('Step into the ring.', fight('You can read them. Your Mankey can hear them. It\'s a step ahead all match.', bout('Machop', 'machop', { myStages: { spe: 1 } }, [item('muscle-band'), room('gn-16-c1')]), FOOTWORK))]),
+  ), [ch('Step into the ring.', fight('You can read them. Your Mankey can hear them. It\'s a step ahead all match.', // The twin shouts the move before it happens: the Machop's opening move is shown before you pick yours (rule `twin`), and your fighter is a step ahead all match.
+    bout('Machop', 'machop', { gn: 'twin', myStages: { spe: 1 } }, [item('muscle-band'), room('gn-16-c1')]), FOOTWORK))]),
   room16('gn-16-c1', 'Tournament: The Corridor', ring(1, { pokemon: 'machop' }), say(
     'In the corridor, the Machop\'s twin is crying. The beaten one is comforting it, an arm round its shoulders.',
   ), [
@@ -114,20 +117,21 @@ const gn16: Json[] = [
     'The final. The rival is a Mankey or a Primeape, like yours, with its own reasons for being here.',
     '**Brannock:** "Two wild ones from the same road, Cordelia! You couldn\'t WRITE this!"',
   ), [ch('Step into the ring.', fight('The bell goes.', { ...trainer('Pax', { size: 1, types: ['fighting'], mirror: true, friendly: true, rule: { gn: 'final', evolveMid: true, noItems: true }, win: [
+    ...FIRST_HIT,
     when('tc-last-exchange', { min: 1 }, [room('gn-16-last')]),
     when('tc-last-exchange', { min: 0, max: 0 }, CHAMPION),
-  ], lose: FINAL_LOSS }), levelBonus: -1 }, FOOTWORK, setTo('tc-last-exchange', 0),
+  ], lose: FINAL_LOSS }), levelBonus: -1 }, FOOTWORK, setTo('tc-last-exchange', 0), setTo('tc-call', 0),
   when('tournament-bowed', { min: 1 }, [], 'In the front row, the Throh is bowing at every hit.'),
   when('tournament-crowd', { min: 5 }, [], 'The hall chants your Mankey\'s name. Its first move will go first.')))]),
   room16('gn-16-last', 'Tournament: The Last Exchange', ring(5, { pokemon: 'primeape' }), say(
-    'If either hasn\'t evolved, it did, in the heat of the match.',
-    '**Brannock:** "It\'s— Cordelia, it\'s EVOLVING! In the RING! Is that ALLOWED?"',
-    '**Fane:** "Nobody\'s ever been brave enough to tell one it isn\'t."',
     'Both are below a quarter. The hall holds its breath. The game slows.',
+    'Your fighter does not look at the rival. It looks at you.',
   ), [
-    ch('Now!', fight('You shout. It goes.', lastBout())),
-    ch('Wait for it.', fight('You hold it back, one beat, two. Then you let it go.', lastBout())),
-    ch('You choose.', fight('You say nothing. It looks back at you, once, and decides.', lastBout(), setTo('tc-you-choose', 1))),
+    ch('Now!', fight('You shout. It goes at once: its first move lands before the rival\'s.', lastBout(), setTo('tc-call', 1))),
+    ch('Wait for it.', fight('You hold it back, one beat, two. The rival comes to it. It will strike second, and much harder.', lastBout(), setTo('tc-call', 2))),
+    ch('You choose.', fight('You say nothing. It looks back at you, once, and decides.', lastBout(), setTo('tc-call', 3), setTo('tc-you-choose', 1),
+      gn('check', { key: 'tc-trusts', if: [{ kind: 'friendship', atLeast: 85 }] }),
+      when('tc-trusts', { min: 0, max: 0 }, [], 'It looks back at you, and waits. It does not know you well enough yet to be left to it. You call the moves.'))),
   ]),
   room16('gn-16-bell', 'Tournament: After the Bell', ring(6, { pokemon: 'primeape' }), say(
     'The title is yours: "Champion," before its name, in every battle from now on. Dynamic Punch. The belt.',
@@ -217,7 +221,7 @@ const valve = (label: string, right: boolean, next: string): Json =>
 const gn17: Json[] = [
   gev('gn-17-door', 'The Polluted Factory', plant({ stop: 'event', rarity: 'rare', types: ['poison'], requires: [not('factory-entered'), not('kaiju-stamp')] }), SCRIMSHAW, GATE),
   gev('gn-17-float', 'The Polluted Factory', plant({ stop: 'event', rarity: 'rare', types: ['poison'], requires: [not('factory-entered'), is('kaiju-stamp')] }), FLOAT_GATE, [
-    ch('Go in.', out('Mr. Scrimshaw writes the valve order on the back of your hand in marker, so you won\'t forget.', flag('factory-valve-order'), ...ENTER)),
+    FLOAT_IN_DOOR(),
   ]),
   rm('gn-17-pipes', 'The Polluted Factory: The Pipes', plant({ pokemon: 'koffing' }), say(
     '*The pipes are labelled: IN. OUT. DON\'T ASK.*',
@@ -242,24 +246,34 @@ const gn17: Json[] = [
     ch('Take the research.', out('You take it. Dr. Stroud watches you do it and says nothing at all.', flag('factory-research'), room('gn-17-pits'))),
     ch('Leave it.', out('You shut the drawer. Someone else can carry that.', room('gn-17-pits'))),
   ]),
-  rm('gn-17-pits', 'The Polluted Factory: The Sludge Pits', plant({ pokemon: 'grimer' }), say(
+  rm('gn-17-pits', 'The Polluted Factory: The Sludge Pits', plant({
+    pokemon: 'grimer',
+    remembers: [{
+      // The Trubbish Nobody Wanted (SF69), caught or kept: it won't leave the sludge pits until every one's out.
+      id: 'trubbish', when: [is('trubbish-kept')],
+      notice: 'Your Trubbish is over the rail before you have decided anything. It is in the pit, up to its middle, pulling. It won\'t leave the sludge pits until every one\'s out. It knows what it is to be left.',
+      hide: [0, 1, 2],
+      addChoices: [ch('Pull them out.', fight(
+        'Your team wades in after the Trubbish. The Grimer don\'t wait. Six pulls, with the horde at your back: a Pokémon that is pulling is not fighting.',
+        HORDE(true), setTo('factory-pulls', 6),
+      ))],
+    }],
+  }), say(
     'The sludge pits. Three Grimer slide up out of the muck to meet you.',
     'And in the pits, stuck fast, six Pokémon that wandered in and couldn\'t get out. One of them is still trying.',
-    'Each of yours could pull one free. It would take two goes, with the Grimer at your back.',
+    'Each of yours can pull one free in a turn, instead of fighting. Six stuck: two turns to get them all, with the Grimer horde still attacking.',
   ), [
-    ch('Pull them out.', out('Your team wades in and pulls. The muck lets go with a sound like a boot in mud. The Grimer don\'t wait.', gn('addParty', { key: 'factory-freed' }), cap('factory-freed', 6), hurt(0.15), scene('gn-17-pits-2'))),
-    ch('Fight the Grimer first.', fight('The three Grimer come on together, slow and sure.', HORDE())),
+    ch('Pull them all out.', fight('Your team wades in and pulls. The muck lets go with a sound like a boot in mud. The Grimer don\'t wait.', HORDE(true), setTo('factory-pulls', 6))),
+    ch('Pull out three, then fight.', fight('One turn of pulling, with the Grimer coming on. Then you turn and face them.', HORDE(true), setTo('factory-pulls', 3))),
+    ch('Fight the Grimer; leave the pits.', fight('The three Grimer come on together, slow and sure. Behind them, in the pits, something stops trying.', HORDE(false), setTo('factory-pulls', 0))),
   ]),
+  // The old second go at the pits (before the pulling moved into the fight): kept so a saved run standing on it still loads.
   rm('gn-17-pits-2', 'The Polluted Factory: The Sludge Pits', plant({ pokemon: 'grimer' }), say(
     'Some are out, shaking off the sludge on the walkway. Some are still in.',
     'The Grimer are closing in.',
   ), [
-    ch('Keep pulling.', fight('One more heave, all together. Then you turn to the Grimer.', HORDE(), gn('addParty', { key: 'factory-freed' }), cap('factory-freed', 6), hurt(0.15))),
-    chIf([not('trubbish-kept')], "That's enough.", fight('You leave the rest. You turn to the Grimer.', HORDE())),
-    chIf([is('trubbish-kept')], "That's enough.", fight(say(
-      'Your Trubbish won\'t come. It stays in the pit, up to its middle, pulling.',
-      'It won\'t leave the sludge pits until every one\'s out. It knows what it is to be left. All six come out.',
-    ), HORDE(), setTo('factory-freed', 6))),
+    ch('Pull the rest out.', fight('One more heave, all together, with the Grimer at your back.', HORDE(true), setTo('factory-pulls', 6))),
+    ch("That's enough.", fight('You leave the rest. You turn to the Grimer.', HORDE(false), setTo('factory-pulls', 0))),
   ]),
   rm('gn-17-muk', 'The Polluted Factory: The Muk in the Wall', plant({ pokemon: 'muk' }), say(
     'A Muk is pressed against a split in the pipe wall, holding a leak shut with its own body.',
@@ -271,7 +285,12 @@ const gn17: Json[] = [
       '*It looks at you. It\'s never been thanked, so it doesn\'t know what this is.*',
       'It follows you. Quietly, a little behind.',
     ), flag('factory-muk-helped'), kindness(1), moment('You sealed a pipe so a Muk could finally let go of the wall.', 70), room('gn-17-control')), { requires: [anyType('steel', 'fire', 'rock')] }) },
-    ch('Feed it.', out('You hold food up to it. It eats from your hand without moving off the wall. It still can\'t leave. But it\'s a little less tired.', kindness(1), room('gn-17-control'))),
+    ch('Feed it.', out(say(
+      'You hold food up to it. It eats from your hand without moving off the wall. Then it eats again. Days of nothing go out of its edges.',
+      'With something in it at last, it does what it was too spent to do: it leaves a piece of itself in the split, a plug the size of a fist, and the leak stays shut without it.',
+      '*It slides off the wall. It looks at the place where it was. It looks at you. It\'s never been thanked, so it doesn\'t know what this is.*',
+      'It follows you. Quietly, a little behind.',
+    ), flag('factory-muk-helped'), kindness(1), moment('You fed a Muk that had held a pipe shut for days, until it could let go of the wall.', 70), room('gn-17-control'))),
     ch('Leave it.', out('You walk on. Behind you, it holds the leak shut. It will go on holding it.', room('gn-17-control'))),
   ]),
   rm('gn-17-control', 'The Polluted Factory: The Control Room', plant({ pokemon: 'magneton' }), say(
@@ -350,8 +369,8 @@ const gn17: Json[] = [
   rm('gn-17-research', "The Polluted Factory: Dr. Stroud's Research", plant({ pokemon: 'magnemite' }), say(
     'You still have Dr. Stroud\'s research. It\'s worth a lot to the right people.',
   ), [
-    ch('Sell it.', out('A buyer pays a lot, in cash, without asking where it came from. They\'ll build another factory, somewhere further on.', $(5000), flag('factory-research-sold'), leavePseudo())),
-    ch('Hand it to a professor.', out('The professor reads it twice and goes pale. "This changes how we make Balls." They send you a special one to try.', item('dream-ball', 3), flag('factory-research-given'), leavePseudo())),
+    ch('Sell it.', out('A buyer pays a lot, in cash, without asking where it came from. They\'ll build another factory, somewhere further on.', $(5000), flag('factory-research-sold'), stampRegion('factory-sold-at'), leavePseudo())),
+    ch('Hand it to a professor.', out('The professor reads it twice and goes pale. "This changes how we make Balls. Properly." They send you one to try, and word goes round: from now on every shop on your road stocks the Dream Ball.', item('dream-ball'), flag('factory-research-given'), leavePseudo())),
   ]),
   gev('gn-17-fishing', 'A River with Fish in It', plant({ stop: 'event', rarity: 'uncommon', pokemon: 'magikarp', effect: 'none', tint: '#2a5a6a', tags: ['Pokémon', 'Story'], requires: [is('factory-shutdown'), { kind: 'gn', test: 'thisRegion', key: 'factory-shutdown' }, laterStage('factory-at'), not('factory-fished')] }), say(
     'On the riverbank, a man in a foreman\'s jacket with the badge torn off. Mr. Scrimshaw. Out of a job.',
@@ -359,13 +378,59 @@ const gn17: Json[] = [
     '**Mr. Scrimshaw:** "Fish in it. Can you believe that? There are fish in it."',
   ), [ch('Sit with him.', out('You sit. He catches nothing for an hour and doesn\'t mind at all.', moment('Mr. Scrimshaw, fishing in a river with fish in it.', 55), kindness(1), flag('factory-fished')))]),
 ];
+function FLOAT_IN_DOOR(): Json {
+  return ch('Go in.', out('Mr. Scrimshaw writes the valve order on the back of your hand in marker, so you won\'t forget.', flag('factory-valve-order'), ...ENTER));
+}
 function PIPE_FIGHT(win: Json[]): Json {
   return inside(eitherWay({ ...wild({ types: ['poison'], species: FACTORY_POOL, lv: 1, win }), rule: { gn: 'pipes', ...SLUDGE } }));
 }
-function HORDE(): Json {
-  return inside(eitherWay({ ...wild({ format: 'triples', species: ['grimer'], lv: 1, win: [scene('gn-17-muk')] }), rule: SLUDGE }));
+function HORDE(pull: boolean): Json {
+  return inside(eitherWay({ ...wild({ format: 'triples', species: ['grimer'], lv: 1, win: [scene('gn-17-muk')] }), rule: pull ? { gn: 'pits', ...SLUDGE } : SLUDGE }));
 }
-const KANTO_FACTORY: Json = { ...gev('cs-kanto-fuchsia-factory', 'The Polluted Factory', plant({ stop: 'event', rarity: 'common', types: ['poison'], requires: [not('factory-entered')] }), SCRIMSHAW, GATE), canon: 'cs.kanto.fuchsia.factory' };
+const FLOAT_IN: Json = FLOAT_IN_DOOR();
+// In Kanto the canon door is the factory's door: with the stamped float from the Kaiju, the foreman recognises it there too.
+const KANTO_FACTORY: Json = { ...gev('cs-kanto-fuchsia-factory', 'The Polluted Factory', plant({
+  stop: 'event', rarity: 'common', types: ['poison'], requires: [not('factory-entered')],
+  remembers: [{ id: 'float', when: [is('kaiju-stamp')], intro: FLOAT_GATE, hide: [0, 1, 2], addChoices: [FLOAT_IN] }],
+}), SCRIMSHAW, GATE), canon: 'cs.kanto.fuchsia.factory' };
+/** Consequences (doc): research sold, "the buyer builds another factory, in a later region"; left running, "the Kaiju, if freed, comes back". */
+const FOLLOW_UPS: Json[] = [
+  gev('gn-17-second', 'The Same Stamp', plant({
+    stop: 'event', rarity: 'uncommon', pokemon: 'grimer', tags: ['Story'],
+    requires: [is('factory-research-sold'), { kind: 'gn', test: 'regionChanged', key: 'factory-sold-at' }, not('factory-second')],
+  }), say(
+    'A river you have never seen before, and a smell you have. A struck match, dropped in a drain.',
+    'Upstream there is a new smokestack, the brick still clean. A new chain-link gate. On the gate, the same stamp: a ball inside a cog. Under it, in fresh paint, a name you last saw on a receipt.',
+    'The buyer built it. With the graph that only goes up, and the pencil note at the bottom crossed out.',
+  ), [
+    ch('Look at the water.', out(say(
+      'The river below the outfall is the colour the other one was. Something small and purple slides off the bank into it, quite at home.',
+      'For the rest of this region, on water routes, Poison-types are a step more common, and Water-types a step rarer.',
+    ), stampRegion('factory-second'), moment('The research you sold built a second factory, on a new river.', 65))),
+    ch('Walk on.', out(say(
+      'You walk on. You can smell it for a long way.',
+      'For the rest of this region, on water routes, Poison-types are a step more common, and Water-types a step rarer.',
+    ), stampRegion('factory-second'))),
+  ]),
+  gev('gn-17-kaiju-back', 'It Came Back', plant({
+    stop: 'event', rarity: 'rare', pokemon: 'tentacruel', tint: '#1d3a4a', effect: 'shake', tags: ['Combat', 'Pokémon', 'Story'],
+    requires: [is('factory-left-running'), is('kaiju-freed'), laterStage('factory-at'), not('factory-kaiju-back'), { kind: 'stageTypes', types: ['water'] }],
+  }), say(
+    'The slick is on this water too. It followed the coast, the way the factory\'s runoff does, because nobody stopped the line.',
+    '*Out in the bay, the sea bulges. The Kaiju. It came back.*',
+    'There is a new net across its body, the same cheap cord, the same stamped floats, cutting in. It is not looking at the town. It is looking for whoever keeps doing this.',
+  ), [
+    chIf([{ kind: 'gn', test: 'cutter' }], 'Cut it free again.', out(say(
+      'You have done this before, and so has it. It holds still this time, mostly. The cords part. It hangs in the water a moment, looking at you, and at the slick, and at you.',
+      'Then it goes. It will be back for as long as the factory runs.',
+    ), hurt(0.2), kindness(1), flag('factory-kaiju-back'), moment('The Kaiju came back in a new net from the same factory, and you cut it free again.', 65))),
+    ch('Drive it away from the harbour.', fight(
+      'It rises to meet you, and the bay rises with it. It is hurt, and it is angrier than last time.',
+      { kind: 'raid', raidId: 'kaiju-tentacruel', name: 'Kaiju Tentacruel', levelBonus: 0, win: [flag('factory-kaiju-back'), item('poison-barb')], lose: [flag('factory-kaiju-back')] },
+    )),
+    ch('Leave the harbour to it.', out('You leave. Behind you a pier goes, plank by plank, and nobody on it is the one who made the net.', flag('factory-kaiju-back'))),
+  ]),
+];
 
 // =====================================================================================================================
 // gn.18  SAFARI LAND  (Hub Destination: the town; until towns exist step 12, optional; once a region). The park itself is a minigame,
@@ -398,7 +463,7 @@ const gn18: Json[] = [
 ];
 const KANTO_SAFARI: Json = { ...gev('cs-kanto-fuchsia-safari', 'Safari Land', park({ stop: 'event', rarity: 'common', types: ['normal', 'ground'], requires: [notThisRegion('safari-at')], remembers: [PHOTO_ON_WALL] }), WARDEN_GATE, GATE18), canon: 'cs.kanto.fuchsia.safari' };
 
-export const EVENTS: Json[] = [...gn16, KANTO_TOURNEY, ...gn17, KANTO_FACTORY, ...gn18, KANTO_SAFARI];
+export const EVENTS: Json[] = [...gn16, KANTO_TOURNEY, ...gn17, KANTO_FACTORY, ...FOLLOW_UPS, ...gn18, KANTO_SAFARI];
 
 /** The old Kanto canon builds of these stories (moved to Greenneedle): kept for saved runs, never shown again. */
 export const REMOVE: string[] = [
@@ -428,6 +493,8 @@ export const PLACEMENT: Record<string, Placement> = {
     note: 'Badge: a paw print. The park is the gn-safari minigame stop the gate opens. Until towns exist it sits on step 12. Kanto shows it through cs-kanto-fuchsia-safari.',
   },
   'gn-18-return': { gn: 'gn.18', shape: 'Single', earliest: 'A5', home: 14, window: [10, 20], sits: 'optional', attaches: 'town', tags: ['Hub Destination'], level: 'No battles', often: 'region', note: 'The free second visit, after a visit that ended on Quiet 8 or more, the same region.' },
+  'gn-17-second': { gn: 'gn.17', shape: 'Single', earliest: 'A7', home: 8, window: [6, 14], sits: 'optional', tags: ['Afterstory'], level: 'no battle', often: 'run', note: 'Only after the research was sold, in a later region: the buyer\'s new factory. Poison a step more common, Water a step rarer, on that region\'s water routes.' },
+  'gn-17-kaiju-back': { gn: 'gn.17', shape: 'Single', earliest: 'A7', home: 10, window: [8, 15], sits: 'optional', tags: ['Afterstory'], level: 'the Kaiju raid at A+0', often: 'run', needs: ['water'], note: 'Only when the factory was left running and the Kaiju was cut free at gn.11: it comes back on a later water stage.' },
   'gn-17-fishing': { gn: 'gn.17', shape: 'Single', earliest: 'A6', home: 14, window: [9, 20], sits: 'optional', tags: ['Afterstory'], level: 'A+0', often: 'run', note: 'Only after the line was shut down, later the same region.' },
 };
 

@@ -1241,6 +1241,11 @@
         "kind": "attribute",
         "key": "goodEvil",
         "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "trubbish-kept",
+        "amount": 1
        }
       ]
      }

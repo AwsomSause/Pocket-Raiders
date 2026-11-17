@@ -15,6 +15,8 @@ const lead = (run: RunState, species: string, moves?: string[]): void => {
   run.party[0] = mon;
 };
 
+const here = (run: RunState, id: string): boolean => run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.some((x) => !x.used && x.eventId === id);
+
 describe('gn.19 The Deep Savanna', () => {
   const walkIn = (seed: string, setup: (run: RunState) => void = () => {}): RunState => {
     const run = gnRun(seed);
@@ -23,9 +25,11 @@ describe('gn.19 The Deep Savanna', () => {
     open(run, 'gn-19-door');
     return choose(run, 'gn-19-door', 'Walk in.').run;
   };
-  const toWaterhole = (seed: string, setup?: (run: RunState) => void): RunState => win(choose(choose(walkIn(seed, setup), 'gn-19-thirsty', 'Keep your water.').run, 'gn-19-cross', 'Cross (one flask).').run);
+  /** A herd may be crossing (a seeded 35% roll): wait for it to pass. */
+  const pastHerd = (run: RunState, id: string): RunState => (here(run, id) ? choose(run, id, 'Wait for the herd to pass.').run : run);
+  const toWaterhole = (seed: string, setup?: (run: RunState) => void): RunState => win(choose(pastHerd(choose(walkIn(seed, setup), 'gn-19-thirsty', 'Keep your water.').run, 'gn-19-herd-edge'), 'gn-19-cross', 'Cross (one flask).').run);
   const toRing = (seed: string, setup?: (run: RunState) => void): RunState => {
-    let run = choose(toWaterhole(seed, setup), 'gn-19-waterhole', 'Wait until it sleeps.').run;
+    let run = pastHerd(choose(toWaterhole(seed, setup), 'gn-19-waterhole', 'Wait until it sleeps.').run, 'gn-19-herd-ridge');
     run = choose(choose(run, 'gn-19-watch', 'Move on.').run, 'gn-19-herd', 'Go round (one flask).').run;
     run = choose(run, 'gn-19-devil', 'Walk through it.').run;
     if (scene(run, 'gn-19-oasis').labels.length && run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.some((x) => !x.used && x.eventId === 'gn-19-oasis')) run = choose(run, 'gn-19-oasis', 'Fill your flasks.').run;
@@ -42,7 +46,7 @@ describe('gn.19 The Deep Savanna', () => {
     const run = walkIn('t19-water');
     expect(flagOf(run, 'savanna-water')).toBe(3);
     expect(scene(run, 'gn-19-thirsty').labels).toEqual(["Trade a flask for what it's carrying.", 'Trade a flask, and let it come along.', 'Trade a flask for the way.', 'Keep your water.']);
-    const path = choose(run, 'gn-19-thirsty', 'Trade a flask for the way.').run;
+    const path = pastHerd(choose(run, 'gn-19-thirsty', 'Trade a flask for the way.').run, 'gn-19-herd-edge');
     expect([flagOf(path, 'savanna-water'), flagOf(path, 'savanna-path')]).toEqual([2, 1]);
     const crossing = choose(path, 'gn-19-cross', 'Cross (one flask).').run;
     expect(flagOf(crossing, 'savanna-water')).toBe(1);
@@ -53,7 +57,7 @@ describe('gn.19 The Deep Savanna', () => {
   it('with no water left, the party starts each fight at 90% HP, and it says so', () => {
     const run = walkIn('t19-dry');
     setFlag(run, 'savanna-water', 1);
-    const out = choose(choose(run, 'gn-19-thirsty', 'Keep your water.').run, 'gn-19-cross', 'Cross (one flask).');
+    const out = choose(pastHerd(choose(run, 'gn-19-thirsty', 'Keep your water.').run, 'gn-19-herd-edge'), 'gn-19-cross', 'Cross (one flask).');
     expect(out.changes.join(' ') + out.text).toMatch(/90% HP/);
     for (const m of out.run.party) if (m.hp > 0) expect(m.hp).toBeLessThanOrEqual(Math.floor(maxHp(content, m) * 0.9));
   });
@@ -62,16 +66,22 @@ describe('gn.19 The Deep Savanna', () => {
     const run = toWaterhole('t19-hippo');
     expect(scene(run, 'gn-19-waterhole').labels).toEqual(['Wait until it sleeps.', 'Offer it shade (a large Pokémon stands by it).', 'Battle.']);
     const shade = choose(run, 'gn-19-waterhole', 'Offer it shade (a large Pokémon stands by it).').run;
+    // Two Alphas, One River: the second channel was dug, so the Hippowdon has heard of you too.
+    expect(scene(toWaterhole('t19-river', (r) => setFlag(r, 'river-shared')), 'gn-19-waterhole').labels[0]).toBe('Walk to the water.');
     expect(flagOf(shade, 'savanna-water')).toBe(3);
     expect(content.events.get('gn-19-waterhole')!.choices.find((c) => c.label.startsWith('Offer'))!.requires).toContainEqual({ kind: 'gn', test: 'heavy' });
     expect(scene(toWaterhole('t19-calf', (r) => setFlag(r, 'crowned-calf-calmed')), 'gn-19-waterhole').labels[0]).toBe('Walk to the water.');
   });
 
   it('after the watching place it is night: the herd blocks the way; the dust devil costs a non-Ground lead an eighth and a step of Speed', () => {
-    let run = choose(toWaterhole('t19-night'), 'gn-19-waterhole', 'Wait until it sleeps.').run;
+    let run = pastHerd(choose(toWaterhole('t19-night'), 'gn-19-waterhole', 'Wait until it sleeps.').run, 'gn-19-herd-ridge');
     run = choose(run, 'gn-19-watch', 'Watch.').run;
     expect(flagOf(run, 'savanna-night')).toBe(1);
-    expect(scene(run, 'gn-19-herd').labels).toEqual(['Wait for the herd to pass.', 'Go round (one flask).']);
+    expect(scene(run, 'gn-19-herd').labels).toEqual(['Wait for the herd to pass.', 'Go round (one flask).', 'Hold a flask out to the eyes in the dark.']);
+    // The water trade again, at night: a Krokorok drinks and shows the way (the dust devil can then be gone round).
+    const shown = choose(run, 'gn-19-herd', 'Hold a flask out to the eyes in the dark.').run;
+    expect([flagOf(shown, 'savanna-water'), flagOf(shown, 'savanna-path')]).toEqual([flagOf(run, 'savanna-water') - 1, 1]);
+    expect(here(shown, 'gn-19-devil')).toBe(true);
     expect(choose(run, 'gn-19-herd', 'Wait for the herd to pass.').run.battle!.enemyTeam.every((m) => ['sandile', 'krokorok', 'krookodile'].includes(m.speciesId))).toBe(true);
     run = choose(run, 'gn-19-herd', 'Go round (one flask).').run;
     const hp = run.party[0]!.hp;
@@ -81,6 +91,51 @@ describe('gn.19 The Deep Savanna', () => {
     lead(run, 'sandshrew');
     const ground = choose(run, 'gn-19-devil', 'Walk through it.').run;
     expect(ground.party[0]!.hp).toBe(maxHp(content, ground.party[0]!));
+  });
+
+  it('migrating herds by day: a seeded roll puts a herd on the node; wait, or go round for a flask', () => {
+    const seen = { herd: 0, clear: 0 };
+    for (let i = 0; i < 14 && !(seen.herd && seen.clear); i++) {
+      const run = choose(walkIn(`t19-herd-${i}`), 'gn-19-thirsty', 'Keep your water.').run;
+      if (!here(run, 'gn-19-herd-edge')) {
+        seen.clear++;
+        expect(here(run, 'gn-19-cross')).toBe(true);
+        continue;
+      }
+      seen.herd++;
+      expect(scene(run, 'gn-19-herd-edge').labels).toEqual(['Wait for the herd to pass.', 'Go round (one flask).']);
+      const waited = choose(run, 'gn-19-herd-edge', 'Wait for the herd to pass.').run;
+      expect([flagOf(waited, 'savanna-water'), here(waited, 'gn-19-cross')]).toEqual([3, true]);
+      const round = choose(run, 'gn-19-herd-edge', 'Go round (one flask).').run;
+      expect([flagOf(round, 'savanna-water'), here(round, 'gn-19-cross')]).toEqual([2, true]);
+      // No water: only waiting is left.
+      const dry = structuredClone(run);
+      setFlag(dry, 'savanna-water', 0);
+      expect(scene(dry, 'gn-19-herd-edge').labels).toEqual(['Wait for the herd to pass.']);
+    }
+    expect(seen.herd).toBeGreaterThan(0);
+    expect(seen.clear).toBeGreaterThan(0);
+  });
+
+  it('the water trade at the crossing: two flasks buy an item or a companion from the Trapinch; one flask left cannot pay', () => {
+    const run = pastHerd(choose(walkIn('t19-pit'), 'gn-19-thirsty', 'Keep your water.').run, 'gn-19-herd-edge');
+    expect(scene(run, 'gn-19-cross').labels).toEqual(['Cross (one flask).', 'Cross, and pour a flask into the pit that opens (two flasks).', 'Cross, pour it a flask, and wait by the pit (two flasks).']);
+    const sand = choose(run, 'gn-19-cross', 'Cross, and pour a flask into the pit that opens (two flasks).');
+    expect(sand.battle).toBe(false);
+    expect([flagOf(sand.run, 'savanna-water'), here(sand.run, 'gn-19-waterhole')]).toEqual([1, true]);
+    expect(sand.changes.join(' ')).toMatch(/Soft Sand/);
+    const friend = choose(run, 'gn-19-cross', 'Cross, pour it a flask, and wait by the pit (two flasks).').run;
+    expect(friend.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'trapinch') || [...friend.party, ...friend.box].some((m) => m.speciesId === 'trapinch')).toBe(true);
+    const low = structuredClone(run);
+    setFlag(low, 'savanna-water', 1);
+    expect(scene(low, 'gn-19-cross').labels).toEqual(['Cross (one flask).']);
+  });
+
+  it('the water left is shown as a number once it is down to two', () => {
+    const notices = (content.events.get('gn-19-cross')!.remembers ?? []).map((v) => v.notice ?? '');
+    expect(notices).toContain('Water: {count:savanna-water} of 3 flasks.');
+    const run = pastHerd(choose(walkIn('t19-count'), 'gn-19-thirsty', 'Trade a flask for the way.').run, 'gn-19-herd-edge');
+    expect(scene(run, 'gn-19-cross').intro).toMatch(/Water: 2 of 3 flasks\./);
   });
 
   it('the wounded leader: guard it (three waves, a Donphan takes a blow each time) and treat it (two flasks): the calf and the fossil', () => {
@@ -136,9 +191,10 @@ describe('gn.20 The Lush Jungle', () => {
     run = choose(run, 'gn-20-stone1', 'Wait for the hum to drop.').run;
     run = choose(run, 'gn-20-stone2', 'Step now.').run;
     run = choose(run, 'gn-20-stone3', 'Wait for the hum to drop.').run;
+    run = choose(run, 'gn-20-roses', 'Walk round them.').run;
     return choose(run, 'gn-20-river2', 'Take the long way.').run;
   };
-  const onNode = (run: RunState, id: string) => run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.some((x) => !x.used && x.eventId === id);
+  const onNode = here;
 
   it('a door on step 14 (window 12 to 17), needs forest; also through the far gate; Unharmed: yes is shown on the way', () => {
     expect(content.coPlacement!.get('gn-20-door')).toMatchObject({ home: 14, window: [12, 17], sits: 'optional', tags: ['forest'] });
@@ -193,11 +249,70 @@ describe('gn.20 The Lush Jungle', () => {
     while (run.pending.length) run.pending.shift();
     run.party.push(createPokemon(content, 'ledian', 10, 'p9-ledian'));
     run = choose(choose(run, 'gn-20-river', 'Take the long way.').run, 'gn-20-longway', 'Go round it.').run;
-    expect(scene(run, 'gn-20-hill').labels).toEqual(['Start across.', 'Turn to the other Ledian.']);
+    expect(scene(run, 'gn-20-hill').labels).toEqual(['Start across.', 'Look up.', 'Turn to the other Ledian.']);
     const before = [...run.party, ...run.box].filter((m) => m.speciesId === 'ledian').length;
     const let_ = choose(choose(run, 'gn-20-hill', 'Turn to the other Ledian.').run, 'gn-20-pair', 'Let the first one go.').run;
     expect([...let_.party, ...let_.box].filter((m) => m.speciesId === 'ledian')).toHaveLength(before - 1);
     expect(flagOf(let_, 'jungle-pair-done')).toBe(1);
+  });
+
+  it('pairs fight as two: the Ledian and the Roselia are double battles; a caught Roselia leaves the other at your boot', () => {
+    const two = (r: RunState) => void r.party.push(createPokemon(content, 'snorlax', r.party[0]!.level, 'p-second'));
+    const ledian = choose(toFlooded('t20-two', two), 'gn-20-flooded', 'Catch one.').run;
+    expect(ledian.battle!.doubles).toBeTruthy();
+    expect(ledian.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['ledian', 'ledian']);
+    let run = choose(toHill('t20-rose', two), 'gn-20-hill', 'Start across.').run;
+    for (const id of ['gn-20-stone1', 'gn-20-stone2', 'gn-20-stone3']) run = choose(run, id, id === 'gn-20-stone2' ? 'Step now.' : 'Wait for the hum to drop.').run;
+    expect(scene(run, 'gn-20-roses').labels).toEqual(['Walk round them.', 'Catch one.']);
+    const fight = choose(run, 'gn-20-roses', 'Catch one.').run;
+    expect(fight.battle!.doubles).toBeTruthy();
+    expect(fight.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['roselia', 'roselia']);
+    expect(fight.battle!.eventRule).toMatchObject({ gn: 'jungle' });
+    // Not caught: nothing follows, and the room only lets you walk on.
+    const none = structuredClone(run);
+    open(none, 'gn-20-rose-pair');
+    expect(scene(none, 'gn-20-rose-pair').labels).toEqual(['Walk on.']);
+    // Caught one: catch the other too, or let the first go.
+    const one = structuredClone(run);
+    one.party.push(createPokemon(content, 'roselia', 10, 'p9-roselia'));
+    setFlag(one, 'jungle-rose-caught');
+    open(one, 'gn-20-rose-pair');
+    expect(scene(one, 'gn-20-rose-pair').labels).toEqual(['Catch it too.', 'Let the first one go.']);
+    const count = (r: RunState) => [...r.party, ...r.box].filter((m) => m.speciesId === 'roselia').length;
+    const freed = choose(one, 'gn-20-rose-pair', 'Let the first one go.').run;
+    expect([count(freed), flagOf(freed, 'jungle-rose-caught'), here(freed, 'gn-20-river2')]).toEqual([count(one) - 1, 0, true]);
+    const both = choose(one, 'gn-20-rose-pair', 'Catch it too.').run;
+    expect(both.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'roselia') || count(both) === count(one) + 1).toBe(true);
+  });
+
+  it('nests in every tree: Look up. is there at the vines and the hill too, once each, and never after the Taken Egg', () => {
+    const vines = toFlooded('t20-nests');
+    // toFlooded pushed on from the vines; go back one room to look.
+    let at = choose(goIn('t20-nests'), 'gn-20-wall', 'Walk on.').run;
+    for (const id of ['gn-20-bright', 'gn-20-bright-2', 'gn-20-bright-3']) at = choose(at, id, 'Go round (the long way).').run;
+    expect(scene(at, 'gn-20-vines').labels).toContain('Look up.');
+    const up = choose(at, 'gn-20-vines', 'Look up.').run;
+    expect(scene(up, 'gn-20-nest-2').labels).toEqual(['Disturb a nest.', 'Leave them be.']);
+    expect(choose(up, 'gn-20-nest-2', 'Disturb a nest.').run.battle!.eventRule).toMatchObject({ gn: 'jungle' });
+    const back = choose(up, 'gn-20-nest-2', 'Leave them be.').run;
+    expect(scene(back, 'gn-20-vines').labels).not.toContain('Look up.');
+    expect(vines.battle).toBeNull();
+    expect(scene(toHill('t20-nests-b'), 'gn-20-hill').labels).toEqual(['Start across.', 'Look up.']);
+    const taken = toHill('t20-nests-c', (r) => setFlag(r, 'egg-taken'));
+    expect(scene(taken, 'gn-20-hill').labels).toEqual(['Start across.']);
+  });
+
+  it('afterstory: a gourd lantern is in the bag at a later rest, once; it is a gift-only keepsake item', () => {
+    const ev = content.events.get('gn-20-lantern')!;
+    expect(content.coPlacement!.get('gn-20-lantern')).toMatchObject({ attaches: 'rest', sits: 'optional' });
+    expect(ev.requires).toEqual(expect.arrayContaining([expect.objectContaining({ key: 'jungle-lantern' }), expect.objectContaining({ test: 'laterStage', key: 'jungle-at' })]));
+    expect(content.catalog.get('gourd-lantern')).toMatchObject({ giftOnly: true });
+    const run = gnRun('t20-lantern');
+    setFlag(run, 'jungle-lantern');
+    open(run, 'gn-20-lantern');
+    const lit = choose(run, 'gn-20-lantern', 'Light it.').run;
+    expect(lit.passives?.['gourd-lantern']).toBe(1);
+    expect(flagOf(lit, 'jungle-lantern-found')).toBe(1);
   });
 
   it('the hill that hums: listen before each step; a slip brings three waves', () => {

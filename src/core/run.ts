@@ -20,7 +20,7 @@ import { finishSpectate } from './sky/spectate';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
-import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
+import { FOE_WAITS, gnAfterTurn, gnShape, gnShapeDouble } from './greenneedle';
 import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
 import { ofAssist, ofGuestLeaves, ofShadow, recordRelease } from './greenneedle/oldfriend';
@@ -162,7 +162,7 @@ import { count, countShiny, discover } from './progress';
 import { effectiveMax, passivePercent, teachableMoves, TM_CHOICES } from './catalog';
 import { rollField } from './overhaul/field';
 import { modifierBanner, modifierWildWeight } from './runModifiers';
-import { factoryWildWeight } from './greenneedle/factory';
+import { factoryWildWeight, professorBall } from './greenneedle/factory';
 import { xatuWildWeight } from './greenneedle/cartographer';
 import { quirkReaction } from './overhaul/personality';
 import { momentAllowed, noteMoments } from './story/momentDirector';
@@ -2894,7 +2894,9 @@ export function oneOnly(content: Content, itemId: string): boolean {
 }
 
 /** Badges needed before the shop sells an entry, after the trainer's shopUnlockOffset. */
-export function shopBadgesNeeded(content: Content, run: Pick<RunState, 'archetypeId'>, entry: Content['shop'][number]): number {
+export function shopBadgesNeeded(content: Content, run: Pick<RunState, 'archetypeId'> & Partial<Pick<RunState, 'story'>>, entry: Content['shop'][number]): number {
+  // gn.17: the professor's special Ball is unlocked for the run.
+  if (professorBall(run.story, entry.item)) return 0;
   return Math.max(0, entry.minBadges - shopUnlockOffset(runArchetype(content, run)));
 }
 
@@ -3365,7 +3367,9 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const turnCtx = battleContext(content, run, rng, captureRng, hyperRng);
   // S7: the Story Run partner's banked Impossible Feat (the engine checks the moment; no RNG).
   turnCtx.feat = featGate(content, run) ?? undefined;
-  const engineEvents: BattleEvent[] = [...shaped.events, ...(battle.doubles ? resolveDoublesTurn(turnCtx, doublesAction(turnCtx, action)) : resolveTurn(turnCtx, shaped.action))];
+  // gn.17, the Sludge Pits: in a double or triple fight the pulling answers the commands the turn really plays.
+  const pits = battle.doubles ? gnShapeDouble(run, doublesAction(turnCtx, action)) : null;
+  const engineEvents: BattleEvent[] = [...shaped.events, ...(pits ? [...(pits.events as BattleEvent[]), ...resolveDoublesTurn(turnCtx, pits.action)] : resolveTurn(turnCtx, shaped.action))];
   // Beta 4.4: a Hyper moment unlocks a move in the Hyper slot for the rest of the battle.
   engineEvents.push(...grantHyperMoves(content, run, engineEvents));
   // A practiced pair hands over after a faint (yours, or a rival's).

@@ -3,15 +3,17 @@ import { describe, expect, it } from 'vitest';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
-import { takeTurn } from '../../src/core/run';
+import { shopBadgesNeeded, shopStock, takeTurn } from '../../src/core/run';
+import { conditionMet } from '../../src/core/events';
 import { FOE_WAITS } from '../../src/core/greenneedle';
 import { SAFARI_ID, type SafariState } from '../../src/core/greenneedle/safari';
 import { gameModule } from '../../src/core/minigame/games';
 import { beginMinigame, minigameAct } from '../../src/core/minigame/flow';
 import { hashSeed, Rng } from '../../src/core/rng';
-import { SLUDGE_OFF, SLUDGE_TURNS, factoryTurnEnd, factoryWildWeight } from '../../src/core/greenneedle/factory';
+import { PIT_PULL, PROFESSOR_BALL, SLUDGE_OFF, SLUDGE_TURNS, factoryTurnEnd, factoryWildWeight, pitsFreed, pitsStart } from '../../src/core/greenneedle/factory';
 import { RIVAL_RETURN_EVENT } from '../../src/core/expansion/canonSaffron';
 import { choose, flagOf, gnRun, lose, open, scene, setFlag, win } from './helpers/gnPlay';
+import { step } from './autoplay';
 
 describe('gn.16 The Fighting Tournament', () => {
   /** A run with the Route 25 Mankey and two others, at the Tournament's door, signed up. */
@@ -168,7 +170,7 @@ describe('gn.17 The Polluted Factory', () => {
     let run = win(choose(win(choose(inside(seed, setup), 'gn-17-pipes', 'Go through.').run), 'gn-17-pipes-2', 'Keep going.').run);
     run = choose(run, 'gn-17-line', 'Walk past him.').run;
     run = choose(run, 'gn-17-desk', 'Take the research.').run;
-    return win(choose(run, 'gn-17-pits', 'Fight the Grimer first.').run);
+    return win(choose(run, 'gn-17-pits', 'Fight the Grimer; leave the pits.').run);
   };
   const toControl = (seed: string, setup?: (run: RunState) => void, muk = 'Seal the pipe for it (a Steel-, Fire- or Rock-type).'): RunState => choose(toMuk(seed, setup), 'gn-17-muk', muk).run;
   const closeValves = (run: RunState): RunState => {
@@ -222,18 +224,62 @@ describe('gn.17 The Polluted Factory', () => {
     expect(burst('magnemite')).toBe(0);
   });
 
-  it('the pits: each standing Pokémon pulls one out per go, six at most; the Trubbish Nobody Wanted will not leave until all six are out', () => {
-    let run = win(choose(win(choose(inside('t17-pits'), 'gn-17-pipes', 'Go through.').run), 'gn-17-pipes-2', 'Keep going.').run);
-    run = choose(choose(run, 'gn-17-line', 'Walk past him.').run, 'gn-17-desk', 'Leave it.').run;
-    const standing = run.party.filter((m) => m.hp > 0).length;
-    run = choose(run, 'gn-17-pits', 'Pull them out.').run;
-    expect(flagOf(run, 'factory-freed')).toBe(Math.min(6, standing));
-    expect(scene(run, 'gn-17-pits-2').labels).toEqual(['Keep pulling.', "That's enough."]);
-    expect(flagOf(choose(run, 'gn-17-pits-2', 'Keep pulling.').run, 'factory-freed')).toBe(Math.min(6, standing * 2));
-    setFlag(run, 'trubbish-kept');
-    const kept = choose(run, 'gn-17-pits-2', "That's enough.");
-    expect(kept.text).toMatch(/every one's out/);
-    expect(flagOf(kept.run, 'factory-freed')).toBe(6);
+  it('the pits: the pulling happens in the Grimer fight: each Pokémon that pulls gives up its move, six at most; the Trubbish Nobody Wanted will not leave until all six are out', () => {
+    const atPits = (seed: string, setup?: (run: RunState) => void): RunState => {
+      let run = win(choose(win(choose(inside(seed, setup), 'gn-17-pipes', 'Go through.').run), 'gn-17-pipes-2', 'Keep going.').run);
+      return choose(choose(run, 'gn-17-line', 'Walk past him.').run, 'gn-17-desk', 'Leave it.').run;
+    };
+    const sturdy = (run: RunState): RunState => {
+      for (const foe of run.battle!.enemyTeam) { foe.moves = [{ id: 'splash', pp: 40 }]; }
+      return run;
+    };
+    const run = atPits('t17-pits');
+    expect(scene(run, 'gn-17-pits').labels).toEqual(['Pull them all out.', 'Pull out three, then fight.', 'Fight the Grimer; leave the pits.']);
+    expect(scene(run, 'gn-17-pits').intro).toMatch(/with the Grimer horde still attacking/);
+    // All six: six pulls are queued, and each costs one of your Pokémon its move while the Grimer go on attacking.
+    let all = sturdy(choose(structuredClone(run), 'gn-17-pits', 'Pull them all out.').run);
+    expect(all.battle!.eventRule).toMatchObject({ gn: 'pits' });
+    expect(all.battle!.storyEffects.filter((t) => t === PIT_PULL)).toHaveLength(6);
+    expect(flagOf(all, 'factory-freed')).toBe(0);
+    const foeHp = all.battle!.enemyTeam.map((m) => m.hp);
+    const turn = step(content, all);
+    all = turn.run;
+    const pulled = 6 - all.battle!.storyEffects.filter((t) => t === PIT_PULL).length;
+    expect(pulled).toBeGreaterThanOrEqual(1);
+    expect(pulled).toBeLessThanOrEqual(3);
+    expect(flagOf(all, 'factory-freed')).toBe(pulled);
+    // A Pokémon that pulled did not attack: on the first turn everyone out was pulling, so no Grimer lost HP.
+    expect(all.battle!.enemyTeam.map((m) => m.hp)).toEqual(foeHp);
+    for (let i = 0; i < 12 && all.phase === 'battle' && all.battle!.storyEffects.includes(PIT_PULL); i++) all = step(content, sturdy(all)).run;
+    expect(flagOf(all, 'factory-freed')).toBe(6);
+    // Three: one turn's worth, never more.
+    let three = sturdy(choose(structuredClone(run), 'gn-17-pits', 'Pull out three, then fight.').run);
+    expect(three.battle!.storyEffects.filter((t) => t === PIT_PULL)).toHaveLength(3);
+    for (let i = 0; i < 8 && three.phase === 'battle' && three.battle!.storyEffects.includes(PIT_PULL); i++) three = step(content, sturdy(three)).run;
+    expect(flagOf(three, 'factory-freed')).toBe(3);
+    expect(flagOf(win(three), 'factory-freed')).toBe(3);
+    // None: an ordinary horde fight.
+    const none = choose(structuredClone(run), 'gn-17-pits', 'Fight the Grimer; leave the pits.').run;
+    expect(none.battle!.storyEffects).not.toContain(PIT_PULL);
+    expect(flagOf(win(none), 'factory-freed')).toBe(0);
+    // The Trubbish Nobody Wanted: it is already in the pit; all six or nothing.
+    const kept = atPits('t17-pits-trub', (r) => setFlag(r, 'trubbish-kept'));
+    expect(scene(kept, 'gn-17-pits').intro).toMatch(/every one's out/);
+    expect(scene(kept, 'gn-17-pits').labels).toEqual(['Pull them out.']);
+    expect(choose(kept, 'gn-17-pits', 'Pull them out.').run.battle!.storyEffects.filter((t) => t === PIT_PULL)).toHaveLength(6);
+  });
+  it('the pit count: pulls made so far, on top of those already out, never more than six', () => {
+    const b = { storyEffects: [] as string[] } as unknown as RunState['battle'] & object;
+    expect(pitsFreed(b)).toBeUndefined();
+    pitsStart(b, 6, 4);
+    expect(b.storyEffects.filter((t) => t === PIT_PULL)).toHaveLength(2);
+    expect(pitsFreed(b)).toBe(4);
+    b.storyEffects.splice(b.storyEffects.indexOf(PIT_PULL), 1);
+    expect(pitsFreed(b)).toBe(5);
+    const full = { storyEffects: [] as string[] } as unknown as RunState['battle'] & object;
+    pitsStart(full, 3, 6);
+    expect(full.storyEffects).not.toContain(PIT_PULL);
+    expect(pitsFreed(full)).toBe(6);
   });
 
   it('the Muk in the wall: sealing it needs a Steel-, Fire- or Rock-type; it follows', () => {
@@ -243,7 +289,11 @@ describe('gn.17 The Polluted Factory', () => {
     expect(sealed.text).toMatch(/never been thanked/);
     expect(flagOf(sealed.run, 'factory-muk-helped')).toBe(1);
     expect(content.events.get('gn-17-muk')!.choices[0]!.requires).toContainEqual(expect.objectContaining({ kind: 'partyTypes', types: ['steel', 'fire', 'rock'] }));
-    expect(flagOf(choose(run, 'gn-17-muk', 'Feed it.').run, 'factory-muk-helped')).toBe(0);
+    // Feeding it helps it too: it plugs the leak with a piece of itself, and follows.
+    const fed = choose(run, 'gn-17-muk', 'Feed it.');
+    expect(fed.text).toMatch(/never been thanked/);
+    expect(flagOf(fed.run, 'factory-muk-helped')).toBe(1);
+    expect(flagOf(choose(run, 'gn-17-muk', 'Leave it.').run, 'factory-muk-helped')).toBe(0);
   });
 
   it('the valves: the labels are wrong, the stains are right; closed, the raid opens without Toxic Spikes; a wrong one opens them all again', () => {
@@ -374,6 +424,77 @@ describe('gn.17 The Polluted Factory', () => {
   });
 });
 
+describe('gn.17 consequences (the research, the Kaiju, the Kanto door)', () => {
+  it('research handed to a professor: the special Ball is on sale for the rest of the run, whatever the badges', () => {
+    const run = gnRun('gnfix17-ball');
+    const entry = content.shop.find((e) => e.item === PROFESSOR_BALL)!;
+    expect(entry.minBadges).toBeGreaterThan(run.badges.length);
+    expect(shopBadgesNeeded(content, run, entry)).toBe(entry.minBadges);
+    expect(shopStock(content, run).some((e) => e.item === PROFESSOR_BALL && run.badges.length >= shopBadgesNeeded(content, run, e))).toBe(false);
+    open(run, 'gn-17-research');
+    const given = choose(run, 'gn-17-research', 'Hand it to a professor.').run;
+    expect(given.inventory[PROFESSOR_BALL]).toBe((run.inventory[PROFESSOR_BALL] ?? 0) + 1);
+    expect(shopBadgesNeeded(content, given, entry)).toBe(0);
+    // Other Balls keep their badge gate.
+    const other = content.shop.find((e) => e.item === 'beast-ball')!;
+    expect(shopBadgesNeeded(content, given, other)).toBe(other.minBadges);
+  });
+  it('research sold: in a later region the buyer has built another factory, and its water routes turn the other way', () => {
+    let run = gnRun('gnfix17-sold');
+    run.regionIndex = 0;
+    open(run, 'gn-17-research');
+    run = choose(run, 'gn-17-research', 'Sell it.').run;
+    expect(flagOf(run, 'factory-research-sold')).toBe(1);
+    const second = content.events.get('gn-17-second')!;
+    const holds = (r: RunState) => second.requires.every((c) => conditionMet(content, r, c));
+    expect(holds(run)).toBe(false);
+    run.regionIndex = 1;
+    expect(holds(run)).toBe(true);
+    open(run, 'gn-17-second');
+    expect(scene(run, 'gn-17-second').intro).toMatch(/the same stamp: a ball inside a cog/);
+    run = choose(run, 'gn-17-second', 'Look at the water.').run;
+    expect(holds(run)).toBe(false);
+    expect(factoryWildWeight(content, run, ['water'], 'grimer')).toBe(1.5);
+    expect(factoryWildWeight(content, run, ['water'], 'magikarp')).toBe(0.5);
+    expect(factoryWildWeight(content, run, ['grass'], 'grimer')).toBe(1);
+    run.regionIndex = 2;
+    expect(factoryWildWeight(content, run, ['water'], 'grimer')).toBe(1);
+    // Never sold: it never shows.
+    const clean = gnRun('gnfix17-clean');
+    clean.regionIndex = 1;
+    expect(second.requires.every((c) => conditionMet(content, clean, c))).toBe(false);
+  });
+  it('left running: the Kaiju, if it was cut free, comes back on a later water stage', () => {
+    const back = content.events.get('gn-17-kaiju-back')!;
+    const run = gnRun('gnfix17-kaiju');
+    const flags = back.requires.filter((c) => c.kind !== 'stageTypes' && c.kind !== 'gn');
+    expect(flags.every((c) => conditionMet(content, run, c))).toBe(false);
+    setFlag(run, 'factory-left-running');
+    expect(flags.every((c) => conditionMet(content, run, c))).toBe(false);
+    setFlag(run, 'kaiju-freed');
+    expect(flags.every((c) => conditionMet(content, run, c))).toBe(true);
+    expect(back.requires).toContainEqual({ kind: 'stageTypes', types: ['water'] });
+    open(run, 'gn-17-kaiju-back');
+    expect(scene(run, 'gn-17-kaiju-back').intro).toMatch(/It came back/);
+    const fight = choose(structuredClone(run), 'gn-17-kaiju-back', 'Drive it away from the harbour.');
+    expect(fight.battle).toBe(true);
+    const left = choose(run, 'gn-17-kaiju-back', 'Leave the harbour to it.').run;
+    expect(flagOf(left, 'factory-kaiju-back')).toBe(1);
+    expect(flags.every((c) => conditionMet(content, left, c))).toBe(false);
+  });
+  it('in Kanto the canon door knows the float too', () => {
+    const run = gnRun('gnfix17-kanto');
+    open(run, 'cs-kanto-fuchsia-factory');
+    expect(scene(run, 'cs-kanto-fuchsia-factory').labels).toEqual(['Sign.', 'Read it first.', 'Climb the fence.']);
+    setFlag(run, 'kaiju-stamp');
+    expect(scene(run, 'cs-kanto-fuchsia-factory').intro).toMatch(/That's ours\. That's one of ours/);
+    expect(scene(run, 'cs-kanto-fuchsia-factory').labels).toEqual(['Go in.']);
+    const inside = choose(run, 'cs-kanto-fuchsia-factory', 'Go in.').run;
+    expect(flagOf(inside, 'factory-valve-order')).toBe(1);
+    expect(flagOf(inside, 'factory-entered')).toBe(1);
+  });
+});
+
 describe('gn.18 Safari Land', () => {
   const fresh = (): SafariState => gameModule(SAFARI_ID).start(content, { steps: 500, balls: 30 }, new Rng(hashSeed('t18-park')).state) as unknown as SafariState;
   const act = (s: SafariState, id: string): SafariState => {
@@ -408,6 +529,8 @@ describe('gn.18 Safari Land', () => {
     expect([s.balls, s.steps, s.quiet]).toEqual([30, 500, 0]);
     expect(visit('t18-gate-b', (r) => setFlag(r, 'safari-fee-up')).money).toBe(1200);
     expect((visit('t18-alpha', (r) => setFlag(r, 'alpha-calmed')).minigame!.state as SafariState).quiet).toBe(3);
+    // The flag the Alpha event actually sets (families/new-events write `calmed-alpha`).
+    expect((visit('t18-alpha-b', (r) => setFlag(r, 'calmed-alpha')).minigame!.state as SafariState).quiet).toBe(3);
   });
 
   it('Quiet rises when you walk, wait and watch, and falls when you run or throw a rock; every chance is shown', () => {
