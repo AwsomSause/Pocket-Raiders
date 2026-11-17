@@ -45,6 +45,8 @@ export function isBossClass(classId: string | undefined | null): boolean {
 
 export interface DamageDealtInfo {
   userTypes: readonly TypeName[];
+  /** The battle turn (1 = first). */
+  turn?: number;
   physical: boolean;
   /** Share of the user's HP left, 0 to 1. */
   hpShare: number;
@@ -93,7 +95,7 @@ export interface DamageDealtInfo {
 /** Damage multiplier for a hit your Pokémon deals (stacks with the older type modifiers). */
 export function damageDealtPerk(perks: Perks | undefined, i: DamageDealtInfo): number {
   let v = 1;
-  v *= product(perks, 'damageMultiplier', (m) => (!m.type || i.userTypes.includes(m.type)) && (!m.types || m.types.some((t) => i.userTypes.includes(t))) && (!m.category || (m.category === 'physical') === i.physical) && (!m.speed || (m.speed === 'fast' ? i.userBaseSpeed >= FAST_BASE_SPEED : i.userBaseSpeed <= SLOW_BASE_SPEED)) && (m.legendary === undefined || m.legendary === Boolean(i.userLegendary)) && (m.ultraBeast === undefined || m.ultraBeast === Boolean(i.userUltraBeast)));
+  v *= product(perks, 'damageMultiplier', (m) => (!m.moveType || m.moveType === i.moveType) && (!m.slot || (m.slot === 'lead') === (i.partyIndex === 0)) && (m.hpAtLeast === undefined || i.hpShare >= m.hpAtLeast) && (m.turnAtMost === undefined || (i.turn ?? 1) <= m.turnAtMost) && (m.turnAtLeast === undefined || (i.turn ?? 1) >= m.turnAtLeast) && (!m.type || i.userTypes.includes(m.type)) && (!m.types || m.types.some((t) => i.userTypes.includes(t))) && (!m.category || (m.category === 'physical') === i.physical) && (!m.speed || (m.speed === 'fast' ? i.userBaseSpeed >= FAST_BASE_SPEED : i.userBaseSpeed <= SLOW_BASE_SPEED)) && (m.legendary === undefined || m.legendary === Boolean(i.userLegendary)) && (m.ultraBeast === undefined || m.ultraBeast === Boolean(i.userUltraBeast)));
   if (i.sameSpecies) v *= product(perks, 'sameSpeciesDamageMultiplier');
   v *= product(perks, 'moveStyleDamage', (m) => m.style === i.moveStyle);
   v *= product(perks, 'moveFlagDamage', (m) => m.flags.some((f) => i.moveFlags?.includes(f)));
@@ -132,6 +134,10 @@ export interface DamageTakenInfo {
   effectiveness?: number;
   /** Full turns the defender has been out (0 = it just came in). */
   targetTurnsOut?: number;
+  physical?: boolean;
+  /** The defender's party slot (0 = lead) and whether it is at full HP. */
+  targetPartyIndex?: number;
+  targetFullHp?: boolean;
 }
 
 /** Damage multiplier for a hit your Pokémon takes. */
@@ -141,6 +147,9 @@ export function damageTakenPerk(perks: Perks | undefined, i: DamageTakenInfo): n
     if (m.type && !i.targetTypes.includes(m.type)) return false;
     if (m.moveType && m.moveType !== i.moveType) return false;
     if (m.fromLegendary && !i.attackerIsLegendary) return false;
+    if (m.category && (m.category === 'physical') !== Boolean(i.physical)) return false;
+    if (m.slot && (m.slot === 'lead') !== (i.targetPartyIndex === 0)) return false;
+    if (m.fullHp && !i.targetFullHp) return false;
     return true;
   });
   if (i.attackerIsBoss) v *= product(perks, 'bossDamageTakenMultiplier');
@@ -611,4 +620,14 @@ export function megaCraftCost(perks: Perks | undefined): number {
 /** Event toolkit: the rules that hold at the start of every battle (weather, Gravity, Trick Room, Tailwind). */
 export function battleStartRules(perks: Perks | undefined): Kind<'battleStart'>[] {
   return of(perks, 'battleStart');
+}
+
+/** Legendary Blessings: the status immunity at the start of a battle (`statusImmuneTurns`). */
+export function statusImmuneNow(perks: Perks | undefined, turn: number, status: string): boolean {
+  return of(perks, 'statusImmuneTurns').some((m) => turn <= m.turns && (!m.status || m.status === status));
+}
+
+/** Legendary Blessings: how often foes' added effects land on your side (1 = as usual). */
+export function foeSecondaryPerk(perks: Perks | undefined): number {
+  return product(perks, 'foeSecondaryChance');
 }
