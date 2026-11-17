@@ -5,7 +5,8 @@ import doctrinesRaw from '../../data/evilMode/doctrines.json';
 import methodsRaw from '../../data/evilMode/methods.json';
 import foundingRaw from '../../data/evilMode/founding.json';
 import districtRaw from '../../data/evilMode/district.json';
-import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FoundingFileSchema, MethodsFileSchema } from './schema';
+import ledgerRaw from '../../data/evilMode/ledger.json';
+import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FoundingFileSchema, LedgerFileSchema, MethodsFileSchema } from './schema';
 
 export const EVIL_DATA = {
   creeds: CreedsFileSchema.parse(creedsRaw).creeds,
@@ -13,6 +14,7 @@ export const EVIL_DATA = {
   methods: MethodsFileSchema.parse(methodsRaw).methods,
   founding: FoundingFileSchema.parse(foundingRaw),
   district: DistrictFileSchema.parse(districtRaw),
+  ledger: LedgerFileSchema.parse(ledgerRaw),
 };
 export type EvilData = typeof EVIL_DATA;
 export type Creed = EvilData['creeds'][number];

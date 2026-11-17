@@ -18,6 +18,17 @@ import { boardView } from '../ui/redux/screens/evilBoard';
 import { boardModel, dispatchRows, newDispatch, type DispatchDraft } from '../core/evilMode/boardScreens';
 import { JOB_METHODS, type JobMethod } from '../core/evilMode/schema';
 import { GAME_WIDTH } from '../ui/theme';
+import { gateKey, gateSeen, openGate, otherWay, type CardGate } from '../core/evilMode/card';
+import { jobProblem } from '../core/evilMode/dispatch';
+import type { JobDraft } from '../core/evilMode/odds';
+import type { StoredCard } from '../core/evilMode/schema';
+import { cardModel, LEDGER_ACTS, ledgerModel, newLedger, type LedgerDraft } from '../core/evilMode/ledgerScreens';
+import { cardView, filedCorner, ledgerView } from '../ui/redux/screens/evilLedger';
+
+/** Keys that confirm (input.ts KEY_MAP), read raw on the Card so a held key can be told from a press. */
+const CONFIRM_CODES = new Set(['Enter', 'NumpadEnter', 'Space', 'KeyZ']);
+
+type OpenCard = { job: JobDraft; gate: CardGate; scroll: number } | { read: StoredCard; scroll: number };
 
 export class EvilScene extends Phaser.Scene {
   private view: ReduxView | null = null;
@@ -26,6 +37,12 @@ export class EvilScene extends Phaser.Scene {
   private notice: string | null = null;
   private input_: HTMLInputElement | null = null;
   private leaving = false;
+  /** The Honest Card overlay (slice 3): a job being confirmed, or a kept Card read from the Ledger. */
+  private card: OpenCard | null = null;
+  private ledger: LedgerDraft | null = null;
+  /** The last line filed, shown in the Ledger's corner. */
+  private filed: string | null = null;
+  private cardOpenedAt = 0;
 
   constructor() {
     super('Evil');
@@ -37,6 +54,9 @@ export class EvilScene extends Phaser.Scene {
     this.disp = newDispatch();
     this.notice = null;
     this.leaving = false;
+    this.card = null;
+    this.ledger = null;
+    this.filed = null;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
     session.evilEnsure();
@@ -54,8 +74,11 @@ export class EvilScene extends Phaser.Scene {
         const block = r?.expansion?.evilMode;
         if (block?.district) {
           const frame = frameModel(block, archetype.name);
+          // The Card takes the whole stage; the frame falls away (design Part 29 section 3).
+          if (this.card) return cardView(cardModel(block, this.card), block.team.look.a, block.team.look.b);
           if (block.district.end) frame.button = 'Leave';
-          return frameView(c, frame, this.notice, boardView(boardModel(block, this.disp), frame, this.notice));
+          const ledger = this.ledger ? ledgerView(ledgerModel(block, this.ledger)) : undefined;
+          return frameView(c, frame, this.notice, boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), filed: filedCorner(this.filed) }));
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -71,12 +94,29 @@ export class EvilScene extends Phaser.Scene {
         how: () => this.toHow(),
         method: (i) => { this.disp = { ...this.disp, how: Number(i), step: 'how' }; this.view?.refresh(); },
         offer: (pct) => { this.disp = { ...this.disp, offer: Number(pct) }; this.view?.refresh(); },
-        queue: () => this.queue(),
+        queue: () => this.openCard(false),
+        cardConfirm: () => this.confirmCard(),
+        cardClose: () => this.closeCard(),
+        cardSwap: () => this.swapCard(),
+        ledger: () => this.toggleLedger(),
+        ltab: (i) => { if (this.ledger) this.ledger = { tab: Number(i), row: 0, act: null }; this.view?.refresh(); },
+        lrow: (i) => { if (this.ledger) this.ledger = { ...this.ledger, row: Number(i), act: 0 }; this.view?.refresh(); },
+        lact: (arg) => { const [i, j] = arg.split(':').map(Number); if (this.ledger) { this.ledger = { ...this.ledger, row: i!, act: j! }; this.ledgerAct(); } },
+        lcard: (id) => this.readCard(id),
         clear: (id) => { services().session.evilStep({ type: 'clearJob', holdingId: id }); this.view?.refresh(); },
       },
       overs: { over: (i) => { if (!this.founded()) { this.draft = { ...this.draft, at: Number(i) }; this.view?.refresh(); } } },
     });
     onInputAction(this, (a) => this.key(a));
+    // The Card reads confirm keys raw: a held key (a repeat) scrolls and never confirms; confirm wants its own press.
+    const kb = this.input.keyboard;
+    const down = (e: KeyboardEvent) => this.rawKey(e, 'down');
+    const up = (e: KeyboardEvent) => this.rawKey(e, 'up');
+    kb?.on('keydown', down);
+    kb?.on('keyup', up);
+    const onScroll = (e: Event) => this.cardScrolled(e);
+    this.view.el.addEventListener('scroll', onScroll, true);
+    this.events.once('shutdown', () => { kb?.off('keydown', down); kb?.off('keyup', up); });
     this.events.on('postupdate', this.place, this);
     this.events.once('shutdown', () => {
       this.events.off('postupdate', this.place, this);
@@ -176,6 +216,8 @@ export class EvilScene extends Phaser.Scene {
 
   /** Keys on the Board and in Dispatch (design Part 29 section 18): every job can be built and queued without a pointer. */
   private dayKey(a: InputAction): void {
+    if (this.card) return this.cardKey(a);
+    if (this.ledger) return this.ledgerKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
     const d = this.disp;
@@ -212,7 +254,7 @@ export class EvilScene extends Phaser.Scene {
       const offers = EVIL_DATA.district.methods.pay.offers.map((o) => o.pct);
       const i = offers.indexOf(d.offer);
       this.disp = { ...d, offer: offers[(i + (a === 'up' ? -1 : 1) + offers.length) % offers.length]! };
-    } else if (a === 'confirm') return this.queue();
+    } else if (a === 'confirm') return this.openCard(true);
     this.view?.refresh();
   }
 
@@ -243,20 +285,184 @@ export class EvilScene extends Phaser.Scene {
     this.view?.refresh();
   }
 
-  private queue(): void {
+  /** The job being built in How, or null. */
+  private draftJob(): JobDraft | null {
     const d = this.disp;
-    const block = this.block();
-    const h = block?.district?.holdings[d.at];
+    const h = this.block()?.district?.holdings[d.at];
     const m = EVIL_DATA.methods[d.how];
-    if (!h || !m || !(JOB_METHODS as readonly string[]).includes(m.id)) return;
+    if (!h || !m || !(JOB_METHODS as readonly string[]).includes(m.id)) return null;
     const method = m.id as JobMethod;
-    const cues = services().session.evilStep({ type: 'queueJob', job: { holdingId: h.id, method, squad: d.squad, ...(method === 'pay' ? { offer: d.offer } : {}) } });
-    const refused = cues.find((c) => c.id === 'refused');
+    return { holdingId: h.id, method, squad: d.squad, ...(method === 'pay' ? { offer: d.offer } : {}) };
+  }
+
+  /** "Read the Card": no job goes without its Honest Card. `byKey`: the press that opened it is still down. */
+  private openCard(byKey: boolean): void {
+    const block = this.block();
+    const job = this.draftJob();
+    if (!block || !job) return;
+    const problem = jobProblem(block, job);
+    if (problem) {
+      this.notice = problem;
+      return this.view?.refresh();
+    }
+    // Opened as "not yet seen"; the first draw measures whether all thirteen fit, and lights CONFIRM at once if they do.
+    this.card = { job, gate: openGate(false, byKey), scroll: 0 };
+    this.cardOpenedAt = performance.now();
+    this.notice = null;
+    this.redrawCard();
+  }
+
+  private closeCard(): void {
+    const read = this.card && 'read' in this.card;
+    this.card = null;
+    if (!read) this.disp = { ...this.disp, step: 'how' };
+    this.view?.refresh();
+  }
+
+  /** Field 13's button: the Card is swapped for the other way's job (a Pay under the price becomes the fair price). */
+  private swapCard(): void {
+    const c = this.card;
+    if (!c || 'read' in c) return;
+    const job = otherWay(c.job);
+    if (!job) return;
+    this.disp = { ...this.disp, offer: job.offer ?? this.disp.offer };
+    this.card = { job, gate: openGate(false, false), scroll: 0 };
+    this.cardOpenedAt = performance.now();
+    this.redrawCard();
+  }
+
+  /** CONFIRM: queues the job and files the Card. Does nothing until field 13's been seen. */
+  private confirmCard(): void {
+    const c = this.card;
+    if (!c || 'read' in c || !c.gate.seen) return;
+    const m = EVIL_DATA.methods.find((x) => x.id === c.job.method)!;
+    const h = this.block()?.district?.holdings.find((x) => x.id === c.job.holdingId);
+    const cues = services().session.evilStep({ type: 'confirmCard', job: c.job });
+    this.card = null;
+    const refused = cues.find((x) => x.id === 'refused');
+    const filed = cues.find((x) => x.id === 'filed');
     if (refused && 'reason' in refused) this.notice = refused.reason;
     else {
-      this.notice = `Queued: step ${h.step}, ${m.name}.`;
-      this.disp = { ...newDispatch(), at: d.at };
+      // The card folds to its twelfth line, which drops into the Ledger's corner.
+      this.filed = filed && 'text' in filed ? filed.text : null;
+      this.notice = `Queued: step ${h?.step ?? '?'}, ${m.name}.`;
+      this.disp = { ...newDispatch(), at: this.disp.at };
     }
+    this.view?.refresh();
+  }
+
+  private cardKey(a: InputAction): void {
+    if (a === 'back') return this.closeCard();
+    if (a === 'up' || a === 'down') this.scrollCard(a === 'up' ? -80 : 80);
+    // Confirm keys are read raw (rawKey), so a held one can be told apart.
+  }
+
+  private rawKey(e: KeyboardEvent, type: 'down' | 'up'): void {
+    if (e.code === 'KeyL' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.toggleLedger();
+    const c = this.card;
+    if (!c || !CONFIRM_CODES.has(e.code)) return;
+    // The press that opened the Card reaches this listener too (after the action listener opened it): skip it.
+    if (e.type === 'keydown' && e.timeStamp <= this.cardOpenedAt) return;
+    if ('read' in c) {
+      if (type === 'down' && !e.repeat) this.closeCard();
+      return;
+    }
+    const r = gateKey(c.gate, { type, repeat: e.repeat });
+    this.card = { ...c, gate: r.gate };
+    if (r.act === 'confirm') return this.confirmCard();
+    if (r.act === 'scroll') this.scrollCard(80);
+    else if (r.gate !== c.gate) this.view?.refresh();
+  }
+
+  private scrollEl(): HTMLElement | null {
+    return this.view?.el.querySelector<HTMLElement>('[data-card-scroll]') ?? null;
+  }
+
+  private scrollCard(by: number): void {
+    const el = this.scrollEl();
+    if (!el || !this.card) return;
+    el.scrollTop += by;
+    this.card = { ...this.card, scroll: el.scrollTop };
+    this.checkSeen();
+  }
+
+  private cardScrolled(e: Event): void {
+    const el = e.target as HTMLElement | null;
+    if (!this.card || !el?.dataset?.cardScroll) return;
+    this.card = { ...this.card, scroll: el.scrollTop };
+    this.checkSeen();
+  }
+
+  /** Field 13 is "seen" once its whole line has been inside the Card's window. */
+  private checkSeen(): void {
+    const c = this.card;
+    if (!c || 'read' in c || c.gate.seen) return;
+    const box = this.scrollEl();
+    const f13 = this.view?.el.querySelector<HTMLElement>('[data-testid="evil-card-f13"]');
+    if (!box || !f13) return;
+    if (f13.getBoundingClientRect().bottom <= box.getBoundingClientRect().bottom + 1) {
+      this.card = { ...c, gate: gateSeen(c.gate) };
+      this.redrawCard();
+    }
+  }
+
+  /** Every redraw replaces the view's HTML: put the Card's scroll back, then measure. */
+  private redrawCard(): void {
+    this.view?.refresh();
+    requestAnimationFrame(() => {
+      const el = this.scrollEl();
+      if (el && this.card) el.scrollTop = this.card.scroll;
+      this.checkSeen();
+    });
+  }
+
+  private readCard(id: string): void {
+    const card = this.block()?.cards.find((c) => c.id === id);
+    if (!card) return;
+    this.card = { read: card, scroll: 0 };
+    this.cardOpenedAt = performance.now();
+    this.redrawCard();
+  }
+
+  private toggleLedger(): void {
+    if (this.card) return;
+    this.ledger = this.ledger ? null : newLedger();
+    this.notice = null;
+    this.view?.refresh();
+  }
+
+  /** Keys in the Ledger: Left/Right the tabs (or the actions under a line), Up/Down the lines, Enter opens or does. */
+  private ledgerKey(a: InputAction): void {
+    const block = this.block();
+    const L = this.ledger;
+    if (!block || !L) return;
+    const m = ledgerModel(block, L);
+    if (a === 'back') this.ledger = L.act !== null ? { ...L, act: null } : null;
+    else if (L.act !== null && (a === 'left' || a === 'right')) this.ledger = { ...L, act: (L.act + (a === 'left' ? -1 : 1) + LEDGER_ACTS.length) % LEDGER_ACTS.length };
+    else if (a === 'left' || a === 'right') this.ledger = { tab: (L.tab + (a === 'left' ? -1 : 1) + m.tabs.length) % m.tabs.length, row: 0, act: null };
+    else if ((a === 'up' || a === 'down') && m.rows) this.ledger = { ...L, row: (L.row + (a === 'up' ? -1 : 1) + m.rows) % m.rows, act: null };
+    else if (a === 'confirm') {
+      if (L.tab === 0 && m.rows) {
+        if (L.act === null) this.ledger = { ...L, act: 0 };
+        else return this.ledgerAct();
+      } else if (L.tab === 1 && m.run?.[L.row]) return this.readCard(m.run[L.row]!.cardId);
+    }
+    this.view?.refresh();
+  }
+
+  /** Waive, Halve or Ask about on the chosen income line. */
+  private ledgerAct(): void {
+    const block = this.block();
+    const L = this.ledger;
+    if (!block || !L || L.act === null) return;
+    const line = ledgerModel(block, L).today?.in[L.row];
+    if (!line) return;
+    const cues = services().session.evilStep({ type: LEDGER_ACTS[L.act]!, holdingId: line.holdingId });
+    const refused = cues.find((c) => c.id === 'refused');
+    const asked = cues.find((c) => c.id === 'asked');
+    this.notice = refused && 'reason' in refused ? refused.reason : asked && 'line' in asked ? asked.line : null;
+    this.filed = !refused ? services().session.run?.expansion?.evilMode?.log.at(-1)?.text ?? this.filed : this.filed;
+    this.ledger = { ...L, act: null };
     this.view?.refresh();
   }
 

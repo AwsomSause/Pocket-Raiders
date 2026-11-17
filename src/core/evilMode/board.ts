@@ -105,6 +105,12 @@ export function fairPrice(h: Holding, data: EvilData = EVIL_DATA): number | null
   return Math.round(price / 50) * 50;
 }
 
+/** What a Pay offer costs: the offer's percent of the fair price, to the nearest ₽50. */
+export function payAmount(h: Holding, offer: number | undefined, data: EvilData = EVIL_DATA): number {
+  const fair = fairPrice(h, data) ?? 0;
+  return Math.round((fair * (offer ?? 100)) / 100 / 50) * 50;
+}
+
 /** What a held holding pays the team each Evening (a safehouse costs its rent). */
 export function takings(h: Holding, data: EvilData = EVIL_DATA): number {
   if (h.owner !== 'team') return 0;

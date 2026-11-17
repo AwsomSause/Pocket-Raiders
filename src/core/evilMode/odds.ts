@@ -73,3 +73,9 @@ export function oddsFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   }
 }
 
+
+/** The odds as printed, line by line (design Part 7 section 2): the figure (a band while a mood is unscouted), then every term. Dispatch and the Card both print this. */
+export function oddsText(o: Odds): string {
+  const figure = o.certain ? 'Certain' : o.lo === o.hi ? `${o.odds}%` : `${o.lo}–${o.hi}%`;
+  return `${figure} · ${o.terms.map((t) => (o.certain || t.value === 0 ? t.label : `${t.label} ${t.value > 0 ? '+' : ''}${t.value}`)).join(' · ')}`;
+}

@@ -5,7 +5,7 @@
 import { districtDef, fairPrice, heldCount, holdingName, kindDef, localOf, methodsFor } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { crewProblem, jobProblem, payAmount } from './dispatch';
-import { oddsFor } from './odds';
+import { oddsFor, oddsText } from './odds';
 import { lineIndex } from './start';
 import { JOB_METHODS, type EvilModeBlock, type Holding, type JobMethod, type LineId } from './schema';
 
@@ -136,9 +136,7 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
   const problem = !chosen ? 'Pick a method.' : chosen.dark ?? (job ? jobProblem(block, job, data) : null);
   let oddsLine = '';
   if (job && (sel.owner !== 'team' || method === 'scout')) {
-    const o = oddsFor(block, job, data);
-    const figure = o.certain ? 'Certain' : o.lo === o.hi ? `${o.odds}%` : `${o.lo}–${o.hi}%`;
-    oddsLine = `${figure} · ${o.terms.map((t) => (o.certain || t.value === 0 ? t.label : `${t.label} ${t.value > 0 ? '+' : ''}${t.value}`)).join(' · ')}`;
+    oddsLine = oddsText(oddsFor(block, job, data));
   }
   model.dispatch = {
     step: d.step,

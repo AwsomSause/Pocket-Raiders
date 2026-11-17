@@ -151,6 +151,8 @@ export const JobSchema = z.object({
   odds: z.number().int().min(0).max(100).nullable(),
   certain: z.boolean(),
   terms: z.array(OddsTermSchema),
+  /** Slice 3: the Honest Card this job was confirmed on (absent only on a job queued before slice 3). */
+  cardId: z.string().min(1).optional(),
 }).strict();
 export type Job = z.infer<typeof JobSchema>;
 
@@ -175,9 +177,73 @@ export type District = z.infer<typeof DistrictSchema>;
 export const CrewSchema = z.object({ id: z.string().min(1), name: z.string().min(1), outOn: z.number().int().min(1).nullable() }).strict();
 export type Crew = z.infer<typeof CrewSchema>;
 
-const BlockV2Schema = z.object({
-  /** The block's own version, for its own migrations. 2: slice 2 added the district, the crew, the queue and the sheets. */
-  v: z.literal(2),
+// ---- Slice 3: the Card and the Ledger (design Part 12 section 1, Part 25a section 5, Part 29 sections 6 and 8, Part 30 section 7) ----
+
+export const CardFieldSchema = z.object({ label: z.string().min(1), text: z.string().min(1), unknown: z.boolean() }).strict();
+export type CardField = z.infer<typeof CardFieldSchema>;
+
+/** A confirmed Honest Card, kept with its day (Part 12 section 1.2: "The Card's kept"). Thirteen fields, always in order. */
+export const StoredCardSchema = z.object({
+  id: z.string().min(1),
+  day: z.number().int().min(1),
+  region: z.number().int().min(0),
+  district: z.number().int().min(1),
+  holdingId: z.string().min(1),
+  method: JobMethodSchema,
+  offer: z.number().int().min(1).max(100).optional(),
+  clean: z.boolean(),
+  fields: z.array(CardFieldSchema).length(13),
+}).strict();
+export type StoredCard = z.infer<typeof StoredCardSchema>;
+
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask'] as const;
+
+/** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
+export const LogEntrySchema = z.object({
+  id: z.string().min(1),
+  day: z.number().int().min(1),
+  region: z.number().int().min(0),
+  district: z.number().int().min(1),
+  kind: z.enum(LOG_KINDS),
+  /** Crew ids. */
+  who: z.array(z.string()),
+  /** The holding the line is about. */
+  to: z.string().optional(),
+  method: JobMethodSchema.optional(),
+  cardId: z.string().optional(),
+  result: z.enum(['went', 'didnt', 'called off']).optional(),
+  /** The sentence, in the Ledger's grammar (Part 25a section 5.1). A card's is its twelfth field, character for character. */
+  text: z.string().min(1),
+  /** Fields still in red ink when it was confirmed ("Confirmed without looking"). */
+  unknowns: z.number().int().min(0).optional(),
+  given: z.number().int().min(0).optional(),
+  taken: z.number().int().min(0).optional(),
+}).strict();
+export type LogEntry = z.infer<typeof LogEntrySchema>;
+
+const S = z.string().min(1);
+export const LedgerFileSchema = z.object({
+  note: z.string(),
+  fields: z.array(S).length(13),
+  written: z.object({ scout: S, persuade: S, persuadeFavour: S, persuadeUnknown: S, persuadeRooms: S, payFair: S, payUnder: S, outplay: S, outplayGround: S, went: S, didnt: S, calledOff: S, wages: S, shares: S, short: S, waive: S, halve: S, ask: S }).strict(),
+  card: z.object({
+    takes: z.object({ scout: S, persuade: S, persuadeFavour: S, persuadeRooms: S, persuadeNothing: S, pay: S, outplay: S, outplayLocal: S }).strict(),
+    from: z.object({ nobody: S, local: S, localNothing: S, notScouted: S, place: S }).strict(),
+    gives: z.object({ scout: S, money: S, favour: S, rooms: S, ground: S, notKnown: S }).strict(),
+    holds: z.object({ holds: S, turns: S, nothing: S }).strict(),
+    hero: S, wont: S, notKnownNone: S, clean: S, underPrice: S, lead: S, unseen: S, day: S,
+  }).strict(),
+  count: z.object({ wageHead: z.number().int().min(0), waive: z.number().int().min(0) }).strict(),
+  ask: z.array(S).min(1),
+  tabs: z.array(S).length(4),
+  givenTaken: S,
+});
+
+export const RateSchema = z.enum(['halved', 'waived']);
+
+const BlockV3Schema = z.object({
+  /** The block's own version, for its own migrations. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. */
+  v: z.literal(3),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -196,16 +262,29 @@ const BlockV2Schema = z.object({
   sheets: z.array(SheetSchema),
   /** The last Evening's money and numbers, one line each. */
   evening: z.array(z.string()),
+  /** Slice 3: the Log (append only), every confirmed Card, the two totals (kept as counters; a test checks they equal the Log's sums), and the lines waived or halved. */
+  log: z.array(LogEntrySchema),
+  cards: z.array(StoredCardSchema),
+  given: z.number().int().min(0),
+  taken: z.number().int().min(0),
+  rates: z.record(z.string(), RateSchema),
 }).strict();
 
 /** Four unnamed Grunts (slice 4 brings named people). */
 export const firstCrew = (n = 4): Crew[] => Array.from({ length: n }, (_, i) => ({ id: `g${i + 1}`, name: `Grunt ${i + 1}`, outOn: null }));
 
-/** Migration v1 -> v2 (slice 1's block): nothing removed; the district is laid on the next step, the crew are four Grunts. */
+/**
+ * Block migrations, one version at a time; nothing is removed.
+ * v1 -> v2 (slice 1's block): the district is laid on the next step, the crew are four Grunts.
+ * v2 -> v3 (slice 2's block): an empty Log and no Cards (the Log starts here; jobs already queued keep going without one), Given and Taken at 0, no rates.
+ */
 export function migrateEvilBlock(raw: unknown): unknown {
-  if (!raw || typeof raw !== 'object' || (raw as { v?: unknown }).v !== 1) return raw;
-  return { ...(raw as object), v: 2, district: null, crew: firstCrew(), queue: [], sheets: [], evening: [] };
+  if (!raw || typeof raw !== 'object') return raw;
+  let b = raw as Record<string, unknown>;
+  if (b.v === 1) b = { ...b, v: 2, district: null, crew: firstCrew(), queue: [], sheets: [], evening: [] };
+  if (b.v === 2) b = { ...b, v: 3, log: [], cards: [], given: 0, taken: 0, rates: {} };
+  return b;
 }
 
-export const EvilModeBlockSchema = z.preprocess(migrateEvilBlock, BlockV2Schema);
-export type EvilModeBlock = z.infer<typeof BlockV2Schema>;
+export const EvilModeBlockSchema = z.preprocess(migrateEvilBlock, BlockV3Schema);
+export type EvilModeBlock = z.infer<typeof BlockV3Schema>;

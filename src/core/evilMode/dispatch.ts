@@ -3,19 +3,17 @@
 // `evil-dispatch` stream, in queue order, then pays takings and wages. Pure: new blocks are returned.
 
 import { hashSeed, Rng } from '../rng';
-import { countsFor, fairPrice, heldCount, holdingName, kindDef, localOf, methodsFor, settleTown, shiftMood, streetOf, takings } from './board';
+import { countsFor, fairPrice, payAmount, heldCount, holdingName, kindDef, localOf, methodsFor, settleTown, shiftMood, streetOf } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { oddsFor, type JobDraft } from './odds';
-import type { EvilModeBlock, Holding, Job, Sheet } from './schema';
+import { cardFor, unknownCount } from './card';
+import { appendLog, fill, lineFor, money, takingsAt } from './ledger';
+import type { EvilModeBlock, Holding, Job, LogEntry, Sheet } from './schema';
 
 /** The roll for the n-th number `evil-dispatch` gives out in this run: 1..100. The count is stored, so a reload rolls the same. */
 export const dispatchRoll = (seed: string, n: number): number => new Rng(hashSeed(`${seed}::evil-dispatch::${n}`)).int(1, 100);
 
-/** What a Pay offer costs: the offer's percent of the fair price, to the nearest ₽50. */
-export function payAmount(h: Holding, offer: number | undefined, data: EvilData = EVIL_DATA): number {
-  const fair = fairPrice(h, data) ?? 0;
-  return Math.round((fair * (offer ?? 100)) / 100 / 50) * 50;
-}
+export { payAmount };
 
 /** Funds already promised to Pay jobs in today's queue. */
 export function promised(block: EvilModeBlock, data: EvilData = EVIL_DATA): number {
@@ -69,14 +67,31 @@ export function queueJob(block: EvilModeBlock, job: JobDraft, data: EvilData = E
   const problem = jobProblem(block, job, data);
   if (problem) return { block, problem };
   const o = oddsFor(block, job, data);
-  const entry: Job = { holdingId: job.holdingId, method: job.method, squad: [...job.squad], ...(job.method === 'pay' ? { offer: job.offer ?? 100 } : {}), odds: null, certain: o.certain, terms: o.terms };
+  // Slice 3: no job goes without its Honest Card. Confirming files the Card (kept with its day) and writes its twelfth
+  // field into the Log as the line, character for character.
+  const card = cardFor(block, job, data);
+  const cardId = `C${block.cards.length + 1}`;
+  const entry: Job = { holdingId: job.holdingId, method: job.method, squad: [...job.squad], ...(job.method === 'pay' ? { offer: job.offer ?? 100 } : {}), odds: null, certain: o.certain, terms: o.terms, cardId };
   const at = block.queue.findIndex((j) => j.holdingId === job.holdingId);
+  let b: EvilModeBlock = block;
+  if (at >= 0) b = calledOff(b, block.queue[at]!, data);
   const queue = at < 0 ? [...block.queue, entry] : block.queue.map((j, i) => (i === at ? entry : j));
-  return { block: { ...block, queue }, problem: null };
+  b = { ...b, queue, cards: [...b.cards, { ...card, id: cardId }] };
+  const unknowns = unknownCount(card);
+  b = appendLog(b, { kind: 'card', who: [...job.squad], to: job.holdingId, method: job.method, cardId, text: card.fields[11]!.text, ...(unknowns ? { unknowns } : {}) });
+  return { block: b, problem: null };
 }
 
-export function clearJob(block: EvilModeBlock, holdingId: string): EvilModeBlock {
-  return { ...block, queue: block.queue.filter((j) => j.holdingId !== holdingId) };
+/** A job taken off the queue: its Card stays in the Log, and a line under it says it was called off. */
+function calledOff(block: EvilModeBlock, j: Job, data: EvilData): EvilModeBlock {
+  if (!j.cardId) return block;
+  return appendLog(block, { kind: 'job', who: [...j.squad], to: j.holdingId, method: j.method, cardId: j.cardId, result: 'called off', text: lineFor(block, [], data.ledger.written.calledOff) });
+}
+
+export function clearJob(block: EvilModeBlock, holdingId: string, data: EvilData = EVIL_DATA): EvilModeBlock {
+  const j = block.queue.find((x) => x.holdingId === holdingId);
+  if (!j) return block;
+  return { ...calledOff(block, j, data), queue: block.queue.filter((x) => x.holdingId !== holdingId) };
 }
 
 /** "Send them": each job's odds and terms are fixed (design Part 30 section 3.5). No number is drawn. */
@@ -106,6 +121,7 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
   let draws = block.draws['evil-dispatch'] ?? 0;
   const regardStreets = [...d0.regardStreets];
   const sheets: Sheet[] = [];
+  const results: Omit<LogEntry, 'id' | 'day' | 'region' | 'district'>[] = [];
   const cap = (n: number) => Math.max(0, Math.min(10, n));
   let loudest: number | null = null;
   const set = (id: string, f: (h: Holding) => Holding) => { holdings = holdings.map((h) => (h.id === id ? f(h) : h)); };
@@ -162,11 +178,14 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
       }
     }
     sheets.push({ holdingId: h.id, method: j.method, squad: [...j.squad], odds, certain: j.certain, roll, won, voice: voice(j.method, won, h.step, data), lines });
+    // The Card's line gets its mark: it went, or it didn't (a Pay short of money on the day didn't go either).
+    const went = won && !(j.method === 'pay' && lines[0]?.startsWith('The money was short'));
+    if (j.cardId) results.push({ kind: 'job', who: [...j.squad], to: h.id, method: j.method, cardId: j.cardId, result: went ? 'went' : 'didnt', text: `Day ${day}. ${went ? data.ledger.written.went : data.ledger.written.didnt}` });
   }
 
   let district = settleTown({ ...d0, holdings, regardStreets }, day, data);
   const evening: string[] = [];
-  const income = district.holdings.reduce((n, h) => n + takings(h, data), 0);
+  const income = district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0);
   const wages = team.creed === 'belonging' ? Math.max(0, Math.floor(income / 2)) : crew.length * (team.creed === 'cause' ? R.wageCause : R.wage);
   const before = team.funds;
   team = { ...team, funds: Math.max(0, team.funds + income - wages) };
@@ -178,7 +197,16 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     team = { ...team, heat: cap(team.heat + loudest) };
     evening.push(`Heat ${loudest >= 0 ? '+' : ''}${loudest}: the day's loudest job.${team.heat === h0 ? ' (No change.)' : ''}`);
   }
-  const out: EvilModeBlock = { ...block, team, crew, district, queue: [], sheets, evening, draws: { ...block.draws, 'evil-dispatch': draws }, applied: [...block.applied, key] };
+  let out: EvilModeBlock = { ...block, team, crew, district, queue: [], sheets, evening, draws: { ...block.draws, 'evil-dispatch': draws }, applied: [...block.applied, key] };
+  for (const e of results) out = appendLog(out, e);
+  // Wages paid: one to Given a head (Part 23 section 8.2), only when they were paid in full.
+  if (wages > 0) {
+    const full = before + income - wages >= 0;
+    const W = data.ledger.written;
+    const heads = `${crew.length}`;
+    const text = fill(!full ? W.short : team.creed === 'belonging' ? W.shares : W.wages, { amount: money(full ? wages : Math.max(0, before + income)), heads });
+    out = appendLog(out, { kind: 'pay', who: crew.map((c) => c.id), text: `Day ${day}. ${text}`, ...(full ? { given: crew.length * data.ledger.count.wageHead } : {}) });
+  }
   const count = heldCount(out);
   if (count >= R.toHold) district = { ...district, end: { how: 'held', day, count } };
   else if (day >= R.days) district = { ...district, end: { how: 'taken', day, count } };
