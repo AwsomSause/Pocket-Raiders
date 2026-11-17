@@ -420,7 +420,8 @@ describe('gn.46 The All-Star Tournament', () => {
 });
 
 // ---------- gn.47 The Pokémon League Exhibition ----------
-import { exRipple, MATCHUPS, matchupOf, nextMatchup, winnerOf } from '../../src/core/greenneedle/exhibition';
+import { exRipple, MATCHUPS, matchupOf, nextMatchup } from '../../src/core/greenneedle/exhibition';
+import { watchMatch } from './helpers/gnExhibition';
 import { serviceView, useService } from '../../src/core/services/flow';
 
 /** Into the queue at the Exhibition. */
@@ -430,15 +431,15 @@ function queue(seed: string, prep?: (run: RunState) => void): RunState {
   open(run, 'gn-47-door');
   return choose(run, 'gn-47-door', 'Join the queue.').run;
 }
-/** Backs a side for a reason, and makes the three moments. */
-function watch(run: RunState, back: 'a' | 'b' | 'none', reason: string | null, moments: [string, string, string]): { run: RunState; text: string; changes: string[] } {
+/** Backs a side for a reason, takes the seat, and watches the match with the three moments; `wins` holds the other side at 1 HP. */
+function watch(run: RunState, back: 'a' | 'b' | 'none', reason: string | null, moments: [string, string, string], wins: 'a' | 'b' = 'a'): { run: RunState; text: string; changes: string[] } {
   const m = matchupOf(run)!;
   const name = (id: string) => content.bosses.get(id)!.name;
   run = back === 'none' ? choose(run, 'gn-47-queue', '"I don\'t mind who wins. I want to see it."').run : choose(run, 'gn-47-queue', `${name(back === 'a' ? m.a : m.b)}.`).run;
   if (reason) run = choose(run, 'gn-47-why', reason).run;
-  run = choose(run, 'gn-47-match-1', moments[0]).run;
-  run = choose(run, 'gn-47-match-2', moments[1]).run;
-  return choose(run, 'gn-47-match-3', moments[2]);
+  const seat = choose(run, 'gn-47-match-1', 'Watch the match.');
+  const w = watchMatch(seat.run, moments, wins);
+  return { run: w.run, text: w.lines.join(' '), changes: w.said.flat() };
 }
 
 describe('gn.47 The Pokémon League Exhibition', () => {
@@ -457,14 +458,13 @@ describe('gn.47 The Pokémon League Exhibition', () => {
   it('back the winner because they\'re stronger: a nod and a Rare item; watch closely three times and you\'re invited down', () => {
     const run = queue('t47-strong');
     const m = matchupOf(run)!;
-    const side = winnerOf(content, run, m) === 1 ? 'a' : 'b';
-    const r = watch(run, side, '"They\'re stronger."', ['Watch closely.', 'Watch closely.', 'Watch closely.']);
+    const r = watch(run, 'b', '"They\'re stronger."', ['Watch closely.', 'Watch closely.', 'Watch closely.'], 'b');
     expect(said(r)).toContain('They look up at your seat, and nod.');
     expect(flagOf(r.run, 'ex-invite')).toBe(1);
     expect(scene(r.run, 'gn-47-after').labels).toEqual(['Go down.', 'Stay in your seat.']);
     expect(scene(r.run, 'gn-47-after').intro).toContain('Come down. Let\'s see what you saw.');
     const fight = choose(r.run, 'gn-47-after', 'Go down.');
-    const winner = content.bosses.get(winnerOf(content, run, m) === 1 ? m.a : m.b)!;
+    const winner = content.bosses.get(m.b)!;
     expect(fight.run.battle!.enemyTeam.map((x) => x.speciesId)).toEqual(winner.signature.slice(0, 3));
     expect(fight.run.battle!.trainer!.name).toBe(winner.name);
     const lost = lose(fight.run);
@@ -475,6 +475,7 @@ describe('gn.47 The Pokémon League Exhibition', () => {
   it('watching closely teaches a move free, once, at any move tutor (if it can legally learn it)', () => {
     const run = queue('t47-tutor');
     const r = watch(run, 'none', null, ['Watch closely.', 'Cheer.', 'Look at the crowd.']);
+    // Watched before the first move: the matchup's own opening move is the one seen.
     const move = matchupOf(r.run)!.seen[0];
     expect(flagOf(r.run, `ex-seen:${move}`)).toBe(1);
     expect(flagOf(r.run, 'ex-outcome')).toBe(5);
@@ -497,8 +498,8 @@ describe('gn.47 The Pokémon League Exhibition', () => {
   it('back the loser: they find you after; back the same one twice and the reporter remembers', () => {
     const run = queue('t47-loser');
     const m = matchupOf(run)!;
-    const side = winnerOf(content, run, m) === 1 ? 'b' : 'a';
-    const r = watch(run, side, '"They\'ve got more to prove."', ['Cheer.', 'Cheer.', 'Cheer.']);
+    const side = 'b' as 'a' | 'b';
+    const r = watch(run, side, '"They\'ve got more to prove."', ['Cheer.', 'Cheer.', 'Cheer.'], 'a');
     expect(said(r)).toContain('"You backed me. On air. That was either kind or foolish."');
     const who = side === 'a' ? m.a : m.b;
     expect(flagOf(r.run, `ex-backed-${who}`)).toBe(1);
@@ -510,7 +511,8 @@ describe('gn.47 The Pokémon League Exhibition', () => {
     const run = queue('t47-treat');
     const m = matchupOf(run)!;
     const lead = run.party[0]!.friendship;
-    const r = watch(run, winnerOf(content, run, m) === 1 ? 'a' : 'b', '"I like how they treat their Pokémon."', ['Look at the crowd.', 'Cheer.', 'Cheer.']);
+    const r = watch(run, 'a', '"I like how they treat their Pokémon."', ['Look at the crowd.', 'Cheer.', 'Cheer.'], 'a');
+    void m;
     expect(said(r)).toContain('Their ace comes over to the barrier');
     expect(r.run.party[0]!.friendship).toBe(lead + 5);
   });

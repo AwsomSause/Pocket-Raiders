@@ -255,19 +255,13 @@ const gn46: Json[] = [
 // =====================================================================================================================
 // gn.47  THE POKÉMON LEAGUE EXHIBITION  (a Town or Hub event; until towns exist, step 15, optional, window 13–17; once per region,
 // from A8; each matchup once per run). Watch a famous match from the stands (core/greenneedle/exhibition.ts; the match is a real
-// CPU-versus-CPU battle on the engine, and its commentary is shown in three parts): back one side on air,
+// CPU-versus-CPU battle on the engine, watched on the battle screen with its commentary): back one side on air,
 // three moments while it runs, and the winner may reward you, or invite you down (25%, or always after watching closely three times).
 // =====================================================================================================================
 const EX_TINT = '#2f3f6b';
 const ex = (o: Json = {}): Json => ({ tint: EX_TINT, tags: ['Story'], effect: 'none', ...o });
 const EX_RARE = ['leftovers', 'expert-belt', 'shell-bell', 'scope-lens', 'quick-claw'];
 const EX_EPIC = ['life-orb', 'choice-band', 'choice-specs', 'choice-scarf', 'assault-vest', 'focus-sash'];
-/** One of the three moments while the match runs. */
-const exMoment = (i: number, next: Json[]): Json[] => [
-  ch('Cheer.', out('You cheer, loud enough to hear yourself on the big screen.', gn('exWatch', { n: i, key: 'cheer' }), ...next)),
-  ch('Watch closely.', out('You stop watching the Pokémon, and watch the hands.', gn('exWatch', { n: i, key: 'watch' }), ...next)),
-  ch('Look at the crowd.', out('You look away from the field, just for a second.', gn('exWatch', { n: i, key: 'crowd' }), ...next)),
-];
 const exEnd: Json[] = [
   gn('exResult'),
   when('ex-outcome', { min: 1, max: 1 }, [any(...EX_RARE)]),
@@ -303,20 +297,15 @@ const gn47: Json[] = [
     ch('"They\'ve got more to prove."', out('"Ooh. Spicy." It\'s broadcast. Inside, on the big screen, both of them hear it.', setTo('ex-reason', 2), scene('gn-47-match-1'))),
     ch('"I like how they treat their Pokémon."', out('Marit lowers the microphone for a second. "That\'s a good reason," she says, off air. Then it\'s back up, and broadcast.', setTo('ex-reason', 3), scene('gn-47-match-1'))),
   ]),
-  rm('gn-47-match-1', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'], remembers: [
-    { id: 'known', when: [gnc('exKnown')], notice: 'Before the first move, one of them scans the stands, row by row. They find you. They nod, just once, and turn back to the field.' },
-  ] }), say(
-    'Six on six. The stadium goes quiet in the way only a very big room can.',
-    '{ex:phase-1}',
-  ), exMoment(1, [scene('gn-47-match-2')])),
-  rm('gn-47-match-2', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'] }), say(
-    'Halfway.',
-    '{ex:phase-2}',
-  ), exMoment(2, [scene('gn-47-match-3')])),
-  rm('gn-47-match-3', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'] }), say(
-    'The last of it. Nobody in the stadium is sitting down any more.',
-    '{ex:phase-3}',
-  ), exMoment(3, exEnd)),
+  // The match is watched on the battle screen (core/greenneedle/exhibition.ts, rule `exhibition-watch`): both Champions' six, played by
+  // the AI, with the commentary box; the three moments (Cheer / Watch closely / Look at the crowd) are asked there, while it runs.
+  // Whoever wins on the field won; `exEnd` then pays by who was backed and why, and opens the After room.
+  rm('gn-47-match-1', 'The Pokémon League Exhibition: The Match', ex({ tags: ['Story', 'Combat'] }), say(
+    'Row nine. The seat is still warm from whoever queued for it since morning.',
+    'Down on the field, **{ex:a}** and **{ex:b}** walk out from opposite tunnels. Six on six.',
+  ), [
+    ch('Watch the match.', fight('The lights go down everywhere except the field.', { ...trainer('Exhibition', { cls: 'ace-trainer', size: 6, lv: 0, friendly: true, rule: { gn: 'exhibition-watch' }, win: exEnd, lose: exEnd }) })),
+  ]),
   rm('gn-47-after', 'The Pokémon League Exhibition: After', ex({ remembers: [
     { id: 'invited', when: [is('ex-invite')], notice: '**{ex:winner}, into the microphone:** "There\'s a trainer in row nine who\'s been watching my hands for ten minutes. Come down. Let\'s see what you saw."' },
   ] }), say(
@@ -1367,7 +1356,7 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.47', shape: 'Single', earliest: 'A8', home: 15, window: [13, 17], sits: 'optional', attaches: 'town', tags: ['Onlooker'],
     level: 'If invited: A+2, with no loss cost', often: 'region', badge: 'own',
     dressing: { kanto: 'The Pokémon League Exhibition', elsewhere: 'The Pokémon League Exhibition' },
-    note: 'Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is a real CPU-versus-CPU battle, six on six, with commentary in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.',
+    note: 'Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is a real CPU-versus-CPU battle, six on six, watched on the battle screen with commentary and three moments (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.',
   },
   'gn-48-door': {
     gn: 'gn.48', shape: 'Hub', earliest: 'A7', home: 14, window: [12, 17], sits: 'optional', attaches: 'town', tags: ['Tournament Episode'],

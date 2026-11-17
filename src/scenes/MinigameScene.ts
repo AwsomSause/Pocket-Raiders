@@ -24,6 +24,11 @@ import { useLookFont } from '../ui/redux/canvasFont';
 import type { Board, MinigameView } from '../core/minigame/games';
 import type { MinigameDef } from '../core/minigame/schema';
 import type { RunState } from '../core/state';
+import { jigsawView } from '../ui/redux/screens/jigsaw';
+import { JIGSAW_ID, type JigsawState } from '../core/greenneedle/jigsaw';
+
+/** gn.41: the fossil in the slab, by the museum's collection (the first the packs have a sprite for is used). */
+const JIGSAW_FOSSILS = ['rampardos', 'aerodactyl', 'tyrantrum'] as const;
 
 const MEDAL_SFX: Record<string, string> = { gold: 'se.shiny', silver: 'se.level_up', bronze: 'se.level_up', none: 'ui.error' };
 const MEDAL_COLOR: Record<string, number> = { gold: 0xf5c842, silver: 0xd0d8e0, bronze: 0xd08848, none: 0x707080 };
@@ -132,6 +137,25 @@ export class MinigameScene extends Phaser.Scene {
       if (def.accessibilityOptions.noTimerOption) this.scene.restart({ focus: this.menu.index, slow: this.slow, paused: !this.paused });
     });
     onInputAction(this, (a) => this.menu.handle(a));
+    // gn.41, the Museum's jigsaw: its own screen (the sandbox and the tray), the same in both UI styles; the menu above keeps the input.
+    if (run.minigame.id === JIGSAW_ID) {
+      const s = run.minigame.state as unknown as JigsawState;
+      const want = JIGSAW_FOSSILS[(s.skull - 1) % JIGSAW_FOSSILS.length]!;
+      const file = [want, ...JIGSAW_FOSSILS].map((id) => monFile(this, id, 'front')).find((f) => f) ?? null;
+      const jig = mountRedux(this, {
+        render: (c) =>
+          jigsawView(c, {
+            title: def.name, hud: view0.hud, prompt: view0.prompt, cols: s.cols, rows: s.rows, tray: s.tray, placed: s.placed, held: s.held,
+            index: this.menu.index, file, skull: s.skull, // (The story's own lines say what was paid; the framework's score and "+₽0" lines are left out.)
+            outcome: outcome ? { lines: outcome.lines.filter((l) => !/^Score \d|^\+₽0/.test(l)), medal: outcome.medal } : null,
+            hints: outcome ? [['Enter', 'done']] : [['Arrows', 'move'], ['Enter', s.held >= 0 ? 'set down' : 'pick up'], ['Esc', 'leave it']],
+          }),
+        acts: { pick: (i) => { if (options[Number(i)]?.disabled) return; this.menu.focus(Number(i), false); this.menu.confirm(); } },
+        overs: { over: (i) => { if (!options[Number(i)]?.disabled) this.menu.focus(Number(i), false); } },
+      });
+      this.menu.onFocus = () => jig.refresh();
+      return;
+    }
     // New UI: the mock-up minigame screen (score windows, the field, the choices) unless a minigame look is picked.
     if (reduxOn() && !skin) {
       const theme = run.stage ? getTheme(session.content, run.stage.themeId) : undefined;
@@ -292,8 +316,14 @@ export class MinigameScene extends Phaser.Scene {
     const finished = session.run!.minigame?.outcome != null;
     // gn.18: the door taken at Safari Land's far gate opens as soon as the visit is over.
     const door = parkDoorSide(session.run!);
+    // A game an event opened says where its story goes on (gn.41's jigsaw: back to the Activities Desk).
+    const room = finished ? (session.run!.minigame?.state as { room?: string } | undefined)?.room : undefined;
     const run = session.leaveMinigame();
     if (door) return void this.scene.start('Event', { sideId: door });
+    if (room && run.phase === 'map') {
+      this.scene.start('Event', { sideId: room });
+      return;
+    }
     this.scene.start(sceneForRun(run), { notice: finished ? '' : 'You left the minigame.', focus: 0 });
   }
 }

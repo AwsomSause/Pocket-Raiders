@@ -225,7 +225,7 @@
    "kanto": "The Pokémon League Exhibition",
    "elsewhere": "The Pokémon League Exhibition"
   },
-  "note": "Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is a real CPU-versus-CPU battle, six on six, with commentary in three parts (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.",
+  "note": "Badge: a ticket. Once per region; each matchup once per run. Until towns exist it sits on step 15. The match is a real CPU-versus-CPU battle, six on six, watched on the battle screen with commentary and three moments (core/greenneedle/exhibition.ts); a move watched closely is free once at any move tutor; a trainer in a later stage copies a move from it.",
   "kinds": [
    "Onlooker"
   ],

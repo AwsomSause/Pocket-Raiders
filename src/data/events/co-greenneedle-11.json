@@ -2441,462 +2441,199 @@
     "Story",
     "Combat"
    ],
-   "remembers": [
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f3f6b",
+    "effect": "none"
+   },
+   "intro": "Row nine. The seat is still warm from whoever queued for it since morning.\n\nDown on the field, **{ex:a}** and **{ex:b}** walk out from opposite tunnels. Six on six.",
+   "choices": [
     {
-     "id": "known",
-     "when": [
-      {
-       "kind": "gn",
-       "test": "exKnown"
+     "label": "Watch the match.",
+     "success": {
+      "text": "The lights go down everywhere except the field.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "exResult"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ex-outcome",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "itemFrom",
+           "ids": [
+            "leftovers",
+            "expert-belt",
+            "shell-bell",
+            "scope-lens",
+            "quick-claw"
+           ]
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ex-outcome",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "friendship",
+           "amount": 5,
+           "who": "lead"
+          },
+          {
+           "kind": "itemFrom",
+           "ids": [
+            "leftovers",
+            "expert-belt",
+            "shell-bell",
+            "scope-lens",
+            "quick-claw"
+           ]
+          }
+         ],
+         "text": "Your lead stands a little straighter after. Bond +1."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ex-outcome",
+         "min": 4,
+         "max": 4,
+         "then": [],
+         "text": "They shake your hand, and hold on a moment longer than they need to."
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "ex-invite",
+         "n": 25
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ex-watched",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ex-invite",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-47-after"
+        }
+       ],
+       "rule": {
+        "gn": "exhibition-watch"
+       },
+       "name": "Exhibition",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "exResult"
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ex-outcome",
+         "min": 1,
+         "max": 1,
+         "then": [
+          {
+           "kind": "itemFrom",
+           "ids": [
+            "leftovers",
+            "expert-belt",
+            "shell-bell",
+            "scope-lens",
+            "quick-claw"
+           ]
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ex-outcome",
+         "min": 3,
+         "max": 3,
+         "then": [
+          {
+           "kind": "friendship",
+           "amount": 5,
+           "who": "lead"
+          },
+          {
+           "kind": "itemFrom",
+           "ids": [
+            "leftovers",
+            "expert-belt",
+            "shell-bell",
+            "scope-lens",
+            "quick-claw"
+           ]
+          }
+         ],
+         "text": "Your lead stands a little straighter after. Bond +1."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ex-outcome",
+         "min": 4,
+         "max": 4,
+         "then": [],
+         "text": "They shake your hand, and hold on a moment longer than they need to."
+        },
+        {
+         "kind": "gn",
+         "op": "roll",
+         "key": "ex-invite",
+         "n": 25
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ex-watched",
+         "min": 3,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "ex-invite",
+           "n": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-47-after"
+        }
+       ]
       }
-     ],
-     "notice": "Before the first move, one of them scans the stands, row by row. They find you. They nod, just once, and turn back to the field."
-    }
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "tint": "#2f3f6b",
-    "effect": "none"
-   },
-   "intro": "Six on six. The stadium goes quiet in the way only a very big room can.\n\n{ex:phase-1}",
-   "choices": [
-    {
-     "label": "Cheer.",
-     "success": {
-      "text": "You cheer, loud enough to hear yourself on the big screen.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "exWatch",
-        "n": 1,
-        "key": "cheer"
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-47-match-2"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Watch closely.",
-     "success": {
-      "text": "You stop watching the Pokémon, and watch the hands.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "exWatch",
-        "n": 1,
-        "key": "watch"
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-47-match-2"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Look at the crowd.",
-     "success": {
-      "text": "You look away from the field, just for a second.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "exWatch",
-        "n": 1,
-        "key": "crowd"
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-47-match-2"
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-47-match-2",
-   "name": "The Pokémon League Exhibition: The Match",
-   "group": "Greenneedle",
-   "tags": [
-    "Story",
-    "Combat"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "tint": "#2f3f6b",
-    "effect": "none"
-   },
-   "intro": "Halfway.\n\n{ex:phase-2}",
-   "choices": [
-    {
-     "label": "Cheer.",
-     "success": {
-      "text": "You cheer, loud enough to hear yourself on the big screen.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "exWatch",
-        "n": 2,
-        "key": "cheer"
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-47-match-3"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Watch closely.",
-     "success": {
-      "text": "You stop watching the Pokémon, and watch the hands.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "exWatch",
-        "n": 2,
-        "key": "watch"
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-47-match-3"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Look at the crowd.",
-     "success": {
-      "text": "You look away from the field, just for a second.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "exWatch",
-        "n": 2,
-        "key": "crowd"
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-47-match-3"
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-47-match-3",
-   "name": "The Pokémon League Exhibition: The Match",
-   "group": "Greenneedle",
-   "tags": [
-    "Story",
-    "Combat"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "tint": "#2f3f6b",
-    "effect": "none"
-   },
-   "intro": "The last of it. Nobody in the stadium is sitting down any more.\n\n{ex:phase-3}",
-   "choices": [
-    {
-     "label": "Cheer.",
-     "success": {
-      "text": "You cheer, loud enough to hear yourself on the big screen.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "exWatch",
-        "n": 3,
-        "key": "cheer"
-       },
-       {
-        "kind": "gn",
-        "op": "exResult"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-outcome",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "expert-belt",
-           "shell-bell",
-           "scope-lens",
-           "quick-claw"
-          ]
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-outcome",
-        "min": 3,
-        "max": 3,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         },
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "expert-belt",
-           "shell-bell",
-           "scope-lens",
-           "quick-claw"
-          ]
-         }
-        ],
-        "text": "Your lead stands a little straighter after. Bond +1."
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-outcome",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "They shake your hand, and hold on a moment longer than they need to."
-       },
-       {
-        "kind": "gn",
-        "op": "roll",
-        "key": "ex-invite",
-        "n": 25
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-watched",
-        "min": 3,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ex-invite",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-47-after"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Watch closely.",
-     "success": {
-      "text": "You stop watching the Pokémon, and watch the hands.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "exWatch",
-        "n": 3,
-        "key": "watch"
-       },
-       {
-        "kind": "gn",
-        "op": "exResult"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-outcome",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "expert-belt",
-           "shell-bell",
-           "scope-lens",
-           "quick-claw"
-          ]
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-outcome",
-        "min": 3,
-        "max": 3,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         },
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "expert-belt",
-           "shell-bell",
-           "scope-lens",
-           "quick-claw"
-          ]
-         }
-        ],
-        "text": "Your lead stands a little straighter after. Bond +1."
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-outcome",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "They shake your hand, and hold on a moment longer than they need to."
-       },
-       {
-        "kind": "gn",
-        "op": "roll",
-        "key": "ex-invite",
-        "n": 25
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-watched",
-        "min": 3,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ex-invite",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-47-after"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Look at the crowd.",
-     "success": {
-      "text": "You look away from the field, just for a second.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "exWatch",
-        "n": 3,
-        "key": "crowd"
-       },
-       {
-        "kind": "gn",
-        "op": "exResult"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-outcome",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "expert-belt",
-           "shell-bell",
-           "scope-lens",
-           "quick-claw"
-          ]
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-outcome",
-        "min": 3,
-        "max": 3,
-        "then": [
-         {
-          "kind": "friendship",
-          "amount": 5,
-          "who": "lead"
-         },
-         {
-          "kind": "itemFrom",
-          "ids": [
-           "leftovers",
-           "expert-belt",
-           "shell-bell",
-           "scope-lens",
-           "quick-claw"
-          ]
-         }
-        ],
-        "text": "Your lead stands a little straighter after. Bond +1."
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-outcome",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "They shake your hand, and hold on a moment longer than they need to."
-       },
-       {
-        "kind": "gn",
-        "op": "roll",
-        "key": "ex-invite",
-        "n": 25
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ex-watched",
-        "min": 3,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ex-invite",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-47-after"
-       }
-      ]
      }
     }
    ]

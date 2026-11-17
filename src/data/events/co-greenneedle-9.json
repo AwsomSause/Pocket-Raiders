@@ -29362,50 +29362,14 @@
    "choices": [
     {
      "label": "Fit the pieces.",
-     "prompt": {
-      "id": "museum-jigsaw",
-      "needs": "perfect"
-     },
      "success": {
-      "text": "Twelve pieces, and not one forced. Dr. Winterbourne holds it up to the light. \"*Perfect.*\" She pays you, and then, from a drawer, gives you a Rare Bone. \"For a good pair of hands.\"",
+      "text": "You kneel at the sandbox. Dr. Winterbourne moves the lamp closer, and then, with visible effort, stops helping.",
       "effects": [
        {
-        "kind": "money",
-        "amount": 800
-       },
-       {
-        "kind": "item",
-        "id": "rare-bone",
-        "count": 1
-       },
-       {
         "kind": "gn",
-        "op": "stampRegion",
-        "key": "museum-jigsaw-at"
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-desk"
-       }
-      ]
-     },
-     "failure": {
-      "text": "It's together. One piece went in with a crack you'll both pretend not to have heard. She pays you for the work, kindly.",
-      "effects": [
-       {
-        "kind": "money",
-        "amount": 800
-       },
-       {
-        "kind": "gn",
-        "op": "stampRegion",
-        "key": "museum-jigsaw-at"
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-41-desk"
+        "op": "minigame",
+        "key": "gn-jigsaw",
+        "n": 1
        }
       ]
      }

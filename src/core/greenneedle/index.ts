@@ -36,7 +36,8 @@ import { eggMoveOptions, familyId } from '../mastery';
 import { pairBondLevel } from '../bond';
 import { borrowBattleStart, borrowEnd, borrowMeet, borrowStart, borrowTokens, rivalTrustAtLeast } from './borrowed';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
-import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
+import { startMinigame } from '../minigame/flow';
+import { exBack, exCalls, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch, exWatchStart } from './exhibition';
 import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorShare, defectorStart, defectorTokens, defectorTrust, guestOf, ROUTE_LINE } from './defector';
 import { rivalBeatenOnce } from './missingAce';
 import { taEnd, taLot, taRare, taStart, EARLY, taBid, taCanBid, taRounds, taTokens } from './teamauction';
@@ -547,6 +548,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       const id = `minigame-${e.key}-${here.sides.length + 1}`;
       here.sides.push({ id, kind: 'minigame', minigameId: e.key!, used: false });
       delete run.minigames.attempts[id];
+      // `n: 1`: the game opens at once, straight from the event (gn.41's jigsaw), instead of waiting as a stop beside the node.
+      if (e.n === 1) startMinigame(content, run, id, 0);
       return '';
     }
     case 'releaseLast': {
@@ -1185,6 +1188,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   if (rule === 'allstar-qf' || rule === 'allstar-sf') allstarStart(content, run, battle, rule === 'allstar-qf' ? 'qf' : 'sf', makeFull(content));
   // gn.47: the Exhibition's winner, with their own three.
   if (rule === 'exhibition') exStart(content, run, battle, makeFull(content));
+  // gn.47: the match itself, watched: both Champions' six take the field, the player's team waits (exhibition.ts).
+  if (rule === 'exhibition-watch') exWatchStart(content, run, battle, makeFull(content));
   // gn.48: a draft battle (n on n), or the bracket against one of the other drafters (`slot`).
   // gn.50: the defector as a boss (each of theirs answers one of yours); at the team's climax, Corin beside you and the corridor held.
   if (rule === 'defector') defectorBossStart(content, run, battle, makeFull(content));
@@ -1446,6 +1451,8 @@ export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   // gn.new.03: the Ball held through this battle answers as soon as it is decided.
   const ball = battle ? ballAnswer(run, battle) : '';
   if (ball) seen.push(cue('player', ball));
+  // gn.47: the commentary box calls each knockout of the watched match.
+  for (const line of exCalls(content, run)) seen.push(cue('player', line));
   if (battle) tourneyAfterTurn(run, battle);
   const out = battle ? pitsFreed(battle) : undefined;
   if (out !== undefined && out > gnFlag(run, 'factory-freed')) setGnFlag(run, 'factory-freed', out);

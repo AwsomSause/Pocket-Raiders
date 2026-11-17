@@ -604,11 +604,10 @@ const gn41: Json[] = [
   rm('gn-41-tray', 'Fossil Identification', marble(), '"Which Pokémon?" Five bones, three answers each. The clues are on the skeletons in the Fossil hall.', [boneCh(1), boneCh(2), boneCh(3), ch('The other two bones.', out('The far end of the tray.', scene('gn-41-tray-2')))]),
   rm('gn-41-tray-2', 'Fossil Identification', marble(), 'The last two bones.', [boneCh(4), boneCh(5), ch('Back to the desk.', out('You leave the tray as you found it, nearly.', scene('gn-41-desk')))]),
   ...BONE_SETS.flatMap((set, i) => set.bones.map((b) => boneRoom(b, i + 1))),
+  // The jigsaw itself is a screen of its own (core/greenneedle/jigsaw.ts, minigame `gn-jigsaw`): it opens at once, pays when the last
+  // piece sits (₽800; with no piece forced, a Rare Bone), marks the restoration done for this region, and leads back to the desk.
   rm('gn-41-jigsaw', 'Fossil Restoration', marble(), say('A broken skull in a sandbox, in twelve pieces. A brush, a pot of glue, and a card: *Don\'t force them.*', 'The museum pays for the work.'), [
-    ch('Fit the pieces.', out('Twelve pieces, and not one forced. Dr. Winterbourne holds it up to the light. "*Perfect.*" She pays you, and then, from a drawer, gives you a Rare Bone. "For a good pair of hands."', { kind: 'money', amount: 800 }, item('rare-bone'), stampRegion('museum-jigsaw-at'), scene('gn-41-desk')), {
-      prompt: { id: 'museum-jigsaw', needs: 'perfect' },
-      fail: out('It\'s together. One piece went in with a crack you\'ll both pretend not to have heard. She pays you for the work, kindly.', { kind: 'money', amount: 800 }, stampRegion('museum-jigsaw-at'), scene('gn-41-desk')),
-    }),
+    ch('Fit the pieces.', out('You kneel at the sandbox. Dr. Winterbourne moves the lamp closer, and then, with visible effort, stops helping.', gn('minigame', { key: 'gn-jigsaw', n: 1 }))),
     ch('Leave it.', out('The skull stays in twelve pieces. It\'s been in twelve pieces a long time.', scene('gn-41-desk'))),
   ]),
   rm('gn-41-gallery', 'The Locked Gallery', marble({ remembers: [{ id: 'met', when: [gnc('thisRegion', { key: 'museum-secret-at' })], notice: 'The gallery\'s resident is back where it was, among the things nobody looks at.', hide: [0, 1] }] }), say(

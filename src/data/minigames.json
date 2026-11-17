@@ -3355,6 +3355,64 @@
         "noTimerOption": true
       },
       "eventOnly": true
+    },
+    {
+      "id": "gn-jigsaw",
+      "name": "Fossil Restoration",
+      "category": "puzzle",
+      "blurb": "A broken skull in a sandbox. Twelve pieces.",
+      "instructions": "Pick up a piece from the tray, then choose the place in the sand where it belongs. A piece that doesn't sit stays in your hand; pressing it in anyway is forcing it, and it is counted. Don't force them.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "restore",
+          "label": "Twelve pieces",
+          "params": {
+            "pieces": 12,
+            "cols": 4,
+            "pay": 800
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "Twelve pieces. The museum pays for the finished work. Done with no piece forced: a Rare Bone as well.",
+      "medals": {
+        "bronze": 0.05,
+        "silver": 0.75,
+        "gold": 1
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "gold": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        }
+      },
+      "failureOutcome": "The skull stays in pieces. It's been in pieces a long time.",
+      "replayRules": "Once a region.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": false
+      },
+      "eventOnly": true
     }
   ]
 }

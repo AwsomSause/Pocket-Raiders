@@ -194,7 +194,6 @@ export const PROMPTS: readonly PromptDef[] = [
   { id: 'bridge-dark', kind: 'timing', label: 'Cross!', hint: 'Press as the ring closes: cross while the bridge is dark.', landMs: 1200, windowsMs: W(80, 160, 300) },
   // Greenneedle gn.59: Ferris's throw, steadied together.
   { id: 'ferris-steady', kind: 'timing', label: 'Steady!', hint: 'Press as the ring closes: throw with Ferris.', landMs: 1500, windowsMs: W(120, 220, 380) },
-  { id: 'museum-jigsaw', kind: 'rhythm', label: 'Fit the pieces', hint: 'Twelve pieces. Press as each one turns to fit: early or late, and it is forced.', beatsMs: [500, 900, 1300, 1700, 2100, 2500, 2900, 3300, 3700, 4100, 4500, 4900], windowsMs: W(90, 170, 300) },
   // Greenneedle gn.new.21: the Orchestra's four sections, entering one at a time (more beats each time).
   { id: 'orchestra-drones', kind: 'rhythm', label: 'Bring in the drones', hint: 'Press on each beat to bring in the low drones.', beatsMs: [700, 1400, 2100], windowsMs: W(100, 180, 320) },
   { id: 'orchestra-chirps', kind: 'rhythm', label: 'Bring in the chirps', hint: 'Press on each beat to bring in the chirps.', beatsMs: [600, 1200, 1800, 2400], windowsMs: W(95, 175, 310) },

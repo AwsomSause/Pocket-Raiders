@@ -11,6 +11,7 @@ import { MINIGAMES_3 } from './games3';
 import { SAFARI_GAMES } from '../greenneedle/safari';
 import { SNAKE_GAMES } from '../greenneedle/snake';
 import { ARCADE_MODULES } from '../greenneedle/arcade';
+import { JIGSAW_GAMES } from '../greenneedle/jigsaw';
 
 export interface Cell {
   id: string;
@@ -874,6 +875,7 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   ...SAFARI_GAMES,
   ...SNAKE_GAMES,
   ...ARCADE_MODULES,
+  ...JIGSAW_GAMES,
 };
 
 export function gameModule(id: string): MinigameModule<BaseState> {
