@@ -4182,7 +4182,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   ultraSettle(content, run, battle.outcome === 'win');
   const bondTaught = battle.outcome === 'win' ? bondLessons(content, run, battle.participants) : [];
   const recap = battle.outcome === 'win' && battle.kind === 'trainer' && (battle.ai >= 0.5 || battle.trainer?.leaderId || battle.rivalId) ? recapLines(content, run, battle) : [];
-  // The caught Pokémon's decision comes first.
+  // The caught Pokémon's decision comes first. A fight-only HP boost (Alpha, raid) is gone by now, so no catch keeps more HP than its max.
+  for (const p of caughtPending) if (p.kind === 'caught') p.mon.hp = Math.min(p.mon.hp, maxHp(content, p.mon));
   run.pending = [...caughtPending, ...run.pending];
   // A trainer's signature mechanic (Rival's Answer): choose after the battle.
   run.pending.push(...signatureDecisions(content, run, battle));

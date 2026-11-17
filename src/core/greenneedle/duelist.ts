@@ -56,6 +56,11 @@ export function duelDue(run: RunState, n: number, stage: number): boolean {
   return run.party.some((m) => m.gn?.includes(CHOSEN) && m.hp > 0);
 }
 
+/** The chosen one is in the party and standing: accepting needs it (gn test `duelReady`). */
+export function duelReady(run: RunState): boolean {
+  return run.party.some((m) => m.gn?.includes(CHOSEN) && m.hp > 0);
+}
+
 /** The chosen one goes in alone; the rest wait on the bench. */
 export function duelEnter(run: RunState): string {
   const mon = run.party.find((m) => m.gn?.includes(CHOSEN));
