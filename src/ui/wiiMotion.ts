@@ -13,6 +13,8 @@ let current: { level: UiMotionLevel; timeScale: number; feel: MotionFeel } = { l
 /** Called by main.ts whenever settings change. */
 export function setUiMotion(m: { level: UiMotionLevel; timeScale: number; feel?: MotionFeel }): void {
   current = { feel: 'default', ...m };
+  // The device's own "reduce motion" switch counts too: bounces drop to the reduced level.
+  if (current.level === 'full' && typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) current.level = 'reduced';
 }
 export const uiMotion = (): { level: UiMotionLevel; timeScale: number; feel: MotionFeel } => current;
 export const uiTiming = (key: UiTimingKey) => uiTween(key, current.level, current.timeScale, current.feel);
@@ -274,7 +276,7 @@ function over(scene: Phaser.Scene, o: Phaser.GameObjects.GameObject): void {
     r = { sx: t.scaleX, sy: t.scaleY, y: t.y, mode: modeFor(t) };
     rest.set(t, r);
   }
-  to(scene, t, r, UI_SCALE.hover, 3, 'hover');
+  to(scene, t, r, UI_SCALE.hover, 4, 'hover');
 }
 
 function out(scene: Phaser.Scene, o: Phaser.GameObjects.GameObject): void {
@@ -303,7 +305,7 @@ function down(scene: Phaser.Scene, o: Phaser.GameObjects.GameObject): void {
 function up(scene: Phaser.Scene, o: Phaser.GameObjects.GameObject): void {
   const t = juiceTarget(o);
   const r = t && rest.get(t);
-  if (t && r) to(scene, t, r, UI_SCALE.hover, 3, 'release', 'Back.easeOut');
+  if (t && r) to(scene, t, r, UI_SCALE.hover, 4, 'release', 'Elastic.easeOut');
 }
 
 /** Gives every interactive object in a scene hover, press and release motion. Call once per scene create. */

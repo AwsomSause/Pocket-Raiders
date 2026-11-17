@@ -12,9 +12,9 @@ const freshRun = () => chooseStarter(content, createRun(content, { runId: 'x43',
 
 describe('expansion settings (settings v42)', () => {
   it('has the plan defaults and the current versions', () => {
-    expect(CURRENT_VERSIONS.settings).toBe(44);
+    expect(CURRENT_VERSIONS.settings).toBe(45);
     expect(CURRENT_VERSIONS.run).toBe(45);
-    expect(EXPANSION_SETTINGS_DEFAULTS).toMatchObject({ climaxCut: 'standard', micInput: false, minigamesDifficulty: 'normal' });
+    expect(EXPANSION_SETTINGS_DEFAULTS).toMatchObject({ climaxCut: 'extended', micInput: false, minigamesDifficulty: 'normal' });
   });
   it('a v41 settings save gains the defaults and keeps its other settings', () => {
     const storage = new MemoryStorageProvider();

@@ -58,7 +58,8 @@ import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
 import { bondFriendship } from './co/who';
-import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug, refillNorthsWind } from './instrumentality/flightNorth';
+import { RETURN_FORMS, applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug, refillNorthsWind } from './instrumentality/flightNorth';
+import { CareSchema } from './care/mods';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { noteSpirits, syncLegendKeys } from './legends/keys';
@@ -257,7 +258,7 @@ import { reverseSideProblem, useReverseSide } from './legends/reverseSide';
 import { assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor, callCalm, effectBlessing, inCommunionForm, noteFirstBlood, syncCommunion } from './blessings';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
 import { closeNodeMenu, freshNodeMenuState, menuBlocker, nodeMenusAllowed } from './nodeMenu/flow';
-import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
+import { BattleStateSchema, currentEnemy, freshStages, freshVolatile, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit, lostBattleXpMultiplier } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
@@ -3733,6 +3734,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     // Beta 0.7 Flight North: the Bug-type returns once per run, before Second Chance (which then stays shut).
     if (flightNorthReady(run)) {
       const fnr = applyFlightNorthReturn(content, run);
+      joinFlightNorthBug(content, run);
       recordChanges(content, current, run, 'battle');
       return { run, events, end: null, defeated: false, cues, drama, flightNorth: fnr };
     }
@@ -4182,7 +4184,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   ultraSettle(content, run, battle.outcome === 'win');
   const bondTaught = battle.outcome === 'win' ? bondLessons(content, run, battle.participants) : [];
   const recap = battle.outcome === 'win' && battle.kind === 'trainer' && (battle.ai >= 0.5 || battle.trainer?.leaderId || battle.rivalId) ? recapLines(content, run, battle) : [];
-  // The caught Pokémon's decision comes first.
+  // The caught Pokémon's decision comes first. A fight-only HP boost (Alpha, raid) is gone by now, so no catch keeps more HP than its max.
+  for (const p of caughtPending) if (p.kind === 'caught') p.mon.hp = Math.min(p.mon.hp, maxHp(content, p.mon));
   run.pending = [...caughtPending, ...run.pending];
   // A trainer's signature mechanic (Rival's Answer): choose after the battle.
   run.pending.push(...signatureDecisions(content, run, battle));
@@ -4994,6 +4997,38 @@ export function pseudoLost(content: Content, run: RunState): void {
   // Back out to the stage the pseudo-stage sits in.
   leavePseudoStage(run);
   run.phase = 'map';
+}
+
+/**
+ * Flight North (director, 2026-11-16): the return always turns the fight into a double battle, the Bug-type beside your lead for
+ * this fight only (two on one when the foe has one Pokémon out). In a fight that is already a double or triple, or that already
+ * has a guest, it helps from the side instead (the strikes `applyFlightNorthReturn` set up). Uses no random numbers.
+ */
+function joinFlightNorthBug(content: Content, run: RunState): void {
+  const battle = run.battle!;
+  const fn = run.expansion?.flightNorth;
+  if (!fn || battle.doubles || battle.loaner) return;
+  const form = RETURN_FORMS[fn.line];
+  const level = Math.max(...run.party.map((m) => m.level), 20);
+  const bug = newMon(content, run, content.species.has(form.returnSpecies) ? form.returnSpecies : form.species, level, 'p');
+  bug.shiny = fn.shiny;
+  bug.friendship = fn.friendship;
+  if (fn.name) bug.care = { ...(bug.care ?? CareSchema.parse({})), nickname: fn.name };
+  const wind = content.moves.get('norths-wind');
+  if (wind && !bug.moves.some((m) => m.id === wind.id)) {
+    if (bug.moves.length < 4) bug.moves.push({ id: wind.id, pp: wind.pp });
+    else bug.moves[3] = { id: wind.id, pp: wind.pp };
+  }
+  const before = [...battle.participants];
+  run.party.push(bug);
+  // Your lead is back on its feet: it starts clean, as a Pokémon just sent out does.
+  battle.playerStages = freshStages();
+  battle.playerVolatile = freshVolatile();
+  makeDoubles(battle, run.party);
+  battle.doubles!.player.index = run.party.length - 1;
+  battle.participants = [...new Set([...before, run.party[battle.activeIndex]!.uid, bug.uid])];
+  battle.loaner = bug.uid;
+  battle.finaleAssist = undefined;
 }
 
 /** Catalog Overhaul new events: the tag partner (a copy of the lead, its moves too) joins this battle for this fight only; finishBattle sends it home. */

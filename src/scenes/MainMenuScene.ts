@@ -20,6 +20,8 @@ import { TITLE_LAYOUTS } from '../ui/titleLayouts';
 import { slotCard } from '../core/presentation/slotLines';
 import { mountRedux, reduxOn } from '../ui/redux/stage';
 import { titleView } from '../ui/redux/screens/title';
+import { bg } from '../ui/redux/kit';
+import { clipsPlayable, runTitleClips, titleClipsHtml, titleClipsOnCanvas } from '../ui/titleClips';
 import { VERSION_LABEL } from '../ui/updateSplashGate';
 
 export class MainMenuScene extends Phaser.Scene {
@@ -57,9 +59,12 @@ export class MainMenuScene extends Phaser.Scene {
 
     // A battlefield that cycles through the arenas, with a Pokémon on show.
     // A built screen style (Settings > Display) paints its own backdrop; 'original' keeps the arenas.
+    const stillClips = !session.settings.menuAnimations || session.settings.disableAllAnimations || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
     const look = screenStyleOf('title', session.settings.screenStyles, session.profile.stats.runsEnded);
     if (look === 'original') {
       new ArenaBackdrop(this, { platformAt: { x: 740, y: 330 }, only: session.profile.menuArena });
+      // The director's animated scenes fade in over the arena (which stays as the fallback picture). New look: below.
+      if (!reduxOn()) titleClipsOnCanvas(this, -30, stillClips);
       const shade = this.add.graphics().setDepth(-20);
       for (let i = 0; i < 20; i++) {
         shade.fillStyle(0x0e0b12, 0.6 * (1 - i / 20));
@@ -75,7 +80,8 @@ export class MainMenuScene extends Phaser.Scene {
       const sp = Phaser.Utils.Array.GetRandom(species);
       if (sp) void loadAssets(this, [pokemonAssetIds(sp.assets).front]).then(() => this.scene.isActive() && mon.show(sp));
     };
-    if (!lay?.carousel) {
+    // The clips fill the screen, so the showcase Pokémon (which stands on the arena's platform) sits out.
+    if (!lay?.carousel && !(look === 'original' && clipsPlayable())) {
       pick();
       this.time.addEvent({ delay: 6500, loop: true, callback: pick });
     }
@@ -180,8 +186,13 @@ export class MainMenuScene extends Phaser.Scene {
     if (reduxOn()) {
       this.pressWait = false;
       this.menu.container.setVisible(true);
+      // The backdrop is its own view: its markup never changes, so the clips keep playing while the menu redraws.
+      const back = mountRedux(this, { render: () => bg('ui/splash-beta-0.5.png') + titleClipsHtml() });
+      back.el.dataset.scene = 'MainMenuBack';
+      runTitleClips(this, back.el, stillClips);
       const view = mountRedux(this, {
-        render: (c) => titleView(c, { options: options.map((o) => o.option), index: this.menu.index, version: VERSION_LABEL, art: 'ui/splash-beta-0.5.png', notes }),
+        clear: true,
+        render: (c) => titleView(c, { options: options.map((o) => o.option), index: this.menu.index, version: VERSION_LABEL, art: '', notes }),
         acts: { pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); } },
         overs: { over: (i) => { if (!options[Number(i)]?.option.disabled) this.menu.focus(Number(i), false); } },
       });

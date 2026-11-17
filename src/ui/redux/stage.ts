@@ -117,6 +117,21 @@ function ensureHost(game: Phaser.Game): HTMLDivElement {
   host.id = 'rx';
   host.className = 'rx';
   document.body.append(host);
+  // Springy buttons: a button-sized clickable gets .sp (redux.css) when the pointer reaches it. Whole-screen click
+  // areas and big panels stay put, like the canvas rule in wiiMotion.ts.
+  const spring = (e: Event): void => {
+    const t = e.target instanceof Element ? e.target.closest<HTMLElement>('[data-act]') : null;
+    if (!t || t.classList.contains('sp') || t.classList.contains('off')) return;
+    if (t.offsetWidth <= 420 && t.offsetHeight <= 300) t.classList.add('sp');
+  };
+  host.addEventListener('pointerover', spring, true);
+  host.addEventListener('pointerdown', spring, true);
+  // A springing button lifts a pixel or two, so a press can land beside where the hover began. Where the pointer
+  // last moved or pressed is where it rests: a view that opens under it there has not been hovered (see `overAt`).
+  // A real move still counts, because the browser sends pointerover before the pointermove of the same step.
+  const rest = (e: PointerEvent): void => { overAt = `${e.clientX},${e.clientY}`; };
+  window.addEventListener('pointermove', rest, true);
+  window.addEventListener('pointerdown', rest, true);
   // The canvas moves and resizes with the window and with Settings > Screen size; follow it.
   window.addEventListener('resize', place);
   game.scale.on('resize', place);

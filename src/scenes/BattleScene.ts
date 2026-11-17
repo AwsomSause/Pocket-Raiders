@@ -185,7 +185,7 @@ import { addStickerRow } from '../ui/battleFx/stickers';
 import { victoryPoseFor } from '../core/presentation/victoryPose';
 import { introRecap } from '../core/presentation/skipRecap';
 import { aceBurst, legendFlash, rivalCatch, rivalEntrance, rivalExit } from '../ui/battleFx/rivalStepIn';
-import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, cameoBeat } from '../ui/battleFx/spectacle';
+import { victoryPose, showRecapBanner, bossVictoryCard, burstReveal, exitWipe, hop, introTransition, stamp, titleCard, type Beat, type IntroKind, phaseBanner, cameoBeat, glassCrack } from '../ui/battleFx/spectacle';
 import { LETTER_MS, storyBar, storyLine, typeSpeech, type StoryBar } from '../ui/dialogue/storyDialogue';
 import { planSpeech, stripSpeechTags, type SpeechVoice } from '../ui/dialogue/speechPacing';
 import { AERO, moveFlagNames, bounceIn, breathe, categoryIcon, drawGlass, effectivenessIcon, effectivenessWord, slideIn, statusIcon, typeLabel, type MotionLevel } from '../ui/aero';
@@ -4523,10 +4523,24 @@ export class BattleScene extends Phaser.Scene {
     if (result.flightNorth) {
       // Beta 0.7 Flight North: the game-over screen cracks, cracks again and shatters; its own music (falls back to the boss track until composed).
       const shake = 0.012 * services().session.settings.shakeStory * capFlash(services().session.settings.shakeIntensity, services().session.settings.reducedFlash);
+      // The glass is drawn over everything; a failed drawing only loses the picture, never the return.
+      let glass: ReturnType<typeof glassCrack> | null = null;
+      try {
+        glass = glassCrack(this, this.motion, capFlash(1, services().session.settings.reducedFlash));
+      } catch (e) {
+        console.warn('Flight North glass failed', e);
+      }
       for (let i = 0; i < 3; i++) {
         this.cameras.main.shake(260 + i * 160, shake * (i + 1));
+        try {
+          if (i < 2) glass?.crack();
+          else await glass?.shatter();
+        } catch (e) {
+          console.warn('Flight North glass failed', e);
+        }
         await this.say(result.flightNorth.lines[i] ?? '');
       }
+      glass?.destroy();
       for (const line of result.flightNorth.lines.slice(3)) await this.say(line);
       this.scene.start(sceneForRun(result.run));
       return;
