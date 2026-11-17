@@ -2,6 +2,7 @@
 // from its own hashed stream (`::blessing-tier::` / `::blessing-pick::`), so no existing roll changes. In-run only: nothing here
 // is saved to the profile. Pure rules + Zod, no Phaser. Data: src/data/blessings.json (hand-written; status per entry).
 
+import { isTempAlly } from '../battle/guests';
 import { z } from 'zod';
 import raw from '../../data/blessings.json';
 import { ArchetypeModifierSchema, type Content } from '../contentSchema';
@@ -350,7 +351,7 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
     if (!state.stagesDone.includes(key)) state.stagesDone = [...state.stagesDone, key];
   }
   if (def.effect.kind === 'sacredAsh' && !state.ashRegions.includes(run.regionIndex)) {
-    const fallen = run.party.filter((m) => m.hp <= 0 && m.uid !== run.battle?.loaner);
+    const fallen = run.party.filter((m) => m.hp <= 0 && !isTempAlly(run.battle, m.uid));
     if (fallen.length > 0) {
       for (const m of fallen) { m.hp = maxHp(content, m); m.status = null; touched.push(m.uid); }
       state.ashRegions = [...state.ashRegions, run.regionIndex];
@@ -359,7 +360,7 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
   if (def.effect.kind === 'healMostHurt') {
     let worst: { uid: string; missing: number } | null = null;
     for (const m of run.party) {
-      if (m.hp <= 0 || m.uid === run.battle?.loaner) continue;
+      if (m.hp <= 0 || isTempAlly(run.battle, m.uid)) continue;
       const missing = maxHp(content, m) - m.hp;
       if (missing > 0 && (!worst || missing > worst.missing)) worst = { uid: m.uid, missing };
     }
@@ -371,14 +372,14 @@ export function blessingAfterBattle(content: Content, run: RunState): string[] {
     // Communion: the rest of the party recovers a little too.
     if (inCommunionForm(run)) {
       for (const m of run.party) {
-        if (m.hp <= 0 || m.uid === run.battle?.loaner || m.uid === worst?.uid) continue;
+        if (m.hp <= 0 || isTempAlly(run.battle, m.uid) || m.uid === worst?.uid) continue;
         m.hp = Math.min(maxHp(content, m), m.hp + Math.ceil(maxHp(content, m) * data.balance.lele.communionPartyPercent / 100));
       }
     }
   }
   // Ho-Oh in Communion: after a boss battle the first fainted Pokémon (party order) rises at half HP.
   if (def.effect.kind === 'sacredAsh' && inCommunionForm(run) && run.battle && isBossClass(run.battle.trainer?.classId)) {
-    const m = run.party.find((p) => p.hp <= 0 && p.uid !== run.battle?.loaner);
+    const m = run.party.find((p) => p.hp <= 0 && !isTempAlly(run.battle, p.uid));
     if (m) { m.hp = Math.max(1, Math.floor(maxHp(content, m) / 2)); touched.push(m.uid); }
   }
   return touched;

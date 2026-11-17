@@ -569,16 +569,16 @@ describe('gn.25 The Unlikely Friendship', () => {
     expect(scene(run, 'gn-25-heap').intro).toMatch(/aren't afraid of you/);
   });
 
-  it('watching: three beats, then the pack: one double battle, six Mightyena, with both of the pair on your side', () => {
+  it('watching: three beats, then the pack: one triple battle, six Mightyena, with both of the pair on your side of the field', () => {
     const watched = choose(heap('t25-pack'), 'gn-25-heap', 'Watch.');
     expect(watched.text).toMatch(/bigger half/);
     expect(watched.text).toMatch(/collide/);
     const fight = choose(watched.run, 'gn-25-pack', 'Fight beside them.').run;
-    expect(fight.battle!.doubles).toBeTruthy();
+    expect(fight.battle!.doubles?.trio).toBeTruthy();
     expect(fight.battle!.eventRule?.gn).toBe('truce');
-    // The Zangoose stands beside you (the fight's ally); the Seviper is right behind it, in the party for this fight.
-    expect(fight.party.find((m) => m.speciesId === 'zangoose')?.uid).toBe(fight.battle!.loaner);
-    expect(fight.party.find((m) => m.speciesId === 'seviper')?.gn).toContain('truce-guest');
+    // Both stand on the field beside your lead, played by the game (allies: core/battle/guests.ts), for this fight only.
+    expect(fight.battle!.guests?.uids).toEqual([fight.party.find((m) => m.speciesId === 'zangoose')!.uid, fight.party.find((m) => m.speciesId === 'seviper')!.uid]);
+    expect(fight.battle!.loaner).toBeUndefined();
     expect(fight.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(Array(6).fill('mightyena'));
     const after = win(fight);
     // Both go back to each other when it is over: neither stays in the party unless you ask.

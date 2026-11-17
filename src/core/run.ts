@@ -98,7 +98,8 @@ import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, 
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
 import { createBattle, itemProblem, resolveAnswer, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
-import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
+import { addGuests, autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
+import { isGuest, isTempAlly } from './battle/guests';
 import { canBeTriples, makeTriples } from './battle/triples';
 import { endBattle as endHeldBattle, expLevelShift, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
 import { gimmickSlots, planBossGimmicks } from './battle/bossGimmicks';
@@ -3448,7 +3449,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   applyHeldAttributes(content, run, engineEvents);
   const promiseLines: string[] = [];
   for (const e of engineEvents) {
-    const fainted = e.type === 'faint' && e.side === 'player' ? run.party.find((p) => p.uid === e.uid) : undefined;
+    // (An ally the game controls is not yours: its faint is no part of your team's story.)
+    const fainted = e.type === 'faint' && e.side === 'player' ? run.party.find((p) => p.uid === e.uid && !isGuest(battle, p.uid)) : undefined;
     if (fainted) {
       promiseLines.push(...notePromiseEvent(content, run, { kind: 'faint', uid: fainted.uid }));
       noteKeepsakeFaint(run);
@@ -3470,7 +3472,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Saffron canon: the `evolveMid` rule evolves the active Pokémon in the heat of the fight.
   events.push(...ruleEvolution(content, run));
   // Poli-Pond: shyness ends after the first battle, the rematch is a duel, and the pond's return (Release or Reconcile) strikes.
-  events.push(...(pondAfterTurn(content, run) as typeof events));
+  events.push(...(pondAfterTurn(content, run, (allies, opts) => void addGuests(turnCtx, allies, opts)) as typeof events));
   // Greenneedle events: stories that count fights (the forest duelist) take their count once the fight is won.
   events.push(...(gnAfterTurn(content, run) as typeof events));
   allstarTurn(run.battle, engineEvents);
@@ -3579,7 +3581,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // R7 Borrowed Team rules: the aces go back to their own trainers as soon as the fight ends.
   if (battle.outcome) endBorrow(run);
   // A temporary ally (a tag battle) goes home after a lost fight too (finishBattle sends it home after a win).
-  if (battle.outcome === 'lose' && battle.loaner) run.party = run.party.filter((m) => m.uid !== battle.loaner);
+  if (battle.outcome === 'lose' && (battle.loaner || battle.guests)) run.party = run.party.filter((m) => !isTempAlly(battle, m.uid));
   // Pidgey's Resolve: a watched CPU fight counts for nothing; the real team comes back and the story reads out how it ended.
   if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose') && feudWatching(run)) {
     // R11: the feud watched. Your team comes back; the outcome's effects apply as for any event fight.
@@ -3933,9 +3935,10 @@ function momentNarration(content: Content, run: RunState, outcome: 'win' | 'caug
 function finishBattle(content: Content, run: RunState): BattleEndResult {
   const battle = run.battle!;
   // A temporary ally goes home: no experience, no catch-up, and it never stays in the party.
-  if (battle.loaner) {
-    run.party = run.party.filter((m) => m.uid !== battle.loaner);
-    battle.participants = battle.participants.filter((u) => u !== battle.loaner);
+  if (battle.loaner || battle.guests) {
+    const temp = new Set(run.party.filter((m) => isTempAlly(battle, m.uid)).map((m) => m.uid));
+    run.party = run.party.filter((m) => !temp.has(m.uid));
+    battle.participants = battle.participants.filter((u) => !temp.has(u));
   }
   // Last Chance Charm: one fallen Pokémon gets back up before anyone is buried.
   if (battle.outcome !== 'lose') lastChanceRevive(content, run);

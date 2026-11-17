@@ -25,6 +25,7 @@ import { worthyStat } from '../greenneedle/worthy';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
 import { agencyArrives, callHelper, fieldOf, helperProblem, reunionTakeHit } from '../greenneedle/reunion';
+import { isTempAlly } from './guests';
 import { truceCover, truceHurt } from '../greenneedle/part3';
 import { ferrisPredicted } from '../greenneedle/ferris';
 import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
@@ -4064,7 +4065,7 @@ function powerFromRule(ctx: BattleContext, rule: PowerRule, base: number, user: 
 
 /** The player has beaten two or more of the foe's team without losing anyone, and has a spare Pokémon: a sweep in progress. */
 function galarSweeping(ctx: BattleContext): boolean {
-  const mine = ctx.party.filter((m) => m.uid !== ctx.battle.loaner);
+  const mine = ctx.party.filter((m) => !isTempAlly(ctx.battle, m.uid));
   return ctx.battle.enemyTeam.filter((m) => m.hp <= 0).length >= 2 && mine.length >= 2 && mine.every((m) => m.hp > 0);
 }
 
@@ -4385,7 +4386,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       return;
     }
     // Greenneedle gn.25 (the pack fight): one of the pair is below a third, so the other stands in front and takes this hit.
-    const cover = truceCover(ctx.content, ctx.battle, ctx.party, target.mon);
+    const cover = truceCover(ctx.content, ctx.battle, ctx.party, target.mon, { user: user.mon, moveId: move.id });
     if (cover) {
       events.push({ type: 'raid', tone: 'info', text: `${cover} stands in front of ${nameOf(ctx, target.mon)}, and takes the hit.` });
       return;
