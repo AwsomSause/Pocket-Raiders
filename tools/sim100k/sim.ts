@@ -7,6 +7,7 @@ import * as A from '../../tests/unit/autoplay';
 import { content } from '../../tests/unit/helpers';
 import * as B from '../lib/simBot';
 import * as Brain from './brain';
+import { waitingStop } from '../../src/core/co/attach';
 import * as R from '../../src/core/run';
 import { chooseBackstory } from '../../src/core/story2/module';
 import { maxHp } from '../../src/core/pokemon';
@@ -79,10 +80,11 @@ const scns: Scn[] = [
   { id: 'classic-veteran', group: 'classic', modeId: 'standard', difficultyId: 'veteran', w: 6 },
   { id: 'classic-champion', group: 'classic', modeId: 'standard', difficultyId: 'champion', w: 5 },
   { id: 'classic-nightmare', group: 'classic', modeId: 'standard', difficultyId: 'nightmare', w: 4 },
-  { id: 'story', group: 'story', modeId: 'standard', difficultyId: 'standard', campaignId: 'orrery-circuit', w: 15 },
   ...['quick-route', 'adventure', 'daily', 'endless', 'endless-tower', 'spooky', 'regional-circuit', 'multi-region', 'research-expedition', 'nuzlocke', 'hardcore-nuzlocke', 'modifier-run', 'rule-draft', 'time-pressure', 'weekly'].map((m) => ({ id: `mode-${m}`, group: 'mode' as const, modeId: m, difficultyId: 'standard', w: 2 })),
 ].filter((s) => !Ru.rulesProblem({ modeId: s.modeId, difficultyId: s.difficultyId, modifierIds: [], deathBlock: false } as Parameters<typeof Ru.rulesProblem>[0]));
 const scnW = scns.reduce((a, s) => a + s.w, 0);
+// Director's ask (2026-11-16): half of all runs are plain Classic standard (default settings, no help, only the trainer varies); no Story Run.
+const PLAIN: Scn = { id: 'classic-standard-plain', group: 'classic', modeId: 'standard', difficultyId: 'standard', w: 0 };
 
 const expansionOf = (allOn: boolean) => ({
   finale: allOn || XS.finaleEnabled, doomEpilogue: allOn || XS.doomEpilogue, labyrinthResume: allOn || XS.labyrinthResume, stagePacing: XS.stagePacing, evolutionEncounters: XS.evolutionEncounters,
@@ -95,6 +97,7 @@ function planOf(n: number) {
   const r = mulberry(n * 2654435761 + 97);
   let x = r() * scnW; let scn = scns[0]!;
   for (const s of scns) { if ((x -= s.w) < 0) { scn = s; break; } }
+  const plain = r() < 0.5; if (plain) scn = PLAIN;
   const arch = r() < 0.5 && FIVE.length ? FIVE[Math.floor(r() * FIVE.length)]! : archetypes[Math.floor(r() * archetypes.length)]!;
   const g = r() * 100;
   const assist = g < GOD_PCT ? 'god' : g < GOD_PCT + HEAL_PCT ? 'heal' : 'none';
@@ -103,6 +106,7 @@ function planOf(n: number) {
   const settings = r() < 0.15 ? 'all-on' : 'default';
   const starterIdx = Math.floor(r() * 3);
   const backstory = scn.group === 'story' && backstories.length ? backstories[Math.floor(r() * backstories.length)]! : undefined;
+  if (plain) return { scn, arch, assist: 'none', skill: 'strong', curiosity: 1, settings: 'default', starterIdx, backstory: undefined, botSeed: Math.floor(r() * 2 ** 31) };
   return { scn, arch, assist, skill, curiosity, settings, starterIdx, backstory, botSeed: Math.floor(r() * 2 ** 31) };
 }
 
@@ -119,7 +123,7 @@ function playOne(n: number): Record<string, unknown> {
   const s = p.scn;
   const seed = `k${n}`;
   const god = p.assist === 'god';
-  const row: Record<string, unknown> = { n, seed, scn: s.id, group: s.group, mode: s.modeId, diff: s.difficultyId, arch: p.arch, assist: p.assist, bot: 'vgc', skill: p.skill, cur: p.curiosity, set: p.settings, bs: p.backstory ?? null };
+  const row: Record<string, unknown> = { n, seed, scn: s.id, group: s.group, mode: s.modeId, diff: s.difficultyId, arch: p.arch, assist: p.assist, bot: 'vgc-seeker', skill: p.skill, cur: p.curiosity, set: p.settings, bs: p.backstory ?? null };
   con = {};
   const bot = mulberry(p.botSeed);
   const C: Record<string, Cnt> = {};
@@ -227,31 +231,68 @@ function playOne(n: number): Record<string, unknown> {
     }
   };
 
+  // The "seeker" habits (director's ask, 2026-11-16): push for events, story and Evil Team content.
+  const HOT = /villain|evil|rocket|aqua|magma|galactic|plasma|flare|skull|yell|star|grunt|story|quest|rival|legend|thread|chain/i;
+  const WALK = /\b(leave|ignore|walk away|walk on|decline|refuse|no thanks|not now|skip|pass by|keep walking|turn back|back away|run away|stay out|do nothing|move on)\b/i;
+  /** Which open choice of an event to take: the one that does the most (fights, flags, follow-ups), never the "walk away" one when there is another. */
+  const eventPick = (view: ReturnType<typeof eventView>, open: number[]): number => {
+    let best = open[0]!; let bs = -Infinity;
+    for (const i of open) {
+      const def = (view.event.choices as unknown[])[i]; const txt = JSON.stringify(def ?? {}); const label = view.choices[i]?.label ?? '';
+      const effects = (txt.match(/"kind":/g) ?? []).length;
+      const v = Math.min(6, effects) + (/"kind":"(battle|trainerBattle|wildBattle|fight)/.test(txt) ? 4 : 0) + (/flag|quest|thread|next|chain|standing|heat|suspicion|recruit|join|follow/i.test(txt) ? 3 : 0) + (HOT.test(txt) ? 2 : 0) - (WALK.test(label) ? 8 : 0) + (view.choices[i]?.chance ?? 1) * 2 + bot() * 3;
+      if (v > bs) { bs = v; best = i; }
+    }
+    if (WALK.test(view.choices[best]?.label ?? '')) bump(c('bot'), 'event: only a walk-away choice was open'); else bump(c('bot'), 'event: took an involved choice');
+    return best;
+  };
+  /** On the map: play a must-see event with the scorer above, and walk to the next node with the most events (Evil Team and story ones first). */
+  const seek = (r: RunState): RunState | null => {
+    if (!r.stage || r.battle || !r.party.some((m) => m.hp > 0)) return null;
+    if (waitingStop(content, r)) return null;
+    const menu = currentMenu(r);
+    const req = menu?.entries.find((e) => e.required && !entryDone(r, e));
+    if (req) {
+      if (req.kind !== 'side' || !req.sideId) return null;
+      const picked = pickMenuEntry(content, r, req.id); if (!picked.sideId) return picked.run;
+      const view = eventView(content, picked.run, picked.sideId); const open = view.choices.map((ch, i) => (ch.locked ? -1 : i)).filter((i) => i >= 0);
+      if (!open.length) return null;
+      return chooseEvent(content, picked.run, picked.sideId, eventPick(view, open)).run;
+    }
+    const choices = R.mapChoices(content, r);
+    if (choices.length < 2) return null;
+    const worth = (n: (typeof choices)[number]) => n.sides.reduce((a, sd) => a + (sd.kind === 'event' ? 2 + (HOT.test(`${sd.eventId ?? ''} ${content.events.get(sd.eventId ?? '')?.group ?? ''}`) ? 3 : 0) : sd.kind === 'raid' || sd.kind === 'totem' ? 1 : 0.3), 0) - (n.harder ? 0.5 : 0);
+    const best = choices.reduce((a, n) => (worth(n) > worth(a) ? n : a));
+    if (worth(best) <= 0.3) return null;
+    bump(c('bot'), 'map: chose the node with more events');
+    return R.chooseNode(content, r, best.id);
+  };
+
   /** The curious part of the bot: optional stops on the current node (through the node menu when there is one). */
   const explore = (r: RunState): RunState | null => {
     const needBalls = Object.entries(r.inventory).reduce((a, [id, q]) => a + ((content.items.get(id)?.effect as { kind?: string } | undefined)?.kind === 'catch' ? q : 0), 0) < 6 && r.money >= 400;
-    if ((p.curiosity <= 0 && !needBalls) || !r.stage || r.stage.current == null) return null;
+    if (!r.stage || r.stage.current == null) return null;
     const nk = `${r.regionIndex}.${r.stage.index}.${r.stage.current}`;
     if (nk !== exploreNode) { exploreNode = nk; exploreCount = 0; }
-    if (exploreCount >= 8) return null;
+    if (exploreCount >= 14) return null;
     const node = r.stage.map.nodes.find((x) => x.id === r.stage!.current);
     if (!node) return null;
     const menu = currentMenu(r);
-    type Opt = { key: string; entryId: string | null; sideId: string | null; cat: string; kind: string };
+    type Opt = { key: string; entryId: string | null; sideId: string | null; cat: string; kind: string; ev?: boolean };
     const opts: Opt[] = [];
     if (menu) {
       for (const e of menu.entries) {
         if (e.required || e.kind === 'encounter' || (e.kind !== 'side' && e.kind !== 'micro')) continue;
         if (entryDone(r, e) || entryLocked(menu, e)) continue;
-        opts.push({ key: `${nk}:${e.id}`, entryId: e.id, sideId: e.sideId ?? null, cat: e.category, kind: e.kind });
+        opts.push({ key: `${nk}:${e.id}`, entryId: e.id, sideId: e.sideId ?? null, cat: e.category, kind: e.kind, ev: e.kind === 'side' && node.sides.find((x) => x.id === e.sideId)?.kind === 'event' });
       }
     } else {
-      for (const sd of node.sides) if (!sd.used && !(sd as { hidden?: boolean }).hidden) opts.push({ key: `${nk}:${sd.id}`, entryId: null, sideId: sd.id, cat: sd.kind === 'shop' ? 'shop' : '', kind: 'side' });
+      for (const sd of node.sides) if (!sd.used && !(sd as { hidden?: boolean }).hidden) opts.push({ key: `${nk}:${sd.id}`, entryId: null, sideId: sd.id, cat: sd.kind === 'shop' ? 'shop' : '', kind: 'side', ev: sd.kind === 'event' });
     }
     for (const o of opts) {
       if (tried.has(o.key)) continue;
       tried.add(o.key);
-      if (bot() >= p.curiosity && !(needBalls && o.cat === 'shop')) continue;
+      if (!o.ev && bot() >= p.curiosity && !(needBalls && o.cat === 'shop')) continue; // events are always taken; other stops by curiosity
       exploreCount++;
       let label = `${o.kind}|${o.cat}`;
       try {
@@ -266,7 +307,7 @@ function playOne(n: number): Record<string, unknown> {
           label += `|${side.eventId}`;
           const open = eventView(content, next, sideId).choices.map((ch, i) => (ch.locked ? -1 : i)).filter((i) => i >= 0);
           if (!open.length) { bump(c('exSkip'), 'event-all-locked'); continue; }
-          out = chooseEvent(content, next, sideId, open[Math.floor(bot() * open.length)]!).run;
+          out = chooseEvent(content, next, sideId, eventPick(eventView(content, next, sideId), open)).run;
         } else if (side.kind === 'heal' || side.kind === 'shop') {
           if (side.kind === 'heal' && (side.used || !next.party.some((m) => m.hp < maxHp(content, m)))) continue;
           out = R.visitSide(content, next, sideId).run;
@@ -384,7 +425,7 @@ function playOne(n: number): Record<string, unknown> {
       if (TRACE) { trace.push(`${steps} ${where(run)} hp=${run.party.map((m) => `${m.speciesId}:${m.hp}/${maxHp(content, m)}`).join(',')} cur=${run.stage?.current} lastEx=${lastEx}`); if (trace.length > 14) trace.shift(); }
       let out: { run: RunState; turn: R.TurnResult | null } | null = null;
       try {
-        if (run.phase === 'map') { const ex = explore(run); if (ex) out = { run: ex, turn: null }; }
+        if (run.phase === 'map') { const ex = explore(run) ?? seek(run); if (ex) out = { run: ex, turn: null }; }
         out ??= collector(run) ?? brainStep(run) ?? B.botStep(content, run, stepFn);
       } catch (e) {
         const err = e as Error;
