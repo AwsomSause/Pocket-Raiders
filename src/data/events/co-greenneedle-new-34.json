@@ -71,11 +71,31 @@
        "types": [],
        "levelBonus": 0,
        "shinyMultiplier": 1,
-       "win": [],
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "absol-paid",
+         "amount": 1
+        }
+       ],
        "rule": {
         "noCatch": true
        },
-       "caught": []
+       "caught": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "absol-paid",
+         "amount": 1
+        }
+       ]
       }
      }
     },
@@ -927,7 +947,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "gn-new-34-end"
+        "eventId": "gn-new-34-count"
        }
       ]
      }
@@ -954,7 +974,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "gn-new-34-end"
+        "eventId": "gn-new-34-count"
        }
       ]
      }
@@ -978,7 +998,7 @@
         },
         {
          "kind": "addEvent",
-         "eventId": "gn-new-34-end"
+         "eventId": "gn-new-34-count"
         }
        ]
       }
@@ -993,7 +1013,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "gn-new-34-end"
+        "eventId": "gn-new-34-count"
        }
       ]
      }
@@ -1019,7 +1039,7 @@
         },
         {
          "kind": "addEvent",
-         "eventId": "gn-new-34-end"
+         "eventId": "gn-new-34-count"
         }
        ]
       }
@@ -1034,7 +1054,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "gn-new-34-end"
+        "eventId": "gn-new-34-count"
        }
       ]
      }
@@ -1379,7 +1399,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "gn-new-34-end"
+        "eventId": "gn-new-34-count"
        }
       ]
      }
@@ -1406,7 +1426,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "gn-new-34-end"
+        "eventId": "gn-new-34-count"
        }
       ]
      }
@@ -1430,7 +1450,7 @@
         },
         {
          "kind": "addEvent",
-         "eventId": "gn-new-34-end"
+         "eventId": "gn-new-34-count"
         }
        ]
       }
@@ -1445,7 +1465,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "gn-new-34-end"
+        "eventId": "gn-new-34-count"
        }
       ]
      }
@@ -1471,7 +1491,7 @@
         },
         {
          "kind": "addEvent",
-         "eventId": "gn-new-34-end"
+         "eventId": "gn-new-34-count"
         }
        ]
       }
@@ -1483,6 +1503,129 @@
         "kind": "flag",
         "key": "warning-held",
         "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-34-count"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-34-count",
+   "name": "The Slide: The Count",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "absol",
+    "tint": "#33404f",
+    "effect": "rain"
+   },
+   "intro": "The hill stops. It takes a long time to be sure that it has stopped.\n\nEverybody is in the square, in the rain, in whatever they were wearing. Nobody is missing. Goody Prowse counts heads, and gets the right number, and counts again.\n\n*Nobody died. Buildings did.*",
+   "choices": [
+    {
+     "label": "Count what is standing.",
+     "success": {
+      "text": "The old cart shed at the foot of the ridge is gone. It was always going to go. It was in the way of a hill.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "warning-dug",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "warning-saved",
+          "amount": 1
+         }
+        ],
+        "text": "The school is standing. The channel you dug took the mud round it, and laid it down in the bottom field, a foot from the wall."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "warning-dug",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The school is gone. Nothing turned the slide, and it went through the classroom wall and out the other side. The children were already out of it."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "warning-shouted",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "warning-saved",
+          "amount": 1
+         }
+        ],
+        "text": "The houses on the low street were awake in time: their doors were braced and their shutters barred, and they stand, with mud to the sills."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "warning-shouted",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The houses on the low street are gone. Nobody woke them early; the families got out by the back windows, at the last, with nothing in their hands."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "warning-held",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "warning-saved",
+          "amount": 1
+         }
+        ],
+        "text": "The school porch held, because something held its door. The bell is still hanging in it."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "warning-held",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The school porch is gone, door and bell and all. Nobody held it. The last children came out through a window."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "warning-carried",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "warning-saved",
+          "amount": 1
+         }
+        ],
+        "text": "The little ones were carried out first, so there were hands to spare, and the hands saved the bakery: its wall was propped before the mud reached it."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "warning-carried",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "The bakery is gone. The little ones walked out on their own feet, slowly, and every spare hand in the village was holding one of theirs."
        },
        {
         "kind": "addEvent",
@@ -1508,7 +1651,7 @@
     "tint": "#4b5563",
     "effect": "rain"
    },
-   "intro": "It is quiet after. Mud to the windowsills. The school is standing, or it is not. Nobody is under it.\n\nGoody Prowse is sitting in the street with a child on her knee, counting heads. She counts them twice.\n\nThe Absol stands on the ridge, in the grey light, looking at the village.",
+   "intro": "It is quiet after. Mud to the windowsills. Nobody is under it.\n\nGoody Prowse is sitting in the street with a child on her knee, counting heads. She counts them twice.\n\nThe Absol stands on the ridge, in the grey light, looking at the village.",
    "choices": [
     {
      "label": "Walk up to the Absol.",
@@ -1518,6 +1661,11 @@
        {
         "kind": "flag",
         "key": "warning-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "warning-kept",
         "amount": 1
        },
        {

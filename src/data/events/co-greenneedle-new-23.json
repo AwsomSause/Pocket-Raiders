@@ -65,13 +65,6 @@
        }
       ]
      }
-    },
-    {
-     "label": "Walk on.",
-     "success": {
-      "text": "Behind you, the window argues on in static, a little quieter.",
-      "effects": []
-     }
     }
    ]
   },
@@ -317,12 +310,8 @@
         ],
         "types": [],
         "levelBonus": 0,
-        "shinyMultiplier": 1
-       },
-       {
-        "kind": "teachMove",
-        "move": "house-call",
-        "species": "rotom"
+        "shinyMultiplier": 1,
+        "ability": "house-call"
        },
        {
         "kind": "gn",

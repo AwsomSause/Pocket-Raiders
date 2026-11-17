@@ -34,17 +34,14 @@
       "effects": [
        {
         "kind": "gn",
+        "op": "nsClear"
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-new-24-sent-1"
        }
       ]
-     }
-    },
-    {
-     "label": "Not tonight.",
-     "success": {
-      "text": "Mr. Holloway nods like he expected it. The shed light stays on behind you for a long time.",
-      "effects": []
      }
     }
    ]
@@ -61,244 +58,192 @@
     "tint": "#1f2a44",
     "effect": "none"
    },
-   "intro": "Wave 1 of five. The wind turns, and the garden goes quiet on one side. Where do the two sentries stand?\n\n*North, south, east, west. Two of your Pokémon, one pair of sides. The raiders won't say which way they're coming.*",
+   "intro": "Wave 1 of five. The wind turns, and the garden goes quiet on one side. Two of your Pokémon stand sentry. Who stands where?\n\n*North, south, east, west. Pick a side, then the Pokémon that stands there. No two waves in a row come the same way, and the first four come from four different sides.*",
    "choices": [
     {
-     "label": "North and south.",
+     "label": "North.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 1
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
+        "key": "ns-ready",
         "min": 1,
-        "max": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
+          "op": "nsRaid",
           "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w1"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 2,
-        "max": 2,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-1"
          }
         ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w1"
        }
       ]
      }
     },
     {
-     "label": "East and west.",
+     "label": "South.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 2
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 3,
-        "max": 3,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ns-side",
-        "min": 4,
-        "max": 4,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w1"
-       }
-      ]
-     }
-    },
-    {
-     "label": "North and east.",
-     "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ns-side",
+        "key": "ns-ready",
         "min": 1,
-        "max": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
+          "op": "nsRaid",
           "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w1"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 3,
-        "max": 3,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-1"
          }
         ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w1"
        }
       ]
      }
     },
     {
-     "label": "South and west.",
+     "label": "East.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 3
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 2,
-        "max": 2,
+        "key": "ns-ready",
+        "min": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
+          "op": "nsRaid",
           "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w1"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 4,
-        "max": 4,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-1"
          }
         ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "West.",
+     "pick": {},
+     "success": {
+      "text": "It takes its place in the wet grass.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "nsPost",
+        "n": 4
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w1"
+        "op": "when",
+        "key": "ns-ready",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "nsRaid",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w1"
+         }
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-sent-1"
+         }
+        ]
        }
       ]
      }
@@ -317,244 +262,192 @@
     "tint": "#1f2a44",
     "effect": "none"
    },
-   "intro": "Wave 2 of five. The wind turns, and the garden goes quiet on one side. Where do the two sentries stand?\n\n*North, south, east, west. Two of your Pokémon, one pair of sides. The raiders won't say which way they're coming.*",
+   "intro": "Wave 2 of five. The wind turns, and the garden goes quiet on one side. Two of your Pokémon stand sentry. Who stands where?\n\n*North, south, east, west. Pick a side, then the Pokémon that stands there. No two waves in a row come the same way, and the first four come from four different sides.*",
    "choices": [
     {
-     "label": "North and south.",
+     "label": "North.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 1
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
+        "key": "ns-ready",
         "min": 1,
-        "max": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w2"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 2,
-        "max": 2,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-2"
          }
         ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w2"
        }
       ]
      }
     },
     {
-     "label": "East and west.",
+     "label": "South.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 2
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 3,
-        "max": 3,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ns-side",
-        "min": 4,
-        "max": 4,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w2"
-       }
-      ]
-     }
-    },
-    {
-     "label": "North and east.",
-     "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ns-side",
+        "key": "ns-ready",
         "min": 1,
-        "max": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w2"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 3,
-        "max": 3,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-2"
          }
         ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w2"
        }
       ]
      }
     },
     {
-     "label": "South and west.",
+     "label": "East.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 3
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 2,
-        "max": 2,
+        "key": "ns-ready",
+        "min": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w2"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 4,
-        "max": 4,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-2"
          }
         ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "West.",
+     "pick": {},
+     "success": {
+      "text": "It takes its place in the wet grass.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "nsPost",
+        "n": 4
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w2"
+        "op": "when",
+        "key": "ns-ready",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "nsRaid",
+          "n": 2
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w2"
+         }
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-sent-2"
+         }
+        ]
        }
       ]
      }
@@ -573,244 +466,192 @@
     "tint": "#1f2a44",
     "effect": "none"
    },
-   "intro": "Wave 3 of five. The wind turns, and the garden goes quiet on one side. Where do the two sentries stand?\n\n*North, south, east, west. Two of your Pokémon, one pair of sides. The raiders won't say which way they're coming.*",
+   "intro": "Wave 3 of five. The wind turns, and the garden goes quiet on one side. Two of your Pokémon stand sentry. Who stands where?\n\n*North, south, east, west. Pick a side, then the Pokémon that stands there. No two waves in a row come the same way, and the first four come from four different sides.*",
    "choices": [
     {
-     "label": "North and south.",
+     "label": "North.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 1
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
+        "key": "ns-ready",
         "min": 1,
-        "max": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 3
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w3"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 2,
-        "max": 2,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-3"
          }
         ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w3"
        }
       ]
      }
     },
     {
-     "label": "East and west.",
+     "label": "South.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 2
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 3,
-        "max": 3,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ns-side",
-        "min": 4,
-        "max": 4,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w3"
-       }
-      ]
-     }
-    },
-    {
-     "label": "North and east.",
-     "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ns-side",
+        "key": "ns-ready",
         "min": 1,
-        "max": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 3
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w3"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 3,
-        "max": 3,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-3"
          }
         ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w3"
        }
       ]
      }
     },
     {
-     "label": "South and west.",
+     "label": "East.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 3
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 2,
-        "max": 2,
+        "key": "ns-ready",
+        "min": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 3
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w3"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 4,
-        "max": 4,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-3"
          }
         ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "West.",
+     "pick": {},
+     "success": {
+      "text": "It takes its place in the wet grass.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "nsPost",
+        "n": 4
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w3"
+        "op": "when",
+        "key": "ns-ready",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "nsRaid",
+          "n": 3
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w3"
+         }
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-sent-3"
+         }
+        ]
        }
       ]
      }
@@ -829,244 +670,192 @@
     "tint": "#1f2a44",
     "effect": "none"
    },
-   "intro": "Wave 4 of five. The wind turns, and the garden goes quiet on one side. Where do the two sentries stand?\n\n*North, south, east, west. Two of your Pokémon, one pair of sides. The raiders won't say which way they're coming.*",
+   "intro": "Wave 4 of five. The wind turns, and the garden goes quiet on one side. Two of your Pokémon stand sentry. Who stands where?\n\n*North, south, east, west. Pick a side, then the Pokémon that stands there. No two waves in a row come the same way, and the first four come from four different sides.*",
    "choices": [
     {
-     "label": "North and south.",
+     "label": "North.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 1
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
+        "key": "ns-ready",
         "min": 1,
-        "max": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 4
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w4"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 2,
-        "max": 2,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-4"
          }
         ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w4"
        }
       ]
      }
     },
     {
-     "label": "East and west.",
+     "label": "South.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 2
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 3,
-        "max": 3,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ns-side",
-        "min": 4,
-        "max": 4,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w4"
-       }
-      ]
-     }
-    },
-    {
-     "label": "North and east.",
-     "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ns-side",
+        "key": "ns-ready",
         "min": 1,
-        "max": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 4
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w4"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 3,
-        "max": 3,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-4"
          }
         ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w4"
        }
       ]
      }
     },
     {
-     "label": "South and west.",
+     "label": "East.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 3
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 2,
-        "max": 2,
+        "key": "ns-ready",
+        "min": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 4
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w4"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 4,
-        "max": 4,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-4"
          }
         ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "West.",
+     "pick": {},
+     "success": {
+      "text": "It takes its place in the wet grass.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "nsPost",
+        "n": 4
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w4"
+        "op": "when",
+        "key": "ns-ready",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "nsRaid",
+          "n": 4
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w4"
+         }
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-sent-4"
+         }
+        ]
        }
       ]
      }
@@ -1085,244 +874,192 @@
     "tint": "#1f2a44",
     "effect": "none"
    },
-   "intro": "Wave 5 of five. The wind turns, and the garden goes quiet on one side. Where do the two sentries stand?\n\n*North, south, east, west. Two of your Pokémon, one pair of sides. The raiders won't say which way they're coming.*",
+   "intro": "Wave 5 of five. The wind turns, and the garden goes quiet on one side. Two of your Pokémon stand sentry. Who stands where?\n\n*North, south, east, west. Pick a side, then the Pokémon that stands there. No two waves in a row come the same way, and the first four come from four different sides.*",
    "choices": [
     {
-     "label": "North and south.",
+     "label": "North.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 1
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
+        "key": "ns-ready",
         "min": 1,
-        "max": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 5
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w5"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 2,
-        "max": 2,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-5"
          }
         ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w5"
        }
       ]
      }
     },
     {
-     "label": "East and west.",
+     "label": "South.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 2
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 3,
-        "max": 3,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ns-side",
-        "min": 4,
-        "max": 4,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w5"
-       }
-      ]
-     }
-    },
-    {
-     "label": "North and east.",
-     "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "ns-side",
+        "key": "ns-ready",
         "min": 1,
-        "max": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 5
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w5"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 3,
-        "max": 3,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-5"
          }
         ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w5"
        }
       ]
      }
     },
     {
-     "label": "South and west.",
+     "label": "East.",
+     "pick": {},
      "success": {
-      "text": "Your Pokémon take their places in the wet grass, and the garden holds its breath.",
+      "text": "It takes its place in the wet grass.",
       "effects": [
        {
         "kind": "gn",
-        "op": "pick",
-        "key": "ns-side",
-        "weights": [
-         1,
-         1,
-         1,
-         1
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "ns-cover",
-        "n": 0
+        "op": "nsPost",
+        "n": 3
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 2,
-        "max": 2,
+        "key": "ns-ready",
+        "min": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "nsRaid",
+          "n": 5
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w5"
          }
-        ]
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
        },
        {
         "kind": "gn",
         "op": "when",
-        "key": "ns-side",
-        "min": 4,
-        "max": 4,
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
         "then": [
          {
           "kind": "gn",
-          "op": "setFlag",
-          "key": "ns-cover",
-          "n": 1
+          "op": "scene",
+          "key": "gn-new-24-sent-5"
          }
         ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "West.",
+     "pick": {},
+     "success": {
+      "text": "It takes its place in the wet grass.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "nsPost",
+        "n": 4
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-24-w5"
+        "op": "when",
+        "key": "ns-ready",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "nsRaid",
+          "n": 5
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-w5"
+         }
+        ],
+        "text": "Both sentries are standing. The garden holds its breath."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ns-ready",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-24-sent-5"
+         }
+        ]
        }
       ]
      }
@@ -1341,12 +1078,12 @@
     "tint": "#1f2a44",
     "effect": "none"
    },
-   "intro": "Something small and quick comes over the fence with a sack already open. A Sneasel, thin as a coat hanger.\n\n*From one of the four sides.*",
+   "intro": "Something small and quick comes over the fence with a sack already open. A Sneasel, thin as a coat hanger.\n\n*You hear it before you see it.*",
    "choices": [
     {
      "label": "Hold the fence.",
      "success": {
-      "text": "It comes in from the side where your sentries stand, and meets them first. It stumbles, surprised.",
+      "text": "It comes in on a side where a sentry stands, and meets your sentry first. It stumbles, surprised.",
       "effects": [],
       "battle": {
        "kind": "wild",
@@ -1357,6 +1094,10 @@
        "levelBonus": -1,
        "shinyMultiplier": 1,
        "win": [
+        {
+         "kind": "gn",
+         "op": "nsClear"
+        },
         {
          "kind": "gn",
          "op": "scene",
@@ -1378,12 +1119,17 @@
         },
         {
          "kind": "gn",
+         "op": "nsClear"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-new-24-sent-2"
         }
        ],
        "rule": {
         "noCatch": true,
+        "leadMark": "ns-lead",
         "foeStages": {
          "atk": -1,
          "spe": -1
@@ -1416,6 +1162,10 @@
        "win": [
         {
          "kind": "gn",
+         "op": "nsClear"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-new-24-sent-2"
         }
@@ -1432,6 +1182,10 @@
          "kind": "gn",
          "op": "stampStage",
          "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "nsClear"
         },
         {
          "kind": "gn",
@@ -1467,12 +1221,12 @@
     "tint": "#1f2a44",
     "effect": "none"
    },
-   "intro": "The second one has learned from the first. It stays low, and goes for the shed door.\n\n*From one of the four sides.*",
+   "intro": "The second one has learned from the first. It stays low, and goes for the shed door.\n\n*You hear it before you see it.*",
    "choices": [
     {
      "label": "Hold the fence.",
      "success": {
-      "text": "It comes in from the side where your sentries stand, and meets them first. It stumbles, surprised.",
+      "text": "It comes in on a side where a sentry stands, and meets your sentry first. It stumbles, surprised.",
       "effects": [],
       "battle": {
        "kind": "wild",
@@ -1483,6 +1237,10 @@
        "levelBonus": -1,
        "shinyMultiplier": 1,
        "win": [
+        {
+         "kind": "gn",
+         "op": "nsClear"
+        },
         {
          "kind": "gn",
          "op": "scene",
@@ -1504,12 +1262,17 @@
         },
         {
          "kind": "gn",
+         "op": "nsClear"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-new-24-food"
         }
        ],
        "rule": {
         "noCatch": true,
+        "leadMark": "ns-lead",
         "foeStages": {
          "atk": -1,
          "spe": -1
@@ -1542,6 +1305,10 @@
        "win": [
         {
          "kind": "gn",
+         "op": "nsClear"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-new-24-food"
         }
@@ -1558,6 +1325,10 @@
          "kind": "gn",
          "op": "stampStage",
          "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "nsClear"
         },
         {
          "kind": "gn",
@@ -1593,12 +1364,12 @@
     "tint": "#1f2a44",
     "effect": "none"
    },
-   "intro": "The third raider doesn't even look at you. It looks at the shed, at the forty eggs in it, the way you look at supper.\n\n*From one of the four sides.*",
+   "intro": "The third raider doesn't even look at you. It looks at the shed, at the forty eggs in it, the way you look at supper.\n\n*You hear it before you see it.*",
    "choices": [
     {
      "label": "Hold the fence.",
      "success": {
-      "text": "It comes in from the side where your sentries stand, and meets them first. It stumbles, surprised.",
+      "text": "It comes in on a side where a sentry stands, and meets your sentry first. It stumbles, surprised.",
       "effects": [],
       "battle": {
        "kind": "wild",
@@ -1609,6 +1380,10 @@
        "levelBonus": -1,
        "shinyMultiplier": 1,
        "win": [
+        {
+         "kind": "gn",
+         "op": "nsClear"
+        },
         {
          "kind": "gn",
          "op": "scene",
@@ -1630,12 +1405,17 @@
         },
         {
          "kind": "gn",
+         "op": "nsClear"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-new-24-sent-4"
         }
        ],
        "rule": {
         "noCatch": true,
+        "leadMark": "ns-lead",
         "foeStages": {
          "atk": -1,
          "spe": -1
@@ -1668,6 +1448,10 @@
        "win": [
         {
          "kind": "gn",
+         "op": "nsClear"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-new-24-sent-4"
         }
@@ -1684,6 +1468,10 @@
          "kind": "gn",
          "op": "stampStage",
          "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "nsClear"
         },
         {
          "kind": "gn",
@@ -1719,12 +1507,12 @@
     "tint": "#1f2a44",
     "effect": "none"
    },
-   "intro": "The fourth is the thinnest of all, and the fastest. Mrs. Holloway bangs the pan. It doesn't stop.\n\n*From one of the four sides.*",
+   "intro": "The fourth is the thinnest of all, and the fastest. Mrs. Holloway bangs the pan. It doesn't stop.\n\n*You hear it before you see it.*",
    "choices": [
     {
      "label": "Hold the fence.",
      "success": {
-      "text": "It comes in from the side where your sentries stand, and meets them first. It stumbles, surprised.",
+      "text": "It comes in on a side where a sentry stands, and meets your sentry first. It stumbles, surprised.",
       "effects": [],
       "battle": {
        "kind": "wild",
@@ -1735,6 +1523,10 @@
        "levelBonus": -1,
        "shinyMultiplier": 1,
        "win": [
+        {
+         "kind": "gn",
+         "op": "nsClear"
+        },
         {
          "kind": "gn",
          "op": "scene",
@@ -1756,12 +1548,17 @@
         },
         {
          "kind": "gn",
+         "op": "nsClear"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-new-24-sent-5"
         }
        ],
        "rule": {
         "noCatch": true,
+        "leadMark": "ns-lead",
         "foeStages": {
          "atk": -1,
          "spe": -1
@@ -1794,6 +1591,10 @@
        "win": [
         {
          "kind": "gn",
+         "op": "nsClear"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-new-24-sent-5"
         }
@@ -1810,6 +1611,10 @@
          "kind": "gn",
          "op": "stampStage",
          "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "nsClear"
         },
         {
          "kind": "gn",
@@ -1850,7 +1655,7 @@
     {
      "label": "Hold the fence.",
      "success": {
-      "text": "It comes in from the side where your sentries stand, and meets them first. It stumbles, surprised.",
+      "text": "It comes in on a side where a sentry stands, and meets your sentry first. It stumbles, surprised.",
       "effects": [],
       "battle": {
        "kind": "wild",
@@ -1861,6 +1666,10 @@
        "levelBonus": 0,
        "shinyMultiplier": 1,
        "win": [
+        {
+         "kind": "gn",
+         "op": "nsClear"
+        },
         {
          "kind": "gn",
          "op": "scene",
@@ -1882,12 +1691,17 @@
         },
         {
          "kind": "gn",
+         "op": "nsClear"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-new-24-end"
         }
        ],
        "rule": {
         "noCatch": true,
+        "leadMark": "ns-lead",
         "foeStages": {
          "atk": -1,
          "spe": -1
@@ -1920,6 +1734,10 @@
        "win": [
         {
          "kind": "gn",
+         "op": "nsClear"
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-new-24-end"
         }
@@ -1936,6 +1754,10 @@
          "kind": "gn",
          "op": "stampStage",
          "key": "ns-at"
+        },
+        {
+         "kind": "gn",
+         "op": "nsClear"
         },
         {
          "kind": "gn",
@@ -1991,6 +1813,15 @@
        },
        {
         "kind": "gn",
+        "op": "stampStage",
+        "key": "ns-fed-at"
+       },
+       {
+        "kind": "gn",
+        "op": "nsClear"
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-new-24-end"
        }
@@ -2002,6 +1833,10 @@
      "success": {
       "text": "You shake out the broom. Three waves to go. Behind you, the shed door rattles, and holds.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "nsClear"
+       },
        {
         "kind": "gn",
         "op": "scene",
@@ -2065,11 +1900,24 @@
         "max": 0,
         "then": [
          {
-          "kind": "flag",
-          "key": "daycare-defended",
-          "amount": 1
+          "kind": "gn",
+          "op": "when",
+          "key": "daycare-fed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "flag",
+            "key": "daycare-defended",
+            "amount": 1
+           }
+          ]
          }
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "nsClear"
        },
        {
         "kind": "gn",
@@ -2105,11 +1953,24 @@
         "max": 0,
         "then": [
          {
-          "kind": "flag",
-          "key": "daycare-defended",
-          "amount": 1
+          "kind": "gn",
+          "op": "when",
+          "key": "daycare-fed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "flag",
+            "key": "daycare-defended",
+            "amount": 1
+           }
+          ]
          }
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "nsClear"
        },
        {
         "kind": "gn",
@@ -2146,11 +2007,24 @@
         "max": 0,
         "then": [
          {
-          "kind": "flag",
-          "key": "daycare-defended",
-          "amount": 1
+          "kind": "gn",
+          "op": "when",
+          "key": "daycare-fed",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "flag",
+            "key": "daycare-defended",
+            "amount": 1
+           }
+          ]
          }
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "nsClear"
        },
        {
         "kind": "gn",
@@ -2219,10 +2093,17 @@
        {
         "kind": "join",
         "shadow": false,
-        "species": [
-         "sneasel"
+        "species": [],
+        "types": [
+         "normal",
+         "fairy",
+         "water",
+         "bug",
+         "grass",
+         "fire",
+         "electric",
+         "fighting"
         ],
-        "types": [],
         "levelBonus": -3,
         "shinyMultiplier": 1,
         "nature": "naughty"
@@ -2251,6 +2132,95 @@
         "op": "setFlag",
         "key": "ns-found",
         "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-24-guard",
+   "name": "The Night Shift: The Sneasel on the Fence",
+   "group": "Greenneedle",
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "daycare-fed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "night-shift-sneasel",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "ns-fed-at"
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "ns-guard-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.oldman"
+    ],
+    "tint": "#1f2a44",
+    "effect": "none"
+   },
+   "intro": "The Holloways' garden, by daylight. The beans are staked again. On the fence post by the shed sits a thin Sneasel, very upright, watching the road.\n\n**Mrs. Holloway:** \"That one stayed. It hasn't let so much as a Rattata near the shed. It eats at the back door, like family.\"\n\n**Mr. Holloway:** \"It looks down the road after you, mind. Every morning. It'd go, if you asked.\"",
+   "choices": [
+    {
+     "label": "Ask it to come with you.",
+     "success": {
+      "text": "It looks at the shed. It looks at Mrs. Holloway, who nods, and blows her nose. Then it drops off the post and falls in beside you, as if it had been waiting for the word.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "sneasel"
+        ],
+        "types": [],
+        "levelBonus": -1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "night-shift-sneasel",
+        "n": 0
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-sneasel-taken",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Sneasel that guarded the day-care garden came with you.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to guard the garden.",
+     "success": {
+      "text": "It gives you one slow blink, and goes back to watching the road. It will be here next time, too.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ns-guard-at"
        }
       ]
      }

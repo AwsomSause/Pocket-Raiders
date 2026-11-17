@@ -1205,6 +1205,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
     multiplier: z.number().positive(),
     species: Species,
     canEvolve: z.boolean().optional(),
+    /** Only while the holder is a first-stage Pokémon: not the evolution of anything (the Little Cup, gn.new.27). */
+    firstStage: z.boolean().optional(),
   }),
   /** Locked into the first move it uses until it switches out (Choice items). */
   z.object({ hook: z.literal('choiceLock') }),
@@ -1266,6 +1268,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   z.object({ hook: z.literal('clearAmulet') }),
   /** Immune to Intimidate; the first use of each status move goes first (Cool Shades, Squirtle Squad). */
   z.object({ hook: z.literal('coolShades') }),
+  /** Holders of these types act first on the first turn of a battle fought in rain (the Thundermark, gn.new.32). */
+  z.object({ hook: z.literal('rainFirst'), types: z.array(TypeNameSchema).min(1) }),
   /** Multi-hit moves hit at least 4 times (Loaded Dice). */
   z.object({ hook: z.literal('loadedDice') }),
   /** Punching moves do more damage and don't make contact (Punching Glove). */

@@ -98,6 +98,8 @@ export const DROP_GUARD: Record<string, BoostStat | 'all'> = {
   'keen-eye': 'acc',
   'wise-eye': 'acc',
   'minds-eye': 'acc',
+  // Greenneedle gn.new.36, Guiding Light: its side's accuracy cannot be lowered.
+  'guiding-light': 'acc',
   'big-pecks': 'def',
   // Greenneedle gn.55: the Angry Bidoof, once it's yours.
   unbothered: 'all',
@@ -223,6 +225,8 @@ const SUPPORTED = new Set<string>([
   'hush', 'three-faces', 'pack-call',
   // Greenneedle gn.57: the Impersonator's Many Faces (engine.ts entryAbility).
   'many-faces', 'before-the-fall',
+  // Greenneedle gn.new.28 Rope-a-Dope, gn.new.37 Foster Wing, gn.new.23 House Call (engine.ts).
+  'rope-a-dope', 'foster-wing', 'house-call',
   // Beta 0.7 batch (Galarian lines).
   'basalt-shell', 'scavenger', 'parcel-guard', 'landfill', 'kitchen-heat', 'neon-camouflage', 'ripe-bloom', 'thunderhead', 'venom-jaws', 'foam-shell', 'royal-disdain', 'hoop-focus',
   ...Object.keys(PINCH),

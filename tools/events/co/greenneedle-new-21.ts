@@ -72,9 +72,9 @@ export const REMOVE: string[] = [];
 
 export const PLACEMENT: Record<string, Placement> = {
   'gn-new-21': {
-    gn: 'gn.new.21', shape: 'Single', earliest: 'A2', home: 9, window: [7, 12], sits: 'optional', attaches: 'instead', tags: ['Pokémon', 'Mystery'], needs: ['forest'],
+    gn: 'gn.new.21', shape: 'Single', earliest: 'A2', home: 9, window: [7, 14], sits: 'optional', attaches: 'instead', tags: ['Pokémon', 'Mystery'], needs: ['forest'], needsAll: ['night'],
     level: 'None (no battles)', often: 'region', badge: 'own',
-    note: 'Badge: a stump. At dusk; fallback step 14. Once per region. A rhythm game of four sections (conduct) or the Pokégear recording (find the conductor). gn-new-21-night is the afterstory.',
+    note: 'Badge: a stump. At dusk (a stage in the evening or at night); fallback step 14 (the end of the window). Once per region. A rhythm game of four sections (conduct) or the Pokégear recording (find the conductor). gn-new-21-night is the afterstory.',
   },
   'gn-new-21-night': { gn: 'gn.new.21', shape: 'Single', earliest: 'A2', home: 1, window: [1, 1], sits: 'optional', attaches: 'rest', tags: ['Pokémon', 'Mystery'], level: 'None', often: 'region', badge: 'own', note: 'Afterstory: the orchestra is heard faintly at Step 1 of every night stage for the rest of the region.' },
 };

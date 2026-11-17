@@ -5833,33 +5833,13 @@
    "kanto": "The Drought Ranch",
    "elsewhere": "The Drought Ranch"
   },
-  "note": "Badge: a water drop. Home step 6, fallback step 11. \"Move the colony\" spends the next node, \"Dig a channel\" the next two (a Ground- or Water-type needed). Dug: a Fresh Milk at every rest this region. Broken: sets bibarel-dam-broken (gn.55 reads it).",
+  "note": "Badge: a water drop. Home step 6, fallback step 11. \"Move the colony\" spends the next node, \"Dig a channel\" the next two (a Ground- or Water-type needed). Dug: a Fresh Milk (a full heal for one Pokémon) at every rest this region. Broken: sets bibarel-dam-broken (gn.55 reads it), and three thin Bidoof are on the road three nodes on (step 9; room gn-new-20-road).",
   "kinds": [
    "Moral Choice"
   ],
   "tags": [
    "forest"
   ]
- },
- "gn-new-20-road": {
-  "gn": "gn.new.20",
-  "shape": "Single",
-  "earliest": "A4",
-  "home": 9,
-  "window": [
-   7,
-   12
-  ],
-  "sits": "optional",
-  "attaches": "after",
-  "level": "None",
-  "often": "run",
-  "badge": "own",
-  "note": "Afterstory: three thin Bidoof on the road a stage later, only if the dam was broken.",
-  "kinds": [
-   "Moral Choice"
-  ],
-  "tags": []
  },
  "gn-new-20-later": {
   "gn": "gn.new.20",
@@ -5888,20 +5868,21 @@
   "home": 9,
   "window": [
    7,
-   12
+   14
   ],
   "sits": "optional",
   "attaches": "instead",
   "level": "None (no battles)",
   "often": "region",
   "badge": "own",
-  "note": "Badge: a stump. At dusk; fallback step 14. Once per region. A rhythm game of four sections (conduct) or the Pokégear recording (find the conductor). gn-new-21-night is the afterstory.",
+  "note": "Badge: a stump. At dusk (a stage in the evening or at night); fallback step 14 (the end of the window). Once per region. A rhythm game of four sections (conduct) or the Pokégear recording (find the conductor). gn-new-21-night is the afterstory.",
   "kinds": [
    "Pokémon",
    "Mystery"
   ],
   "tags": [
-   "forest"
+   "forest",
+   "night"
   ]
  },
  "gn-new-21-night": {
@@ -5991,7 +5972,7 @@
   "home": 5,
   "window": [
    3,
-   8
+   15
   ],
   "sits": "must-see",
   "attaches": "town",
@@ -6002,7 +5983,7 @@
    "kanto": "The Appliance Shop",
    "elsewhere": "The Appliance Shop"
   },
-  "note": "Fallback step 15. Five errands in a row inside the town node (no steps spent). The one it hummed through is a seeded roll at the door. Once per run (the doc's \"once per save\").",
+  "note": "Fallback step 15 (the end of the window). Plain Rotom: the ability House Call. Five errands in a row inside the town node (no steps spent). The one it hummed through is a seeded roll at the door. Once per run (the doc's \"once per save\").",
   "kinds": [
    "Hub Destination"
   ],
@@ -6072,6 +6053,30 @@
    "elsewhere": "The Egg That Was Taken"
   },
   "note": "Only after a wave was lost, a later stage.",
+  "kinds": [
+   "Interrupting Episode"
+  ],
+  "tags": []
+ },
+ "gn-new-24-guard": {
+  "gn": "gn.new.24",
+  "shape": "Single",
+  "earliest": "A5",
+  "home": 10,
+  "window": [
+   5,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "dressing": {
+   "kanto": "The Sneasel on the Fence",
+   "elsewhere": "The Sneasel on the Fence"
+  },
+  "note": "Only after food was left at the fence: the Sneasel that stayed can be collected on any later visit (it comes back each stage until taken).",
   "kinds": [
    "Interrupting Episode"
   ],
@@ -6183,7 +6188,7 @@
    "kanto": "The Mural",
    "elsewhere": "The Mural"
   },
-  "note": "Badge: a paint brush. One panel per stage; the subject (walked-past event, close call, catch, kindness, Gym) is picked in core/greenneedle/mural.ts. Fallback step 15. The ending needs six panels on the wall. Afterstory: the Final Reunion shows one wall per region (flag mural-walls).",
+  "note": "Badge: a paint brush. One panel per stage; the subject (walked-past event, close call, catch, kindness, Gym) is picked in core/greenneedle/mural.ts. Fallback step 15. Each panel names what it shows (the event passed, the foe, the Pokémon caught). The ending needs six panels on the wall and is walked panel by panel, left to right; the Smeargle joins and its first Sketch copies a move the player picks from those used against them this region. Afterstory: the Final Reunion shows one wall per region (flag mural-walls).",
   "kinds": [
    "Mystery Episode",
    "Region-Wide Story"
@@ -6200,7 +6205,7 @@
   "home": 11,
   "window": [
    11,
-   13
+   16
   ],
   "sits": "optional",
   "attaches": "after",
@@ -6278,12 +6283,13 @@
   "level": "A+0, A+0, A+1",
   "often": "run",
   "badge": "own",
-  "note": "Badge: a bridge. Side branch of step 13, at night; fallback step 17, optional. Three fights or one break-out. Once per run. Rope-a-Dope is built as Counter (no such move).",
+  "note": "Badge: a bridge. Side branch of step 13, at night (a city stage in the evening or at night); fallback step 17, optional. Three fights or one break-out (the chase spends a step). Once per run. The Scrafty has the ability Rope-a-Dope.",
   "kinds": [
    "Companion Story"
   ],
   "tags": [
-   "city"
+   "city",
+   "night"
   ]
  },
  "gn-new-28-recruiter": {
@@ -6320,9 +6326,29 @@
   "level": "None",
   "often": "run",
   "badge": "own",
-  "note": "Afterstory: only after the cages were opened, a later stage of the same run (the doc: a later region).",
+  "note": "Afterstory: only after the cages were opened, in a later region.",
   "kinds": [
    "Companion Story"
+  ],
+  "tags": []
+ },
+ "gn-new-28-owner": {
+  "gn": "gn.new.28",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 8,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: only after sitting in the crowd (ring-knows-owner): the owner is seen again, recruiting.",
+  "kinds": [
+   "Evil Team"
   ],
   "tags": []
  },
@@ -6357,7 +6383,7 @@
   "home": 2,
   "window": [
    1,
-   4
+   6
   ],
   "sits": "optional",
   "level": "No battles of their own",
@@ -6370,7 +6396,7 @@
     "home": 2,
     "window": [
      1,
-     4
+     6
     ]
    },
    {
@@ -6384,7 +6410,7 @@
     ]
    }
   ],
-  "note": "Chain inside one stage. Fallback step 6, optional. Once per run (the doc says once per run). While they walk with you, in every battle: Plusle +5% Attack, Minun +5% Defence. Both together: Call and Response (core/greenneedle/cheer.ts).",
+  "note": "Chain inside one stage. Fallback step 6, optional (the end of the window). The ending at step 19 is must-see (every lane), so no path misses the question. Once per run (the doc says once per run). While they walk with you, in every battle: Plusle +5% Attack, Minun +5% Defence. Both together: Call and Response (core/greenneedle/cheer.ts).",
   "kinds": [
    "Companion Story"
   ],
@@ -6399,7 +6425,7 @@
    18,
    19
   ],
-  "sits": "optional",
+  "sits": "must-see",
   "level": "No battles of their own",
   "often": "run",
   "beat": 2,
@@ -7039,7 +7065,7 @@
     ]
    }
   ],
-  "note": "Steps 6 to 7, any lane. The step is a run of rooms whose only choice is \"…\".",
+  "note": "Steps 6 to 7, any lane. For the rest of that step every choice of every event reads \"…\" (core/greenneedle/fox.ts foxSilent); the lantern lights one node on.",
   "kinds": [
    "Region-Wide Story",
    "Legendary-Adjacent"
@@ -7689,7 +7715,7 @@
   "home": 7,
   "window": [
    5,
-   10
+   12
   ],
   "sits": "optional",
   "attaches": "after",
@@ -7707,7 +7733,7 @@
     "home": 7,
     "window": [
      5,
-     10
+     12
     ]
    },
    {
@@ -7717,7 +7743,7 @@
     "home": 12,
     "window": [
      10,
-     15
+     17
     ]
    },
    {
@@ -7727,7 +7753,7 @@
     "home": 7,
     "window": [
      5,
-     10
+     12
     ]
    },
    {
@@ -7745,12 +7771,13 @@
    "kanto": "The Storm Chaser",
    "elsewhere": "The Storm Chaser"
   },
-  "note": "Badge: a bolt. Once per run (the doc says per save; no memory across runs). Raikou is the battle path (fair, A+2, catchable; it runs if it is losing); the patient path gives the Thundermark (held: Electric moves +20%, Speed +10%). A sheltered Pichu is met later as a Pikachu with Lightning Rod (gn-32-pikachu).",
+  "note": "Badge: a bolt. Once per run (the doc says per save; no memory across runs). Raikou is the battle path (fair, A+2, catchable; it runs if it is losing); the patient path (Wait at all three sightings) gives the Thundermark (a team charm: Electric-types in the party act first on turn one of a battle fought in rain). A sheltered Pichu is met later as a Pikachu that is not afraid of thunder (gn-32-pikachu; it does not join).",
   "kinds": [
    "Legendary"
   ],
   "tags": [
-   "storm"
+   "storm",
+   "high"
   ]
  },
  "gn-new-33-door": {
@@ -7812,7 +7839,7 @@
     "home": 5,
     "window": [
      4,
-     8
+     15
     ]
    },
    {
@@ -7822,7 +7849,7 @@
     "home": 10,
     "window": [
      9,
-     14
+     19
     ]
    },
    {
@@ -7832,7 +7859,7 @@
     "home": 10,
     "window": [
      9,
-     14
+     19
     ]
    },
    {
@@ -7846,7 +7873,7 @@
     ]
    }
   ],
-  "note": "Fallback: the warning at Step 15, the slide at Step 19. Once per run; six turns if believed, three if driven off.",
+  "note": "Fallback: the warning at Step 15, the slide at Step 19 (the ends of the windows). Once per run; six turns if believed, three if driven off. Driving it off pays ₽800. Each of the four tasks done at least once saves one building (warning-saved 0-4); the cart shed always goes.",
   "kinds": [
    "World Event",
    "Pokémon",
@@ -7858,7 +7885,7 @@
   "home": 5,
   "window": [
    4,
-   8
+   15
   ]
  },
  "gn-new-35-s1": {
@@ -7868,7 +7895,7 @@
   "home": 10,
   "window": [
    8,
-   12
+   19
   ],
   "sits": "must-see",
   "attaches": "rest",
@@ -7893,7 +7920,7 @@
   "home": 10,
   "window": [
    8,
-   12
+   19
   ],
   "sits": "must-see",
   "attaches": "rest",
@@ -7918,7 +7945,7 @@
   "home": 10,
   "window": [
    8,
-   12
+   19
   ],
   "sits": "must-see",
   "attaches": "rest",
@@ -7943,7 +7970,7 @@
   "home": 10,
   "window": [
    8,
-   12
+   19
   ],
   "sits": "must-see",
   "attaches": "rest",
@@ -7968,7 +7995,7 @@
   "home": 10,
   "window": [
    8,
-   12
+   19
   ],
   "sits": "must-see",
   "attaches": "rest",
@@ -7993,7 +8020,7 @@
   "home": 10,
   "window": [
    8,
-   12
+   19
   ],
   "sits": "must-see",
   "attaches": "rest",
@@ -8018,7 +8045,7 @@
   "home": 10,
   "window": [
    8,
-   12
+   19
   ],
   "sits": "must-see",
   "attaches": "rest",

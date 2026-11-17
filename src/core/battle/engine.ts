@@ -27,7 +27,7 @@ import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
 import { draftTurn } from '../greenneedle/draft';
 import { snorlaxTurn } from '../greenneedle/snorlax';
 import { bidoofTurn, NO_FLINCH } from '../greenneedle/bidoof';
-import { alleyTurn, fairShare } from '../greenneedle/alley';
+import { alleyTurn, FAIR_SHARE_DUE, fairShare } from '../greenneedle/alley';
 import { callPriority, cheerTurn } from '../greenneedle/cheer';
 import { trustHolds } from '../greenneedle/ball';
 import { champPower, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
@@ -2088,10 +2088,22 @@ function switchIn(ctx: BattleContext, partyIndex: number, events: BattleEvent[])
   if (ctx.moments) applyPendingMoments(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, events);
   // Tailwind Heart (gn.new.33): the holder arms it on entry; the next ally to switch in gains +1 Speed. Once per battle.
   if (mon.gn?.includes(TAILWIND_HEART) && !battle.storyEffects.includes('th-used') && !battle.storyEffects.includes('th-armed')) battle.storyEffects.push('th-armed');
-  else if (battle.storyEffects.includes('th-armed') && !battle.storyEffects.includes('th-used') && !mon.gn?.includes(TAILWIND_HEART)) {
+  // (A holder that led the battle armed it when the battle began: it is the one stepping out now.)
+  else if ((battle.storyEffects.includes('th-armed') || (!!outgoing && outgoing.uid !== mon.uid && !!outgoing.gn?.includes(TAILWIND_HEART))) && !battle.storyEffects.includes('th-used') && !mon.gn?.includes(TAILWIND_HEART)) {
     battle.storyEffects.push('th-used');
     events.push({ type: 'raid', tone: 'info', text: `Tailwind Heart: the wind picks up behind ${nameOf(ctx, mon)}!` });
     applyStageChange(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'spe', 1, events);
+  }
+  // Greenneedle gn.new.37, Foster Wing: sent in for an ally that left with less than half its HP, its Defense rises a stage. Once a battle.
+  if (outgoing && outgoing.hp > 0 && outgoing.uid !== mon.uid && outgoing.hp * 2 < maxHp(ctx.content, outgoing) && abilityOf(ctx.content, mon) === 'foster-wing' && !battle.storyEffects.includes('foster-wing-used')) {
+    battle.storyEffects.push('foster-wing-used');
+    events.push({ type: 'raid', tone: 'info', text: `Foster Wing: ${nameOf(ctx, mon)} lands in front of ${nameOf(ctx, outgoing)}, wings spread!` });
+    applyStageChange(ctx, { side: 'player', mon, stages: battle.playerStages, vol: battle.playerVolatile, flinched: false, protected: false }, 'def', 1, events);
+  }
+  // Greenneedle gn.new.22, Fair Share: after its holder stole an item, the next Pokémon sent in gets its share (10% of its max HP).
+  if (outgoing && outgoing.uid !== mon.uid && battle.storyEffects.includes(FAIR_SHARE_DUE)) {
+    battle.storyEffects = battle.storyEffects.filter((e) => e !== FAIR_SHARE_DUE);
+    if (fairShare(ctx.content, mon) > 0) events.push({ type: 'raid', tone: 'info', text: `Fair Share: ${nameOf(ctx, mon)} is handed its half.` });
   }
   // Greenneedle gn.new.08, Curtain Call: Mime Jr. steps out alive, and whoever steps in copies one stage of its best boost (once a battle).
   if (outgoing && outgoing.hp > 0 && outgoing.uid !== mon.uid && abilityOf(ctx.content, outgoing) === 'curtain-call' && !battle.storyEffects.includes('curtain-call-used')) {
@@ -2141,8 +2153,15 @@ function leaveField(ctx: BattleContext, mon: PokemonInstance): void {
   Held.onSwitchOut(ctx, mon);
 }
 
+/** Rope-a-Dope (gn.new.28): contact hits taken since its last attack, at most two. */
+const ROPE_CAP = 2;
+const ropeCount = (battle: BattleState, uid: string): number => Math.min(ROPE_CAP, battle.storyEffects.filter((e) => e === `rope:${uid}`).length);
+
+/** House Call (gn.new.23): the appliance forms a plain Rotom may take, with the type each adds. */
+const HOUSE_CALL_FORMS: [string, TypeName][] = [['rotom-heat', 'fire'], ['rotom-wash', 'water'], ['rotom-frost', 'ice'], ['rotom-fan', 'flying'], ['rotom-mow', 'grass']];
+
 /** Forms an ability keeps when the Pokémon is withdrawn. */
-const PERSISTENT_FORMS = new Set(['palafin-hero', 'greninja-ash', 'zygarde-complete', 'mimikyu-busted', 'eiscue-noice', 'terapagos-terastal']);
+const PERSISTENT_FORMS = new Set(['rotom-heat', 'rotom-wash', 'rotom-frost', 'rotom-fan', 'rotom-mow', 'palafin-hero', 'greninja-ash', 'zygarde-complete', 'mimikyu-busted', 'eiscue-noice', 'terapagos-terastal']);
 
 /** Natural Cure and Regenerator, when a Pokémon still standing is called back (silently, as in the main games). */
 function switchOutAbility(ctx: BattleContext, mon: PokemonInstance): void {
@@ -2579,6 +2598,21 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
       if (best) events.push(say(c.side, 'signature', `${getSpecies(ctx.content, c.mon.speciesId).name} knows what is coming: ${best.name}.`, c.mon.uid));
     }
   }
+  if (ability === 'house-call' && c.mon.speciesId === 'rotom' && !ctx.battle.storyEffects.includes(`house-call:${c.mon.uid}`)) {
+    // House Call (gn.new.23): once a battle, on entry, it takes the appliance form whose type hits the foe hardest (none, if no form hits it hard).
+    const foeTypes = battleTypes(ctx.content, ctx.battle, other.mon);
+    let best: { id: string; eff: number } | null = null;
+    for (const [id, type] of HOUSE_CALL_FORMS) {
+      const eff = typeEffectiveness(ctx.content.typeChart, type, foeTypes);
+      if (ctx.content.species.has(id) && eff > 1 && (!best || eff > best.eff)) best = { id, eff };
+    }
+    if (best) {
+      ctx.battle.storyEffects.push(`house-call:${c.mon.uid}`);
+      announce(c, ability, events);
+      swapForm(ctx, c, best.id, events);
+    }
+    return;
+  }
   if (ability === 'hush') {
     // Hush (catalog overhaul, the Hushed One): the air goes silent. Sound moves fail for three turns on both sides (the Throat Chop block).
     announce(c, ability, events);
@@ -2913,6 +2947,8 @@ function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
   if (jetBonus) return move.priority + jetBonus;
   if (move.category === 'status' && !c.vol.movesUsed.includes(move.id) && Held.hasHook(ctx, c.mon, c.side, 'coolShades')) return move.priority + 1;
   if (ability === 'silent-cloak' && !c.vol.cloakUsed) return move.priority + 1;
+  // Thundermark (gn.new.32): Electric-types in the party act first on the first turn of a battle fought in rain.
+  if (c.side === 'player' && ctx.battle.turn <= 1 && weatherNow(ctx) === 'rain' && Held.hooksOf(ctx, c.mon, c.side).some(({ hook }) => hook.hook === 'rainFirst' && battleTypes(ctx.content, ctx.battle, c.mon).some((t) => hook.types.includes(t)))) return move.priority + 1;
   // Three Faces (catalog overhaul, the Unwelcome Guest): its first move after it comes out is hidden from the foe, so it goes first.
   if (ability === 'three-faces' && c.vol.movesUsed.length === 0) return move.priority + 1;
   if ((ability === 'champions-fury' || ability === 'champions-entrance') && !c.vol.furyUsed && move.category !== 'status') return move.priority + 1;
@@ -4337,7 +4373,8 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     accuracy = ohkoAccuracy(user.mon.level, target.mon.level);
   } else {
     // Unaware ignores the other side's stages; Keen Eye ignores raised evasion.
-    const accStage = foeAbility === 'unaware' ? 0 : user.stages.acc;
+    // Greenneedle gn.new.36, Guiding Light: its side's accuracy cannot be lowered while it is on the field.
+    const accStage = foeAbility === 'unaware' ? 0 : userAbility === 'guiding-light' ? Math.max(0, user.stages.acc) : user.stages.acc;
     const keenEye = (userAbility === 'keen-eye' || userAbility === 'minds-eye' || userAbility === 'wise-eye') && target.stages.eva > 0;
     const evaStage = fx.ignoreStages || userAbility === 'unaware' || keenEye ? 0 : target.stages.eva;
     accuracy = hitChance(baseAccuracy, accStage, evaStage) * itemAccuracy * perkAccuracy;
@@ -4352,8 +4389,6 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       // Greenneedle gn.47: a move copied from the Exhibition doesn't quite work yet (10% less accurate).
       if (ctx.battle.storyEffects.includes(`ex-copied:${user.mon.uid}:${move.id}`)) accuracy *= 0.9;
       if (userAbility === 'compound-eyes') accuracy *= 1.3;
-      // Greenneedle gn.new.36: Guiding Light, a Chinchou that lit a boat's way; it never loses sight of its target.
-      if (userAbility === 'guiding-light') accuracy *= 1.2;
       if (userAbility === 'victory-star') accuracy *= 1.1;
       if (userAbility === 'hustle' && move.category === 'physical') accuracy *= 0.8;
       if (foeAbility && weather && WEATHER_EVASION[foeAbility]?.includes(weather)) accuracy *= 0.8;
@@ -4588,6 +4623,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         powerMult *= twiceToldPower(ctx.battle.extra.twiceTold, target.mon.uid, target.mon.gn, move.id);
       }
       if (userAbility === 'technician' && power <= 60) powerMult *= 1.5;
+      if (userAbility === 'rope-a-dope') powerMult *= 1 + 0.1 * ropeCount(ctx.battle, user.mon.uid);
       const flagBoost = userAbility ? FLAG_BOOST[userAbility] : undefined;
       if (flagBoost && move.flags.includes(flagBoost.flag)) powerMult *= flagBoost.multiplier;
       // Encore Amp: the same sound move on consecutive turns hits 20% harder each time, up to 1.6x.
@@ -5149,6 +5185,9 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     announce(user, 'twin-maw', events);
     abilityHurt(ctx, target, Math.max(1, Math.floor(dealt * 0.25)), events);
   }
+  // Greenneedle gn.new.28, Rope-a-Dope: each contact hit it takes adds 10% to its next attack (at most 20%); the attack spends it.
+  if (landed > 0 && contact && target.mon.hp > 0 && abilityIn(ctx, target) === 'rope-a-dope' && ropeCount(ctx.battle, target.mon.uid) < ROPE_CAP) ctx.battle.storyEffects.push(`rope:${target.mon.uid}`);
+  if (ropeCount(ctx.battle, user.mon.uid) > 0) ctx.battle.storyEffects = ctx.battle.storyEffects.filter((e) => e !== `rope:${user.mon.uid}`);
   if (landed > 0 && ctx.moments) {
     spendMomentBoost(ctx, user, moveType, move.id);
     noteBraveHit(ctx, user);
@@ -6388,6 +6427,7 @@ function postHitExtras(ctx: BattleContext, user: Combatant, target: Combatant, m
         if (id && Object.keys(Held.effectiveHeld(ctx, user.mon)).length === 0) {
           Held.takeItem(ctx, target.mon, id, user.mon);
           events.push({ type: 'selfState', side: user.side, state: 'stole' });
+          if (user.side === 'player' && abilityIn(ctx, user) === 'fair-share' && !ctx.battle.storyEffects.includes(FAIR_SHARE_DUE)) ctx.battle.storyEffects.push(FAIR_SHARE_DUE);
         }
         break;
       }
@@ -7619,12 +7659,6 @@ export function weatherCut(content: Content, mon: PokemonInstance, weather: Weat
 }
 
 function applyWeather(ctx: BattleContext, sides: Combatant[], events: BattleEvent[], tick = true): void {
-  // Fair Share (gn.new.22): the holder's most hurt party-mate recovers a little.
-  if (tick) {
-    const me = sides.find((c) => c.side === 'player');
-    const helped = me && fairShare(ctx.content, ctx.party, me.mon);
-    if (me && helped) events.push({ type: 'raid', tone: 'info', text: 'Fair Share: a bite of its supper goes to the most hurt in the party.' });
-  }
   const weather = ctx.battle.weather;
   if (!weather) return;
   const negated = weatherNow(ctx) === null;

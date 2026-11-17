@@ -3,7 +3,7 @@
 // Twelve Miltank, water for nine. Break the dam (a Bibarel and three Bidoof, A+0), move the colony (a node, two wild fights),
 // dig a channel (two nodes, a Ground- or Water-type; Fresh Milk at every rest this region), or walk away.
 import { $, anyType, ch, fight, flag, heal, takeNode, trainer, wild, out, type Json } from '../dsl.ts';
-import { eitherWay, gev, gn, is, kindness, laterStage, moment, not, regionChanged, rm, say, scene, setTo, stampRegion, stampStage, type Placement } from './_gn.ts';
+import { eitherWay, gev, gn, is, kindness, moment, not, regionChanged, rm, say, scene, setTo, stampRegion, stampStage, type Placement } from './_gn.ts';
 
 export { CATEGORY } from './_gn.ts';
 
@@ -23,7 +23,7 @@ const lostRoom = (id: string, again: string, label: string): Json => rm(id, 'The
 // ---------- the dam ----------
 const damFight = (text: string): Json => fight(text, trainer('The Bibarel Colony', {
   team: ['bibarel', 'bidoof', 'bidoof', 'bidoof'], lv: 0, friendly: true, sprite: 'hiker',
-  win: [gn('setFlag', { key: 'bibarel-dam-broken', n: 1 }), setTo('ranch-broke', 1), stampStage('ranch-stage'), stampRegion('ranch-region'), scene('gn-new-20-broke')],
+  win: [gn('setFlag', { key: 'bibarel-dam-broken', n: 1 }), setTo('ranch-broke', 1), stampStage('ranch-stage'), stampRegion('ranch-region'), { kind: 'laterEvent', eventId: 'gn-new-20-road', nodes: 3 }, scene('gn-new-20-broke')],
   lose: [scene('gn-new-20-dam-lost')],
 }));
 
@@ -95,8 +95,8 @@ const EVENTS_20: Json[] = [
     ch('Watch the water run.', out('**Ysabeau:** "Both. You did both. I didn\'t know that was allowed." She sits down on the trough\'s edge and laughs until she\'s crying.', setTo('ranch-dug', 1), stampRegion('ranch-dug-region'), stampRegion('ranch-region'), stampStage('ranch-stage'), kindness(2), moment('Dug a second channel, so the ranch and the Bibarel both had water.', 80))),
   ]),
 
-  // Afterstory: the road at Step 9 (three thin Bidoof, if the dam was broken).
-  gev('gn-new-20-road', 'The Drought Ranch: Three on the Road', ranch({ stop: 'event', rarity: 'uncommon', callback: true, requires: [is('ranch-broke'), laterStage('ranch-stage'), not('ranch-road')] }), say(
+  // The road at Step 9 of the same stage (three nodes on from the ranch at Step 6): three thin Bidoof, if the dam was broken.
+  rm('gn-new-20-road', 'The Drought Ranch: Three on the Road', ranch(), say(
     'Three Bidoof stand in the middle of the road. Thin. Quiet. They do not get out of the way, and they do not ask for anything.',
     'You know them. You saw them at the foot of the dam. They look at you. They look at the water in your bottle.',
   ), [
@@ -124,9 +124,8 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.new.20', shape: 'Single', earliest: 'A4', home: 6, window: [4, 11], sits: 'optional', attaches: 'instead', tags: ['Moral Choice'], needs: ['forest'],
     level: 'A+0 if the dam is broken (a Bibarel and three Bidoof)', often: 'run', badge: 'own',
     dressing: { kanto: 'The Drought Ranch', elsewhere: 'The Drought Ranch' },
-    note: 'Badge: a water drop. Home step 6, fallback step 11. "Move the colony" spends the next node, "Dig a channel" the next two (a Ground- or Water-type needed). Dug: a Fresh Milk at every rest this region. Broken: sets bibarel-dam-broken (gn.55 reads it).',
+    note: 'Badge: a water drop. Home step 6, fallback step 11. "Move the colony" spends the next node, "Dig a channel" the next two (a Ground- or Water-type needed). Dug: a Fresh Milk (a full heal for one Pokémon) at every rest this region. Broken: sets bibarel-dam-broken (gn.55 reads it), and three thin Bidoof are on the road three nodes on (step 9; room gn-new-20-road).',
   },
-  'gn-new-20-road': { gn: 'gn.new.20', shape: 'Single', earliest: 'A4', home: 9, window: [7, 12], sits: 'optional', attaches: 'after', tags: ['Moral Choice'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: three thin Bidoof on the road a stage later, only if the dam was broken.' },
   'gn-new-20-later': { gn: 'gn.new.20', shape: 'Single', earliest: 'A5', home: 6, window: [2, 14], sits: 'optional', attaches: 'after', tags: ['Moral Choice'], level: 'None', often: 'run', badge: 'own', note: 'Afterstory: a Bibarel building by a road in a later region of the same run; broken: it stops and watches.' },
 };
 

@@ -39,29 +39,26 @@
       "text": "The nearest bird cries out. Then the rest. They have been waiting for someone to hold the line against, and now there is a line.",
       "effects": [],
       "battle": {
-       "kind": "wild",
-       "species": [
-        "fletchinder",
-        "staravia",
-        "pidgeotto",
-        "swellow"
-       ],
-       "types": [],
-       "levelBonus": -1,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "flag",
-         "key": "second-nest-done",
-         "amount": 1
-        },
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
         {
          "kind": "gn",
          "op": "scene",
-         "key": "gn-new-37-hush"
+         "key": "gn-new-37-fell"
         }
        ],
-       "caught": [
+       "sprite": "fletchinder",
+       "team": [
+        "fletchinder",
+        "fletchling",
+        "fletchinder"
+       ],
+       "name": "The Flock",
+       "size": 2,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
         {
          "kind": "flag",
          "key": "second-nest-done",
@@ -110,9 +107,7 @@
         "types": [],
         "levelBonus": 0,
         "shinyMultiplier": 1,
-        "moves": [
-         "foster-wing"
-        ]
+        "ability": "foster-wing"
        },
        {
         "kind": "moment",
@@ -156,9 +151,7 @@
         "types": [],
         "levelBonus": 0,
         "shinyMultiplier": 1,
-        "moves": [
-         "foster-wing"
-        ]
+        "ability": "foster-wing"
        },
        {
         "kind": "moment",
@@ -187,9 +180,45 @@
    "intro": "The flock scatters over the trees and does not come back. The nest is whole. The chick is asleep with its beak open, full and furious at nothing.\n\nThe Fletchinder settles over it. It does not thank you. It has no spare breath for it.\n\n*High above, the Braviary goes on circling. It has not stopped once.*",
    "choices": [
     {
-     "label": "Carry the chick to the Braviary.",
+     "label": "Leave them be.",
      "success": {
-      "text": "It weighs more than it looks. It stops complaining the moment you lift it, as if it had never been held by something that was not a wing.\n\nThe Braviary lands. Not on a branch. On the ground, in front of you, which a bird like that does for no one.\n\nThe chick goes to it. It does not look back. Behind, on the branch, the Fletchinder watches, and does not make a sound.\n\nThen it flies down and settles by your boots. It has fed and warmed something for days, and now there is nothing to feed. It stays close anyway.",
+      "text": "You leave the nest where it is. The Fletchinder keeps its place on the branch. Overhead, the circle goes on, wide and patient, and no one comes down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "second-nest-left",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You drove the flock off a Fletchinder's nest. The Braviary was still circling when you left.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-37-fell",
+   "name": "The Nest, Lost",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#32452d",
+    "effect": "glint"
+   },
+   "intro": "The flock is too many. Your team is pushed back off the branch, and the birds close in on the nest behind you.\n\nThe Fletchinder stands in front of the chick against its own flock. It loses. It does not move aside until it cannot stand.\n\nThe Braviary comes down, then, all at once. The chick goes with it, and looks back.",
+   "choices": [
+    {
+     "label": "Go to the Fletchinder.",
+     "success": {
+      "text": "It lies where it fell, watching the sky. When you kneel, it does not shy away. There is nowhere else left for it to go.",
       "effects": [
        {
         "kind": "flag",
@@ -208,7 +237,7 @@
        },
        {
         "kind": "flag",
-        "key": "second-nest-carried",
+        "key": "second-nest-watched",
         "amount": 1
        },
        {
@@ -220,32 +249,12 @@
         "types": [],
         "levelBonus": 0,
         "shinyMultiplier": 1,
-        "moves": [
-         "foster-wing"
-        ]
+        "ability": "foster-wing"
        },
        {
         "kind": "moment",
-        "text": "You carried a Rufflet to the Braviary that had circled for days. The Fletchinder that raised it came with you.",
-        "importance": 65
-       }
-      ]
-     }
-    },
-    {
-     "label": "Leave them be.",
-     "success": {
-      "text": "You leave the nest where it is. The Fletchinder keeps its place on the branch. Overhead, the circle goes on, wide and patient, and no one comes down.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "second-nest-left",
-        "amount": 1
-       },
-       {
-        "kind": "moment",
-        "text": "You drove the flock off a Fletchinder's nest. The Braviary was still circling when you left.",
-        "importance": 50
+        "text": "You fought a flock for a nest, and lost. The Fletchinder that raised the chick came with you after.",
+        "importance": 60
        }
       ]
      }

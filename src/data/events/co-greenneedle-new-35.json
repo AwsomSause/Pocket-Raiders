@@ -1701,6 +1701,11 @@
        },
        {
         "kind": "flag",
+        "key": "sr-own-tale",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
         "key": "sr-told",
         "amount": 1
        },
@@ -1732,6 +1737,11 @@
       "effects": [
        {
         "kind": "flag",
+        "key": "sr-own-tale",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
         "key": "sr-told",
         "amount": 1
        },
@@ -1761,6 +1771,11 @@
      "success": {
       "text": "They vote for hers.\n\nBy one hand. A child says, \"It had a better fork.\" Another says, \"Theirs had the *quiet*.\" They argue. It is, in fairness, a good fork.\n\nThe old woman takes your hand in both of hers. \"Mine was the better story,\" she says. \"Yours was the truer. They're not the same, and you can tell them both.\"",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "sr-own-tale",
+        "amount": 1
+       },
        {
         "kind": "flag",
         "key": "sr-told",
@@ -1830,7 +1845,20 @@
        "atMost": 99
       }
      ],
+     "intro": "A different old woman, at a different rest, is telling a story to different children. It's about a trainer. It is about **you.** *It is the story you told at the last rest. She has it nearly right. She has the ending wrong. It makes a better ending, to be fair.*",
      "notice": "*The children are asking for \"the one where the Slowking stood up.\" Someone has put the Slowking in a different story. She hasn't noticed.*"
+    },
+    {
+     "id": "own",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sr-own-tale",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A different old woman, at a different rest, is telling a story to different children. It's about a trainer. It is about **you.** *It is the story you told at the last rest. She has it nearly right. She has the ending wrong. It makes a better ending, to be fair.*"
     },
     {
      "id": "lost",
@@ -1856,7 +1884,7 @@
     "tint": "#6b5a3a",
     "effect": "sparkle"
    },
-   "intro": "A different old woman, at a different rest, is telling a story to different children. It's about a trainer. It is about **you.**\n\n*It is the story you told at the last rest. She has it nearly right. She has the ending wrong. It makes a better ending, to be fair.*",
+   "intro": "A different old woman, at a different rest, is telling a story to different children. It's about a trainer. It is about **you.**\n\n*It is the story of your road, the one the Storyteller told a stage ahead of you. She has it nearly right. She has the ending wrong. It makes a better ending, to be fair.*",
    "choices": [
     {
      "label": "Correct her.",
@@ -1888,7 +1916,7 @@
        },
        {
         "kind": "moment",
-        "text": "A different old woman, in a different region, was telling the story you told. She had the ending wrong. It was better.",
+        "text": "A different old woman, in a different region, was telling your story. She had the ending wrong. It was better.",
         "importance": 60
        }
       ]
