@@ -38,7 +38,7 @@ test('the Board: twenty steps, a holding pressed shows what is known, the count 
   await expect(s.getByTestId('evil-count')).toHaveText('Held: 0 of 11');
   await expect(s.getByTestId('evil-day')).toHaveText('Day 1 of 7');
   await s.getByTestId('evil-cell-20').click();
-  await expect(s.getByTestId('evil-panel-name')).toHaveText('Cerulean Gym');
+  await expect(s.getByTestId('evil-panel-name')).toHaveText('Cerulean Gym · Misty');
   for (const [w, h] of [[1280, 720], [960, 540], [800, 600], [740, 360]] as const) {
     await page.setViewportSize({ width: w, height: h });
     await page.waitForTimeout(250);
