@@ -33,6 +33,7 @@ import { emotionDot, partyRow, partyRows, Picker, speciesRow, type PickerLike, t
 import { monFile } from './redux/game';
 import { reduxOn } from './redux/stage';
 import { itemVisual } from './sprites';
+import { withEvolutionScene } from './evolutionScene';
 import { COLORS, textStyle } from './theme';
 
 export interface FieldMenuHost {
@@ -529,7 +530,7 @@ function openItemTarget(host: FieldMenuHost, itemId: string): void {
         openEvolutionChoice(host, itemId, i, targets);
         return;
       }
-      host.changed(session.useItem(itemId, i), stayInBag());
+      withEvolutionScene(host.scene, () => session.useItem(itemId, i), (m) => host.changed(m, stayInBag()));
     },
     onBack: () => {
       close(host, picker);
@@ -552,7 +553,7 @@ function openEvolutionChoice(host: FieldMenuHost, itemId: string, partyIndex: nu
     rows: targets.map((id) => speciesRow(content.species.get(id)!)),
     onSelect: (i) => {
       close(host, picker);
-      host.changed(session.useItem(itemId, partyIndex, targets[i]!), stayInBag());
+      withEvolutionScene(host.scene, () => session.useItem(itemId, partyIndex, targets[i]!), (m) => host.changed(m, stayInBag()));
     },
     onBack: () => {
       close(host, picker);

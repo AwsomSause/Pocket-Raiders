@@ -1,6 +1,7 @@
 // The Camp menu (W3): gadgets, kitchen, workshop, market and camp finds. Every action is a core/camp call through the session;
 // this file only picks arguments (which item, which Pokémon, which choice) and shows the answer. The menu stays open between actions.
 
+import { withEvolutionScene } from './evolutionScene';
 import type Phaser from 'phaser';
 import { freeAbilities } from '../core/rules';
 import { benchList, bagBerryChoices, campOf, campProblem, CAMP, comboList, cursedRelics, gadgetUses, getAction, hasGadget, marketLeft, marketSlots, mysteryOdds, shelfMoves, shelfTypes, slotChoices, usedHere, type CampArgs } from '../core/camp';
@@ -166,9 +167,7 @@ export function openCampMenu(host: FieldMenuHost, group: number | null = null, n
 type Back = (msg: string) => void;
 
 function call(host: FieldMenuHost, id: string, args: CampArgs, back: Back): void {
-  const r = services().session.camp(id, args);
-  back(r.message);
-  void host;
+  withEvolutionScene(host.scene, () => services().session.camp(id, args).message, back);
 }
 
 const partyChoices = (): Choice[] => {

@@ -2,6 +2,7 @@
 // a single Pokémon (vitamins, Rare Candy) ask which party member gets them.
 // Before choosing, the player can also use Bag items or change the lead.
 
+import { evolutionsAfter, partyBefore, playEvolutions } from '../ui/evolutionScene';
 import { fitBlock } from '../ui/fitText';
 import Phaser from 'phaser';
 import { rewardSynergy } from '../core/rewardSynergy';
@@ -407,7 +408,15 @@ export class RewardScene extends Phaser.Scene {
   private choose(draftIndex: number, targetIndex: number): void {
     if (this.chosen) return;
     this.chosen = true;
+    const before = partyBefore();
     const result = services().session.chooseReward(draftIndex, targetIndex);
+    // A reward that evolved a party Pokémon (Rare Candy, an evolution stone) plays the evolution scene first.
+    const evolved = result.reward.reroll ? [] : evolutionsAfter(before);
+    if (evolved.length) void playEvolutions(this, evolved).then(() => this.sys.isActive() && this.showChosen(draftIndex, result));
+    else this.showChosen(draftIndex, result);
+  }
+
+  private showChosen(draftIndex: number, result: ReturnType<ReturnType<typeof services>['session']['chooseReward']>): void {
     if (result.reward.reroll) {
       playSfx(this, 'ui.select');
       this.scene.restart({ notice: result.reward.messages.join(' '), focus: 0 });
