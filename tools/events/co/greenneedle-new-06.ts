@@ -23,7 +23,7 @@ const WAITED = 'It waited exactly where it said it would. A leaf has landed on t
 
 /** The three choices of a duel stop (the Ask room has only the other two). */
 const options = (n: number, ask: boolean): Json[] => [
-  ch('Accept the duel.', out('You bow. {duelist} bows. The others step back, and it goes out onto the road alone.', gn('duelEnter'), scene(`gn-new-06-fight-${n}`))),
+  ch('Accept the duel.', out('You bow. {duelist} bows. The others step back, and it goes out onto the road alone.', gn('duelEnter'), scene(`gn-new-06-fight-${n}`)), { requires: [{ kind: 'gn', test: 'duelReady' }] }), // the chosen one must still stand when you accept (it can faint at the node's battle after the stop showed up)
   ch('Not now.', out('The Farfetch\'d looks at you. Then it lifts its leek and steps off the road. It will wait further on. It never ambushes.', gn('duelPass', { n }))),
   ...(ask ? [ch('Ask what it wants.', out('It does not answer. It points the tip of its leek at the scar on {duelist}, then at a scar of its own, in the same place.', scene(`gn-new-06-ask-${n}`)))] : []),
 ];

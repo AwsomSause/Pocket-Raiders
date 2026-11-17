@@ -48,7 +48,7 @@ describe('UI mock-ups settings (settings v43)', () => {
     const loaded = new SaveManager(storage, content).loadSettings();
     expect(loaded.uiStyle).toBe('new');
     expect(loaded.reduxSkin).toBe('raiders');
-    expect(loaded).toMatchObject({ ...old, musicVolume: 0.3, uiTheme: 'ds', battleUi: 'kit', screenStyles: { title: 'wii' } });
+    expect(loaded).toMatchObject({ ...old, musicVolume: 0.3 });
   });
 
   it('Old and a picked look survive a save and reload', () => {
@@ -71,7 +71,7 @@ describe('Blessings and Ultra Beasts on by default (settings v44)', () => {
     const expansion = { ...old.expansion, blessingsEnabled: false, ultraBeastsEnabled: false, mythicalsEnabled: false, rewinds: true };
     storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 43, savedAt: '', data: { ...old, musicVolume: 0.2, expansion } }));
     const loaded = new SaveManager(storage, content).loadSettings();
-    expect(loaded.expansion).toEqual({ ...expansion, blessingsEnabled: true, ultraBeastsEnabled: true });
+    expect(loaded.expansion).toEqual({ ...expansion, blessingsEnabled: true, ultraBeastsEnabled: true, rewinds: false, secondChancePct: 0, climaxCut: 'extended', eventsDensity: 'full' });
     expect(loaded.musicVolume).toBe(0.2);
   });
 
@@ -82,5 +82,31 @@ describe('Blessings and Ultra Beasts on by default (settings v44)', () => {
     new SaveManager(storage, content).saveSettings({ ...fresh, expansion: { ...fresh.expansion, blessingsEnabled: false, ultraBeastsEnabled: false } });
     const again = new SaveManager(storage, content).loadSettings();
     expect([again.expansion.blessingsEnabled, again.expansion.ultraBeastsEnabled]).toEqual([false, false]);
+  });
+});
+
+describe('Settings v45: looks reset once, Extended Cut and Full density on, Rewinds and Second Chance gone', () => {
+  it('a v44 save loses its custom looks and gets the new defaults, but keeps other settings', () => {
+    const storage = new MemoryStorageProvider();
+    const old = new SaveManager(storage, content).loadSettings();
+    const expansion = { ...old.expansion, climaxCut: 'standard', eventsDensity: 'low', rewinds: true, secondChancePct: 25, heatedMoments: false };
+    storage.set('pkr.settings', JSON.stringify({ format: 'pkmn-roguelike', record: 'settings', schemaVersion: 44, savedAt: '', data: { ...old, musicVolume: 0.2, uiStyle: 'old', reduxSkin: 'trophyHall', eventStyle: 'storybook', plazaStyle: 'social', hubStyle: 'lobby', battleUi: 'kit', screenStyles: { picker: 'random' }, expansion } }));
+    const loaded = new SaveManager(storage, content).loadSettings();
+    expect(loaded).toMatchObject({ uiStyle: 'new', reduxSkin: 'raiders', eventStyle: 'diorama', plazaStyle: 'aero', hubStyle: 'town', battleUi: 'aero', screenStyles: {}, musicVolume: 0.2 });
+    expect(loaded.expansion).toMatchObject({ climaxCut: 'extended', eventsDensity: 'full', rewinds: false, secondChancePct: 0, heatedMoments: false });
+  });
+
+  it('a fresh save starts on the new defaults, and a look picked afterwards survives a reload', () => {
+    const storage = new MemoryStorageProvider();
+    const fresh = new SaveManager(storage, content).loadSettings();
+    expect([fresh.expansion.climaxCut, fresh.expansion.eventsDensity, fresh.expansion.secondChancePct]).toEqual(['extended', 'full', 0]);
+    new SaveManager(storage, content).saveSettings({ ...fresh, reduxSkin: 'trophyHall', uiStyle: 'old' });
+    expect(new SaveManager(storage, content).loadSettings()).toMatchObject({ reduxSkin: 'trophyHall', uiStyle: 'old' });
+  });
+
+  it('the Settings screen no longer lists Rewinds or Second Chance', () => {
+    const ids = SETTINGS.map((d) => d.id);
+    expect(ids).not.toContain('rewinds');
+    expect(ids).not.toContain('secondChance');
   });
 });

@@ -239,10 +239,11 @@ describe('library lines for the new events', () => {
 
 describe('Emotional Turning Point', () => {
   const superHit = (side: 'player' | 'enemy'): BattleEvent => ({ type: 'damage', side, amount: 5, hpAfter: 50, effectiveness: 2, crit: false });
-  it('the third time a Pokémon weathers the same thing, it finds a feeling (once)', () => {
+  // Pick spread (#1427, Kice 2026-11-17): a turning point now takes two of the same feeling (TURNING_POINT_AT), justice four.
+  it('the second time a Pokémon weathers the same thing, it finds a feeling (once)', () => {
     const run = battleRun('rattata', 'trainer');
     const prior = structuredClone(run);
-    expect(trackFeelings(content, prior, run, [superHit('enemy'), superHit('enemy')])).toEqual([]);
+    expect(trackFeelings(content, prior, run, [superHit('enemy')])).toEqual([]);
     const out = trackFeelings(content, prior, run, [superHit('enemy')]);
     expect(out).toEqual([expect.objectContaining({ type: 'turningPoint', side: 'enemy', emotion: 'bravery' })]);
     expect(trackFeelings(content, prior, run, [superHit('enemy'), superHit('enemy'), superHit('enemy')])).toEqual([]);

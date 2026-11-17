@@ -58,13 +58,15 @@ import { endSwap, noteSwapFaint, swapRunning } from './co/swap';
 import { BRAVE_COUNT, BRAVE_HIT, MOMENT_EVOLVE_AFTER } from './battle/pokemonMoments';
 import { revivalFee } from './battle/revivalStatus';
 import { bondFriendship } from './co/who';
-import { applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug, refillNorthsWind } from './instrumentality/flightNorth';
+import { RETURN_FORMS, applyFlightNorthReturn, flightNorthReady, markDecided, markOffered, refusesToLeave, returnedBug, refillNorthsWind } from './instrumentality/flightNorth';
+import { CareSchema } from './care/mods';
 import { applySecondChance, secondChanceOpen, secondChanceRolls } from './instrumentality/secondChance';
 import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
-import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
+import { resolveWonder, startWonder, wonderActions, wonderFollowUp } from './instrumentality/wonders';
+import { hearTelling, hoopaRing, hoopaStage, guestId as promiseGuest, onWildKo as promiseOnWildKo, onRescueAbandoned as promiseOnRescue, magearnaOnFaint, manaphyVisit, onReleased as promiseOnReleased, onRegionStarted as promiseOnRegion, onSold as promiseOnSold, onStageLeft as promiseOnLeft, stageKeyOf as promiseStageKey, bumpTrack, wishesLeft, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
@@ -98,7 +100,8 @@ import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, 
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
 import { createBattle, itemProblem, resolveAnswer, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
-import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
+import { addGuests, autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
+import { isGuest, isTempAlly } from './battle/guests';
 import { canBeTriples, makeTriples } from './battle/triples';
 import { endBattle as endHeldBattle, expLevelShift, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
 import { gimmickSlots, planBossGimmicks } from './battle/bossGimmicks';
@@ -255,10 +258,10 @@ import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { lastChanceRevive } from './lastChance';
 import { reverseSideProblem, useReverseSide } from './legends/reverseSide';
-import { assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor, callCalm, effectBlessing, inCommunionForm, noteFirstBlood, syncCommunion } from './blessings';
+import { applyStarterNote, assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor, callCalm, effectBlessing, inCommunionForm, noteFirstBlood, syncCommunion } from './blessings';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
 import { closeNodeMenu, freshNodeMenuState, menuBlocker, nodeMenusAllowed } from './nodeMenu/flow';
-import { BattleStateSchema, currentEnemy, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
+import { BattleStateSchema, currentEnemy, freshStages, freshVolatile, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
 import { itemSlotLimit, lostBattleXpMultiplier } from './trainerPerks';
 import { applyTrainerTier, readTrainerMemory } from './trainerTiers';
 import { applyTrainerParity, trainerHistoryLine, trainerKey } from './trainerWorld/trainerWorld';
@@ -310,7 +313,7 @@ import { roleOrder } from './battle/opponentAi';
 import { beginRivalBrain } from './rivals/brainSetup';
 import { friendFinaleAssist, friendStageBeat, rivalBattleLines } from './rivals/live';
 import { markStepIn } from './rivals/presence';
-import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, triplesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, RUN_RULES, type RulesChoice } from './rules';
+import { winHealFraction, openingWild, softenOpeningMoves, extendEndless, spookyWild, noBattleItems, randomizeMoves, battleContent, eliteDuelist, gauntlet, doublesOnly, triplesOnly, noEvolution, bossRemix, noHealStops, noRevives, quickWinBonus, timeAttackPoints, battleMoneyScale, disabledByRules, joinProblem, lockSpecies, makeRules, partyCap, pickGeneration, rulesCampaign, startScale, wantsCheckpoint, wantsGenerationLock, wantsTypeLock, getMode, getDifficulty, RUN_RULES, type RulesChoice } from './rules';
 import { shopTierAllowed } from './rarity';
 import { campMoment, campQuirkLine } from './overhaul/quirkTimes';
 import { noteBountyKills } from './bounties';
@@ -388,6 +391,8 @@ export interface NewRunOptions {
   /** The profile's permanent attributes (default: none). */
   attributes?: Record<string, number>;
   /** The profile's past Pokémon; one may come back this run (core/story/reunion.ts). */
+  /** Legendary Blessings: what the save remembers (Discovery and the shuffled bag). */
+  blessingDeck?: import('./blessings').BlessingDeck;
   pastPokemon?: readonly PastPokemon[];
   /** The account's archived rivals; one may shape a rival this run (core/rivals/legacy.ts). */
   rivalArchive?: Profile['rivalArchive'];
@@ -525,7 +530,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {}, ...(e.labyrinthResume ? { labResume: true } : {}) } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.ultraBeasts ? { ultra: freshUltra() } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(stageColumnsFor(campaign, e.stageLength ?? 0) !== campaign.columns ? { stageCols: stageColumnsFor(campaign, e.stageLength ?? 0) } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     if (e.secondChancePct || e.heatedMoments || e.mythicalPromises) run.expansion = { ...run.expansion, ...(e.secondChancePct ? { secondChancePct: e.secondChancePct } : {}), ...(e.heatedMoments ? { heated: true } : {}), ...(e.mythicalPromises ? { promises: true } : {}) };
-    if (e.blessings) assignBlessing(run);
+    if (e.blessings) assignBlessing(run, opts.blessingDeck);
     if (e.wholeRunEvents) drawWholeRun(run); // Catalog Overhaul (legends): a Whole Run Event, 35% of runs, own stream
     weekInfluence(run);
     weekLegends(run); // Catalog Overhaul (legends, row C): Paradox Tide's +1 Influence, Leap Day's free Telling
@@ -649,6 +654,8 @@ export function chooseStarter(content: Content, current: RunState, choiceIndex: 
   const heldLine = isCircuitRun(content, run) ? content.storyData.remembrances.find((r) => r.line[0] === speciesId && r.held) : undefined;
   if (heldLine?.held) run.party[0]!.held = { ...run.party[0]!.held, [heldLine.held]: 1 };
   run.log.starterUid = run.party[0]!.uid;
+  const blessingNote = applyStarterNote(content, run); // LEGENDARY_BLESSINGS.md section 7
+  if (blessingNote) run.journal = [...(run.journal ?? []), blessingNote];
   enterStage(content, run, 0);
   if (getMode(run.rules.modeId)?.startDraft) {
     run.pending.push({ kind: 'mutator', choices: startRuleOffer(run.seed) });
@@ -772,7 +779,63 @@ function forceFirstRivalColumn(content: Content, run: RunState, index: number, m
 }
 
 /** Starts a stage (mutates `run`): picks a fresh theme and gym leader, generates the map, and shows it. */
+/** Stage 2: a Mythical Promise or Wonder speaks outside a battle (it goes in the run's story record, shown with the journal). */
+function promiseSay(content: Content, run: RunState, lines: string[]): void {
+  for (const text of lines) emit(content, run, 'storyMoment', { data: { promise: true }, importance: 60, text });
+}
+
+/** Shaymin: what was passed over in the last region comes back in the first draft of this one, with one more card to choose from. */
+export function shayminReturn(content: Content, run: RunState): string[] {
+  if (promiseGuest(run) !== 'shaymin' || run.regionIndex === 0) return [];
+  const back = Object.entries(run.itemCounters ?? {}).filter(([k, v]) => k.startsWith('shaymin-back:') && v === run.regionIndex);
+  if (back.length === 0) return [];
+  const names: string[] = [];
+  for (const [key] of back.slice(0, 2)) {
+    const id = key.slice('shaymin-back:'.length);
+    if (content.rewards.has(id)) {
+      carryReward(run, id);
+      names.push(content.rewards.get(id)!.name);
+    }
+  }
+  run.itemCounters = Object.fromEntries(Object.entries(run.itemCounters ?? {}).filter(([k]) => !k.startsWith('shaymin-back:')));
+  if (names.length === 0) return [];
+  run.itemCounters = { ...run.itemCounters, 'draft-extra': (run.itemCounters['draft-extra'] ?? 0) + 1 };
+  return [`Shaymin's flowers open: ${names.join(' and ')} comes back, and there is one more card to choose from.`];
+}
+
+/** Celebi: the Gym Leader of an earlier stage is fought again on this map. Same team rules, no new badge (battle.revisit). */
+function celebiRevisit(content: Content, run: RunState, stageIndex: number, leaderId: string): void {
+  const stage = run.stage!;
+  const gym = stage.map.nodes.find((n) => n.kind === 'gym');
+  if (!gym || !run.party.some((m) => m.hp > 0)) {
+    run.phase = 'map';
+    return;
+  }
+  const saved = { index: stage.index, leaderId: stage.leaderId };
+  stage.index = stageIndex;
+  stage.leaderId = leaderId;
+  try {
+    startEncounter(content, run, gym, new Rng(hashSeed(`${run.seed}::celebi-revisit::${run.regionIndex}::${stageIndex}`)));
+  } finally {
+    stage.index = saved.index;
+    stage.leaderId = saved.leaderId;
+  }
+  if (run.battle) run.battle.revisit = true;
+}
+
 function enterStage(content: Content, run: RunState, index: number): void {
+  const leftBehind = run.stage ? (() => {
+    const sides = run.stage.map.nodes.flatMap((n) => n.sides);
+    return { heals: sides.filter((x) => x.kind === 'heal').length, used: sides.filter((x) => x.kind === 'heal' && x.used).length, fish: sides.filter((x) => x.kind === 'fish').length, fishUsed: sides.filter((x) => x.kind === 'fish' && x.used).length };
+  })() : null;
+  promiseSay(content, run, promiseOnStage(run, leftBehind, content));
+  if (run.stage) promiseSay(content, run, promiseOnLeft(content, run, promiseStageKey(run)));
+  if (index === 0) {
+    promiseSay(content, run, promiseOnRegion(content, run));
+    promiseSay(content, run, shayminReturn(content, run));
+  }
+  promiseSay(content, run, hoopaStage(content, run, run.regionIndex * 100 + index));
+  promiseSay(content, run, promiseOnLeadStage(content, run));
   ofGuestLeaves(content, run);
   // Swap Day (NE39) never outlasts its stage.
   if (swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
@@ -797,6 +860,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   noteJournal(content, run);
   run.usedThemes.push(theme.id);
   run.usedLeaders.push(leader.id);
+  run.itemCounters = { ...run.itemCounters, [`stage-leader:${run.regionIndex}:${index}:${leader.id}`]: 1 };
   run.stage = { kind: 'stage', index, themeId: theme.id, leaderId: leader.id, eliteFour: [], map, current: null, visited: [], scoutedTo: 0, foresight: 0, extraFronts: [], roamers: [], convoy: null };
   expireStageMods(run);
   ultraStageTick(content, run, run.regionIndex * campaign.stagesPerRegion + index + 1, false);
@@ -859,6 +923,19 @@ function enterStage(content: Content, run: RunState, index: number): void {
   takeCheckpoint(run);
   takeStageSnapshot(run); // L3 Rewinds: the run snapshot (only when rewinds are on)
   const visit = index === 0 ? rollVisit(content, run, run.regionIndex) : null;
+  const manaphy = index === 0 ? manaphyVisit(run) : null;
+  if (manaphy) {
+    run.pending.unshift(manaphy);
+    run.afterDecisions = 'map';
+    run.phase = 'decision';
+  }
+  const ring = index === 0 ? hoopaRing(content, run, run.regionIndex) : null;
+  if (ring) {
+    run.pending.unshift({ kind: 'caught', mon: newMon(content, run, ring.speciesId, ring.level, 'p') });
+    promiseSay(content, run, [`Hoopa's ring opens: a ${ring.type}-type Pokémon steps through.`]);
+    run.afterDecisions = 'map';
+    run.phase = 'decision';
+  }
   if (visit) {
     run.pending.unshift(visit);
     run.afterDecisions = 'map';
@@ -1283,10 +1360,12 @@ export function mapChoices(content: Content, run: RunState): MapNode[] {
   return plain;
 }
 
-export type MapActionKind = 'treasureMap' | 'escapeRope' | 'bicycle' | 'acroBike' | 'machBike' | 'airship' | 'rematch' | 'transceiver' | 'pail' | 'sprayduck' | 'squirt' | 'tmDeck';
+export type MapActionKind = `wonder:${string}` | 'treasureMap' | 'escapeRope' | 'bicycle' | 'acroBike' | 'machBike' | 'airship' | 'rematch' | 'transceiver' | 'pail' | 'sprayduck' | 'squirt' | 'tmDeck';
 
 export interface MapAction {
   kind: MapActionKind;
+  /** A Guest's Wonder row: its own name (it has no catalog item). */
+  title?: string;
   itemId: string;
   /** What the item does now, for the Items menu. */
   text: string;
@@ -1411,6 +1490,7 @@ export function mapActions(content: Content, run: RunState): MapAction[] {
     const used = usedThisStage(run, itemId) ? 'Already used on this stage.' : null;
     out.push({ kind: c.kind, itemId, text: `${c.text} (once per stage)`, problem: league ?? used ?? c.problem, on: false });
   }
+  for (const w of wonderActions(content, run)) out.push({ kind: `wonder:${w.id}`, itemId: `wonder:${w.id}`, title: w.title, text: w.text, problem: w.problem, on: false });
   return out;
 }
 
@@ -1421,6 +1501,15 @@ export function useMapAction(content: Content, current: RunState, kind: MapActio
   if (!action) throw new Error("You don't have that item");
   if (action.problem && !action.on) throw new Error(action.problem);
   const run = structuredClone(current);
+  if (kind.startsWith('wonder:')) {
+    const started = startWonder(content, run, kind.slice('wonder:'.length));
+    if (started.decision) {
+      run.pending.push(started.decision);
+      run.afterDecisions = 'map';
+      continueAfterDecisions(content, run);
+    }
+    return { run, message: started.message };
+  }
   const stage = run.stage!;
   const name = content.catalog.get(action.itemId)!.name;
   switch (kind) {
@@ -1482,7 +1571,7 @@ export function useMapAction(content: Content, current: RunState, kind: MapActio
         delete run.moveMode;
         return { run, message: `You put the ${name} away.` };
       }
-      run.moveMode = kind;
+      run.moveMode = kind as 'bicycle' | 'acroBike' | 'machBike' | 'airship';
       return { run, message: kind === 'airship' ? `The ${name} is ready. Choose where to fly.` : `You got on the ${name}. Choose where to ride.` };
     }
   }
@@ -2771,6 +2860,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   if (side.kind === 'shop' && sgPriceFactor(run, stageNumber(content, run)) === null) return { run: current, message: SHOP_SHUT };
   if (side.kind === 'heal') {
     const before = run.party.map((m) => m.hp);
+    promiseSay(content, run, promiseOnRest(content, run));
     healParty(content, run);
     coHealStop(content, run, before);
     eeveeHealed(content, run, before);
@@ -2980,6 +3070,7 @@ export function sellItem(content: Content, current: RunState, itemId: string): {
   consumeItem(run.inventory, itemId);
   run.money += price;
   count(run, 'moneyEarned', price);
+  promiseSay(content, run, promiseOnSold(content, run));
   return { run, message: `You sold a ${item.name} for ₽${price}.` };
 }
 
@@ -3223,6 +3314,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     lastStand: () => galarLastStandMon(content, run),
     galar: galarScope(content, run) ?? undefined,
     foeHealTier: run.regionIndex,
+    foeHealMult: getDifficulty(run.rules.difficultyId)?.enemyHeal ?? 1,
     starterUid: run.log.starterUid,
     attributes,
     disabledMechanics: run.disabledMechanics,
@@ -3280,8 +3372,10 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   // Greenneedle gn.55: after the Angry Bidoof's bow, no wild Bidoof or Bibarel attacks first.
   bidoofPeace(run, FOE_WAITS);
   const rivalNotice = followedRival(content, run);
+  if (friendHelp) promiseSay(content, run, promiseOnAssist(content, run)); // Keldeo: no assist from an ally
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   events.push(...coBattleStarted(content, run));
+  for (const text of wonderAtBattleStart(content, run)) events.push({ type: 'raid', tone: 'info', text });
   if (afterstory) events.push({ type: 'raid', tone: 'info', text: afterstory });
   if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
   if (friendHelp) events.push({ type: 'raid', tone: 'info', text: friendHelp });
@@ -3452,9 +3546,17 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   applyHeldAttributes(content, run, engineEvents);
   const promiseLines: string[] = [];
   for (const e of engineEvents) {
-    const fainted = e.type === 'faint' && e.side === 'player' ? run.party.find((p) => p.uid === e.uid) : undefined;
+    if (e.type === 'faint' && e.side === 'enemy' && battle.kind === 'wild' && !battle.trainer) {
+      const foe = battle.enemyTeam.find((m) => m.uid === e.uid);
+      if (foe) promiseLines.push(...promiseOnWildKo(content, run, getSpecies(content, foe.speciesId).types));
+    }
+    // (An ally the game controls is not yours: its faint is no part of your team's story.)
+    const fainted = e.type === 'faint' && e.side === 'player' ? run.party.find((p) => p.uid === e.uid && !isGuest(battle, p.uid)) : undefined;
     if (fainted) {
       promiseLines.push(...notePromiseEvent(content, run, { kind: 'faint', uid: fainted.uid }));
+      promiseOnFaint(run);
+      const swell = magearnaOnFaint(run);
+      if (swell) promiseLines.push(swell);
       noteKeepsakeFaint(run);
       run.expansion = { ...run.expansion, lastFaint: { uid: fainted.uid, at: run.encountersCompleted } };
       changeFriendship(content, fainted, content.balance.friendship.perFaint);
@@ -3474,7 +3576,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Saffron canon: the `evolveMid` rule evolves the active Pokémon in the heat of the fight.
   events.push(...ruleEvolution(content, run));
   // Poli-Pond: shyness ends after the first battle, the rematch is a duel, and the pond's return (Release or Reconcile) strikes.
-  events.push(...(pondAfterTurn(content, run) as typeof events));
+  events.push(...(pondAfterTurn(content, run, (allies, opts) => void addGuests(turnCtx, allies, opts)) as typeof events));
   // Greenneedle events: stories that count fights (the forest duelist) take their count once the fight is won.
   events.push(...(gnAfterTurn(content, run) as typeof events));
   allstarTurn(run.battle, engineEvents);
@@ -3500,6 +3602,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Beta 0.7 M1: a broken Promise speaks, and a Guest's Wonder acts after a won battle.
   for (const text of promiseLines) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text });
   if (battle.outcome === 'win') {
+    promiseOnWin(run);
     const wonder = wonderAfterBattle(content, run, (m) => maxHp(content, m));
     if (wonder) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: wonder });
   }
@@ -3557,7 +3660,11 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   if (battle.outcome && (battle.event?.eventId === 'format:finale' || battle.event?.eventId === 'format:doom')) epilogueBattleEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
   if (battle.outcome && battle.event?.eventId.startsWith('format:')) formatBattleEnded({ content, run }, battle.outcome === 'win' || battle.outcome === 'caught');
   // PS-RESCUE (Beta 0.6 R9): a guard fight tells the running rescue plan how it ended.
-  if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) rescueFightEnded(run, battle.outcome === 'win' || battle.outcome === 'caught');
+  if (battle.outcome && battle.event?.eventId.startsWith('rescue:')) {
+    const won = battle.outcome === 'win' || battle.outcome === 'caught';
+    rescueFightEnded(run, won);
+    if (!won) promiseSay(content, run, promiseOnRescue(content, run));
+  }
   // Mega Evolution and other transformations end with the battle, and so do "next battle" item effects.
   if (battle.outcome) {
     revertTransformations(content, battle, run.party, runArchetype(content, run).modifiers);
@@ -3583,7 +3690,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // R7 Borrowed Team rules: the aces go back to their own trainers as soon as the fight ends.
   if (battle.outcome) endBorrow(run);
   // A temporary ally (a tag battle) goes home after a lost fight too (finishBattle sends it home after a win).
-  if (battle.outcome === 'lose' && battle.loaner) run.party = run.party.filter((m) => m.uid !== battle.loaner);
+  if (battle.outcome === 'lose' && (battle.loaner || battle.guests)) run.party = run.party.filter((m) => !isTempAlly(battle, m.uid));
   // Pidgey's Resolve: a watched CPU fight counts for nothing; the real team comes back and the story reads out how it ended.
   if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose') && feudWatching(run)) {
     // R11: the feud watched. Your team comes back; the outcome's effects apply as for any event fight.
@@ -3737,6 +3844,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     // Beta 0.7 Flight North: the Bug-type returns once per run, before Second Chance (which then stays shut).
     if (flightNorthReady(run)) {
       const fnr = applyFlightNorthReturn(content, run);
+      joinFlightNorthBug(content, run);
       recordChanges(content, current, run, 'battle');
       return { run, events, end: null, defeated: false, cues, drama, flightNorth: fnr };
     }
@@ -3937,9 +4045,10 @@ function momentNarration(content: Content, run: RunState, outcome: 'win' | 'caug
 function finishBattle(content: Content, run: RunState): BattleEndResult {
   const battle = run.battle!;
   // A temporary ally goes home: no experience, no catch-up, and it never stays in the party.
-  if (battle.loaner) {
-    run.party = run.party.filter((m) => m.uid !== battle.loaner);
-    battle.participants = battle.participants.filter((u) => u !== battle.loaner);
+  if (battle.loaner || battle.guests) {
+    const temp = new Set(run.party.filter((m) => isTempAlly(battle, m.uid)).map((m) => m.uid));
+    run.party = run.party.filter((m) => !temp.has(m.uid));
+    battle.participants = battle.participants.filter((u) => !temp.has(u));
   }
   // Last Chance Charm: one fallen Pokémon gets back up before anyone is buried.
   if (battle.outcome !== 'lose') lastChanceRevive(content, run);
@@ -4071,6 +4180,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
       care.talent ??= stats[[...caught.uid].reduce((n, c) => n + c.charCodeAt(0), 0) % stats.length]!;
     }
+    promiseSay(content, run, promiseOnCaught(content, run, caught));
     caughtPending.push({ kind: 'caught', mon: caught });
   }
   // King N's Voice of Pokémon: a wild Pokémon you defeated may ask to join, no ball needed.
@@ -4186,7 +4296,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
   ultraSettle(content, run, battle.outcome === 'win');
   const bondTaught = battle.outcome === 'win' ? bondLessons(content, run, battle.participants) : [];
   const recap = battle.outcome === 'win' && battle.kind === 'trainer' && (battle.ai >= 0.5 || battle.trainer?.leaderId || battle.rivalId) ? recapLines(content, run, battle) : [];
-  // The caught Pokémon's decision comes first.
+  // The caught Pokémon's decision comes first. A fight-only HP boost (Alpha, raid) is gone by now, so no catch keeps more HP than its max.
+  for (const p of caughtPending) if (p.kind === 'caught') p.mon.hp = Math.min(p.mon.hp, maxHp(content, p.mon));
   run.pending = [...caughtPending, ...run.pending];
   // A trainer's signature mechanic (Rival's Answer): choose after the battle.
   run.pending.push(...signatureDecisions(content, run, battle));
@@ -4207,8 +4318,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     materialsGained = gainBattleMaterials(run, getSpecies(content, foe.speciesId).types, kind, battle.raid ? getRaid(content, battle.raid.id).tier : 0, battle.raid?.id ?? 'b');
   }
   const won = outcome === 'win' && battle.trainer?.leaderId ? battle.trainer.leaderId : null;
-  const badge = won && classId === GYM_LEADER_CLASS ? won : null;
-  if (won) recordAftermath(run, won);
+  const badge = won && classId === GYM_LEADER_CLASS && !battle.revisit ? won : null;
+  if (won && !battle.revisit) recordAftermath(run, won);
   if (badge) {
     run.badges.push(badge);
     noteGymWin(content, run, badge);
@@ -4505,17 +4616,47 @@ function carryReward(run: RunState, rewardId: string): void {
   if (!(run.draftCarry ?? []).includes(rewardId)) run.draftCarry = [...(run.draftCarry ?? []), rewardId];
 }
 
-export type DraftItemKind = 'reroll' | 'lock';
+export type DraftItemKind = 'reroll' | 'lock' | 'wishName';
 
 /** Uses left of the Bag item behind a reward-screen action: Cornn Berry re-rolls one choice, Lock Capsule carries one into the next draft. */
 export function draftItemUses(content: Content, run: RunState, kind: DraftItemKind): number {
+  if (kind === 'wishName') return wishesLeft(run);
   const itemId = perkItem(content, run, kind === 'reroll' ? 'rerollOne' : 'lockOne');
   return itemId ? usesLeft(run, itemId) : 0;
 }
 
 /** Uses a Cornn Berry (swap one draft choice for a new one) or a Lock Capsule (that choice comes back in the next draft too). */
-export function useDraftItem(content: Content, current: RunState, kind: DraftItemKind, draftIndex: number): { run: RunState; message: string } {
+/** Jirachi: the same-tier rewards a Wish could name in place of draft card `draftIndex` (its own seeded list; no reward roll moves). */
+export function wishCandidates(content: Content, run: RunState, draftIndex: number): string[] {
+  const card = run.draft?.[draftIndex];
+  if (!card || wishesLeft(run) <= 0) return [];
+  const rarity = content.rewards.get(card)!.rarity;
+  const weights = luckWeights(rewardWeights(content, run), runAttributeEffects(content, run));
+  const rng = new Rng(hashSeed(`${run.seed}::wish-names::${run.encountersCompleted}::${draftIndex}`));
+  const pool = generateDraft(content, run, rng, weights, undefined, { size: 24, exclude: run.draft! });
+  return [...new Set(pool)].filter((id) => content.rewards.get(id)!.rarity === rarity).slice(0, 6);
+}
+
+/** Jirachi: a Wish redraws the whole reward node (a fresh draft, still in the reward phase). */
+export function wishRedraw(content: Content, current: RunState): { run: RunState; message: string } {
   assertPhase(current, 'reward');
+  if (wishesLeft(current) <= 0) throw new Error('No Wishes left');
+  const run = structuredClone(current);
+  bumpTrack(run, 'wishesUsed', (n) => n + 1);
+  const weights = luckWeights(rewardWeights(content, run), runAttributeEffects(content, run));
+  run.draft = newDraft(content, run, weights);
+  return { run, message: `Jirachi's Wish redraws the rewards (${wishesLeft(run)} left).` };
+}
+
+export function useDraftItem(content: Content, current: RunState, kind: DraftItemKind, draftIndex: number, namedReward?: string): { run: RunState; message: string } {
+  assertPhase(current, 'reward');
+  if (kind === 'wishName') {
+    if (!namedReward || !wishCandidates(content, current, draftIndex).includes(namedReward)) throw new Error('That reward cannot be named');
+    const run = structuredClone(current);
+    bumpTrack(run, 'wishesUsed', (n) => n + 1);
+    run.draft![draftIndex] = namedReward;
+    return { run, message: `Jirachi's Wish names ${content.rewards.get(namedReward)!.name} (${wishesLeft(run)} left).` };
+  }
   const rewardId = current.draft?.[draftIndex];
   if (!rewardId) throw new Error(`Invalid reward choice ${draftIndex}`);
   const itemId = perkItem(content, current, kind === 'reroll' ? 'rerollOne' : 'lockOne');
@@ -4567,6 +4708,12 @@ export interface DecisionResult {
 
 /** Answers the oldest pending decision. Replacing or releasing can't be undone, so the screen confirms first. */
 export function resolveDecision(content: Content, current: RunState, choice: DecisionChoice): DecisionResult {
+  const out = resolveDecisionCore(content, current, choice);
+  const lines = promiseOnPartyChanged(content, out.run); // Mew's Promise: a join may leave two members with the same pair of types
+  return lines.length > 0 ? { ...out, message: [out.message, ...lines].filter(Boolean).join(' ') } : out;
+}
+
+function resolveDecisionCore(content: Content, current: RunState, choice: DecisionChoice): DecisionResult {
   assertPhase(current, 'decision');
   const run = structuredClone(current);
   const decision = run.pending[0];
@@ -4574,6 +4721,23 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
   let message: string;
   let followUp: PendingDecision | null = null;
 
+  if (decision.kind === 'wonderChoice') {
+    run.pending.shift();
+    const at = choice.kind === 'circuit' ? choice.optionIndex : 0;
+    const message = resolveWonder(content, run, decision, at);
+    if (decision.wonderId === 'revisit' && promiseGuest(run) === 'celebi') {
+      const [idx, leader] = (decision.options[at] ?? decision.options[0]!).value.split('|');
+      celebiRevisit(content, run, Number(idx), leader!);
+      return { run, message };
+    }
+    const next = wonderFollowUp(content, run, decision, at);
+    if (next) {
+      run.pending.unshift(next);
+      run.afterDecisions = 'map';
+    }
+    continueAfterDecisions(content, run);
+    return { run, message };
+  }
   if (decision.kind === 'mythicalVisit') {
     run.pending.shift();
     const message = resolveVisit(run, decision, choice.kind === 'circuit' ? choice.optionIndex : 1);
@@ -4651,6 +4815,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
       message = `${name} was released. You got ${candies} cand${candies === 1 ? 'y' : 'ies'}. ${markDecided(run, caught, false)}`.trim();
       recordReleased(content, run, caught);
       noteReleased(run, caught);
+      promiseSay(content, run, promiseOnReleased(content, run));
       noteLeft(run, caught);
       // Greenneedle gn.48: a drafted Pokémon that stayed is no wandering Old Friend: it goes back to its first trainer.
       draftGoesHome(content, run, caught);
@@ -4704,6 +4869,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
         mon.moves.push({ id: move.id, pp: move.pp });
         noteMapGrowth(content, run, mon.uid, 'tmLearned');
         message = `${speciesName(content, mon.speciesId)} learned ${move.name}!`;
+        promiseSay(content, run, promiseOnTm(content, run));
       } else {
         // Four moves known: ask which to forget, like a level-up move.
         followUp = { kind: 'learnMove', uid: mon.uid, moveId };
@@ -4771,6 +4937,11 @@ export function chooseReward(content: Content, current: RunState, draftIndex: nu
   const run = structuredClone(current);
   const reward = withStream(run.rng, 'reward', (r) => applyReward(content, run, runArchetype(content, run), rewardId, targetIndex, r));
   count(run, 'moneyEarned', run.money - current.money);
+  // Shaymin's Wonder: the best reward you passed over comes back a region later, improved.
+  if (promiseGuest(run) === 'shaymin') {
+    const passed = current.draft!.filter((_, i) => i !== draftIndex).sort((x, y) => RARITIES.indexOf(content.rewards.get(y)!.rarity) - RARITIES.indexOf(content.rewards.get(x)!.rarity))[0];
+    if (passed) run.itemCounters = { ...run.itemCounters, [`shaymin-back:${passed}`]: run.regionIndex + 1 };
+  }
   if (reward.reroll) {
     // A free re-roll: a fresh draft, still in the reward phase.
     const weights = luckWeights(rewardWeights(content, run), runAttributeEffects(content, run));
@@ -4841,6 +5012,7 @@ export function cashInItem(content: Content, current: RunState, itemId: string):
   if (!canCashIn(content, current, itemId)) throw new Error(`The ${item.name} can't be cashed in right now`);
   const run = structuredClone(current);
   consumeItem(run.inventory, itemId);
+  promiseSay(content, run, promiseOnSold(content, run));
   const parts = Object.entries(item.cashIn!).map(([key, amount]) => attributeText(key as AttributeKey, addRunAttribute(content, run, key as AttributeKey, amount)));
   return { run, message: `You cashed in the ${item.name}: ${parts.join(', ')}.` };
 }
@@ -4852,6 +5024,7 @@ export function setLead(current: RunState, partyIndex: number): RunState {
   const run = structuredClone(current);
   const [mon] = run.party.splice(partyIndex, 1);
   run.party.unshift(mon!);
+  if (partyIndex !== 0) promiseOnLead(run);
   return run;
 }
 
@@ -4875,6 +5048,7 @@ export function depositToBox(content: Content, current: RunState, partyIndex: nu
   const run = structuredClone(current);
   noteBoxed(run, run.party[partyIndex]!);
   run.box.push(run.party.splice(partyIndex, 1)[0]!);
+  promiseSay(content, run, promiseOnPartyChanged(content, run));
   return run;
 }
 
@@ -4886,6 +5060,7 @@ export function withdrawFromBox(content: Content, current: RunState, boxIndex: n
   if (shadowTierOf(current.box[boxIndex]!)?.countsAgainstCap && heavyShadowCount(current.party) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
   const run = structuredClone(current);
   run.party.push(run.box.splice(boxIndex, 1)[0]!);
+  promiseSay(content, run, promiseOnPartyChanged(content, run));
   return run;
 }
 
@@ -4998,6 +5173,38 @@ export function pseudoLost(content: Content, run: RunState): void {
   // Back out to the stage the pseudo-stage sits in.
   leavePseudoStage(run);
   run.phase = 'map';
+}
+
+/**
+ * Flight North (director, 2026-11-16): the return always turns the fight into a double battle, the Bug-type beside your lead for
+ * this fight only (two on one when the foe has one Pokémon out). In a fight that is already a double or triple, or that already
+ * has a guest, it helps from the side instead (the strikes `applyFlightNorthReturn` set up). Uses no random numbers.
+ */
+function joinFlightNorthBug(content: Content, run: RunState): void {
+  const battle = run.battle!;
+  const fn = run.expansion?.flightNorth;
+  if (!fn || battle.doubles || battle.loaner) return;
+  const form = RETURN_FORMS[fn.line];
+  const level = Math.max(...run.party.map((m) => m.level), 20);
+  const bug = newMon(content, run, content.species.has(form.returnSpecies) ? form.returnSpecies : form.species, level, 'p');
+  bug.shiny = fn.shiny;
+  bug.friendship = fn.friendship;
+  if (fn.name) bug.care = { ...(bug.care ?? CareSchema.parse({})), nickname: fn.name };
+  const wind = content.moves.get('norths-wind');
+  if (wind && !bug.moves.some((m) => m.id === wind.id)) {
+    if (bug.moves.length < 4) bug.moves.push({ id: wind.id, pp: wind.pp });
+    else bug.moves[3] = { id: wind.id, pp: wind.pp };
+  }
+  const before = [...battle.participants];
+  run.party.push(bug);
+  // Your lead is back on its feet: it starts clean, as a Pokémon just sent out does.
+  battle.playerStages = freshStages();
+  battle.playerVolatile = freshVolatile();
+  makeDoubles(battle, run.party);
+  battle.doubles!.player.index = run.party.length - 1;
+  battle.participants = [...new Set([...before, run.party[battle.activeIndex]!.uid, bug.uid])];
+  battle.loaner = bug.uid;
+  battle.finaleAssist = undefined;
 }
 
 /** Catalog Overhaul new events: the tag partner (a copy of the lead, its moves too) joins this battle for this fight only; finishBattle sends it home. */

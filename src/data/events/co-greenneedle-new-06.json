@@ -72,6 +72,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -184,6 +190,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -291,6 +303,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -398,6 +416,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -505,6 +529,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -612,6 +642,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -719,6 +755,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -826,6 +868,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -933,6 +981,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -1040,6 +1094,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -1147,6 +1207,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -1209,6 +1275,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -1420,6 +1492,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -1631,6 +1709,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -1842,6 +1926,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [
@@ -2053,6 +2143,12 @@
    "choices": [
     {
      "label": "Accept the duel.",
+     "requires": [
+      {
+       "kind": "gn",
+       "test": "duelReady"
+      }
+     ],
      "success": {
       "text": "You bow. {duelist} bows. The others step back, and it goes out onto the road alone.",
       "effects": [

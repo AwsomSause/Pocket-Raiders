@@ -8,6 +8,7 @@
 //   claim       — achievements are claimed automatically when a run ends;
 //                 trainers are claimed in the Trainer Archive (some cost Bank Credits)
 
+import { nextBlessingDeck } from './blessings';
 import { isAssisted } from './tools/assisted';
 import { applyDexTallies } from './dexResearch';
 import { directiveProgress, type DirectiveProgress } from './directive';
@@ -391,6 +392,8 @@ export function applyRunToProfile(content: Content, profile: Profile, run: RunSt
     },
     ...profile.runHistory,
   ];
+  // Legendary Blessings: the run's blessing is dealt, and the Legendaries whose Signs it found are discovered.
+  if (run.expansion?.blessing) profile.blessings = nextBlessingDeck(profile.blessings, run);
   // The newest runs, plus any older run holding a Legacy Record: those stay in the Hall of Fame for good.
   profile.runHistory = profile.runHistory.filter((r, i) => i < content.balance.runHistorySize || r.legacy.some((c) => (c.records ?? []).length > 0));
 

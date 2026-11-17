@@ -937,6 +937,9 @@ const deckNode = (k: number): Json[] => {
   const trades = `gn-10-trades-${k}`;
   const tradeB = `gn-10-tradeb-${k}`;
   const AT = is('ssanne-at', k, k);
+  // Every value of ssanne-at shows a way on (sim100k found a softlock when this room came up out of order): behind it, battle; here or past it, move on.
+  const BEHIND = is('ssanne-at', 0, k - 1);
+  const PAST = is('ssanne-at', k);
   return [
     rm(here, `S.S. Anne: ${deck} Deck, Cabin ${k}`, ship(), say(
       k === 1 ? '**Boarding. Purser, Mr. Ashworth:** "Ticket. Thank you. Trainers aft, traders everywhere, the captain\'s unwell and would rather you didn\'t knock."' : `The ${deck.toLowerCase()} deck. The ship rolls, gently, under your feet.`,
@@ -944,12 +947,12 @@ const deckNode = (k: number): Json[] => {
     ), [
       ...(dobbs?.learned
         ? [
-          chIf([is('ssanne-at', k - 1, k - 1), { kind: 'partyType', type: dobbs.learned.sees }], 'Battle.', fight('He has learned from what beat him: his team is built for yours this time.', dobbsFight(dobbs.learned.types))),
-          chIf([is('ssanne-at', k - 1, k - 1), { kind: 'partyType', type: dobbs.learned.sees, absent: true }], 'Battle.', fight('Battle on the open deck.', battle)),
+          chIf([BEHIND, { kind: 'partyType', type: dobbs.learned.sees }], 'Battle.', fight('He has learned from what beat him: his team is built for yours this time.', dobbsFight(dobbs.learned.types))),
+          chIf([BEHIND, { kind: 'partyType', type: dobbs.learned.sees, absent: true }], 'Battle.', fight('Battle on the open deck.', battle)),
         ]
-        : [chIf([is('ssanne-at', k - 1, k - 1)], 'Battle.', fight('Battle on the open deck.', battle))]),
+        : [chIf([BEHIND], 'Battle.', fight('Battle on the open deck.', battle))]),
       chIf([AT], 'Trade with the passengers.', out('Two passengers are waiting with Poké Balls in their hands.', scene(trades))),
-      chIf([AT], k === 12 ? 'Go to the captain\'s cabin.' : 'Move on.', out(k === 12 ? 'A steward finds you. "The captain is asking for you. He\'s, ah. Not well."' : 'You walk on along the deck.', ...RESET_TRADES, room(deckRoom(k + 1)))),
+      chIf([PAST], k === 12 ? 'Go to the captain\'s cabin.' : 'Move on.', out(k === 12 ? 'A steward finds you. "The captain is asking for you. He\'s, ah. Not well."' : 'You walk on along the deck.', ...RESET_TRADES, room(deckRoom(k + 1)))),
     ]),
     rm(trades, `S.S. Anne: Trades, Cabin ${k}`, ship(), say('Two trade offers. Each passenger shows you their card, honestly: what they give, and what they want.'), [
       chIf([not('ssanne-took-a')], 'Trade A: any Pokémon for one of similar strength.', out('A passenger trades with you: same level, much the same strength, from this region.', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 40 }, honest: true }, flag('ssanne-took-a'), scene(trades))),

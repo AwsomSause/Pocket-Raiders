@@ -13,4 +13,11 @@ Source: `/mnt/project-files/catalog_overhaul_pack/expanded_notes/LEGENDARY_BLESS
 ## Known limits
 Every blessing that differs from the doc is `limited`, and its `limits` text (shown on the run menu) says how. The common gaps: world-state tracks, locked places, prisons, puzzles, event re-choices, Wormholes, Memories, masks and tower choices do not exist yet, so those parts stand in with a battle perk, a boss-battle Rite or a heal. Stat effects are often built as damage multipliers.
 
-Not built yet (next slice): the shuffled bag per tier and the discovery pool/Reliquary (both cross-run, need a profile field), and the starter interactions (doc section 7).
+## Second slice: Discovery, the bag, the Reliquary, starters
+- **Discovery (Kice: "Follow the spec: start with 10"):** a new save draws only from 10 known blessings (Tapu Lele, Fezandipiti, Moltres, Munkidori, Tornadus, Zacian, Regidrago, Dialga, Palkia, Ho-Oh). A Legendary's Sign found in a run, or a blessing you ran with, joins the draw from the next run. `discovery: false` in `blessings.json` turns this off.
+- **Shuffled bag:** inside a tier, every known blessing is dealt once before any repeats; the bag for a tier starts over when it is empty.
+- Both live in the profile as `blessings: { found, dealt }` (optional, so no save bump; old saves start with an empty deck). Only the deck crosses runs: no run memory of nodes, events or fights.
+- **Reliquary** (hub, Unlocks): all 71 blessings by tier; found ones show their words, the rest are empty plinths.
+- **Starter interactions (section 7):** Kyogre + Water starter: moves 10% more accurate. Groudon + Fire starter: its Price waits until region 2. Virizion + Grass starter: Influence +1. Raikou + Electric starter or Pikachu: Influence +2. Each applies once, when the starter is chosen, with a journal line. The doc's Second Chance interaction is skipped (Second Chance was removed).
+
+Still to come: Giratina's Rite (The Renegade), and the rest of section 7 where it needs systems that do not exist yet.

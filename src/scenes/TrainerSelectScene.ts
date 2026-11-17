@@ -111,7 +111,7 @@ export class TrainerSelectScene extends Phaser.Scene {
             cell: (i) => { const x = real[i]!; return { art: art(x.archetype.spriteAssetId), label: x.status === 'unlocked' ? x.archetype.name : '', off: x.status !== 'unlocked', sil: x.status !== 'unlocked' }; },
             index: Math.min(this.index, real.length - 1),
             detail: !a ? { title: '???' } : open
-              ? { title: a.name, sub: a.title, body: a.description, art: art(a.spriteAssetId), facts: [...a.pros.slice(0, 2).map((x) => ['+', x] as const), ...a.cons.slice(0, 2).map((x) => ['−', x] as const), ['Record', runs.length ? `${runs.length} runs · ${runs.filter((r) => r.victory).length} won` : 'No runs yet'] as const] }
+              ? { title: a.name, sub: a.title, body: a.description, art: art(a.spriteAssetId), facts: [...a.pros.map((x) => ['+', x] as const), ...a.cons.map((x) => ['−', x] as const), ['Record', runs.length ? `${runs.length} runs · ${runs.filter((r) => r.victory).length} won` : 'No runs yet'] as const] }
               : { title: '???', sub: statusLine(slot!.status), body: slot!.status === 'comingLater' ? `${a.name} arrives in a later update.` : `How to unlock: ${a.unlockText}${a.unlockCost ? `, then ${a.unlockCost} Bank Credits in the Trainer Archive` : ''}.` },
             found: real.filter((x) => x.status === 'unlocked').length, total: real.length, foundLabel: 'Unlocked',
             text: this.notice.text || (open && a ? backstoryFor(session.content, a) : 'Choose a trainer. Each one changes the rules of the run a little.'),

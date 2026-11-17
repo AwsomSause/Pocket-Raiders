@@ -368,6 +368,8 @@ describe("gn.12 Maiden's Peak", () => {
 describe('gn.13 Flight North', () => {
   const check = (seed: string, setup: (run: RunState) => void = () => {}) => {
     const run = gnRun(seed);
+    // Past the first region, where Flight North can be the region's promised story and its theft certain (co/regionOneStory.ts).
+    run.regionIndex = 1;
     setup(run);
     open(run, 'gn-13-check');
     return choose(run, 'gn-13-check', 'Keep walking.');

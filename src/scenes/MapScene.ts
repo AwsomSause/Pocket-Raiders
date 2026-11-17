@@ -1885,7 +1885,7 @@ export class MapScene extends Phaser.Scene {
     const rows: { action: MapActionKind | null; itemId: string; title: string; text: string; problem: string | null }[] = mapActions(content, run).map((a) => ({
       action: a.kind,
       itemId: a.itemId,
-      title: `${content.catalog.get(a.itemId)!.name}${a.on ? ' (riding)' : ''}`,
+      title: `${a.title ?? content.catalog.get(a.itemId)!.name}${a.on ? ' (riding)' : ''}`,
       text: a.on ? 'Choose it again to get off.' : a.text,
       problem: a.on ? null : a.problem,
     }));
