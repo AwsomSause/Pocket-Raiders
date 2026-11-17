@@ -9,7 +9,8 @@ import { bossTeamIndex, curveLevel, createPlannedPokemon, GYM_LEADER_CLASS, leve
 import { gearTeam, playerItemsPer } from '../bossGear';
 import { giveBossItems } from '../battle/held';
 import { gimmickSlots, planBossGimmicks } from '../battle/bossGimmicks';
-import { currentLeader } from './gym';
+import { currentLeader, leaderById } from './gym';
+import { defOf } from './neighbour';
 import { getBoss, getCampaign } from '../regions';
 import { hashSeed, Rng } from '../rng';
 import { newMon, nextUid } from '../run';
@@ -93,6 +94,31 @@ export function beginEvilFight(content: Content, current: RunState): RunState | 
   const run = structuredClone(current);
   const A = stageLevel(content, run, block);
   let lent: string[] = [];
+  if ((f.kind === 'chair' || f.kind === 'legend') && block.neighbour) {
+    // Slice 13: the Chair is the neighbour's Boss with their own Gym team at A+2, boss gear and the region's gimmicks;
+    // the Legend is their team's `legendary`, alone, at A+3, wild (so a ball can be thrown).
+    const def = defOf(block.neighbour);
+    const N = EVIL_DATA.neighbour.numbers;
+    const active = Math.max(0, run.party.findIndex((m) => m.hp > 0));
+    if (!run.party[active]) return null;
+    if (f.kind === 'chair') {
+      const L = leaderById(def.id);
+      if (!L) return null;
+      const { team, ai } = leaderTeam(content, run, block, L.boss, L.n, N.chairOffset, block.neighbour.chair.tries);
+      if (!team.length) return null;
+      run.battle = createBattle('trainer', team, active, run.party[active]!.uid, { classId: GYM_LEADER_CLASS, name: def.boss, leaderId: L.boss });
+      run.battle.ai = ai;
+      const plan = planBossGimmicks(content, L.boss, run.battle.enemyTeam, gimmickSlots(block.here.region, Math.max(1, block.here.stage - 1), content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics);
+      run.battle.transform.bossPlan = plan;
+      run.battle.transform.enemyMechanics = [...new Set(Object.values(plan))];
+    } else {
+      if (!content.species.has(def.legend)) return null;
+      run.battle = createBattle('wild', [newMon(content, run, def.legend, Math.max(1, A + N.legendOffset), 'e')], active, run.party[active]!.uid);
+    }
+    run.phase = 'battle';
+    run.expansion = { ...(run.expansion ?? {}), evilMode: { ...block, fight: { ...f, begun: true } } };
+    return run;
+  }
   if (f.kind === 'gym' || f.kind === 'challenge') {
     // Slice 8: Beat (the Boss's party) or the Officer's challenge (their kit, the Boss's party in the box), against the
     // Leader at A+2 with the main game's gimmick count (one after Stage 5 of Region 1, one more a region, to four).

@@ -50,7 +50,7 @@ export function layDistrict(seed: string, region: number, n: number, team: LayTe
     const h: Holding = { id: `s${step}`, step, kind, ref, mood: firstMood(kind, ref, team, data), scouted: 0, owner: 'nobody', holds: false, tried: [] };
     return kind === 'floor' ? { ...h, floor } : h;
   });
-  return { region, n, seed, holdings: deeds(seed, region, n, holdings, data), regardStreets: [], ...(opts.from && opts.from > 1 ? { from: opts.from } : {}) };
+  return { region, n, seed, holdings: turf(seed, region, n, deeds(seed, region, n, holdings, data), data), regardStreets: [], ...(opts.from && opts.from > 1 ? { from: opts.from } : {}) };
 }
 
 /** A region's stage row (district.json `districts`), or undefined for a stage this build hasn't written. */
@@ -62,6 +62,19 @@ function deeds(seed: string, region: number, n: number, holdings: Holding[], dat
   if (!def) return holdings;
   const rng = new Rng(hashSeed(`${seed}::evil-deeds::${region}::${n}`));
   return holdings.map((h) => (def.kinds.includes(h.kind) && rng.int(1, 100) <= def.share ? { ...h, tags: [def.tag] } : h));
+}
+
+/**
+ * Slice 13: the neighbour's holdings in this district (design Part 15a sections 1.2 and 7.1), in their colour, drawn on
+ * their own generator from the seed (so no other roll moves). Tagged with their team's id; still nobody's to the team.
+ */
+function turf(seed: string, region: number, n: number, holdings: Holding[], data: EvilData): Holding[] {
+  const def = data.neighbour.on ? data.neighbour.neighbours.find((x) => x.region === region) : undefined;
+  const want = def?.holds[String(n)] ?? 0;
+  if (!def || !want) return holdings;
+  const rng = new Rng(hashSeed(`${seed}::evil-turf::${region}::${n}`));
+  const pick = new Set(rng.shuffle(holdings.filter((h) => def.kinds.includes(h.kind) && !(h.kind === 'local' && data.district.locals.find((l) => l.id === h.ref)?.minor)).map((h) => h.id)).slice(0, want));
+  return holdings.map((h) => (pick.has(h.id) ? { ...h, tags: [...(h.tags ?? []), def.team] } : h));
 }
 
 /** A floor's row in its district (a tower's floors, numbered from the bottom). */
