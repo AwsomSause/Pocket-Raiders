@@ -54,11 +54,14 @@ function dispatch(m: BoardModel, notice: string | null): string {
   return list + crew + how;
 }
 
-export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; filed?: string } = {}): string {
+export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; filed?: string } = {}): string {
   const book = `<span class="tg" style="cursor:pointer;${extra.ledger ? 'outline:2px solid var(--acc);' : ''}"${act('ledger')} data-testid="evil-ledger-open">Ledger (L)</span>`;
-  const title = `<div class="abs row" style="left:16px;right:16px;top:100px;gap:8px;align-items:center"><b data-testid="evil-team-name">${esc(f.team.name)}</b><span class="tg">${esc(m.title)}</span><span class="tg" style="${m.warn ? 'background:var(--team-b);color:#fff' : ''}" data-testid="evil-day">${esc(m.day)}</span><span class="tg" data-testid="evil-count">${esc(m.count)}</span><div class="grow"></div>${f.chips.map((c) => `<span class="tg" data-testid="evil-chip">${esc(c)}</span>`).join('')}${book}</div>`;
+  const people = `<span class="tg" style="cursor:pointer;${extra.roster ? 'outline:2px solid var(--acc);' : ''}"${act('roster')} data-testid="evil-roster-open">Roster (R)</span>`;
+  const title = `<div class="abs row" style="left:16px;right:16px;top:100px;gap:8px;align-items:center"><b data-testid="evil-team-name">${esc(f.team.name)}</b><span class="tg">${esc(m.title)}</span><span class="tg" style="${m.warn ? 'background:var(--team-b);color:#fff' : ''}" data-testid="evil-day">${esc(m.day)}</span><span class="tg" data-testid="evil-count">${esc(m.count)}</span><div class="grow"></div>${f.chips.map((c) => `<span class="tg" data-testid="evil-chip">${esc(c)}</span>`).join('')}${people}${book}</div>`;
   // The Ledger shares the frame and takes the board's place (slice 3); the last line filed sits in its corner.
   if (extra.ledger) return `${title}${extra.ledger}${extra.filed ?? ''}`;
+  // The Roster (slice 4) takes the board's place the same way.
+  if (extra.roster) return `${title}${extra.roster}${extra.filed ?? ''}`;
   const lower = m.end ? endView(m) + panel(m) : m.dispatch ? dispatch(m, notice) : texts(m, notice) + panel(m);
   return `${title}${map(m)}${lower}${extra.filed ?? ''}`;
 }

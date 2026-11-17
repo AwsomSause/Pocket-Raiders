@@ -4,6 +4,7 @@
 import { cardFor, confirmLit, otherWay, type CardGate } from './card';
 import { EVIL_DATA, type EvilData } from './data';
 import { byPerson, money, runLines, todayPages, type RunMark } from './ledger';
+import { crossers, peopleText } from './people';
 import type { JobDraft } from './odds';
 import type { EvilModeBlock, StoredCard } from './schema';
 
@@ -17,13 +18,15 @@ export interface CardModel {
   /** Field 13's button, where there's another way to swap to. */
   swap: string | null;
   day: number;
+  /** Slice 4: somebody on the squad has a line this job crosses; the button reads "Ask anyway" (Part 29 section 5.4). */
+  ask: string | null;
 }
 
 export function cardModel(block: EvilModeBlock, open: { job: JobDraft; gate: CardGate } | { read: StoredCard }, data: EvilData = EVIL_DATA): CardModel {
-  if ('read' in open) return { fields: open.read.fields.map((f, i) => ({ n: i + 1, ...f })), clean: open.read.clean, mode: 'read', lit: false, swap: null, day: open.read.day };
+  if ('read' in open) return { fields: open.read.fields.map((f, i) => ({ n: i + 1, ...f })), clean: open.read.clean, mode: 'read', lit: false, swap: null, day: open.read.day, ask: null };
   const c = cardFor(block, open.job, data);
   const other = otherWay(open.job, data);
-  return { fields: c.fields.map((f, i) => ({ n: i + 1, ...f })), clean: c.clean, mode: 'confirm', lit: confirmLit(open.gate), swap: other ? 'Swap to that' : null, day: c.day };
+  return { fields: c.fields.map((f, i) => ({ n: i + 1, ...f })), clean: c.clean, mode: 'confirm', lit: confirmLit(open.gate), swap: other ? 'Swap to that' : null, day: c.day, ask: crossers(block, open.job, data).length ? peopleText('ask', data) : null };
 }
 
 export interface LedgerDraft {

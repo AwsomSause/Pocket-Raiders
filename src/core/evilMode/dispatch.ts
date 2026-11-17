@@ -8,7 +8,8 @@ import { EVIL_DATA, type EvilData } from './data';
 import { oddsFor, type JobDraft } from './odds';
 import { cardFor, unknownCount } from './card';
 import { appendLog, fill, lineFor, money, takingsAt } from './ledger';
-import type { EvilModeBlock, Holding, Job, LogEntry, Sheet } from './schema';
+import type { Crew, EvilModeBlock, Holding, Job, LogEntry, Sheet } from './schema';
+import { crossers, districtKey, inRoster, moveLoyalty, peopleText, talentDef, wageOf } from './people';
 
 /** The roll for the n-th number `evil-dispatch` gives out in this run: 1..100. The count is stored, so a reload rolls the same. */
 export const dispatchRoll = (seed: string, n: number): number => new Rng(hashSeed(`${seed}::evil-dispatch::${n}`)).int(1, 100);
@@ -24,6 +25,7 @@ export function promised(block: EvilModeBlock, data: EvilData = EVIL_DATA): numb
 export function crewProblem(block: EvilModeBlock, id: string, ignoreHolding?: string): string | null {
   const c = block.crew.find((x) => x.id === id);
   if (!c) return 'Nobody by that name.';
+  if (c.where !== 'in') return fill(peopleText('left'), { name: c.name });
   if (c.outOn === block.here.day) return `${c.name} is resting after yesterday's battle.`;
   if (block.queue.some((j) => j.holdingId !== ignoreHolding && j.squad.includes(id))) return `${c.name} is already going somewhere today.`;
   return null;
@@ -58,14 +60,28 @@ export function jobProblem(block: EvilModeBlock, job: JobDraft, data: EvilData =
   for (const id of squad) {
     const p = crewProblem(block, id, h.id);
     if (p) return p;
+    // A minor goes scouting and nowhere else: no job with Heat, whatever the Line (Part 10a section 2.1). Checked in `step`.
+    const c = block.crew.find((x) => x.id === id)!;
+    if (c.minor && job.method !== 'scout') return fill(peopleText('minor'), { name: c.name, age: c.age ?? '' });
   }
   return null;
 }
 
+/** Why a job can't simply be confirmed: somebody on the squad has a line it crosses. They can be asked anyway. */
+export function lineProblem(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA): string | null {
+  const who = crossers(block, job, data);
+  return who.length ? `${who.map((p) => p.name).join(', ')} won't. Ask anyway, or send someone else.` : null;
+}
+
 /** Adds a job (or replaces the one on that holding). The odds are worked out now for the screen and fixed at Send. */
 export function queueJob(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA): { block: EvilModeBlock; problem: string | null } {
-  const problem = jobProblem(block, job, data);
+  const problem = jobProblem(block, job, data) ?? lineProblem(block, job, data);
   if (problem) return { block, problem };
+  return fileJob(block, job, data);
+}
+
+/** Files the Card and queues the job (or replaces the one on that holding). Checks are the caller's. */
+function fileJob(block: EvilModeBlock, job: JobDraft, data: EvilData): { block: EvilModeBlock; problem: string | null } {
   const o = oddsFor(block, job, data);
   // Slice 3: no job goes without its Honest Card. Confirming files the Card (kept with its day) and writes its twelfth
   // field into the Log as the line, character for character.
@@ -117,7 +133,10 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
   const R = data.district.rules;
   let holdings = d0.holdings.map((h) => ({ ...h, tried: [...h.tried] }));
   let team = { ...block.team };
-  let crew = block.crew.map((c) => ({ ...c }));
+  let crew: Crew[] = block.crew.map((c) => ({ ...c }));
+  const P = data.people.rules;
+  const dkey = districtKey(block);
+  const lead = (j: Job) => crew.find((c) => c.id === j.squad[0]);
   let draws = block.draws['evil-dispatch'] ?? 0;
   const regardStreets = [...d0.regardStreets];
   const sheets: Sheet[] = [];
@@ -139,8 +158,10 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     loudest = Math.max(loudest ?? -99, m[j.method].heat);
     if (j.method === 'scout') {
       set(h.id, (x) => ({ ...x, scouted: Math.min(2, x.scouted + 1) }));
-      for (const n of holdings) if (n.id !== h.id && Math.abs(n.step - h.step) <= R.scoutReach && n.scouted === 0) set(n.id, (x) => ({ ...x, scouted: 1 }));
-      lines.push(`Scouted step ${h.step}, and what touches it within ${R.scoutReach} steps.`);
+      // Eyes leading: two steps deeper (Part 7 section 2.4).
+      const reach = R.scoutReach + (lead(j)?.talent === 'eyes' ? P.odds.eyesReach : 0);
+      for (const n of holdings) if (n.id !== h.id && Math.abs(n.step - h.step) <= reach && n.scouted === 0) set(n.id, (x) => ({ ...x, scouted: 1 }));
+      lines.push(`Scouted step ${h.step}, and what touches it within ${reach} steps.`);
     } else if (j.method === 'persuade') {
       if (won) {
         set(h.id, (x) => ({ ...x, owner: 'team', method: 'persuade', since: day, holds: true, mood: shiftMood(x.mood, 1), scouted: 2 }));
@@ -173,25 +194,41 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
         lines.push(`Won fairly. It holds. Regard +${m.outplay.regard}.${countsFor({ ...h, owner: 'team', method: 'outplay' }, team.creed) === 2 ? ' Under Power it counts double.' : ''}`);
       } else {
         set(h.id, (x) => ({ ...x, mood: shiftMood(x.mood, 1), tried: x.tried.includes('outplay') ? x.tried : [...x.tried, 'outplay'] }));
-        crew = crew.map((c) => (j.squad.includes(c.id) ? { ...c, outOn: day + 1 } : c));
-        lines.push('Lost. The squad rests tomorrow. A rematch is open.');
+        // Nerve leading: a lost Outplay doesn't cost the squad a day (Part 7 section 2.4).
+        if (lead(j)?.talent === 'nerve') lines.push('Lost. Nerve led: nobody needs a day off. A rematch is open.');
+        else {
+          crew = crew.map((c) => (j.squad.includes(c.id) ? { ...c, outOn: day + 1 } : c));
+          lines.push('Lost. The squad rests tomorrow. A rematch is open.');
+        }
       }
     }
     sheets.push({ holdingId: h.id, method: j.method, squad: [...j.squad], odds, certain: j.certain, roll, won, voice: voice(j.method, won, h.step, data), lines });
     // The Card's line gets its mark: it went, or it didn't (a Pay short of money on the day didn't go either).
     const went = won && !(j.method === 'pay' && lines[0]?.startsWith('The money was short'));
+    // People: a job that went counts toward Lead; a job their talent fits, +1 once a district (Part 5 section 5.2).
+    crew = crew.map((c) => {
+      if (!j.squad.includes(c.id)) return c;
+      let x = went ? { ...c, jobs: c.jobs + 1 } : c;
+      if (x.talent && talentDef(x.talent, data).fits.includes(j.method) && x.fitIn !== dkey) x = { ...moveLoyalty(x, P.loyalty.fit, data), fitIn: dkey };
+      return x;
+    });
     if (j.cardId) results.push({ kind: 'job', who: [...j.squad], to: h.id, method: j.method, cardId: j.cardId, result: went ? 'went' : 'didnt', text: `Day ${day}. ${went ? data.ledger.written.went : data.ledger.written.didnt}` });
   }
 
   let district = settleTown({ ...d0, holdings, regardStreets }, day, data);
   const evening: string[] = [];
   const income = district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0);
-  const wages = team.creed === 'belonging' ? Math.max(0, Math.floor(income / 2)) : crew.length * (team.creed === 'cause' ? R.wageCause : R.wage);
+  const paid = crew.filter((c) => c.where === 'in');
+  const wages = team.creed === 'belonging' ? Math.max(0, Math.floor(income / 2)) : paid.reduce((n, c) => n + wageOf({ ...block, team }, c, income, data), 0);
   const before = team.funds;
   team = { ...team, funds: Math.max(0, team.funds + income - wages) };
   evening.push(`Takings ₽${income.toLocaleString('en-GB')}.`);
-  evening.push(team.creed === 'belonging' ? `Shares ₽${wages.toLocaleString('en-GB')}: half of today, split.` : `Wages ₽${wages.toLocaleString('en-GB')} for ${crew.length}.`);
-  if (before + income - wages < 0) evening.push(`Short ₽${(wages - before - income).toLocaleString('en-GB')}: they were paid what there was.`);
+  evening.push(team.creed === 'belonging' ? `Shares ₽${wages.toLocaleString('en-GB')}: half of today, split.` : `Wages ₽${wages.toLocaleString('en-GB')} for ${paid.length}.`);
+  if (before + income - wages < 0) {
+    evening.push(`Short ₽${(wages - before - income).toLocaleString('en-GB')}: they were paid what there was.`);
+    // Not paid: −1 each, a day (Part 5 section 5.2). Belonging's shares never fall short.
+    crew = crew.map((c) => (c.where === 'in' ? { ...moveLoyalty(c, P.loyalty.unpaid, data), unpaid: c.unpaid + 1 } : c));
+  }
   if (loudest !== null) {
     const h0 = team.heat;
     team = { ...team, heat: cap(team.heat + loudest) };
@@ -203,13 +240,92 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
   if (wages > 0) {
     const full = before + income - wages >= 0;
     const W = data.ledger.written;
-    const heads = `${crew.length}`;
+    const heads = `${paid.length}`;
     const text = fill(!full ? W.short : team.creed === 'belonging' ? W.shares : W.wages, { amount: money(full ? wages : Math.max(0, before + income)), heads });
-    out = appendLog(out, { kind: 'pay', who: crew.map((c) => c.id), text: `Day ${day}. ${text}`, ...(full ? { given: crew.length * data.ledger.count.wageHead } : {}) });
+    out = appendLog(out, { kind: 'pay', who: paid.map((c) => c.id), text: `Day ${day}. ${text}`, ...(full ? { given: paid.length * data.ledger.count.wageHead } : {}) });
   }
   const count = heldCount(out);
   if (count >= R.toHold) district = { ...district, end: { how: 'held', day, count } };
   else if (day >= R.days) district = { ...district, end: { how: 'taken', day, count } };
-  if (district.end) evening.push(data.district.ends[district.end.how]);
+  if (district.end) {
+    evening.push(data.district.ends[district.end.how]);
+    // Paid on time a whole district: +1 each (Part 5 section 5.2). The count starts again with the next district.
+    out = { ...out, crew: out.crew.map((c) => (c.where !== 'in' ? c : { ...(c.unpaid === 0 ? moveLoyalty(c, P.loyalty.paidDistrict, data) : c), unpaid: 0 })) };
+  }
   return { ...out, district, evening };
+}
+
+// ---- Asking anyway (Part 7 sections 11.1 and 11.2, Part 29 section 5.4) ----
+
+/**
+ * An order across a line. The Card's filed with field 12 saying who was asked, and the person refuses, in the yard, before
+ * the job, whatever the Boss answers next: their line's heard and the asking's counted. The job waits on the answer.
+ */
+export function askAnyway(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA): { block: EvilModeBlock; problem: string | null } {
+  if (block.refusal) return { block, problem: 'Somebody is already waiting on an answer in the yard.' };
+  const problem = jobProblem(block, job, data);
+  if (problem) return { block, problem };
+  const who = crossers(block, job, data);
+  if (!who.length) return { block, problem: 'Nobody on this squad has a line it crosses.' };
+  const card = cardFor(block, job, data, true);
+  const cardId = `C${block.cards.length + 1}`;
+  let b: EvilModeBlock = { ...block, cards: [...block.cards, { ...card, id: cardId }] };
+  const unknowns = unknownCount(card);
+  b = appendLog(b, { kind: 'card', who: [...job.squad], to: job.holdingId, method: job.method, cardId, text: card.fields[11]!.text, ...(unknowns ? { unknowns } : {}) });
+  b = appendLog(b, { kind: 'asked', who: who.map((p) => p.id), to: job.holdingId, cardId, text: lineFor(b, who.map((p) => p.id), 'asked anyway, across their line. Refused, in the yard.') });
+  b = { ...b, crew: b.crew.map((c) => (who.some((p) => p.id === c.id) ? { ...c, asked: c.asked + 1, lineHeard: true } : c)), refusal: { cardId, job: { holdingId: job.holdingId, method: job.method, squad: [...job.squad], ...(job.offer !== undefined ? { offer: job.offer } : {}) }, who: who.map((p) => p.id) } };
+  return { block: b, problem: null };
+}
+
+/** Who'd go instead of the refusers: free today, not a minor on a job with Heat, and with no line this job crosses. */
+export function swapsFor(block: EvilModeBlock, data: EvilData = EVIL_DATA): string[] | null {
+  const r = block.refusal;
+  if (!r) return null;
+  const free = inRoster(block).filter((c) => !r.job.squad.includes(c.id) && !crewProblem(block, c.id, r.job.holdingId) && !(c.minor && r.job.method !== 'scout') && !crossers(block, { ...r.job, squad: [c.id] }, data).length);
+  if (free.length < r.who.length) return null;
+  return free.slice(0, r.who.length).map((c) => c.id);
+}
+
+export type RefusalAnswer = 'withdraw' | 'swap' | 'insist';
+
+/**
+ * The Boss's answer (Part 7 section 11.1): withdraw (the job's cancelled; the refuser +2, the others going +1); send someone
+ * else (done by the swap; the refuser −1); insist (11.2: they leave on the spot, the armband on the bonnet; the two
+ * nearest them in rank −2; the job isn't done today). The kept Card's line is marked "called off" unless the swap goes.
+ */
+export function answerRefusal(block: EvilModeBlock, answer: RefusalAnswer, data: EvilData = EVIL_DATA): { block: EvilModeBlock; problem: string | null; line: string } {
+  const r = block.refusal;
+  if (!r) return { block, problem: 'Nobody is waiting on an answer.', line: '' };
+  const L = data.people.rules.loyalty;
+  const names = r.who.map((id) => block.crew.find((c) => c.id === id)!.name).join(' and ');
+  const calledOffLine = (b: EvilModeBlock) => appendLog(b, { kind: 'job', who: [...r.job.squad], to: r.job.holdingId, method: r.job.method, cardId: r.cardId, result: 'called off', text: lineFor(b, [], data.ledger.written.calledOff) });
+  let b: EvilModeBlock = { ...block, refusal: null };
+  if (answer === 'withdraw') {
+    b = { ...b, crew: b.crew.map((c) => (r.who.includes(c.id) ? moveLoyalty(c, L.withdrawn, data) : r.job.squad.includes(c.id) ? moveLoyalty(c, L.withdrawnOthers, data) : c)) };
+    b = calledOffLine(b);
+    return { block: b, problem: null, line: fill(peopleText('withdrawn', data), { name: names }) };
+  }
+  if (answer === 'swap') {
+    const swaps = swapsFor(block, data);
+    if (!swaps) return { block, problem: peopleText('swapNone', data), line: '' };
+    const squad = r.job.squad.map((id) => (r.who.includes(id) ? swaps[r.who.indexOf(id)]! : id));
+    b = { ...b, crew: b.crew.map((c) => (r.who.includes(c.id) ? moveLoyalty(c, L.swapped, data) : c)) };
+    b = calledOffLine(b);
+    const q = queueJob(b, { ...r.job, squad }, data);
+    if (q.problem) return { block, problem: q.problem, line: '' };
+    return { block: q.block, problem: null, line: fill(peopleText('swapped', data), { name: names, who: swaps.map((id) => block.crew.find((c) => c.id === id)!.name).join(' and ') }) };
+  }
+  // Insist: the mode's one scene where the Boss gives an order twice.
+  const order = data.people.ranks.map((x) => x.id);
+  const day = block.here.day;
+  let crew = b.crew.map((c) => (r.who.includes(c.id) ? { ...c, where: 'left' as const, left: { day, how: 'line' as const } } : c));
+  for (const id of r.who) {
+    const me = block.crew.find((c) => c.id === id)!;
+    const near = crew.filter((c) => c.where === 'in').sort((x, y) => Math.abs(order.indexOf(x.rank) - order.indexOf(me.rank)) - Math.abs(order.indexOf(y.rank) - order.indexOf(me.rank))).slice(0, 2).map((c) => c.id);
+    crew = crew.map((c) => (near.includes(c.id) ? moveLoyalty(c, L.insistedWatch, data) : c));
+  }
+  b = { ...b, crew };
+  b = appendLog(b, { kind: 'leave', who: [...r.who], to: r.job.holdingId, cardId: r.cardId, text: lineFor(b, r.who, 'told twice, across their line. Left the armband on the bonnet of the van.') });
+  b = calledOffLine(b);
+  return { block: b, problem: null, line: fill(peopleText('insisted', data), { name: names }) };
 }

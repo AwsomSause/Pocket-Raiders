@@ -63,14 +63,15 @@ test('queue one job with keys only and one with taps only; Send rolls them at th
   await expect(s.getByTestId('evil-card-confirm')).toHaveAttribute('data-lit', 'true');
   await page.keyboard.press('Enter'); // CONFIRM
   await expect(s.getByTestId('evil-queued')).toHaveCount(1);
-  await expect(s.getByTestId('evil-queued').first()).toContainText('Grunt 1, Grunt 2 → step 1 · Scout');
+  const crew = (await block(page)).crew; // slice 4: the Founders drawn for this run, in Roster order
+  await expect(s.getByTestId('evil-queued').first()).toContainText(`${crew[0].name}, ${crew[1].name} → step 1 · Scout`);
 
-  // Taps only: a local, Grunts 3 and 4, Persuade, Queue it.
+  // Taps only: a local, the third and fourth people, Persuade, Queue it.
   const b = await block(page);
   const local = b.district.holdings.find((h: any) => h.kind === 'local' && h.step !== 1);
   await s.getByTestId(`evil-row-${local.step}`).click();
-  await s.getByTestId('evil-crew-g3').click();
-  await s.getByTestId('evil-crew-g4').click();
+  await s.getByTestId(`evil-crew-${crew[2].id}`).click();
+  await s.getByTestId(`evil-crew-${crew[3].id}`).click();
   await s.getByTestId('evil-method-persuade').click();
   await expect(s.getByTestId('evil-odds')).toContainText('Base +50');
   await page.screenshot({ path: info.outputPath('dispatch.png') });

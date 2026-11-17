@@ -3,10 +3,11 @@
 // rolls the jobs on the way into the Evening. An action that doesn't fit changes nothing.
 // Cues are what a screen may show (ids and values). Throwing them away leaves the state correct.
 
-import { clearJob, fixOdds, queueJob, resolveEvening } from './dispatch';
+import { answerRefusal, askAnyway, clearJob, fixOdds, queueJob, resolveEvening, type RefusalAnswer } from './dispatch';
+import { arriveApplicants, askQuestion, hire, leaveAtZero, letGo, promote, turnAway } from './roster';
 import type { JobDraft } from './odds';
 import { askAbout, setRate } from './ledger';
-import { BEATS, type Beat, type EvilModeBlock } from './schema';
+import { BEATS, type Beat, type EvilModeBlock, type Question } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
 export const BEAT_END: Record<Beat, BeatEndType> = {
@@ -28,6 +29,15 @@ export type EvilAction =
   | { type: 'halve'; holdingId: string }
   | { type: 'askAbout'; holdingId: string }
   | { type: 'clearJob'; holdingId: string }
+  /** Slice 4: an order across a line, and the Boss's answer in the yard. */
+  | { type: 'askAnyway'; job: JobDraft }
+  | { type: 'answerRefusal'; answer: RefusalAnswer }
+  /** Slice 4: the notice board and the Office. */
+  | { type: 'hire'; ref: string }
+  | { type: 'question'; ref: string; q: Question }
+  | { type: 'turnAway'; ref: string; rude: boolean }
+  | { type: 'promote'; id: string; answer: number }
+  | { type: 'letGo'; id: string; kindly: boolean }
   | { type: 'dismissOvernight' }
   | { type: 'send' }
   | { type: 'stayIn' }
@@ -35,7 +45,7 @@ export type EvilAction =
   | { type: 'lightsOut' }
   | { type: 'watchRoad' };
 
-export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' } | { id: 'filed'; text: string } | { id: 'asked'; line: string };
+export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' };
 
 export interface StepResult {
   block: EvilModeBlock;
@@ -52,6 +62,22 @@ export function step(block: EvilModeBlock, action: EvilAction): StepResult {
   const { beat } = block.here;
   const no = (reason: string): StepResult => ({ block, cues: [{ id: 'refused', reason }], ok: false });
   if (block.district?.end) return no("The district's over.");
+  // Slice 4: the notice board and the Office, at any beat.
+  if (action.type === 'hire' || action.type === 'question' || action.type === 'turnAway' || action.type === 'promote' || action.type === 'letGo') {
+    const r = action.type === 'hire' ? hire(block, action.ref) : action.type === 'question' ? askQuestion(block, action.ref, action.q) : action.type === 'turnAway' ? turnAway(block, action.ref, action.rude) : action.type === 'promote' ? promote(block, action.id, action.answer) : letGo(block, action.id, action.kindly);
+    return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'said', line: r.line }], ok: true };
+  }
+  // An order across a line waits on its answer: nothing else in Dispatch moves until the Boss answers.
+  if (action.type === 'answerRefusal') {
+    const r = answerRefusal(block, action.answer);
+    return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'said', line: r.line }], ok: true };
+  }
+  if (block.refusal && (action.type === 'queueJob' || action.type === 'confirmCard' || action.type === 'clearJob' || action.type === 'askAnyway' || action.type === 'send')) return no('Somebody is waiting on an answer in the yard.');
+  if (action.type === 'askAnyway') {
+    if (beat !== 'dispatch') return no(`askAnyway does nothing at ${beat}`);
+    const r = askAnyway(block, action.job);
+    return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'refusal' }, { id: 'filed', text: r.block.log.filter((e) => e.kind === 'card').at(-1)!.text }], ok: true };
+  }
   // Slice 2: inside Dispatch, jobs are queued and cleared. Checked here, not only on screen.
   if (action.type === 'queueJob' || action.type === 'confirmCard' || action.type === 'clearJob') {
     if (beat !== 'dispatch') return no(`${action.type} does nothing at ${beat}`);
@@ -77,6 +103,12 @@ export function step(block: EvilModeBlock, action: EvilAction): StepResult {
   if (action.type === 'send') out = fixOdds(out);
   if (to === 'evening') out = resolveEvening(out);
   const cues: EvilCue[] = [{ id: 'beat', beat: to }];
+  // Slice 4: Morning. Anyone at Loyalty 0 is gone, with a note; then the notice board (Part 30 section 6.2).
+  if (to === 'morning' && !out.district?.end) {
+    const z = leaveAtZero(out);
+    out = arriveApplicants(z.block);
+    for (const line of z.notes) cues.push({ id: 'said', line });
+  }
   if (to === 'morning') cues.push({ id: 'newDay', day });
   if (out.district?.end) cues.push({ id: 'districtEnd', how: out.district.end.how });
   return { block: out, cues, ok: true };

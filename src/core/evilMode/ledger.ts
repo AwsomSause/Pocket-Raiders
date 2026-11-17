@@ -6,6 +6,7 @@ import { holdingName, localOf, payAmount, streetOf, takings } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import type { JobDraft } from './odds';
 import type { EvilModeBlock, Holding, LogEntry } from './schema';
+import { inRoster, wageOf } from './people';
 
 export const money = (n: number): string => `₽${n.toLocaleString('en-GB')}`;
 
@@ -99,12 +100,11 @@ export function todayPages(block: EvilModeBlock, data: EvilData = EVIL_DATA): To
       canAsk: open && h.kind === 'local' && !block.applied.includes(askKey(block, h.id)),
     };
   });
-  const R = data.district.rules;
   const creed = block.team.creed;
   const inTotal = inc.reduce((n, l) => n + l.amount, 0);
   const out: { text: string; amount: number }[] = creed === 'belonging'
-    ? [{ text: `Shares · half of the day's takings, split ${block.crew.length} ways`, amount: Math.floor(inTotal / 2) }]
-    : block.crew.map((c) => ({ text: `${c.name} · wage`, amount: creed === 'cause' ? R.wageCause : R.wage }));
+    ? [{ text: `Shares · half of the day's takings, split ${inRoster(block).length} ways`, amount: Math.floor(inTotal / 2) }]
+    : inRoster(block).map((c) => ({ text: `${c.name} · wage`, amount: wageOf(block, c, inTotal, data) }));
   for (const h of d?.holdings ?? []) if (takings(h, data) < 0) out.push({ text: `${holdingName(h, data)} · rent`, amount: -takings(h, data) });
   return { in: inc, inTotal, out, outTotal: out.reduce((n, l) => n + l.amount, 0) };
 }

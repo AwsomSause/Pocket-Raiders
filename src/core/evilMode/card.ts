@@ -7,11 +7,13 @@ import { EVIL_DATA, type EvilData } from './data';
 import { crewNames, fill, holdingTo, money, sentenceFor } from './ledger';
 import { oddsFor, oddsText, type JobDraft } from './odds';
 import type { CardField, EvilModeBlock, StoredCard } from './schema';
+import { crossers, peopleText, wontText } from './people';
 
 export type CardDraft = Omit<StoredCard, 'id'>;
 
 /** The Card for a job. Callers check the job can be queued first (dispatch.ts `jobProblem`). */
-export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA): CardDraft {
+/** `asked`: the Boss is asking anyway, across a line; field 12 says who was asked (Part 29 section 5.4). */
+export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA, asked = false): CardDraft {
   const d = block.district!;
   const h = d.holdings.find((x) => x.id === job.holdingId)!;
   const L = data.ledger.card;
@@ -60,8 +62,9 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   f.push([oddsText(o), o.lo !== o.hi]);
   // 7 Who's going
   f.push([job.squad.map((id, i) => `${crewNames(block, [id])}${i === 0 ? ` ${L.lead}` : ''}`).join(', '), false]);
-  // 8 Who won't (named people arrive in slice 4)
-  f.push([L.wont, false]);
+  // 8 Who won't: every person on the squad whose line this job crosses, and nobody else (Part 7 section 11).
+  const wont = crossers(block, job, data);
+  f.push([wontText(block, job, data), false]);
   // 9 Holds or turns
   f.push([m === 'scout' ? L.holds.nothing : offer && !offer.fair ? L.holds.turns : L.holds.holds, false]);
   // 10 The Hero (slice 5)
@@ -70,7 +73,7 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   const unknown = f.map(([, u], i) => (u ? data.ledger.fields[i]! : null)).filter((x): x is string => !!x);
   f.push([unknown.length ? unknown.map((n) => `${n}: not scouted.`).join(' ') : L.notKnownNone, unknown.length > 0]);
   // 12 How it's written down: the Ledger's sentence, exactly.
-  f.push([sentenceFor(block, job, data), false]);
+  f.push([`${sentenceFor(block, job, data)}${asked && wont.length ? fill(peopleText('askedAnyway', data), { names: wont.map((p) => p.name).join(' and ') }) : ''}`, false]);
   // 13 The other way: never empty.
   const fair = fairPrice(h, data);
   f.push([clean ? L.clean : fill(L.underPrice, { fair: money(fair ?? 0) }), false]);

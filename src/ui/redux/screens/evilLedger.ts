@@ -19,7 +19,7 @@ export function cardView(m: CardModel, teamA: string, teamB: string): string {
     <span class="grow" style="line-height:18px;font-size:${f.n === 1 ? 18 : 14}px;${f.n === 1 ? 'font-weight:700;' : ''}${f.unknown ? 'color:#d8483a;' : ''}${f.n === 12 ? LEDGER_TYPE : ''}"${f.n === 12 ? ' data-testid="evil-card-written"' : ''}>${esc(f.text)}${f.n === 13 && m.swap ? ` <span style="text-decoration:underline;cursor:pointer;margin-left:6px"${act('cardSwap')} data-testid="evil-card-swap">${esc(m.swap)}</span>` : ''}</span></div>`;
   const button = m.mode === 'read'
     ? B('Close', true, 'padding:4px 18px', '', `${act('cardClose')} data-testid="evil-card-close"`)
-    : `${B('CONFIRM', m.lit, `padding:4px 22px;${m.lit ? `background:${esc(teamB)};color:#fff;` : 'opacity:.45;'}`, '', `${act('cardConfirm')} data-testid="evil-card-confirm" data-lit="${m.lit}"`)}${B('Back', false, 'padding:4px 14px', '', `${act('cardClose')} data-testid="evil-card-back"`)}`;
+    : `${B(m.ask ?? 'CONFIRM', m.lit, `padding:4px 22px;${m.lit ? `background:${esc(teamB)};color:#fff;` : 'opacity:.45;'}`, '', `${act('cardConfirm')} data-testid="evil-card-confirm" data-lit="${m.lit}" data-ask="${!!m.ask}"`)}${B('Back', false, 'padding:4px 14px', '', `${act('cardClose')} data-testid="evil-card-back"`)}`;
   const edge = m.clean ? '2px solid #8888' : `4px solid ${esc(teamB)}`;
   const head = `<div class="sm" style="opacity:.7;margin-bottom:4px">${m.mode === 'read' ? `The Card as it was confirmed, day ${m.day}.` : 'The Honest Card.'}</div>`;
   return `<div style="position:absolute;inset:0;background:#141414cc;--team-a:${esc(teamA)};--team-b:${esc(teamB)}" data-testid="evil-card" data-clean="${m.clean}" data-mode="${m.mode}">

@@ -9,6 +9,7 @@ import { dispatchRoll, jobProblem } from '../../src/core/evilMode/dispatch';
 import { oddsFor, type JobDraft } from '../../src/core/evilMode/odds';
 import { EVIL_MODE_ID, ensureDistrict, foundInRun, stepInRun } from '../../src/core/evilMode/session';
 import { EvilModeBlockSchema, type EvilModeBlock, type Holding, type JobMethod } from '../../src/core/evilMode/schema';
+import { firstCrew } from '../../src/core/evilMode/schema';
 import { foundTeam } from '../../src/core/evilMode/start';
 import { STANDARD_CHOICE } from '../../src/core/rules';
 import { chooseStarter, createRun } from '../../src/core/run';
@@ -19,7 +20,9 @@ import { content } from './helpers';
 const found = (seed = 'd1', creed = 'profit', line: 'clean' | 'grey' | 'whatever' = 'grey'): EvilModeBlock => {
   const r = foundTeam({ name: 'Kettle', creed, line, doctrine: 'swarm' }, { boss: 'red', length: 'three', seed });
   if (!r.ok) throw new Error(r.problem);
-  return r.block;
+  // These suites test the district and the Card with the four nameless Grunts of slices 2 and 3 (a migrated block's crew):
+  // no talents, no lines. Named people are tested in evilModePeople.test.ts.
+  return { ...r.block, crew: firstCrew(4, EVIL_DATA.creeds.find((c) => c.id === creed)!.start.loyalty) };
 };
 const go = (b: EvilModeBlock, a: EvilAction): EvilModeBlock => {
   const r = step(b, a);
@@ -284,11 +287,11 @@ describe('saves: block v2 and the migration from v1', () => {
     const run = chooseStarter(content, createRun(content, { runId: 'mig', seed: 'mig', archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: EVIL_MODE_ID } }), 0);
     const v2 = foundInRun(run, { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three').run;
     const b2 = v2.expansion!.evilMode!;
-    const { district: _d, crew: _c, queue: _q, sheets: _s, evening: _e, log: _l, cards: _k, given: _g, taken: _t, rates: _r, ...rest } = b2;
+    const { district: _d, crew: _c, queue: _q, sheets: _s, evening: _e, log: _l, cards: _k, given: _g, taken: _t, rates: _r, applicants: _a, drawn: _dr, refusal: _rf, ...rest } = b2;
     const v1 = { ...rest, v: 1 };
     const parsed = EvilModeBlockSchema.parse(v1);
-    // Slice 3 took the block to v3; a v1 block goes through v2 to v3 in one load.
-    expect(parsed).toMatchObject({ v: 3, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
+    // Slice 4 took the block to v4; a v1 block goes through v2 and v3 to v4 in one load.
+    expect(parsed).toMatchObject({ v: 4, applicants: [], refusal: null, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
     expect(parsed.crew.map((c) => c.name)).toEqual(['Grunt 1', 'Grunt 2', 'Grunt 3', 'Grunt 4']);
     expect(parsed.team).toEqual(b2.team);
     const storage = new MemoryStorageProvider();

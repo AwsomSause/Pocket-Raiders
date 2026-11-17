@@ -34,7 +34,9 @@ export function oddsFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   if (job.method === 'pay') {
     const offer = data.district.methods.pay.offers.find((o) => o.pct === (job.offer ?? 100)) ?? data.district.methods.pay.offers[0]!;
     if (offer.odds === null) return certain(`Offer: the fair price (${offer.pct}%)`);
-    return flat(offer.odds, `Offer: ${offer.pct}% of the fair price`);
+    const pt = [{ label: `Offer: ${offer.pct}% of the fair price`, value: offer.odds }, ...peopleTerms(block, job, data)];
+    const n = clamp(pt.reduce((a, t) => a + t.value, 0), data);
+    return { odds: n, certain: false, terms: pt, lo: n, hi: n };
   }
   const terms: OddsTerm[] = [];
   const base = job.method === 'persuade' ? data.district.methods.persuade.base : data.district.methods.outplay.base;
@@ -58,6 +60,7 @@ export function oddsFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   if (h.tried.includes(job.method)) terms.push({ label: job.method === 'outplay' ? 'A rematch' : 'Asked before: they liked being asked', value: T.triedBefore });
   if (h.scouted > 0) terms.push({ label: 'Scouted: you know the ground', value: T.scouted });
   if (job.squad.length === 2) terms.push({ label: 'The squad is short: two people', value: T.short });
+  terms.push(...peopleTerms(block, job, data));
   const sum = terms.reduce((n, t) => n + t.value, 0);
   const odds = clamp(sum + hidden, data);
   if (!unknownMood) return { odds, certain: false, terms, lo: odds, hi: odds };
@@ -68,9 +71,31 @@ export function oddsFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   function certain(label: string): Odds {
     return { odds: 100, certain: true, terms: [{ label, value: 100 }], lo: 100, hi: 100 };
   }
-  function flat(n: number, label: string): Odds {
-    return { odds: n, certain: false, terms: [{ label, value: n }], lo: n, hi: n };
-  }
+}
+
+/**
+ * The people on a squad (Part 7 section 2.2): the lead's talent fits, +20 (only the lead's counts); a second fitting
+ * talent, +5 once; the lead's rank; the squad's Loyalty as a band. Each is a named term, printed in this order.
+ */
+export function peopleTerms(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA): OddsTerm[] {
+  const O = data.people.rules.odds;
+  const squad = job.squad.map((id) => block.crew.find((c) => c.id === id)).filter((c): c is NonNullable<typeof c> => !!c);
+  const lead = squad[0];
+  if (!lead) return [];
+  const terms: OddsTerm[] = [];
+  const fits = (t: string | null) => !!t && data.people.talents.find((x) => x.id === t)!.fits.includes(job.method);
+  const tname = (t: string) => data.people.talents.find((x) => x.id === t)!.name;
+  if (fits(lead.talent)) terms.push({ label: `Rolls on ${tname(lead.talent!)}: ${lead.name} leads`, value: O.talentLead });
+  const second = squad.slice(1).find((c) => fits(c.talent));
+  if (second) terms.push({ label: `${second.name}'s ${tname(second.talent!)} too`, value: O.talentSecond });
+  if (lead.rank === 'lead') terms.push({ label: `${lead.name} is a Lead`, value: O.leadRank });
+  else if (lead.rank === 'officer' || lead.rank === 'executive') terms.push({ label: `${lead.name} is an ${lead.rank === 'officer' ? 'Officer' : 'Executive'}`, value: O.officerRank });
+  const avg = squad.reduce((n, c) => n + c.loyalty, 0) / squad.length;
+  if (avg >= 9) terms.push({ label: 'The squad is Devoted', value: O.devoted });
+  else if (avg >= 3 && avg < 5) terms.push({ label: 'The squad is Distant', value: O.distant });
+  const leaving = squad.find((c) => c.loyalty >= 1 && c.loyalty <= 2);
+  if (leaving) terms.push({ label: `${leaving.name} is Leaving`, value: O.leaving });
+  return terms;
 }
 
 

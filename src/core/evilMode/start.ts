@@ -4,7 +4,9 @@
 
 import { EVIL_DATA, type EvilData } from './data';
 import { layDistrict } from './board';
-import { firstCrew, LINE_IDS, STREAMS, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
+import { bandOf, foundingRoster, teamLoyalty } from './people';
+import { arriveApplicants } from './roster';
+import { LINE_IDS, STREAMS, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
 
 export interface FoundingChoice {
   name: string;
@@ -69,8 +71,10 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const cap = (n: number): number => Math.min(10, n);
   const regard = cap(creed.start.regard + line.regard);
   const dread = cap(creed.start.dread);
+  // Slice 4: the starting Roster, drawn from the Founders on `evil-people` (design Part 10a section 2).
+  const roster = foundingRoster(opts.seed ?? opts.boss, creed.id, data);
   const block: EvilModeBlock = {
-    v: 3,
+    v: 4,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -93,7 +97,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     draws: Object.fromEntries(STREAMS.map((s) => [s, 0])) as EvilModeBlock['draws'],
     applied: [],
     district: layDistrict(opts.seed ?? opts.boss, 0, 1, { regard, dread }, data),
-    crew: firstCrew(data.district.rules.crew),
+    crew: roster.crew,
     queue: [],
     sheets: [],
     evening: [],
@@ -102,16 +106,18 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     given: 0,
     taken: 0,
     rates: {},
+    applicants: [],
+    drawn: roster.crew.map((c) => c.id),
+    refusal: null,
   };
-  return { ok: true, block: EvilModeBlockSchema.parse(block) };
+  block.draws['evil-people'] = roster.draws;
+  return { ok: true, block: EvilModeBlockSchema.parse(arriveApplicants(block, data)) };
 }
 
 /**
  * The team's Loyalty band (design Part 5 section 5.1). Loyalty is never stored for the team: it is worked out from the
- * Roster. Until people arrive (slice 4) the team stands at its Creed's starting figure.
+ * Roster (people.ts `teamLoyalty`): the mean of everyone in, rounded down.
  */
 export function loyaltyBand(block: EvilModeBlock, data: EvilData = EVIL_DATA): { name: string; face: string } {
-  const figure = data.creeds.find((c) => c.id === block.team.creed)?.start.loyalty ?? 5;
-  const band = data.founding.bands.find((b) => figure >= b.min) ?? data.founding.bands[data.founding.bands.length - 1]!;
-  return { name: band.name, face: band.face };
+  return bandOf(teamLoyalty(block, data), data);
 }

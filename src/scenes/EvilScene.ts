@@ -24,6 +24,9 @@ import type { JobDraft } from '../core/evilMode/odds';
 import type { StoredCard } from '../core/evilMode/schema';
 import { cardModel, LEDGER_ACTS, ledgerModel, newLedger, type LedgerDraft } from '../core/evilMode/ledgerScreens';
 import { cardView, filedCorner, ledgerView } from '../ui/redux/screens/evilLedger';
+import { applicantActs, isQuestionAct, newRoster, personActs, refusalModel, rosterModel, type RosterDraft } from '../core/evilMode/rosterScreens';
+import { officeView, refusalView, rosterView } from '../ui/redux/screens/evilRoster';
+import { crossers } from '../core/evilMode/people';
 
 /** Keys that confirm (input.ts KEY_MAP), read raw on the Card so a held key can be told from a press. */
 const CONFIRM_CODES = new Set(['Enter', 'NumpadEnter', 'Space', 'KeyZ']);
@@ -43,6 +46,9 @@ export class EvilScene extends Phaser.Scene {
   /** The last line filed, shown in the Ledger's corner. */
   private filed: string | null = null;
   private cardOpenedAt = 0;
+  /** Slice 4: the Roster (and the Office inside it), and the cursor on the yard's three answers. */
+  private roster: RosterDraft | null = null;
+  private refuseSel = 0;
 
   constructor() {
     super('Evil');
@@ -57,6 +63,8 @@ export class EvilScene extends Phaser.Scene {
     this.card = null;
     this.ledger = null;
     this.filed = null;
+    this.roster = null;
+    this.refuseSel = 0;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
     session.evilEnsure();
@@ -78,7 +86,13 @@ export class EvilScene extends Phaser.Scene {
           if (this.card) return cardView(cardModel(block, this.card), block.team.look.a, block.team.look.b);
           if (block.district.end) frame.button = 'Leave';
           const ledger = this.ledger ? ledgerView(ledgerModel(block, this.ledger)) : undefined;
-          return frameView(c, frame, this.notice, boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), filed: filedCorner(this.filed) }));
+          const rm = this.roster ? rosterModel(block, this.roster) : null;
+          const roster = rm ? rosterView(rm) : undefined;
+          // An order across a line is answered in the yard before anything else moves (Part 7 section 11.1).
+          const yard = refusalModel(block);
+          const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
+          const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -103,6 +117,13 @@ export class EvilScene extends Phaser.Scene {
         lrow: (i) => { if (this.ledger) this.ledger = { ...this.ledger, row: Number(i), act: 0 }; this.view?.refresh(); },
         lact: (arg) => { const [i, j] = arg.split(':').map(Number); if (this.ledger) { this.ledger = { ...this.ledger, row: i!, act: j! }; this.ledgerAct(); } },
         lcard: (id) => this.readCard(id),
+        roster: () => this.toggleRoster(),
+        rtab: (i) => { if (this.roster) this.roster = newRoster(Number(i)); this.view?.refresh(); },
+        rrow: (i) => { if (this.roster && !this.roster.office) this.roster = { ...this.roster, row: Number(i), act: this.roster.row === Number(i) && this.roster.act !== null ? this.roster.act : 0 }; this.view?.refresh(); },
+        ract: (arg) => { const [i, j] = arg.split(':').map(Number); if (this.roster) { this.roster = { ...this.roster, row: i!, act: j! }; this.rosterAct(); } },
+        oanswer: (i) => this.officeAnswer(Number(i)),
+        ocancel: () => { if (this.roster) this.roster = { ...this.roster, office: null }; this.view?.refresh(); },
+        refuse: (id) => this.answer(id as 'withdraw' | 'swap' | 'insist'),
         clear: (id) => { services().session.evilStep({ type: 'clearJob', holdingId: id }); this.view?.refresh(); },
       },
       overs: { over: (i) => { if (!this.founded()) { this.draft = { ...this.draft, at: Number(i) }; this.view?.refresh(); } } },
@@ -217,7 +238,9 @@ export class EvilScene extends Phaser.Scene {
   /** Keys on the Board and in Dispatch (design Part 29 section 18): every job can be built and queued without a pointer. */
   private dayKey(a: InputAction): void {
     if (this.card) return this.cardKey(a);
+    if (this.block()?.refusal) return this.refusalKey(a);
     if (this.ledger) return this.ledgerKey(a);
+    if (this.roster) return this.rosterKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
     const d = this.disp;
@@ -331,10 +354,22 @@ export class EvilScene extends Phaser.Scene {
     this.redrawCard();
   }
 
-  /** CONFIRM: queues the job and files the Card. Does nothing until field 13's been seen. */
+  /** CONFIRM: queues the job and files the Card. Does nothing until field 13's been seen. With a line crossed it's "Ask anyway". */
   private confirmCard(): void {
     const c = this.card;
     if (!c || 'read' in c || !c.gate.seen) return;
+    const block0 = this.block();
+    if (block0 && crossers(block0, c.job).length) {
+      const cues = services().session.evilStep({ type: 'askAnyway', job: c.job });
+      this.card = null;
+      const refused = cues.find((x) => x.id === 'refused');
+      const filed = cues.find((x) => x.id === 'filed');
+      this.notice = refused && 'reason' in refused ? refused.reason : null;
+      if (filed && 'text' in filed) this.filed = filed.text;
+      this.refuseSel = 0;
+      this.disp = { ...newDispatch(), at: this.disp.at };
+      return this.view?.refresh();
+    }
     const m = EVIL_DATA.methods.find((x) => x.id === c.job.method)!;
     const h = this.block()?.district?.holdings.find((x) => x.id === c.job.holdingId);
     const cues = services().session.evilStep({ type: 'confirmCard', job: c.job });
@@ -359,6 +394,7 @@ export class EvilScene extends Phaser.Scene {
 
   private rawKey(e: KeyboardEvent, type: 'down' | 'up'): void {
     if (e.code === 'KeyL' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.toggleLedger();
+    if (e.code === 'KeyR' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleRoster();
     const c = this.card;
     if (!c || !CONFIRM_CODES.has(e.code)) return;
     // The press that opened the Card reaches this listener too (after the action listener opened it): skip it.
@@ -427,6 +463,7 @@ export class EvilScene extends Phaser.Scene {
   private toggleLedger(): void {
     if (this.card) return;
     this.ledger = this.ledger ? null : newLedger();
+    this.roster = null;
     this.notice = null;
     this.view?.refresh();
   }
@@ -463,6 +500,93 @@ export class EvilScene extends Phaser.Scene {
     this.notice = refused && 'reason' in refused ? refused.reason : asked && 'line' in asked ? asked.line : null;
     this.filed = !refused ? services().session.run?.expansion?.evilMode?.log.at(-1)?.text ?? this.filed : this.filed;
     this.ledger = { ...L, act: null };
+    this.view?.refresh();
+  }
+
+  // ---- Slice 4: the Roster, the Office and the yard ----
+
+  private toggleRoster(): void {
+    if (this.card) return;
+    this.roster = this.roster ? null : newRoster();
+    this.ledger = null;
+    this.notice = null;
+    this.view?.refresh();
+  }
+
+  private said(cues: { id: string }[]): void {
+    const refused = cues.find((c) => c.id === 'refused') as { reason?: string } | undefined;
+    const said = cues.find((c) => c.id === 'said') as { line?: string } | undefined;
+    this.notice = refused?.reason ?? said?.line ?? null;
+  }
+
+  /** The actions under the chosen card: on the Roster, promote or let go; at the notice board, hire, ask, or say no. */
+  private rosterAct(): void {
+    const block = this.block();
+    const R = this.roster;
+    if (!block || !R || R.act === null) return;
+    const m = rosterModel(block, R);
+    if (R.tab === 0) {
+      const p = m.people?.[R.row];
+      const a = p ? personActs(block, p.id)[R.act] : undefined;
+      if (!p || !a) return;
+      if (!a.on) { this.notice = a.why; return this.view?.refresh(); }
+      if (a.id === 'promote') { this.roster = { ...R, office: p.id }; return this.view?.refresh(); }
+      this.said(services().session.evilStep({ type: 'letGo', id: p.id, kindly: a.id === 'letGoKind' }));
+    } else {
+      const ap = m.applicants?.[R.row];
+      const a = ap ? applicantActs(block, ap.ref)[R.act] : undefined;
+      if (!ap || !a) return;
+      if (!a.on) { this.notice = a.why; return this.view?.refresh(); }
+      const q = isQuestionAct(a.id);
+      this.said(services().session.evilStep(q ? { type: 'question', ref: ap.ref, q } : a.id === 'hire' ? { type: 'hire', ref: ap.ref } : { type: 'turnAway', ref: ap.ref, rude: a.id === 'turnRude' }));
+      if (!q) this.roster = { ...R, row: 0, act: null };
+    }
+    this.view?.refresh();
+  }
+
+  private officeAnswer(i: number): void {
+    const R = this.roster;
+    if (!R?.office) return;
+    this.said(services().session.evilStep({ type: 'promote', id: R.office, answer: i }));
+    this.roster = { ...R, office: null, act: null };
+    this.view?.refresh();
+  }
+
+  /** Keys on the Roster: Left/Right tabs (or actions under a card), Up/Down cards, Enter opens or does, Esc backs out. */
+  private rosterKey(a: InputAction): void {
+    const block = this.block();
+    const R = this.roster;
+    if (!block || !R) return;
+    if (R.office) {
+      if (a === 'back') this.roster = { ...R, office: null };
+      else if (a === 'confirm') return this.officeAnswer(0);
+      return this.view?.refresh();
+    }
+    const m = rosterModel(block, R);
+    const acts = R.tab === 0 ? (m.people?.[R.row] ? personActs(block, m.people[R.row]!.id) : []) : m.applicants?.[R.row] ? applicantActs(block, m.applicants[R.row]!.ref) : [];
+    if (a === 'back') this.roster = R.act !== null ? { ...R, act: null } : null;
+    else if (R.act !== null && (a === 'left' || a === 'right') && acts.length) this.roster = { ...R, act: (R.act + (a === 'left' ? -1 : 1) + acts.length) % acts.length };
+    else if (a === 'left' || a === 'right') this.roster = newRoster((R.tab + 1) % 2);
+    else if ((a === 'up' || a === 'down') && m.rows) this.roster = { ...R, row: (R.row + (a === 'up' ? -1 : 1) + m.rows) % m.rows, act: null };
+    else if (a === 'confirm' && m.rows && acts.length) {
+      if (R.act === null) this.roster = { ...R, act: 0 };
+      else return this.rosterAct();
+    }
+    this.view?.refresh();
+  }
+
+  /** The yard: Left/Right the three answers, Enter answers. */
+  private refusalKey(a: InputAction): void {
+    if (a === 'left' || a === 'right') this.refuseSel = (this.refuseSel + (a === 'left' ? 2 : 1)) % 3;
+    else if (a === 'confirm') return this.answer((['withdraw', 'swap', 'insist'] as const)[this.refuseSel]!);
+    this.view?.refresh();
+  }
+
+  private answer(id: 'withdraw' | 'swap' | 'insist'): void {
+    const cues = services().session.evilStep({ type: 'answerRefusal', answer: id });
+    this.said(cues);
+    const filed = services().session.run?.expansion?.evilMode?.log.at(-1)?.text;
+    if (!cues.some((c) => c.id === 'refused') && filed) this.filed = filed;
     this.view?.refresh();
   }
 

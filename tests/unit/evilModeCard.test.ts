@@ -11,6 +11,7 @@ import { cardModel, ledgerModel, newLedger } from '../../src/core/evilMode/ledge
 import { oddsFor, oddsText, type JobDraft } from '../../src/core/evilMode/odds';
 import { EVIL_MODE_ID, foundInRun, stepInRun } from '../../src/core/evilMode/session';
 import { EvilModeBlockSchema, JOB_METHODS, type EvilModeBlock, type Holding } from '../../src/core/evilMode/schema';
+import { firstCrew } from '../../src/core/evilMode/schema';
 import { foundTeam } from '../../src/core/evilMode/start';
 import { STANDARD_CHOICE } from '../../src/core/rules';
 import { chooseStarter, createRun } from '../../src/core/run';
@@ -21,7 +22,9 @@ import { content } from './helpers';
 const found = (seed = 'c1', creed = 'profit'): EvilModeBlock => {
   const r = foundTeam({ name: 'Kettle', creed, line: 'grey', doctrine: 'swarm' }, { boss: 'red', length: 'three', seed });
   if (!r.ok) throw new Error(r.problem);
-  return r.block;
+  // These suites test the district and the Card with the four nameless Grunts of slices 2 and 3 (a migrated block's crew):
+  // no talents, no lines. Named people are tested in evilModePeople.test.ts.
+  return { ...r.block, crew: firstCrew(4, EVIL_DATA.creeds.find((c) => c.id === creed)!.start.loyalty) };
 };
 const go = (b: EvilModeBlock, a: EvilAction): EvilModeBlock => {
   const r = step(b, a);
@@ -271,10 +274,11 @@ describe('saves: block v3 and the migration from v2', () => {
     r = stepInRun(r, { type: 'dismissOvernight' }).run;
     const b3 = r.expansion!.evilMode!;
     const h = first(b3, (x) => x.kind === 'local');
-    const { log: _l, cards: _c, given: _g, taken: _t, rates: _r, ...rest } = b3;
-    const v2 = { ...rest, v: 2, queue: [{ holdingId: h.id, method: 'scout', squad: ['g1'], odds: null, certain: true, terms: [{ label: 'Scouting always works', value: 100 }] }] };
+    const { log: _l, cards: _c, given: _g, taken: _t, rates: _r, applicants: _a, drawn: _dr, refusal: _rf, ...rest } = b3;
+    const v2 = { ...rest, v: 2, crew: [1, 2, 3, 4].map((i) => ({ id: `g${i}`, name: `Grunt ${i}`, outOn: null })), queue: [{ holdingId: h.id, method: 'scout', squad: ['g1'], odds: null, certain: true, terms: [{ label: 'Scouting always works', value: 100 }] }] };
     const parsed = EvilModeBlockSchema.parse(v2);
-    expect(parsed).toMatchObject({ v: 3, log: [], cards: [], given: 0, taken: 0, rates: {} });
+    // Slice 4 took the block to v4; a v2 block goes through v3 to v4 in one load.
+    expect(parsed).toMatchObject({ v: 4, log: [], cards: [], given: 0, taken: 0, rates: {}, applicants: [], refusal: null });
     expect(parsed.team).toEqual(b3.team);
     expect(parsed.district).toEqual(b3.district);
     const storage = new MemoryStorageProvider();

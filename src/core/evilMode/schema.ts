@@ -3,6 +3,7 @@
 // the stream counts and the applied set. Later slices add their fields to the block and bump its own `v`.
 
 import { z } from 'zod';
+import creedsRaw from '../../data/evilMode/creeds.json';
 
 /** Content status (design Part 30 section 12): every entry has one. Passing the schema is not "supported". */
 export const EvilStatusSchema = z.enum(['supported', 'limited', 'disabled', 'invalid']);
@@ -174,8 +175,93 @@ export const DistrictSchema = z.object({
 }).strict();
 export type District = z.infer<typeof DistrictSchema>;
 
-export const CrewSchema = z.object({ id: z.string().min(1), name: z.string().min(1), outOn: z.number().int().min(1).nullable() }).strict();
+// ---- Slice 4: people (design Part 9, Part 10a, Part 5 section 5, Part 30 section 3.3) ----
+
+export const TALENTS = ['voice', 'hands', 'eyes', 'nerve', 'books', 'wheels', 'heart'] as const;
+export const TalentSchema = z.enum(TALENTS);
+export type Talent = z.infer<typeof TalentSchema>;
+export const FLAWS = ['talks', 'drinks', 'doubts', 'skims', 'freezes', 'loves', 'proud', 'kind'] as const;
+export const FlawSchema = z.enum(FLAWS);
+export type Flaw = z.infer<typeof FlawSchema>;
+export const RANKS = ['grunt', 'lead', 'specialist', 'officer', 'executive'] as const;
+export const RankSchema = z.enum(RANKS);
+export type Rank = z.infer<typeof RankSchema>;
+export const LEAVE_WAYS = ['line', 'loyalty', 'letGo'] as const;
+export const QUESTIONS = ['cant', 'wont', 'why', 'who'] as const;
+export const QuestionSchema = z.enum(QUESTIONS);
+export type Question = z.infer<typeof QuestionSchema>;
+
+/**
+ * A person on the Roster (Part 30 section 3.3), one per card. The four unnamed Grunts of slices 2 and 3 are people with
+ * no `ref`, talent, flaw or line (a block migrated from v3 keeps them). Loyalty is stored per person, never for the team.
+ */
+export const CrewSchema = z.object({
+  id: z.string().min(1),
+  /** The deck id (people.json) for a written person; null for a nameless Grunt. */
+  ref: z.string().min(1).nullable(),
+  name: z.string().min(1),
+  age: z.number().int().min(1).nullable(),
+  /** From the deck, set once, never edited. */
+  minor: z.boolean(),
+  talent: TalentSchema.nullable(),
+  flaw: FlawSchema.nullable(),
+  flawFound: z.boolean(),
+  /** The line's number (1..36) in people.json. */
+  line: z.number().int().min(1).max(36).nullable(),
+  lineHeard: z.boolean(),
+  rank: RankSchema,
+  /** 0..10. Shown only as a face and a word. */
+  loyalty: z.number().int().min(0).max(10),
+  where: z.enum(['in', 'left']),
+  outOn: z.number().int().min(1).nullable(),
+  /** Jobs that went (Grunt to Lead needs three). */
+  jobs: z.number().int().min(0),
+  /** Times asked across their line. */
+  asked: z.number().int().min(0),
+  /** Days unpaid in this district (paid on time a whole district: +1 at its end). */
+  unpaid: z.number().int().min(0),
+  /** The district ("region:n") their talent last fitted a job in (+1 once a district). */
+  fitIn: z.string().nullable(),
+  left: z.object({ day: z.number().int().min(1), how: z.enum(LEAVE_WAYS), kindly: z.boolean().optional() }).strict().optional(),
+}).strict();
 export type Crew = z.infer<typeof CrewSchema>;
+export type Person = Crew;
+
+export const ApplicantSchema = z.object({ ref: z.string().min(1), day: z.number().int().min(1), q: QuestionSchema.nullable() }).strict();
+export type Applicant = z.infer<typeof ApplicantSchema>;
+
+/** An order across a line, waiting on the Boss's answer in the yard (Part 7 section 11.1). */
+export const RefusalSchema = z.object({
+  cardId: z.string().min(1),
+  job: z.object({ holdingId: z.string().min(1), method: JobMethodSchema, squad: z.array(z.string().min(1)).min(1), offer: z.number().int().min(1).max(100).optional() }).strict(),
+  who: z.array(z.string().min(1)).min(1),
+}).strict();
+export type Refusal = z.infer<typeof RefusalSchema>;
+
+const T = z.string().min(1);
+export const PeopleFileSchema = z.object({
+  note: z.string(),
+  talents: z.array(z.object({ id: TalentSchema, name: T, mark: T, fits: z.array(JobMethodSchema), says: T, missing: T, refuses: T, lead: T }).strict()).length(TALENTS.length),
+  flaws: z.array(z.object({ id: FlawSchema, name: T, mark: T, say: T, note: T }).strict()).length(FLAWS.length),
+  tags: z.record(z.string(), T),
+  lines: z.array(z.object({ n: z.number().int().min(1).max(36), text: T, tags: z.array(z.string().min(1)) }).strict()).length(36),
+  ranks: z.array(z.object({ id: RankSchema, title: T, wage: z.number().int().min(0), share: z.number().int().min(0), needs: T }).strict()).length(RANKS.length),
+  rules: z.object({
+    rosterCap: z.number().int().min(1), applicantsHeld: z.number().int().min(1), applicantsNotHeld: z.number().int().min(0), waitDays: z.number().int().min(1), leadJobs: z.number().int().min(1), letGoKindDays: z.number().int().min(0), rudeRegard: z.number().int(),
+    weights: z.object({ base: z.number().int().min(1), more: z.number().int().min(0), lessDivide: z.number().int().min(1), youngUnder: z.number().int(), oldOver: z.number().int() }).strict(),
+    creeds: z.record(z.string(), z.object({ more: z.array(z.string()), less: z.array(z.string()) }).strict()),
+    loyalty: z.object({ withdrawn: z.number().int(), withdrawnOthers: z.number().int(), swapped: z.number().int(), insistedWatch: z.number().int(), promoted: z.number().int(), passedOver: z.number().int(), unpaid: z.number().int(), paidDistrict: z.number().int(), fit: z.number().int(), most: z.number().int().min(1) }).strict(),
+    odds: z.object({ talentLead: z.number().int().multipleOf(5), talentSecond: z.number().int().multipleOf(5), leadRank: z.number().int().multipleOf(5), officerRank: z.number().int().multipleOf(5), devoted: z.number().int().multipleOf(5), distant: z.number().int().multipleOf(5), leaving: z.number().int().multipleOf(5), eyesReach: z.number().int().min(0) }).strict(),
+  }).strict(),
+  text: z.record(z.string(), z.union([T, z.array(T), z.record(z.string(), T)])),
+  questions: z.array(z.object({ id: QuestionSchema, ask: T, answer: T }).strict()).length(QUESTIONS.length),
+  people: z.array(z.object({
+    id: T, deck: z.enum(['founders', 'kanto']), name: T, age: z.number().int().min(1), why: T, talent: TalentSchema, flaw: FlawSchema,
+    line: z.number().int().min(1).max(36), lineText: T.optional(), quest: T, minor: z.boolean().optional(), status: EvilStatusSchema,
+  }).strict()).min(1),
+});
+
+export const FacesFileSchema = z.object({ note: z.string(), faces: z.array(z.object({ ref: T, sprite: z.string().regex(/^trainer\.[a-z0-9_/]+$/), provenance: T }).strict()).min(1) });
 
 // ---- Slice 3: the Card and the Ledger (design Part 12 section 1, Part 25a section 5, Part 29 sections 6 and 8, Part 30 section 7) ----
 
@@ -196,7 +282,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -241,9 +327,9 @@ export const LedgerFileSchema = z.object({
 
 export const RateSchema = z.enum(['halved', 'waived']);
 
-const BlockV3Schema = z.object({
-  /** The block's own version, for its own migrations. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. */
-  v: z.literal(3),
+const BlockV4Schema = z.object({
+  /** The block's own version, for its own migrations. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. */
+  v: z.literal(4),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -268,23 +354,37 @@ const BlockV3Schema = z.object({
   given: z.number().int().min(0),
   taken: z.number().int().min(0),
   rates: z.record(z.string(), RateSchema),
+  /** Slice 4: who's at the notice board today, everyone drawn this run (nobody twice), and an order across a line waiting on an answer. */
+  applicants: z.array(ApplicantSchema),
+  drawn: z.array(z.string().min(1)),
+  refusal: RefusalSchema.nullable(),
 }).strict();
 
-/** Four unnamed Grunts (slice 4 brings named people). */
-export const firstCrew = (n = 4): Crew[] => Array.from({ length: n }, (_, i) => ({ id: `g${i + 1}`, name: `Grunt ${i + 1}`, outOn: null }));
+/** A nameless Grunt (slices 2 and 3; a block migrated from v3 keeps its four). */
+export const namelessGrunt = (i: number, loyalty: number): Crew => ({ id: `g${i}`, ref: null, name: `Grunt ${i}`, age: null, minor: false, talent: null, flaw: null, flawFound: false, line: null, lineHeard: false, rank: 'grunt', loyalty, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null });
+/** Four nameless Grunts at a Creed's starting Loyalty. */
+export const firstCrew = (n = 4, loyalty = 5): Crew[] => Array.from({ length: n }, (_, i) => namelessGrunt(i + 1, loyalty));
+/** A Creed's starting Loyalty, read raw here (the migration can't import data.ts, which imports this file). */
+const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c.id === creed)?.start.loyalty ?? 5);
 
 /**
  * Block migrations, one version at a time; nothing is removed.
  * v1 -> v2 (slice 1's block): the district is laid on the next step, the crew are four Grunts.
  * v2 -> v3 (slice 2's block): an empty Log and no Cards (the Log starts here; jobs already queued keep going without one), Given and Taken at 0, no rates.
+ * v3 -> v4 (slice 3's block): the four Grunts stay, nameless, as people at the Creed's starting Loyalty; nobody at the notice board, nobody drawn, no refusal.
  */
 export function migrateEvilBlock(raw: unknown): unknown {
   if (!raw || typeof raw !== 'object') return raw;
   let b = raw as Record<string, unknown>;
   if (b.v === 1) b = { ...b, v: 2, district: null, crew: firstCrew(), queue: [], sheets: [], evening: [] };
   if (b.v === 2) b = { ...b, v: 3, log: [], cards: [], given: 0, taken: 0, rates: {} };
+  if (b.v === 3) {
+    const loyalty = startLoyalty((b.team as { creed?: unknown } | undefined)?.creed);
+    const crew = Array.isArray(b.crew) ? (b.crew as { id: string; name: string; outOn: number | null }[]).map((c) => ({ ...namelessGrunt(1, loyalty), id: c.id, name: c.name, outOn: c.outOn })) : b.crew;
+    b = { ...b, v: 4, crew, applicants: [], drawn: [], refusal: null };
+  }
   return b;
 }
 
-export const EvilModeBlockSchema = z.preprocess(migrateEvilBlock, BlockV3Schema);
-export type EvilModeBlock = z.infer<typeof BlockV3Schema>;
+export const EvilModeBlockSchema = z.preprocess(migrateEvilBlock, BlockV4Schema);
+export type EvilModeBlock = z.infer<typeof BlockV4Schema>;
