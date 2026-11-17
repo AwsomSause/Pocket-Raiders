@@ -1,0 +1,450 @@
+{
+ "note": "Signature item pictures, one per Legendary, Mythical and Ultra Beast species (base forms; forms share it; includes the six story-original species). Art only, 32x32, made with PixelLab (pixel-art generator) for this project; files in public/assets/images/items/legend/<speciesId>.png, asset id item.legend/<speciesId>. status: supported (art; Blessings use it as their object picture).",
+ "status": "supported",
+ "items": {
+  "articuno": {
+   "name": "Frostbound Feather",
+   "look": "a long pale blue ice feather with frost crystals"
+  },
+  "zapdos": {
+   "name": "Stormcall Feather",
+   "look": "a jagged yellow lightning feather crackling with sparks"
+  },
+  "moltres": {
+   "name": "Emberflame Feather",
+   "look": "a fiery orange and red feather with a flame tip"
+  },
+  "mewtwo": {
+   "name": "Cloned Gene Vial",
+   "look": "a glass vial of glowing purple liquid with a DNA helix"
+  },
+  "mew": {
+   "name": "Pink Wishing Charm",
+   "look": "a tiny pink heart-shaped charm with a long thin tail ribbon"
+  },
+  "raikou": {
+   "name": "Thunder Fang Charm",
+   "look": "a yellow tooth-shaped charm with lightning bolt, purple tassel"
+  },
+  "entei": {
+   "name": "Magma Crest Medal",
+   "look": "a round red-orange medal with a volcano and flames"
+  },
+  "suicune": {
+   "name": "Aurora Veil Gem",
+   "look": "a clear blue crystal teardrop with a pale aurora glimmer"
+  },
+  "lugia": {
+   "name": "Silver Gale Scale",
+   "look": "a large silver-white scale with a blue sheen"
+  },
+  "ho-oh": {
+   "name": "Rainbow Sacred Ash",
+   "look": "a small golden urn of glowing ash with a rainbow arc"
+  },
+  "celebi": {
+   "name": "Time Sprout",
+   "look": "a glowing green sapling sprout in a tiny pot with clock hands on a leaf"
+  },
+  "regirock": {
+   "name": "Rock Braille Tablet",
+   "look": "a brown stone tablet carved with dotted braille marks"
+  },
+  "regice": {
+   "name": "Ice Braille Tablet",
+   "look": "a pale blue ice tablet carved with dotted braille marks"
+  },
+  "registeel": {
+   "name": "Steel Braille Tablet",
+   "look": "a grey steel plate engraved with dotted braille marks"
+  },
+  "latias": {
+   "name": "Red Soul Dew Shard",
+   "look": "a small red-white crystal shard with a heart shaped glow"
+  },
+  "latios": {
+   "name": "Blue Soul Dew Shard",
+   "look": "a small blue-white crystal shard with a glow"
+  },
+  "kyogre": {
+   "name": "Deep Tide Pearl",
+   "look": "a large deep blue pearl with swirling waves inside"
+  },
+  "groudon": {
+   "name": "Magma Core Ember",
+   "look": "a cracked black rock with glowing red lava inside"
+  },
+  "rayquaza": {
+   "name": "Sky Pillar Scale",
+   "look": "a long green dragon scale with a golden stripe"
+  },
+  "jirachi": {
+   "name": "Wish Tag Star",
+   "look": "a yellow star with three hanging paper wish strips"
+  },
+  "deoxys": {
+   "name": "Helix Meteor Fragment",
+   "look": "a purple meteor rock fragment with a red crystal core and DNA helix"
+  },
+  "uxie": {
+   "name": "Knowledge Lake Gem",
+   "look": "a yellow gem with a glowing eye symbol"
+  },
+  "mesprit": {
+   "name": "Emotion Lake Gem",
+   "look": "a pink gem with a glowing heart symbol"
+  },
+  "azelf": {
+   "name": "Willpower Lake Gem",
+   "look": "a blue gem with a glowing flame symbol"
+  },
+  "dialga": {
+   "name": "Chrono Diamond",
+   "look": "a steel blue diamond with a clock face inside"
+  },
+  "palkia": {
+   "name": "Spatial Pearl",
+   "look": "a pink pearl containing a small starry space swirl"
+  },
+  "heatran": {
+   "name": "Lava Dome Ingot",
+   "look": "a glowing orange-red molten metal ingot with black crust"
+  },
+  "regigigas": {
+   "name": "Giant Chain Link",
+   "look": "a huge chunky grey rope-chain link, golden"
+  },
+  "giratina": {
+   "name": "Distortion Shard",
+   "look": "a dark purple broken mirror shard with a golden edge"
+  },
+  "cresselia": {
+   "name": "Crescent Lullaby Feather",
+   "look": "a pale yellow crescent moon shaped feather with pink ribbon"
+  },
+  "phione": {
+   "name": "Sea Bubble Charm",
+   "look": "a blue floating bubble with a small shiny sparkle"
+  },
+  "manaphy": {
+   "name": "Tide Egg Locket",
+   "look": "a pale blue egg-shaped locket with a red gem"
+  },
+  "darkrai": {
+   "name": "Nightmare Shroud",
+   "look": "a black ragged cloth swirl with red eye glint"
+  },
+  "shaymin": {
+   "name": "Gracidea Flower",
+   "look": "a small pink flower bouquet of five petals"
+  },
+  "arceus": {
+   "name": "Creation Plate",
+   "look": "a golden hexagonal plate with a rainbow ring and a cross emblem"
+  },
+  "victini": {
+   "name": "Victory Flame Star",
+   "look": "a orange V-shaped star flame"
+  },
+  "cobalion": {
+   "name": "Iron Sword Hilt",
+   "look": "a blue-grey steel sword hilt with a gold guard"
+  },
+  "terrakion": {
+   "name": "Cavern Horn Shard",
+   "look": "a brown rocky horn shard"
+  },
+  "virizion": {
+   "name": "Verdant Blade Leaf",
+   "look": "a green leaf shaped sword blade"
+  },
+  "tornadus": {
+   "name": "Gale Cloud Tuft",
+   "look": "a blue-green swirl of wind cloud with a tail"
+  },
+  "thundurus": {
+   "name": "Tempest Cloud Tuft",
+   "look": "a purple storm cloud with a yellow lightning bolt"
+  },
+  "reshiram": {
+   "name": "Truth Ember Orb",
+   "look": "a white-blue glowing orb with a flame inside"
+  },
+  "zekrom": {
+   "name": "Ideal Bolt Orb",
+   "look": "a black-blue glowing orb with a lightning bolt inside"
+  },
+  "landorus": {
+   "name": "Abundance Seed Pouch",
+   "look": "a brown sack pouch with a green sprout and orange stripe"
+  },
+  "kyurem": {
+   "name": "Absolute Zero Core",
+   "look": "a jagged blue-white ice crystal with grey frost"
+  },
+  "keldeo": {
+   "name": "Sacred Sword Pennant",
+   "look": "a small blue pennant flag on a tiny sword"
+  },
+  "meloetta": {
+   "name": "Melody Musical Note",
+   "look": "a green glowing eighth music note with red accent"
+  },
+  "genesect": {
+   "name": "Mecha Drive Cassette",
+   "look": "a grey cartridge with a purple cannon chip and circuits"
+  },
+  "xerneas": {
+   "name": "Life Antler Bloom",
+   "look": "a rainbow-coloured antler branch with sparkles"
+  },
+  "yveltal": {
+   "name": "Destruction Talon",
+   "look": "a black red crescent claw with orange glow"
+  },
+  "zygarde": {
+   "name": "Order Cell Core",
+   "look": "a green glowing cell with a hexagon pattern"
+  },
+  "diancie": {
+   "name": "Princess Pink Diamond",
+   "look": "a bright pink faceted diamond gem"
+  },
+  "hoopa": {
+   "name": "Ring Prison Bottle",
+   "look": "a golden ring hoop with a purple glowing bottle"
+  },
+  "volcanion": {
+   "name": "Steam Fountain Vial",
+   "look": "a small red vial with orange steam puffing out"
+  },
+  "type-null": {
+   "name": "Synthetic Control Mask",
+   "look": "a grey metal mask helmet with red straps"
+  },
+  "silvally": {
+   "name": "Memory Disc",
+   "look": "a silver memory chip disc with rainbow rim"
+  },
+  "tapu-koko": {
+   "name": "Spark Shell",
+   "look": "a yellow shell with a lightning spark"
+  },
+  "tapu-lele": {
+   "name": "Petal Shell",
+   "look": "a pink shell with petals and glitter"
+  },
+  "tapu-bulu": {
+   "name": "Grass Shell",
+   "look": "a green leafy shell with bark wrapping"
+  },
+  "tapu-fini": {
+   "name": "Mist Shell",
+   "look": "a blue shell with a water mist swirl"
+  },
+  "cosmog": {
+   "name": "Nebula Fluff",
+   "look": "a tiny blue gas cloud swirl with stars"
+  },
+  "cosmoem": {
+   "name": "Stardust Cocoon",
+   "look": "a dark blue star-studded cocoon pod"
+  },
+  "solgaleo": {
+   "name": "Sunne Prism",
+   "look": "a golden orange sun emblem with white mane rays"
+  },
+  "lunala": {
+   "name": "Moone Prism",
+   "look": "a purple crescent moon emblem with a wing"
+  },
+  "necrozma": {
+   "name": "Prism Light Shard",
+   "look": "a black prism crystal shard with a rainbow of light"
+  },
+  "magearna": {
+   "name": "Soul Heart Gear",
+   "look": "a gold clock gear with a red gem heart in the middle"
+  },
+  "marshadow": {
+   "name": "Shadow Mimic Mask",
+   "look": "a dark grey ghostly mask with red slit eyes"
+  },
+  "zeraora": {
+   "name": "Plasma Claw Glove",
+   "look": "a yellow electric claw glove with black stripes"
+  },
+  "meltan": {
+   "name": "Hex Bolt Nut",
+   "look": "a grey hexagonal nut with orange glow"
+  },
+  "melmetal": {
+   "name": "Mystery Gold Nut",
+   "look": "a big shiny gold hexagonal bolt nut"
+  },
+  "zacian": {
+   "name": "Rusty Sword",
+   "look": "a blue worn rusty sword in a scabbard"
+  },
+  "zamazenta": {
+   "name": "Rusty Shield",
+   "look": "a red worn rusty shield with a gold cross"
+  },
+  "eternatus": {
+   "name": "Eternal Dynamax Crystal",
+   "look": "a magenta-black pulsing crystal core with red glow"
+  },
+  "kubfu": {
+   "name": "Tower Scroll",
+   "look": "a small rolled martial arts scroll with a red knot"
+  },
+  "urshifu": {
+   "name": "Wushu Scroll Seal",
+   "look": "a dark grey scroll with red calligraphy seal"
+  },
+  "zarude": {
+   "name": "Jungle Vine Charm",
+   "look": "a green twisted vine wrap with hanging orange leaves"
+  },
+  "regieleki": {
+   "name": "Electron Rod Tablet",
+   "look": "a yellow electric tablet with a spark and blue circuit lines"
+  },
+  "regidrago": {
+   "name": "Dragon Power Tablet",
+   "look": "a green-brown dragon-scaled braille tablet with a purple gem"
+  },
+  "glastrier": {
+   "name": "Glacial Horse Horn",
+   "look": "a pale blue frosty horse horn shape with a white mane"
+  },
+  "spectrier": {
+   "name": "Spectral Horse Wisp",
+   "look": "a purple ghostly flame with horseshoe shape"
+  },
+  "calyrex": {
+   "name": "Crown Sprig",
+   "look": "a small golden crown with a green leaf on top"
+  },
+  "enamorus": {
+   "name": "Cloud Bloom",
+   "look": "a pink cloud with a flower blossom"
+  },
+  "wo-chien": {
+   "name": "Ruinous Tablet",
+   "look": "a dark stick tablet with green leaf and purple glow"
+  },
+  "chien-pao": {
+   "name": "Ruinous Sword",
+   "look": "a icy blue sword blade with white frost"
+  },
+  "ting-lu": {
+   "name": "Ruinous Vessel",
+   "look": "a dark brown cauldron pot with sand beads"
+  },
+  "chi-yu": {
+   "name": "Ruinous Beads",
+   "look": "a ring of red glowing beads, fire"
+  },
+  "koraidon": {
+   "name": "Scarlet Primal Book",
+   "look": "a red book with a gold dinosaur emblem"
+  },
+  "miraidon": {
+   "name": "Violet Future Book",
+   "look": "a purple book with a cyan circuitry emblem"
+  },
+  "okidogi": {
+   "name": "Loyal Mochi",
+   "look": "a pink rice cake with a purple stripe and kebab skewer"
+  },
+  "munkidori": {
+   "name": "Toxic Mochi",
+   "look": "a blue-purple rice cake with a purple stripe and a skewer"
+  },
+  "fezandipiti": {
+   "name": "Charm Mochi",
+   "look": "a pink and yellow rice cake with a skewer and heart"
+  },
+  "ogerpon": {
+   "name": "Teal Mask",
+   "look": "a carved wooden mask with green leaf eyes and a smile"
+  },
+  "terapagos": {
+   "name": "Terastal Gem",
+   "look": "a multi-colour crystalline gem with stars inside"
+  },
+  "pecharunt": {
+   "name": "Mochi Chain Fruit",
+   "look": "a pink peach with a purple chain and a bite taken"
+  },
+  "nihilego": {
+   "name": "Parasite Jelly",
+   "look": "a pale jellyfish-like blob with blue tentacles"
+  },
+  "buzzwole": {
+   "name": "Muscle Pump Dumbbell",
+   "look": "a red black dumbbell with a mosquito wing"
+  },
+  "pheromosa": {
+   "name": "Speed Kick Shoe",
+   "look": "a white thin pointed shoe with a pink strip"
+  },
+  "xurkitree": {
+   "name": "Wire Spark Plug",
+   "look": "a black electric cable plug with yellow lightning"
+  },
+  "celesteela": {
+   "name": "Bamboo Rocket Shell",
+   "look": "a green-white tall rocket tube with a leaf blade"
+  },
+  "kartana": {
+   "name": "Paper Blade",
+   "look": "a white folded origami sword with a red hilt"
+  },
+  "guzzlord": {
+   "name": "Void Maw Sack",
+   "look": "a black-purple bulging sack with a mouth and red glints"
+  },
+  "poipole": {
+   "name": "Poison Pin",
+   "look": "a purple poison needle with a pink bead"
+  },
+  "naganadel": {
+   "name": "Venom Dragon Needle",
+   "look": "a long purple-black venom needle with a gold tip"
+  },
+  "stakataka": {
+   "name": "Brick Wall Block",
+   "look": "a stacked brown stone brick block with glowing yellow slits"
+  },
+  "blacephalon": {
+   "name": "Fireworks Skull",
+   "look": "a white clown head firework with a red fuse"
+  },
+  "equinar": {
+   "name": "Dreamsteed Horseshoe",
+   "look": "a pale pink-violet glowing horseshoe with a small star"
+  },
+  "hollow-shepherd": {
+   "name": "Frost Shepherd Crook",
+   "look": "a pale ghostly blue shepherd staff crook with a hanging lantern"
+  },
+  "brinecrown": {
+   "name": "Brine Crown Shard",
+   "look": "a teal salt-crusted crown with a seagull wing and a pearl"
+  },
+  "veinheart": {
+   "name": "Veinheart Geode",
+   "look": "a grey steel-flecked rock geode cracked open showing a red glowing heart crystal"
+  },
+  "lumeria": {
+   "name": "Lumeria Lantern Wing",
+   "look": "a pink and cyan glowing fairy moth wing"
+  },
+  "verdelis": {
+   "name": "Verdelis Leaf Cocoon",
+   "look": "a green leafy cocoon with a small beetle horn and a glowing seam"
+  }
+ }
+}
