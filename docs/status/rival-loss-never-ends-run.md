@@ -1,0 +1,1 @@
+- **Rival loss never ends a run** (Kice 2026-11-17): `storyLossApplies` (`src/core/story2/loss.ts`) now covers Adventure and Death-Block too, and a trainer named like one of the run's rivals counts as that rival even with no rival flag. Tests in `tests/unit/storyLoss.test.ts`. The `balance.rival.softLoss: false` pin for old-seed tests still turns it off.

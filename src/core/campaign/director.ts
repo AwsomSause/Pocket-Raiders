@@ -3,7 +3,7 @@
 // owns no battle rules. Everything is picked from the run's seed, never a gameplay random stream.
 
 import type { Content } from '../contentSchema';
-import { currentRegion, getCampaign } from '../regions';
+import { currentRegion, getCampaign, runCampaign } from '../regions';
 import { waitingRival } from '../rivals/adapt';
 import type { MapNode, RunState } from '../state';
 import { emit } from '../story/record';
@@ -40,7 +40,7 @@ export function focusDenBonus(run: RunState, which: 'raids' | 'exploration'): nu
 export function actOf(content: Content, run: RunState): Act {
   const stage = run.stage;
   if (!stage || stage.kind === 'league') return 'climax';
-  const total = Math.max(1, getCampaign(content, run.campaignId).stagesPerRegion);
+  const total = Math.max(1, runCampaign(content, run).stagesPerRegion);
   const p = stage.index / total;
   return p < 0.25 ? 'arrival' : p < 0.55 ? 'escalation' : p < 0.9 ? 'turningPoint' : 'climax';
 }

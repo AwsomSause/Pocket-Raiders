@@ -19,7 +19,7 @@ export const RunRulesDataSchema = z.object({
   multiplierCap: z.number().min(1),
   /** Heat Levels (idea S176): opt-in stacking difficulty on top of the difficulty preset. */
   heat: z.object({ max: z.number().int().min(1), enemyLevelPerHeat: z.number().int().min(0), bonusPerHeat: z.number().min(0) }).default({ max: 10, enemyLevelPerHeat: 1, bonusPerHeat: 0.1 }),
-  difficulties: z.array(z.object({ id: z.string(), name: z.string(), blurb: z.string(), multiplier: z.number().min(0), enemyLevelBonus: z.number().int(), /** Fraction of max HP every living Pokémon recovers after a won ordinary fight; fades to 0 over `winHeal.encounters`. */ winHeal: z.number().min(0).max(1).default(0) })).min(1),
+  difficulties: z.array(z.object({ id: z.string(), name: z.string(), blurb: z.string(), multiplier: z.number().min(0), enemyLevelBonus: z.number().int(), /** Fraction of max HP every living Pokémon recovers after a won ordinary fight; fades to 0 over `winHeal.encounters`. */ winHeal: z.number().min(0).max(1).default(0), /** How strong the healing items enemy trainers use are (1 = the region's potion as listed; harder presets heal more per item, never use more). */ enemyHeal: z.number().min(0.1).max(3).default(1) })).min(1),
   winHeal: z.object({ encounters: z.number().int().min(1) }).default({ encounters: 30 }),
   deathBlock: z.object({ battles: z.number().int().min(1), multiplier: z.number().min(0), rule: z.string() }),
   modifiers: z.array(

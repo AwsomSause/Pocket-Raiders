@@ -2019,11 +2019,17 @@ export const TrainerAiSchema = z.object({
   /** A smart trainer (a boss) heals once its Pokémon is under this share of its max HP. */
   healBelow: z.number().min(0).max(1),
   /** The share of max HP a trainer's potion restores. */
-  healFraction: z.number().positive().max(1),
   /** Potions a smart trainer may use in one battle. */
   maxItems: z.number().int().min(0),
   /** Kice 2026-11-17: healing items per fight by trainer class (the sim saw a Stage 1 leader drink 8 Hyper Potions). Rivals and Champions keep the player's budget (boss gear rule). `perLevels`: one more item per this many levels on the team's top Pokémon. */
   healCaps: z.object({ ordinary: z.number().int().min(0), gym: z.number().int().min(0), elite: z.number().int().min(0), perLevels: z.number().int().min(1) }).default({ ordinary: 1, gym: 2, elite: 2, perLevels: 150 }),
+  /** Most healing items (potions, Full Restores, Revives) any enemy trainer uses in one battle. */
+  maxHealItems: z.number().int().min(0).default(4),
+  /** The potion a trainer drinks by region (index = region number, the last entry repeats): item id and share of max HP restored. */
+  healTiers: z.array(z.object({ item: z.string(), fraction: z.number().min(0.05).max(1) })).min(1).default([{ item: 'potion', fraction: 0.2 }, { item: 'super-potion', fraction: 0.3 }, { item: 'hyper-potion', fraction: 0.45 }, { item: 'hyper-potion', fraction: 0.6 }]),
+  /** Enemy Full Heal (status cure) and Full Restore are not used before this region number (0 = the first region). */
+  fullHealFromRegion: z.number().int().min(0).default(1),
+  fullRestoreFromRegion: z.number().int().min(0).default(3),
   /** S271: every trainer (not only smart ones) drinks a potion when low; only smart trainers swap on purpose. */
   allTrainersUseItems: z.boolean().default(false),
   /** Times a smart trainer may swap its Pokémon out on purpose in one battle. */

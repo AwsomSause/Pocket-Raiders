@@ -123,7 +123,7 @@ import { cameraTo, dropIn, fitTrainer, foeBallThrow, openingReveal, partyBallRow
 import { DEFAULT_BALL } from '../core/ballLook';
 import { throwKind, throwTint } from '../core/archetypeTint';
 import { islanderTint, pinkTint } from '../core/greenneedle/part3';
-import { PlayerTrainerActor, playerLookForBattle, preloadPlayerTrainer } from '../ui/playerTrainer';
+import type { PlayerTrainerActor } from '../ui/playerTrainer';
 import { addMarks } from '../ui/battleFx/markAura';
 import { itemVisual, pokemonIcon, pokemonVisual, trainerBackVisual, trainerVisual, type Visual } from '../ui/sprites';
 import { bossVictory } from '../ui/battleFx/victoryLook';
@@ -1169,33 +1169,10 @@ export class BattleScene extends Phaser.Scene {
    * Draws the player trainer (Look A, Overhaul P2) at the left of the player's platform for the opening throw; it then leaves (trainerOut). Trainers with their own
    * throwing sprite keep the older opening throw; in doubles the same trainer throws both balls. Skip: Enter, Space or a tap.
    */
-  private setupTrainerActor(doubles: boolean): void {
+  private setupTrainerActor(_doubles: boolean): void {
+    // Kice 2026-11-17: the custom Look A trainer no longer shows in battle. Trainers with their own back sprite throw with it, the rest borrow Hilda's (ownBackThrow).
     this.trainerActor = null;
     this.trainerReady = Promise.resolve();
-    const art = this.playerArt();
-    if (throwKind(art) === 'own') return;
-    const look = playerLookForBattle();
-    this.trainerReady = Promise.all([preloadPlayerTrainer(this, look), preloadBallFx(this)]).then(() => {
-      if (!this.sys.isActive() || !PlayerTrainerActor.ready(this, look)) return;
-      this.trainerHomeX = doubles ? 90 : 150;
-      const actor = new PlayerTrainerActor(this, look, this.trainerHomeX, PLAYER_TRAINER_FEET, PLAYER_TRAINER_HEIGHT, this.motion, throwTint(art));
-      // Inside the field, behind the Pokémon: the trainer never covers your Pokémon, the text box or a style's menus.
-      this.field.addAt(actor.sprite, this.fieldBase);
-      actor.idle();
-      // Off screen until it walks in for the throw (the reference: your trainer only appears on your side).
-      actor.sprite.setVisible(false).setX(TRAINER_OFF_X);
-      if (this.standClipped()) actor.sprite.setMask(this.standMask());
-      this.trainerActor = actor;
-    });
-    const skip = (): void => this.trainerActor?.skip();
-    this.input.keyboard?.on('keydown-ENTER', skip);
-    this.input.keyboard?.on('keydown-SPACE', skip);
-    this.input.on('pointerdown', skip);
-    this.events.once('shutdown', () => {
-      this.input.keyboard?.off('keydown-ENTER', skip);
-      this.input.keyboard?.off('keydown-SPACE', skip);
-      this.input.off('pointerdown', skip);
-    });
   }
 
   /** Doubles opening: your trainer throws one ball to each of your two spots, then steps off. Presentation only. */
@@ -1238,8 +1215,9 @@ export class BattleScene extends Phaser.Scene {
 
   /** Trainers with their own throwing sprite: it shows at the left for a beat, then slides away (singles and doubles). */
   private async ownBackThrow(): Promise<void> {
-    const art = this.playerArt();
-    if (!art || this.motion === 'off') return;
+    const mine = this.playerArt();
+    if (!mine || this.motion === 'off') return;
+    const art = throwKind(mine) === 'own' ? mine : 'boss.hilda';
     const back = trainerBackVisual(this, art, TRAINER_POS.x - 90, MESSAGE_Y + 4, 260);
     if (!back) return;
     back.setDepth(5);

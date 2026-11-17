@@ -7,7 +7,7 @@ import { directiveText } from '../core/directive';
 import { licenseName } from '../core/license';
 import { getArchetype } from '../core/archetypes';
 import { attributesLine, effectiveAttributes } from '../core/attributes';
-import { getCampaign, runLevelCap } from '../core/regions';
+import { getCampaign, runLevelCap, runCampaign } from '../core/regions';
 import { eventIdOf } from '../core/gameEvents';
 import { questTrainer, runQuestOf, stepsDone } from '../core/quests';
 import { itemsText } from '../core/runPrep';
@@ -42,7 +42,7 @@ export class BriefingScene extends Phaser.Scene {
     const { content } = session;
     const run = session.run!;
     const archetype = getArchetype(content, run.archetypeId);
-    const campaign = getCampaign(content, run.campaignId);
+    const campaign = runCampaign(content, run);
     const token = run.prep.tokenId ? content.prepTokens.get(run.prep.tokenId) : undefined;
     const lead = run.party[0]!;
 

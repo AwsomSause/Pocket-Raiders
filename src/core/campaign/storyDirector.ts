@@ -8,7 +8,7 @@ import { pickStoryRivals, rolesForTheme } from '../story2/storyRivals';
 import type { Content } from '../contentSchema';
 import { evilEventId } from '../evil/content';
 import { evilOf, evilTeam, plannedEvilTeamId } from '../evil/teams';
-import { getCampaign } from '../regions';
+import { getCampaign, runCampaign } from '../regions';
 import { hashSeed, Rng } from '../rng';
 import type { MapNode, RunState } from '../state';
 import { emit } from '../story/record';
@@ -91,7 +91,7 @@ const actOfRow = (content: Content, r: Row): number => (r.stage === SCENE_STAGE 
 export function circuitStage(content: Content, run: Pick<RunState, 'stage' | 'campaignId' | 'regionIndex'>): number | null {
   const stage = run.stage;
   if (!stage) return null;
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   if (stage.kind === 'league') return campaign.regularRegions * campaign.stagesPerRegion + 1;
   return run.regionIndex * campaign.stagesPerRegion + stage.index + 1;
 }
@@ -242,7 +242,7 @@ export function validateBlueprint(content: Content, bp: StoryBlueprint, columns:
 // ---------- the run (mutates run) ----------
 
 export function directorInputs(content: Content, run: RunState): DirectorInputs {
-  const campaign = getCampaign(content, run.campaignId);
+  const campaign = runCampaign(content, run);
   const old = run.story.v2?.blueprint;
   const rivals = run.story.rivals;
   return {
