@@ -10,6 +10,7 @@ import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { chooseStarter, createRun, debugForceEvent, takeTurn } from '../../src/core/run';
 import { Rng, hashSeed } from '../../src/core/rng';
 import { freshSos } from '../../src/core/battle/sos';
+import { autoCommands, makeDoubles } from '../../src/core/battle/doubles';
 import type { RunState } from '../../src/core/state';
 import { content, toBattle } from './helpers';
 
@@ -79,8 +80,41 @@ describe('Flight North: the return', () => {
     expect(res.flightNorth?.name).toBe('Pip');
     expect(res.flightNorth?.display).toBe('Gigantamax-sized Butterfree');
     for (const m of res.run.party) expect(m.hp).toBe(maxHp(content, m));
-    expect(res.run.battle).toMatchObject({ flightNorth: true, finaleAssist: { speciesId: 'butterfree-gmax', name: 'Pip' } });
+    // Director 2026-11-16: the return is always a double battle, the Bug-type beside the lead (two on one against a lone foe).
+    const guest = res.run.party[res.run.party.length - 1]!;
+    expect(res.run.battle).toMatchObject({ flightNorth: true, loaner: guest.uid, doubles: { player: { index: res.run.party.length - 1 }, enemy: { index: -1 } } });
+    expect(res.run.battle!.finaleAssist).toBeUndefined();
+    expect(guest.speciesId).toBe('butterfree-gmax');
+    expect(guest.care?.nickname).toBe('Pip');
+    expect(guest.moves.some((m) => m.id === 'norths-wind')).toBe(true);
     expect(res.run.expansion!.flightNorth!.state).toBe('fighting');
+  });
+  it('the two-on-one fight plays on, and winning sends the guest home and offers the real Bug-type', () => {
+    const first = doomed(afterStage('FNW', 'weedle'));
+    const run = structuredClone(first.run);
+    const size = run.party.length - 1;
+    for (const e of run.battle!.enemyTeam) e.hp = 1;
+    let r = takeTurn(content, run, { kind: 'double', commands: autoCommands({ battle: run.battle!, party: run.party, content }) });
+    for (let i = 0; i < 6 && r.run.phase === 'battle' && r.run.battle && !r.run.battle.outcome; i++) r = takeTurn(content, r.run, { kind: 'double', commands: autoCommands({ battle: r.run.battle, party: r.run.party, content }) });
+    expect(r.defeated).toBe(false);
+    expect(r.run.party.length).toBe(size);
+    expect(r.run.party.some((m) => m.speciesId === 'beedrill-mega')).toBe(false);
+    expect(JSON.stringify(r.run.pending ?? r.run)).toContain('beedrillite');
+  });
+  it('a fight that is already a double keeps its shape: the Bug-type helps from the side', () => {
+    const base = afterStage('FND');
+    const r0 = structuredClone(toBattle(base));
+    r0.party.push(createPokemon(content, 'pidgey', 5, 'p2nd'));
+    for (const m of r0.party) m.hp = 1;
+    r0.battle = createBattle('trainer', [createPokemon(content, 'mewtwo', 90, 'foe1'), createPokemon(content, 'mewtwo', 90, 'foe2')], 0, r0.party[0]!.uid);
+    makeDoubles(r0.battle, r0.party);
+    let res = takeTurn(content, r0, { kind: 'double', commands: autoCommands({ battle: r0.battle, party: r0.party, content }) });
+    for (let i = 0; i < 20 && res.run.phase === 'battle' && !res.flightNorth && !res.defeated; i++) {
+      res = takeTurn(content, res.run, res.run.battle!.doubles!.refill.length ? { kind: 'switch', partyIndex: res.run.party.findIndex((m, k) => m.hp > 0 && k !== res.run.battle!.activeIndex) } : { kind: 'double', commands: autoCommands({ battle: res.run.battle!, party: res.run.party, content }) });
+    }
+    expect(res.flightNorth).toBeDefined();
+    expect(res.run.battle!.loaner).toBeUndefined();
+    expect(res.run.battle!.finaleAssist?.id).toBe('flight-north');
   });
   it('once per run: the next lost fight ends the run, and Second Chance cannot step in', () => {
     const first = doomed(afterStage('FNO', 'weedle'));
@@ -220,6 +254,9 @@ describe('Flight North: what the player sees', () => {
   it('the return battle shows its ally on the first strike only', () => {
     const res = doomed(afterStage('FNC', 'weedle'));
     const battle = res.run.battle!;
+    // The side-help shape (a fight that was already a double keeps it): one-on-one with the Bug-type striking from the side.
+    battle.doubles = undefined;
+    battle.finaleAssist = { id: 'flight-north', name: 'Pip', speciesId: 'beedrill-mega', level: 20, strikesLeft: 6 };
     const hero = res.run.party[0]!;
     const foe = createPokemon(content, 'rattata', 5, 'e2');
     foe.hp = 100;
