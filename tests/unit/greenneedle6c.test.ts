@@ -77,7 +77,7 @@ describe('gn.30 The Island of Pink Pokémon', () => {
   };
 
   it('a door at step 11 needing water (A6, once a run) into five nodes', () => {
-    expect(content.coPlacement!.get('gn-30-door')).toMatchObject({ home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', earliest: 6, tags: ['water'] });
+    expect(content.coPlacement!.get('gn-30-door')).toMatchObject({ home: 11, window: [9, 14], sits: 'side-branch', attaches: 'instead', earliest: 6, tags: ['water'] });
     const run = landed('t30-door');
     expect(openSide(run)!.eventId).toBe('gn-30-landing');
     expect(flagOf(run, 'pink-entered')).toBe(1);
@@ -120,12 +120,12 @@ describe('gn.30 The Island of Pink Pokémon', () => {
 
   it('leaving: a pink islander joins with its mark, or your lead eats the fruit and keeps the colour', () => {
     const run = choose(toHill(landed('t30-gift')), 'gn-30-after', 'Decline, politely.').run;
-    expect(scene(run, 'gn-30-gift').labels).toEqual(['A pink islander comes with you.', 'Let your lead try the fruit.']);
+    expect(scene(run, 'gn-30-gift').labels).toEqual(['A pink islander comes with you.', 'Let one of yours try the fruit.']);
     const joined = choose(run, 'gn-30-gift', 'A pink islander comes with you.').run;
     const pink = [...joined.party, ...joined.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.marks?.includes('pink from the island fruit'));
     expect(pink).toBeTruthy();
     expect(flagOf(joined, 'pink-done')).toBe(1);
-    const ate = choose(run, 'gn-30-gift', 'Let your lead try the fruit.');
+    const ate = choose(run, 'gn-30-gift', 'Let one of yours try the fruit.');
     expect(ate.run.party[0]!.marks).toContain('pink from the island fruit');
     expect(said(ate)).toMatch(/very pale pink/);
   });

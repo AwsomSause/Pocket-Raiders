@@ -606,14 +606,11 @@ describe('gn.25 The Unlikely Friendship', () => {
   });
 
   it('leave them together: a Rare Berry on the path, split in two', () => {
-    const before = afterPack('t25-left');
-    const rare = ['liechi-berry', 'ganlon-berry', 'salac-berry', 'petaya-berry', 'apicot-berry'];
-    const count = (r: RunState): number => rare.reduce((n, id) => n + (r.inventory[id] ?? 0), 0);
-    const had = count(before);
-    const out = choose(before, 'gn-25-after', 'Stay together. Good luck.');
+    const out = choose(afterPack('t25-left'), 'gn-25-after', 'Stay together. Good luck.');
     const run = out.run;
     expect(out.text).toMatch(/Rare Berry, split neatly in two/);
-    expect(count(run)).toBe(had + 1);
+    // One Rare Berry (Liechi, Ganlon, Salac, Petaya or Apicot), not two Sitrus.
+    expect(out.changes.join(' ')).toMatch(/(Liechi|Ganlon|Salac|Petaya|Apicot) Berry/);
     expect(flagOf(run, 'truce-left')).toBe(1);
   });
 

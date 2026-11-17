@@ -417,12 +417,9 @@ const ALERT = 'hideout-alert';
 const LOOP = 'hideout-loop';
 /** A camera on the floor you've just reached: +2, unless the tapes are looping. */
 const INSIDE = 'hideout-inside';
-/** Whether anyone can be talked past (flag `hideout-talk`): at Alert 0 to 4; inside the team, a colleague still can up to 9. Worked out whenever the meter moves. */
-const TALK: Json[] = [
-  gn('check', { key: 'hideout-talk', if: [is('hideout-alert', 0, 4)] }),
-  gn('check', { key: 'hideout-talk-staff', if: [is('hideout-inside'), is('hideout-alert', 0, 9)] }),
-  when('hideout-talk-staff', { min: 1 }, [setTo('hideout-talk', 1)]),
-];
+/** Whether anyone can be talked past: at Alert 0 to 4; inside the team, a colleague still can up to 9. */
+const canTalk: Json = { kind: 'gn', test: 'canTalkPast', key: 'hideout-alert' };
+const noTalk: Json = { kind: 'gn', test: 'noTalkPast', key: 'hideout-alert' };
 const insideTeam: Json = { kind: 'gn', test: 'insideTeam' };
 const camera: Json[] = [
   gn('check', { key: 'hideout-looped', if: [is(LOOP)] }),
@@ -432,9 +429,8 @@ const camera: Json[] = [
     // Inside the team the floors are your workplace, and the meter is Suspicion.
     when(INSIDE, { min: 1 }, [], 'A camera turns, slowly, to follow you. You are staff. Staff don\'t usually come down here. (Suspicion +2)'),
   ]),
-  ...TALK,
 ];
-const alarm: Json[] = [flag(ALERT, 3), cap(ALERT, 10), ...TALK];
+const alarm: Json[] = [flag(ALERT, 3), cap(ALERT, 10)];
 /** On to the next floor, past its camera. */
 const down = (next: string): Json[] => [...camera, { kind: 'addEvent', eventId: next }];
 /** How awake the floor is: bored (0 to 4), patrols (5 to 9), everyone (10). Three lines, one shows. */
@@ -472,7 +468,7 @@ const gn28: Json[] = [
       'You fold it into your jacket. The drawer squeaks shut.',
     ), flag('hideout-file'), { kind: 'evil', mark: 'files' }, ...alarmIfSeen(), scene('gn-28-offices'))),
     ch('Slip behind the canteen.', out('Past the fridge, a door marked STAFF ONLY. Somebody has written *REALLY* under it.', scene('gn-28-back'))),
-    chIf([is('hideout-talk')], 'Talk your way past.', out('You walk up to them as if you had every right to.',
+    chIf([canTalk], 'Talk your way past.', out('You walk up to them as if you had every right to.',
       when(INSIDE, { min: 0, max: 0 }, [], '"New starter," you say. "They sent me down to Labs." The {grunt}s shrug. Neither of them wants the stapler that much.'),
       when(INSIDE, { min: 1 }, [], '"Audit," you say, and hold up a clipboard from the nearest desk. They know your face. They don\'t like it, but they know it. They let you by.'),
       ...down('gn-28-labs'))),
@@ -543,12 +539,12 @@ const gn28: Json[] = [
     'The pen keeper, a tired {grunt} with a bucket of feed, steps in front of them. "Don\'t. I just feed them. Don\'t."',
   ), [
     ch('Open every cage.', fight('You open every cage. She drops the bucket and reaches for a Ball.', grunts(1, [...FREED, ...down('gn-28-vault')]), flag('hideout-pen-fought'))),
-    chIf([is('hideout-talk')], 'Ask the keeper to help.', out('You ask her, quietly, the way you would ask for the salt.',
+    chIf([canTalk], 'Ask the keeper to help.', out('You ask her, quietly, the way you would ask for the salt.',
       when(INSIDE, { min: 0, max: 0 }, [], 'She looks at you for a long time. "...They bite the boss. They never bite me."'),
       when(INSIDE, { min: 1 }, [], '"You\'re from upstairs," she says. "I\'ve seen you in the canteen." She looks at the cages, and at you. "...Go on, then. Before I think about it."'),
       when('hideout-entered', { min: 1 }, [], 'She hands you the keys, folds her jacket on the bucket, and helps you open every cage. Then she walks out with them.'),
       flag('hideout-keeper-quit'), ...FREED, ...down('gn-28-vault'))),
-    chIf([not('hideout-talk')], 'Ask the keeper to help.', fight('"Not with the alarms going," she says. "They\'ll know it was me." She puts the bucket down, and reaches for a Ball.', grunts(1, [...FREED, ...down('gn-28-vault')]))),
+    chIf([noTalk], 'Ask the keeper to help.', fight('"Not with the alarms going," she says. "They\'ll know it was me." She puts the bucket down, and reaches for a Ball.', grunts(1, [...FREED, ...down('gn-28-vault')]))),
   ]),
   // ---- Floor 4. The Vault ----
   floor('gn-28-vault', '{team} Hideout: The Vault', { pokemon: 'persian', effect: 'shake' }, say(
@@ -786,7 +782,7 @@ const gn30: Json[] = [
     ch('Plant it.', out(say(
       'You press it into the soft ground at the edge of the camp, and pour a little water over it.',
       'One day, a small pink tree. You won\'t pass this way again to see it. Somebody will.',
-    ), flag('pink-planted'), moment('Planted the last Pink Fruit\'s stone by a camp, for whoever comes next.', 70))),
+    ), flag('pink-stone-planted'), moment('Planted the last Pink Fruit\'s stone by a camp, for whoever comes next.', 70))),
     ch('Keep it.', out('You put it in your pocket. It weighs nothing at all.', flag('pink-stone-kept'))),
   ]),
 ];

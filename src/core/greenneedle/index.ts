@@ -214,6 +214,12 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.33: the tide is low (the Sunken City's causeway is out of the water).
   if (c.test === 'lastStage') { const camp = getCampaign(content, run.campaignId); return isLastStage(content, run, camp.stagesPerRegion, camp.regularRegions); }
   if (c.test === 'hasPink') return hasPink(run);
+  // gn.28: Alert 0 to 4, anyone can be talked past; inside the team the floors are your workplace, and a colleague still can up to 9.
+  if (c.test === 'canTalkPast' || c.test === 'noTalkPast') {
+    const alert = gnFlag(run, c.key!);
+    const can = alert <= 4 || (insideTeam(run) && alert <= 9);
+    return c.test === 'canTalkPast' ? can : !can;
+  }
   if (c.test === 'paradeMemory') return paradeMemory(run);
   if (c.test === 'paradeNickname') return paradeNickname(run);
   if (c.test === 'paradeEggReady') return paradeEggReady(content, run);
