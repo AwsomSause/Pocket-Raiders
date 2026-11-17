@@ -3232,17 +3232,27 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Waits for a presentation beat; confirm/back skips it. */
-  /** A Mega / Tera / Dynamax / Z cutscene takes the whole screen: the HUD (New look layer or Old look boxes and bar) steps aside, then returns. */
-  private async gimmickBeat(b: Beat, recap?: string): Promise<void> {
-    const parts = ([this.playerBox?.container, this.enemyBox?.container, this.message, this.storyBar?.container, this.header] as (Phaser.GameObjects.Components.Visible & Phaser.GameObjects.GameObject | undefined)[]).filter((o): o is Phaser.GameObjects.Components.Visible & Phaser.GameObjects.GameObject => !!o);
+  /** Steps the whole HUD aside (New look layer; Old look boxes incl. doubles, text bar, header) and returns what puts it back. */
+  private hudAside(): () => void {
+    type V = Phaser.GameObjects.Components.Visible & Phaser.GameObjects.GameObject;
+    const duoBoxes = this.duo ? [...this.duo.slots.player, ...this.duo.slots.enemy].map((o) => o?.box.container) : [];
+    const parts = ([this.playerBox?.container, this.enemyBox?.container, ...duoBoxes, this.message, this.storyBar?.container, this.header] as (V | undefined)[]).filter((o): o is V => !!o);
     const was = parts.map((o) => o.visible);
     parts.forEach((o) => o.setVisible(false));
     this.rx?.visible(false);
+    return () => {
+      parts.forEach((o, i) => { if (o.active && was[i]) o.setVisible(true); });
+      this.rx?.visible(true);
+    };
+  }
+
+  /** A Mega / Tera / Dynamax / Z cutscene takes the whole screen: the HUD steps aside, then returns. */
+  private async gimmickBeat(b: Beat, recap?: string): Promise<void> {
+    const back = this.hudAside();
     try {
       await this.playBeat(b, recap);
     } finally {
-      parts.forEach((o, i) => { if (o.active && was[i]) o.setVisible(true); });
-      this.rx?.visible(true);
+      back();
     }
   }
 
@@ -3595,8 +3605,8 @@ export class BattleScene extends Phaser.Scene {
     const def = session.content.story.definitions.find((d) => d.id === defId);
     const x = def ? explainMoment(session.content, def) : null;
     if (!x || unseenKeys(session.profile.hyperExplained, x).length === 0) return;
-    // New look: its HUD layer sits over the canvas and would cover this panel, so it steps aside until Continue.
-    this.rx?.visible(false);
+    // The HUD (New look layer, Old look boxes and bar) would cover this panel, so it steps aside until Continue.
+    const hudBack = this.hudAside();
     await new Promise<void>((resolve) => {
       const dim = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.7).setOrigin(0).setInteractive();
       const panel = drawGlass(this, 90, 36, GAME_WIDTH - 180, GAME_HEIGHT - 72, { radius: 22 });
@@ -3616,7 +3626,7 @@ export class BattleScene extends Phaser.Scene {
         ready = false;
         this.explainWait = null;
         root.destroy();
-        this.rx?.visible(true);
+        hudBack();
         session.markHyperExplained(x.keys);
         resolve();
       };
