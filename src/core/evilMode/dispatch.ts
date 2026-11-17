@@ -10,6 +10,7 @@ import { cardFor, unknownCount } from './card';
 import { appendLog, fill, lineFor, money, takingsAt } from './ledger';
 import type { Crew, EvilModeBlock, Holding, Job, LogEntry, Sheet } from './schema';
 import { crossers, districtKey, inRoster, moveLoyalty, peopleText, talentDef, wageOf } from './people';
+import { exposeProblem, heatFor, lineAllows, lineRoll, lineWhy, thingProblem } from './line';
 
 /** The roll for the n-th number `evil-dispatch` gives out in this run: 1..100. The count is stored, so a reload rolls the same. */
 export const dispatchRoll = (seed: string, n: number): number => new Rng(hashSeed(`${seed}::evil-dispatch::${n}`)).int(1, 100);
@@ -40,11 +41,21 @@ export function jobProblem(block: EvilModeBlock, job: JobDraft, data: EvilData =
   const h = d.holdings.find((x) => x.id === job.holdingId);
   if (!h) return 'Pick a holding.';
   const kind = kindDef(h.kind, data);
+  // Slice 6: the Line. A method darker than the team's Line is refused here, whatever the screen shows.
+  if (!lineAllows(block, job.method, data)) return lineWhy(block, data);
   if (!methodsFor(h, data).includes(job.method)) return kind.why ?? `Not by ${job.method} at ${kind.name.toLowerCase()}.`;
   if (h.owner === 'team' && job.method !== 'scout') return "It's already yours.";
   const local = localOf(h, data);
   if (local?.minor && job.method !== 'persuade' && job.method !== 'scout') return local.noPrice ?? 'Not with a child.';
   if (job.method === 'persuade' && h.mood === 'shut') return "Shut. They won't open the door.";
+  if (job.method === 'take') {
+    const p = thingProblem(h, job.thing, data);
+    if (p) return p;
+  }
+  if (job.method === 'expose') {
+    const p = exposeProblem(block, h, data);
+    if (p) return p;
+  }
   if (job.method === 'pay') {
     if (h.mood === 'shut') return 'The door.';
     if (fairPrice(h, data) === null) return local?.noPrice ?? 'Nothing here has a price.';
@@ -58,12 +69,15 @@ export function jobProblem(block: EvilModeBlock, job: JobDraft, data: EvilData =
   if (new Set(squad).size !== squad.length) return 'Somebody is in the squad twice.';
   if (squad.length > data.district.rules.squadMax) return `${data.district.rules.squadMax} at most in a squad.`;
   if (job.method !== 'scout' && squad.length < 2) return 'One person can only scout.';
+  if (job.method === 'lean' && squad.length < data.line.lean.squad) return `A Lean needs a squad of ${data.line.lean.squad}.`;
   for (const id of squad) {
     const p = crewProblem(block, id, h.id);
     if (p) return p;
     // A minor goes scouting and nowhere else: no job with Heat, whatever the Line (Part 10a section 2.1). Checked in `step`.
     const c = block.crew.find((x) => x.id === id)!;
     if (c.minor && job.method !== 'scout') return fill(peopleText('minor'), { name: c.name, age: c.age ?? '' });
+    // Warrants (Heat 8+): a face the law knows can't be sent (Part 5 section 4.3).
+    if (c.known && block.team.heat >= data.line.heat.warrants) return `${c.name}'s face is known. There's a warrant out.`;
   }
   return null;
 }
@@ -88,7 +102,7 @@ function fileJob(block: EvilModeBlock, job: JobDraft, data: EvilData): { block: 
   // field into the Log as the line, character for character.
   const card = cardFor(block, job, data);
   const cardId = `C${block.cards.length + 1}`;
-  const entry: Job = { holdingId: job.holdingId, method: job.method, squad: [...job.squad], ...(job.method === 'pay' ? { offer: job.offer ?? 100 } : {}), odds: null, certain: o.certain, terms: o.terms, cardId };
+  const entry: Job = { holdingId: job.holdingId, method: job.method, squad: [...job.squad], ...(job.method === 'pay' ? { offer: job.offer ?? 100 } : {}), ...(job.method === 'take' && job.thing ? { thing: job.thing } : {}), odds: null, certain: o.certain, terms: o.terms, cardId };
   const at = block.queue.findIndex((j) => j.holdingId === job.holdingId);
   let b: EvilModeBlock = block;
   if (at >= 0) b = calledOff(b, block.queue[at]!, data);
@@ -144,6 +158,8 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
   const results: Omit<LogEntry, 'id' | 'day' | 'region' | 'district'>[] = [];
   const cap = (n: number) => Math.max(0, Math.min(10, n));
   let loudest: number | null = null;
+  let proof = [...block.proof];
+  let lineDraws = block.draws['evil-line'] ?? 0;
   const set = (id: string, f: (h: Holding) => Holding) => { holdings = holdings.map((h) => (h.id === id ? f(h) : h)); };
 
   for (const j of block.queue) {
@@ -157,7 +173,9 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     const name = holdingName({ ...h, scouted: Math.max(1, h.scouted) }, data);
     const lines: string[] = [];
     const m = data.district.methods;
-    loudest = Math.max(loudest ?? -99, m[j.method].heat);
+    // Heat by the day's loudest job, not the sum (Part 5 section 4.1); what a job adds depends on how it went.
+    loudest = Math.max(loudest ?? -99, heatFor(j.method, won, lead(j)?.talent === 'hands', data));
+    let takenBy = 0;
     if (j.method === 'scout') {
       set(h.id, (x) => ({ ...x, scouted: Math.min(2, x.scouted + 1) }));
       // Eyes leading: two steps deeper (Part 7 section 2.4).
@@ -189,6 +207,11 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
         if (offer.lowball) set(h.id, (x) => ({ ...x, mood: shiftMood(x.mood, -1) }));
         lines.push(won ? 'The money was short on the day. Nothing changed hands.' : `Refused. ${offer.lowball ? 'A lowball: one colder.' : 'No money spent.'}`);
       }
+    } else if (j.method === 'lean' || j.method === 'take' || j.method === 'expose') {
+      const r = darkResult(j, h, won, { holdings, team, crew, proof, lineDraws, seed: d0.seed, day }, data);
+      ({ holdings, team, crew, proof, lineDraws } = r);
+      lines.push(...r.lines);
+      takenBy = r.taken;
     } else {
       if (won) {
         set(h.id, (x) => ({ ...x, owner: 'team', method: 'outplay', since: day, holds: true, mood: shiftMood(x.mood, 1), scouted: Math.max(1, x.scouted) }));
@@ -214,11 +237,20 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
       if (x.talent && talentDef(x.talent, data).fits.includes(j.method) && x.fitIn !== dkey) x = { ...moveLoyalty(x, P.loyalty.fit, data), fitIn: dkey };
       return x;
     });
-    if (j.cardId) results.push({ kind: 'job', who: [...j.squad], to: h.id, method: j.method, cardId: j.cardId, result: went ? 'went' : 'didnt', text: `Day ${day}. ${went ? data.ledger.written.went : data.ledger.written.didnt}` });
+    if (j.cardId) results.push({ kind: 'job', who: [...j.squad], to: h.id, method: j.method, cardId: j.cardId, result: went ? 'went' : 'didnt', text: `Day ${day}. ${went ? data.ledger.written.went : data.ledger.written.didnt}`, ...(takenBy ? { taken: takenBy } : {}) });
   }
 
-  let district = settleTown({ ...d0, holdings, regardStreets }, day, data);
   const evening: string[] = [];
+  // Dread 8+: one holding a day comes over on its own, nearest first, without a squad and without Heat (Part 7 section 6.6).
+  if (team.dread >= data.line.dread.comeOver) {
+    const next = holdings.filter((x) => x.kind === 'local' && x.owner !== 'team' && x.mood !== 'shut' && !localOf(x, data)?.minor).sort((a, b) => a.step - b.step)[0];
+    if (next) {
+      holdings = holdings.map((x) => (x.id === next.id ? { ...x, owner: 'team', method: 'lean', since: day, holds: false, mood: 'sullen', scouted: Math.max(1, x.scouted) } : x));
+      evening.push(fill(data.line.dread.comeOverLine, { step: next.step }));
+      results.push({ kind: 'law', who: [], to: next.id, text: `Day ${day}. ${fill(data.line.written.comeOver!, { step: next.step })}` });
+    }
+  }
+  let district = settleTown({ ...d0, holdings, regardStreets }, day, data);
   const income = district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0);
   const paid = crew.filter((c) => c.where === 'in');
   const wages = team.creed === 'belonging' ? Math.max(0, Math.floor(income / 2)) : paid.reduce((n, c) => n + wageOf({ ...block, team }, c, income, data), 0);
@@ -236,7 +268,15 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     team = { ...team, heat: cap(team.heat + loudest) };
     evening.push(`Heat ${loudest >= 0 ? '+' : ''}${loudest}: the day's loudest job.${team.heat === h0 ? ' (No change.)' : ''}`);
   }
-  let out: EvilModeBlock = { ...block, team, crew, district, queue: [], sheets, evening, draws: { ...block.draws, 'evil-dispatch': draws }, applied: [...block.applied, key] };
+  // Warrants (Heat 8+): a face the law knows is arrested (Part 9 section 10, way 6). Bail and visits come later.
+  if (team.heat >= data.line.heat.warrants) {
+    for (const c of crew.filter((x) => x.where === 'in' && x.known)) {
+      crew = crew.map((x) => (x.id === c.id ? { ...x, where: 'left' as const, left: { day, how: 'arrested' as const } } : x));
+      evening.push(`${c.name} ${data.line.leave.arrested}`);
+      results.push({ kind: 'leave', who: [c.id], text: `Day ${day}. ${c.name} ${data.line.leave.arrested}` });
+    }
+  }
+  let out: EvilModeBlock = { ...block, team, crew, district, queue: [], sheets, evening, proof, draws: { ...block.draws, 'evil-dispatch': draws, 'evil-line': lineDraws }, applied: [...block.applied, key] };
   for (const e of results) out = appendLog(out, e);
   // Wages paid: one to Given a head (Part 23 section 8.2), only when they were paid in full.
   if (wages > 0) {
@@ -251,6 +291,11 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
   else if (day >= R.days) district = { ...district, end: { how: 'taken', day, count } };
   if (district.end) {
     evening.push(data.district.ends[district.end.how]);
+    // A district ends: Heat −3; Dread −1 if nothing in it was Leaned or Taken (Part 5 sections 4.1 and 6.1).
+    const loud = out.log.some((e) => e.kind === 'job' && e.result === 'went' && e.region === d0.region && e.district === d0.n && (e.method === 'lean' || e.method === 'take'));
+    const t = out.team;
+    out = { ...out, team: { ...t, heat: cap(t.heat + data.line.heat.districtEnd), dread: loud ? t.dread : cap(t.dread + data.line.dread.fade) } };
+    evening.push(`Heat ${data.line.heat.districtEnd}: the district's done.${loud ? '' : ` Dread ${data.line.dread.fade}: nothing loud in it.`}`);
     // Paid on time a whole district: +1 each (Part 5 section 5.2). The count starts again with the next district.
     out = { ...out, crew: out.crew.map((c) => (c.where !== 'in' ? c : { ...(c.unpaid === 0 ? moveLoyalty(c, P.loyalty.paidDistrict, data) : c), unpaid: 0 })) };
   }
@@ -275,7 +320,7 @@ export function askAnyway(block: EvilModeBlock, job: JobDraft, data: EvilData = 
   const unknowns = unknownCount(card);
   b = appendLog(b, { kind: 'card', who: [...job.squad], to: job.holdingId, method: job.method, cardId, text: card.fields[11]!.text, ...(unknowns ? { unknowns } : {}) });
   b = appendLog(b, { kind: 'asked', who: who.map((p) => p.id), to: job.holdingId, cardId, text: lineFor(b, who.map((p) => p.id), 'asked anyway, across their line. Refused, in the yard.') });
-  b = { ...b, crew: b.crew.map((c) => (who.some((p) => p.id === c.id) ? { ...c, asked: c.asked + 1, lineHeard: true } : c)), refusal: { cardId, job: { holdingId: job.holdingId, method: job.method, squad: [...job.squad], ...(job.offer !== undefined ? { offer: job.offer } : {}) }, who: who.map((p) => p.id) } };
+  b = { ...b, crew: b.crew.map((c) => (who.some((p) => p.id === c.id) ? { ...c, asked: c.asked + 1, lineHeard: true } : c)), refusal: { cardId, job: { holdingId: job.holdingId, method: job.method, squad: [...job.squad], ...(job.offer !== undefined ? { offer: job.offer } : {}), ...(job.thing ? { thing: job.thing } : {}) }, who: who.map((p) => p.id) } };
   return { block: b, problem: null };
 }
 
@@ -330,4 +375,84 @@ export function answerRefusal(block: EvilModeBlock, answer: RefusalAnswer, data:
   b = appendLog(b, { kind: 'leave', who: [...r.who], to: r.job.holdingId, cardId: r.cardId, text: lineFor(b, r.who, 'told twice, across their line. Left the armband on the bonnet of the van.') });
   b = calledOffLine(b);
   return { block: b, problem: null, line: fill(peopleText('insisted', data), { name: names }) };
+}
+
+/**
+ * Lean, Take and Expose at the Evening (Part 7 sections 6, 7 and 9). Lean: the holding, would turn, takings half as much
+ * again; Dread +1; the local Sullen; each other local on the street colder at one in two (`evil-line`). Failed: Shut, the
+ * street one colder with no roll, the squad's Loyalty −1 (not a Heart's). Take: the thing (stock, a deed, a ledger);
+ * Dread +2; the local Sullen; failed without Hands leading, the lead's face is known. Expose: the street warmer, the target
+ * Shut to the team, Regard +1 when the proof was a witness (clean hands); the proof's spent either way.
+ */
+function darkResult(j: Job, h: Holding, won: boolean, s: { holdings: Holding[]; team: EvilModeBlock['team']; crew: Crew[]; proof: string[]; lineDraws: number; seed: string; day: number }, data: EvilData) {
+  const L = data.line;
+  let { holdings, team, crew, proof, lineDraws } = s;
+  const cap = (n: number) => Math.max(0, Math.min(10, n));
+  const set = (id: string, f: (x: Holding) => Holding) => { holdings = holdings.map((x) => (x.id === id ? f(x) : x)); };
+  const st = streetOf(h.step, data);
+  const street = holdings.filter((x) => x.id !== h.id && x.kind === 'local' && streetOf(x.step, data) === st);
+  const lines: string[] = [];
+  let taken = 0;
+  const lead = crew.find((c) => c.id === j.squad[0]);
+  const l = localOf(h, data);
+  if (j.method === 'lean') {
+    if (won) {
+      set(h.id, (x) => ({ ...x, owner: 'team', method: 'lean', since: s.day, holds: false, mood: 'sullen', scouted: Math.max(1, x.scouted) }));
+      team = { ...team, dread: cap(team.dread + L.lean.dread) };
+      taken = L.lean.taken;
+      let colder = 0;
+      for (const x of street) {
+        const roll = lineRoll(s.seed, lineDraws, 100);
+        lineDraws += 1;
+        if (roll <= L.lean.streetColder) { set(x.id, (y) => ({ ...y, mood: shiftMood(y.mood, -1) })); colder += 1; }
+      }
+      lines.push(`Frightened. It's yours, and it would turn. Dread +${L.lean.dread}.${colder ? ` ${colder} on the street went colder.` : ''}`);
+    } else {
+      set(h.id, (x) => ({ ...x, mood: 'shut', scouted: Math.max(1, x.scouted) }));
+      for (const x of street) set(x.id, (y) => ({ ...y, mood: shiftMood(y.mood, -1) }));
+      crew = crew.map((c) => (j.squad.includes(c.id) && c.talent !== 'heart' ? moveLoyalty(c, L.lean.loyaltyFail, data) : c));
+      lines.push(`"I'll not be spoken to like that." They went to the constable. Shut, and the street one colder.`);
+    }
+  } else if (j.method === 'take') {
+    const thing = L.things.find((t) => t.id === (j.thing ?? 'stock'))!;
+    if (won) {
+      team = { ...team, dread: cap(team.dread + L.take.dread) };
+      taken = thing.taken;
+      if (thing.id === 'stock') {
+        const amount = (l?.take ?? 0) * L.take.stockDays;
+        team = { ...team, funds: team.funds + amount };
+        set(h.id, (x) => ({ ...x, mood: 'sullen', scouted: Math.max(1, x.scouted) }));
+        lines.push(`Took the stock: ${money(amount)}. Not held. Dread +${L.take.dread}.`);
+      } else if (thing.id === 'deed') {
+        set(h.id, (x) => ({ ...x, owner: 'team', method: 'take', since: s.day, holds: true, mood: 'sullen', scouted: Math.max(1, x.scouted) }));
+        lines.push(`Took the deed. It's yours on paper, and paper holds. Dread +${L.take.dread}.`);
+      } else {
+        set(h.id, (x) => ({ ...x, mood: 'sullen', scouted: 2 }));
+        if (l?.secret) {
+          if (!proof.includes(h.id)) proof = [...proof, h.id];
+          lines.push(`Took the ledger. It's proof: ${l.secret} Dread +${L.take.dread}.`);
+        } else {
+          for (const x of street) set(x.id, (y) => ({ ...y, scouted: Math.max(1, y.scouted) }));
+          lines.push(`Took the ledger. Nothing to prove, but now you know what the street earns. Dread +${L.take.dread}.`);
+        }
+      }
+    } else if (lead?.talent === 'hands') {
+      lines.push('Not taken. Hands led: nothing left behind.');
+    } else {
+      crew = crew.map((c) => (c.id === lead?.id ? { ...c, known: true } : c));
+      lines.push(`Not taken. ${lead?.name ?? 'The lead'}'s face was seen.`);
+    }
+  } else {
+    const clean = !proof.includes(h.id);
+    proof = proof.filter((x) => x !== h.id);
+    crew = crew.map((c) => (j.squad.includes(c.id) ? { ...c, outOn: s.day + L.expose.days - 1 } : c));
+    if (won) {
+      for (const x of street) set(x.id, (y) => ({ ...y, mood: y.mood === 'shut' ? y.mood : shiftMood(y.mood, 1) }));
+      set(h.id, (x) => ({ ...x, mood: 'shut', scouted: 2 }));
+      if (clean) team = { ...team, regard: cap(team.regard + L.expose.regard) };
+      lines.push(`Published. It's true, and the street knows it: one warmer.${clean ? ` Regard +${L.expose.regard}: clean hands.` : ''}`);
+    } else lines.push("Nobody printed it. The proof's spent.");
+    lines.push(`The squad's out ${L.expose.days} days.`);
+  }
+  return { holdings, team, crew, proof, lineDraws, lines, taken };
 }

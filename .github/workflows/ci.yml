@@ -71,6 +71,8 @@ jobs:
   # A spec file runs in one worker from start to end, so a very long file cannot be shared out: split it instead.
   # Shards take the files in name order, so the New UI specs (*NewUi.spec.ts, the heaviest tests) have names spread over
   # the alphabet: four of them side by side in one shard ran two at a time and timed out on a slow runner.
+  # Ten from 2026-11-17: Evil Mode's specs moved frontDoorStyles' many tests into shard 2, which ran out of its 30 minutes
+  # twice with every test passing.
   e2e:
     needs: changes
     if: needs.changes.outputs.code == 'true'

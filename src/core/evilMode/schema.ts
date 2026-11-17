@@ -18,7 +18,7 @@ export const BeatSchema = z.enum(BEATS);
 export type Beat = z.infer<typeof BeatSchema>;
 
 /** The five gameplay streams (design Part 30 section 5). Slice 1 draws from none; counts start at 0. */
-export const STREAMS = ['evil-dispatch', 'evil-people', 'evil-mole', 'evil-gym', 'evil-neighbour'] as const;
+export const STREAMS = ['evil-dispatch', 'evil-people', 'evil-mole', 'evil-gym', 'evil-neighbour', 'evil-line'] as const;
 
 const StartSchema = z.object({ funds: z.number().int().min(0), heat: z.number().int().min(0).max(10), loyalty: z.number().int().min(1).max(10), regard: z.number().int().min(0).max(10), dread: z.number().int().min(0).max(10), roster: z.number().int().min(0) });
 
@@ -87,8 +87,12 @@ export const HOLDING_KINDS = ['local', 'wild', 'alpha', 'safehouse', 'opportunit
 export const HoldingKindSchema = z.enum(HOLDING_KINDS);
 export type HoldingKind = z.infer<typeof HoldingKindSchema>;
 
-/** The four methods slice 2 builds. Lean, Take and Expose arrive later (their buttons show, refused, with why). */
-export const JOB_METHODS = ['scout', 'persuade', 'pay', 'outplay'] as const;
+/** Slice 2 built four methods; slice 6 adds Lean, Take and Expose (Grey or darker for the first two). */
+export const JOB_METHODS = ['scout', 'persuade', 'pay', 'outplay', 'lean', 'take', 'expose'] as const;
+/** What a Take takes (design Part 7 section 7.1). A Pokémon waits for the Pen (slice 10). */
+export const TAKE_THINGS = ['stock', 'deed', 'ledger'] as const;
+export const TakeThingSchema = z.enum(TAKE_THINGS);
+export type TakeThing = z.infer<typeof TakeThingSchema>;
 export const JobMethodSchema = z.enum(JOB_METHODS);
 export type JobMethod = z.infer<typeof JobMethodSchema>;
 
@@ -96,6 +100,8 @@ const LocalSchema = z.object({
   id: z.string().min(1), who: z.string().min(1), trade: z.string().min(1), earns: z.number().int().min(0), take: z.number().int().min(0),
   want: z.string().min(1), fear: z.string().min(1), mood: MoodSchema, says: z.string().min(1),
   noPrice: z.string().min(1).optional(), priceTimes: z.number().int().min(1).optional(), minor: z.boolean().optional(),
+  /** Slice 6: something true that could be published about them (Expose), and whether Lean is harder (a retired Ace, a guard). */
+  secret: z.string().min(1).optional(), hard: z.boolean().optional(),
 });
 export type LocalDef = z.infer<typeof LocalSchema>;
 
@@ -156,6 +162,8 @@ export const JobSchema = z.object({
   cardId: z.string().min(1).optional(),
   /** Slice 5: the Boss went in person and played it (Part 7 section 10): it isn't rolled at Evening. */
   played: z.enum(['won', 'lost']).optional(),
+  /** Slice 6: Take only: what's taken. */
+  thing: TakeThingSchema.optional(),
 }).strict();
 export type Job = z.infer<typeof JobSchema>;
 
@@ -190,7 +198,8 @@ export type Flaw = z.infer<typeof FlawSchema>;
 export const RANKS = ['grunt', 'lead', 'specialist', 'officer', 'executive'] as const;
 export const RankSchema = z.enum(RANKS);
 export type Rank = z.infer<typeof RankSchema>;
-export const LEAVE_WAYS = ['line', 'loyalty', 'letGo', 'handshake', 'coat'] as const;
+/** Slice 6 adds three of the nine: the Line moved, with the Hero, arrested (Part 9 section 10). Slice 7 adds two: a handshake, the coat (knock 31). */
+export const LEAVE_WAYS = ['line', 'loyalty', 'letGo', 'lineMoved', 'hero', 'arrested', 'handshake', 'coat'] as const;
 export const QUESTIONS = ['cant', 'wont', 'why', 'who'] as const;
 export const QuestionSchema = z.enum(QUESTIONS);
 export type Question = z.infer<typeof QuestionSchema>;
@@ -230,6 +239,8 @@ export const CrewSchema = z.object({
   mood: MoodSchema.default('easy'),
   knocks: z.number().int().min(0).default(0),
   left: z.object({ day: z.number().int().min(1), how: z.enum(LEAVE_WAYS), kindly: z.boolean().optional() }).strict().optional(),
+  /** Slice 6: the law knows their face (a failed Take they led without Hands). */
+  known: z.boolean().optional(),
 }).strict();
 export type Crew = z.infer<typeof CrewSchema>;
 export type Person = Crew;
@@ -240,7 +251,7 @@ export type Applicant = z.infer<typeof ApplicantSchema>;
 /** An order across a line, waiting on the Boss's answer in the yard (Part 7 section 11.1). */
 export const RefusalSchema = z.object({
   cardId: z.string().min(1),
-  job: z.object({ holdingId: z.string().min(1), method: JobMethodSchema, squad: z.array(z.string().min(1)).min(1), offer: z.number().int().min(1).max(100).optional() }).strict(),
+  job: z.object({ holdingId: z.string().min(1), method: JobMethodSchema, squad: z.array(z.string().min(1)).min(1), offer: z.number().int().min(1).max(100).optional(), thing: TakeThingSchema.optional() }).strict(),
   who: z.array(z.string().min(1)).min(1),
 }).strict();
 export type Refusal = z.infer<typeof RefusalSchema>;
@@ -284,12 +295,13 @@ export const StoredCardSchema = z.object({
   holdingId: z.string().min(1),
   method: JobMethodSchema,
   offer: z.number().int().min(1).max(100).optional(),
+  thing: TakeThingSchema.optional(),
   clean: z.boolean(),
   fields: z.array(CardFieldSchema).length(13),
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'knock', 'heard', 'wall'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'knock', 'heard', 'wall'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -351,7 +363,7 @@ export const HeroFileSchema = z.object({
   counters: z.record(z.string(), HS),
   counterAt: z.number().int().min(1),
   personalities: z.array(z.object({ id: PersonalitySchema, word: HS, steps: z.array(z.number().int().min(1).max(3)).min(1), afterLoss: z.number().int().min(0), how: HS }).strict()).length(PERSONALITIES.length),
-  loud: z.object({ scout: z.number().int().min(0).max(3), persuade: z.number().int().min(0).max(3), pay: z.number().int().min(0).max(3), payUnder: z.number().int().min(0).max(3), outplay: z.number().int().min(0).max(3) }).strict(),
+  loud: z.object({ scout: z.number().int().min(0).max(3), persuade: z.number().int().min(0).max(3), pay: z.number().int().min(0).max(3), payUnder: z.number().int().min(0).max(3), outplay: z.number().int().min(0).max(3), lean: z.number().int().min(0).max(3), take: z.number().int().min(0).max(3), expose: z.number().int().min(0).max(3) }).strict(),
   reasons: z.array(z.object({ n: z.number().int().min(1).max(16), team: HS, says: HS, kind: z.enum(REASON_KINDS), trigger: HS, status: EvilStatusSchema, waits: HS }).strict()).length(16),
   kinds: z.object({ stop: HS, ask: HS, find: HS }).strict(),
   tiers: z.array(z.object({ min: z.number().int().min(0), level: z.number().int(), ace: z.number().int().min(0), party: z.number().int().min(1).max(6) }).strict()).min(1),
@@ -485,9 +497,9 @@ export const NightFileSchema = z.object({
   knocks: z.array(KnockDefSchema).length(40),
 });
 
-const BlockV5Schema = z.object({
-  /** The block's own version, for its own migrations. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a fight, Hold and going in person. 6: slice 7 added the Night, and each person's mood and knocks. */
-  v: z.literal(6),
+const BlockV7Schema = z.object({
+  /** The block's own version, for its own migrations. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. 7: slice 7 added the Night, and each person's mood and knocks. */
+  v: z.literal(7),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -523,6 +535,9 @@ const BlockV5Schema = z.object({
   inPerson: z.object({ day: z.number().int().min(1), holdingId: z.string().min(1) }).strict().nullable(),
   /** Slice 7: the Night (Part 30 section 3.10). */
   night: NightStateSchema,
+  /** Slice 6: holdings the team holds proof about (a taken ledger), spent by an Expose; and the Line's last move (Hearts go within three days of a move to Whatever it takes). */
+  proof: z.array(z.string().min(1)),
+  lineMove: z.object({ day: z.number().int().min(1), region: z.number().int().min(0), from: LineIdSchema, to: LineIdSchema }).strict().nullable(),
 }).strict();
 
 /** A nameless Grunt (slices 2 and 3; a block migrated from v3 keeps its four). */
@@ -538,7 +553,8 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * v2 -> v3 (slice 2's block): an empty Log and no Cards (the Log starts here; jobs already queued keep going without one), Given and Taken at 0, no rates.
  * v3 -> v4 (slice 3's block): the four Grunts stay, nameless, as people at the Creed's starting Loyalty; nobody at the notice board, nobody drawn, no refusal.
  * v4 -> v5 (slice 4's block): no Hero yet (the session makes them on the next load, from the run's seed), no fight, nobody posted, nobody gone in person.
- * v5 -> v6 (slice 5's block): an empty Night (no knocks had, nothing on the Wall); everyone Easy, nobody's knocked yet.
+ * v5 -> v6 (slice 5's block): no proof held, and the Line never moved (a Line chosen at founding stays where it is).
+ * v6 -> v7 (slice 6's block): an empty Night (no knocks had, nothing on the Wall); everyone Easy, nobody's knocked yet.
  */
 export function migrateEvilBlock(raw: unknown): unknown {
   if (!raw || typeof raw !== 'object') return raw;
@@ -551,12 +567,40 @@ export function migrateEvilBlock(raw: unknown): unknown {
     b = { ...b, v: 4, crew, applicants: [], drawn: [], refusal: null };
   }
   if (b.v === 4) b = { ...b, v: 5, hero: null, fight: null, posted: [], inPerson: null };
-  if (b.v === 5) {
+  if (b.v === 5) b = { ...b, v: 6, proof: [], lineMove: null };
+  if (b.v === 6) {
     const crew = Array.isArray(b.crew) ? (b.crew as Record<string, unknown>[]).map((c) => ({ mood: 'easy', knocks: 0, ...c })) : b.crew;
-    b = { ...b, v: 6, crew, night: emptyNight() };
+    b = { ...b, v: 7, crew, night: emptyNight() };
   }
   return b;
 }
 
-export const EvilModeBlockSchema = z.preprocess(migrateEvilBlock, BlockV5Schema);
-export type EvilModeBlock = z.infer<typeof BlockV5Schema>;
+export const EvilModeBlockSchema = z.preprocess(migrateEvilBlock, BlockV7Schema);
+export type EvilModeBlock = z.infer<typeof BlockV7Schema>;
+
+// ---- Slice 6: the Line (design Part 3 section 7, Part 5 sections 4 and 6, Part 7 sections 6, 7, 9 and 11) ----
+
+const S6 = z.string().min(1);
+const I = z.number().int();
+const P5 = z.number().int().multipleOf(5);
+export const LineFileSchema = z.object({
+  note: z.string(),
+  lean: z.object({ base: P5, squad: I.min(1), heat: I, failHeat: I, dread: I, takings: I.min(100), streetColder: I.min(0).max(100), taken: I.min(0), loyaltyFail: I }).strict(),
+  take: z.object({ base: P5, heat: I, failHeat: I, dread: I, stockDays: I.min(1) }).strict(),
+  expose: z.object({ base: P5, heat: I, regard: I, days: I.min(1) }).strict(),
+  terms: z.object({ fearKnown: P5, leanDread: P5, leanDreadHigh: P5, leanRegardHigh: P5, leanHard: P5, heroNear: P5, heroNearSteps: I.min(0), exposeRegard: P5, exposeDread: P5, checkpoint: P5 }).strict(),
+  things: z.array(z.object({ id: TakeThingSchema, name: S6, gives: S6, written: S6, taken: I.min(0), holds: S6 }).strict()).length(TAKE_THINGS.length),
+  heat: z.object({
+    lamps: z.object({ amberTo: I.min(0).max(10), rule: I.min(0).max(10) }).strict(),
+    ladder: z.array(z.object({ min: I.min(0).max(10), word: S6, doing: S6 }).strict()).min(1),
+    districtEnd: I, warrants: I.min(0).max(10), checkpoints: I.min(0).max(10),
+  }).strict(),
+  dread: z.object({ words: z.array(z.object({ min: I.min(0).max(10), word: S6 }).strict()).min(1), comeOver: I.min(0).max(10), comeOverLine: S6, fade: I }).strict(),
+  stops: z.array(z.object({ id: LineIdSchema, allows: S6, darkens: S6 }).strict()).length(LINE_IDS.length),
+  move: z.record(z.string(), S6),
+  leave: z.record(z.string(), S6),
+  proof: z.record(z.string(), S6),
+  card: z.record(z.string(), z.record(z.string(), S6)),
+  written: z.record(z.string(), S6),
+  wont: z.object({ title: S6, method: S6, noHeart: S6, verbs: z.record(z.string(), S6) }).strict(),
+}).strict();

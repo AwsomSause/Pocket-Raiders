@@ -1,0 +1,91 @@
+{
+  "note": "Evil Mode slice 6: the Line (design Part 3 section 7, Part 5 sections 4 and 6, Part 7 sections 6, 7, 9 and 11, Part 9 section 10, Part 29 section 2.1). Lean, Take and Expose; Heat's ladder; Dread; the three stops; moving the Line; three more ways to leave. Numbers are starting values, not playtested.",
+  "lean": { "base": 50, "squad": 3, "heat": 2, "failHeat": 3, "dread": 1, "takings": 150, "streetColder": 50, "taken": 3, "loyaltyFail": -1 },
+  "take": { "base": 50, "heat": 3, "failHeat": 3, "dread": 2, "stockDays": 3 },
+  "expose": { "base": 55, "heat": 0, "regard": 1, "days": 2 },
+  "terms": {
+    "fearKnown": 10, "leanDread": 10, "leanDreadHigh": 20, "leanRegardHigh": -10, "leanHard": -20, "heroNear": -20, "heroNearSteps": 3,
+    "exposeRegard": 10, "exposeDread": -10, "checkpoint": -20
+  },
+  "things": [
+    { "id": "stock", "name": "The stock", "gives": "Funds once: {amount}, three days of what the place earns.", "written": "Took the stock from {to}.", "taken": 2, "holds": "Not held. Nothing to hold." },
+    { "id": "deed", "name": "The deed", "gives": "The holding, as a deed. It's paper: the kid can't turn it.", "written": "Took the deed from {to}, and used it.", "taken": 3, "holds": "Holds. It's paper." },
+    { "id": "ledger", "name": "The ledger", "gives": "Proof, for an Expose. Or, where there's nothing to prove, what everyone on the street earns.", "written": "Took the ledger from {to}.", "taken": 1, "holds": "Not held. Nothing to hold." }
+  ],
+  "heat": {
+    "lamps": { "amberTo": 5, "rule": 6 },
+    "ladder": [
+      { "min": 0, "word": "Rumour", "doing": "Nothing." },
+      { "min": 1, "word": "File", "doing": "A file's been opened. A constable at the Town nods." },
+      { "min": 3, "word": "Questions", "doing": "Locals are asked about the team. Ones taken by Lean answer." },
+      { "min": 5, "word": "Detective", "doing": "Somebody with a name is a day behind the team." },
+      { "min": 7, "word": "Checkpoints", "doing": "Roads are watched: every job but a scout at −20%, unless Wheels leads." },
+      { "min": 8, "word": "Warrants", "doing": "Faces they know can't be sent. A known face on a failed Take is arrested." },
+      { "min": 9, "word": "Found", "doing": "They know where the base is." },
+      { "min": 10, "word": "Raid", "doing": "A Raid. (Not in this build: the lamps just stay lit.)" }
+    ],
+    "districtEnd": -3,
+    "warrants": 8,
+    "checkpoints": 7
+  },
+  "dread": {
+    "words": [
+      { "min": 0, "word": "Who?" },
+      { "min": 2, "word": "A shop that's suddenly shut" },
+      { "min": 4, "word": "Children called indoors" },
+      { "min": 6, "word": "A great many letters" },
+      { "min": 8, "word": "Nobody'll rent a room" },
+      { "min": 10, "word": "The whole district helps the kid" }
+    ],
+    "comeOver": 8,
+    "comeOverLine": "Step {step}'s paid. Nobody was in.",
+    "fade": -1
+  },
+  "stops": [
+    { "id": "clean", "allows": "Ask, buy, win, look and publish. Nothing taken that isn't given or won.", "darkens": "Nothing. Lean and Take aren't on the screen." },
+    { "id": "grey", "allows": "Everything Clean hands allows, and Lean, and Take (stock, deeds, ledgers).", "darkens": "Lean and Take light up. Every Card still says what they cost." },
+    { "id": "whatever", "allows": "Everything Grey allows. Shadow methods and the Lab come later.", "darkens": "Every Heart on the Roster leaves within three days, together, at breakfast." }
+  ],
+  "move": {
+    "once": "The Line's already been moved in this region.",
+    "notNight": "The Line's moved at Night.",
+    "same": "That's where the Line already is.",
+    "darker": "Darker. Free, and at once.",
+    "lighter": "Lighter. It costs: these people were hired for the old Line.",
+    "hold": "Hold Enter (or press and hold) for two seconds. Letting go early cancels.",
+    "written": "Moved the Line from {from} to {to}.",
+    "hearts": "{names} won't stay on a team that'll do whatever it takes. They'll go within three days.",
+    "nobody": "Nobody leaves over it."
+  },
+  "leave": {
+    "lineMoved": "left together, by the front, at breakfast. The Line had moved.",
+    "lineMovedLight": "left. They'd been hired for the old Line.",
+    "lineMovedStay": "stayed, and watched.",
+    "hero": "went with the kid, as far as the next town. They've told the kid everything on their card.",
+    "arrested": "was arrested. They knew the face from the failed Take."
+  },
+  "proof": {
+    "need": "No proof. Take their ledger, or hold a Warm local on their street who was there.",
+    "nothing": "There's nothing true to publish about them.",
+    "witness": "A witness: {who}, Warm, on the same street.",
+    "ledger": "Their own ledger, taken."
+  },
+  "card": {
+    "lean": { "takes": "{amount} a day, and half as much again, because they're frightened.", "takesNothing": "Their say on the street, because they're frightened.", "gives": "{amount} a day from tomorrow. It turns the day the kid arrives.", "holds": "Turns. The day the kid arrives.", "other": "Persuade them at {odds}%. Or Pay the fair price: {fair}. It holds." },
+    "take": { "takes": "{thing}.", "from": "{to}.", "other": "Pay the fair price: {fair}. Or Persuade them at {odds}%." },
+    "expose": { "takes": "Their standing.", "gives": "{street} one warmer: the fear they were's lifted.", "holds": "Nothing to hold.", "other": "This is it. It's true." }
+  },
+  "written": {
+    "lean": "Frightened {to} into paying {amount} a day.",
+    "leanNothing": "Frightened {to}.",
+    "expose": "Published the truth about {to}.",
+    "leanFail": "They tried to frighten {to}. They were told to get out.",
+    "comeOver": "Step {step} came over on its own. Nobody was in."
+  },
+  "wont": {
+    "title": "What this team, as it stands, won't do.",
+    "method": "This team doesn't {verb}. Whatever the Line says.",
+    "noHeart": "There's nobody here now who'd stop.",
+    "verbs": { "lean": "frighten people", "take": "steal" }
+  }
+}

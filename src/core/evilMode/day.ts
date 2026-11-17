@@ -9,7 +9,8 @@ import type { JobDraft } from './odds';
 import { askAbout, setRate } from './ledger';
 import { holdResult, post, takeBadge, unpost, walkHero } from './hero';
 import { answerKnock, drawKnock, nightAction, takeDown, type NightAction } from './night';
-import { BEATS, type Beat, type EvilModeBlock, type Question } from './schema';
+import { heartsGo, moveLine } from './line';
+import { BEATS, type Beat, type EvilModeBlock, type LineId, type Question } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
 export const BEAT_END: Record<Beat, BeatEndType> = {
@@ -49,6 +50,8 @@ export type EvilAction =
   | { type: 'answerKnock'; answer: number }
   | { type: 'nightAction'; action: NightAction; id?: string }
   | { type: 'takeDown'; index: number }
+  /** Slice 6: move the Line, once a region, at Night (Part 3 section 7.1). */
+  | { type: 'moveLine'; to: LineId }
   | { type: 'dismissOvernight' }
   | { type: 'send' }
   | { type: 'stayIn' }
@@ -106,6 +109,11 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
     if (walked.fight) return { block: walked, cues: [{ id: 'road', lines: walked.hero!.today }, { id: 'fight' }], ok: true };
     if (walked.district?.end) return { block: walked, cues: [{ id: 'road', lines: walked.hero!.today }, { id: 'districtEnd', how: walked.district.end.how }], ok: true };
     block = walked;
+  }
+  // Slice 6: the Line moves at Night, once a region. Refused here, not only on screen.
+  if (action.type === 'moveLine') {
+    const r = moveLine(block, action.to);
+    return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'said', line: r.line }], ok: true };
   }
   // Slice 4: the notice board and the Office, at any beat.
   if (action.type === 'hire' || action.type === 'question' || action.type === 'turnAway' || action.type === 'promote' || action.type === 'letGo') {
@@ -178,8 +186,10 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   out = endIfTaken(out);
   if (to === 'morning' && !out.district?.end) {
     const z = leaveAtZero(out);
-    out = arriveApplicants(z.block);
-    for (const line of z.notes) cues.push({ id: 'said', line });
+    // Slice 6: after a move to Whatever it takes, every Heart goes, together, at breakfast.
+    const hg = heartsGo(z.block);
+    out = arriveApplicants(hg.block);
+    for (const line of [...z.notes, ...hg.notes]) cues.push({ id: 'said', line });
   }
   if (to === 'morning') cues.push({ id: 'newDay', day });
   if (out.district?.end) cues.push({ id: 'districtEnd', how: out.district.end.how });

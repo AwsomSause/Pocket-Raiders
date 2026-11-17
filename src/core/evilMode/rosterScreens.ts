@@ -4,6 +4,7 @@
 
 import { EVIL_DATA, type EvilData } from './data';
 import { severance, cardOf, promoteLine, promoteProblem } from './roster';
+import { realLine } from './line';
 import { deckPerson, flawDef, inRoster, lineText, missingTalents, peopleText, talentDef, teamWont, wageOf } from './people';
 import { swapsFor } from './dispatch';
 import { fill, money } from './ledger';
@@ -74,7 +75,7 @@ export function rosterModel(block: EvilModeBlock, d: RosterDraft, data: EvilData
   const wont = teamWont(block, data);
   const base = {
     tabs: ['The Roster', 'At the notice board'].map((name, i) => ({ name, sel: d.tab === i })),
-    wont: { title: peopleText('wontTitle', data), lines: wont.length ? wont.map((w) => `"${w.line}" (${w.who.join(', ')})`) : [peopleText('wontEmpty', data)] },
+    wont: { title: peopleText('wontTitle', data), lines: [...realLine(block, data), ...(wont.length ? wont.map((w) => `"${w.line}" (${w.who.join(', ')})`) : [peopleText('wontEmpty', data)])] },
     missing: missingTalents(block, data),
     office: null as RosterModel['office'],
   };
@@ -85,7 +86,7 @@ export function rosterModel(block: EvilModeBlock, d: RosterDraft, data: EvilData
   if (d.tab === 0) {
     // Everyone who's ever had a card: those in first, then those who left (dimmed, with how).
     const list = [...inRoster(block), ...block.crew.filter((c) => c.where === 'left')];
-    const how = { line: 'over their line', loyalty: 'gone by morning', letGo: 'let go', handshake: 'with a handshake', coat: 'and left the coat' } as const;
+    const how = { line: 'over their line', loyalty: 'gone by morning', letGo: 'let go', lineMoved: 'the Line moved', hero: 'went with the kid', arrested: 'arrested', handshake: 'with a handshake', coat: 'and left the coat' } as const;
     return {
       ...base, applicants: null, empty: null, rows: list.length,
       people: list.map((p, i) => {

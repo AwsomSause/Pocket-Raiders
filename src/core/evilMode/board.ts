@@ -116,7 +116,9 @@ export function takings(h: Holding, data: EvilData = EVIL_DATA): number {
   if (h.owner !== 'team') return 0;
   if (h.kind === 'town') return data.district.rules.townTakings;
   if (h.kind === 'safehouse') return -data.district.rules.safehouseRent;
-  return localOf(h, data)?.take ?? 0;
+  const t = localOf(h, data)?.take ?? 0;
+  // Slice 6: a Leaned holding pays half as much again (Part 7 section 6).
+  return h.method === 'lean' ? Math.floor((t * data.line.lean.takings) / 100) : t;
 }
 
 /** The name on a holding's row: the local's name once scouted, else the kind; places are always named. */

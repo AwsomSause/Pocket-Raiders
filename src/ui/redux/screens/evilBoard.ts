@@ -51,9 +51,12 @@ function dispatch(m: BoardModel, notice: string | null): string {
     <div class="row sm" style="line-height:22px;padding:0 4px;cursor:pointer;${d.nextSel ? 'outline:2px solid var(--team-a);' : ''}"${act('how')} data-testid="evil-who-next">→ How</div>`, 'position:absolute;left:16px;width:130px;top:252px;bottom:70px;padding:6px 8px;overflow-y:auto', d.step === 'who' ? 'sel' : '', ' data-testid="evil-who"');
   const methods = `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px">${d.methods.map((x, i) => B(`${x.key}. ${esc(x.name)}`, x.chosen, `padding:2px 4px;font-size:13px;justify-content:center;opacity:${x.on ? 1 : 0.4}`, '', `${act('method', i)} data-testid="evil-method-${x.id}" title="${esc(x.dark ?? x.word)}"`)).join('')}</div>`;
   const offers = d.offers ? `<div class="row" style="gap:4px;margin-top:4px">${d.offers.map((o) => B(`${o.pct}% · ${esc(o.cost)}`, o.chosen, 'padding:2px 6px;font-size:12px', '', `${act('offer', o.pct)} data-testid="evil-offer-${o.pct}"`)).join('')}</div>` : '';
+  const things = d.things ? `<div class="row" style="gap:4px;margin-top:4px">${d.things.map((t) => B(esc(t.name), t.chosen, `padding:2px 6px;font-size:12px;opacity:${t.why ? 0.5 : 1}`, '', `${act('thing', t.id)} data-testid="evil-thing-${t.id}" title="${esc(t.why ?? '')}"`)).join('')}</div>` : '';
   const queue = d.queue.length ? d.queue.map((q) => `<div class="row sm" style="line-height:18px"><span class="grow" data-testid="evil-queued">${esc(q.text)}</span><span style="cursor:pointer;text-decoration:underline"${act('clear', q.holdingId)}>Clear</span></div>`).join('') : sm('Nothing queued yet.');
-  const how = W(`<b class="sm">How</b>${methods}${offers}
+  const how = W(`<b class="sm">How</b>${methods}${offers}${things}
     <div class="sm" style="line-height:16px;margin-top:4px" data-testid="evil-odds">${esc(d.oddsLine)}</div>
+    ${d.wont ? `<div class="sm" style="line-height:16px" data-testid="evil-wont">Who won't: ${esc(d.wont)}</div>` : ''}
+    <div class="sm" style="line-height:16px;opacity:.85" data-testid="evil-heat-forecast">${esc(d.heat)}</div>
     ${d.problem ? sm(d.problem, 'color:#f08a7a') : ''}${notice ? sm(notice) : ''}
     <div class="row" style="gap:6px;margin-top:4px">${B('Read the Card', d.canQueue, `padding:2px 12px;${d.canQueue ? '' : 'opacity:.5'}`, '', `${act('queue')} data-testid="evil-queue"`)}</div>
     ${d.hold ? `<div class="row" style="gap:6px;margin-top:4px">${B(esc(d.hold.label), !d.hold.problem, `padding:2px 12px;${d.hold.problem ? 'opacity:.5' : ''}`, '', `${act('hold')} data-testid="evil-hold" title="${esc(d.hold.problem ?? '')}"`)}</div>${d.hold.problem ? sm(d.hold.problem, 'opacity:.7') : ''}` : ''}
@@ -61,17 +64,20 @@ function dispatch(m: BoardModel, notice: string | null): string {
   return list + crew + how;
 }
 
-export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; file?: string; night?: string; filed?: string } = {}): string {
+export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; file?: string; line?: string; night?: string; filed?: string } = {}): string {
   const book = `<span class="tg" style="cursor:pointer;${extra.ledger ? 'outline:2px solid var(--acc);' : ''}"${act('ledger')} data-testid="evil-ledger-open">Ledger (L)</span>`;
   const people = `<span class="tg" style="cursor:pointer;${extra.roster ? 'outline:2px solid var(--acc);' : ''}"${act('roster')} data-testid="evil-roster-open">Roster (R)</span>`;
+  const lineTag = `<span class="tg" style="cursor:pointer;${extra.line ? 'outline:2px solid var(--acc);' : ''}"${act('line')} data-testid="evil-line-open">Line (N)</span>`;
   const fileTag = `<span class="tg" style="cursor:pointer;${extra.file ? 'outline:2px solid var(--acc);' : ''}"${act('file')} data-testid="evil-file-open">File (F)</span>`;
-  const title = `<div class="abs row" style="left:16px;right:16px;top:100px;gap:8px;align-items:center"><b data-testid="evil-team-name">${esc(f.team.name)}</b><span class="tg">${esc(m.title)}</span><span class="tg" style="${m.warn ? 'background:var(--team-b);color:#fff' : ''}" data-testid="evil-day">${esc(m.day)}</span><span class="tg" data-testid="evil-count">${esc(m.count)}</span><div class="grow"></div>${f.chips.map((c) => `<span class="tg" data-testid="evil-chip">${esc(c)}</span>`).join('')}${fileTag}${people}${book}</div>`;
+  const title = `<div class="abs row" style="left:16px;right:16px;top:100px;gap:8px;align-items:center"><b data-testid="evil-team-name">${esc(f.team.name)}</b><span class="tg">${esc(m.title)}</span><span class="tg" style="${m.warn ? 'background:var(--team-b);color:#fff' : ''}" data-testid="evil-day">${esc(m.day)}</span><span class="tg" data-testid="evil-count">${esc(m.count)}</span><div class="grow"></div>${f.chips.map((c) => `<span class="tg" data-testid="evil-chip">${esc(c)}</span>`).join('')}${lineTag}${fileTag}${people}${book}</div>`;
   // The Ledger shares the frame and takes the board's place (slice 3); the last line filed sits in its corner.
   if (extra.ledger) return `${title}${extra.ledger}${extra.filed ?? ''}`;
   // The Roster (slice 4) takes the board's place the same way.
   if (extra.roster) return `${title}${extra.roster}${extra.filed ?? ''}`;
   // The File (slice 5) the same way.
   if (extra.file) return `${title}${extra.file}${extra.filed ?? ''}`;
+  // The Line (slice 6) the same way.
+  if (extra.line) return `${title}${extra.line}${extra.filed ?? ''}`;
   // The Office at Night (slice 7) takes the board's place the same way.
   if (extra.night) return `${title}${extra.night}${extra.filed ?? ''}`;
   const lower = m.end ? endView(m) + panel(m) : m.dispatch ? dispatch(m, notice) : texts(m, notice) + panel(m);
