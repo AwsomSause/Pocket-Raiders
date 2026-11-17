@@ -451,3 +451,69 @@ export function cameoBeat(scene: Phaser.Scene, sprite: Phaser.GameObjects.Sprite
   scene.tweens.add({ targets: sprite, x: W * 1.3, alpha: 0, duration: 380, delay: 1700, ease: 'Cubic.easeIn' });
   return beat(scene, [sprite, flash], 2150);
 }
+
+/** A small fixed sequence for drawing only (never gameplay RNG): the cracks look the same every time. */
+function drawRolls(seed: number): () => number {
+  let s = seed >>> 0;
+  return () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296);
+}
+
+/**
+ * Beta 0.7 Flight North: the screen cracks like glass. Call `crack()` for each crack line (more lines each time) and
+ * `shatter()` for the break: a flash (dimmed by `flash`, 0..1) and shards that fall away. Presentation only.
+ */
+export function glassCrack(scene: Phaser.Scene, motion: MotionLevel, flash: number): { crack: () => void; shatter: () => Promise<void>; destroy: () => void } {
+  const W = scene.scale.width, H = scene.scale.height;
+  const cx = W * 0.56, cy = H * 0.4;
+  const g = scene.add.graphics().setDepth(990).setScrollFactor(0);
+  const roll = drawRolls(0x6e0a7e);
+  let stage = 0;
+  const objects: Phaser.GameObjects.GameObject[] = [g];
+  const line = (len: number, angle: number, width: number): void => {
+    let x = cx, y = cy, a = angle;
+    g.lineStyle(width + 2, 0x0a1420, 0.55);
+    const pts: [number, number][] = [[x, y]];
+    for (let d = 0; d < len; d += 26) {
+      a += (roll() - 0.5) * 0.7;
+      x += Math.cos(a) * 26;
+      y += Math.sin(a) * 26;
+      pts.push([x, y]);
+    }
+    for (const [w, c, al] of [[width + 2, 0x0a1420, 0.55], [width, 0xffffff, 0.95]] as const) {
+      g.lineStyle(w, c, al);
+      g.beginPath();
+      g.moveTo(pts[0]![0], pts[0]![1]);
+      for (const p of pts.slice(1)) g.lineTo(p[0], p[1]);
+      g.strokePath();
+    }
+  };
+  return {
+    crack: () => {
+      stage += 1;
+      const n = stage === 1 ? 5 : 9;
+      for (let i = 0; i < n; i++) line((stage === 1 ? 150 : 420) + roll() * 160, (Math.PI * 2 * i) / n + roll() * 0.5, stage === 1 ? 2 : 3);
+      if (stage > 1) for (let r = 90; r <= 270; r += 90) { g.lineStyle(1.5, 0xffffff, 0.7); g.strokeCircle(cx + (roll() - 0.5) * 20, cy + (roll() - 0.5) * 20, r + roll() * 30); }
+    },
+    shatter: () => new Promise<void>((done) => {
+      const white = scene.add.rectangle(W / 2, H / 2, W, H, 0xffffff, 0.9 * Math.max(0, Math.min(1, flash))).setDepth(989).setScrollFactor(0);
+      objects.push(white);
+      g.clear();
+      const end = (): void => { for (const o of objects) { scene.tweens.killTweensOf(o); o.destroy(); } done(); };
+      if (motion !== 'full') {
+        scene.tweens.add({ targets: white, alpha: 0, duration: 350 });
+        scene.time.delayedCall(380, end);
+        return;
+      }
+      for (let i = 0; i < 26; i++) {
+        const a = roll() * Math.PI * 2, d = 40 + roll() * 320, sz = 26 + roll() * 60;
+        const x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d * 0.7;
+        const shard = scene.add.triangle(x, y, 0, 0, sz, sz * (0.2 + roll() * 0.5), sz * (0.2 + roll() * 0.6), sz, 0xdff3ff, 0.85).setDepth(991).setScrollFactor(0).setStrokeStyle(1, 0xffffff, 0.9).setRotation(roll() * 6);
+        objects.push(shard);
+        scene.tweens.add({ targets: shard, x: x + Math.cos(a) * (120 + roll() * 200), y: H + 120, rotation: shard.rotation + (roll() - 0.5) * 8, alpha: 0.2, duration: 700 + roll() * 500, ease: 'Quad.easeIn' });
+      }
+      scene.tweens.add({ targets: white, alpha: 0, duration: 600 });
+      scene.time.delayedCall(1250, end);
+    }),
+    destroy: () => { for (const o of objects) { scene.tweens.killTweensOf(o); o.destroy(); } },
+  };
+}

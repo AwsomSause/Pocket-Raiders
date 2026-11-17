@@ -42,6 +42,7 @@ import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { leadStarEvent, skyBirdStaging } from '../core/presentation/eventStars';
 import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
 import { eventView as rxEventView, type EventLook } from '../ui/redux/screens/event';
+import { ghostScareFor } from '../core/presentation/ghostScare';
 import type { HonestModel, HonestSide } from '../ui/redux/screens/stops';
 import type { TeamModel } from '../ui/redux/screens/team';
 import { briefingView, finalView, rankUpView, resultView, tableView } from '../ui/redux/screens/evilLooks';
@@ -377,6 +378,7 @@ export class EventScene extends Phaser.Scene {
             lines: pages[at]!,
             speaker,
             page: { at, of: pages.length },
+            scare: ghostScareFor(view.event.id, !out, at),
             art: artOf(this, ctx.arena)?.file ?? null,
             tint: scene.tint ?? null,
             fx: this.calm ? null : scene.effect,
