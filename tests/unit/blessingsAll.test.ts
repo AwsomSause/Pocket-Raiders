@@ -189,7 +189,7 @@ describe('new battle rules', () => {
 });
 
 describe('Palkia, The Space Traveller', () => {
-  it('rearranges a stage before setting out: contents change places, paths and the last node stay', () => {
+  it('rearranges a stage before setting out: contents change places, paths and the final node stay', () => {
     const run = withBlessing('palkia');
     const open = foldNodes(run);
     expect(open.length).toBeGreaterThan(1);
