@@ -61,7 +61,7 @@ export function sgStart(content: Content, run: RunState): string {
     allies.push({ n: b.name, s: 2, d: BY_TYPE[b.types[0] ?? ''] ?? 'market' });
   }
   for (const [n, flag] of FRIENDS) if (f(run, flag) > 0) allies.push({ n, s: 1, d: '' });
-  if (f(run, 'defector-files') === 2 && f(run, 'defector-at') === run.regionIndex + 1) allies.push({ n: 'The fourteen ex-Grunts', s: 2, d: '' });
+  if (f(run, 'defector-files') >= 2 && f(run, 'defector-at') === run.regionIndex + 1) allies.push({ n: 'The fourteen ex-Grunts', s: 2, d: '' });
   // Reputation brought down to 0 or below (Fear): fewer come, and they don't take orders (they pick a district themselves).
   const feared = f(run, 'rep-lost') > 0 && f(run, 'rep') - f(run, 'rep-lost') <= 0;
   const called = feared ? allies.filter((a, i) => a.d !== '' || i % 2 === 0) : allies;

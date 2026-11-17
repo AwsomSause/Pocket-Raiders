@@ -29,7 +29,7 @@ import { pairBondLevel } from '../bond';
 import { borrowBattleStart, borrowEnd, borrowMeet, borrowStart, borrowTokens, rivalTrustAtLeast } from './borrowed';
 import { draftAldhelm, draftBattleStart, draftEnd, draftFriend, draftLetter, draftPick, draftRecruit, draftStart, draftTokens, draftWon } from './draft';
 import { exBack, exDraw, exKnown, nextMatchup, exResult, exStart, exTokens, exWatch } from './exhibition';
-import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorStart, defectorTokens, defectorTrust, guestOf } from './defector';
+import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorReturn, defectorShare, defectorStart, defectorTokens, defectorTrust, guestOf, ROUTE_LINE } from './defector';
 import { rivalBeatenOnce } from './missingAce';
 import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { stAssign, stEnd, stStart, strandingTokens } from './stranding';
@@ -739,6 +739,12 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return defectorReturn(run, (e.n ?? 0) > 0);
     case 'defectorEnd':
       return defectorEnd(run);
+    case 'defectorShare': {
+      // Trust 3+: one free scouting a stage (here, handed over at a meeting).
+      if (!defectorShare(run, host.stage)) return '';
+      host.apply({ kind: 'scout', columns: 3 });
+      return ROUTE_LINE;
+    }
     case 'smuggleCages':
       return smuggleCages(content, run, host.float);
     case 'smuggleRehab':

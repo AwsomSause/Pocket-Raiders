@@ -901,7 +901,14 @@ describe('gn.50 The Evil Team\'s Betrayal', () => {
     const all = win(choose(r, 'gn-50-cabinet', 'Take them all.').run);
     expect(flagOf(all, 'defector-files')).toBe(2);
     expect(trustOf(all)).toBe(1);
-    const boss = win(choose(r, 'gn-50-cabinet', 'Take the boss\'s file too.').run);
+    // "Too": the fourteen first (the first alarm), then a second alarm for the boss's file.
+    const first = win(choose(r, 'gn-50-cabinet', 'Take the boss\'s file too.').run);
+    expect(flagOf(first, 'defector-files')).toBe(2);
+    expect(trustOf(first)).toBe(1);
+    expect(flagOf(first, 'team-rocket-files') ?? 0).toBe(0);
+    const caught = lose(choose(first, 'gn-50-second-alarm', 'Battle.').run);
+    expect(flagOf(caught, 'defector-files')).toBe(2);
+    const boss = win(choose(first, 'gn-50-second-alarm', 'Battle.').run);
     expect(flagOf(boss, 'defector-files')).toBe(3);
     expect(flagOf(boss, 'team-rocket-files')).toBe(1);
     r = choose(r, 'gn-50-cabinet', 'There\'s no time. Just yours.').run;
@@ -992,7 +999,7 @@ const rest = (run: RunState): void => {
 };
 
 describe('gn.51 The Pokémon Smuggling Ring', () => {
-  it('the yard: the doc\'s four ways in; the front is four guard battles at A+1, the last the foreman', () => {
+  it('the yard: the doc\'s four ways in; the front is four guard battles at A+1, then the foreman gives up the keys', () => {
     const run = yard('t51-front');
     expect(scene(run, 'gn-51-yard').labels).toEqual(['Go in through the front.', 'Go in through the roof.', 'Let the air out of the lorries\' tyres first.', 'Fetch the Rangers.']);
     let r = choose(run, 'gn-51-yard', 'Go in through the front.').run;
@@ -1001,6 +1008,10 @@ describe('gn.51 The Pokémon Smuggling Ring', () => {
       expect(b.battle!.enemyTeam[0]!.level).toBeGreaterThan(0);
       r = win(b);
     }
+    expect(opened(r, 'gn-51-foreman')).toBe(true);
+    const money = r.money;
+    r = choose(r, 'gn-51-foreman', 'Take the keys.').run;
+    expect(r.money).toBeGreaterThanOrEqual(money + 2500);
     expect(opened(r, 'gn-51-cages')).toBe(true);
     expect(flagOf(r, 'smuggle-entry')).toBe(1);
   });

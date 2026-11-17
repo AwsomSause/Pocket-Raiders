@@ -1,6 +1,6 @@
 // Greenneedle, part 11: gn.44 The 1v1 Championship (doc GREENNEEDLE_REWORKED_PLACED_10.md).
 // Build: npm run co:build -- greenneedle-11   then   npm run co:gn
-import { $, any, anyType, br, ch, egg, fight, flag, fr, heal, item, join, money, out, scout, takeNode, trainer, wild, type Json } from '../dsl.ts';
+import { $, any, anyType, at, br, ch, egg, fight, flag, fr, heal, item, join, money, out, takeNode, trainer, wild, type Json } from '../dsl.ts';
 import { bond, chIf, exactly, gev, gn, is, laterStage, moment, not, notThisRegion, rm, roll, route, say, scene, setTo, stampRegion, stampStage, teach, when, type Placement } from './_gn.ts';
 import { evil, foe, rivalTrust } from './_evil-story-kit.ts';
 
@@ -547,6 +547,15 @@ const gn49: Json[] = [
     'You come round on the verge. Somebody\'s put a coat under your head. The Snorlax has gone back to sleep, right where it was.',
     'But it rolled, a little, in the fight. There\'s a gap now, just wide enough. The queue squeezes through it, one at a time.',
   ), [ch('Squeeze past.', out('You squeeze past its belly. It snores at you. It sounds like a grudge.', setTo('snorlax-met', 1), item('leftovers'), stampRegion('snorlax-at')))]),
+  // ---- The food follower: at each rest before the stage ends it can still be asked along (the rest stop opens this beside it) ----
+  rm('gn-49-follower', 'The Sleeping Snorlax: One Step Back', hill({ tags: ['Story', 'Recovery'] }), say(
+    'The Snorlax from the road is still one step behind you. It sits when you sit. It watches your bag the way other Pokémon watch the sky.',
+    'It hasn\'t been asked. It would like to be.',
+  ), [
+    ch('Ask it to come with you.', out('It was coming anyway. Now it\'s official. It pats your bag, very gently, and keeps patting it.',
+      snorlaxJoin(), gn('snorlaxFond'), setTo('snorlax-joined', 1))),
+    ch('Not yet.', out('You say nothing. It doesn\'t mind. It has your bag to look at.')),
+  ]),
   // ---- Afterstory: a Snorlax that didn't join, asleep across the road in a later region ----
   gev('gn-49-later', 'The Sleeping Snorlax, Again', hill({ stop: 'event', rarity: 'rare', requires: [is('snorlax-met'), not('snorlax-joined'), not('snorlax-later'), notThisRegion('snorlax-at')] }), say(
     '*The road ends in a hill. The hill\'s breathing. You\'ve seen this hill before.*',
@@ -570,8 +579,9 @@ const note = (o: Json = {}): Json => ({ tint: NOTE_TINT, tags: ['Evil Team', 'St
 const here = gnc('thisRegion', { key: 'defector-at' });
 const helping = exactly('defector', 1);
 const trust = (n: number): Json => gn('defectorTrust', { n });
-/** Trust 3+: Corin shares a route (one free scouting of the team's nodes, each stage they meet you). */
-const SHARE = when('defector-trust', { min: 3 }, [scout(3)], 'Corin slips you a scrap of paper: a route, and where the patrols will be on it.');
+/** Trust 3+: Corin shares a route, one free scouting in every stage of the region (core/greenneedle/defector.ts defectorShare): handed over
+ *  here if this stage's hasn't been given yet; in a stage with no meeting it is left by the road before the first battle. */
+const SHARE = gn('defectorShare');
 /** After each meeting, Corin leaves the way they came. Following them is checking up on them. */
 const leaving = (id: string, name: string, line: string): Json => rm(id, name, note(), line, [
   ch('Let them go.', out('You let them go. You don\'t look where. Somehow that feels like the most useful thing you\'ve done all day.', SHARE)),
@@ -674,18 +684,25 @@ const gn50: Json[] = [
   ), [
     ch('Take them all.', fight('Fifteen folders don\'t fit in one jacket. A drawer bangs. Somewhere, an alarm. Someone\'s coming.', { ...foe('grunt', 'Night Patrol', 2, { lv: 1, win: [setTo('defector-files', 2), trust(1), scene('gn-50-out')] }), friendly: true, lose: [setTo('defector-files', 1), scene('gn-50-out')] })),
     ch('There\'s no time. Just yours.', out('Corin puts the fourteen folders back, one at a time, very carefully, as if they might wake. They don\'t speak on the way out.', setTo('defector-files', 1))),
-    ch('Take the boss\'s file too.', fight('The boss\'s drawer is locked. You open it anyway. The first alarm; then, as you run, a second.', { ...foe('specialist', 'Night Patrol', 3, { lv: 1, win: [setTo('defector-files', 3), evil({ mark: 'files' }), scene('gn-50-out')] }), friendly: true, lose: [setTo('defector-files', 1), scene('gn-50-out')] })),
+    // "Too": all fifteen folders and the boss's file. The first alarm is the same battle as "Take them all"; then a second alarm.
+    ch('Take the boss\'s file too.', fight('Fifteen folders, and then the boss\'s drawer. It\'s locked. You open it anyway. The first alarm. Someone\'s coming.', { ...foe('grunt', 'Night Patrol', 2, { lv: 1, win: [setTo('defector-files', 2), trust(1), scene('gn-50-second-alarm')] }), friendly: true, lose: [setTo('defector-files', 1), scene('gn-50-out')] })),
+  ]),
+  rm('gn-50-second-alarm', 'The Evil Team\'s Betrayal: The Second Alarm', note(), say(
+    'The fourteen folders are inside Corin\'s coat. The boss\'s file is inside yours. You\'re halfway down the corridor when a second alarm starts, louder than the first.',
+    'This patrol isn\'t Grunts. Somebody sent the people who are paid to be awake.',
+  ), [
+    ch('Battle.', fight('They come round the corner three abreast. Corin pushes the fourteen folders further down inside their coat, and stands behind you.', { ...foe('specialist', 'Second Patrol', 3, { lv: 1, win: [setTo('defector-files', 3), evil({ mark: 'files' }), scene('gn-50-out')] }), friendly: true, lose: [scene('gn-50-out')] })),
   ]),
   rm('gn-50-out', 'The Evil Team\'s Betrayal: Outside', note(), say(
     'Outside. Cold air. Running feet going the wrong way, behind you. Corin leans on a wall and laughs, once, like a cough.',
   ), [
     chIf([exactly('defector-files', 2)], 'Breathe.', out('Fourteen people you\'ll never meet will sleep tonight. Corin hands you nothing, says nothing. Doesn\'t need to.')),
-    chIf([exactly('defector-files', 3)], 'Breathe.', out('The boss\'s file is in your bag. Their Plan, in their own words, a stage early. Corin looks at it like it might bite.')),
+    chIf([exactly('defector-files', 3)], 'Breathe.', out('Fourteen people you\'ll never meet will sleep tonight. And the boss\'s file is in your bag: their Plan, in their own words, a stage early. Corin looks at it like it might bite.')),
     chIf([exactly('defector-files', 1)], 'Breathe.', out('One folder. Theirs. It\'s something. It isn\'t enough, and you both know which part isn\'t.')),
   ]),
   // ---- The ending, at the team's climax ----
   gev('gn-50-end', 'The Evil Team\'s Betrayal: The Climax', note({ stop: 'event', rarity: 'rare', requires: [here, is('defector'), not('defector-end'), { kind: 'evil', after: 6 }], remembers: [
-    { id: 'fourteen', when: [exactly('defector-files', 2)], notice: 'And somewhere behind the walls, a side door is standing open. You hear boots. A lot of boots. They\'re on your side.' },
+    { id: 'fourteen', when: [is('defector-files', 2)], notice: 'And somewhere behind the walls, a side door is standing open. You hear boots. A lot of boots. They\'re on your side.' },
   ] }), say(
     '*The {defector:team} site where it all ends. {defector:boss} is inside.*',
     '{defector:ending}',
@@ -702,7 +719,7 @@ const gn50: Json[] = [
 
 // =====================================================================================================================
 // gn.51  THE POKÉMON SMUGGLING RING  (step 14, side branch, window 12–17, better at night; instead of the battle; once per run, A6).
-// Four guards at A+1 (the last is the foreman); the roof skips two; the tyres cost a node; the Rangers do it for you. The cages,
+// Four guards at A+1, then the foreman (who gives up the keys); the roof skips two (at night the rafters are easy); the tyres cost a node; the Rangers do it for you. The cages,
 // the list of who goes home, and the one that stays: afraid of Balls, three rests of patience (core/greenneedle/smuggling.ts).
 // =====================================================================================================================
 const CRATE_TINT = '#232a33';
@@ -711,15 +728,16 @@ const GUARDS = [
   { name: 'Guard Hollis', line: 'The first guard looks up from a crossword. "You\'re not the lorry driver." He sighs, and stands.' },
   { name: 'Guard Pruett', line: 'The second guard was asleep on the cages. He\'s awake now, and embarrassed about it, which makes him angrier.' },
   { name: 'Guard Venn', line: 'The third guard doesn\'t say anything. He just takes off his watch, very carefully, and puts it in his pocket.' },
-  { name: 'Foreman Dace', line: '**Foreman Dace:** "Do you know what one of these fetches, three regions over? More than you\'ll see this year. Step away."' },
+  { name: 'Guard Ashdown', line: 'The fourth guard stands in front of the office door with her arms folded. "He\'s counting. He doesn\'t like to be interrupted when he\'s counting."' },
 ];
+/** The doc: four guard battles, one after another; then the foreman, who has a clipboard and no guards left. */
 const guardRoom = (i: number): Json => rm(`gn-51-guard-${i + 1}`, `The Smuggling Ring: ${GUARDS[i]!.name}`, crate(), say(
   i === 0 ? '*Inside, cages, stacked four high. Tags on each: a region, a number, a price.*' : 'Further in. The cages go on, row after row. Nothing in them makes a sound.',
   GUARDS[i]!.line,
 ), [
-  ch('Battle.', fight('His Pokémon are strong. Somebody pays for strong.', {
+  ch('Battle.', fight(i % 2 === 0 ? 'His Pokémon are strong. Somebody pays for strong.' : 'Strong Pokémon, well fed, badly loved. Somebody pays for strong.', {
     ...trainer(GUARDS[i]!.name, { cls: i === 3 ? 'veteran' : 'roughneck', size: i === 3 ? 4 : 3, lv: 1, friendly: true,
-      win: i === 3 ? [$(2500), any(...TREASURE_ITEMS), scene('gn-51-cages')] : [scene(`gn-51-guard-${i + 2}`)],
+      win: [scene(i === 3 ? 'gn-51-foreman' : `gn-51-guard-${i + 2}`)],
       lose: [scene('gn-51-lorries')] }) })),
 ]);
 const TREASURE_ITEMS = ['nugget', 'big-pearl', 'star-piece', 'comet-shard'];
@@ -732,12 +750,14 @@ const ENTRY = (o: { tyres?: boolean } = {}): Json[] => [
   ), takeNode(1), setTo('smuggle-tyres', 1), scene('gn-51-flat')))]),
   ch('Fetch the Rangers.', out(say(
     'You run for the Ranger post. They come, in a node, three jeeps with the lights off. The guards are theirs.',
-    'The head Ranger hands you a crowbar. "The cages are yours. You found them."',
-  ), takeNode(1), setTo('smuggle-entry', 4), flag('rep', 2), scene('gn-51-cages'))),
+    'The head Ranger hands you a crowbar, and a thin envelope: the finder\'s share, such as it is. "The cages are yours. You found them."',
+  ), takeNode(1), setTo('smuggle-entry', 4), flag('rep', 2), $(800), scene('gn-51-cages'))),
 ];
 
 const gn51: Json[] = [
-  gev('gn-51-yard', 'The Pokémon Smuggling Ring', crate({ stop: 'event', rarity: 'rare', requires: [not('smuggle-freed')] }), say(
+  gev('gn-51-yard', 'The Pokémon Smuggling Ring', crate({ stop: 'event', rarity: 'rare', requires: [not('smuggle-freed')], remembers: [
+    { id: 'night', when: [at('evening', 'night')], notice: 'It\'s dark. The guards\' torches don\'t reach the roof, and the yard lights are off so nobody sees the lorries. That cuts both ways.' },
+  ] }), say(
     '*A warehouse with its lights off and its doors open. Lorries, engines running.*',
     '*Inside, cages, stacked four high. Tags on each: a region, a number, a price.*',
     'Alolan, Galarian, Hisuian, Paldean: regional forms, taken from where they live, to be sold where they\'re rare.',
@@ -751,6 +771,8 @@ const gn51: Json[] = [
     'A beam as wide as your foot. Below, the cages, and the tops of the guards\' heads. One of them is humming.',
     'Halfway along, there\'s a gap where a beam has rotted out.',
   ), [
+    // Better at night: nobody looks up into the dark, and the gap is only a step.
+    chIf([at('evening', 'night')], 'Cross in the dark.', out('In the dark the gap is only a step, and nobody below can see the roof at all. Two guards never know you passed over their heads.', scene('gn-51-guard-3'))),
     chIf([anyType('flying', 'ghost')], 'Let your Pokémon carry you over.', out('It takes you across the gap without a sound. Two guards never see you pass over their heads.', scene('gn-51-guard-3'))),
     ch('Jump the gap.', out('You land soft. Two guards never see you pass over their heads.', scene('gn-51-guard-3')), {
       prompt: { id: 'brace-hold', needs: 'ok' },
@@ -758,6 +780,13 @@ const gn51: Json[] = [
     }),
   ]),
   ...GUARDS.map((_, i) => guardRoom(i)),
+  rm('gn-51-foreman', 'The Smuggling Ring: Foreman Dace', crate(), say(
+    'The office. A desk, a lamp, a clipboard. The foreman doesn\'t get up.',
+    '**Foreman Dace:** "Do you know what one of these fetches, three regions over? More than you\'ll see this year. Step away."',
+    'Then he looks past you, at four guards sitting on the floor, and at your Pokémon. He puts the clipboard down, very slowly, and the keys on top of it.',
+  ), [
+    ch('Take the keys.', out('You take the keys, and the clipboard, and the cash box he was counting into. He doesn\'t say another word.', $(2500), any(...TREASURE_ITEMS), scene('gn-51-cages'))),
+  ]),
   rm('gn-51-lorries', 'The Pokémon Smuggling Ring: The Lorries', crate({ remembers: [
     { id: 'tyres', when: [is('smuggle-tyres')], notice: 'Engines roar. Then they whine, and stop. Every lorry in the yard is sitting on its rims. Nobody\'s driving anywhere. By morning, the Rangers have the lot.' },
   ] }), say(
@@ -795,6 +824,8 @@ const gn51: Json[] = [
   ] }), say(
     'The {smuggle:rescue} from the warehouse is still with you. It takes no place in your team, and nothing can touch it: it stays back.',
     '{smuggle:rest}',
+    'The Rangers\' list, in your pocket, ticked as word comes of each one home:',
+    '{smuggle:list}',
   ), [
     chIf([not('smuggle-joined'), { kind: 'gn', test: 'rehabDone' }], 'Pick up the Ball.', out('It\'s in there. It climbed in by itself. Its Bond starts high. *It chose the door, this time.*', gn('smuggleJoin'))),
     chIf([{ kind: 'gn', test: 'rehabWaiting' }], 'Leave food where it can reach.', out('You put it down and walk away. In the morning the dish is clean, and it\'s a little closer.', gn('smuggleRehab', { n: 1 }))),
@@ -1341,11 +1372,11 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.51', shape: 'Single', earliest: 'A6', home: 14, window: [12, 17], sits: 'side-branch', attaches: 'instead', tags: ['Evil Team'],
     level: 'Guards A+1', often: 'run', badge: 'own',
     dressing: { kanto: 'The Pokémon Smuggling Ring', elsewhere: 'The Pokémon Smuggling Ring' },
-    note: 'Badge: a crate. Better at night. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.',
+    note: 'Badge: a crate. Better at night: in the evening or at night the rafters can be crossed without the jump. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.',
   },
   'gn-51-postcard': { gn: 'gn.51', shape: 'Single', earliest: 'A7', home: 4, window: [1, 8], sits: 'optional', attaches: 'rest', tags: ['Evil Team'], level: 'None', often: 'region', badge: 'own', note: 'Afterstory: one postcard a region, until all four are home.' },
   'gn-52-manor': {
-    gn: 'gn.52', shape: 'Single', earliest: 'A8', home: 16, window: [14, 18], sits: 'side-branch', attaches: 'instead', tags: ['Evil Team'],
+    gn: 'gn.52', shape: 'Single', earliest: 'A8', home: 16, window: [14, 18], sits: 'side-branch', attaches: 'instead', tags: ['Evil Team'], needs: ['night'],
     level: 'If it comes to a fight: A+1', often: 'run', badge: 'own',
     dressing: { kanto: 'The Evil Team\'s Pokémon Auction', elsewhere: 'The Evil Team\'s Pokémon Auction' },
     note: 'Badge: a mask. At night. Only in a region with an evil-team story. SF125\'s pop-up black-market auction is a street-corner copy of this. gn-52-later (the lieutenant wonders, a later stage) and gn-52-sale (the manor for sale, a later region) are its afterstories.',

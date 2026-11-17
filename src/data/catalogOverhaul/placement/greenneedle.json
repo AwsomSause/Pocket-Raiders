@@ -541,7 +541,7 @@
    "kanto": "The Pokémon Smuggling Ring",
    "elsewhere": "The Pokémon Smuggling Ring"
   },
-  "note": "Badge: a crate. Better at night. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.",
+  "note": "Badge: a crate. Better at night: in the evening or at night the rafters can be crossed without the jump. The rescued Pokémon walks beside the player and opens its own scene at each rest stop (run.ts) until it climbs in. Postcards (gn-51-postcard) come one a region afterwards.",
   "kinds": [
    "Evil Team"
   ],
@@ -589,7 +589,9 @@
   "kinds": [
    "Evil Team"
   ],
-  "tags": []
+  "tags": [
+   "night"
+  ]
  },
  "gn-52-later": {
   "gn": "gn.52",

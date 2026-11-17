@@ -42,8 +42,8 @@ import { mirrorRecord } from './greenneedle/mirror';
 import { eeveeHealed, eeveeTurn } from './greenneedle/eevee';
 import { draftGoesHome, draftRecord } from './greenneedle/draft';
 import { exPoster, exRipple } from './greenneedle/exhibition';
-import { snorlaxForgives, snorlaxGym, snorlaxRest } from './greenneedle/snorlax';
-import { farFromHome, smuggleRest } from './greenneedle/smuggling';
+import { snorlaxForgives, snorlaxGym, snorlaxRest, snorlaxAsk } from './greenneedle/snorlax';
+import { farFromHome, smuggleRest, smuggleStage } from './greenneedle/smuggling';
 import { standingWelcome } from './greenneedle/welcome';
 import { ranchRest } from './greenneedle/ranch';
 import { pinLine } from './greenneedle/weather';
@@ -150,7 +150,8 @@ import { clearTagPartner, tagPartnerOf, tagPartnerRegion } from './co/pastAllies
 import { quirkBadgeBond } from './co/quirks';
 import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
 import { addEventStops, boostStat, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
-import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
+import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, scoutAhead, spawnRoamers } from './world';
+import { defectorShare, ROUTE_LEFT } from './greenneedle/defector';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
 import { pickPlannedTheme, snapshotStagePlan, stageSignals, tailorStage } from './stagePlan';
@@ -796,6 +797,8 @@ function enterStage(content: Content, run: RunState, index: number): void {
   startStageEffects(run);
   coStageStart(run);
   followedStage(content, run);
+  // Greenneedle gn.51: one more of the smuggled Pokémon is home (the Rangers' list ticks one a stage).
+  smuggleStage(run);
   clearRecentPurchases(run);
   applyWealthTax(content, run);
   hatchEggs(content, run);
@@ -2763,6 +2766,8 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
     sgRest(content, run);
     careRest(run, content);
     const snorlaxLine = snorlaxRest(run, stageNumber(content, run));
+    // gn.49: the Snorlax that follows your bag can still be asked along, at any rest before the stage ends.
+    snorlaxAsk(content, run, stageNumber(content, run));
     // Greenneedle gn.52: the auction's rare Pokémon is afraid of rooms for a stage: it waits outside the Center.
     const afraidLine = taRoomsAfraid(content, run, before, stageNumber(content, run));
     // Greenneedle gn.51: the rescued Pokémon that won't go in a Ball comes a little closer at each rest.
@@ -3238,6 +3243,8 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const ripple = exRipple(content, run);
   // Greenneedle gn.49: the Snorlax that followed your bag sits down at the Gym door.
   const gymDoor = snorlaxGym(run, stageNumber(content, run));
+  // Greenneedle gn.50: at Trust 3 the defector shares a route once in every stage (if no meeting handed one over, it is left by the road).
+  const corinRoute = defectorShare(run, stageNumber(content, run)) ? (scoutAhead(content, run, 3), ROUTE_LEFT) : '';
   // Greenneedle gn.new.15: the Weather Station's hand-written forecast, pinned up at step 1 of each later stage.
   const pinned = pinLine(content, run);
   // Greenneedle gn.58: a friend let go for its own good steps in for one turn.
@@ -3252,6 +3259,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
   if (friendHelp) events.push({ type: 'raid', tone: 'info', text: friendHelp });
   if (gymDoor) events.push({ type: 'raid', tone: 'info', text: gymDoor });
+  if (corinRoute) events.push({ type: 'raid', tone: 'info', text: corinRoute });
   if (pinned) events.push({ type: 'raid', tone: 'info', text: pinned });
   if (rivalNotice) events.push({ type: 'raid', tone: 'info', text: rivalNotice });
   run.rng.battle = rng.state;

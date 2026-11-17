@@ -22,7 +22,7 @@ export const JOBS = [
 ] as const;
 /** The guest Pokémon's mark (their one Pokémon, held until the job's done). */
 export const GUEST = 'defector-guest';
-const REGION_KEYS = ['defector', 'defector-trust', 'defector-m1', 'defector-m2', 'defector-docs', 'defector-envelope', 'defector-unasked', 'defector-files', 'defector-end', 'defector-followed'];
+const REGION_KEYS = ['defector-route-stage', 'defector', 'defector-trust', 'defector-m1', 'defector-m2', 'defector-docs', 'defector-envelope', 'defector-unasked', 'defector-files', 'defector-end', 'defector-followed'];
 
 const jobOf = (run: RunState) => JOBS[fnv1a(`${run.story.evil?.teamId ?? 'team'}:defector`) % JOBS.length]!;
 const everyone = (run: RunState): PokemonInstance[] => [...run.party, ...run.box];
@@ -72,6 +72,22 @@ export function defectorReturn(run: RunState, unasked: boolean): string {
   return '';
 }
 
+/** All fourteen folders came out of the records room ("Take them all", or "Take the boss's file too", which takes them as well). */
+export const fourteenSaved = (run: Pick<RunState, 'story'>): boolean => f(run, 'defector-files') >= 2;
+
+/**
+ * Trust 3 or more: Corin shares a route, one free scouting in each stage of this region while they are helping. True (and the
+ * stage is stamped) the first time it is asked for in a stage: at a meeting, or else at that stage's first battle.
+ */
+export function defectorShare(run: RunState, stage: number): boolean {
+  if (f(run, 'defector') !== 1 || f(run, 'defector-at') !== run.regionIndex + 1 || trustOf(run) < 3 || f(run, 'defector-end') > 0) return false;
+  if (f(run, 'defector-route-stage') === stage) return false;
+  set(run, 'defector-route-stage', stage);
+  return true;
+}
+export const ROUTE_LINE = 'Corin slips you a scrap of paper: a route, and where the patrols will be on it.';
+export const ROUTE_LEFT = 'A scrap of paper under a stone by the road, in Corin\'s small, careful hand: a route, and where the patrols will be on it.';
+
 /** The ending, read at the team's climax: 1 partner (Trust 5), 2 map (3–4: one Hideout room skipped), 3 postcard (0–2), 4 boss (exposed). */
 export function defectorEnd(run: RunState): string {
   if (f(run, 'defector-end') > 0) return '';
@@ -120,7 +136,7 @@ export function defectorClimax(content: Content, run: RunState, battle: BattleSt
   const team = evilTeam(content, run);
   if (!team || battle.trainer?.name !== team.ranks.leader.name) return;
   if (f(run, 'defector-at') !== run.regionIndex + 1 || f(run, 'defector') !== 1) return;
-  if (f(run, 'defector-files') === 2 && battle.enemyVolatile) {
+  if (fourteenSaved(run) && battle.enemyVolatile) {
     // The side door opens: fourteen ex-Grunts hold the corridor behind you for three turns (nobody comes in to swap places).
     battle.enemyVolatile.trapped = true;
     battle.storyEffects.push(`untrap:enemy:${battle.turn + 2}`, 'defector-corridor');

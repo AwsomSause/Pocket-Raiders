@@ -5032,6 +5032,62 @@
    ]
   },
   {
+   "id": "gn-49-follower",
+   "name": "The Sleeping Snorlax: One Step Back",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "snorlax",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "The Snorlax from the road is still one step behind you. It sits when you sit. It watches your bag the way other Pokémon watch the sky.\n\nIt hasn't been asked. It would like to be.",
+   "choices": [
+    {
+     "label": "Ask it to come with you.",
+     "success": {
+      "text": "It was coming anyway. Now it's official. It pats your bag, very gently, and keeps patting it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "snorlax"
+        ],
+        "types": [],
+        "levelBonus": 2,
+        "shinyMultiplier": 1,
+        "ability": "heavy-sleeper",
+        "mark": "snorlax-woke"
+       },
+       {
+        "kind": "gn",
+        "op": "snorlaxFond"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "snorlax-joined",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "You say nothing. It doesn't mind. It has your bag to look at.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
    "id": "gn-49-later",
    "name": "The Sleeping Snorlax, Again",
    "group": "Greenneedle",
@@ -5612,16 +5668,7 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "when",
-        "key": "defector-trust",
-        "min": 3,
-        "then": [
-         {
-          "kind": "scout",
-          "columns": 3
-         }
-        ],
-        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+        "op": "defectorShare"
        }
       ]
      }
@@ -5644,16 +5691,7 @@
        },
        {
         "kind": "gn",
-        "op": "when",
-        "key": "defector-trust",
-        "min": 3,
-        "then": [
-         {
-          "kind": "scout",
-          "columns": 3
-         }
-        ],
-        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+        "op": "defectorShare"
        }
       ]
      }
@@ -5670,16 +5708,7 @@
        },
        {
         "kind": "gn",
-        "op": "when",
-        "key": "defector-trust",
-        "min": 3,
-        "then": [
-         {
-          "kind": "scout",
-          "columns": 3
-         }
-        ],
-        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+        "op": "defectorShare"
        }
       ]
      },
@@ -5905,16 +5934,7 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "when",
-        "key": "defector-trust",
-        "min": 3,
-        "then": [
-         {
-          "kind": "scout",
-          "columns": 3
-         }
-        ],
-        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+        "op": "defectorShare"
        }
       ]
      }
@@ -5937,16 +5957,7 @@
        },
        {
         "kind": "gn",
-        "op": "when",
-        "key": "defector-trust",
-        "min": 3,
-        "then": [
-         {
-          "kind": "scout",
-          "columns": 3
-         }
-        ],
-        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+        "op": "defectorShare"
        }
       ]
      }
@@ -5963,16 +5974,7 @@
        },
        {
         "kind": "gn",
-        "op": "when",
-        "key": "defector-trust",
-        "min": 3,
-        "then": [
-         {
-          "kind": "scout",
-          "columns": 3
-         }
-        ],
-        "text": "Corin slips you a scrap of paper: a route, and where the patrols will be on it."
+        "op": "defectorShare"
        }
       ]
      },
@@ -6503,12 +6505,77 @@
     {
      "label": "Take the boss's file too.",
      "success": {
-      "text": "The boss's drawer is locked. You open it anyway. The first alarm; then, as you run, a second.",
+      "text": "Fifteen folders, and then the boss's drawer. It's locked. You open it anyway. The first alarm. Someone's coming.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "Night Patrol",
+       "size": 2,
+       "levelBonus": 1,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "defector-files",
+         "n": 2
+        },
+        {
+         "kind": "gn",
+         "op": "defectorTrust",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-50-second-alarm"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "defector-files",
+         "n": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-50-out"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-50-second-alarm",
+   "name": "The Evil Team's Betrayal: The Second Alarm",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f2a3a",
+    "effect": "none"
+   },
+   "intro": "The fourteen folders are inside Corin's coat. The boss's file is inside yours. You're halfway down the corridor when a second alarm starts, louder than the first.\n\nThis patrol isn't Grunts. Somebody sent the people who are paid to be awake.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "They come round the corner three abreast. Corin pushes the fourteen folders further down inside their coat, and stands behind you.",
       "effects": [],
       "battle": {
        "kind": "trainer",
        "evil": "specialist",
-       "name": "Night Patrol",
+       "name": "Second Patrol",
        "size": 3,
        "levelBonus": 1,
        "chain": 1,
@@ -6531,12 +6598,6 @@
        ],
        "friendly": true,
        "lose": [
-        {
-         "kind": "gn",
-         "op": "setFlag",
-         "key": "defector-files",
-         "n": 1
-        },
         {
          "kind": "gn",
          "op": "scene",
@@ -6582,7 +6643,7 @@
     {
      "label": "Breathe.",
      "success": {
-      "text": "The boss's file is in your bag. Their Plan, in their own words, a stage early. Corin looks at it like it might bite.",
+      "text": "Fourteen people you'll never meet will sleep tonight. And the boss's file is in your bag: their Plan, in their own words, a stage early. Corin looks at it like it might bite.",
       "effects": []
      },
      "showIf": [
@@ -6652,7 +6713,7 @@
        "kind": "flag",
        "key": "defector-files",
        "atLeast": 2,
-       "atMost": 2
+       "atMost": 99
       }
      ],
      "notice": "And somewhere behind the walls, a side door is standing open. You hear boots. A lot of boots. They're on your side."
@@ -6798,6 +6859,21 @@
      "atMost": 0
     }
    ],
+   "remembers": [
+    {
+     "id": "night",
+     "when": [
+      {
+       "kind": "period",
+       "in": [
+        "evening",
+        "night"
+       ]
+      }
+     ],
+     "notice": "It's dark. The guards' torches don't reach the roof, and the yard lights are off so nobody sees the lorries. That cuts both ways."
+    }
+   ],
    "scene": {
     "cast": [],
     "tint": "#232a33",
@@ -6869,7 +6945,7 @@
     {
      "label": "Fetch the Rangers.",
      "success": {
-      "text": "You run for the Ranger post. They come, in a node, three jeeps with the lights off. The guards are theirs.\n\nThe head Ranger hands you a crowbar. \"The cages are yours. You found them.\"",
+      "text": "You run for the Ranger post. They come, in a node, three jeeps with the lights off. The guards are theirs.\n\nThe head Ranger hands you a crowbar, and a thin envelope: the finder's share, such as it is. \"The cages are yours. You found them.\"",
       "effects": [
        {
         "kind": "takeNode",
@@ -6885,6 +6961,10 @@
         "kind": "flag",
         "key": "rep",
         "amount": 2
+       },
+       {
+        "kind": "money",
+        "amount": 800
        },
        {
         "kind": "gn",
@@ -6953,7 +7033,7 @@
     {
      "label": "Fetch the Rangers.",
      "success": {
-      "text": "You run for the Ranger post. They come, in a node, three jeeps with the lights off. The guards are theirs.\n\nThe head Ranger hands you a crowbar. \"The cages are yours. You found them.\"",
+      "text": "You run for the Ranger post. They come, in a node, three jeeps with the lights off. The guards are theirs.\n\nThe head Ranger hands you a crowbar, and a thin envelope: the finder's share, such as it is. \"The cages are yours. You found them.\"",
       "effects": [
        {
         "kind": "takeNode",
@@ -6969,6 +7049,10 @@
         "kind": "flag",
         "key": "rep",
         "amount": 2
+       },
+       {
+        "kind": "money",
+        "amount": 800
        },
        {
         "kind": "gn",
@@ -6996,6 +7080,28 @@
    },
    "intro": "A beam as wide as your foot. Below, the cages, and the tops of the guards' heads. One of them is humming.\n\nHalfway along, there's a gap where a beam has rotted out.",
    "choices": [
+    {
+     "label": "Cross in the dark.",
+     "success": {
+      "text": "In the dark the gap is only a step, and nobody below can see the roof at all. Two guards never know you passed over their heads.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-guard-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "period",
+       "in": [
+        "evening",
+        "night"
+       ]
+      }
+     ]
+    },
     {
      "label": "Let your Pokémon carry you over.",
      "success": {
@@ -7114,7 +7220,7 @@
     {
      "label": "Battle.",
      "success": {
-      "text": "His Pokémon are strong. Somebody pays for strong.",
+      "text": "Strong Pokémon, well fed, badly loved. Somebody pays for strong.",
       "effects": [],
       "battle": {
        "kind": "trainer",
@@ -7193,6 +7299,54 @@
   },
   {
    "id": "gn-51-guard-4",
+   "name": "The Smuggling Ring: Guard Ashdown",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#232a33",
+    "effect": "none"
+   },
+   "intro": "Further in. The cages go on, row after row. Nothing in them makes a sound.\n\nThe fourth guard stands in front of the office door with her arms folded. \"He's counting. He doesn't like to be interrupted when he's counting.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Strong Pokémon, well fed, badly loved. Somebody pays for strong.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-51-lorries"
+        }
+       ],
+       "name": "Guard Ashdown",
+       "classId": "veteran",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-51-foreman"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-51-foreman",
    "name": "The Smuggling Ring: Foreman Dace",
    "group": "Greenneedle",
    "tags": [
@@ -7205,49 +7359,32 @@
     "tint": "#232a33",
     "effect": "none"
    },
-   "intro": "Further in. The cages go on, row after row. Nothing in them makes a sound.\n\n**Foreman Dace:** \"Do you know what one of these fetches, three regions over? More than you'll see this year. Step away.\"",
+   "intro": "The office. A desk, a lamp, a clipboard. The foreman doesn't get up.\n\n**Foreman Dace:** \"Do you know what one of these fetches, three regions over? More than you'll see this year. Step away.\"\n\nThen he looks past you, at four guards sitting on the floor, and at your Pokémon. He puts the clipboard down, very slowly, and the keys on top of it.",
    "choices": [
     {
-     "label": "Battle.",
+     "label": "Take the keys.",
      "success": {
-      "text": "His Pokémon are strong. Somebody pays for strong.",
-      "effects": [],
-      "battle": {
-       "kind": "trainer",
-       "friendly": true,
-       "lose": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-51-lorries"
-        }
-       ],
-       "name": "Foreman Dace",
-       "classId": "veteran",
-       "size": 4,
-       "types": [],
-       "levelBonus": 1,
-       "win": [
-        {
-         "kind": "money",
-         "amount": 2500
-        },
-        {
-         "kind": "itemFrom",
-         "ids": [
-          "nugget",
-          "big-pearl",
-          "star-piece",
-          "comet-shard"
-         ]
-        },
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-51-cages"
-        }
-       ]
-      }
+      "text": "You take the keys, and the clipboard, and the cash box he was counting into. He doesn't say another word.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 2500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "star-piece",
+         "comet-shard"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-51-cages"
+       }
+      ]
      }
     }
    ]
@@ -7466,7 +7603,7 @@
     "tint": "#232a33",
     "effect": "none"
    },
-   "intro": "The {smuggle:rescue} from the warehouse is still with you. It takes no place in your team, and nothing can touch it: it stays back.\n\n{smuggle:rest}",
+   "intro": "The {smuggle:rescue} from the warehouse is still with you. It takes no place in your team, and nothing can touch it: it stays back.\n\n{smuggle:rest}\n\nThe Rangers' list, in your pocket, ticked as word comes of each one home:\n\n{smuggle:list}",
    "choices": [
     {
      "label": "Pick up the Ball.",
