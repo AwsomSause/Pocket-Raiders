@@ -4,6 +4,7 @@
 
 import { act, B, esc, facts, H, hpb, mini, paper, tall, TX, W } from '../kit';
 import type { ReduxCtx } from '../stage';
+import { figure, type Art } from '../templates';
 
 const pips = (n: number, of = 3): string => `<span style="flex:none">${Array.from({ length: of }, (_, k) => `<i style="display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;background:${k < n ? 'var(--acc)' : '#0000'};box-shadow:0 0 0 2px var(--tf)"></i>`).join('')}</span>`;
 const clip = 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0';
@@ -17,7 +18,7 @@ export function listWindow(count: number, pick: number, rows: number): { from: n
 
 // ---------- Dossier ----------
 
-export interface DossierPerson { name: string; rank: string; file: string | null }
+export interface DossierPerson { name: string; rank: string; /** Their picture: a trainer atlas, or a single PNG from the cast art. */ file: Art | null }
 export interface DossierModel {
   tabs: string[];
   tab: number;
@@ -43,7 +44,7 @@ export function pyramidFace(rows: number, widest: number): { face: number; cell:
 
 export function dossierView(c: ReduxCtx, d: DossierModel): string {
   const v = c.v(2);
-  const face = (p: DossierPerson, size: number): string => (p.file ? mini(p.file, size) : d.shade ? mini(d.shade, size, 'sil') : '');
+  const face = (p: DossierPerson, size: number): string => (p.file ? figure(p.file, size) : d.shade ? mini(d.shade, size, 'sil') : '');
   const sel = d.people[d.pick] ?? d.people[0];
   const small = d.tabs.join('').length > 56;
   const tabs = `<div class="abs tabs" style="left:24px;top:62px;max-width:912px;overflow:hidden">${d.tabs.map((t, k) => `<span class="${k === d.tab ? 'on' : ''}" style="cursor:pointer;white-space:nowrap${small ? ';font-size:12px;padding:6px 8px' : ''}"${act('popTab', k)}>${esc(t)}</span>`).join('')}</div>`;

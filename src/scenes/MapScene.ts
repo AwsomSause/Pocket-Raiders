@@ -470,7 +470,7 @@ export class MapScene extends Phaser.Scene {
       const f = folders[tab]!;
       const pick = Math.max(0, Math.min(f.entries.length - 1, p.pick));
       const e = f.entries[pick]!;
-      const fileOf = (name: string, id: string): string | null => { const a = artOf(this, castSpriteId(name, id)); return a?.atlas ? a.file : null; };
+      const fileOf = (name: string, id: string) => artOf(this, castSpriteId(name, id));
       return dossierView(c, {
         tabs: folders.map((x) => x.label),
         tab,
