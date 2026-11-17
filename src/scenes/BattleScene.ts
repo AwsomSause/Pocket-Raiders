@@ -3232,6 +3232,20 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** Waits for a presentation beat; confirm/back skips it. */
+  /** A Mega / Tera / Dynamax / Z cutscene takes the whole screen: the HUD (New look layer or Old look boxes and bar) steps aside, then returns. */
+  private async gimmickBeat(b: Beat, recap?: string): Promise<void> {
+    const parts = ([this.playerBox?.container, this.enemyBox?.container, this.message, this.storyBar?.container, this.header] as (Phaser.GameObjects.Components.Visible & Phaser.GameObjects.GameObject | undefined)[]).filter((o): o is Phaser.GameObjects.Components.Visible & Phaser.GameObjects.GameObject => !!o);
+    const was = parts.map((o) => o.visible);
+    parts.forEach((o) => o.setVisible(false));
+    this.rx?.visible(false);
+    try {
+      await this.playBeat(b, recap);
+    } finally {
+      parts.forEach((o, i) => { if (o.active && was[i]) o.setVisible(true); });
+      this.rx?.visible(true);
+    }
+  }
+
   private async playBeat(b: Beat, recap?: string): Promise<void> {
     let over = false;
     this.time.delayedCall(150, () => {
@@ -3581,6 +3595,8 @@ export class BattleScene extends Phaser.Scene {
     const def = session.content.story.definitions.find((d) => d.id === defId);
     const x = def ? explainMoment(session.content, def) : null;
     if (!x || unseenKeys(session.profile.hyperExplained, x).length === 0) return;
+    // New look: its HUD layer sits over the canvas and would cover this panel, so it steps aside until Continue.
+    this.rx?.visible(false);
     await new Promise<void>((resolve) => {
       const dim = this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.7).setOrigin(0).setInteractive();
       const panel = drawGlass(this, 90, 36, GAME_WIDTH - 180, GAME_HEIGHT - 72, { radius: 22 });
@@ -3600,6 +3616,7 @@ export class BattleScene extends Phaser.Scene {
         ready = false;
         this.explainWait = null;
         root.destroy();
+        this.rx?.visible(true);
         session.markHyperExplained(x.keys);
         resolve();
       };
@@ -5314,7 +5331,7 @@ export class BattleScene extends Phaser.Scene {
             const art = mine ? this.playerArt() : (this.run.battle?.trainer ? (this.trainerArt()?.assetId ?? null) : null);
             const crystalId = e.itemId ?? (zBase ? ownedZCrystal(content, this.run.inventory, zBase.type) : null);
             const feel = this.cineFeel('zmove');
-            await this.playBeat(
+            await this.gimmickBeat(
               zMoveScene(this, {
                 makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
                 makeTrainer: art ? (x, y) => trainerVisual(this, art, '', x, y, 3.2) : null,
@@ -5341,7 +5358,7 @@ export class BattleScene extends Phaser.Scene {
             const playerArt = mine ? this.playerArt() : (this.run.battle?.trainer ? (this.trainerArt()?.assetId ?? null) : null);
             const feel = this.cineFeel('tera');
             const patternType = mon.speciesId.startsWith('terapagos') ? 'stellar' : teraType;
-            await this.playBeat(
+            await this.gimmickBeat(
               teraScene(this, {
                 makeFront: (x, y) => pokemonVisual(this, sp, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
                 backdropKey: this.arenaBgKey,
@@ -5367,7 +5384,7 @@ export class BattleScene extends Phaser.Scene {
             // Both front pictures must be loaded before the scene measures them.
             const fronts = [from, to].flatMap((sp) => { const ids = pokemonAssetIds(sp.assets); return mon.shiny ? [ids.front, ids.shinyFront] : [ids.front]; });
             await loadAssets(this, fronts.filter((id) => services().assets.has(id))).catch(() => undefined);
-            await this.playBeat(
+            await this.gimmickBeat(
               megaScene(this, {
                 makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
                 makeMegaFront: (x, y) => pokemonVisual(this, to, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
@@ -5392,7 +5409,7 @@ export class BattleScene extends Phaser.Scene {
             await loadAssets(this, fronts.filter((id) => services().assets.has(id))).catch(() => undefined);
             const pArt = mine ? this.playerArt() : null;
             const fArt = mine ? null : this.trainerArt();
-            await this.playBeat(
+            await this.gimmickBeat(
               dynamaxScene(this, {
                 kind: cine,
                 makeFront: (x, y) => pokemonVisual(this, from, 'front', x, y, PIXEL_SCALE * 1.5, mon.shiny),
@@ -5412,7 +5429,7 @@ export class BattleScene extends Phaser.Scene {
             );
           } else if (cine) {
             const zMove = e.zMoveId ? (content.moves.get(e.zMoveId) ?? null) : zBase ? zMoveFor(content, zBase) : null;
-            await this.playBeat(
+            await this.gimmickBeat(
               cinematic(this, {
                 kind: cine,
                 x: at.x,
