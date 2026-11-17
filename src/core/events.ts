@@ -129,6 +129,7 @@ import type { MapNode, PokemonInstance, RunState, SideStop } from './state';
 import { applyReward, rewardTargetProblem } from './rewards';
 import { focusIs, MYSTERY_EXTRA_STOPS, regionFocus } from './campaign/focus';
 import { emit } from './story/record';
+import { onEventChoice as promiseOnChoice } from './instrumentality/promises';
 import { calmDisturbance, hasDisturbance, noteDungeonEntered } from './worldSim/tick';
 import { recordBattleStarted } from './story/hooks';
 import { partyLifeBond } from './partyLife';
@@ -1188,6 +1189,7 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   if (noTrade) throw new Error(noTrade);
   if (tradeUid !== undefined && !tradePicksOf(content, current, choice)?.some((p) => p.uid === tradeUid)) throw new Error('That Pokémon does not fit the trade');
   const run = structuredClone(current);
+  for (const text of promiseOnChoice(content, run, choice.label)) emit(content, run, 'storyMoment', { data: { promise: true }, importance: 60, text });
   const runSide = run.stage!.map.nodes.find((n) => n.id === node.id)!.sides.find((s) => s.id === sideId)!;
   runSide.used = true;
   delete runSide.hidden;

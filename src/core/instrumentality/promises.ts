@@ -39,6 +39,7 @@ const COMES_WHEN: Record<string, (content: Content, run: RunState) => boolean> =
   zarude: (_c, run) => [...run.party, ...run.box].some((m) => m.hatched === true),
   mew: (_c, run) => Object.keys(promiseState(run).track ?? {}).filter((k) => k.startsWith('caught:')).length >= 20,
   darkrai: (_c, run) => trackOf(run, 'restsPassed') >= 2,
+  jirachi: (_c, run) => trackOf(run, 'declines') >= 3,
   deoxys: (_c, run) => trackOf(run, 'leadChanges') >= 4,
   victini: (_c, run) => trackOf(run, 'winStreak') >= 10,
   genesect: (_c, run) => [...run.party, ...run.box].some((m) => FOSSILS.has(m.speciesId)),
@@ -347,4 +348,17 @@ export function onLeadAtStage(content: Content, run: RunState): string[] {
   const lines = noteEvent(content, run, { kind: 'lead', uid: String(now), previousLead: before > 0 ? String(before) : null });
   bumpTrack(run, 'lastLead', now);
   return lines;
+}
+
+export const WISHES = 3;
+/** Jirachi's three Wishes for the run. */
+export const wishesLeft = (run: RunState): number => (guestId(run) === 'jirachi' ? Math.max(0, WISHES - trackOf(run, 'wishesUsed')) : 0);
+
+/** A choice made in an event. Plain refusals ("Decline", "Refuse", "No, thanks") count as declined requests and gifts: Jirachi's trigger and Promise, Pecharunt's Promise. Judged by the label's first words. */
+const REFUSAL = /^(decline|refuse|say no(?![a-z])|no\.?$|no,? thanks|turn (it|that|the offer|them|him|her) down|reject)/i;
+export const isRefusal = (label: string): boolean => REFUSAL.test(label.trim());
+export function onEventChoice(content: Content, run: RunState, label: string): string[] {
+  if (!run.expansion?.promises || !isRefusal(label)) return [];
+  bumpTrack(run, 'declines', (n) => n + 1);
+  return [...noteEvent(content, run, { kind: 'refuseRequest' }), ...noteEvent(content, run, { kind: 'declineGift' })];
 }

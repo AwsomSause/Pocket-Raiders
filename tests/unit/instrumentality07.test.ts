@@ -4,12 +4,12 @@ import { createBattle } from '../../src/core/battle/engine';
 import { freshSos } from '../../src/core/battle/sos';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { HEATED, heatedConditions, heatedRoll, isBigBattle } from '../../src/core/instrumentality/heated';
-import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
+import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, isRefusal, onEventChoice, wishesLeft, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
 import { resolveWonder, startWonder, wonderActions } from '../../src/core/instrumentality/wonders';
 import { MYTHICALS } from '../../src/core/instrumentality/promisesData';
 import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/instrumentality/secondChance';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
-import { chooseStarter, createRun, takeTurn } from '../../src/core/run';
+import { chooseStarter, createRun, takeTurn, useDraftItem, wishCandidates, wishRedraw } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content, toBattle } from './helpers';
 
@@ -105,7 +105,7 @@ describe('Mythical Promises (M1)', () => {
       expect(m.tellings).toHaveLength(3);
       if (m.status !== 'supported') expect(m.note).toBeTruthy();
     }
-    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['mew', 'deoxys', 'darkrai', 'victini', 'keldeo', 'genesect', 'hoopa', 'zeraora', 'zarude']);
+    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['mew', 'jirachi', 'deoxys', 'darkrai', 'victini', 'keldeo', 'genesect', 'hoopa', 'zeraora', 'zarude']);
   });
   it('every Promise is a checkable rule: it breaks on its event and not on an unrelated one', () => {
     const run = base();
@@ -392,6 +392,53 @@ describe('Mythical Promises stage 2 (Deoxys)', () => {
     expect(comesWhenMet(content, run, 'deoxys')).toBe(false);
     for (let i = 0; i < 4; i++) onLeadChanged(run);
     expect(comesWhenMet(content, run, 'deoxys')).toBe(true);
+  });
+});
+
+describe('Mythical Promises stage 2 (Jirachi)', () => {
+  const atRewards = () => {
+    const run = structuredClone(toBattle(start({ mythicalPromises: true })));
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: 'jirachi', guest: { id: 'jirachi', forgiven: false }, kept: [], left: [] } };
+    run.party[0]!.level = 80;
+    run.party[0]!.moves = [{ id: 'tackle', pp: 35 }];
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 2, 'foe')], 0, run.party[0]!.uid);
+    let res = takeTurn(content, run, { kind: 'move', index: 0 });
+    for (let i = 0; i < 20 && res.run.phase === 'battle'; i++) res = takeTurn(content, res.run, { kind: 'move', index: 0 });
+    return res.run;
+  };
+  it('refusals are plain Decline/Refuse/No-thanks choices; three of them bring Jirachi, any of them breaks its Promise', () => {
+    for (const l of ['Decline', 'Refuse the chair.', 'No, thanks.', 'Turn it down']) expect(isRefusal(l), l).toBe(true);
+    for (const l of ['Walk on.', 'Give it back.', 'Say nothing.', 'Accept']) expect(isRefusal(l), l).toBe(false);
+    const run = start({ mythicalPromises: true });
+    for (let i = 0; i < 2; i++) onEventChoice(content, run, 'Decline');
+    expect(comesWhenMet(content, run, 'jirachi')).toBe(false);
+    onEventChoice(content, run, 'Decline');
+    expect(comesWhenMet(content, run, 'jirachi')).toBe(true);
+    const guest = start({ mythicalPromises: true });
+    guest.expansion = { ...guest.expansion, promise: { tellings: {}, visited: 'jirachi', guest: { id: 'jirachi', forgiven: false }, kept: [], left: [] } };
+    expect(onEventChoice(content, guest, 'Walk on.')).toEqual([]);
+    expect(onEventChoice(content, guest, 'Decline')[0]).toContain('leaves');
+  });
+  it('three Wishes: redraw the node, name a reward of the same tier; none without the Guest', () => {
+    const run = atRewards();
+    expect(run.phase).toBe('reward');
+    expect(wishesLeft(run)).toBe(3);
+    const redrawn = wishRedraw(content, run);
+    expect(wishesLeft(redrawn.run)).toBe(2);
+    expect(redrawn.run.draft).toHaveLength(run.draft!.length);
+    const cands = wishCandidates(content, redrawn.run, 0);
+    expect(cands.length).toBeGreaterThan(0);
+    expect(cands).toEqual(wishCandidates(content, redrawn.run, 0));
+    const rarity = content.rewards.get(redrawn.run.draft![0]!)!.rarity;
+    for (const id of cands) expect(content.rewards.get(id)!.rarity).toBe(rarity);
+    const named = useDraftItem(content, redrawn.run, 'wishName', 0, cands[0]);
+    expect(named.run.draft![0]).toBe(cands[0]);
+    expect(wishesLeft(named.run)).toBe(1);
+    expect(() => useDraftItem(content, redrawn.run, 'wishName', 0, 'not-a-reward')).toThrow();
+    const plain = atRewards();
+    plain.expansion = { ...plain.expansion, promise: { tellings: {}, visited: null, guest: null, kept: [], left: [] } };
+    expect(wishesLeft(plain)).toBe(0);
+    expect(() => wishRedraw(content, plain)).toThrow();
   });
 });
 

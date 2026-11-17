@@ -65,7 +65,7 @@ import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
 import { resolveWonder, startWonder, wonderActions } from './instrumentality/wonders';
-import { hearTelling, hoopaRing, hoopaStage, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
+import { hearTelling, hoopaRing, hoopaStage, bumpTrack, wishesLeft, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
@@ -4536,17 +4536,47 @@ function carryReward(run: RunState, rewardId: string): void {
   if (!(run.draftCarry ?? []).includes(rewardId)) run.draftCarry = [...(run.draftCarry ?? []), rewardId];
 }
 
-export type DraftItemKind = 'reroll' | 'lock';
+export type DraftItemKind = 'reroll' | 'lock' | 'wishName';
 
 /** Uses left of the Bag item behind a reward-screen action: Cornn Berry re-rolls one choice, Lock Capsule carries one into the next draft. */
 export function draftItemUses(content: Content, run: RunState, kind: DraftItemKind): number {
+  if (kind === 'wishName') return wishesLeft(run);
   const itemId = perkItem(content, run, kind === 'reroll' ? 'rerollOne' : 'lockOne');
   return itemId ? usesLeft(run, itemId) : 0;
 }
 
 /** Uses a Cornn Berry (swap one draft choice for a new one) or a Lock Capsule (that choice comes back in the next draft too). */
-export function useDraftItem(content: Content, current: RunState, kind: DraftItemKind, draftIndex: number): { run: RunState; message: string } {
+/** Jirachi: the same-tier rewards a Wish could name in place of draft card `draftIndex` (its own seeded list; no reward roll moves). */
+export function wishCandidates(content: Content, run: RunState, draftIndex: number): string[] {
+  const card = run.draft?.[draftIndex];
+  if (!card || wishesLeft(run) <= 0) return [];
+  const rarity = content.rewards.get(card)!.rarity;
+  const weights = luckWeights(rewardWeights(content, run), runAttributeEffects(content, run));
+  const rng = new Rng(hashSeed(`${run.seed}::wish-names::${run.encountersCompleted}::${draftIndex}`));
+  const pool = generateDraft(content, run, rng, weights, undefined, { size: 24, exclude: run.draft! });
+  return [...new Set(pool)].filter((id) => content.rewards.get(id)!.rarity === rarity).slice(0, 6);
+}
+
+/** Jirachi: a Wish redraws the whole reward node (a fresh draft, still in the reward phase). */
+export function wishRedraw(content: Content, current: RunState): { run: RunState; message: string } {
   assertPhase(current, 'reward');
+  if (wishesLeft(current) <= 0) throw new Error('No Wishes left');
+  const run = structuredClone(current);
+  bumpTrack(run, 'wishesUsed', (n) => n + 1);
+  const weights = luckWeights(rewardWeights(content, run), runAttributeEffects(content, run));
+  run.draft = newDraft(content, run, weights);
+  return { run, message: `Jirachi's Wish redraws the rewards (${wishesLeft(run)} left).` };
+}
+
+export function useDraftItem(content: Content, current: RunState, kind: DraftItemKind, draftIndex: number, namedReward?: string): { run: RunState; message: string } {
+  assertPhase(current, 'reward');
+  if (kind === 'wishName') {
+    if (!namedReward || !wishCandidates(content, current, draftIndex).includes(namedReward)) throw new Error('That reward cannot be named');
+    const run = structuredClone(current);
+    bumpTrack(run, 'wishesUsed', (n) => n + 1);
+    run.draft![draftIndex] = namedReward;
+    return { run, message: `Jirachi's Wish names ${content.rewards.get(namedReward)!.name} (${wishesLeft(run)} left).` };
+  }
   const rewardId = current.draft?.[draftIndex];
   if (!rewardId) throw new Error(`Invalid reward choice ${draftIndex}`);
   const itemId = perkItem(content, current, kind === 'reroll' ? 'rerollOne' : 'lockOne');

@@ -832,8 +832,15 @@ export class GameSession {
     return result;
   }
 
-  useDraftItem(kind: Run.DraftItemKind, index: number): { run: RunState; message: string } {
-    const result = Run.useDraftItem(this.content, this.requireRun(), kind, index);
+  wishRedraw(): { run: RunState; message: string } {
+    const result = Run.wishRedraw(this.content, this.requireRun());
+    this.run = result.run;
+    this.persistRun();
+    return result;
+  }
+
+  useDraftItem(kind: Run.DraftItemKind, index: number, namedReward?: string): { run: RunState; message: string } {
+    const result = Run.useDraftItem(this.content, this.requireRun(), kind, index, namedReward);
     this.run = result.run;
     this.persistRun();
     return result;
