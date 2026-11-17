@@ -1610,13 +1610,15 @@ export function mapPreviews(content: Content, run: RunState): Record<string, Nod
     out[node.id] = { itemId: null, source: `${mainRival(run)?.name ?? 'Your rival'}'s notes`, team: battle.enemyTeam.slice(0, 1).map((m) => ({ speciesId: m.speciesId, level: m.level })), trainerName: battle.trainer.name };
   }
   // Latias's blessing, Sight Sharing: every wild and trainer battle ahead shows the opponent's lead (in Communion, the whole team).
-  if (effectBlessing(run)?.effect.kind === 'sight') {
-    const whole = inCommunionForm(run);
+  // Other blessings that see ahead (Cresselia's dream...) say so in their data (`sight`).
+  const seer = effectBlessing(run);
+  if (seer?.sight) {
+    const whole = seer.sight.team || (inCommunionForm(run) && seer.sight.communionTeam);
     for (const node of held ? [] : mapChoices(content, run)) {
-      if ((node.kind !== 'trainer' && node.kind !== 'wild') || out[node.id] || !run.party.some((p) => p.hp > 0)) continue;
+      if (!seer.sight.kinds.includes(node.kind as 'wild' | 'trainer') || out[node.id] || !run.party.some((p) => p.hp > 0)) continue;
       const battle = moveToNode(content, run, node.id, () => undefined).battle;
       if (!battle) continue;
-      out[node.id] = { itemId: null, source: 'Latias\'s sight', team: (whole ? battle.enemyTeam : battle.enemyTeam.slice(0, 1)).map((m) => ({ speciesId: m.speciesId, level: m.level })), trainerName: battle.trainer?.name ?? null };
+      out[node.id] = { itemId: null, source: `${seer.legendary}'s ${seer.sight.word}`, team: (whole ? battle.enemyTeam : battle.enemyTeam.slice(0, 1)).map((m) => ({ speciesId: m.speciesId, level: m.level })), trainerName: battle.trainer?.name ?? null };
     }
   }
   const gym = stage.map.nodes.find((n) => n.kind === 'gym');

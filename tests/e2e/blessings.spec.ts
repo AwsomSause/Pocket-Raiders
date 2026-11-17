@@ -32,6 +32,9 @@ test('a run with a blessing opens with the blessing screen, then the briefing an
   await page.waitForTimeout(400);
   await page.screenshot({ path: 'test-results/blessing-opening.png' });
   expect(await scene(page)).toBe('Blessing');
+  // The object picture (the species' signature item) loaded and is on screen.
+  const item = await page.evaluate(() => { const p = (window as any).__pkr; const id = p.session.run.expansion.blessing.id; const key = `item.legend/${id}`; const sc = p.game.scene.getScene('Blessing'); return { loaded: p.game.textures.exists(key), shown: sc.children.list.some((o: any) => o.texture?.key === key && o.visible) }; });
+  expect(item).toEqual({ loaded: true, shown: true });
   await page.keyboard.press('Enter'); // on to the briefing
   await waitForScene(page, 'Briefing');
   expect(await page.evaluate(() => (window as any).__pkr.session.run.expansion.blessing.seen)).toBe(true);

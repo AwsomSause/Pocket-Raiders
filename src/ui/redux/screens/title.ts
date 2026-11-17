@@ -9,14 +9,14 @@ export interface TitleModel {
   index: number;
   /** Version plate under the logo. */
   version: string;
-  /** Splash picture under assets/images. */
+  /** Splash picture under assets/images; empty when the scene draws the backdrop itself (the title clips). */
   art: string;
   /** Save warnings; shown in place of the fan-game line. */
   notes: string[];
 }
 
 export function titleView(c: ReduxCtx, d: TitleModel): string {
-  const v = c.v(4), art = bg(d.art);
+  const v = c.v(4), art = d.art ? bg(d.art) : '';
   const btn = (st = '') => d.options.map((o, k) => B(esc(o.label), k === d.index, st, '', `${act('pick', k)} data-over="over"`).replace('class="btn', `class="btn${o.disabled ? ' off' : ''}`)).join('');
   const logo = (st: string) => `<div class="abs" style="${st}"><div style="font-size:64px;font-weight:700;line-height:.9;color:#fff;text-shadow:5px 5px 0 var(--l)">POCKET<br><span class="acc">RAIDERS</span></div><div class="plate" style="display:inline-block;margin-top:10px;font-size:14px">${esc(d.version)}</div></div>`;
   const notes = d.notes.length ? `<div class="abs txt" style="left:36px;bottom:60px;max-width:520px;font-size:15px;line-height:19px">${d.notes.map(esc).join('<br>')}</div>` : '';

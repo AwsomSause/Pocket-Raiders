@@ -30,6 +30,10 @@ export const BlessingStateSchema = z.object({
   vowBroken: z.boolean().optional(),
   /** Kyurem, The Empty Vessel: the blessing it copied from the first Sign of another Legendary. */
   copy: z.string().optional(),
+  /** Palkia: stages rearranged (`region:stage`), and `rite:region:stage` for the stage the Rite opened. */
+  folds: z.array(z.string()).optional(),
+  /** Rides and warps taken (one `region:stage` per use). */
+  rides: z.array(z.string()).optional(),
 });
 export type BlessingState = z.infer<typeof BlessingStateSchema>;
 

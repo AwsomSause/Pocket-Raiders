@@ -181,7 +181,7 @@ describe('Kyurem, The Empty Vessel', () => {
     const lines = addSign(run, 'regidrago', 1);
     expect(lines.join(' ')).toMatch(/Empty Vessel fills/);
     expect(run.expansion!.blessing!.copy).toBe('regidrago');
-    expect(blessingPerks(run)).toEqual([{ kind: 'damageMultiplier', type: 'dragon', value: 1.075 }]);
+    expect(blessingPerks(run)).toEqual([{ kind: 'damageMultiplier', moveType: 'dragon', value: 1.075 }, { kind: 'damageMultiplier', hpAtLeast: 1, value: 1.05 }]);
     // A second Sign of someone else changes nothing.
     addSign(run, 'zacian', 1);
     expect(run.expansion!.blessing!.copy).toBe('regidrago');
