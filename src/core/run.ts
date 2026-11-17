@@ -64,7 +64,7 @@ import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
-import { hearTelling, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
+import { hearTelling, hoopaRing, hoopaStage, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
@@ -779,6 +779,7 @@ function promiseSay(content: Content, run: RunState, lines: string[]): void {
 function enterStage(content: Content, run: RunState, index: number): void {
   const leftBehind = run.stage ? { heals: run.stage.map.nodes.flatMap((n) => n.sides).filter((x) => x.kind === 'heal').length, used: run.stage.map.nodes.flatMap((n) => n.sides).filter((x) => x.kind === 'heal' && x.used).length } : null;
   promiseOnStage(run, leftBehind);
+  promiseSay(content, run, hoopaStage(content, run, run.regionIndex * 100 + index));
   ofGuestLeaves(content, run);
   // Swap Day (NE39) never outlasts its stage.
   if (swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
@@ -865,6 +866,13 @@ function enterStage(content: Content, run: RunState, index: number): void {
   takeCheckpoint(run);
   takeStageSnapshot(run); // L3 Rewinds: the run snapshot (only when rewinds are on)
   const visit = index === 0 ? rollVisit(content, run, run.regionIndex) : null;
+  const ring = index === 0 ? hoopaRing(content, run, run.regionIndex) : null;
+  if (ring) {
+    run.pending.unshift({ kind: 'caught', mon: newMon(content, run, ring.speciesId, ring.level, 'p') });
+    promiseSay(content, run, [`Hoopa's ring opens: a ${ring.type}-type Pokémon steps through.`]);
+    run.afterDecisions = 'map';
+    run.phase = 'decision';
+  }
   if (visit) {
     run.pending.unshift(visit);
     run.afterDecisions = 'map';
@@ -3460,6 +3468,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     const fainted = e.type === 'faint' && e.side === 'player' ? run.party.find((p) => p.uid === e.uid) : undefined;
     if (fainted) {
       promiseLines.push(...notePromiseEvent(content, run, { kind: 'faint', uid: fainted.uid }));
+      promiseOnFaint(run);
       noteKeepsakeFaint(run);
       run.expansion = { ...run.expansion, lastFaint: { uid: fainted.uid, at: run.encountersCompleted } };
       changeFriendship(content, fainted, content.balance.friendship.perFaint);
@@ -3505,6 +3514,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Beta 0.7 M1: a broken Promise speaks, and a Guest's Wonder acts after a won battle.
   for (const text of promiseLines) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text });
   if (battle.outcome === 'win') {
+    promiseOnWin(run);
     const wonder = wonderAfterBattle(content, run, (m) => maxHp(content, m));
     if (wonder) events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: wonder });
   }

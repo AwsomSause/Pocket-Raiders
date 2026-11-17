@@ -4,7 +4,7 @@ import { createBattle } from '../../src/core/battle/engine';
 import { freshSos } from '../../src/core/battle/sos';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { HEATED, heatedConditions, heatedRoll, isBigBattle } from '../../src/core/instrumentality/heated';
-import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
+import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
 import { MYTHICALS } from '../../src/core/instrumentality/promisesData';
 import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/instrumentality/secondChance';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
@@ -104,7 +104,7 @@ describe('Mythical Promises (M1)', () => {
       expect(m.tellings).toHaveLength(3);
       if (m.status !== 'supported') expect(m.note).toBeTruthy();
     }
-    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['mew', 'darkrai', 'genesect', 'zarude']);
+    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['mew', 'darkrai', 'victini', 'genesect', 'hoopa', 'zarude']);
   });
   it('every Promise is a checkable rule: it breaks on its event and not on an unrelated one', () => {
     const run = base();
@@ -270,6 +270,53 @@ describe('Mythical Promises stage 2 (Mew, Darkrai, Genesect)', () => {
     expect(comesWhenMet(content, fresh, 'mew')).toBe(false);
     bumpTrack(fresh, 'caught:s19', 1);
     expect(comesWhenMet(content, fresh, 'mew')).toBe(true);
+  });
+});
+
+describe('Mythical Promises stage 2 (Victini, Hoopa)', () => {
+  const guestRun = (id: string) => {
+    const run = start({ mythicalPromises: true });
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: id, guest: { id, forgiven: false }, kept: [], left: [] } };
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 10, 'foe')], 0, run.party[0]!.uid);
+    return run;
+  };
+  it('Victini: ten wins in a row without a faint bring it; a faint resets the streak', () => {
+    const run = start({ mythicalPromises: true });
+    for (let i = 0; i < 9; i++) onBattleWon(run);
+    expect(comesWhenMet(content, run, 'victini')).toBe(false);
+    onBattleWon(run);
+    expect(comesWhenMet(content, run, 'victini')).toBe(true);
+    onPlayerFaint(run);
+    expect(comesWhenMet(content, run, 'victini')).toBe(false);
+  });
+  it("Victini's Wonder: moves cannot miss in the first battle of a stage only", () => {
+    const run = guestRun('victini');
+    expect(wonderAtBattleStart(content, run)[0]).toContain('cannot miss');
+    expect(run.battle!.storyEffects).toContain('promise:sure-hit');
+    const second = guestRun('victini');
+    second.expansion = run.expansion; // same stage, same record: nothing the second time
+    expect(wonderAtBattleStart(content, second)).toEqual([]);
+  });
+  it('Hoopa takes one item a stage and leaves when fewer than three are left (forgives once first)', () => {
+    const run = guestRun('hoopa');
+    run.inventory = { potion: 3, 'poke-ball': 1 };
+    const lines = hoopaStage(content, run, 1);
+    expect(lines[0]).toContain("Hoopa's ring takes");
+    expect(Object.values(run.inventory).reduce((a, b) => a + b, 0)).toBe(3);
+    expect(lines).toHaveLength(1); // three left: the Promise holds
+    expect(hoopaStage(content, run, 2).join(' ')).toContain('forgives');
+    expect(hoopaStage(content, run, 3).join(' ')).toContain('leaves');
+    expect(hoopaStage(content, run, 4)).toEqual([]);
+  });
+  it('Hoopa\'s ring brings a strong, non-legendary Pokémon of a party type, the same one each time', () => {
+    const run = guestRun('hoopa');
+    const ring = hoopaRing(content, run, 0)!;
+    expect(ring).not.toBeNull();
+    expect(ring).toEqual(hoopaRing(content, run, 0));
+    const sp = content.species.get(ring.speciesId)!;
+    expect(sp.types).toContain(ring.type);
+    expect(sp.tags).not.toContain('legendary');
+    expect(hoopaRing(content, start({ mythicalPromises: true }), 0)).toBeNull();
   });
 });
 

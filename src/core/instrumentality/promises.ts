@@ -39,6 +39,7 @@ const COMES_WHEN: Record<string, (content: Content, run: RunState) => boolean> =
   zarude: (_c, run) => [...run.party, ...run.box].some((m) => m.hatched === true),
   mew: (_c, run) => Object.keys(promiseState(run).track ?? {}).filter((k) => k.startsWith('caught:')).length >= 20,
   darkrai: (_c, run) => trackOf(run, 'restsPassed') >= 2,
+  victini: (_c, run) => trackOf(run, 'winStreak') >= 10,
   genesect: (_c, run) => [...run.party, ...run.box].some((m) => FOSSILS.has(m.speciesId)),
 };
 /** Small in-run counters (rests passed, species caught). */
@@ -257,6 +258,14 @@ export function wonderAtBattleStart(content: Content, run: RunState): string[] {
       lines.push('The Nightmare presses in: the opposing lead loses 1/8 of its HP.');
     }
   }
+  if (id === 'victini') {
+    const key = (run.regionIndex + 1) * 1000 + (run.stage?.index ?? 0) + 1;
+    if (trackOf(run, 'victiniStage') !== key) {
+      bumpTrack(run, 'victiniStage', key);
+      battle.storyEffects.push('promise:sure-hit');
+      lines.push("The Victory Star shines: your moves cannot miss in this stage's first battle.");
+    }
+  }
   if (id === 'genesect') {
     const lead = run.party[battle.activeIndex];
     if (lead) {
@@ -267,4 +276,40 @@ export function wonderAtBattleStart(content: Content, run: RunState): string[] {
     }
   }
   return lines;
+}
+
+/** A won battle extends the streak (Victini's trigger: ten wins in a row without a faint). */
+export const onBattleWon = (run: RunState): void => { if (run.expansion?.promises) bumpTrack(run, 'winStreak', (n) => n + 1); };
+/** A faint of the player's ends the streak. */
+export const onPlayerFaint = (run: RunState): void => { if (run.expansion?.promises && trackOf(run, 'winStreak') > 0) bumpTrack(run, 'winStreak', 0); };
+
+const bagSize = (run: Pick<RunState, 'inventory'>): number => Object.values(run.inventory).reduce((a, b) => a + b, 0);
+
+/** Stage start, Hoopa: it takes one random item (its own stream, one a stage); the Promise needs at least three left. */
+export function hoopaStage(content: Content, run: RunState, stageKey: number): string[] {
+  if (guestId(run) !== 'hoopa') return [];
+  const lines: string[] = [];
+  const ids = Object.keys(run.inventory).filter((id) => (run.inventory[id] ?? 0) > 0).sort();
+  if (ids.length > 0) {
+    const id = ids[new Rng(hashSeed(`${run.seed}::hoopa-takes::${stageKey}`)).int(0, ids.length - 1)]!;
+    run.inventory[id] = (run.inventory[id] ?? 1) - 1;
+    if (run.inventory[id] === 0) delete run.inventory[id];
+    lines.push(`Hoopa's ring takes one ${content.items.get(id)?.name ?? id} and is gone.`);
+  }
+  lines.push(...noteEvent(content, run, { kind: 'bagCount', items: bagSize(run) }));
+  return lines;
+}
+
+/** Hoopa, once a region: its ring brings a strong Pokémon (a wild one that has not been seen to fight, base stats 480+, never a legendary or mythical) of a type the party carries. */
+export function hoopaRing(content: Content, run: RunState, regionKey: number): { speciesId: string; level: number; type: string } | null {
+  if (guestId(run) !== 'hoopa' || run.party.length === 0) return null;
+  const rng = new Rng(hashSeed(`${run.seed}::hoopa-ring::${regionKey}`));
+  const types = [...new Set(run.party.flatMap((m) => getSpecies(content, m.speciesId).types as string[]))].sort();
+  const type = types[rng.int(0, types.length - 1)]!;
+  const pool = [...content.species.values()]
+    .filter((sp) => sp.types.includes(type as never) && !sp.form && !sp.tags.some((t) => t === 'legendary' || t === 'mythical' || t === 'baby') && Object.values(sp.baseStats).reduce((a, b) => a + b, 0) >= 480)
+    .map((sp) => sp.id).sort();
+  if (pool.length === 0) return null;
+  const level = Math.max(...run.party.map((m) => m.level));
+  return { speciesId: pool[rng.int(0, pool.length - 1)]!, level, type };
 }

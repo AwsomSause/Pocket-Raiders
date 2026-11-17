@@ -4494,7 +4494,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     }
     accuracy = Math.min(1, accuracy);
   }
-  if (noGuard || (userAbility === 'hoop-focus' && move.type === 'psychic') || jetSureHit(userAbility, move, jetMoveType(userAbility, move, move.type), weather) || ((target.vol.exposed || target.vol.telekinesis > 0) && !fx.ohko && targetsEnemy)) accuracy = 1;
+  if (noGuard || (userAbility === 'hoop-focus' && move.type === 'psychic') || jetSureHit(userAbility, move, jetMoveType(userAbility, move, move.type), weather) || (user.side === 'player' && ctx.battle.storyEffects.includes('promise:sure-hit')) || ((target.vol.exposed || target.vol.telekinesis > 0) && !fx.ohko && targetsEnemy)) accuracy = 1;
   if (ctx.battle.extra.darkTurns > 0) accuracy *= LIGHTS_OUT_ACCURACY;
   if (variantNeverMisses(ctx.battle.extra.variants, user.mon.uid, ctx.battle.weather?.id ?? null, move.type)) accuracy = 1;
   if (user.vol.sureHit && targetsEnemy) {
