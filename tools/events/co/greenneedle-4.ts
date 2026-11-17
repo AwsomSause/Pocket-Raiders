@@ -181,6 +181,7 @@ const SLUDGE: Json = { typeBoost: { type: 'poison', pct: 10 } };
 const pitAsk = (n: number): Json => ({
   id: `pull-${n}`, at: { turn: n }, if: [{ key: 'factory-pulls', min: 0, max: 0 }],
   text: n === 1 ? 'In the pits, stuck fast, six Pokémon that couldn\'t get out. Each of yours can pull one free this turn, instead of fighting.' : 'Some are still stuck. One of them is still trying. Pull again, or fight?',
+  prompt: 'Pull them out, or fight?',
   options: [
     { label: 'Pull them out.', text: 'The muck lets go with a sound like a boot in mud. The Grimer don\'t wait.', effects: [{ kind: 'op', op: 'pitsPull' }] },
     { label: 'Fight the Grimer.', text: 'Behind the Grimer, in the pits, something stops trying.' },
@@ -219,6 +220,7 @@ const WON = (text: string, ...more: Json[]): Json[] => [flag('kanto-factory-clea
 const mukAsk = (n: number, at: Json): Json => ({
   id: `muk-${n}`, at, if: [{ key: 'factory-muk-helped' }, { key: 'factory-muk-used', min: 0, max: 0 }],
   text: 'Your Muk is at your side. It could flow in front of the party now, and take this phase\'s first attack.',
+  prompt: 'Send your Muk in front for this phase?',
   options: [
     { label: 'Send the Muk in front.', text: 'Your Muk flows out in front of everyone, without being asked twice.', effects: [{ kind: 'flag', key: 'factory-muk-used', n: 1 }, { kind: 'foeWaits', line: 'Your Muk flows in front of the party and takes the first blow. It doesn\'t make a sound.' }] },
     { label: 'Not yet.' },
@@ -236,7 +238,7 @@ const STOP_ANSWER: Json = {
 const RAID_ASKS: Json[] = [
   mukAsk(1, { turn: 1 }), mukAsk(2, { phase: 2 }), mukAsk(3, { phase: 3 }),
   {
-    id: 'core', at: { phase: 3 }, text: '*It\'s pressed against the furnace door. It keeps looking at the pipe it came out of.*',
+    id: 'core', at: { phase: 3 }, text: '*It\'s pressed against the furnace door. It keeps looking at the pipe it came out of.*', prompt: 'It keeps looking at the pipe it came out of.',
     options: [
       { label: 'Finish it.', text: 'It only has weak moves left. It uses them anyway.' },
       STOP_ANSWER,

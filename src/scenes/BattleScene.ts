@@ -2376,8 +2376,9 @@ export class BattleScene extends Phaser.Scene {
   private showAskMenu(ask: AskView, back = false): void {
     this.clearMenus();
     this.tabs.show(false);
-    const pieces = chunkLines([ask.text]);
-    const last = pieces.pop() ?? '';
+    // A long question is read first, piece by piece; its short prompt stays beside the answers.
+    const pieces = ask.text === ask.prompt ? [] : chunkLines([ask.text]);
+    const last = ask.prompt;
     const open = (): void => {
       const n = ask.options.length;
       this.commandWindow.setVisible(true);
@@ -3848,6 +3849,8 @@ export class BattleScene extends Phaser.Scene {
       itemHeight: options.length > 4 ? 36 : 50,
       fontSize: options.length > 4 ? 20 : 30,
       ...(this.skin ? this.menuSpec(this.skin.layout.root, options.length, k) : {}),
+      // An event's own button has a whole sentence on it ("Give it the crystals."): the canvas menu goes to one wide column so it is not cut short.
+      ...(askBtns.length > 0 && options.length <= 4 ? { columns: 1, itemWidth: 320, itemHeight: 32, fontSize: 18, y: MESSAGE_Y + 8 } : {}),
       color: this.btnText,
       // Wii-style glossy buttons: Fight red, Bag gold, Pokémon green, transformations neon.
       glass: { paint: this.skin?.pill, tints: k > 0 ? [...combined.map((m) => m.tint), ...(this.skin!.rootTints ?? []).slice(1)] : this.skin?.rootTints ?? [0xc8303c, 0xc08a10, 0x1f9a52, 0x9a2cc8, 0x2c8ad8, 0x2cb8c8, 0xd8a020], motion: this.motion },

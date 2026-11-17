@@ -226,6 +226,7 @@ const dropIt = (c: string): Json => ({ label: `The ${COLOUR_LABEL[c]} one.`, if:
 /** Between phases, the player gets one action: "Drop a crystal." (pick which) / "Keep everything." */
 const between = (phase: number): Json => ({
   id: `between-${phase - 1}`, at: { phase },
+  prompt: 'It\'s looking at the bag again.',
   text: '*It\'s looking at the bag again. It isn\'t angry. It\'s hungry, or it\'s lonely; with a rock, it\'s hard to tell.*',
   options: [
     { label: 'Drop a crystal.', text: 'You open the bag.', then: 'drop' },

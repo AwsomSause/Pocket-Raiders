@@ -201,6 +201,8 @@ export const GnAskSchema = z.object({
   }),
   if: z.array(AskIf).max(4).optional(),
   text: z.string().min(1).max(400),
+  /** The short line that stays in the text box beside the answers, when `text` is too long to (over 84 characters: it is read first, piece by piece). */
+  prompt: z.string().min(1).max(84).optional(),
   options: z.array(GnAskOptionSchema).min(1).max(4),
 }).refine((a) => a.at.button !== undefined || a.options.length >= 2, { message: 'a question needs 2 to 4 answers' });
 export type GnAsk = z.infer<typeof GnAskSchema>;

@@ -53,7 +53,10 @@ export const HOUSE_CALL_ASKS: readonly GnAsk[] = [
 
 export interface AskView {
   id: string;
+  /** The question in full (read first when it is longer than `prompt`). */
   text: string;
+  /** The line that stays in the text box beside the answers. */
+  prompt: string;
   /** The answers on offer; `index` is the answer's place in the question's own list (what the `answer` action sends). */
   options: { index: number; label: string }[];
 }
@@ -98,7 +101,7 @@ export function phaseSync(content: Content, battle: BattleState): string[] {
       if (moves.length) boss.moves = moves;
     }
     for (const [stat, n] of Object.entries(next.foeStages ?? {})) battle.enemyStages[stat as 'atk'] = n!;
-    if (next.line) lines.push(next.line);
+    if (next.line) lines.push(plain(next.line));
   }
 }
 
@@ -107,9 +110,15 @@ function asksOf(battle: Pick<BattleState, 'eventRule'>): readonly GnAsk[] {
   return [...(battle.eventRule?.asks ?? []), ...HOUSE_CALL_ASKS];
 }
 
+/** The battle's text box shows plain text: the event scripts' *stage directions* and **names** lose their marks. */
+const plain = (text: string): string => text.replace(/\*+/g, '');
+/** What fits in the battle's text box beside the answers. */
+const BOX = 84;
+
 const view = (run: RunState, ask: GnAsk): AskView => ({
   id: ask.id,
-  text: ask.text,
+  text: plain(ask.text),
+  prompt: plain(ask.prompt ?? (ask.text.length <= BOX ? ask.text : ask.text.slice(ask.text.lastIndexOf(' ', BOX)).trim())),
   options: ask.options.map((o, index) => ({ index, label: o.label, ok: holds(run, o.if) })).filter((o) => o.ok).map(({ index, label }) => ({ index, label })),
 });
 
@@ -240,7 +249,7 @@ export function answerAsk(content: Content, run: RunState, askId: string, option
   // The question is closed: a follow-up's open mark goes, an asked-once question is marked done.
   battle.storyEffects = battle.storyEffects.filter((t) => t !== `${ASK_OPEN}${askId}`);
   if (!ask.at.chained && !(button && picked.then)) battle.storyEffects.push(`${ASK_DONE}${askId}`);
-  const lines: string[] = picked.text ? [picked.text] : [];
+  const lines: string[] = picked.text ? [plain(picked.text)] : [];
   for (const fx of picked.effects ?? []) applyEffect(content, run, battle, mon, fx, lines);
   if (picked.then && asksOf(battle).some((a) => a.id === picked.then)) battle.storyEffects.push(`${ASK_OPEN}${picked.then}`);
   // House Call: any last answer (a form, or staying plain) is its one change this battle.

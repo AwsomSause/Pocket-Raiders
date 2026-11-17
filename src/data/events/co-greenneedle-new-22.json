@@ -216,6 +216,7 @@
            "turn": 1
           },
           "text": "The Persian drops from the tank. The first call is yours: how does the Meowth open?",
+          "prompt": "The first call is yours.",
           "options": [
            {
             "label": "\"Pounce!\"",
@@ -262,6 +263,7 @@
            "turn": 3
           },
           "text": "Halfway through, when both are breathing hard. The second call is yours.",
+          "prompt": "The second call is yours.",
           "options": [
            {
             "label": "\"Pounce!\"",
@@ -308,6 +310,7 @@
            "turn": 5
           },
           "text": "When it is nearly over, and neither of them will give way. The third call is yours.",
+          "prompt": "The third call is yours.",
           "options": [
            {
             "label": "\"Pounce!\"",

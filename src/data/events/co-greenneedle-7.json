@@ -4061,6 +4061,7 @@
           "at": {
            "phase": 2
           },
+          "prompt": "It's looking at the bag again.",
           "text": "*It's looking at the bag again. It isn't angry. It's hungry, or it's lonely; with a rock, it's hard to tell.*",
           "options": [
            {
@@ -4085,6 +4086,7 @@
           "at": {
            "phase": 3
           },
+          "prompt": "It's looking at the bag again.",
           "text": "*It's looking at the bag again. It isn't angry. It's hungry, or it's lonely; with a rock, it's hard to tell.*",
           "options": [
            {

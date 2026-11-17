@@ -24,7 +24,7 @@ const ROOF = say(
 
 /** The player coaches the Meowth: three calls during the fight (the battle stops and asks, at the start of turns 1, 3 and 5). */
 const CALL = (n: number, turn: number, text: string): Json => ({
-  id: `call-${n}`, at: { turn }, text,
+  id: `call-${n}`, at: { turn }, text, prompt: `The ${['first', 'second', 'third'][n - 1]} call is yours.`,
   options: [
     { label: '"Pounce!"', text: '**You:** "Pounce!" The Meowth crouches, wiggles, and is ready.', effects: [{ kind: 'stages', side: 'you', stages: { atk: 1 } }] },
     { label: '"Dodge!"', text: '**You:** "Dodge!" The Meowth goes light on its feet.', effects: [{ kind: 'stages', side: 'you', stages: { spe: 1 } }] },
