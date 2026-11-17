@@ -1272,7 +1272,7 @@
    "room": true,
    "scene": {
     "cast": [],
-    "pokemon": "primeape",
+    "pokemon": "mankey",
     "tint": "#7a3b2e",
     "effect": "none",
     "tourney": 4
@@ -1503,7 +1503,7 @@
        "types": [
         "fighting"
        ],
-       "levelBonus": -1,
+       "levelBonus": 0,
        "win": [
         {
          "kind": "gn",

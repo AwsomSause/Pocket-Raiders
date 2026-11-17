@@ -57,7 +57,10 @@ export function tourneyPage(view: TourneyView, fileOf: (species: string) => stri
     const from = finals ? 0 : p * n;
     const slots = Array.from({ length: n }, (_, k): BracketSlot | null => {
       const e = c <= played ? line[from + k] : undefined;
-      return e ? { name: e.name, file: fileOf(e.species), you: e.you, named: e.named, out: e.outIn > 0 && e.outIn <= played } : null;
+      if (!e) return null;
+      // The finalist is not shown until the final: before it, its slot reads "?" with no picture.
+      const hidden = !e.you && view.now < 5 && e.name === view.opponents[4]?.name;
+      return { name: hidden ? '?' : e.name, file: hidden ? null : fileOf(e.species), you: e.you, named: hidden ? false : e.named, out: e.outIn > 0 && e.outIn <= played };
     });
     return { name: names[i]!, now: view.now === c + 1, slots };
   });
@@ -100,7 +103,7 @@ export function tourneyRounds(view: TourneyView): RoundChip[] {
     const r = i + 1;
     const state = view.now > r ? 'won' : view.now === r ? 'next' : 'ahead';
     const opp = view.opponents[i];
-    return { name, state, who: state === 'ahead' && r < 5 ? '?' : opp ? opp.name : '?' };
+    return { name, state, who: state === 'ahead' ? '?' : opp ? opp.name : '?' };
   });
 }
 

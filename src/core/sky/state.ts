@@ -69,7 +69,7 @@ export const SkyStateSchema = z.object({
   /** The afterstory beat (the bird overhead, or the rematch) has been played. */
   afterDone: z.boolean().default(false),
   /** While a watched CPU fight runs, the player's real team and Bag wait here (put back when it ends). */
-  stash: z.object({ party: z.array(z.unknown()), inventory: z.record(z.string(), z.number()) }).optional(),
+  stash: z.object({ party: z.array(z.unknown()), inventory: z.record(z.string(), z.number()), /** The spar or the rematch: the player's own lead is the one fighting. */ own: z.boolean().optional() }).optional(),
   /** A Pidgeot or Fearow that joined: its uid, so a second join can never happen. */
   joinedUid: z.string().optional(),
 });
