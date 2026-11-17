@@ -69,8 +69,8 @@
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-14-maze"
+        "op": "minigame",
+        "key": "gn-arcade"
        }
       ]
      }
@@ -136,36 +136,17 @@
     "tint": "#2d1f4f",
     "effect": "none"
    },
-   "intro": "Game one. A maze, green lines on black, and one small blocky bird at the entrance, waiting to be told where to go.\n\n*It looks out of the screen at you, and taps the glass twice. Your move.*",
+   "intro": "*The screen flickers, and the game starts over from the title. The small blocky bird is back at the first entrance, waiting.*",
    "choices": [
     {
-     "label": "Mash the buttons.",
+     "label": "Step up to the glass.",
      "success": {
-      "text": "You hammer the buttons. The bird bolts left, then right, then straight into a wall. It bumps every wall it meets, panicking, and the timer runs out.",
+      "text": "You put both hands on the controls. The bird straightens up.",
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-14-maze-lost"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Give it time.",
-     "success": {
-      "text": "You wait. The bird stops, looks, and tries the wall. The wall opens: a shortcut the maze never showed anyone. It trots through, and out the exit.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "arcade-cleared-games",
-        "n": 1
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-14-stacker"
+        "op": "minigame",
+        "key": "gn-arcade"
        }
       ]
      }
@@ -189,36 +170,17 @@
     "tint": "#2d1f4f",
     "effect": "none"
    },
-   "intro": "Game two. Coloured blocks tumble down a narrow well. The bird stands at the bottom, holding the whole pile up with both wings.\n\nIt has already stopped looking at the blocks. It is looking at you.",
+   "intro": "*The screen flickers, and the game starts over from the title. The small blocky bird is back at the first entrance, waiting.*",
    "choices": [
     {
-     "label": "Mash the buttons.",
+     "label": "Step up to the glass.",
      "success": {
-      "text": "You rush it. The blocks pile up crooked, and the bird flaps in a circle, dropping them everywhere. The well fills to the top.",
+      "text": "You put both hands on the controls. The bird straightens up.",
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-14-stacker-lost"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Give it time.",
-     "success": {
-      "text": "You give it time. It turns each block twice, slots it flush, and clears four lines at once. Then it clears four more. It does not seem surprised.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "arcade-cleared-games",
-        "n": 2
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-14-shooter"
+        "op": "minigame",
+        "key": "gn-arcade"
        }
       ]
      }
@@ -242,36 +204,17 @@
     "tint": "#2d1f4f",
     "effect": "none"
    },
-   "intro": "Game three. One screen, one little ship, and a wall of descending squares. The bird flies the ship. It has never looked so nervous.\n\nIn the corner, the high score reads HELP. It has not changed in years.",
+   "intro": "*The screen flickers, and the game starts over from the title. The small blocky bird is back at the first entrance, waiting.*",
    "choices": [
     {
-     "label": "Mash the buttons.",
+     "label": "Step up to the glass.",
      "success": {
-      "text": "You mash fire. The ship sprays shots at nothing, and the squares come down faster. It panics, then freezes, then the ship is gone.",
+      "text": "You put both hands on the controls. The bird straightens up.",
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-14-shooter-lost"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Give it time.",
-     "success": {
-      "text": "You let it breathe. It finds the gap between two columns, tucks in, and picks the squares off one by one. The wall thins. The wall is gone.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "arcade-cleared-games",
-        "n": 3
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-14-clear"
+        "op": "minigame",
+        "key": "gn-arcade"
        }
       ]
      }
@@ -295,31 +238,17 @@
     "tint": "#2d1f4f",
     "effect": "none"
    },
-   "intro": "GAME OVER, in red, across the whole screen. The bird sits very still in the middle of it.\n\nIts last life slides back across the screen at you. It does not look away. It waits, very patiently, for you to take it.",
+   "intro": "*The screen flickers, and the game starts over from the title. The small blocky bird is back at the first entrance, waiting.*",
    "choices": [
     {
-     "label": "Take the life.",
+     "label": "Step up to the glass.",
      "success": {
-      "text": "You press the button. The life goes back into the bird, and it exhales, as if it had been holding its breath. The game starts again, slower.",
+      "text": "You put both hands on the controls. The bird straightens up.",
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-14-maze"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Walk away.",
-     "success": {
-      "text": "You step back from the glass. The bird watches you go. The screen keeps running behind you, and nobody has plugged it in.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "arcade-walked",
-        "n": 1
+        "op": "minigame",
+        "key": "gn-arcade"
        }
       ]
      }
@@ -343,31 +272,17 @@
     "tint": "#2d1f4f",
     "effect": "none"
    },
-   "intro": "GAME OVER, in red, across the whole screen. The bird sits very still in the middle of it.\n\nThe last life drifts back across the screen to you, small and bright, and stops at the edge of the glass. It waits.",
+   "intro": "*The screen flickers, and the game starts over from the title. The small blocky bird is back at the first entrance, waiting.*",
    "choices": [
     {
-     "label": "Take the life.",
+     "label": "Step up to the glass.",
      "success": {
-      "text": "You press the button. The life goes back into the bird, and it exhales, as if it had been holding its breath. The game starts again, slower.",
+      "text": "You put both hands on the controls. The bird straightens up.",
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-14-stacker"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Walk away.",
-     "success": {
-      "text": "You step back from the glass. The bird watches you go. The screen keeps running behind you, and nobody has plugged it in.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "arcade-walked",
-        "n": 1
+        "op": "minigame",
+        "key": "gn-arcade"
        }
       ]
      }
@@ -391,31 +306,17 @@
     "tint": "#2d1f4f",
     "effect": "none"
    },
-   "intro": "GAME OVER, in red, across the whole screen. The bird sits very still in the middle of it.\n\nIt nudges its last life across the screen toward you, the way you would slide a coin over a table. Then it waits.",
+   "intro": "*The screen flickers, and the game starts over from the title. The small blocky bird is back at the first entrance, waiting.*",
    "choices": [
     {
-     "label": "Take the life.",
+     "label": "Step up to the glass.",
      "success": {
-      "text": "You press the button. The life goes back into the bird, and it exhales, as if it had been holding its breath. The game starts again, slower.",
+      "text": "You put both hands on the controls. The bird straightens up.",
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-new-14-shooter"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Walk away.",
-     "success": {
-      "text": "You step back from the glass. The bird watches you go. The screen keeps running behind you, and nobody has plugged it in.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "arcade-walked",
-        "n": 1
+        "op": "minigame",
+        "key": "gn-arcade"
        }
       ]
      }

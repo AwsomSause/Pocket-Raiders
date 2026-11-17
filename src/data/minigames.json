@@ -3271,6 +3271,90 @@
         "noTimerOption": true
       },
       "eventOnly": true
+    },
+    {
+      "id": "gn-arcade",
+      "name": "The Arcade Cabinet",
+      "category": "skill",
+      "blurb": "Three games on an unplugged machine. A small blocky bird is the character in all of them.",
+      "instructions": "A maze, a block-stacker and a one-screen shooter. Arrow keys (or the buttons) move the bird; Enter drops a block or fires. Press too fast and it panics and stops listening. Give it a moment and it helps: it finds shortcuts the maze does not show. Fail a game and it pushes its last life back across the screen at you, and waits.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "cabinet",
+          "label": "One coin",
+          "params": {
+            "hurry": 2,
+            "calm": 3,
+            "panicAt": 6,
+            "rushCap": 9,
+            "patience": 3,
+            "slower": 50,
+            "helpScore": 99990,
+            "clearScore": 500,
+            "mazeW": 6,
+            "mazeH": 4,
+            "mazeSlack": 14,
+            "secrets": 2,
+            "secretSaves": 4,
+            "mazeTickScore": 10,
+            "secretScore": 100,
+            "wellW": 6,
+            "wellH": 8,
+            "barMax": 3,
+            "bars": 22,
+            "rowsGoal": 3,
+            "fallEvery": 2,
+            "rowScore": 100,
+            "barScore": 20,
+            "skyW": 7,
+            "skyH": 8,
+            "skyRows": 3,
+            "skyFill": 65,
+            "descendEvery": 8,
+            "squareScore": 50
+          }
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "Clear all three. The table has one high score. The initials: HELP.",
+      "medals": {
+        "bronze": 0.3,
+        "silver": 0.6,
+        "gold": 1
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "gold": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        }
+      },
+      "failureOutcome": "The screen keeps running behind you, and nobody has plugged it in.",
+      "replayRules": "Once a run.",
+      "uiConfiguration": {
+        "layout": "grid",
+        "tickMs": 320
+      },
+      "accessibilityOptions": {
+        "slowFactor": 2,
+        "noTimerOption": true
+      },
+      "eventOnly": true
     }
   ]
 }

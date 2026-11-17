@@ -6223,7 +6223,7 @@
   "level": "No battles",
   "often": "run",
   "badge": "own",
-  "note": "Badge: an arcade cabinet. In the back of a shop (a Town stop once towns exist); fallback step 5 of the next stage. Once a run. The three games are choices (mash the buttons panics, time finds shortcuts); the Porygon joins with Debug when all three are cleared. Sold as is: arcade-sold.",
+  "note": "Badge: an arcade cabinet. In the back of a shop (a Town stop once towns exist); fallback step 5 of the next stage. Once a run. The three games are played (minigame gn-arcade: fast presses panic the bird, time finds shortcuts, a failed game pushes the last life back); the Porygon joins with Debug when all three are cleared. Sold as is: arcade-sold.",
   "kinds": [
    "Miniature Episode"
   ],
