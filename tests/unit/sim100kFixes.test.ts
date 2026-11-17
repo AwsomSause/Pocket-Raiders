@@ -56,4 +56,15 @@ describe('sim100k fixes', () => {
       }
     }
   });
+
+  it('S.S. Anne cabin rooms: after the fourth room every room still shows a way on (the Collector had none, playtest pt32)', () => {
+    const rooms = events(ssanne).filter((e) => e.choices.some((c) => (c.showIf ?? []).some((x) => x.key === 'ssanne-rooms')));
+    expect(rooms.length).toBeGreaterThanOrEqual(11);
+    const holds = (c: Cond, v: number) => c.kind !== 'flag' || c.key !== 'ssanne-rooms' || (v >= (c.atLeast ?? 1) && v <= (c.atMost ?? 99));
+    for (const e of rooms) {
+      for (let v = 0; v <= 12; v++) {
+        expect(e.choices.some((c) => (c.showIf ?? []).every((cond) => holds(cond, v))), `${e.id} with ssanne-rooms ${v}`).toBe(true);
+      }
+    }
+  });
 });
