@@ -1,5 +1,6 @@
 // Reads the game data files and lists the assets they refer to.
 
+import { CAST_SPRITES } from '../src/core/expansion/cast/sprites.ts';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { CatalogInputs, PokemonArt } from '../src/assets/catalog.ts';
@@ -29,7 +30,7 @@ export function readCatalogInputs(): CatalogInputs {
   const themes = readJson('themes.json') as { arenas: Record<string, string> };
   return {
     pokemon: species.map((s) => s.assets),
-    trainerAssetIds: [...archetypes, ...trainers].map((a) => a.spriteAssetId).concat(bosses.flatMap((b) => Object.values(b.sprites)), events.flatMap((e) => e.scene.cast)),
+    trainerAssetIds: [...archetypes, ...trainers].map((a) => a.spriteAssetId).concat(bosses.flatMap((b) => Object.values(b.sprites)), events.flatMap((e) => e.scene.cast), Object.values(CAST_SPRITES).flat().filter((id) => !id.startsWith('trainer.cipher/'))),
     itemAssetIds: [...new Set([...rewards, ...items].map((r) => r.iconAssetId).concat(catalogIcons))],
     backgroundAssetIds: Object.values(themes.arenas),
     battleAnims: animCatalogInputs(parseMoveAnims(readJson('moveAnims.json'))),
