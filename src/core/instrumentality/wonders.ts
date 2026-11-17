@@ -4,7 +4,7 @@
 import type { Content } from '../contentSchema';
 import type { PendingDecision, RunState } from '../state';
 import { addItem, consumeItem } from '../items';
-import { bumpTrack, guestId, itemValue, MELTAN_TO_MERGE, metalItems, promiseState, STANCE_NAME, stageKeyOf, trackOf } from './promises';
+import { bouquetHolder, bumpTrack, guestId, itemValue, MELTAN_TO_MERGE, metalItems, promiseState, STANCE_NAME, stageKeyOf, trackOf } from './promises';
 import { MYTHICALS } from './promisesData';
 
 export interface WonderAction { id: string; title: string; text: string; problem: string | null }
@@ -23,6 +23,13 @@ export function wonderActions(_content: Content, run: RunState): WonderAction[] 
     const ready = trackOf(run, 'restsUsed') > trackOf(run, 'stancesTaken');
     const now = ['none', 'Attack', 'Defense', 'Speed', 'Normal'][trackOf(run, 'stance')] ?? 'none';
     out.push({ id: 'stance', title: 'Deoxys: take a stance', text: `Pick a Forme for the party (now: ${now}). Once a rest.`, problem: ready ? null : 'Deoxys changes stance only after a rest.' });
+  }
+  if (id === 'phione') {
+    out.push({ id: 'current', title: 'Phione: ride the current', text: 'A current carries you past a node (once a region).', problem: trackOf(run, 'currentRegion') === run.regionIndex + 1 ? 'Already used this region.' : run.stage?.kind === 'league' ? 'Not in the Pokémon League.' : null });
+  }
+  if (id === 'magearna') {
+    const holder = bouquetHolder(run);
+    out.push({ id: 'bouquet', title: "Magearna: the bouquet", text: holder ? `${holder.speciesId} carries it. Choose another to hand it over.` : 'Choose who carries her bouquet to the last stage.', problem: run.party.length === 0 ? 'No one to carry it.' : null });
   }
   if (id === 'diancie') {
     const have = Object.keys(run.inventory).filter((i) => (run.inventory[i] ?? 0) > 0);
@@ -47,6 +54,14 @@ export function startWonder(_content: Content, run: RunState, wonderId: string):
       decision: { kind: 'wonderChoice', mythicalId: 'deoxys', wonderId, title: 'Deoxys: choose the party\'s stance', options: STANCES.map((s) => ({ label: STANCE_NAME[s]!, description: STANCE_TEXT[s]!, value: s })) },
       message: '',
     };
+  }
+  if (wonderId === 'current' && guest === 'phione') {
+    bumpTrack(run, 'currentRegion', run.regionIndex + 1);
+    run.moveMode = 'airship';
+    return { decision: null, message: 'A current takes hold of you. Choose where to drift: it carries you past a node.' };
+  }
+  if (wonderId === 'bouquet' && guest === 'magearna') {
+    return { decision: { kind: 'wonderChoice', mythicalId: 'magearna', wonderId, title: 'Who carries the bouquet?', options: run.party.map((m) => ({ label: _content.species.get(m.speciesId)?.name ?? m.speciesId, description: `Lv${m.level}`, value: m.uid })) }, message: '' };
   }
   if (wonderId === 'copy' && guest === 'diancie') {
     const ids = Object.keys(_run_inv(run)).sort();
@@ -73,6 +88,10 @@ export function resolveWonder(_content: Content, run: RunState, decision: Wonder
     bumpTrack(run, 'stance', STANCES.indexOf(pick.value as (typeof STANCES)[number]) + 1);
     bumpTrack(run, 'stancesTaken', trackOf(run, 'restsUsed'));
     return `Deoxys takes the ${pick.label} stance: ${pick.description}.`;
+  }
+  if (decision.wonderId === 'bouquet' && guestId(run) === 'magearna') {
+    bumpTrack(run, 'bouquet', Number(pick.value.replace(/\D/g, '')) || 0);
+    return `${pick.label} carries Magearna's bouquet. Keep it in the party to the last stage.`;
   }
   if (decision.wonderId === 'copy' && guestId(run) === 'diancie') {
     addItem(run.inventory, pick.value, 1);

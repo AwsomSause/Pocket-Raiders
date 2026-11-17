@@ -4,7 +4,7 @@ import { createBattle } from '../../src/core/battle/engine';
 import { freshSos } from '../../src/core/battle/sos';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { HEATED, heatedConditions, heatedRoll, isBigBattle } from '../../src/core/instrumentality/heated';
-import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, onSold, onStageLeft, onRegionStarted, stageKeyOf, metalItems, isRefusal, onEventChoice, wishesLeft, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
+import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, manaphyVisit, onReleased, magearnaOnFaint, bouquetHolder, onPartyChanged as onPartyChanged2, onSold, onStageLeft, onRegionStarted, stageKeyOf, metalItems, isRefusal, onEventChoice, wishesLeft, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
 import { resolveWonder, startWonder, wonderActions } from '../../src/core/instrumentality/wonders';
 import { MYTHICALS } from '../../src/core/instrumentality/promisesData';
 import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/instrumentality/secondChance';
@@ -105,7 +105,7 @@ describe('Mythical Promises (M1)', () => {
       expect(m.tellings).toHaveLength(3);
       if (m.status !== 'supported') expect(m.note).toBeTruthy();
     }
-    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id).sort()).toEqual(['darkrai', 'deoxys', 'diancie', 'genesect', 'hoopa', 'jirachi', 'keldeo', 'melmetal', 'meltan', 'mew', 'victini', 'zarude', 'zeraora']);
+    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id).sort()).toEqual(['darkrai', 'deoxys', 'diancie', 'genesect', 'hoopa', 'jirachi', 'keldeo', 'magearna', 'manaphy', 'melmetal', 'meltan', 'mew', 'phione', 'victini', 'zarude', 'zeraora']);
   });
   it('every Promise is a checkable rule: it breaks on its event and not on an unrelated one', () => {
     const run = base();
@@ -502,6 +502,61 @@ describe('Mythical Promises stage 2 (Diancie, Meltan, Melmetal)', () => {
     m.battle = createBattle('wild', [createPokemon(content, 'rattata', 10, 'foe')], 0, m.party[0]!.uid);
     expect(wonderAtBattleStart(content, m)[0]).toContain('+6% Defense');
     expect(m.battle!.storyEffects).toContain('promise:meltan:3');
+  });
+});
+
+describe('Mythical Promises stage 2 (Phione, Manaphy, Magearna)', () => {
+  const guestRun = (id: string) => {
+    const run = structuredClone(toBattle(start({ mythicalPromises: true })));
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: id, guest: { id, forgiven: false }, kept: [], left: [] } };
+    return run;
+  };
+  it('Phione: comes to a High Bond Water-type; a fishing spot passed breaks the Promise; the current is once a region', () => {
+    const fresh = start({ mythicalPromises: true });
+    expect(comesWhenMet(content, fresh, 'phione')).toBe(false);
+    const water = createPokemon(content, 'squirtle', 10, 'w1');
+    water.friendship = 220;
+    fresh.party.push(water);
+    expect(comesWhenMet(content, fresh, 'phione')).toBe(true);
+    const run = guestRun('phione');
+    expect(onStageEntered(run, { heals: 0, used: 0, fish: 1, fishUsed: 1 }, content)).toEqual([]);
+    expect(onStageEntered(run, { heals: 0, used: 0, fish: 1, fishUsed: 0 }, content)[0]).toContain('forgives');
+    run.stage = { ...(run.stage ?? ({} as never)), kind: 'stage' } as never;
+    expect(wonderActions(content, run)[0]!.problem).toBeNull();
+    expect(startWonder(content, run, 'current').message).toContain('current');
+    expect(run.moveMode).toBe('airship');
+    expect(wonderActions(content, run)[0]!.problem).toContain('Already');
+  });
+  it('Manaphy: Phione parts at the next region and Manaphy visits in the same run; a release breaks its Promise for good; catches gain Bond', () => {
+    const run = guestRun('phione');
+    expect(manaphyVisit(run)).toBeNull(); // region 0
+    run.regionIndex = 1;
+    const visit = manaphyVisit(run)!;
+    expect(visit.mythicalId).toBe('manaphy');
+    expect(promiseState(run).guest).toBeNull();
+    expect(promiseState(run).kept).toContain('phione');
+    expect(promiseState(run).tellings.manaphy).toBe(2);
+    resolveVisit(run, visit, 0);
+    expect(promiseState(run).guest?.id).toBe('manaphy');
+    const mon = createPokemon(content, 'rattata', 5, 'c2');
+    const before = mon.friendship;
+    expect(onCaught(content, run, mon).join(' ')).toContain('more Bond');
+    expect(mon.friendship).toBeGreaterThan(before);
+    expect(onReleased(content, run)[0]).toContain('leaves');
+  });
+  it('Magearna: the bouquet carrier leaving the party breaks the Promise; each fall gives +1 Sp. Atk, twice a battle', () => {
+    const run = guestRun('magearna');
+    run.party.push(createPokemon(content, 'rattata', 5, 'p77'));
+    bumpTrack(run, 'bouquet', 77);
+    expect(bouquetHolder(run)!.uid).toBe('p77');
+    expect(onPartyChanged2(content, run)).toEqual([]);
+    run.party = run.party.filter((m) => m.uid !== 'p77');
+    expect(onPartyChanged2(content, run)[0]).toContain('forgives');
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 10, 'foe')], 0, run.party[0]!.uid);
+    expect(magearnaOnFaint(run)).toContain('+1 Sp. Atk');
+    expect(magearnaOnFaint(run)).toContain('+1 Sp. Atk');
+    expect(magearnaOnFaint(run)).toBeNull();
+    expect(run.battle!.playerStages.spa).toBe(2);
   });
 });
 

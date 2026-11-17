@@ -165,7 +165,7 @@ export function tellAny(run: RunState): string | null {
   if (!run.expansion?.promises) return null;
   const p = run.expansion.promise ?? { tellings: {}, visited: null, guest: null, kept: [], left: [] };
   if (p.visited || p.guest) return null;
-  const open = MYTHICALS.filter((m) => m.status !== 'disabled' && m.id !== 'melmetal' && (p.tellings[m.id] ?? 0) < 3);
+  const open = MYTHICALS.filter((m) => m.status !== 'disabled' && m.id !== 'melmetal' && m.id !== 'manaphy' && (p.tellings[m.id] ?? 0) < 3);
   if (open.length === 0) return null;
   const started = open.filter((m) => (p.tellings[m.id] ?? 0) > 0);
   const pool = started.length > 0 ? started : open;

@@ -29,7 +29,7 @@ export const believed = (run: Pick<RunState, 'expansion'>, id: string): boolean 
 /** Only supported Mythicals can visit at random (their Wonder is built). */
 const visitors = (): MythicalDef[] => MYTHICALS.filter((m) => m.status === 'supported');
 /** Every Mythical that is not disabled can be told of and believed: each has its own Visit scene (legends questlines), so the stage Telling no longer only ever names Zarude. */
-const tellable = (): MythicalDef[] => MYTHICALS.filter((m) => m.status !== 'disabled' && m.id !== 'melmetal'); // Melmetal is only ever the eight Meltan merged
+const tellable = (): MythicalDef[] => MYTHICALS.filter((m) => m.status !== 'disabled' && m.id !== 'melmetal' && m.id !== 'manaphy'); // Melmetal and Manaphy come only through Meltan and Phione
 
 /** Revived fossil Pokémon (and their evolutions): Genesect comes to those who have brought one back. */
 const FOSSILS = new Set(['omanyte', 'omastar', 'kabuto', 'kabutops', 'aerodactyl', 'lileep', 'cradily', 'anorith', 'armaldo', 'cranidos', 'rampardos', 'shieldon', 'bastiodon', 'tirtouga', 'carracosta', 'archen', 'archeops', 'tyrunt', 'tyrantrum', 'amaura', 'aurorus', 'dracozolt', 'arctozolt', 'dracovish', 'arctovish']);
@@ -48,6 +48,7 @@ const COMES_WHEN: Record<string, (content: Content, run: RunState) => boolean> =
   darkrai: (_c, run) => trackOf(run, 'restsPassed') >= 2,
   meltan: (_c, run) => metalItems(_c, run).reduce((n, id) => n + (run.inventory[id] ?? 0), 0) >= 5,
   melmetal: (_c, run) => trackOf(run, 'fed') >= MELTAN_TO_MERGE && guestId(run) === null && promiseState(run).visited === null,
+  phione: (c, run) => [...run.party, ...run.box].some((m) => m.friendship >= 200 && getSpecies(c, m.speciesId).types.includes('water' as never)),
   jirachi: (_c, run) => trackOf(run, 'declines') >= 3,
   deoxys: (_c, run) => trackOf(run, 'leadChanges') >= 4,
   victini: (_c, run) => trackOf(run, 'winStreak') >= 10,
@@ -93,6 +94,10 @@ export function rollVisit(content: Content, run: RunState, regionKey: number): V
   const def = candidates[rng.int(0, candidates.length - 1)]!;
   if (!rng.chance(visitChance(tellingsHeard(run, def.id)))) return null;
   save(run, { ...p, visited: def.id });
+  return visitDecision(def);
+}
+
+export function visitDecision(def: MythicalDef): VisitDecision {
   return {
     kind: 'mythicalVisit',
     mythicalId: def.id,
@@ -220,6 +225,10 @@ export function onCaught(content: Content, run: RunState, mon: RunState['party']
   if (!run.expansion?.promises) return [];
   bumpTrack(run, `caught:${mon.speciesId}`, 1);
   const lines = noteEvent(content, run, { kind: 'catch' });
+  if (guestId(run) === 'manaphy') {
+    mon.friendship = Math.min(255, mon.friendship + 40);
+    lines.push("Manaphy's tide: the new Pokémon starts with more Bond.");
+  }
   if (guestId(run) === 'mew' && mon.moves.length < 8) {
     const options = teachableMoves(content, mon);
     const pick = options.length > 0 ? options[new Rng(hashSeed(`${run.seed}::mew-gift::${mon.uid}`)).int(0, options.length - 1)] : undefined;
@@ -233,7 +242,7 @@ export function onCaught(content: Content, run: RunState, mon: RunState['party']
 }
 
 /** After the party changed (a join, a deposit, a withdraw): Mew's Promise (no two with the same pair of types). */
-export const onPartyChanged = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'partyChanged' }) : []);
+export const onPartyChanged = (content: Content, run: RunState): string[] => (run.expansion?.promises ? [...noteEvent(content, run, { kind: 'partyChanged' }), ...onBouquetCheck(content, run)] : []);
 
 /** A rest used (a Center or camp heal). Darkrai: at most every second rest. */
 export function onRestUsed(content: Content, run: RunState): string[] {
@@ -247,11 +256,14 @@ export function onRestUsed(content: Content, run: RunState): string[] {
 }
 
 /** On entering a stage: rests the last stage offered and the player never used count as passed (Darkrai's trigger). */
-export function onStageEntered(run: RunState, previous: { heals: number; used: number } | null): void {
-  if (!run.expansion?.promises || !previous || previous.heals === 0) return;
-  if (previous.used > 0) return;
+export function onStageEntered(run: RunState, previous: { heals: number; used: number; fish?: number; fishUsed?: number } | null, content?: Content): string[] {
+  if (!run.expansion?.promises || !previous) return [];
+  const water = content && (previous.fish ?? 0) > (previous.fishUsed ?? 0) ? noteEvent(content, run, { kind: 'declineWaterPath' }) : []; // Phione: a fishing spot offered and passed
+  if (previous.heals === 0) return water;
+  if (previous.used > 0) return water;
   bumpTrack(run, 'restsPassed', (n) => n + 1);
   bumpTrack(run, 'restPrevUsed', 0);
+  return water;
 }
 
 /** A TM or technical item used (Genesect: No more machines). */
@@ -394,3 +406,38 @@ export function onRegionStarted(content: Content, run: RunState): string[] {
   return trackOf(run, 'gaveRegion') === run.regionIndex ? [] : noteEvent(content, run, { kind: 'regionEndNotGiven' });
 }
 export const stageKeyOf = (run: Pick<RunState, 'regionIndex' | 'stage'>): number => run.regionIndex * 100 + (run.stage?.index ?? 0);
+
+/** A Pokémon left the party for good (released): Manaphy's Promise, Leave no one. */
+export const onReleased = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'release' }) : []);
+
+/** Phione parts at the first region after its Promise was kept; Manaphy, its kin, then comes (same run; the kept Promise counts as two Tellings of it). Null when it does not apply. */
+export function manaphyVisit(run: RunState): VisitDecision | null {
+  const p = promiseState(run);
+  if (!run.expansion?.promises || run.regionIndex === 0 || p.guest?.id !== 'phione') return null;
+  const manaphy = mythicalOf('manaphy');
+  if (!manaphy) return null;
+  save(run, { ...p, guest: null, kept: [...p.kept, 'phione'], visited: 'manaphy', tellings: { ...p.tellings, manaphy: (p.tellings.manaphy ?? 0) + 2 } });
+  return visitDecision(manaphy);
+}
+
+/** Magearna's bouquet: the party member that carries it (a uid number kept in the run's counters), 0 when no one does yet. */
+export const bouquetHolder = (run: RunState): RunState['party'][number] | undefined => {
+  const n = trackOf(run, 'bouquet');
+  return n > 0 ? [...run.party].find((m) => uidNumber(m.uid) === n) : undefined;
+};
+/** After the party changed: the bouquet's carrier is gone (Magearna's Promise). */
+export function onBouquetCheck(content: Content, run: RunState): string[] {
+  if (!run.expansion?.promises || guestId(run) !== 'magearna' || trackOf(run, 'bouquet') <= 0 || bouquetHolder(run)) return [];
+  bumpTrack(run, 'bouquet', 0);
+  return noteEvent(content, run, { kind: 'bouquetLost' });
+}
+/** Magearna's Wonder: when a party member faints, the active Pokémon gains +1 Sp. Atk (at most +2 a battle). */
+export function magearnaOnFaint(run: RunState): string | null {
+  const battle = run.battle;
+  if (guestId(run) !== 'magearna' || !battle) return null;
+  const used = battle.storyEffects.filter((e) => e === 'promise:magearna-boost').length;
+  if (used >= 2 || battle.playerStages.spa >= 6) return null;
+  battle.storyEffects.push('promise:magearna-boost');
+  battle.playerStages.spa += 1;
+  return "Magearna's heart answers the fall: +1 Sp. Atk.";
+}

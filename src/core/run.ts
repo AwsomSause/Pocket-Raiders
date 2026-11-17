@@ -65,7 +65,7 @@ import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
 import { resolveWonder, startWonder, wonderActions } from './instrumentality/wonders';
-import { hearTelling, hoopaRing, hoopaStage, onRegionStarted as promiseOnRegion, onSold as promiseOnSold, onStageLeft as promiseOnLeft, stageKeyOf as promiseStageKey, bumpTrack, wishesLeft, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
+import { hearTelling, hoopaRing, hoopaStage, magearnaOnFaint, manaphyVisit, onReleased as promiseOnReleased, onRegionStarted as promiseOnRegion, onSold as promiseOnSold, onStageLeft as promiseOnLeft, stageKeyOf as promiseStageKey, bumpTrack, wishesLeft, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
@@ -778,8 +778,11 @@ function promiseSay(content: Content, run: RunState, lines: string[]): void {
 }
 
 function enterStage(content: Content, run: RunState, index: number): void {
-  const leftBehind = run.stage ? { heals: run.stage.map.nodes.flatMap((n) => n.sides).filter((x) => x.kind === 'heal').length, used: run.stage.map.nodes.flatMap((n) => n.sides).filter((x) => x.kind === 'heal' && x.used).length } : null;
-  promiseOnStage(run, leftBehind);
+  const leftBehind = run.stage ? (() => {
+    const sides = run.stage.map.nodes.flatMap((n) => n.sides);
+    return { heals: sides.filter((x) => x.kind === 'heal').length, used: sides.filter((x) => x.kind === 'heal' && x.used).length, fish: sides.filter((x) => x.kind === 'fish').length, fishUsed: sides.filter((x) => x.kind === 'fish' && x.used).length };
+  })() : null;
+  promiseSay(content, run, promiseOnStage(run, leftBehind, content));
   if (run.stage) promiseSay(content, run, promiseOnLeft(content, run, promiseStageKey(run)));
   if (index === 0) promiseSay(content, run, promiseOnRegion(content, run));
   promiseSay(content, run, hoopaStage(content, run, run.regionIndex * 100 + index));
@@ -870,6 +873,12 @@ function enterStage(content: Content, run: RunState, index: number): void {
   takeCheckpoint(run);
   takeStageSnapshot(run); // L3 Rewinds: the run snapshot (only when rewinds are on)
   const visit = index === 0 ? rollVisit(content, run, run.regionIndex) : null;
+  const manaphy = index === 0 ? manaphyVisit(run) : null;
+  if (manaphy) {
+    run.pending.unshift(manaphy);
+    run.afterDecisions = 'map';
+    run.phase = 'decision';
+  }
   const ring = index === 0 ? hoopaRing(content, run, run.regionIndex) : null;
   if (ring) {
     run.pending.unshift({ kind: 'caught', mon: newMon(content, run, ring.speciesId, ring.level, 'p') });
@@ -3487,6 +3496,8 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     if (fainted) {
       promiseLines.push(...notePromiseEvent(content, run, { kind: 'faint', uid: fainted.uid }));
       promiseOnFaint(run);
+      const swell = magearnaOnFaint(run);
+      if (swell) promiseLines.push(swell);
       noteKeepsakeFaint(run);
       run.expansion = { ...run.expansion, lastFaint: { uid: fainted.uid, at: run.encountersCompleted } };
       changeFriendship(content, fainted, content.balance.friendship.perFaint);
@@ -4727,6 +4738,7 @@ function resolveDecisionCore(content: Content, current: RunState, choice: Decisi
       message = `${name} was released. You got ${candies} cand${candies === 1 ? 'y' : 'ies'}. ${markDecided(run, caught, false)}`.trim();
       recordReleased(content, run, caught);
       noteReleased(run, caught);
+      promiseSay(content, run, promiseOnReleased(content, run));
       noteLeft(run, caught);
       // Greenneedle gn.48: a drafted Pokémon that stayed is no wandering Old Friend: it goes back to its first trainer.
       draftGoesHome(content, run, caught);
