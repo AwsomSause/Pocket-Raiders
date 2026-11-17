@@ -19,10 +19,10 @@ export const isEvilRun = (run: RunState | null | undefined): boolean => run?.rul
 export const evilBlock = (run: RunState | null | undefined): EvilModeBlock | undefined => run?.expansion?.evilMode;
 
 /** Founds the team once. A run that already has a team keeps it (a double press, a replayed action: nothing twice). */
-export function foundInRun(run: RunState, choice: FoundingChoice, length: RunLength, stage?: number): { run: RunState; problem: string | null } {
+export function foundInRun(run: RunState, choice: FoundingChoice, length: RunLength, stage?: number, edges: { shadow?: boolean; incursions?: boolean } = {}): { run: RunState; problem: string | null } {
   if (!isEvilRun(run)) return { run, problem: 'This run is not an Evil Mode run.' };
   if (run.expansion?.evilMode) return { run, problem: null };
-  const out = foundTeam(choice, { boss: run.archetypeId, length, seed: run.seed, ...(stage ? { stage } : {}) });
+  const out = foundTeam(choice, { boss: run.archetypeId, length, seed: run.seed, ...(stage ? { stage } : {}), ...edges });
   if (!out.ok) return { run, problem: out.problem };
   return { run: ensureHero({ ...run, expansion: { ...(run.expansion ?? {}), evilMode: out.block } }), problem: null };
 }
@@ -48,6 +48,12 @@ export function stepInRun(run0: RunState, action: EvilAction): { run: RunState; 
   if (nb?.legend === 'freed' && nb.legendUid) {
     const uid = nb.legendUid;
     out = { ...out, party: out.party.filter((m) => m.uid !== uid), box: (out.box ?? []).filter((m) => m.uid !== uid), expansion: { ...(out.expansion ?? {}), evilMode: { ...r.block, neighbour: { ...nb, legendUid: null } } } };
+  }
+  // Slice 21: a Beast that left in the night goes out of the party or the box, once.
+  for (const a of r.block.applied) {
+    if (!a.startsWith('beast-left:') || block.applied.includes(a)) continue;
+    const uid = a.slice('beast-left:'.length);
+    out = { ...out, party: out.party.filter((m) => m.uid !== uid), box: (out.box ?? []).filter((m) => m.uid !== uid) };
   }
   return { run: out, cues: r.cues, ok: true };
 }

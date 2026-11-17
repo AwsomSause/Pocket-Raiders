@@ -2,6 +2,7 @@
 // name before it's confirmed, and the hold-to-confirm hint. Works out what to draw; decides nothing.
 
 import { EVIL_DATA, type EvilData } from './data';
+import { whateverAllows } from './edges';
 import { linePreview, lineName, realLine } from './line';
 import { LINE_IDS, type EvilModeBlock, type LineId } from './schema';
 
@@ -27,7 +28,7 @@ export function lineModel(block: EvilModeBlock, sel: number, data: EvilData = EV
     const f = data.founding.lines.find((l) => l.id === id)!;
     const st = data.line.stops.find((x) => x.id === id)!;
     const current = block.team.line === id;
-    return { id, name: f.name, feel: f.feel, allows: st.allows, darkens: st.darkens, current, sel: i === at, move: current ? null : linePreview(block, id, data).text };
+    return { id, name: f.name, feel: f.feel, allows: id === 'whatever' ? whateverAllows(block, data) : st.allows, darkens: st.darkens, current, sel: i === at, move: current ? null : linePreview(block, id, data).text };
   });
   const target = LINE_IDS[at]!;
   const p = linePreview(block, target, data);

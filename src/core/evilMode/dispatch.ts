@@ -3,6 +3,7 @@
 // `evil-dispatch` stream, in queue order, then pays takings and wages. Pure: new blocks are returned.
 
 import { hashSeed, Rng } from '../rng';
+import { tearBusy, tearPay } from './tear';
 import { countsFor, fairPrice, payAmount, heldCount, holdingName, kindDef, localOf, methodsFor, settleTown, shiftMood, streetName, streetOf } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { oddsFor, type JobDraft } from './odds';
@@ -36,7 +37,7 @@ export function crewProblem(block: EvilModeBlock, id: string, ignoreHolding?: st
   if (block.queue.some((j) => j.holdingId !== ignoreHolding && j.squad.includes(id))) return `${c.name} is already going somewhere today.`;
   if (block.posted.some((p) => p.id === id)) return `${c.name} is posted somewhere today.`;
   if (inChair(block, id)) return `${c.name} holds the Gym's chair.`;
-  return tradeProblem(block, id) ?? schemeBusy(block, id);
+  return tradeProblem(block, id) ?? schemeBusy(block, id) ?? tearBusy(block, id);
 }
 
 /** Why a job can't be queued, in plain words; null when it can. Checked by `step`, not only on screen. */
@@ -110,6 +111,13 @@ export function lineProblem(block: EvilModeBlock, job: JobDraft, data: EvilData 
 /** Adds a job (or replaces the one on that holding). The odds are worked out now for the screen and fixed at Send. */
 export function queueJob(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA): { block: EvilModeBlock; problem: string | null } {
   const problem = jobProblem(block, job, data) ?? lineProblem(block, job, data);
+  if (problem) return { block, problem };
+  return fileJob(block, job, data);
+}
+
+/** Slice 21: a Shadow order. The Pokémon go without their people: the job's checks, but not the squad's lines. */
+export function queueOrdered(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA): { block: EvilModeBlock; problem: string | null } {
+  const problem = jobProblem(block, job, data);
   if (problem) return { block, problem };
   return fileJob(block, job, data);
 }
@@ -279,7 +287,8 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
   const ec = econEvening({ ...block, team, crew, district }, data);
   ({ team, crew, district } = { team: ec.block.team, crew: ec.block.crew, district: ec.block.district! });
   let econ = ec.block.economy;
-  const holdingsIncome = district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0) + past.amount;
+  const pay = tearPay(block, data);
+  const holdingsIncome = district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data, pay), 0) + past.amount;
   const income = holdingsIncome + ec.income;
   const paid = crew.filter((c) => c.where === 'in');
   const wages = team.creed === 'belonging' ? Math.max(0, Math.floor(income / 2)) : paid.reduce((n, c) => n + wageOf({ ...block, team }, c, income, data), 0);

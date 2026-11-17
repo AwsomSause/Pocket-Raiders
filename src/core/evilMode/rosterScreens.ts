@@ -112,7 +112,7 @@ export function rosterModel(block: EvilModeBlock, d: RosterDraft, data: EvilData
     applicants: list.map((a, i) => {
       const p = deckPerson(a.ref, data)!;
       const q = a.q ? data.people.questions.find((x) => x.id === a.q)! : null;
-      const answer = q ? fill(q.answer, { flaw: flawDef(p.flaw, data).name, line: lineText({ ref: p.id, line: p.line }, data), why: p.why, quest: p.quest }) : null;
+      const answer = q ? fill(q.answer, { flaw: flawDef(p.flaw, data).name, line: lineText({ ref: p.id, line: p.line }, data, block), why: p.why, quest: p.quest }) : null;
       const leaves = a.day + data.people.rules.waitDays - 1;
       return {
         ref: a.ref, name: `${p.name}, ${p.age}`, face: faceOf(a.ref, data), minor: !!p.minor,
@@ -135,12 +135,14 @@ export function refusalModel(block: EvilModeBlock, data: EvilData = EVIL_DATA) {
     title: peopleText('refusalTitle', data),
     people: r.who.map((id) => {
       const p = block.crew.find((c) => c.id === id)!;
-      return { name: p.name, face: faceOf(p.ref, data), line: lineText(p, data), says: p.talent ? talentDef(p.talent, data).refuses : 'No.' };
+      return { name: p.name, face: faceOf(p.ref, data), line: lineText(p, data, block), says: p.talent ? talentDef(p.talent, data).refuses : 'No.' };
     }),
     answers: [
       { id: 'withdraw', name: peopleText('withdraw', data), on: true, why: null as string | null },
       { id: 'swap', name: swaps ? `${peopleText('swap', data)}: ${swaps.map((id) => block.crew.find((c) => c.id === id)!.name).join(', ')}` : peopleText('swap', data), on: !!swaps, why: swaps ? null : peopleText('swapNone', data) },
       { id: 'insist', name: peopleText('insist', data), on: true, why: null },
+      // Slice 21: a Shadow order (Part 5 section 8.1), only with the branch in the run and something from the Lab to send.
+      ...(block.settings.shadow && block.edges.shadow && data.edges.shadow.on && block.team.line === 'whatever' ? [{ id: 'shadowOrder', name: `${data.edges.shadow.orders.label} ${data.edges.shadow.orders.sub}`, on: block.edges.shadow.through - block.edges.shadow.purified > 0, why: block.edges.shadow.through - block.edges.shadow.purified > 0 ? null : data.edges.shadow.orders.none }] : []),
     ],
   };
 }

@@ -67,6 +67,8 @@ export const ExpansionSettingsSchema = z.object({
   evilMode: z.boolean().default(true),
   /** Evil Mode run length (Kice's answer 2): Three regions, or Six once six regions are built (slice 19). Read at founding. */
   evilRunLength: RunLengthSchema.default('three'),
+  /** Evil Mode slice 21 (Kice's answer 8): the Shadow branch is Available by default; false removes it from all screens (no Lab, no Rig, no Corruption). Read at founding. */
+  evilShadow: z.boolean().default(true),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});

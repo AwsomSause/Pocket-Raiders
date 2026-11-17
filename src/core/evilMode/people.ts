@@ -20,10 +20,13 @@ export const peopleText = (k: string, data: EvilData = EVIL_DATA): string => {
 };
 
 /** A person's line, as they'd say it (their own wording where the deck has one). */
-export function lineText(p: Pick<Crew, 'line' | 'ref'>, data: EvilData = EVIL_DATA): string {
+/** Slice 21: given the block, line 7 doesn't name the Shadow branch when it's removed from the run. */
+export function lineText(p: Pick<Crew, 'line' | 'ref'>, data: EvilData = EVIL_DATA, block?: EvilModeBlock): string {
   if (p.line === null) return '';
-  return deckPerson(p.ref, data)?.lineText ?? data.people.lines.find((l) => l.n === p.line)!.text;
+  const t = deckPerson(p.ref, data)?.lineText ?? data.people.lines.find((l) => l.n === p.line)!.text;
+  return block && !(block.settings.shadow && block.edges.shadow) ? plainLine(p.line, t, data) : t;
 }
+const plainLine = (n: number, t: string, data: EvilData): string => (n === 7 && t === data.edges.shadow.lineSeven ? data.edges.shadow.lineSevenRemoved : t);
 
 /** Everyone still on the Roster. A person who left stays in the list (Part 30 section 3.3) but isn't "in". */
 export const inRoster = (block: EvilModeBlock): Crew[] => block.crew.filter((c) => c.where === 'in');
@@ -118,7 +121,7 @@ export function crossers(block: EvilModeBlock, job: { holdingId: string; method:
 export function wontText(block: EvilModeBlock, job: { holdingId: string; method: JobMethod; squad: readonly string[] }, data: EvilData = EVIL_DATA): string {
   const who = crossers(block, job, data);
   if (!who.length) return peopleText('wontNone', data);
-  const list = who.map((p) => `${p.name} ("${lineText(p, data).replace(/^Won't/, "won't").replace(/\.$/, '')}")`).join('. ');
+  const list = who.map((p) => `${p.name} ("${lineText(p, data, block).replace(/^Won't/, "won't").replace(/\.$/, '')}")`).join('. ');
   return peopleText('wontSome', data).replace('{list}', list);
 }
 
@@ -127,7 +130,7 @@ export function teamWont(block: EvilModeBlock, data: EvilData = EVIL_DATA): { li
   const by = new Map<string, string[]>();
   for (const p of inRoster(block)) {
     if (p.line === null || !p.lineHeard) continue;
-    const t = data.people.lines.find((l) => l.n === p.line)!.text;
+    const t = lineText({ line: p.line, ref: null }, data, block);
     by.set(t, [...(by.get(t) ?? []), p.name]);
   }
   return [...by.entries()].map(([line, who]) => ({ line, who }));

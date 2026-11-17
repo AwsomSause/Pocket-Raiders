@@ -195,7 +195,7 @@ describe('the fire', () => {
     let b = act(atFire('protector', {}, 'third', 2), { type: 'sitFire' });
     expect(b.fire!.n).toBe('last');
     // In a three-region run region 2 is the last; a six-region run's region 2 is the third.
-    b = act({ ...atFire('protector', {}, 'third', 2), settings: { length: 'six' } }, { type: 'sitFire' });
+    b = act({ ...atFire('protector', {}, 'third', 2), settings: { length: 'six', shadow: true, incursions: true } }, { type: 'sitFire' });
     expect(b.fire!.n).toBe('third');
     b = act(b, { type: 'fireAnswer', id: 'ex1:0' });
     b = act(b, { type: 'fireAnswer', id: 'andYou:0' });
@@ -372,7 +372,7 @@ describe('saves: block v10', () => {
     const { road: _r, fire: _x, reck: _k, ...rest } = b;
     const v9 = JSON.parse(JSON.stringify({ ...rest, v: 12, hero: old }));
     const out = EvilModeBlockSchema.parse(v9);
-    expect(out.v).toBe(15);
+    expect(out.v).toBe(19);
     expect(out.hero).toMatchObject({ temper: 0, fires: [], lies: [], told: false, starter: '', mother: { mood: 'wary', letters: [] } });
     expect(out).toMatchObject({ road: [], fire: null, reck: null });
     expect(() => EvilModeBlockSchema.parse({ ...v9, v: 13 })).toThrow();

@@ -740,18 +740,28 @@
       "id": "lab",
       "name": "The Shadow Lab",
       "runsOn": "nobody",
-      "status": "disabled",
-      "waits": "No Lab at all yet (build plan slice 10's limit).",
+      "status": "supported",
       "line": [
         "whatever"
       ],
       "sizes": [
         {
           "cost": 8000,
-          "does": "One Pokémon a district: its heart's shut. Corruption +1 when built",
+          "does": "One Pokémon a district: its heart's shut. Kit +2 levels, Shadow moves, never refuses. Corruption +1 when built, and it only rises",
           "looks": "A steel door. No window. A hum",
-          "status": "disabled",
-          "waits": "No Lab at all yet (build plan slice 10's limit)."
+          "status": "supported"
+        },
+        {
+          "cost": 6000,
+          "does": "Two a district. Corruption +1",
+          "looks": "The hum's lower. The corridor outside's colder than the rest of the base",
+          "status": "supported"
+        },
+        {
+          "cost": 8000,
+          "does": "Four a district. Corruption +1",
+          "looks": "The next room's Specialist has asked to be moved. They've been moved. The room after that's asked",
+          "status": "supported"
         }
       ],
       "fx": [],

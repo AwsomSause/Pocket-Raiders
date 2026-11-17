@@ -287,7 +287,7 @@ describe('saves: block v6', () => {
     const b = found('grey');
     const { proof: _p, lineMove: _l, ...rest } = b;
     const v6 = EvilModeBlockSchema.parse({ ...rest, v: 5 });
-    expect(v6).toMatchObject({ v: 15, proof: [], lineMove: null });
+    expect(v6).toMatchObject({ v: 19, proof: [], lineMove: null });
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(v6)))).toEqual(v6);
   });
   it('a damaged Take (an unknown thing) and a damaged Line move are refused', () => {

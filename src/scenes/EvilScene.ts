@@ -34,6 +34,9 @@ import { lineModel } from '../core/evilMode/lineScreens';
 import { gymView } from '../ui/redux/screens/evilGym';
 import { neighbourView } from '../ui/redux/screens/evilNeighbour';
 import { schemeView } from '../ui/redux/screens/evilScheme';
+import { edgesView } from '../ui/redux/screens/evilEdges';
+import { edgesModel } from '../core/evilMode/edgesScreens';
+import { tearChip } from '../core/evilMode/edges';
 import { schemeModel } from '../core/evilMode/schemeScreens';
 import { neighbourModel } from '../core/evilMode/neighbourScreens';
 import { gymModel } from '../core/evilMode/gymScreens';
@@ -83,6 +86,8 @@ export class EvilScene extends Phaser.Scene {
   private nb: number | null = null;
   /** Slice 14: the Scheme page's chosen row, or null when it's shut. */
   private sc: number | null = null;
+  /** Slice 21: the Edges page's selected row, or null when closed. */
+  private edge: number | null = null;
   /** Slice 10: the Base page's tab, square and option, or null when it's shut (Walk it and a Raid hold it open). */
   private base: BaseSel | null = null;
   /** Slice 12: the Road page's picked choice (null: closed), the typed line's box, and the region whose last room was seen out. */
@@ -114,6 +119,7 @@ export class EvilScene extends Phaser.Scene {
     this.trade = null;
     this.nb = null;
     this.sc = null;
+    this.edge = null;
     this.base = null;
     this.road = null;
     this.roomSeen = null;
@@ -160,9 +166,13 @@ export class EvilScene extends Phaser.Scene {
           // Slice 14: the Scheme page; a heist's rooms keep it open.
           const smod = (this.sc !== null || block.scheme?.heist?.stage === 'rooms') && !block.fight && !ledger && !roster && !file && !line && !gym && !trade && !nbPage ? schemeModel(block, this.sc ?? 0) : null;
           const scPage = smod ? schemeView(smod, this.notice) : undefined;
+          // Slice 21: the Edges page (U).
+          const em = this.edge !== null && !block.fight && !ledger && !roster && !file && !line && !gym && !trade && !nbPage && !scPage ? edgesModel(block, this.edge) : null;
+          const edPage = em ? edgesView(em, this.notice) : undefined;
+          const edTag = tearChip(block) ?? 'Edges';
           // Slice 10: the Base page. Walk it and a Raid hold it open over everything else.
           const bsel = this.baseSel();
-          const bm = bsel && (this.baseForced() || (!ledger && !roster && !file && !line && !gym && !trade && !nbPage && !scPage)) ? baseModel(block, bsel) : null;
+          const bm = bsel && (this.baseForced() || (!ledger && !roster && !file && !line && !gym && !trade && !nbPage && !scPage && !edPage)) ? baseModel(block, bsel) : null;
           const base = bm ? baseView(bm, this.notice, bm.bg ? this.bgOf(bm.bg) : null) : undefined;
           if (block.fight) frame.button = 'Fight';
           // Slice 12: the fire and the last room hold the screen; the Road page (O) takes the board's place like the File.
@@ -175,7 +185,7 @@ export class EvilScene extends Phaser.Scene {
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(scPage ? { scheme: scPage } : {}), ...(base ? { base } : {}), ...(road ? { road } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(scPage ? { scheme: scPage } : {}), ...(edPage ? { edges: edPage } : {}), edgesTag: edTag, ...(base ? { base } : {}), ...(road ? { road } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -206,7 +216,7 @@ export class EvilScene extends Phaser.Scene {
         ract: (arg) => { const [i, j] = arg.split(':').map(Number); if (this.roster) { this.roster = { ...this.roster, row: i!, act: j! }; this.rosterAct(); } },
         oanswer: (i) => this.officeAnswer(Number(i)),
         ocancel: () => { if (this.roster) this.roster = { ...this.roster, office: null }; this.view?.refresh(); },
-        refuse: (id) => this.answer(id as 'withdraw' | 'swap' | 'insist'),
+        refuse: (id) => this.answer(id as 'withdraw' | 'swap' | 'insist' | 'shadowOrder'),
         clear: (id) => { services().session.evilStep({ type: 'clearJob', holdingId: id }); this.view?.refresh(); },
         file: () => this.toggleFile(),
         ftab: (i) => { if (this.file !== null) this.file = Number(i); this.view?.refresh(); },
@@ -226,6 +236,9 @@ export class EvilScene extends Phaser.Scene {
         nb: () => this.toggleNeighbour(),
         scheme: () => this.toggleScheme(),
         srow: (i) => { this.sc = Number(i); this.schemeDo(); },
+        edges: () => this.toggleEdges(),
+        erow: (i) => { this.edge = Number(i); this.view?.refresh(); },
+        edo: () => this.edgesDo(),
         nrow: (i) => { this.nb = Number(i); this.neighbourDo(); },
         base: () => this.toggleBase(),
         btab: (i) => { if (this.base) { this.base = { ...this.base, tab: Number(i), opt: 0 }; this.view?.refresh(); } },
@@ -419,6 +432,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.trade !== null) return this.tradeKey(a);
     if (this.nb !== null || this.block()?.neighbour?.sitting) return this.neighbourKey(a);
     if (this.sc !== null || this.block()?.scheme?.heist?.stage === 'rooms') return this.schemeKey(a);
+    if (this.edge !== null) return this.edgesKey(a);
     if (this.base !== null) return this.baseKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
@@ -589,6 +603,7 @@ export class EvilScene extends Phaser.Scene {
       const by: Record<string, string> = { KeyV: 'Waive', KeyE: 'End', KeyM: 'Make it honest', KeyB: 'back room' };
       if (by[e.code]) return this.tradeDo(-1, by[e.code]);
     }
+    if (e.code === 'KeyU' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleEdges();
     if (e.code === 'KeyC' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleScheme();
     if (e.code === 'KeyK' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleNeighbour();
     if (e.code === 'KeyY' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleGym();
@@ -938,6 +953,48 @@ export class EvilScene extends Phaser.Scene {
     this.view?.refresh();
   }
 
+  // ---- Slice 21: the Edges page ----
+
+  private toggleEdges(): void {
+    if (this.card) return;
+    const block = this.block();
+    if (!block || block.scheme?.heist?.stage === 'rooms' || block.neighbour?.sitting) return;
+    this.edge = this.edge === null ? 0 : null;
+    this.ledger = null;
+    this.roster = null;
+    this.file = null;
+    this.line = null;
+    this.gym = null;
+    this.trade = null;
+    this.nb = null;
+    this.sc = null;
+    this.notice = null;
+    this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  private edgesKey(a: InputAction): void {
+    const block = this.block();
+    if (a === 'back' || !block) { this.edge = null; return void this.view?.refresh(); }
+    const n = Math.max(1, edgesModel(block, this.edge ?? 0).rows.length);
+    if (a === 'up' || a === 'down' || a === 'left' || a === 'right') { this.edge = ((this.edge ?? 0) + (a === 'up' || a === 'left' ? n - 1 : 1)) % n; return void this.view?.refresh(); }
+    if (a === 'confirm') this.edgesDo();
+  }
+
+  /** CONFIRM on the chosen row: the step refuses anything the page wouldn't allow. Going through a Tear goes to the battle. */
+  private edgesDo(): void {
+    const block = this.block();
+    const row = block ? edgesModel(block, this.edge ?? 0).rows.find((r) => r.sel) : undefined;
+    if (!row) return;
+    const cues = services().session.evilStep(row.action);
+    const refused = cues.find((c) => c.id === 'refused') as { reason?: string } | undefined;
+    const said = cues.filter((c) => c.id === 'said').map((c) => (c as { line: string }).line);
+    this.notice = refused?.reason ?? (said.length ? said.join(' ') : null);
+    if (cues.some((c) => c.id === 'fight')) { this.edge = null; return this.startFight(); }
+    this.edge = 0;
+    this.view?.refresh();
+  }
+
   // ---- Slice 13: the neighbour page ----
 
   private toggleNeighbour(): void {
@@ -1263,13 +1320,15 @@ export class EvilScene extends Phaser.Scene {
 
   /** The yard: Left/Right the three answers, Enter answers. */
   private refusalKey(a: InputAction): void {
-    if (a === 'left' || a === 'right') this.refuseSel = (this.refuseSel + (a === 'left' ? 2 : 1)) % 3;
-    else if (a === 'confirm') return this.answer((['withdraw', 'swap', 'insist'] as const)[this.refuseSel]!);
+    const block = this.block();
+    const ids = (block ? refusalModel(block)?.answers.map((x) => x.id) : null) ?? ['withdraw', 'swap', 'insist'];
+    if (a === 'left' || a === 'right') this.refuseSel = (this.refuseSel + (a === 'left' ? ids.length - 1 : 1)) % ids.length;
+    else if (a === 'confirm') return this.answer(ids[this.refuseSel] as 'withdraw' | 'swap' | 'insist' | 'shadowOrder');
     this.view?.refresh();
   }
 
-  private answer(id: 'withdraw' | 'swap' | 'insist'): void {
-    const cues = services().session.evilStep({ type: 'answerRefusal', answer: id });
+  private answer(id: 'withdraw' | 'swap' | 'insist' | 'shadowOrder'): void {
+    const cues = services().session.evilStep(id === 'shadowOrder' ? { type: 'shadowOrder' } : { type: 'answerRefusal', answer: id });
     this.said(cues);
     const filed = services().session.run?.expansion?.evilMode?.log.at(-1)?.text;
     if (!cues.some((c) => c.id === 'refused') && filed) this.filed = filed;
