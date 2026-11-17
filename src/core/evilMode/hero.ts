@@ -8,7 +8,7 @@ import { hashSeed, Rng } from '../rng';
 import starterTable from '../../data/rivalHome.json';
 import bankJson from '../../data/rivalBank.json';
 import { holdingName, localOf, streetName, streetOf, townStreet } from './board';
-import { dayIn, stageKind } from './region';
+import { dayIn, regionText, runIndex, stageKind } from './region';
 import { goWithHero } from './line';
 import { badgeHow, gymDealt, heroAtGym } from './gym';
 import { EVIL_DATA, type EvilData } from './data';
@@ -343,24 +343,27 @@ function stageWalk(block: EvilModeBlock, data: EvilData): EvilModeBlock {
     return appendLog(out, { kind: 'hero', who: [], to: d.holdings.find((x) => x.kind === 'gym')?.id, text: `Day ${day}. ${text}` });
   };
   if (stageKind(block.here.stage) === 'arrival') {
-    if (di <= 1) return done(block, [fill(R.arrival.home, { street: hero0.home.street })]);
+    // Slice 16: in a later region the Hero has come off the boats (crossing.ts sets today's line), not from home.
+    const later = runIndex(block) > 0;
+    if (di <= 1) return done(block, later ? hero0.today : [fill(R.arrival.home, { street: hero0.home.street })]);
     let out = walkHero(block, data, 19);
     if (out.fight) return out;
-    const today = [...(di === 2 ? [R.arrival.leaves] : []), ...out.hero!.today];
+    const today = [...(di === 2 && !later ? [R.arrival.leaves] : []), ...out.hero!.today];
     if (di < block.region.badgeDay) return done(out, today);
-    out = badge(out, R.arrival.badge);
+    const first = regionText(R.arrival.badge, block, data);
+    out = badge(out, first);
     out = { ...out, district: { ...out.district!, end: { how: 'arrival', day, count: ownedCount(out) } }, evening: [...out.evening, R.arrival.end] };
-    return done(out, [...today, R.arrival.badge]);
+    return done(out, [...today, first]);
   }
   if (di <= 1) {
     let out = walkHero(block, data, 19);
     if (out.fight) return out;
     const today = out.hero!.today;
-    out = badge(out, R.reckoning.badge);
+    out = badge(out, regionText(R.reckoning.badge, block, data));
     // Slice 12: what the eighth Leader says to them, and their answer (Part 21 section 2).
-    return done(out, [...today, R.reckoning.badge, ...eighthLines(out, data)]);
+    return done(out, [...today, regionText(R.reckoning.badge, block, data), ...eighthLines(out, data)]);
   }
-  if (di === 2) return done(badge(block, R.reckoning.badge), [R.reckoning.outside, ...(reckOn(data) ? approachLines(block, data) : [])]);
+  if (di === 2) return done(badge(block, regionText(R.reckoning.badge, block, data)), [R.reckoning.outside, ...(reckOn(data) ? approachLines(block, data) : [])]);
   // Slice 10: the base can delay the Hero, at most two days a region (Part 17 section 3.3).
   const late = baseDelay(block, data);
   if (di < R.reckoning.days + late) return done(block, [R.reckoning.outside, fill(data.base.delay.word, { days: late, s: late === 1 ? '' : 's' })]);
@@ -369,6 +372,6 @@ function stageWalk(block: EvilModeBlock, data: EvilData): EvilModeBlock {
     const r = openLastRoom(block, data);
     return done(r.block, [R.reckoning.arrives, ...r.lines]);
   }
-  const out: EvilModeBlock = { ...block, district: { ...d, end: { how: 'reckoning', day, count: ownedCount(block) } }, evening: [...block.evening, R.reckoning.arrives, R.reckoning.end] };
+  const out: EvilModeBlock = { ...block, district: { ...d, end: { how: 'reckoning', day, count: ownedCount(block) } }, evening: [...block.evening, R.reckoning.arrives, regionText(R.reckoning.end, block, data)] };
   return done(out, [R.reckoning.arrives]);
 }

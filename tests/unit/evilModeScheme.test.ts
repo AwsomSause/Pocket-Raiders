@@ -19,8 +19,11 @@ const choice = (over: Partial<FoundingChoice> = {}): FoundingChoice => ({ name: 
 function found(over: Partial<FoundingChoice> = {}, n = 1, beat: EvilModeBlock['here']['beat'] = 'dispatch', seed = 'scheme-1'): EvilModeBlock {
   const r = foundTeam(choice(over), { boss: 'red', length: 'three', seed, stage: n + 1 });
   if (!r.ok) throw new Error(r.problem);
-  return { ...r.block, here: { ...r.block.here, beat }, hero: null, team: { ...r.block.team, funds: 90000, regard: 8 } };
+  // Slice 16: three regions are written, so the Scheme's pace runs across them (Part 22 section 1.1). These fixtures play
+  // Kanto as the run's third region, where every part's in pace and the Moment comes in District 6.
+  return { ...r.block, here: { ...r.block.here, beat }, hero: null, team: { ...r.block.team, funds: 90000, regard: 8 }, region: { ...r.block.region, crossed: ['johto', 'hoenn'] } };
 }
+const asRegion = (b: EvilModeBlock, R: number): EvilModeBlock => ({ ...b, region: { ...b.region, crossed: ['johto', 'hoenn'].slice(0, R - 1) } });
 const ok = (b: EvilModeBlock, a: EvilAction): EvilModeBlock => {
   const r = step(b, a);
   if (!r.ok) throw new Error(`${a.type} refused: ${r.cues.map((c) => ('reason' in c ? c.reason : c.id)).join('; ')}`);
@@ -100,12 +103,14 @@ describe('the percentage', () => {
 });
 
 describe('the parts', () => {
-  it('pace: the Means from District 1; the Place and Key from District 3', () => {
-    const b = found();
+  it('pace (three regions): the Means from Region 1; the Place and Key from Region 2', () => {
+    const b = asRegion(found(), 1);
     expect(paceProblem(b, 'means')).toBeNull();
-    expect(paceProblem(b, 'place')).toMatch(/District 3/);
-    expect(refused(b, { type: 'schemeWay', part: 'place', key: 'dirty' })).toMatch(/District 3/);
-    expect(paceProblem(found({}, 3), 'place')).toBeNull();
+    expect(paceProblem(b, 'place')).toMatch(/Region 2, District 1/);
+    expect(refused(b, { type: 'schemeWay', part: 'place', key: 'dirty' })).toMatch(/Region 2/);
+    expect(paceProblem(asRegion(found({}, 3), 1), 'key')).toMatch(/Region 2/);
+    expect(paceProblem(asRegion(found(), 2), 'place')).toBeNull();
+    expect(paceProblem(found(), 'key')).toBeNull();
   });
   it('a clean way (a station) takes its days and is stamped clean, with its day and Card; never twice', () => {
     let b = ok(found(), { type: 'schemeWay', part: 'means', key: 'clean' });
@@ -327,7 +332,7 @@ describe('the page and the save (block v11)', () => {
     const { scheme: _s, ...rest } = b;
     const { 'evil-scheme': _d, ...draws } = b.draws;
     const v11 = EvilModeBlockSchema.parse({ ...rest, v: 10, draws });
-    expect(v11.v).toBe(14);
+    expect(v11.v).toBe(15);
     expect(v11.scheme).toMatchObject({ family: 'spite', groundwork: 0, inherited: false, jobs: [], digs: [], eye: 'open' });
     for (const p of PARTS) expect(v11.scheme.parts[p].state).toBe('empty');
     expect(v11.draws['evil-scheme']).toBe(0);

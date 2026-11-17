@@ -11,7 +11,8 @@ import { inChair } from './gym';
 import { appendLog, fill, money } from './ledger';
 import { inRoster, moveLoyalty } from './people';
 import { tradeProblem } from './economy';
-import { STANCES, type CardField, type Crew, type DigDef, type DigState, type EvilModeBlock, type HeistDef, type HeistState, type Holding, type PartId, type SchemeFamily, type SchemePart, type SchemeState, type SchemeWay, PARTS, emptyScheme } from './schema';
+import { runIndex } from './region';
+import { packField, STANCES, type CardField, type Crew, type DigDef, type DigState, type EvilModeBlock, type HeistDef, type HeistState, type Holding, type PartId, type SchemeFamily, type SchemePart, type SchemeState, type SchemeWay, PARTS, emptyScheme } from './schema';
 
 export type WayKey = 'clean' | 'dirty' | 'second';
 export interface Out { block: EvilModeBlock; problem: string | null; lines: string[] }
@@ -61,10 +62,11 @@ export function paceProblem(block: EvilModeBlock, part: PartId, data: EvilData =
     return d.n >= from ? null : W('offPace', data, { part: partName(part), when: `District ${from}` });
   }
   const [r, n] = R.three[part] ?? [0, 1];
-  return d.region > r || (d.region === r && d.n >= n) ? null : W('offPace', data, { part: partName(part), when: `Region ${r + 1}, District ${n}` });
+  const R0 = runIndex(block);
+  return R0 > r || (R0 === r && d.n >= n) ? null : W('offPace', data, { part: partName(part), when: `Region ${r + 1}, District ${n}` });
 }
 
-/** The district (n) the Moment comes in, and the region. */
+/** The district (n) the Moment comes in, and the region (which of the run's, from 0). */
 export function momentWhere(data: EvilData = EVIL_DATA): { region: number; n: number } {
   const R = data.scheme.rules.pace;
   if (regionsWritten(data) <= 1) return { region: 0, n: R.one.moment };
@@ -156,7 +158,7 @@ export function wayProblem(block: EvilModeBlock, part: PartId, key: WayKey, data
   if (way.how === 'cause') {
     if (s.moment.came) return 'The Moment has been.';
     const m = momentWhere(data);
-    if (block.district.region !== m.region || block.district.n < m.n - 1) return `It can only be caused close to the Moment: from District ${m.n - 1}.`;
+    if (runIndex(block) !== m.region || block.district.n < m.n - 1) return `It can only be caused close to the Moment: from District ${m.n - 1}.`;
   }
   if (way.how === 'count') {
     const c = homeCount(block, data);
@@ -202,7 +204,7 @@ export function schemeCard(block: EvilModeBlock, part: PartId, key: WayKey, data
 /** Files a Scheme Card (kept with its day) and its Ledger line. */
 function fileCard(block: EvilModeBlock, key: string, clean: boolean, fields: CardField[], who: string[]): { block: EvilModeBlock; id: string } {
   const id = `S${block.scheme.cards.length + 1}`;
-  const b: EvilModeBlock = { ...block, scheme: { ...block.scheme, cards: [...block.scheme.cards, { id, day: block.here.day, key, clean, fields }] } };
+  const b: EvilModeBlock = { ...block, scheme: { ...block.scheme, cards: [...block.scheme.cards, { id, day: block.here.day, key, clean, fields: fields.map(packField) }] } };
   return { block: appendLog(b, { kind: 'scheme', who, cardId: id, text: `Day ${block.here.day}. ${fields[11]!.text}` }), id };
 }
 
@@ -368,7 +370,7 @@ export function schemeMorning(block0: EvilModeBlock, data: EvilData = EVIL_DATA)
   const s = block.scheme;
   const m = momentWhere(data);
   const d = block.district!;
-  if (s.moment.day === null && !s.moment.came && d.region === m.region && d.n === m.n) {
+  if (s.moment.day === null && !s.moment.came && runIndex(block) === m.region && d.n === m.n) {
     block = { ...block, scheme: { ...s, moment: { ...s.moment, day: (d.from ?? 1) + data.scheme.rules.momentDay - 1 } } };
   }
   const mo = block.scheme.moment;
@@ -439,7 +441,7 @@ export function homeCount(block: EvilModeBlock, data: EvilData = EVIL_DATA): { n
 
 const EYES = ['open', 'narrowed', 'shut'] as const;
 export function moveEye(block: EvilModeBlock, by: 1 | -1, data: EvilData = EVIL_DATA): { block: EvilModeBlock; line: string } {
-  if (block.scheme.family !== 'wonder' || block.here.region < data.scheme.rules.noticeFrom) return { block, line: '' };
+  if (block.scheme.family !== 'wonder' || (block.region?.crossed?.length ?? 0) < data.scheme.rules.noticeFrom) return { block, line: '' };
   const at = EYES.indexOf(block.scheme.eye);
   const to = EYES[Math.max(0, Math.min(2, at + by))]!;
   if (to === block.scheme.eye) return { block, line: '' };

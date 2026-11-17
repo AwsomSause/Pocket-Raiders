@@ -101,7 +101,7 @@ export function policyTrade(block: EvilModeBlock, policy: Policy, data: EvilData
 }
 
 /** Plays from `block` to the region's end (or the budget), recording each action that was accepted. */
-export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA, budget = 4000): PlayResult {
+export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA, budget = 4000, whole = false): PlayResult {
   let block = block0;
   const actions: EvilAction[] = [];
   const districts: DistrictStat[] = [];
@@ -137,6 +137,17 @@ export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData
       continue;
     }
     const R = block.region;
+    // Slice 16: a whole run crosses: the first ticket, nobody asked, the base handed to the town, no forms, the boats.
+    if (R.phase === 'over' && whole && R.crossing) {
+      const x = R.crossing;
+      const a: EvilAction = x.step === 'tickets' ? { type: 'cross', what: 'ticket', id: x.offer[0]! }
+        : x.step === 'who' ? { type: 'cross', what: 'next' }
+        : x.step === 'base' ? { type: 'cross', what: 'base', choice: 'hand' }
+        : x.step === 'forms' ? { type: 'cross', what: 'forms', yes: false }
+        : { type: 'cross', what: 'go' };
+      if (!act(a)) return done(false);
+      continue;
+    }
     if (R.phase === 'over') return done(true);
     if (R.phase === 'tally') {
       const d = block.district!;
@@ -172,6 +183,11 @@ export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData
     if (!act({ type: BEAT_END[block.here.beat] })) return done(false);
   }
   return done(false);
+}
+
+/** Slice 16: plays a whole run, region after region across each Crossing, to its ending's last page (or the budget). */
+export function playRun(block0: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA, budget = 20000): PlayResult {
+  return playRegion(block0, policy, data, budget, true);
 }
 
 /** Replays a list of actions from a founded block; every one must be accepted again. */

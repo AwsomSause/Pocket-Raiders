@@ -99,10 +99,12 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const crew = pc ? [pc, ...roster.crew] : roster.crew;
   const look = { ...data.founding.look, ...(choice.look ?? {}) };
   const stage = data.region.on ? opts.stage ?? 1 : 1;
+  // Slice 16: the first region's picked on its page (Kanto, Johto or Hoenn, whichever's open).
+  const first = data.region.on ? data.region.regions.find((r) => r.id === choice.region)?.index ?? 0 : 0;
   const seed = opts.seed ?? opts.boss;
-  const funds = patron ? Math.floor(modify({ here: { region: 0, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
+  const funds = patron ? Math.floor(modify({ here: { region: first, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
-    v: 14,
+    v: 15,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -121,10 +123,10 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
       dread,
       corruption: 0,
     },
-    here: { region: 0, stage, day: 1, beat: 'morning' },
+    here: { region: first, stage, day: 1, beat: 'morning' },
     draws: Object.fromEntries(STREAMS.map((s) => [s, 0])) as EvilModeBlock['draws'],
     applied: [],
-    district: layDistrict(seed, 0, data.region.on ? stage - 1 : 1, { regard, dread, look }, data),
+    district: layDistrict(seed, first, data.region.on ? stage - 1 : 1, { regard, dread, look, doctrine: choice.doctrine }, data),
     crew,
     queue: [],
     sheets: [],

@@ -89,7 +89,8 @@ export const MoodSchema = z.enum(MOODS);
 export type Mood = z.infer<typeof MoodSchema>;
 
 /** Slice 9 adds Kanto's own holding, a floor of a building (Part 26a section 2.3). */
-export const HOLDING_KINDS = ['local', 'wild', 'alpha', 'safehouse', 'opportunity', 'town', 'gym', 'floor'] as const;
+/** Slice 16 adds Johto's kept place (held by upkeep, pays nothing) and Hoenn's water route (held by running the boats). */
+export const HOLDING_KINDS = ['local', 'wild', 'alpha', 'safehouse', 'opportunity', 'town', 'gym', 'floor', 'kept', 'water'] as const;
 export const HoldingKindSchema = z.enum(HOLDING_KINDS);
 export type HoldingKind = z.infer<typeof HoldingKindSchema>;
 
@@ -123,7 +124,7 @@ export const DistrictFileSchema = z.object({
     kind: z.enum(['arrival', 'district', 'reckoning']).optional(),
     streets: z.array(z.string().min(1)).length(4).optional(),
     places: z.partialRecord(HoldingKindSchema, z.array(z.string().min(1)).min(1)).optional(),
-    layout: z.object({ local: z.number().int().min(0), wild: z.number().int().min(0), alpha: z.number().int().min(0), safehouse: z.number().int().min(0), opportunity: z.number().int().min(0), floor: z.number().int().min(0) }).strict().optional(),
+    layout: z.object({ local: z.number().int().min(0), wild: z.number().int().min(0), alpha: z.number().int().min(0), safehouse: z.number().int().min(0), opportunity: z.number().int().min(0), floor: z.number().int().min(0), kept: z.number().int().min(0).optional(), water: z.number().int().min(0).optional() }).strict().optional(),
     floors: z.array(z.object({ name: z.string().min(1), tenant: z.string().min(1), take: z.number().int().min(0), says: z.string().min(1) }).strict()).optional(),
     tower: z.string().min(1).optional(),
   }).strict()).min(1),
@@ -224,7 +225,8 @@ export const RANKS = ['grunt', 'lead', 'specialist', 'officer', 'executive'] as 
 export const RankSchema = z.enum(RANKS);
 export type Rank = z.infer<typeof RankSchema>;
 /** Slice 6 adds three of the nine: the Line moved, with the Hero, arrested (Part 9 section 10). */
-export const LEAVE_WAYS = ['line', 'loyalty', 'letGo', 'lineMoved', 'hero', 'arrested', 'reckoning'] as const;
+/** Slice 16 adds 'stayed': stayed behind at a Crossing (kindly; Part 2 section 9.2). */
+export const LEAVE_WAYS = ['line', 'loyalty', 'letGo', 'lineMoved', 'hero', 'arrested', 'reckoning', 'stayed'] as const;
 export const QUESTIONS = ['cant', 'wont', 'why', 'who'] as const;
 export const QuestionSchema = z.enum(QUESTIONS);
 export type Question = z.infer<typeof QuestionSchema>;
@@ -310,6 +312,16 @@ export const FacesFileSchema = z.object({ note: z.string(), faces: z.array(z.obj
 
 export const CardFieldSchema = z.object({ label: z.string().min(1), text: z.string().min(1), unknown: z.boolean() }).strict();
 export type CardField = z.infer<typeof CardFieldSchema>;
+/**
+ * Slice 16: a kept Card's field, packed at a Crossing (design Part 30 section 7.4: "packed, never summarised and never
+ * dropped"): a known field is kept as its text alone (its label is the ledger's own, by its place). Read with `unpackField`.
+ */
+export const StoredFieldSchema = z.union([CardFieldSchema, z.string().min(1)]);
+export type StoredField = z.infer<typeof StoredFieldSchema>;
+/** A stored field, whole: a packed one gets its label back from the ledger's list (by its place) and is known. */
+export const unpackField = (f: StoredField, i: number, labels: readonly string[]): CardField => (typeof f === 'string' ? { label: labels[i] ?? '', text: f, unknown: false } : f);
+/** Packs a field: a known one keeps only its text; an unknown one stays whole. */
+export const packField = (f: StoredField): StoredField => (typeof f === 'string' || f.unknown ? f : f.text);
 
 /** A confirmed Honest Card, kept with its day (Part 12 section 1.2: "The Card's kept"). Thirteen fields, always in order. */
 export const StoredCardSchema = z.object({
@@ -322,7 +334,7 @@ export const StoredCardSchema = z.object({
   offer: z.number().int().min(1).max(100).optional(),
   thing: TakeThingSchema.optional(),
   clean: z.boolean(),
-  fields: z.array(CardFieldSchema).length(13),
+  fields: z.array(StoredFieldSchema).length(13),
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
@@ -549,6 +561,32 @@ export const PastDistrictSchema = z.object({
 export type PastDistrict = z.infer<typeof PastDistrictSchema>;
 
 const Int0 = z.number().int().min(0);
+/** Slice 16: the Crossing (design Part 2 section 9; Part 26a section 1.1). One step at a time: the two tickets, who comes, the base, the quay, the boats. */
+export const CrossingSchema = z.object({
+  step: z.enum(['tickets', 'who', 'base', 'forms', 'boats']),
+  /** The two regions the seed offers (ids), and the one picked. */
+  offer: z.array(z.string().min(1)).min(1).max(2),
+  pick: z.string().min(1).nullable(),
+  /** Who stays (a third of the Roster, by name), and the one asked to come anyway ("We need you."). */
+  staying: z.array(z.string().min(1)),
+  asked: z.string().min(1).nullable(),
+  base: z.enum(['hand', 'sell', 'leave', 'burn', 'none']).nullable(),
+  /** The officer left in the old base (Leave an officer in it). */
+  baseOfficer: z.string().min(1).nullable(),
+  forms: z.boolean().nullable(),
+  /** Where the Hero lands: ahead, beside or behind (Part 2 section 9.5). */
+  boats: z.enum(['ahead', 'beside', 'behind']),
+  lines: z.array(z.string()),
+}).strict();
+export type CrossingState = z.infer<typeof CrossingSchema>;
+/** Slice 16 (Hoenn's second clock, Part 26a sections 1.7 and 4.6): days left, and how it was stopped (or 'met' at nought). */
+export const ClockSchema = z.object({
+  left: z.number().int().min(0).max(3),
+  day: z.number().int().min(1),
+  stopped: z.enum(['letters', 'boss', 'hero', 'together', 'met']).nullable(),
+}).strict();
+export type ClockState = z.infer<typeof ClockSchema>;
+
 export const RegionStateSchema = z.object({
   /** The region's id in region.json (Kanto). */
   id: z.string().min(1),
@@ -565,6 +603,17 @@ export const RegionStateSchema = z.object({
   doubledBack: z.boolean(),
   /** Lines for the next Morning: a letter from someone away, a double-back, what was heard on the Road. */
   notes: z.array(z.string().min(1)),
+  /** Slice 16: the regions crossed from, in order (region ids). Its length is the run's region number less one (R − 1). */
+  crossed: z.array(z.string().min(1)),
+  /** Slice 16: the Crossing under way (after the Reckoning's tally, when this isn't the last region), or null. */
+  crossing: CrossingSchema.nullable(),
+  /** Slice 16: what the garrisons and an Officer left in the old base pay each Evening, across the water, at half. */
+  abroad: Int0,
+  /** Slice 16: the answer at the quay (take this region's forms, or not); null before it's asked. */
+  forms: z.boolean().nullable(),
+  /** Slice 16 (Hoenn): the letters carried between the two Bosses (three stop tick 3), and the second clock at the Reckoning. */
+  letters: Int0,
+  clock: ClockSchema.nullable(),
 }).strict();
 export type RegionState = z.infer<typeof RegionStateSchema>;
 
@@ -649,7 +698,7 @@ export const VentureSchema = z.object({
 export type Venture = z.infer<typeof VentureSchema>;
 
 /** A confirmed trade Card, kept with its day (like a job's Card). */
-export const EconCardSchema = z.object({ id: z.string().min(1), day: z.number().int().min(1), cardId: z.string().min(1), fields: z.array(CardFieldSchema).length(13) }).strict();
+export const EconCardSchema = z.object({ id: z.string().min(1), day: z.number().int().min(1), cardId: z.string().min(1), fields: z.array(StoredFieldSchema).length(13) }).strict();
 
 export const EconomyStateSchema = z.object({
   running: z.array(VentureSchema),
@@ -726,7 +775,9 @@ export const NeighbourStateSchema = z.object({
 export type NeighbourState = z.infer<typeof NeighbourStateSchema>;
 
 const NeighbourDefSchema = z.object({
-  id: NS, team: NS, region: NI.min(0), boss: NS, teamName: NS, sign: NS, colour: z.string().regex(/^#[0-9a-f]{6}$/i), minors: z.boolean(),
+  id: NS, team: NS, region: NI.min(0), boss: NS,
+  /** Slice 16: a region with two neighbours (Hoenn) picks one by where the base stands: by the shore, or inland (Part 26a section 4.1). */
+  side: z.enum(['shore', 'inland']).optional(), teamName: NS, sign: NS, colour: z.string().regex(/^#[0-9a-f]{6}$/i), minors: z.boolean(),
   dread: NI.min(0).max(10), pen: NI.min(0), penAfter: NI.min(0),
   holds: z.record(z.string(), NI.min(0)), kinds: z.array(HoldingKindSchema).min(1), base: NI.min(1).max(6),
   ground: NS, refuses: NS, does: NS,
@@ -910,7 +961,7 @@ export const SchemeStateSchema = z.object({
   legend: z.string().nullable(),
   /** Belonging's bought list: adds a thousand to the number and nobody arrives. */
   bought: z.boolean(),
-  cards: z.array(z.object({ id: SS, day: SI.min(1), key: SS, clean: z.boolean(), fields: z.array(CardFieldSchema).length(13) }).strict()),
+  cards: z.array(z.object({ id: SS, day: SI.min(1), key: SS, clean: z.boolean(), fields: z.array(StoredFieldSchema).length(13) }).strict()),
 }).strict();
 export type SchemeState = z.infer<typeof SchemeStateSchema>;
 const emptyPart = (): SchemePart => ({ state: 'empty', clean: null, day: null, way: null, by: null, cardId: null, lostTimes: 0 });
@@ -1175,7 +1226,7 @@ export const EndingsFileSchema = z.object({
 
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
-  v: z.literal(14),
+  v: z.literal(15),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -1292,8 +1343,13 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 11) b = { ...b, v: 12, scheme: emptyScheme(String((b.team as { creed?: unknown } | undefined)?.creed ?? 'profit')), draws: { ...(b.draws as object), 'evil-scheme': 0 } };
   if (b.v === 12) b = { ...b, v: 13, hero: b.hero && typeof b.hero === 'object' ? { ...heroSlice12Start(), ...(b.hero as object) } : b.hero ?? null, road: [], fire: null, reck: null };
   if (b.v === 13) b = { ...b, v: 14, ending: null };
+  // 15: slice 16, the Crossing (the regions crossed, a Crossing under way, pay from abroad, the quay's answer, Hoenn's letters and second clock).
+  if (b.v === 14) b = { ...b, v: 15, region: b.region && typeof b.region === 'object' ? { ...regionSlice16Start(), ...(b.region as object) } : b.region };
   return b;
 }
+
+/** What a region made before slice 16 starts with (and what `newRegion` adds). */
+export const regionSlice16Start = () => ({ crossed: [] as string[], crossing: null, abroad: 0, forms: null, letters: 0, clock: null });
 
 export const EvilModeBlockSchema = z.preprocess(migrateEvilBlock, BlockV7Schema);
 export type EvilModeBlock = z.infer<typeof BlockV7Schema>;
@@ -1352,6 +1408,8 @@ const RS = z.string().min(1);
 export const RuleModSchema = z.object({
   kind: z.enum(['odds', 'heat', 'squads', 'scoutReach', 'loyaltyFloor', 'funds', 'heroGym']),
   method: JobMethodSchema.optional(), tag: RS.optional(),
+  /** Slice 16 (Hoenn): only for a team of this Doctrine, or only for a team of any other. */
+  doctrine: RS.optional(), notDoctrine: RS.optional(),
   add: z.number().int().optional(), scale: z.number().positive().optional(),
   label: RS, whileIn: z.boolean().optional(),
 }).strict();
@@ -1362,7 +1420,7 @@ export const RegionDefSchema = z.object({
   id: RS, index: z.number().int().min(0), name: RS, neighbour: RS, status: EvilStatusSchema, waits: RS.optional(),
   ticket: TicketSchema,
   rule: z.object({ id: RS, name: RS, text: RS, mods: z.array(RuleModSchema), doors: z.array(RuleDoorSchema) }).strict().optional(),
-  deeds: z.object({ tag: RS, share: z.number().int().min(0).max(100), kinds: z.array(HoldingKindSchema).min(1), word: RS }).strict().optional(),
+  deeds: z.object({ tag: RS, share: z.number().int().min(0).max(100), kinds: z.array(HoldingKindSchema).min(1), word: RS, byStage: z.record(z.string(), RS).optional(), words: z.record(z.string(), RS).optional() }).strict().optional(),
   homes: z.record(z.string(), z.array(z.number().int().min(0).max(7))).optional(),
   eighth: RS.optional(),
 }).strict();
@@ -1396,6 +1454,21 @@ export const RegionFileSchema = z.object({
   tally: z.object({ said: RS, labels: z.record(z.string(), RS) }).strict(),
   waysForward: z.array(z.object({ id: z.enum(WAY_IDS), state: RS, means: RS, way: RS, status: EvilStatusSchema, waits: RS.optional() }).strict()).length(WAY_IDS.length),
   patrons: z.array(PatronSchema).length(6),
+  /** Slice 16: the Crossing's words and numbers (design Part 2 section 9; Part 21's scene, kept short). */
+  crossing: z.object({
+    title: RS, intro: RS, tickets: RS, heroFollows: RS, stayShare: z.number().int().min(1), askLoyalty: z.number().int().min(0).max(10),
+    who: RS, stays: RS, reasons: z.array(RS).min(1), ask: RS, askNo: RS, asked: RS, comes: RS, garrisons: RS,
+    base: z.object({ title: RS, none: RS, choices: z.array(z.object({ id: z.enum(['hand', 'sell', 'leave', 'burn']), name: RS, gives: RS, and: RS }).strict()).length(4), sell: z.tuple([z.number().int().min(0), z.number().int().min(0)]), leavePays: z.number().int().min(0), burnHeat: z.number().int() }).strict(),
+    carries: z.array(z.tuple([RS, RS])).min(1),
+    forms: z.object({ ask: RS, yes: RS, no: RS, none: RS }).strict(),
+    boats: z.object({ ahead: RS, beside: RS, behind: RS, steps: z.object({ ahead: z.number().int().min(1), beside: z.number().int().min(1), behind: z.number().int().min(1) }).strict(), night: RS }).strict(),
+    abroad: RS, leave: RS, last: RS, emberBoat: RS, keptWarm: RS,
+  }).strict(),
+  /** Slice 16: Hoenn's letters and its second clock (Part 26a sections 1.7 and 4.6; Part 15a section 8.2). */
+  clock: z.object({
+    region: RS, letters: z.number().int().min(1), letterLine: RS, letterDone: RS, letterWhy: RS, starts: RS, days: z.array(RS).length(3),
+    met: RS, scale: RS, stopBoss: RS, stopHero: RS, stopLetters: RS, together: RS, heroTemper: z.number().int(), bossWhy: RS, open: RS, notRegion: RS,
+  }).strict(),
   look: z.object({
     a: z.array(Colour).length(12), b: z.array(Colour).length(12), symbols: z.array(RS).length(12), cuts: z.array(RS).length(8), heads: z.array(RS).length(8),
     motto: z.tuple([z.array(RS).min(1), z.array(RS).min(1), z.array(z.string()).min(1)]),

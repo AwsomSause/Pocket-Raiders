@@ -33,7 +33,7 @@ function panel(m: BoardModel): string {
 
 function texts(m: BoardModel, notice: string | null): string {
   const fight = m.fight ? `<div style="margin-bottom:6px;cursor:pointer" ${act('advance')} data-testid="evil-fight"><b class="sm" style="color:var(--team-a)">${esc(m.fight)}</b></div>` : '';
-  const go = m.inPerson ? `<div style="margin-bottom:6px" data-testid="evil-inperson"><b class="sm">In person</b>${m.inPerson.go.map((g) => `<div class="row sm" style="line-height:20px;padding:0 4px;cursor:pointer;${g.sel ? 'outline:2px solid var(--team-a);' : ''}"${act('go', g.holdingId)} data-testid="evil-go">${esc(g.text)}</div>`).join('')}${m.inPerson.done ? sm(m.inPerson.done, 'opacity:.7') : sm('G, or press one, to go. Enter stays in.', 'opacity:.7')}</div>` : '';
+  const go = m.inPerson ? `<div style="margin-bottom:6px" data-testid="evil-inperson"><b class="sm">In person</b>${m.inPerson.go.map((g) => `<div class="row sm" style="line-height:20px;padding:0 4px;cursor:pointer;${g.sel ? 'outline:2px solid var(--team-a);' : ''}"${act('go', g.holdingId)} data-testid="evil-go">${esc(g.text)}</div>`).join('')}${m.inPerson.clock.map((c) => `<div class="row sm" style="line-height:20px;padding:0 4px;cursor:pointer;text-decoration:underline"${act('clock', c.code)} data-testid="evil-clock-${c.code.replace(':', '-')}">${esc(c.text)}</div>`).join('')}${m.inPerson.done ? sm(m.inPerson.done, 'opacity:.7') : sm('G, or press one, to go. Enter stays in.', 'opacity:.7')}</div>` : '';
   const blocks = m.overnight.map((o) => `<div style="margin-bottom:6px" data-testid="evil-sheet"><b class="sm">${esc(o.title)}</b>${o.lines.map((l) => sm(l)).join('')}</div>`).join('');
   const eve = m.evening.length ? `<div data-testid="evil-evening">${m.evening.map((l) => sm(l)).join('')}</div>` : '';
   return W(`${fight}${go}${blocks}${eve}${notice ? sm(notice, 'margin-top:6px') : ''}${!fight && !go && !blocks && !eve && !notice ? sm('Arrows move along the road. Each holding shows what is known.') : ''}`, 'position:absolute;left:16px;width:580px;top:252px;bottom:70px;padding:8px 10px;overflow:auto', '', ' data-testid="evil-text"');
@@ -49,6 +49,14 @@ function endView(m: BoardModel): string {
   if (e.phase === 'day') foot = sm('Leave saves the run.', 'margin-top:8px');
   if (e.phase === 'tally' && e.how === 'reckoning') foot = sm('Enter: the end of the region.', 'margin-top:6px;opacity:.8');
   if (e.phase === 'over') foot = W(`<b data-testid="evil-region-over">${esc(e.text)}</b>`, 'padding:6px 8px;margin-top:6px');
+  if (e.crossing) {
+    // Slice 16: the Crossing, one step at a time. Each choice is a button; Enter takes the first one that's open.
+    const x = e.crossing;
+    const first = x.choices.find((c) => !c.off)?.code;
+    foot = `<div style="margin-top:6px" data-testid="evil-crossing" data-step="${x.step}"><b>${esc(x.title)}</b>${sm(x.intro, 'font-style:italic')}${x.said.map((l) => sm(l, 'opacity:.8')).join('')}
+      <b class="sm" style="display:block;margin-top:4px">${esc(x.heading)}</b>${x.info.map((l) => sm(l)).join('')}
+      ${x.choices.map((c) => `<div class="sm" style="line-height:18px;padding:3px 4px;cursor:${c.off ? 'default' : 'pointer'};opacity:${c.off ? 0.45 : 1}"${c.off ? '' : act('cross', c.code)} data-testid="evil-cross-${c.code.replace(':', '-')}"><b>${c.code === first ? '→ ' : ''}${esc(c.text)}${c.code === first ? ' (Enter)' : ''}</b><div style="opacity:.8">${esc(c.sub)}</div></div>`).join('')}</div>`;
+  }
   if (e.road) {
     const r = e.road;
     foot = `<div style="margin-top:6px" data-testid="evil-road-page"><b>${esc(r.title)}</b>${sm(r.heard, 'font-style:italic')}${sm(r.carried)}
@@ -56,7 +64,7 @@ function endView(m: BoardModel): string {
       <div class="row sm" style="line-height:22px;cursor:pointer;padding:0 4px;font-weight:700"${act('stay', '')} data-testid="evil-stay-nobody">→ ${esc(r.nobody)} (Enter)</div>
       ${r.away.map((x) => `<div class="row sm" style="line-height:20px;cursor:pointer;padding:0 4px;text-decoration:underline"${act('recall', x.id)} data-testid="evil-recall-${x.id}">${esc(x.text)}</div>`).join('')}</div>`;
   }
-  return W(`<b style="font-size:20px" data-testid="evil-end" data-how="${e.how}" data-phase="${e.phase}">${esc(head)}</b>${sm(e.title, 'margin:2px 0')}${e.phase !== 'over' ? sm(e.text, 'margin:2px 0 6px') : ''}<div data-testid="evil-tally">${rows}</div>${said}${foot}`, 'position:absolute;left:16px;width:580px;top:252px;bottom:70px;padding:10px 12px;overflow:auto');
+  return W(`<b style="font-size:20px" data-testid="evil-end" data-how="${e.how}" data-phase="${e.phase}">${esc(head)}</b>${sm(e.title, 'margin:2px 0')}${e.phase !== 'over' ? sm(e.text, 'margin:2px 0 6px') : ''}${e.crossing ? '' : `<div data-testid="evil-tally">${rows}</div>${said}`}${foot}`, 'position:absolute;left:16px;width:580px;top:252px;bottom:70px;padding:10px 12px;overflow:auto');
 }
 
 function dispatch(m: BoardModel, notice: string | null): string {

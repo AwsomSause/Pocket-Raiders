@@ -14,7 +14,8 @@ import { JOB_METHODS, type EvilModeBlock, type Holding, type JobMethod, type Lin
 import { heatForecast, lineWhy, thingProblem } from './line';
 import { wontText } from './people';
 import { currentLeader, gymDoors, gymOn, standingText } from './gym';
-import { dayIn, heardOf, mayStay, morningNotes, stageDays, stageKind, stageName, tallyOf, waysForward } from './region';
+import { clockActs, crossingModel, type CrossingModel } from './crossing';
+import { dayIn, heardOf, mayStay, morningNotes, regionText, stageDays, stageKind, stageName, tallyOf, waysForward } from './region';
 import { regionOf } from './regionRule';
 import { postAtNight, postNotes } from './base';
 import { stageRow } from './board';
@@ -62,7 +63,9 @@ export interface BoardModel {
   evening: string[];
   /** Slice 9: a district that's over: its tally; then the Road (who stays); or, after the Reckoning, the region's end. */
   end: { how: 'held' | 'taken' | 'arrival' | 'reckoning'; phase: 'tally' | 'road' | 'over' | 'day'; title: string; text: string; rows: [string, string][]; said: string;
-    road: null | { title: string; stay: { id: string; text: string }[]; nobody: string; carried: string; heard: string; away: { id: string; text: string }[] } } | null;
+    road: null | { title: string; stay: { id: string; text: string }[]; nobody: string; carried: string; heard: string; away: { id: string; text: string }[] };
+    /** Slice 16: the Crossing, once the region's over and it isn't the run's last. */
+    crossing: CrossingModel | null } | null;
   /** Slice 13: the neighbour's tag on the title row ("Rocket · Wary"), or null with no neighbour. */
   neighbour: string | null;
   dispatch: null | {
@@ -89,7 +92,9 @@ export interface BoardModel {
     posted: { holdingId: string; text: string }[];
   };
   /** Slice 5: In person, the queued Outplays the Boss can go and play. */
-  inPerson: null | { go: { holdingId: string; text: string; sel: boolean }[]; done: string | null };
+  inPerson: null | { go: { holdingId: string; text: string; sel: boolean }[]; done: string | null;
+    /** Slice 16, Hoenn: carry a letter, or stop the second clock (act codes letter, stop:boss, stop:hero). */
+    clock: { code: string; text: string }[] };
   /** Slice 5: a battle the day's waiting on. */
   fight: string | null;
 }
@@ -191,6 +196,7 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
     const outplays = block.queue.filter((j) => j.method === 'outplay' && !j.played);
     const went = block.inPerson?.day === day ? name(block.inPerson.holdingId) : undefined;
     model.inPerson = {
+      clock: clockActs(block, data),
       go: went ? [] : outplays.map((j) => ({ holdingId: j.holdingId, text: `Go yourself: Outplay at step ${name(j.holdingId)!.step} · ${holdingName({ ...name(j.holdingId)!, scouted: Math.max(1, name(j.holdingId)!.scouted) }, data)}`, sel: name(j.holdingId)!.step - 1 === d.at })),
       done: went ? `The Boss went to step ${went.step} today.` : outplays.length ? null : 'Nothing to go to in person. (In person, only an Outplay is played yet.)',
     };
@@ -256,7 +262,7 @@ function endModel(block: EvilModeBlock, data: EvilData): NonNullable<BoardModel[
   const d = block.district!;
   const e = d.end!;
   const t = data.region.on ? block.region.tallies.find((x) => x.n === d.n) ?? tallyOf(block, data) : null;
-  const text = e.how === 'held' || e.how === 'taken' ? data.district.ends[e.how] : e.how === 'arrival' ? data.region.arrival.end : data.region.reckoning.end;
+  const text = e.how === 'held' || e.how === 'taken' ? data.district.ends[e.how] : e.how === 'arrival' ? data.region.arrival.end : regionText(data.region.reckoning.end, block, data);
   const phase = data.region.on ? block.region.phase : 'day';
   const R = data.region.road;
   const road = phase === 'road' ? {
@@ -265,5 +271,5 @@ function endModel(block: EvilModeBlock, data: EvilData): NonNullable<BoardModel[
     nobody: R.nobody, carried: R.carried, heard: heardOf(block, data),
     away: block.crew.filter((c) => c.where === 'away').map((c) => ({ id: c.id, text: `Recall ${c.name}` })),
   } : null;
-  return { how: e.how, phase, title: t?.title ?? text, text: phase === 'over' ? data.region.reckoning.over : text, rows: t?.rows ?? [], said: t?.said ?? '', road };
+  return { how: e.how, phase, title: t?.title ?? text, text: phase === 'over' ? regionText(data.region.reckoning.over, block, data) : text, rows: t?.rows ?? [], said: t?.said ?? '', road, crossing: phase === 'over' ? crossingModel(block, data) : null };
 }

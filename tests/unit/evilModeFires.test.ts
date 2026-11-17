@@ -372,7 +372,7 @@ describe('saves: block v10', () => {
     const { road: _r, fire: _x, reck: _k, ...rest } = b;
     const v9 = JSON.parse(JSON.stringify({ ...rest, v: 12, hero: old }));
     const out = EvilModeBlockSchema.parse(v9);
-    expect(out.v).toBe(14);
+    expect(out.v).toBe(15);
     expect(out.hero).toMatchObject({ temper: 0, fires: [], lies: [], told: false, starter: '', mother: { mood: 'wary', letters: [] } });
     expect(out).toMatchObject({ road: [], fire: null, reck: null });
     expect(() => EvilModeBlockSchema.parse({ ...v9, v: 13 })).toThrow();
@@ -435,7 +435,9 @@ describe('the screens\' data (New look): the Road page, the fire and the last ro
     expect(dossier.lists.find((l) => l.title === "What you've said to them")!.lines.join(' ')).toContain('"Mind the road."');
   });
   it('the last room: every option it shows is an id the step accepts, and Close shows once it\'s over', () => {
-    const played = playRegion(foundForPlay('room-2', choice()), 'mix');
+    // Slice 16: Kanto played as the run's last region, so its ending comes.
+    const f = foundForPlay('room-2', choice());
+    const played = playRegion({ ...f, region: { ...f.region, crossed: ['johto', 'hoenn'] } }, 'mix');
     // Slice 15: the autoplayer reads Kanto's ending to its last page; the room page is checked with that ending set aside.
     expect(played.block.ending?.done).toBe(true);
     const b = { ...played.block, ending: null };

@@ -110,7 +110,7 @@ describe('rackets (Part 12 section 2)', () => {
     expect(crewProblem(b1, squad[0]!)).toMatch(/out on trade/);
     // Ngozi's line is "Won't short a wage. Anyone's." (racketWork): she isn't sent.
     expect(squad).not.toContain('ngozi');
-    expect(b1.economy.cards[0]!.fields[7]!.text).toContain('Ngozi');
+    expect(b1.economy.cards[0]!.fields.map((f) => (typeof f === "string" ? f : f.text))[7]).toContain('Ngozi');
   });
 
   it('a Warm street can\'t be racketed; a Clean team can\'t; Belonging only keeps the Tithe; only Cause and Belonging keep a Tithe', () => {
@@ -165,7 +165,7 @@ describe('rackets (Part 12 section 2)', () => {
     expect(b.team.funds).toBe(funds - 1350);
     expect(b.economy.running[0]).toMatchObject({ honest: true, patience: null });
     expect(b.district!.holdings.find((h) => h.step === 3)!.holds).toBe(true);
-    expect(b.economy.cards.at(-1)!.fields[11]!.text).toBe('Kept the street\'s watch, for a wage.');
+    expect(b.economy.cards.at(-1)!.fields.map((f) => (typeof f === "string" ? f : f.text))[11]).toBe('Kept the street\'s watch, for a wage.');
     for (let i = 0; i < 6; i++) b = day(b);
     expect(b.economy.running.find((v) => v.id === id)).toBeDefined();
     expect(ventureDaily(b, b.economy.running.find((v) => v.id === id)!)).toBe(1000);
@@ -324,7 +324,7 @@ describe('saves and determinism', () => {
     const { 'evil-economy': _s, ...draws } = b.draws;
     const v8 = { ...rest, v: 8, draws };
     const v9 = EvilModeBlockSchema.parse(v8);
-    expect(v9.v).toBe(14);
+    expect(v9.v).toBe(15);
     expect(v9.economy).toEqual({ running: [], busy: { day: 0, ids: [] }, loud: null, broke: 0, lastJob: false, whip: [], worksIn: [], cards: [] });
     expect(v9.draws['evil-economy']).toBe(0);
     const ran = ok(hold(found(), [3]), { type: 'trade', req: { cardId: 'protection', street: 0 } });

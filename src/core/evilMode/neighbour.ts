@@ -28,8 +28,21 @@ function draw(block: EvilModeBlock, max: number): { block: EvilModeBlock; roll: 
 export const neighbourOn = (data: EvilData = EVIL_DATA): boolean => data.neighbour.on;
 
 /** The region's neighbour as written, or undefined (a region not written yet, or the setting's undo). */
-export const neighbourDef = (region: number, data: EvilData = EVIL_DATA): NeighbourDef | undefined =>
-  (neighbourOn(data) ? data.neighbour.neighbours.find((n) => n.region === region) : undefined);
+export const neighbourDef = (region: number, data: EvilData = EVIL_DATA, side?: 'shore' | 'inland'): NeighbourDef | undefined => {
+  if (!neighbourOn(data)) return undefined;
+  const here = data.neighbour.neighbours.filter((n) => n.region === region);
+  return here.find((n) => !n.side || !side || n.side === side) ?? here[0];
+};
+
+/**
+ * Slice 16: which of a two-neighbour region's teams is next door (Hoenn: Aqua by the shore, Magma inland; Part 26a section
+ * 4.1). A Tide team settles by the water and an Ember team inland; anyone else, by the seed (hashed, no stream).
+ */
+export function sideFor(seed: string, doctrine?: string): 'shore' | 'inland' {
+  if (doctrine === 'tide') return 'shore';
+  if (doctrine === 'ember') return 'inland';
+  return new Rng(hashSeed(`${seed}::evil-side`)).int(1, 2) === 1 ? 'shore' : 'inland';
+}
 
 export const defOf = (nb: NB, data: EvilData = EVIL_DATA): NeighbourDef => data.neighbour.neighbours.find((n) => n.id === nb.id)!;
 
@@ -54,7 +67,7 @@ export function freshNeighbour(block: Pick<EvilModeBlock, 'here' | 'district'>, 
 /** Made once, when the region has a neighbour and the block hasn't got one. */
 export function ensureNeighbour(block: EvilModeBlock, data: EvilData = EVIL_DATA): EvilModeBlock {
   if (block.neighbour || !block.district) return block;
-  const def = neighbourDef(block.here.region, data);
+  const def = neighbourDef(block.here.region, data, sideFor(block.district.seed, block.team.doctrine));
   return def ? { ...block, neighbour: freshNeighbour(block, def) } : block;
 }
 

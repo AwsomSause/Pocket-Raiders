@@ -171,8 +171,8 @@ describe('the lines, and asking anyway', () => {
       expect(otis1.asked).toBe(1);
       expect(otis1.lineHeard).toBe(true);
       expect(b1.refusal?.who).toEqual(['otis']);
-      expect(b1.cards.at(-1)!.fields[11]!.text).toMatch(/Asked Otis Blackthorn anyway\.$/);
-      expect(b1.log.filter((e) => e.kind === 'card').at(-1)!.text).toBe(b1.cards.at(-1)!.fields[11]!.text);
+      expect(b1.cards.at(-1)!.fields.map((f) => (typeof f === "string" ? f : f.text))[11]).toMatch(/Asked Otis Blackthorn anyway\.$/);
+      expect(b1.log.filter((e) => e.kind === 'card').at(-1)!.text).toBe(b1.cards.at(-1)!.fields.map((f) => (typeof f === "string" ? f : f.text))[11]);
       expect(rosterModel(b1, newRoster(0)).wont.lines.join(' ')).toMatch(/fight anyone who's not ready/);
       expect(refusalModel(b1)!.people[0]!.name).toBe('Otis Blackthorn');
       // Nothing else in Dispatch moves until it's answered.
@@ -364,7 +364,7 @@ describe('saves', () => {
     const { applicants: _a, drawn: _d, refusal: _r, ...rest } = b;
     const v3 = { ...rest, v: 3, crew: [1, 2, 3, 4].map((i) => ({ id: `g${i}`, name: `Grunt ${i}`, outOn: null })) };
     const out = EvilModeBlockSchema.parse(v3);
-    expect(out.v).toBe(14);
+    expect(out.v).toBe(15);
     expect(out.crew.map((c) => [c.id, c.name, c.ref, c.loyalty])).toEqual([1, 2, 3, 4].map((i) => [`g${i}`, `Grunt ${i}`, null, 8]));
     expect(out.applicants).toEqual([]);
     expect(out.refusal).toBeNull();

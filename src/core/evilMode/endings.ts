@@ -10,6 +10,7 @@ import { liedToHero, monName } from './fires';
 import { homeCount, regionsWritten, schemePct } from './scheme';
 import { backWayWing, detectiveOf } from './raid';
 import { defOf } from './neighbour';
+import { runIndex } from './region';
 import type { Crew, EndingId, EndingState, EvilModeBlock, PartId } from './schema';
 
 // ---- The data's shapes (endings.json is checked by EndingsFileSchema; these are the views the code reads) ----
@@ -48,7 +49,7 @@ const NEXT: EndChoice[] = [];
 /** The last region this run can reach: its length (three or six), or the last one written, whichever's first. */
 export const lastRegion = (block: Pick<EvilModeBlock, 'settings'>, data: EvilData = EVIL_DATA): number =>
   Math.min(block.settings.length === 'six' ? 6 : 3, regionsWritten(data)) - 1;
-export const inLastRegion = (block: EvilModeBlock, data: EvilData = EVIL_DATA): boolean => block.here.region >= lastRegion(block, data);
+export const inLastRegion = (block: EvilModeBlock, data: EvilData = EVIL_DATA): boolean => runIndex(block) >= lastRegion(block, data);
 export const endingsOn = (data: EvilData = EVIL_DATA): boolean => D(data).on;
 
 const heroName = (block: EvilModeBlock): string => block.hero?.name ?? 'The kid';
@@ -84,7 +85,7 @@ export function straightProblem(block: EvilModeBlock, data: EvilData = EVIL_DATA
   const n = straightFronts(block).length;
   if (n < R.straightFronts) return fill(N.fronts, { n });
   if (block.team.regard < R.straightRegard) return N.regard;
-  if (block.here.region < lastRegion(block, data) - 1) return N.region;
+  if (runIndex(block) < lastRegion(block, data) - 1) return N.region;
   return null;
 }
 
@@ -100,7 +101,7 @@ export function heirs(block: EvilModeBlock, data: EvilData = EVIL_DATA): Crew[] 
 
 export function handOffProblem(block: EvilModeBlock, data: EvilData = EVIL_DATA): string | null {
   const N = D(data).handOff.not;
-  if (block.here.region < 1) return N.region;
+  if (runIndex(block) < 1) return N.region;
   if (teamLoyalty(block, data) < D(data).rules.handOffLoyalty) return N.loyalty;
   if (!inRoster(block).some((c) => c.rank === 'officer' || c.rank === 'executive')) return N.officer;
   return null;
@@ -459,7 +460,7 @@ function roomSigned(block: EvilModeBlock, i: number, method: string, result: str
   if (method === 'outplay') return result === 'won';
   if (method === 'persuade') return block.log.filter((e) => (e.given ?? 0) > 0).length > i;
   if (method === 'expose') return block.log.filter((e) => (e.taken ?? 0) > 0).length > i;
-  return (block.hero?.badges.length ?? 0) >= 8;
+  return (block.hero?.badges.filter((b) => b.region === block.here.region).length ?? 0) >= 8;
 }
 
 function recruitScenes(block: EvilModeBlock, ending: EndingState, data: EvilData): EndScene[] {
@@ -473,7 +474,7 @@ function recruitScenes(block: EvilModeBlock, ending: EndingState, data: EvilData
   const seen = hero.learned.slice(-3).join('; ') || 'the team';
   out.push(scene('file', 'The File', R.file.map((l) => fill(l, { seen, temper: E.tempers[hero.temper] ?? '' }))));
   const three = threeThings(block);
-  out.push(scene('room', title, [say(block, R.room, { badges: hero.badges.length, three: three.length ? three.join('; ') : 'what it knew' }), say(block, `{hero}: ${pick<string>(R.says, hero.personality) ?? ''}`)]));
+  out.push(scene('room', title, [say(block, R.room, { badges: hero.badges.filter((b) => b.region === block.here.region).length, three: three.length ? three.join('; ') : 'what it knew' }), say(block, `{hero}: ${pick<string>(R.says, hero.personality) ?? ''}`)]));
   if (hero.personality === 'prodigy') {
     const firstLine = hero.fires.find((f) => f.own)?.own ?? '"See you."';
     out.push(scene('postcard', 'A postcard', R.prodigy.map((l) => say(block, l, { line: firstLine })), NEXT, { still: true }));
@@ -815,7 +816,7 @@ export function endingPay(block: EvilModeBlock, data: EvilData = EVIL_DATA): { t
   const districts = [...block.region.past.map((p) => p.district), ...(block.district && block.district.n >= 1 ? [block.district] : [])];
   const played = districts.filter((d) => d.n >= 1).length;
   const held = districts.reduce((n, d) => n + d.holdings.filter((h) => h.owner === 'team' && h.holds && h.kind !== 'gym').length, 0);
-  const rows: [string, number][] = [['The run', P.perRun], ['Regions crossed', block.here.region * P.perRegion], ['Districts played', played * P.perDistrict], ['Holdings held', held * P.perHeld]];
+  const rows: [string, number][] = [['The run', P.perRun], ['Regions crossed', runIndex(block) * P.perRegion], ['Districts played', played * P.perDistrict], ['Holdings held', held * P.perHeld]];
   return { total: rows.reduce((n, [, v]) => n + v, 0), rows };
 }
 
@@ -824,5 +825,5 @@ export interface HallCard { runId: string; date: string; team: string; creed: st
 export function hallCard(block: EvilModeBlock, runId: string, date: string): HallCard | null {
   const e = block.ending;
   if (!e?.done) return null;
-  return { runId, date, team: block.team.name, creed: block.team.creed, ending: e.id, sub: e.sub, day: block.here.day, regions: block.here.region + 1 };
+  return { runId, date, team: block.team.name, creed: block.team.creed, ending: e.id, sub: e.sub, day: block.here.day, regions: runIndex(block) + 1 };
 }

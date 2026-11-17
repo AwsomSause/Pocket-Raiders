@@ -25,7 +25,9 @@ import { STANDARD_CHOICE } from '../../src/core/rules';
 import { EVIL_MODE_ID, foundInRun } from '../../src/core/evilMode/session';
 
 const choice = (over: Partial<FoundingChoice> = {}): FoundingChoice => ({ name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm', patron: 'executive', region: 'kanto', ...over });
-const fresh = (seed = 'end-1', over: Partial<FoundingChoice> = {}): EvilModeBlock => foundForPlay(seed, choice(over));
+/** Slice 16: three regions are written, so these fixtures play Kanto as the run's third (last) region. */
+const asLast = (b: EvilModeBlock): EvilModeBlock => ({ ...b, region: { ...b.region, crossed: ['johto', 'hoenn'] } });
+const fresh = (seed = 'end-1', over: Partial<FoundingChoice> = {}): EvilModeBlock => asLast(foundForPlay(seed, choice(over)));
 /** Plays an ending already begun to its last page (the autoplayer: first choice that moves it, battles lost). */
 const finish = (b: EvilModeBlock): EvilModeBlock => {
   const r = playRegion(b, 'mix');
@@ -93,9 +95,11 @@ describe('the order, and one ending a run', () => {
     const b = fresh();
     const twoRegions = { ...b, settings: { ...b.settings, length: 'three' as const } };
     const ready = { ...twoRegions, scheme: { ...twoRegions.scheme, moment: { ...twoRegions.scheme.moment, came: 'ready' as const } } };
-    // With one region written, Kanto is the last: the Scheme begins.
+    // Kanto played as the run's last region: the Scheme begins. In the first region it doesn't, and there's no Hand-Off yet.
     expect(checkEndings(twoRegions, ready).ending?.id).toBe('scheme');
-    expect(pressable(atNight(officers(b))).find((p) => p.what === 'handOff')!.problem).toBe(EVIL_DATA.endings.handOff.not.region);
+    const first = { ...twoRegions, region: { ...twoRegions.region, crossed: [] } };
+    expect(checkEndings(first, { ...ready, region: first.region }).ending).toBeNull();
+    expect(pressable(atNight(officers(first))).find((p) => p.what === 'handOff')!.problem).toBe(EVIL_DATA.endings.handOff.not.region);
     expect(step({ ...b, team: { ...b.team, heat: 6 } }, { type: 'endPress', what: 'walkIn' }).block.ending?.id).toBe('caught');
     expect(step({ ...b, team: { ...b.team, heat: 5 } }, { type: 'endPress', what: 'walkIn' }).ok).toBe(false);
   });
@@ -128,7 +132,7 @@ describe('what every ending has', () => {
     const b = fresh('pay');
     const pays = ENDING_IDS.map((id) => endingPay(startEnding(b, id, 'test', null)).total);
     expect(new Set(pays).size).toBe(1);
-    expect(endingPay({ ...b, here: { ...b.here, region: 1 } }).total).toBeGreaterThan(pays[0]!);
+    expect(endingPay({ ...b, region: { ...b.region, crossed: [...b.region.crossed, 'sinnoh'] } }).total).toBeGreaterThan(pays[0]!);
   });
   it("a minor's card reads Home in every ending", () => {
     const b = fresh('minor');
@@ -240,7 +244,7 @@ describe('saves: block v14', () => {
     const b = fresh();
     const { ending: _e, ...old } = b;
     const out = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...old, v: 13 })));
-    expect(out).toMatchObject({ v: 14, ending: null });
+    expect(out).toMatchObject({ v: 15, ending: null });
     const mid = step(begun('caught'), { type: 'endAct' }).block;
     const again = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(mid)));
     expect(currentScene(again)).toEqual(currentScene(mid));

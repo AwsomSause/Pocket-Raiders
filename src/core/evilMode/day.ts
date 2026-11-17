@@ -24,6 +24,7 @@ import { lastDay, nightBefore, roomAct, roomResult, type LastDay, type RoomOptio
 import { eveningTemper } from './temper';
 import { canDo } from './canDo';
 import { checkEndings, endAct, endBattle, pressEnding } from './endings';
+import { beginCrossing, carryLetter, clockMet, clockMorning, cross, keptWarmth, stopClock, type CrossAct } from './crossing';
 import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type PartId, type Question, type RoomType, type TableThing, type WingId } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
@@ -68,6 +69,10 @@ export type EvilAction =
   | { type: 'toRoad' }
   | { type: 'goOn'; stay: string | null }
   | { type: 'recall'; id: string }
+  /** Slice 16: the Crossing's answers, in order; Hoenn's letters (In person) and stopping its second clock. */
+  | ({ type: 'cross' } & CrossAct)
+  | { type: 'letter' }
+  | { type: 'stopClock'; how: 'boss' | 'hero' }
   /** Slice 11: a Racket, a Front or a Work from its Card (at Dispatch); the Boss's hand on something running; a way out of bankruptcy. */
   | { type: 'trade'; req: TradeReq }
   | { type: 'venture'; id: string; act: VentureAct }
@@ -159,11 +164,14 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   const r = stepInner(block0, action);
   // Slice 13: the neighbour's Morning (messages, and each tick on its day) comes with every Morning, however it's reached.
   if (!r.ok) return r;
-  let b = schemeMorning(neighbourMorning(settleRegion(neighbourDistrictEnd(r.block))));
+  // Slice 16: Hoenn's second clock (each Reckoning Morning; they meet if the Reckoning ends with it running).
+  let b = clockMorning(schemeMorning(neighbourMorning(settleRegion(clockMet(keptWarmth(neighbourDistrictEnd(r.block)))))));
   // Slice 14: the Reckoning lost (the Hero reached the base) costs the Scheme groundwork, once a region.
   if (b.district?.end?.how === 'reckoning' && b.scheme) b = reckoningLost(b).block;
   // Slice 15: the endings are checked after every step, in their order (Part 23 section 1.1).
   b = checkEndings(block0, b);
+  // Slice 16: a region that isn't the run's last ends at the Crossing.
+  b = beginCrossing(b);
   return { ...r, block: b, cues: b.ending && !block0.ending ? [...r.cues, { id: 'ending' as const }] : r.cues };
 }
 
@@ -199,6 +207,14 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   if (action.type === 'endAct') return no('No ending has begun.');
   const said = (r: { block: EvilModeBlock; problem: string | null; line?: string; lines?: string[]; fight?: boolean }): StepResult =>
     (r.problem ? no(r.problem) : { block: r.block, cues: [...(r.lines ?? (r.line ? [r.line] : [])).map((line) => ({ id: 'said' as const, line })), ...(r.fight ? [{ id: 'fight' as const }] : [])], ok: true });
+  // Slice 16: the Crossing, once the region's over.
+  if (action.type === 'cross') {
+    const { type: _t, ...act } = action;
+    const r = cross(block, act as CrossAct);
+    if (r.problem) return no(r.problem);
+    const crossed = act.what === 'go';
+    return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(crossed ? [{ id: 'beat' as const, beat: 'morning' as const }, { id: 'newDay' as const, day: r.block.here.day }] : [])], ok: true };
+  }
   // Slice 9: after a district, only the tally and the Road move anything.
   if (action.type === 'toRoad' || action.type === 'goOn' || action.type === 'recall') {
     if (action.type === 'recall') {
@@ -274,6 +290,10 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     const r = action.type === 'sitDown' ? sitDown(block) : action.type === 'sitAnswer' ? sitAnswer(block, action.i) : action.type === 'table' ? putOnTable(block, action.thing, action.personId) : action.type === 'rise' ? rise(block) : action.type === 'chair' ? chairAct(block) : legendAct(block);
     if (r.problem) return no(r.problem);
     return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.block.fight && !block.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+  }
+  if (action.type === 'letter' || action.type === 'stopClock') {
+    const r = action.type === 'letter' ? carryLetter(block) : stopClock(block, action.how);
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
   }
   // Slice 12: a fire and the last room hold the day until they're done.
   const s12 = stepS12(block, action);

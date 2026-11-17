@@ -22,11 +22,12 @@ import { heroRival } from './fightEnd';
 import { heroTier } from './hero';
 import type { EvilModeBlock, Holding } from './schema';
 import { walkRound } from './walk';
+import { runIndex } from './region';
 import { detectiveOf } from './raid';
 
 /** The stage's own level, `A` (Part 2 section 1.1): the main game's curve at this region and stage. */
 export function stageLevel(content: Content, run: RunState, block: EvilModeBlock): number {
-  return curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), block.here.region, Math.max(0, block.here.stage - 1), 1));
+  return curveLevel(content, levelScale(content, getCampaign(content, run.campaignId), runIndex(block), Math.max(0, block.here.stage - 1), 1));
 }
 
 /** Species ids (as content has them) from a Doctrine kit's display names. */
@@ -70,7 +71,7 @@ export function heroParty(content: Content, run: RunState, block: EvilModeBlock)
  */
 export function leaderTeam(content: Content, run: RunState, block: EvilModeBlock, bossId: string, n: number, offset: number, tried: number): { team: PokemonInstance[]; ai: number } {
   const boss = getBoss(content, bossId);
-  const authored = boss.teams.gym[bossTeamIndex('gym', block.here.region * 8 + n)]!;
+  const authored = boss.teams.gym[bossTeamIndex('gym', runIndex(block) * 8 + n)]!;
   const A = stageLevel(content, run, block);
   const level = Math.max(1, A + offset);
   let members: PlannedMember[] = remixMembers(authored.members, tried > 0, `evil-gym:${bossId}:${tried}`).map((m) => ({ speciesId: m.speciesId, level, moves: m.moves, training: m.training }));
@@ -79,7 +80,7 @@ export function leaderTeam(content: Content, run: RunState, block: EvilModeBlock
     const uid = nextUid(run, 'e');
     return createPlannedPokemon(content, m, uid, `${run.seed}:${uid}`);
   });
-  giveBossItems(content, team, 'gym', block.here.region, new Rng(hashSeed(`${block.district?.seed ?? ''}::evil-gym-items::${bossId}::${tried}`)));
+  giveBossItems(content, team, 'gym', runIndex(block), new Rng(hashSeed(`${block.district?.seed ?? ''}::evil-gym-items::${bossId}::${tried}`)));
   return { team, ai: authored.ai };
 }
 
@@ -113,7 +114,7 @@ export function beginEvilFight(content: Content, current: RunState): RunState | 
       if (!team.length) return null;
       run.battle = createBattle('trainer', team, active, run.party[active]!.uid, { classId: GYM_LEADER_CLASS, name: def.boss, leaderId: L.boss });
       run.battle.ai = ai;
-      const plan = planBossGimmicks(content, L.boss, run.battle.enemyTeam, gimmickSlots(block.here.region, Math.max(1, block.here.stage - 1), content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics);
+      const plan = planBossGimmicks(content, L.boss, run.battle.enemyTeam, gimmickSlots(runIndex(block), Math.max(1, block.here.stage - 1), content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics);
       run.battle.transform.bossPlan = plan;
       run.battle.transform.enemyMechanics = [...new Set(Object.values(plan))];
     } else {
@@ -162,7 +163,7 @@ export function beginEvilFight(content: Content, current: RunState): RunState | 
     if (!team.length || !run.party[active]) return null;
     run.battle = createBattle('trainer', team, active, run.party[active]!.uid, { classId: GYM_LEADER_CLASS, name: L.name, leaderId: L.boss });
     run.battle.ai = ai;
-    const plan = planBossGimmicks(content, L.boss, run.battle.enemyTeam, gimmickSlots(block.here.region, L.n + 1, content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics);
+    const plan = planBossGimmicks(content, L.boss, run.battle.enemyTeam, gimmickSlots(runIndex(block), L.n + 1, content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics);
     run.battle.transform.bossPlan = plan;
     run.battle.transform.enemyMechanics = [...new Set(Object.values(plan))];
     run.phase = 'battle';

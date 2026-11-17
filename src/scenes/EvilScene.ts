@@ -16,6 +16,7 @@ import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { foundingView, frameView } from '../ui/redux/screens/evilFounding';
 import { boardView } from '../ui/redux/screens/evilBoard';
+import { crossActOf, crossingModel } from '../core/evilMode/crossing';
 import { boardModel, dispatchRows, newDispatch, type DispatchDraft } from '../core/evilMode/boardScreens';
 import { JOB_METHODS, type JobMethod } from '../core/evilMode/schema';
 import { GAME_WIDTH } from '../ui/theme';
@@ -141,7 +142,8 @@ export class EvilScene extends Phaser.Scene {
           const frame = frameModel(block, archetype.name);
           // The Card takes the whole stage; the frame falls away (design Part 29 section 3).
           if (this.card) return cardView(cardModel(block, this.card), block.team.look.a, block.team.look.b);
-          if (block.district.end) frame.button = EVIL_DATA.region.on && block.region.phase === 'tally' ? (block.here.stage >= 8 ? 'The end' : 'The Road') : EVIL_DATA.region.on && block.region.phase === 'road' ? 'Go on' : 'Leave';
+          if (block.district.end && block.region.crossing) frame.button = 'The Crossing';
+          else if (block.district.end) frame.button = EVIL_DATA.region.on && block.region.phase === 'tally' ? (block.here.stage >= 8 ? 'The end' : 'The Road') : EVIL_DATA.region.on && block.region.phase === 'road' ? 'Go on' : 'Leave';
           const ledger = this.ledger ? ledgerView(ledgerModel(block, this.ledger)) : undefined;
           const rm = this.roster ? rosterModel(block, this.roster) : null;
           const roster = rm ? rosterView(rm) : undefined;
@@ -246,6 +248,8 @@ export class EvilScene extends Phaser.Scene {
         lookPrev: (id) => { this.draft = turnLook(this.draft, id as LookRow, -1); this.view?.refresh(); },
         lookNext: (id) => { this.draft = turnLook(this.draft, id as LookRow, 1); this.view?.refresh(); },
         stay: (id) => this.evil({ type: 'goOn', stay: id || null }),
+        cross: (code) => { const c = crossActOf(code); if (c) this.evil({ type: 'cross', ...c }); },
+        clock: (code) => this.evil(code === 'letter' ? { type: 'letter' } : { type: 'stopClock', how: code === 'stop:boss' ? 'boss' : 'hero' }),
         recall: (id) => this.evil({ type: 'recall', id }),
         road: () => this.toggleRoad(),
         rpick: (id) => this.roadPick(id),
@@ -371,6 +375,12 @@ export class EvilScene extends Phaser.Scene {
     // Slice 9: after a district, Enter reads on: the tally, then the Road (leaving nobody), then the region's end.
     if (block.district?.end && EVIL_DATA.region.on && block.region.phase === 'tally') return this.evil({ type: 'toRoad' });
     if (block.district?.end && EVIL_DATA.region.on && block.region.phase === 'road') return this.evil({ type: 'goOn', stay: null });
+    // Slice 16: at the Crossing, Enter takes the first open choice of the step.
+    if (block.district?.end && block.region.crossing) {
+      const first = crossingModel(block)?.choices.find((c) => !c.off);
+      const c = first ? crossActOf(first.code) : null;
+      if (c) return this.evil({ type: 'cross', ...c });
+    }
     if (block.district?.end) return this.leave();
     if (block.fight) return this.startFight();
     const cues = services().session.evilStep({ type: BEAT_END[block.here.beat] });
