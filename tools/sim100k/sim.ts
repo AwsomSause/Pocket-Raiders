@@ -13,7 +13,9 @@ import * as Ru from '../../src/core/rules';
 import { EXPANSION_SETTINGS_DEFAULTS as XS } from '../../src/core/expansion/schema';
 import { currentMenu, ensureNodeMenu, entryDone, entryLocked, pickMenuEntry } from '../../src/core/nodeMenu/flow';
 import { chooseEvent, eventView } from '../../src/core/events';
-import type { RunState } from '../../src/core/state';
+import { currentEnemy, type RunState } from '../../src/core/state';
+import { forcedMoveIndex, itemProblem } from '../../src/core/battle/engine';
+import { nuzlockeCatchProblem } from '../../src/core/nuzlocke';
 
 type Cnt = Record<string, number>;
 
@@ -116,7 +118,7 @@ function playOne(n: number): Record<string, unknown> {
   const s = p.scn;
   const seed = `k${n}`;
   const god = p.assist === 'god';
-  const row: Record<string, unknown> = { n, seed, scn: s.id, group: s.group, mode: s.modeId, diff: s.difficultyId, arch: p.arch, assist: p.assist, skill: p.skill, cur: p.curiosity, set: p.settings, bs: p.backstory ?? null };
+  const row: Record<string, unknown> = { n, seed, scn: s.id, group: s.group, mode: s.modeId, diff: s.difficultyId, arch: p.arch, assist: p.assist, bot: 'collector', skill: p.skill, cur: p.curiosity, set: p.settings, bs: p.backstory ?? null };
   con = {};
   const bot = mulberry(p.botSeed);
   const C: Record<string, Cnt> = {};
@@ -226,7 +228,8 @@ function playOne(n: number): Record<string, unknown> {
 
   /** The curious part of the bot: optional stops on the current node (through the node menu when there is one). */
   const explore = (r: RunState): RunState | null => {
-    if (p.curiosity <= 0 || !r.stage || r.stage.current == null) return null;
+    const needBalls = Object.entries(r.inventory).reduce((a, [id, q]) => a + ((content.items.get(id)?.effect as { kind?: string } | undefined)?.kind === 'catch' ? q : 0), 0) < 6 && r.money >= 400;
+    if ((p.curiosity <= 0 && !needBalls) || !r.stage || r.stage.current == null) return null;
     const nk = `${r.regionIndex}.${r.stage.index}.${r.stage.current}`;
     if (nk !== exploreNode) { exploreNode = nk; exploreCount = 0; }
     if (exploreCount >= 8) return null;
@@ -242,12 +245,12 @@ function playOne(n: number): Record<string, unknown> {
         opts.push({ key: `${nk}:${e.id}`, entryId: e.id, sideId: e.sideId ?? null, cat: e.category, kind: e.kind });
       }
     } else {
-      for (const sd of node.sides) if (!sd.used && !(sd as { hidden?: boolean }).hidden) opts.push({ key: `${nk}:${sd.id}`, entryId: null, sideId: sd.id, cat: '', kind: 'side' });
+      for (const sd of node.sides) if (!sd.used && !(sd as { hidden?: boolean }).hidden) opts.push({ key: `${nk}:${sd.id}`, entryId: null, sideId: sd.id, cat: sd.kind === 'shop' ? 'shop' : '', kind: 'side' });
     }
     for (const o of opts) {
       if (tried.has(o.key)) continue;
       tried.add(o.key);
-      if (bot() >= p.curiosity) continue;
+      if (bot() >= p.curiosity && !(needBalls && o.cat === 'shop')) continue;
       exploreCount++;
       let label = `${o.kind}|${o.cat}`;
       try {
@@ -276,6 +279,56 @@ function playOne(n: number): Record<string, unknown> {
       } catch (e) {
         bump(c('exErr'), `${label.split('|').slice(0, 2).join('|')}: ${norm((e as Error).message).slice(0, 110)}`);
       }
+    }
+    return null;
+  };
+
+  // The "collector" habits (director's ask, 2026-11-16): catch far more, keep the team varied, spread reward picks (no fossil habit).
+  const RAR = ['common', 'uncommon', 'rare', 'epic', 'legendary'];
+  const isBall = (id: string): boolean => (content.items.get(id)?.effect as { kind?: string } | undefined)?.kind === 'catch';
+  const typesOf = (id: string): string[] => content.species.get(id)?.types ?? [];
+  const throwsBy = new Map<string, number>();
+  const taken: Cnt = {};
+  const tryDecide = (r: RunState, choices: Parameters<typeof R.resolveDecision>[2][]): RunState | null => { for (const ch of choices) { try { return R.resolveDecision(content, r, ch).run; } catch { /* next */ } } return null; };
+  const collector = (r: RunState): { run: RunState; turn: R.TurnResult | null } | null => {
+    if (r.phase === 'decision' && r.pending[0]?.kind === 'caught') {
+      const got = (r.pending[0] as { mon: { speciesId: string } }).mon.speciesId;
+      const dup = r.party.some((m) => m.speciesId === got);
+      const full = r.party.length >= R.partyCapacity(content, r);
+      let next: RunState | null = null;
+      if (dup) next = tryDecide(r, [{ kind: 'sendToBox' }, { kind: 'release' }]);
+      else if (!full) next = tryDecide(r, [{ kind: 'addToParty' }, { kind: 'sendToBox' }, { kind: 'release' }]);
+      else {
+        // Full team: a new type takes the place of the lowest-level member whose types the others already cover (never the lead).
+        const mine = new Set(r.party.flatMap((m) => typesOf(m.speciesId)));
+        const brings = typesOf(got).some((t) => !mine.has(t));
+        let swap = -1;
+        if (brings) r.party.forEach((m, i) => { if (i === 0) return; const others = new Set(r.party.filter((_, j) => j !== i).flatMap((o) => typesOf(o.speciesId))); if (typesOf(m.speciesId).every((t) => others.has(t)) && (swap < 0 || m.level < r.party[swap]!.level)) swap = i; });
+        next = tryDecide(r, [...(swap >= 0 ? [{ kind: 'replace' as const, partyIndex: swap }] : []), { kind: 'sendToBox' }, { kind: 'release' }]);
+        if (next && swap >= 0) bump(c('bot'), 'swapped in a new type');
+      }
+      if (next) { bump(c('bot'), dup ? 'duplicate sent to the box' : full ? 'caught with a full team' : 'caught and added'); return { run: next, turn: null }; }
+    }
+    if (r.phase === 'battle' && r.battle && r.battle.kind === 'wild' && !r.battle.needsSwitch && !(r.battle as { doubles?: unknown }).doubles && forcedMoveIndex(r.battle, r.party) === null) {
+      const b = r.battle; const foe = currentEnemy(b); const me = r.party[b.activeIndex]!;
+      const key = b.enemyTeam[0]?.uid ?? ''; const thrown = throwsBy.get(key) ?? 0;
+      const isNew = !r.party.some((m) => m.speciesId === foe.speciesId) && !(r.box ?? []).some((m) => m.speciesId === foe.speciesId);
+      const ball = ['ultra-ball', 'great-ball', 'premier-ball', 'poke-ball', ...Object.keys(r.inventory).filter(isBall)].find((id) => (r.inventory[id] ?? 0) > 0 && id !== 'master-ball');
+      if (ball && thrown < 4 && me.hp / maxHp(content, me) >= 0.3 && (foe.hp <= maxHp(content, foe) * 0.5 || (isNew && foe.level <= me.level - 2)) && itemProblem({ content, battle: b, party: r.party, inventory: r.inventory, catchBlocked: nuzlockeCatchProblem(b) }, ball) === null) {
+        try { const t = R.takeTurn(content, r, { kind: 'item', itemId: ball }); throwsBy.set(key, thrown + 1); bump(c('bot'), 'ball thrown'); return { run: t.run, turn: t }; } catch { /* fight on */ }
+      }
+    }
+    if (r.phase === 'shop') {
+      // Balls first (up to ten in the bag), then the usual potions.
+      let next = r; let bought = 0;
+      const have = () => Object.entries(next.inventory).reduce((a, [id, q]) => a + (isBall(id) ? q : 0), 0);
+      for (const id of ['poke-ball', 'great-ball']) { while (have() < 16 && bought < 16) { try { next = R.buyItem(content, next, id).run; bought++; } catch { break; } } }
+      if (bought) { bump(c('bot'), 'balls bought', bought); return B.botStep(content, next, stepFn); }
+    }
+    if (r.phase === 'reward' && r.draft?.length) {
+      const order = r.draft.map((id, i) => { const rw = content.rewards.get(id); const kind = (rw?.effect as { kind?: string } | undefined)?.kind; const base = kind === 'levelUp' ? 50 : kind === 'vitamin' ? 30 : kind === 'attribute' ? 25 : kind === 'catalog' ? 20 : kind === 'addItem' ? (rw?.category === 'healing' ? 22 : 12) : kind === 'money' ? 8 : 5; return { i, id, v: base + Math.max(0, RAR.indexOf(rw?.rarity ?? '')) * 4 + bot() * 25 - 40 * (taken[id] ?? 0) - (/fossil/.test(id) ? 30 : 0) + (/ball/.test(id) ? 30 : 0) }; }).sort((a, b2) => b2.v - a.v);
+      const targets = r.party.map((_, i) => i).sort(() => bot() - 0.5);
+      for (const o of order) for (const t of targets.length ? targets : [0]) { try { const next = R.chooseReward(content, r, o.i, t).run; bump(taken, o.id); return { run: next, turn: null }; } catch { /* next */ } }
     }
     return null;
   };
@@ -318,7 +371,7 @@ function playOne(n: number): Record<string, unknown> {
       let out: { run: RunState; turn: R.TurnResult | null } | null = null;
       try {
         if (run.phase === 'map') { const ex = explore(run); if (ex) out = { run: ex, turn: null }; }
-        out ??= B.botStep(content, run, stepFn);
+        out ??= collector(run) ?? B.botStep(content, run, stepFn);
       } catch (e) {
         const err = e as Error;
         row.error = norm(err.message).slice(0, 220);
