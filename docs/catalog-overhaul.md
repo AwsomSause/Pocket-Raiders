@@ -53,4 +53,5 @@ Claim a number before you bump a save version: add your row to the live copy on 
 | run | 43 | - | - | - |
 | settings | 42 | 43 | UI rebuild | UI Style setting (New/Old), map/redux skin |
 | settings | | 44 | legends (row 13) | Blessings and Ultra Beasts on for existing players |
+| run | | 45 | eight blessings | optional blessing fields (calmStages, riteArmed, vow, vowBroken, copy) |
 | profile | 20 | - | - | - |

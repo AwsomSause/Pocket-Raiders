@@ -122,23 +122,95 @@ export function siegeMapView(c: ReduxCtx, d: SiegeMapModel): string {
     )).join('');
     return H(d.header, 'map', [['Enter', 'choose']]) + `<div class="abs col" style="left:24px;right:24px;top:72px;gap:10px">${rows}<div class="row" style="justify-content:flex-end">${go}</div></div>` + TX(esc(d.text));
   }
-  const lines = Math.max(1, Math.ceil(d.rows.length / 3)), cell = Math.min(112, Math.floor((340 - 32 - 36 - (lines - 1) * 8) / lines));
-  const grid = d.rows.map((r, k) => {
-    const col = SIEGE_COLORS[r.status], ring = d.entered === k || (d.entered === null && k === d.index);
-    return `<div class="col cen" style="height:${cell}px;gap:6px;justify-content:center;text-align:center;cursor:pointer;background:${col}30;box-shadow:inset 0 0 0 3px ${col}${ring ? ',0 0 0 4px var(--tf)' : ''}"${hit(k)}><b style="font-size:15px">${esc(r.name)}</b>${tagc(r.status)}</div>`;
+  // The war map: the city inside its wall, a road from every gate to the middle, and each district as a plot that
+  // shows how it stands (a flag flying, blades crossed, or burning).
+  const BW = 560, BH = 340, cx = BW / 2, cy = 186;
+  const spots = siegeSpots(d.rows);
+  const chosen = d.entered ?? d.index;
+  const roads = d.rows.map((r, k) => {
+    const s = spots[k]!;
+    if (!r.gate) return '';
+    const col = SIEGE_COLORS[r.status], on = k === chosen;
+    const x1 = s.x + s.w / 2, y1 = s.y + s.h / 2;
+    return `<line x1="${x1}" y1="${y1}" x2="${cx}" y2="${cy}" stroke="#0a1220" stroke-width="${on ? 11 : 8}" stroke-linecap="round"/><line${on ? ' class="wr-march"' : ''} x1="${x1}" y1="${y1}" x2="${cx}" y2="${cy}" stroke="${col}" stroke-width="${on ? 5 : 3}" stroke-dasharray="${on ? '10 8' : r.status === 'held' ? 'none' : '3 7'}" stroke-linecap="round" opacity="${on ? 1 : 0.7}"/>`;
   }).join('');
+  const deco = (s: SiegeStatus): string =>
+    s === 'held'
+      ? '<div class="abs row" style="right:5px;top:-13px;align-items:flex-start"><div class="wr-flagp"></div><div class="wr-flag"></div></div>'
+      : s === 'contested'
+        ? '<div class="abs wr-clash" style="right:-8px;top:-10px"><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><path d="M5 5l12 12M17 5L5 17" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M4 13l5 5M18 13l-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>'
+        : `<div class="abs row" style="left:8px;right:8px;top:-11px;justify-content:space-around;align-items:flex-end">${[0, 0.9, 1.6].map((dl) => `<div style="position:relative"><div class="wr-fire"></div><div class="abs wr-smoke" style="left:-2px;top:-8px;--d:-${dl}s"></div></div>`).join('')}</div>`;
+  const nodes = d.rows.map((r, k) => {
+    const s = spots[k]!, col = SIEGE_COLORS[r.status], ring = k === chosen;
+    return `<div class="abs wr-node s-${r.status}" style="left:${s.x}px;top:${s.y}px;width:${s.w}px;height:${s.h}px;--nc:${col};--nc2:${col}55;--nc3:${col}26;box-shadow:inset 0 0 0 3px ${col}${ring ? ',0 0 0 4px var(--tf)' : ''},0 4px 0 #0008"${hit(k)}>${deco(r.status)}<b>${esc(r.name)}</b>${tagc(r.status)}</div>`;
+  }).join('');
+  // The city inside the wall: little blocks of houses, laid out from the map's own name so each city has its own streets.
+  let seed = 2166136261;
+  for (let i = 0; i < d.title.length; i++) seed = Math.imul(seed ^ d.title.charCodeAt(i), 16777619) >>> 0;
+  const rnd = (): number => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
+  let blocks = '';
+  for (let i = 0; i < 46; i++) {
+    const a = rnd() * Math.PI * 2, q = 0.18 + rnd() * 0.72, bw = 10 + Math.floor(rnd() * 3) * 6, bh = 8 + Math.floor(rnd() * 2) * 6;
+    blocks += `<rect x="${Math.round(cx + Math.cos(a) * 214 * q - bw / 2)}" y="${Math.round(cy + Math.sin(a) * 108 * q - bh / 2)}" width="${bw}" height="${bh}" fill="#7fa8e0" opacity="${(0.1 + rnd() * 0.14).toFixed(2)}"/>`;
+  }
+  const towers = Array.from({ length: 12 }, (_, i) => { const a = ((15 + i * 30) * Math.PI) / 180; return `<rect x="${Math.round(cx + Math.cos(a) * 246 - 5)}" y="${Math.round(cy + Math.sin(a) * 132 - 6)}" width="10" height="12" fill="#b9c8e6" stroke="#0a1220" stroke-width="2"/>`; }).join('');
+  const tally = (['held', 'contested', 'lost'] as const).map((s) => [s, d.rows.filter((r) => r.status === s).length] as const);
+  const control = `<div class="abs col" style="right:12px;top:10px;width:170px;gap:4px"><div class="wr-ctl">${tally.map(([s, n]) => (n ? `<div style="flex:${n};background:${SIEGE_COLORS[s]}"></div>` : '')).join('')}</div><div class="row sm" style="justify-content:space-between;font-size:11px">${tally.map(([s, n]) => `<span style="color:${SIEGE_COLORS[s]}">${n} ${SIEGE_WORD[s].toLowerCase()}</span>`).join('')}</div></div>`;
+  const keep = d.rows.some((r) => !r.gate) ? '' : `<div class="abs" style="left:${cx - 13}px;top:${cy - 13}px;width:26px;height:26px;border-radius:50%;background:#0a1220;box-shadow:0 0 0 3px #7fa8e0,0 0 14px #7fa8e0"></div>`;
+  const board =
+    `<div class="abs wr-board" style="left:24px;top:74px;width:${BW}px;height:${BH}px">` +
+    '<div class="fill wr-grid"></div>' +
+    `<div class="abs wr-sweep" style="left:${cx - 250}px;top:${cy - 250}px;width:500px;height:500px"></div>` +
+    `<svg class="abs" style="left:0;top:0" width="${BW}" height="${BH}" viewBox="0 0 ${BW} ${BH}" aria-hidden="true"><ellipse cx="${cx}" cy="${cy}" rx="246" ry="132" fill="#0a122066" stroke="#93a8cc" stroke-width="6" stroke-dasharray="14 5"/><ellipse cx="${cx}" cy="${cy}" rx="236" ry="124" fill="none" stroke="#93a8cc55" stroke-width="2"/><ellipse cx="${cx}" cy="${cy}" rx="120" ry="62" fill="none" stroke="#93a8cc33" stroke-width="2" stroke-dasharray="4 6"/>${blocks}${towers}${roads}<g transform="translate(34 ${BH - 36})" stroke="#dfe8f5" stroke-width="2" fill="none"><circle r="15" opacity=".5"/><path d="M0 -20V20M-20 0H20" opacity=".5"/><path d="M0 -20l5 14h-10z" fill="#e8443a" stroke="none"/></g></svg>` +
+    `<div class="abs wr-ribbon" style="left:0;top:10px"><b>${esc(d.title)}</b></div>${control}${keep}${nodes}</div>`;
   const side = cur
-    ? W(`<b class="acc">${esc(cur.name)}</b>${facts([['Status', SIEGE_WORD[cur.status]], ['Cost', siegeCost(cur)], ['Held by', cur.heldBy || 'Nobody'], ...(d.tries ? [['Gate fights lost', String(d.tries)] as const] : [])])}`, 'display:flex;flex-direction:column;gap:6px')
+    ? W(`<div class="row" style="justify-content:space-between;align-items:center;gap:8px"><b class="acc">${esc(cur.name)}</b><span class="wr-stamp" style="color:${SIEGE_COLORS[cur.status]}">${SIEGE_WORD[cur.status]}</span></div>${facts([['Status', SIEGE_WORD[cur.status]], ['Cost', siegeCost(cur)], ['Held by', cur.heldBy || 'Nobody'], ...(d.tries ? [['Gate fights lost', String(d.tries)] as const] : [])])}`, 'display:flex;flex-direction:column;gap:6px')
     : '';
   const effects = W(
-    `<b class="acc">Lost district effects</b><div class="sm" style="line-height:20px">${lost.length ? lost.map((r) => `${esc(r.name)}: ${esc(r.ifLost)}`).join('<br>') : 'None. No district is lost.'}</div>`,
+    `<b class="acc">Lost district effects</b>${lost.length ? lost.map((r) => `<div class="wr-warn">${esc(r.name)}: ${esc(r.ifLost)}</div>`).join('') : '<div class="sm" style="line-height:20px">None. No district is lost.</div>'}`,
     'display:flex;flex-direction:column;gap:6px',
   );
-  return (
-    H(d.header, 'map', [['Enter', 'choose']]) +
-    `<div class="abs" style="left:24px;top:74px;width:560px;height:340px">${paper(`<b style="font-size:20px">${esc(d.title)}</b><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px">${grid}</div>`, 'height:100%;box-sizing:border-box')}</div>` +
-    `<div class="abs col" style="left:612px;right:24px;top:76px;gap:14px">${side}${effects}${go}</div>` + TX(esc(d.text))
-  );
+  const enter = `<div class="btn${d.ready ? ' on wr-go' : ''}" style="justify-content:center;cursor:pointer${d.ready ? '' : ';opacity:.5'}"${act('enter')}>${esc(d.button)}</div>`;
+  return H(d.header, 'map', [['Enter', 'choose']]) + board + `<div class="abs col" style="left:612px;right:24px;top:76px;gap:12px">${side}${effects}${enter}</div>` + TX(esc(d.text));
+}
+
+/** A compass word a gate's name starts with, as an angle (north is up). */
+const COMPASS: Record<string, number> = { north: -90, east: 0, south: 90, west: 180 };
+
+/**
+ * Where each district stands on the war map (a 560 x 340 board): gates round the wall, the gateless middle in the
+ * middle. Gates named for the compass stand where their name says; otherwise they are spread evenly from the top.
+ * Plots get smaller as the list grows so that none overlaps another or leaves the board.
+ */
+export function siegeSpots(rows: readonly SiegeDistrict[]): { x: number; y: number; w: number; h: number }[] {
+  const gates = rows.map((r, k) => (r.gate ? k : -1)).filter((k) => k >= 0), inner = rows.map((r, k) => (r.gate ? -1 : k)).filter((k) => k >= 0);
+  const n = gates.length, w = n > 10 ? 72 : n > 8 ? 84 : n > 6 ? 94 : 116, h = n > 10 ? 40 : n > 6 ? 44 : 54;
+  const cx = 280, cy = 186, rx = 246 - w / 2 - 22, ry = 132 - h / 2 + 2;
+  const words = gates.map((k) => COMPASS[rows[k]!.name.trim().split(/\s+/)[0]!.toLowerCase()]);
+  const byName = n > 0 && words.every((a) => a !== undefined) && new Set(words).size === n;
+  const out: { x: number; y: number; w: number; h: number }[] = rows.map(() => ({ x: 0, y: 0, w, h }));
+  // Not every gate has a compass name: the ones that do take the free place nearest their side, the rest fill in round the wall.
+  const slots = gates.map((_, i) => -90 + (360 / n) * i), deg: number[] = gates.map(() => NaN);
+  if (!byName) {
+    const free = new Set(slots.map((_, i) => i));
+    const turn = (a: number, b: number): number => Math.abs(((a - b + 540) % 360) - 180);
+    const take = (i: number, want: number | undefined): void => {
+      let best = -1;
+      for (const j of free) if (best < 0 || (want !== undefined && turn(slots[j]!, want) < turn(slots[best]!, want))) best = j;
+      free.delete(best); deg[i] = slots[best]!;
+    };
+    words.forEach((a, i) => { if (a !== undefined) take(i, a); });
+    words.forEach((a, i) => { if (a === undefined) take(i, undefined); });
+  }
+  gates.forEach((k, i) => {
+    const a = ((byName ? words[i]! : deg[i]!) * Math.PI) / 180;
+    out[k] = { x: Math.round(cx + Math.cos(a) * rx - w / 2), y: Math.round(cy + Math.sin(a) * ry - h / 2), w, h };
+  });
+  const iw = Math.min(w, 110), ih = Math.min(h, inner.length > 2 ? 36 : 48);
+  inner.forEach((k, i) => {
+    out[k] = { x: Math.round(cx - iw / 2), y: Math.round(cy - (inner.length * (ih + 6) - 6) / 2 + i * (ih + 6)), w: iw, h: ih };
+  });
+  return out;
 }
 
 // ---------- League counter-pick ----------

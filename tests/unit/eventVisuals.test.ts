@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { UIE_ARENAS } from '../../src/assets/catalog';
 import { choiceKind } from '../../src/core/events';
 import {
-  allPictureIds, castInText, changeVisual, choiceVisual, eventVisual, lineVisual, namedInText, outcomeBurst, PLACES, shotOf, wordsOf, type VisualContext, type VisualEvent,
+  allPictureIds, castInText, changeVisual, choiceVisual, eventVisual, familyPlaces, lineVisual, namedInText, outcomeBurst, PLACES, shotOf, wordsOf, type VisualContext, type VisualEvent,
 } from '../../src/core/presentation/eventVisuals';
 import { content } from './helpers';
 
@@ -43,6 +43,66 @@ describe('event director: the place', () => {
     expect(a.signature).not.toBe(b.signature);
     expect(a.sigil).toBeGreaterThanOrEqual(0);
     expect(a.sigil).toBeLessThan(1 << 15);
+  });
+});
+
+describe('event director: words that mislead, and storylines', () => {
+  it('a hyphenated name counts as its parts: Poli-Pond is at a pond, whatever show is put on', () => {
+    const v = eventVisual(ev({ name: 'Poli-Pond: The Little Pokémon That Could', intro: 'The reeds shake. A Poliwag is shoved out of them. It puts on a show of not minding.' }), ctx());
+    expect(v.place).toBe('lake');
+    expect(wordsOf('Poli-Pond')).toEqual(['poli-pond', 'poli', 'pond']);
+  });
+  it('a weak word alone does not say where an event is: it loses to the storyline, and only beats the stage', () => {
+    const dance = ev({ name: 'The Dance', intro: 'The ring turns. One of them spins too fast and sits down hard.' });
+    expect(eventVisual(dance, ctx({ stageTypes: ['fire'], family: 'mountain' }))).toMatchObject({ place: 'mountain', placedBy: 'family' });
+    expect(eventVisual(dance, ctx({ stageTypes: ['fire'] })).place).toBe('gym');
+    // An item's or a move's name is not a place.
+    for (const name of ['Ice Stone', 'TM Surf', 'Dream Ball', 'A Ghost of a Chance']) expect(eventVisual(ev({ name, intro: 'She weighs it and nods.' }), ctx({ family: 'shop' })).place, name).toBe('shop');
+    // Beside a surer word, or a second weak word for the same place, it counts.
+    expect(eventVisual(ev({ intro: 'The referee waves you into the ring.' }), ctx({ family: 'mountain' })).place).toBe('gym');
+    expect(eventVisual(ev({ intro: 'A booth at the edge of the stage.' }), ctx({ family: 'mountain' })).place).toBe('fair');
+  });
+  it('an event with no place words stands where its storyline does, before the stage decides', () => {
+    const lands = ev({ id: 'sky.join.fearow', name: 'Fearow Lands', intro: 'Fearow lands beside you with its crest low.' });
+    expect(eventVisual(lands, ctx({ stageTypes: ['fire'] }))).toMatchObject({ place: 'volcano', placedBy: 'stage' });
+    expect(eventVisual(lands, ctx({ stageTypes: ['fire'], family: 'forest' }))).toMatchObject({ place: 'forest', placedBy: 'family' });
+    // Its own words, its stop and its group still come first.
+    expect(eventVisual(ev({ name: 'The Lighthouse', intro: 'A harbour at dusk, ships at the pier.' }), ctx({ family: 'forest' })).place).toBe('sea');
+    expect(eventVisual(ev({ stop: 'shrine' }), ctx({ family: 'forest' })).place).toBe('ruins');
+    expect(eventVisual(ev({ group: 'Camp' }), ctx({ family: 'forest' })).place).toBe('camp');
+  });
+  const e = (id: string, name: string, intro = ''): { id: string; name: string; intro: string } => ({ id, name, intro });
+  it('a storyline is set where its opening event is, or where more of its events are than anywhere else', () => {
+    const places = familyPlaces([
+      e('mt-04-door', 'Mt. Moon', 'The mountain path climbs.'), e('mt-04-dance', 'The Dance', 'The ring turns.'), e('mt-04-mine', 'The Gem-Stone Mine', 'Ore in the quarry wall.'),
+      e('bird.opening', 'Resolve', 'Two birds fight over one branch.'), e('bird.finale', 'High Wind', 'A cliff, a ledge, a summit.'), e('bird.rematch', 'Again', 'On the cliff, by the ridge.'), e('bird.join', 'It Lands', 'It lands beside you.'),
+      e('lone-event', 'Alone', 'Nothing here.'),
+    ]);
+    expect(places.get('mt-04-dance')).toBe('mountain');
+    expect(places.get('mt-04-mine')).toBe('mountain');
+    expect(places.get('bird.join')).toBe('mountain');
+    expect(places.has('lone-event')).toBe(false);
+  });
+  it('an opening with one word is the last guess; ids that only look alike are not one storyline; a whole pack is not a storyline', () => {
+    const guess = familyPlaces([e('owl.opening', 'Resolve', 'Two birds fight over one branch.'), e('owl.join', 'It Lands', 'It lands beside you.')]);
+    expect(guess.get('owl.join')).toBe('forest');
+    const apart = familyPlaces([e('sky.opening', 'The Harbour', 'Ships at the pier.'), e('sky.join', 'It Lands', ''), e('sky-pillar', 'Up', ''), e('sky-other', 'Down', '')]);
+    expect(apart.get('sky.join')).toBe('sea');
+    expect(apart.has('sky-pillar')).toBe(false);
+    const pack = familyPlaces([e('big-door', 'The Forest', 'Trees.'), ...Array.from({ length: 45 }, (_, i) => e(`big-${i}`, 'Something', ''))]);
+    expect(pack.has('big-7')).toBe(false);
+    // The longest shared start wins: a wing of a pack is still a storyline.
+    const wing = familyPlaces([e('big-door', 'The Forest', 'Trees.'), ...Array.from({ length: 45 }, (_, i) => e(`big-${i}`, 'Something', '')), e('big-pike-door', 'The Battle Tower', 'A castle hall.'), e('big-pike-1', 'Room 1', '')]);
+    expect(wing.get('big-pike-1')).toBe('hall');
+  });
+  it('in the game: Poli-Pond opens at the pond, Pidgey’s Resolve is never in a volcano, the Clefairy dance is on Mt. Moon', () => {
+    const all = [...content.events.values()], families = familyPlaces(all);
+    const at = (id: string) => { const x = content.events.get(id)!; return eventVisual(x, { period: 'afternoon', stageTypes: ['fire'], kinds: [], family: families.get(id) }).place; };
+    expect(at('pp-cold-open')).toBe('lake');
+    for (const x of all.filter((y) => y.id.startsWith('sky.'))) expect(at(x.id), x.id).not.toBe('volcano');
+    expect(at('gn-04-dance-1')).toBe('mountain');
+    expect(at('gn-05-hall-damian')).toBe('gym');
+    expect(at('gn-42-pike-3')).toBe('hall');
   });
 });
 
@@ -188,9 +248,10 @@ describe('who the text names', () => {
 describe('ALL events get the new look', () => {
   const events = [...content.events.values()];
   const periods = ['morning', 'afternoon', 'evening', 'night'] as const;
+  const families = familyPlaces(events);
   const looks = events.map((e, i) => {
     const kinds = e.choices.map((c) => choiceKind(c, c.chance ?? null));
-    return { e, kinds, v: eventVisual(e, { period: periods[i % 4]!, stageTypes: [(e.types?.[0] ?? 'normal').toLowerCase()], kinds }) };
+    return { e, kinds, v: eventVisual(e, { period: periods[i % 4]!, stageTypes: [(e.types?.[0] ?? 'normal').toLowerCase()], kinds, family: families.get(e.id) }) };
   });
   it('every event resolves to a place, an hour, a mood and a way to draw it', () => {
     expect(events.length).toBeGreaterThan(8000);

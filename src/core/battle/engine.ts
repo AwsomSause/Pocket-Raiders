@@ -787,6 +787,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
     revengeMoment(ctx, events);
     return events;
   }
+  if (songOfPeace(ctx, events)) return events;
 
   battle.playerVolatile ??= freshVolatile();
   battle.enemyVolatile ??= freshVolatile();
@@ -2782,6 +2783,17 @@ function floatsOver(ctx: BattleContext, target: Combatant, ability: string | nul
   return moveType === 'ground' && !move.effects.smackDown && ctx.battle.field.gravity <= 0 && !target.vol.smackedDown;
 }
 
+/** Legendary Blessing, The Magma Heart (Heatran): the first damaging Fire move against your side in a battle is absorbed (+1 Sp. Atk). */
+function magmaHeart(ctx: BattleContext, user: Combatant, target: Combatant, move: Move, moveType: TypeName, events: BattleEvent[]): boolean {
+  if (target.side !== 'player' || user.side === 'player' || moveType !== 'fire' || move.category === 'status') return false;
+  if (!(ctx.perks ?? []).some((p) => p.kind === 'fireAbsorbFirst') || ctx.battle.storyEffects.includes('magma-heart')) return false;
+  ctx.battle.storyEffects.push('magma-heart');
+  events.push({ type: 'raid', tone: 'phase', text: 'The Magma Heart! Heatran\'s blessing drinks the fire.' });
+  events.push({ type: 'noEffect', side: target.side });
+  applyStageChange(ctx, target, 'spa', 1, events);
+  return true;
+}
+
 /** S7: the target's ability that would block this damaging move (absorbs, Levitate, Wonder Guard, Soundproof, Bulletproof), or null. No side effects. */
 function abilityWouldBlock(ctx: BattleContext, user: Combatant, target: Combatant, move: Move, moveType: TypeName, effectiveness: number): string | null {
   const ability = targetAbility(ctx, user, target);
@@ -2800,6 +2812,7 @@ function abilityBlocksMove(ctx: BattleContext, user: Combatant, target: Combatan
     events.push({ type: 'noEffect', side: target.side });
     return true;
   }
+  if (magmaHeart(ctx, user, target, move, moveType, events)) return true;
   const ability = targetAbility(ctx, user, target);
   if (!ability) return false;
   const damaging = move.category !== 'status';
@@ -2903,7 +2916,14 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
 function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
   // §29 enraged after a rival's sacrifice: its next moves go first.
   const rage = ctx.battle.enraged;
-  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c) + (c.side === 'player' ? callPriority(ctx.battle, c.mon.uid) : 0) + (c.side === 'player' ? quirkPriority(c.mon, c.vol.turnsOut) : 0);
+  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c) + (c.side === 'player' ? callPriority(ctx.battle, c.mon.uid) : 0) + (c.side === 'player' ? quirkPriority(c.mon, c.vol.turnsOut) : 0) + (c.side === 'player' ? boltPriority(ctx, move) : 0);
+}
+
+/** Legendary Blessing, The Bolt (Thundurus): your status moves go first on the battle's first turn (two in Communion). */
+function boltPriority(ctx: BattleContext, move: Move): number {
+  if (move.category !== 'status') return 0;
+  const turns = Math.max(0, ...(ctx.perks ?? []).map((p) => (p.kind === 'statusPriorityTurns' ? p.turns : 0)));
+  return ctx.battle.turn <= turns ? 1 : 0;
 }
 
 function basePriority(ctx: BattleContext, c: Combatant, move: Move): number {
@@ -7946,11 +7966,13 @@ export function startBattle(ctx: BattleContext): BattleEvent[] {
   championsAura(ctx, events);
   forecastAhead(ctx, events);
   shadowBoonDebt(ctx, events);
+  blessingFoeLead(ctx, events);
   eventStartRules(ctx, events);
   coStartRules(ctx.battle, events);
   ultraBattleStart(ctx);
   overhaulFieldStart(ctx, events);
   trapBeforeBattle(ctx, events);
+  eruptArena(ctx, events);
   foeMovePreview(ctx);
   const passive = classPassiveOf(ctx.content, ctx.battle);
   if (passive) events.push(say('enemy', 'arena', passiveLine(ctx.battle.trainer!.name, passive)));
@@ -8034,6 +8056,60 @@ function forecastAhead(ctx: BattleContext, events: BattleEvent[]): void {
   const set = [...new Set(battle.enemyTeam.map((m) => WEATHER_SETTERS[abilityOf(content, m) ?? '']).filter((w): w is Weather => !!w))];
   const word: Record<string, string> = { rain: 'rain', sun: 'harsh sun', sand: 'a sandstorm', snow: 'snow', hail: 'hail' };
   events.push(say('enemy', 'arena', set.length === 0 ? 'Forecast Ahead: nothing on their side can change the weather.' : `Forecast Ahead: their team can bring ${set.map((w) => word[w] ?? w).join(' or ')}.`));
+}
+
+/** Lugia's Rite, the Song: a wild battle ends in peace before anyone moves; every wild Pokémon counts as beaten (full rewards). No random numbers. */
+function songOfPeace(ctx: BattleContext, events: BattleEvent[]): boolean {
+  const { battle } = ctx;
+  if (battle.kind !== 'wild' || battle.outcome || !(ctx.perks ?? []).some((p) => p.kind === 'peacefulWild')) return false;
+  battle.storyEffects.push('song-of-peace');
+  events.push({ type: 'raid', tone: 'phase', text: 'A long note rises from under the sea. The wild Pokémon listen, lower their heads, and the fight is over.' });
+  const participants = ctx.party.filter((m) => m.hp > 0 && battle.participants.includes(m.uid)).map((m) => m.uid);
+  for (const foe of battle.enemyTeam) {
+    if (foe.hp <= 0) continue;
+    foe.hp = 0;
+    events.push({ type: 'faint', side: 'enemy', uid: foe.uid, participants });
+  }
+  battle.outcome = 'win';
+  return true;
+}
+
+/** Heatran's Rite, erupt: a boss battle's arena is wiped clean at the start (your side's hazards, the weather, the terrain). */
+function eruptArena(ctx: BattleContext, events: BattleEvent[]): void {
+  const { battle } = ctx;
+  if (!isBossClass(battle.trainer?.classId) || !(ctx.perks ?? []).some((p) => p.kind === 'eruptArena')) return;
+  battle.storyEffects.push('erupt');
+  const side = battle.sideEffects.player;
+  side.spikes = 0; side.toxicSpikes = 0; side.stealthRock = false; side.stickyWeb = false;
+  battle.weather = null;
+  battle.terrain = null;
+  events.push({ type: 'raid', tone: 'phase', text: 'The mountain erupts beneath the arena: every trap, every storm, every trick of the ground is burned away.' });
+}
+
+/**
+ * Legendary Blessings at the start of a battle (singles; no random numbers): The Abundant Land (Landorus) lowers the opposing lead's
+ * stats in boss and rival battles; Thundurus's Rite paralyses the lead of a trainer battle (not a boss's last Pokémon, not an Electric-type).
+ */
+function blessingFoeLead(ctx: BattleContext, events: BattleEvent[]): void {
+  const { battle, content } = ctx;
+  const foe = currentEnemy(battle);
+  if (!foe || foe.hp <= 0 || battle.doubles) return;
+  const enemy: Combatant = { side: 'enemy', mon: foe, stages: battle.enemyStages, vol: battle.enemyVolatile, flinched: false, protected: false };
+  const boss = isBossClass(battle.trainer?.classId) || !!battle.rival;
+  for (const p of ctx.perks ?? []) {
+    if (p.kind !== 'foeLeadStages' || !boss) continue;
+    events.push({ type: 'raid', tone: 'phase', text: 'The Abundant Land: the ground itself asks the foe to be still.' });
+    for (const stat of p.stats) applyStageChange(ctx, enemy, stat, p.value, events);
+  }
+  if (battle.kind === 'trainer' && (ctx.perks ?? []).some((p) => p.kind === 'foeLeadParalysed') && !foe.status) {
+    const last = battle.enemyTeam.length <= 1 && isBossClass(battle.trainer?.classId);
+    if (!last && !content.species.get(foe.speciesId)?.types.includes('electric')) {
+      foe.status = { id: 'par' };
+      battle.storyEffects.push('bolt-rite');
+      events.push({ type: 'raid', tone: 'phase', text: 'A bolt on request! Thundurus strikes before the battle begins.' });
+      events.push({ type: 'status', side: 'enemy', status: 'par' });
+    }
+  }
 }
 
 /** Catalog Overhaul (SF102 Shadow Boon): the debt is collected at the start of a boss battle; the lead's five stats move by the owed stages. */

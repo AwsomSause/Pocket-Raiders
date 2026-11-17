@@ -66,6 +66,11 @@ export const CAST_SPRITES: Record<string, readonly string[]> = {
   'sc.flare.sycamore': ['boss.sycamore'],
   'sc.skull.kahuna-guzma': ['boss.guzma'],
   'sc.macro-cosmos.pryce': ['boss.pryce'],
+  // Galar and Alola cast: PixelLab sprites made from Kice's trainer reference settings.
+  'sc.aether.dulse-zossie': [c('dulse'), c('zossie')],
+  'sc.macro-cosmos.shielbert': [c('shielbert')],
+  'sc.macro-cosmos.ball-guy': [c('ball-guy')],
+  'sc.macro-cosmos.chair-magnolia': [c('magnolia')],
   // Cipher: no art yet. Drop trainer.cipher/<name>.png into public/assets/images/trainer/cipher/ and it appears.
   'sc.cipher.greevil': ['trainer.cipher/greevil'],
   'sc.cipher.evice': ['trainer.cipher/evice'],

@@ -13,7 +13,7 @@ Content: `tools/events/co/legends-14.ts` -> `src/data/events/co-legends-14.json`
 - **Reactions:** a researcher reacts to a Legendary in the party (extra choice in Communion) and to a Mythical Guest (new mirror flag `guest-any`).
 
 ## Known limits
-- The Empty Vessel, Thundurus, Landorus, Lugia, Reshiram, Zekrom, Heatran and Latias blessings are not in the blessing roster yet; their "blessing at Influence 5" routes start working when they are added. The questline routes work today.
+- The eight blessings this row waited on (Lugia, Latias, Heatran, Thundurus, Landorus, Reshiram, Zekrom, The Empty Vessel) are in the roster now (`docs/status/blessings-eight.md`), so their "blessing at Influence 5" routes work; Thundurus also earns the Works Key and Kyurem both Stones.
 - Speed Forme is a Speed x1.5 stance, not a literal "acts first on turn one". 108 spirits is the doc's number and is rare in one run.
 - Keys are only live when the row A file is loaded (old-seed fingerprints unchanged).
 

@@ -33,6 +33,10 @@
     },
     "renegade": {
       "ghostEncounterWeight": 1.5
+    },
+    "zekrom": {
+      "vowStatPercent": 10,
+      "communionVowStatPercent": 15
     }
   },
   "blessings": [
@@ -42,7 +46,7 @@
       "legendary": "Tapu Lele",
       "speciesId": "tapu-lele",
       "tier": "lesser",
-      "item": "item.gen5/heart-scale",
+      "item": "item.legend/tapu-lele",
       "objectText": "a pink shell, dusted with glittering scales",
       "passage": "It scatters healing as a child scatters petals, and with as much thought for where it lands.",
       "headline": "THE PETALS FALL WHERE THEY WILL",
@@ -59,7 +63,7 @@
       "legendary": "Fezandipiti",
       "speciesId": "fezandipiti",
       "tier": "lesser",
-      "item": "item.gen5/wishing-piece",
+      "item": "item.legend/fezandipiti",
       "objectText": "a purple chain worn as a necklace",
       "passage": "It wished to be lovely, and was made lovely, and has not looked at anything else since.",
       "headline": "THE WORLD IS KINDER TO THE LOVELY",
@@ -76,7 +80,7 @@
       "legendary": "Ho-Oh",
       "speciesId": "ho-oh",
       "tier": "divine",
-      "item": "item.gen5/rainbow-wing",
+      "item": "item.legend/ho-oh",
       "objectText": "a golden feather falling through darkness",
       "passage": "Three perished in the burning tower, and it wept, and they rose and ran. Therefore look up, you who have lost.",
       "headline": "SACRED ASH",
@@ -93,7 +97,7 @@
       "legendary": "Dialga",
       "speciesId": "dialga",
       "tier": "divine",
-      "item": "item.gen5/rainbow-wing",
+      "item": "item.legend/dialga",
       "objectText": "an ancient hourglass, turning by itself",
       "passage": "And from the beginning, time was set into motion. Yet even the river of eternity may be made to flow backward, for the Keeper remembers what has passed.",
       "headline": "TIME BENDS TO YOUR WILL",
@@ -110,7 +114,7 @@
       "legendary": "Palkia",
       "speciesId": "palkia",
       "tier": "divine",
-      "item": "item.gen5/rainbow-wing",
+      "item": "item.legend/palkia",
       "objectText": "a pearl with a fold in it that the eye cannot follow",
       "passage": "It set the near beside the far and called it a road. Ask, and the mountain shall stand behind you that stood before.",
       "headline": "REARRANGE THE ROAD",
@@ -127,7 +131,7 @@
       "legendary": "Moltres",
       "speciesId": "moltres",
       "tier": "lesser",
-      "item": "item.gen5/flame-orb",
+      "item": "item.legend/moltres",
       "objectText": "a feather that glows like an ember",
       "passage": "Where it passes, winter gives up early, and is not sorry.",
       "headline": "THE FIRST WARMTH",
@@ -151,7 +155,7 @@
       "legendary": "Munkidori",
       "speciesId": "munkidori",
       "tier": "lesser",
-      "item": "item.gen5/toxic-orb",
+      "item": "item.legend/munkidori",
       "objectText": "a purple cord tied round a brow",
       "passage": "It wished to be clever, and was made clever enough to serve, and no cleverer.",
       "headline": "CLEVER HANDS",
@@ -175,7 +179,7 @@
       "legendary": "Tornadus",
       "speciesId": "tornadus",
       "tier": "greater",
-      "item": "item.gen5/dragon-scale",
+      "item": "item.legend/tornadus",
       "objectText": "a gourd stoppered with cloud",
       "passage": "It goes about at three hundred miles to the hour, knocking the roofs off, and is astonished every time to find that anyone minded.",
       "headline": "THE WIND AT YOUR BACK",
@@ -200,7 +204,7 @@
       "legendary": "Zacian",
       "speciesId": "zacian",
       "tier": "greater",
-      "item": "item.gen5/dawn-stone",
+      "item": "item.legend/zacian",
       "objectText": "a rusted blade",
       "passage": "It slept in the wood with the rust upon it and was not ashamed; a blade is known by what it was drawn against.",
       "headline": "THE FIRST STRIKE RINGS TRUE",
@@ -225,7 +229,7 @@
       "legendary": "Regidrago",
       "speciesId": "regidrago",
       "tier": "greater",
-      "item": "item.gen5/dragon-fang",
+      "item": "item.legend/regidrago",
       "objectText": "a red crystal shaped like half a jaw",
       "passage": "The maker had not crystal enough to finish it. It has only the head; and the head remembers the rest.",
       "headline": "AN UNFINISHED JAW",
@@ -250,7 +254,7 @@
       "legendary": "Giratina",
       "speciesId": "giratina",
       "tier": "primordial",
-      "item": "item.gen5/griseous-orb",
+      "item": "item.legend/giratina",
       "objectText": "a cracked mirror showing a different room",
       "passage": "It was cast out for its violence into the place behind the world; and there it has had a long while to think about us.",
       "headline": "THE OTHER SIDE OF EVERY DOOR",
@@ -261,6 +265,183 @@
       "pool": false,
       "status": "limited",
       "limits": "Never rolled at the start of a run: only The Rift Whisper offers it, mid-run, in place of the run's blessing. The Reverse Side opens Distortion Incident, then Distortion World, inside the node (pseudo-stage caps still hold: past them the step-out alone happens). Communion (see every node's reverse side) and the Rite (a mirror stage) are not built."
+    },
+    {
+      "id": "lugia",
+      "name": "The Guardian of the Sea",
+      "legendary": "Lugia",
+      "speciesId": "lugia",
+      "tier": "greater",
+      "item": "item.gen5/silver-wing",
+      "objectText": "a silver bell, glowing faintly",
+      "passage": "When the fire and the ice and the lightning quarrel, there is one beneath the sea who is not angry; and the world is kept by that one's patience.",
+      "headline": "A LONG NOTE UNDER WATER",
+      "summary": "Once per stage, call a Calm in battle (Calm on the battle menu): weather, terrain and every stat change on both sides are cleared. It does not take your turn.",
+      "effect": {
+        "kind": "calm"
+      },
+      "status": "supported",
+      "limits": "Single battles only (the Calm and the Song). Rite, the Song: armed from the run menu, your next wild battle ends in peace with full rewards."
+    },
+    {
+      "id": "latias",
+      "name": "The Glass Wing",
+      "legendary": "Latias",
+      "speciesId": "latias",
+      "tier": "greater",
+      "item": "item.gen5/soul-dew",
+      "objectText": "a feather that bends the light round it",
+      "passage": "She folds the light and goes among people as one of them, to see what they are like. She likes them.",
+      "headline": "SIGHT SHARING",
+      "summary": "Sight Sharing: on the map, every wild and trainer battle ahead shows the opponent's lead. In Communion, their whole team.",
+      "effect": {
+        "kind": "sight"
+      },
+      "status": "limited",
+      "limits": "Shown on the map before you pick the node (event battles are not shown). Rite, Shared Sight: for the rest of the stage every battle ahead shows its whole team, and the Gym Leader's team. The rival's map sharing is not built."
+    },
+    {
+      "id": "heatran",
+      "name": "The Magma Heart",
+      "legendary": "Heatran",
+      "speciesId": "heatran",
+      "tier": "greater",
+      "item": "item.gen5/magma-stone",
+      "objectText": "a stone, cool outside and hot within",
+      "passage": "It walks on the roof of the cave as if the cave were turned over, and the fire in it is the mountain's own.",
+      "headline": "A DEEP SLOW BUBBLING",
+      "summary": "The first Fire move used against your side in each battle is absorbed, and its target gains +1 Sp. Atk.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "fireAbsorbFirst"
+        }
+      ],
+      "status": "limited",
+      "limits": "Single battles. Rite, erupt: your next boss battle starts with your side's hazards, the weather and the terrain cleared. Communion (extra ore, no hazard harm in volcano and cave stages) is not built."
+    },
+    {
+      "id": "thundurus",
+      "name": "The Bolt",
+      "legendary": "Thundurus",
+      "speciesId": "thundurus",
+      "tier": "greater",
+      "item": "item.gen5/zap-plate",
+      "objectText": "a scorched drumskin",
+      "passage": "It throws its lightning as a boy throws stones at a pond, to see the splash.",
+      "headline": "THUNDER, CLOSE, WITH LAUGHTER IN IT",
+      "summary": "On the first turn of every battle your status moves have +1 priority. In Communion, the first two turns.",
+      "effect": {
+        "kind": "bolt"
+      },
+      "perks": [
+        {
+          "kind": "statusPriorityTurns",
+          "turns": 1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "statusPriorityTurns",
+          "turns": 2
+        }
+      ],
+      "status": "supported",
+      "limits": "Rite, a bolt on request: the lead of your next trainer battle starts paralysed (not a boss's last Pokémon, not an Electric-type)."
+    },
+    {
+      "id": "landorus",
+      "name": "The Abundant Land",
+      "legendary": "Landorus",
+      "speciesId": "landorus",
+      "tier": "greater",
+      "item": "item.gen5/miracle-seed",
+      "objectText": "a seed sprouting in dry earth",
+      "passage": "It came between the wind and the thunder and bade them be still; and where it had stood the crops were tall.",
+      "headline": "RAIN ON A FIELD",
+      "summary": "At the start of every boss and rival battle the opposing lead has -1 Attack. In Communion, -1 Sp. Atk too.",
+      "effect": {
+        "kind": "perks"
+      },
+      "perks": [
+        {
+          "kind": "foeLeadStages",
+          "stats": [
+            "atk"
+          ],
+          "value": -1
+        }
+      ],
+      "communionPerks": [
+        {
+          "kind": "foeLeadStages",
+          "stats": [
+            "atk",
+            "spa"
+          ],
+          "value": -1
+        }
+      ],
+      "status": "limited",
+      "limits": "Single battles. Rite, fertile ground: where you stand a shop opens and you get three Sitrus Berries (not tied to barren or ruined stages)."
+    },
+    {
+      "id": "reshiram",
+      "name": "The Truth",
+      "legendary": "Reshiram",
+      "speciesId": "reshiram",
+      "tier": "divine",
+      "item": "item.gen5/light-stone",
+      "objectText": "a white stone, warm",
+      "passage": "They were one, and two brothers divided them; and this is the one that would rather know than hope.",
+      "headline": "A STEADY FIRE",
+      "summary": "In events, every choice shows what it will actually cause. In Communion, the foe's first move of each battle is shown before you pick.",
+      "effect": {
+        "kind": "insight"
+      },
+      "communionPerks": [
+        {
+          "kind": "foeMovePreview"
+        }
+      ],
+      "status": "limited",
+      "limits": "Lying speakers are not marked. Communion shows the foe's first move, not its whole move list. Rite, the real plan: your rival's plan (type and ace) and the Gym Leader's team for the stage."
+    },
+    {
+      "id": "zekrom",
+      "name": "The Ideal",
+      "legendary": "Zekrom",
+      "speciesId": "zekrom",
+      "tier": "divine",
+      "item": "item.gen5/dark-stone",
+      "objectText": "a black stone, humming",
+      "passage": "And this is the one that would rather hope than know. Do not ask which brother was right. They burned the country finding out.",
+      "headline": "SWEAR ONE VOW",
+      "summary": "Swear a vow for the run. While it is kept your Pokémon have +10% to every stat (15% in Communion). Broken, the bonus is gone.",
+      "effect": {
+        "kind": "vow"
+      },
+      "status": "limited",
+      "limits": "Two of the three vows are built (Leave no Pokémon behind: no release or trade; Strike no one first: in trainer battles never deal the first damage). Refuse no one who asks is not built. The Rite (the vow holds once) works by itself."
+    },
+    {
+      "id": "kyurem",
+      "name": "The Empty Vessel",
+      "legendary": "Kyurem",
+      "speciesId": "kyurem",
+      "tier": "primordial",
+      "item": "item.gen5/nevermeltice",
+      "objectText": "a block of ice with a hollow in it",
+      "passage": "When the two were divided, something was left over. It is cold, and it is hungry, and it is waiting to be made whole by whatever comes near.",
+      "headline": "NOTHING, YET",
+      "summary": "None, yet. The first Sign you find of another Legendary fills the vessel: it becomes a weaker copy of that blessing (perk bonuses halved) for the rest of the run. Catching Kyurem gives the copy's Rite.",
+      "effect": {
+        "kind": "vessel"
+      },
+      "status": "limited",
+      "limits": "The copy never reaches its own Communion form. It cannot copy Zekrom's vow or The Renegade. Kyurem in Communion with Zekrom or Reshiram earns the DNA Splicers fusion."
     }
   ]
 }

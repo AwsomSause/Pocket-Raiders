@@ -83,15 +83,69 @@ export function rankUpView(r: RankUpLook, files: { leader: Art | null; lt: Art |
 
 export interface TableModel { look: TableLook; choices: EventChoice[]; index: number; files: (Art | null)[]; text: string }
 
-/** 7.6: a top-down table with a map of Hoenn; the leader at the head, the lieutenants each side, an empty chair. One pin moves. */
+/** The team's mark for the banner and the map's corner: a peak for Magma, a wave for Aqua (plain shapes, not the games' logos). */
+const emblem = (team: 'magma' | 'aqua', size: number, color: string): string =>
+  `<svg width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true" style="display:block">${team === 'magma'
+    ? `<path d="M2 21 8 6l4 8 4-8 6 15z" fill="${color}"/><path d="M8 6l2 4-2 2-2-2z" fill="#0004"/>`
+    : `<path d="M2 14c3-6 6-6 9 0s6 6 11 0v7H2z" fill="${color}"/><circle cx="12" cy="6" r="3" fill="${color}"/>`}</svg>`;
+
+/** The plan's risk, read from the choice's own words ("30% chance it's noticed"): the label without it, and the number. */
+function riskOf(label: string): { text: string; noticed: number | null } {
+  const m = /\s*\((\d+)% chance it[’']s noticed\)\s*$/.exec(label);
+  return m ? { text: label.slice(0, m.index), noticed: Number(m[1]) } : { text: label, noticed: null };
+}
+
+/**
+ * 7.6: the war room. A long table under a lamp with a drawn map of Hoenn on it; the leader at the head under the team's
+ * banner, the lieutenants each side, and an empty chair for you. Plans are pins: the plan under the cursor lifts its
+ * pin and a thread runs out to the empty hills.
+ */
 export function tableView(d: TableModel): string {
   const st = STYLE[d.look.team];
+  const glow = d.look.team === 'magma' ? '#6a2416' : '#16385e';
   const moving = d.index < d.look.pins.length ? d.index : -1;
-  const pins = d.look.pins.map((p, i) => {
-    const m = i === moving;
-    return `<div class="abs" style="left:${p.x}%;top:${p.y}%;transform:translate(-50%,-100%);text-align:center"><div style="width:14px;height:14px;border-radius:50%;background:${st.head};border:2px solid #fff;margin:auto;${m ? 'opacity:.35' : ''}"></div><div style="font-size:11px;color:#2a2a2a">${esc(p.label)}</div></div>${m ? `<div class="abs" style="left:${p.x}%;top:${p.y}%;width:${Math.abs(50 - p.x)}%;border-top:2px dashed ${st.head};transform-origin:0 0;transform:rotate(${p.x < 50 ? -20 : 200}deg)"></div><div class="abs" style="left:50%;top:50%;transform:translate(-50%,-100%)"><div style="width:16px;height:16px;border-radius:50%;background:${st.head};border:2px solid #fff;box-shadow:0 0 10px #fff"></div><div style="font-size:11px">the empty hills</div></div>` : ''}`;
+  const pin = (x: number, y: number, label: string, cls = '', head = ''): string =>
+    `<div class="abs wr-pin ${cls}" style="left:${x}%;top:${y}%"><div class="wr-head" style="${head}"></div><div class="wr-needle"></div><div class="wr-tag">${esc(label)}</div></div>`;
+  const pins = d.look.pins.map((p, i) => (i === moving
+    ? `<div class="abs" style="left:${p.x}%;top:${p.y}%;width:18px;height:18px;margin:-20px 0 0 -9px;border-radius:50%;border:2px dashed ${st.head};opacity:.7"></div><div class="abs wr-tag" style="left:${p.x}%;top:${p.y}%;transform:translate(-50%,-2px);opacity:.6;text-decoration:line-through">${esc(p.label)}</div>`
+    : pin(p.x, p.y, p.label))).join('');
+  const from = moving >= 0 ? d.look.pins[moving]! : null;
+  // Threads between the pins (the plans as they stand), and the one move under the cursor.
+  const threads = d.look.pins.map((p, i) => { const q = d.look.pins[(i + 1) % d.look.pins.length]!; return `<line x1="${p.x}" y1="${p.y - 6}" x2="${q.x}" y2="${q.y - 6}" stroke="${st.head}" stroke-width="1.2" opacity=".35" vector-effect="non-scaling-stroke"/>`; }).join('');
+  const move = from ? `<line class="wr-march" x1="${from.x}" y1="${from.y - 6}" x2="50" y2="46" stroke="${st.head}" stroke-width="2.5" stroke-dasharray="8 6" stroke-linecap="round" vector-effect="non-scaling-stroke"/>` : '';
+  const target = from
+    ? `<div class="abs wr-pulse" style="left:50%;top:50%;width:34px;height:34px;margin:-27px 0 0 -17px;border-radius:50%;box-shadow:0 0 0 2px ${st.head},0 0 14px 4px #fff"></div>${pin(50, 50, 'the empty hills', 'wr-bob', 'box-shadow:0 0 0 2px #fff,0 0 10px 3px #fff')}`
+    : '<div class="abs" style="left:50%;top:50%;transform:translate(-50%,-50%);font-size:11px;color:#6b5a3a;font-style:italic">the empty hills</div>';
+  // The map: sea, the land of Hoenn in a few strokes, its volcano, a grid and a compass rose.
+  const land = '<path d="M7 31 16 16 31 12 40 20 51 14 62 18 71 30 68 46 71 60 62 75 51 70 43 80 31 75 23 84 14 75 9 55z" fill="#b9c78e" stroke="#6f7f4c" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M79 35 85 29 91 37 89 49 82 50zM81 65 87 62 92 71 86 80 80 76zM36 88 42 85 45 92 40 97z" fill="#b9c78e" stroke="#6f7f4c" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M20 30 24 20 28 30z" fill="#a0683c" stroke="#6b3e1c" stroke-width="1" vector-effect="non-scaling-stroke"/><path d="M40 44 44 37 48 44zM47 46 50 40 53 46z" fill="#8fa06a" stroke="#6f7f4c" stroke-width=".8" vector-effect="non-scaling-stroke"/>';
+  const waves = [[6, 8], [70, 8], [88, 18], [4, 92], [58, 92], [74, 88], [94, 56]].map(([x, y]) => `<path d="M${x} ${y}q1.5-3 3 0t3 0" fill="none" stroke="#5b8fb0" stroke-width="1" opacity=".7" vector-effect="non-scaling-stroke"/>`).join('');
+  const chart = `<svg class="fill" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><rect width="100" height="100" fill="#9cc4d8" opacity=".38"/>${[20, 40, 60, 80].map((v) => `<path d="M${v} 0V100M0 ${v}H100" stroke="#6b4a1c" stroke-width=".6" opacity=".25" vector-effect="non-scaling-stroke"/>`).join('')}${waves}${land}${threads}${move}</svg>`;
+  const rose = `<svg class="abs" style="right:8px;bottom:6px" width="40" height="40" viewBox="-20 -20 40 40" aria-hidden="true"><circle r="13" fill="none" stroke="#6b4a1c" stroke-width="1.5" opacity=".7"/><path d="M0-18 4-4 18 0 4 4 0 18-4 4-18 0-4-4z" fill="#6b4a1c" opacity=".8"/><path d="M0-18 4-4-4-4z" fill="${st.head}"/></svg>`;
+  const seat = (i: number, x: number, y: number, px: number, role: string): string =>
+    `<div class="abs" style="left:${x}px;top:${y}px;width:120px;text-align:center"><div class="abs wr-chair" style="left:${60 - px * 0.36}px;top:${px * 0.22}px;width:${px * 0.72}px;height:${px * 0.82}px"></div>${i === 0 ? `<div class="abs wr-aura wr-pulse" style="left:${60 - px * 0.8}px;top:${-px * 0.2}px;width:${px * 1.6}px;height:${px * 1.4}px"></div>` : ''}<div style="position:relative">${art(d.files[i] ?? null, px)}</div><div style="position:relative;margin-top:2px"><span class="wr-plaque">${role ? `<b>${role}</b> · ` : ''}${esc(d.look.seats[i]?.name ?? '')}</span></div></div>`;
+  const candle = (x: number, y: number): string => `<div class="abs" style="left:${x}px;top:${y}px;width:10px"><div class="wr-flame" style="margin:auto"></div><div style="width:8px;height:16px;margin:auto;background:linear-gradient(90deg,#f4ecd8,#cfc2a0);box-shadow:0 2px 0 #0006"></div></div>`;
+  const cards = d.choices.map((c, k) => {
+    const r = riskOf(c.label), isPin = k < d.look.pins.length;
+    const risk = r.noticed === null ? '' : `<div class="wr-risk"><span>Noticed</span><i style="--r:${Math.min(100, r.noticed)}%"></i><b>${r.noticed}%</b></div>`;
+    return `<div class="btn wr-card${k === d.index ? ' on' : ''}" style="--wh:${isPin ? st.head : '#7a7468'}"${pickAct(k)}>${esc(r.text)}${risk}</div>`;
   }).join('');
-  const seat = (i: number, x: number, y: number): string => `<div class="abs" style="left:${x}px;top:${y}px;text-align:center;width:90px">${art(d.files[i] ?? null, 64)}<div class="sm" style="color:#fff">${esc(d.look.seats[i]?.name ?? '')}</div></div>`;
-  const buttons = d.choices.map((c, k) => `<div class="btn${k === d.index ? ' on' : ''}" style="font-size:13px;white-space:normal;line-height:15px;height:auto;padding:6px 10px"${pickAct(k)}>${esc(c.label)}</div>`).join('');
-  return `<div class="fill" style="background:#2a1e16"></div><div class="abs" style="left:150px;top:70px;width:440px;height:250px;background:#6a4a30;border-radius:18px;box-shadow:inset 0 0 0 10px #4a3220"><div class="abs" style="left:30px;top:30px;right:30px;bottom:30px;background:#d8cca8;border-radius:6px;overflow:hidden">${pins}</div></div>${seat(0, 325, -6)}${seat(1, 40, 140)}${seat(2, 610, 140)}<div class="abs" style="left:325px;top:330px;width:90px;height:50px;border:2px dashed #fff6;border-radius:8px;color:#fff8;font-size:11px;text-align:center;padding-top:16px">your chair</div><div class="abs col" style="left:720px;right:16px;top:60px;gap:8px">${buttons}</div><div class="abs txt" style="left:20px;right:260px;bottom:10px;font-size:14px">${esc(d.text)}</div>`;
+  const TX0 = 112, TY0 = 100, TW = 480, TH = 246;
+  return (
+    `<div class="fill wr-room" style="--wg:${glow};--wh:${st.head};--wm:${st.mark}"></div><div class="fill wr-boards"></div>` +
+    // The wall behind the head of the table: the team's banner between two smaller ones, and two lamps.
+    `<div class="abs wr-banner" style="left:${TX0 + TW / 2 - 62}px;top:0;width:124px;height:104px;--wh:${st.head};--wm:${st.mark}"></div>` +
+    [TX0 + 34, TX0 + TW - 34 - 70].map((x) => `<div class="abs wr-banner" style="left:${x}px;top:0;width:70px;height:88px;--wh:${st.head};--wm:${st.mark}"><div style="display:flex;justify-content:center;padding-top:14px">${emblem(d.look.team, 38, st.mark)}</div></div>`).join('') +
+    [TX0 - 34, TX0 + TW + 20].map((x) => `<div class="abs" style="left:${x}px;top:26px;width:14px"><div class="wr-flame" style="margin:auto"></div><div style="width:14px;height:6px;background:#c9a25a;box-shadow:0 2px 0 #0008"></div></div>`).join('') +
+    `<div class="abs wr-rug" style="left:${TX0 - 54}px;top:${TY0 + 8}px;width:${TW + 108}px;height:${TH + 66}px;--wh:${st.head};--wm:${st.mark}"></div>` +
+    seat(0, TX0 + TW / 2 - 60, 0, 80, 'LEADER') +
+    `<div class="abs wr-table" style="left:${TX0}px;top:${TY0}px;width:${TW}px;height:${TH}px;--wh:${st.head};--wm:${st.mark}"><div class="abs wr-map" style="left:34px;top:30px;right:34px;bottom:30px">${chart}<div class="abs" style="left:8px;top:6px;opacity:.5">${emblem(d.look.team, 22, st.head)}</div>${rose}${pins}${target}</div></div>` +
+    candle(TX0 + 12, TY0 + 4) + candle(TX0 + TW - 22, TY0 + TH - 40) +
+    `<div class="abs wr-lamp" style="left:${TX0 - 60}px;top:${TY0 - 50}px;width:${TW + 120}px;height:${TH + 100}px"></div>` +
+    seat(1, TX0 - 122, TY0 + 62, 76, '') + seat(2, TX0 + TW + 2, TY0 + 62, 76, '') +
+    `<div class="abs" style="left:${TX0 + TW / 2 - 50}px;top:${TY0 + TH + 6}px;width:100px;text-align:center"><div class="wr-chair wr-pulse" style="width:74px;height:40px;margin:auto;box-shadow:inset 0 0 0 2px ${st.mark},0 0 14px 3px ${st.mark}88"></div><div style="margin-top:3px"><span class="wr-plaque">your chair</span></div></div>` +
+    [[150, 300, 0], [240, 150, 2.1], [330, 330, 4.4], [420, 200, 1.2], [520, 310, 3.3], [600, 170, 5.6], [90, 210, 6.4], [470, 120, 7.3]].map(([x, y, dl]) => `<i class="abs wr-mote" style="left:${x}px;top:${y}px;--d:-${dl}s;--wm:${d.look.team === 'magma' ? '#ffb060' : '#bfe6ff'}"></i>`).join('') +
+    '<div class="fill wr-vig"></div>' +
+    `<div class="abs col" style="left:716px;right:16px;top:52px;gap:8px"><div class="wr-ribbon" style="align-self:flex-start;font-size:13px;line-height:18px;white-space:nowrap"><b>Next week’s work</b> · one change</div>${cards}</div>` +
+    `<div class="abs txt" style="left:20px;right:260px;bottom:10px;font-size:14px">${esc(d.text)}</div>`
+  );
 }
