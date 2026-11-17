@@ -1,0 +1,1705 @@
+{
+  "note": "Evil Mode slice 10, the base. Design /mnt/project-files/plans/evil-mode/16_THE_BASE.md (sites, rooms, sizes, staffing, adjacency, build orders, Night actions), 17_THE_REVERSE_DUNGEON_AND_THE_RAID.md (pieces, the fairness check, Walk it, the warning, the Raid on the Siege Map, after), 05_THE_NUMBERS.md (building costs). Numbers are the design's starting values; none are playtested. Text is the design's own. `on: false` is the slice's undo: the base is one room (the Common Room) and nothing is built, defended or raided.",
+  "on": true,
+  "offer": {
+    "kinds": 2
+  },
+  "squares": {
+    "door": "The front door",
+    "common": "The Common Room",
+    "office": "The Office",
+    "floor": "Bare floor"
+  },
+  "fixed": {
+    "door": "One square, on an edge. Where everyone comes in: applicants, the detective, the Hero.",
+    "common": "Free. Every base has one from the first evening. A kettle. A noticeboard. Pegs. It does nothing to any number. It's the room the game's set in.",
+    "office": "The Boss's. The furthest square from the front door, always: the game places it. The last room."
+  },
+  "sites": [
+    {
+      "id": "cellar",
+      "name": "A cellar under a shop",
+      "region": null,
+      "status": "supported",
+      "bg": "bg.arena.cave",
+      "grid": "4 × 3",
+      "slots": 12,
+      "shape": [
+        "D####",
+        "C####",
+        "#####"
+      ],
+      "and": "A Front upstairs comes free (the shop itself, back room shut). One way in, through the shop.",
+      "local": "The shopkeeper. They know. Their mood's the base's weather.",
+      "evening": "Tobi finds the light switch. It doesn't work. Lux finds the fuse box. Faye's already sweeping. Otis stands in the middle, turns round once, and says: \"It's got a door. That's a start.\"",
+      "effects": [
+        {
+          "text": "A Front upstairs comes free",
+          "status": "limited",
+          "waits": "Fronts come with slice 11 (the economy)."
+        }
+      ]
+    },
+    {
+      "id": "warehouse",
+      "name": "A warehouse",
+      "region": null,
+      "status": "supported",
+      "bg": "bg.arena.factory",
+      "grid": "5 × 4",
+      "slots": 20,
+      "shape": [
+        "D#####",
+        "C#####",
+        "######",
+        "#####."
+      ],
+      "freeRoom": "garage",
+      "raidHeat": 1,
+      "and": "Room for a Garage from the start: it's free and built. Easy to find: Heat reads one higher for the purpose of the Raid.",
+      "local": "A night watchman, sixty, who'd like to keep his job and his chair by the door.",
+      "evening": "The watchman's chair is by the door. Nobody moves it. Somebody finds the light board, and the whole roof comes on at once, row by row, like a held breath let go.",
+      "effects": [
+        {
+          "text": "A Garage, free and built",
+          "status": "supported"
+        },
+        {
+          "text": "Heat reads one higher for the Raid",
+          "status": "supported"
+        }
+      ]
+    },
+    {
+      "id": "cave",
+      "name": "A cave",
+      "region": null,
+      "status": "supported",
+      "bg": "bg.arena.cave",
+      "grid": "Irregular; 14 rooms",
+      "slots": 14,
+      "shape": [
+        "D##..",
+        "C####",
+        ".####",
+        "..###",
+        "...##"
+      ],
+      "raidLate": 2,
+      "workshopScale": 1.5,
+      "and": "Heat finds it two points late (the Raid comes two Evenings later). Damp: a Workshop costs half again.",
+      "local": "A hermit, or a colony of Zubat. Either way they were here first.",
+      "evening": "Something flutters, high up, and settles. Water drips somewhere it always has. Hortense puts the kettle on a flat rock and says it'll do.",
+      "effects": [
+        {
+          "text": "The Raid comes two Evenings late",
+          "status": "supported"
+        },
+        {
+          "text": "A Workshop costs half again",
+          "status": "supported"
+        },
+        {
+          "text": "The Machines Doctrine's kits lose a level here",
+          "status": "limited",
+          "waits": "Kit levels by site come with a later slice."
+        }
+      ]
+    },
+    {
+      "id": "ship",
+      "name": "A ship",
+      "region": null,
+      "status": "supported",
+      "bg": "bg.arena.sea",
+      "grid": "3 × 6, in a line",
+      "slots": 18,
+      "shape": [
+        "DC###################"
+      ],
+      "fee": 200,
+      "and": "Rooms are in a row, so adjacency's only ever two neighbours. The harbour master's owed mooring fees: ₽200 a district.",
+      "local": "A harbour master, who's owed mooring fees: ₽200 a district, or a favour.",
+      "evening": "The deck moves. Tobi is sick over the side and says he's fine. The harbour master watches from the quay with a notebook open at a fresh page.",
+      "effects": [
+        {
+          "text": "Mooring fees, ₽200 a district",
+          "status": "supported"
+        },
+        {
+          "text": "It moves, once a district, to any coast holding",
+          "status": "limited",
+          "waits": "Moving the base comes with the Crossing (slice 16)."
+        }
+      ]
+    },
+    {
+      "id": "house",
+      "name": "A big house",
+      "region": null,
+      "status": "supported",
+      "bg": "bg.arena.ruins",
+      "grid": "4 × 4, two floors",
+      "slots": 16,
+      "shape": [
+        "D####",
+        "C####",
+        "####.",
+        "#####"
+      ],
+      "and": "Applicants think it's respectable. So does the detective, for a while.",
+      "local": "The family that used to own it, in the gatehouse. One of them's old and remembers the ballroom.",
+      "evening": "There's a ballroom. Nobody says anything for a moment. Then somebody walks to the middle of it and their footsteps go all the way up.",
+      "effects": [
+        {
+          "text": "Applicants +1 a district",
+          "status": "limited",
+          "waits": "Comes with the long cast (slice 17)."
+        },
+        {
+          "text": "Heat's word doesn't reach \"Detective\" till 6",
+          "status": "limited",
+          "waits": "Comes with the detective's list (slice 12)."
+        }
+      ]
+    },
+    {
+      "id": "ruin",
+      "name": "A place nobody wanted",
+      "region": null,
+      "status": "supported",
+      "bg": "bg.arena.wasteland",
+      "grid": "A ruin, 16 squares",
+      "slots": 16,
+      "shape": [
+        "D###..",
+        "C.####",
+        "###.##",
+        ".#####"
+      ],
+      "regard": 1,
+      "and": "Free: no purchase, no rent. Regard +1 with the people who were already living there, and they stay.",
+      "local": "Four or five people with nowhere else. They're not on the Roster. They eat in the Mess if there's one.",
+      "evening": "There are people here already. An old man with a kettle. Nobody says anything. Hortense says: \"Is that tea?\" It is.",
+      "effects": [
+        {
+          "text": "Regard +1, once",
+          "status": "supported"
+        },
+        {
+          "text": "The player draws the grid",
+          "status": "limited",
+          "waits": "A drawn grid comes with a later slice; the ruin's shape is fixed for now."
+        }
+      ]
+    },
+    {
+      "id": "lodge",
+      "name": "The old Safari warden's lodge",
+      "region": "kanto",
+      "status": "supported",
+      "bg": "bg.arena.tall_grass",
+      "grid": "4 × 4",
+      "slots": 16,
+      "shape": [
+        "D###.",
+        "C####",
+        "#####",
+        "#####"
+      ],
+      "and": "The fence. Wild Pokémon wander the yard. Koga's district's on the doorstep and Janine's noticed.",
+      "local": "The old warden, who lost his teeth in the Safari Zone and still goes looking.",
+      "evening": "Something wanders across the yard in the dusk and doesn't hurry. Somebody says it's a Rhyhorn. Somebody says it isn't. The fence holds either way.",
+      "effects": [
+        {
+          "text": "Kits recover a day faster",
+          "status": "limited",
+          "waits": "Kit recovery comes with a later slice."
+        }
+      ]
+    },
+    {
+      "id": "burned-tower",
+      "name": "Under the Burned Tower",
+      "region": "johto",
+      "status": "disabled",
+      "waits": "Johto is slice 16.",
+      "bg": "bg.arena.ruins",
+      "grid": "3 × 5, and a basement nobody's mapped",
+      "slots": 15,
+      "and": "A Dig's Site comes with the house.",
+      "local": "Something lives in the basement.",
+      "evening": "—",
+      "effects": []
+    },
+    {
+      "id": "secret-base",
+      "name": "A secret base",
+      "region": "hoenn",
+      "status": "disabled",
+      "waits": "Hoenn is slice 16.",
+      "bg": "bg.arena.forest",
+      "grid": "Irregular; 10",
+      "slots": 10,
+      "and": "Heat for having a base is nil; children have them.",
+      "local": "The Hero's got one too, two routes over.",
+      "evening": "—",
+      "effects": []
+    },
+    {
+      "id": "underground",
+      "name": "The Underground",
+      "region": "sinnoh",
+      "status": "disabled",
+      "waits": "Sinnoh is slice 19.",
+      "bg": "bg.arena.cave",
+      "grid": "A line of 16, with branches",
+      "slots": 16,
+      "and": "Reach +4. Digging's free.",
+      "local": "The Underground Man visits and offers decorating advice.",
+      "evening": "—",
+      "effects": []
+    },
+    {
+      "id": "siding",
+      "name": "A subway siding",
+      "region": "unova",
+      "status": "disabled",
+      "waits": "Unova is slice 19.",
+      "bg": "bg.arena.factory",
+      "grid": "4 × 4, in carriages of four",
+      "slots": 16,
+      "and": "It can be shunted, once.",
+      "local": "The Subway Bosses know.",
+      "evening": "—",
+      "effects": []
+    },
+    {
+      "id": "servants-wing",
+      "name": "A château's servants' wing",
+      "region": "kalos",
+      "status": "disabled",
+      "waits": "Kalos is slice 19.",
+      "bg": "bg.arena.ruins",
+      "grid": "5 × 3",
+      "slots": 15,
+      "and": "Respectable, doubled; a yard with good soil.",
+      "local": "The château's owner hasn't been home in six years.",
+      "evening": "—",
+      "effects": []
+    },
+    {
+      "id": "megamart",
+      "name": "The abandoned megamart",
+      "region": "alola",
+      "status": "disabled",
+      "waits": "Alola is slice 20.",
+      "bg": "bg.arena.graveyard",
+      "grid": "5 × 4",
+      "slots": 20,
+      "and": "It's haunted. Properly: a Mimikyu, and it's lonely.",
+      "local": "Acerola visits it on Tuesdays.",
+      "evening": "—",
+      "effects": []
+    },
+    {
+      "id": "narrowboat",
+      "name": "A narrowboat on the canal",
+      "region": "galar",
+      "status": "disabled",
+      "waits": "Galar is slice 20.",
+      "bg": "bg.arena.sea",
+      "grid": "2 × 6 and 2 × 2",
+      "slots": 16,
+      "and": "A ship's rules, at walking pace.",
+      "local": "The lock-keeper.",
+      "evening": "—",
+      "effects": []
+    },
+    {
+      "id": "lighthouse",
+      "name": "A lighthouse keeper's cottage",
+      "region": "paldea",
+      "status": "disabled",
+      "waits": "Paldea is slice 20.",
+      "bg": "bg.arena.sea",
+      "grid": "3 × 4, and the lamp room",
+      "slots": 12,
+      "and": "The lamp room's a free Large Office.",
+      "local": "The Hero lives down the hill.",
+      "evening": "—",
+      "effects": []
+    }
+  ],
+  "rules": {
+    "days": [
+      1,
+      2,
+      3
+    ],
+    "creedDays": 4,
+    "machinesFaster": 1,
+    "moveCost": 500,
+    "moveDays": 1,
+    "sellBack": 3,
+    "sellLoyalty": -2,
+    "handedLoyalty": 1,
+    "capPerSize": 4,
+    "capMax": 20,
+    "piecesANight": 3,
+    "workshopFree": 7
+  },
+  "rooms": [
+    {
+      "id": "barracks",
+      "name": "Barracks",
+      "runsOn": "nobody",
+      "status": "supported",
+      "sizes": [
+        {
+          "cost": 2500,
+          "does": "Roster cap +4 (to 12)",
+          "looks": "Bunks. A stove. Somebody's sock",
+          "status": "supported"
+        },
+        {
+          "cost": 3750,
+          "does": "+4 (to 16)",
+          "looks": "Lockers. A table for cards",
+          "status": "supported"
+        },
+        {
+          "cost": 5000,
+          "does": "+4 (to 20). And bunks have names on",
+          "looks": "Curtains. Photographs from home. A shelf of borrowed books",
+          "status": "supported"
+        }
+      ],
+      "fx": [
+        {
+          "k": "cap",
+          "v": 4,
+          "from": 1,
+          "per": true
+        }
+      ],
+      "hand": "It runs on whoever's in it.",
+      "first": {
+        "talent": null,
+        "line": "More of us. Right. Who's training them?"
+      },
+      "says": "The beds have names on. I read them all."
+    },
+    {
+      "id": "mess",
+      "name": "The Mess",
+      "runsOn": "heart",
+      "status": "supported",
+      "sizes": [
+        {
+          "cost": 2000,
+          "does": "Loyalty +1 a district, everyone",
+          "looks": "A long table. A hatch. Stew",
+          "status": "supported"
+        },
+        {
+          "cost": 3000,
+          "does": "And applicants +1 a day",
+          "looks": "Two tables. A rota on the wall",
+          "status": "supported"
+        },
+        {
+          "cost": 4000,
+          "does": "And the Hero may eat here, if they're let",
+          "looks": "The door to the yard's propped open. There's always one more chair than people",
+          "status": "limited",
+          "waits": "The Hero at the base comes with the fires and the last room (slice 12)."
+        }
+      ],
+      "fx": [
+        {
+          "k": "loyaltyDistrict",
+          "v": 1,
+          "from": 1
+        },
+        {
+          "k": "applicants",
+          "v": 1,
+          "from": 2
+        }
+      ],
+      "hand": "\"A kitchen. Of my own. With a door that shuts.\" They open every cupboard. \"No. With a door that doesn't shut. That's the point of a kitchen. Who's peeling?\"",
+      "first": {
+        "talent": "heart",
+        "line": "Good. I'd have thought less of you."
+      },
+      "says": "They've a kitchen. Somebody offered me soup. I didn't take it. I wish I had."
+    },
+    {
+      "id": "garage",
+      "name": "The Garage",
+      "runsOn": "wheels",
+      "status": "supported",
+      "sizes": [
+        {
+          "cost": 3000,
+          "does": "Reach +2",
+          "looks": "A van. A pit. A radio playing something nobody chose",
+          "status": "supported"
+        },
+        {
+          "cost": 4500,
+          "does": "A fourth squad",
+          "looks": "Two vans. A board with keys on hooks, and a rule about the hooks",
+          "status": "supported"
+        },
+        {
+          "cost": 6000,
+          "does": "A getaway that can't fail: once a district, a failed job's \"caught\" becomes \"got away\"",
+          "looks": "A third vehicle under a tarpaulin",
+          "status": "limited",
+          "waits": "A job that can be caught comes with the Heists (slice 14)."
+        }
+      ],
+      "fx": [
+        {
+          "k": "reach",
+          "v": 2,
+          "from": 1
+        },
+        {
+          "k": "squads",
+          "v": 1,
+          "from": 2
+        }
+      ],
+      "hand": "\"I'll want the manuals. All of them. And nobody touches the seat position. I mean nobody.\" They mean the Boss.",
+      "first": {
+        "talent": "wheels",
+        "line": "Somewhere to be that isn't here. Sensible."
+      },
+      "says": "Two vans and a pit. They can be anywhere by morning."
+    },
+    {
+      "id": "counting",
+      "name": "The Counting Room",
+      "runsOn": "books",
+      "status": "supported",
+      "sizes": [
+        {
+          "cost": 3000,
+          "does": "Funds here are safe in a Raid (a tenth lost, not half)",
+          "looks": "A table. A lamp. A cash box with a combination everyone knows",
+          "status": "supported"
+        },
+        {
+          "cost": 4500,
+          "does": "Rackets +25%",
+          "looks": "A safe. Ledgers in a row, spines out, dated",
+          "status": "limited",
+          "waits": "Rackets come with the economy (slice 11)."
+        },
+        {
+          "cost": 6000,
+          "does": "The Ledger shows a day ahead",
+          "looks": "A second desk. The assistant's got a plant",
+          "status": "limited",
+          "waits": "The forecast comes with the economy (slice 11)."
+        }
+      ],
+      "fx": [
+        {
+          "k": "raidFunds",
+          "v": 10,
+          "from": 1
+        }
+      ],
+      "hand": "\"Double entry. From today. I'll need every receipt since the Founding.\" Tobi's kept his in a shoe. \"...In a shoe.\"",
+      "first": {
+        "talent": "books",
+        "line": "Before a kitchen. I see. No: I approve. I just see."
+      },
+      "says": "Two books. One's what they took. One's what they gave. Somebody's kept both up to date."
+    },
+    {
+      "id": "infirmary",
+      "name": "The Infirmary",
+      "runsOn": "heart",
+      "status": "supported",
+      "sizes": [
+        {
+          "cost": 3000,
+          "does": "Fainted Pokémon back next day",
+          "looks": "Two beds. A cabinet. A Chansey asleep on the spare one",
+          "status": "limited",
+          "waits": "Kit injuries come with a later slice; the Boss's own party is healed after every battle already."
+        },
+        {
+          "cost": 4500,
+          "does": "And people: a flaw doesn't fire while they're resting",
+          "looks": "Four beds. Screens. A kettle of its own",
+          "status": "limited",
+          "waits": "Resting comes with the Night's knocks (slice 7)."
+        },
+        {
+          "cost": 6000,
+          "does": "Free to anyone. Including whoever just raided you. Regard +1 a district",
+          "looks": "A door onto the street. A lamp over it. A sign: \"Anyone. No questions.\"",
+          "status": "supported"
+        }
+      ],
+      "fx": [
+        {
+          "k": "regardDistrict",
+          "v": 1,
+          "from": 3
+        }
+      ],
+      "hand": "\"I'll treat who comes. I won't ask what they did. If that's a problem, say so now and give the room to someone else.\"",
+      "first": {
+        "talent": "heart",
+        "line": "You're expecting us to get hurt, or you're expecting to hurt someone. Which?"
+      },
+      "says": "They patched up my Pokémon. I was there to arrest them."
+    },
+    {
+      "id": "listening",
+      "name": "The Listening Post",
+      "runsOn": "eyes",
+      "status": "supported",
+      "sizes": [
+        {
+          "cost": 4000,
+          "does": "The Hero's next step on the road",
+          "looks": "A radio. Headphones. A map with one pin",
+          "status": "supported"
+        },
+        {
+          "cost": 6000,
+          "does": "The Hero's next two. The district's holdings scouted to depth 1, free",
+          "looks": "Three radios. Tape. A wall of string that's somebody's system",
+          "status": "supported"
+        },
+        {
+          "cost": 8000,
+          "does": "The detective's next move",
+          "looks": "A switchboard. A cot",
+          "status": "supported"
+        }
+      ],
+      "fx": [
+        {
+          "k": "heroSteps",
+          "v": 1,
+          "from": 1,
+          "per": true
+        },
+        {
+          "k": "scoutFree",
+          "v": 1,
+          "from": 2
+        },
+        {
+          "k": "detective",
+          "v": 1,
+          "from": 3
+        }
+      ],
+      "hand": "\"Good. I'll need it quiet. I'll tell you what I hear and I'll tell you when I'm guessing, and you'll know which is which because I'll say.\"",
+      "first": {
+        "talent": "eyes",
+        "line": "You want to know what's coming more than you want anything else. Me too. It's not a nice way to be."
+      },
+      "says": "There's a map with my road on it. Every stop. They've known where I was the whole time and they never once—"
+    },
+    {
+      "id": "workshop",
+      "name": "The Workshop",
+      "runsOn": "hands",
+      "status": "supported",
+      "sizes": [
+        {
+          "cost": 4000,
+          "does": "One gadget a district",
+          "looks": "A bench. A vice. A glider with one wing",
+          "status": "limited",
+          "waits": "The gadgets come with the Scheme (slice 14)."
+        },
+        {
+          "cost": 6000,
+          "does": "Two. Puzzle floors cost nothing",
+          "looks": "Two benches. A lathe. A sign: TOBI: NO",
+          "status": "supported"
+        },
+        {
+          "cost": 8000,
+          "does": "A Key can be made, clean",
+          "looks": "A third bench, under a sheet",
+          "status": "limited",
+          "waits": "The Key comes with the Scheme (slice 14)."
+        }
+      ],
+      "fx": [
+        {
+          "k": "freePieces",
+          "v": 1,
+          "from": 2
+        }
+      ],
+      "hand": "\"I'd rather make a thing than take it. You know that. You knew it when you hired me.\" They run a hand along the bench. \"This'll do.\"",
+      "first": {
+        "talent": "hands",
+        "line": "Can I have a go on the lathe?"
+      },
+      "says": "Somebody builds things here. There's a note on the lathe that says TOBI: NO."
+    },
+    {
+      "id": "vault",
+      "name": "The Vault",
+      "runsOn": "nerve",
+      "status": "supported",
+      "sizes": [
+        {
+          "cost": 5000,
+          "does": "Holds two relics",
+          "looks": "An iron door. A shelf",
+          "status": "limited",
+          "waits": "Relics come with the Digs (slice 14)."
+        },
+        {
+          "cost": 7500,
+          "does": "Four. A Sign's kept as it should be",
+          "looks": "Racks. Labels. A book that says where each thing came from",
+          "status": "limited",
+          "waits": "Relics come with the Digs (slice 14)."
+        },
+        {
+          "cost": 10000,
+          "does": "The Scheme's parts can't be lost",
+          "looks": "A second door inside the first",
+          "status": "limited",
+          "waits": "The Scheme comes with slice 14."
+        }
+      ],
+      "fx": [],
+      "hand": "\"So I stand here.\" \"You stand here.\" \"And if it's you says open it, at three in the morning, and you don't look right?\" A pause. \"Then you don't open it.\" \"Right. Good. Wanted to hear you say it.\"",
+      "first": {
+        "talent": "nerve",
+        "line": "What've you got to put in it? ...No. Yet. I heard the 'yet.'"
+      },
+      "says": "A man at the door. He let me look. He said, 'Look. Don't touch. Half of it's going back.'"
+    },
+    {
+      "id": "pen",
+      "name": "The Holding Pen",
+      "runsOn": "anyone",
+      "status": "supported",
+      "line": [
+        "grey",
+        "whatever"
+      ],
+      "sizes": [
+        {
+          "cost": 2000,
+          "does": "Holds four Pokémon taken from someone",
+          "looks": "Four stalls. Straw. A water trough",
+          "status": "limited",
+          "waits": "No job takes a Pokémon yet: the Pen stands empty, with its latch."
+        },
+        {
+          "cost": 3000,
+          "does": "Eight",
+          "looks": "Eight. A drain. Somebody's put a blanket in one",
+          "status": "limited",
+          "waits": "No job takes a Pokémon yet."
+        },
+        {
+          "cost": 4000,
+          "does": "Twelve",
+          "looks": "Twelve. The blankets are in all of them now. Nobody's said who",
+          "status": "limited",
+          "waits": "No job takes a Pokémon yet."
+        }
+      ],
+      "fx": [
+        {
+          "k": "stalls",
+          "v": 4,
+          "from": 1,
+          "per": true
+        }
+      ],
+      "hand": "They take the key. They don't say anything.",
+      "first": {
+        "talent": null,
+        "line": "(Nobody says anything. They ask to be on days.)"
+      },
+      "says": "I looked for the cages. There were cards on every door."
+    },
+    {
+      "id": "lab",
+      "name": "The Shadow Lab",
+      "runsOn": "nobody",
+      "status": "disabled",
+      "waits": "No Lab at all yet (build plan slice 10's limit).",
+      "line": [
+        "whatever"
+      ],
+      "sizes": [
+        {
+          "cost": 8000,
+          "does": "One Pokémon a district: its heart's shut. Corruption +1 when built",
+          "looks": "A steel door. No window. A hum",
+          "status": "disabled",
+          "waits": "No Lab at all yet (build plan slice 10's limit)."
+        }
+      ],
+      "fx": [],
+      "hand": "Nobody volunteers.",
+      "first": {
+        "talent": null,
+        "line": "(Nobody speaks.)"
+      },
+      "says": "I'm not writing down what was in that room."
+    },
+    {
+      "id": "office",
+      "name": "The Office",
+      "runsOn": "boss",
+      "status": "supported",
+      "fixed": true,
+      "sizes": [
+        {
+          "cost": 0,
+          "does": "A desk. The Board's on the wall behind it. Night knocks happen here",
+          "looks": "A desk. A chair. A second chair, for whoever knocks",
+          "status": "supported"
+        },
+        {
+          "cost": 2000,
+          "does": "A wall: what's on it's the player's",
+          "looks": "The Wall",
+          "status": "limited",
+          "waits": "The Wall's pin-board comes with the voice (slice 18)."
+        },
+        {
+          "cost": 4000,
+          "does": "A window. Stand at it at Night; in a Raid, go out of it",
+          "looks": "The Long Window. The whole of the district, and at night, lights",
+          "status": "supported"
+        }
+      ],
+      "fx": [
+        {
+          "k": "window",
+          "v": 1,
+          "from": 3
+        }
+      ],
+      "hand": "It's the Boss's.",
+      "first": {
+        "talent": null,
+        "line": ""
+      },
+      "says": "You can see the whole town from their window."
+    },
+    {
+      "id": "creed",
+      "name": "The Creed's room",
+      "runsOn": "patron",
+      "status": "supported",
+      "lastRegion": true,
+      "sizes": [
+        {
+          "cost": 6000,
+          "does": "Where the Finale happens. Built in the last region",
+          "looks": "By the Creed",
+          "status": "limited",
+          "waits": "Built in the last region: Kanto is the first of three."
+        }
+      ],
+      "fx": [],
+      "hand": "They're asked, and say yes.",
+      "first": {
+        "talent": null,
+        "line": ""
+      },
+      "says": "Anybody can see what they're for."
+    }
+  ],
+  "creedRooms": [
+    {
+      "creed": "profit",
+      "name": "The Ledger Hall",
+      "has": "Every coin the team's taken, on shelves, in order, and under each a brass plate with whose it was"
+    },
+    {
+      "creed": "cause",
+      "name": "The Hall",
+      "has": "A stage. Chairs. The sentence on the back wall, in letters a foot high"
+    },
+    {
+      "creed": "power",
+      "name": "The Chair",
+      "has": "One seat"
+    },
+    {
+      "creed": "wonder",
+      "name": "The Engine",
+      "has": "The Means. It hums. Then it doesn't"
+    },
+    {
+      "creed": "belonging",
+      "name": "The Common Room, with the door off",
+      "has": "The kettle. The wall of names"
+    },
+    {
+      "creed": "spite",
+      "name": "The Wall",
+      "has": "A photograph. String"
+    }
+  ],
+  "adjacency": [
+    {
+      "a": "mess",
+      "b": "barracks",
+      "does": "Loyalty +1 a district. They can smell breakfast",
+      "fx": [
+        {
+          "k": "loyaltyDistrict",
+          "v": 1,
+          "from": 1
+        }
+      ],
+      "status": "supported"
+    },
+    {
+      "a": "infirmary",
+      "b": "mess",
+      "does": "The flaw Drinks stops firing. There's always someone up",
+      "fx": [],
+      "status": "limited",
+      "waits": "Flaws firing at Night come with slice 7."
+    },
+    {
+      "a": "counting",
+      "b": "office",
+      "does": "Skimming's seen at once",
+      "fx": [],
+      "status": "limited",
+      "waits": "Skims comes with the economy (slice 11)."
+    },
+    {
+      "a": "pen",
+      "b": "barracks",
+      "does": "Loyalty −1 a district. They can hear it",
+      "fx": [
+        {
+          "k": "loyaltyDistrict",
+          "v": -1,
+          "from": 1
+        }
+      ],
+      "status": "supported"
+    },
+    {
+      "a": "pen",
+      "b": "infirmary",
+      "does": "Somebody starts treating what's in the Pen. \"Since then\" gets kinder",
+      "fx": [],
+      "status": "limited",
+      "waits": "No job takes a Pokémon yet."
+    },
+    {
+      "a": "pen",
+      "b": "mess",
+      "does": "Scraps go through the hatch. Nobody's allowed to. Everyone does",
+      "fx": [],
+      "status": "supported"
+    },
+    {
+      "a": "lab",
+      "b": "*",
+      "does": "That room's Specialist asks to be moved",
+      "fx": [],
+      "status": "disabled",
+      "waits": "No Lab at all yet."
+    },
+    {
+      "a": "workshop",
+      "b": "garage",
+      "does": "Gadgets for vehicles: a getaway's odds +10%",
+      "fx": [],
+      "status": "limited",
+      "waits": "Getaways come with the Heists (slice 14)."
+    },
+    {
+      "a": "workshop",
+      "b": "vault",
+      "does": "A relic can be copied. The copy fools a buyer, not a scholar",
+      "fx": [],
+      "status": "limited",
+      "waits": "Relics come with the Digs (slice 14)."
+    },
+    {
+      "a": "listening",
+      "b": "office",
+      "does": "The Boss hears the Post's report the same Night, not at Morning",
+      "fx": [
+        {
+          "k": "postAtNight",
+          "v": 1,
+          "from": 1
+        }
+      ],
+      "status": "supported"
+    },
+    {
+      "a": "listening",
+      "b": "barracks",
+      "does": "Nobody sleeps well. Once a district the Post tells the Boss one thing",
+      "fx": [],
+      "status": "limited",
+      "waits": "Comes with the Night's knocks (slice 7)."
+    },
+    {
+      "a": "counting",
+      "b": "vault",
+      "does": "Funds in a Raid: nothing lost",
+      "fx": [
+        {
+          "k": "raidFunds",
+          "v": 0,
+          "from": 1
+        }
+      ],
+      "status": "supported"
+    },
+    {
+      "a": "counting",
+      "b": "mess",
+      "does": "The books eat at the desk. The kitchen takes it personally. A tie forms, of the bickering kind",
+      "fx": [],
+      "status": "limited",
+      "waits": "Ties come with the long cast (slice 17)."
+    },
+    {
+      "a": "garage",
+      "b": "door",
+      "does": "Squads leave a step faster. And the detective's seen the vans",
+      "fx": [],
+      "status": "limited",
+      "waits": "Comes with the detective (slice 12)."
+    },
+    {
+      "a": "infirmary",
+      "b": "door",
+      "does": "It's on the street. \"Anyone\" find it. Regard +1 a district more",
+      "fx": [
+        {
+          "k": "regardDistrict",
+          "v": 1,
+          "from": 1
+        }
+      ],
+      "status": "supported"
+    },
+    {
+      "a": "barracks",
+      "b": "door",
+      "does": "The Raid's first room's got everyone in it",
+      "fx": [
+        {
+          "k": "frontWing",
+          "v": 1,
+          "from": 1
+        }
+      ],
+      "status": "supported"
+    },
+    {
+      "a": "office",
+      "b": "door",
+      "does": "Not allowed: the game places the Office furthest",
+      "fx": [],
+      "status": "supported"
+    },
+    {
+      "a": "creed",
+      "b": "door",
+      "does": "Anybody can see what the team's for. Heat +1. Regard or Dread +1",
+      "fx": [
+        {
+          "k": "heatDistrict",
+          "v": 1,
+          "from": 1
+        }
+      ],
+      "status": "supported"
+    }
+  ],
+  "pieces": [
+    {
+      "id": "spin",
+      "name": "A spin floor",
+      "on": "floor",
+      "is": "A maze of arrows",
+      "cost": 500,
+      "rule": "A route across exists.",
+      "puzzle": "spin",
+      "workshop": true,
+      "writes": "Arrows. I went round twice."
+    },
+    {
+      "id": "warp",
+      "name": "Warp pads",
+      "on": "floor",
+      "is": "A puzzle of rooms: step on one, arrive on another",
+      "cost": 800,
+      "rule": "Every pad's reachable; the exit's reachable from the entrance.",
+      "puzzle": "warp",
+      "workshop": true,
+      "writes": "Pads. I kept arriving where I'd started."
+    },
+    {
+      "id": "switch",
+      "name": "A switch door",
+      "on": "door",
+      "is": "Find the switch",
+      "cost": 300,
+      "rule": "The switch is on the intruder's side of the door, somewhere.",
+      "lock": "switch",
+      "workshop": true,
+      "writes": "A door with no handle. The switch was two rooms back."
+    },
+    {
+      "id": "dark",
+      "name": "A dark floor",
+      "on": "floor",
+      "is": "Needs a light",
+      "cost": 400,
+      "rule": "A light's findable before it: a lamp, a Grunt's Pokémon, a window.",
+      "needs": "light",
+      "workshop": true,
+      "writes": "Dark. Somebody's Pokémon lit it for me."
+    },
+    {
+      "id": "conveyor",
+      "name": "A conveyor",
+      "on": "floor",
+      "is": "Belts that carry. Step on wrong and it's back to the door",
+      "cost": 600,
+      "rule": "One sequence of belts reaches the far side.",
+      "puzzle": "conveyor",
+      "workshop": true,
+      "writes": "Belts. Back to the door, twice."
+    },
+    {
+      "id": "ice",
+      "name": "Ice",
+      "on": "floor",
+      "is": "Slide till something stops you",
+      "cost": 500,
+      "rule": "A solution of twelve slides or fewer.",
+      "puzzle": "ice",
+      "workshop": true,
+      "writes": "Ice. I counted the slides."
+    },
+    {
+      "id": "bins",
+      "name": "Bins",
+      "on": "floor",
+      "is": "Two switches, hidden in a room of bins",
+      "cost": 400,
+      "rule": "Both are in bins.",
+      "puzzle": "bins",
+      "workshop": true,
+      "writes": "Bins. The second switch moved. The Roster thinks it's hilarious."
+    },
+    {
+      "id": "lock",
+      "name": "A locked door, and a key",
+      "on": "door",
+      "is": "A key held by a Grunt, or lying in a room",
+      "cost": 300,
+      "rule": "The key's somewhere the intruder can get before the door.",
+      "lock": "key",
+      "writes": "A locked door. The key was in a room I'd already walked through."
+    },
+    {
+      "id": "quiz",
+      "name": "A quiz door",
+      "on": "door",
+      "is": "Three questions",
+      "cost": 0,
+      "rule": "The answers have to be things a person could know: findable inside the base before the door.",
+      "lock": "quiz",
+      "writes": "A quiz. They asked me {ask} I had to go back and look."
+    },
+    {
+      "id": "plate",
+      "name": "A weighing plate",
+      "on": "floor",
+      "is": "Something heavy has to be left on it",
+      "cost": 300,
+      "rule": "The heavy thing's in an earlier room.",
+      "needs": "heavy",
+      "writes": "A plate in the floor. I carried a chair from the room before."
+    },
+    {
+      "id": "corridor",
+      "name": "A long corridor",
+      "on": "floor",
+      "is": "Nothing. It's just long",
+      "cost": 200,
+      "rule": "It costs the intruder nothing but time. A day of the Hero's, if there are three.",
+      "delay": 1,
+      "writes": "A long corridor. It was just long."
+    },
+    {
+      "id": "decoy",
+      "name": "A decoy office",
+      "on": "floor",
+      "is": "A room that looks like the last one: a desk, a chair, a wall",
+      "cost": 1500,
+      "rule": "The Hero's delayed a day. They're cross about it for the rest of the run.",
+      "delay": 3,
+      "writes": "They think this is funny."
+    },
+    {
+      "id": "backway",
+      "name": "A back way",
+      "on": "floor",
+      "is": "A door out, for the team",
+      "cost": 1000,
+      "rule": "It leads outside.",
+      "needs": "outside",
+      "writes": "A door to the outside, from the inside. For them."
+    },
+    {
+      "id": "slot",
+      "name": "A viewing slot",
+      "on": "door",
+      "is": "A hatch in a door, from the team's side",
+      "cost": 200,
+      "rule": "The Boss sees the next room's log a room early when watching.",
+      "writes": "A hatch in the door. Somebody was watching."
+    }
+  ],
+  "puzzles": {
+    "limit": 12,
+    "steps": 60,
+    "ice": [
+      {
+        "name": "The rink",
+        "rows": [
+          ".R...",
+          "....R",
+          ".....",
+          "R....",
+          "...R."
+        ]
+      },
+      {
+        "name": "The pond",
+        "rows": [
+          ".R...",
+          "...R.",
+          ".....",
+          "R....",
+          "..R.R"
+        ]
+      },
+      {
+        "name": "The slide",
+        "rows": [
+          "R...R",
+          ".R.R.",
+          ".....",
+          ".R.R.",
+          "R...R"
+        ]
+      }
+    ],
+    "spin": [
+      {
+        "name": "Round the houses",
+        "rows": [
+          ".>>v.",
+          ".^.v.",
+          ".^<<.",
+          ".....",
+          "S...S"
+        ]
+      },
+      {
+        "name": "The pinwheel",
+        "rows": [
+          ">>v..",
+          "..v..",
+          "..S..",
+          "..^..",
+          "..^<<"
+        ]
+      },
+      {
+        "name": "Straight through",
+        "rows": [
+          ".....",
+          ".....",
+          ">>>>>",
+          ".....",
+          "....."
+        ]
+      }
+    ],
+    "conveyor": [
+      {
+        "name": "The sorting line",
+        "rows": [
+          "..v..",
+          "..v..",
+          "..>>>",
+          ".....",
+          "....."
+        ]
+      },
+      {
+        "name": "Two belts",
+        "rows": [
+          ">>>>v",
+          ".....",
+          "<<<<<",
+          ".....",
+          "....."
+        ]
+      }
+    ],
+    "warp": [
+      {
+        "name": "Three pads",
+        "rows": [
+          ".#a#.",
+          ".#.#.",
+          "b###c",
+          ".#.#.",
+          ".#a#b"
+        ]
+      },
+      {
+        "name": "The cross",
+        "rows": [
+          "a#.#b",
+          "#####",
+          "..c..",
+          "#####",
+          "b#.#a"
+        ]
+      }
+    ],
+    "bins": [
+      {
+        "name": "Fifteen bins",
+        "rows": [
+          "bbbbb",
+          "b...b",
+          "b...b",
+          "b...b",
+          "bbbbb"
+        ]
+      }
+    ]
+  },
+  "quiz": [
+    {
+      "id": "creed",
+      "subject": "The team",
+      "ask": "What's this team for?",
+      "from": "common"
+    },
+    {
+      "id": "cook",
+      "subject": "The team",
+      "ask": "What's the cook's name?",
+      "from": "mess"
+    },
+    {
+      "id": "bunks",
+      "subject": "The team",
+      "ask": "How many bunks are there?",
+      "from": "barracks"
+    },
+    {
+      "id": "stalls",
+      "subject": "The team",
+      "ask": "How many are in the Pen?",
+      "from": "pen"
+    },
+    {
+      "id": "town",
+      "subject": "The district",
+      "ask": "Whose district is this?",
+      "from": "common"
+    },
+    {
+      "id": "types",
+      "subject": "Pokémon",
+      "ask": "What beats Water?",
+      "from": "common"
+    },
+    {
+      "id": "vans",
+      "subject": "The team",
+      "ask": "How many vans are there?",
+      "from": "garage"
+    }
+  ],
+  "fair": {
+    "path": "There's no way from the door to your Office. {room} is walled in.",
+    "key": "The key to door {n} is behind door {n}.",
+    "switch": "The switch for door {n} is on the wrong side of it.",
+    "puzzle": "{piece} in {room} can't be crossed. There's nothing to stop on.",
+    "light": "It's dark in {room} and there's no lamp before it.",
+    "heavy": "There's nothing heavy to put on the plate in {room}.",
+    "quiz": "Nobody could know that. Put it on a wall somewhere, or ask something else.",
+    "backway": "The back way goes to a cupboard.",
+    "dead": "Nobody can get into {room}. That includes you.",
+    "here": "Nothing can go on {room}.",
+    "ok": "A route exists. Every key's before its lock."
+  },
+  "people": {
+    "levels": {
+      "grunt": 0,
+      "lead": 0,
+      "specialist": 0,
+      "officer": 1,
+      "executive": 2
+    },
+    "bands": [
+      {
+        "min": 9,
+        "word": "Devoted",
+        "does": "again",
+        "says": "You'll have to go through me again."
+      },
+      {
+        "min": 7,
+        "word": "Easy",
+        "does": "fight",
+        "says": "Fair enough. Third door's a floor puzzle. I'm not telling you how."
+      },
+      {
+        "min": 5,
+        "word": "Steady",
+        "does": "fight",
+        "says": "Is it true there's dental? ...No, on your side. Is there."
+      },
+      {
+        "min": 3,
+        "word": "Distant",
+        "does": "aside",
+        "says": "Third door. He's not what you think. He might be. I don't know any more."
+      },
+      {
+        "min": 0,
+        "word": "Leaving",
+        "does": "opened",
+        "says": "(Nothing. They're outside, having shown the way in.)"
+      }
+    ],
+    "flaws": {
+      "proud": "They fight a level up and can't be told to stand down.",
+      "talks": "They tell the intruder one true thing about the next room, without meaning to.",
+      "kind": "They offer a Potion before the fight. They say it isn't fair otherwise.",
+      "freezes": "On a bad night they don't fight at all."
+    },
+    "classes": {
+      "grunt": "roughneck",
+      "officer": "veteran",
+      "detective": "veteran"
+    }
+  },
+  "delay": {
+    "corridors": 3,
+    "cap": 2,
+    "word": "The Hero's walk through the base: {days} day{s} longer."
+  },
+  "walk": {
+    "title": "Walk it",
+    "intro": "A borrowed party at the Hero's level. Every piece is real. Every Grunt's there, with their own kit and their own line. They don't know it's the Boss.",
+    "costs": "The in-person slot for the day. Nothing else. Nobody's hurt; kits are healed after.",
+    "gives": "Nothing on any number. It's the only way to know what it's like.",
+    "noHero": "There's nobody to borrow a party from yet: the Hero hasn't set out.",
+    "door": "The front door. It's open. It's always open to someone.",
+    "office": "The Office. Your own chair, from the wrong side of the desk.",
+    "empty": "An empty building. Footsteps. A kettle left on.",
+    "nobody": "Nobody stopped me. I don't know if that's because they couldn't or because they were told not to.",
+    "lost": "The borrowed party's done. The Hero would have stopped here, and come back tomorrow.",
+    "done": "Walked their own base.",
+    "then": "Walked their own base. Then: {what}.",
+    "same": "Walked their own base. Then: changed nothing.",
+    "aside": "{name} steps aside.",
+    "opened": "{name} isn't at the door. They're outside. They'd opened it.",
+    "again": "{name} gets up. \"You'll have to go through me again.\"",
+    "freezes": "{name} doesn't fight. They stand there.",
+    "talks": "{name}, without meaning to: \"The next room's {next}.\"",
+    "kind": "{name} offers a Potion first. \"It's not fair otherwise.\""
+  },
+  "night": {
+    "build": "Building: {room}, {size}. Ready {when}.",
+    "built": "{room} is built.",
+    "walk": "The Boss walks the base.",
+    "walkNone": "The Boss walks the base. Nobody's in any room to speak to.",
+    "walkLoyal": "{name}: Loyalty +1, for being spoken to.",
+    "window": {
+      "leaned": "A light's on over the bakery. It wasn't on last night.",
+      "work": "The bridge. You can see the lamps on it from here. Somebody's crossing.",
+      "lost": "Fewer lights in the Barracks.",
+      "quiet": "It's a town. From here it's just a town.",
+      "hero": "There's a camp-fire on the ridge. One."
+    },
+    "used": "The Night's already spent: {what}.",
+    "nightOnly": "That's a Night action.",
+    "rooms": {
+      "barracks": "Somebody's sock is still on the stove. Somebody else is reading.",
+      "mess": "The stew's on for tomorrow. \"Who's peeling?\"",
+      "garage": "The radio's still playing something nobody chose.",
+      "counting": "Two books, and a lamp. \"Both up to date.\"",
+      "infirmary": "Two beds. A Chansey asleep on the spare one; nobody's the heart to move it.",
+      "listening": "\"Heard, and think. I'll tell you which.\"",
+      "workshop": "A glider with one wing. \"It's the other one that matters.\"",
+      "vault": "\"I stand here.\"",
+      "pen": "The stalls are clean. Nobody's in them.",
+      "office": "The desk. The Board on the wall.",
+      "creed": "The room's quiet."
+    }
+  },
+  "post": {
+    "step": "The Post, heard: the Hero's next stop is {where}.",
+    "steps": "The Post, heard: the Hero's next two stops are {where}.",
+    "scouted": "The Post's had the district on the radio: every holding scouted to depth 1.",
+    "detective": "The Post, think: Heat's {heat}. At {warn} they'll know where you are."
+  },
+  "supper": "Supper. {a} sat with {b}.",
+  "built": {
+    "first": "The first room's free.",
+    "ready": "Ready by {when}."
+  },
+  "raid": {
+    "warnAt": 9,
+    "at": 10,
+    "heatAfter": 4,
+    "heatHeld": 8,
+    "funds": 50,
+    "backWay": 3,
+    "warning": "They know where you are. A detective stands in the doorway, not coming in, and says so. A day's notice.",
+    "warningPost": "The Listening Post: they know where you are. A day's notice.",
+    "lapsed": "The warning lapses. Heat's down; they'd nothing new to go on.",
+    "choices": [
+      {
+        "id": "move",
+        "name": "Move",
+        "is": "A safehouse. The base is lost: its rooms, not its people",
+        "costs": "Every room. The site",
+        "gives": "Heat −4. Everybody. The Wall, under Tobi's arm",
+        "status": "supported",
+        "heat": -4
+      },
+      {
+        "id": "empty",
+        "name": "Stay, and empty it",
+        "is": "The Holding Pen's opened. The Vault's sent away. The law finds a building",
+        "costs": "The Pen's contents (they go home). A day",
+        "gives": "The Raid still comes. It finds beds and a kitchen",
+        "status": "supported"
+      },
+      {
+        "id": "hold",
+        "name": "Stay, and hold",
+        "is": "A Raid",
+        "costs": "The Raid, wing by wing",
+        "gives": "A chance to keep the building",
+        "status": "supported"
+      },
+      {
+        "id": "station",
+        "name": "Walk into the station",
+        "is": "Caught, early, by choice",
+        "costs": "The run's ending, chosen",
+        "gives": "The courtroom's kinder to someone who came in. The Roster's not charged",
+        "status": "limited",
+        "waits": "Endings come with slice 15."
+      }
+    ],
+    "wings": [
+      {
+        "id": "front",
+        "name": "The Front",
+        "rooms": [
+          "door"
+        ],
+        "turns": 1,
+        "is": "The front door; whatever's next to it"
+      },
+      {
+        "id": "living",
+        "name": "The Living wing",
+        "rooms": [
+          "common",
+          "mess",
+          "barracks",
+          "infirmary"
+        ],
+        "turns": 3,
+        "is": "Common Room, Mess, Barracks, Infirmary"
+      },
+      {
+        "id": "working",
+        "name": "The Working wing",
+        "rooms": [
+          "counting",
+          "workshop",
+          "garage",
+          "listening",
+          "pen",
+          "lab"
+        ],
+        "turns": 2,
+        "is": "Each room's searched as it falls"
+      },
+      {
+        "id": "keep",
+        "name": "The Keep",
+        "rooms": [
+          "vault",
+          "office",
+          "creed"
+        ],
+        "turns": 1,
+        "is": "The Vault, the Office. Last"
+      }
+    ],
+    "orders": [
+      {
+        "id": "hold",
+        "name": "Hold"
+      },
+      {
+        "id": "back",
+        "name": "Fall back"
+      },
+      {
+        "id": "run",
+        "name": "Run"
+      },
+      {
+        "id": "down",
+        "name": "Stand down"
+      }
+    ],
+    "door": {
+      "knock": "The detective. Six constables with Growlithe and Arcanine. They knock; it's the rule.",
+      "open": "The door's opened. The Front's Lost without a fight. Nobody's hurt. The detective says \"Thank you,\" and means it.",
+      "force": "It's forced. {name}, at the door, fights.",
+      "forceNobody": "It's forced. Nobody's at the door.",
+      "opened": "The constables were already in the yard. {name} had opened the door."
+    },
+    "slide": "Constables aren't good at {piece}. It's in the log: an hour of policemen sliding into walls.",
+    "acts": {
+      "holds": "{name} holds. Is caught. Says nothing.",
+      "fights": "{name} fights.",
+      "turnRuns": "{name} fights a turn, then runs.",
+      "aside": "{name} steps aside. Puts their hands up. Answers what they're asked.",
+      "runs": "{name} runs.",
+      "gone": "{name} runs. Doesn't come back.",
+      "doorFor": "{name} holds a door so someone else can get out. Is caught. Says nothing.",
+      "back": "{name} falls back.",
+      "down": "{name} stands down. Nobody's hurt.",
+      "out": "{name} is out the back way.",
+      "caught": "{name} is caught.",
+      "searched": "{room} is searched.",
+      "lost": "{wing}: Lost.",
+      "contested": "{wing}: Contested.",
+      "noBack": "There's no back way. Running only goes deeper in."
+    },
+    "queue": "The back way: three a turn. Those not through in time are caught.",
+    "minor": "(sent first: the game won't let a minor be placed lower)",
+    "last": "{name} has asked to go last.",
+    "office": {
+      "speech": "\"I've been to every place you've been. A day late. I've a notebook. D'you want to know what's in it?\"",
+      "clauses": {
+        "work": "You mended something.",
+        "lean": "You leaned on someone.",
+        "waive": "You waived what you were owed when it mattered.",
+        "take": "You took what wasn't yours."
+      },
+      "never": "\"I don't know what to charge you with. I've never had to arrest someone who {middle}\"",
+      "choices": [
+        {
+          "id": "battle",
+          "name": "(Battle.)"
+        },
+        {
+          "id": "charge",
+          "name": "\"What would you charge me with?\""
+        },
+        {
+          "id": "pen",
+          "name": "(Open the Pen.)"
+        },
+        {
+          "id": "window",
+          "name": "(The window.)"
+        }
+      ],
+      "won": "They withdraw. The base is held. Heat's 8, and stays there for the region.",
+      "lost": "The detective's six win. The base is lost.",
+      "charge": "They read the list. Aloud. Item by item. Then: \"That's what I can prove. D'you want to know what I think?\"",
+      "pen": "The detective writes for a long time. \"I'm still taking you in. I'm going to say you opened it before I asked. That's not a kindness. It's what happened.\"",
+      "window": "The Boss goes out of the window. The base is lost; the Boss isn't caught; whoever's still inside is.",
+      "taken": "The Boss is taken in, and out by morning: nothing on the list holds yet. The courtroom comes at the end of the run.",
+      "noPen": "There's no Pen to open.",
+      "noWindow": "A Small Office hasn't a window. Only a Large one."
+    },
+    "detectives": [
+      {
+        "region": "kanto",
+        "name": "DS Billie Achterberg",
+        "age": 41,
+        "works": "On foot. A paper bag of chestnuts.",
+        "middle": "kept cards.",
+        "team": [
+          "Arcanine",
+          "Growlithe",
+          "Persian",
+          "Hitmonchan",
+          "Kangaskhan",
+          "Machoke"
+        ]
+      }
+    ],
+    "after": {
+      "title": "The morning after",
+      "lines": "The Roster's in a safehouse, or a field. Hortense is cooking on something. The Board's there, propped on a crate. The first job on it's \"Find somewhere.\"",
+      "funds": "Funds lost: {amount}.",
+      "fundsNone": "Funds lost: none.",
+      "rooms": "The rooms are gone. The site's gone.",
+      "deeds": "Deeds taken as evidence: {n}.",
+      "caught": "Caught: {names}. They're in the cells.",
+      "nobody": "Nobody was caught.",
+      "held": "The base is held."
+    },
+    "cells": {
+      "bail": "Bail for {name}: {amount}.",
+      "bailed": "{name} is out on bail.",
+      "visit": {
+        "holds": "\"Did they get out?\"",
+        "aside": "\"I told them everything. I'm sorry. No: I'm not. I'd nothing left to hold it in with.\"",
+        "slow": "\"I was fourth in the queue.\"",
+        "down": "\"Nobody got hurt. That's something.\""
+      },
+      "bailEach": 1000
+    }
+  },
+  "first": "Built first: {name}: \"{line}\""
+}

@@ -2,6 +2,7 @@
 // the Road between them with an Officer left behind, drift, the tally, and a soft Reckoning that ends the region and never
 // the run. Pure: new blocks are returned. Drift draws on its own stream (`evil-drift`), so no other roll moves.
 
+import { baseDelay } from './base';
 import { hashSeed, Rng } from '../rng';
 import { EVIL_DATA, type EvilData } from './data';
 import { holdingName, layDistrict, stageRow, takings } from './board';
@@ -23,7 +24,7 @@ export const dayIn = (block: Pick<EvilModeBlock, 'here' | 'district'>): number =
 /** How many days this stage lasts at most: the Arrival until the first Badge (3 or 4), the Reckoning 3, a district 7. */
 export function stageDays(block: Pick<EvilModeBlock, 'here' | 'region'>, data: EvilData = EVIL_DATA): number {
   const k = regionOn(data) ? stageKind(block.here.stage) : 'district';
-  return k === 'arrival' ? block.region.badgeDay : k === 'reckoning' ? data.region.reckoning.days : data.district.rules.days;
+  return k === 'arrival' ? block.region.badgeDay : k === 'reckoning' ? data.region.reckoning.days + baseDelay(block as EvilModeBlock, data) : data.district.rules.days;
 }
 
 /** The stage's name: "The Arrival", "District 3", "The Reckoning". */
