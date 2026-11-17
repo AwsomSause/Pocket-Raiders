@@ -20,9 +20,9 @@ export function uiMotionLevel(s: Settings): UiMotionLevel {
 
 /** Full-motion lengths in ms. Kept short so no animation ever makes input wait. */
 export const UI_TIMING = {
-  hover: 140,
+  hover: 200,
   press: 70,
-  release: 240,
+  release: 340,
   cursor: 200,
   popupOpen: 280,
   popupClose: 160,
@@ -35,7 +35,7 @@ export const UI_TIMING = {
 export type UiTimingKey = keyof typeof UI_TIMING;
 
 /** Scale changes for hover/press/release, relative to an object's rest scale. */
-export const UI_SCALE = { hover: 1.06, press: 0.93, overshoot: 1.1, popupFrom: 0.82, pageZoom: 1.035 } as const;
+export const UI_SCALE = { hover: 1.08, press: 0.9, overshoot: 1.1, popupFrom: 0.82, pageZoom: 1.035 } as const;
 
 export interface UiTween {
   /** 0 = snap straight to the end state. */
@@ -52,7 +52,7 @@ export function uiTween(key: UiTimingKey, level: UiMotionLevel, timeScale = 1, f
   if (level === 'off') return { ms: 0, ease: 'Linear', travel: 0, bounce: false };
   const base = UI_TIMING[key] * timeScale;
   if (level === 'reduced') return { ms: Math.round(Math.min(base, 160) * 0.75), ease: 'Sine.easeOut', travel: 0.25, bounce: false };
-  const ease = key === 'press' || key === 'popupClose' ? 'Quad.easeOut' : key === 'hover' || key === 'cursor' ? 'Cubic.easeOut' : 'Back.easeOut';
+  const ease = key === 'press' || key === 'popupClose' ? 'Quad.easeOut' : key === 'cursor' ? 'Cubic.easeOut' : 'Back.easeOut';
   const f = feelTween(feel);
   const keepEase = key === 'press' || key === 'popupClose' || key === 'hover' || key === 'cursor';
   return { ms: Math.round(base * f.msScale), ease: f.ease && !keepEase ? f.ease : ease, travel: 1, bounce: f.pops };

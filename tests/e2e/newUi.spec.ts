@@ -457,3 +457,16 @@ test('New UI: a lost run ends on the mock-up page; Witness the Rest, the report,
   await waitForScene(page, 'Hub');
   expect(errors).toEqual([]);
 });
+
+test('New UI: the title has its six backdrop clips under the menu, and a button springs under the pointer and still works', async ({ page }) => {
+  const errors = watch(page);
+  await start(page, 'ui=new');
+  // The backdrop is its own view, so the menu redrawing never restarts the clips.
+  await expect(page.locator('#rx .stage[data-scene="MainMenuBack"] .tclips video')).toHaveCount(6);
+  const hub = view(page, 'MainMenu').locator('.btn', { hasText: 'Enter the Hub' });
+  await hub.hover();
+  await expect(hub).toHaveClass(/\bsp\b/);
+  await hub.click();
+  await waitForScene(page, 'Hub');
+  expect(errors).toEqual([]);
+});
