@@ -48,10 +48,18 @@ test('the map shows the lead Pokémon comment and the companion event applies on
   await waitForScene(page, 'Event');
   await page.waitForTimeout(1200);
   await page.screenshot({ path: 'test-results/story-companion-event.png' });
-  await page.keyboard.press('Enter'); // Welcome them aboard
-  await page.waitForTimeout(1500);
-  expect(await page.evaluate(() => (window as any).__pkr.session.run.story.flags['ev:companion'])).toBe(1);
-  await page.keyboard.press('Enter');
+  // The pack's A Friend for the Road (Catalog Overhaul Past Allies): two intro pages, then "Welcome them aboard." (the first choice).
+  // The traveler walks this stage as a one-stage companion (the wanderer counter), which is what lets them patch your partner once per fight.
+  const friend = () => page.evaluate(() => (window as any).__pkr.session.run.itemCounters?.['wanderer-friend'] ?? 0);
+  for (let i = 0; i < 6 && (await friend()) === 0; i++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(700);
+  }
+  expect(await friend()).toBe(1);
+  for (let i = 0; i < 6 && (await page.evaluate(() => (window as any).__pkr.game.scene.isActive('Map'))) === false; i++) {
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(700);
+  }
   await waitForScene(page, 'Map');
   expect(errors).toEqual([]);
 });
