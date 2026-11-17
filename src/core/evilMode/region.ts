@@ -2,6 +2,7 @@
 // the Road between them with an Officer left behind, drift, the tally, and a soft Reckoning that ends the region and never
 // the run. Pure: new blocks are returned. Drift draws on its own stream (`evil-drift`), so no other roll moves.
 
+import voiceRaw from '../../data/evilMode/voice.json';
 import { baseDelay } from './base';
 import { hashSeed, Rng } from '../rng';
 import { EVIL_DATA, type EvilData } from './data';
@@ -271,7 +272,8 @@ export function morningNotes(block: EvilModeBlock, data: EvilData = EVIL_DATA): 
   }
   if (k === 'reckoning') out.push(regionText(data.region.reckoning.day[Math.min(2, di - 1)]!, block, data));
   if (di === 1) out.push(...block.region.notes);
-  for (const p of block.region.past) {
+  // Slice 18: with the post on, an Officer's letter comes as post (Part 25b), not as a note.
+  for (const p of voiceRaw.on ? [] : block.region.past) {
     if (!p.leftWith || (block.here.day - (p.district.from ?? 1)) % 2 !== 0) continue;
     const c = block.crew.find((x) => x.id === p.leftWith && x.where === 'away');
     if (c) out.push(`${c.name}, from ${town(p.district, data)}: ${data.region.road.letters[(block.here.day >> 1) % data.region.road.letters.length]}`);

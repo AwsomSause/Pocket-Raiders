@@ -1,0 +1,5523 @@
+{
+  "note": "Evil Mode slice 18, the voice: knocks 41 to 130 (design Part 24b and Part 24c sections 1 to 5), in slice 7's knock shape (night.json). Every knock's three answers and echoes are here; an effect slice 7 has no echo type for is a flag (listed below with what reads it). Needs that wait on a system the Night can't read yet are live: false, and their knocks are 'disabled' and say which. Numbers are starting values; none are playtested.",
+  "needs": [
+    {
+      "id": "base",
+      "live": false,
+      "says": "A base",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "bossFallen",
+      "live": false,
+      "says": "Archie, Maxie or Guzma fallen",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "corruption4",
+      "live": false,
+      "says": "Corruption 4 or more",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "creed:belonging",
+      "live": false,
+      "says": "A Belonging team, once the Creed's been tested",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "creed:cause",
+      "live": false,
+      "says": "A Cause team, once the Creed's been tested",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "creed:power",
+      "live": false,
+      "says": "A Power team, once the Creed's been tested",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "creed:profit",
+      "live": false,
+      "says": "A Profit team, once the Creed's been tested",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "creed:spite",
+      "live": false,
+      "says": "A Spite team, once the Creed's been tested",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "creed:wonder",
+      "live": false,
+      "says": "A Wonder team, once the Creed's been tested",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "dig",
+      "live": false,
+      "says": "A Dig under way (the Scheme, slice 14)",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "doctrine:beasts",
+      "live": false,
+      "says": "A Beasts team, after a kit Pokémon sat out against the Hero",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "doctrine:bruisers",
+      "live": false,
+      "says": "A Bruisers team, after a win that didn't feel like one",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "doctrine:ember",
+      "live": false,
+      "says": "An Ember team with a Dig under way",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "doctrine:ghosts",
+      "live": false,
+      "says": "A Ghosts team, in the first region",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "doctrine:machines",
+      "live": false,
+      "says": "A Machines team, after a job its plan got wrong",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "doctrine:swarm",
+      "live": false,
+      "says": "A Swarm team, after its first battle lost to the Hero",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "doctrine:tide",
+      "live": false,
+      "says": "A Tide team, in the first region",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "doctrine:tricksters",
+      "live": false,
+      "says": "A Tricksters team, after a Thief or Covet in a fight",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "feud",
+      "live": false,
+      "says": "A feud on the Roster (Part 9 section 9)",
+      "waits": "the long cast (slice 17)"
+    },
+    {
+      "id": "flag:constableWarns",
+      "live": true,
+      "says": "\"Does she know anything?\" at knock 22"
+    },
+    {
+      "id": "flag:notebookBlank",
+      "live": true,
+      "says": "The detective was told the truth at knock 27"
+    },
+    {
+      "id": "flawSecond",
+      "live": false,
+      "says": "A flaw's first knock had, a region ago (or the flaw's fired three times)",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "garrison",
+      "live": false,
+      "says": "A garrison held behind, across the water",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "guzmaGone",
+      "live": false,
+      "says": "Guzma's gone through with Lusamine",
+      "waits": "Alola, Galar, Paldea (slice 20)"
+    },
+    {
+      "id": "gymDealt",
+      "live": false,
+      "says": "A Gym dealt with (any way, or left alone)",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "heat8",
+      "live": false,
+      "says": "Heat 8 or more",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "lineClean",
+      "live": false,
+      "says": "A Clean hands team",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "lostFour",
+      "live": false,
+      "says": "Somebody who's lost four jobs in a row",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "lostJob",
+      "live": false,
+      "says": "A job a Lead led that didn't land, today",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "lysandreAll",
+      "live": false,
+      "says": "Lysandre's bargain taken: \"All sixteen or none\"",
+      "waits": "Sinnoh, Unova, Kalos (slice 19)"
+    },
+    {
+      "id": "newHire",
+      "live": false,
+      "says": "Somebody hired in the last four days",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "notPubBanned",
+      "live": false,
+      "says": "Talks wasn't told \"Stay out of the pub\" at knock 21",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "passedOver",
+      "live": false,
+      "says": "Three good jobs, and a newer Grunt made Lead",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "raidTomorrow",
+      "live": false,
+      "says": "A Raid a day away",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "region:alola",
+      "live": false,
+      "says": "Alola",
+      "waits": "Alola, Galar, Paldea (slice 20)"
+    },
+    {
+      "id": "region:kalos",
+      "live": false,
+      "says": "Kalos",
+      "waits": "Sinnoh, Unova, Kalos (slice 19)"
+    },
+    {
+      "id": "region:unova",
+      "live": false,
+      "says": "Unova",
+      "waits": "Sinnoh, Unova, Kalos (slice 19)"
+    },
+    {
+      "id": "remnantsBeside",
+      "live": false,
+      "says": "The Rocket Remnants roaming \"Beside\"",
+      "waits": "the edges (slice 21)"
+    },
+    {
+      "id": "road",
+      "live": false,
+      "says": "The Road Four on the road",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "rocketFallen",
+      "live": false,
+      "says": "Rocket fallen, by war or by the Hero",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "room:commonRoom",
+      "live": false,
+      "says": "A Common Room in the base",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "room:countingRoom",
+      "live": false,
+      "says": "A Counting Room in the base",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "room:garage",
+      "live": false,
+      "says": "A Garage in the base",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "room:infirmary",
+      "live": false,
+      "says": "An Infirmary in the base",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "room:listeningPost",
+      "live": false,
+      "says": "A Listening Post in the base",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "room:vault",
+      "live": false,
+      "says": "A Vault in the base, with something in it",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "room:workshop",
+      "live": false,
+      "says": "A Workshop in the base",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "site:alola",
+      "live": false,
+      "says": "The base is Alola's house",
+      "waits": "Alola, Galar, Paldea (slice 20)"
+    },
+    {
+      "id": "site:basement",
+      "live": false,
+      "says": "The base is Johto's basement",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "site:boat",
+      "live": false,
+      "says": "The base is Galar's narrowboat",
+      "waits": "Alola, Galar, Paldea (slice 20)"
+    },
+    {
+      "id": "site:lighthouse",
+      "live": false,
+      "says": "The base is Paldea's lighthouse",
+      "waits": "Alola, Galar, Paldea (slice 20)"
+    },
+    {
+      "id": "site:lodge",
+      "live": false,
+      "says": "The base is Kanto's lodge",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "site:siding",
+      "live": false,
+      "says": "The base is Unova's siding",
+      "waits": "Sinnoh, Unova, Kalos (slice 19)"
+    },
+    {
+      "id": "site:tree",
+      "live": false,
+      "says": "The base is Hoenn's tree",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "site:tunnel",
+      "live": false,
+      "says": "The base is Sinnoh's tunnel",
+      "waits": "Sinnoh, Unova, Kalos (slice 19)"
+    },
+    {
+      "id": "site:wing",
+      "live": false,
+      "says": "The base is Kalos's servants' wing",
+      "waits": "Sinnoh, Unova, Kalos (slice 19)"
+    },
+    {
+      "id": "snagem",
+      "live": false,
+      "says": "Snag'em in the region",
+      "waits": "the edges (slice 21)"
+    },
+    {
+      "id": "standing5",
+      "live": false,
+      "says": "Regard or Dread 5 or more",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "talentSecond",
+      "live": false,
+      "says": "Two regions of being good at the talent",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "tick5",
+      "live": false,
+      "says": "The neighbour's fifth tick has fired",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "waivedLastRegion",
+      "live": false,
+      "says": "A waiver, a region back",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "wallCutting",
+      "live": false,
+      "says": "A cutting on the Wall about a Lean or a Take",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "warOver",
+      "live": false,
+      "says": "A war with the neighbour just ended",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    },
+    {
+      "id": "window2",
+      "live": false,
+      "says": "\"Stand at the window\" used twice",
+      "waits": "the Night's wiring for knocks 41-130 (after slice 7, #1443, lands)"
+    }
+  ],
+  "flags": [
+    {
+      "id": "acerolaVisits",
+      "shown": "Acerola visits the Mimikyu on Tuesdays.",
+      "readBy": "The base"
+    },
+    {
+      "id": "adminApplicant",
+      "shown": "After the fall, they're an applicant at Specialist.",
+      "readBy": "The notice board"
+    },
+    {
+      "id": "askMeThemselves",
+      "shown": "The next fire opens with it.",
+      "readBy": "The fire (Part 19)"
+    },
+    {
+      "id": "askedNext",
+      "shown": "They're asked next time.",
+      "readBy": "Promotion"
+    },
+    {
+      "id": "asksFirst",
+      "shown": "He asks first, always.",
+      "readBy": "Promotion"
+    },
+    {
+      "id": "asksIfAllRight",
+      "shown": "\"They ask if I'm all right.\"",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "babyWaiver",
+      "shown": "A month's waiver on the Board; a photograph for the Wall.",
+      "readBy": "Tomorrow's Board"
+    },
+    {
+      "id": "backWay",
+      "shown": "A back way, free, for this region's base.",
+      "readBy": "The base (Part 17)"
+    },
+    {
+      "id": "bakerHalf",
+      "shown": "Funds, a little. Neither column.",
+      "readBy": "The Ledger"
+    },
+    {
+      "id": "bakeryFront",
+      "shown": "The bakery offers a half share, next district.",
+      "readBy": "The Board"
+    },
+    {
+      "id": "bandaged",
+      "shown": "The neighbour's opinion +1; Given +2.",
+      "readBy": "The neighbour; the count"
+    },
+    {
+      "id": "basementAlone",
+      "shown": "The basement's left alone. Noticing: Open.",
+      "readBy": "The Scheme; Morty"
+    },
+    {
+      "id": "basementDig",
+      "shown": "A Dig's Site, free.",
+      "readBy": "The Scheme"
+    },
+    {
+      "id": "beastBenched",
+      "shown": "That Pokémon sits out whenever the Hero's the opponent.",
+      "readBy": "The kit; the last room"
+    },
+    {
+      "id": "beastSits",
+      "shown": "It uses no move against the Hero's team.",
+      "readBy": "Battles against the Hero"
+    },
+    {
+      "id": "bedWork",
+      "shown": "A Work: a bed at the Clinic.",
+      "readBy": "Tomorrow's Board"
+    },
+    {
+      "id": "bestParagraph",
+      "shown": "His note on it's the best paragraph in the Scheme log.",
+      "readBy": "The Scheme screen"
+    },
+    {
+      "id": "betrayerTell",
+      "shown": "The Sit-Down's table gains a fact.",
+      "readBy": "The Sit-Down"
+    },
+    {
+      "id": "biscuitHome",
+      "shown": "\"Since then: went home. With Tam.\"",
+      "readBy": "The Office drawer"
+    },
+    {
+      "id": "bondUp",
+      "shown": "Their Pokémon's Bond +1.",
+      "readBy": "The kit"
+    },
+    {
+      "id": "booksLine",
+      "shown": "\"You learn what the numbers are about.\"",
+      "readBy": "The Hand-Off"
+    },
+    {
+      "id": "bossGrunt",
+      "shown": "A fallen Boss on the Roster, at ₽150, with a line.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "bossMakesRight",
+      "shown": "A Work in the old district every few days, unsigned.",
+      "readBy": "The district behind"
+    },
+    {
+      "id": "bossName",
+      "shown": "What the Roster calls the Boss on every card.",
+      "readBy": "The cards (Part 23)"
+    },
+    {
+      "id": "bossRunsPen",
+      "shown": "The Boss runs the Pen and writes \"Since then\".",
+      "readBy": "The Pen"
+    },
+    {
+      "id": "bottleShelf",
+      "shown": "A sealed bottle on the Common Room shelf, for the run.",
+      "readBy": "The Hero's File"
+    },
+    {
+      "id": "cafeDoors",
+      "shown": "\"There's doors that want standing in at a café.\"",
+      "readBy": "The Mess"
+    },
+    {
+      "id": "canalScout",
+      "shown": "A Scout of the whole canal, free.",
+      "readBy": "The district"
+    },
+    {
+      "id": "canneryFront",
+      "shown": "A Front on the Board tomorrow, a third cheaper.",
+      "readBy": "The Trade page"
+    },
+    {
+      "id": "cat",
+      "shown": "A cat. It likes whoever's mood is lowest.",
+      "readBy": "The base; the Hero"
+    },
+    {
+      "id": "chairTwice",
+      "shown": "\"Offered me a chair. Twice.\"",
+      "readBy": "The detective's notebook"
+    },
+    {
+      "id": "chanseyRounds",
+      "shown": "Kits recover a day faster again, for the region.",
+      "readBy": "The base"
+    },
+    {
+      "id": "childInBase",
+      "shown": "A child in the base. Never on a job, a door or in a kit.",
+      "readBy": "The Mess; a Raid (out first)"
+    },
+    {
+      "id": "coached",
+      "shown": "Their odds +10% for good, after one practice battle.",
+      "readBy": "The Card"
+    },
+    {
+      "id": "coinBoxed",
+      "shown": "It's in the box, listed: \"her mum's\".",
+      "readBy": "The Workshop list"
+    },
+    {
+      "id": "coinPostedBack",
+      "shown": "The woman's in the count at the Notice.",
+      "readBy": "The Notice (Part 22)"
+    },
+    {
+      "id": "constableMess",
+      "shown": "A constable eats in the Mess once. She's the warning before a Raid.",
+      "readBy": "The Raid (Part 17)"
+    },
+    {
+      "id": "corridorFloor",
+      "shown": "The door Grunt gave them the corridor floor anyway.",
+      "readBy": "The Morning"
+    },
+    {
+      "id": "countedApplicant",
+      "shown": "An applicant. Flaw: Freezes. Loyalty 8.",
+      "readBy": "The notice board"
+    },
+    {
+      "id": "creedWatcher",
+      "shown": "They notice first if the Ledger says a different Creed.",
+      "readBy": "The Ledger; the Speech"
+    },
+    {
+      "id": "creedWord",
+      "shown": "One word of the Creed's line may be changed.",
+      "readBy": "The notice on the door"
+    },
+    {
+      "id": "cuttingBack",
+      "shown": "It's back. Whoever hid it knocks next.",
+      "readBy": "The Wall"
+    },
+    {
+      "id": "defector",
+      "shown": "An applicant, with a line already written.",
+      "readBy": "The notice board"
+    },
+    {
+      "id": "defectorDoor",
+      "shown": "Taken in at the door if it's Belonging.",
+      "readBy": "The notice board"
+    },
+    {
+      "id": "defectorWhy",
+      "shown": "Stored: why us.",
+      "readBy": "The notice board"
+    },
+    {
+      "id": "detectiveKnowsWarned",
+      "shown": "The detective knows the Boss was warned.",
+      "readBy": "The Raid (Part 17)"
+    },
+    {
+      "id": "digStopsClean",
+      "shown": "The Dig stops. The clean way's opened.",
+      "readBy": "The Scheme (Part 22)"
+    },
+    {
+      "id": "doorOff",
+      "shown": "No Common Room door. Hear someone out is free there.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "doorPlaned",
+      "shown": "A door that shuts. A feud mends behind it.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "doubtsLastRoom",
+      "shown": "It's the Doubts line in the last room.",
+      "readBy": "The last room"
+    },
+    {
+      "id": "draughtLine",
+      "shown": "Chidi's sentence on the Scheme screen.",
+      "readBy": "The Scheme screen"
+    },
+    {
+      "id": "execApology",
+      "shown": "An apology in person by the Executive; Taken −3, put back.",
+      "readBy": "Tomorrow's Board"
+    },
+    {
+      "id": "execAsks",
+      "shown": "They ask. Something's lost, once, while they're asking.",
+      "readBy": "The Executive"
+    },
+    {
+      "id": "execWaive",
+      "shown": "Executives waive, one a district.",
+      "readBy": "The Ledger"
+    },
+    {
+      "id": "fareHome",
+      "shown": "Given +2; the neighbour's opinion +1, even at War.",
+      "readBy": "The neighbour"
+    },
+    {
+      "id": "fayeAsked",
+      "shown": "Faye may be asked at Hear someone out.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "fayeAsksLux",
+      "shown": "She asks Lux.",
+      "readBy": "The Scheme"
+    },
+    {
+      "id": "fayeTold",
+      "shown": "It was Faye.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "feudRoom",
+      "shown": "Mended by morning behind a door, or a week in the open.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "findOnDesk",
+      "shown": "The thing's on the Office desk one Night, then the Vault.",
+      "readBy": "The Hour (Part 22)"
+    },
+    {
+      "id": "flawStruck",
+      "shown": "The flaw's struck through on their card.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "forcedSitDown",
+      "shown": "A Sit-Down with Lysandre, forced.",
+      "readBy": "The neighbour"
+    },
+    {
+      "id": "fourthChannel",
+      "shown": "A fourth channel between the two sides, carrying nothing.",
+      "readBy": "The walk out (Part 23)"
+    },
+    {
+      "id": "freezesScout",
+      "shown": "Scout jobs +15%, never as the signal.",
+      "readBy": "The Card"
+    },
+    {
+      "id": "friendKnows",
+      "shown": "The Friend knows who the Boss is.",
+      "readBy": "The road (Part 20)"
+    },
+    {
+      "id": "furnished",
+      "shown": "A room furnished by trades. Free.",
+      "readBy": "The base"
+    },
+    {
+      "id": "garrisonBack",
+      "shown": "They come back. The district's held by nobody.",
+      "readBy": "The district behind"
+    },
+    {
+      "id": "garrisonWorks",
+      "shown": "The garrison does one small Work a district, free.",
+      "readBy": "The district behind"
+    },
+    {
+      "id": "giftRule",
+      "shown": "Thief and Covet skip held items that are gifts.",
+      "readBy": "Battles (the Doctrine)"
+    },
+    {
+      "id": "girlRattata",
+      "shown": "The kit's one short. The girl's got a Rattata.",
+      "readBy": "The last card (Part 23)"
+    },
+    {
+      "id": "handDownTm",
+      "shown": "Hand down: a TM, not a Pokémon, offered once.",
+      "readBy": "The Night's actions"
+    },
+    {
+      "id": "hearFree",
+      "shown": "Hear someone out, on them, tonight: free.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "heistRound",
+      "shown": "The heist's way in changes.",
+      "readBy": "The Scheme"
+    },
+    {
+      "id": "heroQuestion",
+      "shown": "The Boss's one letter to the Hero may answer it.",
+      "readBy": "The letters (Part 20)"
+    },
+    {
+      "id": "heroSaucer",
+      "shown": "A saucer on the Hero's fire.",
+      "readBy": "The fire (Part 19)"
+    },
+    {
+      "id": "hoodMother",
+      "shown": "Stored: \"My mother.\"",
+      "readBy": "The neighbour (Aether)"
+    },
+    {
+      "id": "hoodSandwich",
+      "shown": "He comes back twice, for the sandwich.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "hoodToHome",
+      "shown": "He's given the address of Skull's Home.",
+      "readBy": "The neighbour"
+    },
+    {
+      "id": "initials",
+      "shown": "The Card's Not-known field carries his initials.",
+      "readBy": "The Card"
+    },
+    {
+      "id": "insideLatch",
+      "shown": "The Pen's latch opens from inside.",
+      "readBy": "The Pen; the Hero"
+    },
+    {
+      "id": "interviewBoth",
+      "shown": "The headline: \"BOTH.\"",
+      "readBy": "The paper (slice 18)"
+    },
+    {
+      "id": "interviewBridge",
+      "shown": "The piece is kind. Six weeks on: \"WHAT THEY DIDN'T SAY\".",
+      "readBy": "The paper (slice 18)"
+    },
+    {
+      "id": "interviewNone",
+      "shown": "The piece is a guess.",
+      "readBy": "The paper (slice 18)"
+    },
+    {
+      "id": "kettleFront",
+      "shown": "His mother writes to the Front's address. The Post won't open it.",
+      "readBy": "The post"
+    },
+    {
+      "id": "kitNames",
+      "shown": "Kit Pokémon lose their numbers.",
+      "readBy": "The kit screen"
+    },
+    {
+      "id": "kitchenWork",
+      "shown": "A Work: the kitchen.",
+      "readBy": "Tomorrow's Board"
+    },
+    {
+      "id": "landlordListed",
+      "shown": "He's the first name on the detective's list.",
+      "readBy": "The detective's list"
+    },
+    {
+      "id": "landlordSings",
+      "shown": "He comes to Sunday's singing.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "laundressFurious",
+      "shown": "She's still furious.",
+      "readBy": "The district"
+    },
+    {
+      "id": "laundryShown",
+      "shown": "The Mess does the laundry properly from now.",
+      "readBy": "The Mess"
+    },
+    {
+      "id": "laundryWork",
+      "shown": "A Work: a laundry. A job against Plasma with her name on it.",
+      "readBy": "Tomorrow's Board"
+    },
+    {
+      "id": "leadLearned",
+      "shown": "That Card, next time: +5% with this Lead.",
+      "readBy": "The Card"
+    },
+    {
+      "id": "leaderAtGate",
+      "shown": "It's the Leader's line at the gate on the Reckoning's last day.",
+      "readBy": "The Reckoning (Part 21)"
+    },
+    {
+      "id": "leaseClean",
+      "shown": "The base is a lease, clean.",
+      "readBy": "The base"
+    },
+    {
+      "id": "leaveOrJob",
+      "shown": "The Board has leave, and a job that fits.",
+      "readBy": "Tomorrow's Board"
+    },
+    {
+      "id": "ledgerCorrection",
+      "shown": "A correction in the Ledger, initialled, dated, left visible.",
+      "readBy": "The courtroom (Part 23)"
+    },
+    {
+      "id": "liedToAChild",
+      "shown": "Lied to a child.",
+      "readBy": "The courtroom (Part 23), twice"
+    },
+    {
+      "id": "lineSlips",
+      "shown": "The Line slips a step, in the Log.",
+      "readBy": "The Line"
+    },
+    {
+      "id": "locksOpen",
+      "shown": "Every lock in Galar opens for the boat. Reach +2.",
+      "readBy": "The base"
+    },
+    {
+      "id": "locksmithLocal",
+      "shown": "The locksmith: persuade him and Hands +10% on locks.",
+      "readBy": "The district"
+    },
+    {
+      "id": "machineStop",
+      "shown": "Machines kits: the squad's lowest rank may halt a job.",
+      "readBy": "The Card"
+    },
+    {
+      "id": "machopPotion",
+      "shown": "The trainer's holding is one mood warmer.",
+      "readBy": "The district board"
+    },
+    {
+      "id": "mayOfficer",
+      "shown": "They can be made Officer.",
+      "readBy": "Promotion"
+    },
+    {
+      "id": "mimikyuReturns",
+      "shown": "This knock returns, till it's sat with.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "mimikyuStays",
+      "shown": "A Mimikyu: Raid squads who meet it lose a turn.",
+      "readBy": "The Raid"
+    },
+    {
+      "id": "misdreavusFollows",
+      "shown": "A Misdreavus at the edge of the Hero's party.",
+      "readBy": "The Hero's File; the last room"
+    },
+    {
+      "id": "misdreavusScout",
+      "shown": "The File's steps are exact for a district. Then it doesn't come back.",
+      "readBy": "The Hero's File"
+    },
+    {
+      "id": "moleUnsure",
+      "shown": "A slip in the mole file: \"Hortense: unsure.\"",
+      "readBy": "The mole (slice 17)"
+    },
+    {
+      "id": "mondayLine",
+      "shown": "His line on the Monday.",
+      "readBy": "The Scheme ending (Part 23)"
+    },
+    {
+      "id": "motherKnewFirst",
+      "shown": "Her mood's floor is Easy.",
+      "readBy": "The letters (Part 20)"
+    },
+    {
+      "id": "motherSandwiches",
+      "shown": "The Hero's mother comes up every few days. Her mood starts Warm.",
+      "readBy": "The letters (Part 20)"
+    },
+    {
+      "id": "namesOff",
+      "shown": "One name off the list for each Kind who knocks.",
+      "readBy": "The neighbour"
+    },
+    {
+      "id": "neverHadHeart",
+      "shown": "Giovanni: \"You've taken them. Good.\"",
+      "readBy": "The Sit-Down"
+    },
+    {
+      "id": "neverWord",
+      "shown": "\"Won't\" becomes \"Never\".",
+      "readBy": "Her card"
+    },
+    {
+      "id": "nightBattle",
+      "shown": "A battle, three each, at level: the Night's action. His kit tier +1.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "notClapping",
+      "shown": "He's the second person not clapping, if the Speech is \"only the good\".",
+      "readBy": "The Speech (Part 22)"
+    },
+    {
+      "id": "notFeud",
+      "shown": "Otis lets him past in District 5, and denies it.",
+      "readBy": "District 5"
+    },
+    {
+      "id": "notInRoom",
+      "shown": "A line on their card: \"Won't be in the room.\"",
+      "readBy": "The Hour (Part 22)"
+    },
+    {
+      "id": "notObserved",
+      "shown": "The Hero's home street is off the Post's list.",
+      "readBy": "The Hero's File"
+    },
+    {
+      "id": "notOfficerRegion",
+      "shown": "They can't be made Officer this region.",
+      "readBy": "Promotion"
+    },
+    {
+      "id": "notOurOwn",
+      "shown": "The Roster's own post and calls aren't opened.",
+      "readBy": "The Listening Post; the post"
+    },
+    {
+      "id": "oddsMinus20",
+      "shown": "Tomorrow's job there: −20%, and the Card says why.",
+      "readBy": "The Card"
+    },
+    {
+      "id": "offTheList",
+      "shown": "The detective's list never has her name on it.",
+      "readBy": "The detective's list"
+    },
+    {
+      "id": "offThreeDays",
+      "shown": "Off the Roster for three days.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "onDeck",
+      "shown": "On deck the whole way at a Crossing; never on the staying list.",
+      "readBy": "The Crossing"
+    },
+    {
+      "id": "otisFacesOut",
+      "shown": "Otis stands outside the Vault for the run, facing out.",
+      "readBy": "The base"
+    },
+    {
+      "id": "otisMug",
+      "shown": "Otis has been letting them use his mug.",
+      "readBy": "Hear someone out"
+    },
+    {
+      "id": "otisOut",
+      "shown": "Otis's Loyalty +1.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "ownerPatron",
+      "shown": "A Patron (or a second one). She funds a room.",
+      "readBy": "The base"
+    },
+    {
+      "id": "pairTrial",
+      "shown": "One job at the pair's bonus. If it lands, they're a pair.",
+      "readBy": "The Card"
+    },
+    {
+      "id": "penHandedOn",
+      "shown": "The Pen is handed to someone they named.",
+      "readBy": "The Pen"
+    },
+    {
+      "id": "penNames",
+      "shown": "Pen cards are corrected with names.",
+      "readBy": "The Pen"
+    },
+    {
+      "id": "pidgeyLine",
+      "shown": "\"She talks to the Pidgey.\"",
+      "readBy": "The Boss's letter (Part 20)"
+    },
+    {
+      "id": "plainerEarly",
+      "shown": "The Scheme screen's sentence gets plainer a step early.",
+      "readBy": "The Scheme screen"
+    },
+    {
+      "id": "plumeriaWalks",
+      "shown": "She walks. Eleven miles.",
+      "readBy": "The neighbour"
+    },
+    {
+      "id": "promise",
+      "shown": "A promise. Broken: Loyalty −2, theirs.",
+      "readBy": "The courtroom (Part 23)"
+    },
+    {
+      "id": "protonBetrayer",
+      "shown": "He'll be seen again.",
+      "readBy": "A saga (Part 15a)"
+    },
+    {
+      "id": "protonHeard",
+      "shown": "The Roster's lines read a little differently.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "pulledPunch",
+      "shown": "They pull the punch in the neighbour's next war job.",
+      "readBy": "The neighbour"
+    },
+    {
+      "id": "remnantsHired",
+      "shown": "Hired. Talent: \"Persistent.\"",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "remnantsReturn",
+      "shown": "This knock returns, three times.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "rivalAte",
+      "shown": "The Roster likes the Rival.",
+      "readBy": "The Mess"
+    },
+    {
+      "id": "rivalFought",
+      "shown": "The Rival's tier moves; the Hero hears.",
+      "readBy": "The road (Part 20)"
+    },
+    {
+      "id": "rivalWorried",
+      "shown": "\"They walk into places on their own.\"",
+      "readBy": "The road (Part 20)"
+    },
+    {
+      "id": "ruling",
+      "shown": "A ruling's kept. The heir's first quarrel's judged by it.",
+      "readBy": "The Hand-Off"
+    },
+    {
+      "id": "scaredLine",
+      "shown": "\"It didn't mind that I was scared.\"",
+      "readBy": "The Hour (Part 22)"
+    },
+    {
+      "id": "seaLine",
+      "shown": "Stored: their line about the sea.",
+      "readBy": "The courtroom (Part 23)"
+    },
+    {
+      "id": "secondPhoto",
+      "shown": "A second photograph on the Wall, if one's pinned.",
+      "readBy": "The Wall"
+    },
+    {
+      "id": "secretCat",
+      "shown": "A cat in the Garage. Everyone knows but the Boss.",
+      "readBy": "The base"
+    },
+    {
+      "id": "secretTold",
+      "shown": "You know a secret. So do they, by morning.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "shopTipsLater",
+      "shown": "The shop tips to the team by itself two districts on.",
+      "readBy": "The district"
+    },
+    {
+      "id": "shuntUsed",
+      "shown": "The one shunt, used.",
+      "readBy": "The base"
+    },
+    {
+      "id": "skittyCushion",
+      "shown": "Heat for having a base stays nil.",
+      "readBy": "The base"
+    },
+    {
+      "id": "slugmaUnknown",
+      "shown": "The Card's Not-known field: \"What the Slugma know.\"",
+      "readBy": "The Card; Noticing"
+    },
+    {
+      "id": "snagemJob",
+      "shown": "A job against Snag'em on the Board.",
+      "readBy": "Tomorrow's Board"
+    },
+    {
+      "id": "soupWork",
+      "shown": "A Work, backdated to Arrival: the shelter.",
+      "readBy": "The Ledger; the Notice"
+    },
+    {
+      "id": "staffCover",
+      "shown": "\"Respectable\" trebles. The Roster are staff when she's about.",
+      "readBy": "The base"
+    },
+    {
+      "id": "stepSandwiches",
+      "shown": "Sandwiches on the step, every few days.",
+      "readBy": "The base"
+    },
+    {
+      "id": "stipendHonest",
+      "shown": "The Scheme screen's sentence gets plainer.",
+      "readBy": "The Scheme screen"
+    },
+    {
+      "id": "stipendKept",
+      "shown": "₽800 a day, kept.",
+      "readBy": "The Scheme"
+    },
+    {
+      "id": "stipendStopped",
+      "shown": "The stipend stops.",
+      "readBy": "The Scheme"
+    },
+    {
+      "id": "strangerLine",
+      "shown": "The sentence is their card's top line.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "strayReadCard",
+      "shown": "The Stray's read a Card. The Hero's told.",
+      "readBy": "The Strategist (Part 23)"
+    },
+    {
+      "id": "straySearch",
+      "shown": "The Stray's search moves a step.",
+      "readBy": "The road (Part 20)"
+    },
+    {
+      "id": "subwayTickets",
+      "shown": "Two tickets for the Battle Subway.",
+      "readBy": "In person"
+    },
+    {
+      "id": "surplusSits",
+      "shown": "The surplus sits. She asks again at ₽50,000.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "swarmNicknames",
+      "shown": "The kit screen shows nicknames for Swarm kits.",
+      "readBy": "The Hero's File: \"Them again. One's called Gerald\""
+    },
+    {
+      "id": "talentJob",
+      "shown": "Moved to a job that uses their talent.",
+      "readBy": "Dispatch"
+    },
+    {
+      "id": "talksEar",
+      "shown": "Talks is an ear: one thing a district, as a trade.",
+      "readBy": "The neighbour"
+    },
+    {
+      "id": "tellsHeroTruth",
+      "shown": "He tells the Hero the truth at his door, unprompted.",
+      "readBy": "The Hero's marks"
+    },
+    {
+      "id": "theirTalks",
+      "shown": "The neighbour's own Talks, named; hireable at a Truce.",
+      "readBy": "The neighbour"
+    },
+    {
+      "id": "tickEarly",
+      "shown": "He tells one tick's job a day early.",
+      "readBy": "The neighbour"
+    },
+    {
+      "id": "timetable",
+      "shown": "The base can't be found by an inspection.",
+      "readBy": "The base"
+    },
+    {
+      "id": "tinMug",
+      "shown": "She carries a tin mug to drop.",
+      "readBy": "The Reckoning"
+    },
+    {
+      "id": "trayAgain",
+      "shown": "A knock next district if it's not mended.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "tunnelBackWay",
+      "shown": "A back way, and he knows it too.",
+      "readBy": "The base"
+    },
+    {
+      "id": "undergroundFlag",
+      "shown": "A hand-sewn flag, wrong colour.",
+      "readBy": "The Wall"
+    },
+    {
+      "id": "unrolledApplicant",
+      "shown": "An applicant: no talent shown, Loyalty 7 on day one.",
+      "readBy": "The notice board"
+    },
+    {
+      "id": "vanToAether",
+      "shown": "A job tonight with no Card. Skull's stance: Understanding.",
+      "readBy": "The neighbour"
+    },
+    {
+      "id": "vaultMoved",
+      "shown": "The Vault's moved one square, and it's better.",
+      "readBy": "The base"
+    },
+    {
+      "id": "vaultOut",
+      "shown": "The thing's out of play.",
+      "readBy": "The Scheme (Part 22)"
+    },
+    {
+      "id": "vaultShut",
+      "shown": "Corruption doesn't rise this district.",
+      "readBy": "The Vault"
+    },
+    {
+      "id": "voiceCourtLine",
+      "shown": "\"She'd my mother's hands.\"",
+      "readBy": "The courtroom (Part 23)"
+    },
+    {
+      "id": "wageDoubled",
+      "shown": "Their wage doubles. Somebody else hears.",
+      "readBy": "The Night"
+    },
+    {
+      "id": "wageLent",
+      "shown": "\"The Boss's wage: lent.\"",
+      "readBy": "The Ledger's last page"
+    },
+    {
+      "id": "wageRaised",
+      "shown": "Loyalty's floor for the region: 4.",
+      "readBy": "The Roster; the pension line (Part 23)"
+    },
+    {
+      "id": "wageSplit",
+      "shown": "₽14 a head. Old Obadiah frames his.",
+      "readBy": "The Wall"
+    },
+    {
+      "id": "waiverStruck",
+      "shown": "The waiver's struck from the Given column.",
+      "readBy": "The Ledger"
+    },
+    {
+      "id": "walkedRound",
+      "shown": "A custom: a new hire's walked round by a Lead on day one.",
+      "readBy": "The Roster"
+    },
+    {
+      "id": "wallEdited",
+      "shown": "The Wall: \"edited\".",
+      "readBy": "The Hero, in the Office"
+    },
+    {
+      "id": "wardenLocal",
+      "shown": "The Warden: Persuade free for the region.",
+      "readBy": "The district"
+    },
+    {
+      "id": "warnedDefend",
+      "shown": "Defend with a day's warning: the back way's count doubles.",
+      "readBy": "The Raid (Part 17)"
+    },
+    {
+      "id": "warningEarly",
+      "shown": "Heat 9's warning a day early, with a fifth choice.",
+      "readBy": "The Raid (Part 17)"
+    },
+    {
+      "id": "watchesHeir",
+      "shown": "They watch the heir stand at the window.",
+      "readBy": "The Hand-Off (Part 23)"
+    },
+    {
+      "id": "wheelsQuest",
+      "shown": "Their quest, a step.",
+      "readBy": "Quests (Part 10c)"
+    },
+    {
+      "id": "windowLine",
+      "shown": "What they see from the window, stored.",
+      "readBy": "The Hand-Off (Part 23)"
+    },
+    {
+      "id": "witnessFriend",
+      "shown": "She stands with the Witness while they read.",
+      "readBy": "The Finale (Part 22)"
+    },
+    {
+      "id": "workshopPiece",
+      "shown": "It's in the Common Room; the Hero's File mentions only it.",
+      "readBy": "The Hero's File"
+    },
+    {
+      "id": "worstJobUndo",
+      "shown": "The day's worst job gets an undo on tomorrow's Board.",
+      "readBy": "Tomorrow's Board"
+    },
+    {
+      "id": "writingStopped",
+      "shown": "\"Somebody I was writing to's stopped.\" Temper +1.",
+      "readBy": "The fire (Part 19)"
+    },
+    {
+      "id": "wrongTurning",
+      "shown": "A Grunt steps into one of the Hero's fights with the neighbour.",
+      "readBy": "The Hero's marks"
+    },
+    {
+      "id": "yardCones",
+      "shown": "A van, very slowly, and cones, in the yard of an Evening.",
+      "readBy": "The Evening"
+    }
+  ],
+  "knocks": [
+    {
+      "n": 41,
+      "title": "Swarm: “Is that all we're for?”",
+      "sun": false,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "doctrine:swarm"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(A Grunt with three Rattata.) “The kid beat all three with one move. One. I've had them since they were that big. Is that all we're for? Being three?”",
+      "answers": [
+        {
+          "say": "What're their names?",
+          "reply": "“Pip. Other Pip. And Gerald.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "swarmNicknames"
+            }
+          ]
+        },
+        {
+          "say": "Three's the point. One gets through.",
+          "reply": "“None got through.” (They go on being three.)",
+          "echo": []
+        },
+        {
+          "say": "D'you want something bigger?",
+          "reply": "“No. I want these to be enough.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "handDownTm"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 42,
+      "title": "Bruisers: the Machop",
+      "sun": false,
+      "who": {
+        "rank": "lead"
+      },
+      "needs": [
+        "doctrine:bruisers"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I won. Fair. He shook my hand. Then his Machop wouldn't look at him. I did that. I didn't think about the Machop.”",
+      "answers": [
+        {
+          "say": "Go back tomorrow. Take a Potion.",
+          "reply": "“For the Machop?” “For the Machop.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "machopPotion"
+            }
+          ]
+        },
+        {
+          "say": "That's what winning is.",
+          "reply": "“Then I'd like it to feel more like it.”",
+          "echo": []
+        },
+        {
+          "say": "Did you look at yours?",
+          "reply": "“…He looked pleased. I felt worse.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bondUp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 43,
+      "title": "Tricksters: the Amulet Coin",
+      "sun": false,
+      "who": {
+        "talent": "hands"
+      },
+      "needs": [
+        "doctrine:tricksters"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I took her Persian's Amulet Coin mid-fight. It's the Doctrine. It's also her mum's.”",
+      "answers": [
+        {
+          "say": "Post it back.",
+          "reply": "“With a note?” “No note.” “…I'm putting a note.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "coinPostedBack"
+            }
+          ]
+        },
+        {
+          "say": "It's in the box. It's ours.",
+          "reply": "“It's in the box. It's hers.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "coinBoxed"
+            }
+          ]
+        },
+        {
+          "say": "Take items in fights. Not keepsakes.",
+          "reply": "“How do I tell?” “You'll know.” “I did know. That's why I'm here.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "giftRule"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 44,
+      "title": "Beasts: half a sandwich",
+      "sun": false,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "doctrine:beasts"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“He won't fight the kid any more. Just sits. She gave him half a sandwich last week. I'm not cross. I'm asking what I do.”",
+      "answers": [
+        {
+          "say": "Don't send him at the kid.",
+          "reply": "“And if she's at my door?” “Then you'll stand at it without him.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "beastBenched"
+            }
+          ]
+        },
+        {
+          "say": "He does what he's told.",
+          "reply": "“He doesn't, though. That's what I'm telling you.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "beastSits"
+            }
+          ]
+        },
+        {
+          "say": "What kind of sandwich?",
+          "reply": "“…Egg.” (The Mess makes egg sandwiches.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bondUp"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 45,
+      "title": "Machines: the plan was wrong",
+      "sun": false,
+      "who": {
+        "rank": "specialist"
+      },
+      "needs": [
+        "doctrine:machines",
+        "room:workshop"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“They do exactly what's on the plan. I wrote the plan. Today the plan was wrong and none of them stopped.”",
+      "answers": [
+        {
+          "say": "Build in a stop.",
+          "reply": "“Who presses it?” “Whoever's nearest.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "machineStop"
+            }
+          ]
+        },
+        {
+          "say": "Write better plans.",
+          "reply": "“I will. I'd hoped for more than that.”",
+          "echo": []
+        },
+        {
+          "say": "What did they do?",
+          "reply": "“Went through a wall that had somebody's kitchen behind it. Nobody hurt. A dresser.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "kitchenWork"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 46,
+      "title": "Ghosts: the Misdreavus",
+      "sun": false,
+      "who": {
+        "talent": "eyes"
+      },
+      "needs": [
+        "doctrine:ghosts"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“My Misdreavus has been following the kid. At night. Not for us. I think it likes her.”",
+      "answers": [
+        {
+          "say": "Let it.",
+          "reply": "“It'll tell me things.” “Don't ask it.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "misdreavusFollows"
+            }
+          ]
+        },
+        {
+          "say": "Use it. That's a scout.",
+          "reply": "“It'll know I'm using it.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "misdreavusScout"
+            }
+          ]
+        },
+        {
+          "say": "Does the kid know?",
+          "reply": "“She's left a saucer out.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "heroSaucer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 47,
+      "title": "Tide: someone from inland",
+      "sun": true,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "doctrine:tide"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(A Grunt from inland.) “I'd never seen the sea. You gave me a Tentacool. I've seen it now. I think about it.”",
+      "answers": [
+        {
+          "say": "Go down tomorrow. Take the morning.",
+          "reply": "“The whole morning?”",
+          "echo": [
+            {
+              "t": "loyalty",
+              "by": 1
+            },
+            {
+              "t": "flag",
+              "id": "onDeck"
+            }
+          ]
+        },
+        {
+          "say": "What d'you think about?",
+          "reply": "“That it doesn't stop. I'd assumed it stopped somewhere.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "seaLine"
+            }
+          ]
+        },
+        {
+          "say": "It's a Tentacool. Don't get soft.",
+          "reply": "“Too late.”",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 48,
+      "title": "Ember: the second wall",
+      "sun": false,
+      "who": {
+        "rank": "specialist"
+      },
+      "needs": [
+        "doctrine:ember",
+        "dig"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“It's warm down there and it shouldn't be. The Slugma won't go past the second wall. They like warm.”",
+      "answers": [
+        {
+          "say": "Then nor do we.",
+          "reply": "“That's the Scheme's Place, past that wall.” “I know what it is.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "digStopsClean"
+            }
+          ]
+        },
+        {
+          "say": "Send a Grunt past it.",
+          "reply": "“Which one?” (They wait.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "slugmaUnknown"
+            }
+          ]
+        },
+        {
+          "say": "What do you think it is?",
+          "reply": "“I think it's asleep and we're a draught.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "draughtLine"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 49,
+      "title": "“What's it for?”",
+      "sun": false,
+      "who": {
+        "talent": "books"
+      },
+      "needs": [
+        "creed:profit"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“We made more than we need this week. That's not happened before. I've come to ask what it's for.”",
+      "answers": [
+        {
+          "say": "More.",
+          "reply": "“That's an answer. It's not a use.” (She asks again at ₽50,000, in the same words.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "surplusSits"
+            }
+          ]
+        },
+        {
+          "say": "The wage. Put it up.",
+          "reply": "“By how much?” (A tenth, or a quarter. Once.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "wageRaised"
+            }
+          ]
+        },
+        {
+          "say": "What would you do with it?",
+          "reply": "“Buy the cannery and run it properly. I've seen their books. They're a disgrace.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "canneryFront"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 50,
+      "title": "The first wage",
+      "sun": true,
+      "who": {
+        "talent": "hands",
+        "maxAge": 25
+      },
+      "needs": [
+        "creed:profit"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(Holding a parcel badly.) “I bought my mum a kettle. With the first wage. I wanted somebody to see it before I posted it.”",
+      "answers": [
+        {
+          "say": "It's a good kettle.",
+          "reply": "“It whistles.” (It was enough.)",
+          "echo": []
+        },
+        {
+          "say": "Post it from the Front. It'll have a proper stamp.",
+          "reply": "“Can I?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "kettleFront"
+            }
+          ]
+        },
+        {
+          "say": "D'you know where the money came from?",
+          "reply": "“…The bakery. I was on the bakery.” (He looks at the kettle.)",
+          "echo": [
+            {
+              "t": "team",
+              "stat": "regard",
+              "by": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 51,
+      "title": "Somebody who believes it more",
+      "sun": false,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "creed:cause"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(A Grunt who joined for the Creed.) “I've read the notice on the door every morning for a month. Today we did the opposite. I'm not leaving. I'm asking you to read it again.”",
+      "answers": [
+        {
+          "say": "(Read it.) You're right.",
+          "reply": "“I didn't want to be.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "worstJobUndo"
+            }
+          ]
+        },
+        {
+          "say": "It was necessary.",
+          "reply": "“It always is. That's on a lot of doors.”",
+          "echo": [
+            {
+              "t": "mood",
+              "by": -1
+            },
+            {
+              "t": "flag",
+              "id": "creedWatcher"
+            }
+          ]
+        },
+        {
+          "say": "Rewrite the notice, then.",
+          "reply": "“…To say what?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "creedWord"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 52,
+      "title": "Somebody who came for the wage",
+      "sun": false,
+      "who": {
+        "talent": "wheels"
+      },
+      "needs": [
+        "creed:cause"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I came for the dental. I'll be honest. But I heard the speech today and I— is it true? Any of it?”",
+      "answers": [
+        {
+          "say": "All of it.",
+          "reply": "“Blimey.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "notClapping"
+            }
+          ]
+        },
+        {
+          "say": "Most of it.",
+          "reply": "“Which bit isn't?” (You may say, from the Ledger.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "tellsHeroTruth"
+            }
+          ]
+        },
+        {
+          "say": "Does it matter, if the dental's real?",
+          "reply": "“It didn't yesterday.”",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 53,
+      "title": "A challenge",
+      "sun": true,
+      "who": {
+        "talent": "nerve"
+      },
+      "needs": [
+        "creed:power"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I'd like to fight you. Not for the chair. I want to know how far off I am.”",
+      "answers": [
+        {
+          "say": "Now. Three each.",
+          "reply": "(A battle, three against three, at level. It's the Night's action.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "nightBattle"
+            }
+          ]
+        },
+        {
+          "say": "You're not far off.",
+          "reply": "“That's not a number.”",
+          "echo": []
+        },
+        {
+          "say": "When you can beat Otis.",
+          "reply": "“Otis doesn't fight. He stands in doors.” “Then get past him.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "notFeud"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 54,
+      "title": "“Train me.”",
+      "sun": false,
+      "who": {
+        "rank": "grunt",
+        "maxLoyalty": 10
+      },
+      "needs": [
+        "creed:power",
+        "lostFour"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(A Grunt who's lost four in a row.) “I'm the worst in the building. Everyone's too kind to say. Train me, or tell me to go.”",
+      "answers": [
+        {
+          "say": "Six in the morning. The yard.",
+          "reply": "“…I didn't think you'd say yes.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "coached"
+            }
+          ]
+        },
+        {
+          "say": "You're not the worst. You're the newest.",
+          "reply": "“I've been here longer than Tobi.” “Tobi's lucky.”",
+          "echo": [
+            {
+              "t": "mood",
+              "by": 1
+            }
+          ]
+        },
+        {
+          "say": "What're you good at?",
+          "reply": "(Their talent. They'd forgotten they had one.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "talentJob"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 55,
+      "title": "Something found, and not reported",
+      "sun": false,
+      "who": {
+        "talent": "eyes",
+        "flaw": "doubts"
+      },
+      "needs": [
+        "creed:wonder",
+        "dig"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I found something at the Dig. It's small. It's old. I've not put it in the log. I wanted to hold it for a day first. Is that stealing?”",
+      "answers": [
+        {
+          "say": "Hold it for a day.",
+          "reply": "“Thank you. I'll log it Thursday.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bestParagraph"
+            }
+          ]
+        },
+        {
+          "say": "Log it now.",
+          "reply": "“Yes. Of course.” (He holds it a moment longer.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "doubtsSooner"
+            }
+          ]
+        },
+        {
+          "say": "Show me.",
+          "reply": "(It's a tooth. Or a bead. Or a child's carved Pokémon, three thousand years old.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "findOnDesk"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 56,
+      "title": "Somebody who's frightened of it",
+      "sun": false,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "creed:wonder",
+        "dig"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(A Grunt on the Dig crew.) “The others won't say. I will. I don't want to be there when it wakes. I'll dig. I'll carry. I don't want to be in the room.”",
+      "answers": [
+        {
+          "say": "You won't be.",
+          "reply": "“You'll put that on my card?” “Yes.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "notInRoom"
+            }
+          ]
+        },
+        {
+          "say": "Nobody's making you look at it.",
+          "reply": "“It'll look at me.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "scaredLine"
+            }
+          ]
+        },
+        {
+          "say": "What d'you think it'll do?",
+          "reply": "“Ask what we wanted. And we've forty answers.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "plainerEarly"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 57,
+      "title": "Somebody with nowhere else",
+      "sun": true,
+      "who": {
+        "outside": "A stranger on the step, with a bag and no coat"
+      },
+      "needs": [
+        "creed:belonging"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“The woman at the ferry said you take people.”",
+      "answers": [
+        {
+          "say": "Come in. We'll sort the rest tomorrow.",
+          "reply": "“I can't do anything. I should say.” “Can you peel?” “…Yes.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "unrolledApplicant"
+            }
+          ]
+        },
+        {
+          "say": "What happened?",
+          "reply": "(One sentence. A flat that went, a job that went, a family that didn't.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "strangerLine"
+            }
+          ]
+        },
+        {
+          "say": "We're full.",
+          "reply": "“Right. Sorry. She said— right.” (The door Grunt gives them the corridor floor anyway.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "corridorFloor"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 58,
+      "title": "“Can my brother stay?”",
+      "sun": false,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "creed:belonging"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“My brother's eleven. Our nan's gone into hospital. Can he stay? He'd not be in it. He'd just be here.”",
+      "answers": [
+        {
+          "say": "Yes. He's Hortense's till your nan's out.",
+          "reply": "“He'll eat everything.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "childInBase"
+            }
+          ]
+        },
+        {
+          "say": "A base isn't a place for a child.",
+          "reply": "“No. Nor's an empty flat.”",
+          "echo": [
+            {
+              "t": "mood",
+              "by": -1
+            },
+            {
+              "t": "flag",
+              "id": "offThreeDays"
+            }
+          ]
+        },
+        {
+          "say": "Where's the hospital?",
+          "reply": "(The district's Clinic, if there is one. If the team built it: “The one with our name on the bench.”)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bedWork"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 59,
+      "title": "“What happens when it's done?”",
+      "sun": false,
+      "who": {
+        "talent": "nerve",
+        "flaw": "proud"
+      },
+      "needs": [
+        "creed:spite"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“When we've got them. When it's finished. What happens to us?”",
+      "answers": [
+        {
+          "say": "I don't know.",
+          "reply": "“That's what I thought. I'd rather know you don't than think you do.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "mondayLine"
+            }
+          ]
+        },
+        {
+          "say": "We stop.",
+          "reply": "“And I do what? I'm forty-four. I stand in doors.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "cafeDoors"
+            }
+          ]
+        },
+        {
+          "say": "There'll be another.",
+          "reply": "“…Another them? That's not a plan. That's a habit.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "secondPhoto"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 60,
+      "title": "Somebody who met the Target",
+      "sun": false,
+      "who": {
+        "talent": "voice",
+        "flaw": "loves"
+      },
+      "needs": [
+        "creed:spite"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I met them. Today. By accident, in a queue. They held a door for me. They were— I'm sorry. They were nice.”",
+      "answers": [
+        {
+          "say": "They were nice to us once too.",
+          "reply": "“What changed?” (You may say, in a sentence.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "witnessFriend"
+            }
+          ]
+        },
+        {
+          "say": "It doesn't matter what they're like.",
+          "reply": "“It matters to what we're like.”",
+          "echo": [
+            {
+              "t": "mood",
+              "by": -1
+            }
+          ]
+        },
+        {
+          "say": "Stay away from them.",
+          "reply": "“It was a queue.”",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 61,
+      "title": "The Pen: “How d'you sleep?”",
+      "sun": false,
+      "who": {
+        "rank": "specialist"
+      },
+      "needs": [
+        "pen"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(In the doorway of the Office, the Boss asks whoever runs the Pen: “How d'you sleep?” The answer's by their flaw.)",
+      "answers": [
+        {
+          "say": "Give me the key.",
+          "reply": "(They give it. The Boss runs the Pen now. “Since then” on each card is the Boss's to write.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bossRunsPen"
+            }
+          ]
+        },
+        {
+          "say": "Who should have it?",
+          "reply": "(They name someone. A Kind names themselves: “At least I'd mind.”)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "penHandedOn"
+            }
+          ]
+        },
+        {
+          "say": "Send one home. You choose which.",
+          "reply": "(They choose. A Proud picks the Growlithe that cries, and says it's because of the noise.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "penSendHome"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 62,
+      "title": "The Vault: Otis won't open it",
+      "sun": false,
+      "who": {
+        "talent": "nerve"
+      },
+      "needs": [
+        "room:vault",
+        "corruption4"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(At the Office door, with the key on a string round his neck.) “You sent down for what's in the Vault. I'm not opening it. I'll give you the key and you can. I'm not.”",
+      "answers": [
+        {
+          "say": "(Take the key.)",
+          "reply": "“Fourteen years. First door I've not opened.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "otisFacesOut"
+            }
+          ]
+        },
+        {
+          "say": "Why?",
+          "reply": "“Because I've heard it. Through the door. It's not right, what's in there.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "vaultShut"
+            }
+          ]
+        },
+        {
+          "say": "Then nobody opens it.",
+          "reply": "“…That I can do.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "vaultOut"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 63,
+      "title": "The Infirmary: one of theirs",
+      "sun": false,
+      "who": {
+        "talent": "heart"
+      },
+      "needs": [
+        "room:infirmary"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“There's a lad in bed four. He's not ours. He's one of theirs. He came in bleeding from the hand and the sign says ‘Anyone. No questions.’ So I've not asked. I'm telling you because he's in your building.”",
+      "answers": [
+        {
+          "say": "The sign says what it says.",
+          "reply": "“Good. I'd have ignored you otherwise.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bandaged"
+            }
+          ]
+        },
+        {
+          "say": "What does he know?",
+          "reply": "“That his hand hurts. I'll not have him questioned in a bed.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "tickEarly"
+            }
+          ]
+        },
+        {
+          "say": "Get him out.",
+          "reply": "“When he can hold a cup.” (A second sign under the first: “I mean it.”)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 64,
+      "title": "The Workshop: something nobody asked for",
+      "sun": true,
+      "who": {
+        "talent": "hands"
+      },
+      "needs": [
+        "room:workshop"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I made something. Nobody asked. It's not for a job.” (A weather-vane with the team's letter on it; or a music box; or a latch for the Pen that opens from the inside.)",
+      "answers": [
+        {
+          "say": "Put it where people'll see it.",
+          "reply": "“It's only a— all right.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "workshopPiece"
+            }
+          ]
+        },
+        {
+          "say": "What's it for?",
+          "reply": "“It's not for. That's what I liked.”",
+          "echo": []
+        },
+        {
+          "say": "(If it's the latch.) Fit it.",
+          "reply": "“You know what it does.” “Yes.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "insideLatch"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 65,
+      "title": "The Listening Post: something private",
+      "sun": false,
+      "who": {
+        "talent": "eyes"
+      },
+      "needs": [
+        "room:listeningPost"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I heard something that isn't ours to hear. It's about one of us. It's not business. D'you want it?”",
+      "answers": [
+        {
+          "say": "No.",
+          "reply": "“Good. I've already forgotten it.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "notOurOwn"
+            }
+          ]
+        },
+        {
+          "say": "Is anyone in danger?",
+          "reply": "“No. Somebody's in love.”",
+          "echo": []
+        },
+        {
+          "say": "Yes.",
+          "reply": "(She tells. Somebody's secret: a debt, a child, an exam they're sitting by post. Lux tells them she told.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "secretTold"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 66,
+      "title": "The Garage: teaching Beatriz to drive",
+      "sun": true,
+      "who": {
+        "talent": "wheels"
+      },
+      "needs": [
+        "room:garage",
+        "minor"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“The kid wants to learn the van. Not for jobs. Round the yard. I said I'd ask.”",
+      "answers": [
+        {
+          "say": "Round the yard.",
+          "reply": "“I'll put cones out.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "yardCones"
+            }
+          ]
+        },
+        {
+          "say": "No.",
+          "reply": "“Fair enough. She'll learn somewhere worse.”",
+          "echo": []
+        },
+        {
+          "say": "Who taught you?",
+          "reply": "“My dad. In a milk float. I was nine.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "wheelsQuest"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 67,
+      "title": "The Counting Room: the Boss's wage",
+      "sun": false,
+      "who": {
+        "talent": "books"
+      },
+      "needs": [
+        "room:countingRoom"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“There's a wage on the sheet that's not been drawn in six weeks. It's yours.”",
+      "answers": [
+        {
+          "say": "Put it in the float.",
+          "reply": "“I'll put it down as a loan from you to us, then. I'm not having it vanish.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "wageLent"
+            }
+          ]
+        },
+        {
+          "say": "Draw it.",
+          "reply": "“In what name?” (You may type one, or not.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bossName"
+            }
+          ]
+        },
+        {
+          "say": "Split it.",
+          "reply": "“Among everyone? It's ₽14 a head.” “Among everyone.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "wageSplit"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 68,
+      "title": "The Mess: somebody's not eating",
+      "sun": false,
+      "who": {
+        "talent": "heart",
+        "flaw": "kind"
+      },
+      "needs": [
+        "messLarge"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“One of them's not eating. Three days. I'm not saying who till you say you'll not shout.”",
+      "answers": [
+        {
+          "say": "I'll not shout.",
+          "reply": "(A name. Whoever's mood is lowest.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "hearFree"
+            }
+          ]
+        },
+        {
+          "say": "Take them a tray.",
+          "reply": "“I have. It comes back.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "trayAgain"
+            }
+          ]
+        },
+        {
+          "say": "What d'you think it is?",
+          "reply": "“Homesick. Or guilty. They look the same from a serving hatch.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "moleUnsure"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 69,
+      "title": "The Common Room: the door",
+      "sun": true,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "room:commonRoom"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(Whoever was last up.) “The Common Room door sticks. Otis says take it off. Hortense says a room wants a door. They've sent me because neither'll come.”",
+      "answers": [
+        {
+          "say": "Off.",
+          "reply": "“Hortense'll say she told you.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "doorOff"
+            }
+          ]
+        },
+        {
+          "say": "Plane it.",
+          "reply": "“Faye's got a plane.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "doorPlaned"
+            }
+          ]
+        },
+        {
+          "say": "What do you think?",
+          "reply": "“I think I've never been asked what I think about a door.”",
+          "echo": [
+            {
+              "t": "mood",
+              "by": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 70,
+      "title": "The Wall: something's been taken down",
+      "sun": false,
+      "who": {
+        "talent": "hands",
+        "flaw": "talks"
+      },
+      "needs": [
+        "wallCutting"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“Somebody's taken the cutting down. The one about the docks. It wasn't me. It's not a good cutting. But it happened.”",
+      "answers": [
+        {
+          "say": "Put it back up.",
+          "reply": "“I'll need to find it.” (It's in someone's locker.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "cuttingBack"
+            }
+          ]
+        },
+        {
+          "say": "Leave it down.",
+          "reply": "“Then the Wall's only the nice ones.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "wallEdited"
+            }
+          ]
+        },
+        {
+          "say": "Who d'you think?",
+          "reply": "“Faye. She was on the docks. She won't say.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "fayeAsked"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 71,
+      "title": "The cat",
+      "sun": true,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "base"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(The door Grunt.) “There's a cat. It came in with the coal. Is it ours?”",
+      "answers": [
+        {
+          "say": "It is now.",
+          "reply": "“What's it called?” (Type it, or leave it to a vote.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "cat"
+            }
+          ]
+        },
+        {
+          "say": "Whose was it?",
+          "reply": "“Nobody's. I asked down the street.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "cat"
+            },
+            {
+              "t": "team",
+              "stat": "regard",
+              "by": 1
+            }
+          ]
+        },
+        {
+          "say": "No.",
+          "reply": "“I'll put it out.” (They don't. It's in the Garage. Tomasz feeds it.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "secretCat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 72,
+      "title": "The Long Window",
+      "sun": false,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "window2"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(Somebody passing the Office door late, who stops.) “You've been stood there an hour. …Can you see the Centre from here? I never knew that.”",
+      "answers": [
+        {
+          "say": "Come and look.",
+          "reply": "(They do. They point out their own street, or where it'd be.)",
+          "echo": [
+            {
+              "t": "mood",
+              "by": 1
+            },
+            {
+              "t": "flag",
+              "id": "watchesHeir"
+            }
+          ]
+        },
+        {
+          "say": "What d'you see when you look out?",
+          "reply": "(By flaw. A Proud: “What we've got.” A Kind: “Who's still got their lights on.”)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "windowLine"
+            }
+          ]
+        },
+        {
+          "say": "Go to bed.",
+          "reply": "“You as well.” (They're right.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 73,
+      "title": "Skims, again",
+      "sun": false,
+      "who": {
+        "flaw": "skims"
+      },
+      "needs": [
+        "flawSecond"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“You told me to ask. I'm asking. It's four hundred this time. I'll tell you what it's for if you want. I'd rather you didn't want.” (Off the money since the first time: “I've been honest for a region. It's been awful. I'd like to be trusted with it again and see if I can do it on purpose.”)",
+      "answers": [
+        {
+          "say": "Take it. I don't need to know.",
+          "reply": "“…It's not for me. I'll say that much.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "flawStruck"
+            }
+          ]
+        },
+        {
+          "say": "What's it for?",
+          "reply": "(He says. His sister. Then her landlord. He's been paying a stranger's rent since Region 1.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "flawStruck"
+            }
+          ]
+        },
+        {
+          "say": "No.",
+          "reply": "“No. Right. That's allowed.”",
+          "echo": [
+            {
+              "t": "mood",
+              "by": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 74,
+      "title": "Drinks, again",
+      "sun": false,
+      "who": {
+        "flaw": "drinks"
+      },
+      "needs": [
+        "flawSecond"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(Sober, at an odd hour.) “It's a month. I've not said. I'm saying to you because you've got the bottle and you've never once looked at the drawer when I've come in.”",
+      "answers": [
+        {
+          "say": "A month's a month.",
+          "reply": "“It is.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "flawStruck"
+            }
+          ]
+        },
+        {
+          "say": "(Open the drawer. Give it back.) It's yours. Whether you open it's yours too.",
+          "reply": "(He takes it. He puts it on the Common Room shelf, sealed, in full view.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bottleShelf"
+            }
+          ]
+        },
+        {
+          "say": "And the one in the cistern?",
+          "reply": "“Hortense found it. She made a trifle.”",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 75,
+      "title": "Doubts, again",
+      "sun": false,
+      "who": {
+        "flaw": "doubts"
+      },
+      "needs": [
+        "flawSecond"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I stopped again. This time I was right. There was a child asleep in the back room. I'd like it noted that I was right, because I never know.”",
+      "answers": [
+        {
+          "say": "Noted. In the Log. In your name.",
+          "reply": "“In my name?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "initials"
+            }
+          ]
+        },
+        {
+          "say": "You were lucky.",
+          "reply": "“Probably. I'd still stop.”",
+          "echo": []
+        },
+        {
+          "say": "How d'you know when to?",
+          "reply": "“I don't. I stop when I'd be ashamed to keep going. It's not a method.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "doubtsLastRoom"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 76,
+      "title": "Talks, again",
+      "sun": false,
+      "who": {
+        "flaw": "talks"
+      },
+      "needs": [
+        "flawSecond",
+        "notPubBanned"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I've been at the pub. I didn't say anything. I heard something.”",
+      "answers": [
+        {
+          "say": "Go on.",
+          "reply": "(A fact about the neighbour: a tick's day; who their handler's seeing.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "talksEar"
+            }
+          ]
+        },
+        {
+          "say": "Who told you?",
+          "reply": "“A lad from theirs. He talks more than me.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "theirTalks"
+            }
+          ]
+        },
+        {
+          "say": "Did you buy him a drink?",
+          "reply": "“Three.” (Ngozi puts three drinks on the Ledger under “Intelligence”.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 77,
+      "title": "Loves someone on the other side, again",
+      "sun": false,
+      "who": {
+        "flaw": "loves"
+      },
+      "needs": [
+        "flawSecond",
+        "flag:constableWarns"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“She knows. I told her. She's not gone to her sergeant. She's asked to meet you.”",
+      "answers": [
+        {
+          "say": "Bring her to the Mess.",
+          "reply": "“In uniform?” “In a coat.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "constableMess"
+            }
+          ]
+        },
+        {
+          "say": "No.",
+          "reply": "“I'll tell her you said that kindly.”",
+          "echo": []
+        },
+        {
+          "say": "What does she want?",
+          "reply": "“To know if she'd have to arrest me. I said I didn't know.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "offTheList"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 78,
+      "title": "Proud, again",
+      "sun": false,
+      "who": {
+        "flaw": "proud",
+        "talent": "books"
+      },
+      "needs": [
+        "flawSecond"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I've made an error. In the Ledger. ₽3,000, three weeks back. Nobody's caught it. Nobody would. I've come to say so before I correct it, because I'd not have believed me if I'd only said after.”",
+      "answers": [
+        {
+          "say": "Correct it.",
+          "reply": "“That's all?” “That's all.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "ledgerCorrection"
+            }
+          ]
+        },
+        {
+          "say": "Why tell me?",
+          "reply": "“Because I'd know.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "ledgerCorrection"
+            }
+          ]
+        },
+        {
+          "say": "I'd never have found it.",
+          "reply": "“That's what I can't stand.”",
+          "echo": [
+            {
+              "t": "mood",
+              "by": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 79,
+      "title": "Kind, again",
+      "sun": false,
+      "who": {
+        "flaw": "kind"
+      },
+      "needs": [
+        "flawSecond"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I've been sending the leftovers down to the shelter. Out the back. Every night since the first town. I've come to tell you it's about a tenth of the food bill.”",
+      "answers": [
+        {
+          "say": "Put it on the Ledger. As a Work.",
+          "reply": "“It's soup.” “It's a Work.”",
+          "echo": [
+            {
+              "t": "team",
+              "stat": "regard",
+              "by": 1
+            },
+            {
+              "t": "flag",
+              "id": "soupWork"
+            }
+          ]
+        },
+        {
+          "say": "Make it a fifth.",
+          "reply": "“…I'll need another pan.”",
+          "echo": [
+            {
+              "t": "team",
+              "stat": "regard",
+              "by": 1
+            },
+            {
+              "t": "flag",
+              "id": "soupWork"
+            }
+          ]
+        },
+        {
+          "say": "It stops.",
+          "reply": "“No.” (That's the whole answer. It doesn't stop.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 80,
+      "title": "Freezes",
+      "sun": false,
+      "who": {
+        "flaw": "freezes"
+      },
+      "needs": [
+        "flawFired"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I didn't move. At the lookout. I saw them coming and I didn't whistle. I know I'm only on lookouts. I can't even do the one thing.”",
+      "answers": [
+        {
+          "say": "What did you see?",
+          "reply": "(Everything. How many, which way, what they carried. She froze and she saw it all.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "freezesScout"
+            }
+          ]
+        },
+        {
+          "say": "Next time, drop something.",
+          "reply": "“Drop—” “Anything. A noise is a noise.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "tinMug"
+            }
+          ]
+        },
+        {
+          "say": "You're off lookouts.",
+          "reply": "“What's left?” (The map table. She's better at it.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "mapTable"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 81,
+      "title": "Voice: the speech she didn't give",
+      "sun": false,
+      "who": {
+        "talent": "voice"
+      },
+      "needs": [
+        "talentSecond"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I'd a woman at the door today I could've talked round in a minute. I didn't. I told her to keep her shop. I don't know what came over me.”",
+      "answers": [
+        {
+          "say": "Good.",
+          "reply": "“It cost us a holding.” “I can count.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "shopTipsLater"
+            }
+          ]
+        },
+        {
+          "say": "What did come over you?",
+          "reply": "“She'd my mother's hands.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "voiceCourtLine"
+            }
+          ]
+        },
+        {
+          "say": "Go back tomorrow.",
+          "reply": "“I'll go. I'll not do it well.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "oddsMinus20"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 82,
+      "title": "Hands: the lock she couldn't",
+      "sun": false,
+      "who": {
+        "talent": "hands"
+      },
+      "needs": [
+        "talentSecond"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“There's a lock in this town I can't do. Four tries. I'm telling you because I've never said that sentence.”",
+      "answers": [
+        {
+          "say": "Whose is it?",
+          "reply": "“A locksmith's. Retired. It's on his own front door. I think it's a joke.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "locksmithLocal"
+            }
+          ]
+        },
+        {
+          "say": "Then we go round.",
+          "reply": "“I know we go round.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "heistRound"
+            }
+          ]
+        },
+        {
+          "say": "Try a fifth.",
+          "reply": "(She does. It doesn't open. A note's pushed under it from inside: “Nearly.”)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "locksmithLocal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 83,
+      "title": "Eyes: something she wishes she'd not seen",
+      "sun": false,
+      "who": {
+        "talent": "eyes"
+      },
+      "needs": [
+        "talentSecond"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I saw the kid's mum today. Through the long lens. Hanging washing. I wasn't looking for her. I've not been able to un-see it.”",
+      "answers": [
+        {
+          "say": "Take the lens off that street.",
+          "reply": "“For good?” “For good.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "notObserved"
+            }
+          ]
+        },
+        {
+          "say": "What was she like?",
+          "reply": "“She pegs from the left. She talks to the Pidgey.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "pidgeyLine"
+            }
+          ]
+        },
+        {
+          "say": "It's the job.",
+          "reply": "“It's somebody's back garden.”",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 84,
+      "title": "Nerve: afraid for somebody else",
+      "sun": false,
+      "who": {
+        "talent": "nerve"
+      },
+      "needs": [
+        "talentSecond",
+        "neighbour"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I'm not scared of the kid. I'm scared for the kid. They went into the other lot's place on their own today. I watched them go in. I nearly followed.”",
+      "answers": [
+        {
+          "say": "Next time, follow.",
+          "reply": "“As what?” “As a bloke who happened to be passing.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "wrongTurning"
+            }
+          ]
+        },
+        {
+          "say": "They can handle it.",
+          "reply": "“They're a kid.”",
+          "echo": []
+        },
+        {
+          "say": "Why ‘nearly’?",
+          "reply": "“Because I'd not asked you.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "asksFirst"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 85,
+      "title": "Books: a number that's a person",
+      "sun": false,
+      "who": {
+        "talent": "books"
+      },
+      "needs": [
+        "talentSecond",
+        "heldLocal"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“Line forty in the Ledger's been paying since the first week. Never late. Today it's short by eleven. In thirty years, when a good payer's short by eleven, somebody's died or somebody's been born.”",
+      "answers": [
+        {
+          "say": "Find out which.",
+          "reply": "“I have. It's born. A girl.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "babyWaiver"
+            }
+          ]
+        },
+        {
+          "say": "Eleven's eleven.",
+          "reply": "“It is. I'll chase it.” (He doesn't. He pays the eleven himself.)",
+          "echo": []
+        },
+        {
+          "say": "How d'you know that?",
+          "reply": "“Three Bosses. You learn what the numbers are about.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "booksLine"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 86,
+      "title": "Wheels: the road not taken",
+      "sun": true,
+      "who": {
+        "talent": "wheels"
+      },
+      "needs": [
+        "talentSecond"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“There's a road out of this region the maps don't have. I found it Sunday. I've not told the neighbour and I've not told the police. I'm telling you third. I could've told you first.”",
+      "answers": [
+        {
+          "say": "Third's fine.",
+          "reply": "“…I thought you'd be angry.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "backWay"
+            }
+          ]
+        },
+        {
+          "say": "Who's first?",
+          "reply": "“The old lady. It goes past hers.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "wheelsQuest"
+            }
+          ]
+        },
+        {
+          "say": "Don't tell anyone else.",
+          "reply": "“Who'd I tell?” (He tells Tomasz, who's thrilled.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 87,
+      "title": "Heart: the one she couldn't mend",
+      "sun": false,
+      "who": {
+        "talent": "heart"
+      },
+      "needs": [
+        "talentSecond"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“There's a Grunt I can't fix. Nothing's broken. They're sad, and I've no bandage for it. I'm reporting a patient I can't treat.”",
+      "answers": [
+        {
+          "say": "Who?",
+          "reply": "(A name. The lowest mood on the Roster.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "hearFree"
+            }
+          ]
+        },
+        {
+          "say": "What would you prescribe?",
+          "reply": "“A week at home. Or one good job. They'd know which.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "leaveOrJob"
+            }
+          ]
+        },
+        {
+          "say": "That's not your department.",
+          "reply": "“It's the only one I've got.” (She tries anyway.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 88,
+      "title": "A Grunt's first week",
+      "sun": true,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "newHire"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(Somebody hired four days ago.) “I don't know where anything is. I don't know who to ask. I've been using the wrong mug since Tuesday and somebody's been letting me.”",
+      "answers": [
+        {
+          "say": "Whose mug?",
+          "reply": "“Otis's.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "otisMug"
+            }
+          ]
+        },
+        {
+          "say": "Ask Hortense. For everything.",
+          "reply": "“Everything?” “She'll tell you when it's not hers to answer.”",
+          "echo": [
+            {
+              "t": "loyalty",
+              "by": 1
+            }
+          ]
+        },
+        {
+          "say": "Nobody showed you round?",
+          "reply": "“Tobi did. He got lost.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "walkedRound"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 89,
+      "title": "Passed over",
+      "sun": false,
+      "who": {
+        "rank": "grunt",
+        "minLoyalty": 3
+      },
+      "needs": [
+        "passedOver"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(Somebody who's done three jobs well and watched a newer Grunt made Lead.) “I'm not asking for it. I'm asking what I did.”",
+      "answers": [
+        {
+          "say": "(The truth.)",
+          "reply": "“Right. That's fair.” (Or, if you just picked: “So nothing. I did nothing.”)",
+          "echo": []
+        },
+        {
+          "say": "You're next.",
+          "reply": "“I'll hold you to it.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "promise"
+            }
+          ]
+        },
+        {
+          "say": "D'you want it?",
+          "reply": "“…No. I want to have been asked.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "askedNext"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 90,
+      "title": "A Lead who lost one",
+      "sun": false,
+      "who": {
+        "rank": "lead"
+      },
+      "needs": [
+        "lostJob"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(Still in their coat.) “We lost the job. It was me. I called it early. I'd like you to hear it from me before you read it on the Board.”",
+      "answers": [
+        {
+          "say": "What'd you do differently?",
+          "reply": "(One thing. It's the job's Not-known field, learned.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "leadLearned"
+            }
+          ]
+        },
+        {
+          "say": "It was the odds. I set them.",
+          "reply": "“You printed them. I read them. I still called it early.”",
+          "echo": [
+            {
+              "t": "mood",
+              "by": 1
+            }
+          ]
+        },
+        {
+          "say": "It's on the Board already.",
+          "reply": "“I know. I wanted it said out loud as well.”",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 91,
+      "title": "A Specialist disagrees",
+      "sun": false,
+      "who": {
+        "rank": "specialist"
+      },
+      "needs": [],
+      "shut": true,
+      "report": false,
+      "status": "supported",
+      "says": "“You were wrong today. It's my talent, so I'm saying it. I'd not be any use to you if I didn't.”",
+      "answers": [
+        {
+          "say": "You're right.",
+          "reply": "“…Thank you.” (They can be made Officer.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "mayOfficer"
+            }
+          ]
+        },
+        {
+          "say": "I hear you. I'd do it again.",
+          "reply": "“Then I've said it and you've heard it. That's what I came for.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "mayOfficer"
+            }
+          ]
+        },
+        {
+          "say": "That's not yours to say.",
+          "reply": "“It's exactly mine. It's my talent.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "notOfficerRegion"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 92,
+      "title": "An Executive reports: a mercy",
+      "sun": false,
+      "who": {
+        "rank": "executive"
+      },
+      "needs": [],
+      "shut": true,
+      "report": false,
+      "status": "supported",
+      "says": "“I let the cannery off the month. You weren't here. They'd had a fire. I'm not asking; I'm telling you what I did with your name.”",
+      "answers": [
+        {
+          "say": "Good.",
+          "reply": "“I thought you'd say that. I'd have done it if you wouldn't.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "execWaive"
+            }
+          ]
+        },
+        {
+          "say": "Ask me next time.",
+          "reply": "“There wasn't a next time. There was a fire.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "execAsks"
+            }
+          ]
+        },
+        {
+          "say": "What did it cost us?",
+          "reply": "“₽900 and nothing.” (Ngozi's put it under “Weather”.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 93,
+      "title": "An Executive reports: something you wouldn't have done",
+      "sun": false,
+      "who": {
+        "rank": "executive"
+      },
+      "needs": [
+        "lineClean"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I Leaned on the ferryman. You've never Leaned on anyone. I know. It was that or lose the launch. I'd like you to say what you'd have done, so I know for next time.”",
+      "answers": [
+        {
+          "say": "Lost the launch.",
+          "reply": "“…Then I'll go and see him tomorrow.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "execApology"
+            }
+          ]
+        },
+        {
+          "say": "The same.",
+          "reply": "“You've never said that before.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "lineSlips"
+            }
+          ]
+        },
+        {
+          "say": "What did the ferryman say?",
+          "reply": "“‘I knew you lot'd get round to it.’”",
+          "echo": [
+            {
+              "t": "localMood",
+              "by": -1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 94,
+      "title": "A feud",
+      "sun": false,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "feud"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(Two people in the doorway at once, not looking at each other.) “You say.” “No, you say.”",
+      "answers": [
+        {
+          "say": "One at a time. You first.",
+          "reply": "(The first's version. Then the second's. They don't match, and neither's lying.)",
+          "echo": [
+            {
+              "t": "mood",
+              "by": -1
+            }
+          ]
+        },
+        {
+          "say": "I'm not settling it. You are. Common Room. Now.",
+          "reply": "“With the door shut?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "feudRoom"
+            }
+          ]
+        },
+        {
+          "say": "(Hand down: a ruling.)",
+          "reply": "(They take it.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "ruling"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 95,
+      "title": "Friends",
+      "sun": true,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [],
+      "shut": true,
+      "report": false,
+      "status": "supported",
+      "says": "(Two Grunts.) “Can we be on the same squad? We're better together. We've no proof. We just are.”",
+      "answers": [
+        {
+          "say": "From tomorrow.",
+          "reply": "“Told you they'd say yes.” “You said they'd say no.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "standingPair"
+            }
+          ]
+        },
+        {
+          "say": "Prove it.",
+          "reply": "“How?” “One job. Tomorrow. I'll watch the odds.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "pairTrial"
+            }
+          ]
+        },
+        {
+          "say": "You'll talk all day.",
+          "reply": "“We do that anyway. Across the yard. It's worse.”",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 96,
+      "title": "A letter from a garrison",
+      "sun": false,
+      "who": {
+        "outside": "A letter, from a garrison"
+      },
+      "needs": [
+        "garrison"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“Boss. It's quiet here. That's the report. Unofficially: the baker's daughter's teaching Dov to read music and he's dreadful. We've mended the fence at the allotments without being asked. Is that all right? We weren't sure if we were still yours.”",
+      "answers": [
+        {
+          "say": "(Write:) “You are. Mend what you like.”",
+          "reply": "(The garrison does one small Work a district, unasked, free.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "garrisonWorks"
+            }
+          ]
+        },
+        {
+          "say": "(Write:) “Hold the line. Nothing more.”",
+          "reply": "(It holds. The next letter's two sentences.)",
+          "echo": []
+        },
+        {
+          "say": "(Write:) “Come back.”",
+          "reply": "(They do. The district's held by nobody.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "garrisonBack"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 97,
+      "title": "Poached",
+      "sun": false,
+      "who": {
+        "minLoyalty": 3
+      },
+      "needs": [
+        "neighbour"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(Somebody good.) “Theirs have offered me double. I've not said yes. I've not said no. I thought you should get to say something.”",
+      "answers": [
+        {
+          "say": "What d'you want to do?",
+          "reply": "“Stay. I wanted to hear if you'd ask or just match it.”",
+          "echo": [
+            {
+              "t": "loyalty",
+              "by": 1
+            }
+          ]
+        },
+        {
+          "say": "I'll match it.",
+          "reply": "“Then I'm worth double. I'd wondered.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "wageDoubled"
+            }
+          ]
+        },
+        {
+          "say": "Go. With my hand.",
+          "reply": "“…I didn't think you'd make it easy.”",
+          "echo": [
+            {
+              "t": "leave",
+              "how": "handshake"
+            },
+            {
+              "t": "flag",
+              "id": "pulledPunch"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 98,
+      "title": "Faye, after the list",
+      "sun": false,
+      "who": {
+        "flaw": "kind",
+        "talent": "hands"
+      },
+      "needs": [
+        "region:kalos",
+        "lysandreAll"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“You put my name on a list of people who get to live. I didn't ask. Who's the baker in Camphrier? She's on it too. She paid five million. We got on for nothing. I'd like off.”",
+      "answers": [
+        {
+          "say": "I'll take all of us off.",
+          "reply": "“He'll not like that.” “No.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "forcedSitDown"
+            }
+          ]
+        },
+        {
+          "say": "It keeps you safe.",
+          "reply": "“From what? What's coming that you've made a list for?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "fayeAsksLux"
+            }
+          ]
+        },
+        {
+          "say": "Your name's off. Tomorrow.",
+          "reply": "“Just mine?” (She looks at the door.) “…Do Hortense's too. She'd not want it.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "namesOff"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 99,
+      "title": "The laundress",
+      "sun": false,
+      "who": {
+        "outside": "A woman with soot on her apron, who's walked three miles"
+      },
+      "needs": [
+        "region:unova",
+        "tick5"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“I'd a mangle. I'd forty sheets on the line and a copper on the boil. There's a wall on it. A castle wall. I pay you every Friday so that this sort of thing doesn't happen. So.”",
+      "answers": [
+        {
+          "say": "You're right. What d'you need?",
+          "reply": "“A mangle, a copper, a yard, and whoever did it told off.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "laundryWork"
+            }
+          ]
+        },
+        {
+          "say": "It wasn't us.",
+          "reply": "“I know it wasn't you. You're who I pay.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "laundressFurious"
+            }
+          ]
+        },
+        {
+          "say": "Sit down. Have you eaten?",
+          "reply": "“I've not come to eat.” (She eats.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "laundryShown"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 100,
+      "title": "Plumeria at the door",
+      "sun": false,
+      "who": {
+        "outside": "Plumeria, alone, soaked"
+      },
+      "needs": [
+        "region:alola",
+        "guzmaGone"
+      ],
+      "shut": false,
+      "report": true,
+      "status": "disabled",
+      "says": "“I don't know who else has got a van.”",
+      "answers": [
+        {
+          "say": "Tomasz. Keys.",
+          "reply": "“…That's it? I'd a whole thing about how I'd owe you.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "vanToAether"
+            }
+          ]
+        },
+        {
+          "say": "What d'you need it for?",
+          "reply": "“To be somewhere he can see when he comes back out. That's all. I can't do anything. I can be there.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "vanToAether"
+            }
+          ]
+        },
+        {
+          "say": "We're at war with you.",
+          "reply": "“I know what we are. I'm stood here anyway.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "plumeriaWalks"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 101,
+      "title": "A boy in a hood",
+      "sun": false,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "region:alola"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(The door Grunt, at the Office.) “There's a lad at the front asking if we're hiring. Hood up. Got a— I don't know what it is. It's got a helmet on. I said ‘How old are you?’ and he said ‘Old enough’ and I gave him a sandwich. He's eating it on the step. What do I tell him?”",
+      "answers": [
+        {
+          "say": "Tell him no. Tell him there's a sandwich any night.",
+          "reply": "“He'll not come back. Proud.” (He comes back twice. For the sandwich.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "hoodSandwich"
+            }
+          ]
+        },
+        {
+          "say": "Ask him what he's running from.",
+          "reply": "“I did. He said, ‘My mother.’ I said, ‘Aren't we all,’ and he nearly laughed.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "hoodMother"
+            }
+          ]
+        },
+        {
+          "say": "Send him home.",
+          "reply": "“I don't think it's a home.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "hoodToHome"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 102,
+      "title": "The stipend",
+      "sun": false,
+      "who": {
+        "outside": "Whoever's been paying the Digs"
+      },
+      "needs": [
+        "region2",
+        "dig"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "(The Digs have had ₽800 a day from somebody since the first region. Tonight, who. The Patron: “It was me. I wanted to see one done properly before I died. Don't look like that; I'm in excellent health. It's my pension.” Or the neighbour's memo: “The calculation has always included your excavations. Kindly continue.” Or a university's secretary: “There's a form. It's forty pages. Section nine asks what you intend to do with it.”)",
+      "answers": [
+        {
+          "say": "Take it. Continue.",
+          "reply": "(It goes on. ₽800 a day.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "stipendKept"
+            }
+          ]
+        },
+        {
+          "say": "Refuse it. Stop.",
+          "reply": "(It stops.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "stipendStopped"
+            }
+          ]
+        },
+        {
+          "say": "Pay it back. Honestly. (Send the log, uncut; or fill in the form honestly.)",
+          "reply": "(Chidi fills in section nine. The Scheme screen's sentence gets plainer.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "stipendHonest"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 103,
+      "title": "Proton asks for a job",
+      "sun": false,
+      "who": {
+        "outside": "Proton, very polite"
+      },
+      "needs": [
+        "rocketFallen"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“I've a great deal of experience. I'm told you're short of people who'll do the unpleasant part. I'm the unpleasant part.”",
+      "answers": [
+        {
+          "say": "No.",
+          "reply": "“You'll want me before the end.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "protonBetrayer"
+            }
+          ]
+        },
+        {
+          "say": "What happened at Slowpoke Well?",
+          "reply": "(He tells it. Without flinching. It's the whole reason.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "protonHeard"
+            }
+          ]
+        },
+        {
+          "say": "(Call Otis.)",
+          "reply": "(Otis:) “Out.” (That's all.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "otisOut"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 104,
+      "title": "One of theirs wants in",
+      "sun": false,
+      "who": {
+        "outside": "A neighbour's Grunt, in half a uniform"
+      },
+      "needs": [
+        "neighbour"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“I'd like to change sides. I'm not bringing anything. I've no secrets. I'm just not— I looked at what we did Tuesday and I'm not doing Wednesday.”",
+      "answers": [
+        {
+          "say": "What did you do Tuesday?",
+          "reply": "(The neighbour's last tick, from inside.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "defector"
+            }
+          ]
+        },
+        {
+          "say": "Why us?",
+          "reply": "“Yours gave my mate a bandage.” (Or: “You're nearest.”)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "defectorWhy"
+            }
+          ]
+        },
+        {
+          "say": "Go home.",
+          "reply": "“Which one?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "defectorDoor"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 105,
+      "title": "A Boss, asking to be a Grunt",
+      "sun": false,
+      "who": {
+        "outside": "A fallen Boss, without the bandana, holding it"
+      },
+      "needs": [
+        "bossFallen"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“I'd like to find out what I was asking of them. I've never been told what to do in my life. I'd like to see what it's like. I'll take the worst bunk.”",
+      "answers": [
+        {
+          "say": "Wages are ₽150. Pick a line.",
+          "reply": "“A line. Right. …‘Won't flood anything.’”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bossGrunt"
+            }
+          ]
+        },
+        {
+          "say": "Why here?",
+          "reply": "“You beat me, or the kid did, and you didn't crow. I noticed.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bossGrunt"
+            }
+          ]
+        },
+        {
+          "say": "No. Go and make it right where you did it.",
+          "reply": "“…That's harder.” “Yes.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bossMakesRight"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 106,
+      "title": "The handler Admin",
+      "sun": false,
+      "who": {
+        "outside": "The neighbour's handler Admin"
+      },
+      "needs": [
+        "neighbour"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“I'm told to tell you where we stand. I'd rather tell you where I stand. They're not the same.”",
+      "answers": [
+        {
+          "say": "Go on.",
+          "reply": "(One sentence their Boss wouldn't like. It's the Betrayer's tell, a district early.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "betrayerTell"
+            }
+          ]
+        },
+        {
+          "say": "Say what you were sent to say.",
+          "reply": "(The stance, as it is.)",
+          "echo": []
+        },
+        {
+          "say": "D'you want a job?",
+          "reply": "“…Ask me after.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "adminApplicant"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 107,
+      "title": "Three people and a Meowth",
+      "sun": false,
+      "who": {
+        "outside": "Three people and a Meowth, all at once, with a motto"
+      },
+      "needs": [
+        "remnantsBeside"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "(A motto.) (The door Grunt:) “I asked what they can do. That was the answer. It rhymed.”",
+      "answers": [
+        {
+          "say": "One bed. ₽150 between you.",
+          "reply": "“Between us?” “There's a pay rise for the Meowth?” “There's no Meowth on the sheet.” “I'm on the sheet!”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "remnantsHired"
+            }
+          ]
+        },
+        {
+          "say": "What happened to your last job?",
+          "reply": "“We were let go.” “We let ourselves go.” “The boss stopped answering.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "neverHadHeart"
+            }
+          ]
+        },
+        {
+          "say": "No.",
+          "reply": "“We'll try again tomorrow!” (They do.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "remnantsReturn"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 108,
+      "title": "After a war: somebody left behind",
+      "sun": false,
+      "who": {
+        "rank": "grunt"
+      },
+      "needs": [
+        "warOver"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(The door Grunt.) “There's one of theirs sat on the step. The rest've gone. Nobody came back for him. He's not asking for anything. He's just sat.”",
+      "answers": [
+        {
+          "say": "Bring him in. Feed him. Send him home with the fare.",
+          "reply": "“Home's two regions off.” “Then it's a big fare.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "fareHome"
+            }
+          ]
+        },
+        {
+          "say": "Ask him why nobody came back.",
+          "reply": "“He says they counted and went. He says he's never been good at being counted.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "countedApplicant"
+            }
+          ]
+        },
+        {
+          "say": "Not our business.",
+          "reply": "“No.” (The door Grunt takes him a blanket.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 109,
+      "title": "“That's what it's like, then.”",
+      "sun": false,
+      "who": {
+        "talent": "hands",
+        "flaw": "kind"
+      },
+      "needs": [
+        "snagem"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "(With the Card.) “‘Takes: one Sneasel. From: a Grunt, on Market Street. How it's written down: stock.’ …I've filled in forty of these. I never once read one from this end.”",
+      "answers": [
+        {
+          "say": "We'll get her back.",
+          "reply": "“And the next person's? Who gets theirs back?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "snagemJob"
+            }
+          ]
+        },
+        {
+          "say": "Now you know.",
+          "reply": "“I always knew. I'd not felt it.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "neverWord"
+            }
+          ]
+        },
+        {
+          "say": "What was her name?",
+          "reply": "“Needle. She steals my socks.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "penNames"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 110,
+      "title": "The landlord",
+      "sun": false,
+      "who": {
+        "outside": "A man with a folder"
+      },
+      "needs": [
+        "base"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“You've been in my building six weeks. I've had no rent, three complaints, and a very polite note from a Mr. Blackthorn telling me not to come round. I've come round.”",
+      "answers": [
+        {
+          "say": "What's the rent?",
+          "reply": "(A fair figure. He's surprised to be asked.)",
+          "echo": [
+            {
+              "t": "team",
+              "stat": "heat",
+              "by": -1
+            },
+            {
+              "t": "flag",
+              "id": "leaseClean"
+            }
+          ]
+        },
+        {
+          "say": "What are the complaints?",
+          "reply": "“Singing. A van. A cat.” (The singing's the Roster's. It's on Sundays. He's invited.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "landlordSings"
+            }
+          ]
+        },
+        {
+          "say": "Mr. Blackthorn will see you out.",
+          "reply": "“I thought he might.”",
+          "echo": [
+            {
+              "t": "team",
+              "stat": "dread",
+              "by": 1
+            },
+            {
+              "t": "flag",
+              "id": "landlordListed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 111,
+      "title": "A Leader walks in",
+      "sun": false,
+      "who": {
+        "outside": "A Gym Leader, alone, at the front door"
+      },
+      "needs": [
+        "gymDealt"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "(What they say is by how their Gym was got. Beat: “I've come for a rematch. Not for the Gym. For me.” Bought: “I've brought it back. All of it. I've not slept.” Bent: “I've come to see what I bent for.” Replaced, the old Leader: “Who's in my Gym? Are they kind to the trainees?” Befriended: “I was passing.” Left alone: “You've held eleven of my twelve streets and never once come up the hill. I've come down it. Why not?”)",
+      "answers": [
+        {
+          "say": "(Meet them: a fight; take it back; walk them round; the truth.)",
+          "reply": "(It's their line at the gate on the Reckoning's last day.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "leaderAtGate"
+            }
+          ]
+        },
+        {
+          "say": "(Put the kettle on.)",
+          "reply": "(They stay an hour.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "leaderAtGate"
+            }
+          ]
+        },
+        {
+          "say": "“Another day.”",
+          "reply": "(They go. It's still their line at the gate.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "leaderAtGate"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 112,
+      "title": "A constable, with a warning",
+      "sun": false,
+      "who": {
+        "outside": "A constable, out of uniform, not coming in"
+      },
+      "needs": [
+        "raidTomorrow"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“Tomorrow. Early. I'm not here. I was never here. I'd move the old man and the girl tonight if I were you.”",
+      "answers": [
+        {
+          "say": "Why tell us?",
+          "reply": "(By who. “She asked me to.” “I've been writing reports on you for a year.” “My mum's got a roof.”)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "warnedDefend"
+            }
+          ]
+        },
+        {
+          "say": "Thank you.",
+          "reply": "“Don't.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "warnedDefend"
+            }
+          ]
+        },
+        {
+          "say": "Who's leading it?",
+          "reply": "(The detective's name.) “They don't want to. I'll say that.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "detectiveKnowsWarned"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 113,
+      "title": "The detective, a second time",
+      "sun": false,
+      "who": {
+        "outside": "The detective, hat in hand"
+      },
+      "needs": [
+        "heat8",
+        "flag:notebookBlank"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“I've a warrant in my pocket I've not served. I wanted to give you a day. I don't know why. That's what I've come to say. That I don't know why.”",
+      "answers": [
+        {
+          "say": "I do. (Because of the bakery. Because you've seen the kitchen. Because you're tired.)",
+          "reply": "“…Perhaps.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "warningEarly"
+            }
+          ]
+        },
+        {
+          "say": "Serve it.",
+          "reply": "“Tomorrow.”",
+          "echo": []
+        },
+        {
+          "say": "Sit down.",
+          "reply": "(They sit. Nobody says anything for a while.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "chairTwice"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 114,
+      "title": "Somebody from the paper",
+      "sun": false,
+      "who": {
+        "outside": "A reporter"
+      },
+      "needs": [
+        "standing5"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“I'm doing a piece. ‘Who are they?’ I've three people who say you mended the bridge and three who say you run the docks. I can print both. I'd rather print what's true.”",
+      "answers": [
+        {
+          "say": "Both are true.",
+          "reply": "“On the record?” “On the record.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "interviewBoth"
+            }
+          ]
+        },
+        {
+          "say": "The bridge.",
+          "reply": "“And the docks?” (A silence.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "interviewBridge"
+            }
+          ]
+        },
+        {
+          "say": "No comment.",
+          "reply": "“That's what the docks said.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "interviewNone"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 115,
+      "title": "Somebody returning something",
+      "sun": true,
+      "who": {
+        "outside": "A girl of ten, with her dad behind her"
+      },
+      "needs": [],
+      "shut": true,
+      "report": true,
+      "status": "supported",
+      "says": "“Your Rattata was in our shed. It's had some cheese. Dad says I've to bring it back and not ask questions. Why's it got a number?”",
+      "answers": [
+        {
+          "say": "It hasn't, now. What'd you call it?",
+          "reply": "“Cheese.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "kitNames"
+            }
+          ]
+        },
+        {
+          "say": "Thank your dad.",
+          "reply": "(Her dad:) “I've not seen anything. She's not been here.”",
+          "echo": [
+            {
+              "t": "team",
+              "stat": "regard",
+              "by": 1
+            }
+          ]
+        },
+        {
+          "say": "D'you want to keep it?",
+          "reply": "“Can I?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "girlRattata"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 116,
+      "title": "Somebody whose Pokémon's in the Pen",
+      "sun": false,
+      "who": {
+        "outside": "A man, with a child of nine holding his hand"
+      },
+      "needs": [
+        "pen"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“This is Tam. She's got something to ask you. I told her you'd not see us. She said you would.” (Tam Okonkwo:) “Have you got Biscuit?”",
+      "answers": [
+        {
+          "say": "Yes. Wait here.",
+          "reply": "(The Boss goes and gets him. The latch. The card comes off the door.)",
+          "echo": [
+            {
+              "t": "team",
+              "stat": "regard",
+              "by": 1
+            },
+            {
+              "t": "flag",
+              "id": "biscuitHome"
+            }
+          ]
+        },
+        {
+          "say": "No.",
+          "reply": "(Tam:) “He's barking. I can hear him.” (He is.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "liedToAChild"
+            }
+          ]
+        },
+        {
+          "say": "Who told you he was here?",
+          "reply": "(Her dad:) “A lass with a toolbag. Knocked, said one thing, went.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "fayeTold"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 117,
+      "title": "Somebody who wants to pay",
+      "sun": false,
+      "who": {
+        "outside": "The baker"
+      },
+      "needs": [
+        "waivedLastRegion"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“You waived us. In the spring. I've had a good summer. I've brought what I'd have owed. I don't like owing, even to people who say I don't.”",
+      "answers": [
+        {
+          "say": "Keep it. Buy an oven.",
+          "reply": "“I've got an oven.” “A better one.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bakeryFront"
+            }
+          ]
+        },
+        {
+          "say": "I'll take half.",
+          "reply": "“That's nearly fair.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "bakerHalf"
+            }
+          ]
+        },
+        {
+          "say": "(Take it.)",
+          "reply": "“Good. Now we're straight.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "waiverStruck"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 118,
+      "title": "The Friend, with a letter",
+      "sun": false,
+      "who": {
+        "outside": "The Hero's Friend"
+      },
+      "needs": [
+        "heroInMess"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“I've a letter for whoever runs this. I'm to give it to them and not read it. I've not read it. It's from a friend of mine. I don't know why they're writing to you.”",
+      "answers": [
+        {
+          "say": "(Read it.)",
+          "reply": "(It's the Hero's question, the one their reason's made of, asked to a stranger.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "heroQuestion"
+            }
+          ]
+        },
+        {
+          "say": "(Give it back unread.) Tell them to ask me themselves.",
+          "reply": "(The next fire opens with it.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "askMeThemselves"
+            }
+          ]
+        },
+        {
+          "say": "D'you know who I am?",
+          "reply": "“The one who's in charge of the soup? No? …Oh. Oh.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "friendKnows"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 119,
+      "title": "The Rival, wanting a battle",
+      "sun": false,
+      "who": {
+        "outside": "The Hero's Rival, at the front door, loud"
+      },
+      "needs": [
+        "road"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“I'm not the one you're worried about. I know that. I'd like to be. Fight me.”",
+      "answers": [
+        {
+          "say": "(Fight. Three each, at their tier.)",
+          "reply": "(Win: they're insufferable about how close it was. Lose: they tell the Hero, “I beat their Boss,” and the Hero doesn't believe them.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "rivalFought"
+            }
+          ]
+        },
+        {
+          "say": "Not tonight. Come in and eat.",
+          "reply": "(They eat. They don't stop talking.) (Tobi:) “Can we keep this one?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "rivalAte"
+            }
+          ]
+        },
+        {
+          "say": "Who are you worried about?",
+          "reply": "“…Them. They walk into places on their own.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "rivalWorried"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 120,
+      "title": "The Stray: “Is this yours?”",
+      "sun": false,
+      "who": {
+        "outside": "The Hero's Stray, holding something"
+      },
+      "needs": [
+        "road"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“Oh. Hello. Sorry. Is this yours?” (A dropped Card, a kit Pokémon, the weather-vane, the cat.)",
+      "answers": [
+        {
+          "say": "It is. Thank you.",
+          "reply": "(If it's a Card, they've read it.) “It says the odds on it. And who won't go. Do they all say that?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "strayReadCard"
+            }
+          ]
+        },
+        {
+          "say": "Where'd you find it?",
+          "reply": "“By the thing I was looking for. Which wasn't there. But this was.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "straySearch"
+            }
+          ]
+        },
+        {
+          "say": "Keep it.",
+          "reply": "“Oh. No, I couldn't. It's got a name on.” (They put it on the step and go.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 121,
+      "title": "A Grunt who's been writing to the Hero",
+      "sun": false,
+      "who": {
+        "talent": "wheels",
+        "flaw": "talks"
+      },
+      "needs": [
+        "lostToHero"
+      ],
+      "shut": true,
+      "report": false,
+      "status": "disabled",
+      "says": "“I've been writing to the kid. Since they beat me at the gate. They write back. I've not said anything about us. We write about vans. Is that— am I in trouble?”",
+      "answers": [
+        {
+          "say": "No.",
+          "reply": "“I'd have stopped if you'd said.” “I know. Don't.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "fourthChannel"
+            }
+          ]
+        },
+        {
+          "say": "What do they say about us?",
+          "reply": "“Nothing. They ask if I'm all right.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "asksIfAllRight"
+            }
+          ]
+        },
+        {
+          "say": "Stop.",
+          "reply": "“Right.” (He stops.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "writingStopped"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 122,
+      "title": "Kanto: the lodge",
+      "sun": true,
+      "who": {
+        "outside": "A very old Chansey, with a warden's tag"
+      },
+      "needs": [
+        "site:lodge"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "(The yard gate. It's come for its rounds. Nobody's told it the Safari's shut.)",
+      "answers": [
+        {
+          "say": "(Let it do its rounds.)",
+          "reply": "(It checks every Pokémon in the yard, every night, for the region. Halima takes notes.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "chanseyRounds"
+            }
+          ]
+        },
+        {
+          "say": "(Read the tag.)",
+          "reply": "(A name, and “Property of the Warden.” The Warden, in Fuchsia, thought it had died.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "wardenLocal"
+            }
+          ]
+        },
+        {
+          "say": "(Shut the gate.)",
+          "reply": "(It waits. It's there in the morning.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 123,
+      "title": "Johto: the basement",
+      "sun": false,
+      "who": {
+        "nobody": true
+      },
+      "needs": [
+        "site:basement"
+      ],
+      "shut": false,
+      "report": true,
+      "status": "disabled",
+      "says": "(Not a knock. Something on the cellar stair. It's looking. It's burned along one side, long ago, and it's not hurt, and it's not afraid.)",
+      "answers": [
+        {
+          "say": "(Stand still.)",
+          "reply": "(It looks. It goes down again. The basement's left alone.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "basementAlone"
+            }
+          ]
+        },
+        {
+          "say": "(Go down after it.)",
+          "reply": "(Three rooms nobody's mapped, and a fourth it won't let be entered.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "basementDig"
+            }
+          ]
+        },
+        {
+          "say": "(Shut the cellar door.)",
+          "reply": "(A noise, some nights. The door Grunt asks to be moved.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 124,
+      "title": "Hoenn: a trade",
+      "sun": true,
+      "who": {
+        "outside": "A child, at the mouth of the tree"
+      },
+      "needs": [
+        "site:tree"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“Your base is boring. I'll swap you a Skitty cushion for that lamp. Everyone swaps. Don't you know how it works?”",
+      "answers": [
+        {
+          "say": "Done.",
+          "reply": "(A Skitty cushion in the Office. The child tells everyone the base is “all right, a bit grey.”)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "skittyCushion"
+            }
+          ]
+        },
+        {
+          "say": "What else've you got?",
+          "reply": "(A poster, a tyre, a brick that's “really heavy.” It looks dreadful and the Roster loves it.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "furnished"
+            }
+          ]
+        },
+        {
+          "say": "This isn't that kind of base.",
+          "reply": "“Then why's it in a tree?” (It's a fair point.)",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 125,
+      "title": "Sinnoh: decorating advice",
+      "sun": true,
+      "who": {
+        "outside": "The Underground Man, uninvited, looking at the tunnel"
+      },
+      "needs": [
+        "site:tunnel"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“No, no, no. You've put your Vault where anyone'd look. And where's your flag? You must have a flag.”",
+      "answers": [
+        {
+          "say": "Where would you put it?",
+          "reply": "(He says. The Vault's moved one square, and it's better.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "vaultMoved"
+            }
+          ]
+        },
+        {
+          "say": "We've no flag.",
+          "reply": "“Then I shall bring you one.” (He does. The team's letter, hand-sewn, wrong colour.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "undergroundFlag"
+            }
+          ]
+        },
+        {
+          "say": "How did you get in?",
+          "reply": "“My dear, I dug it.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "tunnelBackWay"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 126,
+      "title": "Unova: the timetable",
+      "sun": true,
+      "who": {
+        "nobody": true
+      },
+      "needs": [
+        "site:siding"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "(An envelope under the carriage door. Inside: a printed sheet. “Inspections, Line 7 (disused). All times exact.” And, in two different hands: “Mind the gap.” “All aboard.”)",
+      "answers": [
+        {
+          "say": "(Pin it up.)",
+          "reply": "(The base can't be found by an inspection.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "timetable"
+            }
+          ]
+        },
+        {
+          "say": "(Write back: “Thank you.”)",
+          "reply": "(A second envelope: two tickets for the Battle Subway.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "subwayTickets"
+            }
+          ]
+        },
+        {
+          "say": "(Move the siding. Tonight.)",
+          "reply": "(The one shunt, used. A third envelope arrives at the new siding. They knew that too.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "shuntUsed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 127,
+      "title": "Kalos: the owner comes home",
+      "sun": false,
+      "who": {
+        "outside": "A woman with a great many cases, in the yard, at two in the morning"
+      },
+      "needs": [
+        "site:wing"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“Who on earth are you? This is my servants' wing. …Is that soup? I've not had a hot meal since Lumiose.”",
+      "answers": [
+        {
+          "say": "Staff. The agency sent us.",
+          "reply": "(She believes it. She asks for breakfast at eight. Otis buttles. He's superb.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "staffCover"
+            }
+          ]
+        },
+        {
+          "say": "We're a team. We've been living in your wing.",
+          "reply": "“A team of what?” (The Creed's line.) “…How thrilling. Do go on. Nobody tells me anything.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "ownerPatron"
+            }
+          ]
+        },
+        {
+          "say": "We'll be gone by morning.",
+          "reply": "“Don't be absurd. Who'd make the soup?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "ownerPatron"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 128,
+      "title": "Alola: the Mimikyu",
+      "sun": false,
+      "who": {
+        "nobody": true
+      },
+      "needs": [
+        "site:alola"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "(The stock's been moved again. Every tin in the Mess is facing the wall. In the middle of the floor: a rag, with a drawn-on face, very still.)",
+      "answers": [
+        {
+          "say": "(Sit down near it. Not too near.)",
+          "reply": "(It stays. It's the base's, not the team's.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "mimikyuStays"
+            }
+          ]
+        },
+        {
+          "say": "(Turn the tins back.)",
+          "reply": "(They're turned again by morning.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "mimikyuReturns"
+            }
+          ]
+        },
+        {
+          "say": "(Ask Acerola. She comes on Tuesdays.)",
+          "reply": "“It likes you. It doesn't like many people. Don't make it sad or I'll know.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "acerolaVisits"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "n": 129,
+      "title": "Galar: the lock-keeper",
+      "sun": true,
+      "who": {
+        "outside": "An old man with a windlass"
+      },
+      "needs": [
+        "site:boat"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“You've been moored on my pound a week. I've let you through eleven locks and you've not once said good morning. That's all I've come about. Good morning's free.”",
+      "answers": [
+        {
+          "say": "Good morning.",
+          "reply": "“There. Was that hard?”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "locksOpen"
+            }
+          ]
+        },
+        {
+          "say": "Come aboard. There's tea.",
+          "reply": "(He's aboard an hour. He names every boat that's ever carried anything it shouldn't.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "canalScout"
+            }
+          ]
+        },
+        {
+          "say": "We're keeping to ourselves.",
+          "reply": "“On a canal? Good luck.”",
+          "echo": []
+        }
+      ]
+    },
+    {
+      "n": 130,
+      "title": "Paldea: sandwiches",
+      "sun": false,
+      "who": {
+        "outside": "A woman from down the hill, with a covered plate"
+      },
+      "needs": [
+        "site:lighthouse"
+      ],
+      "shut": true,
+      "report": true,
+      "status": "disabled",
+      "says": "“You're the new people in the lighthouse. I'm at the bottom. I've made too many. My youngest's just set off on the Treasure Hunt and I keep cooking for two.” (She's the Hero's mother. She doesn't know. The Boss does: it's in the File.)",
+      "answers": [
+        {
+          "say": "That's kind. Come in.",
+          "reply": "(She comes up every few days.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "motherSandwiches"
+            }
+          ]
+        },
+        {
+          "say": "I think I should tell you who we are.",
+          "reply": "(The Creed's line. She listens.) “…Well. You'll still want feeding.”",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "motherKnewFirst"
+            }
+          ]
+        },
+        {
+          "say": "We're fine, thank you.",
+          "reply": "“I'll leave them on the step.” (The door Grunt's been eating them and saying nothing.)",
+          "echo": [
+            {
+              "t": "flag",
+              "id": "stepSandwiches"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -46,6 +46,8 @@ export function ledgerView(m: LedgerModel): string {
     const g = m.totals;
     body = `<div class="row" style="gap:60px;justify-content:center;margin-top:30px"><div class="col cen"><span class="sm">Given</span><b style="font-size:34px" data-testid="evil-given">${g.given}</b></div><div class="col cen"><span class="sm">Taken</span><b style="font-size:34px" data-testid="evil-taken">${g.taken}</b></div></div>${sm(g.note, 'text-align:center;margin-top:12px;opacity:.7')}`;
   }
+  // Slice 18: a Books' margin note, in pencil, under the page.
+  if (m.margin) body += `<div class="sm" style="margin-top:8px;font-style:italic;opacity:.75;border-left:2px solid #8886;padding-left:6px" data-testid="evil-ledger-margin">${esc(m.margin)}</div>`;
   return W(`${tabs}<div style="position:absolute;left:10px;right:10px;top:40px;bottom:8px;overflow:auto">${body}</div>`, 'position:absolute;left:16px;right:16px;top:130px;bottom:70px;padding:8px 10px', '', ' data-testid="evil-ledger"');
 }
 

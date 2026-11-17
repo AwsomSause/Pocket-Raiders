@@ -3,6 +3,7 @@
 // the stream counts and the applied set. Later slices add their fields to the block and bump its own `v`.
 
 import { z } from 'zod';
+import { emptyVoice, VoiceStateSchema } from './voiceSchema';
 import creedsRaw from '../../data/evilMode/creeds.json';
 
 /** Content status (design Part 30 section 12): every entry has one. Passing the schema is not "supported". */
@@ -338,7 +339,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'econ', 'neighbour', 'scheme', 'base', 'raid', 'ending', 'post'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -1226,7 +1227,7 @@ export const EndingsFileSchema = z.object({
 
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
-  v: z.literal(15),
+  v: z.literal(17),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -1283,6 +1284,8 @@ const BlockV7Schema = z.object({
   law: LawSchema,
   /** Slice 15: the ending under way (one a run), or null. */
   ending: EndingStateSchema.nullable(),
+  /** Slice 18: the voice. The Radio and the paper each Morning, the post, and what was answered (Part 25a, Part 25b). */
+  voice: VoiceStateSchema,
 }).strict();
 
 /** What a Hero made before slice 12 starts with (and what `makeHero` gives a new one). */
@@ -1345,6 +1348,10 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 13) b = { ...b, v: 14, ending: null };
   // 15: slice 16, the Crossing (the regions crossed, a Crossing under way, pay from abroad, the quay's answer, Hoenn's letters and second clock).
   if (b.v === 14) b = { ...b, v: 15, region: b.region && typeof b.region === 'object' ? { ...regionSlice16Start(), ...(b.region as object) } : b.region };
+  // 16: slice 17, the long cast. Until it lands on this branch the step adds nothing (its own migration replaces this line).
+  if (b.v === 15) b = { ...b, v: 16 };
+  // 17: slice 18, the voice: nothing heard yet, no post, the set on. The Radio and the paper start with the next Morning.
+  if (b.v === 16) b = { ...b, v: 17, voice: emptyVoice() };
   return b;
 }
 
