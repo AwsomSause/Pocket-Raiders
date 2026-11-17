@@ -280,6 +280,8 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...[1, 2].map((n): AssetEntry => ({ id: `cine.sfx.mega${n}`, kind: 'audio', category: 'sound', path: `audio/cine/mega_evolution${n}.m4a`, lazy: true })),
   // Item pictures used as menu icons (the Hub's tiles and currency counters).
   ...MENU_ICON_ITEMS.map((name) => itemEntry(`item.${name}`)),
+  // gn.41: the fossil skull drawn in the Museum's jigsaw slab (PixelLab, docs/quality/asset-provenance.md).
+  itemEntry('item.gn/jigsaw-skull'),
   // Story Overhaul icon pack (P7, src/assets/storyIcons.ts): emotes, hearts, snacks, keepsakes, badges, tokens, ball-exit effects.
   ...STORY_ICONS.map((i): AssetEntry => ({ id: i.id, kind: 'image', category: 'ui', path: i.path, lazy: true })),
   // Professor Vance's six looping animations for the prologue (17 frames each, 160 px cells, 5 per row).

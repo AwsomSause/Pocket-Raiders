@@ -146,7 +146,7 @@ export class MinigameScene extends Phaser.Scene {
         render: (c) =>
           jigsawView(c, {
             title: def.name, hud: view0.hud, prompt: view0.prompt, cols: s.cols, rows: s.rows, tray: s.tray, placed: s.placed, held: s.held,
-            index: this.menu.index, file, skull: s.skull, // (The story's own lines say what was paid; the framework's score and "+₽0" lines are left out.)
+            index: this.menu.index, file, skullArt: artOf(this, 'item.gn/jigsaw-skull')?.file ?? null, skull: s.skull, // (The story's own lines say what was paid; the framework's score and "+₽0" lines are left out.)
             outcome: outcome ? { lines: outcome.lines.filter((l) => !/^Score \d|^\+₽0/.test(l)), medal: outcome.medal } : null,
             hints: outcome ? [['Enter', 'done']] : [['Arrows', 'move'], ['Enter', s.held >= 0 ? 'set down' : 'pick up'], ['Esc', 'leave it']],
           }),
