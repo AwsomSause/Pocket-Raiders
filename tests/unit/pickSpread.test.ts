@@ -60,10 +60,14 @@ describe('Homeland Week (dated first-region boost)', () => {
     const { activeGameEvents } = await import('../../src/core/gameEvents');
     const on = (d: string) => activeGameEvents(content, new Date(`${d}T12:00:00Z`)).some((a) => a.event.id === 'homeland-week');
     expect(ev.schedule.kind).toBe('dated');
-    expect(on('2026-11-17')).toBe(false);
-    expect(on('2026-11-18')).toBe(true);
-    expect(on('2026-11-24')).toBe(true);
-    expect(on('2026-11-25')).toBe(false);
+    // The window follows the deploy day (Kice: the week starts the day it goes live), so read it from the data.
+    const { start, end } = ev.schedule as { start: string; end: string };
+    const day = (d: string, n: number) => new Date(Date.parse(`${d}T12:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
+    expect(day(start, 6)).toBe(end);
+    expect(on(day(start, -1))).toBe(false);
+    expect(on(start)).toBe(true);
+    expect(on(end)).toBe(true);
+    expect(on(day(end, 1))).toBe(false);
   });
   it('Kanto, Hoenn and Galar open about 3x as often with it on, and roll nothing extra with it off', () => {
     const campaign = content.campaigns.get('full')!;
@@ -71,7 +75,7 @@ describe('Homeland Week (dated first-region boost)', () => {
     const N = 3000;
     const share = (w: Record<string, number>) => { let n = 0; for (let i = 0; i < N; i++) if (['kanto', 'hoenn', 'galar'].includes(first(w, i))) n++; return n / N; };
     const off = share({});
-    const on = share(firstRegionWeights(content, ['homeland-week@2026-11-18']));
+    const on = share(firstRegionWeights(content, [`homeland-week@${(ev.schedule as { start: string }).start}`]));
     expect(on).toBeGreaterThan(off + 0.2);
     for (let i = 0; i < 20; i++) expect(generateRegionOrder(content, campaign, new Rng(hashSeed(`r-${i}`)), null, { seed: 'x', weights: {} })).toEqual(generateRegionOrder(content, campaign, new Rng(hashSeed(`r-${i}`)), null));
   });
