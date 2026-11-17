@@ -139,5 +139,7 @@ export interface Placement {
   /** A Region story's beat number and the id its beats share (core/co/placement.ts places beats 2 and 3 once earned). */
   beat?: number;
   chain?: string;
+  /** Placed by its own system (the placer leaves it alone; the entry still records the doc's step). */
+  own?: boolean;
   note?: string;
 }

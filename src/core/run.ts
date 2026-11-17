@@ -3370,7 +3370,7 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const escapeItem = action.kind === 'item' ? content.items.get(action.itemId) : undefined;
   if (escapeItem?.effect.kind === 'escape') return escapeBattle(content, run, escapeItem.id, rng, captureRng, hyperRng);
   const bonded = shapeAction(content, run, action);
-  // Poli-Pond: the Poliwag's nerves (or the bully's tricks in the rematch) can change the command before it is played.
+  // Poli-Pond: the Poliwag is too shy to attack in its first battle, and the bully's tricks in the rematch can change the command before it is played.
   const nerves = pondShape(content, run, bonded.action);
   // Greenneedle events: a named fight rule may answer the command (the Samurai's Pinsir waits out a guard).
   const gn = gnShape(content, run, nerves.action);

@@ -884,7 +884,7 @@
     "stage": "any later evil-team climax or Champion battle"
    }
   ],
-  "note": "Stages S1-S6. The cold open places the lessons and the pond visit on later nodes of its stage (core/events.ts pond begin).",
+  "note": "Stages S1-S6. The lessons, the pond visit and the rematch have entries of their own below.",
   "kinds": [
    "Miniature Episode",
    "Companion Story",
@@ -897,6 +897,115 @@
   "window": [
    2,
    5
+  ]
+ },
+ "pp-lesson-aim": {
+  "gn": "gn.01",
+  "shape": "Chain",
+  "earliest": "A2",
+  "home": 7,
+  "window": [
+   6,
+   9
+  ],
+  "sits": "must-see",
+  "often": "run",
+  "own": true,
+  "kinds": [
+   "Companion Story"
+  ],
+  "tags": []
+ },
+ "pp-lesson-footing": {
+  "gn": "gn.01",
+  "shape": "Chain",
+  "earliest": "A2",
+  "home": 11,
+  "window": [
+   10,
+   13
+  ],
+  "sits": "must-see",
+  "often": "run",
+  "own": true,
+  "kinds": [
+   "Companion Story"
+  ],
+  "tags": []
+ },
+ "pp-pond-visit": {
+  "gn": "gn.01",
+  "shape": "Chain",
+  "earliest": "A2",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "optional",
+  "often": "run",
+  "own": true,
+  "kinds": [
+   "Companion Story"
+  ],
+  "tags": []
+ },
+ "pp-lesson-stand": {
+  "gn": "gn.01",
+  "shape": "Chain",
+  "earliest": "A2",
+  "home": 17,
+  "window": [
+   15,
+   19
+  ],
+  "sits": "must-see",
+  "often": "run",
+  "own": true,
+  "kinds": [
+   "Companion Story"
+  ],
+  "tags": []
+ },
+ "pp-rematch": {
+  "gn": "gn.01",
+  "shape": "Companion",
+  "chain": "pp",
+  "beat": 6,
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   1,
+   4
+  ],
+  "sits": "must-see",
+  "level": "A+0",
+  "often": "run",
+  "kinds": [
+   "Companion Story"
+  ],
+  "tags": []
+ },
+ "pp-rematch-again": {
+  "gn": "gn.01",
+  "shape": "Companion",
+  "chain": "pp",
+  "beat": 6,
+  "earliest": "A2",
+  "home": 2,
+  "window": [
+   1,
+   4
+  ],
+  "sits": "must-see",
+  "level": "A+0",
+  "often": "run",
+  "note": "A lost rematch: \"It can retry at the next water stage.\"",
+  "kinds": [
+   "Companion Story"
+  ],
+  "tags": [
+   "water"
   ]
  },
  "sky.opening": {
@@ -962,6 +1071,63 @@
   "stages": [
    1
   ]
+ },
+ "sky.meet": {
+  "gn": "gn.02",
+  "shape": "Companion",
+  "chain": "sky",
+  "beat": 2,
+  "earliest": "A1",
+  "home": 8,
+  "window": [
+   6,
+   12
+  ],
+  "sits": "optional",
+  "level": "A-1",
+  "often": "run",
+  "kinds": [
+   "Rival Episode"
+  ],
+  "tags": []
+ },
+ "sky.alone": {
+  "gn": "gn.02",
+  "shape": "Companion",
+  "chain": "sky",
+  "beat": 3,
+  "earliest": "A1",
+  "home": 16,
+  "window": [
+   14,
+   18
+  ],
+  "sits": "optional",
+  "level": "A-1",
+  "often": "run",
+  "kinds": [
+   "Rival Episode"
+  ],
+  "tags": []
+ },
+ "sky.finale": {
+  "gn": "gn.02",
+  "shape": "Companion",
+  "chain": "sky",
+  "beat": 4,
+  "earliest": "A1",
+  "home": 18,
+  "window": [
+   16,
+   19
+  ],
+  "sits": "must-see",
+  "level": "A-1",
+  "often": "run",
+  "kinds": [
+   "Rival Episode"
+  ],
+  "tags": []
  },
  "gn-06-bridge": {
   "gn": "gn.06",

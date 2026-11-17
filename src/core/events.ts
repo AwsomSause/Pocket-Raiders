@@ -81,7 +81,7 @@ import { startCalm } from './battle/calm';
 import { legendFlag, syncLegendFlags } from './legends/signs';
 import { takeBlessing } from './blessings';
 import { count, countShiny, discover } from './progress';
-import { FLAGS as POND_FLAGS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
+import { FLAGS as POND_FLAGS, POND_JOIN_BELOW, POND_STEPS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
 import { beginSwap, endSwap, swapReady } from './co/swap';
 import { anyFlagSet, eggWarm, hasEgg, itemForType, owePartner, quietWild, runPlaceMet, stageTypesMet, stageWeatherMet, stripFoeMoves } from './co/neRules';
@@ -139,7 +139,7 @@ import { beginRivalBrain } from './rivals/brainSetup';
 import { borrowTeamView, type TeamView } from './greenneedle/borrowed';
 import { applyQuestEffect, beginBorrow, beginFeudWatch, interleave, mainRival, secondRival, planRivalTeam, starterRivalryStages, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
-import { fitsStage, nodesAhead, planCoStage, positioned, SAME_STAGE, stageTags, type CoEntry } from './co/placement';
+import { fitsStage, nodesAhead, planCoStage, positioned, SAME_STAGE, stageTags, stepColumn, type CoEntry } from './co/placement';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
 
@@ -2763,7 +2763,8 @@ function applyPondEffect(content: Content, run: RunState, e: Extract<EventEffect
       if (mon || Number(run.story.flags[`ev:${POND_FLAGS.begun}`] ?? 0) > 0) return '';
       const levels = run.party.map((m) => m.level);
       const avg = levels.length > 0 ? Math.round(levels.reduce((a, b) => a + b, 0) / levels.length) : 5;
-      const guest = newMon(content, run, 'poliwag', Math.max(2, Math.min(runLevelCap(content, run), avg - 3)), 'p');
+      // gn.01: the lead bully is at A+0 and two levels above the Poliwag, so it joins two under the party.
+      const guest = newMon(content, run, 'poliwag', Math.max(2, Math.min(runLevelCap(content, run), avg - POND_JOIN_BELOW)), 'p');
       guest.pond = freshMark();
       // gn.01 "Pick it up": Bond +1 at the start (friendship +5).
       guest.friendship = e.gentle ? 45 : 40;
@@ -2771,14 +2772,18 @@ function applyPondEffect(content: Content, run: RunState, e: Extract<EventEffect
       if (run.party.length < partyCapacity(content, run)) run.party.push(guest);
       else run.pending.push({ kind: 'caught', mon: guest });
       setPondFlag(run, POND_FLAGS.begun, 1);
-      // The three lessons (at rests) and the pond visit go on later nodes of this stage, by a fixed hash. Anything unplayed returns next stage as a callback.
+      // gn.01: the lessons at Steps 7, 11 and 17 and the guilty Poliwhirl at Step 14, in that order. Each goes on every node of its
+      // step that is still ahead (so no route misses it); a step already behind moves to the next one ahead. Nothing is rolled.
       const stage = run.stage;
       const here = stage?.map.nodes.find((n) => n.id === stage.current);
-      const later = stage && here ? stage.map.nodes.filter((n) => n.column > here.column && n.column < stage.map.columns) : [];
-      if (stage && later.length > 0) {
-        for (const id of ['pp-lesson-aim', 'pp-pond-visit', 'pp-lesson-footing', 'pp-lesson-stand']) {
-          const node = later[fnv1a(`${run.seed}::pond::${id}::${run.stage!.index}`) % later.length]!;
-          node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: id });
+      if (stage && here && stage.kind === 'stage') {
+        const ahead = nodesAhead(stage.map, here.id);
+        let column = here.column;
+        for (const [id, step] of POND_STEPS) {
+          column = Math.min(stage.map.columns - 1, Math.max(column + 1, stepColumn(step, stage.map.columns)));
+          for (const node of stage.map.nodes.filter((n) => n.column === column && ahead.has(n.id))) {
+            node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: id });
+          }
         }
       }
       if (e.gentle) setPondFlag(run, POND_FLAGS.gentle, 1);

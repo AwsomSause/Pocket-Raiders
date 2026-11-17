@@ -1,7 +1,7 @@
 // Beta 0.7: Pidgey's Resolve, the Rivalry of the Sky (core/sky, data/events/sky-rivalry.json).
 
 import { describe, expect, it } from 'vitest';
-import { chooseEvent, conditionMet, eligibleEvents } from '../../src/core/events';
+import { addEventStops, chooseEvent, conditionMet, eligibleEvents, eventLevel } from '../../src/core/events';
 import { chooseAutoAction } from '../../src/core/battle/autoBattle';
 import { cheerDue, cheerSky } from '../../src/core/sky/spectate';
 import { chunkLines } from '../../src/core/sky/text';
@@ -10,7 +10,7 @@ import { abilityOf, createPokemon } from '../../src/core/pokemon';
 import { createBattle, resolveTurn, type BattleEvent } from '../../src/core/battle/engine';
 import { Rng, hashSeed } from '../../src/core/rng';
 import { chooseStarter, createRun, takeTurn } from '../../src/core/run';
-import { applySky, fearowLevel, fearowMoves, giftCandidate, isFinaleStage, meetingIsAlone, pidgeotLevel, playFinale, recruitMon, settleSky, skyOf } from '../../src/core/sky/story';
+import { applySky, scheduleLevel, fearowLevel, fearowMoves, giftCandidate, isFinaleStage, meetingIsAlone, pidgeotLevel, playFinale, recruitMon, settleSky, skyOf } from '../../src/core/sky/story';
 import { freshSky, SkyStateSchema } from '../../src/core/sky/state';
 import { cpuDuel } from '../../src/core/sky/sim';
 import { ExpansionRunSchema } from '../../src/core/expansion/schema';
@@ -218,14 +218,93 @@ describe('Pidgey\'s Resolve: the cliff', () => {
     expect(conditionMet(content, run, { kind: 'sky', when: 'finale' })).toBe(false);
   });
 
-  it('Fearow is always the stronger bird, and training eases it', () => {
-    const untrained = atCliff('cliff-3');
-    const trained = atCliff('cliff-3', 3);
-    trained.expansion!.sky!.gifts = ['oran-berry', 'oran-berry', 'oran-berry'];
-    const gapU = fearowLevel(content, untrained, skyOf(untrained)!) - pidgeotLevel(content, untrained, skyOf(untrained)!);
-    const gapT = fearowLevel(content, trained, skyOf(trained)!) - pidgeotLevel(content, trained, skyOf(trained)!);
-    expect(gapU).toBeGreaterThan(0);
-    expect(gapT).toBeLessThan(gapU);
+  it('gn.02: both birds keep the same schedule (A-1); each spar puts Pidgeot one level ahead, with no cap of three', () => {
+    const at = (spars: number): RunState => {
+      const run = atCliff('cliff-3', spars);
+      run.party.forEach((m) => (m.level = 12)); // well under the region's cap, so nothing is clamped
+      return run;
+    };
+    const untrained = at(0);
+    const base = scheduleLevel(content, untrained);
+    expect(fearowLevel(content, untrained, skyOf(untrained)!)).toBe(base);
+    expect(pidgeotLevel(content, untrained, skyOf(untrained)!)).toBe(base);
+    // Asked twice at the same node: the same number (its own seeded stream).
+    expect(scheduleLevel(content, untrained)).toBe(base);
+    // The schedule is the game's own level for one stage back, so it is under the level of this stage's event foes.
+    const node = untrained.stage!.map.nodes.find((n) => n.id === untrained.stage!.current) ?? untrained.stage!.map.nodes[0]!;
+    untrained.stage!.current = node.id;
+    const here = eventLevel(content, untrained, node, new Rng(hashSeed('x')), 0);
+    expect(scheduleLevel(content, untrained)).toBeLessThanOrEqual(here);
+    for (const spars of [1, 3, 4, 5]) {
+      const run = at(spars);
+      expect(pidgeotLevel(content, run, skyOf(run)!)).toBe(base + spars);
+      expect(fearowLevel(content, run, skyOf(run)!)).toBe(base);
+    }
+    // Gifts still add a level each, to three.
+    const gifted = at(0);
+    skyOf(gifted)!.gifts = ['oran-berry', 'oran-berry', 'oran-berry', 'oran-berry'];
+    expect(pidgeotLevel(content, gifted, skyOf(gifted)!)).toBe(base + 3);
+  });
+
+  it('gn.02: at the branch the Pidgey and the Spearow are the same level, the schedule, not a fixed 5', () => {
+    const run = newRun('sky-lv');
+    run.party.forEach((m) => (m.level = 11));
+    const side = sideOf(run, 'sky.opening')!;
+    run.stage!.current = run.stage!.map.nodes.find((n) => n.sides.some((x) => x.id === side.id))!.id;
+    const want = scheduleLevel(content, run);
+    const started = chooseEvent(content, run, side.id, 0).run;
+    expect(started.party[0]!.level).toBe(want);
+    expect(started.battle!.enemyTeam[0]!.level).toBe(want);
+    // With the team set aside the schedule is still measured against the real team.
+    expect(scheduleLevel(content, started)).toBe(want);
+  });
+
+  it('gn.02: the finale is must-see even when no stage beat was played; the stage beats are optional stops', () => {
+    const run = atCliff('cliff-nomeet');
+    skyOf(run)!.meets = 0;
+    expect(conditionMet(content, run, { kind: 'sky', when: 'finale' })).toBe(true);
+    expect(content.events.get('sky.meet')!.forced).toBe(false);
+    expect(content.events.get('sky.alone')!.forced).toBe(false);
+    expect(content.coPlacement!.get('sky.meet')).toMatchObject({ sits: 'optional', home: 8, window: [6, 12], level: -1 });
+    expect(content.coPlacement!.get('sky.alone')).toMatchObject({ sits: 'optional', home: 16, window: [14, 18] });
+    expect(content.coPlacement!.get('sky.finale')).toMatchObject({ sits: 'must-see', home: 18, window: [16, 19], level: -1 });
+  });
+
+  it('gn.02: the placer puts the stage beat on one node near Step 8 and the finale where no route misses it', () => {
+    let meetPlaced = 0;
+    for (let i = 0; i < 6; i++) {
+      const run = newRun(`sky-place-${i}`);
+      run.expansion = { ...run.expansion, sky: freshSky(run.regionIndex, 'pidgey', 'spearow') };
+      run.stage!.index = 1; // S2: a fence-post stage
+      for (const n of run.stage!.map.nodes) n.sides = [];
+      addEventStops(content, run);
+      const meet = run.stage!.map.nodes.filter((n) => n.sides.some((x) => x.eventId === 'sky.meet'));
+      expect(meet.length).toBe(1); // optional: one node (a route can pass it by), never dropped by a full stage
+      if (meet.length === 1) {
+        meetPlaced++;
+        const cols = run.stage!.map.columns;
+        expect(meet[0]!.column).toBeGreaterThanOrEqual(Math.round((6 * cols) / 20));
+        expect(meet[0]!.column).toBeLessThanOrEqual(Math.round((12 * cols) / 20));
+      }
+      // The cliff: on the last stage it is on a whole column (or a chokepoint).
+      const cliff = atCliff(`sky-place-${i}`);
+      for (const n of cliff.stage!.map.nodes) n.sides = [];
+      addEventStops(content, cliff);
+      const at = cliff.stage!.map.nodes.filter((n) => n.sides.some((x) => x.eventId === 'sky.finale'));
+      expect(at.length).toBeGreaterThan(0);
+      expect(at.length).toBe(cliff.stage!.map.nodes.filter((n) => n.column === at[0]!.column).length);
+    }
+    expect(meetPlaced).toBe(6);
+  });
+
+  it('gn.02: every gift is shown at the finale with what it does; with no gifts nothing is said', () => {
+    const run = atCliff('cliff-show');
+    expect(applySky(content, run, { kind: 'sky', act: 'finaleShow' })).toBe('');
+    skyOf(run)!.gifts = ['sharp-beak', 'oran-berry', 'oran-berry'];
+    const text = applySky(content, run, { kind: 'sky', act: 'finaleShow' });
+    expect(text).toContain('Sharp Beak (Flying moves +20%)');
+    expect(text).toContain('Oran Berry x2 (Below 50% HP: heals 10 HP)');
+    for (const c of content.events.get('sky.finale')!.choices) expect(c.success.effects.at(-1)).toEqual({ kind: 'sky', act: 'finaleShow' });
   });
 
   it('is watched: Pidgeot (with its gifts) against Fearow (with the moves it learned), your team set aside', () => {
@@ -256,9 +335,10 @@ describe('Pidgey\'s Resolve: the cliff', () => {
       const other = watch(atCliff(seed), 'sky.finale', 0, 'fearow');
       if (skyOf(other.run)!.finale.winner === 'pidgeot') fearowCheerPidgeotWins++;
     }
-    expect(asked).toBeGreaterThanOrEqual(15);
+    // gn.02: the birds are level with each other now, so Pidgeot is not always driven under 35%.
+    expect(asked).toBeGreaterThanOrEqual(5);
     expect(pidgeotCheerWins).toBeGreaterThan(0);
-    expect(pidgeotCheerWins).toBeLessThan(asked);
+    expect(pidgeotCheerWins).toBeLessThanOrEqual(asked);
     expect(pidgeotCheerWins).toBeGreaterThan(fearowCheerPidgeotWins);
   });
 
@@ -378,6 +458,33 @@ describe('Pidgey\'s Resolve: the afterstory', () => {
     run.regionIndex += 1;
     return run;
   };
+
+  it('gn.02: when one bird joined, the other is the one overhead in the next region', () => {
+    for (const [bird, other] of [['pidgeot', 'Fearow'], ['fearow', 'Pidgeot']] as const) {
+      const run = newRun(`after-${bird}`);
+      run.expansion = { ...run.expansion, sky: freshSky(run.regionIndex, 'pidgey', 'spearow') };
+      applySky(content, run, { kind: 'sky', act: 'joinBird', bird });
+      expect(skyOf(run)!.ending).toBe(`${bird}-joined`);
+      // Same region: not yet.
+      expect(conditionMet(content, run, { kind: 'sky', when: 'overhead' })).toBe(false);
+      run.regionIndex += 1;
+      expect(conditionMet(content, run, { kind: 'sky', when: 'overhead' })).toBe(true);
+      expect(applySky(content, run, { kind: 'sky', act: 'overhead' })).toContain(other);
+      expect(conditionMet(content, run, { kind: 'sky', when: 'overhead' })).toBe(false);
+    }
+    // A Pidgeot won back in the rematch joins with nothing left overhead (that story is over).
+    const run = newRun('after-rematch');
+    const sky = freshSky(run.regionIndex, 'pidgey', 'spearow');
+    sky.phase = 'done';
+    sky.ending = 'pidgeot-left';
+    run.expansion = { ...run.expansion, sky };
+    run.regionIndex += 1;
+    run.stage!.current = run.stage!.map.nodes[0]!.id;
+    applySky(content, run, { kind: 'sky', act: 'rematchWon' });
+    applySky(content, run, { kind: 'sky', act: 'joinBird', bird: 'pidgeot' });
+    run.regionIndex += 1;
+    expect(conditionMet(content, run, { kind: 'sky', when: 'overhead' })).toBe(false);
+  });
 
   it('the bird that did not join is overhead in the next region, once', () => {
     for (const ending of ['pidgeot-free', 'fearow-free', 'fearow-alone'] as const) {

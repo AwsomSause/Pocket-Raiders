@@ -1,13 +1,14 @@
 // Poli-Pond, "The Little Pokémon That Could" (Beta 0.7 miniature episode, companion story, region-wide story).
 // A shy Poliwag is shoved out of the reeds and joins the party. It cannot attack in its first battle, then it is taught three lessons
-// (aim, footing, standing its ground) at the rests. Each lesson it has not learned is a nerve (in a normal battle) or one of the lead
-// bully's tricks (in the rematch). The ending is Keep (Kindness), Release (it comes back as Poliwrath with allies) or Reconcile.
+// (aim, footing, standing its ground) at the rests. Each lesson it has not learned leaves one of the lead bully's tricks working in
+// the rematch (gn.01: outside the rematch the only rule is that it will not attack in its first battle). The ending is Keep (Kindness), Release (it comes back as Poliwrath with allies) or Reconcile.
 // No RNG anywhere: every effect is a fixed rule, so previews, saves and replays agree. State: story flags (`ev:pp-*`) and one optional
 // mark on the Poliwag itself, so there is no save version change. Pure functions; run.ts and events.ts call them at their hook points.
 
 import { z } from 'zod';
 import type { Content } from '../contentSchema';
-import { abilityOf, maxHp } from '../pokemon';
+import { abilityOf, calcStats, createPokemon, getSpecies } from '../pokemon';
+import { calcDamage, typeEffectiveness } from '../battle/damage';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import { evilTeam } from '../evil/teams';
@@ -24,16 +25,23 @@ export const KINDNESS_ID = 'kindness';
 export const PondMarkSchema = z.object({ shy: z.boolean(), aim: z.boolean(), footing: z.boolean(), stand: z.boolean(), kept: z.boolean().default(false) });
 export type PondMark = z.infer<typeof PondMarkSchema>;
 
-/** The return (Release or Reconcile): Poliwrath plus this many Poliwhirl take the field for this many turns. Their hits never finish the foe (that is yours). */
+/**
+ * The return (Release or Reconcile): a Poliwrath plus this many Poliwhirl fight beside the player for this many turns, as allies (gn.01).
+ * They are real Pokémon at the party's average level and each hits with its own best move (the game's damage formula).
+ * The foe is left with at least 1 HP: a hit from outside the turn cannot faint a Pokémon in this engine, so the last blow is the player's.
+ */
 export const POND_RETURN = {
   release: { poliwhirl: 3, turns: 3 },
   reconcile: { poliwhirl: 4, turns: 4 },
-  /** Share of the foe's full HP each one takes off at the end of a turn. */
-  wrathShare: 0.08,
-  whirlShare: 0.03,
   /** The player is "losing" with this many Pokémon or fewer still standing (and at least one already down). */
   losingAt: 2,
 } as const;
+
+/** The Poliwag joins this many levels under the party's average (the lead bully, two above it, is then at the party's level: A+0). */
+export const POND_JOIN_BELOW = 2;
+
+/** gn.01's beat table: the step (1 to 19) of each scene on the stage the Poliwag joins, in order. */
+export const POND_STEPS: readonly (readonly [string, number])[] = [['pp-lesson-aim', 7], ['pp-lesson-footing', 11], ['pp-pond-visit', 14], ['pp-lesson-stand', 17]];
 
 export const FLAGS = {
   begun: 'pp-begun',
@@ -88,16 +96,13 @@ const cue = (side: 'player' | 'enemy', text: string, uid?: string): Cue => ({ ty
 
 const nameOf = (content: Content, mon: PokemonInstance): string => content.species.get(mon.speciesId)?.name ?? mon.speciesId;
 
-/** Which fight it is: the rematch (the bully's tricks) or any other (the Poliwag's own nerves). */
+/** Which fight it is: the rematch (the bully's tricks) or any other. */
 const inRematch = (battle: BattleState): boolean => battle.event?.eventId.startsWith('pp-rematch') === true;
 
 /**
- * Before the player's command is played: the Poliwag's nerves (or, in the rematch, the lead bully's tricks). Each is a fixed rule and each
- * lesson cancels one of them. Returns the action to play and the lines to show first. Never touches the RNG.
- *  - shy: it will not attack in its first battle; it looks at the ground.
- *  - aim (not taught): every third turn its attack wobbles wide.
- *  - footing (not taught): the first turn after it comes out, it flinches.
- *  - stand (not taught): under half its HP it tries to run, once per battle (it steps back for a teammate when there is one).
+ * Before the player's command is played. gn.01: "It won't attack in its first battle. It's sent out; it looks at the ground; its turn
+ * passes." That is the only rule outside the rematch; in the rematch the lead bully's tricks apply (each lesson cancels one).
+ * Returns the action to play and the lines to show first. Never touches the RNG.
  */
 export function pondShape(content: Content, run: RunState, action: PlayerAction): { action: PlayerAction; events: Cue[] } {
   const battle = run.battle;
@@ -106,16 +111,7 @@ export function pondShape(content: Content, run: RunState, action: PlayerAction)
   if (!battle || !mon || !mark || mark.kept || action.kind !== 'move' || battle.needsSwitch) return { action, events: [] };
   const name = nameOf(content, mon);
   if (inRematch(battle)) return rematchShape(run, battle, name, mon, action);
-  const say = (text: string): { action: PlayerAction; events: Cue[] } => ({ action: { kind: 'idle' }, events: [cue('player', text, mon.uid)] });
-  if (mark.shy) return say(`${name} is looking at the ground.`);
-  if (!mark.aim && battle.turn % 3 === 0) return say(`${name} swings and the attack wobbles wide. It was aiming at nothing.`);
-  if (!mark.footing && battle.playerVolatile.turnsOut === 0) return say(`${name} flinches as it steps out, and loses the turn.`);
-  const bench = run.party.findIndex((m, i) => i !== battle.activeIndex && m.hp > 0 && !m.pond);
-  if (!mark.stand && mon.hp * 2 < maxHp(content, mon) && !battle.storyEffects.includes(`pond-ran:${mon.uid}`)) {
-    battle.storyEffects.push(`pond-ran:${mon.uid}`);
-    if (bench >= 0 && !battle.eventRule?.noSwitch) return { action: { kind: 'switch', partyIndex: bench }, events: [cue('player', `${name} panics and tries to run! Someone else steps up.`, mon.uid)] };
-    return say(`${name} backs away from the fight, shaking. It almost ran.`);
-  }
+  if (mark.shy) return { action: { kind: 'idle' }, events: [cue('player', `${name} is looking at the ground.`, mon.uid)] };
   return { action, events: [] };
 }
 
@@ -160,7 +156,7 @@ const returnKind = (run: Pick<RunState, 'story'>): 'release' | 'reconcile' | nul
 /**
  * After a turn: clears the Poliwag's shyness once its first battle is over, ends the rematch as a loss if the Poliwag went down (it is a
  * duel), and runs the return. The return starts when the player is losing a Champion, Evil Team leader or climax fight, then the
- * allies strike at the end of each of their turns; they never knock the foe out. Returns lines to show.
+ * allies fight beside the player for their turns (each hits with its own move at the end of the turn). Returns lines to show.
  */
 export function pondAfterTurn(content: Content, run: RunState): Cue[] {
   const battle = run.battle;
@@ -183,17 +179,54 @@ export function pondAfterTurn(content: Content, run: RunState): Cue[] {
     setPondFlag(run, FLAGS.fired, 1);
     // The doc's name for it (`poli.returned`), for any other event that asks.
     setPondFlag(run, 'poli-returned', 1);
-    out.push(cue('player', 'A cry comes from somewhere off the field. Small. Familiar. It knows you before you know it.'));
-    out.push(cue('player', `${cfg.poliwhirl + 1} shapes break the reeds of the arena: a Poliwrath, and ${cfg.poliwhirl} Poliwhirl behind it. They have come to stand with you.`));
+    out.push(cue('player', 'A cry from off the field. Your lead turns its head before you do.'));
+    out.push(cue('player', 'A Poliwrath walks onto the field. It looks at you. It recognises you first.'));
+    out.push(cue('player', `Behind it, ${cfg.poliwhirl === 4 ? 'four Poliwhirl, Burl among them' : 'three Poliwhirl'}. They take the field beside you, as allies.`));
   }
   const left = Number((battle.storyEffects.find((e) => e.startsWith('pond-return:')) ?? '').split(':')[1] ?? 0);
   if (left <= 0) return out;
-  const share = POND_RETURN.wrathShare + cfg.poliwhirl * POND_RETURN.whirlShare;
-  const hit = Math.min(foe.hp - 1, Math.max(0, Math.round(maxHp(content, foe) * share)));
-  if (hit > 0) foe.hp -= hit;
-  out.push(cue('enemy', left === 1 ? `The pond's last turn: they hit ${nameOf(content, foe)} together, and step back. The rest is yours.` : `The pond answers: Poliwrath and its Poliwhirl hit ${nameOf(content, foe)} together.`, foe.uid));
+  const foeName = nameOf(content, foe);
+  const allies = pondAllies(content, run, kind);
+  const wrath = pondAllyHit(content, battle, allies[0]!, foe);
+  if (wrath) {
+    foe.hp = Math.max(1, foe.hp - wrath.damage);
+    out.push(cue('enemy', `Poliwrath uses ${wrath.move} on ${foeName}.`, foe.uid));
+  }
+  const whirl = pondAllyHit(content, battle, allies[1]!, foe);
+  if (whirl) {
+    foe.hp = Math.max(1, foe.hp - whirl.damage * cfg.poliwhirl);
+    out.push(cue('enemy', `The ${cfg.poliwhirl === 4 ? 'four' : 'three'} Poliwhirl follow, one after another: ${whirl.move}.`, foe.uid));
+  }
+  if (left === 1) out.push(cue('player', 'The pond steps back to the edge of the field. The rest is yours.'));
   battle.storyEffects = battle.storyEffects.map((e) => (e.startsWith('pond-return:') ? `pond-return:${left - 1}` : e));
   return out;
+}
+
+/** The pond's allies at the return: a Poliwrath, then the Poliwhirl, all at the party's average level. Rebuilt the same every time (no RNG). */
+export function pondAllies(content: Content, run: Pick<RunState, 'party' | 'story'>, kind: 'release' | 'reconcile'): PokemonInstance[] {
+  const level = Math.max(1, run.party.length ? Math.round(run.party.reduce((n, m) => n + m.level, 0) / run.party.length) : 20);
+  return ['poliwrath', ...Array.from({ length: POND_RETURN[kind].poliwhirl }, () => 'poliwhirl')].map((sp, i) => createPokemon(content, sp, level, `pond-ally-${i}`));
+}
+
+/** One ally's hit: its strongest damaging move against this foe, by the game's damage formula (no critical hit, a full roll). */
+export function pondAllyHit(content: Content, battle: BattleState, ally: PokemonInstance, foe: PokemonInstance): { move: string; damage: number } | null {
+  const mine = calcStats(content, ally);
+  const theirs = calcStats(content, foe);
+  const foeTypes = getSpecies(content, foe.speciesId).types;
+  const best = ally.moves
+    .map((m) => content.moves.get(m.id))
+    .filter((m): m is NonNullable<typeof m> => !!m && m.category !== 'status' && (m.power ?? 0) > 0)
+    .map((move) => {
+      const physical = move.category === 'physical';
+      const damage = calcDamage(content.ruleset, {
+        level: ally.level, power: move.power ?? 0, attack: physical ? mine.atk : mine.spa, defense: physical ? theirs.def : theirs.spd, attackStage: 0,
+        defenseStage: battle.enemyStages[physical ? 'def' : 'spd'] ?? 0, stab: getSpecies(content, ally.speciesId).types.includes(move.type),
+        effectiveness: typeEffectiveness(content.typeChart, move.type, foeTypes), crit: false, burned: false, physical, randomFactor: 100,
+      });
+      return { move: move.name, id: move.id, damage };
+    })
+    .sort((a, b) => b.damage - a.damage || a.id.localeCompare(b.id))[0];
+  return best && best.damage > 0 ? { move: best.move, damage: best.damage } : null;
 }
 
 /** Only ever the named abilities get a description; Kindness is data in abilities.json. */
