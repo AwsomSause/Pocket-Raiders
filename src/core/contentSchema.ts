@@ -2027,7 +2027,7 @@ export const TrainerAiSchema = z.object({
   /** Most healing items (potions, Full Restores, Revives) any enemy trainer uses in one battle. */
   maxHealItems: z.number().int().min(0).default(4),
   /** The potion a trainer drinks by region (index = region number, the last entry repeats): item id and share of max HP restored. */
-  healTiers: z.array(z.object({ item: z.string(), fraction: z.number().min(0.05).max(1) })).min(1).default([{ item: 'potion', fraction: 0.25 }, { item: 'super-potion', fraction: 0.35 }, { item: 'hyper-potion', fraction: 0.5 }, { item: 'hyper-potion', fraction: 0.6 }]),
+  healTiers: z.array(z.object({ item: z.string(), fraction: z.number().min(0.05).max(1) })).min(1).default([{ item: 'potion', fraction: 0.2 }, { item: 'super-potion', fraction: 0.3 }, { item: 'hyper-potion', fraction: 0.45 }, { item: 'hyper-potion', fraction: 0.6 }]),
   /** S271: every trainer (not only smart ones) drinks a potion when low; only smart trainers swap on purpose. */
   allTrainersUseItems: z.boolean().default(false),
   /** Times a smart trainer may swap its Pokémon out on purpose in one battle. */

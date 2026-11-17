@@ -78,13 +78,13 @@ describe('story foundation: random streams', () => {
   // Re-pinned STORY1, 2, 5 and 6 for the Catalog Overhaul singles row (SF155 fossil dig): Plume, Root and Claw Fossils are uncommon, as the doc's fossil dig names them the common fossils, so reward and shop draws that hold a fossil pick differently.
   // Re-pinned STORY1 and 4 to 7 for Catalog Overhaul families-a (rebuilt story-family events in the draw pool; hazards answered by a Pokémon give a typed item).
   // Re-pinned (four STORY keys) for pick-spread: Gym Leaders level with the party (gymBonus 0), enemy heal caps, flatter event draws, SOS x0.3 (docs/status/pick-spread.md).
-  // Re-pinned STORY2, 5, 6 and 8 for the enemy heal cap (#1434: at most 4 healing items a battle, potions scale by region); the merge before it kept the old hash.
+  // Re-pinned STORY1, 2, 5, 6 and 8 for the enemy heal cap (every trainer uses at most 4 healing items; the potion is weaker early and stronger by region and difficulty, docs/status/enemy-heal-cap.md). Cause: enemy heals changed, nothing else.
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': 'f82a504b3ee75917',
+    'STORY1/0': '814510fd7cfdc121',
     'STORY2/0': '63dded7c6b1935bd', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
     'STORY4/0': 'ed7be324c68dd80c',
-    'STORY5/0': 'd9b299ddd7100e72',
-    'STORY6/0': '208f127c9d25d695', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
+    'STORY5/0': '7f66af06a7dd503f',
+    'STORY6/0': '4e72b6b12ff454c4', // re-pinned in the Lavender canon PR: new Flashlight (wild-preview key item) joins the item draws; earlier: new Silver Powder (Bug type booster) joins trainer held-item draws; proven by removing it (pin returns)
     'STORY7/0': '78130c8fd7e0f94a',
     'STORY8/0': '41a3008c9951c3cb',
   };
