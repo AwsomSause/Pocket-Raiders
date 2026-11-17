@@ -1112,7 +1112,7 @@ export function gnBattleStart(content: Content, run: RunState): void {
     if (gnFlag(run, 'savanna-water') <= 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(m.hp, Math.max(1, Math.floor(maxHp(content, m) * 0.9)));
     if (rule === 'herd') battle.storyEffects.push(`${FOE_WAITS}A Donphan from the herd steps in front of your Pokémon and takes the blow meant for it.`);
   }
-  // The Great Desert (gn.36): with the water gone, the party enters each battle at 90% HP.
+  // The Endless Desert (gn.36): with the water gone, the party enters each battle at 90% HP.
   if (rule === 'desert' && gnFlag(run, 'desert-water') <= 0) for (const m of run.party) if (m.hp > 0) m.hp = Math.min(m.hp, Math.max(1, Math.floor(maxHp(content, m) * 0.9)));
   // The Haunted Mansion (gn.37): every Ghost-type you battled on the way up joins the owner's side, one at a time.
   if (rule === 'mansion' && battle.enemyTeam[0]) {
