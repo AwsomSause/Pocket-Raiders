@@ -242,12 +242,11 @@ describe('gn.17 The Polluted Factory', () => {
     expect(all.battle!.storyEffects.filter((t) => t === PIT_PULL)).toHaveLength(6);
     expect(flagOf(all, 'factory-freed')).toBe(0);
     const foeHp = all.battle!.enemyTeam.map((m) => m.hp);
-    const active = all.battle!.doubles ? all.battle!.doubles.player.spots?.length ?? 2 : 1;
     const turn = step(content, all);
     all = turn.run;
     const pulled = 6 - all.battle!.storyEffects.filter((t) => t === PIT_PULL).length;
     expect(pulled).toBeGreaterThanOrEqual(1);
-    expect(pulled).toBeLessThanOrEqual(Math.max(1, active, 3));
+    expect(pulled).toBeLessThanOrEqual(3);
     expect(flagOf(all, 'factory-freed')).toBe(pulled);
     // A Pokémon that pulled did not attack: on the first turn everyone out was pulling, so no Grimer lost HP.
     expect(all.battle!.enemyTeam.map((m) => m.hp)).toEqual(foeHp);
