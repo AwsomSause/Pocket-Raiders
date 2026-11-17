@@ -7,7 +7,7 @@
 - Screens (New look): the **Road page (O)**: the flame and "Sit at the fire", the last day's four choices, the other three (help, talk, mislead), the letters (open one), and at Night: write to her, keep the next one back, a line in the notebook. **The fire** holds the screen until it's left: every exchange, then your own line typed (a real text box) or picked. **The last room** holds the screen the same way: everything said, the choices, the outcome, Close. The File shows the temper, what you said at each fire, the letters, the other three, the notebook and its new pages.
 
 ## Saves
-The block's own version goes 9 to 10 here (renumbered to the next free number on rebase): the Hero's temper, fires, lies, letters and pages, and the block's `road`, `fire` and `reck`, all empty on old saves. Tested in `tests/unit/evilModeFires.test.ts`.
+The block's own version goes to 13 (fixed numbering: slice 10 = v9, 11 = v10, 13 = v11, 14 = v12; until those land a v9 save steps straight to v13): the Hero's temper, fires, lies, letters and pages, and the block's `road`, `fire` and `reck`, all empty on old saves. Tested in `tests/unit/evilModeFires.test.ts`.
 
 ## Tests
 `tests/unit/evilModeFires.test.ts` (32): the data for all eight and every Creed and Wall state; the other three as rival records, none discarded; a line a day with no stream moved; the fire's steps, the lie, practice, your own line, the fire missed and the last room's changed first line; letters; the last day, the walk, the room's choices and outcomes, a whole region replayed; canDo across every action and id; the save step; the page models. Browser `tests/e2e/evilModeFires.spec.ts` (keys: the Road page, sit, answer, type your own line, leave; taps: the last room, say nothing, close) at three sizes.

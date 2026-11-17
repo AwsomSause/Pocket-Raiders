@@ -293,7 +293,7 @@ describe('saves: block v2 and the migration from v1', () => {
     const v1 = { ...rest, v: 1 };
     const parsed = EvilModeBlockSchema.parse(v1);
     // Slice 4 took the block to v4; a v1 block goes through v2 and v3 to v4 in one load.
-    expect(parsed).toMatchObject({ v: 10, applicants: [], refusal: null, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
+    expect(parsed).toMatchObject({ v: 13, applicants: [], refusal: null, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
     expect(parsed.crew.map((c) => c.name)).toEqual(['Grunt 1', 'Grunt 2', 'Grunt 3', 'Grunt 4']);
     expect(parsed.team).toEqual(b2.team);
     const storage = new MemoryStorageProvider();

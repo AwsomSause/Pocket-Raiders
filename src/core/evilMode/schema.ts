@@ -781,7 +781,7 @@ export type ReckState = z.infer<typeof ReckStateSchema>;
 
 const BlockV7Schema = z.object({
   /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
-  v: z.literal(10),
+  v: z.literal(13),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -857,7 +857,7 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * becomes 2 (District 1 is Stage 2 now), its district keeps its days from day 1, nothing is behind it, and the tally's
  * changes count from the numbers it has now. The Hero's Arrival Badge isn't owed: the Arrival never happened.
  * v8 -> v9 (slice 9's block): no base yet (a site's offered on the next screen), no Raid, never raided.
- * v9 -> v10 (slice 10's block): the Hero starts Curious with no fires, no lies, nothing told and a mother at Wary who
+ * v9 (or v12) -> v13 (slice 12): the Hero starts Curious with no fires, no lies, nothing told and a mother at Wary who
  * hasn't written yet (her letters start with the next district); the other three are made on the next load (the
  * session needs the run's seed); no fire under way; no Reckoning yet. The starter's read back from the rival record.
  */
@@ -876,7 +876,8 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 6) b = { ...b, v: 7, gyms: [] };
   if (b.v === 7) b = migrateToV8(b);
   if (b.v === 8) b = { ...b, v: 9, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } };
-  if (b.v === 9) b = { ...b, v: 10, hero: b.hero && typeof b.hero === 'object' ? { ...heroSlice12Start(), ...(b.hero as object) } : b.hero ?? null, road: [], fire: null, reck: null };
+  // Slice 12 is v13 (fixed numbering: 11 = v10, 13 = v11, 14 = v12). Until those land, a v9 save steps straight here.
+  if (b.v === 9 || b.v === 12) b = { ...b, v: 13, hero: b.hero && typeof b.hero === 'object' ? { ...heroSlice12Start(), ...(b.hero as object) } : b.hero ?? null, road: [], fire: null, reck: null };
   return b;
 }
 
