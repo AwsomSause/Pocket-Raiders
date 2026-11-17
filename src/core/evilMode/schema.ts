@@ -267,6 +267,8 @@ export const CrewSchema = z.object({
   left: z.object({ day: z.number().int().min(1), how: z.enum(LEAVE_WAYS), kindly: z.boolean().optional() }).strict().optional(),
   /** Slice 6: the law knows their face (a failed Take they led without Hands). */
   known: z.boolean().optional(),
+  /** Slice 10: in the cells after a Raid (where 'away'), and how they were caught (the visit's line). */
+  cell: z.object({ day: z.number().int().min(1), how: z.enum(['holds', 'aside', 'slow', 'down']) }).strict().optional(),
 }).strict();
 export type Crew = z.infer<typeof CrewSchema>;
 export type Person = Crew;
@@ -327,7 +329,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'knock', 'heard', 'wall'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym', 'base', 'raid', 'knock', 'heard', 'wall'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -437,7 +439,7 @@ export type Hero = z.infer<typeof HeroSchema>;
 /** A battle the day's waiting on (design Part 30 section 6.2 `battleResult`): Outplay in person, or a person posted against the Hero. */
 export const FightSchema = z.object({
   /** Slice 8: 'gym' is the Boss's Beat; 'challenge' an Officer's Replace challenge (their kit fights, the Boss's party waits in the box). */
-  kind: z.enum(['outplay', 'hold', 'gym', 'challenge']),
+  kind: z.enum(['outplay', 'hold', 'gym', 'challenge', 'walk', 'raid']),
   holdingId: z.string().min(1),
   /** Hold: who's standing there. */
   personId: z.string().min(1).optional(),
@@ -641,9 +643,114 @@ export const RegionStateSchema = z.object({
 }).strict();
 export type RegionState = z.infer<typeof RegionStateSchema>;
 
+// ---- Slice 10: the base and the Raid (design Part 16, Part 17, Part 30 section 3.7) ----
+
+export const ROOM_TYPES = ['barracks', 'mess', 'garage', 'counting', 'infirmary', 'listening', 'workshop', 'vault', 'pen', 'lab', 'office', 'creed'] as const;
+export const RoomTypeSchema = z.enum(ROOM_TYPES);
+export type RoomType = z.infer<typeof RoomTypeSchema>;
+export const PIECE_IDS = ['spin', 'warp', 'switch', 'dark', 'conveyor', 'ice', 'bins', 'lock', 'quiz', 'plate', 'corridor', 'decoy', 'backway', 'slot'] as const;
+export const PieceIdSchema = z.enum(PIECE_IDS);
+export type PieceId = z.infer<typeof PieceIdSchema>;
+/** A square is "x,y"; a door between two squares is "x,y|x,y" (the two in reading order). */
+const Sq = z.string().regex(/^\d+,\d+$/);
+const Edge = z.string().regex(/^\d+,\d+\|\d+,\d+$/);
+export const RoomSchema = z.object({
+  id: z.string().min(1), type: RoomTypeSchema, size: z.number().int().min(1).max(3), at: Sq,
+  /** Who runs it (a crew id); null for a room that runs on nobody, or one that's shut for want of a Specialist. */
+  staff: z.string().min(1).nullable(),
+  /** The day it's done (it opens at that day's Evening). A move sets it again. */
+  ready: z.number().int().min(0),
+  /** A size being built on it: the room works at its old size till then. */
+  next: z.object({ size: z.number().int().min(2).max(3), ready: z.number().int().min(1) }).strict().optional(),
+}).strict();
+export type Room = z.infer<typeof RoomSchema>;
+export const PieceSchema = z.object({
+  id: z.string().min(1), type: PieceIdSchema,
+  /** A floor piece's square, or a door piece's door. */
+  at: z.union([Sq, Edge]),
+  /** A locked door's key, or a switch door's switch: a square. */
+  key: Sq.optional(),
+  /** Which of the data's layouts a puzzle floor uses. */
+  variant: z.number().int().min(0).optional(),
+  /** A quiz door's three facts (ids from base.json `quiz`). */
+  quiz: z.array(z.string().min(1)).length(3).optional(),
+}).strict();
+export type Piece = z.infer<typeof PieceSchema>;
+export const WalkSchema = z.object({
+  day: z.number().int().min(1),
+  /** The squares walked, door to Office, in order. */
+  route: z.array(Sq).min(2),
+  /** How far along the route; a battle at `at` is fought before going on. */
+  at: z.number().int().min(0),
+  /** Who's been beaten at each square (a Devoted Grunt is fought twice). */
+  beaten: z.array(z.string()),
+  lines: z.array(z.string()),
+  end: z.enum(['office', 'lost']).optional(),
+}).strict();
+export const BaseStateSchema = z.object({
+  site: z.string().min(1),
+  /** The region it's in (one a region). */
+  region: z.number().int().min(0),
+  rooms: z.array(RoomSchema),
+  pieces: z.array(PieceSchema),
+  /** People posted at squares (a room holds one person). */
+  posts: z.array(z.object({ id: z.string().min(1), at: Sq }).strict()),
+  /** Worked out on every change; a base is never stored unfair (Part 17 section 3). */
+  fair: z.literal(true),
+  /** The region's first room was free. */
+  freeUsed: z.boolean(),
+  /** The first three rooms built, in order (read by the Roster at Night, Part 16 section 3.3). */
+  order: z.array(RoomTypeSchema).max(3),
+  /** The Night action spent today, and how many pieces were placed or moved. */
+  night: z.object({ day: z.number().int().min(1), what: z.string().min(1), pieces: z.number().int().min(0) }).strict().nullable(),
+  latch: z.boolean(),
+  walk: WalkSchema.nullable(),
+  /** Walked it today: the next Night's change (or none) is written to the Ledger. */
+  walked: z.object({ day: z.number().int().min(1), what: z.array(z.string()) }).strict().nullable(),
+}).strict();
+export type BaseState = z.infer<typeof BaseStateSchema>;
+export const WING_IDS = ['front', 'living', 'working', 'keep'] as const;
+export const WingIdSchema = z.enum(WING_IDS);
+export type WingId = z.infer<typeof WingIdSchema>;
+/** The Siege Map's three words (core/formats/siege.ts), and never a fourth. */
+export const WingStatusSchema = z.enum(['held', 'contested', 'lost']);
+export const ORDER_IDS = ['hold', 'back', 'run', 'down'] as const;
+export const OrderIdSchema = z.enum(ORDER_IDS);
+export type OrderId = z.infer<typeof OrderIdSchema>;
+export const RaidStateSchema = z.object({
+  /** warned: a day's notice; door: they're knocking; turns: wing by wing; office: the detective and the Boss; done: the morning after. */
+  state: z.enum(['warned', 'door', 'turns', 'office', 'done']),
+  day: z.number().int().min(1),
+  district: z.string().min(1),
+  choice: z.enum(['move', 'empty', 'hold']).nullable(),
+  wings: z.record(WingIdSchema, WingStatusSchema),
+  /** Turns each wing has left before it's Lost. */
+  left: z.record(WingIdSchema, z.number().int().min(0)),
+  orders: z.record(WingIdSchema, OrderIdSchema),
+  turn: z.number().int().min(0),
+  /** Where each person in the base is: a wing, out (the back way), caught, or gone (opened the door, or ran and didn't come back). */
+  where: z.record(z.string(), z.union([WingIdSchema, z.enum(['out', 'caught', 'gone'])])),
+  how: z.record(z.string(), z.enum(['holds', 'aside', 'slow', 'down'])),
+  /** The back way's order (crew ids). */
+  queue: z.array(z.string()),
+  log: z.array(z.string()),
+  /** The Office's end, once chosen; the Raid's cost, once paid. */
+  end: z.enum(['battle', 'won', 'lost', 'charge', 'pen', 'window']).nullable(),
+  after: z.array(z.string()),
+}).strict();
+export type RaidState = z.infer<typeof RaidStateSchema>;
+export const LawSchema = z.object({
+  /** Evenings in a row at the warning's Heat (a cave's late count). */
+  hot: z.number().int().min(0),
+  /** Districts already raided ("region:stage"): never twice. */
+  raids: z.array(z.string()),
+  /** A Raid beaten in the Office holds Heat at 8 for the region. */
+  heatHeld: z.object({ region: z.number().int().min(0), heat: z.number().int().min(0).max(10) }).strict().nullable(),
+}).strict();
+
 const BlockV7Schema = z.object({
-  /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. 8: slice 9 added the region. 9: slice 7 added the Night, and each person's mood and knocks. */
-  v: z.literal(9),
+  /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. 20 (reserved for slice 7): the Night, and each person's mood and knocks. */
+  v: z.literal(20),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -686,6 +793,10 @@ const BlockV7Schema = z.object({
   gyms: z.array(GymStateSchema),
   /** Slice 9: the region being played (the Arrival, six districts, the Reckoning), the districts behind, and the tallies. */
   region: RegionStateSchema,
+  /** Slice 10: the base (null until a site's picked, and after it's lost), a Raid under way or warned of, and the law's count. */
+  base: BaseStateSchema.nullable(),
+  raid: RaidStateSchema.nullable(),
+  law: LawSchema,
 }).strict();
 
 /** A nameless Grunt (slices 2 and 3; a block migrated from v3 keeps its four). */
@@ -706,7 +817,9 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * v7 -> v8 (slice 8's block): a region. A run founded before slice 9 began in Kanto's District 1 (no Arrival): its stage
  * becomes 2 (District 1 is Stage 2 now), its district keeps its days from day 1, nothing is behind it, and the tally's
  * changes count from the numbers it has now. The Hero's Arrival Badge isn't owed: the Arrival never happened.
- * v8 -> v9 (slice 9's block): an empty Night (no knocks had, nothing on the Wall); everyone Easy, nobody's knocked yet.
+ * v8 -> v9 (slice 9's block): no base yet (a site's offered on the next screen), no Raid, never raided.
+ * to v20 (slice 7, its reserved number; from v9 or any later block without it): an empty Night (no knocks had,
+ * nothing on the Wall); everyone Easy, nobody's knocked yet. Keyed on the Night being missing, so it holds whichever slices land first.
  */
 export function migrateEvilBlock(raw: unknown): unknown {
   if (!raw || typeof raw !== 'object') return raw;
@@ -722,9 +835,13 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 5) b = { ...b, v: 6, proof: [], lineMove: null };
   if (b.v === 6) b = { ...b, v: 7, gyms: [] };
   if (b.v === 7) b = migrateToV8(b);
-  if (b.v === 8) {
-    const crew = Array.isArray(b.crew) ? (b.crew as Record<string, unknown>[]).map((c) => ({ mood: 'easy', knocks: 0, ...c })) : b.crew;
-    b = { ...b, v: 9, crew, night: emptyNight() };
+  if (b.v === 8) b = { ...b, v: 9, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } };
+  if (typeof b.v === 'number' && b.v >= 9 && b.v < 20) {
+    if (!('night' in b)) {
+      const crew = Array.isArray(b.crew) ? (b.crew as Record<string, unknown>[]).map((c) => ({ mood: 'easy', knocks: 0, ...c })) : b.crew;
+      b = { ...b, crew, night: emptyNight() };
+    }
+    b = { ...b, v: 20 };
   }
   return b;
 }
@@ -836,3 +953,71 @@ export const RegionFileSchema = z.object({
     cold: z.object({ a: RS, b: RS, line: RS }).strict(), warm: z.object({ cut: RS, line: RS }).strict(), eyebrow: RS,
   }).strict(),
 }).strict();
+
+// ---- Slice 10: the base file (design Part 16, Part 17, Part 5's building costs) ----
+
+const BS = z.string().min(1);
+const Fx = z.array(z.object({ k: BS, v: z.number().int(), from: z.number().int().min(1).max(3), per: z.boolean().optional() }).strict());
+const Status = { status: EvilStatusSchema, waits: BS.optional() };
+const Pattern = z.object({ name: BS, rows: z.array(z.string().length(5)).length(5) }).strict();
+export const BaseFileSchema = z.object({
+  note: z.string(),
+  /** The slice's undo: false and the base is one room (the Common Room): nothing's built, defended or raided. */
+  on: z.boolean(),
+  offer: z.object({ kinds: z.number().int().min(1) }).strict(),
+  squares: z.object({ door: BS, common: BS, office: BS, floor: BS }).strict(),
+  fixed: z.object({ door: BS, common: BS, office: BS }).strict(),
+  sites: z.array(z.object({
+    id: BS, name: BS, region: BS.nullable(), bg: z.string().regex(/^bg\.[a-z0-9_.]+$/), grid: BS, slots: z.number().int().min(1),
+    /** Rows: '#' a square (one becomes the Office), 'D' the front door, 'C' the Common Room, '.' nothing. */
+    shape: z.array(z.string().min(1)).min(1).optional(),
+    freeRoom: RoomTypeSchema.optional(), raidHeat: z.number().int().optional(), raidLate: z.number().int().min(0).optional(), workshopScale: z.number().positive().optional(), fee: z.number().int().min(0).optional(), regard: z.number().int().optional(),
+    and: BS, local: BS, evening: BS,
+    effects: z.array(z.object({ text: BS, ...Status }).strict()),
+    ...Status,
+  }).strict()).min(7),
+  rules: z.object({ days: z.array(z.number().int().min(1)).length(3), creedDays: z.number().int().min(1), machinesFaster: z.number().int().min(0), moveCost: z.number().int().min(0), moveDays: z.number().int().min(1), sellBack: z.number().int().min(1), sellLoyalty: z.number().int(), handedLoyalty: z.number().int(), capPerSize: z.number().int().min(0), capMax: z.number().int().min(1), piecesANight: z.number().int().min(1), workshopFree: z.number().int().min(0) }).strict(),
+  rooms: z.array(z.object({
+    id: RoomTypeSchema, name: BS, runsOn: z.union([TalentSchema, z.enum(['nobody', 'anyone', 'boss', 'patron'])]),
+    line: z.array(LineIdSchema).optional(), fixed: z.boolean().optional(), lastRegion: z.boolean().optional(),
+    sizes: z.array(z.object({ cost: z.number().int().min(0), does: BS, looks: BS, ...Status }).strict()).min(1).max(3),
+    fx: Fx, hand: BS, first: z.object({ talent: TalentSchema.nullable(), line: z.string() }).strict(), says: BS,
+    ...Status,
+  }).strict()).length(ROOM_TYPES.length),
+  creedRooms: z.array(z.object({ creed: BS, name: BS, has: BS }).strict()).length(6),
+  adjacency: z.array(z.object({ a: BS, b: BS, does: BS, fx: Fx, ...Status }).strict()).length(18),
+  pieces: z.array(z.object({
+    id: PieceIdSchema, name: BS, on: z.enum(['floor', 'door']), is: BS, cost: z.number().int().min(0), rule: BS,
+    puzzle: z.enum(['spin', 'warp', 'conveyor', 'ice', 'bins']).optional(), lock: z.enum(['switch', 'key', 'quiz']).optional(), needs: z.enum(['light', 'heavy', 'outside']).optional(),
+    delay: z.number().int().min(0).optional(), workshop: z.boolean().optional(), writes: BS,
+  }).strict()).length(PIECE_IDS.length),
+  puzzles: z.object({ limit: z.number().int().min(1), steps: z.number().int().min(1), ice: z.array(Pattern).min(1), spin: z.array(Pattern).min(1), conveyor: z.array(Pattern).min(1), warp: z.array(Pattern).min(1), bins: z.array(Pattern).min(1) }).strict(),
+  quiz: z.array(z.object({ id: BS, subject: BS, ask: BS, from: z.union([RoomTypeSchema, z.literal('common')]) }).strict()).min(3),
+  fair: z.record(z.string(), BS),
+  people: z.object({
+    levels: z.record(RankSchema, z.number().int()),
+    bands: z.array(z.object({ min: z.number().int().min(0).max(10), word: BS, does: z.enum(['again', 'fight', 'aside', 'opened']), says: BS }).strict()).length(5),
+    flaws: z.record(z.string(), BS),
+    classes: z.object({ grunt: BS, officer: BS, detective: BS }).strict(),
+  }).strict(),
+  delay: z.object({ corridors: z.number().int().min(1), cap: z.number().int().min(0), word: BS }).strict(),
+  walk: z.record(z.string(), BS),
+  night: z.object({ window: z.record(z.string(), BS), rooms: z.record(z.string(), BS) }).catchall(z.union([BS, z.record(z.string(), BS)])),
+  post: z.record(z.string(), BS),
+  supper: BS,
+  built: z.record(z.string(), BS),
+  raid: z.object({
+    warnAt: z.number().int().min(1).max(10), at: z.number().int().min(1).max(10), heatAfter: z.number().int().min(0).max(10), heatHeld: z.number().int().min(0).max(10), funds: z.number().int().min(0).max(100), backWay: z.number().int().min(1),
+    warning: BS, warningPost: BS, lapsed: BS,
+    choices: z.array(z.object({ id: z.enum(['move', 'empty', 'hold', 'station']), name: BS, is: BS, costs: BS, gives: BS, heat: z.number().int().optional(), ...Status }).strict()).length(4),
+    wings: z.array(z.object({ id: WingIdSchema, name: BS, rooms: z.array(BS).min(1), turns: z.number().int().min(1), is: BS }).strict()).length(WING_IDS.length),
+    orders: z.array(z.object({ id: OrderIdSchema, name: BS }).strict()).length(ORDER_IDS.length),
+    door: z.record(z.string(), BS), slide: BS, acts: z.record(z.string(), BS), queue: BS, minor: BS, last: BS,
+    office: z.object({ speech: BS, clauses: z.record(z.string(), BS), never: BS, choices: z.array(z.object({ id: z.enum(['battle', 'charge', 'pen', 'window']), name: BS }).strict()).length(4) }).catchall(z.union([BS, z.record(z.string(), BS), z.array(z.unknown())])),
+    detectives: z.array(z.object({ region: BS, name: BS, age: z.number().int().min(18), works: BS, middle: BS, team: z.array(BS).min(1).max(6) }).strict()).min(1),
+    after: z.record(z.string(), BS),
+    cells: z.object({ bail: BS, bailed: BS, visit: z.record(z.string(), BS), bailEach: z.number().int().min(0) }).strict(),
+  }).strict(),
+  first: BS,
+}).strict();
+export type BaseFile = z.infer<typeof BaseFileSchema>;

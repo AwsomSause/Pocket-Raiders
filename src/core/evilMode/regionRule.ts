@@ -5,6 +5,7 @@
 
 import { EVIL_DATA, type EvilData } from './data';
 import type { EvilModeBlock, JobMethod, OddsTerm, RegionDef, RuleMod } from './schema';
+import { fxTotal } from './baseFx';
 
 export type ModKind = RuleMod['kind'];
 export interface RuleCtx {
@@ -27,6 +28,14 @@ export function activeMods(block: Pick<EvilModeBlock, 'here' | 'team' | 'crew'>,
   const patron = data.region.on ? patronOf(block, data) : undefined;
   const patronIn = block.crew.some((c) => c.id === PATRON_ID && c.where === 'in');
   for (const mod of patron?.mods ?? []) if (!mod.whileIn || patronIn) out.push({ mod, from: patron!.who });
+  // Slice 10: the base's rooms, last (a Garage's reach and its fourth squad).
+  const base = (block as { base?: EvilModeBlock['base'] }).base;
+  if (base) {
+    const reach = fxTotal(block, 'reach', data);
+    const squads = fxTotal(block, 'squads', data);
+    if (reach) out.push({ mod: { kind: 'scoutReach', add: reach, label: 'The Garage' }, from: 'The base' });
+    if (squads) out.push({ mod: { kind: 'squads', add: squads, label: 'The Garage' }, from: 'The base' });
+  }
   return out;
 }
 

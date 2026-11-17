@@ -330,14 +330,22 @@ describe('the Office screen', () => {
 });
 
 describe('saves', () => {
-  it('v8 -> v9: an empty Night, everyone Easy; save and reload keeps a knock at the door', () => {
+  it('to v20 (slice 7\'s reserved number) from any block without a Night: an empty Night, everyone Easy; save and reload keeps a knock at the door', () => {
     const b = toNight(found());
     const { night: _n, ...rest } = b;
-    const v8 = { ...rest, v: 8, crew: b.crew.map(({ mood: _m, knocks: _k, ...c }) => c) };
-    const out = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(v8)));
-    expect(out.v).toBe(9);
-    expect(out.night).toEqual(emptyNight());
-    expect(out.crew.every((c) => c.mood === 'easy' && c.knocks === 0)).toBe(true);
+    const crew = b.crew.map(({ mood: _m, knocks: _k, ...c }) => c);
+    // v9 (slice 10's block, today's last before the Night) and v15 (a block saved by slices that land before this one).
+    for (const v of [9, 15]) {
+      const out = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...rest, v, crew })));
+      expect(out.v).toBe(20);
+      expect(out.night).toEqual(emptyNight());
+      expect(out.crew.every((c) => c.mood === 'easy' && c.knocks === 0)).toBe(true);
+    }
+    // A block that already has its Night keeps it.
+    expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...b, v: 15 }))).night).toEqual(b.night);
+    // An older block goes through every step to v20.
+    const { base: _b, raid: _r, law: _l, ...older } = rest as typeof rest & { base?: unknown; raid?: unknown; law?: unknown };
+    expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...older, v: 8, crew }))).v).toBe(20);
     const again = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(b)));
     expect(again).toEqual(b);
   });
