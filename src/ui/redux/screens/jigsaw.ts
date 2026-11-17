@@ -74,7 +74,8 @@ export function jigsawView(_c: ReduxCtx, d: JigsawModel): string {
   // Drawn large and from the top, so the skull and the shoulders run over nearly every shard (the feet fall off the slab).
   const k = a ? Math.min((bw * 1.12) / a.sw, (bh * 1.62) / a.sh) : 1;
   const sd = d.skullArt ? rxImage(d.skullArt) : undefined;
-  const sk = sd ? Math.min(bw / sd[0], bh / sd[1]) : 1;
+  // Drawn a quarter larger than the slab (the picture has an empty margin), so the skull runs over nearly every shard.
+  const sk = sd ? Math.min(bw / sd[0], bh / sd[1]) * 1.25 : 1;
   const skull = sd && d.skullArt ? `<div class="abs" style="left:${Math.round((bw - sd[0] * sk) / 2)}px;top:${Math.round((bh - sd[1] * sk) / 2)}px;filter:sepia(.35) contrast(1.1);image-rendering:pixelated">${img(d.skullArt, sk)}</div>` : '';
   const fossil = skull ? skull : a && d.file ? `<div class="abs" style="left:${Math.round((bw - a.sw * k) / 2)}px;top:${Math.round(-a.sh * k * 0.05)}px;filter:grayscale(1) sepia(.55) brightness(.5) contrast(1.5);opacity:.92">${mon(d.file, k)}</div>` : '';
   const slab = `<div class="abs" style="left:0;top:0;width:${bw}px;height:${bh}px;background:repeating-linear-gradient(168deg,#0000 0 17px,#5a442412 17px 19px),radial-gradient(ellipse at 42% 44%,#f3e6c4 0,#dcc798 46%,#b89a68 100%)">${fossil}</div>`;

@@ -163,11 +163,11 @@ test.describe('New UI', () => {
   test.use({ deviceScaleFactor: 2 });
   test('the pack fight: the Zangoose and the Seviper stand on your side and play themselves', async ({ page }) => {
     test.setTimeout(600_000);
-    await packFight(page, 'seed=gnscreen-allies&campaign=dev&debug=1&ui=new', '/mnt/project-files/shots/gnscreens/allies.png');
+    await packFight(page, 'seed=gnscreen-allies&campaign=dev&debug=1&ui=new', `${process.env.GN_SHOTS ?? 'test-results/visual/'}allies.png`);
   });
   test('the pond returns: allies walk on for three turns, then step back', async ({ page }) => {
     test.setTimeout(600_000);
-    await pondReturn(page, 'seed=gnscreen-allies-pond&campaign=dev&debug=1&ui=new', '/mnt/project-files/shots/gnscreens/allies-pond.png');
+    await pondReturn(page, 'seed=gnscreen-allies-pond&campaign=dev&debug=1&ui=new', `${process.env.GN_SHOTS ?? 'test-results/visual/'}allies-pond.png`);
   });
 });
 

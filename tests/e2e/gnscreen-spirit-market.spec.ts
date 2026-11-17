@@ -90,17 +90,17 @@ test('the Spirit Market: six lanterns, a trade at each stall by mouse and keyboa
   expect(await cursor(page)).toBe(3);
   await key('Enter');
   expect((await state(page)).at).toBe('dusclops');
-  await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/spirit-market-stall.png' });
+  await page.screenshot({ path: `${process.env.GN_SHOTS ?? 'test-results/visual/'}spirit-market-stall.png` });
   await key('Enter');
   const lesson = ((await state(page)).party[0].lessons as { id: string }[])[0]!.id;
-  await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/spirit-market-lessons.png' });
+  await page.screenshot({ path: `${process.env.GN_SHOTS ?? 'test-results/visual/'}spirit-market-lessons.png` });
   await key('Enter');
   await key('Enter');
   expect(await lead(page)).toEqual([lesson, cloth[0]!.id, 'leer', 'scratch']);
   await expect(mk.locator('[data-lanterns="4"]')).toBeVisible();
   // The picture for the report: the lanes, four lanterns lit and two burnt.
   await page.waitForTimeout(600);
-  await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/spirit-market.png' });
+  await page.screenshot({ path: `${process.env.GN_SHOTS ?? 'test-results/visual/'}spirit-market.png` });
   // The Mismagius: the nickname goes, and the hidden stop shows itself.
   await click(2);
   await expect(mk).toContainText('Give up "Pip".');
@@ -126,14 +126,14 @@ test('the Spirit Market: six lanterns, a trade at each stall by mouse and keyboa
   await expect(mk.locator('[data-lanterns="0"]')).toBeVisible();
   await key('Escape');
   expect(await state(page)).toMatchObject({ at: 'dark', done: false });
-  await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/spirit-market-dark.png' });
+  await page.screenshot({ path: `${process.env.GN_SHOTS ?? 'test-results/visual/'}spirit-market-dark.png` });
   // Stay: the Rare Candy (or whatever the seed picks) is swapped for another item of the same tier.
   const bagBefore = await page.evaluate(() => JSON.stringify((window as any).__pkr.session.run.inventory));
   await click(1);
   await expect(mk).toContainText('You wake at the next step', { timeout: 10_000 });
   await expect(mk).toContainText('Trades made: 6 of 6.');
   expect(await page.evaluate(() => JSON.stringify((window as any).__pkr.session.run.inventory))).not.toBe(bagBefore);
-  await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/spirit-market-done.png' });
+  await page.screenshot({ path: `${process.env.GN_SHOTS ?? 'test-results/visual/'}spirit-market-done.png` });
   await mk.locator('[data-act="pick"]').first().click();
   await waitForScene(page, 'Map');
   expect(await page.evaluate(() => (window as any).__pkr.session.run.minigame)).toBeNull();
