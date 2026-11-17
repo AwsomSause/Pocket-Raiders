@@ -6,6 +6,7 @@ import { gunzipSync, gzipSync } from 'node:zlib';
 import * as A from '../../tests/unit/autoplay';
 import { content } from '../../tests/unit/helpers';
 import * as B from '../lib/simBot';
+import * as Brain from './brain';
 import * as R from '../../src/core/run';
 import { chooseBackstory } from '../../src/core/story2/module';
 import { maxHp } from '../../src/core/pokemon';
@@ -118,7 +119,7 @@ function playOne(n: number): Record<string, unknown> {
   const s = p.scn;
   const seed = `k${n}`;
   const god = p.assist === 'god';
-  const row: Record<string, unknown> = { n, seed, scn: s.id, group: s.group, mode: s.modeId, diff: s.difficultyId, arch: p.arch, assist: p.assist, bot: 'collector', skill: p.skill, cur: p.curiosity, set: p.settings, bs: p.backstory ?? null };
+  const row: Record<string, unknown> = { n, seed, scn: s.id, group: s.group, mode: s.modeId, diff: s.difficultyId, arch: p.arch, assist: p.assist, bot: 'vgc', skill: p.skill, cur: p.curiosity, set: p.settings, bs: p.backstory ?? null };
   con = {};
   const bot = mulberry(p.botSeed);
   const C: Record<string, Cnt> = {};
@@ -304,8 +305,11 @@ function playOne(n: number): Record<string, unknown> {
         const brings = typesOf(got).some((t) => !mine.has(t));
         let swap = -1;
         if (brings) r.party.forEach((m, i) => { if (i === 0) return; const others = new Set(r.party.filter((_, j) => j !== i).flatMap((o) => typesOf(o.speciesId))); if (typesOf(m.speciesId).every((t) => others.has(t)) && (swap < 0 || m.level < r.party[swap]!.level)) swap = i; });
+        // Or a clearly stronger species (by Showdown usage) takes the place of the weakest one, when it is not far behind in level.
+        const gotMon = (r.pending[0] as { mon: { level: number } }).mon; let strongerSwap = false;
+        if (swap < 0) { const pw = Brain.speciesPower(content, got); r.party.forEach((m, i) => { if (i === 0 || gotMon.level < m.level - 8) return; const mp = Brain.speciesPower(content, m.speciesId); if (pw > mp + 0.25 && (swap < 0 || mp < Brain.speciesPower(content, r.party[swap]!.speciesId))) swap = i; }); strongerSwap = swap >= 0; }
         next = tryDecide(r, [...(swap >= 0 ? [{ kind: 'replace' as const, partyIndex: swap }] : []), { kind: 'sendToBox' }, { kind: 'release' }]);
-        if (next && swap >= 0) bump(c('bot'), 'swapped in a new type');
+        if (next && swap >= 0) bump(c('bot'), strongerSwap ? 'swapped in a stronger species' : 'swapped in a new type');
       }
       if (next) { bump(c('bot'), dup ? 'duplicate sent to the box' : full ? 'caught with a full team' : 'caught and added'); return { run: next, turn: null }; }
     }
@@ -314,7 +318,7 @@ function playOne(n: number): Record<string, unknown> {
       const key = b.enemyTeam[0]?.uid ?? ''; const thrown = throwsBy.get(key) ?? 0;
       const isNew = !r.party.some((m) => m.speciesId === foe.speciesId) && !(r.box ?? []).some((m) => m.speciesId === foe.speciesId);
       const ball = ['ultra-ball', 'great-ball', 'premier-ball', 'poke-ball', ...Object.keys(r.inventory).filter(isBall)].find((id) => (r.inventory[id] ?? 0) > 0 && id !== 'master-ball');
-      if (ball && thrown < 4 && me.hp / maxHp(content, me) >= 0.3 && (foe.hp <= maxHp(content, foe) * 0.5 || (isNew && foe.level <= me.level - 2)) && itemProblem({ content, battle: b, party: r.party, inventory: r.inventory, catchBlocked: nuzlockeCatchProblem(b) }, ball) === null) {
+      if (ball && thrown < 4 && me.hp / maxHp(content, me) >= 0.3 && (foe.hp <= maxHp(content, foe) * 0.5 || (isNew && (foe.level <= me.level - 2 || Brain.wouldKo(content, r)))) && itemProblem({ content, battle: b, party: r.party, inventory: r.inventory, catchBlocked: nuzlockeCatchProblem(b) }, ball) === null) {
         try { const t = R.takeTurn(content, r, { kind: 'item', itemId: ball }); throwsBy.set(key, thrown + 1); bump(c('bot'), 'ball thrown'); return { run: t.run, turn: t }; } catch { /* fight on */ }
       }
     }
@@ -326,11 +330,21 @@ function playOne(n: number): Record<string, unknown> {
       if (bought) { bump(c('bot'), 'balls bought', bought); return B.botStep(content, next, stepFn); }
     }
     if (r.phase === 'reward' && r.draft?.length) {
-      const order = r.draft.map((id, i) => { const rw = content.rewards.get(id); const kind = (rw?.effect as { kind?: string } | undefined)?.kind; const base = kind === 'levelUp' ? 50 : kind === 'vitamin' ? 30 : kind === 'attribute' ? 25 : kind === 'catalog' ? 20 : kind === 'addItem' ? (rw?.category === 'healing' ? 22 : 12) : kind === 'money' ? 8 : 5; return { i, id, v: base + Math.max(0, RAR.indexOf(rw?.rarity ?? '')) * 4 + bot() * 25 - 40 * (taken[id] ?? 0) - (/fossil/.test(id) ? 30 : 0) + (/ball/.test(id) ? 30 : 0) }; }).sort((a, b2) => b2.v - a.v);
+      const order = r.draft.map((id, i) => { const rw = content.rewards.get(id); const kind = (rw?.effect as { kind?: string } | undefined)?.kind; const base = kind === 'levelUp' ? 50 : kind === 'vitamin' ? 30 : kind === 'attribute' ? 25 : kind === 'catalog' ? 20 : kind === 'addItem' ? (rw?.category === 'healing' ? 22 : 12) : kind === 'money' ? 8 : 5; return { i, id, v: base + Math.max(0, RAR.indexOf(rw?.rarity ?? '')) * 4 + bot() * 25 - 40 * (taken[id] ?? 0) - (/fossil/.test(id) ? 30 : 0) + (/ball/.test(id) ? 30 : 0) + (kind === 'catalog' ? Math.min(30, 500 * Brain.itemShare((rw?.effect as { entry?: string }).entry ?? '')) : 0), entry: kind === 'catalog' ? (rw?.effect as { entry?: string }).entry ?? '' : '' }; }).sort((a, b2) => b2.v - a.v);
       const targets = r.party.map((_, i) => i).sort(() => bot() - 0.5);
-      for (const o of order) for (const t of targets.length ? targets : [0]) { try { const next = R.chooseReward(content, r, o.i, t).run; bump(taken, o.id); return { run: next, turn: null }; } catch { /* next */ } }
+      for (const o of order) for (const t of (o.entry && Brain.itemShare(o.entry) > 0 ? [...targets].sort((x, y) => Brain.itemShareFor(content, r.party[y]!.speciesId, o.entry) - Brain.itemShareFor(content, r.party[x]!.speciesId, o.entry)) : targets.length ? targets : [0])) { try { const next = R.chooseReward(content, r, o.i, t).run; bump(taken, o.id); return { run: next, turn: null }; } catch { /* next */ } }
     }
     return null;
+  };
+  // The battle brain (tools/sim100k/brain.ts): damage maths, one-exchange look-ahead, switching, set-up, Showdown-informed move choices.
+  const brainState = Brain.freshBrain();
+  const brainStep = (r: RunState): { run: RunState; turn: R.TurnResult | null } | null => {
+    try {
+      if (r.phase === 'decision') { const ch = Brain.learnChoice(content, r); if (!ch) return null; bump(c('bot'), ch.kind === 'skipMove' ? 'new move skipped' : 'new move learned'); return { run: R.resolveDecision(content, r, ch).run, turn: null }; }
+      if (r.phase !== 'battle' || !r.battle) return null;
+      const pick = Brain.battleBrain(content, r, brainState); if (!pick) return null;
+      const t = R.takeTurn(content, r, pick.action); bump(c('brain'), pick.tag); if (((t as unknown as { events?: { type: string; targetUid?: string; hpAfter?: number }[] }).events ?? []).some((e) => e.type === 'item' && typeof e.targetUid === 'string' && e.hpAfter !== undefined && !r.party.some((m) => m.uid === e.targetUid))) { brainState.foeHealTurn = r.battle.turn; bump(c('misc'), 'foe trainer used a healing item'); } if (process.env.SIM_BRAINLOG) { const f0 = currentEnemy(r.battle); const m0 = r.party[r.battle.activeIndex]!; console.log(`${r.battle.kind} t${r.battle.turn} ${m0.speciesId}:${m0.level} ${m0.hp}/${maxHp(content, m0)} vs ${f0.speciesId}:${f0.level} ${f0.hp}/${maxHp(content, f0)} | ${pick.tag} ${JSON.stringify(pick.action)} ${pick.action.kind === 'move' ? m0.moves[pick.action.index]?.id : ''} -> me ${t.run.battle ? t.run.party[t.run.battle.activeIndex]!.hp : '-'} foe ${t.run.battle ? currentEnemy(t.run.battle).hp : '-'}`); if (process.env.SIM_BRAINLOG === '2') console.log('   ', JSON.stringify((t as unknown as { events?: unknown[] }).events ?? Object.keys(t)).slice(0, 900)); } return { run: t.run, turn: t };
+    } catch { bump(c('brain'), 'fell back to the old bot'); return null; }
   };
 
   const stepCap = god ? GOD_STEPS : STEPS;
@@ -371,7 +385,7 @@ function playOne(n: number): Record<string, unknown> {
       let out: { run: RunState; turn: R.TurnResult | null } | null = null;
       try {
         if (run.phase === 'map') { const ex = explore(run); if (ex) out = { run: ex, turn: null }; }
-        out ??= collector(run) ?? B.botStep(content, run, stepFn);
+        out ??= collector(run) ?? brainStep(run) ?? B.botStep(content, run, stepFn);
       } catch (e) {
         const err = e as Error;
         row.error = norm(err.message).slice(0, 220);

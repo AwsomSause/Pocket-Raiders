@@ -20,3 +20,8 @@ Notes:
   entries to prove nothing edits them.
 - The bot is `tools/lib/simBot.ts` plus optional stops (events, shops, heals, raids, totems, fishing) chosen by a
   "curiosity" setting, through the node menu like the map screen does. It cannot play minigames, expeditions, the plaza or services.
+
+## Battle brain and Showdown data
+
+- `brain.ts` is the bot's battle brain (damage estimate for every move, one-exchange look-ahead, switching, set-up, heals). It is rule-based, not machine-learned.
+- `showdown-usage.json` is built by `showdown-usage.mjs` from Pokémon Showdown's public usage stats (https://www.smogon.com/stats/2026-10/chaos/, 16 formats). Provenance: public data, downloaded 2026-11-16. Used for move, species and held-item choices.
