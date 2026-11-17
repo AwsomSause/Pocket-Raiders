@@ -27,7 +27,7 @@ export function rosterView(m: RosterModel): string {
   let body = '';
   if (m.people) {
     body = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:6px">${m.people.map((p, i) => `<div style="padding:4px 6px;border:1px solid #8886;border-top:3px solid var(--team-a);cursor:pointer;opacity:${p.left ? 0.5 : 1};${p.sel ? 'outline:2px solid var(--team-b);' : ''}"${act('rrow', i)} data-testid="evil-person" data-id="${esc(p.id)}" data-left="${!!p.left}">
-      <div class="row" style="gap:6px;align-items:flex-start">${face(p.face, p.band.face, 44, p.minor)}<div class="grow">
+      <div class="row" style="gap:6px;align-items:flex-start">${face(p.face, null, 44, p.minor)}<div class="grow">
         <b class="sm" data-testid="evil-person-name">${esc(p.name)}</b>${sm(`${p.rank} · ${p.talent} · ${p.flaw} · ${p.wage}`)}
         <div class="sm" style="line-height:16px" data-testid="evil-person-band">${esc(`${p.band.name} · ${p.band.face}`)}</div></div></div>
       ${sm(`Line: ${p.line}`, 'font-style:italic')}${sm(p.why, 'opacity:.75')}${p.left ? sm(p.left, 'color:#f08a7a') : ''}${p.acts ? acts(p.acts, i) : ''}</div>`).join('')}</div>`;

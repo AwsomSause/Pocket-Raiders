@@ -116,7 +116,8 @@ test('taps only: asked anyway across a line, refused in the yard, insisted on; t
   const otis = s.locator('[data-testid="evil-person"][data-id="otis"]');
   await expect(otis).toHaveAttribute('data-left', 'true');
   await expect(otis).toContainText('over their line');
-  await expect(s.getByTestId('evil-roster-wont')).toContainText("Won't fight anyone who's not ready");
+  // His line went with him: "what this team won't do" is the lines of the people still in.
+  await expect(s.getByTestId('evil-roster-wont')).not.toContainText("Won't fight anyone who's not ready");
 
   // The Office: Faye's done three jobs; promote her to Lead with a tap.
   await page.evaluate(() => { const c = (window as any).__pkr.session.run.expansion.evilMode.crew.find((x: any) => x.id === 'faye'); c.jobs = 3; });

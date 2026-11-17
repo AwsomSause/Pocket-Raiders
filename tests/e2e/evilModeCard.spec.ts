@@ -88,8 +88,9 @@ test('taps only: CONFIRM stays dark until field 13 has been scrolled into view; 
   const b0 = await block(page);
   const local = b0.district.holdings.find((h: any) => h.kind === 'local');
   await s.getByTestId(`evil-row-${local.step}`).click();
-  await s.getByTestId('evil-crew-g3').click();
-  await s.getByTestId('evil-crew-g4').click();
+  // Slice 4: the Roster is the Founders drawn for this run; the third and fourth go.
+  await s.getByTestId(`evil-crew-${b0.crew[2].id}`).click();
+  await s.getByTestId(`evil-crew-${b0.crew[3].id}`).click();
   await s.getByTestId('evil-method-persuade').click();
   await s.getByTestId('evil-queue').click();
   await expect(s.getByTestId('evil-card')).toBeVisible();
