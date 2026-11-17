@@ -9,8 +9,8 @@ Written by `tests/unit/encounterDirector.test.ts` (part of `npm run check`): 100
 | 2 | wild | 6–8 | 6, 7, 8 | 10000 | 141 | 54.609 / 90 (budget 91.189) | 2.2% | 0 | 0 | 0 | 0.00% |
 | 2 | trainer | 6–8 | 7, 8, 9 | 4000 | 143 | 55.519 / 106 (budget 110.768) | 0.7% | 0 | 0 | 0 | 0.00% |
 | 3 | wild | 10–12 | 10, 11, 12 | 10000 | 294 | 58.643 / 99 (budget 97.594) | 0.4% | 0 | 0 | 0 | 0.00% |
-| 3 | trainer | 10–12 | 11, 12, 13 | 6000 | 266 | 60.33 / 114 (budget 121.197) | 0.5% | 0 | 0 | 0 | 0.00% |
+| 3 | trainer | 10–12 | 11, 12, 13 | 6000 | 267 | 60.308 / 114 (budget 121.197) | 0.5% | 0 | 0 | 0 | 0.00% |
 | 4 | wild | 14–16 | 14, 15, 16 | 10000 | 330 | 63.067 / 105 (budget 103.993) | 1.0% | 0 | 0 | 0 | 0.00% |
-| 4 | trainer | 14–16 | 15, 16, 17 | 6000 | 298 | 67.159 / 114 (budget 131.582) | 1.1% | 0 | 0 | 0 | 0.00% |
+| 4 | trainer | 14–16 | 15, 16, 17 | 6000 | 298 | 67.232 / 114 (budget 131.582) | 1.1% | 0 | 0 | 0 | 0.00% |
 
 One-hit KO = the foe's best attack at a max roll, neutral type, no crit, beats an all-70 Pokémon of the same level. Party loss and win rates are measured by the playtest bot (`node tools/playtest.ts`, `docs/quality/playtest/`), not here.
