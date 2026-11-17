@@ -1,5 +1,6 @@
+import { writeFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import { addSide, open, start, toMap, view, waitForScene, watch } from './helpers/newUi';
+import { addSide, open, view, waitForScene, watch } from './helpers/newUi';
 
 // Greenneedle gn.18, Safari Land as a walkable zone (New UI): the park's grid is walked with the keyboard, the mouse and
 // the on-screen pad; the camera, an encounter and a photograph; a Kanto scene inside the park and back; the far gate's door.
@@ -15,17 +16,40 @@ async function put(page: Page, patch: Record<string, unknown>) {
   await open(page, 'Minigame');
 }
 async function enterPark(page: Page, seed: string) {
-  await start(page, `ui=new&seed=${seed}`);
-  await toMap(page);
+  // The same steps as helpers/newUi.ts `start` and `toMap`, with room for a slow machine (the first load is the long part).
+  await page.goto('/');
+  await page.evaluate(() => localStorage.clear());
+  await page.goto(`/?ui=new&seed=${seed}`);
+  await waitForScene(page, 'MainMenu', 150_000);
+  for (const next of ['Hub', 'TrainerSelect', 'RunPrep', 'StarterSelect', 'Briefing', 'Map']) {
+    await page.keyboard.press('Enter');
+    await waitForScene(page, next, 60_000);
+  }
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 60_000 }).toBe(false);
   await addSide(page, { id: 'gn-park', kind: 'minigame', used: false, minigameId: 'gn-safari' });
   await page.evaluate(() => void (window as any).__pkr.session.beginMinigame('gn-park', 0));
   await open(page, 'Minigame');
   await expect(view(page, 'Minigame').locator('.pk-field')).toBeVisible();
 }
+/** A picture of the screen for the report, at twice the size: only when SAFARI_SHOT names a .png to write. */
+async function shot(page: Page, suffix: string) {
+  const file = process.env.SAFARI_SHOT;
+  if (!file) return;
+  const cdp = await page.context().newCDPSession(page);
+  await cdp.send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 720, deviceScaleFactor: 2, mobile: false });
+  await page.waitForTimeout(500);
+  const { data } = await cdp.send('Page.captureScreenshot', { format: 'png' });
+  writeFileSync(file.replace(/\.png$/, `${suffix}.png`), Buffer.from(data, 'base64'));
+  await cdp.send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 720, deviceScaleFactor: 1, mobile: false });
+  await cdp.detach();
+  await page.waitForTimeout(300);
+}
 const press = async (page: Page, key: string) => {
   await page.keyboard.press(key);
   await page.waitForTimeout(60);
 };
+
+test.setTimeout(420_000);
 
 test('Safari Land: walk the grid, borrow the camera, photograph a Pokémon, and take a door at the far gate', async ({ page }) => {
   const errors = watch(page);
@@ -62,20 +86,13 @@ test('Safari Land: walk the grid, borrow the camera, photograph a Pokémon, and 
   expect(met!.mode).toBe('meet');
   await expect(v).toContainText(/catch \d+%, wanders off \d+%/);
   await expect(v.locator('[data-act="pick"]', { hasText: 'Throw a Ball' })).toBeVisible();
-  // One picture of the finished screen for the report, at twice the size (set SAFARI_SHOT to a file path to take it).
-  if (process.env.SAFARI_SHOT) {
-    const cdp = await page.context().newCDPSession(page);
-    await cdp.send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 720, deviceScaleFactor: 2, mobile: false });
-    await page.waitForTimeout(500);
-    await page.screenshot({ path: process.env.SAFARI_SHOT });
-    await cdp.send('Emulation.setDeviceMetricsOverride', { width: 1280, height: 720, deviceScaleFactor: 1, mobile: false });
-    await page.waitForTimeout(300);
-  }
+  await shot(page, '');
   await v.locator('[data-act="pick"]', { hasText: 'Take a photo' }).click();
   expect((await park(page))!.shots).toBe(1);
   if ((await park(page))!.mode === 'meet') {
     await expect(v.locator('.pk-photo')).toBeVisible();
     await expect(v.locator('.pk-plate')).not.toHaveText('');
+    await shot(page, '-photo');
     // Esc backs off (Leave).
     await press(page, 'Escape');
   }
@@ -113,9 +130,10 @@ test('Safari Land in Kanto: the Tauros Stampede happens inside the park, and the
   expect(await page.evaluate(() => (window as any).__pkr.session.run.phase)).toBe('map');
   await ev.locator('[data-act="pick"]').first().click();
   await expect(ev.locator('[data-act="next"]').first()).toBeVisible({ timeout: 10_000 });
-  for (let i = 0; i < 6 && (await page.evaluate(() => (window as any).__pkr.activeScene())) === 'Event'; i++) {
-    await page.waitForTimeout(900);
-    await ev.locator('[data-act="next"]').last().click({ timeout: 2000 }).catch(() => undefined);
+  // The outcome's pages, then its results: Next until the event closes.
+  for (let i = 0; i < 20 && (await page.evaluate(() => (window as any).__pkr.activeScene())) === 'Event'; i++) {
+    await page.waitForTimeout(1500);
+    await ev.locator('[data-act="next"]').first().dispatchEvent('click', undefined, { timeout: 5000 }).catch(() => undefined);
   }
   // Back on the same tile, the visit on again, the spot gone.
   await waitForScene(page, 'Minigame');

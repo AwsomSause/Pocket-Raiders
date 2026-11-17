@@ -157,12 +157,12 @@ export function safariView(_c: ReduxCtx, d: ParkModel): string {
   const side = d.picture
     ? W(
         `<div class="sm" style="margin-bottom:5px">${esc(d.picture.title)}</div><div class="pk-photo" style="background:linear-gradient(${g[0]} 55%,${g[2]} 55%)">${d.picture.file ? `<div class="pk-shot">${tall(d.picture.file, 74)}</div>` : ''}</div><div class="pk-plate">${esc(d.picture.plate)}</div>`,
-        'left:640px;top:196px;width:296px;height:144px;padding:8px 12px;overflow:hidden',
+        'left:640px;top:196px;width:296px;height:142px;padding:8px 12px;overflow:hidden',
         'abs',
       )
     : W(
         `<div class="row" style="gap:8px;align-items:flex-start">${d.wardenSheet ? `<div style="flex:none;margin-top:-4px">${img(d.wardenSheet, 0.75, [0, 0, 64, 64])}</div>` : ''}<div class="grow"><div class="sm">Warden Baoba-Lin, under their breath${d.camera ? ` · camera: ${d.shots} shot${d.shots === 1 ? '' : 's'}` : ''}</div><div style="font-size:${d.warden.length > 110 ? 13 : 15}px;line-height:1.25;margin-top:4px;font-style:italic">${esc(d.warden)}</div></div></div>`,
-        'left:640px;top:196px;width:296px;height:144px;padding:8px 12px;overflow:hidden',
+        'left:640px;top:196px;width:296px;height:142px;padding:8px 12px;overflow:hidden',
         'abs',
       );
 
@@ -170,7 +170,7 @@ export function safariView(_c: ReduxCtx, d: ParkModel): string {
   const focus = d.walking ? null : d.cells[d.index];
   const message = W(
     `<div style="font-size:${said.length > 190 ? 13 : 15}px;line-height:1.25">${d.msg ? `<b>${esc(d.msg)}</b> ` : ''}${esc(d.prompt)}${focus?.detail ? ` <span class="sm">· ${esc(focus.label)}: ${esc(focus.detail)}</span>` : ''}</div>`,
-    'left:24px;top:352px;width:912px;height:56px;padding:7px 12px;overflow:hidden',
+    'left:24px;top:352px;width:912px;height:52px;padding:6px 12px;overflow:hidden',
     'abs',
   );
 
