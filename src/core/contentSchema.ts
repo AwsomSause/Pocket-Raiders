@@ -3928,6 +3928,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     rival: z.boolean().default(false),
     /** A species that fights beside you as a temporary ally (a double battle; needs two or more foes). `rival`: the rival's; `fellow`: the apprentice's; `past` (batch 5, A Familiar Face Steps In): the ace of the trainer you beat in this run's newest big battle won. */
     ally: z.string().optional(),
+    /** One or two species that fight beside you and are played by the game (core/battle/guests.ts): a triple battle with your lead on the left and the allies in the centre and on the right. They can be hit, can faint, and go home when the fight ends. Needs two or more foes. */
+    allies: z.array(z.string()).min(1).max(2).optional(),
     /** Evil Teams: a member of the run's team at this rank (their Pokémon, name and battle rule; core/evil). */
     evil: z.enum(['grunt', 'specialist', 'executive', 'leader']).optional(),
     /** Grand Arc: with `evil`, fight this roaming team (cipher, rocket-remnants, snagem) instead of the run's own team. */

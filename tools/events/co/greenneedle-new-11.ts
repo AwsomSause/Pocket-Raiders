@@ -1,7 +1,9 @@
 // Greenneedle new event 11: The Night Parade (doc GREENNEEDLE_PLACED_1.md lines 412–449). Rules: src/core/greenneedle/parade.ts.
 // Build: npm run co:build -- greenneedle-new-11   then   npm run co:gn
-// A step-15 must-see at night, once per region. Hide / Watch / Join. Joining opens the Spirit Market: six actions (the lanterns), four stalls on
-// two lanes (walking between lanes is free). The last region's curtain opens for a player who joined every parade.
+// A step-15 must-see at night, once per region. Hide / Watch / Join. Joining opens the Spirit Market, a screen of its own (minigame
+// `gn-spirit-market`, core/greenneedle/spiritMarket.ts and spiritMarketEnd.ts): six lanterns, four stalls, a trade is one action. The last region's
+// curtain opens for a player who joined every parade. The lane and stall rooms below are the earlier version of the market (choice
+// scenes); nothing leads to them any more, and they stay only for a run saved inside one.
 import { ch, flag, heal, join, out, type Json } from '../dsl.ts';
 import { bond, chIf, gev, gn, is, moment, rm, say, scene, setTo, stampRegion, when, type Placement } from './_gn.ts';
 
@@ -33,7 +35,7 @@ const EVENTS: Json[] = [
   ), [
     ch('Hide.', out('You flatten yourself into a doorway and hold your breath. The lanterns pass, a hundred of them, close enough to warm your face. In the morning there is a mask on the road, left behind or left for you. It is only a mask.', flag('parade-hid'), stampRegion('parade-at'), moment('Hid from the Night Parade, and found a mask on the road.', 40))),
     ch('Watch.', out('You stand where you are. The palanquin goes by. For a moment its curtain moves, as if someone inside is looking back. One of your Pokémon presses hard against your leg and does not let go until the last lantern is gone.', bond(1), flag('parade-watched'), stampRegion('parade-at'))),
-    ch('Join the back of the line.', out('You step in behind the last lantern. Nobody stops you. **The line ends at a Spirit Market. Six actions before the lanterns burn down. Stay past the sixth, and you wake at the next step with one item swapped for another of the same tier.** A Misdreavus at the gate says so, once, politely.', flag('parade-joined'), stampRegion('parade-at'), setTo(L, 6), scene(LANE_A))),
+    ch('Join the back of the line.', out('You step in behind the last lantern. Nobody stops you. **The line ends at a Spirit Market. Six actions before the lanterns burn down. Stay past the sixth, and you wake at the next step with one item swapped for another of the same tier.** A Misdreavus at the gate says so, once, politely.', flag('parade-joined'), stampRegion('parade-at'), setTo(L, 6), gn('minigame', { key: 'gn-spirit-market', n: 1 }))),
   ]),
 
   rm(LANE_A, 'The Spirit Market: First Lane', night({ remembers: [bellLine] }), say(
@@ -116,6 +118,6 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.new.11', shape: 'Single', earliest: 'A3', home: 15, window: [10, 17], sits: 'must-see', attaches: 'after', tags: ['World Event'],
     needs: ['night'], stages: [3, 4, 5, 6, 7], level: 'No battles', often: 'region', badge: 'own',
     dressing: { kanto: 'The Night Parade', elsewhere: 'The Night Parade' },
-    note: 'Badge: a lantern. Once per region, at night (the placer tries step 15, then 16–17, then 14 down to 10, the doc fallback; a stage that is not at night skips it, and it stays owed until the first night stage that fits, because its once-per-region stamp is set only when it is played). Joining opens the Spirit Market (six lanterns); the last region opens the palanquin for a player who joined every parade.',
+    note: 'Badge: a lantern. Once per region, at night (the placer tries step 15, then 16–17, then 14 down to 10, the doc fallback; a stage that is not at night skips it, and it stays owed until the first night stage that fits, because its once-per-region stamp is set only when it is played). Joining opens the Spirit Market screen (six lanterns, four stalls, a trade is one action, the bell at the fifth, stay past the sixth and one item is swapped); the last region opens the palanquin for a player who joined every parade.',
   },
 };

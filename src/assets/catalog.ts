@@ -281,6 +281,8 @@ export const FIXED_ASSETS: AssetEntry[] = [
   ...[1, 2].map((n): AssetEntry => ({ id: `cine.sfx.mega${n}`, kind: 'audio', category: 'sound', path: `audio/cine/mega_evolution${n}.m4a`, lazy: true })),
   // Item pictures used as menu icons (the Hub's tiles and currency counters).
   ...MENU_ICON_ITEMS.map((name) => itemEntry(`item.${name}`)),
+  // gn.41: the fossil skull drawn in the Museum's jigsaw slab (PixelLab, docs/quality/asset-provenance.md).
+  itemEntry('item.gn/jigsaw-skull'),
   // Legendary Blessings and Legend items: each species' signature item picture (loaded when a screen needs it).
   ...LEGEND_ITEM_IDS.map((id): AssetEntry => ({ ...itemEntry(`item.legend/${id}`), lazy: true })),
   // Story Overhaul icon pack (P7, src/assets/storyIcons.ts): emotes, hearts, snacks, keepsakes, badges, tokens, ball-exit effects.

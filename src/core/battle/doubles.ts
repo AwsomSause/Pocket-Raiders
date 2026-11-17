@@ -29,6 +29,7 @@ import { comboName } from './battleFlair';
 import { jetSpreads } from './jetAbilities';
 import * as Held from './held';
 import { applyTransformations, battleMove, endDynamax, tickDynamax, zMoveFor, type TransformStepEvent } from './transform';
+import { closedSpot, isGuest, isTempAlly, takeGrudge } from './guests';
 import { alliesAdjacent, canReach, centringMoves, foesAdjacent, lanesOn, shiftProblem } from './triples';
 
 /** 0 left, 1 right in a double battle; 0 left, 1 centre, 2 right in a triple battle. */
@@ -315,6 +316,7 @@ export function doublesSwitchProblem(ctx: Pick<BattleContext, 'battle' | 'party'
   const mon = ctx.party[partyIndex];
   if (!mon) return 'There is no Pokémon there';
   if (mon.hp <= 0) return `${mon.uid} has fainted`;
+  if (isGuest(ctx.battle, mon.uid)) return 'That ally is not yours to send out';
   if (spotsOf(ctx.battle).some((s) => indexAt(ctx, 'player', s) === partyIndex)) return 'That Pokémon is already in battle';
   if (taken.includes(partyIndex)) return 'That Pokémon is already being sent out';
   return null;
@@ -431,6 +433,8 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
     }
     focus(ctx, 'player', spot, events);
     let cmd = action.commands[spot] ?? null;
+    // An ally the game controls picks its own move (whatever was sent for its spot is ignored).
+    if (isGuest(battle, c.mon.uid)) cmd = guestCommand(ctx, field, c);
     const forced = forcedMoveId(c.vol);
     const forcedIndex = forced ? c.mon.moves.findIndex((m) => m.id === forced) : -1;
     if (forced && forcedIndex >= 0) cmd = { action: { kind: 'move', index: forcedIndex }, target: d.aims[c.mon.uid] ?? cmd?.target };
@@ -447,7 +451,7 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
         if (problem) throw new Error(problem);
         if (commands.some((o) => o?.action.kind === 'arena')) throw new Error('Only one Pokémon can smash the arena');
       } else if (cmd.action.kind === 'shift') {
-        const problem = shiftProblem(SPOTS.length, spot);
+        const problem = shiftProblem(SPOTS.length, spot) ?? (battle.guests?.uids.length ? 'Your allies hold their places' : null);
         if (problem) throw new Error(problem);
         if (commands.some((o) => o?.action.kind === 'shift')) throw new Error('Only one Pokémon can shift to the centre');
       } else {
@@ -613,8 +617,10 @@ export function resolveDoublesTurn(ctx: BattleContext, action: PlayerAction): Ba
   // 6. Faints, replacements, the outcome.
   ctx.doublesTurn = undefined;
   settle(ctx, field, events);
+  guestsTurnEnd(ctx, field, events);
   battle.turn += 1;
-  rest(ctx, events);
+  // (A single battle that grew for its allies is a single battle again once they have left.)
+  if (battle.doubles) rest(ctx, events);
   return events;
 }
 
@@ -1260,7 +1266,7 @@ function pivots(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
       sendOut(ctx, field, 'enemy', spot, spare, events);
       if (carried) Object.assign(field.at('enemy', spot)!.stages, carried);
       runEntries(ctx, field, [field.at('enemy', spot)!], events);
-    } else if (benchOf(ctx, 'player').length > 0 && !d.refill.includes(spot)) {
+    } else if (!isGuest(battle, c.mon.uid) && benchOf(ctx, 'player').length > 0 && !d.refill.includes(spot)) {
       battle.batonStages = out.baton ? { ...c.stages } : null;
       d.refill.push(spot);
       battle.needsSwitch = true;
@@ -1272,7 +1278,8 @@ function pivots(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
 function benchOf(ctx: BattleContext, side: Side): number[] {
   const team = side === 'player' ? ctx.party : ctx.battle.enemyTeam;
   const onField = spotsOf(ctx.battle).map((s) => indexAt(ctx, side, s));
-  return team.map((m, i) => ({ m, i })).filter(({ m, i }) => m.hp > 0 && !onField.includes(i)).map(({ i }) => i);
+  // Allies the game controls are never the player's to send out (they walk in by themselves: guestsIn).
+  return team.map((m, i) => ({ m, i })).filter(({ m, i }) => m.hp > 0 && !onField.includes(i) && !(side === 'player' && isGuest(ctx.battle, m.uid))).map(({ i }) => i);
 }
 
 function sideOut(field: Field, side: Side): boolean {
@@ -1312,7 +1319,7 @@ function settle(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
   const d = battle.doubles!;
   faintCheck(ctx, field, events);
   let enemyLeft = battle.enemyTeam.some((m) => m.hp > 0);
-  const playerLeft = ctx.party.some((m) => m.hp > 0 && m.uid !== battle.loaner);
+  const playerLeft = ctx.party.some((m) => m.hp > 0 && !isTempAlly(battle, m.uid));
   // Galar's Champion refuses to be done: one last Pokémon joins the bench and is sent out below (galarCrowd.ts).
   if (!enemyLeft && playerLeft) {
     const stand = ctx.lastStand?.() ?? null;
@@ -1336,6 +1343,8 @@ function settle(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
   for (const spot of SPOTS) {
     const c = field.at('enemy', spot);
     if (c && c.mon.hp > 0) continue;
+    // A spot added to make room for the player's allies stays empty on the foe's side.
+    if (!c && closedSpot(battle, 'enemy', spot)) continue;
     const next = benchOf(ctx, 'enemy')[0];
     if (next === undefined) {
       clearSpot(ctx, 'enemy', spot, events);
@@ -1344,11 +1353,14 @@ function settle(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
     sendOut(ctx, field, 'enemy', spot, next, events);
     entering.push(field.at('enemy', spot)!);
   }
+  // Allies the game controls walk into their own free spots (a fallen ally's place, or an empty one).
+  entering.push(...guestsIn(ctx, field, events));
   // Your fainted spots: choose replacements, or the spot stays empty.
   for (const spot of SPOTS) {
     const c = field.at('player', spot);
     if (!c || c.mon.hp > 0 || d.refill.includes(spot)) continue;
-    if (benchOf(ctx, 'player').length > d.refill.length) d.refill.push(spot);
+    if (closedSpot(battle, 'player', spot)) clearSpot(ctx, 'player', spot, events);
+    else if (benchOf(ctx, 'player').length > d.refill.length) d.refill.push(spot);
     else clearSpot(ctx, 'player', spot, events);
   }
   battle.needsSwitch = d.refill.length > 0;
@@ -1401,4 +1413,191 @@ export function autoCommands(ctx: Pick<BattleContext, 'battle' | 'party' | 'cont
     const foeSpot = near.find((s) => (monAt(ctx, 'enemy', s)?.hp ?? 0) > 0) ?? near[0] ?? 0;
     return { action: { kind: 'move', index }, target: { side: 'enemy', spot: foeSpot } };
   });
+}
+
+// ---------- guest allies: Pokémon on the player's side that the game controls (guests.ts) ----------
+
+/** Party indexes of the allies waiting behind the field, in the order they walk in. None once their turns are up. */
+function waitingGuests(ctx: Pick<BattleContext, 'battle' | 'party'>): number[] {
+  const g = ctx.battle.guests;
+  if (!g || g.turns === 0) return [];
+  const onField = spotsOf(ctx.battle).map((s) => indexAt(ctx, 'player', s));
+  return g.uids.map((uid) => ctx.party.findIndex((m) => m.uid === uid)).filter((i) => i >= 0 && ctx.party[i]!.hp > 0 && !onField.includes(i));
+}
+
+/** The next waiting allies take the free spots on the player's side: an empty spot, or one where an ally has fainted. */
+function guestsIn(ctx: BattleContext, field: Field, events: BattleEvent[]): Combatant[] {
+  const { battle } = ctx;
+  const d = battle.doubles!;
+  const entering: Combatant[] = [];
+  if (!battle.guests) return entering;
+  for (const spot of spotsOf(battle)) {
+    const view = slotView(ctx, 'player', spot);
+    const free = !view || (view.mon.hp <= 0 && isGuest(battle, view.mon.uid));
+    // In a battle that grew for them, the allies keep to the added spots (your own spots stay yours, even when empty).
+    if (!free || d.refill.includes(spot) || (battle.guests.closed && !closedSpot(battle, 'player', spot))) continue;
+    const next = waitingGuests(ctx)[0];
+    if (next === undefined) break;
+    sendOut(ctx, field, 'player', spot, next, events);
+    entering.push(field.at('player', spot)!);
+  }
+  return entering;
+}
+
+/**
+ * What an ally the game controls does this turn: the move worth most against a foe it can reach (the foe AI's own move values),
+ * never a spread move that would cost its partners more than it gains. No random numbers: ties go to the earlier move and the
+ * foe further left. A grudge (guestGrudge) sends its single-target moves at that foe while it is in reach.
+ */
+function guestCommand(ctx: BattleContext, field: Field, c: Combatant): SlotCommand {
+  const { content, battle } = ctx;
+  const grudge = takeGrudge(battle, c.mon.uid);
+  const foes = field.alive('enemy');
+  const near = field.nearFoes(c);
+  let best: { index: number; score: number; target?: SlotCommand['target'] } | null = null;
+  c.mon.moves.forEach((slot, index) => {
+    if (slot.pp <= 0) return;
+    const move = S.resolveMove(content, c.mon, index);
+    const kind = targetKind(move);
+    const value = (t: Combatant) => S.moveValue({ content, ai: 1, target: t.mon, stages: c.stages }, c.mon, move.id);
+    let score = 0;
+    let target: SlotCommand['target'];
+    if (ALLY_AIMED.has(move.id) || kind === 'ally') score = 0;
+    else if (kind === 'single') {
+      const reach = foes.filter((f) => field.reaches(c, f, move));
+      const wanted = reach.find((f) => f.mon.uid === grudge);
+      const aim = wanted ?? reach.reduce<Combatant | null>((b, f) => (!b || value(f) > value(b) ? f : b), null);
+      if (aim) {
+        score = value(aim) * (wanted ? 4 : 1);
+        target = { side: 'enemy', spot: field.spotOf(aim)! };
+      }
+    } else if (kind === 'foes' || kind === 'others') {
+      score = near.reduce((sum, f) => sum + value(f), 0) * (near.length > 1 ? 0.75 : 1);
+      if (kind === 'others') for (const a of field.allies(c)) if (S.abilityIn(ctx, a) !== 'telepathy') score -= value(a) * 0.75;
+    } else score = near[0] ? value(near[0]) : 0;
+    if (!best || score > best.score) best = { index, score, target };
+  });
+  const pick = best as { index: number; score: number; target?: SlotCommand['target'] } | null;
+  if (!pick) return { action: { kind: 'move', index: -1 }, target: near[0] ? { side: 'enemy', spot: field.spotOf(near[0])! } : undefined };
+  return { action: { kind: 'move', index: pick.index }, ...(pick.target ? { target: pick.target } : {}) };
+}
+
+/** After a full turn: the allies' turns run down (they leave at none), and waiting allies trade places with the ones out. */
+function guestsTurnEnd(ctx: BattleContext, field: Field, events: BattleEvent[]): void {
+  const { battle } = ctx;
+  const g = battle.guests;
+  if (!g || g.uids.length === 0 || battle.outcome || g.turns === 0) return;
+  if (g.turns !== undefined) {
+    g.turns -= 1;
+    if (g.turns === 0) {
+      guestsLeave(ctx, events);
+      return;
+    }
+  }
+  if (!g.rotate) return;
+  const next = waitingGuests(ctx)[0];
+  if (next === undefined) return;
+  const out = field.alive('player').filter((c) => isGuest(battle, c.mon.uid));
+  const leaving = out.find((c) => c.mon.uid !== g.anchor) ?? out[0];
+  const spot = leaving ? field.spotOf(leaving) : null;
+  if (!leaving || spot === null) return;
+  field.on(leaving, events);
+  events.push({ type: 'switchOut', side: 'player', uid: leaving.mon.uid });
+  S.switchOutAbility(ctx, leaving.mon);
+  sendOut(ctx, field, 'player', spot, next, events);
+  runEntries(ctx, field, [field.at('player', spot)!], events);
+  g.uids = [...g.uids.filter((uid) => uid !== leaving.mon.uid), leaving.mon.uid];
+}
+
+/** The allies step off the field and out of the party. A single battle that grew for them is a single battle again. */
+function guestsLeave(ctx: BattleContext, events: BattleEvent[]): void {
+  const { battle, party } = ctx;
+  const g = battle.guests!;
+  const d = battle.doubles!;
+  for (const spot of spotsOf(battle)) {
+    const view = slotView(ctx, 'player', spot);
+    if (!view || !isGuest(battle, view.mon.uid)) continue;
+    events.push({ type: 'switchOut', side: 'player', uid: view.mon.uid });
+    delete d.aims[view.mon.uid];
+    clearSpot(ctx, 'player', spot, events);
+  }
+  battle.participants = battle.participants.filter((uid) => !isGuest(battle, uid));
+  // They joined at the end of the party, so taking them out moves nobody else's place.
+  const first = party.findIndex((m) => isGuest(battle, m.uid));
+  if (first >= 0 && party.slice(first).every((m) => isGuest(battle, m.uid))) {
+    party.splice(first);
+    g.uids = [];
+  }
+  if (g.grown !== 'single' || g.uids.length > 0) return;
+  const mine = spotsOf(battle).filter((s) => slotView(ctx, 'player', s));
+  const theirs = spotsOf(battle).filter((s) => slotView(ctx, 'enemy', s));
+  if (mine.length !== 1 || theirs.length !== 1) return;
+  focus(ctx, 'player', mine[0]!, events);
+  focus(ctx, 'enemy', theirs[0]!, events);
+  battle.needsSwitch = d.refill.length > 0;
+  battle.doubles = undefined;
+  battle.guests = undefined;
+}
+
+/**
+ * Allies the game controls join the battle (at its start or in the middle). They go to the end of the party and take the free
+ * spots on the player's side; the rest wait behind. A single or double battle grows to three spots a side to make room: the new
+ * spots are for the allies only, and the foe's new spots stay empty, so the foe fields no more than before. No random numbers.
+ */
+export function addGuests(ctx: BattleContext, allies: PokemonInstance[], opts: { turns?: number; rotate?: boolean; anchor?: string } = {}): BattleEvent[] {
+  const { battle } = ctx;
+  const events: BattleEvent[] = [];
+  if (battle.outcome || battle.guests || allies.length === 0 || battle.needsSwitch) return events;
+  setAnnounceContent(ctx.content);
+  let grown: 'single' | 'double' | undefined;
+  let closed: { player: number[]; enemy: number[] } | undefined;
+  const row = (): Slot[] => [emptySlot(), emptySlot(), emptySlot()];
+  if (!battle.doubles) {
+    // The player's Pokémon stays on the left (the engine rests on the leftmost one between turns); the foe stands in the centre, in everyone's reach.
+    battle.doubles = { player: emptySlot(), enemy: emptySlot(), swapped: { player: false, enemy: false }, refill: [], commanding: [], aims: {}, trio: { at: { player: 0, enemy: 1 }, player: row(), enemy: row() } };
+    grown = 'single';
+    closed = { player: [1, 2], enemy: [0, 2] };
+  } else if (!battle.doubles.trio) {
+    const d = battle.doubles;
+    const at = { player: primarySpot(d, 'player'), enemy: primarySpot(d, 'enemy') };
+    const side = (s: Side): Slot[] => {
+      const r = row();
+      r[1 - at[s]] = d[s];
+      return r;
+    };
+    d.trio = { at, player: side('player'), enemy: side('enemy') };
+    d.player = emptySlot();
+    d.enemy = emptySlot();
+    d.swapped = { player: false, enemy: false };
+    grown = 'double';
+    closed = { player: [2], enemy: [2] };
+  }
+  normalise(battle);
+  ctx.party.push(...allies);
+  battle.guests = { uids: allies.map((m) => m.uid), ...(opts.turns !== undefined ? { turns: opts.turns } : {}), ...(opts.rotate ? { rotate: true } : {}), ...(opts.anchor ? { anchor: opts.anchor } : {}), ...(closed ? { closed } : {}), ...(grown ? { grown } : {}) };
+  const field = new Field(ctx);
+  const entering = guestsIn(ctx, field, events);
+  runEntries(ctx, field, entering, events);
+  rest(ctx, events);
+  return events;
+}
+
+/**
+ * A new battle becomes a triple battle with allies the game controls: your lead on the left, then the allies (already at the end
+ * of `party`) in the centre and on the right. Your other Pokémon wait behind and come in when a spot opens.
+ */
+export function makeGuestTriples(battle: BattleState, party: PokemonInstance[], guestUids: string[]): void {
+  battle.doubles = undefined;
+  battle.guests = { uids: [...guestUids] };
+  const index = (uid: string | undefined): number => (uid ? party.findIndex((m) => m.uid === uid && m.hp > 0) : -1);
+  const foes = battle.enemyTeam.map((m, i) => ({ m, i })).filter(({ m, i }) => i !== battle.enemyIndex && m.hp > 0).map(({ i }) => i);
+  battle.doubles = {
+    player: emptySlot(), enemy: emptySlot(), swapped: { player: false, enemy: false }, refill: [], commanding: [], aims: {},
+    trio: {
+      at: { player: 0, enemy: 0 },
+      player: [emptySlot(), { ...emptySlot(), index: index(guestUids[0]) }, { ...emptySlot(), index: index(guestUids[1]) }],
+      enemy: [emptySlot(), { ...emptySlot(), index: foes[0] ?? -1 }, { ...emptySlot(), index: foes[1] ?? -1 }],
+    },
+  };
+  battle.participants = [...new Set([...battle.participants, ...guestUids.slice(0, 2).filter((uid) => index(uid) >= 0)])];
 }

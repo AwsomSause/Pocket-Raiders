@@ -5,6 +5,7 @@
 //    as the only battle items, and the Set battle style (no voluntary switching in trainer battles).
 // Pure: no RNG.
 
+import { isTempAlly } from './battle/guests';
 import type { Content } from './contentSchema';
 import { getMode, pacifist } from './rules';
 import { getSpecies } from './pokemon';
@@ -47,7 +48,7 @@ export const nuzlockeCatchProblem = (battle: { nuzlockeNoCatch?: boolean }): str
  */
 export function buryFallen(content: Content, run: RunState, cause: string): string[] {
   if (!nuzlockeLevel(run.rules)) return [];
-  let fallen = run.party.filter((m) => m.hp <= 0 && m.uid !== run.battle?.loaner);
+  let fallen = run.party.filter((m) => m.hp <= 0 && !isTempAlly(run.battle, m.uid));
   fallen = spendInsurance(run, fallen);
   if (fallen.length === 0 || fallen.length >= run.party.length) return [];
   const nz = (run.nuzlocke ??= { areas: [], memorial: [] });

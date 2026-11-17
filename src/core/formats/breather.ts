@@ -3,6 +3,7 @@
 // checkpoints. No shop. The share drops to 35% when the Siege Map lost the gate that poisons it (Kanto West Gate, the
 // Cliff Stair elsewhere). It applies once: choosing finishes it, and a reload cannot repeat it. No RNG.
 
+import { isTempAlly } from '../battle/guests';
 import { maxHp } from '../pokemon';
 import type { RunState } from '../state';
 import { markCheckpoint, markDone } from './store';
@@ -34,7 +35,7 @@ function lostDistricts(run: Pick<RunState, 'expansion'>): string[] {
 }
 
 function fallen(run: RunState): RunState['party'] {
-  return run.party.filter((m) => m.hp <= 0 && m.uid !== run.battle?.loaner);
+  return run.party.filter((m) => m.hp <= 0 && !isTempAlly(run.battle, m.uid));
 }
 
 /** Applies the heal and the one revive (mutates the run). Idempotent: a finished Breather does nothing. */
