@@ -5,6 +5,7 @@
 // Ripples: in a later stage, a trainer talks about it and has copied a move they saw (10% less accurate for them).
 import type { Content } from '../contentSchema';
 import type { BattleState, PokemonInstance, RunState } from '../state';
+import { exhibitionMove, forcedMoveIndex, type PlayerAction } from '../battle/engine';
 import { fnv1a } from '../expansion/hash';
 import { featuredRival } from '../rivals/living';
 import { logOf } from './allstar';
@@ -109,7 +110,9 @@ export function exDraw(content: Content, run: RunState): string {
   cast(run, 'ex-matchup', m.id);
   set(run, `ex-used-${m.id}`, 1);
   for (const k of ['ex-backed', 'ex-reason', 'ex-watched', 'ex-outcome', 'ex-invite']) set(run, k, 0);
-  set(run, 'ex-winner', winnerOf(content, run, m));
+  // The winner is whoever wins the watched match on the field (exWatchEnd); nobody has won yet.
+  set(run, 'ex-winner', 0);
+  void content;
   return '';
 }
 
@@ -138,7 +141,8 @@ export function exWatch(content: Content, run: RunState, phase: number, choice: 
     return who ? `${bossName(content, who)} glances up at the stands. They heard that.` : 'You cheer for both of them. Nobody can tell, which is the point.';
   }
   if (choice === 'watch') {
-    const move = m.seen[phase - 1] ?? m.seen[0];
+    // In the watched match it is the move last used on the field; before the first move (or in the told version), the matchup's own.
+    const move = castOf(run, 'ex-last-move') ?? m.seen[phase - 1] ?? m.seen[0];
     set(run, 'ex-watched', f(run, 'ex-watched') + 1);
     set(run, `ex-seen:${move}`, 1);
     return `You watch the timing of ${content.moves.get(move)?.name ?? move}, exactly. You could teach that. A move tutor will show one of yours, for free.`;
@@ -277,4 +281,145 @@ export function exPoster(run: RunState): string {
   if (f(run, 'ex-poster') <= 0 || !at || run.regionIndex * 100 + (run.stage?.index ?? 0) < at) return '';
   set(run, 'ex-poster', 0);
   return 'A poster of the Exhibition is up on the Center\'s wall. Somebody\'s drawn a small figure in row nine.';
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// The match, watched on the battle screen (doc: "The player watches. A CPU-versus-CPU battle, six on six, with commentary. It takes
+// about a minute, and can be sped up. The player isn't idle. Three times in the match, a prompt.").
+// The event's fight (rule `exhibition-watch`) is a real battle of the run: the first Champion's six stand in the party's place, the
+// second's are the foe, and both are played by the same exhibition AI (no setting of the player's is read). The player's own team
+// waits in the Box, untouched, and comes back when it ends; nothing in the fight counts. Who wins is whoever wins on the field.
+// Everything is in the run (the battle itself, and `ev:ex-*` flags), so a save in the middle of the match loads back into it.
+// ---------------------------------------------------------------------------------------------------------------------------------
+const STASH = 'ev:ex-stash';
+/** True while the Exhibition's match is being watched. */
+export const exWatching = (run: Pick<RunState, 'story'>): boolean => typeof run.story.flags[STASH] === 'string';
+
+/** gn rule `exhibition-watch`: both Champions' own six take the field at the exhibition level; the player's team waits in the Box. */
+export function exWatchStart(content: Content, run: RunState, battle: BattleState, make: (speciesId: string, level: number, uid: string) => PokemonInstance): void {
+  const m = matchupOf(run);
+  if (!m || exWatching(run)) return;
+  const six = (id: string, tag: string): PokemonInstance[] => {
+    const sig = (content.bosses.get(id)?.signature ?? []).filter((sp) => content.species.has(sp)).slice(0, 6);
+    return (sig.length ? sig : ['pikachu']).map((sp, i) => make(sp, MATCH_LEVEL, `ex-${tag}${i}`));
+  };
+  const mine = six(m.a, 'a');
+  const theirs = six(m.b, 'b');
+  run.story.flags[STASH] = run.party.map((x) => x.uid).join(',');
+  run.box = [...(run.box ?? []), ...run.party];
+  run.party = mine;
+  battle.enemyTeam = theirs;
+  battle.enemyIndex = 0;
+  battle.activeIndex = 0;
+  battle.participants = [mine[0]!.uid];
+  if (battle.trainer) battle.trainer = { ...battle.trainer, name: bossName(content, m.b), spriteBoss: m.b };
+  battle.spectate = { kind: 'duel' };
+  for (const k of ['ex-moment', 'ex-ko-a', 'ex-ko-b']) set(run, k, 0);
+  cast(run, 'ex-last-move', '');
+}
+
+const down = (team: readonly PokemonInstance[]): number => team.filter((x) => x.hp <= 0).length;
+
+/** The next turn of the watched match: both sides are played by the exhibition AI; a fainted Pokémon is followed by the next in line. */
+export function exWatchAction(content: Content, run: RunState): PlayerAction[] {
+  const battle = run.battle;
+  if (!battle || !exWatching(run)) return [];
+  if (battle.needsSwitch) return [{ kind: 'switch', partyIndex: run.party.findIndex((x, i) => x.hp > 0 && i !== battle.activeIndex) }];
+  const forced = forcedMoveIndex(battle, run.party);
+  if (forced !== null) return [{ kind: 'move', index: forced }];
+  const best = exhibitionMove({ content, battle, party: run.party });
+  // If the engine won't take the pick this turn (Disable, Taunt, a Choice lock), the others are tried in order, then Struggle.
+  const rest = (run.party[battle.activeIndex]?.moves ?? []).map((mv, i) => (mv.pp > 0 && i !== best ? i : -1)).filter((i) => i >= 0);
+  return [best, ...rest, -1].filter((i, at, all) => all.indexOf(i) === at).map((index) => ({ kind: 'move' as const, index }));
+}
+
+/** Which of the three moments is due now (1 to 3), or 0: before the first move, at half-way, and when one side is down to its last two. */
+export function exMomentDue(run: RunState): number {
+  const battle = run.battle;
+  if (!battle || battle.outcome || !exWatching(run)) return 0;
+  const n = f(run, 'ex-moment') + 1;
+  if (n > 3) return 0;
+  const a = down(run.party), b = down(battle.enemyTeam);
+  const size = Math.min(run.party.length, battle.enemyTeam.length);
+  if (n === 1) return 1;
+  if (n === 2) return a + b >= Math.ceil(size / 2) ? 2 : 0;
+  return Math.min(run.party.length - a, battle.enemyTeam.length - b) <= 2 ? 3 : 0;
+}
+
+/** What is read out before the moment's three choices: the stadium, and the matchup's own small moment. */
+export function exMomentLines(content: Content, run: RunState, n: number): string[] {
+  const m = matchupOf(run);
+  if (!m) return [];
+  if (n === 1) return ['Six on six. The stadium goes quiet in the way only a very big room can.', ...(exKnown(run) ? ['Before the first move, one of them scans the stands, row by row. They find you. They nod, just once, and turn back to the field.'] : []), m.phases[0]];
+  if (n === 2) return ['Halfway.', m.phases[1]];
+  return ['The last of it. Nobody in the stadium is sitting down any more.'];
+}
+
+/** The question over the three choices: who is on the field (the screen shows their Pokémon, not their names). */
+export function exMomentAsk(content: Content, run: RunState): string {
+  const m = matchupOf(run);
+  return m ? `${bossName(content, m.a)} against ${bossName(content, m.b)}. What do you do?` : 'What do you do?';
+}
+
+export const EX_MOMENT_CHOICES = [
+  { key: 'cheer', label: 'Cheer.', text: 'You cheer, loud enough to hear yourself on the big screen.' },
+  { key: 'watch', label: 'Watch closely.', text: 'You stop watching the Pokémon, and watch the hands.' },
+  { key: 'crowd', label: 'Look at the crowd.', text: 'You look away from the field, just for a second.' },
+] as const;
+
+/** The player's answer to the moment that is due: what they do, and what comes of it. Nothing happens when none is due. */
+export function exMomentAnswer(content: Content, run: RunState, key: string): string[] {
+  const n = exMomentDue(run);
+  const pick = EX_MOMENT_CHOICES.find((c) => c.key === key);
+  if (!n || !pick) return [];
+  set(run, 'ex-moment', n);
+  return [pick.text, exWatch(content, run, n, pick.key)].filter(Boolean);
+}
+
+const CALLS = [
+  '{mon} is down{by}! {trainer} has {left} left.',
+  'And that is {mon} out of it{by}! {left} left for {trainer}.',
+  '{mon} can\'t go on{by}. {trainer} is down to {left}.',
+];
+const COUNT = ['none', 'one', 'two', 'three', 'four', 'five', 'six'];
+/** The commentary box, after a turn of the watched match: one call per knockout, with the move that did it. Also keeps the move last used. */
+export function exCalls(content: Content, run: RunState): string[] {
+  const battle = run.battle;
+  const m = matchupOf(run);
+  if (!battle || !m || !exWatching(run)) return [];
+  const used = battle.playerVolatile.lastMove ?? battle.enemyVolatile.lastMove;
+  const out: string[] = [];
+  const side = (team: readonly PokemonInstance[], key: string, trainer: string, hitBy: string | null): void => {
+    const was = f(run, key), now = down(team);
+    if (now <= was) return;
+    set(run, key, now);
+    const fallen = team.filter((x) => x.hp <= 0).slice(was);
+    fallen.forEach((mon, i) => {
+      const by = hitBy && content.moves.has(hitBy) ? `, to ${content.moves.get(hitBy)!.name}` : '';
+      const left = team.length - was - i - 1;
+      out.push(`Commentary: ${CALLS[(was + i + (key === 'ex-ko-a' ? 0 : 1)) % CALLS.length]!.replaceAll('{mon}', content.species.get(mon.speciesId)?.name ?? mon.speciesId).replaceAll('{by}', by).replaceAll('{trainer}', trainer).replaceAll('{left}', left === 0 ? 'nobody' : (COUNT[left] ?? String(left)))}`);
+    });
+  };
+  side(run.party, 'ex-ko-a', bossName(content, m.a), battle.enemyVolatile.lastMove);
+  side(battle.enemyTeam, 'ex-ko-b', bossName(content, m.b), battle.playerVolatile.lastMove);
+  if (used && content.moves.has(used) && (content.moves.get(used)!.power ?? 0) > 0) cast(run, 'ex-last-move', used);
+  return out;
+}
+
+/** The match is over: the player's own team comes back from the Box as it was, the winner is whoever won on the field, and the
+ *  matchup's last small moment is read. */
+export function exWatchEnd(content: Content, run: RunState, outcome: 'win' | 'lose'): string[] {
+  const stash = run.story.flags[STASH];
+  if (typeof stash !== 'string') return [];
+  const uids = stash.split(',').filter(Boolean);
+  run.party = uids.map((uid) => run.box.find((x) => x.uid === uid)).filter((x): x is PokemonInstance => Boolean(x));
+  run.box = run.box.filter((x) => !uids.includes(x.uid));
+  delete run.story.flags[STASH];
+  const m = matchupOf(run);
+  const win = outcome === 'win' ? 1 : 2;
+  set(run, 'ex-winner', win);
+  if (!m) return [];
+  const winner = bossName(content, win === 1 ? m.a : m.b);
+  const loser = bossName(content, win === 1 ? m.b : m.a);
+  return [m.phases[2].replaceAll('{winner}', winner).replaceAll('{loser}', loser)];
 }

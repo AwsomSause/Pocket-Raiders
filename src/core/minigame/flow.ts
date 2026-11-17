@@ -130,7 +130,12 @@ function settle(content: Content, run: RunState): RunState {
   s.outcome = payout(content, run, getMinigame(content, s.id), s.tier, score, max);
   if (s.id === SAFARI_ID) s.outcome.lines.push(...safariFinish(content, run, s.state as SafariState));
   if (s.id === SNAKE_ID) s.outcome.lines.push(...psyduckFinish(content, run, s.state as SnakeState));
-  if (s.id === JIGSAW_ID) s.outcome.lines.push(...jigsawFinish(content, run, s.state as JigsawState));
+  if (s.id === JIGSAW_ID) {
+    // The museum's pay is the story's, not a medal's: it is paid in full (no stage cap) and shown in the outcome's money.
+    const had = run.money;
+    s.outcome.lines.push(...jigsawFinish(content, run, s.state as JigsawState));
+    s.outcome.money += run.money - had;
+  }
   if (s.id === 'berry-blending') {
     const line = poffinConditions(run, s.state as never, s.outcome.medal);
     if (line) s.outcome.lines.push(line);

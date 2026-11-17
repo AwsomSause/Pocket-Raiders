@@ -17,6 +17,7 @@ import { regionGifts, regionInterest } from './flagPerks';
 import { noteBattle } from './expansion/fieldNotes';
 import { settleSky } from './sky/story';
 import { endOwnWatch, finishSpectate, ownWatching } from './sky/spectate';
+import { exWatchEnd, exWatching } from './greenneedle/exhibition';
 import { settleRivalRecruits } from './rivals/eventRecruit';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
@@ -3566,6 +3567,16 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     run.phase = 'map';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, spectated: { kind: battle.spectate.kind, lines: [`${winner === 1 ? mainRival(run)?.name : secondRival(run)?.name} wins.`, ...lines] } };
+  }
+  if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose') && exWatching(run)) {
+    // gn.47 the Exhibition, watched: your own team comes back untouched; whoever won on the field won; the event's outcome follows.
+    const head = exWatchEnd(content, run, battle.outcome);
+    const lines = battle.event ? eventBattleWon(content, run, battle.event, battle.turn - 1) : [];
+    run.battle = null;
+    run.afterDecisions = 'map';
+    continueAfterDecisions(content, run);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, spectated: { kind: battle.spectate.kind, lines: [...head, ...lines] } };
   }
   if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose') && ownWatching(run)) {
     // Pidgey's Resolve, the spar and the rematch: watched, not played. The real team comes back untouched; the scene's own outcome applies.

@@ -216,6 +216,8 @@ const EXPLAIN_LOCK_MS = 1200;
 const COMMAND_X = 588;
 /** How long Auto-Battle's chosen action stays on screen before it is played (Back cancels). */
 const AUTO_PICK_MS = 1100;
+/** gn.47: the pause before each turn of the watched Exhibition match. */
+const EXHIBITION_PICK_MS = 300;
 /** Double battles: where each spot stands (left, right) and the databox spots. */
 const DUO_POS = {
   player: [
@@ -2329,16 +2331,49 @@ export class BattleScene extends Phaser.Scene {
       this.showSkyCheerMenu();
       return;
     }
+    // gn.47 the Exhibition: three times in the match the player is asked what they do (cheer, watch closely, look at the crowd).
+    const moment = session.exhibitionMoment();
+    if (moment) {
+      this.showExhibitionMenu(moment);
+      return;
+    }
     this.autoRunning = true;
     this.clearMenus();
     this.tabs.show(false);
-    await new Promise<void>((done) => this.time.delayedCall(AUTO_PICK_MS, () => done()));
+    // (The Exhibition is a long match, six on six: a short breath between turns keeps it near the doc's minute; Battle speed shortens it further.)
+    await new Promise<void>((done) => this.time.delayedCall(session.exhibitionOn() ? EXHIBITION_PICK_MS : AUTO_PICK_MS, () => done()));
     this.autoRunning = false;
     const battle = this.run.battle;
     if (!battle) return;
     const forced = forcedMoveIndex(battle, this.run.party);
-    if (forced !== null) await this.act({ kind: 'move', index: forced });
+    if (forced !== null && !session.exhibitionOn()) await this.act({ kind: 'move', index: forced });
     else await this.act({ kind: 'move', index: 0 }, true);
+  }
+
+  /** gn.47: one of the Exhibition's three moments. The lines are read, then the three choices; the answer is read, and the match goes on. */
+  private showExhibitionMenu(moment: { lines: string[]; ask: string; choices: readonly { key: string; label: string }[] }): void {
+    this.clearMenus();
+    this.tabs.show(false);
+    void this.readAloud(moment.lines).then(() => {
+      this.commandWindow.setVisible(true);
+      this.message.setText(moment.ask);
+      this.menu = new Menu(this, {
+        x: COMMAND_X + 24,
+        y: MESSAGE_Y + 18,
+        options: moment.choices.map((c) => ({ label: c.label })),
+        columns: 1,
+        itemWidth: 300,
+        itemHeight: 36,
+        fontSize: 22,
+        color: this.btnText,
+        glass: { paint: this.skin?.pill, tints: [0x1f9a52, 0x2a6fc8, 0xc8303c], motion: this.motion },
+        onSelect: (i) => {
+          this.clearMenus();
+          const lines = services().session.exhibitionAnswer(moment.choices[i]!.key);
+          void this.readAloud(lines).then(() => this.nextPrompt());
+        },
+      });
+    });
   }
 
   /** The finale's one question: who to cheer for. Cheering is the only thing the player does in a watched fight. */
@@ -4323,9 +4358,11 @@ export class BattleScene extends Phaser.Scene {
     let result: TurnResult;
     try {
       if (auto) {
-        const taken = session.takeAutoTurn();
-        if (!taken) throw new Error('Auto-Battle could not choose an action.');
-        result = taken.result;
+        // gn.47: a watched Exhibition is played by its own AI for both sides (no setting of the player's is read).
+        const watched = session.exhibitionTurn();
+        const taken = watched ? null : session.takeAutoTurn();
+        if (!watched && !taken) throw new Error('Auto-Battle could not choose an action.');
+        result = watched ?? taken!.result;
       } else result = session.takeTurn(action);
     } catch (err) {
       // The menus only offer legal choices, so this means a bug; show it rather than freeze.
