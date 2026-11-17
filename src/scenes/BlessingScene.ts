@@ -43,10 +43,31 @@ export class BlessingScene extends Phaser.Scene {
     // The item floats on the left, on plain black.
     const px = 250;
     const itemImg = this.add.image(px, 250, '__DEFAULT').setAlpha(0).setVisible(false);
-    void loadAssets(this, [def.item]).then(() => {
-      if (!this.sys.isActive() || !this.textures.exists(def.item)) return;
+    const showItem = (): boolean => {
+      if (!this.sys.isActive() || !this.textures.exists(def.item)) return false;
       itemImg.setTexture(def.item).setScale(8).setVisible(true);
       if (!fast) this.tweens.add({ targets: itemImg, y: 238, duration: 2400, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      return true;
+    };
+    // Missing art must never leave the left half black: a plain glowing orb with the Legendary's initial stands in.
+    const stand = (): void => {
+      if (!this.sys.isActive() || itemImg.visible) return;
+      const g = this.add.graphics().setAlpha(0);
+      for (const [r, a] of [[104, 0.12], [84, 0.2], [64, 0.35]] as const) g.fillStyle(0xc8b8e8, a).fillCircle(px, 250, r);
+      const letter = this.add.text(px, 250, def.legendary.charAt(0).toUpperCase(), textStyle(64, '#fff2c0')).setOrigin(0.5).setAlpha(0);
+      this.tweens.add({ targets: [g, letter], alpha: 1, duration: 600 });
+    };
+    // Load the picture; if it did not arrive (a failed request), ask once more with a fresh address, then use the stand-in.
+    void loadAssets(this, [def.item]).then(async () => {
+      if (showItem()) return;
+      const key = def.item;
+      await new Promise<void>((done) => {
+        if (!this.sys.isActive() || this.textures.exists(key)) return done();
+        this.load.once(Phaser.Loader.Events.COMPLETE, () => done());
+        this.load.image(key, `assets/images/items/${key.replace(/^item\./, '')}.png?r=${Date.now() % 100000}`);
+        if (!this.load.isLoading()) this.load.start();
+      });
+      if (!showItem()) stand();
     });
 
     const x = 470;
