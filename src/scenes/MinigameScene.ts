@@ -5,6 +5,7 @@
 import Phaser from 'phaser';
 import { getMinigame, minigameView, parkDoorSide, parkEventSide, parkWaiting } from '../core/minigame/flow';
 import { SAFARI_ID } from '../core/greenneedle/safari';
+import { isZone } from '../core/greenneedle/zone';
 import { openPark } from './safariPark';
 import { services } from '../game/services';
 import { paintSkinBackdrop, skinFor } from '../ui/screenSkins';
@@ -70,8 +71,9 @@ export class MinigameScene extends Phaser.Scene {
     const view0 = view;
     const outcome = run.minigame.outcome;
     // gn.18 in the New UI: the park is a grid you walk (scenes/safariPark.ts) until the visit ends; the outcome uses this screen.
-    if (reduxOn() && !skin && run.minigame.id === SAFARI_ID && !outcome) {
-      openPark(this, { title: def.name, onDone: () => this.scene.restart({ focus: 0 }), onEvent: (sideId) => this.scene.start('Event', { sideId }) });
+    // gn.19, gn.20: the Deep Savanna and the Lush Jungle are walked on the same screen, each with its own look.
+    if (reduxOn() && !skin && (run.minigame.id === SAFARI_ID || isZone(run.minigame.id)) && !outcome) {
+      openPark(this, { title: def.name, onDone: () => this.scene.restart({ focus: 0 }), onEvent: (sideId) => this.scene.start('Event', { sideId }), onLeft: () => this.scene.start(sceneForRun(session.run!), { notice: '', focus: 0 }) });
       return;
     }
     this.add.text(GAME_WIDTH / 2, 22, `${def.name}  ·  ${def.difficultyTiers[run.minigame.tier]!.label}`, textStyle(30, COLORS.textLight)).setOrigin(0.5);

@@ -3217,6 +3217,114 @@
       "eventOnly": true
     },
     {
+      "id": "gn-savanna",
+      "name": "The Deep Savanna",
+      "category": "resource",
+      "blurb": "Past the last fence post, on foot.",
+      "instructions": "Walk the savanna a tile at a time: nothing out here counts your steps. The story waits where something stands in your way; walk up to it. You carry three flasks of water, and every dry crossing costs one.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "walk",
+          "label": "Walk",
+          "params": {}
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "No score. What you do at each place is the story's.",
+      "medals": {
+        "bronze": 0.1,
+        "silver": 0.2,
+        "gold": 0.3
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "gold": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        }
+      },
+      "failureOutcome": "Nothing is lost. The grass closes behind you.",
+      "replayRules": "Once a run.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": true
+      },
+      "eventOnly": true
+    },
+    {
+      "id": "gn-jungle",
+      "name": "The Lush Jungle",
+      "category": "resource",
+      "blurb": "Leaves, and then more leaves.",
+      "instructions": "Walk the jungle a tile at a time. The story waits where something stands in your way; walk up to it. If nothing faints on the way in (yours or theirs), a ladder comes down at the end.",
+      "unlockRequirements": {
+        "badges": 0,
+        "regionIndex": 0
+      },
+      "difficultyTiers": [
+        {
+          "id": "walk",
+          "label": "Walk",
+          "params": {}
+        }
+      ],
+      "durationLimit": 0,
+      "attemptLimit": 1,
+      "scoringRules": "No score. What you do at each place is the story's.",
+      "medals": {
+        "bronze": 0.1,
+        "silver": 0.2,
+        "gold": 0.3
+      },
+      "rewardTable": {
+        "bronze": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "silver": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        },
+        "gold": {
+          "money": 0,
+          "item": null,
+          "effect": null
+        }
+      },
+      "failureOutcome": "Nothing is lost. The leaves close behind you.",
+      "replayRules": "Once a run.",
+      "uiConfiguration": {
+        "layout": "choices",
+        "tickMs": 0
+      },
+      "accessibilityOptions": {
+        "slowFactor": 1,
+        "noTimerOption": true
+      },
+      "eventOnly": true
+    },
+    {
       "id": "gn-psyduck",
       "name": "The Psyduck Migration",
       "category": "skill",
