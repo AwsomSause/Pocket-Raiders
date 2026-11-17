@@ -9,6 +9,8 @@ import { worthyStart } from '../../src/core/greenneedle/duelist';
 import { tyrogueMon, tyrogueTurn } from '../../src/core/greenneedle/tyrogue';
 import { banetteCloth, dusclopsLessons, paradeRare } from '../../src/core/greenneedle/parade';
 import { resolveDecision } from '../../src/core/run';
+import { fatesOf } from '../../src/core/greenneedle/left';
+import { gnTokens } from '../../src/core/greenneedle';
 import { content } from './helpers';
 import { addEventStops, stageNumber } from '../../src/core/events';
 import { choose, flagOf, gnRun, open, scene, setFlag } from './helpers/gnPlay';
@@ -352,5 +354,52 @@ describe('gn.new.11 The Night Parade (fixes): the stalls', () => {
     }
     expect(got.size).toBeGreaterThan(2);
     expect(JSON.stringify(content.events.get('gn-new-11-sableye'))).not.toMatch(/rare-candy/);
+  });
+});
+
+describe('gn.new.13 The Ones You Left (fixes): the script fits the Pokémon left this run', () => {
+  const camp = (seed: string, ledger: string): RunState => { const run = gnRun(seed); run.story.flags['left:ledger'] = ledger; open(run, 'gn-new-13-door'); return run; };
+  const text = (run: RunState, id: string): string => gnTokens(content, run, scene(run, id).intro);
+  it('no fixed "six Poké Balls", no lost team, no "Tomorrow, the Gym": the door counts the Balls that are there', () => {
+    const raw = JSON.stringify(['gn-new-13-door', 'gn-new-13-pick-a', 'gn-new-13-pick-b', 'gn-new-13-goodbye'].map((id) => content.events.get(id)));
+    expect(raw).not.toMatch(/six Poké Balls|Six Poké Balls|Tomorrow, the Gym|losing with|team I lost|Two go with|Two stay/);
+    const two = text(camp('leftfix-two', 'pidgey:12|rattata:11'), 'gn-new-13-door');
+    expect(two).toContain('A cold fire. A bedroll, still rolled. Two Poké Balls in a row on a log, and beside them, a notebook in your own handwriting.');
+    expect(two).toContain('the ones you left on this road, by name: Rattata and Pidgey.');
+    expect(two).toContain('The Balls open by themselves. They have been waiting.');
+    const one = text(camp('leftfix-one', 'pidgey:12'), 'gn-new-13-door');
+    expect(one).toContain('One Poké Ball on a log, and beside it, a notebook');
+    expect(one).toContain('The Ball opens by itself. It has been waiting.');
+    expect(text(camp('leftfix-six', 'raichu:38|pidgeot:39|venusaur:40|blastoise:41|charizard:42|snorlax:37'), 'gn-new-13-door')).toContain('Six Poké Balls in a row');
+  });
+  it('one left and taken: nobody else decides, and nobody walks into the woods', () => {
+    let run = camp('leftfix-take-one', 'pidgey:12');
+    run = choose(run, 'gn-new-13-door', 'Take one.').run;
+    expect(text(run, 'gn-new-13-pick-a')).toContain('The only one on the log: Pidgey (Lv 12).');
+    expect(scene(run, 'gn-new-13-pick-a').labels).toHaveLength(1);
+    run = choose(run, 'gn-new-13-pick-a', scene(run, 'gn-new-13-pick-a').labels[0]!).run;
+    expect(fatesOf(run)).toHaveLength(0);
+    const morning = text(run, 'gn-new-13-goodbye');
+    expect(morning).toContain('There is nobody else left to decide.');
+    expect(morning).not.toMatch(/woods|passing trainer/);
+  });
+  it('two left, none taken: one walks into the woods, one goes with the trainer, in the singular', () => {
+    let run = camp('leftfix-bury-two', 'pidgey:12|rattata:11');
+    run = choose(run, 'gn-new-13-door', 'Take none. Bury the notebook.').run;
+    const morning = text(run, 'gn-new-13-goodbye');
+    expect(morning).toMatch(/One walks into the woods, (Pidgey|Rattata), and does not look back\./);
+    expect(morning).toMatch(/(Pidgey|Rattata) goes with a passing trainer, who calls out, "A good one, this\. I'll look after it\."/);
+    expect(morning).not.toMatch(/stay at the camp|stays at the camp/);
+  });
+  it('a boxed Pokémon that is not taken is still yours: it waits, it never leaves with a trainer or into the woods', () => {
+    let run = gnRun('leftfix-boxed');
+    run.box = [createPokemon(content, 'pikachu', 14, 'p-boxed-a'), createPokemon(content, 'oddish', 12, 'p-boxed-b')];
+    open(run, 'gn-new-13-door');
+    run = choose(run, 'gn-new-13-door', 'Take none. Bury the notebook.').run;
+    expect(fatesOf(run).map((x) => x.fate)).toEqual(['wait', 'wait']);
+    expect(run.box).toHaveLength(2);
+    const morning = text(run, 'gn-new-13-goodbye');
+    expect(morning).toMatch(/go back into their Balls by themselves\. They are still yours\./);
+    expect(morning).not.toMatch(/woods|passing trainer/);
   });
 });
