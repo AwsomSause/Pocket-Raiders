@@ -1,0 +1,33 @@
+{
+  "note": "Evil Mode slice 4 (design Part 29 section 21, Part 1 row D7, Kice's answer 4): who's drawn as whom. Named people are existing townsfolk and trainer-class pictures with an armband in the team's first colour; the game's Grunt pictures (male only) stay for the nameless. Minors use Youngster, Lass and Schoolkid pictures. No new characters are made (no OCs). Every sprite is from the director's packs: images/trainer (Showdown/PokeRogue trainer sheets) and images/trainer/pr (the Google Drive trainer pack). One row a person; changing who's drawn as whom is this file alone.",
+  "faces": [
+    { "ref": "otis", "sprite": "trainer.roughneck", "provenance": "images/trainer/roughneck (director's trainer pack)" },
+    { "ref": "faye", "sprite": "trainer.pr/backpacker_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "tobi", "sprite": "trainer.pr/backpacker_m", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "lux", "sprite": "trainer.pr/psychic_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "ngozi", "sprite": "trainer.pr/clerk_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "tomasz", "sprite": "trainer.biker", "provenance": "images/trainer/biker (director's trainer pack)" },
+    { "ref": "hortense", "sprite": "trainer.pr/doctor_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "vikram", "sprite": "trainer.pr/ace_trainer_m", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "sioned", "sprite": "trainer.pr/worker_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "kwabena", "sprite": "trainer.black_belt_m", "provenance": "images/trainer/black_belt_m (director's trainer pack)" },
+    { "ref": "beatriz", "sprite": "trainer.pr/school_kid_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "obadiah", "sprite": "trainer.pr/veteran_m", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "chidi", "sprite": "trainer.pr/scientist_m", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "rahel", "sprite": "trainer.pr/ace_trainer_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "junseo", "sprite": "trainer.pr/clerk_m", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "halima", "sprite": "trainer.pr/pokefan_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "arlo", "sprite": "trainer.pr/waiter_m", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "mirela", "sprite": "trainer.pr/maid", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "dov", "sprite": "trainer.biker", "provenance": "images/trainer/biker (director's trainer pack)" },
+    { "ref": "nanami", "sprite": "trainer.pr/nursery_aide", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "garrick", "sprite": "trainer.worker_m", "provenance": "images/trainer/worker_m (director's trainer pack)" },
+    { "ref": "pilar", "sprite": "trainer.pr/black_belt_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "efua", "sprite": "trainer.pr/scientist_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "walther", "sprite": "trainer.pr/rich_m", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "sooah", "sprite": "trainer.pr/youngster_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "ignatius", "sprite": "trainer.pr/janitor", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "catriona", "sprite": "trainer.pr/ranger_f", "provenance": "images/trainer/pr (director's Google Drive trainer pack)" },
+    { "ref": "yevgeny", "sprite": "trainer.hiker", "provenance": "images/trainer/hiker (director's trainer pack)" }
+  ]
+}

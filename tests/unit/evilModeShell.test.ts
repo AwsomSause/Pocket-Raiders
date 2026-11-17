@@ -47,8 +47,9 @@ describe('founding (start.ts)', () => {
       expect(EvilModeBlockSchema.safeParse(b).success, c.id).toBe(true);
       expect(b.team).toMatchObject({ creed: c.id, funds: c.start.funds, heat: c.start.heat, regard: c.start.regard, dread: c.start.dread, boss: 'red', patron: null, corruption: 0 });
       expect(b.here).toEqual({ region: 0, stage: 1, day: 1, beat: 'morning' });
-      expect(Object.values(b.draws).every((n) => n === 0)).toBe(true);
-      expect(b.applied).toEqual([]);
+      // Slice 4: founding draws the Roster and the first applicant from evil-people, and from no other stream.
+      expect(Object.entries(b.draws).every(([s, n]) => (s === 'evil-people' ? n === c.start.roster + b.applicants.length : n === 0))).toBe(true);
+      expect(b.applied).toEqual(['applicants:0:1:1']);
     }
   });
   it('the Line changes the first morning: Whatever it takes Heat +1, Clean hands Regard +1 (boundary: capped at 10)', () => {

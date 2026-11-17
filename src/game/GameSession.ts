@@ -9,7 +9,7 @@
 import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
-import { foundInRun, stepInRun } from '../core/evilMode/session';
+import { ensureDistrict, foundInRun, stepInRun } from '../core/evilMode/session';
 import type { FoundingChoice } from '../core/evilMode/start';
 import type { EvilAction, EvilCue } from '../core/evilMode/day';
 import * as NodeMenu from '../core/nodeMenu/flow';
@@ -1068,6 +1068,16 @@ export class GameSession {
     this.run = out.run;
     this.persistRun();
     return null;
+  }
+
+  /** Evil Mode: a block saved before slice 2 gets its district (laid from the run's seed) and is saved once. */
+  evilEnsure(): void {
+    const run = this.run;
+    if (!run) return;
+    const out = ensureDistrict(run);
+    if (out === run) return;
+    this.run = out;
+    this.persistRun();
   }
 
   /** Evil Mode: one action on the day, saved at the end of the beat. The cues are for the screen only. */

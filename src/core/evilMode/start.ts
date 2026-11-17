@@ -3,6 +3,9 @@
 // team is cream and green, has no Patron, and starts in Kanto.
 
 import { EVIL_DATA, type EvilData } from './data';
+import { layDistrict } from './board';
+import { bandOf, foundingRoster, teamLoyalty } from './people';
+import { arriveApplicants } from './roster';
 import { LINE_IDS, STREAMS, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
 
 export interface FoundingChoice {
@@ -60,14 +63,18 @@ export function foundingProblem(choice: FoundingChoice, data: EvilData = EVIL_DA
  * Founding to the first morning (design Part 3 section 11): Funds, Heat, Regard and Dread by Creed, then the Line's
  * changes (Whatever it takes: Heat +1; Clean hands: Regard +1). Day 1, Morning, Kanto District 1.
  */
-export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: RunLength }, data: EvilData = EVIL_DATA): { ok: true; block: EvilModeBlock } | { ok: false; problem: string } {
+export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: RunLength; seed?: string }, data: EvilData = EVIL_DATA): { ok: true; block: EvilModeBlock } | { ok: false; problem: string } {
   const problem = foundingProblem(choice, data);
   if (problem) return { ok: false, problem };
   const creed = data.creeds.find((c) => c.id === choice.creed)!;
   const line = data.founding.lines.find((l) => l.id === choice.line)!;
   const cap = (n: number): number => Math.min(10, n);
+  const regard = cap(creed.start.regard + line.regard);
+  const dread = cap(creed.start.dread);
+  // Slice 4: the starting Roster, drawn from the Founders on `evil-people` (design Part 10a section 2).
+  const roster = foundingRoster(opts.seed ?? opts.boss, creed.id, data);
   const block: EvilModeBlock = {
-    v: 1,
+    v: 4,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -82,23 +89,35 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
       patron: null,
       funds: creed.start.funds,
       heat: cap(creed.start.heat + line.heat),
-      regard: cap(creed.start.regard + line.regard),
-      dread: cap(creed.start.dread),
+      regard,
+      dread,
       corruption: 0,
     },
     here: { region: 0, stage: 1, day: 1, beat: 'morning' },
     draws: Object.fromEntries(STREAMS.map((s) => [s, 0])) as EvilModeBlock['draws'],
     applied: [],
+    district: layDistrict(opts.seed ?? opts.boss, 0, 1, { regard, dread }, data),
+    crew: roster.crew,
+    queue: [],
+    sheets: [],
+    evening: [],
+    log: [],
+    cards: [],
+    given: 0,
+    taken: 0,
+    rates: {},
+    applicants: [],
+    drawn: roster.crew.map((c) => c.id),
+    refusal: null,
   };
-  return { ok: true, block: EvilModeBlockSchema.parse(block) };
+  block.draws['evil-people'] = roster.draws;
+  return { ok: true, block: EvilModeBlockSchema.parse(arriveApplicants(block, data)) };
 }
 
 /**
  * The team's Loyalty band (design Part 5 section 5.1). Loyalty is never stored for the team: it is worked out from the
- * Roster. Until people arrive (slice 4) the team stands at its Creed's starting figure.
+ * Roster (people.ts `teamLoyalty`): the mean of everyone in, rounded down.
  */
 export function loyaltyBand(block: EvilModeBlock, data: EvilData = EVIL_DATA): { name: string; face: string } {
-  const figure = data.creeds.find((c) => c.id === block.team.creed)?.start.loyalty ?? 5;
-  const band = data.founding.bands.find((b) => figure >= b.min) ?? data.founding.bands[data.founding.bands.length - 1]!;
-  return { name: band.name, face: band.face };
+  return bandOf(teamLoyalty(block, data), data);
 }

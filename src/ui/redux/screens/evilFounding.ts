@@ -63,11 +63,12 @@ export function foundingView(_c: ReduxCtx, m: FoundingModel): string {
 
 const lamps = (n: number, on: (i: number) => string): string => Array.from({ length: 10 }, (_, i) => `<i style="display:inline-block;width:7px;height:12px;margin-right:2px;border-radius:2px;background:${i < n ? on(i) : '#0004'}"></i>`).join('');
 
-export function frameView(_c: ReduxCtx, f: FrameModel, notice: string | null): string {
+/** The day's frame. With `board` (slice 2: a district), the board fills the middle and the chip sits in its title row. */
+export function frameView(_c: ReduxCtx, f: FrameModel, notice: string | null, board?: string): string {
   const s = f.strip;
-  const slot = (label: string, body: string, tip: string, id: string): string => W(`<div class="sm" style="line-height:14px">${esc(label)}</div><div style="font-weight:700">${body}</div>`, 'padding:4px 10px', '', ` title="${esc(tip)}" data-testid="evil-${id}"`);
+  const slot = (label: string, body: string, tip: string, id: string): string => W(`<div class="sm" style="line-height:14px">${esc(label)}</div><div style="font-weight:700">${body}</div>`, `padding:4px 10px${id === 'funds' ? ';cursor:pointer' : ''}`, '', ` title="${esc(tip)}" data-testid="evil-${id}"${id === 'funds' ? act('ledger') : ''}`);
   const strip = `<div class="abs row" style="left:16px;right:16px;top:52px;gap:6px">
-    ${slot('Funds', `₽${s.funds.toLocaleString('en-GB')}`, `Funds ₽${s.funds}`, 'funds')}
+    ${slot('Funds', `₽${s.funds.toLocaleString('en-GB')}`, `Funds ₽${s.funds}. Opens the Ledger.`, 'funds')}
     ${slot('Heat', lamps(s.heat, (i) => (i < 5 ? '#e8a020' : '#d8483a')), `Heat ${s.heat}`, 'heat')}
     ${slot('Loyalty', esc(s.loyalty.name), `${s.loyalty.name}. ${s.loyalty.face}.`, 'loyalty')}
     ${slot('Regard', lamps(s.regard, () => '#6fb0e8'), `Regard ${s.regard}`, 'regard')}
@@ -79,5 +80,6 @@ export function frameView(_c: ReduxCtx, f: FrameModel, notice: string | null): s
   const beat = W(`<div style="line-height:24px" data-testid="evil-beat-text">${esc(f.text)}</div>${notice ? sm(notice, 'margin-top:8px') : ''}`, 'position:absolute;left:16px;right:16px;top:230px;padding:14px');
   const lozenges = f.beats.map((b) => `<span class="tg" data-testid="evil-beat-${b.id}" data-state="${b.state}" style="${b.state === 'now' ? 'outline:2px solid var(--acc);' : b.state === 'later' ? 'opacity:.55;' : ''}">${b.state === 'done' ? '✓ ' : ''}${esc(b.name)}</span>`).join('');
   const foot = `<div class="abs row" style="left:16px;right:16px;bottom:16px;gap:6px;align-items:center">${lozenges}<div class="grow"></div>${B(esc(f.button), true, 'width:190px;justify-content:center', '', act('advance') + ' data-testid="evil-advance"')}</div>`;
-  return `<div style="position:absolute;inset:0;--team-a:${esc(t.a)};--team-b:${esc(t.b)}" data-testid="evil-frame">${H(`Evil Mode · ${t.name}`, 'story', [['Enter', f.button], ['Esc', 'menu']])}${strip}${chips}${team}${beat}${foot}</div>`;
+  const middle = board ?? `${chips}${team}${beat}`;
+  return `<div style="position:absolute;inset:0;--team-a:${esc(t.a)};--team-b:${esc(t.b)}" data-testid="evil-frame">${H(`Evil Mode · ${t.name}`, 'story', [['Enter', f.button], ['Esc', 'menu']])}${strip}${middle}${foot}</div>`;
 }
