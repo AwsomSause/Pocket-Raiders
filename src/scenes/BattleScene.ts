@@ -5246,6 +5246,8 @@ export class BattleScene extends Phaser.Scene {
             const team = this.run.battle?.enemyTeam ?? [];
             if (e.side === 'enemy' && this.run.battle?.trainer && team.length > 1 && team[team.length - 1]!.uid === e.uid) {
               void burstReveal(this, ENEMY_POS.x, ENEMY_POS.y - 80, this.foeRim(), this.motion);
+              // Kice: the ace is announced in words (both looks), not just their last Pokémon. Presentation only.
+              await this.say(`${this.trainerTitle() ?? this.run.battle.trainer.name} sends out their ace, ${this.speciesName(this.shown.enemy!)}!`);
               if (this.role === 'rival') void this.fx.flourish('enemy', 'rival.ace');
               const bossNow = this.boss();
               if (bossNow?.role === 'champion') {
