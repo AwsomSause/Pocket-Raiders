@@ -12,6 +12,7 @@ import { SAFARI_GAMES } from '../greenneedle/safari';
 import { SNAKE_GAMES } from '../greenneedle/snake';
 import { ARCADE_MODULES } from '../greenneedle/arcade';
 import { JIGSAW_GAMES } from '../greenneedle/jigsaw';
+import { MARKET_GAMES } from '../greenneedle/spiritMarket';
 
 export interface Cell {
   id: string;
@@ -33,6 +34,8 @@ export interface MinigameView {
   keys?: Partial<Record<'up' | 'down' | 'left' | 'right' | 'confirm', string>>;
   /** Nothing moves until the player chooses: the screen stops its clock. */
   waiting?: boolean;
+  /** The cell Esc presses instead of walking out of the game (the Spirit Market: a step back, or the gate). */
+  back?: string;
 }
 
 /** A play field as plain data: one letter per tile (row by row), the pieces standing on it, and the text beside it. The screen decides how a letter looks. */
@@ -876,6 +879,7 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   ...SNAKE_GAMES,
   ...ARCADE_MODULES,
   ...JIGSAW_GAMES,
+  ...MARKET_GAMES,
 };
 
 export function gameModule(id: string): MinigameModule<BaseState> {
