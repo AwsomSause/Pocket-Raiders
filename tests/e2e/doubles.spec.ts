@@ -76,8 +76,7 @@ test('a double battle takes two commands a turn and survives a reload', async ({
   await waitForScene(page, 'Battle');
   expect((await battleState(page))?.doubles).toBe(true);
   await expect.poll(() => page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle').duo))).toBe(true);
-  // W17: your trainer is on the doubles field too (it throws both balls at the start, then steps off).
-  await expect.poll(() => page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle').trainerActor)), { timeout: 10_000 }).toBe(true);
+  // Kice 2026-11-17: no custom player trainer on the field any more (trainers throw with their own or Hilda's back sprite).
 
   // Play turns with Enter: Fight, first move, first target, for each Pokémon.
   for (let i = 0; i < 80; i++) {
