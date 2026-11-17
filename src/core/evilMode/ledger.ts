@@ -46,6 +46,11 @@ export function writtenFor(block: EvilModeBlock, job: JobDraft, data: EvilData =
     const offer = data.district.methods.pay.offers.find((o) => o.pct === (job.offer ?? 100));
     return fill(offer?.fair ? W.payFair : W.payUnder, { to, amount: money(payAmount(h, job.offer, data)) });
   }
+  // Slice 6: Lean, Take, Expose (Part 25a section 5.2): what was done, plainly.
+  const X = data.line.written;
+  if (job.method === 'lean') return l && l.take > 0 && h.scouted > 0 ? fill(X.lean!, { to, amount: money(Math.floor((l.take * data.line.lean.takings) / 100)) }) : fill(X.leanNothing!, { to });
+  if (job.method === 'take') return fill(data.line.things.find((t) => t.id === (job.thing ?? 'stock'))!.written, { to });
+  if (job.method === 'expose') return fill(X.expose!, { to });
   return fill(h.kind === 'local' ? W.outplay : W.outplayGround, { to });
 }
 
