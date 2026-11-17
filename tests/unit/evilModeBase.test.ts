@@ -617,8 +617,10 @@ describe('the Hero\'s delay (Part 17 section 3.3): at most two days a region', (
 describe('saves: block v9', () => {
   it('v8 -> v9: no base, no Raid, never raided; a base saved and loaded is the same', () => {
     const b = based();
-    const { base: _b, raid: _r, law: _l, ...rest } = b;
-    const v9 = EvilModeBlockSchema.parse({ ...rest, v: 11 });
+    // A v8 block (fixed version order: 9 is this slice) has none of the later slices' fields either.
+    const { base: _b, raid: _r, law: _l, economy: _e, neighbour: _n, scheme: _s, road: _d, fire: _f, reck: _k, ending: _g, ...rest } = b;
+    const { 'evil-economy': _de, 'evil-scheme': _ds, ...draws } = rest.draws as Record<string, number>;
+    const v9 = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify({ ...rest, draws, v: 8 })));
     expect(v9).toMatchObject({ v: 14, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } });
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(b)))).toEqual(b);
   });

@@ -1285,10 +1285,11 @@ export function migrateEvilBlock(raw: unknown): unknown {
   if (b.v === 5) b = { ...b, v: 6, proof: [], lineMove: null };
   if (b.v === 6) b = { ...b, v: 7, gyms: [] };
   if (b.v === 7) b = migrateToV8(b);
-  if (b.v === 8) b = { ...b, v: 9, economy: emptyEconomy(), draws: { ...(b.draws as object), 'evil-economy': 0 } };
-  if (b.v === 9) b = { ...b, v: 10, neighbour: null };
-  if (b.v === 10) b = { ...b, v: 11, scheme: emptyScheme(String((b.team as { creed?: unknown } | undefined)?.creed ?? 'profit')), draws: { ...(b.draws as object), 'evil-scheme': 0 } };
-  if (b.v === 11) b = { ...b, v: 12, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } };
+  // Fixed order of the block versions (shared across the slice branches): 9 slice 10, 10 slice 11, 11 slice 13, 12 slice 14, 13 slice 12, 14 slice 15.
+  if (b.v === 8) b = { ...b, v: 9, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } };
+  if (b.v === 9) b = { ...b, v: 10, economy: emptyEconomy(), draws: { ...(b.draws as object), 'evil-economy': 0 } };
+  if (b.v === 10) b = { ...b, v: 11, neighbour: null };
+  if (b.v === 11) b = { ...b, v: 12, scheme: emptyScheme(String((b.team as { creed?: unknown } | undefined)?.creed ?? 'profit')), draws: { ...(b.draws as object), 'evil-scheme': 0 } };
   if (b.v === 12) b = { ...b, v: 13, hero: b.hero && typeof b.hero === 'object' ? { ...heroSlice12Start(), ...(b.hero as object) } : b.hero ?? null, road: [], fire: null, reck: null };
   if (b.v === 13) b = { ...b, v: 14, ending: null };
   return b;
