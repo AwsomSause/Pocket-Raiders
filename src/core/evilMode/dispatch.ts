@@ -28,6 +28,7 @@ export function crewProblem(block: EvilModeBlock, id: string, ignoreHolding?: st
   if (c.where !== 'in') return fill(peopleText('left'), { name: c.name });
   if (c.outOn === block.here.day) return `${c.name} is resting after yesterday's battle.`;
   if (block.queue.some((j) => j.holdingId !== ignoreHolding && j.squad.includes(id))) return `${c.name} is already going somewhere today.`;
+  if (block.posted.some((p) => p.id === id)) return `${c.name} is posted somewhere today.`;
   return null;
 }
 
@@ -149,9 +150,10 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     const h = holdings.find((x) => x.id === j.holdingId);
     if (!h) continue;
     const odds = j.odds ?? oddsFor(block, j, data).odds;
-    const roll = dispatchRoll(d0.seed, draws);
-    draws += 1;
-    const won = j.certain || roll <= odds;
+    // Slice 5: a job the Boss played in person isn't rolled (and takes no number from the stream).
+    const roll = j.played ? (j.played === 'won' ? 1 : 100) : dispatchRoll(d0.seed, draws);
+    if (!j.played) draws += 1;
+    const won = j.played ? j.played === 'won' : j.certain || roll <= odds;
     const name = holdingName({ ...h, scouted: Math.max(1, h.scouted) }, data);
     const lines: string[] = [];
     const m = data.district.methods;
@@ -202,7 +204,7 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
         }
       }
     }
-    sheets.push({ holdingId: h.id, method: j.method, squad: [...j.squad], odds, certain: j.certain, roll, won, voice: voice(j.method, won, h.step, data), lines });
+    sheets.push({ holdingId: h.id, method: j.method, squad: [...j.squad], odds, certain: j.certain, roll, won, voice: voice(j.method, won, h.step, data), lines, ...(j.played ? { played: true } : {}) });
     // The Card's line gets its mark: it went, or it didn't (a Pay short of money on the day didn't go either).
     const went = won && !(j.method === 'pay' && lines[0]?.startsWith('The money was short'));
     // People: a job that went counts toward Lead; a job their talent fits, +1 once a district (Part 5 section 5.2).

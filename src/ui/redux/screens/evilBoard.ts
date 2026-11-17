@@ -16,7 +16,11 @@ function map(m: BoardModel): string {
     return `<div class="win${c.sel ? ' sel' : ''}" style="position:absolute;left:${col * 58}px;top:${row * 60}px;width:52px;height:52px;padding:0;box-sizing:border-box;outline:${RING[c.ring]};outline-offset:-3px;opacity:${c.lit ? 1 : 0.4};cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center"${act('cell', i)} data-testid="evil-cell-${c.step}" data-ring="${c.ring}" title="${esc(`${c.step}. ${c.name} (${c.kind})${c.mood ? `, ${c.mood}` : ''}`)}">
       <span class="sm" style="position:absolute;left:4px;top:1px;font-size:10px">${c.step}</span><b style="font-size:20px">${esc(c.mark)}</b>
       ${c.dot ? `<i style="position:absolute;right:4px;top:4px;width:9px;height:9px;border-radius:5px;background:${c.dot};border:1px solid #0008"></i>` : ''}
-      ${c.queued ? '<i style="position:absolute;right:3px;bottom:3px;width:10px;height:10px;background:var(--team-a);border:2px solid var(--team-b);transform:rotate(45deg)"></i>' : ''}</div>`;
+      ${c.queued ? '<i style="position:absolute;right:3px;bottom:3px;width:10px;height:10px;background:var(--team-a);border:2px solid var(--team-b);transform:rotate(45deg)"></i>' : ''}
+      ${c.home ? '<span style="position:absolute;left:3px;bottom:0;font-size:11px" title="Their street" data-testid="evil-home">⌂</span>' : ''}
+      ${c.posted ? '<span style="position:absolute;right:3px;top:13px;font-size:11px;font-weight:700;color:var(--team-a)" title="Somebody\'s standing here" data-testid="evil-posted">⚑</span>' : ''}
+      ${c.road ? '<i style="position:absolute;left:6px;right:6px;bottom:2px;border-bottom:2px dotted #fff8" data-testid="evil-road"></i>' : ''}
+      ${c.hero ? '<b style="position:absolute;left:50%;top:-8px;transform:translateX(-50%);background:#fff;color:#141414;border-radius:8px;padding:0 5px;font-size:11px;line-height:15px;box-shadow:0 0 0 2px #141414" title="The kid" data-testid="evil-hero-marker">KID</b>' : ''}</div>`;
   };
   return `<div class="abs" style="left:16px;top:130px;width:580px;height:112px" data-testid="evil-map">${m.cells.map(cell).join('')}</div>`;
 }
@@ -28,9 +32,11 @@ function panel(m: BoardModel): string {
 }
 
 function texts(m: BoardModel, notice: string | null): string {
+  const fight = m.fight ? `<div style="margin-bottom:6px;cursor:pointer" ${act('advance')} data-testid="evil-fight"><b class="sm" style="color:var(--team-a)">${esc(m.fight)}</b></div>` : '';
+  const go = m.inPerson ? `<div style="margin-bottom:6px" data-testid="evil-inperson"><b class="sm">In person</b>${m.inPerson.go.map((g) => `<div class="row sm" style="line-height:20px;padding:0 4px;cursor:pointer;${g.sel ? 'outline:2px solid var(--team-a);' : ''}"${act('go', g.holdingId)} data-testid="evil-go">${esc(g.text)}</div>`).join('')}${m.inPerson.done ? sm(m.inPerson.done, 'opacity:.7') : sm('G, or press one, to go. Enter stays in.', 'opacity:.7')}</div>` : '';
   const blocks = m.overnight.map((o) => `<div style="margin-bottom:6px" data-testid="evil-sheet"><b class="sm">${esc(o.title)}</b>${o.lines.map((l) => sm(l)).join('')}</div>`).join('');
   const eve = m.evening.length ? `<div data-testid="evil-evening">${m.evening.map((l) => sm(l)).join('')}</div>` : '';
-  return W(`${blocks}${eve}${notice ? sm(notice, 'margin-top:6px') : ''}${!blocks && !eve && !notice ? sm('Arrows move along the road. Each holding shows what is known.') : ''}`, 'position:absolute;left:16px;width:580px;top:252px;bottom:70px;padding:8px 10px;overflow:auto', '', ' data-testid="evil-text"');
+  return W(`${fight}${go}${blocks}${eve}${notice ? sm(notice, 'margin-top:6px') : ''}${!fight && !go && !blocks && !eve && !notice ? sm('Arrows move along the road. Each holding shows what is known.') : ''}`, 'position:absolute;left:16px;width:580px;top:252px;bottom:70px;padding:8px 10px;overflow:auto', '', ' data-testid="evil-text"');
 }
 
 function endView(m: BoardModel): string {
@@ -50,18 +56,22 @@ function dispatch(m: BoardModel, notice: string | null): string {
     <div class="sm" style="line-height:16px;margin-top:4px" data-testid="evil-odds">${esc(d.oddsLine)}</div>
     ${d.problem ? sm(d.problem, 'color:#f08a7a') : ''}${notice ? sm(notice) : ''}
     <div class="row" style="gap:6px;margin-top:4px">${B('Read the Card', d.canQueue, `padding:2px 12px;${d.canQueue ? '' : 'opacity:.5'}`, '', `${act('queue')} data-testid="evil-queue"`)}</div>
-    <div style="margin-top:4px">${queue}</div>`, 'position:absolute;left:152px;width:444px;top:252px;bottom:70px;padding:6px 8px;overflow:auto', d.step === 'how' ? 'sel' : '', ' data-testid="evil-how"');
+    ${d.hold ? `<div class="row" style="gap:6px;margin-top:4px">${B(esc(d.hold.label), !d.hold.problem, `padding:2px 12px;${d.hold.problem ? 'opacity:.5' : ''}`, '', `${act('hold')} data-testid="evil-hold" title="${esc(d.hold.problem ?? '')}"`)}</div>${d.hold.problem ? sm(d.hold.problem, 'opacity:.7') : ''}` : ''}
+    <div style="margin-top:4px">${queue}${d.posted.map((q) => `<div class="row sm" style="line-height:18px"><span class="grow" data-testid="evil-posted-row">${esc(q.text)}</span><span style="cursor:pointer;text-decoration:underline"${act('unpost', q.holdingId)}>Clear</span></div>`).join('')}</div>`, 'position:absolute;left:152px;width:444px;top:252px;bottom:70px;padding:6px 8px;overflow:auto', d.step === 'how' ? 'sel' : '', ' data-testid="evil-how"');
   return list + crew + how;
 }
 
-export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; filed?: string } = {}): string {
+export function boardView(m: BoardModel, f: FrameModel, notice: string | null, extra: { ledger?: string; roster?: string; file?: string; filed?: string } = {}): string {
   const book = `<span class="tg" style="cursor:pointer;${extra.ledger ? 'outline:2px solid var(--acc);' : ''}"${act('ledger')} data-testid="evil-ledger-open">Ledger (L)</span>`;
   const people = `<span class="tg" style="cursor:pointer;${extra.roster ? 'outline:2px solid var(--acc);' : ''}"${act('roster')} data-testid="evil-roster-open">Roster (R)</span>`;
-  const title = `<div class="abs row" style="left:16px;right:16px;top:100px;gap:8px;align-items:center"><b data-testid="evil-team-name">${esc(f.team.name)}</b><span class="tg">${esc(m.title)}</span><span class="tg" style="${m.warn ? 'background:var(--team-b);color:#fff' : ''}" data-testid="evil-day">${esc(m.day)}</span><span class="tg" data-testid="evil-count">${esc(m.count)}</span><div class="grow"></div>${f.chips.map((c) => `<span class="tg" data-testid="evil-chip">${esc(c)}</span>`).join('')}${people}${book}</div>`;
+  const fileTag = `<span class="tg" style="cursor:pointer;${extra.file ? 'outline:2px solid var(--acc);' : ''}"${act('file')} data-testid="evil-file-open">File (F)</span>`;
+  const title = `<div class="abs row" style="left:16px;right:16px;top:100px;gap:8px;align-items:center"><b data-testid="evil-team-name">${esc(f.team.name)}</b><span class="tg">${esc(m.title)}</span><span class="tg" style="${m.warn ? 'background:var(--team-b);color:#fff' : ''}" data-testid="evil-day">${esc(m.day)}</span><span class="tg" data-testid="evil-count">${esc(m.count)}</span><div class="grow"></div>${f.chips.map((c) => `<span class="tg" data-testid="evil-chip">${esc(c)}</span>`).join('')}${fileTag}${people}${book}</div>`;
   // The Ledger shares the frame and takes the board's place (slice 3); the last line filed sits in its corner.
   if (extra.ledger) return `${title}${extra.ledger}${extra.filed ?? ''}`;
   // The Roster (slice 4) takes the board's place the same way.
   if (extra.roster) return `${title}${extra.roster}${extra.filed ?? ''}`;
+  // The File (slice 5) the same way.
+  if (extra.file) return `${title}${extra.file}${extra.filed ?? ''}`;
   const lower = m.end ? endView(m) + panel(m) : m.dispatch ? dispatch(m, notice) : texts(m, notice) + panel(m);
   return `${title}${map(m)}${lower}${extra.filed ?? ''}`;
 }

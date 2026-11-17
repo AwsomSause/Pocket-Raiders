@@ -26,6 +26,8 @@ import { cardModel, LEDGER_ACTS, ledgerModel, newLedger, type LedgerDraft } from
 import { cardView, filedCorner, ledgerView } from '../ui/redux/screens/evilLedger';
 import { applicantActs, isQuestionAct, newRoster, personActs, refusalModel, rosterModel, type RosterDraft } from '../core/evilMode/rosterScreens';
 import { officeView, refusalView, rosterView } from '../ui/redux/screens/evilRoster';
+import { fileModel } from '../core/evilMode/heroScreens';
+import { fileView } from '../ui/redux/screens/evilFile';
 import { crossers } from '../core/evilMode/people';
 
 /** Keys that confirm (input.ts KEY_MAP), read raw on the Card so a held key can be told from a press. */
@@ -49,6 +51,8 @@ export class EvilScene extends Phaser.Scene {
   /** Slice 4: the Roster (and the Office inside it), and the cursor on the yard's three answers. */
   private roster: RosterDraft | null = null;
   private refuseSel = 0;
+  /** Slice 5: the File's open tab, or null when it's shut. */
+  private file: number | null = null;
 
   constructor() {
     super('Evil');
@@ -65,6 +69,7 @@ export class EvilScene extends Phaser.Scene {
     this.filed = null;
     this.roster = null;
     this.refuseSel = 0;
+    this.file = null;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
     session.evilEnsure();
@@ -88,11 +93,14 @@ export class EvilScene extends Phaser.Scene {
           const ledger = this.ledger ? ledgerView(ledgerModel(block, this.ledger)) : undefined;
           const rm = this.roster ? rosterModel(block, this.roster) : null;
           const roster = rm ? rosterView(rm) : undefined;
+          const fm = this.file !== null ? fileModel(block, this.file, this.heroTeam(), (id) => services().session.content.species.get(id)?.name ?? id) : null;
+          const file = fm ? fileView(fm) : undefined;
+          if (block.fight) frame.button = 'Fight';
           // An order across a line is answered in the yard before anything else moves (Part 7 section 11.1).
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -125,6 +133,11 @@ export class EvilScene extends Phaser.Scene {
         ocancel: () => { if (this.roster) this.roster = { ...this.roster, office: null }; this.view?.refresh(); },
         refuse: (id) => this.answer(id as 'withdraw' | 'swap' | 'insist'),
         clear: (id) => { services().session.evilStep({ type: 'clearJob', holdingId: id }); this.view?.refresh(); },
+        file: () => this.toggleFile(),
+        ftab: (i) => { if (this.file !== null) this.file = Number(i); this.view?.refresh(); },
+        hold: () => this.hold(),
+        unpost: (id) => { services().session.evilStep({ type: 'unpost', holdingId: id }); this.view?.refresh(); },
+        go: (id) => this.goYourself(id),
       },
       overs: { over: (i) => { if (!this.founded()) { this.draft = { ...this.draft, at: Number(i) }; this.view?.refresh(); } } },
     });
@@ -224,7 +237,9 @@ export class EvilScene extends Phaser.Scene {
     const block = services().session.run?.expansion?.evilMode;
     if (!block) return;
     if (block.district?.end) return this.leave();
+    if (block.fight) return this.startFight();
     const cues = services().session.evilStep({ type: BEAT_END[block.here.beat] });
+    if (cues.some((c) => c.id === 'fight')) return this.startFight();
     const refused = cues.find((c) => c.id === 'refused');
     this.notice = refused && 'reason' in refused ? refused.reason : null;
     this.disp = { ...newDispatch(), at: this.disp.at };
@@ -241,6 +256,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.block()?.refusal) return this.refusalKey(a);
     if (this.ledger) return this.ledgerKey(a);
     if (this.roster) return this.rosterKey(a);
+    if (this.file !== null) return this.fileKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
     const d = this.disp;
@@ -395,6 +411,13 @@ export class EvilScene extends Phaser.Scene {
   private rawKey(e: KeyboardEvent, type: 'down' | 'up'): void {
     if (e.code === 'KeyL' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.toggleLedger();
     if (e.code === 'KeyR' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleRoster();
+    if (e.code === 'KeyF' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleFile();
+    if (e.code === 'KeyH' && type === 'down' && !e.repeat && !this.card && this.block()?.here.beat === 'dispatch' && this.disp.step === 'how') return this.hold();
+    if (e.code === 'KeyG' && type === 'down' && !e.repeat && !this.card && this.block()?.here.beat === 'inPerson') {
+      const h = this.block()?.district?.holdings[this.disp.at];
+      const j = this.block()?.queue.find((x) => x.method === 'outplay' && !x.played && (!h || x.holdingId === h.id)) ?? this.block()?.queue.find((x) => x.method === 'outplay' && !x.played);
+      if (j) return this.goYourself(j.holdingId);
+    }
     const c = this.card;
     if (!c || !CONFIRM_CODES.has(e.code)) return;
     // The press that opened the Card reaches this listener too (after the action listener opened it): skip it.
@@ -464,6 +487,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.card) return;
     this.ledger = this.ledger ? null : newLedger();
     this.roster = null;
+    this.file = null;
     this.notice = null;
     this.view?.refresh();
   }
@@ -503,12 +527,69 @@ export class EvilScene extends Phaser.Scene {
     this.view?.refresh();
   }
 
+  // ---- Slice 5: the Hero, Hold, going in person, and the File ----
+
+  /** The Hero's team as the rival record has it (read there, never copied). */
+  private heroTeam(): string[] {
+    const run = services().session.run;
+    const id = run?.expansion?.evilMode?.hero?.rivalId;
+    return (id ? run?.story.rivals.find((r) => r.id === id)?.memory?.lastBattle?.team : undefined) ?? [];
+  }
+
+  private toggleFile(): void {
+    if (this.card) return;
+    if (!this.block()?.hero) {
+      this.notice = "Nobody's on the road yet.";
+      return void this.view?.refresh();
+    }
+    this.file = this.file === null ? 0 : null;
+    this.ledger = null;
+    this.roster = null;
+    this.notice = null;
+    this.view?.refresh();
+  }
+
+  private fileKey(a: InputAction): void {
+    if (a === 'back' || a === 'confirm') this.file = null;
+    else if (a === 'left' || a === 'right') this.file = ((this.file ?? 0) + (a === 'left' ? 2 : 1)) % 3;
+    this.view?.refresh();
+  }
+
+  /** Hold: the one person picked stands at the holding the cursor's on (Dispatch; no Card). */
+  private hold(): void {
+    const block = this.block();
+    const h = block?.district?.holdings[this.disp.at];
+    if (!block || !h) return;
+    const cues = services().session.evilStep({ type: 'post', holdingId: h.id, id: this.disp.squad[0] ?? '' });
+    this.said(cues);
+    if (!cues.some((c) => c.id === 'refused')) this.disp = { ...newDispatch(), at: this.disp.at };
+    this.view?.refresh();
+  }
+
+  private goYourself(holdingId: string): void {
+    const cues = services().session.evilStep({ type: 'goYourself', holdingId });
+    if (cues.some((c) => c.id === 'fight')) return this.startFight();
+    this.said(cues);
+    this.view?.refresh();
+  }
+
+  /** The battle the day's waiting on: into the battle scene; its end comes back here (sceneForRun). */
+  private startFight(): void {
+    if (!services().session.evilFight()) {
+      this.notice = 'The fight could not start.';
+      return void this.view?.refresh();
+    }
+    this.leaving = true;
+    this.scene.start('Battle');
+  }
+
   // ---- Slice 4: the Roster, the Office and the yard ----
 
   private toggleRoster(): void {
     if (this.card) return;
     this.roster = this.roster ? null : newRoster();
     this.ledger = null;
+    this.file = null;
     this.notice = null;
     this.view?.refresh();
   }

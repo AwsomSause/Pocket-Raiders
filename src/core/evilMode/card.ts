@@ -3,6 +3,7 @@
 // Field 12 is the Ledger's sentence, from ledger.ts, so the line filed is the line the player read.
 
 import { fairPrice, holdingName, localOf, payAmount, streetOf, takings } from './board';
+import { heroField } from './hero';
 import { EVIL_DATA, type EvilData } from './data';
 import { crewNames, fill, holdingTo, money, sentenceFor } from './ledger';
 import { oddsFor, oddsText, type JobDraft } from './odds';
@@ -68,7 +69,7 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   // 9 Holds or turns
   f.push([m === 'scout' ? L.holds.nothing : offer && !offer.fair ? L.holds.turns : L.holds.holds, false]);
   // 10 The Hero (slice 5)
-  f.push([L.hero, false]);
+  f.push([heroField(block, h, data), false]);
   // 11 Not known: every field that's a guess, listed.
   const unknown = f.map(([, u], i) => (u ? data.ledger.fields[i]! : null)).filter((x): x is string => !!x);
   f.push([unknown.length ? unknown.map((n) => `${n}: not scouted.`).join(' ') : L.notKnownNone, unknown.length > 0]);

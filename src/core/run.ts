@@ -21,6 +21,7 @@ import { exWatchEnd, exWatching } from './greenneedle/exhibition';
 import { settleRivalRecruits } from './rivals/eventRecruit';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
+import { endEvilFight, evilFightOn } from './evilMode/fightEnd';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape, gnShapeDouble } from './greenneedle';
 import { answerAsk } from './greenneedle/ask';
@@ -3134,6 +3135,8 @@ export interface TurnResult {
   stepIn?: StepInEnd;
   /** What the trainer says during the turn (presentation only). */
   drama: DramaLine[];
+  /** Evil Mode: a battle the day waited on is over; the lines say what it cost or won. The run goes on (never a game over). */
+  evilFight?: { won: boolean; lines: string[] };
   /** A Poké Doll was used: the wild battle is over, with no experience, money or catch. */
   escaped?: boolean;
 }
@@ -3489,6 +3492,12 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   const reveal = [revealMove(content, run, 'player', false), revealMove(content, run, 'enemy', Boolean(rivalHere) && rivalBond(rivalHere, currentEnemy(battle).speciesId).confidence >= 40)];
   for (const r of reveal) if (r) events.push(r);
   events.push(...trackFeelings(content, current, run, events as BattleEvent[]));
+  // Evil Mode (slice 5): a battle the day was waiting on. Its result goes to the day, never to the main game's after-battle
+  // steps: no prize, no node, and a loss never ends the run (core/evilMode/fightEnd.ts).
+  if (battle.outcome && evilFightOn(run)) {
+    const lines = endEvilFight(content, run, battle.outcome === 'win' || battle.outcome === 'caught', healParty);
+    return { run, events, end: null, defeated: false, cues: [], drama: [], evilFight: { won: battle.outcome !== 'lose', lines } };
+  }
   if ((battle.outcome === 'win' || battle.outcome === 'caught') && battle.evoStone) {
     addItem(run.inventory, battle.evoStone, 1);
     events.push({ type: 'spectacle', kind: 'arena', side: 'player', text: `You pick up the ${content.items.get(battle.evoStone)?.name ?? battle.evoStone}.` });
