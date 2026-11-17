@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { chainRooms, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
+import { conditionMet } from '../../src/core/events';
 import { takeTurn } from '../../src/core/run';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { reinforcementDue } from '../../src/core/raid/raid';
@@ -107,23 +108,83 @@ describe('gn.11 Kaiju Tentacruel', () => {
     expect(flagOf(stamp.run, 'kaiju-stamp')).toBe(1);
   });
 
-  it('free the injured one: needs a slicing or claw move; it costs HP (more if angered); that Tentacool joins, and the Kaiju comes back later as an ally', () => {
+  it('free the injured one: two turns inside the raid; the cutter is out of the fight while the rest protect it; that Tentacool joins once', () => {
     let run = toWall('gn11-g');
     run = choose(run, 'gn-11-seawall', 'Follow it to the reef.').run;
     teach(run, 0, 'tackle');
     for (const m of run.party.slice(1)) m.moves = [{ id: 'tackle', pp: 35 }];
     expect(scene(run, 'gn-11-reef').labels).not.toContain('Cut the net.');
     teach(run, 0, 'metal-claw');
-    const hp = run.party[0]!.hp;
-    run = choose(run, 'gn-11-reef', 'Cut the net.').run;
-    expect(run.party[0]!.hp).toBeLessThan(hp);
+    // A cutter alone has nobody to protect it: the net can't be cut.
+    const alone = structuredClone(run);
+    alone.party = alone.party.slice(0, 1);
+    expect(scene(alone, 'gn-11-reef').labels).not.toContain('Cut the net.');
+    if (run.party.length < 2) addMon(run, 'rattata', 'tackle');
+    const cutter = run.party[0]!.uid;
+    const size = run.party.length;
+    const cut = choose(run, 'gn-11-reef', 'Cut the net.');
+    // The Kaiju is fought: this is the raid, won by holding out two turns. Nothing is freed yet.
+    expect(cut.battle).toBe(true);
+    expect(cut.run.battle!.raid).toBeTruthy();
+    expect(cut.run.battle!.eventRule?.surviveTurns).toBe(2);
+    expect(flagOf(cut.run, 'kaiju-freed')).toBe(0);
+    expect(cut.run.party.some((m) => m.uid === cutter)).toBe(false);
+    expect(cut.run.party.length).toBe(size - 1);
+    expect(cut.run.box.some((m) => m.uid === cutter)).toBe(true);
+    run = win(cut.run);
     expect(flagOf(run, 'kaiju-freed')).toBe(1);
+    expect([...run.party, ...run.box].filter((m) => m.uid === cutter).length).toBe(1);
+    expect(run.party.some((m) => m.uid === cutter) || run.party.length === 6).toBe(true);
     setFlag(run, 'kaiju-girl');
     const kept = choose(run, 'gn-11-freed', 'Hold out a hand.');
     expect([kept.text, ...kept.changes].join(' ')).toContain('I said it was looking');
+    const all = [...kept.run.party, ...kept.run.box, ...kept.run.pending.flatMap((x) => (x.kind === 'caught' ? [x.mon] : []))];
+    expect(all.filter((m) => m.speciesId === 'tentacool' && m.fixedAbility === 'huge-power').length).toBe(1);
     const ret = content.events.get('gn-11-return')!;
     const battle = ret.choices[0]!.success.battle as { ally?: string };
     expect(battle.ally).toBe('tentacruel');
+  });
+
+  it('losing while the net is being cut is the lost ending: the cutter comes back, nothing is freed, and the stage\'s shops shut', () => {
+    let run = toWall('gn11-h');
+    run = choose(run, 'gn-11-seawall', 'Follow it to the reef.').run;
+    teach(run, 0, 'metal-claw');
+    if (run.party.length < 2) addMon(run, 'rattata', 'tackle');
+    const cutter = run.party[0]!.uid;
+    const far = run.stage!.map.nodes.find((n) => n.id !== run.stage!.current)!;
+    far.sides.push({ id: 'test-shop', kind: 'shop', used: false });
+    run = lose(choose(run, 'gn-11-reef', 'Cut the net.').run);
+    expect(run.phase).not.toBe('over');
+    expect(flagOf(run, 'kaiju-freed')).toBe(0);
+    expect(flagOf(run, 'kaiju-lost')).toBe(1);
+    expect(run.party.some((m) => m.uid === cutter)).toBe(true);
+    expect(run.stage!.map.nodes.flatMap((n) => n.sides).find((x) => x.id === 'test-shop')!.used).toBe(true);
+  });
+
+  it('freed, and the Polluted Factory left running: it comes back to the harbour angry (a giant, Attack +1, no catching); not otherwise', () => {
+    const e = content.events.get('gn-11-anger')!;
+    const run = gnRun('gn11-anger');
+    const ok = (r: RunState) => e.requires.every((c) => conditionMet(content, r, c));
+    setFlag(run, 'kaiju-at', 0);
+    expect(ok(run)).toBe(false);
+    setFlag(run, 'kaiju-freed');
+    expect(ok(run)).toBe(false); // the factory was shut down, or not met
+    setFlag(run, 'factory-left-running');
+    run.story.flags['ev:kaiju-at'] = 1;
+    const laterOk = ok(run);
+    const b = e.choices[0]!.success.battle as { species: string[]; rule: { giant?: boolean; noCatch?: boolean; foeStages?: { atk?: number } }; foeMoves: string[] };
+    expect(b.species).toEqual(['tentacruel']);
+    expect(b.rule).toMatchObject({ giant: true, noCatch: true, foeStages: { atk: 1 } });
+    expect(b.foeMoves).toEqual(['wrap', 'acid-armor', 'hydro-pump', 'tidal-surge']);
+    open(run, 'gn-11-anger');
+    const fought = choose(run, 'gn-11-anger', 'Stand on the sea wall.');
+    expect(fought.battle).toBe(true);
+    expect(fought.run.battle!.enemyStages.atk).toBe(1);
+    const held = win(fought.run);
+    expect(flagOf(held, 'kaiju-anger-held')).toBe(1);
+    setFlag(held, 'kaiju-at', 0);
+    expect(ok(held)).toBe(false); // once
+    expect(typeof laterOk).toBe('boolean');
   });
 });
 
@@ -159,6 +220,72 @@ describe("gn.12 Maiden's Peak", () => {
     expect(labels[0]).toMatch(/^TM .* \(₽[\d,]+\)$/);
     const bought = choose(room, caseId, labels[0]!);
     expect(bought.run.money).toBeLessThan(10000);
+  });
+
+  it('one of each a visit: three Swap Alley cards, one egg move (priced by rarity), one true thing from Madame Roux (no charge)', () => {
+    let run = enter('gn12-visit');
+    run.money = 50000;
+    run = choose(run, 'gn-12-square', 'Further into the market.').run;
+    const hub = run;
+    // Swap Alley: a card is gone once it is taken.
+    run = choose(hub, 'gn-12-square-2', 'Swap Alley.').run;
+    expect(scene(run, 'gn-12-swap').labels.length).toBe(4);
+    setFlag(run, 'maiden-swap-1');
+    expect(scene(run, 'gn-12-swap').labels).toEqual(['The second card: a little further off.', 'The third card: anything goes.', 'Back to the square.']);
+    expect(content.events.get('gn-12-swap')!.choices.slice(0, 3).map((c) => JSON.stringify(c.success.effects).includes('maiden-swap-'))).toEqual([true, true, true]);
+    // A choice of nature: all twenty natures that lean one way, five stats by four.
+    const natures = ['atk', 'spa', 'spe', 'def', 'spd'].flatMap((k) => content.events.get(`gn-12-nature-${k}`)!.choices.map((c) => (c.success.effects[0] as { key: string }).key));
+    expect(new Set(natures).size).toBe(20);
+    expect(scene(run, 'gn-12-nature').labels).toEqual(['Stronger (Attack).', 'Cleverer (Sp. Atk).', 'Some other way.', 'Leave it as it is.']);
+    // The Egg Move Tutor: one price shows, by the lead's rarity; one egg move a visit.
+    run = choose(hub, 'gn-12-square-2', 'Egg Row.').run;
+    run = choose(run, 'gn-12-eggs', 'The Egg Move Tutor.').run;
+    const prices = scene(run, 'gn-12-tutor').labels.filter((l) => l.startsWith('Pay him'));
+    expect(prices.length).toBe(1);
+    expect(['Pay him (₽600).', 'Pay him (₽1,200).', 'Pay him (₽2,400).']).toContain(prices[0]);
+    const money = run.money;
+    const taught = choose(run, 'gn-12-tutor', prices[0]!).run;
+    expect(money - taught.money).toBe(Number(prices[0]!.replace(/\D/g, '')));
+    expect(flagOf(taught, 'maiden-tutor')).toBe(1);
+    expect(scene(taught, 'gn-12-tutor').labels).toEqual(['Back to the row.']);
+    // Madame Roux: no price; one true thing.
+    run = choose(hub, 'gn-12-square-2', 'Further in.').run;
+    run = choose(run, 'gn-12-square-3', 'The Fortune Teller.').run;
+    const before = run.money;
+    const told = choose(run, 'gn-12-roux', 'Ask for the one true thing.').run;
+    expect(told.money).toBe(before);
+    expect(scene(told, 'gn-12-roux').labels).toEqual(['Back to the square.']);
+    // A new visit resets all of it.
+    setFlag(told, 'maiden-swap-1');
+    open(told, 'gn-12-door');
+    const again = choose(told, 'gn-12-door', 'Walk into the market.').run;
+    for (const k of ['maiden-swap-1', 'maiden-tutor', 'maiden-roux-told']) expect(flagOf(again, k)).toBe(0);
+  });
+
+  it('Lantern Row: Poké Balls, status cures and supplies, each at the shop price plus 10%', () => {
+    let run = enter('gn12-row');
+    run.money = 50000;
+    run = choose(run, 'gn-12-square', 'Lantern Row.').run;
+    expect(scene(run, 'gn-12-lantern').labels).toEqual(['The Poké Ball shelf.', 'The status cures.', 'The out-of-battle supplies.', 'Back to the square.']);
+    run = choose(run, 'gn-12-lantern', 'The Poké Ball shelf.').run;
+    expect(scene(run, 'gn-12-lantern-balls').labels).toEqual(['A Poké Ball (₽220)', 'A Great Ball (₽660)', 'An Ultra Ball (₽880)', 'Back along the row.']);
+    const balls = run.inventory['great-ball'] ?? 0;
+    const money = run.money;
+    const bought = choose(run, 'gn-12-lantern-balls', 'A Great Ball (₽660)').run;
+    expect(bought.inventory['great-ball']).toBe(balls + 1);
+    expect(bought.money).toBe(money - 660);
+    bought.money = 100;
+    expect(conditionMet(content, bought, content.events.get('gn-12-lantern-balls')!.choices[0]!.requires![0]!)).toBe(false); // can't afford it
+  });
+
+  it('the Dusk Vendors take a Berry from the bag too', () => {
+    const run = enter('gn12-bag');
+    run.party.forEach((m) => { m.held = {}; });
+    for (const id of Object.keys(run.inventory)) if (id.endsWith('-berry')) delete run.inventory[id];
+    const cond = { kind: 'gn', test: 'holdsBerry' } as never;
+    expect(conditionMet(content, run, cond)).toBe(false);
+    run.inventory['oran-berry'] = 2;
+    expect(conditionMet(content, run, cond)).toBe(true);
   });
 
   it('the Dusk Vendors open only at dusk and take a held Berry', () => {
@@ -214,6 +341,21 @@ describe("gn.12 Maiden's Peak", () => {
     expect(flagOf(run, 'maiden-blessing')).toBe(0);
     expect(flagOf(run, 'kanto-maiden-hms')).toBe(1);
     expect(content.catalog.get('hm-moonblast')!.effect).toMatchObject({ kind: 'teachMove', move: 'moonblast' });
+    // The HMs are kept and reusable: used once at the cliff, then their case opens once on every later stage.
+    const hms = content.events.get('gn-12-hms')!;
+    expect(hms.choices.map((c) => c.label)).toEqual(['Use HM Dazzling Gleam.', 'Use HM Play Rough.', 'Use HM Moonblast.', 'Put them away.']);
+    const ok = (r: RunState) => hms.requires.every((c) => conditionMet(content, r, c));
+    expect(ok(run)).toBe(false); // used at the cliff on this stage
+    run.story.flags['ev:maiden-hms-at'] = -1;
+    expect(ok(run)).toBe(true);
+    expect(JSON.stringify(hms.choices[0]!.success.effects)).toContain('seeAgain'); // using one does not use it up
+    run = win(run); // the three teach prompts
+    run.story.flags['ev:maiden-hms-at'] = -1;
+    open(run, 'gn-12-hms');
+    const away = choose(run, 'gn-12-hms', 'Put them away.').run;
+    expect(ok(away)).toBe(false); // not again this stage
+    away.story.flags['ev:maiden-hms-at'] = -1;
+    expect(ok(away)).toBe(true);
   });
 });
 

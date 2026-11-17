@@ -165,7 +165,7 @@ const SF69: Json[] = [
     'A huge heap of junk. Something shiny pokes out of it: a Nugget. Something smelly guards it: a Trubbish on top of the heap, puffing itself up. It thinks the heap is its home.',
     [
       ch('Battle it for the Nugget.', fight('It puffs up as big as it can. It is not very big. When it\'s over you take the Nugget, and behind you the Trubbish sobs on its heap.', wf({ species: ['trubbish'], lv: 0, win: [item('nugget')] }))),
-      ch('Clean the heap (two nodes).', out('Two days of sorting. The heap becomes a tidy pile, then a neat little house of crates. The Trubbish watches the whole time. When you leave, it follows you, and drops the Nugget at your feet like a gift.', takeNode(2), join({ species: ['trubbish'], lv: 0 }), { kind: 'boxBond', key: 'trubbish' }, item('nugget'), good(1))),
+      ch('Clean the heap (two nodes).', out('Two days of sorting. The heap becomes a tidy pile, then a neat little house of crates. The Trubbish watches the whole time. When you leave, it follows you, and drops the Nugget at your feet like a gift.', takeNode(2), join({ species: ['trubbish'], lv: 0 }), flag('abandoned-mon'), { kind: 'boxBond', key: 'trubbish' }, item('nugget'), good(1))),
       ch('Leave it.', leave('You leave it on its heap. It watches you go, still puffed up, just in case.')),
     ]),
 ];

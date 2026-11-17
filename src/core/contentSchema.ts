@@ -3799,6 +3799,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
      * Greenneedle gn.11: what earlier choices did to the boss, once per point of a story flag (`flag` effect key): its stat stages
      * (the pylons that anger it) and the share of its HP it has already lost when the fight opens (rescued helpers, the boats, stuns).
      */
+    /** Greenneedle gn.11: an event rule for this raid (`surviveTurns: 2`: holding out two turns while the net is cut is a win). */
+    rule: EventRuleSchema.optional(),
     flagMods: z.array(z.object({ flag: z.string().min(1), foeStages: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(-2).max(2)).default({}), hpPercent: z.number().int().min(0).max(20).default(0) })).max(6).default([]),
     win: z.array(EventEffectSchema).default([]),
     lose: z.array(EventEffectSchema).optional(),

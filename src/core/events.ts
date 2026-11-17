@@ -2309,6 +2309,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     startRaidBattle(content, run, def, rng.pick(def.species), level);
     if (b.spikesUnless && Number(run.story.flags[`ev:${b.spikesUnless.flag}`] ?? 0) < b.spikesUnless.atLeast) run.battle!.sideEffects.player.toxicSpikes = 1;
     raidFlagMods(content, run, b.flagMods);
+    if (b.rule) run.battle!.eventRule = b.rule;
     run.battle!.event = event;
     return;
   }

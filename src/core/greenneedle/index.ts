@@ -3,6 +3,8 @@
 // previews, saves and replays agree. State is run flags (`ev:gn-*`) plus the optional `gn` marks on a Pokémon: no save change.
 
 import type { Content } from '../contentSchema';
+import { kaijuBack, kaijuCut, netCutter, shutMarket } from './kaiju';
+import { rarityOf } from '../rarity';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
@@ -220,6 +222,8 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   if (c.test === 'lookAtLevel') return run.party.some((m) => !!m.look && c.types!.includes(m.look) && m.level >= gnFlag(run, c.key!));
   if (c.test === 'notRegion') return !c.types!.includes(run.regionOrder[run.regionIndex] ?? '');
   if (c.test === 'holdsBerry') return Object.entries(run.inventory).some(([id, n]) => n > 0 && id.endsWith('-berry')) || run.party.some((m) => Object.entries(m.held ?? {}).some(([id, n]) => n > 0 && id.endsWith('-berry')));
+  if (c.test === 'leadRarity') return !!run.party[0] && c.types!.includes(rarityOf(content, run.party[0].speciesId));
+  if (c.test === 'netCutter') return netCutter(content, run) !== null;
   if (c.test === 'leadFit') { const lead = run.party[0]; return !!lead && lead.hp >= maxHp(content, lead) && !lead.status; }
   // gn.19: a large Pokémon (100 kg or more) in the party, standing, to give the Hippowdon shade.
   if (c.test === 'heavy') return run.party.some((m) => m.hp > 0 && (content.species.get(m.speciesId)?.weight ?? 50) >= 100);
@@ -466,6 +470,13 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       }
       return '';
     }
+    // gn.11: the net cutter leaves for the two turns, and comes back; a lost raid shuts the stage's market.
+    case 'kaijuCut':
+      return kaijuCut(content, run);
+    case 'kaijuBack':
+      return kaijuBack(run);
+    case 'shutMarket':
+      return shutMarket(run) > 0 ? 'The market is shut for the stage' : '';
     case 'eggNotes': {
       // gn.09: Bill's Egg Notes are information: the egg moves each party Pokémon's family can learn (nothing is taught).
       const lines = run.party.map((m) => {
