@@ -256,7 +256,7 @@ import type { TotemDef } from './totem/schema';
 import { createStreams, hashSeed, Rng, withStream } from './rng';
 import { lastChanceRevive } from './lastChance';
 import { reverseSideProblem, useReverseSide } from './legends/reverseSide';
-import { assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor, callCalm, effectBlessing, inCommunionForm, noteFirstBlood, syncCommunion } from './blessings';
+import { applyStarterNote, assignBlessing, blessingAfterBattle, blessingPerks, blessingShopFactor, callCalm, effectBlessing, inCommunionForm, noteFirstBlood, syncCommunion } from './blessings';
 import { applyWealthTax, clearRecentPurchases, dynamicPriceFactor, noteRecentPurchase, recentCopies } from './priceSwing';
 import { closeNodeMenu, freshNodeMenuState, menuBlocker, nodeMenusAllowed } from './nodeMenu/flow';
 import { BattleStateSchema, currentEnemy, freshStages, freshVolatile, type BattleState, type MapNode, type SideStop, type RunPrep, type PastPokemon, type PendingDecision, type PokemonInstance, type Profile, type RunState, type StageState, type StageMap, freshPlaza } from './state';
@@ -389,6 +389,8 @@ export interface NewRunOptions {
   /** The profile's permanent attributes (default: none). */
   attributes?: Record<string, number>;
   /** The profile's past Pokémon; one may come back this run (core/story/reunion.ts). */
+  /** Legendary Blessings: what the save remembers (Discovery and the shuffled bag). */
+  blessingDeck?: import('./blessings').BlessingDeck;
   pastPokemon?: readonly PastPokemon[];
   /** The account's archived rivals; one may shape a rival this run (core/rivals/legacy.ts). */
   rivalArchive?: Profile['rivalArchive'];
@@ -526,7 +528,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
     const flags = { ...(e.stagePacing ? { pacing: true } : {}), ...(e.evolutionEncounters ? { evoEncounters: true } : {}), ...(e.leagueCounterPick ? { counterPick: true } : {}), ...(e.kantoCanon ? { canon: { flags: [], completed: [], menus: {}, ...(e.labyrinthResume ? { labResume: true } : {}) } } : {}), ...(e.worldTracks ? { tracks: true } : {}), ...(e.ultraBeasts ? { ultra: freshUltra() } : {}), ...(e.eventsDensity ? { density: e.eventsDensity } : {}), ...(e.climaxCut === 'extended' ? { climaxCut: 'extended' as const } : {}), ...(e.storyTraits ? { storyTraits: true } : {}) };
     if (Object.keys(flags).length > 0) run.expansion = { ...run.expansion, ...flags };
     if (e.secondChancePct || e.heatedMoments || e.mythicalPromises) run.expansion = { ...run.expansion, ...(e.secondChancePct ? { secondChancePct: e.secondChancePct } : {}), ...(e.heatedMoments ? { heated: true } : {}), ...(e.mythicalPromises ? { promises: true } : {}) };
-    if (e.blessings) assignBlessing(run);
+    if (e.blessings) assignBlessing(run, opts.blessingDeck);
     if (e.wholeRunEvents) drawWholeRun(run); // Catalog Overhaul (legends): a Whole Run Event, 35% of runs, own stream
     weekInfluence(run);
     weekLegends(run); // Catalog Overhaul (legends, row C): Paradox Tide's +1 Influence, Leap Day's free Telling
@@ -650,6 +652,8 @@ export function chooseStarter(content: Content, current: RunState, choiceIndex: 
   const heldLine = isCircuitRun(content, run) ? content.storyData.remembrances.find((r) => r.line[0] === speciesId && r.held) : undefined;
   if (heldLine?.held) run.party[0]!.held = { ...run.party[0]!.held, [heldLine.held]: 1 };
   run.log.starterUid = run.party[0]!.uid;
+  const blessingNote = applyStarterNote(content, run); // LEGENDARY_BLESSINGS.md section 7
+  if (blessingNote) run.journal = [...(run.journal ?? []), blessingNote];
   enterStage(content, run, 0);
   if (getMode(run.rules.modeId)?.startDraft) {
     run.pending.push({ kind: 'mutator', choices: startRuleOffer(run.seed) });

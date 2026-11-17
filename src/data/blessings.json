@@ -22,6 +22,7 @@
       "influence": 0
     }
   },
+  "discovery": true,
   "balance": {
     "lele": {
       "healPercent": 10,
@@ -55,7 +56,8 @@
         "kind": "healMostHurt"
       },
       "status": "supported",
-      "limits": "Communion: the rest of the party also heals 5%. Its Rite (restore the party fully, once) is on the Run menu. The \"heal a town\" half is not built."
+      "limits": "Communion: the rest of the party also heals 5%. Its Rite (restore the party fully, once) is on the Run menu. The \"heal a town\" half is not built.",
+      "known": true
     },
     {
       "id": "fezandipiti",
@@ -84,7 +86,8 @@
             "kind": "foeLeadParalysed"
           }
         ]
-      }
+      },
+      "known": true
     },
     {
       "id": "ho-oh",
@@ -109,7 +112,8 @@
         "on": "any",
         "perks": [],
         "heal": true
-      }
+      },
+      "known": true
     },
     {
       "id": "dialga",
@@ -126,7 +130,8 @@
         "kind": "rewinds"
       },
       "status": "limited",
-      "limits": "Rewinds follow the Rewinds system (singles only; no button in doubles or triples). Communion: obtaining Dialga unlocks its Rite, going back to the start of the stage (team keeps its levels, moves and species; items and events of the stage are not kept), from the Run menu on the map."
+      "limits": "Rewinds follow the Rewinds system (singles only; no button in doubles or triples). Communion: obtaining Dialga unlocks its Rite, going back to the start of the stage (team keeps its levels, moves and species; items and events of the stage are not kept), from the Run menu on the map.",
+      "known": true
     },
     {
       "id": "palkia",
@@ -143,7 +148,8 @@
         "kind": "fold"
       },
       "status": "limited",
-      "limits": "Rite, Design the Road: rearrange the stage you are on, even after setting out (choosing every node's kind from a budget is not built). Rearranging is from a list on the run menu, not by dragging on the map."
+      "limits": "Rite, Design the Road: rearrange the stage you are on, even after setting out (choosing every node's kind from a budget is not built). Rearranging is from a list on the run menu, not by dragging on the map.",
+      "known": true
     },
     {
       "id": "moltres",
@@ -190,7 +196,8 @@
           }
         ],
         "heal": true
-      }
+      },
+      "known": true
     },
     {
       "id": "munkidori",
@@ -233,7 +240,8 @@
             "turns": 2
           }
         ]
-      }
+      },
+      "known": true
     },
     {
       "id": "tornadus",
@@ -281,7 +289,8 @@
             "turns": 5
           }
         ]
-      }
+      },
+      "known": true
     },
     {
       "id": "zacian",
@@ -330,7 +339,8 @@
             "value": 1.25
           }
         ]
-      }
+      },
+      "known": true
     },
     {
       "id": "regidrago",
@@ -386,7 +396,8 @@
             "value": 1.3
           }
         ]
-      }
+      },
+      "known": true
     },
     {
       "id": "giratina",
@@ -1117,7 +1128,14 @@
         "heal": true
       },
       "status": "limited",
-      "limits": "The Rite heals instead of freeing captives in a prison event."
+      "limits": "The Rite heals instead of freeing captives in a prison event.",
+      "starterNote": {
+        "types": [
+          "grass"
+        ],
+        "line": "Your Grass starter lifts its head to the wind: Virizion's Influence +1.",
+        "influence": 1
+      }
     },
     {
       "id": "type-null",
@@ -1725,7 +1743,17 @@
         ]
       },
       "status": "limited",
-      "limits": "Storm nodes and hidden nodes are not built. Communion: every battle begins in three turns of rain (not node weather on the map). The Rite covers one boss battle, not a whole stage."
+      "limits": "Storm nodes and hidden nodes are not built. Communion: every battle begins in three turns of rain (not node weather on the map). The Rite covers one boss battle, not a whole stage. Starter: Pikachu or an Electric starter gives +2 Influence (the Trial comes one band sooner).",
+      "starterNote": {
+        "types": [
+          "electric"
+        ],
+        "species": [
+          "pikachu"
+        ],
+        "line": "Your starter sparks when the thunder rolls: Raikou's Influence +2, so its Trial comes sooner.",
+        "influence": 2
+      }
     },
     {
       "id": "entei",
@@ -2447,11 +2475,6 @@
           "kind": "damageMultiplier",
           "moveType": "water",
           "value": 1.2
-        },
-        {
-          "kind": "damageTakenMultiplier",
-          "moveType": "ground",
-          "value": 1.15
         }
       ],
       "communionPerks": [
@@ -2459,11 +2482,6 @@
           "kind": "damageMultiplier",
           "moveType": "water",
           "value": 1.2
-        },
-        {
-          "kind": "damageTakenMultiplier",
-          "moveType": "ground",
-          "value": 1.15
         },
         {
           "kind": "battleStart",
@@ -2491,7 +2509,26 @@
         ]
       },
       "status": "limited",
-      "limits": "Sea-route shortcuts and Groudon's hazard nodes are not built; the Price is Ground moves hurting more. Communion: every battle begins in three turns of rain. The Rite floods one boss battle, not a stage."
+      "limits": "Sea-route shortcuts and Groudon's hazard nodes are not built; the Price is Ground moves hurting more. The Price stays in Communion (the quarrel goes on). Starter: a Water starter makes your moves 10% more accurate (not \"the first Water move cannot miss\"). Communion: every battle begins in three turns of rain. The Rite floods one boss battle, not a stage.",
+      "starterNote": {
+        "types": [
+          "water"
+        ],
+        "line": "Your Water starter feels the sea rising: its moves are 10% more accurate.",
+        "perks": [
+          {
+            "kind": "accuracyMultiplier",
+            "value": 1.1
+          }
+        ]
+      },
+      "pricePerks": [
+        {
+          "kind": "damageTakenMultiplier",
+          "moveType": "ground",
+          "value": 1.15
+        }
+      ]
     },
     {
       "id": "groudon",
@@ -2517,11 +2554,6 @@
           "kind": "damageMultiplier",
           "moveType": "fire",
           "value": 1.1
-        },
-        {
-          "kind": "damageTakenMultiplier",
-          "moveType": "water",
-          "value": 1.15
         }
       ],
       "communionPerks": [
@@ -2534,11 +2566,6 @@
           "kind": "damageMultiplier",
           "moveType": "fire",
           "value": 1.1
-        },
-        {
-          "kind": "damageTakenMultiplier",
-          "moveType": "water",
-          "value": 1.15
         },
         {
           "kind": "battleStart",
@@ -2571,7 +2598,21 @@
         ]
       },
       "status": "limited",
-      "limits": "The extra land node and Kyogre's hazard nodes are not built; the Price is Water moves hurting more. Communion: every battle begins in three turns of harsh sun. The Rite raises one boss battle, not new nodes."
+      "limits": "The extra land node and Kyogre's hazard nodes are not built; the Price is Water moves hurting more. The Price stays in Communion; a Fire starter waives it for the first region. Communion: every battle begins in three turns of harsh sun. The Rite raises one boss battle, not new nodes.",
+      "starterNote": {
+        "types": [
+          "fire"
+        ],
+        "line": "Your Fire starter stands on Groudon's side: Kyogre ignores you for the first region.",
+        "noPriceRegions": 1
+      },
+      "pricePerks": [
+        {
+          "kind": "damageTakenMultiplier",
+          "moveType": "water",
+          "value": 1.15
+        }
+      ]
     },
     {
       "id": "regigigas",

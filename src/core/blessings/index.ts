@@ -24,6 +24,15 @@ const BlessingDefSchema = z.object({
   effect: z.object({ kind: z.enum(['none', 'healMostHurt', 'shopDiscount', 'sacredAsh', 'perks', 'rewinds', 'reverseSide', 'calm', 'sight', 'insight', 'vow', 'vessel', 'bolt', 'fold']) }),
   /** Perks used instead of `perks` once the blessing is in Communion (omitted: the same perks). */
   communionPerks: z.array(ArchetypeModifierSchema).optional(),
+  /** One of the blessings a new save can draw from (LEGENDARY_BLESSINGS.md section 3, Discovery). */
+  known: z.boolean().default(false),
+  /** A Price that stays on even in Communion (Kyogre and Groudon are hostile to each other). A matching starter may waive it for its first regions. */
+  pricePerks: z.array(ArchetypeModifierSchema).optional(),
+  /** Section 7: the starter that changes something, and what. */
+  starterNote: z.object({
+    types: z.array(z.string()).default([]), species: z.array(z.string()).default([]), line: z.string().min(1),
+    influence: z.number().int().min(0).optional(), perks: z.array(ArchetypeModifierSchema).optional(), noPriceRegions: z.number().int().min(1).optional(),
+  }).optional(),
   /** false: never rolled at run start; only an event offers it (`takeBlessing`), so adding it moves no seed's roll. */
   pool: z.boolean().default(true),
   /** Battle perks (the same rules trainers use) that this blessing adds. */
@@ -60,6 +69,8 @@ export type BlessingDef = z.infer<typeof BlessingDefSchema>;
 
 const FileSchema = z.object({
   tiers: z.record(z.enum(BLESSING_TIERS), z.object({ chance: z.number().positive(), influence: z.number().int().min(0) })),
+  /** Discovery on: a save draws only from the blessings it knows (the `known` ones and those it found Signs of). */
+  discovery: z.boolean().default(true),
   balance: z.object({ lele: z.object({ healPercent: z.number(), communionPartyPercent: z.number() }), fezandipiti: z.object({ discountPercent: z.number(), communionDiscountPercent: z.number() }), renegade: z.object({ ghostEncounterWeight: z.number().positive() }), zekrom: z.object({ vowStatPercent: z.number(), communionVowStatPercent: z.number() }) }),
   blessings: z.array(BlessingDefSchema).min(1),
 });
@@ -76,8 +87,8 @@ const playable = (b: BlessingDef): boolean => b.status !== 'disabled';
  * Rolls the tier (45/30/17/6.5/1.5), then a blessing inside it. A tier with no playable blessing is left out of the roll, so its
  * share spreads over the other tiers in proportion (it never all lands on one neighbour). Pure: same seed, same answer.
  */
-export function rollBlessing(seed: string): BlessingState | null {
-  const pool = BLESSINGS.filter((b) => playable(b) && b.pool);
+export function rollBlessing(seed: string, deck?: BlessingDeck): BlessingState | null {
+  const pool = BLESSINGS.filter((b) => playable(b) && b.pool && (!deck || !data.discovery || b.known || deck.found.includes(b.id)));
   if (pool.length === 0) return null;
   const tiers = BLESSING_TIERS.filter((t) => pool.some((b) => b.tier === t));
   const tierRng = new Rng(hashSeed(`${seed}::blessing-tier`));
@@ -88,14 +99,63 @@ export function rollBlessing(seed: string): BlessingState | null {
     roll -= data.tiers[t]!.chance;
     if (roll < 0) { useTier = t; break; }
   }
-  const inTier = pool.filter((b) => b.tier === useTier);
+  // Evenness: within a tier, blessings are dealt from a shuffled bag (the save remembers what it dealt), so each is seen before any repeats.
+  const tierAll = pool.filter((b) => b.tier === useTier);
+  const fresh = deck ? tierAll.filter((b) => !deck.dealt.includes(b.id)) : [];
+  const inTier = fresh.length > 0 ? fresh : tierAll;
   const pick = inTier[new Rng(hashSeed(`${seed}::blessing-pick`)).int(0, inTier.length - 1)]!;
   return { id: pick.id, tier: pick.tier, influence: data.tiers[pick.tier]!.influence, seen: false, ashRegions: [], communion: false, riteUsed: false, stagesDone: [] };
 }
 
+/** What the save remembers of blessings across runs: which it has found (Discovery) and which it has dealt (the shuffled bag). */
+export interface BlessingDeck { found: readonly string[]; dealt: readonly string[] }
+
+/** Run end: the save's deck after this run. The run's blessing is dealt (a tier's bag starts over once every blessing it holds was dealt), and every Legendary whose Sign was found, and the run's own, is found. */
+export function nextBlessingDeck(deck: BlessingDeck | undefined, run: RunState): { found: string[]; dealt: string[] } {
+  const state = run.expansion?.blessing;
+  const found = [...new Set([...(deck?.found ?? []), ...(state ? [state.id, ...(state.signs ?? [])] : [])])].filter((id) => getBlessing(id));
+  let dealt = [...(deck?.dealt ?? [])];
+  const def = state ? getBlessing(state.id) : undefined;
+  if (def?.pool) {
+    dealt = [...new Set([...dealt, def.id])];
+    const known = BLESSINGS.filter((b) => b.tier === def.tier && playable(b) && b.pool && (!data.discovery || b.known || found.includes(b.id)));
+    if (known.every((b) => dealt.includes(b.id))) dealt = dealt.filter((id) => getBlessing(id)?.tier !== def.tier);
+  }
+  return { found, dealt };
+}
+
+/** The hub's Reliquary: every playable blessing, tier by tier; the found ones (known from the start, or found in a run) show their words, the rest are blank plinths. */
+export function reliquary(deck: BlessingDeck | undefined): { id: string; found: boolean; name: string; legendary: string; tier: BlessingTier; text: string }[] {
+  return BLESSING_TIERS.flatMap((t) => BLESSINGS.filter((b) => b.tier === t && playable(b))).map((b) => ({
+    id: b.id, found: !data.discovery || !!b.known || !!deck?.found.includes(b.id), name: b.name, legendary: b.legendary, tier: b.tier, text: b.summary,
+  }));
+}
+
+/** A Sign of another Legendary was found this run (Discovery). */
+export function noteSign(run: RunState, ids: readonly string[]): void {
+  const state = run.expansion?.blessing;
+  if (!state) return;
+  const add = [...new Set(ids)].filter((id) => getBlessing(id) && !(state.signs ?? []).includes(id));
+  if (add.length > 0) state.signs = [...(state.signs ?? []), ...add];
+}
+
+/** Section 7: the starter changes something for a few blessings (Influence, a perk, a Price waived). Once, when the starter is chosen. Returns the line to show. */
+export function applyStarterNote(content: Content, run: RunState): string | null {
+  const state = run.expansion?.blessing;
+  const def = runBlessing(run);
+  const starter = run.party[0];
+  if (!state || !def?.starterNote || !starter || state.starterNote) return null;
+  const note = def.starterNote;
+  const types = content.species.get(starter.speciesId)?.types ?? [];
+  if (!note.species.includes(starter.speciesId) && !note.types.some((t) => types.includes(t as never))) return null;
+  state.starterNote = true;
+  if (note.influence) state.influence += note.influence;
+  return note.line;
+}
+
 /** Run start: gives the run its blessing when the setting was on (stored once; never changes). */
-export function assignBlessing(run: RunState): void {
-  const b = rollBlessing(run.seed);
+export function assignBlessing(run: RunState, deck?: BlessingDeck): void {
+  const b = rollBlessing(run.seed, deck);
   if (b) run.expansion = { ...run.expansion, blessing: b };
   // Dialga's blessing is the Rewinds system, switched on for this run.
   if (b && getBlessing(b.id)?.effect.kind === 'rewinds') grantRewinds(run, 'blessing');
@@ -193,6 +253,9 @@ export function blessingPerks(run: RunState): Perks {
     const pct = Math.min(inCommunionForm(run) ? g.communionMax : g.max, g.step * run.badges.length);
     if (pct > 0) for (const stat of ['atk', 'def', 'spa', 'spd', 'spe'] as const) extra.push({ kind: 'statMultiplier', stat, value: Math.round((1 + pct) * 1000) / 1000 });
   }
+  // A Price that stays (Kyogre, Groudon); a matching starter waives it for the first regions.
+  if (def.pricePerks && !(state.starterNote && def.starterNote?.noPriceRegions && run.regionIndex < def.starterNote.noPriceRegions)) extra.push(...def.pricePerks);
+  if (state.starterNote && def.starterNote?.perks) extra.push(...def.starterNote.perks);
   const own = inCommunionForm(run) && def.communionPerks ? def.communionPerks : def.perks;
   if (own.length === 0) return extra;
   if (def.firstBattleOfStage && !(def.communionAllBattles && inCommunionForm(run)) && run.stage && state.stagesDone.includes(`${run.regionIndex}:${run.stage.index}`)) return extra;

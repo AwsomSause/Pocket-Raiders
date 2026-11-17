@@ -6,7 +6,7 @@
 // It also keeps a few read-only mirror flags current, so events of every category can read the run's blessing, Guest and Promise with a
 // plain `flag` condition. Pure rules, no Phaser, no RNG. Shared contract: /mnt/project-files/plans/catalog-overhaul/LEGENDS_PIECES.md.
 
-import { fillVessel, getBlessing } from '../blessings';
+import { fillVessel, getBlessing, noteSign } from '../blessings';
 import { hashSeed, Rng } from '../rng';
 import { MYTHICALS } from '../instrumentality/promisesData';
 import { BEAST_BY_ID } from '../ultra/beasts';
@@ -121,6 +121,7 @@ export function syncLegendFlags(run: Pick<RunState, 'story' | 'expansion' | 'reg
 export function addSign(run: RunState, who: string, amount: number): string[] {
   const legend = blessingLegend(run);
   const state = run.expansion?.blessing;
+  if (amount > 0 && who !== 'own') noteSign(run, SIGN_GROUPS[who] ?? [who]);
   // Kyurem, The Empty Vessel: the first Sign of another Legendary with a blessing fills it.
   const filled = legend && amount > 0 && who !== 'own' && !signMatches(who, legend) ? fillVessel(run, who, SIGN_GROUPS) : null;
   if (filled) syncLegendFlags(run);

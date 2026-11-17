@@ -1902,6 +1902,8 @@ export const ProfileSchema = z.object({
   /** Candy Shop perks bought with candies (balance.candyShop): they add to every run's starting Bag. */
   candyPerks: z.array(z.string()).default([]),
   runHistory: z.array(RunRecordSchema),
+  /** Legendary Blessings across runs: blessings found (Discovery) and dealt (the shuffled bag per tier). Ids only. */
+  blessings: z.object({ found: z.array(z.string()).default([]), dealt: z.array(z.string()).default([]) }).optional(),
   /** What the last finished run paid out (shown on the run-end screen and in the Bank). */
   lastPayout: PayoutSchema.nullable(),
   /** Bank licenses owned. */
