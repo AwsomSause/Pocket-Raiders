@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { open, start, view, waitForScene, watch } from './helpers/newUi';
 
 // Evil Mode slice 17 ("the long cast"), in the New look. Taps: a crew member's own quest shows on the Roster and its
-// step is taken from their card (the block moves a step). Keys: U opens the Suspicions page and closes it; nothing on
+// step is taken from their card (the block moves a step). Keys: J opens the Suspicions page and closes it; nothing on
 // it names the mole. Taps: the mole knocks at the Office at Night; an answer closes the scene. Screens at three sizes.
 
 const stage = (page: Page) => view(page, 'Evil');
@@ -77,18 +77,18 @@ test('a quest: its line shows on the Roster and a step is taken by tap', async (
   expect(errors).toEqual([]);
 });
 
-test('U opens the Suspicions page; it never names the mole', async ({ page }, info) => {
+test('J opens the Suspicions page; it never names the mole', async ({ page }, info) => {
   const errors = watch(page);
   await founded(page);
   await setUp(page, `const p = b.crew.find((c) => c.where === 'in' && c.id !== 'patron'); b.mole.handler = 'police'; b.mole.who = p.id; b.mole.state = 'reporting'; b.mole.marks = 1;
     b.mole.slips = [{ day: 1, tell: 5, about: p.id }];`);
   const s = stage(page);
-  await page.keyboard.press('KeyU');
+  await page.keyboard.press('KeyJ');
   await expect(s.getByTestId('evil-suspicions')).toBeVisible();
   expect(await s.getByTestId('evil-suspect').count()).toBeGreaterThan(0);
   expect(await s.getByTestId('evil-suspicions').innerText()).not.toMatch(/\bmole\b/i);
   await shots(page, info, 'suspicions');
-  await page.keyboard.press('KeyU');
+  await page.keyboard.press('KeyJ');
   await expect(s.getByTestId('evil-suspicions')).toHaveCount(0);
   expect(errors).toEqual([]);
 });

@@ -8,13 +8,13 @@
 - **Ask to stay** (Loyalty 1-2): reasons on their card, greyed ones say why; once per person; the answer rolls on `evil-mole`.
 - **The mole** (`src/core/evilMode/mole.ts`, `mole.json`, stream `evil-mole`, ON by default): a handler (police, neighbour, local, the Hero's mother), a marked applicant from District 2 (never a minor; refused = never the mole), reports at each district's end (the police's: Heat +1 "reason not known"), six tells pinned as slips (innocents show them too), the Patron's warning once. The Office at Night: name them (wrong costs Loyalty 4, a minor leaves, a second wrong caps Loyalty at 8 for the region), feed them a false job at Dispatch, the knock at Loyalty 8. Four outcomes: turned, let go, kept, stopped by a quest.
 - **Three more ways to leave**: poached (by a standing neighbour, Loyalty under 3), quest (their ending took them), sent (let go from the Office).
-- **Screens (New look)**: quest line and step/ending buttons on the Roster; Suspicions page (key U, or the tag on the board); the Office scene. No screen reads who the mole is.
+- **Screens (New look)**: quest line and step/ending buttons on the Roster; Suspicions page (key J, or the tag on the board); the Office scene. No screen reads who the mole is.
 
 ## Saves
 - Evil block **15 -> 16**: adds `quests` (empty) and `mole` (empty). Test in `tests/unit/evilModeLongCast.test.ts`.
 
 ## Tests
-`tests/unit/evilModeLongCast.test.ts` (22): deck counts and faces; founders first region only; nobody twice; every quest finishable, steps a district apart, Loyalty pinned at 10; wrong beat has a line; failed at the Crossing caps 7; Ask to stay once; same seed same mark, never a minor, refused never the mole; mole Off: the draw's taken and ignored, odds and Heat untouched, streets the same; wrong name never changes the real mole; found, let go = sent; turned neighbour, mother never turns; knock once at 8; feed once a district; Suspicions page identical whoever the mole is; v15 -> v16; a region replays. All 16 Evil unit files pass (426). Browser `tests/e2e/evilModeLongCast.spec.ts` (3): quest step by tap; U opens Suspicions with no "mole" on it; the knock answered by tap; screenshots at three sizes.
+`tests/unit/evilModeLongCast.test.ts` (22): deck counts and faces; founders first region only; nobody twice; every quest finishable, steps a district apart, Loyalty pinned at 10; wrong beat has a line; failed at the Crossing caps 7; Ask to stay once; same seed same mark, never a minor, refused never the mole; mole Off: the draw's taken and ignored, odds and Heat untouched, streets the same; wrong name never changes the real mole; found, let go = sent; turned neighbour, mother never turns; knock once at 8; feed once a district; Suspicions page identical whoever the mole is; v15 -> v16; a region replays. All 16 Evil unit files pass (426). Browser `tests/e2e/evilModeLongCast.spec.ts` (3): quest step by tap; J opens Suspicions with no "mole" on it; the knock answered by tap; screenshots at three sizes.
 
 ## Limits
 - Applicants for three regions only, until slices 19/20 (the plan's limit).
