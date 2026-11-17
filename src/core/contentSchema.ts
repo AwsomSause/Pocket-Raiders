@@ -2024,10 +2024,6 @@ export const TrainerAiSchema = z.object({
   maxItems: z.number().int().min(0),
   /** Kice 2026-11-17: healing items per fight by trainer class (the sim saw a Stage 1 leader drink 8 Hyper Potions). Rivals and Champions keep the player's budget (boss gear rule). `perLevels`: one more item per this many levels on the team's top Pokémon. */
   healCaps: z.object({ ordinary: z.number().int().min(0), gym: z.number().int().min(0), elite: z.number().int().min(0), perLevels: z.number().int().min(1) }).default({ ordinary: 1, gym: 2, elite: 2, perLevels: 150 }),
-  /** Most healing items (potions, Full Restores, Revives) any enemy trainer uses in one battle. */
-  maxHealItems: z.number().int().min(0).default(4),
-  /** The potion a trainer drinks by region (index = region number, the last entry repeats): item id and share of max HP restored. */
-  healTiers: z.array(z.object({ item: z.string(), fraction: z.number().min(0.05).max(1) })).min(1).default([{ item: 'potion', fraction: 0.25 }, { item: 'super-potion', fraction: 0.35 }, { item: 'hyper-potion', fraction: 0.5 }, { item: 'hyper-potion', fraction: 0.6 }]),
   /** S271: every trainer (not only smart ones) drinks a potion when low; only smart trainers swap on purpose. */
   allTrainersUseItems: z.boolean().default(false),
   /** Times a smart trainer may swap its Pokémon out on purpose in one battle. */
