@@ -113,6 +113,8 @@ export const ExpansionRunSchema = z.object({
   counterPick: z.boolean().optional(),
   /** The story-event density this run started with (E3): how many quiet-node story events a region gets. Set once at run start. */
   density: z.enum(['low', 'normal', 'full']).optional(),
+  /** Nodes per stage this run plays (set once at run start from the `stageLength` setting). Absent = the old 20, so a run saved before this keeps its length. */
+  stageCols: z.number().int().min(3).optional(),
   /** The climax length the run started with (the `climaxCut` setting); run events that need the Extended Cut read it. */
   climaxCut: z.enum(['standard', 'extended']).optional(),
   /** The `storyTraits` setting the run started with. */
