@@ -755,7 +755,6 @@
  },
  "trainerAi": {
   "healBelow": 0.3,
-  "healFraction": 0.5,
   "maxItems": 1,
   "allTrainersUseItems": true,
   "maxSwitches": 2,

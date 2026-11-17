@@ -2019,7 +2019,6 @@ export const TrainerAiSchema = z.object({
   /** A smart trainer (a boss) heals once its Pokémon is under this share of its max HP. */
   healBelow: z.number().min(0).max(1),
   /** The share of max HP a trainer's potion restores. */
-  healFraction: z.number().positive().max(1),
   /** Potions a smart trainer may use in one battle. */
   maxItems: z.number().int().min(0),
   /** Kice 2026-11-17: healing items per fight by trainer class (the sim saw a Stage 1 leader drink 8 Hyper Potions). Rivals and Champions keep the player's budget (boss gear rule). `perLevels`: one more item per this many levels on the team's top Pokémon. */
