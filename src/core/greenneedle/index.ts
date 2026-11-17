@@ -6,6 +6,7 @@ import type { Content } from '../contentSchema';
 import { kaijuBack, kaijuCut, netCutter, shutMarket } from './kaiju';
 import { rarityOf } from '../rarity';
 import { skySilhouette } from '../instrumentality/flightNorth';
+import { flightNorthCertain } from '../co/regionOneStory';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import type { GnCond, GnEffect } from './schema';
@@ -427,7 +428,9 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return '';
     case 'roll': {
       const odds = e.n! + (e.mods ?? []).filter((m) => m.when.every((c) => host.met?.(c) ?? false)).reduce((sum, m) => sum + m.n, 0);
-      setGnFlag(run, e.key!, host.float() * 100 < odds ? 1 : 0);
+      // The roll is always taken (the stream stays in step); Flight North as the first region's story is then certain.
+      const hit = host.float() * 100 < odds;
+      setGnFlag(run, e.key!, hit || (e.key === 'flight-stolen' && flightNorthCertain(run)) ? 1 : 0);
       return '';
     }
     case 'pick': {
