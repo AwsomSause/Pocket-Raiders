@@ -3,6 +3,7 @@
 // crosses; and the `evil-people` stream. Pure: nothing here changes a block. Text comes from people.json.
 
 import { hashSeed, Rng } from '../rng';
+import { modify, PATRON_ID } from './regionRule';
 import { EVIL_DATA, type EvilData } from './data';
 import type { Crew, EvilModeBlock, Holding, JobMethod, Rank, Talent } from './schema';
 import { localOf } from './board';
@@ -42,7 +43,9 @@ export function bandOf(loyalty: number, data: EvilData = EVIL_DATA): { name: str
 export function teamLoyalty(block: EvilModeBlock, data: EvilData = EVIL_DATA): number {
   const ins = inRoster(block);
   if (!ins.length) return data.creeds.find((c) => c.id === block.team.creed)?.start.loyalty ?? 5;
-  return Math.floor(ins.reduce((n, c) => n + c.loyalty, 0) / ins.length);
+  // Slice 9: a Grunt who's seen three Bosses keeps team Loyalty at 2 or more (Part 3 section 9.5), on the rule hook.
+  const floor = data.region.on && block.team.patron ? modify(block, 'loyaltyFloor', {}, 0, data) : 0;
+  return Math.max(floor, Math.floor(ins.reduce((n, c) => n + c.loyalty, 0) / ins.length));
 }
 
 /** One cause moves one person's Loyalty by at most two (Part 5 section 5.2), between 0 and 10. */
@@ -55,6 +58,9 @@ export const moveLoyalty = (p: Crew, by: number, data: EvilData = EVIL_DATA): Cr
 
 /** A person's wage today. Officers and Executives take a share of the day's income instead. Belonging pays shares (dispatch). */
 export function wageOf(block: EvilModeBlock, p: Crew, income: number, data: EvilData = EVIL_DATA): number {
+  // Slice 9: a Patron with a pension in writing (Obadiah: ₽200 a day) draws exactly that.
+  const pension = p.id === PATRON_ID && block.team.patron ? data.region.patrons.find((x) => x.id === block.team.patron)?.person?.wage : undefined;
+  if (pension !== undefined) return pension;
   const r = rankDef(p.rank, data);
   if (r.share > 0) return Math.floor((Math.max(0, income) * r.share) / 100);
   return block.team.creed === 'cause' ? Math.floor(r.wage / 2) : r.wage;

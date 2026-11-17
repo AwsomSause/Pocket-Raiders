@@ -15,7 +15,7 @@ import { EvilModeBlockSchema, firstCrew, type Crew, type EvilModeBlock, type Hol
 import { foundTeam } from '../../src/core/evilMode/start';
 
 const found = (line: 'clean' | 'grey' | 'whatever' = 'grey', seed = 'line1', n = 6): EvilModeBlock => {
-  const r = foundTeam({ name: 'Kettle', creed: 'profit', line, doctrine: 'swarm' }, { boss: 'red', length: 'three', seed });
+  const r = foundTeam({ name: 'Kettle', creed: 'profit', line, doctrine: 'swarm' }, { boss: 'red', length: 'three', seed, stage: 2 });
   if (!r.ok) throw new Error(r.problem);
   return { ...r.block, crew: firstCrew(n, 6), applicants: [] };
 };
@@ -287,7 +287,7 @@ describe('saves: block v6', () => {
     const b = found('grey');
     const { proof: _p, lineMove: _l, ...rest } = b;
     const v6 = EvilModeBlockSchema.parse({ ...rest, v: 5 });
-    expect(v6).toMatchObject({ v: 6, proof: [], lineMove: null });
+    expect(v6).toMatchObject({ v: 8, proof: [], lineMove: null });
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(v6)))).toEqual(v6);
   });
   it('a damaged Take (an unknown thing) and a damaged Line move are refused', () => {

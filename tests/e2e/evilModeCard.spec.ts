@@ -29,7 +29,7 @@ async function foundedAtDispatch(page: Page) {
   await waitForScene(page, 'StarterSelect');
   await page.keyboard.press('Enter');
   await waitForScene(page, 'Evil');
-  await page.evaluate(() => (window as any).__pkr.session.evilFound({ name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }));
+  await page.evaluate(() => (window as any).__pkr.session.evilFound({ name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 2));
   await restartEvil(page);
   await page.keyboard.press('Enter'); // Morning -> Dispatch
   await expect(stage(page).getByTestId('evil-beat-dispatch')).toHaveAttribute('data-state', 'now');
@@ -112,7 +112,7 @@ test('taps only: CONFIRM stays dark until field 13 has been scrolled into view; 
   // Give the team a paying holding, then work its line in the Ledger by taps.
   await page.evaluate(() => {
     const run = (window as any).__pkr.session.run;
-    const h = run.expansion.evilMode.district.holdings.find((x: any) => x.kind === 'local' && x.ref === 'eze') ?? run.expansion.evilMode.district.holdings.find((x: any) => x.kind === 'local' && x.owner !== 'team');
+    const h = run.expansion.evilMode.district.holdings.find((x: any) => x.kind === 'local' && x.ref === 'eze') ?? run.expansion.evilMode.district.holdings.find((x: any) => x.kind === 'local' && x.owner !== 'team' && !['adeleke', 'ferreira', 'whitlock', 'achebe', 'leofric', 'obi', 'amadi', 'k5-fuji'].includes(x.ref)); // a local who pays (since slice 9 the district's locals vary)
     Object.assign(h, { owner: 'team', method: 'persuade', since: 1, holds: true, scouted: 1 });
   });
   await restartEvil(page);

@@ -17,6 +17,7 @@
     "test:e2e": "playwright test",
     "sim:overhaul": "node tools/overhaul-sim.ts",
     "sim:node-menus": "node tools/node-menu-sim.ts",
+    "sim:evil": "node tools/evil-sim.ts",
     "sim:story": "node tools/story-sim.ts",
     "sim:story-nightly": "node tools/story-nightly.ts",
     "assets:import": "node tools/import-assets.ts",

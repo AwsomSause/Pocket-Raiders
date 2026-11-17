@@ -1,18 +1,24 @@
 // Evil Mode founding to a first state (design Part 3, Part 30 section 2.1). Pure: no Phaser, no randomness.
-// Slice 1 builds pages 1 to 5 (Boss, name, Creed, Line, Doctrine). The Look, Patron and region pages arrive later, so a
-// team is cream and green, has no Patron, and starts in Kanto.
+// Slice 1 built pages 1 to 5 (Boss, name, Creed, Line, Doctrine); slice 9 adds the Look, the Patron and the first region
+// (Kanto is the only one open), and a team begins at the region's Arrival.
 
 import { EVIL_DATA, type EvilData } from './data';
 import { layDistrict } from './board';
 import { bandOf, foundingRoster, teamLoyalty } from './people';
 import { arriveApplicants } from './roster';
-import { LINE_IDS, STREAMS, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
+import { modify, PATRON_ID } from './regionRule';
+import { newRegion } from './region';
+import { LINE_IDS, STREAMS, type Crew, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
 
 export interface FoundingChoice {
   name: string;
   creed: string;
   line: LineId;
   doctrine: string;
+  /** Slice 9: the Look (colours as hex, and ids from region.json), the Patron's id and the first region's id. Optional: absent, cream and green, Nobody, Kanto. */
+  look?: { a: string; b: string; symbol?: string; cut?: string; head?: string; motto?: [string, string, string] };
+  patron?: string;
+  region?: string;
 }
 
 export interface NameCheck {
@@ -56,14 +62,26 @@ export function foundingProblem(choice: FoundingChoice, data: EvilData = EVIL_DA
   if (!LINE_IDS.includes(choice.line)) return 'Choose a Line.';
   const doctrine = data.doctrines.find((d) => d.id === choice.doctrine);
   if (!doctrine || doctrine.status === 'disabled' || doctrine.status === 'invalid') return 'Choose a Doctrine.';
+  if (choice.patron !== undefined && !data.region.patrons.some((p) => p.id === choice.patron)) return 'Choose a Patron.';
+  if (choice.region !== undefined) {
+    const r = data.region.regions.find((x) => x.id === choice.region);
+    if (!r || r.status === 'disabled' || r.status === 'invalid') return r?.waits ? `${r.name} opens with ${r.waits}.` : 'Choose a first region.';
+  }
   return null;
+}
+
+/** The Patron on the Roster (Part 3 section 9): Rank 4 (an Officer) from the first day, at Loyalty 7. Null for the Champion and Nobody. */
+export function patronCrew(patronId: string | undefined, data: EvilData = EVIL_DATA): Crew | null {
+  const p = data.region.patrons.find((x) => x.id === patronId)?.person;
+  if (!p) return null;
+  return { id: PATRON_ID, ref: null, name: p.name, age: p.age, minor: false, talent: p.talent, flaw: p.flaw, flawFound: true, line: null, lineHeard: false, rank: 'officer', loyalty: 7, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null };
 }
 
 /**
  * Founding to the first morning (design Part 3 section 11): Funds, Heat, Regard and Dread by Creed, then the Line's
  * changes (Whatever it takes: Heat +1; Clean hands: Regard +1). Day 1, Morning, Kanto District 1.
  */
-export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: RunLength; seed?: string }, data: EvilData = EVIL_DATA): { ok: true; block: EvilModeBlock } | { ok: false; problem: string } {
+export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: RunLength; seed?: string; stage?: number }, data: EvilData = EVIL_DATA): { ok: true; block: EvilModeBlock } | { ok: false; problem: string } {
   const problem = foundingProblem(choice, data);
   if (problem) return { ok: false, problem };
   const creed = data.creeds.find((c) => c.id === choice.creed)!;
@@ -73,8 +91,16 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const dread = cap(creed.start.dread);
   // Slice 4: the starting Roster, drawn from the Founders on `evil-people` (design Part 10a section 2).
   const roster = foundingRoster(opts.seed ?? opts.boss, creed.id, data);
+  // Slice 9: the Patron (on the Roster unless the Champion or Nobody), and the Look. A new team begins at the Arrival (stage 1).
+  const patron = data.region.on ? choice.patron ?? null : null;
+  const pc = patronCrew(patron ?? undefined, data);
+  const crew = pc ? [pc, ...roster.crew] : roster.crew;
+  const look = { ...data.founding.look, ...(choice.look ?? {}) };
+  const stage = data.region.on ? opts.stage ?? 1 : 1;
+  const seed = opts.seed ?? opts.boss;
+  const funds = patron ? Math.floor(modify({ here: { region: 0, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
-    v: 6,
+    v: 8,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -85,19 +111,19 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
       line: choice.line,
       lineMovedInRegion: [],
       doctrine: choice.doctrine,
-      look: { ...data.founding.look },
-      patron: null,
-      funds: creed.start.funds,
+      look,
+      patron,
+      funds,
       heat: cap(creed.start.heat + line.heat),
       regard,
       dread,
       corruption: 0,
     },
-    here: { region: 0, stage: 1, day: 1, beat: 'morning' },
+    here: { region: 0, stage, day: 1, beat: 'morning' },
     draws: Object.fromEntries(STREAMS.map((s) => [s, 0])) as EvilModeBlock['draws'],
     applied: [],
-    district: layDistrict(opts.seed ?? opts.boss, 0, 1, { regard, dread }, data),
-    crew: roster.crew,
+    district: layDistrict(seed, 0, data.region.on ? stage - 1 : 1, { regard, dread, look }, data),
+    crew,
     queue: [],
     sheets: [],
     evening: [],
@@ -115,7 +141,10 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     inPerson: null,
     proof: [],
     lineMove: null,
+    gyms: [],
+    region: null as never,
   };
+  block.region = newRegion(block, seed, data);
   block.draws['evil-people'] = roster.draws;
   return { ok: true, block: EvilModeBlockSchema.parse(arriveApplicants(block, data)) };
 }

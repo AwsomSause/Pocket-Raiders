@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { open, start, view, waitForScene, watch } from './helpers/newUi';
 
-// Evil Mode slice 1 ("the shell"): with the setting on, Run Setup offers the mode; a team is founded on five pages and an
+// Evil Mode slice 1 ("the shell"): with the setting on, Run Setup offers the mode; a team is founded on its pages and an
 // empty day goes round, saved at every beat. With the Old look selected the New layer is mounted for the run anyway.
 
 async function settingOn(page: Page, uiStyle?: 'old') {
@@ -46,6 +46,12 @@ test('found a team in the New look, press through an empty day, and it reloads w
   await s.getByTestId('evil-next').click();
   await s.getByTestId('evil-doctrine-tide').click();
   await shot('doctrine');
+  // Slice 9's pages: the Look, the Patron and the first region (each has a default, so Next goes straight on).
+  for (const p of ['look', 'patron', 'region']) {
+    await s.getByTestId('evil-next').click();
+    await expect(s.getByTestId('evil-founding')).toHaveAttribute('data-page', p);
+    await shot(p);
+  }
   await s.getByTestId('evil-next').click();
   await expect(s.getByTestId('evil-founding')).toHaveAttribute('data-page', 'summary');
   await s.getByTestId('evil-next').click();
@@ -55,13 +61,13 @@ test('found a team in the New look, press through an empty day, and it reloads w
 
   await expect(s.getByTestId('evil-team-name')).toHaveText('Team Kettle');
   await expect(s.getByTestId('evil-loyalty')).toContainText('Easy');
-  await expect(s.getByTestId('evil-chip')).toHaveText('Kanto · District 1 · Day 1');
+  await expect(s.getByTestId('evil-chip').first()).toHaveText('Kanto · The Arrival · Day 1');
   await shot('day');
   for (const beat of ['morning', 'dispatch', 'inPerson', 'evening', 'night', 'hero']) {
     await expect(s.getByTestId(`evil-beat-${beat}`)).toHaveAttribute('data-state', 'now');
     await s.getByTestId('evil-advance').click();
   }
-  await expect(s.getByTestId('evil-chip')).toHaveText('Kanto · District 1 · Day 2');
+  await expect(s.getByTestId('evil-chip').first()).toHaveText('Kanto · The Arrival · Day 2');
   await page.keyboard.press('Enter');
   await expect(s.getByTestId('evil-beat-dispatch')).toHaveAttribute('data-state', 'now');
 
@@ -75,7 +81,7 @@ test('found a team in the New look, press through an empty day, and it reloads w
     p.game.scene.start('Evil');
   });
   await waitForScene(page, 'Evil');
-  await expect(stage(page).getByTestId('evil-chip')).toHaveText('Kanto · District 1 · Day 2');
+  await expect(stage(page).getByTestId('evil-chip').first()).toHaveText('Kanto · The Arrival · Day 2');
   await expect(stage(page).getByTestId('evil-beat-dispatch')).toHaveAttribute('data-state', 'now');
   const block = await page.evaluate(() => (window as any).__pkr.session.run.expansion.evilMode);
   expect(block.team).toMatchObject({ name: 'Kettle', creed: 'belonging', line: 'clean', doctrine: 'tide', boss: 'red' });
@@ -94,6 +100,11 @@ test('with the Old look selected, the New layer is mounted for the run and the s
 
 test('with the setting off, Run Setup does not offer Evil Mode', async ({ page }) => {
   await start(page, 'ui=new');
+  // On by default since slice 9; switched off here.
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.session;
+    s.saveSettings({ ...s.settings, expansion: { ...s.settings.expansion, evilMode: false } });
+  });
   await open(page, 'RunPrep', { archetypeId: 'red', modeId: 'evil-mode' });
   await page.keyboard.press('Enter');
   await waitForScene(page, 'StarterSelect');

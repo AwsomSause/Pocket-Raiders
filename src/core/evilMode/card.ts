@@ -2,7 +2,7 @@
 // same order, and the gate that lights CONFIRM. Pure: no number is drawn; a Card is arithmetic over the block.
 // Field 12 is the Ledger's sentence, from ledger.ts, so the line filed is the line the player read.
 
-import { fairPrice, holdingName, localOf, payAmount, streetOf, takings } from './board';
+import { fairPrice, holdingName, localOf, payAmount, streetName, streetOf, takings } from './board';
 import { heroField } from './hero';
 import { EVIL_DATA, type EvilData } from './data';
 import { crewNames, fill, holdingTo, money, sentenceFor } from './ledger';
@@ -10,6 +10,7 @@ import { oddsFor, oddsText, type JobDraft } from './odds';
 import type { CardField, EvilModeBlock, StoredCard } from './schema';
 import { crossers, peopleText, wontText } from './people';
 import { heatIfSent, proofFor } from './line';
+import { modify } from './regionRule';
 
 export type CardDraft = Omit<StoredCard, 'id'>;
 
@@ -21,7 +22,7 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   const L = data.ledger.card;
   const l = localOf(h, data);
   const blind = h.kind === 'local' && h.scouted === 0;
-  const to = holdingTo(h, data);
+  const to = holdingTo(h, data, block.district);
   const m = job.method;
   const offer = m === 'pay' ? data.district.methods.pay.offers.find((o) => o.pct === (job.offer ?? 100)) : undefined;
   const dark = m === 'lean' || m === 'take' || m === 'expose';
@@ -29,7 +30,7 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   const thing = m === 'take' ? data.line.things.find((t) => t.id === (job.thing ?? 'stock'))! : undefined;
   const clean = !(offer && !offer.fair) && m !== 'lean' && m !== 'take';
   const daily = takings({ ...h, owner: 'team' }, data);
-  const street = data.district.streets[streetOf(h.step, data)]!.name;
+  const street = streetName(d, streetOf(h.step, data), data);
   const o = oddsFor(block, job, data);
   const methodName = data.methods.find((x) => x.id === m)!.name;
 
@@ -65,7 +66,8 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   else if (l) f.push([L.gives.favour, false]);
   else f.push([L.gives.ground, false]);
   // 5 Moves: the five numbers, each drawn; a dash where it doesn't move.
-  const heat = heatIfSent(m, data);
+  // Slice 9: the region's rule shows here too (a deeded Take's Heat), from the same hook the Evening uses.
+  const heat = modify(block, 'heat', { method: m, tags: h.tags }, heatIfSent(m, data), data);
   const leanDaily = m === 'lean' ? Math.floor((daily * data.line.lean.takings) / 100) : daily;
   const funds = m === 'expose' ? '—' : thing ? (thing.id === 'stock' ? `↑ ${money(stock)} once` : thing.id === 'deed' && daily > 0 ? `↑ ${money(daily)} a day` : '—') : m === 'lean' ? (blind ? '?' : leanDaily > 0 ? `↑ ${money(leanDaily)} a day` : '—') : m === 'pay' ? `↓ ${money(payAmount(h, job.offer, data))}` : blind && m !== 'scout' ? '?' : m !== 'scout' && daily > 0 ? `↑ ${money(daily)} a day` : m !== 'scout' && daily < 0 ? `↓ ${money(-daily)} a day` : '—';
   const heatText = heat > 0 ? `↑ ${heat} if the day's loudest` : heat < 0 ? `↓ ${-heat} if nothing louder goes today` : '—';

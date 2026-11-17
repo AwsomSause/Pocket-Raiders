@@ -9,7 +9,10 @@ import type { JobDraft } from './odds';
 import { askAbout, setRate } from './ledger';
 import { holdResult, post, takeBadge, unpost, walkHero } from './hero';
 import { heartsGo, moveLine } from './line';
-import { BEATS, type Beat, type EvilModeBlock, type LineId, type Question } from './schema';
+import { gymAct, gymEvening, gymResult } from './gym';
+import { recall, goOn, tallyOf, toRoad } from './region';
+import { EVIL_DATA } from './data';
+import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type Question } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
 export const BEAT_END: Record<Beat, BeatEndType> = {
@@ -47,6 +50,12 @@ export type EvilAction =
   | { type: 'battleResult'; won: boolean; fielded?: string[] }
   /** Slice 6: move the Line, once a region, at Night (Part 3 section 7.1). */
   | { type: 'moveLine'; to: LineId }
+  /** Slice 8: one of the Gym's five ways, at the In person beat (Part 8a). */
+  | { type: 'gymWay'; way: GymWay }
+  /** Slice 9: after a district, the tally's read; on the Road, an Officer's left (or nobody) and the team goes on; or one's recalled. */
+  | { type: 'toRoad' }
+  | { type: 'goOn'; stay: string | null }
+  | { type: 'recall'; id: string }
   | { type: 'dismissOvernight' }
   | { type: 'send' }
   | { type: 'stayIn' }
@@ -54,7 +63,7 @@ export type EvilAction =
   | { type: 'lightsOut' }
   | { type: 'watchRoad' };
 
-export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] };
+export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' | 'arrival' | 'reckoning' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] };
 
 export interface StepResult {
   block: EvilModeBlock;
@@ -68,9 +77,30 @@ export const nextBeat = (beat: Beat): Beat => BEATS[(BEATS.indexOf(beat) + 1) % 
 
 /** One action. The input block is never changed; a new one is returned. */
 export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
+  const r = stepInner(block0, action);
+  return r.ok ? { ...r, block: settleRegion(r.block) } : r;
+}
+
+/** Slice 9: a district that's just ended is tallied once, and the region waits on the tally (Part 2 section 4.2). */
+function settleRegion(block: EvilModeBlock): EvilModeBlock {
+  if (!block.district?.end || block.region.phase !== 'day' || !EVIL_DATA.region.on) return block;
+  return { ...block, region: { ...block.region, phase: 'tally', tallies: [...block.region.tallies, tallyOf(block)] } };
+}
+
+function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   let block = block0;
   const { beat } = block.here;
   const no = (reason: string): StepResult => ({ block: block0, cues: [{ id: 'refused', reason }], ok: false });
+  // Slice 9: after a district, only the tally and the Road move anything.
+  if (action.type === 'toRoad' || action.type === 'goOn' || action.type === 'recall') {
+    if (action.type === 'recall') {
+      const r = recall(block, action.id);
+      return r.problem ? no(r.problem) : { block: r.block, cues: [{ id: 'said', line: r.line }], ok: true };
+    }
+    const r = action.type === 'toRoad' ? toRoad(block) : goOn(block, action.stay);
+    if (r.problem) return no(r.problem);
+    return { block: r.block, cues: action.type === 'goOn' ? [{ id: 'beat', beat: 'morning' }, { id: 'newDay', day: r.block.here.day }] : [], ok: true };
+  }
   if (block.district?.end) return no("The district's over.");
   // Slice 5: a battle the day's waiting on comes first; only its result moves anything.
   if (action.type === 'battleResult') {
@@ -79,6 +109,10 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
     if (f.kind === 'hold') {
       const r = holdResult(block, action.won, action.fielded ?? []);
       return { block: endIfTaken(r.block), cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+    }
+    if (f.kind === 'gym' || f.kind === 'challenge') {
+      const r = gymResult(block, action.won);
+      return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
     }
     const queue = block.queue.map((j) => (j.holdingId === f.holdingId && j.method === 'outplay' ? { ...j, played: action.won ? ('won' as const) : ('lost' as const) } : j));
     return { block: { ...block, queue, fight: null }, cues: [{ id: 'said', line: action.won ? 'Won fairly. It holds, from this Evening.' : 'Lost. The party is healed; nothing ends.' }], ok: true };
@@ -104,6 +138,12 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
     if (walked.fight) return { block: walked, cues: [{ id: 'road', lines: walked.hero!.today }, { id: 'fight' }], ok: true };
     if (walked.district?.end) return { block: walked, cues: [{ id: 'road', lines: walked.hero!.today }, { id: 'districtEnd', how: walked.district.end.how }], ok: true };
     block = walked;
+  }
+  // Slice 8: the Gym's five ways, refused here unless the door's open (not only on screen).
+  if (action.type === 'gymWay') {
+    const r = gymAct(block, action.way);
+    if (r.problem) return no(r.problem);
+    return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.fight ? [{ id: 'fight' as const }] : [])], ok: true };
   }
   // Slice 6: the Line moves at Night, once a region. Refused here, not only on screen.
   if (action.type === 'moveLine') {
@@ -149,7 +189,7 @@ export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   let out: EvilModeBlock = { ...block, here: { ...block.here, day, beat: to } };
   // "Send them" fixes the odds; going into the Evening rolls every job once (design Part 30 section 5.2).
   if (action.type === 'send') out = fixOdds(out);
-  if (to === 'evening') out = resolveEvening(out);
+  if (to === 'evening') out = gymEvening(resolveEvening(out));
   const cues: EvilCue[] = [{ id: 'beat', beat: to }];
   // Slice 4: Morning. Anyone at Loyalty 0 is gone, with a note; then the notice board (Part 30 section 6.2).
   // Slice 5: nobody stays posted overnight. The road's lines are shown at the Morning.

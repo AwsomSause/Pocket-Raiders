@@ -2,7 +2,7 @@
 // The Log is append only: nothing here edits or removes an entry. Given and Taken are kept as counters and as sums over
 // the Log, and a test checks the two agree. Pure: new blocks are returned. No number is drawn.
 
-import { holdingName, localOf, payAmount, streetOf, takings } from './board';
+import { holdingName, localOf, payAmount, streetName, streetOf, takings } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import type { JobDraft } from './odds';
 import type { EvilModeBlock, Holding, LogEntry } from './schema';
@@ -17,8 +17,8 @@ const lowerFirst = (t: string): string => t.charAt(0).toLowerCase() + t.slice(1)
 const upperFirst = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
 
 /** Who or where a line is about, with its street: "Mrs. Chiamaka Eze, 61, runs the ferry, Nugget Bridge". Names once scouted. */
-export function holdingTo(h: Holding, data: EvilData = EVIL_DATA): string {
-  const street = data.district.streets[streetOf(h.step, data)]?.name ?? '';
+export function holdingTo(h: Holding, data: EvilData = EVIL_DATA, where?: { region: number; n: number } | null): string {
+  const street = where ? streetName(where, streetOf(h.step, data), data) : data.district.streets[streetOf(h.step, data)]?.name ?? '';
   if (h.kind === 'local') {
     if (h.scouted === 0) return `a local at step ${h.step}, ${street}`;
     const l = localOf(h, data)!;
@@ -33,7 +33,7 @@ export const crewNames = (block: EvilModeBlock, ids: readonly string[]): string 
 export function writtenFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EVIL_DATA): string {
   const W = data.ledger.written;
   const h = block.district!.holdings.find((x) => x.id === job.holdingId)!;
-  const to = holdingTo(h, data);
+  const to = holdingTo(h, data, block.district);
   const l = localOf(h, data);
   if (job.method === 'scout') return fill(W.scout, { to });
   if (job.method === 'persuade') {
@@ -150,7 +150,7 @@ export function setRate(block: EvilModeBlock, holdingId: string, act: 'waive' | 
   const h = block.district!.holdings.find((x) => x.id === holdingId)!;
   const W = data.ledger.written;
   const full = takings(h, data);
-  const text = act === 'waive' ? fill(W.waive, { to: holdingTo(h, data) }) : fill(W.halve, { to: holdingTo(h, data), amount: money(Math.floor(full / 2)), fair: money(full) });
+  const text = act === 'waive' ? fill(W.waive, { to: holdingTo(h, data, block.district) }) : fill(W.halve, { to: holdingTo(h, data, block.district), amount: money(Math.floor(full / 2)), fair: money(full) });
   const b = { ...block, rates: { ...block.rates, [holdingId]: act === 'waive' ? ('waived' as const) : ('halved' as const) } };
   return { block: appendLog(b, { kind: act, who: [], to: holdingId, text: lineFor(block, [], text), ...(act === 'waive' ? { given: data.ledger.count.waive } : {}) }), problem: null };
 }
@@ -173,5 +173,5 @@ export function askAbout(block: EvilModeBlock, holdingId: string, data: EvilData
   const line = `${crewNames(block, [by])}: "${said}"`;
   const district = { ...block.district!, holdings: block.district!.holdings.map((x) => (x.id === h.id ? { ...x, scouted: 2 } : x)) };
   const b = { ...block, district, applied: [...block.applied, askKey(block, h.id)] };
-  return { block: appendLog(b, { kind: 'ask', who: [by], to: h.id, text: lineFor(block, [by], fill(data.ledger.written.ask, { to: holdingTo(h, data) })) }), problem: null, line };
+  return { block: appendLog(b, { kind: 'ask', who: [by], to: h.id, text: lineFor(block, [by], fill(data.ledger.written.ask, { to: holdingTo(h, data, block.district) })) }), problem: null, line };
 }

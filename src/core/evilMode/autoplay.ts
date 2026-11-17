@@ -1,0 +1,116 @@
+// Evil Mode's autoplayer (design Part 30 section 14.1): plays a whole region from founding with a simple policy, through
+// `step` only, and records every action, so the same list replays to the same block. The simulator (tools/evil-sim.ts)
+// runs it over many seeds; the tests replay it. Pure: no Phaser, no gameplay RNG of its own (a policy reads the block).
+
+import { EVIL_DATA, type EvilData } from './data';
+import { BEAT_END, step, type EvilAction } from './day';
+import { jobProblem } from './dispatch';
+import { makeHero } from './hero';
+import { inRoster } from './people';
+import { mayStay } from './region';
+import { foundTeam, type FoundingChoice } from './start';
+import type { EvilModeBlock, Holding, JobMethod } from './schema';
+import type { JobDraft } from './odds';
+
+/** always Persuade; the richest job first (Pay when it can, else Persuade); a mix (and an Officer left behind). */
+export type Policy = 'persuade' | 'richest' | 'mix';
+
+export interface DistrictStat { n: number; how: string; funds: number; heat: number; held: number; day: number; left: number; badges: number }
+export interface PlayResult {
+  block: EvilModeBlock;
+  actions: EvilAction[];
+  districts: DistrictStat[];
+  /** True when the region reached its end (the Reckoning's over) within the action budget. */
+  finished: boolean;
+}
+
+/** A founded block at the region's first Morning, with the Hero made from the seed (as the session does). */
+export function foundForPlay(seed: string, choice: FoundingChoice, data: EvilData = EVIL_DATA): EvilModeBlock {
+  const r = foundTeam(choice, { boss: 'red', length: 'three', seed }, data);
+  if (!r.ok) throw new Error(r.problem);
+  const b = r.block;
+  return data.hero.on && b.district ? { ...b, hero: makeHero(seed, b.district, null, data).hero } : b;
+}
+
+/** The policy's jobs for today: scout the unknown, then work what's known, one squad at a time, while people are free. */
+export function policyJobs(block: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA): JobDraft[] {
+  const d = block.district!;
+  const free = inRoster(block).filter((c) => c.outOn !== block.here.day && !c.minor).map((c) => c.id);
+  const out: JobDraft[] = [];
+  const open = d.holdings.filter((h) => h.owner !== 'team' && h.kind !== 'gym' && h.kind !== 'town');
+  const worth = (h: Holding) => (h.kind === 'local' || h.kind === 'floor' ? 2 : 1);
+  const sorted = policy === 'persuade' ? open : [...open].sort((a, b) => worth(b) - worth(a) || a.step - b.step);
+  let funds = block.team.funds;
+  for (const h of sorted) {
+    if (free.length === 0) break;
+    const methods: JobMethod[] = h.scouted === 0 && h.kind !== 'wild' && h.kind !== 'alpha' ? ['scout'] : policy === 'persuade' ? ['persuade', 'outplay'] : policy === 'richest' ? ['pay', 'persuade', 'outplay'] : h.step % 2 ? ['persuade', 'pay', 'outplay'] : ['outplay', 'persuade', 'pay'];
+    for (const method of methods) {
+      const size = method === 'scout' ? 1 : 2;
+      if (free.length < size) continue;
+      const job: JobDraft = { holdingId: h.id, method, squad: free.slice(0, size), ...(method === 'pay' ? { offer: 100 } : {}) };
+      const tried = { ...block, queue: [...block.queue, ...out.map((j) => ({ ...j, odds: null, certain: false, terms: [] }))] } as EvilModeBlock;
+      if (method === 'pay' && funds < 2000) continue;
+      if (jobProblem(tried, job, data)) continue;
+      out.push(job);
+      free.splice(0, size);
+      if (method === 'pay') funds -= 2000;
+      break;
+    }
+  }
+  return out;
+}
+
+/** Plays from `block` to the region's end (or the budget), recording each action that was accepted. */
+export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData = EVIL_DATA, budget = 4000): PlayResult {
+  let block = block0;
+  const actions: EvilAction[] = [];
+  const districts: DistrictStat[] = [];
+  const act = (a: EvilAction): boolean => {
+    const r = step(block, a);
+    if (r.ok) {
+      block = r.block;
+      actions.push(a);
+    }
+    return r.ok;
+  };
+  for (let i = 0; i < budget; i++) {
+    const R = block.region;
+    if (R.phase === 'over') return { block, actions, districts, finished: true };
+    if (R.phase === 'tally') {
+      const d = block.district!;
+      districts.push({ n: d.n, how: d.end!.how, funds: block.team.funds, heat: block.team.heat, held: d.end!.count, day: block.here.day, left: block.crew.filter((c) => c.where === 'left').length, badges: block.hero?.badges.length ?? 0 });
+      act({ type: 'toRoad' });
+      continue;
+    }
+    if (R.phase === 'road') {
+      const officer = policy === 'mix' ? mayStay(block, data)[0]?.id ?? null : null;
+      act({ type: 'goOn', stay: officer });
+      continue;
+    }
+    // A battle the day waits on: the policy loses every one it's in (the soft-loss path; nothing ends).
+    if (block.fight) {
+      act({ type: 'battleResult', won: false });
+      continue;
+    }
+    if (block.refusal) {
+      act({ type: 'answerRefusal', answer: 'withdraw' });
+      continue;
+    }
+    const beat = block.here.beat;
+    if (beat === 'morning' && block.applicants.length && inRoster(block).length < 6 && block.team.funds > 1500) act({ type: 'hire', ref: block.applicants[0]!.ref });
+    if (beat === 'dispatch' && block.queue.length === 0) for (const job of policyJobs(block, policy, data)) act({ type: 'queueJob', job });
+    if (!act({ type: BEAT_END[block.here.beat] })) return { block, actions, districts, finished: false };
+  }
+  return { block, actions, districts, finished: false };
+}
+
+/** Replays a list of actions from a founded block; every one must be accepted again. */
+export function replay(block0: EvilModeBlock, actions: readonly EvilAction[]): EvilModeBlock {
+  let block = block0;
+  for (const a of actions) {
+    const r = step(block, a);
+    if (!r.ok) throw new Error(`Replay refused ${a.type}: ${r.cues.map((c) => ('reason' in c ? c.reason : c.id)).join('; ')}`);
+    block = r.block;
+  }
+  return block;
+}

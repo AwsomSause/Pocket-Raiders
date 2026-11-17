@@ -17,7 +17,7 @@ import { content } from './helpers';
 
 const choice = (over: Partial<FoundingChoice> = {}): FoundingChoice => ({ name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm', ...over });
 const block = (over: Partial<FoundingChoice> = {}): EvilModeBlock => {
-  const r = foundTeam(choice(over), { boss: 'red', length: 'three' });
+  const r = foundTeam(choice(over), { boss: 'red', length: 'three', stage: 2 });
   if (!r.ok) throw new Error(r.problem);
   return r.block;
 };
@@ -46,7 +46,7 @@ describe('founding (start.ts)', () => {
       const b = block({ creed: c.id });
       expect(EvilModeBlockSchema.safeParse(b).success, c.id).toBe(true);
       expect(b.team).toMatchObject({ creed: c.id, funds: c.start.funds, heat: c.start.heat, regard: c.start.regard, dread: c.start.dread, boss: 'red', patron: null, corruption: 0 });
-      expect(b.here).toEqual({ region: 0, stage: 1, day: 1, beat: 'morning' });
+      expect(b.here).toEqual({ region: 0, stage: 2, day: 1, beat: 'morning' });
       // Slice 4: founding draws the Roster and the first applicant from evil-people, and from no other stream.
       expect(Object.entries(b.draws).every(([s, n]) => (s === 'evil-people' ? n === c.start.roster + b.applicants.length : n === 0))).toBe(true);
       expect(b.applied).toEqual(['applicants:0:1:1']);
@@ -79,9 +79,9 @@ describe('founding (start.ts)', () => {
     expect(checkName('rocket').ok).toBe(false);
     expect(checkName('Brr').ok).toBe(false);
     expect(checkName('  Open   Hand ').problem).toMatch(/already exists/);
-    expect(foundTeam(choice({ name: 'Rocket' }), { boss: 'red', length: 'three' }).ok).toBe(false);
-    expect(foundTeam(choice({ creed: 'nope' }), { boss: 'red', length: 'three' }).ok).toBe(false);
-    expect(foundTeam(choice({ doctrine: '' }), { boss: 'red', length: 'three' }).ok).toBe(false);
+    expect(foundTeam(choice({ name: 'Rocket' }), { boss: 'red', length: 'three', stage: 2 }).ok).toBe(false);
+    expect(foundTeam(choice({ creed: 'nope' }), { boss: 'red', length: 'three', stage: 2 }).ok).toBe(false);
+    expect(foundTeam(choice({ doctrine: '' }), { boss: 'red', length: 'three', stage: 2 }).ok).toBe(false);
   });
   it('the Line lights methods: Clean hands has five, Grey and darker all seven', () => {
     expect(methodsLit('clean').filter((m) => m.lit).map((m) => m.id)).toEqual(['persuade', 'pay', 'outplay', 'scout', 'expose']);
@@ -131,16 +131,16 @@ describe('Evil Mode on a run, and saves', () => {
   });
   it('founding writes the block once; the Boss is the run\'s trainer', () => {
     const r = evilRun();
-    const a = foundInRun(r, choice(), 'three');
+    const a = foundInRun(r, choice(), 'three', 2);
     expect(a.problem).toBeNull();
     expect(a.run.expansion?.evilMode?.team.boss).toBe('red');
     expect(r.expansion?.evilMode).toBeUndefined();
-    const again = foundInRun(a.run, choice({ name: 'Anvil' }), 'six');
+    const again = foundInRun(a.run, choice({ name: 'Anvil' }), 'six', 2);
     expect(again.run.expansion?.evilMode?.team.name).toBe('Kettle');
-    expect(foundInRun(chooseStarter(content, createRun(content, { runId: 's', seed: 's', archetypeId: 'red' }), 0), choice(), 'three').problem).not.toBeNull();
+    expect(foundInRun(chooseStarter(content, createRun(content, { runId: 's', seed: 's', archetypeId: 'red' }), 0), choice(), 'three', 2).problem).not.toBeNull();
   });
   it('save at each beat and reload: the same state', () => {
-    let r = foundInRun(evilRun(), choice(), 'three').run;
+    let r = foundInRun(evilRun(), choice(), 'three', 2).run;
     const storage = new MemoryStorageProvider();
     for (let i = 0; i < BEATS.length + 1; i++) {
       const sm = new SaveManager(storage, content);
@@ -162,7 +162,7 @@ describe('Evil Mode on a run, and saves', () => {
     expect(loaded.status === 'ok' && loaded.data.expansion?.evilMode).toBeUndefined();
   });
   it('a damaged block does not pass the run schema (failure: the save is not silently changed)', () => {
-    const r = foundInRun(evilRun(), choice(), 'three').run;
+    const r = foundInRun(evilRun(), choice(), 'three', 2).run;
     const bad = { ...r, expansion: { ...r.expansion, evilMode: { ...r.expansion!.evilMode!, here: { region: 0, stage: 1, day: 0, beat: 'noon' } } } };
     const storage = new MemoryStorageProvider();
     storage.set('pkr.run', envelope('run', CURRENT_VERSIONS.run, bad));
@@ -171,18 +171,20 @@ describe('Evil Mode on a run, and saves', () => {
 });
 
 describe('the setting and the mode gate', () => {
-  it('Evil Mode is off by default; Run length is Three', () => {
-    expect(EXPANSION_SETTINGS_DEFAULTS.evilMode).toBe(false);
+  it('Evil Mode is on by default from slice 9 (a whole region plays); Run length is Three', () => {
+    expect(EXPANSION_SETTINGS_DEFAULTS.evilMode).toBe(true);
     expect(EXPANSION_SETTINGS_DEFAULTS.evilRunLength).toBe('three');
-    expect(DEFAULT_SETTINGS.expansion.evilMode).toBe(false);
+    expect(DEFAULT_SETTINGS.expansion.evilMode).toBe(true);
   });
-  it('settings saved before the setting existed load with it off', () => {
+  it('settings saved before the setting existed load with it on (the new default); a saved Off stays Off', () => {
     const storage = new MemoryStorageProvider();
     const old = structuredClone(DEFAULT_SETTINGS) as Record<string, unknown> & { expansion: Record<string, unknown> };
     delete old.expansion.evilMode;
     delete old.expansion.evilRunLength;
     storage.set('pkr.settings', envelope('settings', CURRENT_VERSIONS.settings, old));
-    expect(new SaveManager(storage, content).loadSettings().expansion).toMatchObject({ evilMode: false, evilRunLength: 'three' });
+    expect(new SaveManager(storage, content).loadSettings().expansion).toMatchObject({ evilMode: true, evilRunLength: 'three' });
+    storage.set('pkr.settings', envelope('settings', CURRENT_VERSIONS.settings, { ...old, expansion: { ...old.expansion, evilMode: false } }));
+    expect(new SaveManager(storage, content).loadSettings().expansion.evilMode).toBe(false);
   });
   it('Run Setup offers the mode only while the setting is on', () => {
     expect(offeredModes({ evilMode: false }).map((m) => m.id)).not.toContain(EVIL_MODE_ID);
@@ -191,9 +193,9 @@ describe('the setting and the mode gate', () => {
     expect(rulesProblem({ ...STANDARD_CHOICE, modeId: EVIL_MODE_ID })).toBeNull();
   });
   it('the Settings row turns it on and off; Run length stays Three until six regions exist', () => {
-    const on = changeSetting(DEFAULT_SETTINGS, 'evilMode');
-    expect(on.expansion.evilMode).toBe(true);
-    expect(changeSetting(on, 'evilMode').expansion.evilMode).toBe(false);
+    const off = changeSetting(DEFAULT_SETTINGS, 'evilMode');
+    expect(off.expansion.evilMode).toBe(false);
+    expect(changeSetting(off, 'evilMode').expansion.evilMode).toBe(true);
     expect(changeSetting(DEFAULT_SETTINGS, 'evilRunLength')).toBe(DEFAULT_SETTINGS);
   });
 });
@@ -216,7 +218,7 @@ describe('view models (screens.ts)', () => {
     const f = frameModel(block(), 'Red');
     expect(f.strip.corruption).toBeNull();
     expect(f.strip.loyalty.name).toBe('Steady');
-    expect(f.chips).toEqual(['Kanto · District 1 · Day 1']);
+    expect(f.chips).toEqual(['Kanto · District 1 · Day 1', "Kanto: Everything's owned"]);
     expect(f.button).toBe('To work');
     expect(f.team.name).toBe('Team Kettle');
   });

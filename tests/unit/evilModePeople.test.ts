@@ -16,7 +16,7 @@ import { foundTeam } from '../../src/core/evilMode/start';
 import { arriveApplicants } from '../../src/core/evilMode/roster';
 
 const found = (seed = 'p1', creed = 'profit'): EvilModeBlock => {
-  const r = foundTeam({ name: 'Kettle', creed, line: 'grey', doctrine: 'swarm' }, { boss: 'red', length: 'three', seed });
+  const r = foundTeam({ name: 'Kettle', creed, line: 'grey', doctrine: 'swarm' }, { boss: 'red', length: 'three', seed, stage: 2 });
   if (!r.ok) throw new Error(r.problem);
   return r.block;
 };
@@ -364,7 +364,7 @@ describe('saves', () => {
     const { applicants: _a, drawn: _d, refusal: _r, ...rest } = b;
     const v3 = { ...rest, v: 3, crew: [1, 2, 3, 4].map((i) => ({ id: `g${i}`, name: `Grunt ${i}`, outOn: null })) };
     const out = EvilModeBlockSchema.parse(v3);
-    expect(out.v).toBe(6);
+    expect(out.v).toBe(8);
     expect(out.crew.map((c) => [c.id, c.name, c.ref, c.loyalty])).toEqual([1, 2, 3, 4].map((i) => [`g${i}`, `Grunt ${i}`, null, 8]));
     expect(out.applicants).toEqual([]);
     expect(out.refusal).toBeNull();

@@ -1,23 +1,113 @@
 {
-  "note": "Evil Mode slice 2 (slice 6: locals also take Lean, Take and Expose; three have a secret that is true, two are hard to frighten): one Kanto district (design Part 6, Part 7, Part 26a). Twenty steps, eight locals drawn from the written deck of twenty, four methods (Scout, Persuade, Pay, Outplay). Starting values, not playtested.",
+  "note": "Evil Mode slice 2 (slice 6: locals also take Lean, Take and Expose; three have a secret that is true, two are hard to frighten): one Kanto district (design Part 6, Part 7, Part 26a). Twenty steps, eight locals drawn from the written deck of twenty, four methods (Scout, Persuade, Pay, Outplay). Starting values, not playtested. Slice 9: Kanto's eight stages (n 0 the Arrival at Pewter, 1 to 6 the districts, 7 the Reckoning at Viridian), each with its own streets and places; Celadon and Saffron are towers of floors (Kanto's own holding, Part 26a section 2.3); Kanto's eight locals (Part 26a section 2.5) live in their own districts.",
   "districts": [
-    { "region": 0, "n": 1, "town": "Cerulean", "leader": "Misty", "grievance": "Water rates tripled last year.", "status": "supported" }
+    {
+      "region": 0,
+      "n": 0,
+      "town": "Pewter",
+      "leader": "Brock",
+      "grievance": "The museum's short of guards and the quarry's short of work. Nobody here's heard of you.",
+      "status": "supported",
+      "kind": "arrival",
+      "streets": ["Museum Row", "Quarry Lane", "Market Steps", "Route 2 Gate"],
+      "places": { "wild": ["The quarry floor", "Route 2 verges", "The Viridian Forest edge", "The old pits", "The dry-stone walls"], "alpha": ["The quarry's deep end"], "safehouse": ["The museum's back stores", "The miners' boarding house", "Rooms over the pharmacy"], "opportunity": ["The fossil lab", "The quarry company's office"], "town": ["Pewter City"], "gym": ["Pewter Gym"] }
+    },
+    { "region": 0, "n": 1, "town": "Cerulean", "leader": "Misty", "grievance": "Water rates tripled last year.", "status": "supported", "kind": "district", "streets": ["Nugget Bridge", "Water Street", "Bicycle Row", "The Cape Road"] },
+    {
+      "region": 0,
+      "n": 2,
+      "town": "Vermilion",
+      "leader": "Lt. Surge",
+      "grievance": "The docks pay by the tide, and the harbourmaster keeps a ledger with everyone in it.",
+      "status": "supported",
+      "kind": "district",
+      "streets": ["The Docks", "Harbour Road", "Fan Club Lane", "The Pier"],
+      "places": { "wild": ["The sea wall", "Diglett's Cave mouth", "The tide pools", "Route 6 hedges", "The breakwater"], "alpha": ["The dry dock"], "safehouse": ["A cabin on a laid-up trawler", "The sailors' mission", "Rooms over the chandler's"], "opportunity": ["The liner's purser's office", "The harbourmaster's ledger", "The Pokémon Fan Club"], "town": ["Vermilion City"], "gym": ["Vermilion Gym"] }
+    },
+    {
+      "region": 0,
+      "n": 3,
+      "town": "Celadon",
+      "leader": "Erika",
+      "grievance": "The store sets every price in the city, and the Game Corner sets the rest.",
+      "status": "supported",
+      "kind": "district",
+      "streets": ["Store Square", "Perfume Arcade", "Game Corner Row", "The Garden Walk"],
+      "places": { "wild": ["The Celadon gardens", "Route 16's hedge"], "alpha": ["The pond behind the Gym"], "safehouse": ["A room at the Celadon Mansion", "The hotel's back stairs"], "opportunity": ["The Game Corner's back room", "The prize exchange"], "town": ["Celadon City"], "gym": ["Celadon Gym"] },
+      "layout": { "local": 6, "wild": 2, "alpha": 1, "safehouse": 2, "opportunity": 2, "floor": 5 },
+      "tower": "The department store",
+      "floors": [
+        { "name": "Ground floor: the perfume counter", "tenant": "The perfumers' concession", "take": 280, "says": "We pay the store by the square foot. You'd have to pay us by the bottle." },
+        { "name": "Second floor: trainers' goods", "tenant": "The outfitters", "take": 320, "says": "Every Ball in the city's sold on this floor or it's a fake." },
+        { "name": "Third floor: TMs", "tenant": "The TM franchise", "take": 400, "says": "A lease, a lawyer and a locked case. You'll want the lawyer." },
+        { "name": "Fourth floor: gifts", "tenant": "The gift buyer", "take": 360, "says": "I buy what sells at the start of the season. I've stopped asking who buys it." },
+        { "name": "The rooftop: vending and the view", "tenant": "The vending contractor", "take": 480, "says": "You can see the whole city from here. Including the Game Corner's back door." }
+      ]
+    },
+    {
+      "region": 0,
+      "n": 4,
+      "town": "Fuchsia",
+      "leader": "Koga",
+      "grievance": "The Safari Zone's losing visitors, and the warden's losing his teeth.",
+      "status": "supported",
+      "kind": "district",
+      "streets": ["Safari Gate Road", "Warden's Row", "The Zoo Wall", "Cycling Road's foot"],
+      "places": { "wild": ["The Safari Zone fence line", "Route 15 meadows", "The zoo's back pond", "Route 18 dunes", "The marsh by the gate"], "alpha": ["The Zone's far lake"], "safehouse": ["The old warden's lodge outbuildings", "A beach hut on Route 19", "Rooms over the fishing shop"], "opportunity": ["The Safari Zone ticket office", "The warden's lost teeth"], "town": ["Fuchsia City"], "gym": ["Fuchsia Gym"] }
+    },
+    {
+      "region": 0,
+      "n": 5,
+      "town": "Saffron",
+      "leader": "Sabrina",
+      "grievance": "Silph built half the city and owns the other half. Eleven floors, and four people signed in this week never signed out.",
+      "status": "supported",
+      "kind": "district",
+      "streets": ["Silph Plaza", "The Dojo Steps", "Copycat Lane", "The Gatehouses"],
+      "places": { "wild": ["The Route 5 underpass"], "safehouse": ["The rail station's left luggage", "Rooms behind the Dojo"], "opportunity": ["The Magnet Train office"], "town": ["Saffron City"], "gym": ["Saffron Gym"] },
+      "layout": { "local": 3, "wild": 1, "alpha": 0, "safehouse": 2, "opportunity": 1, "floor": 11 },
+      "tower": "Silph Co.",
+      "floors": [
+        { "name": "Silph 1F: Reception", "tenant": "The front desk", "take": 240, "says": "Sign here. And here. Nobody reads it." },
+        { "name": "Silph 2F: Facilities", "tenant": "The cleaning contract", "take": 240, "says": "We've keys to every floor but the seventh." },
+        { "name": "Silph 3F: Sales", "tenant": "The Ball sales team", "take": 320, "says": "Targets are up. They're always up." },
+        { "name": "Silph 4F: Accounts", "tenant": "Payroll", "take": 320, "says": "We pay eleven floors and we're paid last." },
+        { "name": "Silph 5F: The canteen", "tenant": "The caterers", "take": 280, "says": "Soup's on. The engineers eat at their desks." },
+        { "name": "Silph 6F: Testing", "tenant": "The Ball testers", "take": 360, "says": "We throw things at walls for a living. It's fine." },
+        { "name": "Silph 7F: Research", "tenant": "The engineers", "take": 440, "says": "There's a prototype on seven. We don't talk about seven." },
+        { "name": "Silph 8F: Legal", "tenant": "The company lawyers", "take": 400, "says": "Everything in this building is owned, including the air conditioning." },
+        { "name": "Silph 9F: The archive", "tenant": "The records office", "take": 360, "says": "Forty years of paper. Some of it's interesting." },
+        { "name": "Silph 10F: The boardroom", "tenant": "The board's secretary", "take": 480, "says": "The board meets on Thursdays. It decides on Wednesdays." },
+        { "name": "Silph 11F: The president's office", "tenant": "The president's private office", "take": 600, "says": "He'll see you. He sees everybody, eventually." }
+      ]
+    },
+    {
+      "region": 0,
+      "n": 6,
+      "town": "Cinnabar",
+      "leader": "Blaine",
+      "grievance": "An island with a burned mansion, a lab that won't talk about what it made, and a ferry Blaine's never once taken.",
+      "status": "supported",
+      "kind": "district",
+      "streets": ["The Ferry Slip", "Mansion Road", "Lab Lane", "The Volcano Path"],
+      "places": { "wild": ["The burned mansion's garden", "The volcano's lower slopes", "Seafoam's channel", "The lava fields", "The shore rocks"], "alpha": ["The mansion's cellar"], "safehouse": ["The ferry office's back room", "A fisher's cottage", "The old Pokémon Center annexe"], "opportunity": ["The lab's archive", "The ferry company"], "town": ["Cinnabar Island"], "gym": ["Cinnabar Gym"] }
+    },
+    {
+      "region": 0,
+      "n": 7,
+      "town": "Viridian",
+      "leader": "Giovanni",
+      "grievance": "The eighth Gym's the neighbour's. The Hero wins their last Badge here, the day before they come for you.",
+      "status": "supported",
+      "kind": "reckoning",
+      "streets": ["Gym Road", "Route 22 Gate", "The Old Man's Corner", "Route 1's end"],
+      "places": { "wild": ["Route 22's long grass", "The Viridian Forest's south edge", "Route 1 hedges", "The pond by the Gym", "Victory Road's foot"], "alpha": ["The forest's heart"], "safehouse": ["The Trainer School's attic", "Rooms behind the Mart", "A shed on Route 22"], "opportunity": ["The Gym's locked back door", "The Trainer School"], "town": ["Viridian City"], "gym": ["Viridian Gym"] }
+    }
   ],
   "layout": { "steps": 20, "local": 8, "wild": 5, "alpha": 1, "safehouse": 2, "opportunity": 2, "town": 1 },
   "rules": { "days": 7, "toHold": 11, "townStreet": 4, "scoutReach": 2, "fairDays": 6, "crew": 4, "squadMax": 3, "townTakings": 400, "safehouseRent": 50, "wage": 150, "wageCause": 75 },
-  "streets": [
-    { "name": "Nugget Bridge", "from": 1, "to": 5 },
-    { "name": "Water Street", "from": 6, "to": 10 },
-    { "name": "Bicycle Row", "from": 11, "to": 15 },
-    { "name": "The Cape Road", "from": 16, "to": 19 }
-  ],
-  "moods": [
-    { "id": "warm", "name": "Warm", "dot": "#e8b830", "persuade": 20 },
-    { "id": "easy", "name": "Easy", "dot": "#3fae5a", "persuade": 10 },
-    { "id": "wary", "name": "Wary", "dot": "#9a9a9a", "persuade": 0 },
-    { "id": "sullen", "name": "Sullen", "dot": "#8a5a30", "persuade": -20 },
-    { "id": "shut", "name": "Shut", "dot": "#141414", "persuade": 0 }
-  ],
+  "streets": [{ "name": "Nugget Bridge", "from": 1, "to": 5 }, { "name": "Water Street", "from": 6, "to": 10 }, { "name": "Bicycle Row", "from": 11, "to": 15 }, { "name": "The Cape Road", "from": 16, "to": 19 }],
+  "moods": [{ "id": "warm", "name": "Warm", "dot": "#e8b830", "persuade": 20 }, { "id": "easy", "name": "Easy", "dot": "#3fae5a", "persuade": 10 }, { "id": "wary", "name": "Wary", "dot": "#9a9a9a", "persuade": 0 }, { "id": "sullen", "name": "Sullen", "dot": "#8a5a30", "persuade": -20 }, { "id": "shut", "name": "Shut", "dot": "#141414", "persuade": 0 }],
   "kinds": [
     { "id": "local", "name": "A local", "mark": "L", "methods": ["scout", "persuade", "pay", "outplay", "lean", "take", "expose"] },
     { "id": "wild", "name": "Wild ground", "mark": "W", "methods": ["scout", "outplay"], "places": ["The reed beds", "The cape meadow", "Under Nugget Bridge", "The berry hedge", "The old canal", "The flooded quarry", "The cliff path"] },
@@ -25,14 +115,10 @@
     { "id": "safehouse", "name": "A safehouse", "mark": "+", "methods": ["scout", "persuade", "pay"], "places": ["Mrs. Okafor's rooms", "The bike-shop loft", "The fishermen's hostel"], "price": 600, "mood": "wary" },
     { "id": "opportunity", "name": "An opportunity", "mark": "?", "methods": ["scout"], "places": ["The water board office", "The bicycle shop nobody can afford", "The bridge prize stall"], "why": "Schemes come in a later build." },
     { "id": "town", "name": "The Town", "mark": "T", "methods": ["scout"], "places": ["Cerulean Town"], "why": "The Town follows its street: hold most of the four nearest locals." },
-    { "id": "gym", "name": "The Gym", "mark": "G", "methods": [], "places": ["Cerulean Gym"], "why": "The Gym's five ways come in a later build." }
+    { "id": "gym", "name": "The Gym", "mark": "G", "methods": ["scout"], "places": ["Cerulean Gym"], "why": "Only scouted from Dispatch (a talk with the caretaker). The five ways are in person: the Gym page (Y)." },
+    { "id": "floor", "name": "A floor", "mark": "F", "methods": ["scout", "persuade", "pay", "take"], "mood": "wary", "why": "Floors are held from the bottom: work the one below first, or warm its tenant." }
   ],
-  "methods": {
-    "persuade": { "base": 50, "heat": -1, "regard": 1 },
-    "pay": { "heat": -1, "offers": [ { "pct": 100, "odds": null, "fair": true }, { "pct": 75, "odds": 60, "fair": false }, { "pct": 50, "odds": 30, "fair": false, "lowball": true } ] },
-    "outplay": { "base": 55, "heat": 1, "regard": 1 },
-    "scout": { "heat": -1 }
-  },
+  "methods": { "persuade": { "base": 50, "heat": -1, "regard": 1 }, "pay": { "heat": -1, "offers": [{ "pct": 100, "odds": null, "fair": true }, { "pct": 75, "odds": 60, "fair": false }, { "pct": 50, "odds": 30, "fair": false, "lowball": true }] }, "outplay": { "base": 55, "heat": 1, "regard": 1 }, "scout": { "heat": -1 } },
   "terms": { "scouted": 10, "short": -10, "triedBefore": 10, "wantKnown": 20, "regardPerPoint": 10, "regardMost": 30, "dread": -10, "floor": 5, "ceiling": 95 },
   "voices": {
     "persuade.won": ["\"They asked us in for tea, Boss. We said yes.\"", "\"Shook on it. Didn't even have to raise my voice.\""],
@@ -49,10 +135,7 @@
     "expose.won": ["\"It's on the front page. They're reading it on the bridge.\"", "\"Every word true. That's what did it.\""],
     "expose.lost": ["\"Nobody'd print it. The editor drinks with him.\""]
   },
-  "ends": {
-    "held": "The district's yours. Eleven holdings and counting.",
-    "taken": "The seventh day's over and it isn't yours. The Hero will walk through it."
-  },
+  "ends": { "held": "The district's yours. Eleven holdings and counting.", "taken": "The seventh day's over and it isn't yours. The Hero will walk through it." },
   "locals": [
     { "id": "eze", "who": "Mrs. Chiamaka Eze, 61", "trade": "Runs the ferry", "earns": 900, "take": 300, "want": "Her son home from the city.", "fear": "The bank", "mood": "wary", "says": "Nobody gives a ferry woman a new engine for nothing." },
     { "id": "onuoha", "who": "Mr. Emeka Onuoha, 54", "trade": "Mill hand; a Growlithe older than most Grunts", "earns": 600, "take": 200, "want": "A rematch with the foreman.", "fear": "The mill shutting", "mood": "easy", "says": "Singles. No switching. I've work at six." },
@@ -73,6 +156,14 @@
     { "id": "mwangi", "who": "Mrs. Philippa Mwangi, 70", "trade": "Landlord of four cottages; charges too little", "earns": 900, "take": 300, "want": "Somebody to take over when she can't.", "fear": "The winter", "mood": "easy", "says": "I keep meaning to put the rents up. Then I meet the tenants." },
     { "id": "obi", "who": "Mr. Dariusz Obi, 33", "trade": "Reporter, the weekly", "earns": 600, "take": 0, "want": "A story that isn't the fête.", "fear": "What the neighbours think", "mood": "wary", "says": "I'll print what's true. If you want something else printed, you'll need a different paper." },
     { "id": "amadi", "who": "Little Ines Amadi, 11, and her Wooper", "trade": "No trade. She's always at this step", "earns": 0, "take": 0, "want": "To know who you are.", "fear": "Nothing", "mood": "warm", "says": "Are you the baddies? Miss says you might be. I said I'd ask.", "minor": true, "noPrice": "She's eleven." },
-    { "id": "quaye", "who": "Mr. Bartholomew Quaye, 46", "trade": "Foreman at the mill", "earns": 1200, "take": 400, "want": "The mill kept open.", "fear": "The mill shutting", "mood": "wary", "says": "I'll hear you out. I've heard them all out. Then I've gone back to work.", "secret": "He's been told the mill shuts in the spring. He hasn't told the hands." }
+    { "id": "quaye", "who": "Mr. Bartholomew Quaye, 46", "trade": "Foreman at the mill", "earns": 1200, "take": 400, "want": "The mill kept open.", "fear": "The mill shutting", "mood": "wary", "says": "I'll hear you out. I've heard them all out. Then I've gone back to work.", "secret": "He's been told the mill shuts in the spring. He hasn't told the hands." },
+    { "id": "k1-finch", "who": "Mr. Aldous Finch, 58", "trade": "Night guard, Pewter Museum", "earns": 600, "take": 200, "want": "Somebody to look at the fossils with", "fear": "Being pensioned off before the Aerodactyl's mounted", "mood": "easy", "says": "Nobody steals from a museum in Pewter. It's all rocks. ...You're not here about the rocks.", "home": 0, "region": 0 },
+    { "id": "k2-wen", "who": "Mrs. Wen Li-Hua, 44", "trade": "The Cerulean bicycle shop", "earns": 900, "take": 300, "want": "To sell one bicycle. Just one", "fear": "The maker", "mood": "wary", "says": "Nine years. Not one. People come in to look at the price and laugh.", "home": 1, "region": 0 },
+    { "id": "k3-farouk", "who": "Captain Idris Farouk, 61", "trade": "Purser on the liner, retired ashore", "earns": 900, "take": 300, "want": "His sea legs back", "fear": "The harbourmaster's ledger, which he's in", "mood": "easy", "says": "I've seen every sort come up a gangway. You're the sort that pays for the cabin and uses the hold.", "home": 2, "secret": "He signed two cabins off as sailed that never left the quay.", "region": 0 },
+    { "id": "k4-lindqvist", "who": "Miss Perpetua Lindqvist, 33", "trade": "Perfume counter, Celadon", "earns": 1200, "take": 400, "want": "Her own shop, small, with a bell", "fear": "The floor manager", "mood": "wary", "says": "Third floor's TMs. Fourth's gifts. You want the fifth, and you want it after closing. I can smell it on you.", "home": 3, "region": 0 },
+    { "id": "k5-fuji", "who": "Mr. Fuji", "trade": "Keeps the house in Lavender; takes in what's left behind", "earns": 0, "take": 0, "want": "Nothing for himself", "fear": "Nothing you could use", "mood": "warm", "says": "You've a Growlithe with you that isn't yours. No, don't explain. Is it eating?", "home": 5, "noPrice": "He takes nothing, and he sells nothing.", "locks": ["lean", "take"], "lockWhy": "Mr. Fuji can't be Leaned on or Taken from. Every Kind refuses, and so does Otis, who isn't.", "region": 0 },
+    { "id": "k6-wasik", "who": "Mr. Teodor Wasik, 50", "trade": "The gate at the Safari Zone", "earns": 600, "take": 200, "want": "The warden's teeth found, so the man'll stop mumbling at him", "fear": "The Zone shutting", "mood": "sullen", "says": "Five hundred steps and you're out. That's the rule. I don't make exceptions. I've made four.", "home": 4, "region": 0 },
+    { "id": "k7-nwachukwu", "who": "Ms. Amara Nwachukwu, 39", "trade": "Reception, Silph", "earns": 900, "take": 300, "want": "To go home at five", "fear": "What's on the seventh floor", "mood": "wary", "says": "I've signed in eleven floors of people this week. Four of them never signed out.", "home": 5, "secret": "She signed four people in who never signed out, and she kept the sheets.", "region": 0 },
+    { "id": "k8-calloway", "who": "Dr. Ines Calloway, 66", "trade": "The Cinnabar lab's last researcher", "earns": 1200, "take": 400, "want": "To be asked about the fossils instead", "fear": "Being asked about the other thing", "mood": "shut", "says": "We made something here once. I'd rather you asked about the fossils.", "home": 6, "region": 0 }
   ]
 }
