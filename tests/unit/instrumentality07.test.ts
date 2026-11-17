@@ -4,7 +4,7 @@ import { createBattle } from '../../src/core/battle/engine';
 import { freshSos } from '../../src/core/battle/sos';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { HEATED, heatedConditions, heatedRoll, isBigBattle } from '../../src/core/instrumentality/heated';
-import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
+import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
 import { MYTHICALS } from '../../src/core/instrumentality/promisesData';
 import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/instrumentality/secondChance';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
@@ -104,7 +104,7 @@ describe('Mythical Promises (M1)', () => {
       expect(m.tellings).toHaveLength(3);
       if (m.status !== 'supported') expect(m.note).toBeTruthy();
     }
-    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['mew', 'darkrai', 'victini', 'genesect', 'hoopa', 'zarude']);
+    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['mew', 'darkrai', 'victini', 'keldeo', 'genesect', 'hoopa', 'zeraora', 'zarude']);
   });
   it('every Promise is a checkable rule: it breaks on its event and not on an unrelated one', () => {
     const run = base();
@@ -317,6 +317,37 @@ describe('Mythical Promises stage 2 (Victini, Hoopa)', () => {
     expect(sp.types).toContain(ring.type);
     expect(sp.tags).not.toContain('legendary');
     expect(hoopaRing(content, start({ mythicalPromises: true }), 0)).toBeNull();
+  });
+});
+
+describe('Mythical Promises stage 2 (Zeraora, Keldeo)', () => {
+  const armed = (id: string) => {
+    const run = structuredClone(toBattle(start({ mythicalPromises: true })));
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: id, guest: { id, forgiven: false }, kept: [], left: [] } };
+    run.party[0]!.moves = [{ id: 'tackle', pp: 35 }];
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 30, 'foe')], 0, run.party[0]!.uid);
+    return run;
+  };
+  it("Zeraora's arc: the first damaging move once a battle is Electric and +20%; the second is plain", () => {
+    const run = armed('zeraora');
+    expect(wonderAtBattleStart(content, run)[0]).toContain('Electric');
+    const res = takeTurn(content, run, { kind: 'move', index: 0 });
+    expect(res.run.battle?.storyEffects ?? run.battle!.storyEffects).toContain('promise:zeraora-used');
+    const res2 = takeTurn(content, res.run, { kind: 'move', index: 0 });
+    expect(res2.run.battle!.storyEffects.filter((e) => e === 'promise:zeraora-used')).toHaveLength(1);
+  });
+  it("Keldeo's secret sword is used once a battle", () => {
+    const run = armed('keldeo');
+    expect(wonderAtBattleStart(content, run)[0]).toContain('weaker');
+    const res = takeTurn(content, run, { kind: 'move', index: 0 });
+    expect(res.run.battle!.storyEffects.filter((e) => e === 'promise:keldeo-used')).toHaveLength(1);
+  });
+  it("Keldeo's Promise: an assist breaks it (forgives once); Zeraora's: a catch breaks it for good", () => {
+    const k = armed('keldeo');
+    expect(onAssistAccepted(content, k)[0]).toContain('forgives');
+    expect(onAssistAccepted(content, k)[0]).toContain('leaves');
+    const z = armed('zeraora');
+    expect(onCaught(content, z, createPokemon(content, 'rattata', 5, 'c9'))[0]).toContain('leaves');
   });
 });
 

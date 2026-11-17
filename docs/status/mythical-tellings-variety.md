@@ -18,3 +18,7 @@ Known: `blueprintBalance` gn-arcade / gn-jigsaw payout tests fail on ui-mockups 
 ## Stage 2, batch B (Victini, Hoopa now `supported`)
 - Victini: trigger ten wins in a row without a faint; Wonder: moves cannot miss in the first battle of each stage (engine reads `storyEffects` `promise:sure-hit`). Limits: declaring three fights fated is not built; declining a rival's challenge is not checked (no fleeing exists).
 - Hoopa: at each stage its ring takes one random item (own stream); fewer than three left breaks the Promise. Wonder: once a region its ring brings a strong non-legendary Pokémon of a party type (keep/box/release offer). Limit: the type is seeded, not named by the player.
+
+## Stage 2, batch C (Zeraora, Keldeo now `supported`)
+- Engine reads per-battle `storyEffects` flags: `promise:zeraora` (first damaging move becomes Electric, +20%, once a battle), `promise:keldeo` (one move hits the weaker defense, once a battle).
+- Promise hooks: Zeraora, a catch; Keldeo, a friend's or shadow's assist at battle start. Both come through their Visit scenes (no random trigger yet).

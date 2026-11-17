@@ -266,6 +266,14 @@ export function wonderAtBattleStart(content: Content, run: RunState): string[] {
       lines.push("The Victory Star shines: your moves cannot miss in this stage's first battle.");
     }
   }
+  if (id === 'zeraora') {
+    battle.storyEffects.push('promise:zeraora');
+    lines.push("Zeraora crackles: your lead's next attack becomes Electric and hits 20% harder.");
+  }
+  if (id === 'keldeo') {
+    battle.storyEffects.push('promise:keldeo');
+    lines.push('Keldeo steadies you: once this battle a move strikes the weaker of the foe\'s defenses.');
+  }
   if (id === 'genesect') {
     const lead = run.party[battle.activeIndex];
     if (lead) {
@@ -313,3 +321,6 @@ export function hoopaRing(content: Content, run: RunState, regionKey: number): {
   const level = Math.max(...run.party.map((m) => m.level));
   return { speciesId: pool[rng.int(0, pool.length - 1)]!, level, type };
 }
+
+/** An assist taken (a friend or shadow steps in; a rival's step-in help): Keldeo's Promise, Fight your own battles. */
+export const onAssistAccepted = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'acceptAssist' }) : []);

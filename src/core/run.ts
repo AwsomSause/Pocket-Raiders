@@ -64,7 +64,7 @@ import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
-import { hearTelling, hoopaRing, hoopaStage, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
+import { hearTelling, hoopaRing, hoopaStage, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
@@ -3292,6 +3292,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   // Greenneedle gn.55: after the Angry Bidoof's bow, no wild Bidoof or Bibarel attacks first.
   bidoofPeace(run, FOE_WAITS);
   const rivalNotice = followedRival(content, run);
+  if (friendHelp) promiseSay(content, run, promiseOnAssist(content, run)); // Keldeo: no assist from an ally
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   events.push(...coBattleStarted(content, run));
   for (const text of wonderAtBattleStart(content, run)) events.push({ type: 'raid', tone: 'info', text });

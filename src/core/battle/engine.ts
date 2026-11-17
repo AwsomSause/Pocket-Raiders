@@ -4534,7 +4534,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
   const liquid = userAbility === 'liquid-voice' && move.flags.includes('sound') && !move.flags.includes('typeless');
   const normalized = userAbility === 'normalize' && baseType !== 'normal' && !move.flags.includes('typeless');
   const changedType = liquid || normalized || (typeChange !== undefined && baseType === 'normal' && !move.flags.includes('typeless'));
-  const moveType = liquid ? 'water' : normalized ? 'normal' : changedType ? typeChange! : jetMoveType(userAbility, move, baseType);
+  // Zeraora's Wonder (Mythical Promises): once a battle the next damaging move of the player's becomes Electric and gains 20%.
+  const zeraoraArc = user.side === 'player' && move.category !== 'status' && ctx.battle.storyEffects.includes('promise:zeraora') && !ctx.battle.storyEffects.includes('promise:zeraora-used');
+  if (zeraoraArc) ctx.battle.storyEffects.push('promise:zeraora-used');
+  const moveType = zeraoraArc ? 'electric' : liquid ? 'water' : normalized ? 'normal' : changedType ? typeChange! : jetMoveType(userAbility, move, baseType);
   const targetTypes = battleTypes(content, ctx.battle, target.mon);
   // Scrappy: Normal and Fighting moves hit Ghost types.
   const hitTypes = userAbility === 'scrappy' && (moveType === 'normal' || moveType === 'fighting') ? targetTypes.filter((t) => t !== 'ghost') : targetTypes;
@@ -4661,7 +4664,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       const targetStats = statsOf(ctx, target);
       const physical = fx.attackFrom === 'best' || fx.autoCategory || (fx.teraBlast && ctx.battle.transform.teraTypes[user.mon.uid]) ? userStats.atk >= userStats.spa : move.category === 'physical';
       // Constellation Fists: its punches hit whichever defense is weaker.
-      const weakerDef = userAbility === 'constellation-fists' && move.flags.includes('punch') ? targetStats.def <= targetStats.spd : null;
+      // Keldeo's Wonder (Mythical Promises): once a battle a move strikes the weaker of the foe's two defenses.
+      const keldeoSecret = user.side === 'player' && ctx.battle.storyEffects.includes('promise:keldeo') && !ctx.battle.storyEffects.includes('promise:keldeo-used');
+      if (keldeoSecret) ctx.battle.storyEffects.push('promise:keldeo-used');
+      const weakerDef = userAbility === 'constellation-fists' && move.flags.includes('punch') ? targetStats.def <= targetStats.spd : keldeoSecret ? targetStats.def <= targetStats.spd : null;
       const hitsDefense = weakerDef ?? (physical || fx.targetsDefense) !== (ctx.battle.extra.wonderRoom > 0);
       // Psyche Edge: its slicing moves use Sp. Atk when that is higher.
       const edgeSpa = userAbility === 'psyche-edge' && inGroup(move, 'slicing') && userStats.spa > userStats.atk;
@@ -4889,6 +4895,7 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
         final,
       });
       damage = applyTypeModifiers(ctx, user, target, effectiveness, damage, physical, moveType, move);
+      if (zeraoraArc) damage = Math.max(1, Math.floor(damage * 1.2));
       if (ctx.moments) { const boost = momentDamageMult(ctx, user, moveType, move.id); if (boost !== 1) damage = Math.max(1, Math.floor(damage * boost)); }
       // Catalog Overhaul quirks (core/co/quirks.ts): a habit of this Pokémon changes its damage.
       if (user.side === 'player' && user.mon.quirk) { const q = quirkDamageMult(content, user.mon, { moveType, vsTrainer: ctx.battle.kind === 'trainer', atGym: Boolean(ctx.battle.trainer?.leaderId), firstMove: user.vol.turnsOut === 0 }); if (q !== 1) damage = Math.max(1, Math.floor(damage * q)); }
