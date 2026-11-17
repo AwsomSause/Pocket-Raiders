@@ -1,0 +1,1 @@
+- Look A custom female trainer removed from battle and New UI portraits (Kice 2026-11-17): battle never draws the generic Look A actor; trainers without their own back sprite throw with Hilda's, New UI player portrait for Look A is Hilda's animated picture. Look A files stay for the Prologue pick screen and the Pidgey scene. No save change.
