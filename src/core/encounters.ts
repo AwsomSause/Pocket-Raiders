@@ -40,11 +40,17 @@ export interface LevelScale {
  * (that excess) × `factor` levels, at most `maxBonus`. Never negative, so a weak
  * party is not helped; capped, so Blue's faster leveling still pays off.
  */
-export function withPartyStrength(content: Content, scale: LevelScale, partyLevels: readonly number[]): LevelScale {
+export function withPartyStrength(content: Content, scale: LevelScale, partyLevels: readonly number[], matchPlayer = false): LevelScale {
   const cfg = content.balance.difficulty.partyStrength;
   if (!cfg.enabled || partyLevels.length === 0) return scale;
   const top = [...partyLevels].sort((a, b) => b - a).slice(0, 3);
   const average = top.reduce((a, b) => a + b, 0) / top.length;
+  // Kice 2026-11-17: a Gym Leader fights on par with your team (the sim showed leaders ~5 levels below it, because the
+  // correction is capped at `maxBonus` and starts after `grace`). The region's level cap still limits it in `enemyLevel`.
+  if (matchPlayer) {
+    const party = Math.max(0, Math.round(average - curveLevel(content, scale)));
+    return { ...scale, ...(party > 0 ? { party } : {}), ceiling: Math.round(average) + cfg.levelCeiling };
+  }
   const excess = average - curveLevel(content, scale) - cfg.grace;
   const party = Math.max(0, Math.min(cfg.maxBonus, Math.round(excess * cfg.factor)));
   const ceiling = cfg.levelCeiling > 0 ? Math.round(average) + cfg.levelCeiling : undefined;

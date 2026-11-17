@@ -2022,6 +2022,8 @@ export const TrainerAiSchema = z.object({
   healFraction: z.number().positive().max(1),
   /** Potions a smart trainer may use in one battle. */
   maxItems: z.number().int().min(0),
+  /** Kice 2026-11-17: healing items per fight by trainer class (the sim saw a Stage 1 leader drink 8 Hyper Potions). Rivals and Champions keep the player's budget (boss gear rule). `perLevels`: one more item per this many levels on the team's top Pokémon. */
+  healCaps: z.object({ ordinary: z.number().int().min(0), gym: z.number().int().min(0), elite: z.number().int().min(0), perLevels: z.number().int().min(1) }).default({ ordinary: 1, gym: 2, elite: 2, perLevels: 150 }),
   /** S271: every trainer (not only smart ones) drinks a potion when low; only smart trainers swap on purpose. */
   allTrainersUseItems: z.boolean().default(false),
   /** Times a smart trainer may swap its Pokémon out on purpose in one battle. */
@@ -2198,7 +2200,7 @@ export const BalanceSchema = z.object({
   lateBoss: z.object({ fromLevel: z.number().int().min(0), damagePerLevel: z.number().min(0), minDamageScale: z.number().min(0.1).max(1), maxBoostStage: z.number().int().min(0).max(6) }).default({ fromLevel: 100, damagePerLevel: 0, minDamageScale: 1, maxBoostStage: 6 }),
   /** Beta 0.6: Pokémon-specific moments (core/moments); off = the rules before them (old-seed tests). */
   pokemonMoments: z.boolean().default(true),
-  sos: z.object({ enabled: z.boolean() }).default({ enabled: true }),
+  sos: z.object({ enabled: z.boolean(), callScale: z.number().min(0).max(1).default(1) }).default({ enabled: true, callScale: 1 }),
   /** Battle Drama spectacle (APPROVED §7): Last Stand, Perfect Counter, Momentum, Guard Break, Revenge Moment, boss phases, Boss Revenge Rematch (core/battle/spectacle.ts). */
   spectacle: SpectacleConfigSchema,
   /** Ideas W1 rules: Type Resonance, Bleed, Curse Tags, Hazard burst, Underdog XP (core/battle/w1Rules.ts). */
@@ -4062,6 +4064,8 @@ export const GameEventSchema = z.object({
     z.object({ kind: z.literal('weeklyRotation') }),
     z.object({ kind: z.literal('yearly'), start: MonthDaySchema, end: MonthDaySchema }),
     /** On for whole days picked by a rule of the (UTC) date: a Friday the 13th, a new or full moon, every Friday or Tuesday, a palindrome date (11/11). */
+    /** One dated window (UTC, `YYYY-MM-DD`, both inclusive): on from the start's first moment to the end's last, then off for good. */
+    z.object({ kind: z.literal('dated'), start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/) }),
     z.object({ kind: z.literal('daily'), rule: z.enum(['friday13', 'newMoon', 'fullMoon', 'friday', 'tuesday', 'palindrome']) }),
   ]),
   /** What makes an edition: the ISO week ("2026-W44") or the year ("2026"). */
@@ -4078,6 +4082,8 @@ export const GameEventSchema = z.object({
   optIn: z.boolean().default(false),
   /** Map events (events.json) it features: they turn up more often. */
   mapEvents: z.array(z.string()).default([]),
+  /** Regions that are likelier to be a run's first (each counts `weight` times in the draw; see core/regions.ts). */
+  firstRegionBoost: z.object({ regions: z.array(z.string()).min(1), weight: z.number().min(1).max(20) }).optional(),
   objectives: z.array(GameEventObjectiveSchema).min(3).max(5),
   /** For finishing every objective, the first time ever; after that, `fallbackReward` instead. */
   reward: QuestRewardSchema,

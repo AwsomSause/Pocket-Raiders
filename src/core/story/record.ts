@@ -84,7 +84,8 @@ export function emit(content: Content, run: RunState, type: DomainEventType, opt
     type,
     where: opts.where ?? whereNow(run),
     actors: opts.actors ?? [],
-    data: opts.data ?? {},
+    // Every rivalry event carries a `kind` (the sim saw ~40% "undefined"): trainer-rival beats use their outcome.
+    data: type === 'rivalryFormed' && opts.data?.kind === undefined ? { ...(opts.data ?? {}), kind: `rival-${String(opts.data?.outcome ?? 'origin')}` } : opts.data ?? {},
   };
   story.events.push(event);
   if (story.events.length > cfg.limits.recentEvents) story.events.splice(0, story.events.length - cfg.limits.recentEvents);

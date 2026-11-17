@@ -144,7 +144,7 @@ import { familyId, runMasteryPerks } from './mastery';
 import { rememberPick, varietyWeight } from './variety';
 import { regionTrainerCap, rememberRegionTrainer } from './trainerPools';
 import { WILD_MET_POOL, isOddOneOutNode, oddOneOutWeight, wildMetWeight } from './wildDampers';
-import { gameEventModifiers } from './gameEvents';
+import { firstRegionWeights, gameEventModifiers } from './gameEvents';
 import { bumpEventCounters } from './eventToolkit';
 import { blackMarketMarkup, fieldResearchMoney, spookyEncounterChance, voiceAsksToJoin } from './trainerEvolution';
 import { growGarden } from './berries';
@@ -437,7 +437,7 @@ export function createRun(content: Content, opts: NewRunOptions): RunState {
   // Used once here, so its own seed-derived generator needs no saved stream.
   // Starter Remembrances are the only starter system: the quiz's three (or, with no quiz, a seeded draw by the same rules).
   const starterChoices = opts.starterOverride?.length ? [...opts.starterOverride] : drawRemembranceStarters(content, opts.seed);
-  const regionOrder = withStream(rng, 'map', (r) => generateRegionOrder(content, campaign, r, rules.regionId));
+  const regionOrder = withStream(rng, 'map', (r) => generateRegionOrder(content, campaign, r, rules.regionId, { seed: opts.seed, weights: firstRegionWeights(content, opts.gameEvents ?? []) }));
   const run: RunState = {
     runId: opts.runId,
     journal: [],
@@ -2169,7 +2169,7 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
   const campaign = getCampaign(content, run.campaignId);
   // Catalog Overhaul: an event that came first may have made this battle some stages easier or harder (read once).
   const shift = takeNodeLevelShift(run);
-  const scale = withPartyStrength(content, stage.kind === 'league' ? leagueScale(content, run.regionIndex) : levelScale(content, campaign, run.regionIndex, Math.max(0, stage.index + shift), node.column), run.party.map((p) => p.level));
+  const scale = withPartyStrength(content, stage.kind === 'league' ? leagueScale(content, run.regionIndex) : levelScale(content, campaign, run.regionIndex, Math.max(0, stage.index + shift), node.column), run.party.map((p) => p.level), node.kind === 'gym');
   // Counts stages from the start of the run (trainer and gym teams grow with it).
   const stageNumber = run.regionIndex * campaign.stagesPerRegion + stage.index;
   const activeIndex = run.party.findIndex((p) => p.hp > 0);

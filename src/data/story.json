@@ -75,13 +75,16 @@
     },
     "byEvent": {
       "survivedFatal": [
-        "determination"
+        "determination",
+        "bravery"
       ],
       "lostToBoss": [
-        "determination"
+        "determination",
+        "patience"
       ],
       "closeCall": [
-        "perseverance"
+        "perseverance",
+        "patience"
       ],
       "bossBeaten": [
         "bravery"
@@ -112,7 +115,7 @@
         "minHpShare": 0.25
       },
       "chance": {
-        "base": 0.15,
+        "base": 0.25,
         "attributes": [
           "love"
         ],
@@ -173,7 +176,7 @@
         ]
       },
       "chance": {
-        "base": 0.03,
+        "base": 0.22,
         "attributes": [
           "love",
           "luck"
@@ -220,7 +223,7 @@
       "category": "bond",
       "triggerConditions": {
         "trigger": "feltABond",
-        "minFriendship": 220,
+        "minFriendship": 150,
         "needsMemory": [
           "closeCall",
           "survivedFatal",
@@ -228,7 +231,7 @@
         ]
       },
       "chance": {
-        "base": 0.1,
+        "base": 0.22,
         "attributes": [
           "love",
           "charisma"
@@ -4339,10 +4342,10 @@
       "category": "survival",
       "triggerConditions": {
         "trigger": "defiance",
-        "minFriendship": 120
+        "minFriendship": 90
       },
       "chance": {
-        "base": 0.12,
+        "base": 0.22,
         "attributes": [
           "rage",
           "strength"
@@ -4401,10 +4404,10 @@
       "category": "bond",
       "triggerConditions": {
         "trigger": "protectiveInstinct",
-        "minFriendship": 160
+        "minFriendship": 110
       },
       "chance": {
-        "base": 0.12,
+        "base": 0.22,
         "attributes": [
           "love",
           "good"
@@ -4850,12 +4853,12 @@
     "huntTitle": "Storm Hunter"
   },
   "rarity": {
-    "momentChance": 0.3,
-    "flairChance": 0.5,
-    "perBattle": 1,
-    "perBossBattle": 2,
-    "cooldownBattles": 2,
-    "hyperScale": 0.4,
+    "momentChance": 0.85,
+    "flairChance": 1,
+    "perBattle": 3,
+    "perBossBattle": 4,
+    "cooldownBattles": 0,
+    "hyperScale": 0.9,
     "exempt": [
       "teamSun",
       "teamRain",
@@ -4887,6 +4890,20 @@
       "repeatPenalty": 0.5,
       "repeatFloor": 0.25,
       "intenseBoost": 1.25
+    },
+    "perRunCap": 5,
+    "perRunCaps": {
+      "enemyRiledUp": 2,
+      "enemyLearned": 3,
+      "partnerFall": 3,
+      "friendlyCompetition": 3,
+      "teamTrickRoom": 2,
+      "teamSand": 2,
+      "teamRain": 2,
+      "teamSun": 2,
+      "teamSnow": 2,
+      "hungInThere": 3,
+      "signatureAwakening": 4
     }
   },
   "gauntlet": {
@@ -5069,6 +5086,6 @@
     ],
     "moralityAt": 3,
     "studiedAfter": 3,
-    "oneSidedGap": 5
+    "oneSidedGap": 8
   }
 }

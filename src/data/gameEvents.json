@@ -12986,6 +12986,80 @@
     "raids",
     "totems"
    ]
+  },
+  {
+   "id": "homeland-week",
+   "version": 1,
+   "name": "Homeland Week",
+   "kind": "themed",
+   "description": "The old home regions are calling. Kanto, Hoenn and Galar are three times as likely to be where your run begins.",
+   "schedule": {
+    "kind": "dated",
+    "start": "2026-11-18",
+    "end": "2026-11-24"
+   },
+   "seedRule": "year",
+   "progressionEligibility": true,
+   "eligibility": {
+    "minRunsFinished": 0
+   },
+   "mode": "any",
+   "ruleText": "For one week, Kanto, Hoenn and Galar are 3x as likely to be your first region.",
+   "modifiers": [],
+   "firstRegionBoost": {
+    "regions": [
+     "kanto",
+     "hoenn",
+     "galar"
+    ],
+    "weight": 3
+   },
+   "mapEvents": [],
+   "objectives": [
+    {
+     "id": "badges",
+     "text": "Defeat 3 Gym Leaders",
+     "counter": "gymLeadersDefeated",
+     "atLeast": 3,
+     "reward": {
+      "researchPoints": 40
+     }
+    },
+    {
+     "id": "catch",
+     "text": "Catch 10 Pokémon",
+     "counter": "pokemonCaught",
+     "atLeast": 10,
+     "reward": {
+      "researchPoints": 60
+     }
+    },
+    {
+     "id": "events",
+     "text": "Finish 6 map events",
+     "counter": "eventsCompleted",
+     "atLeast": 6,
+     "reward": {
+      "researchPoints": 80
+     }
+    }
+   ],
+   "reward": {
+    "researchPoints": 200,
+    "bankCredits": 2000
+   },
+   "repeatPolicy": "oncePerEvent",
+   "fallbackReward": {
+    "researchPoints": 150,
+    "candies": 10
+   },
+   "visualTheme": {
+    "color": "#4aa3df",
+    "icon": "item.coin_case"
+   },
+   "contentTags": [
+    "regions"
+   ]
   }
  ]
 }

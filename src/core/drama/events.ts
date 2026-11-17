@@ -123,7 +123,7 @@ const enemyAlive = (c: PlanCtx) => c.battle.enemyIndex;
 const allAlive = (c: PlanCtx) => c.run.party.every((m) => m.hp > 0);
 const aceOut = (c: PlanCtx) => {
   const send = c.drama.find((e) => e.kind === 'enemySwitch');
-  return send && c.battle.enemyIndex === c.battle.enemyTeam.length - 1 && c.battle.enemyTeam.length >= 3 ? { at: send.at } : null;
+  return send && c.battle.enemyIndex === c.battle.enemyTeam.length - 1 && c.battle.enemyTeam.length >= 2 ? { at: send.at } : null;
 };
 
 export const CHECKS: Record<string, Check> = {
@@ -152,7 +152,7 @@ export const CHECKS: Record<string, Check> = {
     for (let i = 0; i < c.events.length - 1; i++) {
       const e = c.events[i]!;
       const n = c.events[i + 1]!;
-      if (e.type === 'move' && e.side === 'enemy' && (c.content.moves.get(e.moveId)?.power ?? 0) >= DRAMA.config.declarationMoveBpMin && n.type === 'miss' && n.side === 'enemy') return { at: i + 1 };
+      if (e.type === 'move' && e.side === 'enemy' && (c.content.moves.get(e.moveId)?.power ?? 0) >= Math.min(60, DRAMA.config.declarationMoveBpMin) && n.type === 'miss' && n.side === 'enemy') return { at: i + 1 };
     }
     return null;
   },
@@ -171,10 +171,10 @@ export const CHECKS: Record<string, Check> = {
     return (rec ? grudgeHeld(rec) : c.bond.strain >= 10) ? aceOut(c) : null;
   },
   mercyMoment: (c) => {
-    if (c.bond.affection < 40 || c.bond.strain >= 60) return null;
+    if (c.bond.affection < 25 || c.bond.strain >= 60) return null;
     const foe = c.foeMon;
     const i = c.events.findIndex((e) => e.type === 'move' && e.side === 'enemy');
-    return foe && foe.hp > 0 && hpShare(c.content, foe) <= 0.15 && i >= 0 ? { at: lastIdx(c) } : null;
+    return foe && foe.hp > 0 && hpShare(c.content, foe) <= 0.25 && i >= 0 ? { at: lastIdx(c) } : null;
   },
   breakingPoint: (c) => {
     if (c.bond.confidence > 60) return null;

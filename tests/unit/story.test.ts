@@ -77,8 +77,9 @@ describe('story foundation: random streams', () => {
   // Re-pinned STORY6/0 for Shadow II (Shadow tiers replace the flat Shadow damage and the old Sealed ignore roll; a player Shadow fights in that seed). Re-pinned STORY1, 2, 4-8 for Catalog Overhaul places (new and rebuilt run events in the draw pool). Re-pinned STORY1, 2 and 4-8 again in the batch-2 combine (places and singles together; 7 and 8 equal the places pins). Re-pinned STORY5 and 6 in the batch-3 combine (families-b's rebuilt road events and Never-Melt Ice with batch 2); STORY4 to 7 again with families-a in.
   // Re-pinned STORY1, 2, 5 and 6 for the Catalog Overhaul singles row (SF155 fossil dig): Plume, Root and Claw Fossils are uncommon, as the doc's fossil dig names them the common fossils, so reward and shop draws that hold a fossil pick differently.
   // Re-pinned STORY1 and 4 to 7 for Catalog Overhaul families-a (rebuilt story-family events in the draw pool; hazards answered by a Pokémon give a typed item).
+  // Re-pinned (STORY1/0 only) for pick-spread: Gym Leaders level with the party (gymBonus 0), enemy heal caps, flatter event draws, SOS x0.3 (docs/status/pick-spread.md).
   const BEFORE_STORY: Record<string, string> = {
-    'STORY1/0': 'f6d87023062d411e',
+    'STORY1/0': 'f82a504b3ee75917',
     'STORY2/0': 'f1731ee4f116e125', // STORY2, 5, 6 re-pinned after #1098 (Starter Sets removal); cause not isolated, see PR
     'STORY4/0': 'ed7be324c68dd80c',
     'STORY5/0': '0695cbd39abf2c0e',

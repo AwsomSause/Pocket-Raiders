@@ -8,6 +8,7 @@ import { effectiveAttributes, type Attributes } from '../attributes';
 import type { HyperAttribute, HyperContext } from '../battle/hyper';
 import type { Content } from '../contentSchema';
 import { currentEmotion } from './emotions';
+import { momentCapped } from './momentCaps';
 import { Rng } from '../rng';
 import { bonusFriendship, hyperChancePerk, isBossClass } from '../trainerPerks';
 import { crowdBoost } from '../galarFavor';
@@ -87,6 +88,7 @@ export function buildHyperContext(content: Content, run: RunState, rng: Rng): Hy
     eligibility(trigger, mon) {
       const def = content.story.definitions.find((d) => d.triggerConditions.trigger === trigger);
       if (!def) return null;
+      if (momentCapped(content, run, trigger)) return null;
       const cond = def.triggerConditions;
       const history = run.story.histories[mon.uid];
       if (cond.minFriendship !== undefined && (bonusFriendship(perks, mon.friendship) < cond.minFriendship || friendshipOff)) return null;
