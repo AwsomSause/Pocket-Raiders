@@ -64,7 +64,7 @@ import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
-import { hearTelling, noteEvent as notePromiseEvent, resolveVisit, rollVisit, wonderAfterBattle } from './instrumentality/promises';
+import { hearTelling, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
@@ -771,7 +771,14 @@ function forceFirstRivalColumn(content: Content, run: RunState, index: number, m
 }
 
 /** Starts a stage (mutates `run`): picks a fresh theme and gym leader, generates the map, and shows it. */
+/** Stage 2: a Mythical Promise or Wonder speaks outside a battle (it goes in the run's story record, shown with the journal). */
+function promiseSay(content: Content, run: RunState, lines: string[]): void {
+  for (const text of lines) emit(content, run, 'storyMoment', { data: { promise: true }, importance: 60, text });
+}
+
 function enterStage(content: Content, run: RunState, index: number): void {
+  const leftBehind = run.stage ? { heals: run.stage.map.nodes.flatMap((n) => n.sides).filter((x) => x.kind === 'heal').length, used: run.stage.map.nodes.flatMap((n) => n.sides).filter((x) => x.kind === 'heal' && x.used).length } : null;
+  promiseOnStage(run, leftBehind);
   ofGuestLeaves(content, run);
   // Swap Day (NE39) never outlasts its stage.
   if (swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
@@ -2768,6 +2775,7 @@ export function visitSide(content: Content, current: RunState, sideId: string): 
   if (side.kind === 'shop' && sgPriceFactor(run, stageNumber(content, run)) === null) return { run: current, message: SHOP_SHUT };
   if (side.kind === 'heal') {
     const before = run.party.map((m) => m.hp);
+    promiseSay(content, run, promiseOnRest(content, run));
     healParty(content, run);
     coHealStop(content, run, before);
     eeveeHealed(content, run, before);
@@ -3278,6 +3286,7 @@ export function beginBattle(content: Content, current: RunState): { run: RunStat
   const rivalNotice = followedRival(content, run);
   const events = run.battle!.doubles ? startDoubles(ctx) : startBattle(ctx);
   events.push(...coBattleStarted(content, run));
+  for (const text of wonderAtBattleStart(content, run)) events.push({ type: 'raid', tone: 'info', text });
   if (afterstory) events.push({ type: 'raid', tone: 'info', text: afterstory });
   if (ripple) events.push({ type: 'raid', tone: 'info', text: ripple });
   if (friendHelp) events.push({ type: 'raid', tone: 'info', text: friendHelp });
@@ -4067,6 +4076,7 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
       const stats = ['atk', 'def', 'spa', 'spd', 'spe'] as const;
       care.talent ??= stats[[...caught.uid].reduce((n, c) => n + c.charCodeAt(0), 0) % stats.length]!;
     }
+    promiseSay(content, run, promiseOnCaught(content, run, caught));
     caughtPending.push({ kind: 'caught', mon: caught });
   }
   // King N's Voice of Pokémon: a wild Pokémon you defeated may ask to join, no ball needed.
@@ -4563,6 +4573,12 @@ export interface DecisionResult {
 
 /** Answers the oldest pending decision. Replacing or releasing can't be undone, so the screen confirms first. */
 export function resolveDecision(content: Content, current: RunState, choice: DecisionChoice): DecisionResult {
+  const out = resolveDecisionCore(content, current, choice);
+  const lines = promiseOnPartyChanged(content, out.run); // Mew's Promise: a join may leave two members with the same pair of types
+  return lines.length > 0 ? { ...out, message: [out.message, ...lines].filter(Boolean).join(' ') } : out;
+}
+
+function resolveDecisionCore(content: Content, current: RunState, choice: DecisionChoice): DecisionResult {
   assertPhase(current, 'decision');
   const run = structuredClone(current);
   const decision = run.pending[0];
@@ -4700,6 +4716,7 @@ export function resolveDecision(content: Content, current: RunState, choice: Dec
         mon.moves.push({ id: move.id, pp: move.pp });
         noteMapGrowth(content, run, mon.uid, 'tmLearned');
         message = `${speciesName(content, mon.speciesId)} learned ${move.name}!`;
+        promiseSay(content, run, promiseOnTm(content, run));
       } else {
         // Four moves known: ask which to forget, like a level-up move.
         followUp = { kind: 'learnMove', uid: mon.uid, moveId };
@@ -4871,6 +4888,7 @@ export function depositToBox(content: Content, current: RunState, partyIndex: nu
   const run = structuredClone(current);
   noteBoxed(run, run.party[partyIndex]!);
   run.box.push(run.party.splice(partyIndex, 1)[0]!);
+  promiseSay(content, run, promiseOnPartyChanged(content, run));
   return run;
 }
 
@@ -4882,6 +4900,7 @@ export function withdrawFromBox(content: Content, current: RunState, boxIndex: n
   if (shadowTierOf(current.box[boxIndex]!)?.countsAgainstCap && heavyShadowCount(current.party) >= SHADOW_SLOT_CAP) throw new Error(`A party can hold only ${SHADOW_SLOT_CAP} Gripped or Fallen Shadow Pokémon.`);
   const run = structuredClone(current);
   run.party.push(run.box.splice(boxIndex, 1)[0]!);
+  promiseSay(content, run, promiseOnPartyChanged(content, run));
   return run;
 }
 

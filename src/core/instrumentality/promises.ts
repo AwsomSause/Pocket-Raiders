@@ -6,7 +6,8 @@
 
 import type { Content } from '../contentSchema';
 import { hashSeed, Rng } from '../rng';
-import { getSpecies } from '../pokemon';
+import { getSpecies, maxHp } from '../pokemon';
+import { teachableMoves } from '../catalog';
 import type { PendingDecision, RunState } from '../state';
 import { MYTHICALS, type MythicalDef, type PromiseRule } from './promisesData';
 
@@ -30,10 +31,26 @@ const visitors = (): MythicalDef[] => MYTHICALS.filter((m) => m.status === 'supp
 /** Every Mythical that is not disabled can be told of and believed: each has its own Visit scene (legends questlines), so the stage Telling no longer only ever names Zarude. */
 const tellable = (): MythicalDef[] => MYTHICALS.filter((m) => m.status !== 'disabled');
 
+/** Revived fossil Pokémon (and their evolutions): Genesect comes to those who have brought one back. */
+const FOSSILS = new Set(['omanyte', 'omastar', 'kabuto', 'kabutops', 'aerodactyl', 'lileep', 'cradily', 'anorith', 'armaldo', 'cranidos', 'rampardos', 'shieldon', 'bastiodon', 'tirtouga', 'carracosta', 'archen', 'archeops', 'tyrunt', 'tyrantrum', 'amaura', 'aurorus', 'dracozolt', 'arctozolt', 'dracovish', 'arctovish']);
+
 /** What makes a visit possible this run ("Comes when"). Supported Mythicals only; the others have no trigger yet. */
 const COMES_WHEN: Record<string, (content: Content, run: RunState) => boolean> = {
   zarude: (_c, run) => [...run.party, ...run.box].some((m) => m.hatched === true),
+  mew: (_c, run) => Object.keys(promiseState(run).track ?? {}).filter((k) => k.startsWith('caught:')).length >= 20,
+  darkrai: (_c, run) => trackOf(run, 'restsPassed') >= 2,
+  genesect: (_c, run) => [...run.party, ...run.box].some((m) => FOSSILS.has(m.speciesId)),
 };
+/** Small in-run counters (rests passed, species caught). */
+export const trackOf = (run: Pick<RunState, 'expansion'>, key: string): number => promiseState(run).track?.[key] ?? 0;
+export function bumpTrack(run: RunState, key: string, value: number | ((n: number) => number)): number {
+  const p = promiseState(run);
+  const next = typeof value === 'function' ? value(p.track?.[key] ?? 0) : value;
+  save(run, { ...p, track: { ...p.track, [key]: next } });
+  return next;
+}
+export const guestId = (run: Pick<RunState, 'expansion'>): string | null => promiseState(run).guest?.id ?? null;
+
 export const comesWhenMet = (content: Content, run: RunState, id: string): boolean => COMES_WHEN[id]?.(content, run) ?? false;
 
 /** One Telling per new stage, about the Mythical already half-told, else a seeded pick. Returns the line, or null (nothing left, or off). */
@@ -182,4 +199,72 @@ export function wonderAfterBattle(content: Content, run: RunState, maxHpOf: (m: 
     m.status = null;
   }
   return 'Zarude\'s vines bind your party\'s wounds.';
+}
+
+// ---------- Stage 2: Promise events from the game's actions, and Wonders that act in the run's flow ----------
+
+/** A caught Pokémon: counts the species (Mew's trigger), checks the Promise (Zeraora's No Cages), and Mew teaches it one extra move (seeded by its uid). */
+export function onCaught(content: Content, run: RunState, mon: RunState['party'][number]): string[] {
+  if (!run.expansion?.promises) return [];
+  bumpTrack(run, `caught:${mon.speciesId}`, 1);
+  const lines = noteEvent(content, run, { kind: 'catch' });
+  if (guestId(run) === 'mew' && mon.moves.length < 8) {
+    const options = teachableMoves(content, mon);
+    const pick = options.length > 0 ? options[new Rng(hashSeed(`${run.seed}::mew-gift::${mon.uid}`)).int(0, options.length - 1)] : undefined;
+    const move = pick ? content.moves.get(pick) : undefined;
+    if (move) {
+      mon.moves.push({ id: move.id, pp: move.pp });
+      lines.push(`Mew's gift: ${getSpecies(content, mon.speciesId).name} knows ${move.name}.`);
+    }
+  }
+  return lines;
+}
+
+/** After the party changed (a join, a deposit, a withdraw): Mew's Promise (no two with the same pair of types). */
+export const onPartyChanged = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'partyChanged' }) : []);
+
+/** A rest used (a Center or camp heal). Darkrai: at most every second rest. */
+export function onRestUsed(content: Content, run: RunState): string[] {
+  if (!run.expansion?.promises) return [];
+  const previousUsed = trackOf(run, 'restPrevUsed') === 1;
+  const lines = noteEvent(content, run, { kind: 'restUsed', previousUsed });
+  bumpTrack(run, 'restPrevUsed', 1);
+  bumpTrack(run, 'restsPassed', 0);
+  return lines;
+}
+
+/** On entering a stage: rests the last stage offered and the player never used count as passed (Darkrai's trigger). */
+export function onStageEntered(run: RunState, previous: { heals: number; used: number } | null): void {
+  if (!run.expansion?.promises || !previous || previous.heals === 0) return;
+  if (previous.used > 0) return;
+  bumpTrack(run, 'restsPassed', (n) => n + 1);
+  bumpTrack(run, 'restPrevUsed', 0);
+}
+
+/** A TM or technical item used (Genesect: No more machines). */
+export const onTmUsed = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'useTm' }) : []);
+
+/** The opposing lead at battle start. Darkrai: it loses 1/8 of its HP. Genesect: a free boost to the lead's stronger attacking stat. */
+export function wonderAtBattleStart(content: Content, run: RunState): string[] {
+  const id = guestId(run);
+  const battle = run.battle;
+  if (!id || !battle) return [];
+  const lines: string[] = [];
+  if (id === 'darkrai') {
+    const foe = battle.enemyTeam[battle.enemyIndex];
+    if (foe && foe.hp > 1) {
+      foe.hp = Math.max(1, foe.hp - Math.max(1, Math.floor(maxHp(content, foe) / 8)));
+      lines.push('The Nightmare presses in: the opposing lead loses 1/8 of its HP.');
+    }
+  }
+  if (id === 'genesect') {
+    const lead = run.party[battle.activeIndex];
+    if (lead) {
+      const base = getSpecies(content, lead.speciesId).baseStats;
+      const stat = (base.spa ?? 0) > (base.atk ?? 0) ? 'spa' : 'atk';
+      battle.playerStages[stat] = Math.min(6, battle.playerStages[stat] + 1);
+      lines.push(`Genesect's Drive charges ${getSpecies(content, lead.speciesId).name}: +1 ${stat === 'spa' ? 'Sp. Atk' : 'Attack'}.`);
+    }
+  }
+  return lines;
 }

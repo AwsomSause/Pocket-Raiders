@@ -4,7 +4,7 @@ import { createBattle } from '../../src/core/battle/engine';
 import { freshSos } from '../../src/core/battle/sos';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { HEATED, heatedConditions, heatedRoll, isBigBattle } from '../../src/core/instrumentality/heated';
-import { breaks, believed, hearTelling, noteEvent, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
+import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
 import { MYTHICALS } from '../../src/core/instrumentality/promisesData';
 import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/instrumentality/secondChance';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
@@ -104,7 +104,7 @@ describe('Mythical Promises (M1)', () => {
       expect(m.tellings).toHaveLength(3);
       if (m.status !== 'supported') expect(m.note).toBeTruthy();
     }
-    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['zarude']);
+    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['mew', 'darkrai', 'genesect', 'zarude']);
   });
   it('every Promise is a checkable rule: it breaks on its event and not on an unrelated one', () => {
     const run = base();
@@ -207,6 +207,69 @@ describe('Mythical Promises (M1)', () => {
   });
   it('off by default: a plain run hears no Tellings', () => {
     expect(hearTelling(start(undefined), 0)).toBeNull();
+  });
+});
+
+describe('Mythical Promises stage 2 (Mew, Darkrai, Genesect)', () => {
+  const guestRun = (id: string) => {
+    const run = start({ mythicalPromises: true });
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: id, guest: { id, forgiven: false }, kept: [], left: [] } };
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 10, 'foe')], 0, run.party[0]!.uid);
+    return run;
+  };
+  it('Darkrai: the opposing lead loses 1/8 HP at battle start; no Guest, no effect', () => {
+    const run = guestRun('darkrai');
+    const foe = run.battle!.enemyTeam[0]!;
+    const hp = foe.hp;
+    expect(wonderAtBattleStart(content, run)[0]).toContain('1/8');
+    expect(foe.hp).toBe(hp - Math.floor(maxHp(content, foe) / 8));
+    const plain = start({ mythicalPromises: true });
+    plain.battle = createBattle('wild', [createPokemon(content, 'rattata', 10, 'foe')], 0, plain.party[0]!.uid);
+    expect(wonderAtBattleStart(content, plain)).toEqual([]);
+  });
+  it("Darkrai's Promise: the second rest in a row breaks it (forgives once), and its trigger is two rests passed", () => {
+    const run = guestRun('darkrai');
+    expect(onRestUsed(content, run)).toEqual([]); // the first rest is fine
+    expect(onRestUsed(content, run)[0]).toContain('forgives');
+    const fresh = start({ mythicalPromises: true });
+    expect(comesWhenMet(content, fresh, 'darkrai')).toBe(false);
+    onStageEntered(fresh, { heals: 1, used: 0 });
+    onStageEntered(fresh, { heals: 1, used: 0 });
+    expect(trackOf(fresh, 'restsPassed')).toBe(2);
+    expect(comesWhenMet(content, fresh, 'darkrai')).toBe(true);
+    onStageEntered(fresh, { heals: 0, used: 0 }); // a stage with no rest changes nothing
+    expect(trackOf(fresh, 'restsPassed')).toBe(2);
+    onRestUsed(content, fresh);
+    expect(comesWhenMet(content, fresh, 'darkrai')).toBe(false);
+  });
+  it('Genesect: +1 to the lead\'s stronger attacking stat each battle; a TM breaks its Promise and it does not forgive', () => {
+    const run = guestRun('genesect');
+    const before = { ...run.battle!.playerStages };
+    expect(wonderAtBattleStart(content, run)[0]).toContain('Drive');
+    const gained = Object.keys(before).filter((k) => run.battle!.playerStages[k as 'atk'] === before[k as 'atk'] + 1);
+    expect(gained).toHaveLength(1);
+    expect(onTmUsed(content, run)[0]).toContain('leaves');
+    expect(promiseState(run).guest).toBeNull();
+  });
+  it('Genesect comes to those with a revived fossil Pokémon', () => {
+    const run = start({ mythicalPromises: true });
+    expect(comesWhenMet(content, run, 'genesect')).toBe(false);
+    run.party.push(createPokemon(content, 'kabuto', 10, 'fossil'));
+    expect(comesWhenMet(content, run, 'genesect')).toBe(true);
+  });
+  it('Mew: counts caught species (20 makes it come), gives a catch an extra move, and a catch with Zeraora-less Mew breaks nothing', () => {
+    const run = guestRun('mew');
+    const mon = createPokemon(content, 'rattata', 10, 'c1');
+    const moves = mon.moves.length;
+    const lines = onCaught(content, run, mon);
+    expect(mon.moves.length).toBe(moves + 1);
+    expect(lines[0]).toContain("Mew's gift");
+    expect(onCaught(content, run, createPokemon(content, 'rattata', 10, 'c1'))).toEqual(onCaught(content, run, createPokemon(content, 'rattata', 10, 'c1')).slice(0, 1)); // seeded: same uid, same pick
+    const fresh = start({ mythicalPromises: true });
+    for (let i = 0; i < 19; i++) bumpTrack(fresh, `caught:s${i}`, 1);
+    expect(comesWhenMet(content, fresh, 'mew')).toBe(false);
+    bumpTrack(fresh, 'caught:s19', 1);
+    expect(comesWhenMet(content, fresh, 'mew')).toBe(true);
   });
 });
 

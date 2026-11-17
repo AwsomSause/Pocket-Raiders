@@ -156,6 +156,8 @@ export const ExpansionRunSchema = z.object({
     guest: z.object({ id: z.string(), forgiven: z.boolean().default(false) }).nullable().default(null),
     kept: z.array(z.string()).default([]),
     left: z.array(z.string()).default([]),
+    /** Stage 2 (Mythical Promises): small in-run counters the Promises and Wonders read (rests passed, species caught, charges used). Optional, no save bump. */
+    track: z.record(z.string(), z.number()).optional(),
   }).optional(),
   /** Beta 0.7 workstream 13: in-run epilogue (Citadark finale, Region of Doom). */
   epilogue: EpilogueStateSchema.optional(),
