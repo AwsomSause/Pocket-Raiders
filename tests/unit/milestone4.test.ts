@@ -26,7 +26,7 @@ import {
 import type { RunState } from '../../src/core/state';
 import { SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
-import { content, takeAnyReward, toBattle } from './helpers';
+import { content, takeAnyReward, toBattle, withoutDoors } from './helpers';
 
 const RED = getArchetype(content, 'red');
 const FULL = content.campaigns.get('full')!;
@@ -239,7 +239,9 @@ describe('the final boss', () => {
 describe('the dev campaign, start to finish', () => {
   it('clears two regions (stages, league, champion), raises the cap, then wins the run', () => {
     // Six strong Pokémon: level 100 teams know one-hit KO moves such as Fissure.
-    let run = powerUp(newRun('dev-full', 'dev'));
+    let run = withoutDoors(powerUp(newRun('dev-full', 'dev')));
+    // Greenneedle gn.13's Flight North check can steal the party into its seven-room chain (tested in greenneedle3.test.ts): this walk is about the campaign's shape.
+    run.story.flags['ev:flight-checked'] = 1;
     for (let i = 1; i < content.balance.partyMax; i++) run.party.push({ ...structuredClone(run.party[0]!), uid: `extra${i}` });
     const firstRegion = run.regionOrder[0]!;
     const kinds: string[] = [];
@@ -247,11 +249,18 @@ describe('the dev campaign, start to finish', () => {
     let guard = 0;
     while (run.phase !== 'over' && guard++ < 200) {
       expect(run.phase).toBe('map');
+      const seen = run.stage!.visited.length;
       run = toBattle(refresh(run));
-      const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-      kinds.push(node.kind);
+      // Every node walked, also one an event placed "instead of the battle" took (toBattle walks on past it).
+      for (const id of run.stage!.visited.slice(seen)) kinds.push(run.stage!.map.nodes.find((n) => n.id === id)!.kind);
+      // An event placed before this node can start its own battle in the node battle's place: its win goes back to the map.
+      const eventBattle = !!run.battle?.event;
       run = win(run, true);
       if (run.phase === 'over') break;
+      if (eventBattle && run.phase !== 'reward') {
+        run = skipDecisions(run);
+        continue;
+      }
       expect(run.phase).toBe('reward');
       run = skipDecisions(takeAnyReward(run));
       if (run.regionIndex === 1 && !sawSecondRegion) {

@@ -69,6 +69,7 @@ export class DexBrowser {
   }
 
   close(): void {
+    if (this.closed) return;
     this.closed = true;
     this.root.destroy();
   }

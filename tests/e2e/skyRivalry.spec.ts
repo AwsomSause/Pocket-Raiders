@@ -33,7 +33,10 @@ test('the Pidgey and Spearow branch fight plays by itself on the battle scene', 
   let shots = 0;
   const t0 = Date.now();
   while ((await scene(page)) === 'Battle' && Date.now() - t0 < 100_000) {
-    await page.keyboard.press('Enter');
+    // Enter only while a line is waiting to be read. A press made while the battle is closing is handled by no screen,
+    // so an automated browser keeps it and replays it into the map, where Enter starts the next trip (a new battle).
+    const waiting = await page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle')?.advance));
+    if (waiting) await page.keyboard.press('Enter');
     await page.waitForTimeout(350);
     const state = await page.evaluate(() => {
       const b = (window as any).__pkr.game.scene.getScene('Battle');
@@ -72,7 +75,7 @@ test('the cliff finale asks who to cheer for when Pidgeot is low, and the answer
     const { session, game } = (window as any).__pkr;
     const run = session.run;
     run.party.forEach((m: any) => (m.level = 25));
-    run.expansion = { ...run.expansion, density: 'normal', sky: { region: 0, backed: 'pidgey', duelWinner: 'spearow', phase: 'rivalry', metStages: [], meets: 4, spars: 0, boosts: 0, alone: 0, gifts: [], answers: [], finale: { asked: false }, afterDone: false } };
+    run.expansion = { ...run.expansion, density: 'normal', sky: { region: 0, backed: 'pidgey', duelWinner: 'spearow', phase: 'rivalry', metStages: [], meets: 4, spars: 0, boosts: 0, alone: 0, watched: 0, bond: 0, wiser: 0, gifts: [], answers: [], finale: { asked: false }, afterDone: false } };
     run.stage.index = 7;
     const node = run.stage.map.nodes[0];
     run.stage.current = node.id;
@@ -88,7 +91,7 @@ test('the cliff finale asks who to cheer for when Pidgeot is low, and the answer
       const b = (window as any).__pkr.game.scene.getScene('Battle');
       return b?.menu?.labels?.map?.((o: any) => o.text) ?? null;
     });
-    if (labels && labels.includes('Cheer for Pidgeot')) {
+    if (labels && labels.includes('Pidgeot!')) {
       asked = true;
       await page.screenshot({ path: 'test-results/visual/sky-cheer.png' });
       await page.keyboard.press('Enter');
@@ -101,7 +104,12 @@ test('the cliff finale asks who to cheer for when Pidgeot is low, and the answer
   const after = await page.evaluate(() => ({ party: (window as any).__pkr.session.run.party.map((m: any) => m.speciesId), sky: (window as any).__pkr.session.run.expansion?.sky }));
   expect(asked).toBe(true);
   expect(after.party).toEqual(team);
-  expect(after.sky.finale.cheer).toBe('pidgeot');
-  expect(after.sky.finale.winner).toMatch(/pidgeot|fearow/);
+  if (after.sky.wiser === 1) {
+    // gn.02: Fearow won with Pidgeot cheered: the story goes on next region, one stage wiser, with a fresh finale.
+    expect(after.sky).toMatchObject({ region: 1, phase: 'rivalry', finale: { asked: false } });
+  } else {
+    expect(after.sky.finale.cheer).toBe('pidgeot');
+    expect(after.sky.finale.winner).toMatch(/pidgeot|fearow/);
+  }
   expect(errors).toEqual([]);
 });

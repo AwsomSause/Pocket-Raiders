@@ -51,7 +51,8 @@ describe('rollBlessing', () => {
   it('over many seeds every playable blessing shows up and tiers follow the odds (empty tiers fall down)', () => {
     const counts: Record<string, number> = {};
     for (let i = 0; i < 4000; i++) { const r = rollBlessing(`odds-${i}`)!; counts[r.id] = (counts[r.id] ?? 0) + 1; }
-    const playable = BLESSINGS.filter((b) => b.status !== 'disabled');
+    // Event-only blessings (pool: false, The Renegade from The Rift Whisper) are never rolled.
+    const playable = BLESSINGS.filter((b) => b.status !== 'disabled' && b.pool);
     for (const b of playable) expect(counts[b.id] ?? 0, b.id).toBeGreaterThan(0);
     // Divine 17% + the Primordial and Origin rolls (8%) that fall down to it, shared by Ho-Oh and Dialga.
     expect(counts['ho-oh']! / 4000).toBeGreaterThan(0.09);

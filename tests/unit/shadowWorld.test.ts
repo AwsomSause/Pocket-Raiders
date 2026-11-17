@@ -270,7 +270,10 @@ describe('Events', () => {
     addFlag(run, 'sanctuary-sign');
     addFlag(run, 'kindness', 3);
     const now = ids(run);
-    for (const id of ['shadow-outbreak', 'shadow-stronghold', 'sanctuary-found', 'ancient-shrine']) expect(now.has(id), id).toBe(true);
+    // ancient-shrine became a Legendary Sign stop (Catalog Overhaul legends RULE ids) and is retired.
+    // sanctuary-found is retired too: the Catalog Overhaul (SF9) merged it into the Hurt Wanderer line (wanderer-arrives).
+    for (const id of ['shadow-outbreak', 'shadow-stronghold']) expect(now.has(id), id).toBe(true);
+    expect(now.has('sanctuary-found')).toBe(false);
   });
   it('rescuing from a hideout gives a Shadow Pokémon, and a sanctuary rest blesses the party and opens the world', () => {
     const run = fresh('ev-rescue');

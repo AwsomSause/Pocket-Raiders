@@ -1,0 +1,258 @@
+{
+ "category": "greenneedle",
+ "note": "Greenneedle pseudo stages (chains): the map is drawn from each door event's rooms. Built by tools/catalog-overhaul/gn-data.ts.",
+ "chains": [
+  {
+   "id": "ps_gn_moon",
+   "name": "Mt. Moon",
+   "entry": "gn-04-door",
+   "themeId": "rock-fairy",
+   "tint": "#2a2440",
+   "mood": "moonlight",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_forest",
+   "name": "Viridian Forest: The Samurai's Challenge",
+   "entry": "gn-03-door",
+   "themeId": "grass-bug",
+   "tint": "#1f3a22",
+   "mood": "green light",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_ssanne",
+   "name": "The S.S. Anne",
+   "entry": "gn-10-dock",
+   "themeId": "normal-water",
+   "tint": "#2f5d73",
+   "mood": "sea air",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_lighthouse",
+   "name": "Bill's Lighthouse",
+   "entry": "gn-09-door",
+   "themeId": "water-dragon",
+   "tint": "#1c2a44",
+   "mood": "night sea",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_rain",
+   "name": "Cold Night's Rain",
+   "entry": "gn-07-door",
+   "themeId": "water-ghost",
+   "tint": "#1a2433",
+   "mood": "rain",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_gorge",
+   "name": "The Gorge and the Hidden Village",
+   "entry": "gn-06-bridge",
+   "themeId": "water-grass",
+   "tint": "#24402e",
+   "mood": "woodsmoke",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_flight",
+   "name": "Flight North",
+   "entry": "gn-13-check",
+   "themeId": "normal-flying",
+   "tint": "#2f5d73",
+   "mood": "open sky",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_labyrinth",
+   "name": "Sabrina's Labyrinth",
+   "entry": "gn-14-door",
+   "themeId": "psychic-ghost",
+   "tint": "#2a1a40",
+   "mood": "shadow lanterns",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_maiden",
+   "name": "Maiden's Peak",
+   "entry": "gn-12-door",
+   "themeId": "fairy-ghost",
+   "tint": "#3b2f52",
+   "mood": "festival lanterns",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_factory",
+   "name": "The Polluted Factory",
+   "entry": "gn-17-door",
+   "themeId": "poison-steel",
+   "tint": "#4a4a2a",
+   "mood": "smog",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_savanna",
+   "name": "The Deep Savanna",
+   "entry": "gn-19-door",
+   "themeId": "ground-fire",
+   "tint": "#b08a3a",
+   "mood": "dry heat",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_jungle",
+   "name": "The Lush Jungle",
+   "entry": "gn-20-door",
+   "themeId": "grass-poison",
+   "tint": "#1e5a2a",
+   "mood": "humid green",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_cubone",
+   "name": "The Lonely Cubone",
+   "entry": "gn-22-door",
+   "themeId": "ground-ghost",
+   "tint": "#6f6a5a",
+   "mood": "grey woods",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_hideout",
+   "name": "The Hideout",
+   "entry": "gn-28-door",
+   "themeId": "dark-steel",
+   "tint": "#2a1f24",
+   "mood": "evil team hideout",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_pink",
+   "name": "The Island of Pink Pokémon",
+   "entry": "gn-30-door",
+   "themeId": "water-grass",
+   "tint": "#e48fb4",
+   "mood": "pink island",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_giants",
+   "name": "The Island of Giant Pokémon",
+   "entry": "gn-26-door",
+   "themeId": "water-grass",
+   "tint": "#5f7f6a",
+   "mood": "giant island",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_unown",
+   "name": "Caverns-o-Mighty",
+   "entry": "gn-34-door",
+   "themeId": "psychic-ghost",
+   "tint": "#5a4f6e",
+   "mood": "unown caverns",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_sunken",
+   "name": "The Sunken City",
+   "entry": "gn-33-door",
+   "themeId": "water-ghost",
+   "tint": "#2d6e7a",
+   "mood": "sunken city",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_crystal",
+   "name": "The Crystal Caverns",
+   "entry": "gn-32-door",
+   "themeId": "rock-fairy",
+   "tint": "#6f8fb8",
+   "mood": "crystal cave",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_forest",
+   "name": "The Forgotten Forest",
+   "entry": "gn-31-door",
+   "themeId": "grass-bug",
+   "tint": "#2f4a2a",
+   "mood": "ancient forest",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_lab",
+   "name": "The Overgrown Laboratory",
+   "entry": "gn-38-door",
+   "themeId": "grass-steel",
+   "tint": "#355a3a",
+   "mood": "overgrown lab",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_mansion",
+   "name": "The Haunted Mansion",
+   "entry": "gn-37-door",
+   "themeId": "normal-ghost",
+   "tint": "#3a2f45",
+   "mood": "haunted house",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_desert",
+   "name": "The Great Desert",
+   "entry": "gn-36-door",
+   "themeId": "fire-ground",
+   "tint": "#c79a52",
+   "mood": "desert",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_ridge",
+   "name": "Thunderstorm Ridge",
+   "entry": "gn-35-door",
+   "themeId": "electric-flying",
+   "tint": "#3b4060",
+   "mood": "thunderstorm ridge",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_last_stop",
+   "name": "The Last Stop",
+   "entry": "gn-new-09-door",
+   "themeId": "psychic-ghost",
+   "tint": "#1c2236",
+   "mood": "night train",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_station",
+   "name": "The Weather Station",
+   "entry": "gn-new-15-door",
+   "themeId": "rock-ghost",
+   "tint": "#6c8aa6",
+   "mood": "mountain weather station",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_snowbound",
+   "name": "The Snowbound Village",
+   "entry": "gn-n19-door",
+   "themeId": "normal-ice",
+   "tint": "#bcd3e6",
+   "mood": "snow village",
+   "start": "opened"
+  },
+  {
+   "id": "ps_gn_courier",
+   "name": "The Old Courier",
+   "entry": "gn-new-33-door",
+   "themeId": "normal-flying",
+   "tint": "#6b5a3a",
+   "mood": "high wind",
+   "start": "opened"
+  }
+ ]
+}

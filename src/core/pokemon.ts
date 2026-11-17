@@ -7,7 +7,11 @@ import { evsOf, rollIvs, statIvsOf } from './ivs';
 import type { Content, GrowthRate, Species, StatBlock, StatName } from './contentSchema';
 import { STAT_NAMES } from './contentSchema';
 import { Rng, hashSeed } from './rng';
+import { REVIVAL_STATUSES } from './moments/pokemonMoments';
 import type { MoveSlot, PokemonInstance } from './state';
+
+/** Catalog Overhaul (Alphas): the Alpha Mark's extra max HP, in percent. */
+export const ALPHA_MARK_HP = 10;
 
 export function getSpecies(content: Content, id: string): Species {
   const species = content.species.get(id);
@@ -42,6 +46,16 @@ export function hpLevelMultiplier(content: Content, level: number): number {
   return 1 + (content.balance.hpLevelBonus ?? 0) * Math.min(1, Math.max(0, level) / 100);
 }
 
+/** Max HP percent from held items with a `maxHp` hook. */
+function heldHpPercent(content: Content, mon: PokemonInstance): number {
+  let pct = 0;
+  for (const id of Object.keys(mon.held ?? {})) {
+    const effect = content.catalog.get(id)?.effect;
+    if (effect?.kind === 'held') for (const h of effect.hooks) if (h.hook === 'maxHp') pct += h.percent;
+  }
+  return pct;
+}
+
 export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
   const species = getSpecies(content, mon.speciesId);
   const perStack = content.balance.vitaminMultiplierPerStack;
@@ -56,15 +70,28 @@ export function calcStats(content: Content, mon: PokemonInstance): StatBlock {
         ? Math.floor((core + mon.level + 10 + Math.floor(mon.level * content.balance.hpPerLevel)) * hpLevelMultiplier(content, mon.level))
         : Math.floor(((core + 5) * Math.round(natureMultiplier(effectiveNature(mon), stat) * 100)) / 100);
     const stacks = mon.vitamins[stat] ?? 0;
-    const boost = ((mon.statBoosts?.[stat] ?? 0) + (stat === 'hp' ? mon.perkHp ?? 0 : 0)) / 100;
+    const boost = ((mon.statBoosts?.[stat] ?? 0) + (mon.eventBoosts?.[stat] ?? 0) + (mon.evoDeclineBoost ?? 0) + (stat === 'hp' ? (mon.perkHp ?? 0) + (mon.alpha ? ALPHA_MARK_HP : 0) : 0)) / 100;
     stats[stat] = Math.floor(raw * (1 + perStack * stacks + boost) * (content.balance.careEffects ? careMultiplier(mon.care, stat) : 1));
   }
+  // Greenneedle gn.38 Specification: made, polished. Its highest stat 20% higher, its lowest 10% lower (ties: HP, Atk, Def, SpA, SpD, Spe order).
+  if (mon.fixedAbility === 'specification') {
+    const hi = STAT_NAMES.reduce((a, b) => (stats[b] > stats[a] ? b : a));
+    const lo = STAT_NAMES.reduce((a, b) => (stats[b] < stats[a] ? b : a));
+    stats[hi] = Math.floor(stats[hi] * 1.2);
+    if (lo !== hi) stats[lo] = Math.max(1, Math.floor(stats[lo] * 0.9));
+  }
+  // A held item that raises max HP (the Giant's Mark).
+  const heldHp = heldHpPercent(content, mon);
+  if (heldHp) stats.hp = Math.floor(stats.hp * (1 + heldHp / 100));
   // Dynamax doubles HP for its turns (battle/transform.ts).
   if (mon.dynamaxed) stats.hp *= 2;
   // Overcharged (Beta 0.6 Pokémon moments): HP x1.5, every other stat doubled, until the battle ends.
   if (mon.overcharged) {
     for (const stat of STAT_NAMES) stats[stat] = Math.floor(stats[stat] * (stat === 'hp' ? 1.5 : 2));
   }
+  // A last stand (pack Part 2B): its stat multipliers, max HP included, until the battle ends.
+  const stand = mon.revivalStatus ? REVIVAL_STATUSES[mon.revivalStatus] : undefined;
+  if (stand) for (const stat of STAT_NAMES) stats[stat] = Math.floor(stats[stat] * (stand.stats[stat] ?? 1));
   return stats;
 }
 

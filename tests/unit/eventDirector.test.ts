@@ -1,8 +1,10 @@
 // The Event Director (Electric §2C): story-aware eligibility and remembered choices.
 
 import { describe, expect, it } from 'vitest';
-import { eligibleEvents } from '../../src/core/events';
+import { conditionMet, eligibleEvents } from '../../src/core/events';
 import { createPokemon } from '../../src/core/pokemon';
+import { registerRival } from '../../src/core/rivals/overhaul';
+import { mainRival } from '../../src/core/rivals/questlines';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { content } from './helpers';
 
@@ -27,9 +29,18 @@ describe('Event Director conditions', () => {
     expect(ids(run)).not.toContain('quiet-bond');
     expect(ids(run)).not.toContain('old-rival-old-friend');
     run.story.relationships.push({ open: true, kind: 'bond', a: { kind: 'pokemon', id: 'a' }, b: { kind: 'pokemon', id: 'b' } } as never);
-    run.story.rivals.push({ encounters: 3 } as never);
+    run.story.rivals.push({ id: 'blue', encounters: 3 } as never);
     expect(ids(run)).toContain('quiet-bond');
-    expect(ids(run)).toContain('old-rival-old-friend');
+    // Catalog batch 5: the old rival is now a rival beat, gated by the rival's feelings too (respect 3+).
+    expect(ids(run)).not.toContain('old-rival-old-friend');
+    registerRival(run, { id: 'blue', role: 'main', personality: 'underdog', style: 'blitz', arc: 'prodigy-learns-humility' }).feelings.respect = 3;
+    expect(mainRival(run)?.id).toBe('blue');
+    // Its stage comes from the catalog placement and its turn from the rival slot (a due questline beat goes first; covered in
+    // rivalQuestlines.test.ts), so check the rival gates themselves here.
+    const gates = content.events.get('old-rival-old-friend')!.requires.filter((c) => !(c.kind === 'rivalQuest' && c.slotFree));
+    expect(gates.every((c) => conditionMet(content, run, c))).toBe(true);
+    run.expansion!.rival!.blue!.feelings.respect = 2;
+    expect(gates.every((c) => conditionMet(content, run, c))).toBe(false);
   });
 
   it('the Overdrive unusual events are rare', () => {
@@ -42,12 +53,12 @@ describe('a rival who became a friend (left-out 2.2)', () => {
     const run = late('dir-ev-ally');
     run.party.push(createPokemon(content, 'rattata', 5, 'extra'));
     run.story.rivals.push({ encounters: 3, state: 'recurring' } as never);
+    run.story.rivals[0]!.state = 'ally';
+    // Catalog Overhaul row 12: the ally's gift merged into R15's gift (rival-trap-gift) and is retired, never drawn;
+    // the swap is now R7's finale (Borrowed Team), drawn only by the rival questline schedule.
+    expect(content.events.get('rival-gift')!.disabled).toBe(true);
     expect(ids(run)).not.toContain('rival-gift');
     expect(ids(run)).not.toContain('rival-swap');
-    run.story.rivals[0]!.state = 'ally';
-    expect(ids(run)).toContain('rival-gift');
-    expect(ids(run)).toContain('rival-swap');
-    const gift = content.events.get('rival-gift')!;
-    expect(JSON.stringify(gift)).toContain('"join"');
+    expect(content.events.get('rival-swap')!.requires).toContainEqual({ kind: 'rivalQuest', beat: 'R7.finale' });
   });
 });

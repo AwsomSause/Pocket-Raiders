@@ -13,14 +13,16 @@ const play = (run: RunState, id: string, choice: number) => { const f = debugFor
 const flag = (run: RunState, key: string) => Number(run.story.flags[`ev:${key}`] ?? 0);
 
 describe('Fuchsia canon: the event graph', () => {
-  const ids = [...content.events.keys()].filter((id) => id.startsWith(P));
-  const targets = (id: string) => content.events.get(id)!.choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).filter((e) => e.kind === 'addEvent').map((e) => (e as { eventId: string }).eventId);
+  // Retired rooms (the old factory rooms, rebuilt as Greenneedle gn.17) stay for saved runs but are never reached.
+  const ids = [...content.events.keys()].filter((id) => id.startsWith(P) && !content.events.get(id)!.disabled);
+  const targets = (id: string) => [...content.events.get(id)!.choices, ...content.events.get(id)!.remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).filter((e) => e.kind === 'addEvent' || e.kind === 'laterEvent').map((e) => (e as { eventId: string }).eventId); // laterEvent: the Weakest Paras, again at the next rest
   it('every target exists and every room is reachable from a gate', () => {
     for (const id of ids) for (const t of targets(id)) expect(content.events.has(t), `${id} -> ${t}`).toBe(true);
-    const gates = ids.filter((id) => content.events.get(id)!.canon);
+    // Gates, plus the follow-up placed at a later visit (the Tauros that looked back).
+    const gates = [...ids.filter((id) => content.events.get(id)!.canon), `${P}tauros-back`];
     const reach = new Set<string>(gates);
     for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) if (!reach.has(t)) { reach.add(t); again = true; } }
-    expect([...reach].sort()).toEqual(ids.sort());
+    expect([...reach].filter((id) => id.startsWith(P)).sort()).toEqual(ids.sort());
   });
   it('the gates carry catalog ids, and each Fuchsia space with a play-through has one', () => {
     const wanted = ['factory', 'safari', 'savanna', 'jungle', 'warden', 'tauros', 'zoo', 'snag'];
@@ -30,20 +32,22 @@ describe('Fuchsia canon: the event graph', () => {
       expect(ids.some((e) => content.events.get(e)!.canon === id), id).toBe(true);
     }
   });
-  it('the Fuchsia menu rolls three optional spaces, at most two of them Pseudo Stages', () => {
+  it('the Fuchsia menu has the Rod Brothers and rolls three optional spaces, at most two of them Pseudo Stages', () => {
     for (let i = 0; i < 40; i++) {
       const menu = buildTownMenu(canonKanto, { seed: `FM${i}`, slot: 'stage-5', flags: new Set(), completed: new Set() });
-      expect(menu.length).toBe(3);
+      expect(menu).toContain('cs.kanto.fuchsia.gurus'); // Always (KANTO_PLACED_4), plus three rolled
+      expect(menu.length).toBe(4);
       expect(menu.filter((m) => /factory|savanna|jungle/.test(m)).length).toBeLessThanOrEqual(2);
     }
   });
 });
 
 describe('Polluted Factory', () => {
-  it('the gate adds the Sludge field (Poison +10%) and opens the first room', () => {
+  // The factory was rebuilt as Greenneedle gn.17 (tests/unit/greenneedle4.test.ts); its Kanto gate opens the new factory.
+  it('the gate opens the Greenneedle factory: the waiver, then the pipes', () => {
     const out = play(begin('FAC1'), 'factory', 0).run;
-    expect(out.tempEffects.some((t) => JSON.stringify(t).includes('"poison"'))).toBe(true);
-    expect(out.stage!.map.nodes.some((n) => n.sides.some((s) => s.eventId === `${P}factory-n1`))).toBe(true);
+    expect(flag(out, 'factory-entered')).toBe(1);
+    expect(out.stage!.map.nodes.some((n) => n.sides.some((s) => s.eventId === 'gn-17-pipes'))).toBe(true);
   });
   it('the pipes burst in about a quarter of crossings and poison the lead (Poison types are immune)', () => {
     let burst = 0;
@@ -107,19 +111,16 @@ describe('Polluted Factory', () => {
   });
 });
 
-describe('Safari Land (a plain event)', () => {
-  it('the entry costs ₽500, needs the money and starts a wild fight in the Safari pool', () => {
+describe('Safari Land', () => {
+  it('the entry costs ₽500, needs the money and opens the Safari Land park', () => {
     const rich = begin('SAF1');
     rich.money = 1000;
     const f = debugForceEvent(content, structuredClone(rich), `${P}safari`);
     const r = chooseEvent(content, f.run, f.sideId, 0).run;
     expect(r.money).toBe(500);
-    expect(flag(r, 'kanto-safari-balls')).toBe(30);
-    expect(flag(r, 'kanto-safari-steps')).toBe(500);
-    const battle = room('safari').choices[0]!.success.battle as { kind: string; species: string[] };
-    expect(battle.kind).toBe('wild');
-    expect(battle.species).toContain('chansey');
-    for (const id of battle.species) expect(content.species.has(id)).toBe(true);
+    // Rebuilt as Greenneedle gn.18: the park is the story-only minigame gn-safari (30 Balls, 500 steps; tests/unit/greenneedle4.test.ts).
+    expect(r.stage!.map.nodes.some((n) => n.sides.some((s) => s.kind === 'minigame' && s.minigameId === 'gn-safari'))).toBe(true);
+    expect(JSON.stringify(content.minigames.games.find((g) => g.id === 'gn-safari'))).toMatch(/"steps":500.*"balls":30|"balls":30.*"steps":500/);
     const poor = begin('SAF2');
     poor.money = 100;
     const g = debugForceEvent(content, structuredClone(poor), `${P}safari`);
@@ -127,50 +128,48 @@ describe('Safari Land (a plain event)', () => {
   });
 });
 
-describe('Warden, Tauros, Zoo and the Snag Test', () => {
-  it('the three-node tooth search finds them in the Center 40%, Area 2 35%, Area 3 25%', () => {
-    const c1 = room('warden-n1').choices[0]!.chance!;
-    const c2 = room('warden-n2').choices[0]!.chance!;
+describe('Warden, Tauros, Zoo and the Snag Test (KANTO_PLACED_2)', () => {
+  it('the tooth search finds them in the Center 40%, Area 2 35%, Area 3 25%, and pays TM Strength and ten Safari Balls', () => {
+    const c1 = room('warden').choices[0]!.chance!;
+    const c2 = room('warden-elsewhere').choices[0]!.chance!;
     expect(c1).toBeCloseTo(0.4);
-    expect((1 - c1) * c2).toBeCloseTo(0.35);
-    expect((1 - c1) * (1 - c2)).toBeCloseTo(0.25);
-    expect(room('warden-n3').choices[0]!.failure).toBeUndefined();
-    const found = room('warden-n3').choices[0]!.success.effects;
-    expect(found).toContainEqual({ kind: 'teachMove', move: 'strength' });
-    expect(found).toContainEqual({ kind: 'flag', key: 'kanto-safari-pass', amount: 1 });
+    expect((1 - c1) * c2).toBeCloseTo(0.35, 2);
+    expect((1 - c1) * (1 - c2)).toBeCloseTo(0.25, 2);
+    for (const r of ['warden-center', 'warden-area2']) {
+      const found = room(r).choices[0]!.success.effects;
+      expect(found).toContainEqual({ kind: 'teachMove', move: 'strength' });
+      expect(found).toContainEqual({ kind: 'item', id: 'safari-ball', count: 10 });
+    }
+    // Area 3 is a choice, never a battle; waiting costs one Safari step.
+    expect(room('warden-area3').choices.every((c) => !c.success.battle)).toBe(true);
+    expect(room('warden-area3').choices[2]!.success.effects).toContainEqual({ kind: 'loseItem', id: 'safari-ball', count: 1 });
   });
-  it('Tauros: dodging is safe, bait is 40% a ball, rock 25% and costs 2; the haul gives one Tauros and a Charm for each extra', () => {
-    expect(room('tauros').choices[0]!.success.effects).toEqual([]);
-    expect(room('tauros-r1').choices.map((c) => c.chance)).toEqual([0.4, 0.25, undefined]);
-    let run = begin('TAU');
-    run.story.flags['ev:kanto-tauros-caught'] = 3;
-    const first = play(run, 'tauros-end', 0);
-    expect(first.run.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'tauros')).toBe(true);
-    expect(flag(first.run, 'kanto-tauros-caught')).toBe(2);
-    run = first.run;
-    run.phase = 'map';
-    run.pending = [];
-    run.story.flags['ev:kanto-tauros-joined'] = 1;
-    const second = play(run, 'tauros-end', 1);
-    expect(flag(second.run, 'kanto-tauros-caught')).toBe(1);
-    expect(content.catalog.get('tauros-charm')?.name).toBe('Tauros Charm');
+  it('Tauros: dodging is safe, bait is 40% a ball for six throws, rock 25% and costs two; extras become Tauros Charms', () => {
+    expect(room('tauros').choices[0]!.success.battle).toBeUndefined();
+    expect(room('tauros-bait').choices[0]!.chance).toBe(0.4);
+    expect(room('tauros-bait').remembers[0]!.when).toEqual([{ kind: 'flag', key: 'kanto-tauros-throws', atLeast: 6, atMost: 99 }]);
+    const rock = room('tauros-rock').choices[0]!;
+    expect(rock.chance).toBe(0.25);
+    expect(rock.failure!.effects).toContainEqual({ kind: 'loseItem', id: 'safari-ball', count: 2 });
+    expect(room('tauros-more').choices[0]!.success.effects).toContainEqual({ kind: 'item', id: 'tauros-charm', count: 1 });
+    const run = begin('TAU'); run.inventory['safari-ball'] = 3;
+    const out = play(run, 'tauros-back', 0).run;
+    expect(out.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'tauros') || out.party.some((m) => m.speciesId === 'tauros')).toBe(true);
+    expect(out.inventory['safari-ball']).toBe(2);
   });
   it('the Zoo sells one Rare Candy for ₽10,000', () => {
     const run = begin('ZOO');
     run.money = 12000;
-    const out = play(run, 'zoo', 1).run;
+    const out = play(run, 'zoo', 3).run;
     expect(out.money).toBe(2000);
-    expect(flag(out, 'kanto-zoo-candy')).toBe(1);
-    const again = structuredClone(out);
-    again.money = 12000;
-    const f = debugForceEvent(content, again, `${P}zoo`);
-    expect(conditionMet(content, f.run, room('zoo').choices[1]!.requires[1]!)).toBe(false);
+    expect(room('zoo').choices[3]!.success.effects).toContainEqual({ kind: 'item', id: 'rare-candy', count: 1 });
   });
-  it('the Snag Test is a 2-on-1 against a Snag\'em operative; winning gives the Snag Ball', () => {
+  it('the Snag Test is a two-on-one with the snagged Rhyhorn on their side; winning gives the Snag Ball', () => {
     const b = room('snag').choices[0]!.success.battle!;
-    expect(b.kind).toBe('trainer');
-    expect(b.kind === 'trainer' && b.ally).toBe('rhyhorn');
+    expect(b.kind === 'trainer' && b.team).toContain('rhyhorn');
+    expect(b.kind === 'trainer' && b.format).toBe('doubles');
     expect(b.win).toContainEqual({ kind: 'item', id: 'snag-ball', count: 1 });
+    expect(room('snag').choices[1]!.success.effects).toContainEqual({ kind: 'flag', key: 'intel', amount: 1 });
     const out = play(begin('SNAG'), 'snag', 0).run;
     expect(out.battle).toBeTruthy();
   });

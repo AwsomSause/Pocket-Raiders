@@ -1,0 +1,3121 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "black-friday",
+   "name": "The Black Friday Stampede",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A crowd heaves at the doors of a shop on opening day. \"First pick to whoever gets there first!\" A small child is crushed against the glass, holding her mum's hand, nearly crying.",
+   "choices": [
+    {
+     "label": "Push to the front.",
+     "success": {
+      "text": "You shoulder through. You get the best thing on the shelf. When you turn round, the child is crying properly, and people are looking at you.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a child go first.",
+     "success": {
+      "text": "You make a gap, and the child slips into it and gets her prize. You get what is left. Her mum catches your arm on the way out. \"Here. It was my mother's. It brings luck to the patient.\"",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "potion",
+         "super-potion",
+         "great-ball"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "lucky-egg",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You let a child go first, and her mother gave you a Lucky Egg.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "counterfeit-cop",
+   "name": "The Counterfeit Charm Cop",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A cop stands at a charm stall, glaring at the vendor. \"That charm's fake. I need a witness who saw the sale.\" The vendor looks at you. His boy, beside him, looks at the floor.",
+   "choices": [
+    {
+     "label": "Witness.",
+     "success": {
+      "text": "You tell what you saw. The vendor goes quietly; the boy watches him go and does not cry. \"He'll run the stall now,\" says the cop, softer. \"Maybe he'll run it straight.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "counterfeit-witness",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "money",
+        "amount": 200
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy the fake.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 60
+      }
+     ],
+     "success": {
+      "text": "You buy one, cheap. The vendor winks. It is a pretty thing. It will work once, you think, and then it will break, like the man who sold it.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -60
+       },
+       {
+        "kind": "item",
+        "id": "fake-charm",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay out of it.",
+     "success": {
+      "text": "You keep walking. Behind you the argument goes on without you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "counterfeit-son-stall",
+   "name": "An Honest Stall",
+   "group": "Merchants & Deals",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flagAge",
+     "key": "counterfeit-witness",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "counterfeit-son-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a3d2a",
+    "effect": "none"
+   },
+   "intro": "The charm stall again, a stage on. The boy runs it now. Every charm has a tag: what it really does, written out in careful letters. He recognises you. He does not look away.",
+   "choices": [
+    {
+     "label": "Buy a real charm (300).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "He wraps it properly. \"Dad said you were the one who told.\" A pause. \"Thanks. I mean it. It's better like this.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "item",
+        "id": "amulet-coin",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "counterfeit-son-seen",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask how his dad is.",
+     "success": {
+      "text": "\"He writes,\" says the boy. \"He says he's sorry. He says it a lot.\" He gives you a charm for free. \"For asking.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cleanse-tag",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "counterfeit-son-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "scalper-alley",
+   "name": "Scalper Alley",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.roughneck"
+    ],
+    "tint": "#201a28",
+    "effect": "none"
+   },
+   "intro": "A scalper in an alley holds up a tier-three item, the last of the shop's stock. \"Triple price. Bought the lot this morning. Shop's empty, so it's me or nothing.\"",
+   "choices": [
+    {
+     "label": "Buy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1200
+      }
+     ],
+     "success": {
+      "text": "You pay triple. It stings, and it works. The shop stays empty on your next visit, and the next.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Scalped shelves",
+        "effects": [
+         {
+          "kind": "shopUnlockOffset",
+          "value": -1
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report him.",
+     "success": {
+      "text": "You find a patrol. He is gone by the time they come, but the stock is in a crate behind him. By morning the shop's shelves are full again, a little fuller than before.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Restocked shelves",
+        "effects": [
+         {
+          "kind": "shopEarlyRareStock",
+          "count": 1
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave him to wait for someone desperate.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "trade-wind-caravan",
+   "name": "The Trade Wind Caravan",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A caravan of three wagons by the road: a spice trader, a stone trader, a tailor. \"You may trade with one of us,\" says the eldest. \"Only one. We do not come back this way.\"",
+   "choices": [
+    {
+     "label": "The spice trader.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "Her wagon smells of a hundred places. She sells you snacks and Berries and tells you which ones your Pokémon will love. The other two wagons roll on without you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fresh-water",
+         "soda-pop",
+         "lemonade",
+         "moomoo-milk",
+         "lava-cookie",
+         "old-gateau",
+         "casteliacone",
+         "sweet-heart"
+        ]
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "flag",
+        "key": "caravan-spice",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The stone trader.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "His stones glow in their straw. He lets you hold each one before you choose. The other two wagons roll on without you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fire-stone",
+         "water-stone",
+         "thunder-stone",
+         "leaf-stone",
+         "moon-stone",
+         "sun-stone",
+         "dusk-stone",
+         "dawn-stone",
+         "shiny-stone",
+         "ice-stone"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "caravan-stone",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The tailor.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "She measures your Pokémon with great seriousness and sews something that fits exactly. The other two wagons roll on without you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "silk-scarf",
+         "choice-scarf"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "caravan-tailor",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "bond-ceremony",
+   "name": "Bond Ceremony",
+   "group": "Training and growth",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#402838",
+    "effect": "hearts"
+   },
+   "intro": "A shrine where trainers and their Pokémon promise to stay together. Old ribbons on every post, faded, still tied. The keeper says, \"A vow here is for good. No trading it away. No letting go.\"",
+   "choices": [
+    {
+     "label": "Make the vow with a Pokémon.",
+     "pick": {},
+     "success": {
+      "text": "You kneel. Your Pokémon puts its head against yours. You tie a ribbon on the post together. It will not be released or traded, and nothing will make it love you less. If it is ever lost, the vow will stay with all of you.",
+      "effects": [
+       {
+        "kind": "vow",
+        "who": "picked"
+       },
+       {
+        "kind": "friendship",
+        "amount": 20,
+        "who": "picked"
+       },
+       {
+        "kind": "moment",
+        "text": "You made a vow at the Bond shrine.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "\"There is no hurry,\" says the keeper. \"The ribbons wait.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ghetsis-offer",
+   "name": "Ghetsis's Offer",
+   "group": "Tricksters, villains and teams",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#281038",
+    "effect": "fog"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma"
+    }
+   ],
+   "intro": "Ghetsis, in his robes, at the edge of a square, as if he has always been standing there. \"Power, child. Take it. Plasma rewards those who see clearly.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "requires": [
+      {
+       "kind": "standWith",
+       "joined": false
+      }
+     ],
+     "success": {
+      "text": "He smiles, and something huge and three-headed comes to your side. Plasma's colours are yours now. Somewhere, a part of you is already wondering what it cost.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "hydreigon"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "standWith",
+        "action": "join"
+       },
+       {
+        "kind": "moment",
+        "text": "You took Ghetsis's offer and stood with Plasma.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Fool.\" He does not raise his voice. He simply turns away, and the square seems colder after.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "two-visitors",
+   "name": "Two Visitors",
+   "group": "Shadow Pokémon",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kindness",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "shadow-activity",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#20202c",
+    "effect": "fog"
+   },
+   "intro": "A sanctuary keeper and a collector in a good coat have set up on the same crate. Both are looking at the Shadow Pokémon you rescued. The keeper says \"Let me heal it.\" The collector says \"Let me pay you.\"",
+   "choices": [
+    {
+     "label": "The keeper.",
+     "requires": [
+      {
+       "kind": "partyShadow"
+      },
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "She takes it gently, talking to it the whole time. \"A region,\" she says. \"Then it comes back to you. Clean.\" It looks back at you once, over her shoulder.",
+      "effects": [
+       {
+        "kind": "sendAway",
+        "key": "keeper-shadow",
+        "shadow": true,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The collector.",
+     "requires": [
+      {
+       "kind": "partyShadow"
+      },
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "He counts out the money without looking at it. It does not look at you as it goes. \"It'll have a good home,\" he says. You will see it again, in a place that is not a home at all.",
+      "effects": [
+       {
+        "kind": "sendAway",
+        "key": "collector-shadow",
+        "shadow": true,
+        "who": "lead"
+       },
+       {
+        "kind": "money",
+        "amount": 800
+       },
+       {
+        "kind": "flag",
+        "key": "shadow-sold",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Neither.",
+     "success": {
+      "text": "\"It stays with me.\" The keeper nods. The collector shrugs and folds his coat.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "keeper-shadow-returns",
+   "name": "The Keeper Returns",
+   "group": "Shadow Pokémon",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "keeper-shadow",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "keeper-shadow-back",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a4a52",
+    "effect": "none"
+   },
+   "intro": "The sanctuary keeper is waiting on the road, and beside her, clear-eyed, is the Pokémon you rescued. The darkness is gone out of it. It sees you and comes at a run.",
+   "choices": [
+    {
+     "label": "Welcome it home.",
+     "success": {
+      "text": "It is warm. It is itself. The keeper wipes her eyes. \"It asked for you every day.\"",
+      "effects": [
+       {
+        "kind": "bringBack",
+        "key": "keeper-shadow",
+        "levels": 2,
+        "friendship": 30,
+        "purify": true
+       },
+       {
+        "kind": "flag",
+        "key": "keeper-shadow-back",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Pokémon you rescued came back purified.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-boss-phone-call",
+   "name": "Boss Phone Call",
+   "group": "Villain Teams",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1418",
+    "effect": "flicker"
+   },
+   "intro": "A public phone rings by itself as you pass. When you pick up, a rasping voice says: \"I've been watching you. Choose your words.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You say nothing. The voice likes the sound of itself, and talks too long. When the line goes dead you know one piece of their plan.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed it a lie.",
+     "success": {
+      "text": "You tell it where you are going. You are not going there. It thanks you. Somewhere, an Operation sets up at the wrong place and waits for nobody.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": -1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-misled",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hang up.",
+     "success": {
+      "text": "You put the phone back on its hook. It does not ring again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-letter-mixup",
+   "name": "Villain Letter Mix-up",
+   "group": "Villain Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "The postman hands you a letter by mistake. It is addressed to a Grunt, and it is orders.",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "Times, places, a code word. You fold it carefully and memorise it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Rewrite it.",
+     "success": {
+      "text": "You steam it open and change the orders. Stand down. Stay put. You seal it again. The postman takes it on. Somewhere, an Operation is called off by its own side.",
+      "effects": [
+       {
+        "kind": "evil",
+        "op": "foiled"
+       },
+       {
+        "kind": "moment",
+        "text": "You rewrote a Grunt's orders and called off an Operation.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Return it.",
+     "success": {
+      "text": "You give it back to the postman. He is relieved, and pays you a little for the trouble.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 250
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-spy-dead-drop",
+   "name": "Spy Dead Drop",
+   "group": "Villain Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2024",
+    "effect": "none"
+   },
+   "intro": "An envelope behind a loose brick, sealed, addressed to no one. A dead drop.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "Inside: a step of the evil team's plan, in somebody's neat hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Swap it.",
+     "success": {
+      "text": "You copy the handwriting as best you can and leave them a plan of your own. Somebody will follow it, carefully, the wrong way.",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": -1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-misled",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You push the brick back in. Not your business. Not today.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-stakeout",
+   "name": "Stakeout",
+   "group": "Villain Teams",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#1c1c28",
+    "effect": "none"
+   },
+   "intro": "Across the street, in a café that is always shut, a shady meeting is starting. Uniforms under coats.",
+   "choices": [
+    {
+     "label": "Wait and watch. (a node)",
+     "success": {
+      "text": "You wait. And wait. You see everything: who, what, two steps of the plan. Your legs are stiff when you stand.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Burst in.",
+     "success": {
+      "text": "\"It's a setup!\" \"It's a kid.\" \"Get the kid!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Courier",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "intel",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 400
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-doom-clock",
+   "name": "Doom Clock Bomb",
+   "group": "Heists & Hideouts",
+   "stop": "hideout",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a0c0c",
+    "effect": "flicker"
+   },
+   "intro": "A red clock ticking over crates in the hideout. Two wires, red and blue, run to a dented box. A Grunt behind a barrel whispers: \"Don't ask me. I just carry them.\"",
+   "choices": [
+    {
+     "label": "Red.",
+     "chance": 0.5,
+     "success": {
+      "text": "Snip. The clock stops. Everybody breathes again, including the Grunt.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     },
+     "failure": {
+      "text": "Snip. A pipe bursts. Water floods the hideout to your knees. Nobody is hurt, but it takes a long time to wade out.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Blue.",
+     "chance": 0.5,
+     "success": {
+      "text": "Snip. The clock stops. Everybody breathes again, including the Grunt.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 500
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     },
+     "failure": {
+      "text": "Snip. A pipe bursts. Water floods the hideout to your knees. Nobody is hurt, but it takes a long time to wade out.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use a Psychic- or Steel-type.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "psychic",
+        "steel"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon studies the box for a long, long time, then holds both wires still while you take the clock off its mount. Slow. Safe.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 250
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "psychic",
+          "steel"
+         ]
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-hostage-negotiation",
+   "name": "Hostage Negotiation",
+   "group": "Villain Teams",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#241820",
+    "effect": "none"
+   },
+   "intro": "A Grunt holds a trainer's Pokémon behind a crate. \"One step closer and it's over!\" The trainer is crying. Everyone is looking at you.",
+   "choices": [
+    {
+     "label": "Talk (Reputation 3).",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rep",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "They know your name. You talk slowly. You tell them it is over and there is a way out. They believe you. They put it down.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade an item.",
+     "success": {
+      "text": "You hold something out. \"Take this instead.\" He grabs it and runs. The Pokémon runs the other way, into its trainer's arms.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Force it.",
+     "success": {
+      "text": "\"Fine!\" In the scramble the hostage is knocked down. It gets up, shaky. It will be all right. Now there's just him and you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Hostage Taker",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "vt-shadow-exchange",
+   "name": "Shadow Pokémon Exchange",
+   "group": "Heists & Hideouts",
+   "stop": "hideout",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#1c0c2a",
+    "effect": "fog"
+   },
+   "intro": "A dealer in a back room. \"I lend Shadow Pokémon. A few battles. It hits hard. Just keep it away from the light.\" Nobody is making you.",
+   "choices": [
+    {
+     "label": "Borrow it.",
+     "success": {
+      "text": "It is cold to the touch and does not look at you. The dealer writes your name in a book.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [],
+        "types": [],
+        "levelBonus": 1,
+        "shinyMultiplier": 1,
+        "shadow": true
+       },
+       {
+        "kind": "flag",
+        "key": "shadow-activity",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "shadow-tally",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Suit yourself.\" The book closes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "face-villain-pep",
+   "name": "Villain Boss Pep Talk",
+   "group": "Famous Faces",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#2a1e1e",
+    "effect": "none"
+   },
+   "intro": "A villain boss steps out of the shadows with a lukewarm smile. \"You're clever. Wasted on the good guys, honestly.\"",
+   "choices": [
+    {
+     "label": "Join you.",
+     "requires": [
+      {
+       "kind": "standWith",
+       "joined": false
+      }
+     ],
+     "success": {
+      "text": "He laughs, delighted, and claps you on the shoulder like an old friend. \"Welcome. You'll get a name. Everyone does.\" You stand with them now.",
+      "effects": [
+       {
+        "kind": "standWith",
+        "action": "join"
+       },
+       {
+        "kind": "moment",
+        "text": "You joined the evil team.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Pity.\" He means it, which is somehow worse.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Why me?",
+     "success": {
+      "text": "\"Because you win,\" he says, \"and you don't enjoy it. That's rare. The ones who enjoy it are easy to replace.\" He waits.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "face-villain-pep"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "giovanni-offer",
+   "name": "Giovanni's Offer",
+   "group": "Famous faces",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.giovanni"
+    ],
+    "tint": "#201010",
+    "effect": "fog"
+   },
+   "intro": "Giovanni, a Persian at his feet, looking at you the way a buyer looks at a horse. \"Join Team Rocket. I reward loyalty.\"",
+   "choices": [
+    {
+     "label": "Accept.",
+     "requires": [
+      {
+       "kind": "standWith",
+       "joined": false
+      },
+      {
+       "kind": "evil",
+       "team": "rocket"
+      }
+     ],
+     "success": {
+      "text": "He hands you an envelope and a black uniform. \"Good.\" You stand with Rocket now.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 3000
+       },
+       {
+        "kind": "standWith",
+        "action": "join"
+       },
+       {
+        "kind": "moment",
+        "text": "You accepted Giovanni's offer.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "\"Then you'll be crushed.\" He does not even stand up. The Persian does.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Giovanni",
+       "bossId": "giovanni",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 4000
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kind-total",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-bounty-hunter",
+   "name": "The Bounty Hunter",
+   "group": "Run-Wide Modifiers",
+   "stop": "ambush",
+   "rarity": "rare",
+   "types": [
+    "dark"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#241414",
+    "effect": "shake"
+   },
+   "intro": "A hard-eyed hunter leans out of a doorway. \"Vasko. I hunt the strongest one in any team. Sign my contract: three times, down the road, I come for your best. Beat me all three times and the pay is big.\"",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "You sign. He folds the paper into his coat. \"Your best,\" he says. \"Keep it sharp.\" Then he is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "bounty-signed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "He shrugs. \"There's always someone stronger to sign.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-bounty-hunter-duel",
+   "name": "Vasko Comes Back",
+   "group": "Run-Wide Modifiers",
+   "stop": "ambush",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "bounty-signed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "bounty-won",
+     "atLeast": 0,
+     "atMost": 2
+    },
+    {
+     "kind": "flag",
+     "key": "bounty-lost",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a2a",
+    "effect": "none"
+   },
+   "intro": "Vasko steps out onto the road. \"As agreed. Your best against mine. One on one.\" He counts the marks on his sleeve. {flag:bounty-won} down.",
+   "choices": [
+    {
+     "label": "Lead with your best.",
+     "success": {
+      "text": "\"Good. Don't hold back.\" His first Pokémon goes for yours and nothing else.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "bounty-lost",
+         "amount": 1
+        }
+       ],
+       "rule": {
+        "suddenDeath": true
+       },
+       "name": "Vasko",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "bounty-won",
+         "amount": 1
+        },
+        {
+         "kind": "seeAgain",
+         "eventId": "rk-bounty-hunter-duel"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-bounty-hunter-paid",
+   "name": "The Bounty, Paid",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 2,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "bounty-won",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "bounty-paid",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a2a",
+    "effect": "none"
+   },
+   "intro": "Vasko waits by the road with a heavy purse and a torn contract. \"Three times. Nobody does three times.\" He looks at your best Pokémon a long moment. \"Keep it.\"",
+   "choices": [
+    {
+     "label": "Take the pay.",
+     "success": {
+      "text": "It is a great deal of money. He shakes your hand, and your Pokémon's paw, very seriously.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 4000
+       },
+       {
+        "kind": "flag",
+        "key": "bounty-paid",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "top"
+       },
+       {
+        "kind": "moment",
+        "text": "You beat Vasko three times.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-interview",
+   "name": "The Interview",
+   "group": "Run-Wide Modifiers",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#20242a",
+    "effect": "none"
+   },
+   "intro": "A hiring manager with a clipboard. \"What are you best at? Be honest. It decides how you'll grow from here.\"",
+   "choices": [
+    {
+     "label": "Battling.",
+     "success": {
+      "text": "Written down: Battling. Every fight from now on teaches a little more.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-interview-battling",
+        "name": "Focus: Battling",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.1
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catching.",
+     "success": {
+      "text": "Written down: Catching. Every Ball you throw from now on flies a little truer, and every catch pays.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-interview-catching",
+        "name": "Focus: Catching",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "catchMoneyMultiplier",
+          "value": 1.25
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Helping.",
+     "success": {
+      "text": "Written down: Helping. The manager looks up. \"Rare answer.\" Your Pokémon will warm to you faster from now on.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-interview-helping",
+        "name": "Focus: Helping",
+        "effects": [
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.25
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-rule-board",
+   "name": "The Rule Board",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#14202a",
+    "effect": "none"
+   },
+   "intro": "A notice board of house rules, with pins. \"Pin one up,\" says the sign. \"It holds for the rest of your run. So does the reward.\"",
+   "choices": [
+    {
+     "label": "No battle items: money +30%.",
+     "success": {
+      "text": "You pin it. No battle items from now on. Your pockets already feel heavier.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-rule-nobattleitems",
+        "name": "No Battle Items",
+        "effects": [
+         {
+          "kind": "runRule",
+          "id": "no-battle-items"
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.3
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No revives: XP +25%.",
+     "success": {
+      "text": "You pin it. Fainted is fainted from now on. Every lesson sticks harder.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-rule-norevives",
+        "name": "No Revives",
+        "effects": [
+         {
+          "kind": "runRule",
+          "id": "no-revives"
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 1.25
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Double money: foes +2 levels.",
+     "success": {
+      "text": "You pin it. Rich and in danger, from now on.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-rule-richandrisky",
+        "name": "Rich and Risky",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 2
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 2
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the board bare.",
+     "success": {
+      "text": "You leave the pins where they are.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "contract-desk",
+   "name": "The Contract Desk",
+   "group": "Set Pieces",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A broker slides three contracts across the desk, pay and difficulty written on each. \"Easy pays little. Hard pays a lot. Fail me and I remember.\"",
+   "choices": [
+    {
+     "label": "Easy.",
+     "success": {
+      "text": "A small job: a nuisance trainer moved on.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "broker-rep-lost",
+         "amount": 1
+        }
+       ],
+       "name": "Contract: Easy",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Medium.",
+     "success": {
+      "text": "A real job: a gang of three.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "broker-rep-lost",
+         "amount": 1
+        }
+       ],
+       "name": "Contract: Medium",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Hard.",
+     "success": {
+      "text": "The hard job: an ace who has beaten everyone the broker sent.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "broker-rep-lost",
+         "amount": 1
+        }
+       ],
+       "name": "Contract: Hard",
+       "classId": "ace-trainer",
+       "size": 4,
+       "types": [],
+       "levelBonus": 4,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1500
+        },
+        {
+         "kind": "moment",
+         "text": "You took the broker's hard contract and won.",
+         "importance": 55
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "failed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "broker-rep-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The broker remembers the job you failed. She slides only one contract across.",
+     "hide": [
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cursed-treasure",
+   "name": "The Cursed Treasure",
+   "group": "Set Pieces",
+   "stop": "treasure",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#201020",
+    "effect": "glint"
+   },
+   "intro": "A chest wrapped in chains, humming. A note nailed to the lid: \"Whoever takes this, someone else pays.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "The chains fall away at your touch. Inside: something rare and lovely. Somewhere, you feel it, someone's luck just turned.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "cursed-treasure-taken",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it humming in the dark. Nobody pays. Not today.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cursed-treasure-merchant",
+   "name": "The Ruined Merchant",
+   "group": "Set Pieces",
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flagAge",
+     "key": "cursed-treasure-taken",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "cursed-treasure-amends",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3328",
+    "effect": "none"
+   },
+   "intro": "A merchant sits on the steps of a boarded-up shop. Everything went wrong at once, he says: the fire, the debts, the cart. \"Like somebody else's luck landed on me.\" He doesn't know your face. You know his.",
+   "choices": [
+    {
+     "label": "Pay him (1000).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "You press the money into his hands. He does not understand why. He takes it anyway, and holds it, and starts to cry.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "flag",
+        "key": "cursed-treasure-amends",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You made amends to the merchant the treasure ruined.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help him rebuild. (a node)",
+     "success": {
+      "text": "You spend a day hauling and hammering. By the end the shop has a door again. He sells you nothing; he gives you tea.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "cursed-treasure-amends",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell him the truth.",
+     "success": {
+      "text": "You tell him about the chest. He is quiet for a long time. \"Well,\" he says. \"At least now I know it wasn't me.\" It is not forgiveness. It is something.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cursed-treasure-amends",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. He does not look up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cursed-treasure-amends",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-archivist-dilemma",
+   "name": "The Archivist's Dilemma",
+   "group": "Mysteries & Ruins",
+   "stop": "library",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#201c2a",
+    "effect": "glint"
+   },
+   "intro": "An archivist holds two scrolls and looks as if both are her children. \"I can only keep one in the great archive. The war history, or the founding myth. The other burns.\"",
+   "choices": [
+    {
+     "label": "Keep the war history.",
+     "success": {
+      "text": "She files it. The other scroll curls in the fire. From now on this region remembers its war: of land against sea, and the sky that ended it. Their Signs will come to you.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "archive-war",
+        "name": "The War Remembered",
+        "effects": [
+         {
+          "kind": "legendaryFocus",
+          "species": [
+           "groudon",
+           "kyogre",
+           "rayquaza"
+          ],
+          "weight": 4,
+          "gateChance": 0.25
+         }
+        ]
+       },
+       {
+        "kind": "choice",
+        "id": "archivist-keep",
+        "pick": "war",
+        "text": "Kept the war history",
+        "weight": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep the founding myth.",
+     "success": {
+      "text": "She files it. The other scroll curls in the fire. From now on this region remembers how the world began: time, space, and what lies under both. Their Signs will come to you.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "archive-myth",
+        "name": "The Myth Remembered",
+        "effects": [
+         {
+          "kind": "legendaryFocus",
+          "species": [
+           "dialga",
+           "palkia",
+           "giratina"
+          ],
+          "weight": 4,
+          "gateChance": 0.25
+         }
+        ]
+       },
+       {
+        "kind": "choice",
+        "id": "archivist-keep",
+        "pick": "myth",
+        "text": "Kept the founding myth",
+        "weight": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mr-final-page",
+   "name": "The Final Page",
+   "group": "Mysteries & Ruins",
+   "stop": "library",
+   "rarity": "rare",
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1818",
+    "effect": "glint"
+   },
+   "intro": "The last page of a great book, left open on a lectern. Three endings written in three hands. Whichever you read becomes yours.",
+   "choices": [
+    {
+     "label": "Read the hopeful ending.",
+     "success": {
+      "text": "Everyone gets home. Nobody is left behind. You close the book feeling lighter. Your Pokémon feel it too: they warm to you faster from now on.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "final-page-hopeful",
+        "name": "The Hopeful Ending",
+        "effects": [
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.2
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ending-hopeful",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the honest one.",
+     "success": {
+      "text": "Some get home. Some do not. It is true, and it hurts, and it teaches. Every battle teaches a little more from now on.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "final-page-honest",
+        "name": "The Honest Ending",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.08
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ending-honest",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read the strange one.",
+     "success": {
+      "text": "It does not end. It turns into a map of a place that is not there, and then into a list of colours. Strange things will find you more often from now on.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "final-page-strange",
+        "name": "The Strange Ending",
+        "effects": [
+         {
+          "kind": "shinyChanceMultiplier",
+          "value": 1.5
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ending-strange",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-pact-booth",
+   "name": "The Pact Booth",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1414",
+    "effect": "glint"
+   },
+   "intro": "A clerk in a red coat pushes a contract across the counter. \"Harder fights, richer pay. Sign here.\" The contract reads: THE PACT. Gain: every prize pays half again (money x1.5). Cost: every foe fights two levels higher. For the rest of the run.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "The ink dries. The road ahead feels meaner, and so does your wallet: fuller.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-pact-booth",
+        "name": "The Pact",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.5
+         },
+         {
+          "kind": "enemyLevelOffset",
+          "value": 2
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "You read every line again. THE PACT. Gain: every prize pays half again (money x1.5). Cost: every foe fights two levels higher. For the rest of the run. The clerk waits, pen out.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-pact-booth"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You hand the pen back. Nothing changes. That was allowed.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-curse-lottery",
+   "name": "The Curse Lottery",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c1028",
+    "effect": "fog"
+   },
+   "intro": "A hooded clerk spins a drum of tickets. \"Every curse comes with its blessing. Draw one. You'll read both before you sign.\"",
+   "choices": [
+    {
+     "label": "Draw a ticket.",
+     "success": {
+      "text": "The drum stops. A ticket drops into your hand, face up.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rk-curse-ticket-1",
+         "rk-curse-ticket-2",
+         "rk-curse-ticket-3"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "A ticket gives one blessing and one curse, for the rest of the run. You read both before you sign. Nothing is hidden.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-curse-lottery"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You walk past the booth. The drum keeps spinning for someone else.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-curse-ticket-1",
+   "name": "A Lottery Ticket",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2448",
+    "effect": "none"
+   },
+   "intro": "The ticket reads: BLESSING: Every battle teaches more (XP x1.2). CURSE: Every hit lands harder on you (damage taken x1.1). For the rest of the run.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "You sign the back of the ticket. It burns away, and both halves of it stay with you.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-curse-ticket-1",
+        "name": "Curse Lottery Ticket",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.2
+         },
+         {
+          "kind": "damageTakenMultiplier",
+          "value": 1.1
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "You read the ticket again. Blessing: Every battle teaches more (XP x1.2). Curse: Every hit lands harder on you (damage taken x1.1).",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-curse-ticket-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You hand the pen back. Nothing changes. That was allowed.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-curse-ticket-2",
+   "name": "A Lottery Ticket",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2448",
+    "effect": "none"
+   },
+   "intro": "The ticket reads: BLESSING: After every battle your team heals a little (5%). CURSE: Every prize pays less (money x0.85). For the rest of the run.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "You sign the back of the ticket. It burns away, and both halves of it stay with you.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-curse-ticket-2",
+        "name": "Curse Lottery Ticket",
+        "effects": [
+         {
+          "kind": "postBattleHeal",
+          "percent": 5
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 0.85
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "You read the ticket again. Blessing: After every battle your team heals a little (5%). Curse: Every prize pays less (money x0.85).",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-curse-ticket-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You hand the pen back. Nothing changes. That was allowed.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-curse-ticket-3",
+   "name": "A Lottery Ticket",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2448",
+    "effect": "none"
+   },
+   "intro": "The ticket reads: BLESSING: Critical hits come more often (+5%). CURSE: Potions heal less (healing items x0.8). For the rest of the run.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "You sign the back of the ticket. It burns away, and both halves of it stay with you.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-curse-ticket-3",
+        "name": "Curse Lottery Ticket",
+        "effects": [
+         {
+          "kind": "critChanceBonus",
+          "value": 0.05
+         },
+         {
+          "kind": "healingMultiplier",
+          "value": 0.8
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "You read the ticket again. Blessing: Critical hits come more often (+5%). Curse: Potions heal less (healing items x0.8).",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-curse-ticket-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You hand the pen back. Nothing changes. That was allowed.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-fate-cards",
+   "name": "Fate Cards",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#1e1a2e",
+    "effect": "glint"
+   },
+   "intro": "A dealer fans three cards face down. \"Each one gives, and each one takes. Turn one. You'll read it before you agree.\"",
+   "choices": [
+    {
+     "label": "Turn a card.",
+     "success": {
+      "text": "The dealer lets you choose. You turn it over.",
+      "effects": [
+       {
+        "kind": "addEventFrom",
+        "ids": [
+         "rk-fate-card-sun",
+         "rk-fate-card-tower",
+         "rk-fate-card-star"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "Each card prints its gain and its cost. You read both before you sign. Nothing is hidden.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-fate-cards"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You leave the cards face down. The dealer shrugs and shuffles.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-fate-card-sun",
+   "name": "The Sun",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2c2440",
+    "effect": "none"
+   },
+   "intro": "The Sun. GIVES: Your whole team healed, now. TAKES: 150 money.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 150
+      }
+     ],
+     "success": {
+      "text": "The dealer lays The Sun on the table between you, and it is done.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "money",
+        "amount": -150
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "You read the card again. The Sun. Gives: Your whole team healed, now. Takes: 150 money.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-fate-card-sun"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You hand the pen back. Nothing changes. That was allowed.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-fate-card-tower",
+   "name": "The Tower",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2c2440",
+    "effect": "none"
+   },
+   "intro": "The Tower. GIVES: A rare find, now. TAKES: Every Pokémon takes a hard knock (15% HP).",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "The dealer lays The Tower on the table between you, and it is done.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "star-piece",
+         "comet-shard",
+         "leftovers",
+         "life-orb",
+         "choice-band"
+        ]
+       },
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "You read the card again. The Tower. Gives: A rare find, now. Takes: Every Pokémon takes a hard knock (15% HP).",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-fate-card-tower"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You hand the pen back. Nothing changes. That was allowed.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-fate-card-star",
+   "name": "The Star",
+   "group": "Run-Wide Modifiers",
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2c2440",
+    "effect": "none"
+   },
+   "intro": "The Star. GIVES: A new Pokémon follows you from the table. TAKES: 250 money, the dealer's cut.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 250
+      }
+     ],
+     "success": {
+      "text": "The dealer lays The Star on the table between you, and it is done.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "money",
+        "amount": -250
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "You read the card again. The Star. Gives: A new Pokémon follows you from the table. Takes: 250 money, the dealer's cut.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-fate-card-star"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You hand the pen back. Nothing changes. That was allowed.",
+      "effects": []
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rk-risk-dial",
+   "name": "The Risk Dial",
+   "group": "Run-Wide Modifiers",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1414",
+    "effect": "shake"
+   },
+   "intro": "A brass dial on a post, marked from Calm to Chaos. The needle sits at Calm. Calm: rare Pokémon x0.8, ambushes x0.5. Sign, and it holds for the rest of the run.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "The dial locks at Calm. For the rest of the run: Calm: rare Pokémon x0.8, ambushes x0.5.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-risk-dial-calm",
+        "name": "Risk Dial: Calm",
+        "effects": [
+         {
+          "kind": "encounterWeightMultiplier",
+          "group": "rare",
+          "value": 0.8
+         },
+         {
+          "kind": "stopWeight",
+          "stop": "ambush",
+          "value": 0.5
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rk-dial-set",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn the dial.",
+     "success": {
+      "text": "Click. The needle moves to Brisk. Brisk: rare Pokémon x1.25, ambushes x1.25.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-dial-point",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-risk-dial"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "The plate under the dial: Calm: rare Pokémon x0.8, ambushes x0.5. Brisk: rare Pokémon x1.25, ambushes x1.25. Wild: rare Pokémon x1.5, ambushes x1.5. Chaos: rare Pokémon x2, ambushes x2.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-risk-dial"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You leave the dial where it is.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "point-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rk-dial-point",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ],
+     "intro": "The brass dial. The needle sits at Brisk. Brisk: rare Pokémon x1.25, ambushes x1.25. Sign, and it holds for the rest of the run.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Sign.",
+       "success": {
+        "text": "The dial locks at Brisk. For the rest of the run: Brisk: rare Pokémon x1.25, ambushes x1.25.",
+        "effects": [
+         {
+          "kind": "relic",
+          "id": "rk-risk-dial-brisk",
+          "name": "Risk Dial: Brisk",
+          "effects": [
+           {
+            "kind": "encounterWeightMultiplier",
+            "group": "rare",
+            "value": 1.25
+           },
+           {
+            "kind": "stopWeight",
+            "stop": "ambush",
+            "value": 1.25
+           }
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "rk-dial-set",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Turn the dial.",
+       "success": {
+        "text": "Click. The needle moves to Wild. Wild: rare Pokémon x1.5, ambushes x1.5.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "rk-dial-point",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "rk-risk-dial"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "point-2",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rk-dial-point",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ],
+     "intro": "The brass dial. The needle sits at Wild. Wild: rare Pokémon x1.5, ambushes x1.5. Sign, and it holds for the rest of the run.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Sign.",
+       "success": {
+        "text": "The dial locks at Wild. For the rest of the run: Wild: rare Pokémon x1.5, ambushes x1.5.",
+        "effects": [
+         {
+          "kind": "relic",
+          "id": "rk-risk-dial-wild",
+          "name": "Risk Dial: Wild",
+          "effects": [
+           {
+            "kind": "encounterWeightMultiplier",
+            "group": "rare",
+            "value": 1.5
+           },
+           {
+            "kind": "stopWeight",
+            "stop": "ambush",
+            "value": 1.5
+           }
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "rk-dial-set",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Turn the dial.",
+       "success": {
+        "text": "Click. The needle moves to Chaos. Chaos: rare Pokémon x2, ambushes x2.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "rk-dial-point",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "rk-risk-dial"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "point-3",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rk-dial-point",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ],
+     "intro": "The brass dial. The needle sits at Chaos. Chaos: rare Pokémon x2, ambushes x2. Sign, and it holds for the rest of the run.",
+     "hide": [
+      0,
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "Sign.",
+       "success": {
+        "text": "The dial locks at Chaos. For the rest of the run: Chaos: rare Pokémon x2, ambushes x2.",
+        "effects": [
+         {
+          "kind": "relic",
+          "id": "rk-risk-dial-chaos",
+          "name": "Risk Dial: Chaos",
+          "effects": [
+           {
+            "kind": "encounterWeightMultiplier",
+            "group": "rare",
+            "value": 2
+           },
+           {
+            "kind": "stopWeight",
+            "stop": "ambush",
+            "value": 2
+           }
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "rk-dial-set",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Turn the dial.",
+       "success": {
+        "text": "Click. The needle moves to Calm. Calm: rare Pokémon x0.8, ambushes x0.5.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "rk-dial-point",
+          "amount": -99
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "rk-risk-dial"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rk-shadow-boon",
+   "name": "The Shadow Boon",
+   "group": "Run-Wide Modifiers",
+   "stop": "shrine",
+   "rarity": "rare",
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#10101c",
+    "effect": "fog"
+   },
+   "intro": "Your own shadow peels off the road and stands up. It has your voice. \"I'll lend you strength now. You pay it back later.\" It holds out a contract: THE LOAN. Gain: your lead, +1 to every stat, for this region. Cost: at your next boss battle, your lead starts at -1 to every stat. Then the debt is paid.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "Strength pours into your lead from the ground up. Your shadow lies back down at your feet. It will be waiting at the next boss, and it says so.",
+      "effects": [
+       {
+        "kind": "statBoost",
+        "stat": "all",
+        "percent": 5,
+        "who": "lead",
+        "until": "region"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Shadow's Loan",
+        "effects": [
+         {
+          "kind": "bossLeadStages",
+          "value": -1
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "Your shadow reads it to you, slowly, in your voice. THE LOAN. Gain: your lead, +1 to every stat, for this region. Cost: at your next boss battle, your lead starts at -1 to every stat. Then the debt is paid.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-shadow-boon"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You hand the pen back. Nothing changes. That was allowed.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-sunk-cost",
+   "name": "The Sunk Cost Choice",
+   "group": "Run-Wide Modifiers",
+   "scene": {
+    "cast": [],
+    "tint": "#24201c",
+    "effect": "none"
+   },
+   "intro": "A half-built bridge across a gorge, and a builder sitting on the last plank. \"We're in too deep. 500 already in it. Keep paying, or walk away.\" THE BRIDGE. Pay 500 more: the bridge is finished and you cross by the shortcut. Walk away: the 500 already paid is gone, and that is fine.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "You pay. The last planks go down by evening and you cross by the shortcut, high over the gorge, with the wind in your face.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "express"
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it again.",
+     "success": {
+      "text": "The builder goes through it again, honestly. THE BRIDGE. Pay 500 more: the bridge is finished and you cross by the shortcut. Walk away: the 500 already paid is gone, and that is fine.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-sunk-cost"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "You walk away. The 500 already in the bridge stays in the bridge. The builder nods: \"That's fine. Somebody else will finish it.\" It is fine. You go round.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

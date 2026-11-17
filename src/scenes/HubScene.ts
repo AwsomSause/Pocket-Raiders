@@ -50,12 +50,25 @@ import { DexInfo } from '../ui/dexInfo';
 import { DexBrowser, hasDexLook } from '../ui/dexBrowser';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dexState } from '../core/presentation/dexInfo';
+import { tallyOf } from '../core/dexResearch';
 import { itemVisual, pokemonIcon, trainerVisual } from '../ui/sprites';
 import { loadAssets, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { currencyChip, drawLogo } from '../ui/showcase';
 import { legacyRotation, type RotationEntry } from '../core/legacyRuns';
 import { HUB_TOWN, type HubPlace } from '../core/hubTown/schema';
 import { chooseHubPokemon, hubPokemon, hubPokemonChoices, placeById } from '../core/hubTown/world';
+import { pokemonHeightM } from '../core/heights';
+import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { askText, type AskOptions } from '../ui/redux/ask';
+import { useLookFont } from '../ui/redux/canvasFont';
+import { runCardView } from '../ui/redux/screens/over';
+import { playerPortrait } from '../ui/redux/templates';
+import { dockView, type DockFigure } from '../ui/redux/screens/hub';
+import { rxFileOf } from '../ui/redux/assets';
+import { counterView } from '../ui/redux/screens/counter';
+import { treeView, type TreeCellState } from '../ui/redux/screens/tree';
+import type { AssetManifest } from '../assets/catalog';
+import { monFile } from '../ui/redux/game';
 import { boughtToday, buyFromMerchant, merchantProblem, merchantStock } from '../core/hubTown/merchant';
 import { cardBackground, localDay } from '../core/town';
 import { HubTownView } from '../ui/hubTown/townView';
@@ -81,7 +94,7 @@ import { sortTrainers, TRAINER_SORT_KEYS, TRAINER_SORT_LABELS } from '../core/tr
 import { hubArrivalNotice, openTools } from './hubTools';
 import { device } from '../game/deviceTools';
 
-type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'books' | 'chains' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'options' | 'save' | 'tools' | 'town' | 'back';
+type Room = 'run' | 'archive' | 'achievements' | 'bank' | 'attributes' | 'history' | 'quests' | 'mastery' | 'research' | 'codex' | 'wardrobe' | 'card' | 'events' | 'fame' | 'legacy' | 'memories' | 'mentors' | 'tales' | 'tree' | 'prestige' | 'network' | 'museum' | 'books' | 'chains' | 'intel' | 'moves' | 'seeds' | 'nook' | 'merchant' | 'hubmon' | 'hubtown' | 'lobby' | 'dock' | 'options' | 'save' | 'tools' | 'town' | 'back';
 
 const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'run', label: 'Start a run', blurb: 'Choose a trainer and a starter, then set off.' },
@@ -121,6 +134,7 @@ const ALL_ROOMS: { room: Room; label: string; blurb: string }[] = [
   { room: 'hubmon', label: 'Walking Pokémon', blurb: 'Choose the Pokémon you walk Hub Town as. Your party and runs never change.' },
   { room: 'hubtown', label: 'Hub Town', blurb: 'Walk the town as your Pokémon: every room is a building (Settings > Hub style makes it the Hub).' },
   { room: 'lobby', label: 'Arena Lobby', blurb: 'Back to the Arena Lobby menu.' },
+  { room: 'dock', label: 'Hub dock', blurb: 'Back to the Hub dock and its buttons.' },
 ];
 const ROOMS = ALL_ROOMS;
 
@@ -195,7 +209,42 @@ const PAUSE_ROOMS: Room[] = ['options', 'hubmon', 'save', 'tools', 'back'];
 let townVisit = false;
 const lobbyHub = (): boolean => services().session.settings.hubStyle === 'lobby' && !townVisit;
 /** The pause menu's rooms: a visit from the Arena Lobby also offers the way back to it. */
-const pauseRooms = (): Room[] => (services().session.settings.hubStyle === 'lobby' ? ['lobby', ...PAUSE_ROOMS] : PAUSE_ROOMS);
+const pauseRooms = (): Room[] => (services().session.settings.hubStyle === 'lobby' ? ['lobby', ...PAUSE_ROOMS] : reduxOn() ? ['dock', ...PAUSE_ROOMS] : PAUSE_ROOMS);
+
+/**
+ * New UI: the Hub opens as the mock-ups' dock (two tabs of six buttons under a line-up of Pokémon) unless the Hub
+ * style is the Arena Lobby. Its Town page walks Hub Town (`townVisit`) until the pause menu's "Hub dock".
+ */
+const dockHub = (): boolean => reduxOn() && services().session.settings.hubStyle !== 'lobby' && !townVisit;
+interface DockEntry { label: string; rooms: Room[] }
+const DOCK: { tab: string; buttons: DockEntry[] }[] = [
+  {
+    tab: 'Town',
+    buttons: [
+      { label: 'Settings', rooms: PAUSE_ROOMS },
+      { label: 'Trainers', rooms: ['archive', 'quests', 'mentors', 'network', 'card', 'wardrobe'] },
+      { label: 'New Run', rooms: ['run'] },
+      { label: 'Events', rooms: ['events', 'tales', 'chains', 'achievements', 'nook'] },
+      { label: 'Unlocks', rooms: ['bank', 'attributes', 'tree', 'prestige', 'research', 'mastery', 'moves', 'books', 'museum', 'intel'] },
+      { label: 'Town', rooms: ['hubtown', 'town', 'merchant'] },
+    ],
+  },
+  {
+    tab: 'Last run',
+    buttons: [
+      { label: 'Hall of Fame', rooms: ['fame'] },
+      { label: 'Team', rooms: ['legacy'] },
+      { label: 'Run History', rooms: ['history'] },
+      { label: 'Memories', rooms: ['memories'] },
+      { label: 'Moments', rooms: ['codex'] },
+      { label: 'Seeds', rooms: ['seeds'] },
+    ],
+  },
+];
+/** Where the dock's cursor was, so coming back from a room lands on the same button (the middle one at first). */
+const dockSpot = { tab: 0, index: 2 };
+/** The mock-up's own line-up: it fills the ground line while the profile has few Pokémon of its own to show. */
+const DOCK_WELCOME = ['charizard', 'lucario', 'garchomp', 'gengar', 'pikachu', 'gyarados', 'snorlax', 'dragonite', 'eevee', 'tyranitar', 'turtwig', 'mewtwo', 'bulbasaur'];
 
 /** What the keepers say before they open their place (Hub Town spec §5). */
 const KEEPERS: Record<string, { name: string; line: (p: Profile) => string }> = {
@@ -234,6 +283,12 @@ export class HubScene extends Phaser.Scene {
   period: Period = 'afternoon';
   indicators: HubIndicators | null = null;
   private lobbyPokemon: Species[] = [];
+  /** New UI: the dock while the Hub shows it (null in Hub Town and the Arena Lobby). */
+  private dock: ReduxView | null = null;
+  private dockLayout = 0;
+  /** The bubble over the dock's line-up: the arrival notice or a rival's note, for a few seconds. */
+  private dockSay = '';
+  private rivalLine = '';
 
   constructor() {
     super('Hub');
@@ -252,6 +307,8 @@ export class HubScene extends Phaser.Scene {
       preloadPokemon(this, this.lobbyPokemon, { front: true });
       return;
     }
+    // The dock draws on the New UI layer and loads its own pictures.
+    if (dockHub()) return;
     const keeperArt = HUB_TOWN.keepers.map((k) => overworldAssetIds.trainer(k.sprite));
     // Date.now (not new Date()) so tests that pin the clock get the same crowd.
     this.crowdWindow = crowdWindow(new Date(Date.now()));
@@ -301,6 +358,8 @@ export class HubScene extends Phaser.Scene {
     this.lobby = null;
     this.minimap = null;
     this.indicators = null;
+    // Hub Town on foot is drawn on the canvas: in the New look its text uses the skin's font.
+    if (!lobbyHub() && !dockHub()) useLookFont(this);
     if (lobbyHub()) {
       const current = session.savedRun.status === 'ok' ? session.savedRun.data : null;
       this.lobby = new ArenaLobby(this, {
@@ -308,9 +367,11 @@ export class HubScene extends Phaser.Scene {
         busy: () => Boolean(this.picker || this.section || this.dexInfo),
         onTile: (t) => this.openLobbyTile(t, 0),
       });
-    } else this.buildTown(p, motion, ready);
+    } else if (!dockHub()) this.buildTown(p, motion, ready);
 
+    this.dock = null;
     this.drawHeader(data, ready);
+    if (!this.lobby && dockHub()) this.buildDock(data.notice, ready);
 
     // Reopened for a room (after buying or changing something): open that room's place page again.
     if (data.focus !== undefined) this.reopen(ROOMS[Math.min(data.focus, ROOMS.length - 1)]!.room);
@@ -380,6 +441,7 @@ export class HubScene extends Phaser.Scene {
 
     // Living Rival: a letter or a visit from a rival of a finished run; every Hub visit changes which.
     const rivalNote = hubRivalNote(p.rivalArchive, rotationVisits * 7 + p.stats.runsEnded, { achievements: earned, runsEnded: p.stats.runsEnded, nickname: rivalNickname(p.legacyRuns), expression: rivalMood(p.legacyRuns).expression, ...(headToHead(p.legacyRuns)[0] ? { board: scoreboardLine(headToHead(p.legacyRuns)[0]!) } : {}) });
+    this.rivalLine = rivalNote?.text ?? '';
     if (rivalNote) {
       const note = this.add
         .text(GAME_WIDTH / 2, data.notice ? 160 : 110, rivalNote.text, textStyle(16, rivalNote.tone === 'sharp' ? COLORS.gold : COLORS.textLight, { align: 'center', wordWrap: { width: GAME_WIDTH - 160 }, stroke: '#10203a', strokeThickness: 4 }))
@@ -404,6 +466,17 @@ export class HubScene extends Phaser.Scene {
       const tile = this.lobby.tileFor(room);
       this.lobby.focus(tile.id, false);
       if (tile.rooms.length > 1) this.openLobbyTile(tile, tile.rooms.indexOf(room));
+      return;
+    }
+    if (this.dock) {
+      const tab = DOCK.findIndex((t) => t.buttons.some((b) => b.rooms.includes(room)));
+      if (tab < 0) return;
+      const index = DOCK[tab]!.buttons.findIndex((b) => b.rooms.includes(room));
+      const b = DOCK[tab]!.buttons[index]!;
+      dockSpot.tab = tab;
+      dockSpot.index = index;
+      this.dock.refresh();
+      if (b.rooms.length > 1) this.openSection({ name: b.label, rooms: b.rooms }, b.rooms.indexOf(room));
       return;
     }
     if (pauseRooms().includes(room)) this.openPause(pauseRooms().indexOf(room));
@@ -496,6 +569,121 @@ export class HubScene extends Phaser.Scene {
   }
 
   /** Esc in town: settings, the Pokémon you walk as, save data, tools, and the way back to the title screen. */
+  // ---------- New UI: the dock ----------
+
+  /** Who stands on the dock's ground line: the Pokémon you walk as, your last team, past Aces, your most used, then the mock-up's own. */
+  private dockLineup(): DockFigure[] {
+    const { session } = services();
+    const p = session.profile;
+    const want: { id: string; shiny: boolean }[] = [];
+    const add = (id: string | null | undefined, shiny = false): void => {
+      if (id && want.length < 40 && session.content.species.has(id) && !want.some((x) => x.id === id)) want.push({ id, shiny });
+    };
+    add(hubPokemon(p).speciesId);
+    for (const m of p.legacyRuns[0]?.team ?? []) add(m.speciesId, m.shiny);
+    for (const e of this.entries) add(e.ace?.speciesId, e.ace?.shiny);
+    for (const id of hubPokemonChoices(p)) add(id);
+    for (const id of DOCK_WELCOME) add(id);
+    const out: DockFigure[] = [];
+    for (const w of want) {
+      if (out.length >= 13) break;
+      const file = monFile(this, w.id, 'front', w.shiny);
+      // The mock-up draws each Pokémon at its real height: 62 pixels to the metre, between 0.3 m and 3 m.
+      if (file) out.push({ art: { file, atlas: true }, scale: 1, px: Math.round(Math.max(0.3, Math.min(3, pokemonHeightM(session.content.species.get(w.id)!))) * 62) });
+    }
+    return out;
+  }
+
+  private buildDock(notice: string | undefined, ready: number): void {
+    const { session } = services();
+    const lineup = this.dockLineup();
+    this.dockSay = notice ?? (this.rivalLine || (ready ? `${ready} trainer${ready === 1 ? ' is' : 's are'} ready to claim. Look under Trainers.` : ''));
+    if (this.dockSay) this.time.delayedCall(7000, () => { this.dockSay = ''; this.dock?.refresh(); });
+    dockSpot.tab = Phaser.Math.Clamp(dockSpot.tab, 0, DOCK.length - 1);
+    dockSpot.index = Phaser.Math.Clamp(dockSpot.index, 0, DOCK[dockSpot.tab]!.buttons.length - 1);
+    this.dock = mountRedux(this, {
+      render: (c) => {
+        this.dockLayout = c.v(3);
+        const p = session.profile;
+        const tab = DOCK[dockSpot.tab]!;
+        return dockView(c, {
+          town: 'Hub Town',
+          chips: [`₽ ${p.bankCredits.toLocaleString('en-US')}`, `Rank ${prestigeRank(p)}`],
+          tabs: DOCK.map((t) => t.tab),
+          tab: dockSpot.tab,
+          buttons: tab.buttons.map((x) => ({ label: x.label, small: x.label === 'Trainers' && ready ? String(ready) : '' })),
+          index: dockSpot.index,
+          lineup,
+          say: this.dockSay,
+          // The mock-up's dock has no line about the focused button and only names its keys under the row of buttons.
+          note: '',
+          hints: this.dockLayout === 0 ? [['↓', 'switch tab'], ['Enter', 'open']] : [],
+        });
+      },
+      acts: {
+        pick: (k) => { if (this.dockFree()) { dockSpot.index = Phaser.Math.Clamp(Number(k), 0, DOCK[dockSpot.tab]!.buttons.length - 1); this.dockOpen(); } },
+        tab: (k) => { if (this.dockFree()) this.dockTab(Number(k)); },
+      },
+      overs: { over: (k) => { const i = Number(k); if (this.dockFree() && i !== dockSpot.index && i >= 0 && i < DOCK[dockSpot.tab]!.buttons.length) { dockSpot.index = i; this.dock?.refresh(); } } },
+    });
+  }
+
+  /** The dock only listens while no room, page or info card is open over it. */
+  private dockFree(): boolean {
+    return Boolean(this.dock) && !this.picker && !this.section && !this.dexInfo;
+  }
+
+  private dockTab(tab: number): void {
+    const next = ((tab % DOCK.length) + DOCK.length) % DOCK.length;
+    if (next === dockSpot.tab) return;
+    dockSpot.tab = next;
+    dockSpot.index = Math.min(dockSpot.index, DOCK[next]!.buttons.length - 1);
+    playSfx(this, 'ui.move');
+    this.dock?.refresh();
+  }
+
+  private dockOpen(): void {
+    const b = DOCK[dockSpot.tab]!.buttons[dockSpot.index]!;
+    this.dockSay = '';
+    this.dock?.refresh();
+    playSfx(this, 'ui.select');
+    if (b.rooms.length === 1) this.enter(b.rooms[0]!);
+    else this.openSection({ name: b.label, rooms: b.rooms }, 0);
+  }
+
+  /** Keys on the dock. The buttons sit in a row, a column or a three-wide grid (by theme), and the arrows follow that. */
+  private dockKey(a: InputAction): void {
+    const n = DOCK[dockSpot.tab]!.buttons.length;
+    const move = (by: number): void => {
+      dockSpot.index = (dockSpot.index + by + n) % n;
+      playSfx(this, 'ui.move');
+      this.dock?.refresh();
+    };
+    if (a === 'confirm') return this.dockOpen();
+    if (a === 'back') { this.scene.start('MainMenu'); return; }
+    const v = this.dockLayout;
+    if (v === 1) {
+      if (a === 'up') move(-1);
+      else if (a === 'down') move(1);
+      else if (a === 'left') this.dockTab(dockSpot.tab - 1);
+      else if (a === 'right') this.dockTab(dockSpot.tab + 1);
+    } else if (v === 2) {
+      // Three across: up and down change the line, and step over to the other tab from the first or last line.
+      if (a === 'left') move(-1);
+      else if (a === 'right') move(1);
+      else if (a === 'up') {
+        if (dockSpot.index >= 3) move(-3);
+        else this.dockTab(dockSpot.tab - 1);
+      } else if (a === 'down') {
+        if (dockSpot.index + 3 < n) move(3);
+        else this.dockTab(dockSpot.tab + 1);
+      }
+    } else if (a === 'left') move(-1);
+    else if (a === 'right') move(1);
+    else if (a === 'up') this.dockTab(dockSpot.tab - 1);
+    else if (a === 'down') this.dockTab(dockSpot.tab + 1);
+  }
+
   private openPause(focus = 0): void {
     this.place = { name: 'Menu', rooms: pauseRooms() };
     this.openSection(this.place, focus);
@@ -513,7 +701,7 @@ export class HubScene extends Phaser.Scene {
       const summary = this.roomSummary(room);
       return {
         problem: null,
-        hint: info.blurb,
+        hint: room === 'hubtown' && this.dock ? 'Walk the town as your Pokémon: every room is a building. Esc opens the menu with the way back here.' : info.blurb,
         draw: (scene, box, w, h) => {
           const icon = ROOM_ICON[room];
           if (icon) box.add(itemVisual(scene, icon, 34, h / 2, 1));
@@ -561,6 +749,10 @@ export class HubScene extends Phaser.Scene {
       else this.lobby.handle(a);
       return;
     }
+    if (this.dock) {
+      this.dockKey(a);
+      return;
+    }
     // Held keys walk on their own (the town reads them every frame); a tap still takes one step or turns.
     if (a === 'up' || a === 'down' || a === 'left' || a === 'right') this.town?.step(a);
     else if (a === 'confirm') this.town?.interact();
@@ -583,6 +775,8 @@ export class HubScene extends Phaser.Scene {
       return {
         problem: merchantProblem(p, ware, day),
         hint: `${ware.line} Waits in your pack for the next run.`,
+        // New look: the price at the right of the row, as on the mock-up's shop list.
+        menu: { label: item?.name ?? ware.item, note: sold.includes(ware.item) ? 'Sold out' : `${ware.price} credits`, detail: `${ware.line} Waits in your pack for the next run.` },
         draw: (scene, box, w, h) => {
           box.add(itemVisual(scene, item?.iconAssetId ?? `item.${ware.item.replace(/-/g, '_')}`, 34, h / 2, 1));
           box.add(scene.add.text(66, 8, item?.name ?? ware.item, textStyle(22, COLORS.textLight)));
@@ -803,7 +997,7 @@ export class HubScene extends Phaser.Scene {
         this.scene.start('Town');
         break;
       case 'tools':
-        openTools({ open: (c) => this.openPicker(c), close: () => this.closePicker(), restart: (n) => this.restart(n, 'tools') });
+        openTools({ open: (c) => this.openPicker(c), close: () => this.closePicker(), restart: (n) => this.restart(n, 'tools'), ask: reduxOn() ? (o) => askText(this, o) : undefined });
         break;
       case 'back':
         this.scene.start('MainMenu');
@@ -819,13 +1013,24 @@ export class HubScene extends Phaser.Scene {
         this.scene.restart({});
         break;
       case 'lobby':
+      case 'dock':
         townVisit = false;
         this.scene.restart({});
         break;
     }
   }
 
+  /** A typed answer: the New look's form page (the mock-ups' code entry), the Old look's browser box (`old` is its line). */
+  private askLine(o: AskOptions, old: string, initial = ''): Promise<string | null> {
+    return reduxOn() ? askText(this, { ...o, value: initial }) : Promise.resolve(window.prompt(old, initial));
+  }
+
   private openPicker(config: ConstructorParameters<typeof Picker>[1]): void {
+    // One list at a time: a page opened from a list (Tools, a quest line) takes its place. A list left open under
+    // the new one would stay drawn for the rest of the visit and slow the hub down.
+    const old = this.picker;
+    this.picker = null;
+    old?.close();
     this.picker = new Picker(this, { screen: this.roomScreen, ...config });
   }
 
@@ -941,12 +1146,22 @@ export class HubScene extends Phaser.Scene {
       hint: 'Enter switches the tab: All, Seen, Owned, Mastered (gold rank or better).',
       draw: (scene, box) => box.add(scene.add.text(12, 12, `Tab: ${tab.toUpperCase()} (${shown.length}/${set.members.length})  ›`, textStyle(20, COLORS.gold))),
     };
-    const rows: PickerRow[] = [tabRow, ...shown.map((id): PickerRow => {
+    // New UI: the mock-up's wall of species pictures. The tabs sit in the header, so the list has no tab row.
+    const wall = reduxOn();
+    const TABS = ['all', 'seen', 'owned', 'mastered'] as const;
+    const rows: PickerRow[] = [...(wall ? [] : [tabRow]), ...shown.map((id): PickerRow => {
       const sp = session.content.species.get(id)!;
       const state = dexState(session.profile, id);
       const shadow = state === 'unknown' ? hinted.get(id) : undefined;
+      const no = `No. ${String(sp.dex).padStart(4, '0')}`;
+      const tally = tallyOf(session.profile, id);
       return {
         problem: null,
+        cell: wall
+          ? state === 'unknown'
+            ? { file: shadow ? monFile(this, id, 'front') : null, title: no, body: shadow ? `A shadow from your field notes: ${shadow.join(' / ')} type.` : 'Not met yet.', off: true, sil: Boolean(shadow) }
+            : { file: monFile(this, id, 'front'), title: sp.name, body: `${no} · Seen ${tally.seen} · Caught ${tally.caught}` }
+          : undefined,
         hint: shadow ? `A silhouette from your field notes: ${shadow.join(' / ')} type. Not met yet.` : state === 'unknown' ? 'Not met yet.' : `${sp.name}: ${sp.types.join(' / ')}. Enter opens its page.`,
         draw: (scene, box, _w, h) => {
           if (shadow) {
@@ -990,14 +1205,14 @@ export class HubScene extends Phaser.Scene {
       rows,
       columns: 2,
       rowHeight: 48,
+      tabs: wall ? { labels: ['All', 'Seen', 'Owned', 'Mastered'], index: TABS.indexOf(tab), onChange: (i) => { this.dexTab = TABS[i]!; this.openDexSet(set); } } : undefined,
       onSelect: (i) => {
-        if (i === 0) {
-          const order = ['all', 'seen', 'owned', 'mastered'] as const;
-          this.dexTab = order[(order.indexOf(this.dexTab) + 1) % order.length]!;
+        if (!wall && i === 0) {
+          this.dexTab = TABS[(TABS.indexOf(this.dexTab) + 1) % TABS.length]!;
           this.openDexSet(set);
           return;
         }
-        this.dexInfo = new DexInfo(this, session.content, session.profile, shown[i - 1]!, () => {
+        this.dexInfo = new DexInfo(this, session.content, session.profile, shown[wall ? i : i - 1]!, () => {
           this.dexInfo = null;
         });
       },
@@ -1466,6 +1681,61 @@ export class HubScene extends Phaser.Scene {
     this.archiveOpen = true;
   }
 
+  /**
+   * New UI: the Bank's Exchange Counter as the mock-up counter page: two offers (credits for Research Points and back),
+   * one lot or five at a time. The cursor stops on each button of each offer; the clerk's box says why a button is shut.
+   */
+  private openExchange(at = 0, notice = ''): void {
+    const { session } = services();
+    const { content } = session, p = session.profile, x = content.balance.bank.exchange;
+    const LOTS = [1, 5];
+    const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
+    const offers = [
+      { dir: 'toPoints' as const, name: 'Research Points', give: x.credits, giveName: 'credits', get: x.points, getName: 'Research Points', art: 'item.scanner', have: `You have ${p.researchPoints} Research Points` },
+      { dir: 'toCredits' as const, name: 'Bank Credits', give: x.backPoints, giveName: 'Research Points', get: x.backCredits, getName: 'credits', art: 'item.coin_case', have: `You have ${p.bankCredits} Bank Credits` },
+    ];
+    const stops = offers.flatMap((o) => LOTS.map((lots) => ({ o, lots, problem: exchangeProblem(content, p, o.dir, lots), line: `${o.give * lots} ${o.giveName} for ${o.get * lots} ${o.getName}` })));
+    const rows: PickerRow[] = stops.map((s) => ({
+      problem: null,
+      hint: s.problem ?? `${s.line}. Enter: exchange.`,
+      draw: (scene, box) => box.add(scene.add.text(12, 12, `${s.o.name} × ${s.lots}: ${s.line}`, textStyle(20))),
+    }));
+    this.closePicker();
+    this.openPicker({
+      title: 'Exchange Counter',
+      rows,
+      columns: 1,
+      rowHeight: 48,
+      start: Math.min(at, rows.length - 1),
+      pageCols: LOTS.length,
+      page: (c, index) => counterView(c, {
+        title: 'Exchange Counter',
+        clerk: 'Counter clerk',
+        chips: [`${p.bankCredits} credits`, `${p.researchPoints} Research`],
+        offers: offers.map((o, k) => ({ name: o.name, price: `${o.give} ${o.giveName}`, art: rxFileOf(manifest, o.art), have: o.have, text: `${o.give} ${o.giveName} buy ${o.get} ${o.getName} a lot.`, problems: LOTS.map((_, j) => stops[k * LOTS.length + j]!.problem) })),
+        buttons: LOTS.map((n) => `Exchange ${n}`),
+        index,
+        text: (index === at && notice) || stops[index]?.problem || 'Trade Bank Credits and Research Points, one lot or five at a time.',
+      }),
+      onSelect: (i) => {
+        const s = stops[i]!;
+        if (s.problem) {
+          // The clerk says why, in place of the last exchange's line.
+          playSfx(this, 'ui.error', 0.5);
+          if (notice) this.openExchange(i, s.problem);
+          return;
+        }
+        session.exchangeAtBank(s.o.dir, s.lots);
+        playSfx(this, 'se.exp', 0.6);
+        this.openExchange(i, `Exchanged ${s.line}.`);
+      },
+      onBack: () => {
+        this.closePicker();
+        this.openLicenses();
+      },
+    });
+  }
+
   private openLicenses(): void {
     const { session } = services();
     const p = session.profile;
@@ -1474,12 +1744,17 @@ export class HubScene extends Phaser.Scene {
     const x = content.balance.bank.exchange;
     const next = nextTier(content, p);
     // First the Bank's own services (tier, Exchange Counter), then the licenses.
-    const bankServices: { label: string; sub: string; right: string; problem: string | null; run: () => void; notice: string }[] = [
+    // New UI: the Exchange Counter is a page of its own (the mock-up's counter with a clerk), one row here.
+    const counter = reduxOn();
+    const bankServices: { label: string; sub: string; right: string; problem: string | null; run: () => void; notice: string; open?: () => void }[] = [
       next
         ? { label: `Bank tier ${bankTier(p)} → ${next.tier}: ${next.name}`, sub: next.blurb, right: `${next.cost} credits`, problem: tierProblem(content, p), run: () => session.buyBankTier(), notice: `The Bank is now tier ${next.tier}: ${next.name}.` }
         : { label: `Bank tier ${bankTier(p)}: top tier`, sub: 'Every Bank service is open.', right: '', problem: 'The Bank is already at its top tier.', run: () => undefined, notice: '' },
+      ...(counter ? [{ label: 'Exchange Counter', sub: 'Trade Bank Credits and Research Points.', right: bankTier(p) >= 3 ? '' : 'Tier 3', problem: null, run: () => undefined, notice: '', open: () => this.openExchange() }] : []),
+      ...(counter ? [] : [
       { label: 'Exchange Counter: credits → Research', sub: `${x.credits} credits for ${x.points} Research Points.`, right: bankTier(p) >= 3 ? '' : 'Tier 3', problem: exchangeProblem(content, p, 'toPoints'), run: () => session.exchangeAtBank('toPoints'), notice: `Exchanged ${x.credits} credits for ${x.points} Research Points.` },
       { label: 'Exchange Counter: Research → credits', sub: `${x.backPoints} Research Points for ${x.backCredits} credits.`, right: bankTier(p) >= 3 ? '' : 'Tier 3', problem: exchangeProblem(content, p, 'toCredits'), run: () => session.exchangeAtBank('toCredits'), notice: `Exchanged ${x.backPoints} Research Points for ${x.backCredits} credits.` },
+      ]),
       ...content.balance.candyShop.map((perk) => ({ label: `Candy Shop: ${perk.name}`, sub: perk.description, right: p.candyPerks.includes(perk.id) ? 'Owned' : `${perk.cost} candies`, problem: candyPerkProblem(content, p, perk.id), run: () => session.buyCandyPerk(perk.id), notice: `You bought the ${perk.name}.` })),
     ];
     const serviceRows: PickerRow[] = bankServices.map((s) => ({
@@ -1512,6 +1787,7 @@ export class HubScene extends Phaser.Scene {
       onSelect: (i) => {
         if (i < bankServices.length) {
           const s = bankServices[i]!;
+          if (s.open) return s.open();
           if (s.problem) {
             playSfx(this, 'ui.error', 0.5);
             return;
@@ -1539,7 +1815,7 @@ export class HubScene extends Phaser.Scene {
     const { session } = services();
     const { content } = session;
     const p = session.profile;
-    interface Entry { label: string; sub: string; right?: string; on?: boolean; problem?: string | null; run?: () => string | void; start?: () => void }
+    interface Entry { label: string; sub: string; right?: string; on?: boolean; problem?: string | null; run?: () => string | void | Promise<string | void>; start?: () => void }
     const entries: Entry[] = [];
     const now = new Date().toISOString();
     const apply = (fn: (pr: Profile) => Profile, notice: string): string => {
@@ -1547,14 +1823,28 @@ export class HubScene extends Phaser.Scene {
       return notice;
     };
     let title = '';
+    let treeGrid: { name: string; nodes: ((typeof LEGACY.tree.nodes)[number] | null)[] }[] | null = null;
+    let treeCols = 1;
     switch (room) {
-      case 'tree':
+      case 'tree': {
         title = `Research Tree  ·  ${p.researchPoints} Research Points`;
-        for (const n of LEGACY.tree.nodes) {
+        // New look: the mock-ups' tree page, a row per branch; a short branch is padded so the cursor moves in a grid.
+        const padded = reduxOn();
+        treeCols = Math.max(...LEGACY.tree.branches.map((b) => LEGACY.tree.nodes.filter((n) => n.branch === b.id).length));
+        treeGrid = LEGACY.tree.branches.map((b) => {
+          const ns = LEGACY.tree.nodes.filter((n) => n.branch === b.id);
+          return { name: b.name, nodes: padded ? Array.from({ length: treeCols }, (_, k) => ns[k] ?? null) : ns };
+        });
+        for (const n of treeGrid.flatMap((r) => r.nodes)) {
+          if (!n) {
+            entries.push({ label: '', sub: 'Nothing more on this branch.' });
+            continue;
+          }
           const st = nodeStatus(p, n);
           entries.push({ label: `${LEGACY.tree.branches.find((b) => b.id === n.branch)?.name}: ${n.name}`, sub: n.blurb, right: st === 'owned' ? 'Researched' : `${n.cost} RP`, on: st === 'owned', problem: nodeProblem(p, n), run: () => apply((pr) => buyNode(pr, n.id), `Researched ${n.name}. ${n.blurb}`) });
         }
         break;
+      }
       case 'prestige': {
         const next = nextPrestige(p);
         title = `Prestige  ·  rank ${prestigeRank(p)} of ${LEGACY.prestige.maxRank}`;
@@ -1641,8 +1931,8 @@ export class HubScene extends Phaser.Scene {
         entries.push({
           label: 'Write a note to your future self',
           sub: nk.note !== null ? `${nk.noteDelivered ? 'Last note' : 'Waiting for your next run'}: "${nk.note}"` : 'It is read to you when your next run begins.',
-          run: () => {
-            const text = window.prompt(`A note to your next run (up to ${NOOK.note_rules.maxLength} letters):`, '')?.trim();
+          run: async () => {
+            const text = (await this.askLine({ title: 'A note to your next run', heading: 'Write a note to your future self', text: `Up to ${NOOK.note_rules.maxLength} letters. It is read to you when your next run begins.`, ok: 'Seal' }, `A note to your next run (up to ${NOOK.note_rules.maxLength} letters):`))?.trim();
             if (!text) return;
             return apply((pr) => writeNote(pr, text), 'The note is sealed. You will read it at your next run start.');
           },
@@ -1650,8 +1940,8 @@ export class HubScene extends Phaser.Scene {
         entries.push({
           label: 'Enter a poster code',
           sub: `${nk.codesUsed.length}/${NOOK.giftCodes.length} codes used. Codes unlock titles.`,
-          run: () => {
-            const code = window.prompt('Poster code:', '')?.trim();
+          run: async () => {
+            const code = (await this.askLine({ title: 'Poster code', area: 'run', heading: 'Enter a poster code', text: `Codes unlock titles. ${nk.codesUsed.length} of ${NOOK.giftCodes.length} used.` }, 'Poster code:'))?.trim();
             if (!code) return;
             const r = redeemCode(session.profile, code);
             session.changeProfile(() => r.profile);
@@ -1693,8 +1983,8 @@ export class HubScene extends Phaser.Scene {
         entries.push({
           label: 'Paste a seed code',
           sub: 'Add a code a friend shared (PR1.…).',
-          run: () => {
-            const code = window.prompt('Seed code (PR1.…):', '')?.trim();
+          run: async () => {
+            const code = (await this.askLine({ title: 'Seed code', area: 'run', heading: 'Enter a seed code', text: 'A code a friend shared. Seed codes start with PR1.' }, 'Seed code (PR1.…):'))?.trim();
             if (!code) return;
             const r = decodeSeedCode(code);
             if (!r.ok) return r.reason;
@@ -1734,11 +2024,28 @@ export class HubScene extends Phaser.Scene {
         if (e.right) box.add(scene.add.text(w - 12, h / 2, e.right, textStyle(16, e.problem && !e.on ? COLORS.textMuted : COLORS.gold)).setOrigin(1, 0.5));
       },
     }));
+    const flat = treeGrid?.flatMap((r) => r.nodes) ?? [];
+    const cellState = (n: (typeof flat)[number]): TreeCellState => (!n ? 'none' : nodeStatus(p, n) === 'owned' ? 'owned' : nodeStatus(p, n) === 'open' ? 'open' : 'locked');
+    const tree = treeGrid && reduxOn() ? treeGrid : null;
     this.openPicker({
       title,
       rows,
       columns: 1,
       rowHeight: 56,
+      ...(tree ? {
+        pageCols: treeCols,
+        page: (c: ReduxCtx, index: number) => {
+          const n = flat[index] ?? null, problem = n ? nodeProblem(p, n) : null, owned = !!n && nodeStatus(p, n) === 'owned';
+          return treeView(c, {
+            title: 'Research Tree', chips: [`${p.researchPoints} Research Points`], cols: treeCols, index,
+            rows: tree.map((r) => ({ name: r.name, cells: r.nodes.map((x) => ({ label: x?.name ?? '', state: cellState(x) })) })),
+            card: n
+              ? { name: n.name, line: n.blurb, facts: [['Cost', `${n.cost} Research Points`], ['Have', `${p.researchPoints}`], ...(n.prestige ? [['Needs prestige rank', `${n.prestige}`] as const] : [])], button: owned ? 'Researched' : 'Unlock', ready: !owned && !problem }
+              : { name: '—', line: 'Nothing more on this branch.', facts: [], button: 'Unlock', ready: false },
+            text: n ? (owned ? `${n.name}: researched. ${n.blurb}` : problem ? `${n.blurb} · ${problem}` : `${n.blurb} · Enter: research it.`) : 'Nothing more on this branch.',
+          });
+        },
+      } : {}),
       onSelect: (i) => {
         const e = entries[i]!;
         if (e.start) {
@@ -1750,10 +2057,15 @@ export class HubScene extends Phaser.Scene {
           if (e.problem) playSfx(this, 'ui.error', 0.5);
           return;
         }
-        const notice = e.run();
-        if (notice === undefined) return;
-        playSfx(this, 'se.exp', 0.6);
-        this.restart(notice, room);
+        const done = (notice: string | void): void => {
+          if (notice === undefined) return;
+          playSfx(this, 'se.exp', 0.6);
+          this.restart(notice, room);
+        };
+        // An entry that asks for typed text answers later.
+        const out = e.run();
+        if (out instanceof Promise) void out.then(done);
+        else done(out);
       },
       onBack: () => this.closePicker(),
     });
@@ -1859,7 +2171,21 @@ export class HubScene extends Phaser.Scene {
         },
       },
     ];
-    this.openPicker({ title: 'Trainer Card', rows, columns: 1, rowHeight: 340, onSelect: () => undefined, onBack: () => this.closePicker() });
+    // New UI: the mock-ups' card page (picture, name and rank, the record, the badge discs).
+    const look = p.story?.protagonist?.look === 'look_b' ? 'b' : 'a';
+    const stars = showcaseOf(p).map((id) => ['★', session.content.achievements.get(id)?.name ?? id] as const);
+    const page = (c: ReduxCtx): string => runCardView(c, {
+      title: 'Trainer Card', area: 'hub', save: false,
+      name: p.story?.protagonist?.name || 'Trainer',
+      rank: `Rank ${prestigeRank(p)}`,
+      facts: [['Title', p.activeTitle ?? 'Trainer'], ['Runs', String(p.stats.runsEnded)], ['Battles won', String(p.stats.battlesWon)], ['Best run', `${p.stats.bestEncounters} encounters`], ['Pokémon caught', String(p.speciesCaught.length)], ...stars],
+      trainer: playerPortrait(look),
+      badges: Math.min(8, p.best.badges ?? 0),
+      team: [],
+      text: `Frame: ${frame.name}. Change title and frame in the Wardrobe.`,
+      hints: [['Esc', 'back']],
+    });
+    this.openPicker({ title: 'Trainer Card', rows, columns: 1, rowHeight: 340, onSelect: () => undefined, onBack: () => this.closePicker(), page });
   }
 
   /** Hyper moment codex: every story moment, found ones named with how often you saw them, the rest hidden. */

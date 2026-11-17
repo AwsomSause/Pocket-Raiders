@@ -1,0 +1,3916 @@
+{
+ "catalogOverhaul": "anime",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "aq31-bond-phenomenon",
+   "name": "The Bond Phenomenon",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 6,
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_m"
+    ],
+    "pokemon": "froakie",
+    "tint": "#142a3a",
+    "effect": "float"
+   },
+   "intro": "Evening on a jetty. You have just won a battle, and your Pokémon are shaking the water off their backs. Up in a dead tree over the water sits a Froakie, its frothy bubbles heaped round its neck like a scarf. It watched the whole fight without blinking. A young trainer on the jetty follows your eyes and sighs. \"That one? It chose me last spring. It left in the autumn.\" He turns an empty Poké Ball over in his hands. \"It just wasn't happy with me. It wanted something I couldn't give it, and I never found out what.\" He is the fourth trainer it has left, he says. It is looking for somebody, he thinks: somebody who matches it. The Froakie has not looked away from you once.",
+   "choices": [
+    {
+     "label": "Ask it to come.",
+     "success": {
+      "text": "You walk to the foot of the tree and ask it plainly, the way you would ask a person. The Froakie looks at you for a long time. Then it drops into the water, comes up at your feet, and walks beside you. Not ahead, not behind: beside. It is not a yes. It is a \"show me.\" The trainer on the jetty laughs, a little sadly. \"It did that with me too. Good luck.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "froakie"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq-greninja-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "You call up to the tree. The Froakie is down before you finish: it has been waiting for exactly this. It lands on the jetty in a crouch, foam bristling, and for the first time all evening it looks happy.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Froakie",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq31-battled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq31-after-the-bout"
+        }
+       ],
+       "lineup": [
+        "froakie"
+       ],
+       "spritePokemon": "froakie",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq31-battled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq31-bout-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq31-after-the-bout"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ignore it.",
+     "success": {
+      "text": "You pick up your bag and walk on. You do not look back at the tree. Behind you there is a small wet plop, and then, all afternoon, very quietly, the sound of something keeping pace with you in the reeds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-greninja-followed",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq31-froakie-follows",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq31-after-the-bout",
+   "name": "Closer Than Anyone",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "won-by-a-hair",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq31-bout-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It won, by a hair. It knows exactly how thin the hair was. It does not look like a winner. It looks like somebody who has finally been pushed as far as it can go, and liked it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "froakie",
+    "tint": "#142a3a",
+    "effect": "float"
+   },
+   "intro": "The Froakie sits in the shallows, breathing hard, its foam half gone. It was close. Closer than it has been with anyone, by the look on its face. It looks at your Pokémon one by one, and then at you, as if checking a sum it has been working on for a very long time.",
+   "choices": [
+    {
+     "label": "Hold out your hand.",
+     "success": {
+      "text": "It looks at the hand. Then it slaps it, hard, a wet webbed high five that stings for an hour. It climbs up your arm and sits on your shoulder, dripping down your collar. The trainer on the jetty shakes his head, smiling. \"Four of us, and it just wanted a fight it could lose.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "froakie"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it decide.",
+     "success": {
+      "text": "You sit down on the jetty and wait. It takes its time. It walks round you twice. Then it sits down next to you, close enough that its foam wets your sleeve, and looks out at the water the same way you are looking. That is the decision.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "froakie"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq31-froakie-follows",
+   "name": "Something in the Reeds",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "froakie",
+    "tint": "#142a3a",
+    "effect": "float"
+   },
+   "intro": "Two nodes on, you stop to make camp. There is a Froakie sitting on your bag. It is damp. It has clearly been there a while. It has the air of somebody who has been ignored before, many times, and has decided that this time it will not take the hint.",
+   "choices": [
+    {
+     "label": "Let it come.",
+     "success": {
+      "text": "You move the bag. It moves with the bag. By the fire it sits exactly as far from you as you are from the flames, and in the morning it is a little closer. You ignored it, and it chose you anyway. You get the feeling that was the point.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "froakie"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it back to its tree.",
+     "success": {
+      "text": "You point back the way you came. It looks where you point, and then at you, and does not move for a long time. In the morning the bag is dry and the Froakie is gone. You think you hear it once, in the reeds, and then not again.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq31-froakie-test",
+   "name": "The Test",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq-greninja-asked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq-greninja-asked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "froakie",
+     "bond": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "froakie",
+    "tint": "#142a3a",
+    "effect": "none"
+   },
+   "intro": "For a whole stage the Froakie has watched you. How you call a fight. How you treat the one who loses it for you. Who eats first at camp, and who gets the dry spot when it rains. Tonight it sits across the fire with its arms folded and its foam puffed up, and you understand that the test is over. It is about to tell you how you did.",
+   "choices": [
+    {
+     "label": "Wait for its answer.",
+     "success": {
+      "text": "It gets up. It walks round the fire, slowly, the long way. Then it sits down again: on your side of the fire, against your knee. It does not do anything else. It does not need to. Four trainers asked it to come. You are the first one it has stayed for.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "froakie",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-test-passed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask how you did.",
+     "success": {
+      "text": "It looks at you as if that were a very silly question. Then, very seriously, it holds up one webbed hand and wobbles it: so-so. Then it comes round the fire and goes to sleep on your foot, which is the opposite of so-so, and stays there all night.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "froakie",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-test-passed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq31-as-one",
+   "name": "As One",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq31-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "froakie",
+     "bond": 5
+    },
+    {
+     "kind": "partySpecies",
+     "species": "greninja"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tested",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-greninja-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It sat across a fire from you once and weighed you up. You passed, then. You can feel it weighing you now, and you are passing again."
+    },
+    {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-greninja-followed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You walked past it once, and it followed you anyway. You can feel, right now, exactly how glad it is that it did."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/ace_trainer_f"
+    ],
+    "pokemon": "greninja-ash",
+    "tint": "#1a2440",
+    "effect": "float"
+   },
+   "intro": "A hard fight finds you on the road: an Ace Trainer who has heard about your Greninja and wants to see it for herself. Your Greninja steps out. Then something happens that has never happened before. Water rises off the ground and wraps round it like a cloak. The pattern on its face changes. A great spinning star of water builds on its back. And you can feel the wind on its face. You can see what it sees, the foe and the field and your own self standing behind it. You blink, and it blinks.",
+   "choices": [
+    {
+     "label": "Fight as one.",
+     "success": {
+      "text": "Every move you think of, it is already making. Every hit it takes, you flinch. The Ace Trainer takes one step back.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Bond Phenomenon",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "type": "water",
+          "value": 1.1
+         }
+        ],
+        "battles": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Bond Phenomenon: guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "type": "water",
+          "value": 1.1
+         }
+        ],
+        "battles": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ace Trainer Odalys",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "water",
+        "psychic",
+        "dark"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq31-bond-formed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your Greninja changed in the middle of a fight, and for a while you saw with its eyes.",
+         "importance": 75
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq31-bond-formed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your Greninja changed in the middle of a fight, and for a while you saw with its eyes.",
+         "importance": 75
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Hold on to the feeling.",
+     "success": {
+      "text": "You stop thinking about the fight and think about it instead. The water star on its back spins faster. The Ace Trainer says, quietly, \"I came to see that.\"",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "The Bond Phenomenon",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "type": "water",
+          "value": 1.1
+         }
+        ],
+        "battles": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "The Bond Phenomenon: guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "type": "water",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "type": "water",
+          "value": 1.1
+         }
+        ],
+        "battles": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Ace Trainer Odalys",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [
+        "water",
+        "psychic",
+        "dark"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq31-bond-formed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your Greninja changed in the middle of a fight, and for a while you saw with its eyes.",
+         "importance": 75
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq31-bond-formed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Your Greninja changed in the middle of a fight, and for a while you saw with its eyes.",
+         "importance": 75
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq31-the-roots",
+   "name": "The Roots",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 10,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq31-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq31-met",
+     "atLeast": 4,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "froakie",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "water"
+   ],
+   "remembers": [
+    {
+     "id": "as-one",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq31-bond-formed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It has worn your shape once, in a fight, and you have worn its. It knows you will understand without being told."
+    },
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-greninja-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You asked it to come, once, on a jetty. It came. Now it is the one who would have to ask, and it will not."
+    },
+    {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq-greninja-followed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You walked past it once and it followed you anyway. It has never needed permission. It is waiting for yours now."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "greninja",
+    "tint": "#16281a",
+    "effect": "shake"
+   },
+   "intro": "News comes up the road with the travellers. In a region not far off, roots are breaking through the ground: roots as thick as houses, choking the rivers, cracking the towns in half. Something old and green is waking under the earth and nobody knows how to calm it. They say there is a glow down in the cracks, like a single cell, watching. That night your partner stands at the edge of camp, facing the way the roots are. It has heard. It looks at you. It does not ask.",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "You say it before it has to. It stands very still. Then it crosses the camp and presses its forehead to yours, once, hard, the way it slapped your hand on the first day. When it goes, it goes fast: a ripple across the dark water, and then nothing. You stand there a long time. Somewhere north, a region is about to get a great deal of help.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "It goes to fight the roots",
+         "species": [
+          "froakie",
+          "frogadier",
+          "greninja"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-went",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-greninja",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Greninja went to save a region from the roots. It did not ask. You told it to go.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay with me.",
+     "success": {
+      "text": "It looks north for a long, long moment. Then it sits down beside you, with its back to the roots. In the morning it is still there. It never mentions it again. Sometimes, late at night, you catch it facing that way, very still, and when it sees you watching it turns round and comes back to the fire.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "froakie",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq31-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The roots were calling, and your Greninja stayed with you.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq32-bird-learned-fire",
+   "name": "The Bird That Learned Fire",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "fletchling",
+    "tint": "#3a1a10",
+    "effect": "fire"
+   },
+   "intro": "A vent in the hillside, breathing heat. A small Fletchling goes into the shimmer over it, flat out. It comes out the other side smoking, tumbles, lands badly, and shakes itself. Then it walks back to the start. It comes out singed every time, and it tries again. Up the slope, on a ledge in the heat where nothing its size should be, an old Talonflame sleeps on a nest of warm stones. And you understand: the little bird is not trying to get through the heat. It is trying to get up there.",
+   "choices": [
+    {
+     "label": "Stop it.",
+     "success": {
+      "text": "You catch it mid-run, in both hands, and it is furious. It is so small. It pecks your thumb, hard, and then sits in your palm glaring at you, the tips of its feathers still smoking. It comes with you because you are holding it. It will not forgive you for a long time. At every camp, it sits facing the volcano.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchling"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": -30
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-stopped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help it.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fire"
+       ]
+      }
+     ],
+     "pick": {
+      "types": [
+       "fire"
+      ]
+     },
+     "success": {
+      "text": "Your Fire-type sits down beside the vent and does not show the bird the fire. It shows it the breathing. In on the cool. Out on the hot. The Fletchling watches the way only a very small bird can watch. First try: smoke. Second try: less smoke. Third try, it goes into the shimmer breathing the way it was shown, and comes out the other side lit, every feather edged with flame, bigger than it went in and astonished at itself: a Fletchinder. It lands on your Fire-type's head and stays there.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchinder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-helped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help it: fan it with your coat.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire",
+       "absent": true
+      }
+     ],
+     "success": {
+      "text": "You have no fire to lend it, so you take off your coat and fan it as it goes in. It does nothing useful at all. It may make things worse. The Fletchling comes out singed, as always, and lands on your coat, and looks up at you, and you can see it has decided you are on its side. It does not get through today. It comes with you, to try again somewhere hotter.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchling"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-fanned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You sit down on a warm rock and count. It goes in eleven more times. Eleven times it comes out smoking. Somewhere around the ninth you stop breathing. On the twelfth it does not come out smoking. It comes out lit, every feather edged with fire, bigger than it went in: a Fletchinder. It lands beside you, on fire, and looks at you as if you had doubted it. You had not. It does not believe you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "fletchinder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-watched",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq32-lights-the-fire",
+   "name": "It Lights the Tent",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq32-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "fletchling",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq32-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "facing-the-volcano",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq32-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Every camp since you caught it, it has sat facing the volcano. Tonight, for the first time, it has turned round to face the fire instead."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "fletchling",
+    "tint": "#3a1a10",
+    "effect": "fire"
+   },
+   "intro": "Camp. You are still fumbling with the kindling when the bird sorts it out for you: one hot breath, and the campfire is lit. It looks extremely pleased with itself. Then, before anyone can stop it, it lights the tent.",
+   "choices": [
+    {
+     "label": "Put the tent out.",
+     "success": {
+      "text": "You beat it out with a pan. The bird watches the whole thing with great interest, as if this were another kind of fire it could learn. There is a hole in the tent now, roughly its size. It sleeps by the hole all night, keeping the draught out, which you decide is an apology.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Laugh.",
+     "success": {
+      "text": "You laugh until your ribs hurt. The bird does not understand what is funny, but it understands that you are not angry, and that seems to be new to it. The tent smells of smoke for the rest of the run. You never once mind.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq32-no-brakes",
+   "name": "No Brakes",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq32-lights-the-fire"
+    },
+    {
+     "kind": "partyLine",
+     "species": "fletchling",
+     "bond": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "fletchling",
+    "tint": "#3a2410",
+    "effect": "none"
+   },
+   "intro": "It has started practising speed. Every rest, it goes up, and comes down faster than the time before: flat out, a streak of orange along the road, the air cracking behind it. It has not practised stopping. Today it stops against the back of your head.",
+   "choices": [
+    {
+     "label": "Catch it next time.",
+     "success": {
+      "text": "You stand in the road with your arms out. It comes down like a thrown stone and hits you square in the chest instead of the head, which is progress. You both sit in the dust. It looks very proud. You have a bird-shaped bruise for a week.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Teach it to brake.",
+     "success": {
+      "text": "You show it, with your arms, how a bird spreads its tail. It watches. It goes up. It comes down. At the very last moment it spreads its tail and lands, wobbling, on your outstretched wrist. Then it looks back at its own tail as if it had never seen it before.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq32-in-the-rain",
+   "name": "Steam",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq32-no-brakes"
+    },
+    {
+     "kind": "partyLine",
+     "species": "fletchling",
+     "bond": 3
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "fletchling",
+    "tint": "#1c2430",
+    "effect": "rain"
+   },
+   "intro": "Rain, all day. The bird hates it. It steams where the drops hit it, and it sulks, feathers clamped tight: a small, damp, hissing grudge on your shoulder. Then {lead} finds a big leaf by the road and, without being asked, holds it up over the bird, and walks like that, very carefully, mile after mile.",
+   "choices": [
+    {
+     "label": "Let {lead} hold the leaf.",
+     "success": {
+      "text": "You leave them to it. {lead} holds the leaf. The bird stops hissing. By evening it has moved from your shoulder to {lead}'s head, under the leaf, dry and smug, and the two of them come into camp together as if they had planned the whole thing.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold your coat over them both.",
+     "success": {
+      "text": "You take off your coat and hold it over both of them, and all three of you walk the rest of the day in a little dry tent of your own. You are soaked through. The bird stops steaming and starts, very quietly, to sing.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq32-the-ledge",
+   "name": "The Ledge",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq32-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq32-met",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "fletchling",
+     "bond": 0
+    }
+   ],
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "remembers": [
+    {
+     "id": "held-back",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq32-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You held it back from this mountain once, in both hands. It sat facing it at every camp. You do not hold it now. It looks back at you once, to check that you will not."
+    },
+    {
+     "id": "breathing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq32-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "At the foot of the slope your Fire-type breathes with it, one last time, the way it taught it: in on the cool, out on the hot."
+    },
+    {
+     "id": "counting",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq32-watched",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You catch yourself counting again, out of habit. You do not get past one."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "talonflame",
+    "tint": "#3a1a10",
+    "effect": "fire"
+   },
+   "intro": "The volcano again, or one just like it. The vent. The ledge. And the old Talonflame is awake. Your bird goes up. Straight up, through the heat, through the shimmer that used to throw it down. It does not smoke now; it belongs in it. It lands on the ledge. The old one looks it over for a long time. It is a parent. It left it at the bottom on purpose. They all do. Most never come up. They touch beaks. Then the old one looks down at you, a long way below, and dips its head.",
+   "choices": [
+    {
+     "label": "Wait at the bottom.",
+     "success": {
+      "text": "It could stay. You both know it could. It stands on the ledge with its parent for one more breath, and then it drops: straight down, wings folded, fire streaming off it. Halfway down it opens them and it is bigger, it is a Talonflame, and it lands beside you hard enough to scorch the stones. Up on the ledge the old one is still watching. It does not look disappointed. It looks like a parent.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "fletchling",
+        "to": "talonflame"
+       },
+       {
+        "kind": "formChange",
+        "from": "fletchinder",
+        "to": "talonflame"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-turned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-talonflame",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your bird flew up the volcano to the parent who left it there, and came back down to you a Talonflame.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call up to it.",
+     "success": {
+      "text": "You call to it once. Not to bring it down: just so it knows where you are. It hears. It looks at its parent, and its parent looks at you, and then it drops: straight down, wings folded, fire streaming off it. Halfway down it opens them and it is bigger, a Talonflame, and it pulls up a hand above your head and lands as gently as a leaf. It learned to brake.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "fletchling",
+        "to": "talonflame"
+       },
+       {
+        "kind": "formChange",
+        "from": "fletchinder",
+        "to": "talonflame"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "fletchling",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq32-turned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-talonflame",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your bird flew up the volcano to the parent who left it there, and came back down to you a Talonflame.",
+        "importance": 75
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq33-luchador",
+   "name": "The Luchador",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "types": [
+    "flying",
+    "rock",
+    "grass",
+    "bug"
+   ],
+   "remembers": [
+    {
+     "id": "tournament",
+     "when": [
+      {
+       "kind": "partySpecies",
+       "species": "hawlucha"
+      },
+      {
+       "kind": "flag",
+       "key": "fighting-tournament-hawlucha",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your own Hawlucha stops dead. It knows this one: they stood across the ring from each other at the Fighting Tournament. The two of them strike the same pose at the same moment, mirror images, and neither will be the first to stop."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m"
+    ],
+    "pokemon": "hawlucha",
+    "tint": "#1e2a18",
+    "effect": "none"
+   },
+   "intro": "A tall rock above a forest path. On top of it, a Hawlucha strikes a pose: wings wide, chest out, one foot planted like a statue. Below it, three bullies come tearing out of the trees, running for their lives, one of them missing a shoe. The Hawlucha watches them go without moving a feather. Then it turns, sees you, and poses again, just for you. A small forest kid peeks out from behind a trunk. \"It protects the little ones. Every single day. It won't let anyone thank it, though. It just poses and goes.\"",
+   "choices": [
+    {
+     "label": "Pose back.",
+     "success": {
+      "text": "You plant a foot and throw your arms wide. It is a terrible pose. The Hawlucha is visibly moved. It leaps down, bows deeply, and points to a flat patch of grass: a ring. It wants a wrestling match. One on one, nobody tagging out.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hawlucha",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq33-wrestled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq33-after-the-match"
+        }
+       ],
+       "lineup": [
+        "hawlucha"
+       ],
+       "spritePokemon": "hawlucha",
+       "friendly": true,
+       "rule": {
+        "noSwitch": true
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq33-wrestled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq33-match-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq33-after-the-match"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Thank it.",
+     "success": {
+      "text": "You call up a thank-you. The Hawlucha turns its back on you, slowly, dramatically, wings folded round it like a cape, and holds that pose too. The forest kid sighs. \"Told you.\" But it does not leave. It is watching you over its shoulder, and it is, you think, a little bit pleased.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq33-thanked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq33-luchador-again"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Challenge it to a match.",
+     "success": {
+      "text": "It accepts before you finish the sentence. But this is a show, not a brawl: it wants style. No knockouts. Show it your moves, three different ones, and make every one of them count.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hawlucha",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq33-flair-match",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq33-after-the-match"
+        }
+       ],
+       "lineup": [
+        "hawlucha"
+       ],
+       "spritePokemon": "hawlucha",
+       "friendly": true,
+       "rule": {
+        "contest": 3
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq33-flair-match",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq33-match-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq33-after-the-match"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq33-luchador-again",
+   "name": "Still Posing",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m"
+    ],
+    "pokemon": "hawlucha",
+    "tint": "#1e2a18",
+    "effect": "none"
+   },
+   "intro": "The Hawlucha is still on its rock, back half turned, peeking at you over one wing. The forest kid tugs your sleeve and whispers. \"It likes you. It just can't ever say so. You have to do something it understands.\"",
+   "choices": [
+    {
+     "label": "Pose back.",
+     "success": {
+      "text": "You strike the worst pose of your life. The Hawlucha spins round, delighted, leaps down and points at the ring. One on one, nobody tagging out.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hawlucha",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq33-wrestled",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq33-after-the-match"
+        }
+       ],
+       "lineup": [
+        "hawlucha"
+       ],
+       "spritePokemon": "hawlucha",
+       "friendly": true,
+       "rule": {
+        "noSwitch": true
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq33-wrestled",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq33-match-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq33-after-the-match"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Challenge it to a match.",
+     "success": {
+      "text": "It is off the rock in one bound. A show, not a brawl: no knockouts, three different moves, all style.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hawlucha",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq33-flair-match",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq33-after-the-match"
+        }
+       ],
+       "lineup": [
+        "hawlucha"
+       ],
+       "spritePokemon": "hawlucha",
+       "friendly": true,
+       "rule": {
+        "contest": 3
+       },
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq33-flair-match",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq33-match-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq33-after-the-match"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave it to its forest.",
+     "success": {
+      "text": "You bow to it, the way it bowed to nobody. It holds its pose until you are out of sight. You hear the little ones cheering it behind you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq33-after-the-match",
+   "name": "The Champion of the Little Ones",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "it-won",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq33-match-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It won. It does not seem to care about that at all. It keeps looking at you as if you had won something better."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_m"
+    ],
+    "pokemon": "hawlucha",
+    "tint": "#2a3418",
+    "effect": "confetti"
+   },
+   "intro": "The match is over. The forest kids have come out of the trees to watch, a whole row of them. The Hawlucha climbs back onto its rock and strikes the biggest pose yet, at the sky, for nobody. Then it hops down and stands in front of you, waiting. The first kid tugs your sleeve. \"It wants to come with you. It will never say it. You have to say it.\"",
+   "choices": [
+    {
+     "label": "Say it.",
+     "success": {
+      "text": "You say it. The Hawlucha turns its back on you, very dramatically, so that nobody can see its face. The kids can see its face. They all start giggling. Then it marches to your side and stays there, posing at everything you pass for the rest of the day.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "hawlucha"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq33-joined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to guard the forest.",
+     "success": {
+      "text": "It nods, once, gravely, as one champion to another. Then it climbs back up its rock and poses for the little ones, who cheer. When you look back from the end of the path it is posing at you, and holding it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq34-goomy-went-home",
+   "name": "The Goomy Who Went Home",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 5,
+   "types": [
+    "fire",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "goomy",
+    "tint": "#3a2c14",
+    "effect": "none"
+   },
+   "intro": "Sand and heat, and in the middle of it the last thing you expect: a Goomy, crying. It is drying out. Its skin has gone tacky and dull, and the little wet trail it leaves behind it vanishes in the sun almost at once. It sees you, and lights up, and slides straight over and hugs your boot. It is very sticky. It loves you at once. Someone has written a phone number on a tag round its horn. You call it. A tired voice answers: a wetland keeper. \"The wetland's being drained. That Goomy was the only one that got out. It must have walked for days.\"",
+   "choices": [
+    {
+     "label": "Take it home.",
+     "success": {
+      "text": "The keeper gives you the way, voice cracking. \"Four nodes from you. Please hurry. They're nearly done.\" You wrap the Goomy in a wet shirt and it hums against your neck the whole way, damp and pleased, as if going home with you were the best idea anyone ever had.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "goomy"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq34-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq34-going-home",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq34-on-the-way",
+        "nodes": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Raise it.",
+     "success": {
+      "text": "You keep it. You keep it wet: a water bottle, then two, then a hat full of puddle. It is happy. It is very, very happy, and very sticky, and by evening there is Goomy on everything you own. The keeper sighs down the phone, then laughs. \"Look after it, then. It picked you.\"",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "goomy"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq34-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq34-raised",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find it a wetland nearby.",
+     "success": {
+      "text": "There is a marsh an hour off the road: small and cool and full of reeds. You carry the Goomy there and set it down in the mud. It sighs all the way down to its feelers. It is home, or near enough. When you leave, it slides to the edge of the water and watches you go, and it does not stop watching until the reeds close behind you. It misses you already. On your sleeve it has left a great shining smear of slime that will never quite wash out.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "goodra-slime",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq34-nearby",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq34-on-the-way",
+   "name": "The First Rain",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "sliggoo",
+    "tint": "#1c2a30",
+    "effect": "rain"
+   },
+   "intro": "Halfway home, rain comes in off the hills: the first rain the Goomy has felt in days. It slides off your shoulder into the biggest puddle on the road and just lies there, soaking, getting bigger. Then it really does get bigger. It stretches, and swells, and stands up out of the puddle taller than it was, shining and soft: a Sliggoo. It looks at its new self in the water, and then at you, and then down the road toward home.",
+   "choices": [
+    {
+     "label": "Hurry on.",
+     "success": {
+      "text": "It slides ahead of you now, leaving a broad wet track you could follow in the dark. It does not need carrying any more. It knows the way. Two nodes to go.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "goomy",
+        "to": "sliggoo"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "goomy",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq34-sliggoo",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "aq34-the-wetland",
+        "nodes": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq34-the-wetland",
+   "name": "The Draining Crew",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/worker_f"
+    ],
+    "pokemon": "goodra",
+    "tint": "#2a2418",
+    "effect": "shake"
+   },
+   "intro": "The wetland. Or what is left of it: pumps chugging on the bank, pipes running off over the hill, mud cracking where the water stood. A crew in hard hats is clearing the last of the reeds. Your Sliggoo goes very quiet. Then it grows. It stands up taller than you, shining, horns sweeping back, and it is a Goodra, and it is furious, and it is home.",
+   "choices": [
+    {
+     "label": "Stand with it.",
+     "success": {
+      "text": "Goodra plants itself between the crew and the last of the water, and you stand beside it.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "goomy",
+        "to": "goodra"
+       },
+       {
+        "kind": "formChange",
+        "from": "sliggoo",
+        "to": "goodra"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Draining Crew",
+       "classId": "worker",
+       "size": 3,
+       "types": [
+        "ground",
+        "steel"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "aq34-wetland-saved",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq34-the-protector"
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "aq34-wetland-saved",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "aq34-crew-fight-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "aq34-the-protector"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq34-the-protector",
+   "name": "The Wetland's Protector",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "remembers": [
+    {
+     "id": "crew-gave-up",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq34-crew-fight-lost",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You lost the fight. It did not matter. The crew took one look at a Goodra standing in the last of the water, crying, and turned the pumps off themselves."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "goodra",
+    "tint": "#1c3024",
+    "effect": "rain"
+   },
+   "intro": "The pumps are off. Water is already creeping back across the mud, slow and brown and certain. Goodra wades out into it up to its chest and stands there with its eyes shut. Little Goomy are coming out of the reeds, the ones that hid, one by one, and gathering round its feet. The keeper is crying down the phone. Goodra turns and looks at you. It does not want to leave you. It does not want to leave them.",
+   "choices": [
+    {
+     "label": "Let it stay.",
+     "success": {
+      "text": "You say it before it has to. It wades back and hugs you: all of you, sticky, for a very long time. When you go, the whole wetland is watching, and the slime it left on your coat shines all the way to the next node. It is the wetland's protector now. It always was going to be.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "It stays to guard its wetland",
+         "species": [
+          "goomy",
+          "sliggoo",
+          "goodra"
+         ]
+        }
+       },
+       {
+        "kind": "item",
+        "id": "goodra-slime",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq34-stayed-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "reunion-guest-goodra",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Goodra walked home across a desert and saved its wetland. It stayed to guard it. It is still sticky.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring it with you.",
+     "success": {
+      "text": "It looks at the little ones in the reeds, and then at you, and comes. It cries a bit, the first night. The keeper promises to send news, and the wetland will be fine now the crew is gone. Goodra is less sure it will be fine without them. It is completely sure about you.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "goomy",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq34-came-away",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your Goodra saved its wetland, and then chose the road with you.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq35-egg-in-the-cave",
+   "name": "The Egg in the Cave",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "types": [
+    "rock",
+    "ground"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "pokemon": "noivern",
+    "tint": "#16141e",
+    "effect": "none"
+   },
+   "intro": "Deep in a cave, where the light from the entrance gives out, something huge is curled round an egg: a Noivern, wings wrapped tight. It growls when it hears you, a sound that fills the whole cave. Then it coughs, and coughs again, and cannot stop. It tries to rise, and its wings will not hold it. It cannot fly. A researcher with a headlamp is sitting a careful distance away. \"It's been sick a week. It hasn't left that egg once, not even to eat.\"",
+   "choices": [
+    {
+     "label": "Bring it food.",
+     "success": {
+      "text": "You set food down where it can reach without standing: berries, and everything soft you have. It does not trust it. Then hunger wins. It eats, slowly, coughing between mouthfuls. All night, every time you open your eyes, its eyes are open too, watching you over the egg.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-noibat-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq35-after-food"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the egg somewhere safe.",
+     "success": {
+      "text": "You take one step toward the egg. That is all it takes. The Noivern comes up off the ground on wings that should not hold it, screaming, and the sound slams you back against the rock. It lands between you and the egg, shaking, coughing, and still screaming.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq35-egg-grabbed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq35-it-attacks"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call a doctor.",
+     "success": {
+      "text": "The researcher has a number. The doctor comes down the long way, two nodes of cave, with a heavy bag and a great deal of patience, and it takes all of that time. By the end the Noivern's cough is a wheeze, then a sigh, then nothing. It stands up, for the first time in a week, and stretches its wings as far as the cave allows.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "aq-noibat-doctor",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq35-after-doctor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq35-it-attacks",
+   "name": "The Scream",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "noivern",
+    "tint": "#16141e",
+    "effect": "rattle"
+   },
+   "intro": "The Noivern is between you and the egg, wings spread as wide as the cave allows, the sound coming off it so loud the walls ring. It is shaking. It cannot keep this up for long. It is going to try anyway.",
+   "choices": [
+    {
+     "label": "Retreat.",
+     "success": {
+      "text": "You back away, hands up, all the way to the light. The screaming stops the moment you reach the cave mouth. Behind you, in the dark, the coughing starts again.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Explain.",
+     "success": {
+      "text": "You crouch down, as small as you can make yourself, and you talk. You hardly know what you are saying. It does not matter: it is the voice that matters, low and steady. The sound stops. The Noivern sinks back round its egg, spent, and watches you. It has not decided you are a friend. It has decided you can stay.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq35-explained",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq35-second-chance"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq35-second-chance",
+   "name": "You Can Stay",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "pokemon": "noivern",
+    "tint": "#16141e",
+    "effect": "none"
+   },
+   "intro": "The Noivern is curled round its egg again, coughing, one eye fixed on you. The researcher lets out a breath she has been holding for a long time. \"I thought that was the end of you. All right. Now what?\"",
+   "choices": [
+    {
+     "label": "Bring it food.",
+     "success": {
+      "text": "You set food down where it can reach without standing: berries, and everything soft you have. It does not trust it. Then hunger wins. It eats, slowly, coughing between mouthfuls. All night, every time you open your eyes, its eyes are open too, watching you over the egg.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-noibat-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq35-after-food"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call a doctor.",
+     "success": {
+      "text": "The researcher has a number. The doctor comes down the long way, two nodes of cave, with a heavy bag and a great deal of patience, and it takes all of that time. By the end the Noivern's cough is a wheeze, then a sigh, then nothing. It stands up, for the first time in a week, and stretches its wings as far as the cave allows.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "aq-noibat-doctor",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq35-after-doctor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq35-after-food",
+   "name": "Watched All Night",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "pokemon": "noivern",
+    "tint": "#16141e",
+    "effect": "none"
+   },
+   "intro": "Morning, or what passes for it in a cave. The Noivern ate. It is still coughing, and it still cannot fly, but it watches you differently now. Under its wing, the egg rocks, once. The researcher looks at the cough, and then at you. \"Food helps. It won't fix that chest.\"",
+   "choices": [
+    {
+     "label": "Call a doctor.",
+     "success": {
+      "text": "The researcher has a number. The doctor comes down the long way, two nodes of cave, with a heavy bag and a great deal of patience, and it takes all of that time. By the end the Noivern's cough is a wheeze, then a sigh, then nothing. It stands up, for the first time in a week, and stretches its wings as far as the cave allows.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "aq-noibat-doctor",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq35-hatching"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them rest.",
+     "success": {
+      "text": "You leave the rest of your food where it can reach, and go. All the way to the cave mouth you can feel it watching you. You hope the cough eases. You will never know.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq35-after-doctor",
+   "name": "Well, and Hungry",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/doctor_m"
+    ],
+    "pokemon": "noivern",
+    "tint": "#16141e",
+    "effect": "none"
+   },
+   "intro": "The Noivern is well. It is also starving: a week without food, and even now, well again, it will not leave the egg to hunt. It looks at the cave mouth, then at the egg, then at you. The doctor packs his bag. \"Medicine's done its part. It needs feeding now, and it won't go.\"",
+   "choices": [
+    {
+     "label": "Bring it food.",
+     "success": {
+      "text": "You set food down where it can reach without standing: berries, and everything soft you have. It does not trust it. Then hunger wins. It eats, slowly, coughing between mouthfuls. All night, every time you open your eyes, its eyes are open too, watching you over the egg.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq-noibat-fed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq35-hatching"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You go. It is well now; it will hunt in the end, when it has to. At the cave mouth you look back. It is still looking at the light, and still not moving.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq35-hatching",
+   "name": "In Your Arms",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq-noibat-fed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq-noibat-doctor",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "noibat",
+    "tint": "#221c2e",
+    "effect": "sparkle"
+   },
+   "intro": "The Noivern has eaten. It is well. For the first time in more than a week it lifts its wing off the egg. Then it does a thing you did not expect: it nudges the egg toward you, slowly, with its nose. You pick it up. It is warm. It is moving. It cracks in your arms, and a Noibat tumbles out, all ears, and screams at you with its whole tiny body. The parent watches. It does not take it back.",
+   "choices": [
+    {
+     "label": "Hold it close.",
+     "success": {
+      "text": "The Noibat stops screaming. It sniffs you, all over, very loudly. Then it climbs your coat and hangs off your collar upside down, satisfied. The Noivern looks at the two of you for a long time, and then it folds its wings and settles down to sleep, properly, for the first time in a week. It has let it go with you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "noibat"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 30
+       },
+       {
+        "kind": "flag",
+        "key": "aq35-hatched",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Noibat hatched in your arms in a cave, and its parent let it go with you.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it back to its parent.",
+     "success": {
+      "text": "You set the Noibat down by the great wing. The parent looks at it, and at you, and then gathers it in, very gently. The researcher is crying, quietly, behind her headlamp. You walk out into the light with empty arms and a warm feeling where the egg was.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq36-sleeps-in-the-bag",
+   "name": "The One Who Sleeps in the Bag",
+   "group": "Pokémon-anime questlines",
+   "rarity": "common",
+   "minStage": 1,
+   "types": [
+    "grass",
+    "bug"
+   ],
+   "remembers": [
+    {
+     "id": "oran-berry",
+     "when": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "notice": "There is a berry missing from your bag, and juice all over the Rowlet's face. It was here for the berry. It is now very full, and very, very asleep.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Let it stay.",
+       "success": {
+        "text": "You zip the bag most of the way, leaving it a gap to breathe, and carry it all day. Every so often the bag hoots. It is so full of berry that it does not even wake up for this. When you make camp, it does not come out. It lives there now. You are just the bag's legs.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "oran-berry"
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rowlet"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 10
+         },
+         {
+          "kind": "flag",
+          "key": "aq36-in-the-bag",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Wake it and send it home.",
+       "success": {
+        "text": "You lift it out, gently, and it wakes all the way up, deeply offended. You point at the trees. It goes, flapping heavily up to the flock, and you zip the bag shut. It flies a little low, being so full. The flock stops calling.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "oran-berry"
+         },
+         {
+          "kind": "flag",
+          "key": "aq36-sent-home",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "aq36-back-in-the-bag"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Carry the bag to the flock.",
+       "success": {
+        "text": "You carry the whole bag, Rowlet and all, to the foot of the flock's tree. An old Decidueye drops down, the elder, and looks into the bag for a long time. The Rowlet snores. It is so full of berry that it does not even wake up for this. The elder looks at you. Then it nods, once, and goes back up. The flock stops calling. The matter, it seems, is settled.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "oran-berry"
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rowlet"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 20
+         },
+         {
+          "kind": "flag",
+          "key": "aq36-elder-nodded",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "sitrus-berry",
+     "when": [
+      {
+       "kind": "item",
+       "id": "sitrus-berry"
+      }
+     ],
+     "notice": "There is a berry missing from your bag, and juice all over the Rowlet's face. It was here for the berry. It is now very full, and very, very asleep.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Let it stay.",
+       "success": {
+        "text": "You zip the bag most of the way, leaving it a gap to breathe, and carry it all day. Every so often the bag hoots. It is so full of berry that it does not even wake up for this. When you make camp, it does not come out. It lives there now. You are just the bag's legs.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "sitrus-berry"
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rowlet"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 10
+         },
+         {
+          "kind": "flag",
+          "key": "aq36-in-the-bag",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Wake it and send it home.",
+       "success": {
+        "text": "You lift it out, gently, and it wakes all the way up, deeply offended. You point at the trees. It goes, flapping heavily up to the flock, and you zip the bag shut. It flies a little low, being so full. The flock stops calling.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "sitrus-berry"
+         },
+         {
+          "kind": "flag",
+          "key": "aq36-sent-home",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "aq36-back-in-the-bag"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Carry the bag to the flock.",
+       "success": {
+        "text": "You carry the whole bag, Rowlet and all, to the foot of the flock's tree. An old Decidueye drops down, the elder, and looks into the bag for a long time. The Rowlet snores. It is so full of berry that it does not even wake up for this. The elder looks at you. Then it nods, once, and goes back up. The flock stops calling. The matter, it seems, is settled.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "sitrus-berry"
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rowlet"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 20
+         },
+         {
+          "kind": "flag",
+          "key": "aq36-elder-nodded",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "lum-berry",
+     "when": [
+      {
+       "kind": "item",
+       "id": "lum-berry"
+      }
+     ],
+     "notice": "There is a berry missing from your bag, and juice all over the Rowlet's face. It was here for the berry. It is now very full, and very, very asleep.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Let it stay.",
+       "success": {
+        "text": "You zip the bag most of the way, leaving it a gap to breathe, and carry it all day. Every so often the bag hoots. It is so full of berry that it does not even wake up for this. When you make camp, it does not come out. It lives there now. You are just the bag's legs.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "lum-berry"
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rowlet"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 10
+         },
+         {
+          "kind": "flag",
+          "key": "aq36-in-the-bag",
+          "amount": 1
+         }
+        ]
+       }
+      },
+      {
+       "label": "Wake it and send it home.",
+       "success": {
+        "text": "You lift it out, gently, and it wakes all the way up, deeply offended. You point at the trees. It goes, flapping heavily up to the flock, and you zip the bag shut. It flies a little low, being so full. The flock stops calling.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "lum-berry"
+         },
+         {
+          "kind": "flag",
+          "key": "aq36-sent-home",
+          "amount": 1
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "aq36-back-in-the-bag"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Carry the bag to the flock.",
+       "success": {
+        "text": "You carry the whole bag, Rowlet and all, to the foot of the flock's tree. An old Decidueye drops down, the elder, and looks into the bag for a long time. The Rowlet snores. It is so full of berry that it does not even wake up for this. The elder looks at you. Then it nods, once, and goes back up. The flock stops calling. The matter, it seems, is settled.",
+        "effects": [
+         {
+          "kind": "loseItem",
+          "id": "lum-berry"
+         },
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "rowlet"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 20
+         },
+         {
+          "kind": "flag",
+          "key": "aq36-elder-nodded",
+          "amount": 1
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rowlet",
+    "tint": "#1a2a18",
+    "effect": "none"
+   },
+   "intro": "You open your bag for a snack, and somebody is already in it: a Rowlet, round as a bun, asleep on top of your spare socks. It opens one eye. It looks at you. It looks at you a while longer, as if you were the one who had climbed into its bag. Then it closes the eye and goes back to sleep. From the trees overhead, a whole flock of Rowlet start calling, round and round, the way you would call a child in for dinner.",
+   "choices": [
+    {
+     "label": "Let it stay.",
+     "success": {
+      "text": "You zip the bag most of the way, leaving it a gap to breathe, and carry it all day. Every so often the bag hoots. When you make camp, it does not come out. It lives there now. You are just the bag's legs.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rowlet"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq36-in-the-bag",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake it and send it home.",
+     "success": {
+      "text": "You lift it out, gently, and it wakes all the way up, deeply offended. You point at the trees. It goes, flapping heavily up to the flock, and you zip the bag shut. The flock stops calling.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq36-sent-home",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq36-back-in-the-bag"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry the bag to the flock.",
+     "success": {
+      "text": "You carry the whole bag, Rowlet and all, to the foot of the flock's tree. An old Decidueye drops down, the elder, and looks into the bag for a long time. The Rowlet snores. The elder looks at you. Then it nods, once, and goes back up. The flock stops calling. The matter, it seems, is settled.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rowlet"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 20
+       },
+       {
+        "kind": "flag",
+        "key": "aq36-elder-nodded",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq36-back-in-the-bag",
+   "name": "Back Again",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rowlet",
+    "tint": "#141c24",
+    "effect": "none"
+   },
+   "intro": "That night, by your fire, you hear a scratching. The zip of your bag is open. There is a Rowlet in the bag, on the socks, asleep, exactly where it was this morning. It has brought a leaf with it, as a pillow.",
+   "choices": [
+    {
+     "label": "Let it stay.",
+     "success": {
+      "text": "You zip the bag most of the way, leaving it a gap to breathe. It hoots once in its sleep. In the morning the flock calls, and it does not answer, and the flock, after a while, stops calling. It has decided. It lives in the bag now.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rowlet"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq36-in-the-bag",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry it back to the flock.",
+     "success": {
+      "text": "You carry it to the trees in the dark and set it on a branch. It does not wake up. In the morning, you check your bag twice. It is empty, and somehow that is the saddest thing you have seen all week.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq37-old-guardian",
+   "name": "The Old Guardian",
+   "group": "Pokémon-anime questlines",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/pokefan_f"
+    ],
+    "pokemon": "litten",
+    "tint": "#241c1c",
+    "effect": "none"
+   },
+   "intro": "An empty building at the end of a street: broken windows, a door hanging off one hinge. A Litten slips out from under a market stall with a bun in its mouth and runs for it. Inside, on a heap of old coats, lies a Stoutland. It is very old. Its great moustache has gone white and thin. The Litten sets the bun down by its nose and sits back to watch it eat. It brings it everything. A neighbour leaning on her gate shakes her head. \"That dog's been dying for months. The cat won't let it.\"",
+   "choices": [
+    {
+     "label": "Help them.",
+     "success": {
+      "text": "You buy food and carry it in. The Litten puffs itself up to twice its size and spits at you. Then, when you set the food down and step back, it lets you. Barely. It stands over the Stoutland the whole time, watching your hands. The old dog eats a little and thumps its tail, once, on the coats. The Litten looks at the tail as if it were a miracle.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq37-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq37-helped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring a doctor.",
+     "success": {
+      "text": "The doctor kneels by the coats a long time, gentle hands, quiet voice. Then she sits back on her heels. \"There's nothing to do. He's just old. He's very, very old.\" The Litten does not understand the words. It understands the voice. It lies down along the Stoutland's side, and does not move again while you are there. It is staying.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq37-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq37-doctor",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You walk on. It is not your street. Behind you the Litten is already out again, hunting the market for something the old dog might eat. That night, in the building at the end of the street, the Stoutland dies, with nobody there but the Litten.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq37-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq37-left",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq37-waiting",
+   "name": "Waiting at the Door",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq37-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq37-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "types": [
+    "normal",
+    "electric",
+    "steel"
+   ],
+   "remembers": [
+    {
+     "id": "traveller",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "an06-dogs-grave"
+      }
+     ],
+     "notice": "Footsteps behind you: the long-lived traveller, staff in hand. She says nothing. She sits down on the floor beside the Litten, the way someone sits who has done this many times, for many friends. She has."
+    },
+    {
+     "id": "alone",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq37-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You walked past this door a stage ago. Nobody was here when it happened, nobody but the Litten. It does not know you. It does not need to."
+    },
+    {
+     "id": "the-food",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq37-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It remembers the food you carried in. It does not spit at you this time. It only looks."
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/pokefan_f"
+    ],
+    "pokemon": "litten",
+    "tint": "#1c1820",
+    "effect": "none"
+   },
+   "intro": "You pass back by the building at the end of the street. The neighbour tells you over her gate, very quietly: the old Stoutland died. Inside, the coats are still shaped like the dog. The Litten sits beside them, upright, watching the door. Every so often it goes out, and comes back with food, and sets it down where the nose used to be. Then it sits again and watches the door. It is waiting for it to come back.",
+   "choices": [
+    {
+     "label": "Sit with it.",
+     "success": {
+      "text": "You sit down on the floor, not too close. You do not say anything. It does not look at you. The light goes across the room, and up the wall, and out. Some time in the dark the Litten moves along the coats until its back is against your leg. It is still watching the door. But it is leaning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq37-grieved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq37-sat",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it away.",
+     "success": {
+      "text": "You pick it up. It fights you, all claws, yowling, and you hold on and carry it out into the street, and then it goes completely still in your arms, which is worse. It comes with you, because you are carrying it. It looks back at the door until the street turns. It was not ready. You both know it was not ready.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "litten"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "litten",
+        "amount": -30
+       },
+       {
+        "kind": "flag",
+        "key": "aq37-taken-away",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq37-guardian-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You do not go in. You sit on the step outside, every day you are in town, where it can see you. The Litten carries its food past you, in and out, in and out. On the third day it stops in front of you, and drops a bun at your feet, and goes back inside to the door.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq37-grieved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aq37-waited",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq37-ready",
+   "name": "When It Is Ready",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq37-grieved",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq37-grieved",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "remembers": [
+    {
+     "id": "leaned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq37-sat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It leaned on you once, in the dark, while it watched a door. It is not watching any door now. It is watching you."
+    },
+    {
+     "id": "step",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq37-waited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You sat on its step for three days. Now it has come and sat on yours."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "litten",
+    "tint": "#2a1c18",
+    "effect": "none"
+   },
+   "intro": "On the road there is a Litten sitting in the middle of the path in front of you. It is thinner than it was. It has a bun in its mouth. It walks up and sets the bun down at your feet, the way it used to set them by the old dog's nose, and sits back, and watches you, to see if you will eat.",
+   "choices": [
+    {
+     "label": "Eat it.",
+     "success": {
+      "text": "You eat it. It is squashed and very stale, and it is the best thing you have eaten all run. The Litten watches every bite. When you finish, it gets up and walks beside you, close, and that is that. It has somebody to look after again.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "litten"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 30
+       },
+       {
+        "kind": "flag",
+        "key": "aq37-guardian-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Litten looked after an old Stoutland until the very end. When it was ready, it came to look after you.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share it with it.",
+     "success": {
+      "text": "You break the bun in half and hold one half out. It looks at the half for a long moment, as if nobody had ever thought to feed it back. Then it eats, beside you, shoulder to your knee. When you stand up, it stands up too.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "litten"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 30
+       },
+       {
+        "kind": "flag",
+        "key": "aq37-guardian-done",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Litten looked after an old Stoutland until the very end. When it was ready, it came to look after you.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell it to go home.",
+     "success": {
+      "text": "You tell it, gently, that it does not have to look after anyone. It looks at you for a long time. Then it picks the bun back up and goes, back down the road toward the town, and you never quite know whether that was right.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-dusk-wolf",
+   "name": "The Dusk Wolf",
+   "group": "Pokémon-anime questlines",
+   "rarity": "rare",
+   "minStage": 3,
+   "types": [
+    "rock",
+    "ground",
+    "flying"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "rockruff",
+    "tint": "#3a2418",
+    "effect": "none"
+   },
+   "intro": "Evening at the foot of a rocky hill, the sky going orange. A girl comes down the path beaming, a Rockruff trotting at her heels. Both her hands are bandaged. Up to the elbow on the left. \"I'm Elowen. Elowen Stanhope. It likes me a lot.\" She holds up the bandages, as proof. \"Mum says it's got to go. It bit the postman. It loves the postman.\" The Rockruff trots over to you. It bites your sleeve, then sits, tail going, holding on.",
+   "choices": [
+    {
+     "label": "Let it.",
+     "success": {
+      "text": "You do not pull away. You do not flinch. It holds on, and holds on, and then, puzzled, lets go, and licks the wet patch it left. Over the next stage it bites less, and then less again. It needed somebody not to flinch. Elowen watches, bandaged hands pressed together. \"Will you write? It can't write. Will you write for it?\" You promise.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rockruff"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-let-it",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Train it.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "It bites. You go still, perfectly still, and wait. It lets go, confused. The next time it only mouths, gently, and you praise it to the skies. By sundown it has worked out the difference, and it is so proud of it that it runs to {lead} and demonstrates: chomp, gentle, chomp, gentle. Elowen watches, bandaged hands pressed together. \"Will you write? It can't write. Will you write for it?\" You promise.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rockruff"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 15
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-play-bite",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It bites. You flinch, you cannot help it, and it holds on tighter, delighted with the game. You try again, and again. By sundown your sleeve is in rags and it has the idea, mostly: it only bites hard now when it is very excited, which is often. Elowen watches, bandaged hands pressed together. \"Will you write? It can't write. Will you write for it?\" You promise.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rockruff"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-play-bite",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it to see the sunset.",
+     "success": {
+      "text": "The sun is already low. You take it up the hill with Elowen, the Rockruff tugging your sleeve the whole way, as if it knows where you are going. Elowen watches, bandaged hands pressed together. \"Will you write? It can't write. Will you write for it?\" You promise.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rockruff"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-met",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq38-the-sunset"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it with Elowen.",
+     "success": {
+      "text": "You give her back her Rockruff. She hugs it, bandages and all, and it bites her hair, lovingly. \"Mum will come round,\" she says, not at all sure. You hope so, all the way down the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-the-sunset",
+   "name": "The Green Flash",
+   "group": "Pokémon-anime questlines",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rockruff",
+    "tint": "#4a2414",
+    "effect": "sparkle"
+   },
+   "intro": "The top of the hill, and the sun going down over the rim of the world, huge and red. The Rockruff sits. It watches the sun go down. For a long time. It does not fidget, it does not bite, it does not so much as twitch an ear. It is the stillest it has ever been. The last of it. And then, on the rim of the world, a green flash: a thing that happens one evening in a thousand. Its eyes have it.",
+   "choices": [
+    {
+     "label": "Watch with it.",
+     "success": {
+      "text": "You sit beside it until the sky is dark blue and the first stars are out, and it does not move, and neither do you. When at last it turns to you, its eyes are still holding a little of that green. You know, without knowing how, what it will be when it is grown.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq38-sunset-watched",
+        "amount": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "A Rockruff watched the sun go down with you until it saw the green flash.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-sunset-hill",
+   "name": "A Hill Facing West",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq38-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq38-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq38-sunset-watched",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "partySpecies",
+     "species": "rockruff"
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening"
+     ]
+    }
+   ],
+   "types": [
+    "rock",
+    "ground",
+    "flying"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rockruff",
+    "tint": "#4a2414",
+    "effect": "none"
+   },
+   "intro": "Evening comes on, red and gold. Beside the road there is a hill with a clear view to the west. The Rockruff has stopped walking. It is looking at the light. It looks at the hill. Then it looks at you, and does not bite anything at all.",
+   "choices": [
+    {
+     "label": "Take it up the hill.",
+     "success": {
+      "text": "You climb together. The top of the hill, and the sun going down over the rim of the world, huge and red. The Rockruff sits. It watches the sun go down. For a long time. It does not fidget, it does not bite, it does not so much as twitch an ear. It is the stillest it has ever been. The last of it. And then, on the rim of the world, a green flash: a thing that happens one evening in a thousand. Its eyes have it. You sit beside it until the sky is dark blue and the first stars are out, and it does not move, and neither do you. When at last it turns to you, its eyes are still holding a little of that green. You know, without knowing how, what it will be when it is grown.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aq38-sunset-watched",
+        "amount": 1
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "A Rockruff watched the sun go down with you until it saw the green flash.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not tonight.",
+     "success": {
+      "text": "You walk on. It walks on beside you, looking back over its shoulder at the light until the road turns. There will be other evenings, and other hills.",
+      "effects": [
+       {
+        "kind": "seeAgain",
+        "eventId": "aq38-sunset-hill"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-wolf-greeting",
+   "name": "Rocks on Its Neck",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq38-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "rockruff",
+     "bond": 1
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq38-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rockruff",
+    "tint": "#2a2018",
+    "effect": "none"
+   },
+   "intro": "At camp the Rockruff comes and leans on your leg, and rubs the rocks round its neck up and down against your shin, hard. It is a greeting. It is, you discover, also quite sore.",
+   "choices": [
+    {
+     "label": "Rub its neck.",
+     "success": {
+      "text": "You rub the soft fur at the base of the rocks, where it itches. It groans like an old door and falls over sideways, legs in the air. From then on it greets you the same way every evening, and you keep a hand ready.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it lean.",
+     "success": {
+      "text": "You stand still and let it lean, bruises and all. It leans harder. It is a small dog with a lot of rock on it and a great deal to say, and this is how it says it.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-scene-1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-wolf-evenings",
+   "name": "Cross in the Evenings",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq38-wolf-greeting"
+    },
+    {
+     "kind": "partyLine",
+     "species": "rockruff",
+     "bond": 2
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-grave",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "an06-dogs-grave"
+      }
+     ],
+     "notice": "Tonight it goes further than usual. You find it on the hill, at the old grave where the long-lived traveller stood, howling. Something under the ground howls back, pleased."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rockruff",
+    "tint": "#2a1c18",
+    "effect": "none"
+   },
+   "intro": "Evenings, it gets cross. No reason you can see. Its fur goes up, it snaps at nothing, and then it goes off alone for an hour, out past the firelight. It always comes back. It always comes back sorry, head low, and lies down with its chin on your boot.",
+   "choices": [
+    {
+     "label": "Wait up for it.",
+     "success": {
+      "text": "You keep the fire going until it comes in. It looks surprised to find you awake, and then very relieved, and lies down a little closer than usual. You do not ask where it went. It would not be able to tell you.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow it out.",
+     "success": {
+      "text": "You follow at a distance. It sits on a rock and stares at the last of the light, growling softly at nothing. When it notices you, it comes straight back, tail low, sorry, and walks home pressed against your legs.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-scene-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-wolf-colour",
+   "name": "At the Turn of the Light",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq38-wolf-evenings"
+    },
+    {
+     "kind": "partyLine",
+     "species": "rockruff",
+     "bond": 3
+    }
+   ],
+   "remembers": [
+    {
+     "id": "green",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aq38-sunset-watched",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The colour is green. The exact green of the flash you saw together on the hill."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rockruff",
+    "tint": "#3a2418",
+    "effect": "glint"
+   },
+   "intro": "The evenings are worse now. It paces. And at the turn of the light, just for a second, as the sun touches the edge of the world, its eyes go a colour you have never seen on it. Then it blinks, and they are its own again, and it looks at you as if to ask whether you saw.",
+   "choices": [
+    {
+     "label": "Tell it you saw.",
+     "success": {
+      "text": "You tell it. It looks at you for a long time. Then it lies down with its chin on your knee, and stays there until it is fully dark, as if it is glad that somebody else knows.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold it until it passes.",
+     "success": {
+      "text": "You put your arms round it, rocks and all, and hold on until the light is gone. It shakes a little. Then it stops. Whatever is coming, it will not meet it alone.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-scene-3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-wolf-evening",
+   "name": "The Evening It Evolves",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq38-sunset-watched",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flagAge",
+     "key": "aq38-sunset-watched",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "rockruff",
+     "bond": 3
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "aq38-evolved",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lycanroc-dusk",
+    "tint": "#3a2014",
+    "effect": "none"
+   },
+   "intro": "It is gone from camp. You find it out on a rock against the last of the light: bigger, the wrong shape for the dog it was, all mane and long legs, orange as the last of the day, and in its eyes, still, a little of that green, with its back turned to you. It does not know whether it is still liked.",
+   "choices": [
+    {
+     "label": "Hold out a sleeve.",
+     "success": {
+      "text": "It looks at the sleeve. It looks at you. It takes it, very, very gently, the way it learned to, and holds on. Behind it, slowly, its tail begins to go, the way it did on the first day.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "rockruff",
+        "to": "lycanroc-dusk"
+       },
+       {
+        "kind": "formChange",
+        "from": "lycanroc",
+        "to": "lycanroc-dusk"
+       },
+       {
+        "kind": "formChange",
+        "from": "lycanroc-midnight",
+        "to": "lycanroc-dusk"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your wolf grew up on a rock at sundown, and took your sleeve, very gently.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come here.",
+     "success": {
+      "text": "It comes. Slowly, head low, unsure, too big for your lap now and trying to fit in it anyway. It does not fit. You do not let that stop either of you.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "rockruff",
+        "to": "lycanroc-dusk"
+       },
+       {
+        "kind": "formChange",
+        "from": "lycanroc",
+        "to": "lycanroc-dusk"
+       },
+       {
+        "kind": "formChange",
+        "from": "lycanroc-midnight",
+        "to": "lycanroc-dusk"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your wolf grew up on a rock at sundown, and came when you called.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit down beside it.",
+     "success": {
+      "text": "You climb up and sit beside it, shoulder to shoulder, and look where it is looking. After a while it leans. It is a great deal heavier than it used to be. You do not mind at all.",
+      "effects": [
+       {
+        "kind": "formChange",
+        "from": "rockruff",
+        "to": "lycanroc-dusk"
+       },
+       {
+        "kind": "formChange",
+        "from": "lycanroc",
+        "to": "lycanroc-dusk"
+       },
+       {
+        "kind": "formChange",
+        "from": "lycanroc-midnight",
+        "to": "lycanroc-dusk"
+       },
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your wolf grew up on a rock at sundown, and you sat beside it.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-wolf-evening-day",
+   "name": "The Evening It Evolves",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq38-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq38-sunset-watched",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "partySpecies",
+     "species": "lycanroc"
+    },
+    {
+     "kind": "flag",
+     "key": "aq38-evolved",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lycanroc",
+    "tint": "#3a2014",
+    "effect": "none"
+   },
+   "intro": "It is gone from camp. You find it out on a rock against the last of the light: bigger, the wrong shape for the dog it was, all mane and long legs, the colour of noon, eyes clear and bright, with its back turned to you. It does not know whether it is still liked.",
+   "choices": [
+    {
+     "label": "Hold out a sleeve.",
+     "success": {
+      "text": "It looks at the sleeve. It looks at you. It takes it, very, very gently, the way it learned to, and holds on. Behind it, slowly, its tail begins to go, the way it did on the first day.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your wolf grew up on a rock at sundown, and took your sleeve, very gently.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come here.",
+     "success": {
+      "text": "It comes. Slowly, head low, unsure, too big for your lap now and trying to fit in it anyway. It does not fit. You do not let that stop either of you.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your wolf grew up on a rock at sundown, and came when you called.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit down beside it.",
+     "success": {
+      "text": "You climb up and sit beside it, shoulder to shoulder, and look where it is looking. After a while it leans. It is a great deal heavier than it used to be. You do not mind at all.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your wolf grew up on a rock at sundown, and you sat beside it.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-wolf-evening-night",
+   "name": "The Evening It Evolves",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq38-met",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "aq38-sunset-watched",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "partySpecies",
+     "species": "lycanroc-midnight"
+    },
+    {
+     "kind": "flag",
+     "key": "aq38-evolved",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lycanroc-midnight",
+    "tint": "#3a2014",
+    "effect": "none"
+   },
+   "intro": "It is gone from camp. You find it out on a rock against the last of the light: bigger, the wrong shape for the dog it was, all mane and long legs, red as a fire gone low, eyes like the middle of the night, with its back turned to you. It does not know whether it is still liked.",
+   "choices": [
+    {
+     "label": "Hold out a sleeve.",
+     "success": {
+      "text": "It looks at the sleeve. It looks at you. It takes it, very, very gently, the way it learned to, and holds on. Behind it, slowly, its tail begins to go, the way it did on the first day.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your wolf grew up on a rock at sundown, and took your sleeve, very gently.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come here.",
+     "success": {
+      "text": "It comes. Slowly, head low, unsure, too big for your lap now and trying to fit in it anyway. It does not fit. You do not let that stop either of you.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your wolf grew up on a rock at sundown, and came when you called.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit down beside it.",
+     "success": {
+      "text": "You climb up and sit beside it, shoulder to shoulder, and look where it is looking. After a while it leans. It is a great deal heavier than it used to be. You do not mind at all.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-evolved",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Your wolf grew up on a rock at sundown, and you sat beside it.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-letter",
+   "name": "A Letter for Elowen",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "aq38-met",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "partyLine",
+     "species": "rockruff",
+     "bond": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "rockruff",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "A new region, and you owe Elowen a letter. You sit down with paper at the next rest. Your wolf sits down with you, very interested in the pen, and slightly less interested in not eating it.",
+   "choices": [
+    {
+     "label": "Write it together.",
+     "success": {
+      "text": "You write about the road, the evenings, the biting (less). At the bottom, where you would sign, it leans over and bites the corner of the page, very carefully: a tooth mark, by way of signature. You post it at the next town. Somewhere, a girl with healing hands is going to laugh out loud.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-letter-1",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You wrote to Elowen. Your wolf signed it with a tooth mark.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq38-letter-again",
+   "name": "Another Letter",
+   "group": "Pokémon-anime questlines",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "aq38-letter"
+    },
+    {
+     "kind": "flag",
+     "key": "aq38-met",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 2
+    },
+    {
+     "kind": "partyLine",
+     "species": "rockruff",
+     "bond": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/school_kid_f"
+    ],
+    "pokemon": "rockruff",
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Another region, another letter for Elowen. This time there is one waiting for you too, forwarded twice and very creased. In big careful writing she says her hands have healed, her mum has stopped being cross, and the postman asks after it every single day.",
+   "choices": [
+    {
+     "label": "Write back.",
+     "success": {
+      "text": "You read her letter out loud. At the word postman, its ears go straight up. You write back, a long one this time, and at the bottom it signs again: one tooth mark, very neat, a little deeper than last time. It has grown.",
+      "effects": [
+       {
+        "kind": "friendshipLine",
+        "species": "rockruff",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "aq38-letter-2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

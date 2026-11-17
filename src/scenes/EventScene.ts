@@ -13,7 +13,10 @@
 import { stopArtFor } from '../ui/stopArt';
 import Phaser from 'phaser';
 import { clockLabel, periodOf, PERIOD_LOOK, seasonOf, specialDateToday } from '../core/clock';
-import { eventView, type ChoiceView, type EventResult } from '../core/events';
+import { eventView, tradeCard as eventTradeCard, type ChoiceView, type EventResult, type TradePick } from '../core/events';
+import { campStarOf, partyStarOf } from '../core/moments/pokemonMoments';
+import { codeNameCard, codeNameFor, STAND, standWithOf } from '../core/arc/standWithExtended';
+import type { CardSide, HonestCard } from '../core/co/tradeCard';
 import { promptById, type Grade } from '../core/interaction/prompt';
 import { runInteractionPrompt } from '../ui/interactionPrompt';
 import { arenaFor, getTheme } from '../core/themes';
@@ -23,15 +26,37 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, textStyle } from '../ui/theme';
 import { AERO, paintGlass } from '../ui/aero';
 import { eventBackdrop, eventStyleOf } from '../core/presentation/eventStyles';
+import { castInText, choiceVisual, eventVisual, familyPlaces, lineVisual, namedInText, shotOf, type PlaceId } from '../core/presentation/eventVisuals';
+import { catalogIconId } from '../core/contentSchema';
 import { layoutFor } from '../ui/eventStyles';
 import type { ChoiceWidget, EventCtx, EventLayoutHandles, Rect } from '../ui/eventStyles/types';
 import { sceneForRun } from './routing';
 import { tourneyBracket } from '../core/expansion/tourney';
 import { drawChampionStage, drawTourneyPanel, drawTourneyStrip } from '../ui/tourneyBracket';
+import { artOf, monFile, partyChips } from '../ui/redux/game';
+import { storeOf } from '../ui/redux/storeFloors';
+import { itemEvolutionTargets } from '../core/evolution';
+import { maxHp } from '../core/pokemon';
+import { pageSpeaker, scriptPages, type ScriptPage } from '../ui/redux/script';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { tourneyHome, tourneyPage, tourneyRounds } from '../ui/redux/screens/bracket';
+import { eventView as rxEventView, type EventLook } from '../ui/redux/screens/event';
+import type { HonestModel, HonestSide } from '../ui/redux/screens/stops';
+import type { TeamModel } from '../ui/redux/screens/team';
+import { briefingView, finalView, rankUpView, resultView, tableView } from '../ui/redux/screens/evilLooks';
+import { evilLook, rankUpLook, resultLook, type EvilLook } from '../core/evil/screens';
 
+
+/** Where each storyline is set (`familyPlaces`), worked out once for the game's events. Presentation only. */
+let storyPlaces: { of: object; places: Map<string, PlaceId> } | null = null;
+function storyPlace(events: ReadonlyMap<string, { id: string; name: string; intro: string }>, id: string): PlaceId | undefined {
+  if (storyPlaces?.of !== events) storyPlaces = { of: events, places: familyPlaces([...events.values()]) };
+  return storyPlaces.places.get(id);
+}
 
 const BOTTOM_H = 168;
 const PICK_W = 420;
+const PICK_HEAD = 'Pick a Pokémon (Esc: back)';
 
 interface Card {
   box: Phaser.GameObjects.Container;
@@ -46,16 +71,45 @@ export class EventScene extends Phaser.Scene {
   private phase: 'choose' | 'pick' | 'outcome' = 'choose';
   private busy = false;
   private outcomeStep: 'text' | 'rewards' = 'text';
+  /** New UI: the intro and the outcome text as pages (each waits for the player), and the page on show. */
+  private rxPages: ScriptPage[] = [];
+  private rxAt = 0;
+  private rxOutPages: ScriptPage[] = [];
+  private rxOutAt = 0;
+  /** New UI: a split-second countdown waits here until the last intro page (the choices) is on show. */
+  private rxStartClock: (() => void) | null = null;
+  /** New UI, tournament events: the bracket page on show, or null while the bracket is closed. */
+  private rxBracket: number | null = null;
+  private toggleBracket: (() => void) | null = null;
+  private toggleCard: (() => void) | null = null;
   private inputReady = false;
   private leaving = false;
   private outcomeBox: Phaser.GameObjects.Container | null = null;
   private outcomeHint: Phaser.GameObjects.Text | null = null;
-  private picker: { box: Phaser.GameObjects.Container; rows: Phaser.GameObjects.Text[]; picks: { uid: string; label: string }[]; at: number } | null = null;
+  private picker: { box: Phaser.GameObjects.Container; head: Phaser.GameObjects.Text; rows: Phaser.GameObjects.Text[]; picks: TradePick[]; at: number } | null = null;
+  /** Honest Trade Card: the Pokémon the trader has warned about ("mine's worth less"); a second yes on it trades. */
+  private pickSure: string | null = null;
+  /** New UI: the event's trade card is open to read (T), before a choice is made. */
+  private rxCard = false;
+  /** New UI, rival scenes after The Borrowed Team: the rival's team page is open. */
+  private rxTeam = false;
+  private toggleTeam: (() => void) | null = null;
+  /** New UI, Honest Trade Card page: the cursor is on Trade (0) or Back (1). */
+  private pickFocus: 0 | 1 = 0;
   private result: EventResult | null = null;
   private calm = false;
   private moneyText: Phaser.GameObjects.Text | null = null;
   private layout: EventLayoutHandles | null = null;
   private bracketPanel: Phaser.GameObjects.Container | null = null;
+  /** New UI: the mock-up event screen drawn over the canvas (default event style only). */
+  private rx: ReduxView | null = null;
+  /** HOENN_TEAMS 7: the team's own look for this event in the New UI (Final Choice, Briefing, Leader's Table), or null. */
+  private rxLook: EvilLook | null = null;
+  /** The Final Choice's hold to confirm (7.7): the choice held, when it started, and how far along (0-1). */
+  private hold: { at: number; t0: number; timer: Phaser.Time.TimerEvent } | null = null;
+  private holdPct = 0;
+  private rxClock = '';
+  private rxLeft = 0;
 
   constructor() {
     super('Event');
@@ -69,7 +123,23 @@ export class EventScene extends Phaser.Scene {
     this.cards = [];
     this.index = 0;
     this.phase = 'choose';
+    this.outcomeStep = 'text';
+    this.rxPages = [];
+    this.rxAt = 0;
+    this.rxOutPages = [];
+    this.rxOutAt = 0;
+    this.rxStartClock = null;
+    this.rxBracket = null;
+    this.rxLook = null;
+    this.hold = null;
+    this.holdPct = 0;
+    this.toggleBracket = null;
+    this.toggleCard = null;
     this.picker = null;
+    this.pickSure = null;
+    this.rxCard = false;
+    this.rxTeam = false;
+    this.toggleTeam = null;
     this.result = null;
     this.leaving = false;
     this.fullLayer = null;
@@ -123,20 +193,240 @@ export class EventScene extends Phaser.Scene {
     this.moneyPill(run.money, this.layout.moneyAt);
     // Beta 0.7 Fighting Tournament: the bracket strip on every tournament event, B for the full bracket, the podium at the end.
     this.bracketPanel = null;
-    if (scene.tourney !== undefined) {
-      const tv = tourneyBracket(content, run, scene.tourney);
+    const tv = scene.tourney !== undefined ? tourneyBracket(content, run, scene.tourney) : null;
+    let champion: string | null = null;
+    if (tv) {
       const toggle = (): void => {
+        // New UI: the bracket is a page of the event's own view (its group pages turn with left and right).
+        if (this.rx) {
+          this.rxBracket = this.rxBracket === null ? tourneyHome(tv) : null;
+          playSfx(this, 'ui.select', 0.4);
+          this.rx.refresh();
+          return;
+        }
         if (this.bracketPanel) { this.bracketPanel.destroy(); this.bracketPanel = null; return; }
         this.bracketPanel = drawTourneyPanel(this, content, tv, toggle);
       };
+      this.toggleBracket = toggle;
       drawTourneyStrip(this, tv, toggle);
       this.input.keyboard?.on('keydown-B', toggle);
       if (scene.tourney === 6) {
         const champ = run.party.find((m) => m.champion) ?? run.party.find((m) => m.speciesId === 'primeape' || m.speciesId === 'mankey');
-        drawChampionStage(this, content, champ?.speciesId ?? 'primeape', Number(run.story.flags['ev:r25-food'] ?? 0) > 0, this.calm);
+        champion = champ?.speciesId ?? 'primeape';
+        drawChampionStage(this, content, champion, Number(run.story.flags['ev:r25-food'] ?? 0) > 0, this.calm);
       }
     }
-    this.offerFullText(view.event.intro);
+    this.rx = null;
+    this.rxClock = '';
+    if (reduxOn() && eventStyleOf(session.settings.eventStyle) === 'diorama') {
+      const pct = (c: ChoiceView): string => (c.chance === null ? '' : `${Math.round(c.chance * 100)}%`);
+      const sub = (c: ChoiceView): string => c.locked ?? [c.cost, c.preview ?? c.risk].filter(Boolean).join(' · ');
+      const youArt = artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId);
+      // A Pokémon Moment (an event about a party Pokémon) that names no art: that Pokémon stands with the player, as on the mock-up's moment page.
+      const partyStar = !champion && !ctx.species && !ctx.castIds.length ? partyStarOf(view.event.requires, run.party) : null;
+      // A camp rest is about one of the team (the mock-up's camp page shows it by the fire, with no trainer).
+      const campStar = !champion && !ctx.species && !ctx.castIds.length && !partyStar ? campStarOf(view.event.group, run.party) : null;
+      const mine = partyStar ?? campStar;
+      // Stand With Them: the one who offers the job and names you (the team's leader) stands in the picture.
+      const standTeam = view.event.id.startsWith('stand-with-') ? (standWithOf(run)?.team ?? run.story.evil?.teamId ?? null) : null;
+      const bossArt = (name: string | undefined): typeof youArt => {
+        if (!name) return null;
+        const rank = Object.values(content.evilTeams.teams.find((t) => t.id === standTeam)?.ranks ?? {}).find((r) => r.name.includes(name));
+        return artOf(this, rank?.sprite) ?? artOf(this, content.bosses.get(name.toLowerCase())?.sprites.default);
+      };
+      const giverArt = standTeam ? bossArt(codeNameFor(standTeam)?.givenBy) : null;
+      const cast = partyStar ? youArt : (artOf(this, ctx.castIds[0]) ?? giverArt);
+      // The person speaking stands in the picture when the event's cast has them (matched by name).
+      const castOf = (who: string | null): typeof cast => {
+        const key = who?.toLowerCase().split(/\s+/).filter((w) => w.length > 2).pop();
+        const id = key ? ctx.castIds.find((x) => x.toLowerCase().includes(key)) : undefined;
+        return id ? artOf(this, id) ?? cast : cast;
+      };
+      this.rxPages = scriptPages(view.event.intro);
+      this.rxAt = ctx.introSeen ? this.rxPages.length - 1 : 0;
+      const star = champion ? monFile(this, champion) : ctx.species ? monFile(this, ctx.species.id) : mine ? monFile(this, mine, 'front', run.party.find((m) => m.speciesId === mine)?.shiny ?? false) : null;
+      const rounds = tv ? tourneyRounds(tv) : null;
+      // A swap shows both sides before the player commits: the Pokémon that goes, and the one that comes back when the trade says so.
+      const tradeCard = (p: TradePick | undefined): { give: { name: string; file: string | null }; get: { name: string; file: string | null } | null } | null => {
+        if (!p || p.gets === undefined) return null;
+        const mine = run.party.find((m) => m.uid === p.uid);
+        const got = p.gets ? content.species.get(p.gets) : undefined;
+        return { give: { name: p.label, file: mine ? monFile(this, mine.speciesId, 'front', mine.shiny) : null }, get: got ? { name: got.name, file: monFile(this, got.id) } : null };
+      };
+      // Catalog Overhaul: the Honest Trade Card (both sides with every line of TRADES.md 1.1), as its own page.
+      const eventCard = eventTradeCard(content, run, this.sideId);
+      const cap1 = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+      const cardSide = (x: CardSide): HonestSide => ({
+        name: x.name, file: monFile(this, x.species, 'front', x.shiny), level: x.level, types: [...(content.species.get(x.species)?.types ?? [])], nature: cap1(x.nature),
+        ability: x.ability ? content.abilities.get(x.ability)?.name ?? x.ability : null, hidden: x.hidden,
+        moves: x.moves.map((id) => content.moves.get(id)?.name ?? id), quirk: x.quirk ? { name: x.quirk.name, line: x.quirk.line } : null, marks: x.marks.map(cap1),
+        held: x.held ? content.items.get(x.held)?.name ?? x.held : null, evolvesTo: x.evolvesTo ? content.species.get(x.evolvesTo)?.name ?? x.evolvesTo : null, value: x.value, shiny: x.shiny,
+      });
+      const honestOf = (card: HonestCard, at: number, count: number, readOnly: boolean, asking: boolean): HonestModel => ({
+        title: 'Trade', you: youArt, trader: card.trader ?? 'Trader', traderArt: castOf(card.trader), wants: card.wants, gift: card.gift,
+        give: card.yours ? cardSide(card.yours) : null, get: cardSide(card.theirs), warn: card.warn, why: card.why, asking, at, count, focus: this.pickFocus, readOnly,
+      });
+      const honest = (): HonestModel | null => {
+        const pk = this.picker, p = pk?.picks[pk.at];
+        if (pk && p?.card) return honestOf(p.card, pk.at, pk.picks.length, false, this.pickSure === p.uid);
+        // Read before choosing: the card for the first of the player's Pokémon that fits (the trader's side alone when none does).
+        const read = view.choices.flatMap((c) => c.tradePicks ?? []).find((x) => x.card)?.card ?? eventCard;
+        return this.rxCard && read && this.phase === 'choose' ? honestOf(read, 0, 0, true, false) : null;
+      };
+      if (eventCard) {
+        this.toggleCard = (): void => {
+          if (this.phase !== 'choose' || this.rxBracket !== null) return;
+          this.rxCard = !this.rxCard;
+          playSfx(this, 'ui.select', 0.4);
+          this.rx?.refresh();
+        };
+        this.input.keyboard?.on('keydown-T', this.toggleCard);
+      }
+      // The job offer's chip says what joining is worth, as on the mock-up.
+      const groupTag = `${view.event.group} · ${view.event.rarity.charAt(0).toUpperCase()}${view.event.rarity.slice(1)}`;
+      const tag = view.event.id === 'stand-with-recruiter' && !standWithOf(run) ? `Reputation +${STAND.joinRep} if you join` : groupTag;
+      const teamPage = (): TeamModel | null => (view.team && this.rxTeam && this.phase === 'choose' ? { rival: view.team.rival, cards: view.team.mons.map((m) => ({ name: m.name, file: monFile(this, m.speciesId, 'icon'), level: m.level, types: m.types, moves: m.moves })) } : null);
+      if (view.team) {
+        this.toggleTeam = (): void => {
+          if (this.phase !== 'choose' || this.rxBracket !== null || this.rxCard) return;
+          this.rxTeam = !this.rxTeam;
+          playSfx(this, 'ui.select', 0.4);
+          this.rx?.refresh();
+        };
+        this.input.keyboard?.on('keydown-R', this.toggleTeam);
+      }
+      // A department store floor: the directory, and who each good on the shelf helps (a stone that evolves it, medicine for the hurt).
+      const store = storeOf(view.event.id);
+      const helps = (live: typeof run): string[][] => view.event.choices.map((ch) => {
+        const fx = ch.success?.effects ?? [];
+        const item = fx.find((e): e is Extract<typeof e, { kind: 'item' }> => e.kind === 'item')?.id;
+        const heals = fx.some((e) => e.kind === 'heal');
+        return live.party.map((m) => (item && itemEvolutionTargets(content, m, item, live.regionOrder[live.regionIndex]).length ? 'Can evolve' : heals && m.hp > 0 && m.hp < maxHp(content, m) ? 'Heals' : ''));
+      });
+      const look = (this.rxLook = evilLook(content, run, view.event.id));
+      const fileOf = (id: string) => artOf(this, id);
+      const lookFiles = look?.kind === 'final' ? look.faces.map((f) => fileOf(f.sprite)) : look?.kind === 'table' ? look.seats.map((x) => fileOf(x.sprite)) : [];
+      // The remade event screen: the event director reads this event's own words and data and decides its picture
+      // (place, hour, mood, weather), and the screen stages whoever the event names. Presentation only.
+      const kinds = view.choices.map((x) => x.kind);
+      const vis = eventVisual(view.event, { period: periodOf(run), stageTypes: (theme?.types ?? []).map((t) => t.toLowerCase()), kinds, family: storyPlace(content.events, view.event.id) });
+      const said = `${view.event.name}. ${view.event.intro}`;
+      const listed = ctx.castIds.map((id) => ({ id, art: artOf(this, id) })).filter((x): x is { id: string; art: NonNullable<typeof cast> } => x.art !== null).slice(0, 3);
+      // An event that pictures nobody still shows the people its text names by their trade ("a Hiker blocks the path").
+      const named = listed.length || partyStar || giverArt ? [] : castInText(said).map((id) => ({ id, art: artOf(this, id) })).filter((x): x is { id: string; art: NonNullable<typeof cast> } => x.art !== null);
+      const people = partyStar ? (youArt ? [{ id: 'you', art: youArt }] : []) : listed.length ? listed : giverArt ? [{ id: 'giver', art: giverArt }] : named;
+      const speciesByName = new Map<string, string>();
+      for (const sp of content.species.values()) if (!speciesByName.has(sp.name.toLowerCase())) speciesByName.set(sp.name.toLowerCase(), sp.id);
+      const starId = champion ?? ctx.species?.id ?? mine ?? null;
+      const monFiles = [star, ...namedInText(said, speciesByName, 3).filter((id) => id !== starId).map((id) => monFile(this, id))].filter((f): f is string => !!f).filter((f, i, all) => all.indexOf(f) === i).slice(0, 2);
+      const itemsByName = new Map<string, string>();
+      for (const it of content.items.values()) if (it.name.length > 3) itemsByName.set(it.name.toLowerCase(), it.iconAssetId);
+      for (const it of content.catalog.values()) if (it.name.length > 3 && !itemsByName.has(it.name.toLowerCase())) itemsByName.set(it.name.toLowerCase(), catalogIconId(it.icon));
+      const props = namedInText(said, itemsByName, 3).map((id) => artOf(this, id)).filter((a): a is NonNullable<typeof cast> => a !== null && !a.atlas).map((a) => a.file);
+      const pic = vis.pictures.map((id) => artOf(this, id)?.file).find((f) => !!f) ?? null;
+      // A scene with nobody in it: the lead Pokémon looks on from the near corner, as it does from the player's side of a battle.
+      const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
+      const buddy = !people.length && !monFiles.length && lead ? monFile(this, lead.speciesId, 'back', !!lead.shiny) : null;
+      const eventLook: Omit<EventLook, 'speaking' | 'emote'> = {
+        scene: { set: vis.set, place: vis.place, inside: vis.inside, time: vis.time, mood: vis.mood, weather: vis.weather, motes: vis.motes, seed: vis.seed, pic, tint: scene.tint ?? null, still: this.calm },
+        shot: shotOf(vis, people.length, monFiles.length > 0, kinds), stir: vis.stir, sigil: vis.sigil, cast: people.map((x) => x.art), mons: monFiles, props, buddy,
+        choices: view.choices.map((x) => choiceVisual({ label: x.label, kind: x.kind, locked: x.locked !== null, chance: x.chance })),
+      };
+      /** Which pictured person is speaking: matched by name, or the only one there. */
+      const speakingOf = (who: string | null): number => {
+        if (!who || !people.length) return -1;
+        const key = who.toLowerCase().split(/\s+/).filter((w) => w.length > 2).pop();
+        const at = key ? people.findIndex((x) => x.id.toLowerCase().includes(key)) : -1;
+        return at >= 0 ? at : people.length === 1 && !partyStar ? 0 : -1;
+      };
+      this.rx = mountRedux(this, {
+        render: (c) => {
+          const r = this.result;
+          const out = this.phase === 'outcome' && r ? { step: this.outcomeStep, ok: r.success, changes: r.changes, next: r.battle ? 'Battle!' : 'Continue' } : null;
+          // The result can be drawn a moment before the outcome panel opens: page its text here if that has not happened yet.
+          if (out && !this.rxOutPages.length) this.rxOutPages = scriptPages(r!.text);
+          const pages = out ? (out.step === 'rewards' ? [[{ who: null, text: 'Here is what changed.' }]] : this.rxOutPages) : this.rxPages;
+          const at = Math.max(0, Math.min(out ? (out.step === 'rewards' ? 0 : this.rxOutAt) : this.rxAt, pages.length - 1));
+          // HOENN_TEAMS 7: the team's own screens. The choices, rolls and effects are the event's own.
+          const lookChoices = view.choices.map((x) => ({ label: x.label, sub: sub(x), chance: pct(x), locked: x.locked !== null }));
+          if (look && !out && !this.picker && this.rxAt >= this.rxPages.length - 1) {
+            const text = pages[at]!.map((l) => (l.who ? `${l.who}: ${l.text}` : l.text)).join(' ');
+            if (look.kind === 'final') return finalView({ look, choices: lookChoices, index: this.index, hold: this.holdPct, files: lookFiles, title: view.event.name });
+            if (look.kind === 'briefing') return briefingView({ look, choices: lookChoices, index: this.index, text });
+            if (look.kind === 'table') return tableView({ look, choices: lookChoices, index: this.index, files: lookFiles, text });
+          }
+          if (out && r && out.step === 'rewards') {
+            const up = rankUpLook(content, r.run, r.changes);
+            if (up) return rankUpView(up, { leader: fileOf(up.leader), lt: fileOf(up.lt), grunt: fileOf(up.grunt) }, out.next);
+            const form = resultLook(content, view.event.id, this.index, view.choices[this.index]?.label ?? '', r.changes, r.text);
+            if (form) return resultView(form, out.next);
+          }
+          const speaker = pageSpeaker(pages[at]!);
+          return rxEventView(c, {
+            name: view.event.name,
+            // Once the choice is made the offer's chip has said its piece.
+            tag: out ? groupTag : tag,
+            lines: pages[at]!,
+            speaker,
+            page: { at, of: pages.length },
+            art: artOf(this, ctx.arena)?.file ?? null,
+            tint: scene.tint ?? null,
+            fx: this.calm ? null : scene.effect,
+            cast: castOf(speaker),
+            mon: star,
+            look: { ...eventLook, speaking: speakingOf(speaker), emote: (() => { const e = pages[at]!.map((l) => lineVisual(l.text).emote).find((x) => x !== null); return e ? artOf(this, `icon.emote.${e}`)?.file ?? null : null; })() },
+            choices: view.choices.map((x) => ({ label: x.label, sub: sub(x), chance: pct(x), locked: x.locked !== null })),
+            index: this.index,
+            money: (r?.run ?? run).money,
+            outcome: out,
+            pick: this.picker ? { labels: this.picker.picks.map((x) => x.label), at: this.picker.at, card: tradeCard(this.picker.picks[this.picker.at]) } : null,
+            countdown: this.rxClock,
+            timer: this.rxClock && view.event.countdown ? this.rxLeft / view.event.countdown : null,
+            standing: view.standing ?? null,
+            rounds,
+            honest: honest(),
+            codeCard: (() => {
+              // Joining shows the code-name card while the welcome line is read.
+              if (view.event.id !== 'stand-with-recruiter' || !r?.success) return null;
+              const joined = standWithOf(r.run);
+              const card = joined ? codeNameCard(r.run, content.evilTeams.teams.find((t) => t.id === joined.team)?.name ?? joined.team, content.regions.get(joined.region)?.name ?? joined.region) : null;
+              return card ? { name: card.alias, rank: card.rank, facts: card.facts, trainer: bossArt(card.givenBy), badges: r.run.badges.length } : null;
+            })(),
+            team: teamPage(),
+            teamHint: !!view.team && this.phase === 'choose' && !out,
+            cardHint: eventCard !== null && this.phase === 'choose' && !out,
+            bracket: tv && this.rxBracket !== null ? tourneyPage(tv, (sp) => monFile(this, sp), this.rxBracket, 'Saffron Fighting Tournament') : null,
+            title: champion ? 'CHAMPION' : null,
+            store: store ? { ...store, party: partyChips(this), notes: helps(r?.run ?? run) } : null,
+          });
+        },
+        acts: {
+          pick: (k) => (this.rxLook?.kind === 'final' ? this.startHold(Number(k)) : this.confirm(Number(k))),
+          page: () => this.turnPage(1),
+          bracket: () => this.toggleBracket?.(),
+          bracketPage: (k) => { this.rxBracket = Number(k); this.rx?.refresh(); },
+          next: () => this.advanceOutcome(),
+          trade: (k) => { if (!this.picker?.picks[Number(k)]) return; this.pickAt(Number(k)); this.tryTrade(); },
+          card: () => this.toggleCard?.(),
+          team: () => this.toggleTeam?.(),
+          back: () => (this.rxTeam ? this.toggleTeam?.() : this.rxCard ? this.toggleCard?.() : this.handlePick('back')),
+          // The Honest Trade Card page: Trade, Back, and the arrows that step through the player's fitting Pokémon.
+          accept: () => this.tryTrade(),
+          step: (k) => { const pk = this.picker; if (pk) this.pickAt((pk.at + Number(k) + pk.picks.length) % pk.picks.length); },
+        },
+        overs: { over: (k) => this.focus(Number(k)), tradeOver: (k) => this.pickAt(Number(k)), acc: () => this.pickFocusAt(0), dec: () => this.pickFocusAt(1) },
+      });
+      // 7.7: press and hold a corner (or Enter) to choose; letting go cancels.
+      if (this.rxLook?.kind === 'final') {
+        const el = this.rx.el;
+        const down = (e: Event): void => { const t = (e.target as HTMLElement).closest<HTMLElement>('[data-hold]'); if (t && el.contains(t)) this.startHold(Number(t.dataset.hold)); };
+        const up = (): void => this.cancelHold();
+        el.addEventListener('pointerdown', down);
+        window.addEventListener('pointerup', up);
+        this.input.keyboard?.on('keyup', (e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') up(); });
+        this.events.once('shutdown', () => window.removeEventListener('pointerup', up));
+      }
+    } else this.offerFullText(view.event.intro);
     if (!this.calm) this.ambient(scene.effect, area, layers.fx);
     if (area.w < GAME_WIDTH || area.h < GAME_HEIGHT) layers.fx.setMask(this.make.graphics({}, false).fillRect(area.x, area.y, area.w, area.h).createGeometryMask());
     this.cards = this.layout.widgets.map((w, i) => ({ box: w.box, view: view.choices[i]!, widget: w }));
@@ -145,8 +435,12 @@ export class EventScene extends Phaser.Scene {
     this.cameras.main.fadeIn(this.calm ? 1 : 300);
     // Split-second choice (ideas W1): a countdown when timed prompts are on; at zero the fallback option is taken.
     const seconds = view.event.countdown;
-    if (seconds && session.settings.skillPrompts) {
+    const startClock = (): void => {
+      if (!seconds || !session.settings.skillPrompts) return;
       let left = seconds;
+      this.rxClock = `Decide! ${left}`;
+      this.rxLeft = left;
+      this.rx?.refresh();
       const clock = this.add.text(GAME_WIDTH / 2, 20, `Decide! ${left}`, textStyle(26, '#ffe060', { stroke: '#181818', strokeThickness: 5 })).setOrigin(0.5).setDepth(50);
       this.time.addEvent({
         delay: 1000,
@@ -154,6 +448,9 @@ export class EventScene extends Phaser.Scene {
         callback: () => {
           if (this.phase !== 'choose') return clock.destroy();
           left -= 1;
+          this.rxClock = left > 0 ? `Decide! ${left}` : '';
+          this.rxLeft = left;
+          this.rx?.refresh();
           clock.setText(`Decide! ${left}`).setColor(left <= 3 ? '#ff6a6a' : '#ffe060');
           if (left > 0) return;
           clock.destroy();
@@ -165,7 +462,26 @@ export class EventScene extends Phaser.Scene {
           }
         },
       });
+    };
+    // New UI: the clock starts when the choices show (the last page of the intro), not while the player is reading.
+    if (this.rx && this.rxAt < this.rxPages.length - 1) this.rxStartClock = startClock;
+    else startClock();
+  }
+
+  /** New UI: next (or previous) page of the intro. The choices, and a countdown if the event has one, come with the last page. */
+  private turnPage(by: 1 | -1): void {
+    if (!this.rx || this.phase !== 'choose' || this.busy) return;
+    const to = this.rxAt + by;
+    // No turning back once a countdown runs: the choices stay up.
+    if (to < 0 || to >= this.rxPages.length || (by < 0 && this.rxClock)) return;
+    this.rxAt = to;
+    playSfx(this, 'ui.select', 0.3);
+    if (to === this.rxPages.length - 1 && this.rxStartClock) {
+      const go = this.rxStartClock;
+      this.rxStartClock = null;
+      go();
     }
+    this.rx.refresh();
   }
 
   /** If the style's text card had to cut the intro, a "Read all" button opens the full text (nothing is ever hidden for good). */
@@ -213,6 +529,22 @@ export class EventScene extends Phaser.Scene {
       this.bracketPanel = null;
       return;
     }
+    if (this.rxBracket !== null) {
+      if (action === 'left' || action === 'up') this.rxBracket = (this.rxBracket + 4) % 5;
+      else if (action === 'right' || action === 'down') this.rxBracket = (this.rxBracket + 1) % 5;
+      else this.rxBracket = null;
+      playSfx(this, 'ui.select', 0.3);
+      this.rx?.refresh();
+      return;
+    }
+    if (this.rxTeam) {
+      if (action === 'confirm' || action === 'back') this.toggleTeam?.();
+      return;
+    }
+    if (this.rxCard) {
+      if (action === 'confirm' || action === 'back') this.toggleCard?.();
+      return;
+    }
     if (this.fullLayer) {
       if (action === 'confirm' || action === 'back') this.toggleFull('');
       return;
@@ -225,10 +557,50 @@ export class EventScene extends Phaser.Scene {
       this.handlePick(action);
       return;
     }
+    if (this.rx && this.rxAt < this.rxPages.length - 1) {
+      if (action === 'confirm' || action === 'right' || action === 'down') this.turnPage(1);
+      else if (action === 'back' || action === 'left' || action === 'up') this.turnPage(-1);
+      return;
+    }
+    if (this.rx && action === 'back') return this.turnPage(-1);
     const n = this.cards.length;
     if (action === 'left' || action === 'up') this.focus((this.index - 1 + n) % n);
     else if (action === 'right' || action === 'down') this.focus((this.index + 1) % n);
-    else if (action === 'confirm') this.confirm();
+    else if (action === 'confirm') {
+      if (this.rxLook?.kind === 'final') this.startHold(this.index);
+      else this.confirm();
+    }
+  }
+
+  /** 7.7: the orb brightens while the choice is held, about two seconds; a locked corner says why at once. */
+  private startHold(i: number): void {
+    if (this.phase !== 'choose' || this.busy || (this.hold && this.hold.at === i)) return;
+    if (this.rx && this.rxAt < this.rxPages.length - 1) return;
+    const card = this.cards[i];
+    if (!card || card.view.locked) return this.confirm(i);
+    this.cancelHold();
+    if (this.index !== i) this.focus(i, false);
+    const t0 = this.time.now;
+    const timer = this.time.addEvent({
+      delay: 50,
+      loop: true,
+      callback: () => {
+        this.holdPct = Math.min(1, (this.time.now - t0) / 2000);
+        this.rx?.refresh();
+        if (this.holdPct < 1) return;
+        this.cancelHold();
+        this.confirm(i);
+      },
+    });
+    this.hold = { at: i, t0, timer };
+  }
+
+  private cancelHold(): void {
+    if (!this.hold) return;
+    this.hold.timer.remove(false);
+    this.hold = null;
+    this.holdPct = 0;
+    this.rx?.refresh();
   }
 
   /** The focused option lifts (each style draws its own focus); the details follow it. */
@@ -238,10 +610,12 @@ export class EventScene extends Phaser.Scene {
     this.index = i;
     this.cards.forEach((c, j) => c.widget.focus(j === i));
     this.layout?.detail(this.cards[i]?.view);
+    this.rx?.refresh();
   }
 
   private confirm(at?: number): void {
     if (this.phase !== 'choose' || this.busy) return;
+    if (this.rx && this.rxAt < this.rxPages.length - 1) return;
     if (at !== undefined) this.index = at;
     const card = this.cards[this.index];
     if (!card) return;
@@ -252,12 +626,14 @@ export class EventScene extends Phaser.Scene {
     }
     // A trade with more than one fitting Pokémon: the player picks which one goes.
     const picks = card.view.tradePicks;
-    if (picks && picks.length > 1) this.openPicker(picks);
+    // New UI: a swap always shows its card (both sides) first, even when only one Pokémon fits.
+    // Old look: one fitting Pokémon trades straight away, unless the trader has to warn that theirs is worth less.
+    if (picks && (picks.length > 1 || (picks.length === 1 && (this.rx ? picks[0]!.gets !== undefined : picks[0]!.card?.warn === 'worse')))) this.openPicker(picks);
     else this.commit(picks?.[0]?.uid);
   }
 
   /** The party Pokémon the partner would take, as a list over the option column. */
-  private openPicker(picks: { uid: string; label: string }[]): void {
+  private openPicker(picks: TradePick[]): void {
     this.phase = 'pick';
     playSfx(this, 'ui.select', 0.5);
     const w = PICK_W;
@@ -266,43 +642,86 @@ export class EventScene extends Phaser.Scene {
     const bg = this.add.graphics();
     paintGlass(bg, -w / 2, -BOTTOM_H / 2, w, BOTTOM_H, { tint: AERO.glassLow, glow: false, alpha: 0.98, radius: 14 });
     box.add(bg);
-    box.add(this.add.text(0, -BOTTOM_H / 2 + 12, 'Pick a Pokémon (Esc: back)', textStyle(12, '#f8e8a0')).setOrigin(0.5, 0.5));
+    const head = this.add.text(0, -BOTTOM_H / 2 + 12, PICK_HEAD, textStyle(12, '#f8e8a0')).setOrigin(0.5, 0.5);
+    box.add(head);
     const rows = picks.map((p, i) => {
       const t = this.add.text(0, -BOTTOM_H / 2 + 34 + i * rowH, p.label, textStyle(14, COLORS.textLight)).setOrigin(0.5, 0).setInteractive({ useHandCursor: true });
       t.on('pointerover', () => this.pickAt(i));
-      t.on('pointerdown', () => this.commit(p.uid));
+      t.on('pointerdown', () => { this.pickAt(i); this.tryTrade(); });
       box.add(t);
       return t;
     });
-    this.picker = { box, rows, picks, at: 0 };
+    this.pickSure = null;
+    this.pickFocus = 0;
+    this.picker = { box, head, rows, picks, at: 0 };
     this.pickAt(0);
+    this.rx?.refresh();
   }
 
   private pickAt(i: number): void {
     const pk = this.picker;
     if (!pk) return;
+    // Moving to another Pokémon takes the trader's question back.
+    if (i !== pk.at && this.pickSure !== null) {
+      this.pickSure = null;
+      pk.head.setText(PICK_HEAD);
+    }
     pk.at = i;
     pk.rows.forEach((t, j) => t.setColor(j === i ? '#f8e8a0' : COLORS.textLight).setText(`${j === i ? '▶ ' : ''}${pk.picks[j]!.label}`));
+    this.rx?.refresh();
+  }
+
+  private pickFocusAt(k: 0 | 1): void {
+    if (k === this.pickFocus) return;
+    this.pickFocus = k;
+    playSfx(this, 'ui.select', 0.3);
+    this.rx?.refresh();
   }
 
   private handlePick(action: InputAction): void {
     const pk = this.picker;
     if (!pk) return;
     const n = pk.picks.length;
+    // New UI, Honest Trade Card page: left and right step through the Pokémon, up and down move between Trade and Back.
+    if (this.rx && pk.picks[pk.at]?.card) {
+      if (action === 'left') this.pickAt((pk.at - 1 + n) % n);
+      else if (action === 'right') this.pickAt((pk.at + 1) % n);
+      else if (action === 'up' || action === 'down') this.pickFocusAt(this.pickFocus === 0 ? 1 : 0);
+      else if (action === 'confirm' && this.pickFocus === 0) this.tryTrade();
+      if (action !== 'back' && !(action === 'confirm' && this.pickFocus === 1)) return;
+      action = 'back';
+    }
     if (action === 'up' || action === 'left') this.pickAt((pk.at - 1 + n) % n);
     else if (action === 'down' || action === 'right') this.pickAt((pk.at + 1) % n);
-    else if (action === 'confirm') this.commit(pk.picks[pk.at]!.uid);
+    else if (action === 'confirm') this.tryTrade();
     else if (action === 'back') {
       pk.box.destroy();
       this.picker = null;
+      this.pickSure = null;
       this.phase = 'choose';
+      this.rx?.refresh();
     }
+  }
+
+  /** Trades the picked Pokémon. TRADES.md 1.2: when the player would give more than they get, the trader says so and asks once more. */
+  private tryTrade(): void {
+    const pk = this.picker, p = pk?.picks[pk.at];
+    if (!pk || !p) return;
+    if (p.card?.warn === 'worse' && this.pickSure !== p.uid) {
+      this.pickSure = p.uid;
+      playSfx(this, 'ui.select', 0.4);
+      pk.head.setText('"Mine\'s worth less than yours. You sure?" Enter: yes');
+      this.rx?.refresh();
+      return;
+    }
+    void this.commit(p.uid);
   }
 
   private async commit(tradeUid?: string): Promise<void> {
     if (this.busy) return;
     this.picker?.box.destroy();
     this.picker = null;
+    this.pickSure = null;
     const { session } = services();
     // Ideas W5: a choice with a skill prompt plays it first; the grade alone decides the outcome.
     const def = eventView(session.content, session.run!, this.sideId).event.choices[this.index]?.prompt;
@@ -331,7 +750,11 @@ export class EventScene extends Phaser.Scene {
     const r = this.result!;
     playSfx(this, r.success ? 'se.level_up' : 'ui.error', 0.5);
     this.outcomeStep = 'text';
+    this.rxOutPages = scriptPages(r.text);
+    this.rxOutAt = 0;
     this.inputReady = false;
+    this.rxClock = '';
+    this.rx?.refresh();
     this.time.delayedCall(this.calm ? 0 : 450, () => (this.inputReady = true));
     this.input.on('pointerdown', () => this.advanceOutcome());
     const chips = r.changes;
@@ -357,9 +780,16 @@ export class EventScene extends Phaser.Scene {
   private advanceOutcome(): void {
     if (this.phase !== 'outcome' || !this.inputReady) return;
     const r = this.result!;
+    if (this.rx && this.outcomeStep === 'text' && this.rxOutAt < this.rxOutPages.length - 1) {
+      this.rxOutAt += 1;
+      playSfx(this, 'ui.select', 0.3);
+      this.rx.refresh();
+      return;
+    }
     if (this.outcomeStep === 'text' && r.changes.length) {
       this.outcomeStep = 'rewards';
       this.inputReady = false;
+      this.rx?.refresh();
       playSfx(this, 'ui.select', 0.4);
       const old = this.outcomeBox;
       if (old) {

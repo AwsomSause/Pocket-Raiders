@@ -11,6 +11,7 @@ import { abilityOf, maxHp } from '../pokemon';
 import type { PlayerAction } from '../battle/engine';
 import type { BattleState, PokemonInstance, RunState } from '../state';
 import { evilTeam } from '../evil/teams';
+import { hashSeed, Rng } from '../rng';
 
 export const LESSONS = ['aim', 'footing', 'stand'] as const;
 export type PondLesson = (typeof LESSONS)[number];
@@ -30,8 +31,8 @@ export const POND_RETURN = {
   /** Share of the foe's full HP each one takes off at the end of a turn. */
   wrathShare: 0.08,
   whirlShare: 0.03,
-  /** The player is "losing" when the Pokémon in front is under this share of its HP. */
-  losingBelow: 0.4,
+  /** The player is "losing" with this many Pokémon or fewer still standing (and at least one already down). */
+  losingAt: 2,
 } as const;
 
 export const FLAGS = {
@@ -62,12 +63,19 @@ export const pondMon = (run: Pick<RunState, 'party'>): PokemonInstance | undefin
 
 export const freshMark = (): PondMark => ({ shy: true, aim: false, footing: false, stand: false, kept: false });
 
-/** Lesson counters after one lesson: how many were taught, and how many on the first retry; all three on the first retry is Exceptional. */
-export function recordLesson(run: Pick<RunState, 'story' | 'party'>, lesson: PondLesson, firstTry: boolean): void {
+/** How a lesson was learned (flag `pp-lesson-<lesson>`): on the second retry (1), on the first retry (2), or the shortcut way, weaker (3). */
+export const LESSON_RESULT = { second: 1, first: 2, weak: 3 } as const;
+
+/**
+ * Lesson counters after one lesson: how many were taught, and how many on the first retry; all three on the first retry is Exceptional.
+ * `weak` (the shortcut response): learned, but in the rematch it cancels the bully's trick only half the time.
+ */
+export function recordLesson(run: Pick<RunState, 'story' | 'party'>, lesson: PondLesson, firstTry: boolean, weak = false): void {
   const mon = pondMon(run);
   if (mon?.pond) mon.pond[lesson] = true;
   if (pondFlag(run, `pp-lesson-${lesson}`) > 0) return;
-  setPondFlag(run, `pp-lesson-${lesson}`, firstTry ? 2 : 1);
+  setPondFlag(run, `pp-lesson-${lesson}`, weak ? LESSON_RESULT.weak : firstTry ? LESSON_RESULT.first : LESSON_RESULT.second);
+  firstTry = firstTry && !weak;
   setPondFlag(run, FLAGS.lessons, pondFlag(run, FLAGS.lessons) + 1);
   if (firstTry) setPondFlag(run, FLAGS.firstTry, pondFlag(run, FLAGS.firstTry) + 1);
   if (pondFlag(run, FLAGS.lessons) >= LESSONS.length && pondFlag(run, FLAGS.firstTry) >= LESSONS.length) setPondFlag(run, FLAGS.exceptional, 1);
@@ -97,16 +105,42 @@ export function pondShape(content: Content, run: RunState, action: PlayerAction)
   const mark = mon?.pond;
   if (!battle || !mon || !mark || mark.kept || action.kind !== 'move' || battle.needsSwitch) return { action, events: [] };
   const name = nameOf(content, mon);
-  const rematch = inRematch(battle);
-  const say = (own: string, bully: string): { action: PlayerAction; events: Cue[] } => ({ action: { kind: 'idle' }, events: [cue('player', rematch ? bully : own, mon.uid)] });
-  if (mark.shy && !rematch) return say(`${name} looks at the ground. It is not ready to hurt anyone yet.`, '');
-  if (!mark.aim && battle.turn % 3 === 0) return say(`${name} swings and the attack wobbles wide. It was aiming at nothing.`, `The bully weaves and grins. ${name}'s attack goes wide: it never learned to aim.`);
-  if (!mark.footing && battle.playerVolatile.turnsOut === 0) return say(`${name} flinches as it steps out, and loses the turn.`, `The bully shoves ${name} on the way in. It stumbles and flinches: it never found its footing.`);
+  if (inRematch(battle)) return rematchShape(run, battle, name, mon, action);
+  const say = (text: string): { action: PlayerAction; events: Cue[] } => ({ action: { kind: 'idle' }, events: [cue('player', text, mon.uid)] });
+  if (mark.shy) return say(`${name} is looking at the ground.`);
+  if (!mark.aim && battle.turn % 3 === 0) return say(`${name} swings and the attack wobbles wide. It was aiming at nothing.`);
+  if (!mark.footing && battle.playerVolatile.turnsOut === 0) return say(`${name} flinches as it steps out, and loses the turn.`);
   const bench = run.party.findIndex((m, i) => i !== battle.activeIndex && m.hp > 0 && !m.pond);
   if (!mark.stand && mon.hp * 2 < maxHp(content, mon) && !battle.storyEffects.includes(`pond-ran:${mon.uid}`)) {
     battle.storyEffects.push(`pond-ran:${mon.uid}`);
-    if (bench >= 0 && !rematch && !battle.eventRule?.noSwitch) return { action: { kind: 'switch', partyIndex: bench }, events: [cue('player', `${name} panics and tries to run! Someone else steps up.`, mon.uid)] };
-    return say(`${name} backs away from the fight, shaking. It almost ran.`, `The bully stares ${name} down. It freezes and almost runs: it never learned to stand its ground.`);
+    if (bench >= 0 && !battle.eventRule?.noSwitch) return { action: { kind: 'switch', partyIndex: bench }, events: [cue('player', `${name} panics and tries to run! Someone else steps up.`, mon.uid)] };
+    return say(`${name} backs away from the fight, shaking. It almost ran.`);
+  }
+  return { action, events: [] };
+}
+
+/**
+ * The rematch (gn.01): Burl's three tricks, each cancelled by one lesson.
+ *  - Splash-Blind (Aim): the Poliwag's first two moves (turns 1 and 2) miss.
+ *  - Shove (Footing): a flinch every other turn (even turns).
+ *  - The Slap (Standing its ground): on turn 3 it turns to run, loses the turn, and turns back.
+ * A lesson learned the shortcut way cancels its trick only half the time: a coin per trick and turn on its own seeded stream
+ * (`pond-weak`), so a replay gives the same coins and no other roll moves.
+ */
+function rematchShape(run: RunState, battle: BattleState, name: string, mon: PokemonInstance, action: PlayerAction): { action: PlayerAction; events: Cue[] } {
+  const t = battle.turn;
+  const fires = (lesson: PondLesson): boolean => {
+    const v = pondFlag(run, `pp-lesson-${lesson}`);
+    if (v === LESSON_RESULT.first || v === LESSON_RESULT.second) return false;
+    if (v === LESSON_RESULT.weak) return new Rng(hashSeed(`${run.seed}::pond-weak::${lesson}::${t}`)).float() < 0.5;
+    return true;
+  };
+  const lost = (text: string): { action: PlayerAction; events: Cue[] } => ({ action: { kind: 'idle' }, events: [cue('enemy', text, mon.uid)] });
+  if (t <= 2 && fires('aim')) return lost(`Splash-Blind! Burl slaps a sheet of water into ${name}'s eyes. Its attack misses.`);
+  if (t % 2 === 0 && fires('footing')) return lost(`Shove! Burl shoulders ${name} off its feet. It flinches and loses the turn.`);
+  if (t === 3) {
+    if (fires('stand')) return lost(`The Slap! Burl slaps the water. ${name} turns to run... then turns back. The turn is gone.`);
+    return { action, events: [cue('enemy', `Burl slaps the water. Every other Poliwhirl flinches. ${name} doesn't. Burl looks at his own hand.`, mon.uid)] };
   }
   return { action, events: [] };
 }
@@ -143,7 +177,8 @@ export function pondAfterTurn(content: Content, run: RunState): Cue[] {
   const mark = battle.storyEffects.find((e) => e.startsWith('pond-return:'));
   if (!mark) {
     const lead = run.party[battle.activeIndex];
-    if (pondFlag(run, FLAGS.fired) > 0 || !lead || lead.hp <= 0 || lead.hp < 1 || lead.hp >= maxHp(content, lead) * POND_RETURN.losingBelow || !pondReturnPlace(content, run)) return out;
+    const standing = run.party.filter((m) => m.hp > 0).length;
+    if (pondFlag(run, FLAGS.fired) > 0 || !lead || lead.hp <= 0 || standing > POND_RETURN.losingAt || standing === run.party.length || !pondReturnPlace(content, run)) return out;
     battle.storyEffects.push(`pond-return:${cfg.turns}`);
     setPondFlag(run, FLAGS.fired, 1);
     out.push(cue('player', 'A cry comes from somewhere off the field. Small. Familiar. It knows you before you know it.'));

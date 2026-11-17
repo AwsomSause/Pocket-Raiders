@@ -1,0 +1,5295 @@
+{
+ "catalogOverhaul": "people",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "npc-meet-cooltrainer-marcus",
+   "name": "Cooltrainer Marcus: Respect",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-marcus-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A stone bridge over a fast, cold river. A trainer in a sharp coat leans on the rail with his arms folded, and he does not move aside when you reach him. Three Poké Balls sit on his belt, polished until they shine. Marcus: \"Only the best trainers get my respect.\" He looks you up and down, slowly, the way a buyer looks at a horse. Marcus: \"Let's see if you're one.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Marcus unfolds his arms at last and almost smiles. Three Poké Balls open one after another, and every Pokémon that lands on the bridge is big, sharp and ready.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Cooltrainer Marcus beat you on a bridge",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gyarados",
+        "tyranitar",
+        "garchomp"
+       ],
+       "name": "Cooltrainer Marcus",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You earned Cooltrainer Marcus's respect on a bridge",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"What counts as best?\"",
+     "success": {
+      "text": "Marcus: \"Winning.\" He says it like it is the only word in the dictionary that matters. Then his coat flares as he throws, and the battle is on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Cooltrainer Marcus beat you on a bridge",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gyarados",
+        "tyranitar",
+        "garchomp"
+       ],
+       "name": "Cooltrainer Marcus",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You earned Cooltrainer Marcus's respect on a bridge",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Don't need it.\"",
+     "success": {
+      "text": "Marcus blinks. Nobody has ever told him that before; you can see it land. Then he laughs, a real one that cracks his whole careful face open, and he steps aside to let you cross.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marcus-shrugged",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cooltrainer-marcus-m2",
+   "name": "Cooltrainer Marcus: The Loss",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-marcus-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-marcus-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "Outside a Pokémon League gate, past the banners and the crowd, a sharp coat lies crumpled on the ground. Marcus sits beside it on the kerb with his elbows on his knees. Marcus: \"I lost in the first round. To a kid. A kid with a Snubbull.\" He laughs, but there is nothing in it. Marcus: \"I've been the best on every route. And I lost to a Snubbull.\"",
+   "choices": [
+    {
+     "label": "\"So learn from it.\"",
+     "success": {
+      "text": "Marcus looks at you for a long moment. Then he picks up his coat, shakes the dust off it, and asks you, quietly, what you think he did wrong.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cooltrainer-marcus-learn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rematch the kid.\"",
+     "success": {
+      "text": "The kid says yes before Marcus has finished asking. This time Marcus wins, cleanly, every move right. The kid shakes his hand and runs off happy. Marcus stands there with the win in his hands and does not feel any better at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marcus-rematch",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle me.\"",
+     "success": {
+      "text": "Marcus is on his feet before you finish. He fights angry: he throws out his biggest hitter and keeps it in long after it should have come out, and he makes mistakes he would never have made on a bridge.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-marcus-angry",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "An angry Marcus beat you outside the League gate",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gyarados",
+        "tyranitar",
+        "garchomp"
+       ],
+       "name": "Cooltrainer Marcus",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat an angry Marcus outside the League gate",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "shrugged",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-marcus-shrugged",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He glances up when he sees you, and something in his face shifts. Marcus: \"You didn't care about my respect. I've been thinking about that.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cooltrainer-marcus-learn",
+   "name": "Cooltrainer Marcus: What Went Wrong",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "Marcus pulls his coat back on and sits up straight, like a student at the front of a class. He has replayed the match in his head a hundred times. He wants to hear it from someone else.",
+   "choices": [
+    {
+     "label": "\"You hit too hard.\"",
+     "success": {
+      "text": "Marcus frowns and turns it over slowly. Marcus: \"No. I always hit hard.\" Then his eyes go wide. Marcus: \"I never switch. I never once switched.\" He stares at the gate like it has finally told him its secret.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-learned",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You underestimated the kid.\"",
+     "success": {
+      "text": "He nods, but it does not sit right with him; you can see him keep digging. Marcus: \"...No. I never switch. That kid switched four times.\" He laughs, the first real laugh of the day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-learned",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You never switch.\"",
+     "success": {
+      "text": "Marcus goes very still. Then he lets out a long breath, as if he has put down something heavy he has carried for years. Marcus: \"I never switch.\" He says it again, quieter, and writes it on the back of his hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-learned",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cooltrainer-marcus-m3",
+   "name": "Cooltrainer Marcus: Coach",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-marcus-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-marcus-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_m"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "A dusty practice field behind a Pokémon Center. Marcus, coat off and sleeves rolled up, is crouched beside the kid from the League, pointing at things. The Snubbull has grown into a Granbull, and it watches him like he hung the moon. Marcus sees you and stands, grinning. Marcus: \"Turns out I'm better at this than at winning.\"",
+   "choices": [
+    {
+     "label": "\"Battle the kid.\"",
+     "success": {
+      "text": "The kid squeaks with excitement. Marcus folds his arms, the way he used to on the bridge, but now he is nodding along to every move. The Granbull is very, very good.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "choice-band",
+         "choice-specs",
+         "choice-scarf"
+        ]
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cooltrainer-marcus"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The kid Marcus coaches beat you with a Granbull",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "granbull"
+       ],
+       "name": "The Snubbull Kid",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the kid Marcus coaches, and their Granbull",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Battle Marcus.\"",
+     "success": {
+      "text": "Marcus grins and takes the field himself. He switches now, smoothly and without pride, and he is far better than the trainer on the bridge ever was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "choice-band",
+         "choice-specs",
+         "choice-scarf"
+        ]
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cooltrainer-marcus"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Coach Marcus beat you, switching like a master",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gyarados",
+        "tyranitar",
+        "garchomp"
+       ],
+       "name": "Cooltrainer Marcus",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Coach Marcus, who switches now",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Ask what changed.\"",
+     "success": {
+      "text": "Marcus watches the kid run the Granbull through a drill, and you see how proud he is. Marcus: \"Best isn't winning. Best's the one who makes others better.\" He digs in his old bag and hands you a Choice item he does not need any more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-marcus-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "choice-band",
+         "choice-specs",
+         "choice-scarf"
+        ]
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cooltrainer-marcus"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cooltrainer-selene",
+   "name": "Cooltrainer Selene: Flawless",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-selene-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A lighthouse on a windy point, its door propped open with a stone. A trainer sits in the doorway with a thick notebook on her knees, every page crammed with tiny tables and arrows. Selene: \"My strategy is flawless. I've modelled every type matchup.\" She snaps the notebook shut and stands, brushing salt off her coat. Selene: \"Let's test it.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Selene does not even look at the field when you make your first switch; she has already called it out loud, a heartbeat before you do it. She smiles very slightly and writes something down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Cooltrainer Selene predicted you perfectly",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "alakazam",
+        "gardevoir",
+        "espeon"
+       ],
+       "name": "Cooltrainer Selene",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You broke Cooltrainer Selene's flawless model",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Show me the notes.\"",
+     "success": {
+      "text": "Selene hesitates, then hands the notebook over, almost proud. Her Alakazam's moves are right there, underlined twice: Psychic, Shadow Ball. You read the rest of her team before she takes the book back and calls out her first Pokémon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-selene-notes",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Selene beat you even after you read her notes",
+         "importance": 60
+        }
+       ],
+       "foeMoves": [
+        "psychic",
+        "shadow-ball"
+       ],
+       "team": [
+        "alakazam",
+        "gardevoir",
+        "espeon"
+       ],
+       "name": "Cooltrainer Selene",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You read Selene's notes and beat her model",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Strategy's boring.\"",
+     "success": {
+      "text": "Selene: \"Then you'll lose.\" She says it without any heat at all, as a plain fact, and opens the notebook to a fresh page before the first Pokémon is out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Cooltrainer Selene beat you, as she said she would",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "alakazam",
+        "gardevoir",
+        "espeon"
+       ],
+       "name": "Cooltrainer Selene",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Cooltrainer Selene without a plan",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cooltrainer-selene-m2",
+   "name": "Cooltrainer Selene: The Glitch",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-selene-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-selene-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The lighthouse steps, grey morning. Selene sits halfway up them with her notebook torn clean in half, pages scattered down the stone and snatched at by the wind. Selene: \"A wild Ditto. It beat my whole model. It just copied everything.\" She picks up one torn page and looks at it like it betrayed her. Selene: \"I don't know how to plan for that.\"",
+   "choices": [
+    {
+     "label": "\"You can't plan for everything.\"",
+     "success": {
+      "text": "Selene is quiet for a long time, gathering the torn pages into a neat pile she will never use. Selene: \"I hate that.\" But she does not argue, and when you leave she is watching the sea instead of the notebook.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-selene-accepted",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Catch that Ditto.\"",
+     "success": {
+      "text": "Selene's head comes up. For a second she looks like herself again. She points down the shore, where something pink was last seen sliding between the rocks, and grabs her coat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cooltrainer-selene-ditto-trail"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Plan with me.\"",
+     "success": {
+      "text": "Selene takes a fresh page from her bag and starts writing at once. She asks about your next big battle and builds a plan around it, line by line. When she tears the page out for you, one hint at the bottom is circled twice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-selene-planned",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cooltrainer-selene-ditto-trail",
+   "name": "Cooltrainer Selene: The Pink Trail",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "A bend of the shore later, Selene crouches by a tide pool. In the wet sand: a Krabby's tracks, then a Wingull's, then a Shellos's, all made by the same blob that keeps changing its feet. Selene: \"It's copying the tracks too. Of course it is.\"",
+   "choices": [
+    {
+     "label": "\"Follow the strangest tracks.\"",
+     "success": {
+      "text": "You follow the prints that make no sense at all, and they lead round the point toward the old pier. Selene keeps up, muttering notes she is not writing down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cooltrainer-selene-ditto"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Wait for it to come to us.\"",
+     "success": {
+      "text": "You sit still by the pool. Selene lasts four minutes before she gets up and starts walking, and you follow her toward the old pier, where the tracks were heading anyway.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cooltrainer-selene-ditto"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cooltrainer-selene-ditto",
+   "name": "Cooltrainer Selene: The Copycat",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none",
+    "pokemon": "ditto"
+   },
+   "intro": "Under the old pier, two nodes down the shore from the lighthouse, a small pink blob blinks at you from a coil of rope. It looks at your lead. It starts, unmistakably, to change shape.",
+   "choices": [
+    {
+     "label": "\"Battle it.\"",
+     "success": {
+      "text": "The Ditto becomes your lead the instant it touches the sand, every move the same. Selene watches the whole fight with her mouth slightly open, and does not write a single thing down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-ditto",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ditto"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You faced the Ditto that broke Selene's model",
+         "importance": 60
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Ditto that broke Selene's model beat you too",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Let Selene try.\"",
+     "success": {
+      "text": "Selene steps forward with no notebook in her hands at all. Selene: \"No plan. Fine.\" She falters, so you step in beside her and the Ditto copies you instead.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-ditto",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "ditto"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You and Selene faced the Ditto under the pier",
+         "importance": 60
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Ditto under the pier copied you into a corner",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cooltrainer-selene-m3",
+   "name": "Cooltrainer Selene: Improvised",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-selene-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-selene-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_cooltrainer_f"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The lighthouse again, but Selene is outside it, sitting on the rail with no notebook anywhere. A Ditto rides on her shoulder like a pink scarf and copies her frown when she sees you. Selene: \"I'm trying a new strategy: no strategy. I'm terrible at it.\" She says it with a laugh, which is new, and the Ditto laughs too, sort of.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Selene tosses her three Poké Balls into the air and lets them land in any order they like. She has no idea who comes out first, and she laughs, delighted, when she finds out.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cooltrainer-selene"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Selene beat you with no plan at all",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "espeon",
+        "gardevoir",
+        "alakazam"
+       ],
+       "name": "Cooltrainer Selene",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Selene's no-strategy strategy",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Teach me to plan.\"",
+     "success": {
+      "text": "Selene lights up and borrows a pencil. She teaches you how to read a boss before the boss reads you, so for the rest of this region you will see the first move of every boss coming. She gives you a Twisted Spoon to stir it with.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-selene-boss-first-move",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cooltrainer-selene"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Teach me to improvise.\"",
+     "success": {
+      "text": "Selene: \"You're asking the wrong person.\" But she tries anyway, and you both end up laughing on the rail. For the rest of this region, your lead gains +1 Speed whenever it is switched in. She presses a Twisted Spoon into your hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-selene-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-selene-switch-speed",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "twistedspoon",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cooltrainer-selene"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-crush-girl-tamsin",
+   "name": "Crush Girl Tamsin: Another Punch",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-tamsin-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_crushgirl"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A gym yard, packed earth and chalk lines. A girl in taped gloves is hitting a punching bag so hard the chain creaks with every blow, her Machop copying her stance at her side. Tamsin: \"Throw a punch, then another!\" She does not stop to look at you. Thud, thud, thud. Tamsin: \"My coach says never stop. So I don't.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Tamsin turns from the bag without even catching her breath. Her team comes at you all-out, every turn an attack, and she never once switches.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Crush Girl Tamsin punched straight through you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "machop",
+        "hitmontop",
+        "hawlucha"
+       ],
+       "name": "Crush Girl Tamsin",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You weathered Crush Girl Tamsin's all-out offence",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"When do you rest?\"",
+     "success": {
+      "text": "Tamsin's fist stops an inch from the bag. Tamsin: \"...What's that?\" She honestly does not know. Then she shakes it off, and her Machop is already in the ring.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-asked",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tamsin, who has never rested, beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "machop",
+        "hitmontop",
+        "hawlucha"
+       ],
+       "name": "Crush Girl Tamsin",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Tamsin, who has never rested",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave her to it. Long after the gym yard is out of sight, you can still hear the chain creaking.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-crush-girl-tamsin-m2",
+   "name": "Crush Girl Tamsin: New Coach",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-tamsin-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-tamsin-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_crushgirl"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "The same gym yard, but quieter. Tamsin sits on the bench with a new coach beside her, a much older woman with a cane and kind eyes. Her Machop sits between them with one arm wrapped in a thick bandage. Tamsin: \"Old coach worked us till we broke. Machop's arm.\" She will not look at it. The old woman taps the bench with her cane. New coach, Ellery: \"Rest is training. Tell her.\"",
+   "choices": [
+    {
+     "label": "\"Listen to Ellery.\"",
+     "success": {
+      "text": "Tamsin tries resting. She hates it, loudly, every single minute of it, and complains the whole afternoon. But by evening her Machop is flexing its arm without wincing, and she sits very still watching it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-rested",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go back to the old coach.\"",
+     "success": {
+      "text": "Tamsin nods hard and goes back. Weeks of drills later, Machop's arm is worse, not better. She keeps battling on it anyway, hurt, with her jaw set and her eyes wet, because nobody ever taught her how to stop.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-pushed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle me and decide.\"",
+     "success": {
+      "text": "Ellery nods for a gentle battle, so you keep it slow and kind. Halfway through, Tamsin stops shouting orders and just watches her Machop: it is moving easily, and it looks happier than she has ever seen it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-rested",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tamsin won a gentle battle and learned something",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "machop",
+        "hitmontop"
+       ],
+       "name": "Crush Girl Tamsin",
+       "size": 2,
+       "types": [],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "A gentle battle showed Tamsin her Machop was happier",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-tamsin-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Tamsin looks up at you and her face goes red. Tamsin: \"You asked about rest. I should've listened.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-crush-girl-tamsin-m3",
+   "name": "Crush Girl Tamsin: Champion Fist",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-tamsin-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-tamsin-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_crushgirl"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A small tournament in a town hall, folding chairs and a hand-painted banner. Tamsin is in the final, bouncing on her toes in her corner, her Machamp beside her. She spots you in the crowd and points straight at you. Tamsin: \"Watch. Then fight me after.\"",
+   "choices": [
+    {
+     "label": "\"Cheer.\"",
+     "success": {
+      "text": "You cheer until your throat hurts. Tamsin wins the final, and when the bell goes she leaps the rope and hugs her Machamp, then Ellery, then a stranger. She pins an Expert Belt from her prize bag on you without asking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "expert-belt",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-crush-girl-tamsin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle after.\"",
+     "success": {
+      "text": "The trophy is still warm in her hands when she drops it on a chair and climbs back into the ring. Tamsin: \"Okay. You now.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "expert-belt",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-crush-girl-tamsin"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Tournament champion Tamsin beat you too",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "machamp",
+        "hawlucha"
+       ],
+       "name": "Crush Girl Tamsin",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat tournament champion Tamsin",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Coach her between rounds.\"",
+     "success": {
+      "text": "Tamsin drags you into her corner by the sleeve. Ellery hands you a towel and nods: you are in charge. The bell rings for the break, and Tamsin looks to you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-crush-girl-tamsin-coach"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Cheer.\"",
+     "success": {
+      "text": "You cheer for every round. Tamsin loses the final, and her Machop retires afterwards, its arm done for good. She sits on the edge of the ring holding it. She is okay, mostly. She gives you an Expert Belt anyway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "expert-belt",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-crush-girl-tamsin"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pushed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-tamsin-pushed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A small tournament in a town hall, folding chairs and a hand-painted banner. Tamsin is in the final, bouncing on her toes in her corner, but there is no Machamp beside her: her Machop sits in the front row with its arm in a sling, watching. She spots you and points. Tamsin: \"Watch. Then fight me after.\"",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Battle after.\"",
+       "success": {
+        "text": "Tamsin wipes her eyes on her glove and climbs back into the ring. Tamsin: \"Okay. You now.\" Her Machop watches from the front row.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-tamsin-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "item",
+          "id": "expert-belt",
+          "count": 1
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-crush-girl-tamsin"
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Tamsin beat you the day her Machop retired",
+           "importance": 60
+          }
+         ],
+         "team": [
+          "hawlucha",
+          "hitmontop"
+         ],
+         "name": "Crush Girl Tamsin",
+         "size": 2,
+         "types": [],
+         "levelBonus": 1,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You battled Tamsin the day her Machop retired",
+           "importance": 60
+          }
+         ]
+        }
+       }
+      },
+      {
+       "label": "\"Coach her between rounds.\"",
+       "success": {
+        "text": "You call every switch you can, but the old injury decides it. Tamsin loses the final, and her Machop retires afterwards. She thanks you for trying. She is okay, mostly, and gives you an Expert Belt.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-tamsin-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "item",
+          "id": "expert-belt",
+          "count": 1
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-crush-girl-tamsin"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "fit",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-tamsin-pushed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "hide": [
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-crush-girl-tamsin-coach",
+   "name": "Crush Girl Tamsin: In Her Corner",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_crushgirl"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "The break between rounds. Her Machamp is breathing hard; the other trainer's Pokémon is fresh. Tamsin grips the rope. Tamsin: \"Who do I send? Tell me quick.\"",
+   "choices": [
+    {
+     "label": "\"Switch to Hitmontop.\"",
+     "success": {
+      "text": "Tamsin switches without a word of argument, which she has never done in her life. Hitmontop spins the final round away, and she wins. Tamsin: \"Thanks. I mean it.\" She hands you an Expert Belt.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "expert-belt",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-crush-girl-tamsin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Switch to Hawlucha.\"",
+     "success": {
+      "text": "Hawlucha dives off the corner post and wins it in three moves. Tamsin screams, and then hugs you so hard your feet leave the floor. Tamsin: \"Thanks. I mean it.\" She gives you an Expert Belt.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-tamsin-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "expert-belt",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-crush-girl-tamsin"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-crush-kin-ivan-and-mira",
+   "name": "Crush Kin Ivan and Mira: Double the Pressure",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kin-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_crushkin"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A dirt road between two fields. A brother and sister stand back to back in the middle of it, matching gis, matching scuffed knuckles, blocking the whole way. Ivan: \"Two trainers, double the pressure!\" His sister rolls her eyes without turning round. Mira: \"He means double the punches.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "They spin apart in perfect time and throw together. Hariyama and Medicham land shoulder to shoulder, and the road shakes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kin-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Crush Kin beat you two on one",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "hariyama",
+        "medicham"
+       ],
+       "format": "doubles",
+       "name": "Crush Kin Ivan and Mira",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat the Crush Kin in a double battle",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Who's older?\"",
+     "success": {
+      "text": "Both of them say \"Me!\" at exactly the same moment. Then they argue about it for ten minutes, each with a long list of proof, while you sit on a fence and eat lunch. Neither ever wins.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kin-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"One at a time?\"",
+     "success": {
+      "text": "They look at you as if you suggested they cut off an arm. Ivan: \"Together or nothing.\" They refuse, and stay back to back on the road.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-crush-kin-ivan-and-mira-m2",
+   "name": "Crush Kin Ivan and Mira: The Move",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kin-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kin-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_crushkin"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A train platform at the edge of town. Mira sits alone on a bench, no Ivan in sight, turning a train ticket over and over in her fingers until the corners are soft. Mira: \"I got into a dojo in another region. Ivan doesn't know.\" She looks down the line, where the tracks bend out of sight.",
+   "choices": [
+    {
+     "label": "\"Tell him.\"",
+     "success": {
+      "text": "Mira takes a breath and goes to find him. It is a hard conversation, out behind the station, and you hear most of it. Ivan is happy for her and devastated, both at once, and by the end they are both crying and laughing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kin-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-kin-told",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go without telling.\"",
+     "success": {
+      "text": "Mira nods, puts the ticket in her pocket and boards the next train without looking back. Ivan finds out from a note she left on his pillow. You hear about it later from a stranger: he read it standing up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kin-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-kin-note",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll tell him.\"",
+     "success": {
+      "text": "You find Ivan and tell him. He is angry at you first, red-faced and shouting. Then the anger has nowhere left to go, and he sits down in the dust, angry at nobody, and asks when her train leaves.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kin-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-kin-messenger",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-crush-kin-ivan-and-mira-ivan",
+   "name": "Crush Kin Ivan and Mira: Two Regions: Ivan",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": false,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kin-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kin-ivan",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kin-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_crushkin"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Ivan's home road, without his sister. He is training alone with his Hariyama, and he is better: tighter, calmer, less shouting. A thick bundle of letters is tucked into his belt. Ivan: \"She writes every week. I'm getting better.\" He pats the letters without thinking about it.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Ivan bows, which he never used to do. In singles, without his sister at his back, he is much stronger than before.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kin-ivan",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Ivan beat you in singles, much stronger than before",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "hariyama"
+       ],
+       "name": "Crush Kin Ivan",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Ivan in singles, a region away from his sister",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Carry a letter.\"",
+     "success": {
+      "text": "Ivan goes red and pulls a crumpled letter from his belt, the newest one, the longest one he has ever written. Ivan: \"For Mira. If you see her.\" You tuck it somewhere safe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kin-ivan",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-kin-letter",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ],
+   "callback": true,
+   "minStage": 1
+  },
+  {
+   "id": "npc-meet-crush-kin-ivan-and-mira-m3",
+   "name": "Crush Kin Ivan and Mira: Two Regions: Mira",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "afternoon",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kin-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kin-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "roster-kin-ivan",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_crushkin"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A dojo in another region, far from the dirt road. Mira is on the mat, sweat on her brow, her Medicham mirroring her stance. A little screen on the wall plays a battle video: Ivan, fighting. Mira: \"He sends me his battle videos. He's getting better.\" She pauses the video on his face and smiles at it.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Mira steps onto the mat and bows the way the dojo taught her. In singles, Medicham alone, she is much stronger than before. When it is over she ties a Focus Band round your wrist.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kin-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "focus-band",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-crush-kin-ivan-and-mira"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Mira beat you in singles, much stronger than before",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "medicham"
+       ],
+       "name": "Crush Kin Mira",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Mira in singles, a region away from her brother",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Carry a letter.\"",
+     "success": {
+      "text": "Mira writes back on the spot and folds in a hand-drawn photo of the two of them back to back, the way they used to stand on the road. You promise to post it. She gives you a Focus Band for the trouble.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-kin-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Mira drew the Crush Kin back to back for Ivan",
+        "importance": 60
+       },
+       {
+        "kind": "item",
+        "id": "focus-band",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-crush-kin-ivan-and-mira"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "note-letter",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-kin-note",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "roster-kin-letter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You hand her Ivan's letter. She lays it beside the first ones he sent: short at first, then longer and longer. This one is the longest. Taped inside is a hand-drawn photo of them both."
+    },
+    {
+     "id": "note",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-kin-note",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mira shows you his letters, pinned in a row on the wall. Ivan's letters were short at first, and they get longer."
+    },
+    {
+     "id": "letter",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-kin-letter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You hand her Ivan's letter. She reads it twice and laughs. Taped inside is a hand-drawn photo of them both, back to back."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cue-ball-dutch",
+   "name": "Cue Ball Dutch: Show Me",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-dutch-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_cueball"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A wooden bridge over a slow river, and in the middle of it a toll booth somebody has painted with roaring orange flames. A huge bald man in a leather vest fills the booth's doorway, his head shining in the sun. Dutch: \"Show me what you've got!\" He cracks his knuckles, one hand, then the other. Dutch: \"Toll's a battle.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Dutch roars with laughter and throws. His Primeape lands on the toll booth roof, already furious about something, and leaps.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dutch-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Cue Ball Dutch's Primeape took the toll",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "primeape"
+       ],
+       "name": "Cue Ball Dutch",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You paid Cue Ball Dutch's toll in battle",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Pay a toll instead.\"",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "Dutch looks almost hurt, but a toll's a toll. He takes your 200 and counts it twice with great dignity, then lifts the barrier with one finger.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Swim.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "Your Water-type takes you on its back and ferries you across, the current pulling you well downstream. Dutch waves from the bridge, baffled. It costs you a long walk back to the path.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cue-ball-dutch-m2",
+   "name": "Cue Ball Dutch: Bad News",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-dutch-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-dutch-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_cueball"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The flame-painted toll booth, but no roar this time. Dutch sits on the step with a letter in his huge hands, reading it for what looks like the tenth time. Dutch: \"Bridge is getting knocked down. New highway.\" He folds the letter very small. Dutch: \"This booth's all I've got.\"",
+   "choices": [
+    {
+     "label": "\"Fight it.\"",
+     "success": {
+      "text": "Dutch marches you both to the town hall and demands a hearing. The council agrees to settle it the old way. When the dust clears, the old bridge is kept as a footpath, and Dutch cries openly in the hallway.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dutch-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dutch-kept",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "You lost to the council, but they kept Dutch's bridge anyway",
+         "importance": 60
+        }
+       ],
+       "name": "The Town Council",
+       "classId": "veteran",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled the town council to save Dutch's bridge",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Come with the new road.\"",
+     "success": {
+      "text": "Dutch looks at the letter again, then at the surveyors' flags in the distance. He walks over and asks for a job. By the end of the day he has a hard hat and a place on the highway crew, and the hat barely fits.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dutch-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dutch-crew",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Move the booth.\"",
+     "success": {
+      "text": "Dutch makes one phone call. By afternoon a Machamp crew arrives, lifts the whole flame-painted booth onto their shoulders and carries it down the river to a riverside park, with Dutch walking beside it like a proud parent.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dutch-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dutch-moved",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cue-ball-dutch-m3",
+   "name": "Cue Ball Dutch: Toll's a Smile",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-dutch-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-dutch-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_cueball"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "Dutch, wherever he landed, and he is grinning so wide his whole bald head wrinkles. A line of kids waits at his booth, each one pulling a face at him as they pass. Dutch: \"Toll's changed. Toll's a smile now. Kids love it.\"",
+   "choices": [
+    {
+     "label": "\"Smile.\"",
+     "success": {
+      "text": "You smile, and Dutch roars with laughter and waves you through like royalty. He presses a Muscle Band from his old toll days into your hand as you pass. Dutch: \"Keep that smile on.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dutch-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "muscle-band",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cue-ball-dutch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle anyway.\"",
+     "success": {
+      "text": "Dutch: \"For old times!\" Pangoro and Primeape both land on the booth roof, and the kids cheer for whoever is winning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dutch-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "muscle-band",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cue-ball-dutch"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Cue Ball Dutch beat you, for old times",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "pangoro",
+        "primeape"
+       ],
+       "name": "Cue Ball Dutch",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled Cue Ball Dutch for old times",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Paint the booth.\"",
+     "success": {
+      "text": "Dutch hands you a brush and a dented tin of paint. The old flames are flaking. Dutch: \"Your call. What colour?\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-cue-ball-dutch-paint"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "kept",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-dutch-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The old bridge, kept as a footpath, with the flame-painted booth still in the middle of it. Dutch is grinning so wide his whole bald head wrinkles, and a line of kids waits to cross. Dutch: \"Toll's changed. Toll's a smile now. Kids love it.\""
+    },
+    {
+     "id": "crew",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-dutch-crew",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A rest stop on the new highway, and the old flame-painted booth sits at its edge as the crew's tea hut. Dutch, hard hat on, is grinning so wide his bald head wrinkles. Kids line up. Dutch: \"Toll's changed. Toll's a smile now. Kids love it.\""
+    },
+    {
+     "id": "moved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-dutch-moved",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A riverside park, and the flame-painted booth stands by the water where the Machamp crew set it down. Dutch is grinning so wide his whole bald head wrinkles. Kids line up. Dutch: \"Toll's changed. Toll's a smile now. Kids love it.\""
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-cue-ball-dutch-paint",
+   "name": "Cue Ball Dutch: A New Coat",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_cueball"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "Dutch holds the ladder steady with one hand, which is all he needs. The kids crowd round to watch. Every one of them has an opinion about the colour.",
+   "choices": [
+    {
+     "label": "\"Bright red flames, fresh.\"",
+     "success": {
+      "text": "You repaint the flames as bright as new. Dutch stands back and wipes his eyes. Dutch: \"Like the first day.\" He gives you a Muscle Band, and says that booth is going to the Final Reunion.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dutch-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dutch-paint",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You repainted Dutch's booth with red flames",
+        "importance": 60
+       },
+       {
+        "kind": "item",
+        "id": "muscle-band",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cue-ball-dutch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Sky blue, with clouds.\"",
+     "success": {
+      "text": "Sky blue, with fat white clouds. The kids add a Primeape in the corner. Dutch laughs until he has to sit down, and gives you a Muscle Band. He says that booth is going to the Final Reunion.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dutch-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dutch-paint",
+        "amount": 2,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You repainted Dutch's booth sky blue",
+        "importance": 60
+       },
+       {
+        "kind": "item",
+        "id": "muscle-band",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cue-ball-dutch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Sunshine yellow, with smiles.\"",
+     "success": {
+      "text": "Sunshine yellow, covered in painted smiles, one for every kid in line. Dutch: \"Perfect. Toll's a smile.\" He gives you a Muscle Band. That booth is going to the Final Reunion.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-dutch-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-dutch-paint",
+        "amount": 3,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "You painted Dutch's booth sunshine yellow",
+        "importance": 60
+       },
+       {
+        "kind": "item",
+        "id": "muscle-band",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-cue-ball-dutch"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-engineer-baxter",
+   "name": "Engineer Baxter: On Current",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-baxter-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_engineer"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A power station at night, humming behind its fence. A man with a heavy toolbelt sits on an upturned crate, tapping his headlamp, which flickers on, off, on. A Klinklang turns slowly beside him like a clock. Baxter: \"Everything runs on current, even teams.\" He gives the lamp one more tap. It dies.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Baxter grins in the dark and sends out Magnezone and Klinklang. Sparks jump between them and light up the fence.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-baxter-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Engineer Baxter beat you at the power station",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "magnezone",
+        "klinklang"
+       ],
+       "name": "Engineer Baxter",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Engineer Baxter at the power station",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Fix your lamp.\"",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "electric"
+      }
+     ],
+     "success": {
+      "text": "Your Electric-type touches the headlamp and it blazes on, brighter than it has been in years. Baxter laughs and digs in his belt. Baxter: \"Here. You've earned it.\" It is a Cell Battery.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-baxter-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "cell-battery",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You leave him in the dark with his flickering lamp and his humming station.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-engineer-baxter-m2",
+   "name": "Engineer Baxter: The Blackout",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-baxter-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-baxter-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_engineer"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "A town with every window dark. Baxter is up a ladder against a substation box, his headlamp the only light on the street, wires in his teeth. Baxter: \"Someone's been feeding the substation to a Pokémon. I keep fixing it, it keeps going out.\" Below him, frightened faces peer from doorways.",
+   "choices": [
+    {
+     "label": "\"Follow the cables.\"",
+     "success": {
+      "text": "You follow the chewed cables out of town into the dark, where they run toward a low, strange humming, like many voices singing in the static. Baxter calls after you to be careful.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-baxter-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-baxter-cables",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Help fix it.\"",
+     "success": {
+      "text": "You hold the ladder and pass up tools until well past midnight, the hours you would have spent resting. Then the lights come on across town all at once, and people cheer from their windows. Power for one night, at least.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-baxter-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-baxter-fixed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Find who's doing it.\"",
+     "success": {
+      "text": "You stake out the substation with Baxter. Near dawn, a figure in a dark uniform slips in with a bag of fresh cable cutters. Their orders fall out of a pocket as they run: the next step of their plan.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-baxter-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-baxter-team",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-engineer-baxter-m3",
+   "name": "Engineer Baxter: The Rotom",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-baxter-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-baxter-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_engineer"
+    ],
+    "tint": "#40301c",
+    "effect": "none"
+   },
+   "intro": "Baxter's workshop, cluttered and warm. A Rotom zips between the appliances, popping in and out of a washing machine, a fan, a toaster, making each one hum. Baxter: \"Moved in after the blackout. Won't leave. Wants to be useful.\" The toaster pops, apparently in agreement.",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Baxter: \"Let's see what it's learned.\" The Rotom dives into the washing machine and comes out spinning, Magnezone beside it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-baxter-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "magnet",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-engineer-baxter"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Baxter's washing-machine Rotom beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "rotom-wash",
+        "magnezone"
+       ],
+       "name": "Engineer Baxter",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Baxter and his washing-machine Rotom",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Take the Rotom.\"",
+     "success": {
+      "text": "Baxter looks at the Rotom. The Rotom looks at you, then zips into your bag, which hums. Baxter: \"Guess it's decided.\" He looks a little sad, and a little relieved about the toaster.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-baxter-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "rotom"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-engineer-baxter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give it a job.\"",
+     "success": {
+      "text": "You and Baxter set the Rotom to running the workshop: the lathe, the lights, the kettle. It is thrilled and does everything at once. Baxter, happier than you have ever seen him, gives you a Magnet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-baxter-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "magnet",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-engineer-baxter"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-fisherman-elliot",
+   "name": "Fisherman Elliot: Patience",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-elliot-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A long wooden pier in soft light. A man in a battered hat sits on the very end with his rod out, and from the look of the dust on his boots he has not moved in hours. Elliot: \"Patience is the whole trick.\" He does not look round. He pats the plank beside him. Elliot: \"Battle? Sure. Sit first.\"",
+   "choices": [
+    {
+     "label": "\"Sit.\"",
+     "success": {
+      "text": "You sit. The water laps. A Wingull lands on the rail and leaves again. Neither of you says anything for a long, long time, and slowly your shoulders come down from round your ears. Then he reels in and nods at the shore.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-fisherman-elliot-patience"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle now.\"",
+     "success": {
+      "text": "Elliot: \"Hm.\" He sets the rod down with a sigh, very slowly, and only then reaches for his Poké Balls.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Fisherman Elliot beat you, slow and steady",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gyarados",
+        "lanturn"
+       ],
+       "name": "Fisherman Elliot",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Fisherman Elliot on his pier",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Fish with him.\"",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Elliot hands you a spare rod without a word. Your line goes taut, and you bring up a fine catch, the kind a Good Rod pulls in. Elliot: \"Hm. Not bad.\" That is high praise.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-elliot-fished",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "poliwag",
+         "goldeen",
+         "krabby",
+         "horsea",
+         "shellder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your line jerks and you nearly lose the rod. Elliot reaches over with one hand and steadies it, and together you bring up a fine catch, the kind a Good Rod pulls in. Elliot: \"Hm. Patience.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-elliot-fished",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "poliwag",
+         "goldeen",
+         "krabby",
+         "horsea",
+         "shellder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-fisherman-elliot-patience",
+   "name": "Fisherman Elliot: Slow and Steady",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "A node of calm later, on the grass at the end of the pier, Elliot finally stands and stretches until his back cracks. Elliot: \"Right. Now we battle.\"",
+   "choices": [
+    {
+     "label": "\"Ready when you are.\"",
+     "success": {
+      "text": "He battles exactly the way he fishes: slow and steady, never rushing, waiting for you to make the first mistake.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Fisherman Elliot beat you, slow and steady",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gyarados",
+        "lanturn"
+       ],
+       "name": "Fisherman Elliot",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Fisherman Elliot on his pier",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"One more minute.\"",
+     "success": {
+      "text": "Elliot actually smiles. Elliot: \"You learn fast.\" He gives you your minute, then battles slow and steady, never rushing.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Fisherman Elliot beat you, slow and steady",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "gyarados",
+        "lanturn"
+       ],
+       "name": "Fisherman Elliot",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Fisherman Elliot on his pier",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-fisherman-elliot-m2",
+   "name": "Fisherman Elliot: The Big One",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-elliot-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-elliot-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "tint": "#1c3040",
+    "effect": "none",
+    "pokemon": "kingdra"
+   },
+   "intro": "The pier at dawn, mist on the water. Elliot is on his feet for once, braced against the rail, his rod bent double and the line singing. Something huge moves under the surface. Elliot: \"Twenty years I've waited for this one. Help me hold.\"",
+   "choices": [
+    {
+     "label": "\"Hold the rod.\"",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You grab the rod beside him and pull until your arms burn. A Kingdra breaks the surface, enormous, the biggest anyone has ever seen. Elliot lands it, looks at it for one long minute, and lets it go. Elliot: \"Twenty years. Worth it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-elliot-landed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your grip slips, but Elliot does not. He hauls, and an enormous Kingdra breaks the surface. He lands it, gazes at it for a long minute, and gently lets it go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-elliot-landed",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let it go.\"",
+     "success": {
+      "text": "You reach over and cut the line. Elliot stares at the empty water. Elliot: \"...Yeah. Twenty more years, then.\" Then he laughs, a big surprised laugh that echoes off the water.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-elliot-released",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle it out of the water.\"",
+     "success": {
+      "text": "Elliot: \"Do it.\" The line snaps and an enormous Kingdra rises out of the water to face you. If you can, it is yours to catch.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-elliot-battled",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "kingdra"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You battled the Big One out of the water",
+         "importance": 60
+        }
+       ],
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The Big One slipped back under the pier",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-fisherman-elliot-m3",
+   "name": "Fisherman Elliot: Grandson",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "evening"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-elliot-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-elliot-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "The pier again. Elliot sits on the end with a little boy beside him holding a bright plastic toy rod, wriggling, kicking his feet, asking if it is a fish yet every ten seconds. Elliot: \"Teaching him patience. He has none. Like you.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The boy cheers for both of you at once. Elliot fights slow and steady with Kingdra and Lanturn. When it is done, he gives you his old Super Rod.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "super-rod",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-fisherman-elliot"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Fisherman Elliot beat you in front of his grandson",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "kingdra",
+        "lanturn"
+       ],
+       "name": "Fisherman Elliot",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Fisherman Elliot in front of his grandson",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Fish with them.\"",
+     "success": {
+      "text": "Three lines in the water. The boy lasts a minute, then two, then five. Elliot is so proud he forgets his own rod. Afterwards he gives you a Super Rod.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "super-rod",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-fisherman-elliot"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell the boy about the Big One.\"",
+     "success": {
+      "text": "You tell it big. The boy wants to see it. And as if it heard, the Big One surfaces, enormous, right by the pier. The boy is quiet for the first time in his life. Elliot gives you a Super Rod.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-elliot-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "super-rod",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-fisherman-elliot"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "caught",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-elliot-battled",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "partySpecies",
+       "species": "kingdra"
+      }
+     ],
+     "notice": "The boy tugs your sleeve and asks, very seriously, if he can see \"Grandpa's fish\" in your party. Elliot pretends not to listen."
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-gambler-lucky",
+   "name": "Gambler Lucky: Double or Nothing",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-lucky-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gambler"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A smoky back room behind a bar, one bare bulb over a green table. A man in a loud jacket shuffles a deck of cards with fast, beautiful hands, a Persian lounging on the table beside him. Lucky: \"Double or nothing on this battle!\" He fans the cards. Lucky: \"I put up 500. You put up 500. Fair?\"",
+   "choices": [
+    {
+     "label": "\"Bet.\"",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "You both lay 500 on the green table. The bet is real, and he does not cheat: Persian and Togekiss fight fair. The winner takes 1000.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "flag",
+        "key": "roster-lucky-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-lucky-bet",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "You lost 500 to Gambler Lucky, fair and square",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "persian",
+        "togekiss"
+       ],
+       "name": "Gambler Lucky",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1000
+        },
+        {
+         "kind": "moment",
+         "text": "You won Gambler Lucky's double-or-nothing bet",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Battle for nothing.\"",
+     "success": {
+      "text": "Lucky: \"Where's the fun?\" But he pockets the cards and plays anyway, for the normal prize.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lucky-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Gambler Lucky beat you for nothing",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "persian",
+        "togekiss"
+       ],
+       "name": "Gambler Lucky",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Gambler Lucky with nothing on the table",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Lucky shrugs and goes back to his shuffling. The cards whisper in his hands as you leave.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-gambler-lucky-m2",
+   "name": "Gambler Lucky: In Debt",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-lucky-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-lucky-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gambler"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "An alley behind the same bar. Lucky, ragged now, his loud jacket torn at the shoulder, is pinned against the wall by two big thugs. His Persian hisses from a bin lid. Thug: \"He owes. A lot.\" Lucky is still smiling, somehow. Lucky: \"I'll win it back. One more game.\"",
+   "choices": [
+    {
+     "label": "\"Pay part of his debt.\"",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1000
+      }
+     ],
+     "success": {
+      "text": "You count out 1000. The thugs take it, look at each other, and leave. Lucky sinks down the wall and cannot look at you for a long time.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1000
+       },
+       {
+        "kind": "flag",
+        "key": "roster-lucky-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-lucky-paid",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Fight the thugs.\"",
+     "success": {
+      "text": "The thugs crack their knuckles. Two battles, back to back, in a narrow alley. When it is over they leave, angry, promising this is not finished.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lucky-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-lucky-defended",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The thugs beat you, but left Lucky alone",
+         "importance": 60
+        }
+       ],
+       "chain": 2,
+       "name": "Thugs",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You drove off the thugs leaning on Lucky",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Let him gamble once more.\"",
+     "success": {
+      "text": "Lucky deals one more game against the thugs, his hands shaking. He loses. Badly. They take his Persian as payment, and he watches it go without a word.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lucky-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-lucky-lost-persian",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-gambler-lucky-m3",
+   "name": "Gambler Lucky: Quitting",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-lucky-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-lucky-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gambler"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "A plain meeting room with stacked chairs and a coffee urn. Lucky sits by the window in a clean, quiet jacket, turning a coin over and over in his fingers. Lucky: \"Ninety days. I keep this to remember. Never flip it.\"",
+   "choices": [
+    {
+     "label": "\"Battle, no bet.\"",
+     "success": {
+      "text": "No money on the table. Lucky plays it clean and grins the whole way through. Afterwards he says he enjoyed it more than any bet he ever won, and gives you an Amulet Coin.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lucky-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "amulet-coin",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-gambler-lucky"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lucky beat you clean, no bet",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "persian",
+        "togekiss"
+       ],
+       "name": "Gambler Lucky",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You and Lucky battled for nothing, and he loved it",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Keep going.\"",
+     "success": {
+      "text": "Lucky looks at you, then at the coin. He presses it into your palm and closes your fingers over it. Lucky: \"Keep it for me. Then I'll know I can't flip it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lucky-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "moment",
+        "text": "Lucky gave you his ninety-day coin, never flipped",
+        "importance": 60
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-gambler-lucky"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Get the Persian back.\"",
+     "success": {
+      "text": "Lucky stops turning the coin. Lucky: \"You'd do that?\" He writes down where the thugs' boss drinks, and you set out.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-gambler-lucky-persian-trail"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle, no bet.\"",
+     "success": {
+      "text": "No money on the table. Lucky plays it clean and grins the whole way through. Afterwards he says he enjoyed it more than any bet he ever won, and gives you an Amulet Coin.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lucky-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "amulet-coin",
+        "count": 1
+       },
+       {
+        "kind": "money",
+        "amount": 1100
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-gambler-lucky"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Lucky beat you clean, no bet",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "persian",
+        "togekiss"
+       ],
+       "name": "Gambler Lucky",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You and Lucky battled for nothing, and he loved it",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "paid",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-lucky-paid",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Before anything else, Lucky counts out 1100 and puts it in your hand. Lucky: \"Paid you back. With a little extra.\"",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Keep going.\"",
+       "success": {
+        "text": "Lucky looks at you, then at the coin. He presses it into your palm and closes your fingers over it. Lucky: \"Keep it for me. Then I'll know I can't flip it.\"",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-lucky-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "moment",
+          "text": "Lucky gave you his ninety-day coin, never flipped",
+          "importance": 60
+         },
+         {
+          "kind": "money",
+          "amount": 1100
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-gambler-lucky"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "lost-persian",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-lucky-lost-persian",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "There is no Persian at his feet. He keeps glancing at the empty space.",
+     "hide": [
+      3
+     ]
+    },
+    {
+     "id": "defended",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-lucky-defended",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "hide": [
+      2,
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-gambler-lucky-persian-trail",
+   "name": "Gambler Lucky: The Boss's Trail",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_gambler"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "The first node of the trail: a bar where the thugs drink. One of them recognises you from the alley and goes pale. Somewhere upstairs, a Persian is yowling.",
+   "choices": [
+    {
+     "label": "\"Take me to your boss.\"",
+     "success": {
+      "text": "The thug thinks about it, then jerks his head toward the stairs. You climb them, toward the yowling.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-gambler-lucky-persian-boss"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Follow the yowling.\"",
+     "success": {
+      "text": "You slip past the bar and follow the sound up the back stairs, one creaking step at a time.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-gambler-lucky-persian-boss"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-gambler-lucky-persian-boss",
+   "name": "Gambler Lucky: The Boss",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_gambler"
+    ],
+    "tint": "#301c40",
+    "effect": "none"
+   },
+   "intro": "Two nodes from the meeting room, a back office. A heavy man with rings on every finger sits behind a desk, Lucky's Persian on a velvet cushion beside him, very unhappy. He listens to you and laughs. Boss: \"Battle me for it.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "The boss fights dirty but not well. After the battle he waves a ringed hand: the Persian is not worth the trouble. It leaps into your arms, and Lucky, later, cries into its fur. He gives you an Amulet Coin.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-lucky-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "amulet-coin",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-gambler-lucky"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "The thugs' boss beat you, but gave up the Persian anyway",
+         "importance": 60
+        }
+       ],
+       "name": "The Thugs' Boss",
+       "classId": "roughneck",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You won Lucky's Persian back from the thugs' boss",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-gentleman-alfred",
+   "name": "Gentleman Alfred: Proper Form",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-alfred-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A garden party on a lawn strung with lanterns. An old man in a bow tie stands by the roses, and beside him a Furfrou in an elegant trim sits perfectly straight. Alfred: \"Proper form, proper manners. Bow before we begin.\" He waits, hands clasped behind his back, with the patience of someone who has waited for good manners all his life.",
+   "choices": [
+    {
+     "label": "\"Bow.\"",
+     "success": {
+      "text": "You bow, and Alfred is utterly charmed. He bows back, deeper. Alfred: \"Splendid.\" For a trainer with manners, he promises a prize a fifth larger than usual.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "You bowed to Gentleman Alfred, then lost",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "arcanine",
+        "furfrou"
+       ],
+       "name": "Gentleman Alfred",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "roster-alfred-bow-prize",
+         "amount": 1,
+         "stamp": "region"
+        },
+        {
+         "kind": "moment",
+         "text": "You bowed to Gentleman Alfred, then beat him",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Alfred sighs very gently and steps onto the lawn. Arcanine and Furfrou take their places like dancers.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Gentleman Alfred beat you at a garden party",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "arcanine",
+        "furfrou"
+       ],
+       "name": "Gentleman Alfred",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Gentleman Alfred at a garden party",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Skip the bow.\"",
+     "success": {
+      "text": "Alfred raises one white eyebrow. Alfred: \"How modern.\" Then he nods to his Pokémon, and the battle begins.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "You skipped the bow and Gentleman Alfred beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "arcanine",
+        "furfrou"
+       ],
+       "name": "Gentleman Alfred",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You skipped the bow and beat Gentleman Alfred",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-gentleman-alfred-m2",
+   "name": "Gentleman Alfred: The Estate Sale",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-alfred-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-alfred-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A great old house behind iron gates, with a hand-painted SALE sign hung on them. Alfred stands in the empty hall among dust sheets, the Furfrou and Arcanine at his side. Alfred: \"I can't keep it. Forty rooms and nobody in them.\" He straightens his bow tie. Alfred: \"I'd like my Pokémon to go to someone who'll battle properly.\"",
+   "choices": [
+    {
+     "label": "\"Take one.\"",
+     "success": {
+      "text": "Alfred trims the Furfrou himself, slowly, one last time, and ties a little ribbon at its collar. Then he puts its lead in your hand and does not let go for a moment. The Furfrou joins you, trimmed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-alfred-gave",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "furfrou"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Stay with them.\"",
+     "success": {
+      "text": "Alfred looks at the Arcanine, and the Furfrou, and the long empty hall. Alfred: \"I suppose I could.\" He keeps them, and he takes the SALE sign off the furniture at least.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-alfred-kept",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Help him find somewhere smaller.\"",
+     "success": {
+      "text": "Alfred brightens like a lamp. He fetches his hat and a list of places he has been too shy to look at.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-gentleman-alfred-house-hunt"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-gentleman-alfred-house-hunt",
+   "name": "Gentleman Alfred: House Hunting",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "The first stop down the road: a flat above a bakery, a bungalow by a busy road. Alfred tuts at each one politely. The Arcanine sniffs every doorway and sneezes.",
+   "choices": [
+    {
+     "label": "\"Somewhere with water.\"",
+     "success": {
+      "text": "Alfred nods. Alfred: \"Yes. Somewhere with water.\" You walk on, toward a lane that dips down to a pond.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-gentleman-alfred-cottage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Somewhere with room for visitors.\"",
+     "success": {
+      "text": "Alfred: \"Fewer rooms, but more visitors. Yes.\" You walk on, and the lane dips down to a pond.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-gentleman-alfred-cottage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-gentleman-alfred-cottage",
+   "name": "Gentleman Alfred: The Cottage by the Pond",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "Two nodes from the estate, a small stone cottage sits by a pond, roses round the door, a FOR SALE sign half-sunk in the grass. The Furfrou trots straight to the water and sits.",
+   "choices": [
+    {
+     "label": "\"This one.\"",
+     "success": {
+      "text": "Alfred stands in the doorway for a long minute. Alfred: \"This one.\" He buys it that afternoon, and the Arcanine falls asleep on the porch before the papers are signed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-cottage",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Look inside first.\"",
+     "success": {
+      "text": "Two rooms, a kitchen, a window over the pond. Alfred runs his hand along the mantel and smiles. He buys it that afternoon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-cottage",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-gentleman-alfred-m3",
+   "name": "Gentleman Alfred: Cottage Tea",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-alfred-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-alfred-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#40281c",
+    "effect": "none"
+   },
+   "intro": "A small cottage with roses round the door. Alfred, in shirtsleeves and no bow tie at all, is pouring tea at a table by the window, three cups already set out. Alfred: \"I find I like it. Fewer rooms. More visitors.\"",
+   "choices": [
+    {
+     "label": "\"Tea.\"",
+     "success": {
+      "text": "Alfred pours, and you drink it by the window with the pond outside. By the second cup your whole party is rested and well. He gives you a Silk Scarf from his old wardrobe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-gentleman-alfred"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Alfred rolls up his shirtsleeves even further. Alfred: \"Proper form, mind.\" His Arcanine pads out onto the lawn. He gives you a Silk Scarf from his old wardrobe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-gentleman-alfred"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Gentleman Alfred beat you on the cottage lawn",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "arcanine"
+       ],
+       "name": "Gentleman Alfred",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Gentleman Alfred on the cottage lawn",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Bring a guest.\"",
+     "success": {
+      "text": "You bring a friend from the road whose own story has wrapped up. Alfred lays out an extra cup, and by the end of the pot they are old friends. He gives you a Silk Scarf from his old wardrobe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-alfred-guest",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "silk-scarf",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-gentleman-alfred"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tea.\"",
+     "success": {
+      "text": "Alfred pours, and you drink it by the window with the pond outside. By the second cup your whole party is rested and well. The Furfrou you took is the only gift he says you need.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-alfred-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-gentleman-alfred"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gave",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-alfred-gave",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Alfred asks after the Furfrou before anything else, and smiles when he hears it battles properly.",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"Battle.\"",
+       "success": {
+        "text": "Alfred rolls up his shirtsleeves even further. Alfred: \"Proper form, mind.\" His Arcanine pads out onto the lawn. The Furfrou you took is the only gift he says you need.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-alfred-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-gentleman-alfred"
+         }
+        ],
+        "battle": {
+         "kind": "trainer",
+         "friendly": true,
+         "lose": [
+          {
+           "kind": "moment",
+           "text": "Gentleman Alfred beat you on the cottage lawn",
+           "importance": 60
+          }
+         ],
+         "team": [
+          "arcanine"
+         ],
+         "name": "Gentleman Alfred",
+         "size": 1,
+         "types": [],
+         "levelBonus": 2,
+         "win": [
+          {
+           "kind": "moment",
+           "text": "You beat Gentleman Alfred on the cottage lawn",
+           "importance": 60
+          }
+         ]
+        }
+       }
+      },
+      {
+       "label": "\"Bring a guest.\"",
+       "success": {
+        "text": "You bring a friend from the road whose own story has wrapped up. Alfred lays out an extra cup, and by the end of the pot they are old friends. The Furfrou you took is the only gift he says you need.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "roster-alfred-done",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "flag",
+          "key": "roster-alfred-guest",
+          "amount": 1,
+          "stamp": "region"
+         },
+         {
+          "kind": "recruit",
+          "trainer": "npc-gentleman-alfred"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "kept-furfrou",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "roster-alfred-gave",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "hide": [
+      3
+     ]
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-hiker-anthony",
+   "name": "Hiker Anthony: Stubborn",
+   "group": "Trainers and challenges",
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-anthony-m1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_hiker"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "stop": "event",
+   "types": [],
+   "rarity": "common",
+   "minStage": 1,
+   "intro": "A mountain trail, high and windy. A big man with a bigger pack sits on a boulder, breaking a sandwich in half, and handing the other half up to an Onix that coils round the rock behind him. Anthony: \"Mountains make for stubborn Pokémon.\" The Onix chews, slowly. Anthony: \"Onix here's been with me thirty years. Stubborn as a rock. Is a rock.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Anthony stuffs the rest of his sandwich in his mouth and stands up. Graveler rolls down the slope, and the Onix uncoils, very slowly, very grumpy about lunch.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-anthony-m1",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Hiker Anthony beat you on a mountain trail",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "graveler",
+        "onix"
+       ],
+       "name": "Hiker Anthony",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Hiker Anthony on a mountain trail",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Share lunch.\"",
+     "success": {
+      "text": "Anthony shifts over on the boulder and splits his sandwich three ways. You eat in the sun, the Onix rumbling, the wind on your face. By the time the crumbs are gone, your whole party is rested.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-anthony-m1",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-anthony-lunch",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave.\"",
+     "success": {
+      "text": "You nod and walk on up the trail. Behind you, Anthony goes on talking to the Onix about the weather.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-hiker-anthony-m2",
+   "name": "Hiker Anthony: The Rockslide",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-anthony-m1",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-anthony-m2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_hiker"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "A trail buried under a fresh rockslide, dust still hanging in the air. Anthony is on his knees at the foot of it, shouting into the stones until his voice cracks. Anthony: \"Onix dug in to hold the slope. It's under there.\"",
+   "choices": [
+    {
+     "label": "\"Dig.\"",
+     "success": {
+      "text": "Your Ground- or Fighting-type goes in after it, shifting stone after stone. It takes three long turns of digging, and on the third the rocks groan, and a great grey head pushes up into the light.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-anthony-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-anthony-dug",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     },
+     "pick": {
+      "types": [
+       "ground",
+       "fighting"
+      ]
+     }
+    },
+    {
+     "label": "\"Get help.\"",
+     "success": {
+      "text": "You run for the village down the mountain. Anthony stays with the rocks, still talking to his Onix through the gaps.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-anthony-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-hiker-anthony-village-road"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Call it out.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "roster-anthony-lunch",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You kneel by the rocks and call the Onix, the way you did over lunch. The stones shift. The Onix knows your voice, and it heaves itself up and out toward it. Anthony sits down hard in the dust and laughs and laughs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-anthony-m2",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-anthony-called",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-hiker-anthony-village-road",
+   "name": "Hiker Anthony: Down the Mountain",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_hiker"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "The first node down the trail. The path is steep and loose after the slide, and the village roofs are still far below.",
+   "choices": [
+    {
+     "label": "\"Run.\"",
+     "success": {
+      "text": "You half run, half slide down the switchbacks, scraped and breathless. The village is close now.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-hiker-anthony-village"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take the safe path.\"",
+     "success": {
+      "text": "You take the long, safe way round, as fast as you dare. The village is close now.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "npc-meet-hiker-anthony-village"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-hiker-anthony-village",
+   "name": "Hiker Anthony: Shovels",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "room": true,
+   "requires": [],
+   "scene": {
+    "cast": [
+     "boss.npc_hiker"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "Two nodes from the slide, the mountain village. The moment you say \"Anthony's Onix\", everybody drops what they are doing. Everybody knows Anthony.",
+   "choices": [
+    {
+     "label": "\"Bring shovels.\"",
+     "success": {
+      "text": "Half the village climbs the mountain with shovels on their shoulders. They dig in shifts until the Onix's head breaks free, and Anthony hugs every single one of them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-anthony-village",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bring everyone.\"",
+     "success": {
+      "text": "The whole village comes, with shovels, picks, a cart and a pot of soup. By dusk the Onix is free, and Anthony is crying into the soup.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-anthony-village",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "npc-meet-hiker-anthony-m3",
+   "name": "Hiker Anthony: Steelix",
+   "group": "Trainers and challenges",
+   "stop": "event",
+   "types": [],
+   "rarity": "uncommon",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "period",
+     "in": [
+      "morning",
+      "afternoon"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "roster-anthony-m2",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "roster-anthony-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "boss.npc_hiker"
+    ],
+    "tint": "#28401c",
+    "effect": "none"
+   },
+   "intro": "The mountain trail, morning sun. Anthony sits on his boulder, and the coil round it now shines like polished steel: a Steelix, gleaming. It still takes half his sandwich. Anthony: \"Under there so long the pressure changed it. Still stubborn.\"",
+   "choices": [
+    {
+     "label": "\"Battle.\"",
+     "success": {
+      "text": "Anthony stands, brushing off crumbs. The Steelix rises over you like a building, and a Golem rolls down beside it. Afterwards he gives you a Metal Coat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-anthony-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-hiker-anthony"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "moment",
+         "text": "Hiker Anthony and his Steelix beat you",
+         "importance": 60
+        }
+       ],
+       "team": [
+        "steelix",
+        "golem"
+       ],
+       "name": "Hiker Anthony",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "moment",
+         "text": "You beat Hiker Anthony and his shining Steelix",
+         "importance": 60
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Climb with him.\"",
+     "success": {
+      "text": "Anthony shoulders his pack, and the Steelix carries you both up a shortcut only it knows, skipping a whole stretch of mountain. At the top he gives you a Metal Coat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-anthony-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-hiker-anthony"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask for a story.\"",
+     "success": {
+      "text": "Anthony tells you about the mountain, and then, quieter, about a place he has never told anyone: where a rare Pokémon nests, high above the trail. He gives you a Metal Coat to remember it by.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "roster-anthony-done",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "roster-anthony-rare-nest",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "item",
+        "id": "metal-coat",
+        "count": 1
+       },
+       {
+        "kind": "recruit",
+        "trainer": "npc-hiker-anthony"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

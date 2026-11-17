@@ -6,6 +6,9 @@
 //   - on entering a map node, using a side stop, or buying at a shop
 //   - when the run ends (profile first, then the run record is cleared)
 
+import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
+import { applyEvilEffect, evilTeam } from '../core/evil/teams';
+import { skyAct, type SkyAction } from '../core/evil/teamSky';
 import * as NodeMenu from '../core/nodeMenu/flow';
 import { playSpecialEntry } from '../core/nodeMenu/special/menu';
 import { playerTrainerFor } from '../core/archetypes';
@@ -29,7 +32,7 @@ import { finalizeRun, recordRunStarted } from '../core/profile';
 import { activeScene, finishScene, type StoryScene } from '../core/story2/module';
 import { finishRivalScene, rivalStoryScene } from '../core/story2/rivalStory';
 import { fieldTrialDue, finishFieldTrial } from '../core/story2/fieldTrial';
-import { awardLiveAchievements, claimTrainer, setActiveTitle, type RunEndSummary } from '../core/progress';
+import { awardLiveAchievements, claimTrainer, ownsTrainer, setActiveTitle, type RunEndSummary } from '../core/progress';
 import { setCardFrame, setCryTheme, setMenuArena } from '../core/wardrobe';
 import { buyNote } from '../core/researchNotes';
 import { makeRandomSeed } from '../core/rng';
@@ -111,6 +114,12 @@ export class GameSession {
     this.profile = profile;
     if (warning) this.warnings.push(warning);
     this.settings = this.saves.loadSettings();
+    // Legendary Blessings, Ultra Beast Incursions and Whole Run Events are on by default (settings v44; Whole Run Events by schema default). Automated browsers starting from fresh settings
+    // keep them off, so the older browser tests still walk Starter -> Briefing with no Blessing screen and no surprise Incursion;
+    // ?legends=1 gives such a browser the real defaults (tests/e2e/blessings.spec.ts). Players never have navigator.webdriver.
+    if (typeof navigator !== 'undefined' && navigator.webdriver && !this.saves.hasSettings() && !(typeof location !== 'undefined' && location.search.includes('legends=1'))) {
+      this.settings = { ...this.settings, expansion: { ...this.settings.expansion, blessingsEnabled: false, ultraBeastsEnabled: false, wholeRunEvents: false } };
+    }
     this.savedRun = this.saves.loadRun();
     const timeline = this.saves.loadTimeline();
     this.timeline = timeline.store;
@@ -266,7 +275,9 @@ export class GameSession {
    * `prep` carries the Preparation Desk's choices (and its campaign) and is remembered for next time.
    */
   newRun(requestedArchetypeId: string, seed: string = makeRandomSeed(), campaignId?: string, prep?: RunPrep, rules?: RulesChoice, starterOverride?: string[]): RunState {
-    const archetypeId = this.content.archetypes.has(requestedArchetypeId) ? playerTrainerFor(requestedArchetypeId) : requestedArchetypeId;
+    // Any trainer the player owns can lead a run; an unowned id (old saves, shared codes) becomes one of the five starters.
+    const requested = this.content.archetypes.get(requestedArchetypeId);
+    const archetypeId = requested && !ownsTrainer(this.profile, requested) ? playerTrainerFor(requestedArchetypeId) : requestedArchetypeId;
     // A saved preset can name a loan or Vault item the profile no longer has.
     if (prep) prep = { ...prep, loan: prep.loan && !loanProblem(this.content, this.profile), vaultItem: prep.vaultItem && this.profile.vault.includes(prep.vaultItem) ? prep.vaultItem : null, mentorId: availableMentors(this.profile).some((m) => m.id === prep!.mentorId) ? prep.mentorId : null };
     // Story Run: the prologue's identity, and the backstory and Starter line picked in Beats 7-8 or the Short Intake (used once).
@@ -276,7 +287,7 @@ export class GameSession {
     if (story && next.starter && !starterOverride?.length) starterOverride = [next.starter];
     if (story && (next.starter || next.backstory)) this.profile = { ...this.profile, story: clearNextRun(this.profile.story) };
     const opts = { seed, archetypeId, campaignId, prep, rules, attributes: this.profile.attributes, mastery: this.profile.mastery, gameEvents: rules?.weeks === false ? [] : activeGameEvents(this.content, new Date()).map((a) => a.edition), raidTierUnlocked: this.profile.best.raidBestTier ?? 0, licenses: runBankFlags(this.profile), candyPerks: this.profile.candyPerks, ownedTrainers: this.profile.unlockedArchetypes, dexCaught: dexCaughtCount(this.profile), mentorBonds: this.profile.mentorBonds, npcMemory: this.profile.npcMemory, treasureHunt: this.profile.treasureHunt, ...(story ? { protagonist: { look: me.look, name: me.nameSet ? me.name : '', pronouns: me.pronouns, ...(next.backstory ? { backstory: next.backstory } : {}) } } : {}) };
-    this.run = Run.createRun(this.content, { ...opts, expansion: { finale: this.settings.expansion.finaleEnabled, doomEpilogue: this.settings.expansion.doomEpilogue, labyrinthResume: this.settings.expansion.labyrinthResume, stagePacing: this.settings.expansion.stagePacing, evolutionEncounters: this.settings.expansion.evolutionEncounters, leagueCounterPick: this.settings.expansion.leagueCounterPick, kantoCanon: this.settings.expansion.kantoSevii, grandArc: this.settings.expansion.grandArcEnabled, worldTracks: this.settings.expansion.worldTracks, eventsDensity: this.settings.expansion.eventsDensity, climaxCut: this.settings.expansion.climaxCut, storyTraits: this.settings.expansion.storyTraits, rewinds: this.settings.expansion.rewinds, nodeMenus: this.settings.expansion.nodeMenus, blessings: this.settings.expansion.blessingsEnabled, ultraBeasts: this.settings.expansion.ultraBeastsEnabled, secondChancePct: this.settings.expansion.secondChancePct, heatedMoments: this.settings.expansion.heatedMoments, mythicalPromises: this.settings.expansion.mythicalsEnabled }, ...(story && starterOverride?.length ? { starterOverride } : {}), runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
+    this.run = Run.createRun(this.content, { ...opts, expansion: { finale: this.settings.expansion.finaleEnabled, doomEpilogue: this.settings.expansion.doomEpilogue, labyrinthResume: this.settings.expansion.labyrinthResume, stagePacing: this.settings.expansion.stagePacing, evolutionEncounters: this.settings.expansion.evolutionEncounters, leagueCounterPick: this.settings.expansion.leagueCounterPick, kantoCanon: this.settings.expansion.kantoSevii, grandArc: this.settings.expansion.grandArcEnabled, worldTracks: this.settings.expansion.worldTracks, eventsDensity: this.settings.expansion.eventsDensity, climaxCut: this.settings.expansion.climaxCut, storyTraits: this.settings.expansion.storyTraits, rewinds: this.settings.expansion.rewinds, nodeMenus: this.settings.expansion.nodeMenus, blessings: this.settings.expansion.blessingsEnabled, ultraBeasts: this.settings.expansion.ultraBeastsEnabled, secondChancePct: this.settings.expansion.secondChancePct, heatedMoments: this.settings.expansion.heatedMoments, mythicalPromises: this.settings.expansion.mythicalsEnabled, wholeRunEvents: this.settings.expansion.wholeRunEvents }, ...(story && starterOverride?.length ? { starterOverride } : {}), runId: randomId('run'), pastPokemon: this.profile.pastPokemon, rivalArchive: this.profile.rivalArchive, runHistory: this.profile.runHistory });
     const grants = startGrants(this.content, this.profile, archetypeId);
     applyStartGrants(this.content, this.run, this.profile);
     // Memories: what earlier runs left behind (ghosts, keepsakes, old friends, the chosen heirloom). Picked from the profile, not rolled.
@@ -434,8 +445,20 @@ export class GameSession {
   chooseEvent(sideId: string, choiceIndex: number, tradeUid?: string, promptGrade?: Grade): EventResult {
     const result = chooseEvent(this.content, this.requireRun(), sideId, choiceIndex, tradeUid, promptGrade);
     this.run = result.run;
-    this.persistRun();
+    if (this.run.phase !== 'over') this.persistRun(); // a finished run's save is already cleared (NE100 The Road Home plays after it)
     return result;
+  }
+
+  /** NE100 The Road Home: true when the run end should open it first (the run ended at its final battle). Reads state only. */
+  roadHomeDue(): boolean {
+    return this.run ? roadHomeDue(this.content, this.run) : false;
+  }
+
+  /** NE100: puts The Road Home on the node the run ended on and returns its stop's id. Not saved: the finished run's save is gone. */
+  openRoadHome(): string {
+    const { run, sideId } = openRoadHome(this.requireRun());
+    this.run = run;
+    return sideId;
   }
 
   /** Starts the fight with a Totem. */
@@ -667,6 +690,15 @@ export class GameSession {
     this.run = back;
     this.persistRun();
     return true;
+  }
+
+  /** The Renegade's blessing: steps out of this battle to the node's other side (core/legends/reverseSide.ts). The message, or null when it can't be used. */
+  reverseSide(): string | null {
+    const result = Run.stepToReverseSide(this.content, this.requireRun());
+    if (!result) return null;
+    this.run = result.run;
+    this.persistRun();
+    return result.message;
   }
 
   /** Beta 0.7 Legendary Blessings: uses the run's Rite (Tapu Lele's heal, Dialga's stage rewind). Returns the message, or null when it can't be used. */
@@ -944,6 +976,37 @@ export class GameSession {
     return result.message;
   }
 
+  /** The Team Hub's Hand In Uniform (HOENN_TEAMS 7.1): leave the team; the inside meters go and the outside story resumes. */
+  handInUniform(): string {
+    const run = structuredClone(this.requireRun());
+    const team = evilTeam(this.content, run);
+    if (!team) return 'You are not in a team.';
+    applyEvilEffect(this.content, run, { kind: 'evil', leave: true, beat: false, heat: 0, defect: false } as Parameters<typeof applyEvilEffect>[2]);
+    this.run = run;
+    this.persistRun();
+    return `You hand in ${team.name}'s uniform.`;
+  }
+
+  /** The team Radio (HOENN_TEAMS 7.5): mute or unmute it. The run keeps the note that it was muted. */
+  toggleRadio(): string {
+    const run = structuredClone(this.requireRun());
+    const muted = Number(run.story.flags['ev:hoenn-radio-muted'] ?? 0) > 0;
+    run.story.flags['ev:hoenn-radio-muted'] = muted ? 0 : 1;
+    if (!muted) run.story.flags['ev:hoenn-radio-was-muted'] = 1;
+    this.run = run;
+    this.persistRun();
+    return muted ? 'The Radio crackles back on.' : 'You turn the Radio off. Somebody notices the silence.';
+  }
+
+  /** Team Sky's screens (core/evil/teamSky): one action, saved; the message says what happened. */
+  skyAct(action: SkyAction): string {
+    const run = structuredClone(this.requireRun());
+    const message = skyAct(this.content, run, action);
+    this.run = run;
+    this.persistRun();
+    return message;
+  }
+
   depositToBox(partyIndex: number): void {
     this.run = Run.depositToBox(this.content, this.requireRun(), partyIndex);
     this.persistRun();
@@ -1153,8 +1216,8 @@ export class GameSession {
   }
 
   /** One lot at the Bank's Exchange Counter. */
-  exchangeAtBank(dir: ExchangeDirection): void {
-    this.profile = exchange(this.content, this.profile, dir);
+  exchangeAtBank(dir: ExchangeDirection, lots = 1): void {
+    this.profile = exchange(this.content, this.profile, dir, lots);
     this.checkSave(this.saves.saveProfile(this.profile));
     this.changed();
   }

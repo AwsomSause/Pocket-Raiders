@@ -1,0 +1,61 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-60-reveal",
+   "name": "Something Walks Into the Light",
+   "group": "Greenneedle",
+   "room": true,
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3d2f24",
+    "effect": "none"
+   },
+   "intro": "A rest. The fire. The team.\n\nSomething walks into the light.\n\nIt doesn't hurry. It goes past your lead, which moves over. It sits down in the gap between two of them, as if the gap had been kept.\n\nIt looks at the fire. Then at you.",
+   "choices": [
+    {
+     "label": "\"There you are.\"",
+     "success": {
+      "text": "It blinks, slowly. The way you do at someone you've been waiting a long time to be seen by.\n\nIt's been with you since the first road. Now it's here, and it stays.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "followedJoin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"...How long?\"",
+     "success": {
+      "text": "It looks back the way you came. A very long way. Every region, every fire, every night you didn't know.\n\nThen it looks at you again, and the answer is: all of it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "followedJoin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Hold out a hand.)",
+     "success": {
+      "text": "It crosses the last of the distance and puts its chin in your palm. It is warm, and heavier than it looks.\n\nIt was never going to be anywhere else.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "followedJoin"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

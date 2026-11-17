@@ -1,0 +1,124 @@
+[
+ {
+  "id": "wooloo-wool",
+  "name": "Wooloo Wool",
+  "family": "Valuables",
+  "description": "+₽200",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "fluffy-tail",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 200,
+   "changes": {}
+  }
+ },
+ {
+  "id": "tiny-mushroom",
+  "name": "Tiny Mushroom",
+  "family": "Valuables",
+  "description": "+₽50, +1 toward Peace",
+  "rarity": "common",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "tinymushroom",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 50,
+   "changes": {
+    "ragePeace": -1
+   }
+  }
+ },
+ {
+  "id": "mareep-wool",
+  "name": "Mareep Wool",
+  "family": "Valuables",
+  "description": "+₽300",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": null,
+  "how": "use",
+  "icon": "fluffy-tail",
+  "status": "supported",
+  "effect": {
+   "kind": "money",
+   "amount": 300,
+   "changes": {}
+  }
+ },
+ {
+  "id": "toy-pikachu",
+  "name": "Toy Pikachu",
+  "family": "Map and encounter items",
+  "description": "A child's treasure. Next wild battle: the wild Pokémon loses its first turn, too busy staring at it",
+  "rarity": "uncommon",
+  "stacksOn": "player",
+  "max": 1,
+  "how": "use",
+  "icon": "poke-doll",
+  "status": "supported",
+  "effect": {
+   "kind": "encounter",
+   "lasts": {
+    "for": "battles",
+    "count": 1
+   },
+   "mods": [
+    {
+     "mod": "freeTurn"
+    }
+   ]
+  }
+ },
+ {
+  "id": "bright-powder",
+  "name": "Bright Powder",
+  "family": "Battle held items",
+  "description": "Moves aimed at the holder are 10% less likely to hit",
+  "rarity": "uncommon",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "brightpowder",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "evasion",
+     "percent": 10
+    }
+   ]
+  }
+ },
+ {
+  "id": "twisted-spoon",
+  "name": "Twisted Spoon",
+  "family": "Type boosters (held)",
+  "description": "A spoon bent by a mind-reader: Psychic moves +20%",
+  "rarity": "rare",
+  "stacksOn": "pokemon",
+  "max": 1,
+  "how": "held",
+  "icon": "twistedspoon",
+  "status": "supported",
+  "effect": {
+   "kind": "held",
+   "hooks": [
+    {
+     "hook": "typePower",
+     "types": [
+      "psychic"
+     ],
+     "percent": 20
+    }
+   ]
+  }
+ }
+]

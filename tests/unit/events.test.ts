@@ -1,9 +1,10 @@
 // Map events ("?" stops): placement, choices, checks, battles, event items and saves.
 
+import { CO_BUDGET, positioned } from '../../src/core/co/placement';
 import { describe, expect, it } from 'vitest';
 import { applyCatalog, getCatalogEntry } from '../../src/core/catalog';
 import { addEventStops, eligibleEvents, choiceRisk, chooseEvent, eventView, stopIsHidden } from '../../src/core/events';
-import { EventChoiceSchema } from '../../src/core/contentSchema';
+import { EventChoiceSchema, EventDefSchema } from '../../src/core/contentSchema';
 import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
 import { chooseStarter, createRun, takeTurn, type TurnResult } from '../../src/core/run';
@@ -11,6 +12,12 @@ import type { RunState } from '../../src/core/state';
 import { CURRENT_VERSIONS, SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
 import { content } from './helpers';
+import oldEvents from '../../src/data/events.json';
+
+// The old one-way Water-type swap (its catalog id, water-fan-swap, is now the Collector's honest trade): kept as a fixture so
+// the `tradeAway` rules stay covered.
+const OLD_WATER_SWAP = EventDefSchema.parse({ ...(oldEvents as { events: { id: string }[] }).events.find((e) => e.id === 'water-fan-swap')!, id: 'test-water-swap' });
+content.events.set(OLD_WATER_SWAP.id, OLD_WATER_SWAP);
 
 function newRun(seed = 'events'): RunState {
   return chooseStarter(content, createRun(content, { runId: 'r', seed, archetypeId: 'red' }), 0);
@@ -68,7 +75,10 @@ describe('placing event stops', () => {
     expect(rests).toHaveLength(content.balance.events.restPerStage);
     expect(stops.length - rests.length).toBeGreaterThanOrEqual(content.balance.events.perStage[0]);
     const quotaMax = Object.values(content.balance.events.stopQuotas).reduce((sum, [, hi]) => sum + hi, 0);
-    expect(stops.length - rests.length).toBeLessThanOrEqual(content.balance.events.perStage[1] + quotaMax);
+    // Catalog Overhaul: events with a placement block are placed on their own step on top of the draws, inside the pack's own budget.
+    const placed = stops.filter((s) => { const p = content.coPlacement?.get(s.side.eventId!); return !!p && positioned(p); });
+    expect(new Set(placed.map((s) => s.side.eventId)).size).toBeLessThanOrEqual(CO_BUDGET.events);
+    expect(stops.length - rests.length - placed.length).toBeLessThanOrEqual(content.balance.events.perStage[1] + quotaMax);
     for (const s of stops) expect(s.node.kind).not.toBe('gym');
     expect(JSON.stringify(newRun('place').stage!.map)).toBe(JSON.stringify(run.stage!.map));
   });
@@ -136,7 +146,14 @@ describe('map stop types (events and map stops plan)', () => {
   });
 
   it('check cards show the attribute and a locked card says what it needs', () => {
-    const run = atEvent(newRun('cards'), 'rare-sighting');
+    // rare-sighting was the sample until the Catalog Overhaul rebuilt it without checks; this copy keeps the old card shape.
+    const sample = content.events.get('rare-sighting')!;
+    const [luck, locked] = EventChoiceSchema.array().parse([
+      { label: 'Approach quietly', check: 'luck', success: { text: 'It squares up!', effects: [] }, failure: { text: 'It bolts.', effects: [] } },
+      { label: 'Follow the tracks', requires: [{ kind: 'attribute', key: 'luck', atLeast: 20 }], success: { text: 'You cut it off.', effects: [] } },
+    ]);
+    content.events.set('test-check-cards', { ...sample, id: 'test-check-cards', choices: [luck!, locked!], remembers: [] });
+    const run = atEvent(newRun('cards'), 'test-check-cards');
     const view = eventView(content, run, 'test-event');
     expect(view.choices[0]!.attribute).toBe('luck');
     expect(view.choices[0]!.attributeValue).not.toBeNull();
@@ -146,12 +163,34 @@ describe('map stop types (events and map stops plan)', () => {
 
 describe('recruit events', () => {
   it('stop appearing for a trainer you already own', () => {
-    const fresh = newRun('own');
-    const owned = structuredClone(fresh);
-    owned.itemCounters = { ...owned.itemCounters, 'owned:npc-youngster-joey': 1 };
-    const has = (r: RunState) => eligibleEvents(content, r).some((e) => e.id === 'npc-meet-youngster-joey');
-    expect(has(fresh)).toBe(true);
-    expect(has(owned)).toBe(false);
+    // A plain recruit event (the old npc-meet shape): owning the trainer hides it.
+    const event = EventDefSchema.parse({
+      id: 'test-recruit', name: 'Test recruit', group: 'Trainers and challenges', intro: 'A trainer waves.',
+      choices: [{ label: 'Join me', success: { text: 'They join.', effects: [{ kind: 'recruit', trainer: 'npc-youngster-joey' }] } }],
+    });
+    content.events.set(event.id, event);
+    try {
+      const fresh = newRun('own');
+      const owned = structuredClone(fresh);
+      owned.itemCounters = { ...owned.itemCounters, 'owned:npc-youngster-joey': 1 };
+      const has = (r: RunState, id: string) => eligibleEvents(content, r).some((e) => e.id === id);
+      expect(has(fresh, 'test-recruit')).toBe(true);
+      expect(has(owned, 'test-recruit')).toBe(false);
+      // The Road Roster arc (Catalog Overhaul, ROAD_ROSTER.md) recruits Joey only when it finishes, so owning him never hides the arc.
+      expect(has(fresh, 'npc-meet-youngster-joey')).toBe(true);
+      expect(has(owned, 'npc-meet-youngster-joey')).toBe(true);
+    } finally {
+      content.events.delete(event.id);
+    }
+  });
+
+  it('a Road Roster arc recruits its trainer from every outcome that finishes it', () => {
+    const last = content.events.get('npc-meet-youngster-joey-m3')!;
+    const fight = last.choices.find((c) => c.success.battle)!;
+    expect(fight.success.effects).toContainEqual({ kind: 'recruit', trainer: 'npc-youngster-joey' });
+    for (const room of ['npc-meet-youngster-joey-contest', 'npc-meet-youngster-joey-speech']) {
+      for (const c of content.events.get(room)!.choices) expect(c.success.effects, room).toContainEqual({ kind: 'recruit', trainer: 'npc-youngster-joey' });
+    }
   });
 });
 
@@ -179,7 +218,12 @@ describe('choosing at an event', () => {
   });
 
   it('locks a choice whose requirement is missing', () => {
-    const run = atEvent(newRun('locked'), 'rest-meadow');
+    // rest-meadow was the sample until the Catalog Overhaul rebuilt it without an item cost; this copy keeps the old shape.
+    const [needsBerry] = EventChoiceSchema.array().parse([
+      { label: 'Share an Oran Berry', requires: [{ kind: 'item', id: 'oran-berry' }], success: { text: 'Shared.', effects: [{ kind: 'loseItem', id: 'oran-berry' }] } },
+    ]);
+    content.events.set('test-locked', { ...content.events.get('rest-meadow')!, id: 'test-locked', choices: [needsBerry!], remembers: [] });
+    const run = atEvent(newRun('locked'), 'test-locked');
     delete run.inventory['oran-berry'];
     const view = eventView(content, run, 'test-event');
     expect(view.choices[0]!.locked).toMatch(/Oran Berry/);
@@ -193,7 +237,10 @@ describe('choosing at an event', () => {
     expect(started.run.passives?.['rm-2-key']).toBeUndefined();
     const before = started.run.money;
     const end = win(started.run);
-    expect(end.run.money).toBeGreaterThanOrEqual(before + 2000);
+    // The prize the event states (its win effects), on top of whatever the battle itself pays.
+    const prize = (content.events.get('rm-2-key-cabin')!.choices[0]!.success.battle!.win ?? []).reduce((n, e) => n + (e.kind === 'money' ? e.amount : 0), 0);
+    expect(prize).toBeGreaterThan(0);
+    expect(end.run.money).toBeGreaterThanOrEqual(before + prize);
     expect(end.run.phase).not.toBe('reward');
   });
 
@@ -211,7 +258,15 @@ describe('choosing at an event', () => {
   });
 
   it('a held-item gift goes to a Pokémon that can hold it', () => {
-    const run = atEvent(newRun('gift'), 'card-key-silph');
+    // An event whose first choice only hands over one held item (the Parcel is a Potion since the Catalog Overhaul).
+    const gift = [...content.events.values()].find((e) => {
+      const c = e.choices[0];
+      if (!c || e.requires.length || c.requires.length || c.chance !== undefined || c.check || c.success.battle || c.branches?.length) return false;
+      const fx = c.success.effects;
+      return fx.length === 1 && fx[0]!.kind === 'item' && content.catalog.get(fx[0]!.id)?.stacksOn === 'pokemon';
+    })!;
+    expect(gift).toBeDefined();
+    const run = atEvent(newRun('gift'), gift.id);
     const result = chooseEvent(content, run, 'test-event', 0);
     expect(result.changes[0]).toMatch(/for |sold for/);
   });
@@ -282,8 +337,11 @@ describe('choice cards: cost and kind of risk (Visual Bible event screens)', () 
   it('an uncertain choice says what it depends on and what failing means', () => {
     expect(choiceRisk(content, choice({ check: 'luck', failure: { text: 'f' } })).risk).toBe('Depends on your Luck · nothing lost if it fails');
     expect(choiceRisk(content, choice({ chance: 0.5, failure: { text: 'f', effects: [{ kind: 'damage', share: 0.2 }] } })).risk).toBe('Luck of the draw · a setback if it fails');
-    const fight = content.events.get('fight-or-flight-2')!.choices.find((c) => c.check && c.failure?.battle)!;
-    expect(choiceRisk(content, fight).risk).toMatch(/^Depends on your \w+ · a fight if it fails$/);
+    // fight-or-flight-2 was the sample until the Catalog Overhaul rebuilt it; this copy keeps the old card shape.
+    const [fight] = EventChoiceSchema.array().parse([
+      { label: 'Stand your ground', check: 'strength', success: { text: 'It backs off.', effects: [] }, failure: { text: 'It charges.', effects: [], battle: { kind: 'wild', species: ['tauros'] } } },
+    ]);
+    expect(choiceRisk(content, fight!).risk).toMatch(/^Depends on your \w+ · a fight if it fails$/);
   });
 
   it('a cost paid either way counts; a cost only on success does not (it would spoil the outcome)', () => {
@@ -304,17 +362,17 @@ describe('trade events', () => {
   const choiceOf = (run: RunState, id: string) => eventView(content, run, 'test-event').choices[0]!;
 
   it('stay locked, with the requirement in words, until a fitting Pokémon is in the party', () => {
-    const run = atEvent(newRun('trade-lock'), 'water-fan-swap');
+    const run = atEvent(newRun('trade-lock'), 'test-water-swap');
     run.party = [createPokemon(content, 'charmander', 5, 'a'), createPokemon(content, 'bulbasaur', 5, 'b')];
-    expect(choiceOf(run, 'water-fan-swap').locked).toBe('Needs a Water-type in your party');
+    expect(choiceOf(run, 'test-water-swap').locked).toBe('Needs a Water-type in your party');
     expect(() => chooseEvent(content, run, 'test-event', 0)).toThrow(/Water-type/);
-    expect(choiceOf(run, 'water-fan-swap').cost).toBe('trade away a Water-type');
+    expect(choiceOf(run, 'test-water-swap').cost).toBe('trade away a Water-type');
   });
 
   it('take the lowest-level fitting Pokémon and give one back', () => {
-    const run = atEvent(newRun('trade-go'), 'water-fan-swap');
+    const run = atEvent(newRun('trade-go'), 'test-water-swap');
     run.party = [createPokemon(content, 'squirtle', 12, 'a'), createPokemon(content, 'charmander', 5, 'b'), createPokemon(content, 'psyduck', 7, 'c')];
-    expect(choiceOf(run, 'water-fan-swap').locked).toBeNull();
+    expect(choiceOf(run, 'test-water-swap').locked).toBeNull();
     const result = chooseEvent(content, run, 'test-event', 0);
     expect(result.run.party.map((m) => m.speciesId)).toEqual(['squirtle', 'charmander']);
     expect(result.run.pending.some((p) => p.kind === 'caught')).toBe(true);
@@ -322,15 +380,15 @@ describe('trade events', () => {
   });
 
   it('never trade away the last Pokémon', () => {
-    const run = atEvent(newRun('trade-last'), 'water-fan-swap');
+    const run = atEvent(newRun('trade-last'), 'test-water-swap');
     run.party = [createPokemon(content, 'squirtle', 5, 'a')];
-    expect(choiceOf(run, 'water-fan-swap').locked).toBe('Needs 2 Pokémon in your party');
+    expect(choiceOf(run, 'test-water-swap').locked).toBe('Needs 2 Pokémon in your party');
   });
 });
 
 describe('trade picks and species traits', () => {
   it('lets the player pick which fitting Pokémon goes', () => {
-    const run = atEvent(newRun('trade-pick'), 'water-fan-swap');
+    const run = atEvent(newRun('trade-pick'), 'test-water-swap');
     run.party = [createPokemon(content, 'squirtle', 12, 'a'), createPokemon(content, 'psyduck', 7, 'c')];
     const view = eventView(content, run, 'test-event').choices[0]!;
     expect(view.tradePicks!.map((p) => p.uid)).toEqual(['c', 'a']);

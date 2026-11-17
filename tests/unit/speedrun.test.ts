@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { categoryLabel, formatMs, newSplits, parseSplits, splitLines, updateSplits } from '../../src/core/tools/speedrun';
+import { categoryLabel, formatMs, newSplits, parseSplits, speedrunTiles, splitLines, updateSplits } from '../../src/core/tools/speedrun';
 
 describe('speedrun timer', () => {
   it('formats times', () => {
@@ -27,5 +27,18 @@ describe('speedrun timer', () => {
     expect(parseSplits('nope')).toBeNull();
     expect(parseSplits(null)).toBeNull();
     expect(parseSplits(JSON.stringify(newSplits('r', 3)))).toEqual(newSplits('r', 3));
+  });
+  it('shows the timer as tiles: the switch, the time, the last five splits, the category', () => {
+    expect(speedrunTiles(false, null, 0, null)).toEqual([['Timer', 'Off'], ['Current', '–'], ['Splits', 'None yet']]);
+    let s = updateSplits(newSplits('r', 0), 60_000, 7, false);
+    const tiles = speedrunTiles(true, s, 125_000, 'standard / hard');
+    expect(tiles).toHaveLength(8);
+    expect(tiles[0]).toEqual(['Timer', 'On']);
+    expect(tiles[1]).toEqual(['Current', '2:05']);
+    expect(tiles[2]).toEqual(['Split: Badge 3', '1:00']);
+    expect(tiles[6]).toEqual(['Split: Badge 7', '1:00']);
+    expect(tiles[7]).toEqual(['Category', 'standard / hard']);
+    s = updateSplits(s, 200_000, 7, true);
+    expect(speedrunTiles(true, s, 999_000, null)[1]).toEqual(['Finished', '3:20']);
   });
 });

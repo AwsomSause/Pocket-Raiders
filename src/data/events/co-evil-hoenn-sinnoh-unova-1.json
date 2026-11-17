@@ -1,0 +1,3773 @@
+{
+ "catalogOverhaul": "evil-hoenn-sinnoh-unova",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "evil-galactic-offer-sinnoh",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "glint"
+   },
+   "intro": "Saturn, tired, holding a clipboard, is waiting by the Windworks fence. Saturn: \"You fought well. It was inefficient. You stopped to check on the girl's father. That's four minutes.\" Saturn: \"Master Cyrus says spirit is the flaw. I'm not sure. I notice the ones with it get more done. Come and be a counter-example. I'd like to have one to point at.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "Saturn: \"Veilstone. The lobby. There's a card on the desk. Fill it in. Don't explain it.\" He ticks something on the clipboard. You're Team Galactic now, on the inside, and nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Saturn: \"Noted.\" He writes one word and walks back to the van without looking round. Team Galactic's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would I be doing?\"",
+     "success": {
+      "text": "Saturn: \"Whatever is next on the list. There is always a list. You'd be surprised how restful that is.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "evil-galactic-offer-sinnoh-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes to Saturn. That night, by the Windworks fence, a man in a brown coat steps out of a hedge. Looker: \"So. You will be my eyes inside. I have joined also, under another name. You will not recognise me. Nobody recognises me. It is my gift.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-galactic-offer-sinnoh-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "glint"
+   },
+   "intro": "Saturn: \"Well? Yes or no. I'm timing it.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "Saturn: \"Veilstone. The lobby. There's a card on the desk. Fill it in. Don't explain it.\" He ticks something on the clipboard. You're Team Galactic now, on the inside, and nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Saturn: \"Noted.\" He writes one word and walks back to the van without looking round. Team Galactic's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes to Saturn. That night, by the Windworks fence, a man in a brown coat steps out of a hedge. Looker: \"So. You will be my eyes inside. I have joined also, under another name. You will not recognise me. Nobody recognises me. It is my gift.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act1",
+   "name": "A White Room",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "A lobby with nothing in it but a desk, a pen on a chain, and a card. The card says: WHAT WOULD YOU LIKE TO STOP? Technician Wynn Oakeshott: \"One line. Don't explain it. Nobody reads the explanation. He reads the line.\" She isn't looking up.",
+   "choices": [
+    {
+     "label": "\"Losing.\"",
+     "success": {
+      "text": "You write it. Wynn files it without reading it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-losing",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Being afraid.\"",
+     "success": {
+      "text": "You write it. Wynn files it without reading it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-afraid",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Missing someone.\"",
+     "success": {
+      "text": "You write it. Wynn files it without reading it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-missing",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Something else.)",
+     "success": {
+      "text": "The pen's on a chain. It reaches exactly as far as the card and no further.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-card"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act1-card",
+   "name": "A White Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "WHAT WOULD YOU LIKE TO STOP? Wynn waits, not looking up.",
+   "choices": [
+    {
+     "label": "\"Nothing.\"",
+     "success": {
+      "text": "You write it. Wynn files it without reading it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-nothing",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"People getting hurt.\"",
+     "success": {
+      "text": "You write it. Wynn files it without reading it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-hurt",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Leave it blank.)",
+     "success": {
+      "text": "You hand it back empty. Wynn: \"...Nobody's left it blank. I've no tab for blank.\" She makes one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-blank",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-room"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"This.\"",
+     "success": {
+      "text": "Wynn looks up. First time. Wynn: \"\"This.\" The card? The form? ...I'll file it under T.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-card-this",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-room"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act1-room",
+   "name": "A White Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "A white room. Two bunks. Two lockers, labelled LOCKER. A window, labelled WINDOW. On the top bunk, staring at the ceiling, which is labelled: Greer Whitcombe: \"You're Ceres. I'm Greer. That's it; that's the introductions. Nobody's going to ask you where you're from. Isn't it wonderful.\" Greer: \"They don't do birthdays. They don't do \"how are you.\" It's the kindest place I've ever worked. D'you know how tiring it is, being asked? Out there? Every day. \"How are you, Greer.\" And having to make something up.\" Greer: \"He says he'll make a world with no spirit in it. No wanting. No missing people. I thought: yes. That. Sign me up for not missing people.\"",
+   "choices": [
+    {
+     "label": "\"Who do you miss?\"",
+     "success": {
+      "text": "She's quiet. Greer: \"...That's a four-minute question. I'll answer it when we've four minutes.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-greer-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-canteen"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It sounds restful.\"",
+     "success": {
+      "text": "Greer: \"It is. I slept. First night. Eleven hours. I hadn't done that since—\" She stops. \"Since.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-canteen"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"And if he does it?\"",
+     "success": {
+      "text": "Greer: \"Then I shan't mind that he has. That's the beauty of it. It's the only plan there's ever been where you can't regret it after.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-canteen"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "afraid",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-card-afraid",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Greer: \"You wrote \"being afraid.\" Wynn told me; she tells me things, I'm restful. Does it work? Tell me if it works.\""
+    }
+   ]
+  },
+  {
+   "id": "gx-act1-canteen",
+   "name": "The Canteen",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m",
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "The canteen. One meal. Five hundred people. No talking. A sound, very low: someone's humming. Cadet Io: \"Sorry. Sorry. I don't know I'm doing it.\" She's two seats down, catching herself. A Grunt: \"Observation two.\" He says it without malice. Cadet Io: \"It's not a feeling. It's a tune.\" Nobody answers. It'd cost four minutes.",
+   "choices": [
+    {
+     "label": "\"What's the tune?\"",
+     "success": {
+      "text": "She shrugs, helpless. Cadet Io: \"I don't know. It's been in my head since I came downstairs. I can't find where it starts.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-labels"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Hum the next bar.)",
+     "success": {
+      "text": "She stares. She grins. She hums the one after. Three tables look round. Nobody stops you. Nobody's sure it's against anything.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-io-duet",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-labels"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "You eat. Io eats. The humming stops, and starts again under the clatter, and stops.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-labels"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act1-labels",
+   "name": "Corridor C",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "tint": "#2a3240",
+    "effect": "sparkle"
+   },
+   "intro": "The first task. Wynn hands over a label gun. Wynn: \"Corridor C's not been done. Everything a person might look at. If it's got a name, it gets a tab.\" DOOR. LIGHT. FLOOR. EXTINGUISHER. At the end of the corridor there's a drawer, already labelled, in Wynn's own hand: FEELINGS (EMPTY).",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "It isn't empty. A pressed flower. A bus ticket. A photograph, face down. Wynn's behind you. Wynn: \"That's mislabelled. I know it's mislabelled. I've not got round to it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-drawer-opened",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "Wynn: \"You didn't look. Everybody looks.\" A pause. Wynn: \"Thank you.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-drawer-left",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-end"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Relabel it: FEELINGS.",
+     "success": {
+      "text": "She watches the tab come out of the gun. She doesn't take it off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-drawer-relabelled",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act1-end"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act1-end",
+   "name": "A Helmet",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "End of the first week. Rank 2: a helmet, and the regulation haircut. Or a wig from the cupboard. Nobody will say which you took.",
+   "choices": [
+    {
+     "label": "The haircut.",
+     "success": {
+      "text": "The clippers are cold. Nobody asks.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "A wig from the cupboard.",
+     "success": {
+      "text": "It itches. Nobody asks.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-wig",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act2",
+   "name": "Eleven Minutes",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m",
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#2a3a48",
+    "effect": "fog"
+   },
+   "intro": "Lake Valor at first light. A survey van. A black airship, very high, very patient. In the van, with a slide rule nobody else can use: Lior Trevelyan: \"You're the new one. Good. I need someone who hasn't read it. I've read it.\" Lior: \"The plan. All of it; I'd clearance, for the funding review. The last page. It's elegant. I'll give him that. It's the most elegant thing I've ever seen. It ends everything. I checked the maths four times, hoping I was stupid.\" Greer: \"Don't tell me.\" Lior: \"I wasn't going to tell you. You're here for the not-knowing. I'm telling Ceres, who looks like a person who'd rather.\"",
+   "choices": [
+    {
+     "label": "\"Tell me.\"",
+     "success": {
+      "text": "Lior: \"The Chain holds two things that between them are every when and every where. He pulls. What comes out the other side has neither. He calls it a new world. It's a correct term, if you don't mind that there's nothing in it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-last-page",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act2-shore"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Don't.\"",
+     "success": {
+      "text": "Lior: \"...Fair.\" He folds the page away. His hands are shaking a little.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act2-shore"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why are you still here?\"",
+     "success": {
+      "text": "Lior: \"The pension. And— this is the awful part— I want to see if I'm right.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act2-shore"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "hurt",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-card-hurt",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Saturn, on the radio, before anything else: \"Ceres. Your card. 'People getting hurt.' I read it twice. I filed it myself.\""
+    }
+   ]
+  },
+  {
+   "id": "gx-act2-shore",
+   "name": "The Shore",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_fisherman"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#2a3a48",
+    "effect": "fog"
+   },
+   "intro": "The test charge went off at dawn. It was meant to measure the lakebed. It's taken the top six feet of water with it. The shore: a hundred Magikarp on the mud, flopping. A man of eighty with a rod, standing among them, not fishing. Old Padraig Lachlan: \"Sixty years I've fished this water. I've never once had them come to me.\" He isn't joking. He's picking them up, one at a time, and walking each to the waterline. He's managed nine. He's eighty. Saturn, on the radio: Saturn: \"Ceres. The main charges. Four points, marked. You've a window of forty minutes before the contractor's ship is in position. Begin.\"",
+   "choices": [
+    {
+     "label": "Set them.",
+     "success": {
+      "text": "Forty minutes. The fisherman doesn't look up. He's got to fourteen. The lake's taken on schedule.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-lake-valor-full",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-greer",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-lior",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Set them wrong.",
+     "success": {
+      "text": "A wire crossed at point three. The blast's a quarter of what it should be. Azelf's dazed, not held. Over a loudspeaker, from a ship you can't see: Hunter J: \"Client's charge underperformed. Not my invoice.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 2,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-lake-valor-quarter",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-greer",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-lior",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put the fish back first. Then set them. (a node)",
+     "success": {
+      "text": "You put the detonator case down and pick up a Magikarp. Greer watches you for a while. Then she puts down her case and picks one up. It's the first thing she's chosen to do in a year.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-eleven",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-fish",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act2-fish"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act2-fish",
+   "name": "Eleven Minutes",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m",
+     "boss.npc_fisherman"
+    ],
+    "pokemon": "magikarp",
+    "tint": "#2a3a48",
+    "effect": "none"
+   },
+   "intro": "Lior's doing it by arithmetic: nearest to the water first. Greer's doing it by which one's looking at her. The fisherman's doing it the way he was. A van door. Saturn, with a stopwatch, on the bank. Saturn: \"You're eleven minutes over. I've been timing it from the ridge.\" He looks at the mud. Three left, a long way up, where the water was. Saturn: \"Those are inefficiently placed.\" He takes off his gloves. He folds them. He walks up the mud in good shoes. Saturn: \"It's— they're heavier than the specification suggests.\" The fisherman: \"Mind the spines, son.\" Nobody's called him \"son.\" He's twenty-six. Saturn: \"...Noted.\" At the end, putting his gloves back on: Saturn: \"Eleven minutes. I'll log it.\" He does. He logs it as \"equipment check.\" It's the first false entry of his career. Then the charges. As the van pulls out, the fisherman calls after you: Padraig: \"Whatever that's for, in the cases. You put them back first. I'll remember which way round you did it.\"",
+   "choices": [
+    {
+     "label": "Set them.",
+     "success": {
+      "text": "Forty minutes. The fisherman doesn't look up. He's got to fourteen. The lake's taken on schedule.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-lake-valor-full",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-greer",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-lior",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Set them wrong.",
+     "success": {
+      "text": "A wire crossed at point three. The blast's a quarter of what it should be. Azelf's dazed, not held. Over a loudspeaker, from a ship you can't see: Hunter J: \"Client's charge underperformed. Not my invoice.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 2,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-lake-valor-quarter",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-greer",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-lior",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act3",
+   "name": "The Frequency You Can't Hear",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#3a2418",
+    "effect": "none"
+   },
+   "intro": "The basement. It's warm. Three tanks, lit from below. In each, a small bright shape with a red band around it. At a desk with a price list: Charon: \"Ah. The provisional one. Come in; shut the door; you're letting the heat out. They all come down here, you know. \"Delivering.\" Nobody's delivered anything in a month. They stand by the forge and they don't know why.\" Charon: \"They scream, by the way. The three. On a frequency you can't hear. The instruments can. I've turned the instruments off; it was upsetting the staff.\"",
+   "choices": [
+    {
+     "label": "Go through to the glass.",
+     "success": {
+      "text": "The warm gets warmer.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act3-glass"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act3-glass",
+   "name": "The Glass",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "pokemon": "azelf",
+    "tint": "#3a2418",
+    "effect": "none"
+   },
+   "intro": "Greer's at the middle tank. Azelf, or whichever was taken, is looking at her. She's not looking away. Greer: \"It's— I can feel what it wants. It wants me to want something. Anything. It's just offering. I'd forgotten what that— oh.\" Greer: \"Oh, no. I'd forgotten on purpose.\" She's got her hand flat on the glass. So has it.",
+   "choices": [
+    {
+     "label": "Go to the readout.",
+     "success": {
+      "text": "You leave her there. She doesn't notice you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-greer-glass",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act3-readout"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act3-readout",
+   "name": "The Readout",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m",
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#3a2418",
+    "effect": "none"
+   },
+   "intro": "A wall of dead dials. One switch: INSTRUMENTS. Lior: \"I know what's on those, if you turn them on. I designed the pickups. It's not a number you un-see.\"",
+   "choices": [
+    {
+     "label": "\"Open the tanks.\"",
+     "success": {
+      "text": "You reach for the release. A shutter comes down over the far door, and a man in a guard's coat comes through the near one.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act3-warden"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Turn the instruments back on. Let everyone hear.\"",
+     "success": {
+      "text": "The dials come up. Three needles, hard over. A speaker, which was never meant to be connected, and is. It isn't a scream. It's three notes, held, that don't resolve. It's the sound of something asking the same question for a month. Every Grunt on the floor stops. Somebody sits down where they are. Somebody takes off the helmet, and then the wig under it. A Grunt, to nobody: \"I've been bringing boxes down here for three weeks. I thought it was the warm.\" Charon, mildly: \"Now that's a pity. That'll be thirty resignations by morning. D'you know what it costs to train a Grunt?\" Cadet Io, in the doorway, very white: \"That's the tune. That's the one I've been— that's where I got it.\" Thirty Grunts resign by morning.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-instruments",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act3-saturn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Greer. Step back. It's the job.\"",
+     "success": {
+      "text": "She does. It takes her a long time to get her hand off the glass. She doesn't sleep that night; first time in a year.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 4
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-tanks-held",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act3-warden",
+   "name": "Room Four",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#3a2418",
+    "effect": "glint"
+   },
+   "intro": "Warden Pell: \"Step away from the release, Ceres. That's three months of somebody's work in there.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Steel, all of it, and patient.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "evil",
+         "rank": 4
+        },
+        {
+         "kind": "flag",
+         "key": "galactic-tanks-held",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "galactic-inside-act3",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ],
+       "team": [
+        "bastiodon",
+        "probopass",
+        "magnezone"
+       ],
+       "name": "Warden Pell",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "evil",
+         "suspicion": 5,
+         "rank": 4
+        },
+        {
+         "kind": "flag",
+         "key": "galactic-tanks-opened",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "galactic-guardians-free",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "galactic-inside-act3",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act3-saturn",
+   "name": "Room Four: Saturn",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#3a2418",
+    "effect": "none"
+   },
+   "intro": "He comes down. He looks at the dials. Saturn: \"Who turned these on.\"",
+   "choices": [
+    {
+     "label": "\"I did.\"",
+     "success": {
+      "text": "He nods. Saturn: \"I can't hear it. The frequency. I've the readout. It looks like—\" He doesn't finish. Saturn: \"Leave them on. I'll say it was a fault.\" It's the second false entry.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 4
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-saturn-second-entry",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"They came on.\"",
+     "success": {
+      "text": "Saturn: \"Instruments don't come on.\" He looks at you for a long time. Saturn: \"...They came on. I'll log it.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 4
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You should listen.\"",
+     "success": {
+      "text": "He stands by the speaker with his hands behind his back for a full minute. Saturn: \"I am listening. I can't hear anything.\" He doesn't switch it off.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 4
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act4",
+   "name": "A Large Box",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "beat": 5,
+     "rank": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#1a2230",
+    "effect": "glint"
+   },
+   "intro": "The breakwater. The lighthouse going round. A man in a long coat, watching the sea, which isn't doing anything for him. Cyrus: \"Ceres. You were sent for. Stand there. Don't speak yet; I'm finishing a thought.\" A long time. The light comes round twice. Cyrus: \"I was a quiet child. I liked machines. A machine does what it's for. My grandfather used to say I'd grow into people. I grew out of them.\" Cyrus: \"I'm told I'm angry. I'm not. I'm tired. Everyone I've ever met has wanted me to feel something for their benefit. I'd like it to stop. Not for me. For everyone. No one would be lonely if there were no one to be lonely at.\" Cyrus: \"I've read your card. I've read all of them. Five hundred and six people have asked me to stop something. I intend to be thorough.\"",
+   "choices": [
+    {
+     "label": "\"Were you lonely?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gx-asked-lonely",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Cyrus: \"I've no current reading on that. I tested the first stage on myself. A year ago. I recorded that I didn't mind the result. I've not been able to verify the entry since, because the instrument that would mind is the one I switched off.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-asked-lonely",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nobody on those cards asked for all of it.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gx-asked-cards",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He's still. Cyrus: \"...They asked for one each. I've noted that. I concluded they lacked the imagination to ask for the rest.\" A pause. Cyrus: \"It's possible they lacked the wish. I can't tell those apart any more. That's a limitation of the method. I've logged it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-asked-cards",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-cards-said",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Your grandfather. Is he alive?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gx-asked-alive",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Cyrus: \"In Sunyshore. Two streets from here. He writes. I don't open them. There's a box.\" A pause. Cyrus: \"It's quite a large box.\" \"Why keep them?\" Cyrus: \"I don't know. I've looked at it as a problem. A thing one's not going to read should be disposed of. I've had the box moved four times. I've not disposed of it. Observation three, perhaps. They're not finished. They've not been seen.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-asked-alive",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-box-known",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll come.\"",
+     "success": {
+      "text": "Cyrus: \"You're the first of them who hasn't argued. Come to the Pillar. I'd like a witness. A thing isn't finished till it's been seen.\" Rank 6 is offered: Witness. It skips 5. Saturn's told by memo.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-cyrus-confided",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-box"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "missing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-card-missing",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Cyrus: \"\"Missing someone.\" You wrote that. I noted it. You've not behaved like someone who wants it stopped.\""
+    },
+    {
+     "id": "card-short",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-card-hurt",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "He has your card in his coat pocket. He doesn't take it out."
+    }
+   ]
+  },
+  {
+   "id": "gx-act4-talk",
+   "name": "A Large Box",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "The light comes round. He waits.",
+   "choices": [
+    {
+     "label": "\"Were you lonely?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gx-asked-lonely",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Cyrus: \"I've no current reading on that. I tested the first stage on myself. A year ago. I recorded that I didn't mind the result. I've not been able to verify the entry since, because the instrument that would mind is the one I switched off.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-asked-lonely",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nobody on those cards asked for all of it.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gx-asked-cards",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He's still. Cyrus: \"...They asked for one each. I've noted that. I concluded they lacked the imagination to ask for the rest.\" A pause. Cyrus: \"It's possible they lacked the wish. I can't tell those apart any more. That's a limitation of the method. I've logged it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-asked-cards",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-cards-said",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Your grandfather. Is he alive?\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "gx-asked-alive",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "Cyrus: \"In Sunyshore. Two streets from here. He writes. I don't open them. There's a box.\" A pause. Cyrus: \"It's quite a large box.\" \"Why keep them?\" Cyrus: \"I don't know. I've looked at it as a problem. A thing one's not going to read should be disposed of. I've had the box moved four times. I've not disposed of it. Observation three, perhaps. They're not finished. They've not been seen.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-asked-alive",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-box-known",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-talk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll come.\"",
+     "success": {
+      "text": "Cyrus: \"You're the first of them who hasn't argued. Come to the Pillar. I'd like a witness. A thing isn't finished till it's been seen.\" Rank 6 is offered: Witness. It skips 5. Saturn's told by memo.",
+      "effects": [
+       {
+        "kind": "evil",
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-cyrus-confided",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-box"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act4-street",
+   "name": "Two Streets",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "Outside, the lighthouse goes round. Two streets from here, there's a bench.",
+   "choices": [
+    {
+     "label": "Walk two streets.",
+     "success": {
+      "text": "The Old Man of Sunyshore's on his bench, as he always is. \"He's kept every one.\" The old man: \"...Kept. Not read?\" \"Not read.\" He thinks about it for a long time. The old man: \"Kept's something. I'll take kept.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-grandfather-kept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back.",
+     "success": {
+      "text": "You walk back to Veilstone in the dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act4-box",
+   "name": "The Top Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "The top room, which the Witness may enter. The box is a real thing. Four hundred and sixty-eight letters, unopened, in date order, the newest on top. Nine years of Fridays.",
+   "choices": [
+    {
+     "label": "Take the top one.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-letter",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You slip the newest letter into your coat: A Letter, Unopened. It can be handed to him, at the Pillar.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-letter",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-box"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open one.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-letter-read",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "It's short. \"The Wingull are back. I've saved you the crossword. No need to write. — G.\" They're all like that. Nobody's been asking him to feel anything. Somebody's been saving him the crossword.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-letter-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-box"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Carry the box.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-box",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "It's heavy. It takes a Pokémon's worth of room in the bag. It can be brought to the Pillar.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-box",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-box"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the room.",
+     "success": {
+      "text": "You close the door on the top room. The rest of the box stays where it is, the newest on top.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act4-street"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act5",
+   "name": "Four Minutes",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "The Assembly Hall. Five hundred in ranks. You're on the floor this time, third row. Cyrus, at the lectern: \"You have given me your labor. I have given you a purpose. Tomorrow that exchange concludes.\" Cyrus: \"The world is incomplete because the spirit is incomplete. I will remove the error. There will be no more want, and so no more strife, and so no more of this.\" Applause. Synchronised. Greer's clapping. She's a quarter-beat late. She's never been late. The Witness goes out by the side door, behind him. It's the corridor. Saturn's there. Cyrus, same tone: \"They will not be coming. The new world has no requirement for them. Do not inform them. It would only cause feeling.\" Saturn: \"...Understood, sir.\" Cyrus, to you, as to a colleague: \"You'll have gathered that. You, I require. Until it's been seen. After that I've made no provision. I thought you'd prefer to be told.\" He goes. Saturn doesn't move. Saturn: \"Five hundred and six cards. I've processed their pensions. I set up the pensions, Ceres. He let me set up the pensions.\"",
+   "choices": [
+    {
+     "label": "\"Tell them.\"",
+     "success": {
+      "text": "Saturn: \"I can't. It's not on the list.\" He looks at you. Saturn: \"It's not on yours either. I've checked.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act5-dorm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What will you do?\"",
+     "success": {
+      "text": "Saturn: \"What's next on the list. There's always a list.\" He doesn't look at it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act5-dorm"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"He told me. Why?\"",
+     "success": {
+      "text": "Saturn: \"Because you'd ask. And it'd cost four minutes. He's saved the four minutes.\" A pause. Saturn: \"It's the nearest he comes to courtesy. I used to think it was the nearest anyone needed.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-act5-dorm"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-act5-dorm",
+   "name": "Four Minutes",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m",
+     "trainer.pr/scientist_m"
+    ],
+    "tint": "#141a24",
+    "effect": "none"
+   },
+   "intro": "The dormitory, after lights-out. Five hundred bunks. Three people awake. Lior: \"If it works, there'll be no one to know I was right. That's the only maths I can't forgive him.\" Greer, to the ceiling, which is labelled: \"I've four minutes.\" Nobody says anything. It's the first time in the building anyone's been given them. Greer: \"It was my sister. Her name was Una. She'd a laugh you could hear through a wall. I came here so I'd stop listening for it. There. I've said it. I didn't die of it.\" Cadet Io, from the next bunk, who wasn't meant to be awake: \"...How are you, Greer?\" A very long silence. Greer: \"Bad.\" And then, as if it's the most surprising thing she's ever heard herself say: Greer: \"Thanks for asking.\" Your last choice of the night: tell the room, or don't.",
+   "choices": [
+    {
+     "label": "Tell the three.",
+     "success": {
+      "text": "You tell them, in a whisper, what's on the far side of tomorrow. They know. In every ending, they act on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-una",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-told-three",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the dormitory.",
+     "success": {
+      "text": "You stand on a bunk. Five hundred people wake the same way. It's told in one sentence. Nobody shouts. Somebody, far back, starts to hum. You're found out, and it doesn't matter; it's tomorrow. The Pillar's gauntlet is half empty.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 10
+       },
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-una",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-told-all",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say nothing.",
+     "success": {
+      "text": "The room sleeps. Greer doesn't.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-una",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-told-none",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-op-windworks-shift",
+   "name": "Operation: The Windworks Shift",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "intro": "The order: take all six turbines off the public grid and onto the Veilstone line. At the board, hands up: The engineer: \"I'm not helping you. I want that understood. I'm just bad at saying no.\"",
+   "choices": [
+    {
+     "label": "Take all six.",
+     "success": {
+      "text": "Six turbines, six switches. The engineer watches the village lights go out one street at a time.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Which one feeds the village?\"",
+     "success": {
+      "text": "The engineer: \"...Four. Floaroma. Two hundred houses and the flower shop's cold store.\" He looks at the board. He looks at you. The engineer: \"If four had a fault, I'd have to leave it on the local loop. For safety.\" You leave one turning. Outside the fence: a small girl, and a Drifloon on her head. The little girl: \"Papa's lights are still on. He said they'd go off. Did you do a fault?\" Floaroma keeps its lights: the Brownout never reaches it, and its rest heals in full all region.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-floaroma-lit",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-op-survey",
+   "name": "Operation: The Survey",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 3,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "intro": "The order: sound the three lakes. Depth to the island, to the metre. It's for the charges. Lior, with the plumb line: \"Fourteen point two.\"",
+   "choices": [
+    {
+     "label": "\"Fourteen point two.\"",
+     "success": {
+      "text": "He writes it. The charges will be shaped to the metre.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Thirteen point two.\" (Lake Acuity)",
+     "success": {
+      "text": "He looks at the line. He looks at you. Lior: \"...I've a slide rule nobody else in the building can use. If I say thirteen point two, it's thirteen point two until the heat death.\" He writes it. Lior: \"D'you know what a metre does to a shaped charge? It turns a cage into a loud noise.\" Lior: \"This is the first wrong number I've ever written down. It's— I feel sick. Is this what it's like? Doing a thing on purpose?\" Lake Acuity's guardian won't be held by its blast.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-survey-acuity",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Thirteen point two.\" (Lake Verity)",
+     "success": {
+      "text": "He looks at the line. He looks at you. Lior: \"...I've a slide rule nobody else in the building can use. If I say thirteen point two, it's thirteen point two until the heat death.\" He writes it. Lior: \"D'you know what a metre does to a shaped charge? It turns a cage into a loud noise.\" Lior: \"This is the first wrong number I've ever written down. It's— I feel sick. Is this what it's like? Doing a thing on purpose?\" Lake Verity's guardian won't be held by its blast.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-survey-verity",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Thirteen point two.\" (Lake Valor)",
+     "success": {
+      "text": "He looks at the line. He looks at you. Lior: \"...I've a slide rule nobody else in the building can use. If I say thirteen point two, it's thirteen point two until the heat death.\" He writes it. Lior: \"D'you know what a metre does to a shaped charge? It turns a cage into a loud noise.\" Lior: \"This is the first wrong number I've ever written down. It's— I feel sick. Is this what it's like? Doing a thing on purpose?\" Lake Valor's guardian won't be held by its blast.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-survey-valor",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-op-requisition",
+   "name": "Operation: The Requisition",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "pokemon": "happiny",
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "intro": "The order: a Pokémon Center's generator. The lab's short. The nurse is standing in front of it. The nurse: \"There's an incubator on that circuit. A Happiny, nine days from hatching. If you take it I'll be keeping an egg warm in my coat.\" Greer: \"We've an order.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "The generator goes on the lorry. The nurse takes off her coat.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"For 'a generator.' It doesn't say which.\"",
+     "success": {
+      "text": "In the shed: a second one. Older. Under a tarpaulin. It's got a brass plate: VEILSTONE LIGHT & POWER. TO KEEP THE LIGHTS ON. Greer: \"That's forty years old. It won't run the lab.\" \"No.\" She thinks about it for four minutes. She doesn't time them. Greer: \"...It's a generator. It's what the form says.\" She takes one end. The lab's a generator short. Charon's forge runs at half: the Pillar will have one fewer Chain.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-spare",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-pillar-chain-short",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-op-lecture",
+   "name": "Operation: The Lecture",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "intro": "The order: a recruiting talk at Canalave's library. Forty students. A script: A FUTURE WITHOUT CONFLICT. Lior's at the back, arms folded, not breathing.",
+   "choices": [
+    {
+     "label": "Read the script.",
+     "success": {
+      "text": "Forty students. Six sign. Lior leaves before the end.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read out the last page of the plan.",
+     "success": {
+      "text": "\"The resulting state contains no time and no location. No observer persists. The project has no deliverable on the far side.\" Silence. A student, hand up: \"Sorry. \"No observer.\" Does that include us?\" \"Yes.\" The student: \"And you're— recruiting. For that.\" Another: \"What's the starting salary?\" Laughter. It's the first you've heard in a Galactic uniform. A third, at the back, not laughing: \"Can I see the maths?\" Lior's already walking down the aisle with it. Nobody signs.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-lecture-read",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-op-honey-trees",
+   "name": "Operation: The Honey Trees",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 5,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "pokemon": "vespiquen",
+    "tint": "#4878a8",
+    "effect": "none"
+   },
+   "intro": "The order: a relay mast on a hill of honey trees. Clear the Combee. In front of the oldest tree, with a smoker: A honey seller: \"There's a Vespiquen in that one's been queen since my mother sold from this gate. You'll not shift her. I'm not saying that as a threat. I'm saying I've tried, for the roof.\" A Munchlax is asleep at the roots, sticky to the ears.",
+   "choices": [
+    {
+     "label": "Clear them.",
+     "success": {
+      "text": "It takes the afternoon, and the seller doesn't watch.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is four per cent in the Observations?\"",
+     "success": {
+      "text": "Lior, with a theodolite: \"The next hill's nine metres lower. We'd lose four per cent.\" \"Is four per cent in the Observations?\" Lior: \"...No. There's nothing about four per cent.\" The mast goes on the next hill. The Munchlax follows the smell of the survey crew's sandwiches down one and up the other, and sits on the mast's footing, and can't be moved.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-next-hill",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-op-munchlax"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-op-munchlax",
+   "name": "The Mast Footing",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "munchlax",
+    "tint": "#2e3a22",
+    "effect": "none"
+   },
+   "intro": "The Munchlax is on the mast's footing, and it isn't moving. The honey seller holds up a jar. The Honest Trade Card: a jar of her honey, and it'll come with you.",
+   "choices": [
+    {
+     "label": "Trade it the jar.",
+     "success": {
+      "text": "It takes the jar in both hands and follows you down the hill.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "munchlax"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-munchlax",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it on the footing.",
+     "success": {
+      "text": "It's still there when the mast goes up. The crew put a sandwich out for it every day.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-op-quiet-room",
+   "name": "Operation: The Quiet Room",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 6,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#3a2418",
+    "effect": "none"
+   },
+   "intro": "The order: guard the tanks through the night. Don't engage. Don't look. The warm room. Three small lights. The instruments are on or off, as you left them. There's a chair.",
+   "choices": [
+    {
+     "label": "Guard them, as ordered.",
+     "success": {
+      "text": "You stand with your back to the glass all night. In the morning the readout shows a month of the same question.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the chair up by Uxie. (a node)",
+     "success": {
+      "text": "Nothing's said. A node passes. They know. You remember something: the map shows one node further ahead for the rest of the region.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "scout",
+        "columns": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-quiet-uxie",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-op-quiet-morning"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the chair up by Mesprit. (a node)",
+     "success": {
+      "text": "Nothing's said. A node passes. They know. Your lead leans on your leg, and its bond goes up a step.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-quiet-mesprit",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-op-quiet-morning"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull the chair up by Azelf. (a node)",
+     "success": {
+      "text": "Nothing's said. A node passes. They know. Once, at the climax, a Pokémon of yours that would faint will hold at 1 HP. It decided not to.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-quiet-azelf",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-op-quiet-morning"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-op-quiet-morning",
+   "name": "The Quiet Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#3a2418",
+    "effect": "none"
+   },
+   "intro": "Charon, in the morning, looking at the readout: Charon: \"They were quiet. All night. First time in a month. What did you do?\"",
+   "choices": [
+    {
+     "label": "\"Nothing.\"",
+     "success": {
+      "text": "Charon: \"...Hm. I can't bill for that.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"I sat.\"",
+     "success": {
+      "text": "Charon: \"...Hm. I can't bill for that.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"I didn't ask them for anything.\"",
+     "success": {
+      "text": "Charon: \"...Hm. I can't bill for that.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-op-egg",
+   "name": "Nine Days On",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "after": 5,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "galactic-spare",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "pokemon": "happiny",
+    "tint": "#3a2a3a",
+    "effect": "none"
+   },
+   "intro": "You pass the Center again. The nurse sees you through the window, and holds something up to the glass. It's pink, and cross, and nine days old.",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "It waves back, or the nurse makes it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-lights-out-3",
+   "name": "Lights Out",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "gx-lights-3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "tint": "#141a24",
+    "effect": "none"
+   },
+   "intro": "Five hundred bunks. Everyone asleep the same way: on the back, hands at the sides. You aren't. Cadet Io is awake. Cadet Io, in a whisper: \"D'you dream? I've stopped. I used to dream I was late. I miss being late.\"",
+   "choices": [
+    {
+     "label": "\"I dreamed I was late last night.\"",
+     "success": {
+      "text": "She laughs, very quietly, into her pillow. A bunk away, somebody turns over onto their side.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Try being late tomorrow.\"",
+     "success": {
+      "text": "\"On purpose?\" She thinks about it. \"...Thirty seconds. I'll start with thirty seconds.\" Somebody turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Hum the bar from the canteen.)",
+     "success": {
+      "text": "She hums the next one, under her breath. Two bunks down, somebody turns over onto their side, toward the sound.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-lights-out-4",
+   "name": "Lights Out",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 3,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "gx-lights-4",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "tint": "#141a24",
+    "effect": "none"
+   },
+   "intro": "Five hundred bunks. Everyone asleep the same way: on the back, hands at the sides. You aren't. Wynn is awake. She's labelling the bunks by torchlight. Not numbers. Names. Wynn: \"I'll take them off before reveille. I only wanted to see it done once.\"",
+   "choices": [
+    {
+     "label": "\"Do mine.\"",
+     "success": {
+      "text": "She looks at you a long moment, and prints it, and sticks it on. It's your own name, not Ceres. Somebody turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave them on.\"",
+     "success": {
+      "text": "\"I can't. It's not regulation.\" She doesn't take them off until the very last minute. Somebody turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who's that one?\"",
+     "success": {
+      "text": "She reads it to you, in a whisper, and the next, and the next, until the torch dies. Somebody turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-lights-out-5",
+   "name": "Lights Out",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "gx-lights-5",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#141a24",
+    "effect": "none"
+   },
+   "intro": "Five hundred bunks. Everyone asleep the same way: on the back, hands at the sides. You aren't. Nobody's awake. Thirty bunks are empty. The beds are made. On each pillow: a helmet, and a wig, with a name sewn in the band.",
+   "choices": [
+    {
+     "label": "(Read the names.)",
+     "success": {
+      "text": "Astrid. Leif. Tove. Thirty names, in a wigmaker's hand. You put each wig back where it was. Somebody, nearby, turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Straighten the helmets.)",
+     "success": {
+      "text": "Thirty helmets, square to the pillows. Somebody, nearby, turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Lie down in one.)",
+     "success": {
+      "text": "It's still a little warm. You don't sleep. Somebody, nearby, turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-lights-out-6",
+   "name": "Lights Out",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 5,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "gx-lights-6",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#141a24",
+    "effect": "none"
+   },
+   "intro": "Five hundred bunks. Everyone asleep the same way: on the back, hands at the sides. You aren't. Saturn is in the doorway, with a clipboard. Saturn: \"I do a count. It's not required. Five hundred and six. Four hundred and seventy-six. I say the number and then I stand here.\" A pause. Saturn: \"I don't know what the standing's for.\"",
+   "choices": [
+    {
+     "label": "\"It's for them.\"",
+     "success": {
+      "text": "He stands there a while longer. Then he goes. Somebody turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-6",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Count me.\"",
+     "success": {
+      "text": "\"...Four hundred and seventy-seven.\" He writes it. Somebody turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-6",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Stand with him.)",
+     "success": {
+      "text": "You stand in the doorway, side by side, and say nothing. It takes four minutes. He doesn't time them. Somebody turns over.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gx-lights-6",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-turned-over",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-inspection",
+   "name": "Inspection",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f",
+     "trainer.pr/galactic_grunt_m"
+    ],
+    "pokemon": "purugly",
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "A corridor. A line of Grunts, at attention. Mars, walking it, with Purugly. Mars: \"Hair. Level with the ear. Master Cyrus notices. He's never said he notices. I notice for him.\" Three along from you: a Grunt whose hair's on at an angle. A great deal of his own's coming out under it. He's standing very straight and whispering. Grunt No. 836: \"Psst. Ceres. It has slipped. I can feel that it has slipped. I cannot adjust it; adjustment would be suspicious.\"",
+   "choices": [
+    {
+     "label": "(Straighten it.)",
+     "success": {
+      "text": "A quick hand. Looker: \"You have the reflexes of an agent. I shall say so in my report. It is one sentence; I shall make it two.\" Then she reaches you. Mars: \"Wig or cut?\" Before there's an answer: Mars: \"Don't tell me. I don't ask. I'm not—\" She touches her own hair, once, at the back, where it doesn't sit flat. Mars: \"Level with the ear. Dismissed.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "looker-owed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Sneeze, loudly.)",
+     "success": {
+      "text": "Mars turns. Purugly turns. Mars: \"Observation two.\" \"It's not a feeling. It's a sneeze.\" Somebody, far down the line, hums one bar. She doesn't find out who. Then she reaches you. Mars: \"Wig or cut?\" Before there's an answer: Mars: \"Don't tell me. I don't ask. I'm not—\" She touches her own hair, once, at the back, where it doesn't sit flat. Mars: \"Level with the ear. Dismissed.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "(Do nothing.)",
+     "success": {
+      "text": "She stops in front of him. A long look. Mars: \"...That's the worst regulation cut in the building.\" Looker: \"Thank you, Commander.\" Mars: \"It wasn't—\" She moves on. She's got four hundred more. Then she reaches you. Mars: \"Wig or cut?\" Before there's an answer: Mars: \"Don't tell me. I don't ask. I'm not—\" She touches her own hair, once, at the back, where it doesn't sit flat. Mars: \"Level with the ear. Dismissed.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "losing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-card-losing",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Mars: \"You wrote \"losing.\" Good. So would I.\""
+    }
+   ]
+  },
+  {
+   "id": "gx-seen",
+   "name": "Seen",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 4,
+     "rank": 3,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_m"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "Observation three: every job needs a second signature. You're rostered as the second, for a day. A corridor, labelled, by Wynn: it's perfect. She's left one thing off: the window. Wynn: \"I couldn't. You can see the mountain from it.\" A grid repair, by a lineman: it's better than the drawing; he's used the old method. Then a \"wellness check,\" by a clinic orderly: a Shinx that looks at nothing.",
+   "choices": [
+    {
+     "label": "Sign the wellness check.",
+     "success": {
+      "text": "Signing completes it. The Shinx goes back to the clinic.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-seen-saturn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't sign it.",
+     "success": {
+      "text": "You send it back: \"Unfinished. Not seen.\" The Shinx is back with its trainer by the next stage, and bites her, and she cries with relief.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-shinx-home",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-seen-saturn"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-seen-saturn",
+   "name": "Seen",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "A pension schedule, by Saturn: five hundred and six lines. He watches you read the total. Then a blank form, in his hand: \"Equipment check. Lake Valor. Eleven minutes.\" He's asking for a witness to a false entry.",
+   "choices": [
+    {
+     "label": "Sign it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "galactic-eleven",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Saturn: \"Then there's two of us.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-saturn-witnessed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-seen-pencil"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sign the schedule, and leave the form.",
+     "success": {
+      "text": "He puts the form back in the drawer, under the others.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gx-seen-pencil"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-seen-pencil",
+   "name": "Seen",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "The last form's upstairs. Cyrus, at the desk, not looking up: Cyrus: \"I've sharpened this pencil. It requires a second signature.\" It's a pencil. Cyrus: \"I'm aware it's a pencil. I applied the rule to everything, to see if it held. It holds. I find I don't like to use it until someone's looked.\"",
+   "choices": [
+    {
+     "label": "(Sign.)",
+     "success": {
+      "text": "You sign. He takes the pencil back, and uses it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a good point.\"",
+     "success": {
+      "text": "Cyrus: \"It is.\" He holds it out anyway. You sign.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-seen",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You don't need me to look at a pencil.\"",
+     "success": {
+      "text": "Cyrus: \"No. I've established that I don't. I've established it eleven times this month.\" He holds it out anyway. You sign.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-seen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-next-of-kin",
+   "name": "Next of Kin",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 5,
+     "rank": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "Saturn's office. A desk. A lamp. Five hundred and six forms in a stack with a ruler's edge. Saturn: \"Pensions want a beneficiary. I sent the form round. Look.\" Line seven: NEXT OF KIN. Most say: None. Saturn: \"Three hundred and forty of those are false. I've their intake addresses; I cross-checked. They've mothers. Husbands. One's nine children. They wrote \"None\" because it's what they came here to make true.\" Saturn: \"I can't process \"None.\" It's not a payee.\"",
+   "choices": [
+    {
+     "label": "\"Fill them in.\" (a night)",
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "A night's work, card to address. The Thirty will know where to knock; each returned card will have a home to go with it; and three hundred and forty people will get a letter, the morning after the Pillar: \"Your son is well and is asking for you.\" Saturn signs every one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-next-of-kin",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Some of the addresses are smudged. You get two hundred done before the lamp gives out. It's enough to start.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-next-of-kin",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Leave them. It's what they asked for.\"",
+     "success": {
+      "text": "He squares the stack. Saturn: \"Noted.\" He doesn't file it.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Whose did you put?\"",
+     "success": {
+      "text": "He turns his own over. Line seven's blank. Saturn: \"I'd meant to get to it.\" He turns one more, from a separate drawer. It's Cyrus's. Saturn's filled it in himself, in his own hand: \"Grandfather. Sunyshore.\" Saturn: \"He left it empty. I'm not permitted to guess. I looked it up. I've not told him there's a form.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-x-grandfather",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gx-next-of-kin"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-alone-mars",
+   "name": "Mars, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 4,
+     "rank": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f"
+    ],
+    "pokemon": "purugly",
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "The Windworks, at night. She's talking to a Purugly. Mars: \"He's never said my name. \"Commander.\" I've done everything. Everything. I'd follow him into nothing. That's the plan, isn't it? Nothing. With him. I thought that sounded lovely.\"",
+   "choices": [
+    {
+     "label": "\"He doesn't want anyone there.\"",
+     "success": {
+      "text": "The Purugly looks at you. So does she. Mars: \"...I know.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What's your name?\"",
+     "success": {
+      "text": "She tells you. It's not Mars. In any ending, she's the one who goes looking for him.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mars-named",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What will you do after?\"",
+     "success": {
+      "text": "Mars: \"There isn't an after. That was the point.\" She scratches the Purugly's ears. \"Isn't there?\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-alone-jupiter",
+   "name": "Jupiter, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 4,
+     "rank": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_beauty"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "Eterna. A statue, defaced. She's cleaning it. Jupiter: \"I don't believe a word of it. A new world. Please. I'm here for the pay and the hat. But I've been pretending so long I've started checking the sky.\"",
+   "choices": [
+    {
+     "label": "\"Then leave.\"",
+     "success": {
+      "text": "Jupiter: \"And go where? I'd have to believe in something else.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What if he's right?\"",
+     "success": {
+      "text": "Jupiter: \"Then I'll have been wrong in a very good hat.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Why clean the statue?\"",
+     "success": {
+      "text": "Jupiter: \"Somebody carved that. I just blew up the plaque. I'm not a vandal.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "nothing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-card-nothing",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Jupiter: \"You wrote \"nothing.\" That's mine. Get your own.\""
+    }
+   ]
+  },
+  {
+   "id": "gx-alone-saturn",
+   "name": "Saturn, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 4,
+     "rank": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#3a2418",
+    "effect": "none"
+   },
+   "intro": "The lab. He's switched the instruments back on, and is listening. Saturn: \"I can't hear it. The frequency. I've the readout. It looks like screaming. I keep thinking: if I can't hear it, am I responsible for it?\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "He nods, slowly. Saturn: \"...That's efficient. Thank you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "saturn-heard",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Turn up the gain.\"",
+     "success": {
+      "text": "He turns it up. Nothing changes for him. He leaves it up.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What would Cyrus say?\"",
+     "success": {
+      "text": "Saturn: \"\"Irrelevant.\" He'd be right. I don't find that as restful as I used to.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-alone-charon",
+   "name": "Charon, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "after": 4,
+     "rank": 4,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_scientist"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "His office. A price list. Charon: \"He wants to unmake the world. I want to invoice it. We've the same machine and one of us is mad. I'll leave you to work out which.\"",
+   "choices": [
+    {
+     "label": "\"Both.\"",
+     "success": {
+      "text": "Charon: \"Ha! Very likely.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What's on the list?\"",
+     "success": {
+      "text": "It's every lake, with a figure.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-charon-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm not for sale.\"",
+     "success": {
+      "text": "Charon: \"Everyone says that. It's my favourite opening position.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "galactic-charon-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-charon-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gx-loyalty-test",
+   "name": "The Loyalty Test",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "suspicion": 7,
+     "suspicionBelow": 10,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.cyrus"
+    ],
+    "tint": "#2a3240",
+    "effect": "none"
+   },
+   "intro": "Cyrus: \"You put the fish back. Saturn's logged eleven minutes. Explain the eleven minutes.\"",
+   "choices": [
+    {
+     "label": "\"They were dying.\"",
+     "success": {
+      "text": "Cyrus: \"Many things are dying. It's not a reason. It's a description.\" He writes something down.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It was inefficient to leave them: the smell.\"",
+     "success": {
+      "text": "Cyrus: \"...That's a reason.\" He doesn't believe it, and lets it stand.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I wanted to.\"",
+     "success": {
+      "text": "He looks at you for a long time. Cyrus: \"...Wanting. Yes. I see it has uses.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -2
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-wanted-to",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "blank",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-card-blank",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Wynn: \"(in the doorway)\" Your blank card is on his desk, on its own tab."
+    }
+   ]
+  },
+  {
+   "id": "gx-found-out",
+   "name": "Found Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "galactic",
+     "inside": true,
+     "suspicion": 10,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "sinnoh"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_psychic_f",
+     "boss.npc_psychic_m"
+    ],
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "The lift stops between floors. When the doors open, Mars is waiting, with Purugly, and behind her half the corridor. Mars: \"Ceres. Or whatever's on your real card. He'd like a word. He'd like it to be your last.\" You've been found out. There's only one way back outside.",
+   "choices": [
+    {
+     "label": "Fight your way out.",
+     "success": {
+      "text": "She doesn't make a speech.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "galactic-found-out",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Commander Mars",
+       "size": 5,
+       "levelBonus": 2,
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "io",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "galactic-io-duet",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Cadet Io is in the crowd. She hums one bar, very loud, and three Grunts look round at her instead of at you."
+    }
+   ]
+  }
+ ]
+}

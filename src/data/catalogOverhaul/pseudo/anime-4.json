@@ -1,0 +1,7 @@
+{
+ "category": "anime",
+ "note": "Door chains of tools/events/co/anime-4.ts (entry = the questline first event; rooms linked with addEvent).",
+ "chains": [
+  { "id": "ps_an35_dungeon", "name": "The Cook of the Dungeon", "entry": "an35-cook-of-the-dungeon", "themeId": "water-rock", "tint": "#1c2422", "mood": "hungry dungeon", "start": "opened" }
+ ]
+}

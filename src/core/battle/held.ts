@@ -16,13 +16,14 @@
 import { hasChampionLastStand, isLastStanding } from '../trainerEvolution';
 import type { BattleBoost, BoostStat, Content, HeldHook, Move, StatusId, TypeName, Weather } from '../contentSchema';
 import type { Perks } from '../archetypes';
-import { calcStats, getSpecies } from '../pokemon';
+import { abilityOf, calcStats, getSpecies } from '../pokemon';
 import { inThreeStageLine, scaleHeldBonus, statPerk, survivalChance, weatherTurnsBonus } from '../trainerPerks';
 import type { Rng } from '../rng';
 import { freshHeldState } from '../state';
 import type { BattleState, HeldState, PokemonInstance, Stages, Volatile } from '../state';
 import { clampStage } from './damage';
 import { setHooks } from '../itemSets';
+import { ownTypes } from '../co/typeShift';
 import { growthBerryMultiplier, growthHealMultiplier } from '../overhaul/growth';
 
 export type Side = 'player' | 'enemy';
@@ -214,10 +215,27 @@ function teamBerryPercent(ctx: Pick<HeldContext, 'content' | 'teamItems'>, side:
   return total;
 }
 
+/** The holder's ability, counting a battle override (Trace, Skill Swap) while it is the one in front. */
+function heldAbility(ctx: HeldContext, mon: PokemonInstance, side: Side): string | null {
+  const vol = side === 'player' ? ctx.battle.playerVolatile : ctx.battle.enemyVolatile;
+  const front = side === 'player' ? ctx.party?.[ctx.battle.activeIndex] : ctx.battle.enemyTeam[ctx.battle.enemyIndex];
+  return (front?.uid === mon.uid ? vol?.abilityOverride : null) ?? abilityOf(ctx.content, mon);
+}
+
 /** A Berry is eaten: counts for Powder Jar and Gooey Mulch, and a Berry Pouch may keep it. */
 function eatBerry(ctx: HeldContext, holder: Pick<Holder, 'mon' | 'side'>, itemId: string): void {
   if (holder.side === 'player') stateOf(ctx.battle).berries += 1;
   if (ctx.content.catalog.get(itemId)?.family.startsWith('Berries') && ctx.rng.chance(Math.min(1, teamBerryPercent(ctx, holder.side, 'berrySave') / 100))) return;
+  // Fermented Shell (Jet batch 5): each Berry works twice before it is gone.
+  if (ctx.content.catalog.get(itemId)?.family.startsWith('Berries') && heldAbility(ctx, holder.mon, holder.side) === 'fermented-shell') {
+    const key = `ferment:${holder.mon.uid}:${itemId}`;
+    const used = stateOf(ctx.battle).used;
+    if (!used[key]) {
+      used[key] = { on: 1 };
+      return;
+    }
+    delete used[key];
+  }
   eat(holder.mon, itemId);
 }
 
@@ -241,15 +259,23 @@ function heal(content: Content, mon: PokemonInstance, amount: number): number {
 
 // ---------- stats, speed, critical hits, accuracy ----------
 
+/** Unwavering's bonus to every stat (Greenneedle gn.21). */
+const UNWAVERING = 1.25;
+
 /** Multiplier on a stat from held items (Choice items, Eviolite, Light Ball, Iron Ball, Everstone...). */
 export function heldStatMultiplier(ctx: Pick<HeldContext, 'content' | 'teamItems' | 'perks'>, mon: PokemonInstance, side: Side, stat: 'atk' | 'def' | 'spa' | 'spd' | 'spe'): number {
   let m = side === 'player' ? statPerk(ctx.perks, stat, getSpecies(ctx.content, mon.speciesId).types, { burned: mon.status?.id === 'brn', threeStageLine: (ctx.perks ?? []).some((p) => p.kind === 'conditionalStatMultiplier' && p.when === 'threeStageLine') && inThreeStageLine(ctx.content, mon.speciesId) }) : 1;
+  const canEvolve = getSpecies(ctx.content, mon.speciesId).evolutions.length > 0;
+  let evolveBonus = 1;
   for (const { hook } of hooks(hooksOf(ctx, mon, side), 'stat')) {
     if (hook.stat !== stat && hook.stat !== 'all') continue;
-    if (hook.canEvolve && getSpecies(ctx.content, mon.speciesId).evolutions.length === 0) continue;
-    m *= side === 'player' ? scaleHeldBonus(ctx.perks, hook.multiplier) : hook.multiplier;
+    if (hook.canEvolve && !canEvolve) continue;
+    const bonus = side === 'player' ? scaleHeldBonus(ctx.perks, hook.multiplier) : hook.multiplier;
+    if (hook.canEvolve) evolveBonus *= bonus;
+    else m *= bonus;
   }
-  return m;
+  // Unwavering (Greenneedle gn.21): every stat +25% while it could still evolve. It doesn't stack with Eviolite: the larger applies.
+  return m * (mon.fixedAbility === 'unwavering' && canEvolve ? Math.max(evolveBonus, UNWAVERING) : evolveBonus);
 }
 
 export function critStageBonus(ctx: HeldContext, holder: Holder): number {
@@ -268,6 +294,12 @@ export function accuracyMultiplier(ctx: HeldContext, user: Holder, target: Holde
   const state = stateOf(ctx.battle);
   const userHooks = hooksOf(ctx, user.mon, user.side);
   if (hooks(userHooks, 'moveLast').some((h) => h.hook.sureHit)) return null;
+  // Ravi's Bell: the holder's first move aimed at a foe each battle can't miss.
+  for (const { itemId } of hooks(userHooks, 'firstMoveSure')) {
+    if (timesUsed(ctx, user.mon.uid, itemId) > 0) continue;
+    markUsed(ctx, user.mon.uid, itemId);
+    return null;
+  }
   if (state.sure.includes(user.mon.uid)) {
     state.sure = state.sure.filter((u) => u !== user.mon.uid);
     return null;
@@ -327,6 +359,7 @@ export function attackMultiplier(
   const all = hooksOf(ctx, user.mon, user.side);
   let m = 1;
   for (const { hook, copies } of hooks(all, 'typePower')) if (hook.types.includes(moveType)) m *= 1 + (hook.percent * copies) / 100;
+  for (const { hook } of hooks(all, 'ownTypePower')) if (ownTypes(ctx.content, user.mon).includes(moveType)) m *= 1 + hook.percent / 100;
   for (const { hook, copies } of hooks(all, 'categoryPower')) if (hook.category === move.category) m *= 1 + (hook.percent * copies) / 100;
   for (const { hook } of hooks(all, 'power')) m *= 1 + hook.percent / 100;
   for (const { hook } of hooks(all, 'punchingGlove')) if (move.flags.includes('punch')) m *= 1 + hook.percent / 100;
@@ -923,14 +956,19 @@ export function expMultiplier(content: Content, mon: PokemonInstance): number {
   return hooks(hooksOf({ content }, mon, 'enemy'), 'exp').reduce((m, h) => m * h.hook.multiplier, 1);
 }
 
+/** Ferris's Hat: the holder gains experience as if it were this many levels lower. */
+export function expLevelShift(content: Content, mon: PokemonInstance): number {
+  return hooks(hooksOf({ content }, mon, 'enemy'), 'expLevel').reduce((n, h) => n + h.hook.levels, 0);
+}
+
 /** Extra friendship gains for the holder (Prism Scale). */
 export function friendshipMultiplier(content: Content, mon: PokemonInstance): number {
   return hooks(hooksOf({ content }, mon, 'enemy'), 'friendship').reduce((m, h) => m * (1 + h.hook.percent / 100), 1);
 }
 
-/** Everstone: the holder doesn't evolve. */
+/** Everstone: the holder doesn't evolve. Unwavering (Greenneedle gn.21) never evolves either. */
 export function blocksEvolution(content: Content, mon: PokemonInstance): boolean {
-  return hooks(hooksOf({ content }, mon, 'enemy'), 'noEvolve').length > 0;
+  return mon.fixedAbility === 'unwavering' || hooks(hooksOf({ content }, mon, 'enemy'), 'noEvolve').length > 0;
 }
 
 /**
@@ -971,7 +1009,7 @@ export function giveBossItems(content: Content, team: PokemonInstance[], role: '
   for (let n = 0; n < count; n++) {
     const mon = team[team.length - 1 - n]!;
     const pool = [...content.catalog.values()].filter((entry) => {
-      if (entry.status !== 'supported' || entry.effect?.kind !== 'held' || entry.stacksOn !== 'pokemon') return false;
+      if (entry.giftOnly || entry.status !== 'supported' || entry.effect?.kind !== 'held' || entry.stacksOn !== 'pokemon') return false;
       if (!entry.effect.hooks.every((h) => BOSS_HOOKS.has(h.hook))) return false;
       return entry.effect.hooks.every((h) => !('species' in h) || !h.species || speciesMatches(content, mon.speciesId, h.species));
     });

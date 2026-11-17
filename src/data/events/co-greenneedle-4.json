@@ -1,0 +1,4627 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [
+  "cs-kanto-fuchsia-factory-n1",
+  "cs-kanto-fuchsia-factory-n2",
+  "cs-kanto-fuchsia-factory-n3",
+  "cs-kanto-fuchsia-factory-n4",
+  "cs-kanto-fuchsia-factory-n5a",
+  "cs-kanto-fuchsia-factory-n5b",
+  "cs-kanto-fuchsia-factory-n5c",
+  "cs-kanto-fuchsia-factory-n6",
+  "cs-kanto-fuchsia-factory-pick",
+  "cs-kanto-saffron-rival-return",
+  "cs-kanto-saffron-t-win1",
+  "cs-kanto-saffron-t-win2",
+  "cs-kanto-saffron-t-win3",
+  "cs-kanto-saffron-t1",
+  "cs-kanto-saffron-t2",
+  "cs-kanto-saffron-t3",
+  "cs-kanto-saffron-t4",
+  "cs-kanto-saffron-t5a",
+  "cs-kanto-saffron-t5b",
+  "cs-kanto-saffron-t5c",
+  "cs-kanto-saffron-tc",
+  "cs-kanto-saffron-tm1",
+  "cs-kanto-saffron-tm2",
+  "cs-kanto-saffron-tm3",
+  "cs-kanto-saffron-tm4"
+ ],
+ "events": [
+  {
+   "id": "gn-16-door",
+   "name": "The Fighting Tournament",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "fighting"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-mankey",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "mankey-at"
+    },
+    {
+     "kind": "partyLine",
+     "species": "mankey"
+    },
+    {
+     "kind": "flag",
+     "key": "kanto-tournament-won",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "tournament-out",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "tournament-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 0
+   },
+   "intro": "A sports hall with the doors propped open. Thirty-two names on a chalkboard. Fighting-types only.\n\n**A steward:** \"One on one. No switching. Forty percent patch-up between rounds. Faint, and you're out, but you keep what you've won.\"\n\nYour Mankey reads the board as if it can read. Maybe it can.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "Your name goes at the bottom of the board, in chalk. Everyone else on your team goes to the rail, and not one of them is happy about it.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "solo",
+        "species": [
+         "mankey",
+         "primeape"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tournament-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "tournament-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-last-exchange",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-you-choose",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-food-returned",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "tournament-crowd",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-food-returned",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "tournament-crowd",
+          "n": 2
+         }
+        ],
+        "text": "The whole troop is in the stands, on each other's shoulders. Someone has hung a Berry sack from the rail like a banner. Crowd 2."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-lost",
+        "min": 1,
+        "then": [],
+        "text": "Across the hall, Pax sees you and grins. \"Again? Good.\""
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You leave the board for somebody else. Your Mankey looks back at it twice.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-r1",
+   "name": "Tournament: Round of 32",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "machop",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 1
+   },
+   "intro": "**Commentator, \"Big\" Hector Brannock:** \"And HERE they come! Out of nowhere! Off the road! A *wild-caught* Mankey, ladies and gentlemen!\"\n\n**Colour, Miss Cordelia Fane:** \"I'd like to remind viewers that 'out of nowhere' is where all of them come from, Hector.\"\n\nRound one: a **Machop**, with its twin coaching from the rail. The twin shouts every move a second before it happens.\n\n**Fane:** \"You can read them like a menu, Hector.\"",
+   "choices": [
+    {
+     "label": "Step into the ring.",
+     "success": {
+      "text": "You can read them. Your Mankey can hear them. It's a step ahead all match.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-montage-footwork",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "leadBoost",
+          "type": "spe",
+          "n": 1
+         }
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "tournament-out",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-out"
+        }
+       ],
+       "rule": {
+        "matchLead": true,
+        "bstMatch": true,
+        "noItems": true,
+        "myStages": {
+         "spe": 1
+        }
+       },
+       "name": "Machop",
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "tc-behind",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "hurtLead"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-behind",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          }
+         ],
+         "text": "It won from behind! The crowd is on its feet."
+        },
+        {
+         "kind": "heal",
+         "share": 0.4
+        },
+        {
+         "kind": "item",
+         "id": "muscle-band",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-c1"
+        }
+       ],
+       "species": [
+        "machop"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-c1",
+   "name": "Tournament: The Corridor",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "machop",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 1
+   },
+   "intro": "In the corridor, the Machop's twin is crying. The beaten one is comforting it, an arm round its shoulders.",
+   "choices": [
+    {
+     "label": "Good match.",
+     "success": {
+      "text": "The beaten one looks up and nods. The twin wipes its face and nods too, a second later.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-gap1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk past. Behind you, they're already arguing about the rematch.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-gap1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-gap1",
+   "name": "Tournament: The Montage",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 1
+   },
+   "intro": "Four gaps between rounds. Pick what to train: it lasts the rest of the bracket.",
+   "choices": [
+    {
+     "label": "Power",
+     "success": {
+      "text": "It hits a sandbag until the bag gives up. Then it hits the floor where the bag was.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-power",
+        "n": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Training: Power",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "value": 1.1
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-power",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Guard",
+     "success": {
+      "text": "You throw Berries at it. It learns to block them. It eats the ones it blocks, and looks at you for more.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-guard",
+        "n": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Training: Guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "value": 1.1
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-guard",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Footwork",
+     "success": {
+      "text": "It chases its own shadow round a ring until it catches it. It doesn't know what to do then.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-footwork",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-footwork",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-16-r2",
+   "name": "Tournament: Round of 16",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "throh",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 2
+   },
+   "intro": "Round two: a **Throh** that bows to everyone, including the referee.\n\nIt bows to your Mankey. It holds the bow, and waits.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "Your Mankey bows. The hall goes \"Aww.\" Crowd +1.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-montage-footwork",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "leadBoost",
+          "type": "spe",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tournament-crowd",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "tournament-crowd",
+        "n": 5
+       },
+       {
+        "kind": "flag",
+        "key": "tournament-bowed",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "tournament-out",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-out"
+        }
+       ],
+       "rule": {
+        "matchLead": true,
+        "bstMatch": true,
+        "noItems": true
+       },
+       "name": "Throh",
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "tc-behind",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "hurtLead"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-behind",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          }
+         ],
+         "text": "It won from behind! The crowd is on its feet."
+        },
+        {
+         "kind": "heal",
+         "share": 0.4
+        },
+        {
+         "kind": "item",
+         "id": "protein",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-gap2"
+        }
+       ],
+       "species": [
+        "throh"
+       ]
+      }
+     }
+    },
+    {
+     "label": "Don't.",
+     "success": {
+      "text": "Your Mankey doesn't bow. The Throh straightens up, unbothered, and bows to the referee again instead.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-montage-footwork",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "leadBoost",
+          "type": "spe",
+          "n": 1
+         }
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "tournament-out",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-out"
+        }
+       ],
+       "rule": {
+        "matchLead": true,
+        "bstMatch": true,
+        "noItems": true
+       },
+       "name": "Throh",
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "tc-behind",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "hurtLead"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-behind",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          }
+         ],
+         "text": "It won from behind! The crowd is on its feet."
+        },
+        {
+         "kind": "heal",
+         "share": 0.4
+        },
+        {
+         "kind": "item",
+         "id": "protein",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-gap2"
+        }
+       ],
+       "species": [
+        "throh"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-gap2",
+   "name": "Tournament: The Montage",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "throh",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 2
+   },
+   "intro": "It bows again after it loses. In the corridor, it's bowing to a vending machine.\n\nPick what to train.",
+   "choices": [
+    {
+     "label": "Power",
+     "success": {
+      "text": "It hits a sandbag until the bag gives up. Then it hits the floor where the bag was.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-power",
+        "n": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Training: Power",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "value": 1.1
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-power",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Guard",
+     "success": {
+      "text": "You throw Berries at it. It learns to block them. It eats the ones it blocks, and looks at you for more.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-guard",
+        "n": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Training: Guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "value": 1.1
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-guard",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Footwork",
+     "success": {
+      "text": "It chases its own shadow round a ring until it catches it. It doesn't know what to do then.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-footwork",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-footwork",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-16-r3",
+   "name": "Tournament: Quarterfinal",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hitmonchan",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 3
+   },
+   "intro": "Round three: a **Hitmonchan** that has never made a sound.\n\n**Brannock:** \"Not a sound from the Hitmonchan! Not ever! Cordelia, has it *ever?*\"\n\n**Fane:** \"Once. In the regionals. It sneezed. They replayed it for a week.\"",
+   "choices": [
+    {
+     "label": "Step into the ring.",
+     "success": {
+      "text": "It doesn't cry out when it's hit. It doesn't cry out when it hits back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-montage-footwork",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "leadBoost",
+          "type": "spe",
+          "n": 1
+         }
+        ]
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "tournament-out",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-out"
+        }
+       ],
+       "rule": {
+        "matchLead": true,
+        "bstMatch": true,
+        "noItems": true,
+        "silent": true
+       },
+       "name": "Hitmonchan",
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "tc-behind",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "hurtLead"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-behind",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          }
+         ],
+         "text": "It won from behind! The crowd is on its feet."
+        },
+        {
+         "kind": "heal",
+         "share": 0.4
+        },
+        {
+         "kind": "item",
+         "id": "focus-sash",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-gap3"
+        }
+       ],
+       "species": [
+        "hitmonchan"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-gap3",
+   "name": "Tournament: The Montage",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hitmonchan",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 3
+   },
+   "intro": "When it lost, it tapped its glove to its chest, once.\n\nIn the corridor it's alone, lacing its gloves. It looks up. It nods.\n\nPick what to train.",
+   "choices": [
+    {
+     "label": "Power",
+     "success": {
+      "text": "It hits a sandbag until the bag gives up. Then it hits the floor where the bag was.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-power",
+        "n": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Training: Power",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "value": 1.1
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-power",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Guard",
+     "success": {
+      "text": "You throw Berries at it. It learns to block them. It eats the ones it blocks, and looks at you for more.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-guard",
+        "n": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Training: Guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "value": 1.1
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-guard",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Footwork",
+     "success": {
+      "text": "It chases its own shadow round a ring until it catches it. It doesn't know what to do then.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-footwork",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-footwork",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-16-r4",
+   "name": "Tournament: Semifinal",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hawlucha",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 4
+   },
+   "intro": "Round four: a **Hawlucha** that plays to the crowd. It poses on the ropes. It blows kisses.\n\n**Fane:** \"It's better than it pretends, Hector. They always are.\"",
+   "choices": [
+    {
+     "label": "Step into the ring.",
+     "success": {
+      "text": "The Hawlucha bows to the stands, not to you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-montage-footwork",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "leadBoost",
+          "type": "spe",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-fifth-joined",
+        "min": 1,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "tournament-crowd",
+          "amount": 2
+         },
+         {
+          "kind": "gn",
+          "op": "capFlag",
+          "key": "tournament-crowd",
+          "n": 5
+         }
+        ],
+        "text": "When the Hawlucha taunts the front row, your Mankey steps between it and them, arms out. The fifth. It always will. Crowd +2."
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "tournament-out",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-out"
+        }
+       ],
+       "rule": {
+        "matchLead": true,
+        "bstMatch": true,
+        "noItems": true,
+        "gn": "hawlucha"
+       },
+       "name": "Hawlucha",
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "check",
+         "key": "tc-behind",
+         "if": [
+          {
+           "kind": "gn",
+           "test": "hurtLead"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-behind",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          }
+         ],
+         "text": "It won from behind! The crowd is on its feet."
+        },
+        {
+         "kind": "heal",
+         "share": 0.4
+        },
+        {
+         "kind": "item",
+         "id": "black-belt",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-gap4"
+        }
+       ],
+       "species": [
+        "hawlucha"
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-gap4",
+   "name": "Tournament: The Corridor",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "primeape",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 4
+   },
+   "intro": "Against the corridor wall, the rival's fighter is sitting with a thin trainer who's wrapping its hands.\n\n**The rival's trainer, a kid called Pax:** \"It's from Route 25 too. Different troop. Same thieves. We didn't have anyone who brought the food back.\"\n\n**Pax:** \"The prize money's for them. That's all. No hard feelings, whatever happens.\"",
+   "choices": [
+    {
+     "label": "Rest.",
+     "success": {
+      "text": "It sits with its back against yours. Nobody says anything. It's the right call.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Power",
+     "success": {
+      "text": "It hits a sandbag until the bag gives up. Then it hits the floor where the bag was.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-power",
+        "n": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Training: Power",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spa",
+          "value": 1.1
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-final"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-power",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Guard",
+     "success": {
+      "text": "You throw Berries at it. It learns to block them. It eats the ones it blocks, and looks at you for more.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-guard",
+        "n": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Training: Guard",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.1
+         },
+         {
+          "kind": "statMultiplier",
+          "stat": "spd",
+          "value": 1.1
+         }
+        ],
+        "battles": 5,
+        "until": "battle"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-final"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-guard",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Footwork",
+     "success": {
+      "text": "It chases its own shadow round a ring until it catches it. It doesn't know what to do then.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tournament-montage-footwork",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-final"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "tournament-montage-footwork",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-16-final",
+   "name": "Tournament: The Final",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "primeape",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 5
+   },
+   "intro": "The final. The rival is a Mankey or a Primeape, like yours, with its own reasons for being here.\n\n**Brannock:** \"Two wild ones from the same road, Cordelia! You couldn't WRITE this!\"",
+   "choices": [
+    {
+     "label": "Step into the ring.",
+     "success": {
+      "text": "The bell goes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-montage-footwork",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "leadBoost",
+          "type": "spe",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-last-exchange",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-bowed",
+        "min": 1,
+        "then": [],
+        "text": "In the front row, the Throh is bowing at every hit."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-crowd",
+        "min": 5,
+        "then": [],
+        "text": "The hall chants your Mankey's name. Its first move will go first."
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "tournament-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-lost"
+        }
+       ],
+       "rule": {
+        "gn": "final",
+        "evolveMid": true,
+        "noItems": true
+       },
+       "name": "Pax",
+       "mirror": true,
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-last-exchange",
+         "min": 1,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-16-last"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-last-exchange",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "canon",
+           "action": "champion",
+           "species": [
+            "mankey",
+            "primeape"
+           ]
+          },
+          {
+           "kind": "flag",
+           "key": "kanto-tournament-won",
+           "amount": 1
+          },
+          {
+           "kind": "canon",
+           "action": "unsolo",
+           "species": []
+          },
+          {
+           "kind": "moment",
+           "text": "Won the Fighting Tournament with a Mankey from Route 25.",
+           "importance": 85
+          },
+          {
+           "kind": "addEvent",
+           "eventId": "gn-16-bell"
+          }
+         ]
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-last",
+   "name": "Tournament: The Last Exchange",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "primeape",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 5
+   },
+   "intro": "If either hasn't evolved, it did, in the heat of the match.\n\n**Brannock:** \"It's— Cordelia, it's EVOLVING! In the RING! Is that ALLOWED?\"\n\n**Fane:** \"Nobody's ever been brave enough to tell one it isn't.\"\n\nBoth are below a quarter. The hall holds its breath. The game slows.",
+   "choices": [
+    {
+     "label": "Now!",
+     "success": {
+      "text": "You shout. It goes.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "tournament-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-lost"
+        }
+       ],
+       "rule": {
+        "gn": "lastExchange",
+        "evolveMid": true,
+        "noItems": true
+       },
+       "name": "Pax",
+       "mirror": true,
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "canon",
+         "action": "champion",
+         "species": [
+          "mankey",
+          "primeape"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-tournament-won",
+         "amount": 1
+        },
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "moment",
+         "text": "Won the Fighting Tournament with a Mankey from Route 25.",
+         "importance": 85
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-bell"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Wait for it.",
+     "success": {
+      "text": "You hold it back, one beat, two. Then you let it go.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "tournament-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-lost"
+        }
+       ],
+       "rule": {
+        "gn": "lastExchange",
+        "evolveMid": true,
+        "noItems": true
+       },
+       "name": "Pax",
+       "mirror": true,
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "canon",
+         "action": "champion",
+         "species": [
+          "mankey",
+          "primeape"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-tournament-won",
+         "amount": 1
+        },
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "moment",
+         "text": "Won the Fighting Tournament with a Mankey from Route 25.",
+         "importance": 85
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-bell"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "You choose.",
+     "success": {
+      "text": "You say nothing. It looks back at you, once, and decides.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-you-choose",
+        "n": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "flag",
+         "key": "tournament-lost",
+         "amount": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-lost"
+        }
+       ],
+       "rule": {
+        "gn": "lastExchange",
+        "evolveMid": true,
+        "noItems": true
+       },
+       "name": "Pax",
+       "mirror": true,
+       "size": 1,
+       "types": [
+        "fighting"
+       ],
+       "levelBonus": -1,
+       "win": [
+        {
+         "kind": "canon",
+         "action": "champion",
+         "species": [
+          "mankey",
+          "primeape"
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-tournament-won",
+         "amount": 1
+        },
+        {
+         "kind": "canon",
+         "action": "unsolo",
+         "species": []
+        },
+        {
+         "kind": "moment",
+         "text": "Won the Fighting Tournament with a Mankey from Route 25.",
+         "importance": 85
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "gn-16-bell"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-bell",
+   "name": "Tournament: After the Bell",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "primeape",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 6
+   },
+   "intro": "The title is yours: \"Champion,\" before its name, in every battle from now on. Dynamic Punch. The belt.\n\nPax's fighter helps yours up. Pax holds out a hand.\n\nThere's an envelope of prize money on the table.",
+   "choices": [
+    {
+     "label": "Keep the prize money.",
+     "success": {
+      "text": "You take the envelope. Pax nods. \"Fair's fair.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 3000
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it to Pax's troop.",
+     "success": {
+      "text": "You push the envelope across. Pax stares at it, then at you. \"...They'll eat all winter.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "tournament-shared",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Split it.",
+     "success": {
+      "text": "You split it down the middle, note by note. Pax laughs, and it cracks halfway.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 1500
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "tournament-shared",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-out",
+   "name": "Tournament: Out",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 0
+   },
+   "intro": "Your Mankey goes down. The referee counts it out, gently.\n\nYour team pours over the rail. You keep what you've won.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "**Fane:** \"That one will be back, Hector.\" **Brannock:** \"They always are!\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-lost",
+   "name": "Tournament: The Final, Lost",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "primeape",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 5
+   },
+   "intro": "Pax's fighter helps yours up. It holds on a moment longer than it needs to.\n\n**Pax:** \"Next region. Come back. It'll want a rematch. So will I.\"\n\nYou keep four rounds of prizes.",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "Your Mankey looks back at the ring all the way to the door.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-16-rival-return",
+   "name": "A Familiar Belt",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "tourney": 0,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "primeape",
+    "tint": "#7a3b2e",
+    "effect": "none"
+   },
+   "intro": "On the path ahead, a fighter of your own kind stands very straight, arms folded across a belt it made itself: red cloth, knotted, bleached by the sun.\n\nIt looks at you, and bows, once, from the waist.",
+   "choices": [
+    {
+     "label": "Bow back.",
+     "success": {
+      "text": "It grins. The home-made belt is the best thing it owns. It has never looked better.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-shared",
+        "min": 1,
+        "then": [],
+        "text": "The belt has two names stitched on it. One of them is yours."
+       },
+       {
+        "kind": "moment",
+        "text": "The Tournament rival came back in a home-made belt, and bowed.",
+        "importance": 60
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You nod and walk on. It watches you go, belt and all.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-saffron-tournament",
+   "name": "The Fighting Tournament",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "fighting"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "kanto-mankey",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "partyLine",
+     "species": "mankey"
+    },
+    {
+     "kind": "flag",
+     "key": "kanto-tournament-won",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "tournament-out",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "tournament-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mankey",
+    "tint": "#7a3b2e",
+    "effect": "none",
+    "tourney": 0
+   },
+   "intro": "A sports hall with the doors propped open. Thirty-two names on a chalkboard. Fighting-types only.\n\n**A steward:** \"One on one. No switching. Forty percent patch-up between rounds. Faint, and you're out, but you keep what you've won.\"\n\nYour Mankey reads the board as if it can read. Maybe it can.",
+   "choices": [
+    {
+     "label": "Sign up.",
+     "success": {
+      "text": "Your name goes at the bottom of the board, in chalk. Everyone else on your team goes to the rail, and not one of them is happy about it.",
+      "effects": [
+       {
+        "kind": "canon",
+        "action": "solo",
+        "species": [
+         "mankey",
+         "primeape"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "tournament-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "tournament-at"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-last-exchange",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-you-choose",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-food-returned",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "tournament-crowd",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mankey-food-returned",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "tournament-crowd",
+          "n": 2
+         }
+        ],
+        "text": "The whole troop is in the stands, on each other's shoulders. Someone has hung a Berry sack from the rail like a banner. Crowd 2."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tournament-lost",
+        "min": 1,
+        "then": [],
+        "text": "Across the hall, Pax sees you and grins. \"Again? Good.\""
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-16-r1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "You leave the board for somebody else. Your Mankey looks back at it twice.",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.saffron.tournament"
+  },
+  {
+   "id": "gn-17-door",
+   "name": "The Polluted Factory",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "poison"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "factory-entered",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "kaiju-stamp",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "grimer",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "A chain-link gate, a smokestack, and a smell like a struck match dropped in a drain.\n\n**Foreman, Mr. Scrimshaw:** \"Visitors sign the waiver. It says we're not liable. For anything. It's a very thorough waiver.\"\n\nHe holds out a clipboard. The pen is chained to it. The chain is corroded green.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "You sign. Mr. Scrimshaw files it without reading it, under a stack of others nobody read either. The gate rattles open.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "factory-at"
+       },
+       {
+        "kind": "gn",
+        "op": "markParty",
+        "key": "factory-in"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-pipes"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it first.",
+     "success": {
+      "text": "You read it. All of it. Mr. Scrimshaw shifts from foot to foot.\n\nPage four, in very small print: \"solvent residue may be released into the river during normal operation.\" It's a File, now. You keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-file",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "factory-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "factory-at"
+       },
+       {
+        "kind": "gn",
+        "op": "markParty",
+        "key": "factory-in"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-pipes"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb the fence.",
+     "success": {
+      "text": "You go over the fence while he's still holding out the pen. Your sleeve tears on the wire. He doesn't chase you. He just writes something down.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "flag",
+        "key": "factory-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "factory-at"
+       },
+       {
+        "kind": "gn",
+        "op": "markParty",
+        "key": "factory-in"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-pipes"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-float",
+   "name": "The Polluted Factory",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "types": [
+    "poison"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "factory-entered",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "kaiju-stamp",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "grimer",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "A chain-link gate, a smokestack, and the smell of the same slick you saw on the sea.\n\nYou hold up the float from the Kaiju's net. The stamp is the factory's own: a ball inside a cog.\n\n**Mr. Scrimshaw:** \"...That's ours. That's one of ours. I told them the nets would drift.\"\n\nHe looks at it a long time. Then he unlocks the gate himself.\n\n**Mr. Scrimshaw:** \"Control room valves. Ignore the labels. Black stain first, then green, then yellow. Don't tell them I told you.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "Mr. Scrimshaw writes the valve order on the back of your hand in marker, so you won't forget.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-valve-order",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "factory-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "factory-at"
+       },
+       {
+        "kind": "gn",
+        "op": "markParty",
+        "key": "factory-in"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-pipes"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-pipes",
+   "name": "The Polluted Factory: The Pipes",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "koffing",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "*The pipes are labelled: IN. OUT. DON'T ASK.*\n\nThey sweat and tick in the heat. Something in the dark between them shifts, and coughs.",
+   "choices": [
+    {
+     "label": "Go through.",
+     "success": {
+      "text": "A pipe groans overhead as something comes out of the dark.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "grimer",
+        "grimer-alola",
+        "grimer-delta",
+        "koffing",
+        "trubbish",
+        "stunky",
+        "gulpin"
+       ],
+       "types": [
+        "poison"
+       ],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-pipes-2"
+        }
+       ],
+       "rule": {
+        "gn": "pipes",
+        "typeBoost": {
+         "type": "poison",
+         "pct": 10
+        }
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-pipes-2"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-pipes-2",
+   "name": "The Polluted Factory: The Pipes",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "stunky",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "Further in, the pipes get lower. You have to stoop.\n\nA drip lands on your neck. It's warm. Something else is down here, and it's heard you.",
+   "choices": [
+    {
+     "label": "Keep going.",
+     "success": {
+      "text": "It comes at you from under a pipe marked DON'T ASK.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "grimer",
+        "grimer-alola",
+        "grimer-delta",
+        "koffing",
+        "trubbish",
+        "stunky",
+        "gulpin"
+       ],
+       "types": [
+        "poison"
+       ],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-17-line"
+        }
+       ],
+       "rule": {
+        "gn": "pipes",
+        "typeBoost": {
+         "type": "poison",
+         "pct": 10
+        }
+       },
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-17-line"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-line",
+   "name": "The Polluted Factory: The Line",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magnemite",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "The production line. Half-made Poké Balls ride a belt, cheap red shells, thin as eggshell.\n\n**Scientist, Dr. Stroud:** \"Do you know what a Poké Ball costs to make *properly?* Nobody can afford properly.\"\n\nHe says it like he has said it to himself many times, and has never once believed it.",
+   "choices": [
+    {
+     "label": "Fight him.",
+     "success": {
+      "text": "He sighs, and reaches for a Ball off the belt.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Dr. Stroud",
+       "classId": "scientist",
+       "size": 2,
+       "types": [
+        "poison"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-desk"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Walk past him.",
+     "success": {
+      "text": "He doesn't stop you. He goes back to his clipboard. His desk is behind him, unlocked.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-desk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-desk",
+   "name": "The Polluted Factory: Dr. Stroud's Desk",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magnemite",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "The desk drawer is full of research. Solvent counts. River samples. A graph that only goes up.\n\nAt the bottom, in pencil: \"Proper would cost 4x. Tell them.\"",
+   "choices": [
+    {
+     "label": "Take the research.",
+     "success": {
+      "text": "You take it. Dr. Stroud watches you do it and says nothing at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-pits"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You shut the drawer. Someone else can carry that.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-pits"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-pits",
+   "name": "The Polluted Factory: The Sludge Pits",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "grimer",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "The sludge pits. Three Grimer slide up out of the muck to meet you.\n\nAnd in the pits, stuck fast, six Pokémon that wandered in and couldn't get out. One of them is still trying.\n\nEach of yours could pull one free. It would take two goes, with the Grimer at your back.",
+   "choices": [
+    {
+     "label": "Pull them out.",
+     "success": {
+      "text": "Your team wades in and pulls. The muck lets go with a sound like a boot in mud. The Grimer don't wait.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "addParty",
+        "key": "factory-freed"
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "factory-freed",
+        "n": 6
+       },
+       {
+        "kind": "damage",
+        "share": 0.15
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-pits-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fight the Grimer first.",
+     "success": {
+      "text": "The three Grimer come on together, slow and sure.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "triples",
+       "species": [
+        "grimer"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-muk"
+        }
+       ],
+       "rule": {
+        "typeBoost": {
+         "type": "poison",
+         "pct": 10
+        }
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-muk"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-pits-2",
+   "name": "The Polluted Factory: The Sludge Pits",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "grimer",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "Some are out, shaking off the sludge on the walkway. Some are still in.\n\nThe Grimer are closing in.",
+   "choices": [
+    {
+     "label": "Keep pulling.",
+     "success": {
+      "text": "One more heave, all together. Then you turn to the Grimer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "addParty",
+        "key": "factory-freed"
+       },
+       {
+        "kind": "gn",
+        "op": "capFlag",
+        "key": "factory-freed",
+        "n": 6
+       },
+       {
+        "kind": "damage",
+        "share": 0.15
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "format": "triples",
+       "species": [
+        "grimer"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-muk"
+        }
+       ],
+       "rule": {
+        "typeBoost": {
+         "type": "poison",
+         "pct": 10
+        }
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-muk"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "That's enough.",
+     "success": {
+      "text": "You leave the rest. You turn to the Grimer.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "triples",
+       "species": [
+        "grimer"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-muk"
+        }
+       ],
+       "rule": {
+        "typeBoost": {
+         "type": "poison",
+         "pct": 10
+        }
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-muk"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "trubbish-kept",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "That's enough.",
+     "success": {
+      "text": "Your Trubbish won't come. It stays in the pit, up to its middle, pulling.\n\nIt won't leave the sludge pits until every one's out. It knows what it is to be left. All six come out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "factory-freed",
+        "n": 6
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "format": "triples",
+       "species": [
+        "grimer"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-muk"
+        }
+       ],
+       "rule": {
+        "typeBoost": {
+         "type": "poison",
+         "pct": 10
+        }
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-muk"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "trubbish-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-17-muk",
+   "name": "The Polluted Factory: The Muk in the Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "muk",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "A Muk is pressed against a split in the pipe wall, holding a leak shut with its own body.\n\nIt's been there for days. Its edges have dried and cracked. It doesn't look at you. It can't afford to.",
+   "choices": [
+    {
+     "label": "Seal the pipe for it (a Steel-, Fire- or Rock-type).",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "steel",
+        "fire",
+        "rock"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon seals the split, a weld that glows and cools.\n\n*It slides off the wall. It leaves its shape there, in the grime. It looks at the place where it was.*\n\n*It looks at you. It's never been thanked, so it doesn't know what this is.*\n\nIt follows you. Quietly, a little behind.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-muk-helped",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You sealed a pipe so a Muk could finally let go of the wall.",
+        "importance": 70
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-control"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Feed it.",
+     "success": {
+      "text": "You hold food up to it. It eats from your hand without moving off the wall. It still can't leave. But it's a little less tired.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-control"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You walk on. Behind you, it holds the leak shut. It will go on holding it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-control"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-control",
+   "name": "The Polluted Factory: The Control Room",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magneton",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "The control room. Dials, all in the red. Three big wheel valves on the wall.\n\nA window looks down into the furnace. Something down there glows.",
+   "choices": [
+    {
+     "label": "Close the valves.",
+     "success": {
+      "text": "You go to the valves.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "factory-valves",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-valve1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "factory-valves",
+       "atLeast": 0,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Fight the scientist.",
+     "success": {
+      "text": "A second scientist steps out from behind the dials. \"You can't be in here!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Scientist",
+       "classId": "scientist",
+       "size": 2,
+       "types": [
+        "poison",
+        "steel"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        },
+        {
+         "kind": "flag",
+         "key": "factory-scientist",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-control"
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "factory-scientist",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Look through the glass.",
+     "success": {
+      "text": "You go to the window. The lever is beside it, behind its own pane.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-saw-form",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-glass"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go down to the furnace.",
+     "success": {
+      "text": "A metal stair, down into the heat.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-raid1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-glass",
+   "name": "The Polluted Factory: Through the Glass",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "muk",
+    "tint": "#4a4a2a",
+    "effect": "fire"
+   },
+   "intro": "Through the glass: something in the furnace, moving. A Muk of Ground and Fire, glowing at the seams.\n\nIt isn't angry. It hurts. It rolls over in the heat like something trying to sleep on a burn.\n\nBeside the window, behind its own glass: LINE STOP.",
+   "choices": [
+    {
+     "label": "Break the glass.",
+     "success": {
+      "text": "You break the glass. The lever is cold. Once it's pulled, the line stops, and it doesn't start again.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-lever"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "factory-shutdown",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Step back.",
+     "success": {
+      "text": "You step back from the window. The glow stays on your eyes a while.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-control"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-lever",
+   "name": "The Polluted Factory: Line Stop",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magneton",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "Your hand is on the lever. It can't be undone.",
+   "choices": [
+    {
+     "label": "Pull it.",
+     "success": {
+      "text": "The line stops. The belt grinds to a halt. Every half-made Ball rolls off the end and onto the floor.\n\nSomewhere below, the river stops getting worse.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "factory-shutdown"
+       },
+       {
+        "kind": "moment",
+        "text": "You pulled the lever and stopped the factory line for good.",
+        "importance": 70
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-control"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "You take your hand off it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-control"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-valve1",
+   "name": "The Polluted Factory: The Valves",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magneton",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "Three valves, labelled COOLANT, STEAM and WATER. The labels are wrong. The stains on the floor are right.\n\nUnder COOLANT, the floor is black and eaten through. Under WATER, a green crust. Under STEAM, a thin yellow film.",
+   "choices": [
+    {
+     "label": "The valve marked COOLANT.",
+     "success": {
+      "text": "It turns hard, then all at once. Somewhere below, a pipe stops roaring.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-valve2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The valve marked STEAM.",
+     "success": {
+      "text": "Wrong one. The pipes bang like a door kicked in, a hot spray hits your arm, and the valves you closed spin open again.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "factory-valves",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-control"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The valve marked WATER.",
+     "success": {
+      "text": "Wrong one. The pipes bang like a door kicked in, a hot spray hits your arm, and the valves you closed spin open again.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "factory-valves",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-control"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-valve2",
+   "name": "The Polluted Factory: The Valves",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magneton",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "One down. The pipes shudder. The green crust under WATER has started to bubble.",
+   "choices": [
+    {
+     "label": "The valve marked STEAM.",
+     "success": {
+      "text": "Wrong one. The pipes bang like a door kicked in, a hot spray hits your arm, and the valves you closed spin open again.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "factory-valves",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-control"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The valve marked WATER.",
+     "success": {
+      "text": "It turns hard, then all at once. Somewhere below, a pipe stops roaring.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-valve3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-valve3",
+   "name": "The Polluted Factory: The Valves",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magneton",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "Two down. Only STEAM is left, over its thin yellow film.",
+   "choices": [
+    {
+     "label": "The valve marked STEAM.",
+     "success": {
+      "text": "The last one closes. The whole building goes quiet, like it's holding its breath.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-valves",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-control"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-raid1",
+   "name": "The Polluted Factory: The Furnace",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "muk",
+    "tint": "#4a4a2a",
+    "effect": "fire"
+   },
+   "intro": "The Magmuk. Huge, slow, spreading across the floor like a spill that decided to stand up.\n\nWherever it touches, the floor glows. It lays Molten Sludge on its first turn.\n\nSpread moves split it. Each one makes a small one that has to be beaten too. Hit it once at a time.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "It rears up. The heat comes off it in waves.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-fire"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-raid2"
+        }
+       ],
+       "rule": {
+        "gn": "sludge",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropUnmarked",
+         "key": "factory-in"
+        },
+        {
+         "kind": "flag",
+         "key": "factory-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "factory-lost",
+         "min": 1,
+         "then": [],
+         "text": "Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there."
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Send the Muk in front.",
+     "success": {
+      "text": "Your Muk flows out in front of everyone, without being asked.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "factory-muk-now",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "factory-muk-used",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-fire"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-raid2"
+        }
+       ],
+       "rule": {
+        "gn": "sludge",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropUnmarked",
+         "key": "factory-in"
+        },
+        {
+         "kind": "flag",
+         "key": "factory-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "factory-lost",
+         "min": 1,
+         "then": [],
+         "text": "Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there."
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "factory-muk-helped",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "factory-muk-used",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-17-raid2",
+   "name": "The Polluted Factory: The Furnace Burns",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "muk",
+    "tint": "#4a4a2a",
+    "effect": "fire"
+   },
+   "intro": "It's burning now, and so is the floor. Anything that isn't a Fire-type may catch a burn each turn.\n\nWater moves go up as steam: half damage. But they clear the Molten Sludge.",
+   "choices": [
+    {
+     "label": "Fight.",
+     "success": {
+      "text": "The floor glows under your feet.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-fire"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-core"
+        }
+       ],
+       "rule": {
+        "gn": "furnace",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropUnmarked",
+         "key": "factory-in"
+        },
+        {
+         "kind": "flag",
+         "key": "factory-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "factory-lost",
+         "min": 1,
+         "then": [],
+         "text": "Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there."
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Send the Muk in front.",
+     "success": {
+      "text": "Your Muk flows out in front, its edges hissing on the floor.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "factory-muk-now",
+        "n": 1
+       },
+       {
+        "kind": "flag",
+        "key": "factory-muk-used",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-fire"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-core"
+        }
+       ],
+       "rule": {
+        "gn": "furnace",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropUnmarked",
+         "key": "factory-in"
+        },
+        {
+         "kind": "flag",
+         "key": "factory-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "factory-lost",
+         "min": 1,
+         "then": [],
+         "text": "Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there."
+        }
+       ],
+       "pseudo": true
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "factory-muk-helped",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "factory-muk-used",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-17-core",
+   "name": "The Polluted Factory: The Core",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "grimer",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "It's small now. Small, fast and frightened. The size of a Grimer, backing into a corner.\n\n*It's pressed against the furnace door. It keeps looking at the pipe it came out of.*",
+   "choices": [
+    {
+     "label": "Finish it.",
+     "success": {
+      "text": "It only has weak moves left. It uses them anyway.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "muk-delta-fire"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "kanto-factory-cleared",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "black-sludge",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You finished the Magmuk in the Polluted Factory.",
+         "importance": 75
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "factory-shutdown",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "factory-left-running",
+           "amount": 1
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-17-pick"
+        }
+       ],
+       "rule": {
+        "gn": "core",
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "dropUnmarked",
+         "key": "factory-in"
+        },
+        {
+         "kind": "flag",
+         "key": "factory-lost",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "factory-lost",
+         "min": 1,
+         "then": [],
+         "text": "Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there."
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Stop attacking.",
+     "success": {
+      "text": "You call your team back. It stays in the corner. One turn. Two.\n\nThen it slides into the pipe it came out of, and is gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "kanto-factory-cleared",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "black-sludge",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You stopped attacking, and the Magmuk went home down its pipe.",
+        "importance": 75
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "factory-shutdown",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "factory-left-running",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-pick"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the Muk go to it.",
+     "success": {
+      "text": "Your Muk slides over. It puts an arm round it.\n\nThe small one stops shaking. They go into the pipe together. Neither looks back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-magmuk-calmed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-factory-cleared",
+        "amount": 1
+       },
+       {
+        "kind": "item",
+        "id": "black-sludge",
+        "count": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Muk you freed took the Magmuk home.",
+        "importance": 75
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "factory-shutdown",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "flag",
+          "key": "factory-left-running",
+          "amount": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-17-pick"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "factory-muk-helped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-17-pick",
+   "name": "The Polluted Factory: After",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "grimer",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "The furnace ticks as it cools. On the floor, a lump of Black Sludge, still warm.\n\nOut of the pits and the pipes, a few of the ones you passed are watching you. One of them could come along.",
+   "choices": [
+    {
+     "label": "Alolan Grimer",
+     "success": {
+      "text": "The Alolan Grimer slides up, all bright colours, and sticks to your boot.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "grimer-alola"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kanto-factory-pick",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "factory-research",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-17-research"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "factory-research",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Delta Grimer",
+     "success": {
+      "text": "The Delta Grimer, dry and sandy, nudges your hand.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "grimer-delta"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kanto-factory-pick",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "factory-research",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-17-research"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "factory-research",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trubbish",
+     "success": {
+      "text": "The Trubbish rolls over to you and waits to be picked up.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "trubbish"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kanto-factory-pick",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "factory-research",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-17-research"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "factory-research",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Muk",
+     "success": {
+      "text": "Your Muk doesn't wait to be asked. It's already beside you. It knows how to hold something shut for someone else.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "muk"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "stopgap"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "kanto-factory-pick",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "factory-research",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-17-research"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "factory-research",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "leavePseudo"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "factory-muk-helped",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "factory-magmuk-calmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-17-research",
+   "name": "The Polluted Factory: Dr. Stroud's Research",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "magnemite",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "You still have Dr. Stroud's research. It's worth a lot to the right people.",
+   "choices": [
+    {
+     "label": "Sell it.",
+     "success": {
+      "text": "A buyer pays a lot, in cash, without asking where it came from. They'll build another factory, somewhere further on.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 5000
+       },
+       {
+        "kind": "flag",
+        "key": "factory-research-sold",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand it to a professor.",
+     "success": {
+      "text": "The professor reads it twice and goes pale. \"This changes how we make Balls.\" They send you a special one to try.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "dream-ball",
+        "count": 3
+       },
+       {
+        "kind": "flag",
+        "key": "factory-research-given",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-fishing",
+   "name": "A River with Fish in It",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "factory-shutdown",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "factory-shutdown"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "factory-at"
+    },
+    {
+     "kind": "flag",
+     "key": "factory-fished",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "magikarp",
+    "tint": "#2a5a6a",
+    "effect": "none"
+   },
+   "intro": "On the riverbank, a man in a foreman's jacket with the badge torn off. Mr. Scrimshaw. Out of a job.\n\nHis line is in the water. The water is clear. Something tugs.\n\n**Mr. Scrimshaw:** \"Fish in it. Can you believe that? There are fish in it.\"",
+   "choices": [
+    {
+     "label": "Sit with him.",
+     "success": {
+      "text": "You sit. He catches nothing for an hour and doesn't mind at all.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Mr. Scrimshaw, fishing in a river with fish in it.",
+        "importance": 55
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "factory-fished",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-fuchsia-factory",
+   "name": "The Polluted Factory",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "poison"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "factory-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "grimer",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "A chain-link gate, a smokestack, and a smell like a struck match dropped in a drain.\n\n**Foreman, Mr. Scrimshaw:** \"Visitors sign the waiver. It says we're not liable. For anything. It's a very thorough waiver.\"\n\nHe holds out a clipboard. The pen is chained to it. The chain is corroded green.",
+   "choices": [
+    {
+     "label": "Sign.",
+     "success": {
+      "text": "You sign. Mr. Scrimshaw files it without reading it, under a stack of others nobody read either. The gate rattles open.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "factory-at"
+       },
+       {
+        "kind": "gn",
+        "op": "markParty",
+        "key": "factory-in"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-pipes"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it first.",
+     "success": {
+      "text": "You read it. All of it. Mr. Scrimshaw shifts from foot to foot.\n\nPage four, in very small print: \"solvent residue may be released into the river during normal operation.\" It's a File, now. You keep it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-file",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "factory-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "factory-at"
+       },
+       {
+        "kind": "gn",
+        "op": "markParty",
+        "key": "factory-in"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-pipes"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Climb the fence.",
+     "success": {
+      "text": "You go over the fence while he's still holding out the pen. Your sleeve tears on the wire. He doesn't chase you. He just writes something down.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "flag",
+        "key": "factory-entered",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "factory-at"
+       },
+       {
+        "kind": "gn",
+        "op": "markParty",
+        "key": "factory-in"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-17-pipes"
+       }
+      ]
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.factory"
+  },
+  {
+   "id": "gn-18-gate",
+   "name": "Safari Land",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "normal",
+    "ground"
+   ],
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "safari-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "photo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "safari-photo-best",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the gatehouse wall, one of your photographs hangs in a frame, with a small brass plate under it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#6a7a2e",
+    "effect": "none"
+   },
+   "intro": "A wooden gatehouse, a turnstile, and a warden in a wide hat with binoculars round their neck.\n\n**Warden Baoba-Lin:** \"Thirty Safari Balls. Five hundred steps. No battles: your Pokémon wait here. Bait, rocks, or Balls. Or nothing, which is underrated.\"\n\n**Warden:** \"I'll be narrating. Under my breath. Pretend I'm not.\"",
+   "choices": [
+    {
+     "label": "Pay ₽500 and go in.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The turnstile clicks. Thirty Safari Balls in a canvas bag, and a step counter on your wrist.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "safari-at"
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-safari"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "safari-fee-up",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Pay ₽800 and go in.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "**Warden:** \"Eight hundred. The Rhyhorn are still talking about last time.\" The turnstile clicks.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "safari-at"
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-safari"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "safari-fee-up",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "**Warden:** \"Fair enough. It'll be here. That's rather the point of it.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-18-return",
+   "name": "Safari Land: A Free Visit",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [
+    "normal",
+    "ground"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "safari-free",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "safari-free"
+    },
+    {
+     "kind": "flag",
+     "key": "safari-free-used",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "photo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "safari-photo-best",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the gatehouse wall, one of your photographs hangs in a frame, with a small brass plate under it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#6a7a2e",
+    "effect": "none"
+   },
+   "intro": "The warden lifts the turnstile bar before you reach it.\n\n**Warden:** \"You. Go on. No charge. You were barely there last time; be barely there again.\"",
+   "choices": [
+    {
+     "label": "Go in, free.",
+     "success": {
+      "text": "Thirty Safari Balls, and the warden doesn't even count them out.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "safari-free-used",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-safari"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "**Warden:** \"It keeps.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "cs-kanto-fuchsia-safari",
+   "name": "Safari Land",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "types": [
+    "normal",
+    "ground"
+   ],
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "safari-at"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "photo",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "safari-photo-best",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On the gatehouse wall, one of your photographs hangs in a frame, with a small brass plate under it."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#6a7a2e",
+    "effect": "none"
+   },
+   "intro": "A wooden gatehouse, a turnstile, and a warden in a wide hat with binoculars round their neck.\n\n**Warden Baoba-Lin:** \"Thirty Safari Balls. Five hundred steps. No battles: your Pokémon wait here. Bait, rocks, or Balls. Or nothing, which is underrated.\"\n\n**Warden:** \"I'll be narrating. Under my breath. Pretend I'm not.\"",
+   "choices": [
+    {
+     "label": "Pay ₽500 and go in.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The turnstile clicks. Thirty Safari Balls in a canvas bag, and a step counter on your wrist.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "safari-at"
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-safari"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "safari-fee-up",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Pay ₽800 and go in.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 800
+      }
+     ],
+     "success": {
+      "text": "**Warden:** \"Eight hundred. The Rhyhorn are still talking about last time.\" The turnstile clicks.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -800
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "safari-at"
+       },
+       {
+        "kind": "gn",
+        "op": "minigame",
+        "key": "gn-safari"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "safari-fee-up",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Not today.",
+     "success": {
+      "text": "**Warden:** \"Fair enough. It'll be here. That's rather the point of it.\"",
+      "effects": []
+     }
+    }
+   ],
+   "canon": "cs.kanto.fuchsia.safari"
+  }
+ ]
+}

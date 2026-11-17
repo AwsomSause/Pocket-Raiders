@@ -1,0 +1,3263 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "evil-star-offer-paldea",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "glint"
+   },
+   "intro": "At the school gates. A Grunt in a star helmet, reading from a card: \"'Hasta la vistar!' is— no. Wait. 'Join Team Star, where— ' I've lost my place. Look. D'you want to come? There's a tent. Nobody makes you talk. Nobody takes your stuff. That's the whole pitch.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "\"You will? Brilliant. Up the hill. There's a gate made of pallets; you can't miss it.\" You're in Team Star now, on the inside: the New Kid. Nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "star-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "\"Fair enough. Nobody makes you.\" He folds the card back into his pocket, carefully, as if he'll need it again. Team Star goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who took your stuff?\"",
+     "success": {
+      "text": "The helmet comes off. He's about fifteen. \"...Everyone. For a year. Then Star happened. Then nobody.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "evil-star-offer-paldea-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes. That night, in a Mesagoza café, you say it again to a man in a brown coat who calls himself Looker. Looker: \"Team Star. They are children, you know. So. You will be my eyes, and you will be gentle with what you see.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "star-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-star-offer-paldea-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "He puts the helmet back on. \"So. D'you want to come?\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "\"You will? Brilliant. Up the hill. There's a gate made of pallets; you can't miss it.\" You're in Team Star now, on the inside: the New Kid. Nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "star-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "\"Fair enough. Nobody makes you.\" He folds the card back into his pocket, carefully, as if he'll need it again. Team Star goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes. That night, in a Mesagoza café, you say it again to a man in a brown coat who calls himself Looker. Looker: \"Team Star. They are children, you know. So. You will be my eyes, and you will be gentle with what you see.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "star-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-act1",
+   "name": "Nobody Makes You Talk",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "sparkle"
+   },
+   "intro": "A hillside. A gate made of pallets. A banner with a star. Tents. Fairy lights, in daylight. A bassline. The gate Grunt, helmet two sizes too big, wrench the wrong way round: \"You came! I did the card wrong. I always do the card wrong. Go in. You don't have to say anything. That's rule two.\" Inside the gate, taped to a post: a field-trip permission slip. On the back, in five handwritings: the Code. 1. Nobody takes your stuff. 2. Nobody makes you talk. 3. You can sit with us. 4. A boss who's beaten steps down. 5. Nobody gets talked out of it.",
+   "choices": [
+    {
+     "label": "Take the helmet.",
+     "success": {
+      "text": "You're given a helmet. Atticus made it. It fits. He's never met you. A note inside the band, in tiny stitches: \"Spare. For whoever's next. — A.\" He's made forty-one. He's been keeping one back for eighteen months.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-helmet-41",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-act1-tent"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-act1-tent",
+   "name": "The Tent",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "A tent. A mixing desk. A sleeping bag. A stack of exercise books to the height of a chair. Odin Fenwright, sixteen, cross-legged, with a protractor: Odin: \"You're Fulu. Squad of one. I'm Odin. That's my bag; that's yours; that's the homework.\" Odin: \"I've not been to a class in eighteen months. I've the syllabus memorised. I do the work. All of it. I post it under the staffroom door. Nobody marks it. I got Giacomo to check my maths; he's good. We're not skiving. We just can't be in the building.\"",
+   "choices": [
+    {
+     "label": "\"Why not?\"",
+     "success": {
+      "text": "Odin: \"You know when you've been somewhere something happened, and your legs won't? It's that. It's not a decision. I get to the gate and my legs won't.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act1-class"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Do they know you do it?\"",
+     "success": {
+      "text": "Odin: \"I put my name on it. Every sheet. Top right, like you're meant to. I don't know what happens after the door.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act1-class"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What happened eighteen months ago?\"",
+     "success": {
+      "text": "Odin: \"There was a whole class of us got picked on. Proper. Every day. Teachers knew. We made the team to stand up. We stood up once. All together. Didn't touch anyone. The bullies got frightened and left school. And we got the blame for 'driving students out.' That's the bit nobody'll say.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act1-class"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-act1-class",
+   "name": "Third Period",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giacomo",
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "Third period. A bell: it's a saucepan. Twenty kids on crates. Giacomo at the decks, with a whiteboard. Giacomo: \"Quadratics. Four-four time. Negative b,\" (a beat) \"plus or minus,\" (a beat) \"root of b-squared minus four a c—\" Twenty kids: \"—ALL OVER TWO A.\" Giacomo, to you, not stopping: \"Fulu! You're late! That's a detention! We don't have detentions! Sit down!\"",
+   "choices": [
+    {
+     "label": "(Sit down.)",
+     "success": {
+      "text": "You sit on a crate. You learn the quadratic formula in four-four. Night. The fairy lights. A fire in an oil drum. Odin, in the dark: \"You've not said much.\" Odin: \"That's fine. Rule two.\" A helmet. A sleeping bag. A timetable.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-odin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-act1-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is this allowed?\"",
+     "success": {
+      "text": "Giacomo: \"Nobody's said it isn't! Sit down!\" You sit. Night. The fairy lights. A fire in an oil drum. Odin, in the dark: \"You've not said much.\" Odin: \"That's fine. Rule two.\" A helmet. A sleeping bag. A timetable.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-odin",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who sets the work?\"",
+     "success": {
+      "text": "Giacomo: \"The Academy. We nicked the timetable. It's the same lessons. Same order. Same day. If we ever go back, nobody's behind. That was Cassiopeia's rule. She was dead strict about it.\" Night. The fairy lights. A fire in an oil drum. Odin, in the dark: \"You've not said much.\" Odin: \"That's fine. Rule two.\" A helmet. A sleeping bag. A timetable.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-odin",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-act2",
+   "name": "The Thing with the Beans",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mela",
+     "trainer.pr/school_kid_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "Schedar base. A truck on a rise. Somebody on top of it, in very large boots, fixing one. Mela, not looking down: \"You're the squad of one. Gate duty. Take the new kid; he needs to see how it's done. Somebody comes, you say 'who goes there,' you battle 'em. That's the job. Don't let 'em talk.\" The new kid. Yusuf Lightfoot, thirteen, with a helmet under his arm and a shoebox under the other: \"I'm Yusuf. I came 'cause my cousin did. He's in Navi. I've been here three weeks.\" The shoebox has holes in the lid. It's not a Pokémon. It's papier-mâché. Yusuf: \"It's nothing. It's a— it's nothing.\"",
+   "choices": [
+    {
+     "label": "Take the gate.",
+     "success": {
+      "text": "The gate. An hour.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act2-gate"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "tidepool",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "tidepool-founded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A line on a rock outside Schedar: BETTER ISN'T FINISHED TILL YOU'VE SOMEWHERE TO GO. Mela: \"Yeah. That. That.\""
+    }
+   ]
+  },
+  {
+   "id": "st-act2-gate",
+   "name": "The Gate",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-youngster",
+     "trainer.pr/school_kid_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "Then, up the path: a boy in Academy uniform, by himself, carrying a casserole dish with a tea towel over it. The schoolmate: \"I'm not here to fight. Yusuf, your mum's asking. She's made the thing with the beans.\" He holds it out. It's still warm. He's walked it up a hill. Yusuf's looking at his shoes. The schoolmate: \"And Mr. Jacq says the science fair's Thursday and there's still a table with your name on. He's not taken the card off.\"",
+   "choices": [
+    {
+     "label": "\"Let him go home.\"",
+     "success": {
+      "text": "He looks at you. He looks at the truck. He doesn't go. He needed to be asked a different question.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act2-gate-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"He stays. That's the rule.\"",
+     "success": {
+      "text": "Rule five. The schoolmate puts the dish down on the path and goes. Yusuf eats the beans in the gatehouse, by himself, out of the dish.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "star-yusuf-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-yusuf",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yusuf. What do you want?\"",
+     "success": {
+      "text": "Yusuf: \"...I want to do the science fair. I've a volcano. It's a good volcano.\" He opens the shoebox. It is. It's got a village round the bottom, with little flags. Yusuf: \"I've not said. Everybody here got— I didn't get it as bad. I came after. I just didn't want to be the one who went back. Like it was fine.\" A boot, on the truck roof. She's heard all of it. Mela: \"Oi. New kid.\" Yusuf: \"...Yeah.\" Mela: \"Is it a good volcano?\" Yusuf: \"It erupts.\" Mela: \"Then go and do your volcano, kid. Nobody stays here 'cause they've got to. That's not the rule. That's the opposite of the rule.\" A pause. Mela: \"We'll come and watch. Loudly.\" He goes down the hill with a schoolmate, a shoebox and an empty casserole dish. Mela, to you, lacing the boot: \"Don't look at me like that. I'm not soft. He's thirteen.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-volcano",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-yusuf-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-yusuf",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-act2-gate-2",
+   "name": "The Gate",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-youngster",
+     "trainer.pr/school_kid_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "The dish is still warm. Yusuf's still looking at his shoes.",
+   "choices": [
+    {
+     "label": "\"He stays. That's the rule.\"",
+     "success": {
+      "text": "Rule five. The schoolmate puts the dish down on the path and goes. Yusuf eats the beans in the gatehouse, by himself, out of the dish.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "star-yusuf-stayed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-yusuf",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yusuf. What do you want?\"",
+     "success": {
+      "text": "Yusuf: \"...I want to do the science fair. I've a volcano. It's a good volcano.\" He opens the shoebox. It is. It's got a village round the bottom, with little flags. Yusuf: \"I've not said. Everybody here got— I didn't get it as bad. I came after. I just didn't want to be the one who went back. Like it was fine.\" A boot, on the truck roof. She's heard all of it. Mela: \"Oi. New kid.\" Yusuf: \"...Yeah.\" Mela: \"Is it a good volcano?\" Yusuf: \"It erupts.\" Mela: \"Then go and do your volcano, kid. Nobody stays here 'cause they've got to. That's not the rule. That's the opposite of the rule.\" A pause. Mela: \"We'll come and watch. Loudly.\" He goes down the hill with a schoolmate, a shoebox and an empty casserole dish. Mela, to you, lacing the boot: \"Don't look at me like that. I'm not soft. He's thirteen.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-volcano",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-yusuf-home",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-yusuf",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-act3",
+   "name": "Forty-One, One Friday",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "The Academy, at night. A side door. Odin, at the threshold, with his hand on the frame. Odin: \"Cassiopeia wants the file. On what happened. Proof. I said I'd go.\" His legs won't. Odin: \"...Give me a second.\" It takes a minute.",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "He goes in. On his own. It's the first time in eighteen months.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "odin-walked-in",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-file-corridor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go in first.",
+     "success": {
+      "text": "You go in. He comes after you, a step behind, the way you'd follow somebody into cold water.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-file-corridor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold out a hand.",
+     "success": {
+      "text": "He looks at it. He takes it. You go in together.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-file-corridor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-file-corridor",
+   "name": "The Corridor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "Lockers. A noticeboard. EXPULSION NOTICES — FINAL WARNING. Forty names. Odin's is eleventh.",
+   "choices": [
+    {
+     "label": "The records room.",
+     "success": {
+      "text": "A cabinet. A drawer by year.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-file-records"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-file-records",
+   "name": "The Records Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "A cabinet. A drawer by year. A folder, eighteen months old. Empty. A sticky note, in a neat hand: \"Removed at the Vice-Principal's instruction. See H. — Staff involved reassigned.\" Odin: \"They wiped it. There's no bullying on record. There's just us, with a truck, looking like the problem.\" One sheet's left, at the back, stuck to the folder's spine. It's the forty-second. \"Recommend the group be regarded as the aggressors.\" Odin: \"That's— we told them. Forty-one times. I wrote number fifteen. 'We're not making it up. We compared.' I remember typing it.\"",
+   "choices": [
+    {
+     "label": "A light, in the doorway.",
+     "success": {
+      "text": "A torch.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-file-torch"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-file-torch",
+   "name": "The Torch",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman",
+     "trainer.pr/star_grunt_m",
+     "boss.drive/paldean-sv-janitor"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "A light in the doorway. A man of sixty, in a cardigan, with a ring of keys. He hasn't got the wig on. It's the first time. The Director: \"...Ah.\" Odin: \"Clive?\" The Director: \"Clavell. I'm afraid. I've been meaning to say.\" He looks at the open drawer. At the empty folder. He's as shocked as they are. The Director: \"I've been here a year. I've been trying to find out why you won't come back. Nobody would tell me. There was no one left to tell me. I've a school with a year missing, and forty children outside it, and I'm supposed to expel them on Monday for reasons nobody can show me.\"",
+   "choices": [
+    {
+     "label": "\"Show him the empty folder.\"",
+     "success": {
+      "text": "He reads the sticky note. He reads the forty-second. The Director: \"'H.' Harrow. He interviewed me for this post. He was charming.\" In the corridor, going out: a man with a floor buffer, who's stopped it. Mr. Upshaw: \"Evening.\" He looks at Odin. He knows the helmet. He knows the name; it's top right on seventy sheets. Mr. Upshaw: \"Fenwright. Your quadratics are coming on.\" And he switches the buffer back on.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-file-empty",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "upshaw-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-director-shown",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Run.",
+     "success": {
+      "text": "You're gone. He doesn't chase. He stands with a torch and an empty folder. He's seen less than he needs. In the corridor, going out: a man with a floor buffer, who's stopped it. Mr. Upshaw: \"Evening.\" He looks at Odin. He knows the helmet. He knows the name; it's top right on seventy sheets. Mr. Upshaw: \"Fenwright. Your quadratics are coming on.\" And he switches the buffer back on.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-file-empty",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "upshaw-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-director-ran",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell him. All of it. Now.\"",
+     "success": {
+      "text": "Odin does. Rule two says nobody makes you. Nobody's making him. It takes an hour. The Director sits down on a filing cabinet and listens. He doesn't say \"use your words.\" He doesn't say anything. At the end: The Director: \"I can't act on an account. I'd need a record. Somebody who was here.\" In the corridor, going out: a man with a floor buffer, who's stopped it. Mr. Upshaw: \"Evening.\" He looks at Odin. He knows the helmet. He knows the name; it's top right on seventy sheets. Mr. Upshaw: \"Fenwright. Your quadratics are coming on.\" And he switches the buffer back on.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 3
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-file-empty",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "upshaw-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-director-told",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-act4",
+   "name": "A Second-Year Who's Scared of the Canteen",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "beat": 5,
+     "rank": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "tint": "#141424",
+    "effect": "none"
+   },
+   "intro": "A phone that rings. Yours. Cassiopeia, a voice changer: \"This is Cassiopeia. You've been inside six weeks. You've seen the folder. I'm going to tell you something. I'd like you not to hang up.\" Cassiopeia: \"I founded it. I'm the reason they're out there. I should tell you: I'm also trying to end it. I've been setting people on them. Good trainers. So they'll lose, by their own rules, and go home. It's the only way I can think of to let them stop.\" Cassiopeia: \"There's a bench. By the fountain. I'll be— there'll be someone there.\"",
+   "choices": [
+    {
+     "label": "Go to the fountain.",
+     "success": {
+      "text": "A bench. A small figure in a hood.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act4-bench"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "silent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-act1-quiet",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Cassiopeia: \"You don't fill gaps. That's— I like that. I can't do phones. This is all right.\""
+    }
+   ]
+  },
+  {
+   "id": "st-act4-bench",
+   "name": "The Bench",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "pokemon": "eevee",
+    "tint": "#141424",
+    "effect": "none"
+   },
+   "intro": "The bench. A small figure in a hood. An Eevee backpack. A laptop, shut. The voice is her own now. Penny, to the fountain: \"I got sent abroad when it blew up. My dad's idea. So I wasn't there when they took the blame. I made the plan and I wasn't there. They think I'm some legend. I'm a second-year who's scared of the canteen.\" Penny: \"I wrote rule five. 'Nobody gets talked out of it.' I was so pleased. I thought: no teacher can ever sit us down and be reasonable. And now I can't— I rang Giacomo. A year ago. I said, it's Cassiopeia, you can stop. He said, 'Rule five, boss.' He was proud.\" Penny: \"So I've been hiring people to beat them. That's what I do. I sit behind a pillar and I send strong trainers to make my friends lose. It's the only door I left.\"",
+   "choices": [
+    {
+     "label": "\"They don't want to stop. They want to come back together.\"",
+     "success": {
+      "text": "Penny: \"There's no 'together' to come back to. There's a forty-second report. They'd walk into that building as 'the aggressors.'\" A pause. Penny: \"...Unless there wasn't a forty-second report. Unless there were the other forty-one.\" She gives you a number. It's her real one. You're Cassiopeia's Voice.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "star-penny-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell them it's you.\"",
+     "success": {
+      "text": "Penny: \"They'll hate me.\" \"They've a tent with your star on it.\" She's quiet for a while. Penny: \"...They kept the star?\" She gives you a number. It's her real one. You're Cassiopeia's Voice.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "star-penny-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You were a kid. You still are.\"",
+     "success": {
+      "text": "Penny: \"I was fourteen. I wrote report number forty. 'We're going to do something about it ourselves. I'm telling you first.' I thought that was the grown-up thing.\" She gives you a number. It's her real one. You're Cassiopeia's Voice.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "star-penny-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"They know it's you.\"",
+     "success": {
+      "text": "She looks up. First time. Penny: \"They— no. They think she's— how long?\" \"Always. Rule two. Nobody makes you talk.\" She puts her hood down. Then up again. Then, slowly, down. She gives you a number. It's her real one. You're the One She Meets.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "star-penny-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "penny-hood-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "penny-knows-they-know",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "ferry",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-lore-ferry",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You could say it: \"Eleven hours.\" Penny: \"...Who told you about the ferry.\" A pause. Penny: \"I wrote the timetable rule on the ferry. 'Same lessons, same day, so nobody's behind.' I thought if I couldn't be there I could at least make sure they could come back. It's the only rule I'm proud of.\""
+    },
+    {
+     "id": "ledger",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ledger-founded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Penny: \"I've read Team Ledger's accounts. They publish. Everything. I've forty-one reports nobody'll admit existed, and there's a gang in Kanto that prints its own receipts.\""
+    }
+   ]
+  },
+  {
+   "id": "st-act5",
+   "name": "As Us",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.giacomo",
+     "boss.ortega",
+     "trainer.pr/eri"
+    ],
+    "tint": "#2a1a14",
+    "effect": "none"
+   },
+   "intro": "A hill between the five bases. An oil-drum fire. Five trucks, parked in a ring, noses out. Five bosses on five bonnets. They don't do this. They've not all been in one place since the shed. Giacomo: \"Monday. The notices say Monday. We're expelled by post or we're in the yard.\" Ortega: \"I vote yard. With the engines. Loud. So loud they can't pretend. Star Barrage.\" Atticus: \"And then?\" Ortega: \"...And then they've heard us.\" Eri: \"They heard us last time. They wrote it down wrong.\" Mela: \"Somebody's got to say it. Do we want to go back?\" Nobody answers. The fire. Odin, from the edge, where the squad seconds sit: \"If we go back, do we go back as us? With the helmets? Or do we have to pretend it didn't happen? Because I'm not pretending it didn't happen.\" Giacomo: \"Rule five. Nobody's talked out of it.\" Mela: \"Yeah. I know. I know the rule. I'm asking what we want. The rule doesn't say what we want. It just says nobody can change our minds. I'm not sure we ever made them up.\" The five look at the squad of one. Eri: \"Fulu. You've been in the building. You've seen the folder. What's it like in there now?\"",
+   "choices": [
+    {
+     "label": "\"The same.\"",
+     "success": {
+      "text": "Eri: \"...Right.\" Nobody says anything. The fire.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act5-van"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"There's a Director who listened for an hour.\"",
+     "success": {
+      "text": "Giacomo: \"An hour?\" \"He didn't say 'use your words.' He didn't say anything.\" Mela: \"...Huh.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act5-van"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"There's a janitor with a box.\"",
+     "success": {
+      "text": "Atticus: \"A box?\" \"Seventy Fridays. In date order.\" Giacomo's stopped. Giacomo: \"He kept it? All of— my verse-chorus proof of Pythagoras is in a box?\" Odin: \"He said my quadratics were coming on.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act5-van"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"There's a table with Yusuf's name on. Nobody took the card off.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "star-volcano",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Mela: \"...They left the card.\" She looks at her boot. Mela: \"Eighteen months, there's forty desks in that room with nobody at them. Did they take ours away?\" \"I'll look.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act5-van"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "desks",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-desks-kept",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You've lifted the lids in 1-G. Nobody took the desks away."
+    },
+    {
+     "id": "encore",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "encore-founded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A coach in the Academy's car park. Forty-two seats. Black and pink. Big Daz: \"We heard there's a lot who've nobody watchin'. We've come to watch.\""
+    },
+    {
+     "id": "koa",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "koa-fourth",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Odin: \"A kid in Alola took his trial four times. With forty people watching. I'd take a class with forty people watching.\""
+    }
+   ]
+  },
+  {
+   "id": "st-act5-van",
+   "name": "As Us",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-worker",
+     "trainer.pr/atticus"
+    ],
+    "tint": "#2a1a14",
+    "effect": "none"
+   },
+   "intro": "Down the hill, at the Ruchbah gate, a van with no plates. Captain Zeb, on the radio, fourteen: Captain Zeb: \"Boss. There's people in our helmets. They've got the wrong boots.\" Atticus, counting, by the fire: \"Forty. Forty-one. Forty-two.\" He's counting helmets. He's got one too many. He doesn't put it away.",
+   "choices": [
+    {
+     "label": "The night's last choice: what's said, and to whom.",
+     "success": {
+      "text": "The fire's low.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-act5-told"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-act5-told",
+   "name": "As Us",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/mela",
+     "boss.giacomo",
+     "trainer.pr/eri"
+    ],
+    "tint": "#2a1a14",
+    "effect": "none"
+   },
+   "intro": "Your last choice of the night. What's said, and to whom.",
+   "choices": [
+    {
+     "label": "Nothing.",
+     "success": {
+      "text": "Monday goes as it goes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-as-us",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-van",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-told-none",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "To Odin and Yusuf.",
+     "success": {
+      "text": "They know Cassiopeia's trying to end it. In every ending, they act on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-as-us",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-van",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-told-squad",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "To the five: \"Cassiopeia wants you to stop.\"",
+     "success": {
+      "text": "It isn't breaking rule five. It's telling them what she wants; it's not talking them out of it. Silence. Then Mela: Mela: \"Then why didn't she say?\" Giacomo: \"She did. I said 'rule five, boss.' I was proud.\" He puts his headphones on. He takes them off. Atticus: \"We've been holding a door shut that she's been trying to open from the other side.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-as-us",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-van",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-told-wants",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "To the five: \"She's Penny. She's by the fountain. She thinks you don't know.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "has": "confided"
+      }
+     ],
+     "success": {
+      "text": "Eri: \"...She thinks we don't know?\" Ortega: \"She found the Varoom! In a skip! Who else'd it be!\" Mela: \"Eighteen months she's been doing a voice at us.\" She's laughing. Then she isn't. Mela: \"She's been by herself the whole time.\" They get in the trucks. They don't go to the yard. They go to the fountain.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-as-us",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-van",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-told-penny",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "st-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-op-gate",
+   "name": "Operation: The Gate",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "The order: turn challengers away. \"Who goes there.\" A battle. No talking. The gate Grunt gives you the card. On every line it says: BATTLE THEM.",
+   "choices": [
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "Who goes there. A battle. No talking. They go.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask each why they came.",
+     "success": {
+      "text": "You ask.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-op-gate-ask"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "odin-low",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "star",
+       "inside": true,
+       "suspicion": 0,
+       "suspicionBelow": 4
+      }
+     ],
+     "notice": "Odin: \"Rule two. You don't have to.\""
+    },
+    {
+     "id": "yusuf-low",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "star",
+       "inside": true,
+       "suspicion": 0,
+       "suspicionBelow": 4
+      }
+     ],
+     "notice": "Yusuf: \"It's nothing. It's a shoebox.\""
+    }
+   ]
+  },
+  {
+   "id": "st-op-gate-ask",
+   "name": "The Gate",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "A trainer with eight badges: Cassiopeia sent him. He's been told they need to lose. He doesn't know why. He feels bad about it. A second-year with a rucksack: she got a flyer. She wants to join. She's been at the gate an hour working up to it. A delivery man: forty sandwiches. From \"a friend.\" They're labelled. A woman with a pot: beans. And a boy in the wrong boots: \"School production.\"",
+   "choices": [
+    {
+     "label": "Battle the boy in the wrong boots.",
+     "success": {
+      "text": "He's the first one the base has ever turned away, and it's the right one. The gate Grunt, wrench the wrong way round: \"We've been battling the sandwich man? For a year?\" The card's rewritten. By the Grunt. In felt tip: WHO GOES THERE. AND WHAT FOR.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-gate-asked",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "grunt",
+       "name": "A boy in the wrong boots",
+       "size": 3,
+       "levelBonus": 0,
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-op-homework",
+   "name": "Operation: The Homework Run",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "The order: Friday. The folder. Under the staffroom door. In and out; don't be seen.",
+   "choices": [
+    {
+     "label": "Under the door.",
+     "success": {
+      "text": "In and out. Nobody sees.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hand it to a teacher. In person. Wait.",
+     "success": {
+      "text": "The staffroom door. You knock.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-op-homework-door"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "odin-mid",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "star",
+       "inside": true,
+       "standing": 5
+      }
+     ],
+     "notice": "Odin: \"You walk at my speed. Nobody walks at my speed.\""
+    },
+    {
+     "id": "yusuf-mid",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "star",
+       "inside": true,
+       "standing": 5
+      }
+     ],
+     "notice": "Yusuf: \"D'you want to see it erupt? I've done it in the sink.\""
+    },
+    {
+     "id": "odin-sus",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "star",
+       "inside": true,
+       "suspicion": 4,
+       "suspicionBelow": 7
+      }
+     ],
+     "notice": "Odin: \"You were at the staffroom door. In daylight. That's brave or stupid. I've not decided.\""
+    }
+   ]
+  },
+  {
+   "id": "st-op-homework-door",
+   "name": "The Staffroom Door",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/paldean-sv-scientist"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "Mr. Jacq, opening it, with a mug: \"Yes?\" You hold out a folder. Forty names. He reads the first one. Top right. Mr. Jacq: \"Fenwright.\" The second. Mr. Jacq: \"...These are 1-G.\" He looks at you. At the helmet. Mr. Jacq: \"You're one of—\" \"I'm the post.\" Mr. Jacq: \"Wait there. Don't go. Don't go.\" He goes in. A long time. He comes back with a red pen and a chair. Mr. Jacq: \"I'm going to mark the first one now. In front of you. So you can tell them you saw it done.\"",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "He marks Odin's. In a corridor. On his knee. It takes forty minutes. You wait. Mr. Jacq: \"Nine out of ten. He's dropped a sign in question six. Tell him he's dropped a sign.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-homework-marked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-op-flag",
+   "name": "Operation: The Flag",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "The order: a new hill. A new banner. Somewhere remote; somewhere nobody'll take it down. Odin, with a pole: \"The far ridge. That's the order. Nobody goes up there.\"",
+   "choices": [
+    {
+     "label": "The far ridge.",
+     "success": {
+      "text": "It goes up on the far ridge. Nobody goes up there.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nobody sees up there.\"",
+     "success": {
+      "text": "You point. A nearer hill. Bare. It faces the Academy's east windows. It's the view from Homeroom 1-G. Odin: \"...That's— we'd be looking right at it. They'd be looking right at us.\" \"That's what a flag's for.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-op-flag-dawn"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "mela",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-inside-act2",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "At the oil drum, Mela: \"He's thirteen. I'm not soft.\" Nobody said she was."
+    },
+    {
+     "id": "homework",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-homework-marked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Odin, to anyone: \"Nine out of ten. I dropped a sign. In six.\" He's told forty people."
+    },
+    {
+     "id": "odin-after",
+     "when": [
+      {
+       "kind": "evil",
+       "has": "loyalty-test"
+      }
+     ],
+     "notice": "Odin: \"I'm glad you told them. I'd have had to, and I'd have made it sound worse.\""
+    }
+   ]
+  },
+  {
+   "id": "st-op-flag-dawn",
+   "name": "The Flag",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "Dawn. A pole, a rope, a wind.",
+   "choices": [
+    {
+     "label": "Raise it.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "It goes up at dawn. In 1-G, at registration: Mr. Jacq, reading forty names to forty empty desks. He looks up. Out of the window. A star, on a hill, a mile off. He goes on reading. He's smiling. At the end, he adds a forty-first: \"Flag. Present.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-flag-raised",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The wind takes it twice. It goes up at dawn anyway. In 1-G, at registration: Mr. Jacq, reading forty names to forty empty desks. He looks up. Out of the window. A star, on a hill, a mile off. He goes on reading. He's smiling. At the end, he adds a forty-first: \"Flag. Present.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-flag-raised",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-op-canteen",
+   "name": "Operation: The Canteen",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "The order: \"liberate\" lunch. In by the kitchen door; forty trays; out. Odin, at the canteen's double doors, in a helmet: \"It's one o'clock. There's four hundred people in there.\" Odin: \"I've not been in since report twenty-three. That was mine as well. 'Is there somewhere else I'm allowed to eat.'\"",
+   "choices": [
+    {
+     "label": "In by the kitchen door.",
+     "success": {
+      "text": "Forty trays. Out. The squad eats from the pot that night.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay. Sit down. At a table. In daylight.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 400
+      }
+     ],
+     "success": {
+      "text": "You go in first. Two lunches: ₽400. The Honest Trade Card: it's lunch. You sit. At a table by the bins. You put the second tray opposite. The doors. A boy in a star helmet. Four hundred people don't look up; it's lunch; they're eating. He walks to the table. It takes him a long time. He sits. He takes the helmet off and puts it on the bench beside him. Odin: \"...It's chips.\" Odin: \"I'd built it up. In my head. Eighteen months. It's just a room with chips in.\" Nothing's stolen. The squad eats from the pot that night, as usual. Odin eats twice.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -400
+       },
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-canteen",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "odin-high",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "star",
+       "inside": true,
+       "standing": 8
+      }
+     ],
+     "notice": "Odin: \"If I go in, I want you on my left. That's where the door is.\""
+    },
+    {
+     "id": "yusuf-high",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "star",
+       "inside": true,
+       "standing": 8
+      }
+     ],
+     "notice": "Yusuf: \"When I'm in Star and in school, will you tell people that's allowed?\""
+    },
+    {
+     "id": "flag",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-flag-raised",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "At the oil drum, a Grunt: \"You can see the school from the flag. You can see our room.\""
+    }
+   ]
+  },
+  {
+   "id": "st-op-truck",
+   "name": "Operation: The Truck",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.ortega",
+     "boss.drive/paldean-sv-worker"
+    ],
+    "pokemon": "revavroom",
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "The order: guard the Ruchbah Starmobile. There's been a van.",
+   "choices": [
+    {
+     "label": "Guard it.",
+     "success": {
+      "text": "You stand by it all night. Nothing comes.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wash it. With the kids who built it.",
+     "success": {
+      "text": "A bucket. A sponge.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-op-truck-wash"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "canteen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-canteen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Giacomo: \"Fenwright ate in the canteen? In daylight? And nothing—\" Odin: \"It's chips.\""
+    },
+    {
+     "id": "pots",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-pot",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "At the oil drum, everybody: \"There's three pots now.\""
+    }
+   ]
+  },
+  {
+   "id": "st-op-truck-wash",
+   "name": "The Truck",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ortega",
+     "boss.drive/paldean-sv-worker"
+    ],
+    "pokemon": "revavroom",
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "Ortega, under the chassis. Captain Zeb, on the bonnet. A Revavroom the size of a shed, purring. Ortega, from underneath: \"You don't guard an engine. You maintain it.\" Each panel washed is a thing said. The bonnet, Zeb: Zeb: \"She runs hot. She doesn't like running hot. I can tell. She goes quiet after.\" The wheels, Ortega: Ortega: \"My dad thinks it's a phase. He's offered to ring someone. I'd rather be expelled than rung up for.\" The star on the door, a Grunt: \"I painted that. I'd never painted anything. I didn't know I could do a straight line.\" The grille: you. The Revavroom's looking at you. Close up. It's got eyes.",
+   "choices": [
+    {
+     "label": "\"Does she want to?\"",
+     "success": {
+      "text": "Ortega: \"...Does who want to what.\" \"The engine. Run.\" He comes out from under. Ortega: \"I've never— it's an engine.\" He looks at it. It looks at him. Ortega: \"It's a Revavroom. I know it's a Revavroom. I've been calling her 'the engine' for a year and a half so I'd not have to—\" He puts a hand on the grille. Ortega: \"D'you want to? Girl? You can stop. I'd still feed you.\" She revs. Once. Low. Zeb: \"That's yes.\" Ortega: \"How d'you know.\" Zeb: \"Torque.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-engine-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-op-call",
+   "name": "Operation: The Call",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "tint": "#141424",
+    "effect": "none"
+   },
+   "intro": "The order: take Cassiopeia's orders for Monday. Write them down. Relay them. Cassiopeia, the voice changer: \"Monday. Positions. Segin at the east wall. Schedar—\"",
+   "choices": [
+    {
+     "label": "Write them down.",
+     "success": {
+      "text": "Eleven items. You write them down. You relay them.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"How are you?\"",
+     "success": {
+      "text": "Silence. The changer hums.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-op-call-2"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "acceptable",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "star-gate-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "(changer) \"Acceptable.\" (a click) \"—that was really good, actually—\" (a click) \"Acceptable.\""
+    },
+    {
+     "id": "speech",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "star",
+       "inside": true,
+       "after": 6,
+       "has": "confided"
+      }
+     ],
+     "notice": "Penny: \"I've an eleven-page speech. Giacomo says one line. What's the one line?\""
+    }
+   ]
+  },
+  {
+   "id": "st-op-call-2",
+   "name": "The Call",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "tint": "#141424",
+    "effect": "none"
+   },
+   "intro": "Cassiopeia: \"...That's not on the agenda.\" \"I know.\" Cassiopeia: \"I've an agenda. I've eleven items. I made it so I'd not have to—\" The changer cuts out. Or she's turned it off. Penny: \"I'm really bad. Actually. Since you ask. I've not slept. I keep thinking: Monday, they're either expelled or they're in a yard with engines I designed, and either way I'm behind a pillar.\"",
+   "choices": [
+    {
+     "label": "\"Come to the yard.\"",
+     "success": {
+      "text": "A long time. Penny: \"...I'll think about it. That's not no.\" The orders are still relayed. All eleven items. There's a twelfth, in her own voice, that you're asked to pass on: \"And tell them I'll be there. Not on the phone.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-call-asked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What d'you need?\"",
+     "success": {
+      "text": "Penny: \"...Somebody to say I can stop being Cassiopeia. I can't say it. Rule five. I'd be talking myself out of it.\" \"You can stop being Cassiopeia.\" A very long silence. Penny: \"That— doesn't count. You're not— does that count?\" \"Rule five says nobody gets talked out of it. I'm not talking you out of it. I'm telling you you're allowed.\" Penny: \"That's a loophole.\" \"You wrote it.\" She laughs. It's got the hiccups in it. The orders are still relayed. All eleven items. There's a twelfth, in her own voice, that you're asked to pass on: \"And tell them I'll be there. Not on the phone.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-call-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "penny-allowed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Stay on the line.)",
+     "success": {
+      "text": "Neither of you says anything for a while. It isn't awkward. The orders are still relayed. All eleven items. There's a twelfth, in her own voice, that you're asked to pass on: \"And tell them I'll be there. Not on the phone.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-call-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-near-3",
+   "name": "How Near",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "Odin walks to the school, evenings. To see how near his legs'll go. You walk with him. The end of the road. He can see the clock.",
+   "choices": [
+    {
+     "label": "Walk beside him.",
+     "success": {
+      "text": "Odin: \"That's it. That's the record. I can see it.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-near-4",
+   "name": "How Near",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "Odin walks to the school, evenings. To see how near his legs'll go. You walk with him. The bus shelter opposite.",
+   "choices": [
+    {
+     "label": "Walk beside him.",
+     "success": {
+      "text": "Odin: \"I used to get off here. I'd my hand on the pole, like this. I can't let go of the pole.\" He lets go of the pole. He puts his hand back.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-near-5",
+   "name": "How Near",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "Odin walks to the school, evenings. To see how near his legs'll go. You walk with him. Inside. At night. With a job to do.",
+   "choices": [
+    {
+     "label": "Walk beside him.",
+     "success": {
+      "text": "Odin: \"It's easier with a reason. I didn't have to be there. I just had to fetch something.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-near-6",
+   "name": "How Near",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "Odin walks to the school, evenings. To see how near his legs'll go. You walk with him. The gate. In daylight. Break's on; there's noise.",
+   "choices": [
+    {
+     "label": "Walk beside him.",
+     "success": {
+      "text": "Odin: \"They're playing football. I thought it'd be— I don't know what I thought. It's just football.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-near-7",
+   "name": "How Near",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#1c2038",
+    "effect": "none"
+   },
+   "intro": "Odin walks to the school, evenings. To see how near his legs'll go. You walk with him. The yard. He stands in it. For a minute. Nobody looks.",
+   "choices": [
+    {
+     "label": "Walk beside him.",
+     "success": {
+      "text": "Odin: \"Nobody looked. I thought they'd all look.\" A pause. Odin: \"I'm in the yard. Fulu. I'm in the yard.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-lesson",
+   "name": "Your Lesson",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.giacomo"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "A crate. A whiteboard. Twenty kids on the ground. A timetable with a gap in it. Giacomo: \"Fourth period's 'Battle Studies.' We've nobody for it. Eri does PE; it's not the same. You've been everywhere. Teach.\"",
+   "choices": [
+    {
+     "label": "\"What to do after you lose.\"",
+     "success": {
+      "text": "Twenty kids write it down. It's the only lesson they've had on it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-lesson-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's not a tool. Ask it.\"",
+     "requires": [
+      {
+       "kind": "bondLevel",
+       "atLeast": 5
+      }
+     ],
+     "success": {
+      "text": "Twenty kids look at their Pokémon. One asks hers something, quietly.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-lesson-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"There's others. Like you. They're all right.\"",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "ledger-founded",
+        "ember-founded",
+        "tidepool-founded",
+        "encore-founded",
+        "lantern-founded",
+        "openhand-founded"
+       ]
+      }
+     ],
+     "success": {
+      "text": "What you did in another region, with people who'd been left out. Twenty kids listen as if it were the news.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-lesson-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Type match-ups.\"",
+     "success": {
+      "text": "Giacomo: \"It's on the syllabus. Fair enough.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-lesson-test"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-lesson-test",
+   "name": "Your Lesson",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giacomo",
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "A Grunt, hand up: \"Is this on the test?\" Giacomo: \"There's no test. There's never been a test. We've nobody to set one.\" The Grunt: \"...Can we have one? I'd like to know if I'm any good.\"",
+   "choices": [
+    {
+     "label": "Set one question.",
+     "success": {
+      "text": "One question. Whatever you like. It's marked the next stage. Everybody passes. Atticus sews a pass-mark onto each sleeve.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "star-lesson",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-seventh-star",
+   "name": "The Seventh Star",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 4,
+     "rank": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/atticus"
+    ],
+    "tint": "#141424",
+    "effect": "none"
+   },
+   "intro": "A hill. No lights. Atticus, with a needle, and a sky. Atticus: \"Cassiopeia's five stars. The W. Segin, Ruchbah, Navi, Schedar, Caph. One each. She picked. She said: 'A constellation's just some dots somebody decided went together.'\" Atticus: \"There's a sixth. Achird. Faint. And a seventh, fainter: Fulu. Nobody uses those. She said to keep them back. For whoever came after.\" He holds up your helmet. He's sewing something inside the band, where the \"spare\" note was. Atticus: \"I've been unpicking 'spare.' It's taken a week. I do very small stitches.\"",
+   "choices": [
+    {
+     "label": "\"What goes there now?\"",
+     "success": {
+      "text": "He shows it. Seven tiny points. A W, and two more. Atticus: \"That's all of us. With you in. And a place for her.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-seventh",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why'd she keep two back?\"",
+     "success": {
+      "text": "Atticus: \"She said: 'There'll be someone who should've been in the room and wasn't. And someone who wasn't in the room and should be.' I didn't understand it. I think the first one's her.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-seventh",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who's Achird for?\"",
+     "success": {
+      "text": "He doesn't answer. He goes on sewing. Very small stitches.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "star-seventh",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-voice-changer",
+   "name": "Voice Changer",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 5,
+     "rank": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.penny"
+    ],
+    "tint": "#141424",
+    "effect": "none"
+   },
+   "intro": "The phone rings. It's late. Cassiopeia, the voice changer: \"Fulu. Report. Segin's morale. Schedar's supplies. Whether Ortega's eating.\" You report. Cassiopeia: \"Good. And— is Mela sleeping? She doesn't. She says she does.\" A click. The changer's cut out. She hasn't noticed. Penny, her own voice, small, tired: \"—because she used to ring me at two in the morning, before. Just to say she was awake. And I'd say, me too. And we'd not say anything else. We'd just both be awake.\" A silence. She's heard herself. Penny: \"...It's off. Isn't it. The thing.\"",
+   "choices": [
+    {
+     "label": "\"It's off.\"",
+     "success": {
+      "text": "Penny: \"How long?\" \"Since 'is Mela sleeping.'\" Penny: \"Oh, no.\" A pause. Penny: \"...It's quite nice. Talking like this. I'd forgotten what I sound like.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "She doesn't switch it back on. Neither of you hangs up for a while.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Ring her. At two. Don't say who.\"",
+     "success": {
+      "text": "She does. That night. You aren't on the call. The next day, at Schedar: Mela: \"Somebody rang me. Two in the morning. Didn't say a word. Just breathed. I said, 'Me too.'\" She's lacing a boot. She's smiling at it. Mela: \"I slept after. First time in a year.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "penny-rang",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-giacomo-alone",
+   "name": "Giacomo, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.giacomo"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "At the decks, headphones round his neck. Giacomo: \"I wrote the team song. Nobody's heard the last verse. It's about going back. I can't finish it till I know if we do.\"",
+   "choices": [
+    {
+     "label": "\"Play what you've got.\"",
+     "success": {
+      "text": "He does. It stops where the last verse should be. He doesn't fill the gap. Neither do you.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What rhymes with 'homeroom'?\"",
+     "success": {
+      "text": "Giacomo: \"Nothing. I've checked. That's half the problem.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Write it as if you do.\"",
+     "success": {
+      "text": "He picks up a pen. He puts it down. Giacomo: \"...I'll write it in pencil.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giacomo-pencil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-mela-alone",
+   "name": "Mela, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mela"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "Fixing a boot. Mela: \"I was the one who shouted. That day. The bullies ran 'cause I shouted. So if we got blamed, I got us blamed. Nobody's said. I've said it to myself every night.\"",
+   "choices": [
+    {
+     "label": "\"You shouted for them.\"",
+     "success": {
+      "text": "Mela: \"...Yeah. I did.\" She goes back to the boot.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"They'd have run anyway.\"",
+     "success": {
+      "text": "Mela: \"Maybe.\" She doesn't believe it. She'd like to.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Has anyone thanked you?\"",
+     "success": {
+      "text": "She's stopped lacing. Mela: \"...No. I didn't do it for— no. Nobody has.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "st-mela-thank"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-mela-thank",
+   "name": "Mela, Alone",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/mela"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "The boot, half laced.",
+   "choices": [
+    {
+     "label": "\"Thank you.\"",
+     "success": {
+      "text": "She looks at the boot for a long time. She doesn't say anything. She finishes the lace, very carefully.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mela-thanked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing.)",
+     "success": {
+      "text": "She finishes the lace.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-atticus-alone",
+   "name": "Atticus, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/atticus"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "Sewing. Atticus: \"I made every uniform. Forty. By hand. If we disband, what do I do with forty helmets? I'm not being funny. I've nowhere to put them.\"",
+   "choices": [
+    {
+     "label": "\"A school club needs a kit.\"",
+     "success": {
+      "text": "He stops sewing. Atticus: \"...It would, wouldn't it.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Keep one.\"",
+     "success": {
+      "text": "Atticus: \"I've kept one. I've kept one for eighteen months. That's how I know it doesn't help.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Who taught you to sew?\"",
+     "success": {
+      "text": "Atticus: \"Nobody. A book. I sewed under the desk, in lessons. It was the only thing I could do with my hands that nobody could take off me.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "openhand",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "openhand-founded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A tea towel in Atticus's tent: ASK THE ONE IT'S ABOUT. Atticus: \"Nobody did. Eighteen months. They asked the school.\""
+    }
+   ]
+  },
+  {
+   "id": "st-ortega-alone",
+   "name": "Ortega, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.ortega"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "On a far too expensive chair. Ortega: \"My family could've had the bullies expelled in a day. I never told them. I didn't want it bought. I wanted us to do it. And then it went wrong, and I could still buy it right, and I still won't. Is that pride? Giacomo says it's pride.\"",
+   "choices": [
+    {
+     "label": "\"It's pride.\"",
+     "success": {
+      "text": "Ortega: \"...Yeah. Fine. It's pride. I'm keeping it.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"It's respect.\"",
+     "success": {
+      "text": "He looks at you as if you'd paid him. Ortega: \"Tell Giacomo.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Buy the truck a new engine instead.\"",
+     "success": {
+      "text": "Ortega: \"I don't buy her engines. I build them. That's the whole point.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "st-eri-alone",
+   "name": "Eri, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/eri"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "In the dojo, cooling down. Eri: \"I'm the strong one. So I stand at the front. Nobody's asked if I'm frightened. I'm always frightened. I'm just big.\"",
+   "choices": [
+    {
+     "label": "\"I'm asking.\"",
+     "success": {
+      "text": "Eri: \"...Yeah. I am. Thanks.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eri-asked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who stands in front of you?\"",
+     "success": {
+      "text": "Eri: \"Nobody. That's the job.\" She stretches. She doesn't look at you.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Sit down a minute.\"",
+     "success": {
+      "text": "She sits. She doesn't say anything. It's the first time you've seen her sit.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lantern",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lantern-founded",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A lamp at the Caph base gate. Eri: \"Somebody posted it from Sinnoh. With a note. 'Ask, and then wait.' I don't know who it's for. I think it's for me.\""
+    }
+   ]
+  },
+  {
+   "id": "st-odin-asks",
+   "name": "Odin Asks",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "suspicion": 7,
+     "suspicionBelow": 10,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#241830",
+    "effect": "none"
+   },
+   "intro": "There isn't a loyalty test. Team Star doesn't test people. Odin, by the oil drum, not looking at you: Odin: \"You've been talking to the Director. I saw. Are you going to tell them, or am I?\"",
+   "choices": [
+    {
+     "label": "\"I'll tell them.\"",
+     "success": {
+      "text": "You tell them. Nobody shouts. Odin, after: \"I'm glad you told them. I'd have had to, and I'd have made it sound worse.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -2
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You tell them.\"",
+     "success": {
+      "text": "He does. He makes it sound worse. They listen anyway. Rule two.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Let's both.\"",
+     "success": {
+      "text": "You tell them together. It takes a while. Odin, after: \"I'm glad you told them. I'd have had to, and I'd have made it sound worse.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "yusuf",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-yusuf",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Yusuf's by the gatehouse. He catches your eye, and nods, very small, as if to say: go on."
+    }
+   ]
+  },
+  {
+   "id": "st-found-out",
+   "name": "Found Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "star",
+     "inside": true,
+     "suspicion": 10,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "paldea"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/mela",
+     "trainer.pr/star_grunt_m"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "The gate's shut when you come back. Mela's on it, in her dad's boots, and she won't meet your eye. Mela: \"You've been in the building more than we have. With the Director. It's fine. It's not a crime. But it's Monday soon, and we can't have somebody in the tent who's on both sides of the gate.\" Nobody battles you. Nobody shouts. That's not what they're for. Odin, behind her, holds out his hand for the helmet.",
+   "choices": [
+    {
+     "label": "Give it back.",
+     "success": {
+      "text": "You give it back. Odin turns it over and puts it under his arm, carefully, like something he'll be asked to look after. You're outside Team Star now. Nobody's angry. That's somehow worse.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "star-found-out",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

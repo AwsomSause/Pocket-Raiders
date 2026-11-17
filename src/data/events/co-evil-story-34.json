@@ -1,0 +1,3585 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "sk-final-choice",
+   "name": "The Final Choice",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters",
+     "boss.guzma",
+     "boss.lillie-z"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "glint"
+   },
+   "intro": "The upper deck of Aether Paradise. The sky coming apart like wet paper. Pale bells drifting in it. Walking toward it: Lusamine, in white, not hurrying. Behind her, for once not in front of anyone: Guzma. A bat. No bandana: she's asked him to take it off. At the rail: Lillie, with a bag that's moving. At the lift: Wicke, with a pile of forms. Faba, with a key. On the dock, below: a van. Forty kids. Plumeria, with a book. Beside you: your squad. Lusamine: \"It's open. Do you see them? They don't change. They don't leave. They only want.\" Lusamine, to Guzma, without turning: \"Come along, dear. Hold the door. A kahuna keeps his island's gate.\" Guzma: \"...Yeah.\" He doesn't move yet. Lusamine, to you: \"And you're the one he's fond of. Bring him. He dawdles.\"",
+   "choices": [
+    {
+     "label": "Hold the door.",
+     "success": {
+      "text": "You go to the gate, and put your hand on it. Guzma looks at you. He doesn't say anything.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-final-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-plan-hau"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand between her and the gate.",
+     "success": {
+      "text": "You walk past her. You turn round. You're between Lusamine and the sky.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-turn-between"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to Aether's side.",
+     "success": {
+      "text": "You cross the deck. Not to the gate. To Wicke.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-placed-warn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give me both.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "rank": 5,
+       "has": "confided"
+      }
+     ],
+     "success": {
+      "text": "Everyone on the deck looks round. Including the ones who weren't listening.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-final-both",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-deck"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "case",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "guzma-knows-case",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Guzma's already seen what's at the end of the walk. He keeps looking at the glass."
+    },
+    {
+     "id": "pile",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "wicke-pile",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Wicke's pile: two hundred and six forms, unsigned."
+    },
+    {
+     "id": "null",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "null-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Gladion's at the rail with something that's got a name."
+    }
+   ]
+  },
+  {
+   "id": "ae-final-choice",
+   "name": "The Final Choice",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters",
+     "boss.guzma",
+     "boss.lillie-z"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "glint"
+   },
+   "intro": "The upper deck of Aether Paradise. The sky coming apart like wet paper. Pale bells drifting in it. Walking toward it: Lusamine, in white, not hurrying. Behind her, for once not in front of anyone: Guzma. A bat. No bandana: she's asked him to take it off. At the rail: Lillie, with a bag that's moving. At the lift: Wicke, with a pile of forms. Faba, with a key. On the dock, below: a van. Forty kids. Plumeria, with a book. Beside you: your squad. Lusamine: \"It's open. Do you see them? They don't change. They don't leave. They only want.\" Lusamine, to Guzma, without turning: \"Come along, dear. Hold the door. A kahuna keeps his island's gate.\" Guzma: \"...Yeah.\" He doesn't move yet. Lusamine, to you: \"Deputy. You'll come. You've never once tried to leave.\"",
+   "choices": [
+    {
+     "label": "Go with her.",
+     "success": {
+      "text": "You go to her side. She takes your arm, as she'd take a coat.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-final-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-plan-hau"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand between her and the gate.",
+     "success": {
+      "text": "You walk past her. You turn round. You're between Lusamine and the sky.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-turn-between"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to Skull's side.",
+     "success": {
+      "text": "You cross the deck. Not to the gate. To Faba.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-final-case",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-case-key"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give me both.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "rank": 5,
+       "has": "confided"
+      }
+     ],
+     "success": {
+      "text": "Everyone on the deck looks round. Including the ones who weren't listening.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-final-both",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-deck"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gohome",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aether-gohome-said",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You've the sign's second sentence in your pocket. \"GO HOME.\""
+    },
+    {
+     "id": "pile",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "wicke-pile",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Wicke's pile: two hundred and six forms, unsigned."
+    },
+    {
+     "id": "null",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "null-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Gladion's at the rail with something that's got a name."
+    }
+   ]
+  },
+  {
+   "id": "al-plan-hau",
+   "name": "Phase 1: The Stairs",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.hau-stance"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Your party holds the deck. Three come up. The first is Hau. Hau: \"You were nice. At the School. I told everyone you were nice.\"",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "He doesn't smile. He always smiles.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.hau-stance",
+       "team": [
+        "raichu-alola",
+        "tauros",
+        "noivern"
+       ],
+       "name": "Hau",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-plan-rival"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-plan-rival",
+   "name": "Phase 1: The Stairs",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Your rival comes up the stairs and stops at the top, and looks at who you're standing with.",
+   "choices": [
+    {
+     "label": "\"Go home.\"",
+     "success": {
+      "text": "\"Not without you.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-plan-nanu"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "\"There's a reason.\"",
+     "success": {
+      "text": "\"Then show me.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -1
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-plan-nanu"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-plan-nanu",
+   "name": "Phase 1: The Stairs",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.nanu"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Nanu: \"Thirty years a cop. I've held a lot of doors for the wrong people. Lemme tell you how it feels after.\" He doesn't. He sends out a Persian.",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "His cats come out one at a time, unhurried.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.nanu",
+       "team": [
+        "persian-alola",
+        "sableye",
+        "krookodile",
+        "honchkrow"
+       ],
+       "name": "Nanu",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-plan-pylons"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-plan-pylons",
+   "name": "Phase 2: The Pylons",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.nanu"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Nanu, beaten, sitting down on the deck among his cats: Nanu: \"Mm. Go on, then. I'll be here. Somebody's gotta feed these when it goes wrong.\" Three pylons to prime. The defenders try to short them.",
+   "choices": [
+    {
+     "label": "Prime the pylons.",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "aether"
+      }
+     ],
+     "success": {
+      "text": "The defenders come at the pylons.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The defenders",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-plan-through-ae"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Prime the pylons.",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "skull"
+      }
+     ],
+     "success": {
+      "text": "The defenders come at the pylons. Guzma primes the third himself. His hands are shaking. He does it wrong twice. Guzma: \"Kahuna keeps the gate. Kahuna keeps the gate. That's a thing, right? That's a real thing they do?\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The defenders",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-plan-through-sk"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "skull",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "skull"
+      }
+     ],
+     "notice": "Guzma's at the third pylon already, with his sleeves pushed up."
+    }
+   ]
+  },
+  {
+   "id": "al-plan-through-ae",
+   "name": "Phase 3: Through",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters",
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#10101c",
+    "effect": "fog"
+   },
+   "intro": "You go through with her. A sea with no water in it. Black rock. Glass threads. A hundred pale bells. Lusamine: \"There. Do you feel it? Nothing's going anywhere.\" One of the bells comes down. It settles on her like a hat, and then like a veil, and then there isn't a line between them. The Mother Beast, her voice and a chord under it: \"Look how still they are. Look how they stay. Deputy. You'll stay.\" She's happy. She isn't herself. She can't be pulled out. She can be reminded.",
+   "choices": [
+    {
+     "label": "Stay.",
+     "success": {
+      "text": "A turn. Another. Your party's Pokémon are being put back: one by one, into their Balls, by threads. \"Everything in its place.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-plan-stay"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The sign had a second sentence.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "aether-gohome-said",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Mother Beast: \"...Go home.\" The chord wavers. \"That was his. I took it down. It told everything to go.\" You pull. It's a bar: your hand in hers. She doesn't come; but you do. The gate doesn't close cleanly. Alola has Beasts in it now: once a stage, a wild battle may be an Ultra Beast, frightened, that flees at half health. Lusamine has what stays. Aether runs itself. The cold room's still cold. Your Pokémon that were put back, on the far side, are slow to come out of their Balls for the rest of Alola; it fades. Lusamine is on the far side. Happy. Not herself. Guzma went; or turned round for forty voices. Plumeria feeds forty, still. Wicke signs intake, and nothing else. Faba is the last line. Koa holds a door he doesn't understand. Zia went through after her, on a rope; Uri held the rope, and didn't let go. Lux was kept well out of it, by everyone. Lillie is at the rail. Gladion went in after his mother. Tall Tale is in glass. The man at the Pelago hums, and doesn't know why he's sad today. Nanu feeds the cats. Po Town is forty and a bat. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-far-side",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-beasts-loose",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"He's lost. He grows beans.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "alola-mohn-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The largest bell goes dark. You pull. It's a bar: your hand in hers. She doesn't come; but you do. The gate doesn't close cleanly. Alola has Beasts in it now: once a stage, a wild battle may be an Ultra Beast, frightened, that flees at half health. Lusamine has what stays. Aether runs itself. The cold room's still cold. Your Pokémon that were put back, on the far side, are slow to come out of their Balls for the rest of Alola; it fades. Lusamine is on the far side. Happy. Not herself. Guzma went; or turned round for forty voices. Plumeria feeds forty, still. Wicke signs intake, and nothing else. Faba is the last line. Koa holds a door he doesn't understand. Zia went through after her, on a rope; Uri held the rope, and didn't let go. Lux was kept well out of it, by everyone. Lillie is at the rail. Gladion went in after his mother. Tall Tale is in glass. The man at the Pelago hums, and doesn't know why he's sad today. Nanu feeds the cats. Po Town is forty and a bat. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-far-side",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-beasts-loose",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull.",
+     "success": {
+      "text": "You've nothing to say. You pull anyway. It's a bar: your hand in hers. Zia comes through after you, with a rope from the dock round her waist, and Uri on the other end of it, doing what he's told: \"Hold this, and don't let go.\" He doesn't. The gate doesn't close cleanly. Alola has Beasts in it now: once a stage, a wild battle may be an Ultra Beast, frightened, that flees at half health. Lusamine has what stays. Aether runs itself. The cold room's still cold. Your Pokémon that were put back, on the far side, are slow to come out of their Balls for the rest of Alola; it fades. Lusamine is on the far side. Happy. Not herself. Guzma went; or turned round for forty voices. Plumeria feeds forty, still. Wicke signs intake, and nothing else. Faba is the last line. Koa holds a door he doesn't understand. Zia went through after her, on a rope; Uri held the rope, and didn't let go. Lux was kept well out of it, by everyone. Lillie is at the rail. Gladion went in after his mother. Tall Tale is in glass. The man at the Pelago hums, and doesn't know why he's sad today. Nanu feeds the cats. Po Town is forty and a bat. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-far-side",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-beasts-loose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zia-rope",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-plan-stay",
+   "name": "Phase 3: Through",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters"
+    ],
+    "tint": "#10101c",
+    "effect": "fog"
+   },
+   "intro": "The third turn. The threads are at your belt. The game asks again.",
+   "choices": [
+    {
+     "label": "Stay.",
+     "success": {
+      "text": "You stay a moment longer. Then a rope comes taut round your waist: Zia, with a rope from the dock, and Uri on the other end of it, doing what he's told. \"Hold this, and don't let go.\" He doesn't. You come back. She doesn't. The gate doesn't close cleanly. Alola has Beasts in it now: once a stage, a wild battle may be an Ultra Beast, frightened, that flees at half health. Lusamine has what stays. Aether runs itself. The cold room's still cold. Your Pokémon that were put back, on the far side, are slow to come out of their Balls for the rest of Alola; it fades. Lusamine is on the far side. Happy. Not herself. Guzma went; or turned round for forty voices. Plumeria feeds forty, still. Wicke signs intake, and nothing else. Faba is the last line. Koa holds a door he doesn't understand. Zia went through after her, on a rope; Uri held the rope, and didn't let go. Lux was kept well out of it, by everyone. Lillie is at the rail. Gladion went in after his mother. Tall Tale is in glass. The man at the Pelago hums, and doesn't know why he's sad today. Nanu feeds the cats. Po Town is forty and a bat. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-far-side",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-beasts-loose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zia-rope",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pull.",
+     "success": {
+      "text": "You pull. It's a bar: your hand in hers. She doesn't come; but you do. The threads let go of the last Ball. The gate doesn't close cleanly. Alola has Beasts in it now: once a stage, a wild battle may be an Ultra Beast, frightened, that flees at half health. Lusamine has what stays. Aether runs itself. The cold room's still cold. Your Pokémon that were put back, on the far side, are slow to come out of their Balls for the rest of Alola; it fades. Lusamine is on the far side. Happy. Not herself. Guzma went; or turned round for forty voices. Plumeria feeds forty, still. Wicke signs intake, and nothing else. Faba is the last line. Koa holds a door he doesn't understand. Zia went through after her, on a rope; Uri held the rope, and didn't let go. Lux was kept well out of it, by everyone. Lillie is at the rail. Gladion went in after his mother. Tall Tale is in glass. The man at the Pelago hums, and doesn't know why he's sad today. Nanu feeds the cats. Po Town is forty and a bat. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-far-side",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-beasts-loose",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-plan-through-sk",
+   "name": "Phase 3: Through",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#10101c",
+    "effect": "fog"
+   },
+   "intro": "Guzma's at the door. She's gone through. He's meant to follow. There's a case in there, in the glass and the dark. He can see it. It's his height. Guzma: \"Yo. Number One. She picked me. First time. You get that? First time anybody—\"",
+   "choices": [
+    {
+     "label": "\"Go, then.\"",
+     "success": {
+      "text": "He goes. You hold the door. The bat's on the deck where he put it down. Forty kids and a bat on a deck: they look to Number One. The gate doesn't close cleanly. Alola has Beasts in it now: once a stage, a wild battle may be an Ultra Beast, frightened, that flees at half health. Lusamine has what stays. Aether runs itself. The cold room's still cold. Your Pokémon that were put back, on the far side, are slow to come out of their Balls for the rest of Alola; it fades. Lusamine is on the far side. Happy. Not herself. Guzma went; or turned round for forty voices. Plumeria feeds forty, still. Wicke signs intake, and nothing else. Faba is the last line. Koa holds a door he doesn't understand. Zia went through after her, on a rope; Uri held the rope, and didn't let go. Lux was kept well out of it, by everyone. Lillie is at the rail. Gladion went in after his mother. Tall Tale is in glass. The man at the Pelago hums, and doesn't know why he's sad today. Nanu feeds the cats. Po Town is forty and a bat. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-far-side",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-beasts-loose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guzma-went",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"She pays your rent.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "skull-knows-boat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He stops. \"...She what.\" He looks at the van on the dock, and the forty, and the book in Plumeria's hand. He turns round. Forty kids, a bat, and Guzma on a deck: they look to Number One. The gate doesn't close cleanly. Alola has Beasts in it now: once a stage, a wild battle may be an Ultra Beast, frightened, that flees at half health. Lusamine has what stays. Aether runs itself. The cold room's still cold. Your Pokémon that were put back, on the far side, are slow to come out of their Balls for the rest of Alola; it fades. Lusamine is on the far side. Happy. Not herself. Guzma went; or turned round for forty voices. Plumeria feeds forty, still. Wicke signs intake, and nothing else. Faba is the last line. Koa holds a door he doesn't understand. Zia went through after her, on a rope; Uri held the rope, and didn't let go. Lux was kept well out of it, by everyone. Lillie is at the rail. Gladion went in after his mother. Tall Tale is in glass. The man at the Pelago hums, and doesn't know why he's sad today. Nanu feeds the cats. Po Town is forty and a bat. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-far-side",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-beasts-loose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guzma-turned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You passed every one.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "guzma-passed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The forty can hear, on the dock. He stops, one foot through. \"...Every one?\" He turns round. Forty kids, a bat, and Guzma on a deck: they look to Number One. The gate doesn't close cleanly. Alola has Beasts in it now: once a stage, a wild battle may be an Ultra Beast, frightened, that flees at half health. Lusamine has what stays. Aether runs itself. The cold room's still cold. Your Pokémon that were put back, on the far side, are slow to come out of their Balls for the rest of Alola; it fades. Lusamine is on the far side. Happy. Not herself. Guzma went; or turned round for forty voices. Plumeria feeds forty, still. Wicke signs intake, and nothing else. Faba is the last line. Koa holds a door he doesn't understand. Zia went through after her, on a rope; Uri held the rope, and didn't let go. Lux was kept well out of it, by everyone. Lillie is at the rail. Gladion went in after his mother. Tall Tale is in glass. The man at the Pelago hums, and doesn't know why he's sad today. Nanu feeds the cats. Po Town is forty and a bat. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-far-side",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-beasts-loose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guzma-turned",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Lux calls you big bro.\"",
+     "success": {
+      "text": "He stops. One foot through. \"...I told her to quit that.\" From the dock, forty voices, not together: \"YO, BIG G!\" He turns round. Forty kids, a bat, and Guzma on a deck: they look to Number One. The gate doesn't close cleanly. Alola has Beasts in it now: once a stage, a wild battle may be an Ultra Beast, frightened, that flees at half health. Lusamine has what stays. Aether runs itself. The cold room's still cold. Your Pokémon that were put back, on the far side, are slow to come out of their Balls for the rest of Alola; it fades. Lusamine is on the far side. Happy. Not herself. Guzma went; or turned round for forty voices. Plumeria feeds forty, still. Wicke signs intake, and nothing else. Faba is the last line. Koa holds a door he doesn't understand. Zia went through after her, on a rope; Uri held the rope, and didn't let go. Lux was kept well out of it, by everyone. Lillie is at the rail. Gladion went in after his mother. Tall Tale is in glass. The man at the Pelago hums, and doesn't know why he's sad today. Nanu feeds the cats. Po Town is forty and a bat. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -10,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-far-side",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-beasts-loose",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guzma-turned",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-turn-between",
+   "name": "Phase 1: Between",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "You stand in front of the gate. She stops walking.",
+   "choices": [
+    {
+     "label": "Stay where you are.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "evil",
+         "team": "skull"
+        }
+       ],
+       "text": "Lusamine: \"Oh, it's the one he's fond of.\" Lusamine: \"I don't have people who stand in my way. I have people who are perfect. I'll wait for you to come back.\" She doesn't wait. She sends out Madame, her Clefable, without looking.",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-turn-fight"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Lusamine: \"...Deputy.\" Lusamine: \"I don't have people who stand in my way. I have people who are perfect. I'll wait for you to come back.\" She doesn't wait. She sends out Madame, her Clefable, without looking.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-turn-fight"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "wing",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "alola-told-wing",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Wicke's torn up two hundred and six forms. The wing's doors are open. Each turn, something that got better walks past, down to the dock, and into the sea."
+    },
+    {
+     "id": "town",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "alola-told-town",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Forty kids on the stairs. They don't fight her. Plumeria: \"We ain't here for you, lady. We're here for him. G. You ate?\""
+    }
+   ]
+  },
+  {
+   "id": "al-turn-fight",
+   "name": "Phase 2: Lusamine",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Clefable (Madame), Lilligant, Milotic, Mismagius, and Bewear, the one she calls Embrace. At half Embrace's health: Everything in Its Place. She tidies: your active Pokémon is returned and replaced, each turn.",
+   "choices": [
+    {
+     "label": "Battle her.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "guzma-knows-case",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "He steps in front of you. Guzma: \"Ya boy is NOT a keepsake.\" He takes one hit meant for you. She fights as if the battle's a room she's putting straight.",
+       "effects": []
+      }
+     ],
+     "success": {
+      "text": "She fights as if the battle's a room she's putting straight.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.lusamine-masters",
+       "team": [
+        "clefable",
+        "lilligant",
+        "milotic",
+        "mismagius",
+        "bewear"
+       ],
+       "name": "Lusamine",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-turn-lillie"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "corsola",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "alola-carried-corsola",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Corsola you carried out is set down on the deck. It jumps. She sees it move. Her next order's a turn late."
+    },
+    {
+     "id": "pikachu",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "alola-carried-pikachu",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Pikachu you carried out is set down on the deck. It jumps. She sees it move. Her next order's a turn late."
+    },
+    {
+     "id": "null",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "null-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Gladion: \"You made three monsters to protect us from the thing you want to wear. I named mine.\""
+    }
+   ]
+  },
+  {
+   "id": "al-turn-lillie",
+   "name": "Phase 3: Lillie",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters",
+     "boss.lillie-z"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "She's beaten. The gate's still open. She could still walk. Lillie, from the rail, with a bag: Lillie: \"Mother.\" Lusamine: \"Lillie. You've done something to your hair.\" Lillie: \"I'm going to. Next week. I've decided. I'm not perfect. I'm not finished. I'm going to change and you're going to miss it if you go in there.\" A long time. The bells drift. Lusamine: \"...What will you do to it?\" Lillie: \"I don't know yet. That's the point.\"",
+   "choices": [
+    {
+     "label": "Shut the gate.",
+     "success": {
+      "text": "It's a lever. It's heavy. Whoever's beside you helps. It shuts, with her on this side. Aether's run by Wicke, who releases things. The first is a Mareanie. The sign's put back up: the old one, off the barge, hand-lettered, both sentences. Skull's a house with forty kids and a roof that's been fixed. Nanu signs the lease, sighing. A week on, at the foot of a trial site, Koa, with thirty-nine people behind him and one in white gloves: Koa: \"A'ight. Fourth time. Somebody watchin'?\" All of them: \"YEAH.\" Lusamine asks what Lillie'll do to her hair. Guzma: \"Ya boy is NOT a keepsake.\" Plumeria runs Po Town. Wicke is President, and releases a Mareanie first. Faba is on reception, handing out the leaflet. Koa takes his trial a fourth time, and forty watch. Zia runs releases. Uri is told to let them go, and does. Lux is in school; all forty come to parents' evening. Lillie cuts her hair. Gladion is Deputy, unwillingly. Tall Tale is woken, and looks north. The man at the Pelago gets a visitor who's good at beans. Nanu signs the lease. Po Town has a roof. The sign has both sentences.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gate-shut",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sign-restored",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "koa-fourth",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-case-key",
+   "name": "Phase 1: The Key",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/faba",
+     "boss.guzma"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "You cross the deck. To Faba. You hold out a hand. Faba: \"I'm the last line of defence.\"",
+   "choices": [
+    {
+     "label": "\"Who are you defending her from?\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "faba-asked",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "He's been thinking about it since you asked him, alone. Faba: \"...I've never asked.\" He puts the cold room's key in your hand. He's astonished at himself. You throw it. Across the deck. Guzma catches it, one-handed, without looking. Guzma: \"What's this.\" \"B2. All of them.\" He looks at the key. He looks at the gate. He looks at her back. Guzma: \"...Yeah. A'ight. Yo! Po Town! We got a job!\"",
+       "effects": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-case-pua"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Faba: \"...\" He puts the cold room's key in your hand. He's astonished at himself. You throw it. Across the deck. Guzma catches it, one-handed, without looking. Guzma: \"What's this.\" \"B2. All of them.\" He looks at the key. He looks at the gate. He looks at her back. Guzma: \"...Yeah. A'ight. Yo! Po Town! We got a job!\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-case-pua"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-case-pua",
+   "name": "Phase 2: Curator Pua",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f",
+     "trainer.pr/aether_grunt_m"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Lusamine doesn't turn round. The Foundation's staff do. Curator Pua and two Employees. She says \"it's for the best\" as she sends each one out, and by the third she's saying it as a question.",
+   "choices": [
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "\"It's for the best.\" \"It's for the best.\" \"...It's for the best?\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/scientist_f",
+       "name": "Curator Pua and two Employees",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-case-carry"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-case-carry",
+   "name": "Phase 3: The Cold Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma",
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#1a2230",
+    "effect": "fog"
+   },
+   "intro": "It isn't a battle. It's a carry. Forty kids. Sixty cases. A lift that holds four. Guzma, with a case on his shoulder that's got a Pikachu in it, mid-leap: Guzma: \"I ain't smashin' nothin'. Anybody smashes anything, they answer to me. These are people's.\" Tupp: \"Yo, we're haulin' glass, don't be an—\" Rapp: \"Don't.\" Tupp: \"—lass?\" Zipp: \"Lass!\" Lux, who's been told to wait in the van, holding the lift door: Lux: \"I'm helping.\" Route the cases to the ferry before the stasis units' batteries run down.",
+   "choices": [
+    {
+     "label": "Route the cases.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Each that reaches the dock is set down by the water, and opened. They wake.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-case-tale"
+       }
+      ]
+     },
+     "failure": {
+      "text": "The batteries are low on the last dozen; the lift sticks twice. Every case reaches the dock in the end, slower than you'd like. Each is set down by the water, and opened. They wake.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-case-tale"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-case-tale",
+   "name": "Phase 3: The Cold Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "pokemon": "exeggutor-alola",
+    "tint": "#1a2a3a",
+    "effect": "none"
+   },
+   "intro": "The last one's Tall Tale. It takes six of them. Guzma's at the front. Guzma: \"This the first one? The one she— a'ight. Easy. Easy with him.\" It thaws on the dock. Three heads blink. They look at the island. They look at the sea. They look north.",
+   "choices": [
+    {
+     "label": "Go up the stairs.",
+     "success": {
+      "text": "She's still walking. Nobody's stopped her; they've been carrying.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-case-gate"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-case-gate",
+   "name": "Phase 4: The Gate",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma",
+     "boss.lusamine-masters"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Guzma, out of breath, at the top of the stairs: Guzma: \"Yo. Lady. You said I was your favourite.\" Lusamine: \"You are, dear.\" Guzma: \"I just carried sixty of your favourites up a stairwell. They were cold.\" A pause. Guzma: \"I got forty kids. I ain't got favourites. I got forty.\" He doesn't follow her.",
+   "choices": [
+    {
+     "label": "(Let her go.)",
+     "success": {
+      "text": "She goes through alone. Po Town's a real town. It's got a Pokémon Center that's a real Center: Zia runs it. It's got sixty new residents that got better, and are deciding where to go. Lusamine went through alone; or was told, and stopped. Guzma carried sixty cases, and smashed nothing. Plumeria runs a real town. Wicke sends malasadas to Po Town. Faba gave up the key, and is still astonished. Koa carried cases all night. Zia runs Po Town's Center. Uri stood aside. Lux held the lift door. Lillie is the same. Gladion carried the Nulls' cases himself. Tall Tale was woken on the dock; it took six to carry it. The man at the Pelago is the same. Nanu signs the lease. Po Town is a real town. The sign has both sentences.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-case",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "coldroom-carried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-alone",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"He's twenty miles north. He grows beans.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "alola-mohn-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "She stops, with one foot over the line. She's told. She stops. Po Town's a real town. It's got a Pokémon Center that's a real Center: Zia runs it. It's got sixty new residents that got better, and are deciding where to go. Lusamine went through alone; or was told, and stopped. Guzma carried sixty cases, and smashed nothing. Plumeria runs a real town. Wicke sends malasadas to Po Town. Faba gave up the key, and is still astonished. Koa carried cases all night. Zia runs Po Town's Center. Uri stood aside. Lux held the lift door. Lillie is the same. Gladion carried the Nulls' cases himself. Tall Tale was woken on the dock; it took six to carry it. The man at the Pelago is the same. Nanu signs the lease. Po Town is a real town. The sign has both sentences.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-case",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "coldroom-carried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lusamine-told",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-placed-warn",
+   "name": "Placed",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.wicke"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "Forty children will be found homes and schools, apart, kindly, and without being asked. Nobody's harmed. Nobody's together. Po Town will be empty.",
+   "choices": [
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "You read it again.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-placed-warn-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back.",
+     "success": {
+      "text": "You go back to where you were standing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-placed-warn-2",
+   "name": "Placed",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.wicke"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "Forty children will be found homes and schools, apart, kindly, and without being asked. Nobody's harmed. Nobody's together. Po Town will be empty. Are you sure?",
+   "choices": [
+    {
+     "label": "I'm sure.",
+     "success": {
+      "text": "You take a sheet of paper out of your jacket.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-final-placed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-placed-list"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back.",
+     "success": {
+      "text": "You go back to where you were standing.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-placed-list",
+   "name": "Phase 1: The List",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.wicke"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "You go to Wicke, with a sheet of paper. Forty names. Ages. Which trial. Which island they're from. Wicke: \"These are— Po Town? You've their names?\" \"He asks everyone.\" Wicke: \"Oh, the poor things. In that rain. We've a programme. We've homes. I'll sign at once.\" She means it. Every word. It's the kindest thing on the deck, and that's what's wrong with it.",
+   "choices": [
+    {
+     "label": "Hand her the list.",
+     "success": {
+      "text": "She signs. Somebody on the stairs has worked out what the paper is.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-placed-plumeria"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-placed-plumeria",
+   "name": "Phase 2: Plumeria",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Plumeria, on the stairs, alone: Plumeria: \"You gave her the names. His names. He asked every one of those kids who they were so somebody'd know. And you wrote it down for a lady with a clipboard.\" She isn't fighting to win. She's fighting to hold the stairs till the van's gone. It doesn't go. They won't leave without her.",
+   "choices": [
+    {
+     "label": "Battle her.",
+     "success": {
+      "text": "Salazzle first. She doesn't look at you once.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.plumeria",
+       "team": [
+        "salazzle",
+        "toxapex",
+        "golbat",
+        "gengar"
+       ],
+       "name": "Plumeria",
+       "size": 4,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-placed-ledger"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-placed-ledger",
+   "name": "Phase 3: Placement",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.wicke",
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "Plumeria, beaten: Plumeria: \"...Who's gonna ask if they ate.\" A white boat, at the Po Town jetty, in daylight. Staff in white, with umbrellas, being gentle. A ledger, a column of names, and beside each, in Wicke's neat hand, a place. Koa Ridgeway: Akala. A boarding school. \"Excellent facilities.\" Nohea: Melemele. A family. The twins: different islands. \"For their independence.\" Lux: Poni. A very good home. She's fourteen. She's safe. She's fed. She wasn't asked. Nobody's harmed. Nobody's together. Wicke, signing the last: \"There. They've all somewhere to go.\" Zia, reading over her shoulder, very quietly: Zia: \"Did anyone ask them where?\" The pen stops. Wicke: \"...We don't— it's for the—\" She looks at the column. Wicke: \"Oh, no.\"",
+   "choices": [
+    {
+     "label": "Go up to the gate.",
+     "success": {
+      "text": "Guzma's at the door. He hasn't heard.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-placed-gate"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-placed-gate",
+   "name": "Phase 4: The Gate",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Guzma's at the door. He hasn't heard.",
+   "choices": [
+    {
+     "label": "Tell him.",
+     "success": {
+      "text": "You tell him. He listens. He looks down at the dock, where the van was. Then he goes through: there's no Po Town to turn round for. Po Town's empty. The rain stops on a Wednesday. Nobody's there to open a window. Po Town is a rest now: forty villas, bowls washed, on the side. Your Pokémon are each a step less sure of you, for now; it recovers. Plumeria leaves the Borrow Book on the step: three hundred and twelve entries, three open. At the rests ahead, letters will arrive: from a kid, to another kid, care of you. They don't have each other's addresses. Lusamine signs forty forms, and thinks it's kindness. Guzma went through: there was nowhere to turn round for. Plumeria: \"Who's gonna ask if they ate.\" Wicke: \"Oh, no.\" Faba is promoted. Koa is at a boarding school, with excellent facilities. Zia read over a shoulder. Uri holds an umbrella. Lux is on Poni. Safe. Not asked. She writes. Lillie is the same. Gladion leaves. Tall Tale is in glass. The man at the Pelago isn't told. Nanu has nobody to charge. Po Town is empty. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": -1,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-placed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "potown-empty",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "borrow-book",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guzma-went",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Don't.",
+     "success": {
+      "text": "You say nothing. He goes through: there's no Po Town to turn round for. Po Town's empty. The rain stops on a Wednesday. Nobody's there to open a window. Po Town is a rest now: forty villas, bowls washed, on the side. Your Pokémon are each a step less sure of you, for now; it recovers. Plumeria leaves the Borrow Book on the step: three hundred and twelve entries, three open. At the rests ahead, letters will arrive: from a kid, to another kid, care of you. They don't have each other's addresses. Lusamine signs forty forms, and thinks it's kindness. Guzma went through: there was nowhere to turn round for. Plumeria: \"Who's gonna ask if they ate.\" Wicke: \"Oh, no.\" Faba is promoted. Koa is at a boarding school, with excellent facilities. Zia read over a shoulder. Uri holds an umbrella. Lux is on Poni. Safe. Not asked. She writes. Lillie is the same. Gladion leaves. Tall Tale is in glass. The man at the Pelago isn't told. Nanu has nobody to charge. Po Town is empty. The sign says GET WELL.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": -1,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-placed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "potown-empty",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "borrow-book",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guzma-went",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-placed-letters-1",
+   "name": "Letters (8 of 40)",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "alola-ending-placed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "alola-letters",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A letter, care of you. From Nohea, on Melemele, to \"Koa (the wet one).\" Seven more under it, tied with a bootlace.",
+   "choices": [
+    {
+     "label": "Carry them.",
+     "success": {
+      "text": "You carry them to where they're going. It's out of your way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-letters",
+        "amount": 8
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them on the table at the rest. Somebody else might.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-letters-dropped",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-placed-letters-2",
+   "name": "Letters (16 of 40)",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "alola-ending-placed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "alola-letters",
+     "atLeast": 8,
+     "atMost": 8
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "Eight letters. One from a twin to a twin, on different islands. It says \"WHERE ARE YOU\" on the front, and an island's name on the back, crossed out, and another.",
+   "choices": [
+    {
+     "label": "Carry them.",
+     "success": {
+      "text": "You carry them to where they're going. It's out of your way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-letters",
+        "amount": 8
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them on the table at the rest. Somebody else might.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-letters-dropped",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-placed-letters-3",
+   "name": "Letters (24 of 40)",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "alola-ending-placed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "alola-letters",
+     "atLeast": 16,
+     "atMost": 16
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "Eight more. One's from Koa, from the boarding school: \"Excellent facilities. Nobody asks if you ate.\" It's addressed to all of them.",
+   "choices": [
+    {
+     "label": "Carry them.",
+     "success": {
+      "text": "You carry them to where they're going. It's out of your way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-letters",
+        "amount": 8
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them on the table at the rest. Somebody else might.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-letters-dropped",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-placed-letters-4",
+   "name": "Letters (32 of 40)",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "alola-ending-placed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "alola-letters",
+     "atLeast": 24,
+     "atMost": 24
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "Eight more. One's from Lux, on Poni. It's six pages. It's mostly drawings of a van.",
+   "choices": [
+    {
+     "label": "Carry them.",
+     "success": {
+      "text": "You carry them to where they're going. It's out of your way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-letters",
+        "amount": 8
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them on the table at the rest. Somebody else might.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-letters-dropped",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-placed-letters-5",
+   "name": "Letters (40 of 40)",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "alola-ending-placed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "alola-letters",
+     "atLeast": 32,
+     "atMost": 32
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "The last eight. Lux's is on top: \"Plumes. I got everybody's. Everybody's got everybody's now.\"",
+   "choices": [
+    {
+     "label": "Carry them.",
+     "success": {
+      "text": "You carry them. Forty. They've all got each other's addresses now. Months on, a van's seen on the Poni road. It's very full.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-letters",
+        "amount": 8
+       },
+       {
+        "kind": "flag",
+        "key": "alola-van-poni",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave them on the table at the rest. Somebody else might.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-letters-dropped",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-both-deck",
+   "name": "Phase 1: The Deck",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma",
+     "boss.wicke",
+     "boss.lusamine-masters"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "\"You've each got half a good idea. You take them in. You make them well. Neither of you does the next part.\" Guzma: \"...You want us?\" Wicke: \"I've the forms.\" Lusamine, at the gate, turning for the first time: Lusamine: \"You'd take my Foundation. And put it with that.\" \"It's your husband's Foundation. I've seen his sign.\"",
+   "choices": [
+    {
+     "label": "Battle Guzma.",
+     "success": {
+      "text": "Neither's fought to the end. Each is fought to a stop.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.guzma",
+       "team": [
+        "golisopod",
+        "ariados",
+        "masquerain",
+        "pinsir"
+       ],
+       "name": "Guzma",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-both-guzma"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-both-guzma",
+   "name": "Phase 2: Two Bosses",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma",
+     "boss.lusamine-masters"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Guzma: \"I been second my whole life, Number One. You tellin' me I gotta be second to you?\"",
+   "choices": [
+    {
+     "label": "\"I'm telling you there's forty-one. And you count separate.\"",
+     "success": {
+      "text": "He laughs. He sits down on the deck. Guzma: \"...Plumes says that. A'ight.\" Lusamine is already sending out Madame.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.lusamine-masters",
+       "team": [
+        "clefable",
+        "lilligant",
+        "milotic",
+        "mismagius",
+        "bewear"
+       ],
+       "name": "Lusamine",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "al-both-lusamine"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-both-lusamine",
+   "name": "Phase 2: Two Bosses",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Lusamine: \"You'll let them go. All of them. That's what the second sentence is. You'll stand on the dock and wave.\"",
+   "choices": [
+    {
+     "label": "\"And some'll come back.\"",
+     "success": {
+      "text": "She doesn't answer. She doesn't go through, either.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-sign"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"One did. He's twenty miles north.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "alola-mohn-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "She doesn't answer. She doesn't go through, either. She looks north.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-sign"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-both-sign",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.wicke",
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "A deck. A dock. Forty kids. Two hundred staff. Two hundred and six that got better. A gate, open. Four decisions. The first: the sign.",
+   "choices": [
+    {
+     "label": "GET WELL.",
+     "success": {
+      "text": "The sign stays as it was.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-sign-short",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-cold"
+       }
+      ]
+     }
+    },
+    {
+     "label": "GET WELL. GO HOME.",
+     "success": {
+      "text": "Both sentences. Everything the team takes in will have a count: days till it's somewhere to go. The team's judged on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-sign-full",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-cold"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your own second sentence.",
+     "success": {
+      "text": "You write it under the first, yourself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-sign-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-cold"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-both-cold",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "The second: the cold room.",
+   "choices": [
+    {
+     "label": "Keep it cold.",
+     "success": {
+      "text": "B2 stays cold.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-cold-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake them, and ask each.",
+     "success": {
+      "text": "Sixty cases, opened one at a time, and each is asked. The police wave, these days.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-cold-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-gate"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake them, and keep the ones that'd be useful.",
+     "success": {
+      "text": "A powerful roster on day one. Zia leaves the door open, and walks out through it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-cold-useful",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zia-left",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-gate"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-both-gate",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "The third: the gate.",
+   "choices": [
+    {
+     "label": "Shut it.",
+     "success": {
+      "text": "It shuts.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-gate-shut",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-forty"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "It stays open.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-gate-open",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-forty"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shut it, and keep a door: for the ones on the far side that are lost.",
+     "success": {
+      "text": "A door: the Thin Place. Once a stage, a frightened Beast may be shown the way back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-gate-door",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-forty"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-both-forty",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "The fourth: the forty.",
+   "choices": [
+    {
+     "label": "Grunts.",
+     "success": {
+      "text": "They're Grunts.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-forty-grunts",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-ladle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Staff.",
+     "success": {
+      "text": "They're staff, with passes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-forty-staff",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-ladle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Each one's asked: \"What's next?\" And somebody watches.",
+     "success": {
+      "text": "Each of the forty has a trial to retake. Koa's first.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-forty-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "al-both-ladle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "al-both-ladle",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Plumeria, with a ladle: Plumeria: \"Two bases. A white one and a wet one. Who's doin' the cookin'?\"",
+   "choices": [
+    {
+     "label": "\"You.\"",
+     "success": {
+      "text": "Plumeria: \"Figured.\" Two bases: a white one and a wet one. Aether's funds, and a line item that's finally honest. Skull's loyalty: very high, and personal. It isn't to the team. It's to whoever asked their name. Everything this team takes in has to end up somewhere. Lusamine was fought to a stop: \"You'll stand on the dock and wave.\" Guzma counts separate. Plumeria has the Mess, and the Book. Wicke has the forms. Faba has been asked what he's for, and is still thinking. Koa is the first Lead. Zia has the Infirmary. Uri steps aside for the right people. Lux has the common room. Lillie is the same. Gladion's been asked to run security, and covers his face. The man at the Pelago gets a supply boat, monthly. It's white. Nanu's been asked to be Law. \"Mm. No.\" He does it anyway. Po Town is a base.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-both",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-alola",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-cook-plumeria",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Whoever asks 'you ate?'\"",
+     "success": {
+      "text": "Plumeria: \"...That's everybody, now.\" Two bases: a white one and a wet one. Aether's funds, and a line item that's finally honest. Skull's loyalty: very high, and personal. It isn't to the team. It's to whoever asked their name. Everything this team takes in has to end up somewhere. Lusamine was fought to a stop: \"You'll stand on the dock and wave.\" Guzma counts separate. Plumeria has the Mess, and the Book. Wicke has the forms. Faba has been asked what he's for, and is still thinking. Koa is the first Lead. Zia has the Infirmary. Uri steps aside for the right people. Lux has the common room. Lillie is the same. Gladion's been asked to run security, and covers his face. The man at the Pelago gets a supply boat, monthly. It's white. Nanu's been asked to be Law. \"Mm. No.\" He does it anyway. Po Town is a base.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-both",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-alola",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-cook-asks",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Everybody washes their own bowl.\"",
+     "success": {
+      "text": "Plumeria: \"Ha. A'ight.\" Two bases: a white one and a wet one. Aether's funds, and a line item that's finally honest. Skull's loyalty: very high, and personal. It isn't to the team. It's to whoever asked their name. Everything this team takes in has to end up somewhere. Lusamine was fought to a stop: \"You'll stand on the dock and wave.\" Guzma counts separate. Plumeria has the Mess, and the Book. Wicke has the forms. Faba has been asked what he's for, and is still thinking. Koa is the first Lead. Zia has the Infirmary. Uri steps aside for the right people. Lux has the common room. Lillie is the same. Gladion's been asked to run security, and covers his face. The man at the Pelago gets a supply boat, monthly. It's white. Nanu's been asked to be Law. \"Mm. No.\" He does it anyway. Po Town is a base.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-both",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-alola",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-cook-bowls",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-corridor-sk",
+   "name": "One Slowpoke",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull"
+    },
+    {
+     "kind": "evil",
+     "inside": false,
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "alola-offer-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "alola-slowpoke-down",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/aether_grunt_m"
+    ],
+    "pokemon": "slowpoke",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "A nursery on Akala. You walk in on a corridor. Two squads. One Slowpoke, between them, being held at both ends. Koa: \"Yo. That's ours.\" Zia: \"It's a patient.\" Uri: \"I've been told to take it.\" Koa: \"I been told to take it.\" The Slowpoke yawns. Lux, who was locked in a van: Lux: \"Why's everybody got the same job?\" Nobody asks how she got out. They've all noticed you.",
+   "choices": [
+    {
+     "label": "\"Whose is it, actually?\"",
+     "success": {
+      "text": "The nursery's keeper: \"Nobody's. It walked in. Two years back. It's got a friend here.\" Nobody lets go. You leave them to it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Put it down. All of you. See where it goes.\"",
+     "success": {
+      "text": "Four hands let go. It sits. It thinks about it. It takes about a minute. It's the longest minute in the corridor's history. It gets up. It goes back into the nursery, slowly, and lies down next to another Slowpoke, which shuffles over without waking. Koa: \"...So nobody needed to steal it.\" Zia: \"Nobody needed to have it.\" Uri: \"I wasn't told what to do if it didn't want to go. Nobody's ever covered that.\" Lux: \"It's got a friend.\" Koa and Zia have met. He notices her gloves. She notices he's wet.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-slowpoke-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-uri",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It's not your corridor. You leave them holding it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-corridor-ae",
+   "name": "One Slowpoke",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether"
+    },
+    {
+     "kind": "evil",
+     "inside": false,
+     "after": 2,
+     "ends": [
+      "none"
+     ]
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "alola-offer-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "alola-slowpoke-down",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/aether_grunt_m"
+    ],
+    "pokemon": "slowpoke",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "A nursery on Akala. You walk in on a corridor. Two squads. One Slowpoke, between them, being held at both ends. Koa: \"Yo. That's ours.\" Zia: \"It's a patient.\" Uri: \"I've been told to take it.\" Koa: \"I been told to take it.\" The Slowpoke yawns. Lux, who was locked in a van: Lux: \"Why's everybody got the same job?\" Nobody asks how she got out. They've all noticed you.",
+   "choices": [
+    {
+     "label": "\"Whose is it, actually?\"",
+     "success": {
+      "text": "The nursery's keeper: \"Nobody's. It walked in. Two years back. It's got a friend here.\" Nobody lets go. You leave them to it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Put it down. All of you. See where it goes.\"",
+     "success": {
+      "text": "Four hands let go. It sits. It thinks about it. It takes about a minute. It's the longest minute in the corridor's history. It gets up. It goes back into the nursery, slowly, and lies down next to another Slowpoke, which shuffles over without waking. Koa: \"...So nobody needed to steal it.\" Zia: \"Nobody needed to have it.\" Uri: \"I wasn't told what to do if it didn't want to go. Nobody's ever covered that.\" Lux: \"It's got a friend.\" Koa and Zia have met. He notices her gloves. She notices he's wet.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-slowpoke-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-uri",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "It's not your corridor. You leave them holding it.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-founding",
+   "name": "Team Tidepool",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "alola-offer-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "alola-slowpoke-down",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/skull_grunt_m"
+    ],
+    "pokemon": "corsola",
+    "tint": "#1e3a40",
+    "effect": "none"
+   },
+   "intro": "Rocks. A pool on Akala, at low water. Two people sitting on either side of it who've never sat on the same rocks. Zia Pemberton, gloves off, one hand in the water: Zia: \"You said, 'See where it goes.' I've thought about nothing else.\" Koa Ridgeway, wet, as usual: Koa: \"She wrote me. On paper. I ain't had a letter since I was eleven.\" Zia: \"I know how to make them well.\" Koa: \"I know what it's like when nobody wants you after.\" Both: \"It's the same job. It's the second half nobody does.\" In the pool: a Corsola, with one branch shorter than the others. It's looking at Zia. It waves the branch. Zia: \"...That's— I nursed that one. Before the cold. They let one go, my first year, by mistake. It came back here.\" She's crying. It's very undramatic. Zia: \"It remembers me. It went home and it remembers me. I didn't know they did that. Nobody at the Paradise knows they do that; we've never let enough go to find out.\" The creed, scratched on a rock above the tide line: BETTER ISN'T FINISHED TILL YOU'VE SOMEWHERE TO GO.",
+   "choices": [
+    {
+     "label": "Sit down on the rocks.",
+     "success": {
+      "text": "You sit. Team Tidepool: Zia, who can make anything well; Koa, who knows the walk back up; Uri, who'd like to be told something he'd have done anyway. Lux isn't crew. She's fourteen. She'll be the first one Tidepool finds a place for, and she'll pick it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "tidepool-founded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who else?\"",
+     "success": {
+      "text": "Zia counts them off. Uri Vandermeer: \"I do what I'm told. I'd like to be told something I'd have done anyway.\" Wicke: two hundred and six unsigned forms, and a boat she can borrow. Plumeria: the Borrow Book, three open entries. Nanu: he doesn't join; he stops charging rent. Acerola, eleven, who does the cooking: \"I've a house full of kids with nobody. D'you want it to be part of this? It'd be nice to be part of something that writes back.\" And a captain, unnamed: the one who said \"next.\" He's come to watch.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "tidepool-founded",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "uri",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-uri",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Uri: \"I do what I'm told. I'd like to be told something I'd have done anyway.\""
+    }
+   ]
+  },
+  {
+   "id": "tp-return-1",
+   "name": "Return 1: Three Open Entries",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#1e3a40",
+    "effect": "none"
+   },
+   "intro": "A Return's a walk. Somebody, or something, that's been taken in is taken back: to where it's from, or to where it's chosen. Tidepool goes along. It doesn't leave till the thing's landed. Plumeria opens the Borrow Book. Three hundred and twelve. Three not brought back.",
+   "choices": [
+    {
+     "label": "Go.",
+     "success": {
+      "text": "You go along.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tp-r1-rockruff"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-r1-rockruff",
+   "name": "A Rockruff",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "pokemon": "rockruff",
+    "tint": "#1e3a40",
+    "effect": "none"
+   },
+   "intro": "A Rockruff, from a boy on Melemele. The boy moved. Nobody knew where. Found: Akala, a new school. He doesn't recognise it at first; it's grown. It recognises him.",
+   "choices": [
+    {
+     "label": "Next entry.",
+     "success": {
+      "text": "Plumeria ticks it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tp-r1-cutiefly"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-r1-cutiefly",
+   "name": "A Cutiefly",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "pokemon": "cutiefly",
+    "tint": "#1e3a40",
+    "effect": "none"
+   },
+   "intro": "A Cutiefly, from a florist. It was let go by a Grunt who felt bad. In the wrong meadow. It's doing fine.",
+   "choices": [
+    {
+     "label": "Ask it. (An open hand; a flower.)",
+     "success": {
+      "text": "It goes back. The florist's kept its jar.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tp-r1-mudbray"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-r1-mudbray",
+   "name": "A Mudbray",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "pokemon": "mudbray",
+    "tint": "#1e3a40",
+    "effect": "none"
+   },
+   "intro": "A Mudbray, from a farm. It doesn't want to go back. It's been pulling the Po Town taro cart for a year and it likes it. Plumeria goes to the farm herself. With the book. She apologises. The farmer: \"A year? I thought it was stolen. You've been working it? ...Is it happy?\"",
+   "choices": [
+    {
+     "label": "\"Come and see.\"",
+     "success": {
+      "text": "He comes to see. It's happy. He takes a day's wage for it, and a bag of taro. Plumeria closes the book. It's the first time it's balanced.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tidepool-return1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-return-2",
+   "name": "Return 2: The Fourth Time",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "tidepool-return1",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "A trial site. Koa takes his trial again. Koa: \"Three times I walked up there. I can tell you every stone.\" Behind him: thirty-nine kids, a keeper in white gloves, a guard, an eleven-year-old with a ladle, and an old man under several cats. Koa: \"...That's a lot of people.\" Zia: \"You said if somebody was watching.\" Koa: \"I said somebody.\"",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You don't take it for him. You watch.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tp-r2-wrong"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-r2-wrong",
+   "name": "The Fourth Time",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "boss.kiawe"
+    ],
+    "pokemon": "salandit",
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "You're in the crowd. It's a battle you aren't in. It goes wrong, in the middle. His Salandit's burned out. He's got one left. At the top of the path, the captain. The same one. He's not talking to anybody. He's watching. The captain: \"...Take your time.\" It's the opposite of \"next.\"",
+   "choices": [
+    {
+     "label": "Keep looking.",
+     "chance": 0.5,
+     "success": {
+      "text": "He passes. Forty people make a noise that the island hears. A queue's formed behind him: Nohea. The twin. The boy who froze.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tidepool-return2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "koa-passed",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "He doesn't. Koa: \"A'ight. Fifth time. Tuesday?\" Forty people: \"TUESDAY.\" A queue's formed behind him: Nohea. The twin. The boy who froze.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "tidepool-return2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "koa-tuesday",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look away.",
+     "chance": 0.5,
+     "success": {
+      "text": "You look at the sea. When you look back, it's over. It doesn't matter which way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tidepool-return2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "koa-tuesday",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You look at the sea. When you look back, he's at the top. A queue's formed behind him: Nohea. The twin. The boy who froze.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "tidepool-return2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "koa-passed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-return-3",
+   "name": "Return 3: Two Hundred and Six",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "tidepool-return1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.wicke",
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "The conservation wing, at night. Wicke's forms. Each one's a Pokémon that got better and has been waiting. Wicke: \"If I sign the other form: 'release': I need a second signature. A keeper's.\" Zia's got a pen. Wicke: \"And a destination. For each. The form won't file without.\"",
+   "choices": [
+    {
+     "label": "Sort the charts.",
+     "success": {
+      "text": "You start with the first pile.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tp-r3-charts"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-r3-charts",
+   "name": "Two Hundred and Six",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.wicke",
+     "trainer.pr/aether_grunt_f"
+    ],
+    "pokemon": "mareanie",
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "A long, quiet game: two hundred and six charts. Each has where it was found. You sort them by island; Tidepool's crew takes a boat each. \"Mareanie. Spines regrown. Found: Hano Beach.\" \"Wingull. Wing set. Found: off Po Town.\" That's where all the Wingull went. \"Petilil. Found: Lush Jungle. Has asked to stay.\" It's allowed. That's somewhere to go. \"Slowpoke. Nothing wrong. Found: a nursery. Has a friend there.\"",
+   "choices": [
+    {
+     "label": "Sort until morning.",
+     "success": {
+      "text": "The wing's empty by morning. Curator Pua's standing in it. Pua: \"It's very quiet. I'd thought— I'd thought it'd feel like losing them.\" She looks at the chalk on the wall: Zia's started two columns. Pua: \"It feels like the job.\"",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "tidepool-return3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-still-here",
+   "name": "Still Here",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "inside": false,
+     "ends": [
+      "none"
+     ],
+     "beat": 6,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters",
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "glint"
+   },
+   "intro": "The upper deck. The gate. Lusamine, walking. Tidepool doesn't fight. It comes up the stairs with two people. Zia: \"President. We've brought you something.\" Lusamine: \"I'm leaving, dear. I'm going where nothing does.\" Koa: \"Yeah. We heard. Thing is. You got this idea that stuff either stays the same or it's gone.\"",
+   "choices": [
+    {
+     "label": "Step aside for them.",
+     "success": {
+      "text": "You step aside.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tp-still-two"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-still-two",
+   "name": "Still Here",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.gladion-stance",
+     "boss.lillie-z",
+     "boss.lusamine-masters"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Two people step forward. Gladion, with a Pokémon that's got its helmet off, and a name. Lillie, with a bag, and a look she didn't used to have. Zia: \"They changed. They're still here.\" Lillie: \"Mother. I'm going to cut my hair.\" Gladion: \"I named it. It's fine. We're fine. Come and see.\" Lusamine: \"...You're not the ones I had.\" Lillie: \"No. You never met us. You were busy keeping the others.\"",
+   "choices": [
+    {
+     "label": "Look at the stairs.",
+     "success": {
+      "text": "Somebody else is coming up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tp-still-corsola"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-still-corsola",
+   "name": "Still Here",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/skull_grunt_m",
+     "boss.lusamine-masters"
+    ],
+    "pokemon": "corsola",
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "Behind them, up the stairs, at their own pace: a Corsola with a short branch, carried in a bucket by a fourteen-year-old. A Pikachu, that was frozen mid-leap, finishing the leap. A Slowpoke, and its friend. Zia: \"These got better. And went. And came to say so.\" The Corsola waves its branch. Lusamine: \"It did that to him. On the barge. I never forgave it.\" Koa: \"Lady. It's wavin' at you.\"",
+   "choices": [
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "Lusamine doesn't go through the gate.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tp-still-close"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look at the dock.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "alola-mohn-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "A boat's come in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "tp-still-pelago"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-still-pelago",
+   "name": "Still Here",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drive/alolan-usum-gentleman",
+     "boss.lillie-z",
+     "boss.lusamine-masters"
+    ],
+    "pokemon": "exeggutor-alola",
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "A man in a straw hat, with a basket, who's been told there are people here who like beans. The Man at the Pelago: \"Hello, hello! What a lot of stairs! Is this the— oh.\" He's looking at an Exeggutor on the dock. It's looking at him. Three heads. The Man at the Pelago: \"...Well, now. Don't I know you.\" He's humming. Lillie's humming. It's the same tune. Lusamine doesn't go through the gate. She sits down on the deck in a white dress. She doesn't tell him. She asks if she can carry the basket.",
+   "choices": [
+    {
+     "label": "Watch the gate.",
+     "success": {
+      "text": "Nobody's holding it open now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mohn-came",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "tp-still-close"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-still-close",
+   "name": "Still Here",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters",
+     "trainer.pr/faba",
+     "boss.wicke"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "The gate closes by itself. Nobody was holding it open but her.",
+   "choices": [
+    {
+     "label": "Let it close.",
+     "success": {
+      "text": "It closes. Tidepool doesn't disband. It becomes a thing Alola has: a rock by the tide with a line scratched on it, where a Pokémon may be asked what it wants. The sign's back. Both sentences. On Aether Paradise's dock, and, in spray paint, on the Po Town wall. Lusamine carries a basket. Guzma stops in Po Town: somebody's asked his name. It's Hala. Plumeria's book balances. Wicke finds a pen. Faba stops halfway. Koa: \"Tuesday?\" Zia has two columns in chalk. Uri was told something he'd have done anyway. Lux picked her own place: the Aether House. Acerola needed a second cook. Lillie: \"You never met us.\" Gladion: \"Come and see.\" Tall Tale: \"Don't I know you.\" The man at the Pelago has a straw hat, and a lot of stairs. Nanu stops charging. The sign's on the Po Town wall, in paint. Both sentences. Twice.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-tidepool",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle Faba.",
+     "success": {
+      "text": "Faba, defending the last line from nobody.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/faba",
+       "team": [
+        "hypno",
+        "claydol",
+        "bruxish"
+       ],
+       "name": "Faba",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "tp-still-faba"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-still-faba",
+   "name": "Still Here",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/faba",
+     "boss.wicke"
+    ],
+    "tint": "#1a1a2e",
+    "effect": "none"
+   },
+   "intro": "He stops halfway. Faba: \"I've— who am I—\" Wicke takes his arm.",
+   "choices": [
+    {
+     "label": "Let the gate close.",
+     "success": {
+      "text": "It closes by itself. Tidepool doesn't disband. It becomes a thing Alola has: a rock by the tide with a line scratched on it, where a Pokémon may be asked what it wants. The sign's back. Both sentences. On Aether Paradise's dock, and, in spray paint, on the Po Town wall. Lusamine carries a basket. Guzma stops in Po Town: somebody's asked his name. It's Hala. Plumeria's book balances. Wicke finds a pen. Faba stops halfway. Koa: \"Tuesday?\" Zia has two columns in chalk. Uri was told something he'd have done anyway. Lux picked her own place: the Aether House. Acerola needed a second cook. Lillie: \"You never met us.\" Gladion: \"Come and see.\" Tall Tale: \"Don't I know you.\" The man at the Pelago has a straw hat, and a lot of stairs. Nanu stops charging. The sign's on the Po Town wall, in paint. Both sentences. Twice.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-tidepool",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tp-rock",
+   "name": "A Line on a Rock",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "alola-ending-tidepool",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1e3a40",
+    "effect": "none"
+   },
+   "intro": "A rock above the tide line, with a line scratched on it: BETTER ISN'T FINISHED TILL YOU'VE SOMEWHERE TO GO.",
+   "choices": [
+    {
+     "label": "Ask your lead what it wants.",
+     "success": {
+      "text": "The answer's what it does. It looks at the sea, and at the road, and at you; and it keeps going. It's glad to've been asked.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

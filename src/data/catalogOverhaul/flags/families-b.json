@@ -1,0 +1,18 @@
+{
+ "category": "families-b",
+ "note": "Run flags the families-b events (STORY_FAMILIES_6.md and its road chains) read that another row writes. Each stays here only until that row's events are on the branch.",
+ "external": {
+  "promise-diancie": "legends (Diancie's Promise state flag)",
+  "promise-kept-diancie": "legends (Diancie's Promise kept)",
+  "guest-darkrai": "legends (Darkrai as a guest)",
+  "whale-pod": "legends (whale questline flag, LEGENDS_PIECES.md section 4)",
+  "ranger-spire": "families-a (SF8.3 the Old Ranger scatters Ember's ashes at the Windswept Spire)",
+  "vale-freed": "families-a (The Hollow Vale was freed)",
+  "pierre-done": "families-a (Juggler Pierre's arc done)",
+  "crisis-fever-on": "families-a (The Fever strand, SF1.4, is this region's)",
+  "lost-mon": "any row whose event loses a Pokémon for good (MEMORY_AND_FORMAT lost.<name>)",
+  "last-stop-ticket": "greenneedle (The Last Stop, gn.new.09, the Dusknoir punches the ticket)",
+  "ovt-last-stop": "greenneedle (node timer started with the ticket)"
+ },
+ "flags": []
+}

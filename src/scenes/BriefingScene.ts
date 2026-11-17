@@ -22,10 +22,16 @@ import { sceneForRun } from './routing';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dressScreen } from '../ui/screenDress';
 import { BRIEFING_LOOKS } from '../ui/briefingLooks';
+import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
+import { rxFileOf } from '../ui/redux/assets';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { briefView } from '../ui/redux/screens/run';
 
 export class BriefingScene extends Phaser.Scene {
   private menu!: Menu;
   private status!: Phaser.GameObjects.Text;
+  /** New UI view, when on. */
+  private view: ReduxView | null = null;
 
   constructor() {
     super('Briefing');
@@ -96,6 +102,31 @@ export class BriefingScene extends Phaser.Scene {
     });
     this.add.text(16, GAME_HEIGHT - 22, '←/→ choose  ·  Enter select', textStyle(14, '#8a7f96')).setDepth(20);
     onInputAction(this, (a) => this.menu.handle(a));
+
+    // New UI: the mock-ups' Campaign Briefing when no screen style is picked.
+    this.view = null;
+    if (reduxOn() && look === 'original') {
+      const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
+      const theme = run.stage ? getTheme(content, run.stage.themeId) : null;
+      const short = new Set(['Trainer', 'Campaign', 'Region order', 'First stage', 'Starting with', 'Rules', 'Attributes', 'Seed']);
+      const layers = new Map<number, string>();
+      for (const n of run.stage?.map.nodes ?? []) if (!layers.has(n.column)) layers.set(n.column, n.kind);
+      this.view = mountRedux(this, {
+        render: (c) => briefView(c, {
+          title: 'Campaign Briefing', campaign: campaign.name, regions,
+          facts: [['Trainer', archetype.name], ['Stages', `${campaign.stagesPerRegion} per region`], ['Level cap', String(runLevelCap(content, run))], ['Starting with', `₽${run.money}`], ['Bag', itemsText(content, run.inventory) || 'empty'], ['Preparation', token?.name ?? 'none']],
+          nodes: [...layers.entries()].sort((a, b) => a[0] - b[0]).slice(0, 8).map(([, kind]) => kind),
+          stage: theme ? `${theme.name} (${theme.types.map(capitalise).join(' / ')}). Wild Pokémon up to Lv ${runLevelCap(content, run)}.` : '',
+          notes: [['Attributes', attributesLine(effectiveAttributes(content, run))], ...rows.filter(([label]) => !short.has(label))],
+          seed: run.seed,
+          party: run.party.map((m) => { const sp = content.species.get(m.speciesId); return { name: sp?.name ?? m.speciesId, file: sp ? rxFileOf(manifest, pokemonAssetIds(sp.assets).front)?.file ?? null : null }; }),
+          index: this.menu.index,
+          text: this.status.text || 'Check the plan, then depart. The seed can be copied and shared.',
+        }),
+        acts: { go: () => this.scene.start(sceneForRun(session.run!)), copy: () => this.copySeed(run.seed) },
+      });
+      this.menu.onFocus = () => this.view?.refresh();
+    }
   }
 
   /** Label/text rows inside the panel (y 76–426): the biggest font that fits, shrunk as a last resort. */
@@ -125,8 +156,8 @@ export class BriefingScene extends Phaser.Scene {
   }
 
   private copySeed(seed: string): void {
-    const done = () => this.status.setText(`Seed "${seed}" copied.`);
-    const failed = () => this.status.setText(`Couldn't copy automatically. The seed is: ${seed}`);
+    const done = () => { this.status.setText(`Seed "${seed}" copied.`); this.view?.refresh(); };
+    const failed = () => { this.status.setText(`Couldn't copy automatically. The seed is: ${seed}`); this.view?.refresh(); };
     if (navigator.clipboard?.writeText) navigator.clipboard.writeText(seed).then(done, failed);
     else failed();
   }

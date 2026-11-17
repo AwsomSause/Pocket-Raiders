@@ -103,6 +103,11 @@ function fitLabel(text: string, max = 38): string {
   return text.length > max ? `${text.slice(0, max - 1)}…` : text;
 }
 
+import { mountRedux, reduxOn } from '../ui/redux/stage';
+import { menuView } from '../ui/redux/templates';
+import { DESK_ROWS, deskItems } from '../ui/redux/screens/run';
+import { ownsTrainer } from '../core/progress';
+
 export class RunPrepScene extends Phaser.Scene {
   private menu!: Menu;
   private picker: Picker | null = null;
@@ -115,6 +120,8 @@ export class RunPrepScene extends Phaser.Scene {
   private rules: RulesChoice = STANDARD_CHOICE;
   private modCursor = 0;
   private page = OVERVIEW;
+  /** New look: the desk is the mock-ups' one menu of seven rows (Depart last), with no page tabs. */
+  private desk = false;
   private help: Phaser.GameObjects.Text | null = null;
 
   constructor() {
@@ -144,7 +151,8 @@ export class RunPrepScene extends Phaser.Scene {
     this.page = Math.max(0, Math.min(OVERVIEW, data.page ?? OVERVIEW));
     const def = PAGES[this.page]!;
     const motion = session.settings.battleAnimations;
-    const rows = def.rows;
+    this.desk = reduxOn() && this.page === OVERVIEW;
+    const rows: readonly Row[] = this.desk ? DESK_ROWS : def.rows;
     this.help = null; // a Text from the screen's previous run is gone
 
     this.add.text(GAME_WIDTH / 2, 22, 'Preparation Desk', textStyle(30, COLORS.textLight)).setOrigin(0.5);
@@ -206,7 +214,9 @@ export class RunPrepScene extends Phaser.Scene {
     }
     const summary = this.add.container(left, top);
     let y = 0;
+    const lines: string[] = [];
     const line = (text: string, size = 18, color: string = COLORS.textLight) => {
+      lines.push(text);
       const t = this.add.text(0, y, text, textStyle(size, color, { wordWrap: { width } }));
       summary.add(t);
       y += t.height + 4;
@@ -261,7 +271,8 @@ export class RunPrepScene extends Phaser.Scene {
     this.add.text(GAME_WIDTH / 2, 478, notice, textStyle(16, '#f0e0a0', { align: 'center', wordWrap: { width: GAME_WIDTH - 60 } })).setOrigin(0.5, 0);
     this.add.text(16, GAME_HEIGHT - 22, '↑/↓ choose  ·  ←/→ change  ·  Enter select  ·  Q/E or PgUp/PgDn page  ·  Esc back to trainers', textStyle(14, '#8a7f96'));
 
-    this.focusIndex = Math.min(data.focus ?? 0, rows.length - 1);
+    // The desk opens on Depart, so Enter alone still starts the run.
+    this.focusIndex = Math.min(data.focus ?? (this.desk ? rows.indexOf('start') : 0), rows.length - 1);
     this.menu.focus(this.focusIndex, false);
     this.help?.setText(ROW_HELP[rows[this.focusIndex]!] ?? '');
 
@@ -274,6 +285,36 @@ export class RunPrepScene extends Phaser.Scene {
         t.setAlpha(0).setX(x + dx);
         this.tweens.add({ targets: t, alpha: 1, x, duration: 220, ease: 'Cubic.easeOut' });
       }
+    }
+
+    // New UI: the mock-up's Preparation Desk (the menu template); this scene stays the controller.
+    if (reduxOn()) {
+      const slots = presetSlotCount(content, profile);
+      const items = this.desk
+        ? deskItems({
+          campaign: content.campaigns.get(this.prep.campaignId)?.name ?? this.prep.campaignId, mode: getMode(this.rules.modeId)?.name ?? this.rules.modeId, difficulty: getDifficulty(this.rules.difficultyId)?.name ?? this.rules.difficultyId,
+          prep: token?.name ?? null, modifiers: this.rules.modifierIds.length, deathBlock: this.rules.deathBlock, seed: this.seed,
+          saved: Array.from({ length: slots }, (_, i) => presetIn(profile, i)).filter(Boolean).length, slots,
+        })
+        : rows.map((r) => { const [name = '', ...rest] = labels[r].replace(/\s*▶$/, '').split(': '); return { label: name, note: rest.join(': ') }; });
+      const deskFacts: [string, string][] = [['Trainer', archetype.name], ['Difficulty', getDifficulty(this.rules.difficultyId)?.name ?? ''], ['Weeks', this.rules.weeks === false ? 'Off' : 'On']];
+      const view = mountRedux(this, {
+        render: (c) => {
+          const row = rows[this.focusIndex]!;
+          return menuView(c, {
+            title: 'Preparation Desk', area: 'run', hints: this.desk ? [['Enter', 'choose'], ['←→', 'change'], ['Esc', 'back']] : [['Enter', 'select'], ['←→', 'change'], ['Q/E', 'page'], ['Esc', 'trainers']],
+            items: items.map((x, i) => ({ ...x, disabled: disabled(rows[i]!) })),
+            index: this.focusIndex,
+            // Depart shows the whole build; every other row what it changes, over the three facts that matter most.
+            detail: !this.desk || row === 'start' ? { title: lines[0] ?? def.title, body: lines.slice(1).join('\n') } : { title: items[this.focusIndex]!.label, body: ROW_HELP[row].replace(' ←/→ changes it.', ''), facts: deskFacts },
+            text: notice || (this.desk ? 'Set the run up, then depart.' : ROW_HELP[row] || def.blurb),
+            ...(this.desk ? {} : { tabs: { labels: PAGES.map((p) => p.title), index: this.page } }),
+          });
+        },
+        acts: { pick: (i) => { this.menu.focus(Number(i), false); this.menu.confirm(); }, tab: (k) => !this.picker && this.goPage(Number(k)) },
+        overs: { over: (i) => { if (!disabled(rows[Number(i)]!)) this.menu.focus(Number(i), false); } },
+      });
+      this.menu.onFocus = () => view.refresh();
     }
 
     onInputAction(this, (a) => {
@@ -317,7 +358,7 @@ export class RunPrepScene extends Phaser.Scene {
 
   /** The Modifiers page is its own scene (scrolling list); it hands the choices back on leaving. */
   private openModifiers(): void {
-    const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, page: this.page === PAGES.findIndex((p) => p.id === 'modifiers') ? OVERVIEW : this.page };
+    const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: this.desk ? this.focusIndex : 0, rules: this.rules, page: this.page === PAGES.findIndex((p) => p.id === 'modifiers') ? OVERVIEW : this.page };
     this.scene.start('RunModifiers', { desk, rules: this.rules } satisfies RunModifiersData);
   }
 
@@ -329,7 +370,7 @@ export class RunPrepScene extends Phaser.Scene {
 
   /** Run Setup and Trainer are their own scene: rows on the left, every option on the right. */
   private openChoices(group: ChoicesGroup): void {
-    const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: 0, rules: this.rules, page: group === PAGES[this.page]!.id ? OVERVIEW : this.page };
+    const desk: RunPrepData = { archetypeId: this.archetypeId, prep: this.prep, seed: this.seed, focus: this.desk ? this.focusIndex : 0, rules: this.rules, page: group === PAGES[this.page]!.id ? OVERVIEW : this.page };
     this.scene.start('RunChoices', { desk, group, state: { archetypeId: this.archetypeId, prep: this.prep, rules: this.rules } } satisfies RunChoicesData);
   }
 
@@ -343,7 +384,7 @@ export class RunPrepScene extends Phaser.Scene {
     const next = <T>(list: T[], current: T): T => list[(list.indexOf(current) + step + list.length) % list.length]!;
     switch (row) {
       case 'trainer': {
-        const ids = [...content.archetypes.values()].filter((a) => a.available && (a.unlockedByDefault || profile.unlockedArchetypes.includes(a.id))).map((a) => a.id);
+        const ids = [...content.archetypes.values()].filter((a) => a.available && ownsTrainer(profile, a)).map((a) => a.id);
         this.archetypeId = next(ids, this.archetypeId);
         return this.refresh();
       }
@@ -423,6 +464,12 @@ export class RunPrepScene extends Phaser.Scene {
         return this.openPresets('save');
       case 'load':
         return this.openPresets('load');
+      // On the New look's desk these rows open their page (←/→ still steps through the choices in place).
+      case 'campaign':
+      case 'mode':
+        return this.desk ? this.openChoices('config') : this.cycle(row, 1);
+      case 'token':
+        return this.desk ? this.openChoices('trainer') : this.cycle(row, 1);
       default:
         return this.cycle(row, 1);
     }
@@ -472,13 +519,22 @@ export class RunPrepScene extends Phaser.Scene {
         box.add(scene.add.text(16, h / 2, preset ? `${i + 1}. ${presetText(preset)}` : `${i + 1}. (empty)`, textStyle(18, preset ? COLORS.text : COLORS.textMuted, { wordWrap: { width: 820 } })).setOrigin(0, 0.5));
       },
     }));
+    // The New look's desk has one "Loadout presets" row: its list starts with the way to save.
+    const saveRow = this.desk && mode === 'load';
+    if (saveRow) rows.unshift({ problem: null, hint: 'Keeps this whole setup in a preset slot to load later.', draw: (scene, box, _w, h) => { box.add(scene.add.text(16, h / 2, 'Save this setup in a slot…', textStyle(18, COLORS.text)).setOrigin(0, 0.5)); } });
     this.menu.enabled = false;
     this.picker = new Picker(this, {
-      title: mode === 'save' ? 'Save this loadout in a slot' : 'Load a loadout',
+      title: mode === 'save' ? 'Save this loadout in a slot' : this.desk ? 'Loadout presets' : 'Load a loadout',
       rows,
       columns: 1,
       rowHeight: 60,
-      onSelect: (i) => {
+      onSelect: (at) => {
+        const i = saveRow ? at - 1 : at;
+        if (i < 0) {
+          this.picker?.close();
+          this.picker = null;
+          return this.openPresets('save');
+        }
         if (mode === 'save') {
           session.savePreset(i, { ...this.prep, name: `Preset ${i + 1}`, archetypeId: this.archetypeId });
           return this.refresh({}, { notice: `Saved in preset slot ${i + 1}.` });
@@ -487,7 +543,7 @@ export class RunPrepScene extends Phaser.Scene {
         if (!preset) return playSfx(this, 'ui.error', 0.5);
         const parts = presetParts(preset);
         this.archetypeId = parts.archetypeId;
-        this.scene.restart({ archetypeId: parts.archetypeId, prep: parts.prep, seed: this.seed, focus: 0, notice: `Loaded preset ${i + 1}.` } satisfies RunPrepData);
+        this.scene.restart({ archetypeId: parts.archetypeId, prep: parts.prep, seed: this.seed, ...(this.desk ? {} : { focus: 0 }), notice: `Loaded preset ${i + 1}.` } satisfies RunPrepData);
       },
       onBack: () => {
         this.picker?.close();

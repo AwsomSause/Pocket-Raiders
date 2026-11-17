@@ -9,7 +9,7 @@ import { getMentor } from './mentors';
 import { getArchetype } from './archetypes';
 import { attributesLine, readAttributes } from './attributes';
 import type { Archetype, Content, License, PrepToken, TypeName } from './contentSchema';
-import { requirementProgress } from './progress';
+import { ownsTrainer, requirementProgress } from './progress';
 import { masteredStarters } from './mastery';
 import type { Rng } from './rng';
 import { baseStatTotal, isNative, isWildEligible, wildEligibleSpecies } from './themes';
@@ -84,7 +84,7 @@ export function resolvePrep(content: Content, profile: Profile, archetypeId: str
   const prep: RunPrep = { ...wanted };
 
   const archetype = content.archetypes.get(archetypeId);
-  const trainerOk = archetype && archetype.available && (archetype.unlockedByDefault || profile.unlockedArchetypes.includes(archetype.id));
+  const trainerOk = archetype && archetype.available && ownsTrainer(profile, archetype);
   const fallbackTrainer = [...content.archetypes.values()].find((a) => a.unlockedByDefault)!;
   if (!trainerOk) problems.push(`Trainer "${archetype?.name ?? archetypeId}" isn't available; using ${fallbackTrainer.name}.`);
 

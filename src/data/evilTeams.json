@@ -7,7 +7,27 @@
   "ambushAt": 4,
   "heatPerLevel": 3,
   "levelsPerSuccess": 1,
-  "levelsPerMeeting": 1
+  "levelsPerMeeting": 1,
+  "counters": {
+   "normal": "machamp",
+   "fire": "swampert",
+   "water": "jolteon",
+   "electric": "golem",
+   "grass": "arcanine",
+   "ice": "magmortar",
+   "fighting": "alakazam",
+   "poison": "hippowdon",
+   "ground": "gyarados",
+   "flying": "electivire",
+   "psychic": "houndoom",
+   "bug": "talonflame",
+   "rock": "poliwrath",
+   "ghost": "mightyena",
+   "dragon": "mamoswine",
+   "dark": "lucario",
+   "steel": "infernape",
+   "fairy": "scizor"
+  }
  },
  "consequences": {
   "facility": {
@@ -341,25 +361,105 @@
      "id": "pokemon-heist",
      "kind": "steal",
      "name": "Pokémon Heist",
-     "text": "Rocket grunts are loading stolen Poké Balls into an unmarked van."
+     "text": "Rocket grunts are loading stolen Poké Balls into an unmarked van.",
+     "lasting": {
+      "text": "Every Center in the region has fewer Pokémon to trade, and your rival was robbed too: their team is weaker.",
+      "effects": [
+       {
+        "kind": "rivalLevelOffset",
+        "value": -2
+       }
+      ],
+      "flags": [
+       "centers-fewer-trades"
+      ]
+     }
     },
     {
      "id": "black-market",
      "kind": "trade",
      "name": "Black Market",
-     "text": "A back-alley stall sells Pokémon with no papers and no questions."
+     "text": "A back-alley stall sells Pokémon with no papers and no questions.",
+     "lasting": {
+      "text": "Pokémon with no papers turn up wild all over the region, and they are afraid of Balls.",
+      "effects": [
+       {
+        "kind": "captureMultiplier",
+        "value": 0.9
+       }
+      ],
+      "flags": [
+       "wild-no-papers"
+      ]
+     }
     },
     {
      "id": "radio-tower",
      "kind": "facility",
-     "name": "Radio Tower Takeover",
-     "text": "Rocket has seized the local radio tower and is broadcasting a strange signal."
+     "name": "Radio Tower",
+     "text": "Rocket has seized the local radio tower and is broadcasting a strange signal.",
+     "lasting": {
+      "text": "The signal forces evolutions: wild Pokémon in the region are evolved, stronger and angry.",
+      "effects": [
+       {
+        "kind": "speciesEncounterWeight",
+        "trait": "fullyEvolved",
+        "value": 3
+       },
+       {
+        "kind": "catchLevelOffset",
+        "value": 3
+       }
+      ],
+      "flags": [
+       "wild-forced-evolved"
+      ]
+     }
     },
     {
      "id": "evolution-signal",
      "kind": "experiment",
-     "name": "Forced Evolution Lab",
-     "text": "A hidden machine is forcing wild Pokémon to evolve, and it hurts them."
+     "name": "Evolution Signal",
+     "text": "A hidden machine is forcing wild Pokémon to evolve, and it hurts them.",
+     "lasting": {
+      "text": "Pokémon forced to evolve in this region are hurting: 10% lower in every stat.",
+      "effects": [],
+      "flags": [
+       "forced-evo-hurt"
+      ]
+     }
+    }
+   ],
+   "home": [
+    "kanto",
+    "johto"
+   ],
+   "inside": {
+    "op": "radio-tower",
+    "half": false
+   },
+   "routes": [
+    {
+     "region": "kanto",
+     "ranks": [
+      "Recruit",
+      "Grunt",
+      "Field Agent",
+      "Section Chief",
+      "Executive",
+      "The Boss's Right Hand"
+     ]
+    },
+    {
+     "region": "johto",
+     "ranks": [
+      "Hopeful",
+      "Grunt",
+      "Operative",
+      "Cell Leader",
+      "Executive (the fifth)",
+      "The Voice"
+     ]
     }
    ]
   },
@@ -464,25 +564,104 @@
      "id": "coastal-dig",
      "kind": "habitat",
      "name": "Coastal Dig",
-     "text": "Aqua grunts are digging up a nesting beach to flood it."
+     "text": "Aqua grunts are digging up a nesting beach to flood it.",
+     "lasting": {
+      "text": "The beach floods, and the turtles that nested there are gone from the region.",
+      "effects": [
+       {
+        "kind": "speciesEncounterWeight",
+        "lines": [
+         "squirtle"
+        ],
+        "value": 0.001
+       }
+      ],
+      "flags": [
+       "beach-flooded"
+      ]
+     }
     },
     {
      "id": "submarine-theft",
      "kind": "steal",
      "name": "Submarine Theft",
-     "text": "Team Aqua is stealing a research submarine from the docks."
+     "text": "Team Aqua is stealing a research submarine from the docks.",
+     "lasting": {
+      "text": "The deep trench is open to Aqua. Kyogre's Sign is harder to earn (one more needed).",
+      "effects": [],
+      "flags": [
+       {
+        "key": "sign-need-kyogre",
+        "amount": 1
+       }
+      ]
+     }
     },
     {
      "id": "deep-sea-study",
      "kind": "legendary",
-     "name": "Deep Sea Survey",
-     "text": "Aqua divers are mapping the trench where a giant sleeps."
+     "name": "Deep-Sea Study",
+     "text": "Aqua divers are mapping the trench where a giant sleeps.",
+     "lasting": {
+      "text": "Aqua knows where Kyogre sleeps: at the Hideout it is half-awake, and the sea comes in.",
+      "effects": [],
+      "flags": [
+       "team-aqua-legend-stirring"
+      ]
+     }
     },
     {
      "id": "harbor-control",
      "kind": "control",
-     "name": "Harbor Lockdown",
-     "text": "Team Aqua has closed the harbor and charges a toll to pass."
+     "name": "Harbour Control",
+     "text": "Team Aqua has closed the harbor and charges a toll to pass.",
+     "lasting": {
+      "text": "Ferries cost ₽500 for the rest of the region, and the sea roads are guarded.",
+      "effects": [],
+      "flags": [
+       {
+        "key": "ferry-toll",
+        "amount": 500
+       }
+      ]
+     }
+    }
+   ],
+   "home": [
+    "hoenn"
+   ],
+   "inside": {
+    "op": "submarine-theft",
+    "half": false
+   },
+   "routes": [
+    {
+     "region": "hoenn",
+     "ranks": [
+      "Deckhand",
+      "Grunt",
+      "Diver",
+      "Bosun",
+      "Admin",
+      "The First Mate"
+     ],
+     "steps": [
+      3,
+      8,
+      15,
+      25
+     ],
+     "max": 60,
+     "test": 6,
+     "out": 9,
+     "pay": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600
+     ]
     }
    ]
   },
@@ -587,25 +766,97 @@
      "id": "volcano-drill",
      "kind": "facility",
      "name": "Volcano Drill",
-     "text": "Team Magma has taken over a geothermal plant to drill into the volcano."
+     "text": "Team Magma has taken over a geothermal plant to drill into the volcano.",
+     "lasting": {
+      "text": "Fire hazards on every node of the region: burns come easier.",
+      "effects": [
+       {
+        "kind": "statusChanceMultiplier",
+        "status": "brn",
+        "value": 1.5
+       }
+      ],
+      "flags": [
+       "fire-hazards"
+      ]
+     }
     },
     {
      "id": "meteorite-heist",
      "kind": "steal",
      "name": "Meteorite Heist",
-     "text": "Magma grunts are stealing a meteorite from the observatory."
+     "text": "Magma grunts are stealing a meteorite from the observatory.",
+     "lasting": {
+      "text": "Magma can wake Groudon early: the Hideout climax is harder.",
+      "effects": [],
+      "flags": [
+       "team-magma-climax-harder"
+      ]
+     }
     },
     {
      "id": "magma-survey",
      "kind": "legendary",
      "name": "Magma Survey",
-     "text": "Magma geologists are listening for a heartbeat deep under the mountain."
+     "text": "Magma geologists are listening for a heartbeat deep under the mountain.",
+     "lasting": {
+      "text": "The heartbeat under the mountain quickens: the Quake strand rises.",
+      "effects": [],
+      "flags": [
+       "crisis-quake-raise"
+      ],
+      "crisis": 1
+     }
     },
     {
      "id": "hot-spring-closure",
      "kind": "control",
      "name": "Hot Spring Closure",
-     "text": "Team Magma has fenced off the town's hot springs as \"private land\"."
+     "text": "Team Magma has fenced off the town's hot springs as \"private land\".",
+     "lasting": {
+      "text": "The hot springs are fenced: no hot-spring rests this region.",
+      "effects": [],
+      "flags": [
+       "no-hot-springs"
+      ]
+     }
+    }
+   ],
+   "home": [
+    "hoenn"
+   ],
+   "inside": {
+    "op": "magma-survey",
+    "half": true
+   },
+   "routes": [
+    {
+     "region": "hoenn",
+     "ranks": [
+      "Recruit",
+      "Grunt",
+      "Surveyor",
+      "Foreman",
+      "Admin",
+      "The Right Hand"
+     ],
+     "steps": [
+      3,
+      8,
+      15,
+      25
+     ],
+     "max": 60,
+     "test": 6,
+     "out": 9,
+     "pay": [
+      100,
+      200,
+      300,
+      400,
+      500,
+      600
+     ]
     }
    ]
   },
@@ -711,25 +962,82 @@
      "id": "lake-raid",
      "kind": "legendary",
      "name": "Lake Raid",
-     "text": "Galactic grunts are setting bombs at a lake where a guardian sleeps."
+     "text": "Galactic grunts are setting bombs at a lake where a guardian sleeps.",
+     "lasting": {
+      "text": "The lake guardian is taken. Its Sign is lost for this run.",
+      "effects": [],
+      "flags": [
+       "sign-lost-lake-guardian"
+      ]
+     }
     },
     {
      "id": "energy-plant",
      "kind": "facility",
-     "name": "Power Plant Takeover",
-     "text": "Galactic Energy has bought the local power plant and turned the lights off."
+     "name": "Energy Plant",
+     "text": "Galactic Energy has bought the local power plant and turned the lights off.",
+     "lasting": {
+      "text": "Lights out across the region: the Blackout starts at Severity 2.",
+      "effects": [],
+      "flags": [
+       {
+        "key": "crisis-blackout-start",
+        "amount": 2
+       }
+      ],
+      "crisis": 2
+     }
     },
     {
      "id": "spirit-lab",
      "kind": "experiment",
-     "name": "Spirit Extraction Lab",
-     "text": "Scientists are draining the \"spirit\" from captured Pokémon."
+     "name": "Spirit Lab",
+     "text": "Scientists are draining the \"spirit\" from captured Pokémon.",
+     "lasting": {
+      "text": "The Pokémon of the spirit lab, freed later, are listless: Bond grows slower.",
+      "effects": [
+       {
+        "kind": "friendshipMultiplier",
+        "value": 0.9
+       }
+      ],
+      "flags": [
+       "spirit-lab-listless"
+      ]
+     }
     },
     {
      "id": "veilstone-warehouse",
      "kind": "steal",
-     "name": "Warehouse Raid",
-     "text": "Galactic is emptying a warehouse of Poké Balls and fossils."
+     "name": "Veilstone Warehouse",
+     "text": "Galactic is emptying a warehouse of Poké Balls and fossils.",
+     "lasting": {
+      "text": "The fossils are shipped away: no fossil revival this region.",
+      "effects": [],
+      "flags": [
+       "no-fossil-revival"
+      ]
+     }
+    }
+   ],
+   "home": [
+    "sinnoh"
+   ],
+   "inside": {
+    "op": "spirit-lab",
+    "half": false
+   },
+   "routes": [
+    {
+     "region": "sinnoh",
+     "ranks": [
+      "Applicant",
+      "Grunt",
+      "Technician",
+      "Adjutant",
+      "Commander (the fifth)",
+      "Witness"
+     ]
     }
    ]
   },
@@ -834,25 +1142,79 @@
      "id": "liberation-rally",
      "kind": "recruit",
      "name": "Liberation Rally",
-     "text": "Plasma speakers are convincing trainers to give up their Pokémon."
+     "text": "Plasma speakers are convincing trainers to give up their Pokémon.",
+     "lasting": {
+      "text": "One in five Roster trainers in this region releases their team.",
+      "effects": [],
+      "flags": [
+       "roster-released"
+      ]
+     }
     },
     {
      "id": "pokemon-confiscation",
      "kind": "steal",
-     "name": "\"Rescue\" Drive",
-     "text": "Plasma grunts in fake ranger coats are taking Pokémon \"for their safety\"."
+     "name": "Pokémon Confiscation",
+     "text": "Plasma grunts in fake ranger coats are taking Pokémon \"for their safety\".",
+     "lasting": {
+      "text": "The checkpoints stay up: your Pokémon can be confiscated in town. Anything taken is in the Hideout's Holding Pen.",
+      "effects": [],
+      "flags": [
+       "plasma-checkpoints"
+      ]
+     }
     },
     {
      "id": "frigate-build",
      "kind": "facility",
-     "name": "Frigate Dock",
-     "text": "Plasma is fitting an ice cannon to a flying frigate in the harbor."
+     "name": "Frigate Build",
+     "text": "Plasma is fitting an ice cannon to a flying frigate in the harbor.",
+     "lasting": {
+      "text": "The ice cannon fires: it hails in every battle this region.",
+      "effects": [
+       {
+        "kind": "battleStart",
+        "weather": "hail",
+        "turns": 5
+       }
+      ],
+      "flags": [
+       "region-hail"
+      ]
+     }
     },
     {
      "id": "genesect-project",
      "kind": "artificial",
-     "name": "Ancient Revival Project",
-     "text": "Plasma scientists are rebuilding an ancient Pokémon as a weapon."
+     "name": "Genesect Project",
+     "text": "Plasma scientists are rebuilding an ancient Pokémon as a weapon.",
+     "lasting": {
+      "text": "A rebuilt Genesect is loose, and hostile. It will come for you before the region is out.",
+      "effects": [],
+      "flags": [
+       "genesect-loose"
+      ]
+     }
+    }
+   ],
+   "home": [
+    "unova"
+   ],
+   "inside": {
+    "op": "frigate-build",
+    "half": false
+   },
+   "routes": [
+    {
+     "region": "unova",
+     "ranks": [
+      "Listener",
+      "Knight",
+      "Liberator",
+      "The Seventh Seat",
+      "Keeper of the King's Room",
+      "The King's Friend"
+     ]
     }
    ]
   },
@@ -950,33 +1312,96 @@
     "comet-shard"
    ],
    "legendary": [
-    "yveltal",
-    "xerneas"
+    "xerneas",
+    "yveltal"
    ],
    "ops": [
     {
      "id": "power-plant",
      "kind": "facility",
-     "name": "Power Plant Seizure",
-     "text": "Flare grunts in red suits are running the local power plant."
+     "name": "Power Plant",
+     "text": "Flare grunts in red suits are running the local power plant.",
+     "lasting": {
+      "text": "The power is gone from the towns: the Blackout starts at Severity 1.",
+      "effects": [],
+      "flags": [
+       {
+        "key": "crisis-blackout-start",
+        "amount": 1
+       }
+      ],
+      "crisis": 1
+     }
     },
     {
      "id": "stone-mining",
      "kind": "habitat",
-     "name": "Mega Stone Mining",
-     "text": "Flare is strip-mining a cave full of Mega Stones and sleeping Pokémon."
+     "name": "Stone Mining",
+     "text": "Flare is strip-mining a cave full of Mega Stones and sleeping Pokémon.",
+     "lasting": {
+      "text": "The mine keeps running: Mega-capable Pokémon flicker in battle, and the Mega meter rises each stage.",
+      "effects": [],
+      "flags": [
+       "flare-mine-running"
+      ]
+     }
     },
     {
      "id": "ultimate-weapon",
      "kind": "research",
-     "name": "Weapon Research",
-     "text": "A Flare lab is studying an ancient weapon that drains life."
+     "name": "Ultimate Weapon",
+     "text": "A Flare lab is studying an ancient weapon that drains life.",
+     "lasting": {
+      "text": "The land is drained: every rest in this region heals 10% less.",
+      "effects": [
+       {
+        "kind": "healingMultiplier",
+        "value": 0.9
+       }
+      ],
+      "flags": [
+       "land-drained"
+      ]
+     }
     },
     {
      "id": "flare-tickets",
      "kind": "trade",
-     "name": "Future Tickets",
-     "text": "Flare is selling \"tickets to the future\" for five million each."
+     "name": "Flare Tickets",
+     "text": "Flare is selling \"tickets to the future\" for five million each.",
+     "lasting": {
+      "text": "The rich of the region leave with their tickets: shop prices rise 10%.",
+      "effects": [
+       {
+        "kind": "priceMultiplier",
+        "group": "all",
+        "value": 1.1
+       }
+      ],
+      "flags": [
+       "region-rich-gone"
+      ]
+     }
+    }
+   ],
+   "home": [
+    "kalos"
+   ],
+   "inside": {
+    "op": "stone-mining",
+    "half": false
+   },
+   "routes": [
+    {
+     "region": "kalos",
+     "ranks": [
+      "Subscriber",
+      "Member",
+      "Stylist",
+      "Patron",
+      "Chosen",
+      "The Last Guest"
+     ]
     }
    ]
   },
@@ -1074,32 +1499,80 @@
     "rocky-helmet"
    ],
    "legendary": [
-    "nihilego"
+    "tapu-koko"
    ],
    "ops": [
     {
      "id": "pokemon-snatch",
      "kind": "steal",
-     "name": "Pokémon Snatching",
-     "text": "Skull grunts are grabbing Pokémon from a daycare."
+     "name": "Pokémon Snatch",
+     "text": "Skull grunts are grabbing Pokémon from a daycare.",
+     "lasting": {
+      "text": "The daycare is closed for the rest of the region.",
+      "effects": [],
+      "flags": [
+       "daycare-closed"
+      ]
+     }
     },
     {
      "id": "trial-crash",
      "kind": "interfere",
-     "name": "Trial Crashing",
-     "text": "Team Skull has crashed a local trial and is blocking every challenger."
+     "name": "Trial Crash",
+     "text": "Team Skull has crashed a local trial and is blocking every challenger.",
+     "lasting": {
+      "text": "The Island Trial is crashed: it is closed for this run.",
+      "effects": [],
+      "flags": [
+       "trial-closed"
+      ]
+     }
     },
     {
      "id": "town-takeover",
      "kind": "control",
      "name": "Town Takeover",
-     "text": "Team Skull has taken over an abandoned town and charges a \"fee\" to pass."
+     "text": "Team Skull has taken over an abandoned town and charges a \"fee\" to pass.",
+     "lasting": {
+      "text": "The town's rest is Skull-run now: it heals only half.",
+      "effects": [],
+      "flags": [
+       "rest-skull-run"
+      ]
+     }
     },
     {
      "id": "skull-recruit",
      "kind": "recruit",
-     "name": "Recruitment Drive",
-     "text": "Skull is recruiting kids who failed their trials."
+     "name": "Skull Recruit",
+     "text": "Skull is recruiting kids who failed their trials.",
+     "lasting": {
+      "text": "Skull has new members: three more Grunts in every ambush.",
+      "effects": [],
+      "flags": [
+       "skull-recruited"
+      ]
+     }
+    }
+   ],
+   "home": [
+    "alola"
+   ],
+   "inside": {
+    "op": "trial-crash",
+    "half": false
+   },
+   "routes": [
+    {
+     "region": "alola",
+     "ranks": [
+      "Numbskull",
+      "Grunt",
+      "Big Sib",
+      "Enforcer",
+      "Admin",
+      "Guzma's Second"
+     ]
     }
    ]
   },
@@ -1197,33 +1670,87 @@
     "star-piece"
    ],
    "legendary": [
-    "silvally",
-    "nihilego"
+    "nihilego",
+    "necrozma"
    ],
    "ops": [
     {
      "id": "preservation-lab",
      "kind": "facility",
-     "name": "Preservation Wing",
-     "text": "Aether has opened a \"preservation\" lab that freezes rescued Pokémon."
+     "name": "Preservation Lab",
+     "text": "Aether has opened a \"preservation\" lab that freezes rescued Pokémon.",
+     "lasting": {
+      "text": "The frozen Pokémon are lost for this run.",
+      "effects": [],
+      "flags": [
+       "frozen-lost"
+      ]
+     }
     },
     {
      "id": "beast-research",
      "kind": "research",
-     "name": "Wormhole Research",
-     "text": "Aether is measuring energy from a crack in the sky."
+     "name": "Beast Research",
+     "text": "Aether is measuring energy from a crack in the sky.",
+     "lasting": {
+      "text": "The crack widens into a Tear: Ultra Beast rules in this region.",
+      "effects": [],
+      "flags": [
+       "tear-open"
+      ]
+     }
     },
     {
      "id": "type-null-project",
      "kind": "artificial",
-     "name": "Project Type: Null",
-     "text": "Aether is building an artificial Pokémon to fight the beasts."
+     "name": "Type: Null Project",
+     "text": "Aether is building an artificial Pokémon to fight the beasts.",
+     "lasting": {
+      "text": "Type: Null is Faba's weapon now. It will be sent after you before the region is out.",
+      "effects": [],
+      "flags": [
+       "type-null-loose"
+      ]
+     }
     },
     {
      "id": "sanctuary-closure",
      "kind": "habitat",
      "name": "Sanctuary Closure",
-     "text": "Aether has fenced off a wild sanctuary as \"protected property\"."
+     "text": "Aether has fenced off a wild sanctuary as \"protected property\".",
+     "lasting": {
+      "text": "A rare species is fenced off: rare Pokémon are scarcer in the wild here.",
+      "effects": [
+       {
+        "kind": "encounterWeightMultiplier",
+        "group": "rare",
+        "value": 0.6
+       }
+      ],
+      "flags": [
+       "sanctuary-fenced"
+      ]
+     }
+    }
+   ],
+   "home": [
+    "alola"
+   ],
+   "inside": {
+    "op": "preservation-lab",
+    "half": false
+   },
+   "routes": [
+    {
+     "region": "alola",
+     "ranks": [
+      "Volunteer",
+      "Employee",
+      "Researcher",
+      "Branch Deputy",
+      "Branch Chief",
+      "The President's Favourite"
+     ]
     }
    ]
   },
@@ -1328,26 +1855,77 @@
     {
      "id": "stadium-block",
      "kind": "interfere",
-     "name": "Stadium Blockade",
-     "text": "Team Yell is blocking the stadium so nobody but Marnie can enter."
+     "name": "Stadium Block",
+     "text": "Team Yell is blocking the stadium so nobody but Marnie can enter.",
+     "lasting": {
+      "text": "The stadium's exhibition is cancelled.",
+      "effects": [],
+      "flags": [
+       "exhibition-cancelled"
+      ]
+     }
     },
     {
      "id": "route-chant",
      "kind": "control",
-     "name": "Route Chant-Off",
-     "text": "Team Yell has taken over a route and won't let anyone through."
+     "name": "Route Chant",
+     "text": "Team Yell has taken over a route and won't let anyone through.",
+     "lasting": {
+      "text": "The chanting never stops: that route takes two nodes.",
+      "effects": [],
+      "flags": [
+       "route-chant"
+      ]
+     }
     },
     {
      "id": "ticket-scalp",
      "kind": "trade",
-     "name": "Ticket Scalping",
-     "text": "Team Yell is buying up every match ticket and reselling them."
+     "name": "Ticket Scalp",
+     "text": "Team Yell is buying up every match ticket and reselling them.",
+     "lasting": {
+      "text": "Circuit rung entry costs ₽100 more this region.",
+      "effects": [],
+      "flags": [
+       {
+        "key": "circuit-fee",
+        "amount": 100
+       }
+      ]
+     }
     },
     {
      "id": "fan-recruit",
      "kind": "recruit",
-     "name": "Fan Drive",
-     "text": "Team Yell is recruiting new grunts with free scarves."
+     "name": "Fan Recruit",
+     "text": "Team Yell is recruiting new grunts with free scarves.",
+     "lasting": {
+      "text": "Twice the ambushes, but every one of them is a scarf-waving new fan.",
+      "effects": [],
+      "flags": [
+       "yell-fans-recruited"
+      ]
+     }
+    }
+   ],
+   "home": [
+    "galar"
+   ],
+   "inside": {
+    "op": "route-chant",
+    "half": false
+   },
+   "routes": [
+    {
+     "region": "galar",
+     "ranks": [
+      "Supporter",
+      "Yeller",
+      "Road Crew",
+      "Head of the Queue",
+      "Marnie's Corner",
+      "Piers's Opening Act"
+     ]
     }
    ]
   },
@@ -1453,25 +2031,73 @@
      "id": "base-blockade",
      "kind": "control",
      "name": "Base Blockade",
-     "text": "Team Star has set up a base camp and closed the road behind it."
+     "text": "Team Star has set up a base camp and closed the road behind it.",
+     "lasting": {
+      "text": "A road is closed for the rest of the region.",
+      "effects": [],
+      "flags": [
+       "road-closed"
+      ]
+     }
     },
     {
      "id": "class-crash",
      "kind": "interfere",
-     "name": "Class Crashing",
-     "text": "Team Star is crashing the local trainer school and scaring off students."
+     "name": "Class Crash",
+     "text": "Team Star is crashing the local trainer school and scaring off students.",
+     "lasting": {
+      "text": "The trainer school is closed: fewer young Roster trainers.",
+      "effects": [],
+      "flags": [
+       "school-closed"
+      ]
+     }
     },
     {
      "id": "star-recruit",
      "kind": "recruit",
-     "name": "Star Recruitment",
-     "text": "Team Star is recruiting new grunts with shiny jackets."
+     "name": "Star Recruit",
+     "text": "Team Star is recruiting new grunts with shiny jackets.",
+     "lasting": {
+      "text": "Star has a new member: one more in every ambush squad.",
+      "effects": [],
+      "flags": [
+       "star-recruited"
+      ]
+     }
     },
     {
      "id": "ruins-claim",
      "kind": "legendary",
      "name": "Ruins Claim",
-     "text": "Team Star has camped out in ruins where something ancient roars."
+     "text": "Team Star has camped out in ruins where something ancient roars.",
+     "lasting": {
+      "text": "The ruins are Star's: their Legendary's Sign is lost for this run.",
+      "effects": [],
+      "flags": [
+       "sign-lost-ruins"
+      ]
+     }
+    }
+   ],
+   "home": [
+    "paldea"
+   ],
+   "inside": {
+    "op": "base-blockade",
+    "half": false
+   },
+   "routes": [
+    {
+     "region": "paldea",
+     "ranks": [
+      "New Kid",
+      "Grunt",
+      "Squad Second",
+      "Sixth Boss",
+      "Cassiopeia's Voice",
+      "The One She Meets"
+     ]
     }
    ]
   },
@@ -1576,28 +2202,77 @@
      "id": "lineage-raids",
      "kind": "steal",
      "name": "Lineage Raids",
-     "text": "The Hounds are taking Pokémon of Legendary lineage: Dratini, Larvitar, Beldum."
+     "text": "The Hounds are taking Pokémon of Legendary lineage: Dratini, Larvitar, Beldum.",
+     "lasting": {
+      "text": "Dratini, Larvitar and Beldum are taken: none can be found in this region.",
+      "effects": [
+       {
+        "kind": "speciesEncounterWeight",
+        "lines": [
+         "dratini",
+         "larvitar",
+         "beldum"
+        ],
+        "value": 0.001
+       }
+      ],
+      "flags": [
+       "lineage-taken"
+      ]
+     }
     },
     {
      "id": "choir-sermons",
      "kind": "recruit",
      "name": "Choir Sermons",
-     "text": "Cass Verrin's Choir hands out pamphlets about Ascension in the square."
+     "text": "Cass Verrin's Choir hands out pamphlets about Ascension in the square.",
+     "lasting": {
+      "text": "One in five townsfolk joins the Marauders. Shops close early.",
+      "effects": [
+       {
+        "kind": "shopRefreshMultiplier",
+        "value": 0.8
+       }
+      ],
+      "flags": [
+       "shops-close-early"
+      ]
+     }
     },
     {
      "id": "ferry-runs",
      "kind": "trade",
      "name": "Ferry Runs",
-     "text": "Rennick's Ferrymen move sealed crates through the port at night."
+     "text": "Rennick's Ferrymen move sealed crates through the port at night.",
+     "lasting": {
+      "text": "The sea routes carry Marauder ambushes.",
+      "effects": [],
+      "flags": [
+       "sea-ambush"
+      ]
+     }
     },
     {
      "id": "engine-works",
      "kind": "facility",
-     "name": "The Resonance Engine",
-     "text": "Chalk researchers are assembling something huge inside an old observatory."
+     "name": "Engine Works",
+     "text": "Chalk researchers are assembling something huge inside an old observatory.",
+     "lasting": {
+      "text": "The Hideout's Engine is complete. At the climax it binds one of your Pokémon until you win.",
+      "effects": [],
+      "flags": [
+       "team-marauders-engine"
+      ]
+     }
     }
    ],
-   "storyOnly": true
+   "storyOnly": true,
+   "home": [],
+   "inside": {
+    "op": "engine-works",
+    "half": false
+   },
+   "routes": []
   },
   {
    "id": "choir",
@@ -1699,29 +2374,85 @@
     {
      "id": "tolling-bells",
      "kind": "control",
-     "name": "The Tolling",
-     "text": "The Choir rings the town bells at all hours. Nobody can sleep but their own."
+     "name": "Tolling Bells",
+     "text": "The Choir rings the town bells at all hours. Nobody can sleep but their own.",
+     "lasting": {
+      "text": "The bells ring all night: no rest heals fully this region.",
+      "effects": [
+       {
+        "kind": "healingMultiplier",
+        "value": 0.85
+       }
+      ],
+      "flags": [
+       "bells-tolling"
+      ]
+     }
     },
     {
      "id": "counting-stones",
      "kind": "legendary",
-     "name": "The Counting Stones",
-     "text": "Hooded figures chant at the Counting Stones every night."
+     "name": "Counting Stones",
+     "text": "Hooded figures chant at the Counting Stones every night.",
+     "lasting": {
+      "text": "The Long Night: wild Pokémon are Ghost-touched for the region.",
+      "effects": [
+       {
+        "kind": "typeEncounterWeight",
+        "type": "ghost",
+        "value": 3
+       }
+      ],
+      "flags": [
+       "long-night"
+      ]
+     }
     },
     {
      "id": "quiet-recruits",
      "kind": "recruit",
      "name": "Quiet Recruits",
-     "text": "Tired townsfolk are being invited to a chapel under the well."
+     "text": "Tired townsfolk are being invited to a chapel under the well.",
+     "lasting": {
+      "text": "The town is drowsy: fewer people stop you with something to say.",
+      "effects": [],
+      "flags": [
+       "town-drowsy"
+      ]
+     }
     },
     {
      "id": "shepherd-rites",
      "kind": "research",
      "name": "Shepherd Rites",
-     "text": "Acolytes are copying old prophecies from the archive by candlelight."
+     "text": "Acolytes are copying old prophecies from the archive by candlelight.",
+     "lasting": {
+      "text": "The prophecy is complete: the Hideout climax is fought at night, and Dark and Ghost moves hit 10% harder.",
+      "effects": [
+       {
+        "kind": "damageTakenMultiplier",
+        "moveType": "dark",
+        "value": 1.1
+       },
+       {
+        "kind": "damageTakenMultiplier",
+        "moveType": "ghost",
+        "value": 1.1
+       }
+      ],
+      "flags": [
+       "team-choir-night"
+      ]
+     }
     }
    ],
-   "storyOnly": true
+   "storyOnly": true,
+   "home": [],
+   "inside": {
+    "op": "tolling-bells",
+    "half": false
+   },
+   "routes": []
   },
   {
    "id": "ironvein",
@@ -1823,29 +2554,77 @@
     {
      "id": "veinheart-drill",
      "kind": "facility",
-     "name": "The Deep Drill",
-     "text": "A huge drill is boring toward the Veinheart seam under the hills."
+     "name": "Veinheart Drill",
+     "text": "A huge drill is boring toward the Veinheart seam under the hills.",
+     "lasting": {
+      "text": "The drill reaches the deep seam: the Quake starts, and Veinheart's Sign is harder.",
+      "effects": [],
+      "flags": [
+       {
+        "key": "crisis-quake-start",
+        "amount": 1
+       },
+       {
+        "key": "sign-need-veinheart",
+        "amount": 1
+       }
+      ],
+      "crisis": 1
+     }
     },
     {
      "id": "power-buyout",
      "kind": "control",
      "name": "Power Buyout",
-     "text": "The Combine is buying every generator in town and doubling the price."
+     "text": "The Combine is buying every generator in town and doubling the price.",
+     "lasting": {
+      "text": "Every generator is the Combine's: shop prices rise 10%.",
+      "effects": [
+       {
+        "kind": "priceMultiplier",
+        "group": "all",
+        "value": 1.1
+       }
+      ],
+      "flags": [
+       "power-bought"
+      ]
+     }
     },
     {
      "id": "greenwall-cutting",
      "kind": "habitat",
      "name": "Greenwall Cutting",
-     "text": "Logging crews are clearing the forest where wild Pokémon nest."
+     "text": "Logging crews are clearing the forest where wild Pokémon nest.",
+     "lasting": {
+      "text": "A forest's wild nests are lost: Broken Habitat starts.",
+      "effects": [],
+      "flags": [
+       "habitat-broken"
+      ]
+     }
     },
     {
      "id": "seam-survey",
      "kind": "research",
      "name": "Seam Survey",
-     "text": "Engineers are measuring strange readings deep in the mine."
+     "text": "Engineers are measuring strange readings deep in the mine.",
+     "lasting": {
+      "text": "The Combine finds Veinheart: at the Hideout it is in chains (freed by winning).",
+      "effects": [],
+      "flags": [
+       "team-ironvein-veinheart-chained"
+      ]
+     }
     }
    ],
-   "storyOnly": true
+   "storyOnly": true,
+   "home": [],
+   "inside": {
+    "op": "power-buyout",
+    "half": false
+   },
+   "routes": []
   },
   {
    "id": "cartographers",
@@ -1941,7 +2720,6 @@
     "helix-fossil"
    ],
    "legendary": [
-    "hollow-shepherd",
     "brinecrown"
    ],
    "ops": [
@@ -1949,28 +2727,62 @@
      "id": "relic-dig",
      "kind": "research",
      "name": "Relic Dig",
-     "text": "A survey team has fenced off an old ruin and is digging day and night."
+     "text": "A survey team has fenced off an old ruin and is digging day and night.",
+     "lasting": {
+      "text": "The ruin is emptied: a fossil kind is gone from the region.",
+      "effects": [],
+      "flags": [
+       "fossil-gone"
+      ]
+     }
     },
     {
      "id": "map-theft",
      "kind": "steal",
      "name": "Map Theft",
-     "text": "Old family maps are vanishing from homes all over town."
+     "text": "Old family maps are vanishing from homes all over town.",
+     "lasting": {
+      "text": "The old maps are gone: hidden places don't show on the map this region.",
+      "effects": [],
+      "flags": [
+       "hidden-off-map"
+      ]
+     }
     },
     {
      "id": "deep-charting",
      "kind": "legendary",
      "name": "Deep Charting",
-     "text": "A pale ship circles the deep water where Brinecrown is said to sleep."
+     "text": "A pale ship circles the deep water where Brinecrown is said to sleep.",
+     "lasting": {
+      "text": "The Society has Brinecrown's bearings: its Sign is lost for this run.",
+      "effects": [],
+      "flags": [
+       "sign-lost-brinecrown"
+      ]
+     }
     },
     {
      "id": "local-guides",
      "kind": "recruit",
-     "name": "Paid Guides",
-     "text": "The Society pays locals well to show them the old paths."
+     "name": "Local Guides",
+     "text": "The Society pays locals well to show them the old paths.",
+     "lasting": {
+      "text": "Every guide in the region works for the Society now: a friendly guide always betrays you.",
+      "effects": [],
+      "flags": [
+       "guides-betray"
+      ]
+     }
     }
    ],
-   "storyOnly": true
+   "storyOnly": true,
+   "home": [],
+   "inside": {
+    "op": "map-theft",
+    "half": false
+   },
+   "routes": []
   },
   {
    "id": "wildfire",
@@ -2073,28 +2885,75 @@
      "id": "pylon-strike",
      "kind": "interfere",
      "name": "Pylon Strike",
-     "text": "Saboteurs are cutting the lines between town and the mine."
+     "text": "Saboteurs are cutting the lines between town and the mine.",
+     "lasting": {
+      "text": "The lines are cut: the Blackout starts at Severity 2.",
+      "effects": [],
+      "flags": [
+       {
+        "key": "crisis-blackout-start",
+        "amount": 2
+       }
+      ],
+      "crisis": 2
+     }
     },
     {
      "id": "pipeline-sabotage",
      "kind": "facility",
      "name": "Pipeline Sabotage",
-     "text": "Someone keeps setting small fires along the pipeline."
+     "text": "Someone keeps setting small fires along the pipeline.",
+     "lasting": {
+      "text": "The small fires grow: the Wildfire starts.",
+      "effects": [],
+      "flags": [
+       {
+        "key": "crisis-wildfire-start",
+        "amount": 1
+       }
+      ],
+      "crisis": 1
+     }
     },
     {
      "id": "wild-release",
      "kind": "habitat",
      "name": "Wild Release",
-     "text": "The Accord is breaking open ranches and releasing every Pokémon."
+     "text": "The Accord is breaking open ranches and releasing every Pokémon.",
+     "lasting": {
+      "text": "The routes flood with displaced Pokémon: twice as many wild Pokémon, all of them scared.",
+      "effects": [
+       {
+        "kind": "captureMultiplier",
+        "value": 0.9
+       }
+      ],
+      "flags": [
+       "wild-displaced"
+      ]
+     }
     },
     {
      "id": "manifesto-drive",
      "kind": "recruit",
-     "name": "The Manifesto",
-     "text": "Copies of a green-and-black manifesto are pasted on every wall."
+     "name": "Manifesto Drive",
+     "text": "Copies of a green-and-black manifesto are pasted on every wall.",
+     "lasting": {
+      "text": "The townsfolk side with the Accord, and the Rangers think less of you.",
+      "effects": [],
+      "flags": [
+       "rangers-lost"
+      ]
+     }
     }
    ],
-   "storyOnly": true
+   "storyOnly": true,
+   "home": [],
+   "inside": {
+    "op": "pylon-strike",
+    "half": false
+   },
+   "routes": []
   },
   {
    "id": "gilt",
@@ -2197,28 +3056,65 @@
      "id": "match-fixing",
      "kind": "control",
      "name": "Match Fixing",
-     "text": "Gym results this week match the betting slips a little too well."
+     "text": "Gym results this week match the betting slips a little too well.",
+     "lasting": {
+      "text": "One Gym's results are bought: its Leader's team is 3 levels higher.",
+      "effects": [],
+      "flags": [
+       {
+        "key": "gym-fixed",
+        "amount": 3
+       }
+      ]
+     }
     },
     {
      "id": "betting-ring",
      "kind": "trade",
-     "name": "The Back Room",
-     "text": "A private room behind the arena takes bets on every gym battle."
+     "name": "Betting Ring",
+     "text": "A private room behind the arena takes bets on every gym battle.",
+     "lasting": {
+      "text": "Gym battles in the region have hecklers: your Speed drops on turn one.",
+      "effects": [],
+      "flags": [
+       "gym-hecklers"
+      ]
+     }
     },
     {
      "id": "referee-bribes",
      "kind": "interfere",
-     "name": "Bought Whistles",
-     "text": "Referees are calling close battles for the Circle's favourites."
+     "name": "Referee Bribes",
+     "text": "Referees are calling close battles for the Circle's favourites.",
+     "lasting": {
+      "text": "Close calls go to the Circle: ties lose.",
+      "effects": [],
+      "flags": [
+       "ties-lose"
+      ]
+     }
     },
     {
      "id": "laurel-donations",
      "kind": "recruit",
      "name": "Laurel Donations",
-     "text": "The Club is paying young trainers' entry fees, with strings attached."
+     "text": "The Club is paying young trainers' entry fees, with strings attached.",
+     "lasting": {
+      "text": "Young Roster trainers owe the Circle, and one of them throws a match against you.",
+      "effects": [],
+      "flags": [
+       "roster-throws"
+      ]
+     }
     }
    ],
-   "storyOnly": true
+   "storyOnly": true,
+   "home": [],
+   "inside": {
+    "op": "betting-ring",
+    "half": false
+   },
+   "routes": []
   },
   {
    "id": "cipher",

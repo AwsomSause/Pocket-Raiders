@@ -68,6 +68,7 @@ export function itemUseProblem(content: Content, item: Item, mon: PokemonInstanc
     case 'urge':
     case 'itemDrop':
     case 'escape':
+    case 'balm':
       return `${item.name} only works in battle.`;
     case 'keyItem':
     case 'megaStone':

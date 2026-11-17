@@ -10,7 +10,9 @@ import { itemCount } from '../core/items';
 import { mapItemSummary } from '../core/mapItems';
 import { bulkTotal, currentShopType, haggleChance, pokenetDeal, shopScreenType, SHOP_TYPE_LABELS, type ShopTypeId } from '../core/shopTypes';
 import { uiMotionLevel } from '../core/presentation/uiMotion';
-import { isBlackMarket, oneOnly, sellPrice, shopBadgesNeeded, shopPrice, shopSaleItem, shopStock } from '../core/run';
+import { isBlackMarket, oneOnly, sellPrice, shopBadgesNeeded, shopDealItem, shopPrice, shopSaleItem, shopStock } from '../core/run';
+import { shopWorthIt, shopWorthItPerk } from '../core/mentorWorld';
+import { runPerks } from '../core/archetypes';
 import { services } from '../game/services';
 import { playSfx, playMusicLazy } from '../ui/audio';
 import { onInputAction } from '../ui/input';
@@ -24,6 +26,8 @@ import { effectiveAttributes } from '../core/attributes';
 import { textStyle } from '../ui/theme';
 import { sceneForRun } from './routing';
 import { partySpecies, preloadPokemon } from '../ui/lazyAssets';
+import { reduxOn } from '../ui/redux/stage';
+import { reduxChoicePrompt, reduxShop } from '../ui/redux/screens/shop';
 
 export class ShopScene extends Phaser.Scene {
   private picker: Picker | null = null;
@@ -67,6 +71,9 @@ export class ShopScene extends Phaser.Scene {
       haggle: run.shop?.haggle ?? null,
       mystery: (id) => currentShopType(run) === 'night' && !mart.has(id),
       isBlack: (e) => isBlackMarket(content, run, e),
+      // Tobias's lesson: one cheaper item per shop, and held items worth it for this team.
+      mentorDeal: shopDealItem(content, run),
+      worthIt: shopWorthItPerk(runPerks(content, run)) ? (item) => shopWorthIt(content, run, item) : undefined,
       canSell: Object.keys(run.inventory).some((id) => run.inventory[id]! > 0 && sellPrice(content, run, id) !== null),
       working: mapItemSummary(content, run),
     });
@@ -103,14 +110,18 @@ export class ShopScene extends Phaser.Scene {
         notice: data.notice,
         haggle: { charisma, chance: haggleChance(content, charisma) },
       };
-    this.handles = shopLayout(this.shopType)(this.ctx, { focus: (i) => this.setFocus(i), pick: (i) => this.pick(i) });
+    // New UI: the mock-ups' shop draws every kind of shop; Old keeps each shop's own look.
+    this.handles = (reduxOn() ? reduxShop : shopLayout(this.shopType))(this.ctx, { focus: (i) => this.setFocus(i), pick: (i) => this.pick(i), pickMany: (i, n) => this.buyMany(i, n) });
     this.setFocus(Math.min(data.focus ?? 0, view.rows.length - (view.canSell ? 0 : 1)));
 
     onInputAction(this, (action) => {
       if (this.picker) return void this.picker.handle(action);
       if (this.prompt) return this.promptInput(action);
       if (action === 'back') return this.leave();
-      if (action === 'confirm') return this.pick(this.focusIndex);
+      if (action === 'confirm') {
+        const n = this.handles?.count?.() ?? 1;
+        return n > 1 ? this.buyMany(this.focusIndex, n) : this.pick(this.focusIndex);
+      }
       view = this.view();
       const next = this.handles!.move(action, this.focusIndex);
       if (next !== this.focusIndex) {
@@ -171,6 +182,25 @@ export class ShopScene extends Phaser.Scene {
     } catch (e) {
       playSfx(this, 'ui.error', 0.6);
       this.handles?.refresh(view, null, (e as Error).message);
+      return;
+    }
+    playSfx(this, 'ui.buy', 0.8);
+    const after = this.view();
+    const index = after.rows.findIndex((r) => r.itemId === row.itemId);
+    this.handles?.refresh(after, index >= 0 ? index : null, message.replace(/^You bought /, 'Bought '));
+  }
+
+  /** New UI's "Buy 5": several of one item in one go (core `buyItems`; a one-only item or too little money is refused there). */
+  private buyMany(i: number, count: number): void {
+    const { session } = services();
+    const row = this.view().rows[i];
+    if (!row) return;
+    let message: string;
+    try {
+      message = session.buyItems(row.itemId, count);
+    } catch (e) {
+      playSfx(this, 'ui.error', 0.6);
+      this.handles?.refresh(this.view(), null, (e as Error).message);
       return;
     }
     playSfx(this, 'ui.buy', 0.8);
@@ -278,7 +308,7 @@ export class ShopScene extends Phaser.Scene {
 
   private openPrompt(question: string, options: [string, () => void][]): void {
     if (!this.ctx) return;
-    const ui = choicePrompt(this.ctx, question, options.map((o) => o[0]), (k) => this.closePrompt(k));
+    const ui = reduxOn() ? reduxChoicePrompt(question, options.map((o) => o[0]), (k) => this.closePrompt(k)) : choicePrompt(this.ctx, question, options.map((o) => o[0]), (k) => this.closePrompt(k));
     this.prompt = { ui, index: 0, actions: options.map((o) => o[1]) };
     ui.focus(0);
   }

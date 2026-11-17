@@ -1,6 +1,7 @@
 // Choice memory (Beta 0.6): remembered flags change what an event shows; indices stay stable; the flag registry is clean.
 
 import { describe, expect, it } from 'vitest';
+import { ENGINE_FLAGS } from '../../src/core/rivals/questlines';
 import memoryFlags from '../../src/data/overhaul/memoryFlags.json';
 import { EventDefSchema, MAX_EVENT_VARIANTS } from '../../src/core/contentSchema';
 import { allChoices, choiceAt, effectiveEvent, memoryKey, memoryValue, remembered, visibleChoices } from '../../src/core/eventMemory';
@@ -8,6 +9,7 @@ import { chooseEvent, eventView } from '../../src/core/events';
 import { chooseStarter, createRun } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
+import { FOREST } from '../../src/core/greenneedle';
 
 const outcome = (text: string, effects: unknown[] = []) => ({ text, effects });
 const BASE = {
@@ -93,11 +95,42 @@ describe('memory flag registry', () => {
   it('every remembers condition in real content reads a flag some event sets', () => {
     const setKeys = new Set<string>();
     const reads: string[] = [];
+    // A Greenneedle effect (`gn`) also sets run flags (setFlag, roll, pick, stamps, noFaint ...), and its `when` holds more effects.
+    const addSetter = (e: { kind: string; key?: string; op?: string; then?: unknown[] }): void => {
+      if (e.kind === 'flag' && e.key) setKeys.add(e.key);
+      if (e.kind === 'gn') {
+        if (e.key && e.op !== 'when' && e.op !== 'scene' && e.op !== 'itemEach') setKeys.add(e.key);
+        for (const t of (e.then ?? []) as { kind: string }[]) addSetter(t);
+      }
+    };
     for (const ev of content.events.values()) {
-      for (const ch of allChoices(ev)) for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (e.kind === 'flag') setKeys.add(e.key);
+      // Setters: outcome effects, a battle's win and lose effects (a friendly fight's loss still applies its own), and choice branches.
+      for (const ch of allChoices(ev)) {
+        for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle?.lose ?? [])]) {
+          addSetter(e);
+          // Rival questlines set flags through their own effect (set, pick, roll).
+          if (e.kind === 'rivalQuest') for (const k of [e.set?.key, e.pick?.key, e.roll?.key]) if (k) setKeys.add(k);
+        }
+        for (const b of ch.branches ?? []) for (const e of b.effects) addSetter(e);
+      }
       for (const v of ev.remembers) for (const c of v.when) if (c.kind === 'flag') reads.push(`${ev.id}:${c.key}`);
     }
-    const missing = reads.filter((r) => !setKeys.has(r.split(':')[1]!));
+    // Set by code, not by an effect: the Viridian Forest counters (core/greenneedle FOREST). Other code-set flags are `rule` entries in the flag files.
+    for (const k of Object.values(FOREST)) setKeys.add(k);
+    // Flags the rival questline engine sets after a fight (core/rivals/questlines.ts ENGINE_FLAGS).
+    for (const k of ENGINE_FLAGS) setKeys.add(k);
+    // Catalog Overhaul flag files name the flags code keeps (`rule`) and the ones another set will write (`hook`, its line waits until then).
+    const coFlags = Object.values(import.meta.glob<{ flags: { key: string; rule?: string; hook?: string }[] }>('../../src/data/catalogOverhaul/flags/*.json', { eager: true, import: 'default' }));
+    for (const f of coFlags) for (const x of f.flags ?? []) if (x.rule || x.hook) setKeys.add(x.key);
+    // The Evil Team engine writes flags too: an Operation's lasting flags, and team marks (`team-<team>-<mark>`) from `evil` effects.
+    for (const t of content.evilTeams.teams) {
+      for (const op of t.ops) for (const f of op.lasting?.flags ?? []) setKeys.add(typeof f === 'string' ? f : f.key);
+      for (const ev of content.events.values()) for (const ch of allChoices(ev)) for (const o of [ch.success, ch.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (e.kind === 'evil' && e.mark) setKeys.add(`team-${t.id}-${e.mark}`);
+    }
+    // Flags another Catalog Overhaul row writes, declared until that row's events are on the branch (src/data/catalogOverhaul/flags/*.json).
+    const external = Object.values(import.meta.glob('../../src/data/catalogOverhaul/flags/*.json', { eager: true, import: 'default' }) as Record<string, { external?: Record<string, string> }>).flatMap((f) => Object.keys(f.external ?? {}));
+    const declared = (k: string) => external.some((x) => (x.endsWith('*') ? k.startsWith(x.slice(0, -1)) : k === x));
+    const missing = reads.filter((r) => !setKeys.has(r.split(':')[1]!) && !declared(r.split(':')[1]!));
     expect(missing).toEqual([]);
   });
 });

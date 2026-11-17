@@ -1,6 +1,6 @@
 // Beta 0.6 E5: the Extended Cut director, the one climax-cut reader, and Second Shot.
 import { describe, expect, it } from 'vitest';
-import { beginClimax, climaxCutOf, climaxLost, climaxPhases, finishStep, nextStep } from '../../src/core/arc/climaxExtended';
+import { beginClimax, climaxBoard, climaxCutOf, climaxLost, climaxPhases, finishStep, nextStep, secondShotNotice } from '../../src/core/arc/climaxExtended';
 import { assistModeOf } from '../../src/core/rivals/live';
 import { friendAssist } from '../../src/core/rivals/friend';
 import { xflagHolds } from '../../src/core/events';
@@ -151,5 +151,117 @@ describe('real run flow', () => {
     expect(r.expansion!.track!.kanto!.step).toBe(1);
     expect(r.expansion!.cut!.result).toBe('worst');
     expect(r.phase).not.toBe('over');
+  });
+});
+
+describe('the phase list the player reads (climaxBoard)', () => {
+  it('is null for a Standard run and before the climax begins', () => {
+    expect(climaxBoard(mk())).toBeNull();
+    expect(climaxBoard(mk('standard'))).toBeNull();
+    expect(climaxBoard(mk('extended'))).toBeNull();
+  });
+  it('lists every phase in order: the first is Now, the one after Next, the rest Ahead', () => {
+    const r = mk('extended');
+    expect(beginClimax(r, 'kanto')).toBe(true);
+    const b = climaxBoard(r)!;
+    expect(b.region).toBe('kanto');
+    expect(b.rows.map((x) => x.name)).toEqual(climaxPhases('kanto').map((s) => s.name));
+    expect(b.rows.map((x) => x.state)).toEqual(['now', 'next', ...b.rows.slice(2).map(() => 'ahead')]);
+    expect(b.rows.every((x) => x.pct === 0)).toBe(true);
+    expect(b.shots).toBe(0);
+    expect(b.tries).toBe(2);
+  });
+  it('says what each phase is: a story beat, a format with its fights, the rest', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    const rows = climaxBoard(r)!.rows;
+    const sub = (name: string) => rows.find((x) => x.name === name)!.sub;
+    expect(sub('Broadcast and Choice')).toBe('Story');
+    expect(sub('The Sealed City')).toBe('Siege Map');
+    expect(sub('The Streets')).toBe('Blackout · 2–3 fights');
+    expect(sub('The Climb')).toBe('Gauntlet · 4–6 fights');
+    expect(sub('Breather')).toBe('Heal, revive one, save');
+    expect(sub('Giovanni')).toBe('Boss · 1 fight');
+  });
+  it('finished phases are Done and full; a running battle phase counts its fights', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    finishStep(r);
+    finishStep(r);
+    finishStep(r);
+    const cut = r.expansion!.cut as Record<string, any>;
+    cut.director = { ...cut.director, need: 4, fought: 1 };
+    const rows = climaxBoard(r)!.rows;
+    expect(rows.slice(0, 3).map((x) => [x.state, x.pct])).toEqual([['done', 100], ['done', 100], ['done', 100]]);
+    expect(rows[3]).toEqual({ name: 'The Climb', sub: 'Gauntlet · 1 of 4 fights won', state: 'now', pct: 25 });
+    expect(rows[4]!.state).toBe('next');
+  });
+  it('reading it changes nothing, and it is gone once the climax is over', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    const before = JSON.stringify(r);
+    climaxBoard(r);
+    expect(JSON.stringify(r)).toBe(before);
+    expect(climaxLost(r)).toBe('retry');
+    expect(climaxBoard(r)!.shots).toBe(1);
+    expect(climaxLost(r)).toBe('worst');
+    expect(climaxBoard(r)).toBeNull();
+  });
+  it('a damaged director reads as the start, never as a crash', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    (r.expansion!.cut as Record<string, unknown>).director = { idx: 'x', shots: -3, need: 0, fought: 9 };
+    const b = climaxBoard(r)!;
+    expect(b.rows[0]!.state).toBe('now');
+    expect(b.shots).toBe(0);
+    expect(b.rows[0]!.pct).toBe(0);
+  });
+});
+
+describe('what a lost climax battle tells the player (secondShotNotice)', () => {
+  it('the first loss is the Second Shot: a retry, with a warning about the next loss', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    const before = structuredClone(r);
+    expect(climaxLost(r)).toBe('retry');
+    const n = secondShotNotice(before, r)!;
+    expect(n.title).toBe('Second Shot');
+    expect(n.button).toBe('Try again');
+    expect(n.body).toContain('last save point');
+    expect(n.body).toContain('One more loss ends the climax');
+  });
+  it('the second loss ends the climax, and says the run goes on', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    climaxLost(r);
+    const before = structuredClone(r);
+    expect(climaxLost(r)).toBe('worst');
+    const n = secondShotNotice(before, r)!;
+    expect(n.title).toBe('The climax is lost');
+    expect(n.button).toBe('Go on');
+    expect(n.body).toContain('the run goes on');
+  });
+  it('says nothing when no shot was spent: a win, a Standard run, a battle before the climax', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    expect(secondShotNotice(structuredClone(r), r)).toBeNull();
+    const plain = mk('standard');
+    expect(secondShotNotice(structuredClone(plain), plain)).toBeNull();
+    const early = mk('extended');
+    expect(secondShotNotice(structuredClone(early), early)).toBeNull();
+    expect(secondShotNotice(mk(), mk())).toBeNull();
+  });
+  it('reads only, and a damaged director never crashes it', () => {
+    const r = mk('extended');
+    beginClimax(r, 'kanto');
+    const before = structuredClone(r);
+    climaxLost(r);
+    const snap = JSON.stringify(r);
+    secondShotNotice(before, r);
+    expect(JSON.stringify(r)).toBe(snap);
+    (r.expansion!.cut as Record<string, unknown>).director = { shots: 'x' };
+    expect(secondShotNotice(before, r)).toBeNull();
+    (r.expansion!.cut as Record<string, unknown>).director = null;
+    expect(secondShotNotice(before, r)).toBeNull();
   });
 });

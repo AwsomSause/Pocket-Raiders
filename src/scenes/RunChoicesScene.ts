@@ -12,6 +12,8 @@ import { onInputAction } from '../ui/input';
 import { ScrollList } from '../ui/scrollList';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import type { RunPrepData } from './RunPrepScene';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { settingsView } from '../ui/redux/templates';
 
 export type ChoicesGroup = 'config' | 'trainer';
 export interface RunChoicesData {
@@ -39,6 +41,8 @@ export class RunChoicesScene extends Phaser.Scene {
   private detail!: Phaser.GameObjects.Text;
   private notice!: Phaser.GameObjects.Text;
   private testing = false;
+  /** New UI: the mock-ups' Run Setup page (rows with ◀ value ▶) drawn over this scene. */
+  private view: ReduxView | null = null;
 
   constructor() {
     super('RunChoices');
@@ -71,7 +75,24 @@ export class RunChoicesScene extends Phaser.Scene {
     this.refreshRows();
     this.focusRow(this.rowIndex);
 
+    this.view = reduxOn() ? mountRedux(this, {
+      render: (c) => settingsView(c, {
+        title: 'Run Setup', area: 'run', tabs: GROUPS.map((g) => (g.id === 'config' ? 'Setup' : g.title)), tab: GROUPS.indexOf(this.group),
+        rows: this.group.rows.map(([row, title]) => { const o = this.cur(row); return { label: title, value: o.options.find((x) => x.id === o.chosen)?.label ?? 'none', disabled: !o.enabled }; }),
+        index: this.rowIndex,
+        text: this.notice.text || `${this.help.text} ${this.detail.text}`.replace(/\s+/g, ' '),
+        hints: [['↔', 'change'], ['Q/E', 'page'], ['Esc', 'desk']],
+      }),
+      acts: { pick: (i) => { this.rowsList.index = Number(i); this.focusRow(Number(i)); this.step(1); }, tab: (k) => this.setGroup(GROUPS[Number(k)]!.id) },
+    }) : null;
     onInputAction(this, (a) => {
+      if (this.view) {
+        // New UI: one list; left and right step the focused row's choice (locked choices are skipped).
+        if (a === 'up' || a === 'down') { this.notice.setText(''); this.rowsList.move(a === 'up' ? -1 : 1); }
+        else if (a === 'left' || a === 'right' || a === 'confirm') this.step(a === 'left' ? -1 : 1);
+        else if (a === 'back') this.leave();
+        return this.view.refresh();
+      }
       const list = this.col === 'rows' ? this.rowsList : this.optsList;
       if (a === 'up') list.move(-1);
       else if (a === 'down') list.move(1);
@@ -175,6 +196,22 @@ export class RunChoicesScene extends Phaser.Scene {
     this.optsList.setActive(true);
     this.optsList.index = i;
     this.showDetail(i);
+  }
+
+  /** New UI: moves the focused row to its next (or previous) choice that can be picked. */
+  private step(dir: 1 | -1): void {
+    const [row] = this.group.rows[this.rowIndex]!;
+    const o = this.cur(row);
+    if (!o.enabled) { this.say('This row only applies to the Regional Circuit mode.'); return void this.view?.refresh(); }
+    const n = o.options.length, at = Math.max(0, o.options.findIndex((x) => x.id === o.chosen));
+    for (let q = 1; q <= n; q++) {
+      const i = (at + dir * q + n * q) % n;
+      if (!o.options[i]!.ok) continue;
+      this.pickOption(i);
+      this.backToRows();
+      break;
+    }
+    this.view?.refresh();
   }
 
   /** Picks an option of a row directly (used by tests and shortcuts). */

@@ -1,0 +1,1492 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "shadow-sighting",
+   "name": "A Dark Aura",
+   "group": "Shadow Pokémon",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#150a20",
+    "effect": "fog"
+   },
+   "intro": "A Pokémon stands very still in the long grass, wrapped in a purple haze. Its eyes are empty, like a window with nobody home.\n\nSomewhere behind those eyes, it is still in there. You can tell by the way it shakes.",
+   "choices": [
+    {
+     "label": "Watch from the trees.",
+     "success": {
+      "text": "It moves like something is steering it. A collar of black wire, a tag with a team mark. You write it all down. Somebody is doing this on purpose.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "shadow-activity",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw it a berry.",
+     "success": {
+      "text": "The haze flickers. It does not eat, but it does not attack, and for one breath its eyes almost find yours. Then the wire tugs it away into the trees.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "shadow-activity",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sighting-kind",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your own Shadow Pokémon go to it.",
+     "requires": [
+      {
+       "kind": "partyShadow"
+      }
+     ],
+     "success": {
+      "text": "The two of them stand nose to nose in the haze for a long time. Neither one attacks. When yours comes back, it walks a little straighter, as if it saw something it wants to stop being.",
+      "effects": [
+       {
+        "kind": "shadowHeart",
+        "amount": -6
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "shadow-activity",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Back away.",
+     "success": {
+      "text": "You back away slowly. The haze fades behind you, but the shaking stays with you for a while.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shadow-sanctuary",
+   "name": "The Shadow Sanctuary",
+   "group": "Shadow Pokémon",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "shadow-sighting"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#120820",
+    "effect": "flicker"
+   },
+   "intro": "A ruined hut at the edge of the woods. Inside, a caged Pokémon wrapped in the same dark haze, and a tired caretaker in a patched coat keeping watch.\n\nCaretaker: \"The haze comes off. Slowly. With people who stay. Most people don't stay.\"",
+   "choices": [
+    {
+     "label": "Break the cage open.",
+     "check": "strength",
+     "success": {
+      "text": "The lock gives, and the shadowed Pokémon comes out swinging: scared, strong, and not sure you are not the one who caged it.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "dark",
+        "ghost",
+        "poison"
+       ],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "shadow": true,
+       "blissful": false,
+       "win": [
+        {
+         "kind": "item",
+         "id": "rare-candy",
+         "count": 1
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The lock holds. The caretaker shoos you out, not unkindly: \"Force is how it got in there.\"",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help the caretaker calm it.",
+     "success": {
+      "text": "Hours of quiet voices and slow hands. When the cage opens, it does not run. It steps out and stands beside you, still shaded, choosing you.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "join",
+        "shadow": true,
+        "species": [],
+        "types": [
+         "dark",
+         "ghost",
+         "poison"
+        ],
+        "levelBonus": -1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sanctuary-friend",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it in the caretaker's care.",
+     "success": {
+      "text": "Caretaker: \"Then it stays with me until the haze is gone. Come back for it.\" She writes your name on the cage, so it knows someone is coming.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "sanctuary-ward-wild",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sanctuary-friend",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave your own Shadow Pokémon here to heal.",
+     "requires": [
+      {
+       "kind": "partyShadow"
+      }
+     ],
+     "success": {
+      "text": "You kneel and say goodbye properly. It watches you go from the doorway. The caretaker puts a hand on its head: \"I'll keep it safe. You come back.\"",
+      "effects": [
+       {
+        "kind": "sendAway",
+        "key": "shadow-sanctuary-ward",
+        "shadow": true,
+        "who": "lead"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "sanctuary-friend",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "sanctuary-berry",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sighting-kind",
+       "atLeast": 1,
+       "atMost": 999
+      }
+     ],
+     "notice": "Caretaker: \"You're the one who threw the berry, back in the grass. It told me. Well. It came here calmer, and that told me.\""
+    }
+   ]
+  },
+  {
+   "id": "shadow-stabilize",
+   "name": "Steadying the Shadow",
+   "group": "Shadow Pokémon",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "shadow-sanctuary"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a1030",
+    "effect": "glint"
+   },
+   "intro": "The caretaker from the Sanctuary finds you on the road, out of breath, with a bag of herbs.\n\nCaretaker: \"The haze listens to a steady heart. Loud noises, sudden moves, and it closes again. You have to be the calm it can borrow.\"",
+   "choices": [
+    {
+     "label": "Sit with your Shadow Pokémon through the night.",
+     "requires": [
+      {
+       "kind": "partyShadow"
+      }
+     ],
+     "success": {
+      "text": "You talk to it until the fire burns down. By morning the haze is thinner, and it is leaning its whole weight against you, asleep.",
+      "effects": [
+       {
+        "kind": "shadowHeart",
+        "amount": -10
+       },
+       {
+        "kind": "friendship",
+        "amount": 6,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Train it gently, a little at a time.",
+     "requires": [
+      {
+       "kind": "partyShadow"
+      }
+     ],
+     "success": {
+      "text": "Small moves, never forced. Its strikes get cleaner, and once, for a heartbeat, its eyes flash with a spark of itself.",
+      "effects": [
+       {
+        "kind": "shadowHeart",
+        "amount": -5
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Visit the Sanctuary with her.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sanctuary-friend",
+       "atLeast": 1,
+       "atMost": 999
+      }
+     ],
+     "success": {
+      "text": "The one you left there hears your voice before it sees you, and presses against the bars. Caretaker: \"See? It remembers. It is getting better.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sanctuary-visits",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it space.",
+     "success": {
+      "text": "You thank her for the herbs and walk on. She watches you go, and keeps a light in the window anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shadow-purified",
+   "name": "The Haze Lifts",
+   "group": "Shadow Pokémon",
+   "rarity": "rare",
+   "minStage": 5,
+   "requires": [
+    {
+     "kind": "eventSeen",
+     "id": "shadow-stabilize"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a1850",
+    "effect": "hearts"
+   },
+   "intro": "Word comes down the road with the caretaker's handwriting on it: \"Today is the day. The last of the haze is lifting. Come.\"",
+   "choices": [
+    {
+     "label": "Stay with your Shadow Pokémon until it is gone.",
+     "requires": [
+      {
+       "kind": "partyShadow"
+      }
+     ],
+     "success": {
+      "text": "The haze lifts off it like smoke off a cold morning. It looks at you, finally clear-eyed, and cries out so loud the whole party jumps. Warmth floods through all of you.",
+      "effects": [
+       {
+        "kind": "purifyShadow",
+        "ready": 100
+       },
+       {
+        "kind": "friendship",
+        "amount": 8,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back to the Sanctuary for the one you left.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "shadow-sanctuary-ward",
+       "atLeast": 1,
+       "atMost": 999
+      },
+      {
+       "kind": "flag",
+       "key": "sanctuary-reclaimed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "It is waiting at the door, clear-eyed and loud, and it runs the last ten steps. The caretaker is crying and pretending she isn't. \"Told you to come back.\"",
+      "effects": [
+       {
+        "kind": "bringBack",
+        "key": "shadow-sanctuary-ward",
+        "levels": 2,
+        "friendship": 20,
+        "purify": true
+       },
+       {
+        "kind": "flag",
+        "key": "sanctuary-reclaimed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back for the caged one in her care.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sanctuary-ward-wild",
+       "atLeast": 1,
+       "atMost": 999
+      },
+      {
+       "kind": "flag",
+       "key": "sanctuary-reclaimed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "The cage is open. The Pokémon inside is not hazed any more, just shy, and it walks to your name on the bars and then to you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [],
+        "types": [
+         "dark",
+         "ghost",
+         "poison"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sanctuary-reclaimed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Share a quiet moment.",
+     "success": {
+      "text": "You sit with the caretaker on the step. She presses a strange glowing stone into your hand: \"For the next one. There is always a next one.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       },
+       {
+        "kind": "research",
+        "amount": 15
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "purified-visits",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sanctuary-visits",
+       "atLeast": 1,
+       "atMost": 999
+      }
+     ],
+     "notice": "Caretaker: \"You kept coming back. Do you know how rare that is? It knew your footsteps by the end.\""
+    }
+   ]
+  },
+  {
+   "id": "shadow-outbreak",
+   "name": "Shadow Outbreak",
+   "group": "Shadow Pokémon",
+   "stop": "haunted",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shadow-outbreak",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1a0c2a",
+    "effect": "fog"
+   },
+   "intro": "Purple haze hangs over the route like smoke that forgot to rise. Wild Pokémon pace in circles, eyes dull. Something nearby is feeding it, and it is getting bigger.",
+   "choices": [
+    {
+     "label": "Search for the source.",
+     "check": "intelligence",
+     "success": {
+      "text": "Behind a rock: a humming canister with a team mark, and the Pokémon it hazed, standing guard over it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [
+        "dark",
+        "ghost",
+        "poison"
+       ],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "shadow": true,
+       "blissful": false,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "shadow-outbreak",
+         "amount": -1
+        },
+        {
+         "kind": "flag",
+         "key": "kindness",
+         "amount": 1
+        },
+        {
+         "kind": "research",
+         "amount": 15
+        }
+       ]
+      }
+     },
+     "failure": {
+      "text": "The haze thickens and the Pokémon lash out. You pull back with scrapes, coughing.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the Blissful aura settle the haze.",
+     "requires": [
+      {
+       "kind": "partyBlissful"
+      }
+     ],
+     "success": {
+      "text": "Soft light spreads from your Blissful Pokémon. The haze thins, the pacing slows, and the route breathes again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shadow-outbreak",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kindness",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow your Shadow Pokémon to the source.",
+     "requires": [
+      {
+       "kind": "partyShadow"
+      }
+     ],
+     "success": {
+      "text": "It knows this haze. It walks straight to the canister without looking, and stands there shaking until you smash it. The haze clears. So, a little, does its own.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shadow-outbreak",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "kindness",
+        "amount": 1
+       },
+       {
+        "kind": "shadowHeart",
+        "amount": -8
+       }
+      ]
+     }
+    },
+    {
+     "label": "Avoid the area.",
+     "success": {
+      "text": "You take the long way round. The haze stays where it is.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "shadow-stronghold",
+   "name": "Hideout Infiltration",
+   "group": "Shadow Pokémon",
+   "stop": "hideout",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shadow-activity",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#150c22",
+    "effect": "flicker"
+   },
+   "intro": "A faction hideout wedged into the cliffside: vents, a guarded loading dock, and cages stacked behind glass. Some of the cages are moving.\n\nYou can get a look at the guards before you choose.",
+   "choices": [
+    {
+     "label": "Slip in through the vents.",
+     "check": "speed",
+     "success": {
+      "text": "Quiet and quick. You open a cage, and a hazed Pokémon steps out trembling, looking at your hand like it has never seen one held out open.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": true,
+        "species": [],
+        "types": [
+         "dark",
+         "ghost",
+         "poison"
+        ],
+        "levelBonus": -1,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "shadow-activity",
+        "amount": -1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A guard spots you. \"Intruder!\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hideout guards",
+       "size": 3,
+       "shadow": 1,
+       "types": [
+        "dark"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        },
+        {
+         "kind": "flag",
+         "key": "shadow-activity",
+         "amount": -1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Break in through the front.",
+     "requires": [
+      {
+       "kind": "noTrainerTag",
+       "tag": "pacifist"
+      }
+     ],
+     "success": {
+      "text": "Alarms scream. The whole shift storms out to meet you, and somewhere above, a lieutenant is shouting orders.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hideout guards",
+       "size": 4,
+       "shadow": 2,
+       "types": [
+        "dark"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1100
+        },
+        {
+         "kind": "item",
+         "id": "premier-ball",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "shadow-activity",
+         "amount": -1
+        },
+        {
+         "kind": "flag",
+         "key": "kindness",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "lieutenant-loose",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Free the cages and send them to the Sanctuary.",
+     "check": "speed",
+     "success": {
+      "text": "You work the locks one by one while the guards change shift. The freed ones go north to the caretaker, every one. On the roof, the lieutenant sees you, and runs.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sanctuary-ward-wild",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sanctuary-friend",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "shadow-activity",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "lieutenant-loose",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 3
+       }
+      ]
+     },
+     "failure": {
+      "text": "A lock jams and the alarm goes. You get out with nothing but bruises.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.08
+       }
+      ]
+     }
+    },
+    {
+     "label": "Study the guards' patrol, then leave.",
+     "success": {
+      "text": "You learn when they change shifts and which crates move at night.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "shadow-black-market",
+   "name": "Shadow Market",
+   "group": "Shadow Pokémon",
+   "stop": "merchant",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "shadow-activity",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#10101c",
+    "effect": "fog"
+   },
+   "intro": "A hooded dealer sells from a crate behind a barn. A hand-painted sign: STOLEN. CHEAP. NO QUESTIONS.\n\nDealer: \"Information, gear, special supplies. Every coin I take goes back to the people who make the haze. You know that, right?\"",
+   "choices": [
+    {
+     "label": "Buy a tip about the factions (₽600).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "He slides a folded map across. Circled in red: what the hideouts are moving, and where. Your money goes back up the line.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "revealStops"
+       },
+       {
+        "kind": "flag",
+        "key": "evil-funded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a Snag Ball (₽5000). \"Two in five of these work.\"",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 5000
+      },
+      {
+       "kind": "flag",
+       "key": "snag-ball-sold",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "chance": 0.4,
+     "success": {
+      "text": "A battered ball with a black seam. It is the good one.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -5000
+       },
+       {
+        "kind": "item",
+        "id": "snag-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "snag-ball-sold",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-funded",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "A battered ball with a black seam. It is one of the three that don't work. He told you the odds; he keeps the money.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -5000
+       },
+       {
+        "kind": "flag",
+        "key": "snag-ball-sold",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-funded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy back the Shadow Pokémon in the crate (₽2000).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 2000
+      }
+     ],
+     "success": {
+      "text": "He opens the crate. Inside, a hazed Pokémon with a team tag, curled small. \"Reclaimed, then. It's yours, if you want the trouble.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -2000
+       },
+       {
+        "kind": "join",
+        "shadow": true,
+        "species": [],
+        "types": [
+         "dark",
+         "ghost",
+         "poison"
+        ],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-funded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Report the dealer to the Sanctuary Keepers.",
+     "success": {
+      "text": "A keeper thanks you and pays for the tip. By evening the crate is gone, and another stall closes.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "flag",
+        "key": "kindness",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "shadow-activity",
+        "amount": -1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "shadow-lieutenant",
+   "name": "The Lieutenant Returns",
+   "group": "Shadow Pokémon",
+   "stop": "ambush",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "lieutenant-loose",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#180c1c",
+    "effect": "fog"
+   },
+   "intro": "A figure steps out of the trees: the lieutenant who got away, with a fresh team and a burn scar on one glove.\n\nLieutenant: \"You cost me an operation. I want it back. Starting with you.\"",
+   "choices": [
+    {
+     "label": "Fight them.",
+     "requires": [
+      {
+       "kind": "noTrainerTag",
+       "tag": "pacifist"
+      }
+     ],
+     "success": {
+      "text": "They send out their best, and one of them is hazed so deep it does not even flinch.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "The Lieutenant's squad",
+       "size": 4,
+       "shadow": 1,
+       "types": [
+        "dark"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1500
+        },
+        {
+         "kind": "flag",
+         "key": "shadow-activity",
+         "amount": -1
+        },
+        {
+         "kind": "flag",
+         "key": "lieutenant-loose",
+         "amount": -1
+        },
+        {
+         "kind": "flag",
+         "key": "lieutenant-beaten",
+         "amount": 1
+        },
+        {
+         "kind": "join",
+         "shadow": true,
+         "species": [],
+         "types": [
+          "dark",
+          "ghost",
+          "poison"
+         ],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Bluff your way past.",
+     "check": "charisma",
+     "success": {
+      "text": "You talk about the Keepers on the next ridge. They hesitate long enough for you to slip away.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": -1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "They see through it, and the squad shoves you to the ground on the way past.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back.",
+     "success": {
+      "text": "You take another road. They will remember.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lieutenant-again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lieutenant-beaten",
+       "atLeast": 1,
+       "atMost": 999
+      }
+     ],
+     "notice": "Lieutenant: \"Again. You. Fine. This time I brought the ones I kept back.\""
+    }
+   ]
+  },
+  {
+   "id": "shadow-triad",
+   "name": "Shadow Triad",
+   "group": "Tricksters, villains and teams",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#101010",
+    "effect": "fog"
+   },
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma"
+    }
+   ],
+   "intro": "Three figures in black and white drop from nowhere in a puff of smoke, faces covered, perfectly still.\n\nShadow Triad: \"Lord Ghetsis would like to know why you keep getting in the way.\"",
+   "choices": [
+    {
+     "label": "Battle all three.",
+     "requires": [
+      {
+       "kind": "noTrainerTag",
+       "tag": "pacifist"
+      }
+     ],
+     "success": {
+      "text": "They attack together, all three at once, without a word between them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "triples",
+       "name": "Shadow Triad",
+       "size": 3,
+       "types": [
+        "dark"
+       ],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "leftovers",
+          "focus-sash",
+          "life-orb",
+          "choice-band",
+          "lucky-punch",
+          "macho-brace",
+          "smoke-ball"
+         ]
+        },
+        {
+         "kind": "money",
+         "amount": 1500
+        },
+        {
+         "kind": "flag",
+         "key": "shadow-activity",
+         "amount": -1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Hand over an item.",
+     "success": {
+      "text": "One of them takes it without touching your hand. Then there are no figures at all, only smoke.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell him I'm not stopping.\"",
+     "success": {
+      "text": "A pause. Then, together: \"He knows.\" The smoke clears. The road ahead feels watched for the rest of the day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "shadow-activity",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "karma-echo",
+   "name": "An Echo of What You Did",
+   "group": "Set Pieces",
+   "rarity": "uncommon",
+   "minStage": 4,
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#20202a",
+    "effect": "none"
+   },
+   "intro": "A stranger stops you at the crossroads, hat low, notebook open.\n\nStranger: \"I collect what the road says about people. You'd be surprised how much it says. Want to hear yours?\"",
+   "choices": [
+    {
+     "label": "\"What does the road say about me?\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "record",
+         "is": "high"
+        }
+       ],
+       "text": "Stranger: \"{flag:rep} good turns, {flag:kind-total} kindnesses. They say you stop for people. A shopkeeper two towns back asked me to give you this, if I ever met you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 200
+        },
+        {
+         "kind": "friendship",
+         "amount": 1,
+         "who": "party"
+        },
+        {
+         "kind": "attribute",
+         "key": "goodEvil",
+         "amount": 1
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "record",
+         "is": "low"
+        }
+       ],
+       "text": "Stranger: \"{flag:rep-lost} bad turns, and something you kept that wasn't yours. They lock their doors when they hear your name. Some of them pay me to warn them you're coming.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": 200
+        },
+        {
+         "kind": "attribute",
+         "key": "ragePeace",
+         "amount": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Stranger: \"By my count: {flag:rep} good turns, {flag:rep-lost} bad ones, {flag:kind-total} kindnesses. Quiet road. Nobody has made up their mind about you yet.\"",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do they say about my team?\"",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "rep",
+         "category": "rival",
+         "atLeast": "known"
+        }
+       ],
+       "text": "Stranger: \"They say you never once backed down from your rival. Kids have started picking sides.\"",
+       "effects": [
+        {
+         "kind": "friendship",
+         "amount": 1,
+         "who": "party"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "rep",
+         "category": "champion",
+         "atLeast": "known"
+        }
+       ],
+       "text": "Stranger: \"Gym Leaders talk. They say you fight like someone who has already seen the end of the road.\"",
+       "effects": [
+        {
+         "kind": "friendship",
+         "amount": 1,
+         "who": "party"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "rep",
+         "category": "villain",
+         "atLeast": "known"
+        }
+       ],
+       "text": "Stranger: \"The teams know your face. Some of their grunts have stopped wearing the uniform on this road.\"",
+       "effects": [
+        {
+         "kind": "friendship",
+         "amount": 1,
+         "who": "party"
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "rep",
+         "category": "bond",
+         "atLeast": "known"
+        }
+       ],
+       "text": "Stranger: \"They say your Pokémon would walk into fire for you, and that you would walk in first.\"",
+       "effects": [
+        {
+         "kind": "friendship",
+         "amount": 2,
+         "who": "party"
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Stranger: \"They talk about your {lead}. Mostly that it looks tired, and that it never stops looking at you.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I don't care what they say.\"",
+     "success": {
+      "text": "Stranger: \"Everyone says that.\" They close the notebook and let you pass.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "co-week-rival",
+   "name": "Your Rival, Here Too",
+   "group": "Rivalry Week",
+   "room": true,
+   "stop": "event",
+   "scene": {
+    "cast": [],
+    "tint": "#e04848",
+    "effect": "sparkle"
+   },
+   "intro": "Halfway through, somebody is leaning on the wall like they have been waiting all day.\n\n{rival}: \"Rivalry Week. You didn't think I'd let you have this place to yourself, did you?\"",
+   "choices": [
+    {
+     "label": "\"Then let's settle it here.\"",
+     "requires": [
+      {
+       "kind": "rivalMet",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "{rival} grins and throws first. In a place like this, nobody is coming to break it up.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Rival",
+       "rival": true,
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 900
+        },
+        {
+         "kind": "flag",
+         "key": "week-rival-won",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Help me get through, then.\"",
+     "success": {
+      "text": "{rival}: \"Fine. Just this once.\" Two teams side by side for a while. You both get better, and neither of you says so.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 4,
+        "who": "party"
+       },
+       {
+        "kind": "levels",
+        "amount": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk past them.",
+     "success": {
+      "text": "{rival}: \"Running already? I'll be in the next one too.\"",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "week-rival-again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "week-rival-won",
+       "atLeast": 1,
+       "atMost": 999
+      }
+     ],
+     "notice": "{rival}: \"The last one went to you. I have been thinking about it every step since.\""
+    }
+   ]
+  }
+ ]
+}

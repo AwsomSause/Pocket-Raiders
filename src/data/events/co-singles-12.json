@@ -1,0 +1,1411 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "spooky-season",
+   "name": "Spooky Season Begins",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "spooky-season",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Lanterns lit, and the dead have walked out to the road!\"** Pumpkins grin on every gatepost. Somewhere, a parade is tuning up.",
+   "choices": [
+    {
+     "label": "Wear a costume.",
+     "success": {
+      "text": "You throw a sheet over your head and cut out two eye holes. The Ghost-types on the road take one look and decide you are one of them. They are friendlier all week, and the Pumpkin King and the Midnight Parade are out there somewhere.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "ghost"
+         ]
+        }
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Costume on: Ghost-types are friendlier",
+        "effects": [
+         {
+          "kind": "captureMultiplier",
+          "value": 1.1
+         },
+         {
+          "kind": "typeEncounterWeight",
+          "type": "ghost",
+          "value": 2
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "spooky-costume",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go as you are.",
+     "success": {
+      "text": "You go as you are. Spooky forms rustle in the long grass, and somewhere out there, the Pumpkin King and the Midnight Parade are waiting.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "winter-festival",
+   "name": "Winter Festival",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "winter-festival",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Snow, lights and gifts for everyone!\"** A tree in the square, strung with lights, and a pile of presents underneath.",
+   "choices": [
+    {
+     "label": "Give a gift.",
+     "success": {
+      "text": "You leave a gift under the tree for someone you will never meet. It feels better than any present you have opened. Somewhere out in the snow, the Frost King stirs, and the gift swap is open.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a gift.",
+     "success": {
+      "text": "A little parcel with your name spelled wrong on it. Inside, something useful. Somewhere out in the snow, the Frost King stirs, and the gift swap is open.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "pp-up",
+         "nugget",
+         "snowball"
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lunar-new-year",
+   "name": "Lunar New Year",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "lunar-new-year",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Red lanterns, dragon dances, lucky envelopes!\"** Drums in the street and a dragon made of people, weaving through the crowd.",
+   "choices": [
+    {
+     "label": "Join the dragon dance.",
+     "success": {
+      "text": "You dance under the dragon's tail, and your Dragon-types dance with you, roaring along with the drums. At the end, an old lady presses a red envelope into your hand: ₽888, for luck.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "dragon"
+         ]
+        }
+       },
+       {
+        "kind": "money",
+        "amount": 888
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hang a lantern.",
+     "success": {
+      "text": "You hang a red lantern on the line with the others and make a wish. An old lady presses a red envelope into your hand: ₽888, for luck.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 888
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "friendship-festival",
+   "name": "Friendship Festival",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "friendship-festival",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Bring your friends, all of them, every last one!\"** Blankets on every lawn.",
+   "choices": [
+    {
+     "label": "Picnic.",
+     "success": {
+      "text": "You spread a blanket and your whole team piles onto it. All week long, every moment you share counts for a little more.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Friendship Festival: Bond gains up",
+        "effects": [
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.5
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "spring-bloom",
+   "name": "Spring Bloom",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "spring-bloom",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The first flowers are out, and so are the eggs!\"** Gracidea everywhere, and children with baskets.",
+   "choices": [
+    {
+     "label": "Look for eggs.",
+     "success": {
+      "text": "You ask around. The egg hunt is in the meadow, and every hidden place on this road is marked for you.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look for the Guardian.",
+     "success": {
+      "text": "You ask about the Guardian. People lower their voices: it keeps the first bloom, in a meadow nobody can quite find. Now you know where to look.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "summer-splash",
+   "name": "Summer Splash",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "summer-splash",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Sun, sea, and the biggest beach battle of the year!\"**",
+   "choices": [
+    {
+     "label": "Swim.",
+     "success": {
+      "text": "You swim out past the breakers with your team, and the tide pools shine on the way back. Everyone comes out of the sea refreshed.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "A warm-up match on the sand with a swimmer who is far too good at this.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Beach Swimmer",
+       "classId": "swimmer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 300
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "valentines-duo-week",
+   "name": "Duo Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "valentines-duo-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Two hearts, one battle!\"** Every match this week is fought in pairs, and pays like it.",
+   "choices": [
+    {
+     "label": "Pick a pair from the team.",
+     "pick": {},
+     "success": {
+      "text": "You pick this one, and your lead to stand beside it. All week, doubles pay half again, and the two of them fight like they planned it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "picked"
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Duo Week: doubles pay ×1.5",
+        "effects": [
+         {
+          "kind": "doubleBattleRewardMultiplier",
+          "value": 1.5
+         },
+         {
+          "kind": "friendshipMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cherry-blossom-picnic",
+   "name": "Cherry Blossom Picnic",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "cherry-blossom-picnic",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The blossom only lasts a week. Sit under it while you can.\"**",
+   "choices": [
+    {
+     "label": "Picnic.",
+     "success": {
+      "text": "You lie under the blossom with your team until the petals cover all of you. Everyone is rested, and something small and green watches from the next tree, pleased.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "flag",
+        "key": "sign-shaymin",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pride-rainbow-parade",
+   "name": "Rainbow Parade",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "pride-rainbow-parade",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Everyone, exactly as they are!\"** A parade under a rainbow that does not fade.",
+   "choices": [
+    {
+     "label": "March.",
+     "success": {
+      "text": "You march, and your team marches with you, ribbons on everyone. Overhead, the rainbow burns brighter, and something with burning wings crosses it, once.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "sign-ho-oh",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cheer.",
+     "success": {
+      "text": "You cheer from the side until your voice goes. Overhead, the rainbow burns brighter, and something with burning wings crosses it, once.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "sign-ho-oh",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "midsummer-night",
+   "name": "Midsummer Night",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "midsummer-night",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The shortest night of the year. Nobody sleeps.\"** Fireflies, and music from the woods.",
+   "choices": [
+    {
+     "label": "Stay up.",
+     "success": {
+      "text": "You stay up. Fairies and bugs dance in the dark, and a light comes on in a place on the map you had not noticed before.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Midsummer Night: Fairy and Bug Pokémon about",
+        "effects": [
+         {
+          "kind": "typeEncounterWeight",
+          "type": "fairy",
+          "value": 2
+         },
+         {
+          "kind": "typeEncounterWeight",
+          "type": "bug",
+          "value": 2
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sleep.",
+     "success": {
+      "text": "You sleep through it, and wake to dew and birdsong, everyone rested.",
+      "effects": [
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fireworks-festival",
+   "name": "Fireworks Festival",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "fireworks-festival",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Tonight the sky catches fire!\"**",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You lie on the hill and watch. Your team gasps at every one. So do you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help light them (a Fire-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type lights the fuses one by one, and the whole crowd cheers its name.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": {
+         "types": [
+          "fire"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "autumn-harvest-moon",
+   "name": "Harvest Moon",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "autumn-harvest-moon",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The trees are heavy this year. Take what you need.\"**",
+   "choices": [
+    {
+     "label": "Pick Berries.",
+     "success": {
+      "text": "Under the big orange moon, the trees give twice what they should. Your bag is full of Berries.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cheri-berry",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "pecha-berry",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "harvest-moon",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "thanksgiving-feast",
+   "name": "The Feast",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "thanksgiving-feast",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"A long table, and room for everyone.\"**",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "You eat until nobody can move. Everyone is whole again.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bring someone.",
+     "success": {
+      "text": "You bring a trainer you met on the road, and they are so happy to be asked. Everyone is whole again, and they will remember you asked.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "roster-trust",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "winter-solstice",
+   "name": "Winter Solstice",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "winter-solstice",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The longest night. Walk it, or wait for the dawn.\"**",
+   "choices": [
+    {
+     "label": "Walk in the dark.",
+     "success": {
+      "text": "You walk the longest night with your team close around you. Ghosts and Dark-types watch from the trees, and once, at the darkest hour, a shape like a black cloud with a single blue eye passes over you, and your dreams are strange for days.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Solstice: Ghost and Dark Pokémon about",
+        "effects": [
+         {
+          "kind": "typeEncounterWeight",
+          "type": "ghost",
+          "value": 2
+         },
+         {
+          "kind": "typeEncounterWeight",
+          "type": "dark",
+          "value": 2
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "telling-darkrai",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay by the fire.",
+     "success": {
+      "text": "You stay by the fire until the dawn comes back. Everyone rests.",
+      "effects": [
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "spring-equinox",
+   "name": "Spring Equinox",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "spring-equinox",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Day and night, exactly equal. Stand in the balance.\"**",
+   "choices": [
+    {
+     "label": "Stand in the balance.",
+     "success": {
+      "text": "You stand on the line between the sun and the moon. For a moment you feel both, and something vast, made of light, notices.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-light",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Stood in the balance at the equinox.",
+        "importance": 35
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "autumn-equinox",
+   "name": "Autumn Equinox",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "autumn-equinox",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"The deer are changing their coats.\"**",
+   "choices": [
+    {
+     "label": "Look for the deer.",
+     "success": {
+      "text": "In the gold woods you find them: Deerling and Sawsbuck in their autumn coats. They are everywhere this week.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Autumn: Deerling and Sawsbuck about",
+        "effects": [
+         {
+          "kind": "speciesEncounterWeight",
+          "lines": [
+           "deerling"
+          ],
+          "value": 4
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "diwali-light-walk",
+   "name": "Festival of Lights",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "diwali-light-walk",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Every lamp is lit tonight. Follow them home.\"**",
+   "choices": [
+    {
+     "label": "Follow the lamps.",
+     "success": {
+      "text": "You follow the lamps, and they lead you down paths you would never have found: two hidden places, lit for you.",
+      "effects": [
+       {
+        "kind": "revealStops"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Light a lamp.",
+     "success": {
+      "text": "You light a lamp for someone who needs it, and leave it in a window.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kindness",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mid-autumn-moon-cake",
+   "name": "Moon Festival",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "mid-autumn-moon-cake",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Moon cakes, and the biggest moon of the year.\"**",
+   "choices": [
+    {
+     "label": "Share one.",
+     "success": {
+      "text": "You share a moon cake with your lead under the full moon. Baked into the middle, for luck: a Moon Stone.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "item",
+        "id": "moon-stone",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "day-of-the-dead",
+   "name": "Day of the Dead",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "day-of-the-dead",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Marigolds on every grave, and a candle for every friend.\"**",
+   "choices": [
+    {
+     "label": "Leave marigolds for a lost friend.",
+     "success": {
+      "text": "You leave marigolds for the ones you lost on this road. For one moment, in the candlelight, you see them again, just as they were. Then the wind moves the flames, and the way to the Lantern Sea is open.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-sea-open",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Left marigolds for lost friends.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch the parade.",
+     "success": {
+      "text": "Skeletons and Ghost-types dance down the street together. It is joyful, and sad, and joyful again. The way to the Lantern Sea is open.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "lantern-sea-open",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "brew-fair",
+   "name": "Brew Fair",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "brew-fair",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Berry Juice, every flavour, first cup free!\"**",
+   "choices": [
+    {
+     "label": "Try one.",
+     "success": {
+      "text": "A cup of Berry Juice for everyone on the team. Everyone feels a little better.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "harvest-festival",
+   "name": "Harvest Festival",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "harvest-festival",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Many hands, light work!\"** Carts of grain and a farmer who keeps losing track of things.",
+   "choices": [
+    {
+     "label": "Help.",
+     "success": {
+      "text": "You help bring the harvest in. The farmer thanks you three times, forgetting each time that he already did, and pays you for the day.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 300
+       },
+       {
+        "kind": "flag",
+        "key": "farmer-forgets-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pokemon-day",
+   "name": "Pokémon Day",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "pokemon-day",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Every first partner, out in the wild for one day!\"**",
+   "choices": [
+    {
+     "label": "Visit the starters.",
+     "success": {
+      "text": "Out in the long grass, a first partner Pokémon, wild and curious, comes trotting up to see who you are.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "bulbasaur",
+        "charmander",
+        "squirtle",
+        "chikorita",
+        "cyndaquil",
+        "totodile",
+        "treecko",
+        "torchic",
+        "mudkip"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "earth-week",
+   "name": "Earth Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "earth-week",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Clean the river, plant a tree, leave it better!\"**",
+   "choices": [
+    {
+     "label": "Volunteer.",
+     "success": {
+      "text": "You sign up for the Big Cleanup. Rock, Ground and Grass Pokémon come out to see the cleared banks all week.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kindness",
+        "amount": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Earth Week: Rock, Ground and Grass Pokémon about",
+        "effects": [
+         {
+          "kind": "typeEncounterWeight",
+          "type": "rock",
+          "value": 2
+         },
+         {
+          "kind": "typeEncounterWeight",
+          "type": "ground",
+          "value": 2
+         },
+         {
+          "kind": "typeEncounterWeight",
+          "type": "grass",
+          "value": 2
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "stargazing-nights",
+   "name": "Stargazing Nights",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "stargazing-nights",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Look up. Something might look back.\"**",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You lie in the grass and watch the stars all night. Rare Pokémon come out on nights like this.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Stargazing: rare Pokémon about",
+        "effects": [
+         {
+          "kind": "encounterWeightMultiplier",
+          "group": "rare",
+          "value": 2
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "trainer-academy",
+   "name": "Trainer Academy Week",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "trainer-academy",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Open classes for every trainer on the road!\"**",
+   "choices": [
+    {
+     "label": "Enrol.",
+     "success": {
+      "text": "You enrol. All week, the study halls are open and the Academy Exam is on, and every trainer on the road is training harder: two levels stronger, and paying a fifth more.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Academy Week: trainers +2 levels, prizes +20%",
+        "effects": [
+         {
+          "kind": "enemyLevelOffset",
+          "value": 2
+         },
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.2
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-festival",
+   "name": "Berry Festival",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "berry-festival",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Plant a Berry, guard a tree, win a prize!\"**",
+   "choices": [
+    {
+     "label": "Plant.",
+     "success": {
+      "text": "You plant a Berry in the festival ground and pat the soil down. \"Come back down the road,\" says the gardener. \"It will have grown.\"",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "wk-berry-sprout",
+        "nodes": 6
+       }
+      ]
+     }
+    },
+    {
+     "label": "Guard the tree.",
+     "success": {
+      "text": "Berry thieves! You stand in front of the festival tree.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Berry Thief",
+       "classId": "roughneck",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "liechi-berry",
+          "ganlon-berry",
+          "salac-berry"
+         ]
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "wk-berry-sprout",
+   "name": "Your Berry Tree",
+   "group": "Calendar weeks",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The Berry you planted at the festival has come up: a little tree, heavy with fruit, with your name on a stick beside it.",
+   "choices": [
+    {
+     "label": "Pick them.",
+     "success": {
+      "text": "You pick every one. Your bag is full of Berries.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "cheri-berry",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "rawst-berry",
+        "count": 2
+       },
+       {
+        "kind": "item",
+        "id": "persim-berry",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "new-moon-night",
+   "name": "New Moon",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "new-moon-night",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"No moon tonight. Stay in, or go out into the dark.\"**",
+   "choices": [
+    {
+     "label": "Go out.",
+     "success": {
+      "text": "You go out into the dark. Dark-types prowl all week, and once, at the darkest hour, a shape with a single blue eye passes over you.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "New Moon: Dark Pokémon about",
+        "effects": [
+         {
+          "kind": "typeEncounterWeight",
+          "type": "dark",
+          "value": 2
+         }
+        ],
+        "until": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "telling-darkrai",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay in.",
+     "success": {
+      "text": "You stay in. Everyone rests.",
+      "effects": [
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "full-moon-rise",
+   "name": "Full Moon",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "full-moon-rise",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Stand in the moonlight, and be well.\"**",
+   "choices": [
+    {
+     "label": "Stand in it.",
+     "success": {
+      "text": "You stand in the full moon with your team. It is cool and kind, and it heals. Somewhere above, a shape like a crescent drifts across the moon.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       },
+       {
+        "kind": "flag",
+        "key": "sign-cresselia",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "friday-the-13th",
+   "name": "Friday the 13th",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "friday-the-13th",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Unlucky day! Or is it?\"** Black Purrloin on every wall.",
+   "choices": [
+    {
+     "label": "Carry a lucky charm.",
+     "success": {
+      "text": "You carry a charm all day. Nothing bad happens. Nothing good either. That is the charm.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Embrace it.",
+     "success": {
+      "text": "You embrace it. First a bad thing: you trip in a puddle and your whole team gets a soaking. Then a good thing: in the puddle, a Nugget.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1,
+        "who": "party",
+        "except": []
+       },
+       {
+        "kind": "item",
+        "id": "nugget",
+        "count": 1
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Unlucky week: Ghost Pokémon about",
+        "effects": [
+         {
+          "kind": "typeEncounterWeight",
+          "type": "ghost",
+          "value": 2
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "palindrome-date",
+   "name": "Palindrome Day",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "palindrome-date",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Today reads the same both ways.\"**",
+   "choices": [
+    {
+     "label": "Look in a mirror.",
+     "success": {
+      "text": "You look in a shop window and your reflection waves a moment too late. All week, mirror matches are waiting on the road: your own team, the other way round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirror-week",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "weekend-warm-up",
+   "name": "Weekend Warm-Up",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "weekend-warm-up",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"It's Friday! Celebrate!\"**",
+   "choices": [
+    {
+     "label": "Celebrate.",
+     "success": {
+      "text": "You celebrate. Prize money is a tenth better until the week is out.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Weekend: prize money +10%",
+        "effects": [
+         {
+          "kind": "moneyMultiplier",
+          "value": 1.1
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "shiny-charm-day",
+   "name": "Shiny Charm Day",
+   "group": "Calendar weeks",
+   "stop": "event",
+   "rarity": "common",
+   "gameEvent": "shiny-charm-day",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "**\"Today, shiny odds are doubled. Look closely!\"**",
+   "choices": [
+    {
+     "label": "Look closely.",
+     "success": {
+      "text": "You look closely at every Pokémon you see. Shiny odds are doubled while the day lasts.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Shiny Charm Day: shiny odds ×2",
+        "effects": [
+         {
+          "kind": "shinyChanceMultiplier",
+          "value": 2
+         }
+        ],
+        "until": "region"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

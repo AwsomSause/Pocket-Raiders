@@ -1,0 +1,1832 @@
+{
+ "catalogOverhaul": "legends",
+ "override": true,
+ "remove": [
+  "ghost-trainer-reunion"
+ ],
+ "events": [
+  {
+   "id": "cameo-ally-assist",
+   "name": "A Familiar Face Steps In",
+   "group": "NPC Stories",
+   "stop": "ambush",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "won",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "cameo-used",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2428",
+    "effect": "none"
+   },
+   "intro": "Two trainers have been eyeing your party for a while. They are not subtle about it.\nThen a third shadow falls across the road.\n\nA familiar face: \"Remember me? {pa:won}.\"\nA familiar face: \"You beat me fair. Figured I owed you. Need a hand?\"",
+   "choices": [
+    {
+     "label": "Accept their help.",
+     "success": {
+      "text": "They step up beside you. Their ace comes out of its Ball already looking for a fight.\nThe two trainers exchange a look. Too late to back out now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cameo-used",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Road Duo",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "friendship",
+         "amount": 3,
+         "who": "party"
+        }
+       ],
+       "ally": "past",
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Decline politely.",
+     "success": {
+      "text": "\"Thank you. I've got this.\"\nA familiar face: \"Figured you'd say that.\"\nThey stay anyway, leaning on a fence, until the two trainers lose interest and leave.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cameo-used",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ng-plus-old-friends",
+   "name": "Old Friends, New Run",
+   "group": "NPC Stories",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "won",
+     "atLeast": 1
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "intro": "A stranger stops you in the road with a newspaper folded under their arm.\nThey smile like they know you.\n\nStranger: \"I read about you. {pa:won}.\"\nStranger: \"That was really you? You really did that?\"",
+   "choices": [
+    {
+     "label": "Tell the tale.",
+     "success": {
+      "text": "You tell it. Your team keeps interrupting with their own parts.\nBy the end there is a small crowd. Someone claps.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 4
+       },
+       {
+        "kind": "money",
+        "amount": 300
+       }
+      ]
+     }
+    },
+    {
+     "label": "Deny everything.",
+     "success": {
+      "text": "\"Never heard of them.\"\nStranger: \"Right. Of course.\"\nThey wink. They tell everyone anyway.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did they write about my team?\"",
+     "success": {
+      "text": "Stranger: \"Just the names. {pa:won-team}.\"\nYou hear them read aloud by someone else. They sound like a legend. They sound like yours.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A stranger read my team's names out of the paper.",
+        "importance": 50
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fell",
+     "when": [
+      {
+       "kind": "pastAlly",
+       "has": "fell",
+       "atLeast": 1
+      }
+     ],
+     "intro": "A stranger stops you in the road with a newspaper folded under their arm.\nThey smile like they know you.\n\nStranger: \"I read about the last time. {pa:fell}, at {pa:fell-where}.\"\nStranger: \"Everyone said that was the end of you. And here you are.\""
+    }
+   ]
+  },
+  {
+   "id": "champion-defense",
+   "name": "The Champion Who Came Before",
+   "group": "Hall of Fame",
+   "rarity": "rare",
+   "minStage": 6,
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "best",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2410",
+    "effect": "sparkle"
+   },
+   "intro": "A banner hangs over the Hall's field. It bears a name you know: yours, from {pa:best}.\nToday the Hall has rebuilt that team and put it on the field.\n\n{pa:best-team}. The same Pokémon, as strong as the road has made you since.\nIt is not a replay of how you won. It is the team, asking to be beaten by what you are now.",
+   "choices": [
+    {
+     "label": "Defend your name.",
+     "success": {
+      "text": "You take the field opposite yourself. The crowd does not know who to cheer for. Neither do you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "The Team That Won",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 3000
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "big-nugget",
+          "pp-up"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 15
+        },
+        {
+         "kind": "attribute",
+         "key": "strength",
+         "amount": 1
+        }
+       ],
+       "pastAlly": "best",
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Salute and walk on.",
+     "success": {
+      "text": "You salute the banner. Down on the field, the old team turns to watch you go.\nYou wonder if they were proud. You decide they were.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "retired-team",
+   "name": "The Team That Fell Short",
+   "group": "Hall of Fame",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "fell",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c1c22",
+    "effect": "glint"
+   },
+   "intro": "A weathered banner hangs over an empty field. It names a team that fell short: yours, at {pa:fell-where}.\n{pa:fell}.\n\nToday the Hall has set that team out again. {pa:fell-team}. Same Pokémon, same hearts.\nThey have something to prove. So, it turns out, do you.",
+   "choices": [
+    {
+     "label": "Give them the rematch.",
+     "success": {
+      "text": "They fight the way you fought that day: too brave, a little desperate. You know every one of their mistakes. You made them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "The Team That Fell Short",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 2000
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "pearl",
+          "big-pearl"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 15
+        },
+        {
+         "kind": "attribute",
+         "key": "strength",
+         "amount": 1
+        }
+       ],
+       "pastAlly": "fell",
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Let them rest.",
+     "success": {
+      "text": "You stand at the edge of the field until the banner stops moving.\nThen you tell your team, quietly, that you are proud of that day too.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rivals-friend",
+   "name": "Rival's Friend",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1d24",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "rival",
+     "atLeast": 1
+    }
+   ],
+   "intro": "A stranger steps in front of you. They have a Pokédex open to a page they have clearly read many times.\n\nStranger: \"My friend says you're the one to beat. {rival}. You know them.\"\nStranger: \"I borrowed their team from that day. {pa:rival-team}. I want to see for myself.\"",
+   "choices": [
+    {
+     "label": "Accept the challenge.",
+     "success": {
+      "text": "Every Pokémon on their side looks at you like it remembers. It does.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Rival's Friend",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "pearl",
+          "big-pearl"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 5
+        }
+       ],
+       "pastAlly": "rival",
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Decline.",
+     "success": {
+      "text": "Stranger: \"Huh. They said you'd never turn down a fight.\"\nThey write something in the Pokédex margin. You feel judged.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "archive-gauntlet-entry",
+   "name": "The Archive Gauntlet",
+   "group": "Memories",
+   "stop": "tower",
+   "rarity": "rare",
+   "minStage": 4,
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "second",
+     "atLeast": 2
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1f2a3a",
+    "effect": "flicker"
+   },
+   "intro": "A dusty archive hall. Frames on the wall show the teams you have raised on this road, one big battle each.\nOne by one, they begin to move.\n\nCaretaker: \"They're not ghosts. They're records. They just like to stretch.\"\nCaretaker: \"You can fight any of them. Or you can just look.\"",
+   "choices": [
+    {
+     "label": "Fight the earliest.",
+     "success": {
+      "text": "Your earliest team steps down out of its frame. It is smaller than you remember. It is braver than you remember, too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "archive-visited",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Your Earliest Team",
+       "classId": "ace-trainer",
+       "size": 4,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "research",
+         "amount": 10
+        },
+        {
+         "kind": "friendship",
+         "amount": 3,
+         "who": "party"
+        },
+        {
+         "kind": "moment",
+         "text": "Fought my earliest team in the Archive.",
+         "importance": 60
+        }
+       ],
+       "pastAlly": "earliest",
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Fight the best.",
+     "success": {
+      "text": "Your best team steps down out of its frame, and the whole hall goes quiet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "archive-visited",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Your Best Team",
+       "classId": "ace-trainer",
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1500
+        },
+        {
+         "kind": "itemFrom",
+         "ids": [
+          "nugget",
+          "pp-up"
+         ]
+        },
+        {
+         "kind": "research",
+         "amount": 15
+        },
+        {
+         "kind": "moment",
+         "text": "Fought my best team in the Archive.",
+         "importance": 60
+        }
+       ],
+       "pastAlly": "best",
+       "lose": []
+      }
+     }
+    },
+    {
+     "label": "Just look.",
+     "success": {
+      "text": "You walk the wall slowly. Each frame has a caption, in a hand that looks a lot like yours.\n\n{pa:frames}",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "archive-visited",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "frame",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "archive-visited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nThere is a new, empty frame at the end of the wall. Its little brass plate already has your name on it."
+    }
+   ]
+  },
+  {
+   "id": "lost-and-found-desk",
+   "name": "The Lost-and-Found Desk",
+   "group": "Memories",
+   "stop": "merchant",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "lostItem",
+     "atLeast": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#2a2a1f",
+    "effect": "glint"
+   },
+   "intro": "A clerk behind a cluttered desk looks up as you come in.\nClerk: \"Something turned up that has your journey written all over it.\"\n\nClerk: \"Handed in a while back. Somebody found it on the road you came by.\"\nIt is your {pa:lost}. The one you lost.",
+   "choices": [
+    {
+     "label": "Claim it.",
+     "success": {
+      "text": "The clerk slides it over and stamps a form that says RETURNED in red.\nIt is a little scuffed. It is very much yours.",
+      "effects": [
+       {
+        "kind": "pastAlly",
+        "action": "returnItem"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it for someone who needs it more.",
+     "success": {
+      "text": "Clerk: \"You're sure?\"\nYou are. The clerk writes FOR WHOEVER on a tag and ties it on, carefully.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "companion-recruit",
+   "name": "A Friend for the Road",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "companion-recruited",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#222a30",
+    "effect": "none"
+   },
+   "intro": "A capable traveler with a first-aid satchel falls into step beside you.\nTraveler: \"You look like you could use a medic.\"\n\nTraveler: \"I'm going your way for a while. When your partner's in trouble, I can patch it up. Once per fight.\"",
+   "choices": [
+    {
+     "label": "Welcome them aboard.",
+     "success": {
+      "text": "They walk with you. They hum. They know the names of every plant on the road.\nWhen the stage ends, they will go their own way. You find you are already a little sad about that.",
+      "effects": [
+       {
+        "kind": "wandererFriend",
+        "stages": 1
+       },
+       {
+        "kind": "flag",
+        "key": "companion-recruited",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Travel alone.",
+     "success": {
+      "text": "You thank them. They nod, unoffended, and take the other fork.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "companion-recruited",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-anniversary-archive",
+   "name": "The Anniversary Archive",
+   "group": "Run-Wide Modifiers",
+   "stop": "library",
+   "rarity": "rare",
+   "minStage": 4,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a3a",
+    "effect": "glint"
+   },
+   "intro": "A hidden archive opens only for runs that have come this far.\nShelves of photos and trinkets. You recognise them: all of them are from this journey.\n\n{pa:frames}",
+   "choices": [
+    {
+     "label": "Read the journal.",
+     "success": {
+      "text": "The journal is in your handwriting. You do not remember writing it.\nYou read every page. Some of them you would write differently now. You would not change a single one.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 20
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Read my own journal in the Anniversary Archive.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take a trinket from the shelf.",
+     "success": {
+      "text": "You take one small thing from the shelf. The archive does not mind. It was always going to be yours.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "big-pearl",
+         "pearl",
+         "star-piece",
+         "stardust",
+         "comet-shard",
+         "relic-gold",
+         "rare-bone",
+         "big-mushroom"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a note for the end of the road.",
+     "success": {
+      "text": "You write a note to whoever you will be when this run ends.\nYou fold it twice and leave it in the Hall of Records' box. Someone will put it in a case.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rk-archive-note",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-coin-vault",
+   "name": "The Lucky Coin Vault",
+   "group": "Run-Wide Modifiers",
+   "stop": "special",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2410",
+    "effect": "glint"
+   },
+   "intro": "A round vault door with a coin slot, polished by a lot of hopeful hands.\nBrass plate: \"What goes in turns into research that outlasts your run.\"\n\nBehind the door, faintly, a machine counts and counts.",
+   "choices": [
+    {
+     "label": "Deposit ₽200.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "The coins rattle down a long way. The counting gets slightly louder.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "research",
+        "amount": 12
+       }
+      ]
+     }
+    },
+    {
+     "label": "Deposit ₽600.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 600
+      }
+     ],
+     "success": {
+      "text": "The coins rattle down. A light above the door blinks, once, pleased.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -600
+       },
+       {
+        "kind": "research",
+        "amount": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Deposit ₽1500.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "The vault hums. Somewhere a little bell rings, as if somebody important just got some good news.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "research",
+        "amount": 130
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep your coins.",
+     "success": {
+      "text": "You keep them. The machine keeps counting anyway.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-hall-of-records",
+   "name": "The Hall of Records",
+   "group": "Run-Wide Modifiers",
+   "stop": "library",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "tint": "#20203a",
+    "effect": "none"
+   },
+   "intro": "Glass cases line the walls: your best moments on this road, wins and wild ones.\nThe biggest case holds {pa:best}. {pa:best-team}, in little brass figures.\n\nA plaque offers a challenge. Under it, in smaller print: \"Records are for breaking.\"",
+   "choices": [
+    {
+     "label": "Study the records.",
+     "success": {
+      "text": "You study every case. You find a mistake you made back then, and you understand it now.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 15
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take the plaque's challenge: no healing stops.",
+     "success": {
+      "text": "You sign the plaque. The ink is still wet when your team looks at you like you have lost your mind.\nThen they look determined.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "rk-records-challenge",
+        "name": "Record Challenge",
+        "effects": [
+         {
+          "kind": "runRule",
+          "id": "no-heal-stops"
+         },
+         {
+          "kind": "xpMultiplier",
+          "value": 1.3
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Admire and go.",
+     "success": {
+      "text": "You look at the cases one last time. Then you go and make some more.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "note",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rk-archive-note",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "\n\nIn the last case, under glass, is a folded note in your handwriting.\nYou do not open it. You know what it says. It says keep going."
+    }
+   ]
+  },
+  {
+   "id": "rk-legacy-pedestal",
+   "name": "The Legacy Pedestal",
+   "group": "Run-Wide Modifiers",
+   "stop": "shrine",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2030",
+    "effect": "sparkle"
+   },
+   "intro": "A stone pedestal waits by the road with room for one thing.\nTrainers leave things here for whoever comes after them. Whoever takes one, pays it forward.\n\nIt is empty today. It looks like it is waiting for you.",
+   "choices": [
+    {
+     "label": "Leave a Potion for whoever comes next.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion"
+      }
+     ],
+     "success": {
+      "text": "You set it down. It looks very small on the big stone. It might be exactly enough for somebody.",
+      "effects": [
+       {
+        "kind": "pastAlly",
+        "action": "pedestal",
+        "item": "potion"
+       },
+       {
+        "kind": "flag",
+        "key": "pedestal-left",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a Poké Ball for whoever comes next.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-ball"
+      }
+     ],
+     "success": {
+      "text": "You leave a Poké Ball. Somebody's first catch, maybe. You hope it is a good one.",
+      "effects": [
+       {
+        "kind": "pastAlly",
+        "action": "pedestal",
+        "item": "poke-ball"
+       },
+       {
+        "kind": "flag",
+        "key": "pedestal-left",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Maybe next time.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-legacy-pedestal-thanks",
+   "name": "The Legacy Pedestal: Paid Forward",
+   "group": "Past Allies",
+   "callback": true,
+   "stop": "event",
+   "rarity": "uncommon",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "pedestal",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "pedestal-left",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2410",
+    "effect": "sparkle"
+   },
+   "intro": "A young trainer runs up to you, out of breath, holding something out with both hands.\nYoung trainer: \"It was you, wasn't it? At the pedestal? The lady said it was you.\"\n\nYoung trainer: \"It got me through. I don't need it now.\"\nYoung trainer: \"So I'm paying it forward. Back. Whichever.\"",
+   "choices": [
+    {
+     "label": "Thank them.",
+     "success": {
+      "text": "They grin, wave, and run off to wherever they are going next. It is a long way from here, and they are not afraid of it.",
+      "effects": [
+       {
+        "kind": "pastAlly",
+        "action": "pedestalThanks"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 20
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-memory-lane",
+   "name": "Memory Lane",
+   "group": "Run-Wide Modifiers",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2030",
+    "effect": "float"
+   },
+   "intro": "A path of lanterns. Each one holds a scene from this road, small and bright.\nNothing here changes. But it is lovely to see.\n\nThe first lantern holds {pa:earliest}. The team in it is so young.",
+   "choices": [
+    {
+     "label": "Walk the whole lane.",
+     "success": {
+      "text": "You walk every lantern, slowly. Your team walks with you. They stop at the ones they remember.\n\n{pa:frames}",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Walked Memory Lane.",
+        "importance": 60
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stop at the first lantern.",
+     "success": {
+      "text": "{pa:earliest-team}. That was all of you, once.\nYou stay until the lantern flickers, then thank it, and go.",
+      "effects": [
+       {
+        "kind": "moment",
+        "text": "Stopped at the first lantern on Memory Lane.",
+        "importance": 50
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cameo-veteran-garchomp",
+   "name": "A Veteran Returns",
+   "group": "Rival Interactions",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "fell",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "arlen-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "garchomp",
+    "tint": "#2a2428",
+    "effect": "none"
+   },
+   "intro": "A dusty road. A hardened veteran in a battered cap falls into step beside you without asking.\nA Garchomp walks with them. Scarred, quiet, and watching you very closely.\n\nArlen: \"Heard you were in trouble.\"\nArlen: \"I fought beside someone like you once. Not long ago. Not far from here.\"\n\nArlen: \"They went down. I kept going.\"\nArlen: \"I've been trying to work out why ever since.\"",
+   "choices": [
+    {
+     "label": "\"Fight with me.\"",
+     "success": {
+      "text": "Arlen: \"Thought you'd say that.\"\nThe Garchomp moves to your side like it has stood there before.",
+      "effects": [
+       {
+        "kind": "tagPartner",
+        "copy": "lead",
+        "battles": 3,
+        "species": "garchomp"
+       },
+       {
+        "kind": "flag",
+        "key": "arlen-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "arlen-fought",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell me about them.\"",
+     "success": {
+      "text": "Arlen is quiet for three steps. Four.\n\nArlen: \"They had a {pa:starter}. Stubborn little thing.\"\nArlen: \"They went down at {pa:fell-where}.\"\nArlen: \"I keep thinking, if I'd been faster...\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "arlen-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "arlen-told",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cameo-veteran-garchomp-tell"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go home.\"",
+     "success": {
+      "text": "Arlen: \"Haven't got one.\"\nThey touch the brim of the cap. The Garchomp looks back at you once, and then they are gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "arlen-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "line",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "gible"
+      }
+     ],
+     "notice": "\n\nYour own Garchomp line steps out of its Ball by itself.\nIt and Arlen's Garchomp stand nose to nose for a long moment. Neither looks away."
+    },
+    {
+     "id": "since",
+     "when": [
+      {
+       "kind": "pastAlly",
+       "has": "won",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\nArlen: \"Heard they got back up, in the end. Won at {pa:won}.\"\nArlen does not say the line about being faster. Not this time."
+    }
+   ]
+  },
+  {
+   "id": "cameo-veteran-garchomp-tell",
+   "name": "A Veteran Returns: Whose Fault",
+   "group": "Past Allies",
+   "room": true,
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "garchomp",
+    "tint": "#2a2428",
+    "effect": "none"
+   },
+   "intro": "Arlen is waiting for you to say something. The road is very quiet.\nThe Garchomp sits down in the dust between you.",
+   "choices": [
+    {
+     "label": "\"It wasn't your fault.\"",
+     "success": {
+      "text": "Arlen is quiet for a long time.\nThen they nod, once, and walk on beside you, closer than before.",
+      "effects": [
+       {
+        "kind": "tagPartner",
+        "copy": "lead",
+        "battles": 3,
+        "species": "garchomp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It was mine.\"",
+     "success": {
+      "text": "Arlen looks at you for a long, long time.\nArlen: \"...Huh.\"\n\nThey do not ask. They just stay. The Garchomp stays too, for the rest of the region.",
+      "effects": [
+       {
+        "kind": "tagPartner",
+        "copy": "lead",
+        "battles": 3,
+        "species": "garchomp",
+        "region": true
+       },
+       {
+        "kind": "flag",
+        "key": "arlen-mine",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Then be faster now.\"",
+     "success": {
+      "text": "Arlen grins for the first time.\nArlen: \"Yeah. Yeah, all right.\"\nThe Garchomp is already moving.",
+      "effects": [
+       {
+        "kind": "tagPartner",
+        "copy": "lead",
+        "battles": 3,
+        "species": "garchomp",
+        "boost": "spe"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cameo-veteran-garchomp-joins",
+   "name": "A Veteran Returns: Left Behind",
+   "group": "Past Allies",
+   "callback": true,
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "arlen-mine",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "cameo-veteran-garchomp-joined",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "garchomp",
+    "tint": "#2a2428",
+    "effect": "hearts"
+   },
+   "intro": "Arlen is gone. The Garchomp is not.\nIt is sitting by the road at the start of the new region, as if it was told to wait here.\n\nThere is a note tied to its arm, in square handwriting.\nNote: \"It picked you. Don't make me come back for it.\"",
+   "choices": [
+    {
+     "label": "Take the Garchomp with you.",
+     "success": {
+      "text": "The Garchomp falls in beside you without a sound.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "garchomp"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "asIs": true
+       },
+       {
+        "kind": "flag",
+        "key": "cameo-veteran-garchomp-joined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it after Arlen.",
+     "success": {
+      "text": "It looks at you for a long time. Then it goes, quickly, the way Arlen went.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cameo-veteran-garchomp-joined",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cameo-veteran-lucario",
+   "name": "A Familiar Trainer",
+   "group": "Rival Interactions",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "fell",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "arlen-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "lucario",
+    "tint": "#2a2428",
+    "effect": "none"
+   },
+   "intro": "A dusty road. A hardened veteran in a battered cap falls into step beside you without asking.\nA Lucario walks with them. Scarred, quiet, and watching you very closely.\n\nArlen: \"Heard you were in trouble.\"\nArlen: \"I fought beside someone like you once. Not long ago. Not far from here.\"\n\nArlen: \"They went down. I kept going.\"\nArlen: \"I've been trying to work out why ever since.\"",
+   "choices": [
+    {
+     "label": "\"Fight with me.\"",
+     "success": {
+      "text": "Arlen: \"Thought you'd say that.\"\nThe Lucario moves to your side like it has stood there before.",
+      "effects": [
+       {
+        "kind": "tagPartner",
+        "copy": "lead",
+        "battles": 3,
+        "species": "lucario"
+       },
+       {
+        "kind": "flag",
+        "key": "arlen-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "arlen-fought",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Tell me about them.\"",
+     "success": {
+      "text": "Arlen is quiet for three steps. Four.\n\nArlen: \"They had a {pa:starter}. Stubborn little thing.\"\nArlen: \"They went down at {pa:fell-where}.\"\nArlen: \"I keep thinking, if I'd been faster...\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "arlen-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "arlen-told",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "cameo-veteran-lucario-tell"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go home.\"",
+     "success": {
+      "text": "Arlen: \"Haven't got one.\"\nThey touch the brim of the cap. The Lucario looks back at you once, and then they are gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "arlen-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "line",
+     "when": [
+      {
+       "kind": "partyLine",
+       "species": "riolu"
+      }
+     ],
+     "notice": "\n\nYour own Lucario line steps out of its Ball by itself.\nIt and Arlen's Lucario stand nose to nose for a long moment. Neither looks away."
+    },
+    {
+     "id": "since",
+     "when": [
+      {
+       "kind": "pastAlly",
+       "has": "won",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\nArlen: \"Heard they got back up, in the end. Won at {pa:won}.\"\nArlen does not say the line about being faster. Not this time."
+    }
+   ]
+  },
+  {
+   "id": "cameo-veteran-lucario-tell",
+   "name": "A Familiar Trainer: Whose Fault",
+   "group": "Past Allies",
+   "room": true,
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "pokemon": "lucario",
+    "tint": "#2a2428",
+    "effect": "none"
+   },
+   "intro": "Arlen is waiting for you to say something. The road is very quiet.\nThe Lucario sits down in the dust between you.",
+   "choices": [
+    {
+     "label": "\"It wasn't your fault.\"",
+     "success": {
+      "text": "Arlen is quiet for a long time.\nThen they nod, once, and walk on beside you, closer than before.",
+      "effects": [
+       {
+        "kind": "tagPartner",
+        "copy": "lead",
+        "battles": 3,
+        "species": "lucario"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It was mine.\"",
+     "success": {
+      "text": "Arlen looks at you for a long, long time.\nArlen: \"...Huh.\"\n\nThey do not ask. They just stay. The Lucario stays too, for the rest of the region.",
+      "effects": [
+       {
+        "kind": "tagPartner",
+        "copy": "lead",
+        "battles": 3,
+        "species": "lucario",
+        "region": true
+       },
+       {
+        "kind": "flag",
+        "key": "arlen-mine",
+        "amount": 1,
+        "stamp": "region"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Then be faster now.\"",
+     "success": {
+      "text": "Arlen grins for the first time.\nArlen: \"Yeah. Yeah, all right.\"\nThe Lucario is already moving.",
+      "effects": [
+       {
+        "kind": "tagPartner",
+        "copy": "lead",
+        "battles": 3,
+        "species": "lucario",
+        "boost": "spe"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "cameo-veteran-lucario-joins",
+   "name": "A Familiar Trainer: Left Behind",
+   "group": "Past Allies",
+   "callback": true,
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "arlen-mine",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "cameo-veteran-lucario-joined",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "lucario",
+    "tint": "#2a2428",
+    "effect": "hearts"
+   },
+   "intro": "Arlen is gone. The Lucario is not.\nIt is sitting by the road at the start of the new region, as if it was told to wait here.\n\nThere is a note tied to its arm, in square handwriting.\nNote: \"It picked you. Don't make me come back for it.\"",
+   "choices": [
+    {
+     "label": "Take the Lucario with you.",
+     "success": {
+      "text": "The Lucario falls in beside you without a sound.",
+      "effects": [
+       {
+        "kind": "join",
+        "species": [
+         "lucario"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "asIs": true
+       },
+       {
+        "kind": "flag",
+        "key": "cameo-veteran-lucario-joined",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send it after Arlen.",
+     "success": {
+      "text": "It looks at you for a long time. Then it goes, quickly, the way Arlen went.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cameo-veteran-lucario-joined",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "legacy-ranch",
+   "name": "The Ranch Keeper",
+   "group": "Rival Interactions",
+   "requires": [
+    {
+     "kind": "pastAlly",
+     "has": "left",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ranch-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#283018",
+    "effect": "hearts"
+   },
+   "intro": "A ranch at dusk. A rancher in big boots walks out to the fence with a blanket bundle in her arms.\nMags: \"Somebody left this with me. Said you'd come by.\"\n\nAn Egg. A paper tag on it with your name, in ink that has already started to fade.\nMags: \"It's from one of yours. Didn't say which. I've kept it warm.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It is warmer than you expected. Something inside it shifts, as if it knows your voice.\nMags: \"Three stages, give or take. Talk to it.\"",
+      "effects": [
+       {
+        "kind": "pastAlly",
+        "action": "egg"
+       },
+       {
+        "kind": "flag",
+        "key": "ranch-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ranch-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Which one?\"",
+     "success": {
+      "text": "Mags turns the tag over. On the back, a photo: {pa:ranch}. Looking straight at the camera, the way it used to look at you.\n\nMags: \"That one. Thought so.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ranch-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "legacy-ranch-photo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it here for now.",
+     "success": {
+      "text": "Mags: \"Suits me. It likes the barn.\"\nMags: \"Come back when you've crossed into new country. It'll be waiting at the fence.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ranch-kept",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ranch-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "released",
+     "when": [
+      {
+       "kind": "pastAlly",
+       "has": "ranchReleased",
+       "atLeast": 1
+      }
+     ],
+     "notice": "\n\nMags: \"They brought it themselves, you know.\"\nMags: \"Said they'd been let go, and wanted you to have something.\""
+    }
+   ]
+  },
+  {
+   "id": "legacy-ranch-photo",
+   "name": "The Ranch Keeper: The Photo",
+   "group": "Past Allies",
+   "room": true,
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#283018",
+    "effect": "hearts"
+   },
+   "intro": "You hold the photo for a long time. Mags does not hurry you.",
+   "choices": [
+    {
+     "label": "Take the Egg.",
+     "success": {
+      "text": "You tuck the photo into your bag, beside the Egg. They belong together.",
+      "effects": [
+       {
+        "kind": "pastAlly",
+        "action": "egg"
+       },
+       {
+        "kind": "flag",
+        "key": "ranch-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ranch-done",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it with Mags a while.",
+     "success": {
+      "text": "Mags: \"I'll keep it by the stove.\"\nMags: \"New country, then. It'll be waiting.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ranch-kept",
+        "amount": 1,
+        "stamp": "region"
+       },
+       {
+        "kind": "flag",
+        "key": "ranch-done",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "legacy-ranch-waiting",
+   "name": "The Ranch Keeper: At the Fence",
+   "group": "Past Allies",
+   "callback": true,
+   "stop": "event",
+   "rarity": "rare",
+   "types": [],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ranch-kept",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "pastAlly",
+     "has": "left",
+     "atLeast": 1
+    },
+    {
+     "kind": "flag",
+     "key": "ranch-collected",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#283018",
+    "effect": "hearts"
+   },
+   "intro": "Another ranch, another fence, and somehow the same Mags, waving both arms.\nMags: \"Told you it'd wait. It's nearly out. Listen.\"\n\nTap. Tap. A crack runs across the shell the moment you touch it.",
+   "choices": [
+    {
+     "label": "Hold it while it hatches.",
+     "success": {
+      "text": "It is warm, and impatient, and very nearly here.",
+      "effects": [
+       {
+        "kind": "pastAlly",
+        "action": "egg",
+        "now": true
+       },
+       {
+        "kind": "flag",
+        "key": "ranch-collected",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

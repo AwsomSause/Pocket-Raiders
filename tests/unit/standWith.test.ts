@@ -1,7 +1,7 @@
 // Stand With Them (slice E8): code name, reputation ladder, eligibility, verdicts, Second Shot, rival handed over.
 
 import { describe, expect, it } from 'vitest';
-import { STAND, standWithClimaxLost, standWithPlayable, accessOf, addMercy, bandOf, changeRep, codeNameOf, freeHandedOverRival, joinInsideMan, joinProblem, lostStandWithClimax, officersSide, resolveVerdict, standWithOf, standWithStatus, standingLine, verdictsOpen } from '../../src/core/arc/standWithExtended';
+import { STAND, standWithClimaxLost, standWithPlayable, accessOf, addMercy, bandOf, changeRep, codeNameCard, codeNameOf, freeHandedOverRival, joinInsideMan, joinProblem, lostStandWithClimax, officersSide, resolveVerdict, standWithOf, standWithStatus, standingLine, verdictsOpen } from '../../src/core/arc/standWithExtended';
 import { ExpansionRunSchema } from '../../src/core/expansion/schema';
 import { applyEffect, conditionMet, eventBattleWon } from '../../src/core/events';
 import { activeHolds } from '../../src/core/evil/rescue';
@@ -28,6 +28,14 @@ describe('joining', () => {
     expect(codeNameOf(run)).toBe('Provisional Agent 000 "House Card"');
     expect(standWithOf(run)!.rep).toBe(30);
     expect(() => joinInsideMan(run)).toThrow(/already/);
+  });
+  it('the code-name card reads the alias, rank and lines once joined, and is null before', () => {
+    const run = fresh('card');
+    expect(codeNameCard(run, 'Team Rocket', 'Kanto')).toBeNull();
+    joinInsideMan(run);
+    const card = codeNameCard(run, 'Team Rocket', 'Kanto')!;
+    expect(card).toMatchObject({ alias: 'House Card', rank: bandOf(30)!.rank, givenBy: 'Giovanni' });
+    expect(card.facts).toEqual([['Code name', 'Provisional Agent 000'], ['Team', 'Team Rocket, Kanto'], ['Reputation', '+30'], ['Uniform', 'Issued'], ['Standing', bandOf(30)!.band]]);
   });
   it('every code name in the data is for a distinct team', () => {
     expect(new Set(STAND.codeNames.map((c) => c.team)).size).toBe(STAND.codeNames.length);

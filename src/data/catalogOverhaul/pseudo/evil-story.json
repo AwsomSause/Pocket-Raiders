@@ -1,0 +1,2061 @@
+{
+ "category": "evil-story",
+ "note": "Evil Team Hideouts (STORY_FAMILIES_13 A8, STORY_FAMILIES_18 SF131 to SF133) and the Plasma Holding Camp (SF130). Written by tools/events/co/_evil-story-sync.ts.",
+ "chains": [
+  {
+   "id": "ps_evil_hideout_rocket",
+   "name": "Team Rocket Hideout",
+   "entry": "evil-rocket-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "rocket",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-locked-chest"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_aqua",
+   "name": "Team Aqua Hideout",
+   "entry": "evil-aqua-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "aqua",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-laser-maze"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-cargo-ship-ransack"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_magma",
+   "name": "Team Magma Hideout",
+   "entry": "evil-magma-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "magma",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-safehouse-raid"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_galactic",
+   "name": "Team Galactic Hideout",
+   "entry": "evil-galactic-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "galactic",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-prison-break"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_plasma",
+   "name": "Team Plasma Hideout",
+   "entry": "evil-plasma-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "plasma",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-cargo-ship-ransack"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_flare",
+   "name": "Team Flare Hideout",
+   "entry": "evil-flare-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "flare",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-vent-crawl"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-locked-chest"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_skull",
+   "name": "Team Skull Hideout",
+   "entry": "evil-skull-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "skull",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-safehouse-raid"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_aether",
+   "name": "the Aether Foundation Hideout",
+   "entry": "evil-aether-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "aether",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-prison-break"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_yell",
+   "name": "Team Yell Hideout",
+   "entry": "evil-yell-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "yell",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-laser-maze"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-fake-gym-front"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_star",
+   "name": "Team Star Hideout",
+   "entry": "evil-star-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "star",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-password-lock",
+     "vt-vent-crawl"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-fake-gym-front"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_marauders",
+   "name": "the Mythic Marauders Hideout",
+   "entry": "evil-marauders-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "marauders",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-vent-crawl"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-cargo-ship-ransack"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_choir",
+   "name": "the Hollow Choir Hideout",
+   "entry": "evil-choir-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "choir",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-prison-break"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_ironvein",
+   "name": "the Ironvein Combine Hideout",
+   "entry": "evil-ironvein-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "ironvein",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-safehouse-raid"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_cartographers",
+   "name": "the Pale Cartographers Hideout",
+   "entry": "evil-cartographers-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "cartographers",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-vent-crawl",
+     "vt-laser-maze"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-cargo-ship-ransack"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_wildfire",
+   "name": "the Wildfire Accord Hideout",
+   "entry": "evil-wildfire-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "wildfire",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-password-lock",
+     "vt-vent-crawl"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-safehouse-raid"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_evil_hideout_gilt",
+   "name": "the Gilt Circle Hideout",
+   "entry": "evil-gilt-hideout",
+   "themeId": "ghost-dark",
+   "tint": "#161a22",
+   "mood": "dark and cold",
+   "team": "gilt",
+   "layout": [
+    [
+     "ps-evil-hideout-gate"
+    ],
+    [
+     "ps-evil-hideout-a",
+     "ps-evil-hideout-b",
+     "vt-camera-swap"
+    ],
+    [
+     "ps-evil-hideout-c",
+     "vt-laser-maze",
+     "vt-password-lock"
+    ],
+    [
+     "ps-evil-hideout-d",
+     "vt-fake-gym-front"
+    ],
+    [
+     "evil-{teamId}-hideout-boss"
+    ],
+    [
+     "evil-{teamId}-hideout-after"
+    ],
+    [
+     "evil-{teamId}-rescue"
+    ],
+    [
+     "ps-evil-hideout-e"
+    ]
+   ]
+  },
+  {
+   "id": "ps_plasma_camp",
+   "name": "The Plasma Holding Camp",
+   "entry": "plasma-substage-gate",
+   "themeId": "ghost-dark",
+   "tint": "#1a2230",
+   "mood": "quiet, crates breathing in the dark"
+  },
+  {
+   "id": "ps_rk_tower",
+   "name": "Pokémon Tower, at Night",
+   "entry": "rk-act3",
+   "themeId": "ghost-dark",
+   "tint": "#22142e",
+   "mood": "cold, and quiet on a Thursday",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "rk-tower-graves"
+    ],
+    [
+     "rk-tower-stair"
+    ],
+    [
+     "rk-tower-third"
+    ],
+    [
+     "rk-tower-down"
+    ]
+   ]
+  },
+  {
+   "id": "ps_rk_plan",
+   "name": "Silph Co.: Under New Management",
+   "entry": "rk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2230",
+   "mood": "sealed, humming, raining on the roof",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "rk-plan-hold"
+    ],
+    [
+     "rk-plan-gate"
+    ],
+    [
+     "rk-plan-rival"
+    ],
+    [
+     "rk-plan-defender"
+    ],
+    [
+     "rk-plan-roof"
+    ],
+    [
+     "rk-plan-verdict"
+    ]
+   ]
+  },
+  {
+   "id": "ps_rk_turn",
+   "name": "Silph Co.: The Long Ledger, From the Top",
+   "entry": "rk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2230",
+   "mood": "floor by floor, downward",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "rk-turn-11"
+    ],
+    [
+     "rk-turn-10"
+    ],
+    [
+     "rk-turn-9"
+    ],
+    [
+     "rk-turn-7"
+    ],
+    [
+     "rk-turn-6"
+    ],
+    [
+     "rk-turn-b"
+    ],
+    [
+     "rk-turn-roof"
+    ],
+    [
+     "rk-turn-door"
+    ]
+   ]
+  },
+  {
+   "id": "ps_rk_police",
+   "name": "Silph Co.: Safekeeping",
+   "entry": "rk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2230",
+   "mood": "forty officers on the stairs",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "rk-police-cordon"
+    ],
+    [
+     "rk-police-arrests"
+    ],
+    [
+     "rk-police-roof"
+    ],
+    [
+     "rk-police-door"
+    ]
+   ]
+  },
+  {
+   "id": "ps_rk_own",
+   "name": "Silph Co.: The Fourth Rule",
+   "entry": "rk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2230",
+   "mood": "an office that is yours now",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "rk-own-duel"
+    ],
+    [
+     "rk-own-matori"
+    ],
+    [
+     "rk-own-callers"
+    ],
+    [
+     "rk-own-list"
+    ],
+    [
+     "rk-own-rigs"
+    ],
+    [
+     "rk-own-roof"
+    ],
+    [
+     "rk-own-rule",
+     "rk-own-lost"
+    ]
+   ]
+  },
+  {
+   "id": "ps_neo_tower",
+   "name": "The Radio Tower: Dress Rehearsal",
+   "entry": "neo-act3",
+   "themeId": "ghost-dark",
+   "tint": "#1e1e2e",
+   "mood": "a building that hums at night",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "neo-tower-basement"
+    ],
+    [
+     "neo-tower-studio"
+    ],
+    [
+     "neo-tower-library"
+    ],
+    [
+     "neo-tower-roof"
+    ]
+   ]
+  },
+  {
+   "id": "ps_neo_plan",
+   "name": "The Radio Tower: The Call",
+   "entry": "neo-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1e2e",
+   "mood": "every radio in Johto on",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "neo-plan-hold"
+    ],
+    [
+     "neo-plan-keys"
+    ],
+    [
+     "neo-plan-rival"
+    ],
+    [
+     "neo-plan-defender"
+    ],
+    [
+     "neo-plan-roof"
+    ],
+    [
+     "neo-plan-door"
+    ],
+    [
+     "neo-plan-verdict"
+    ]
+   ]
+  },
+  {
+   "id": "ps_neo_turn",
+   "name": "The Radio Tower: Dead Air, From the Booth",
+   "entry": "neo-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1e2e",
+   "mood": "from the microphone, downward",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "neo-turn-air-1"
+    ],
+    [
+     "neo-turn-air-2"
+    ],
+    [
+     "neo-turn-studio"
+    ],
+    [
+     "neo-turn-corridor"
+    ],
+    [
+     "neo-turn-third"
+    ],
+    [
+     "neo-turn-library"
+    ],
+    [
+     "neo-turn-lobby"
+    ],
+    [
+     "neo-turn-basement"
+    ],
+    [
+     "neo-turn-roof"
+    ],
+    [
+     "neo-turn-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_neo_lance",
+   "name": "The Radio Tower: The Dragon's Order",
+   "entry": "neo-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1e2e",
+   "mood": "a Dragonite at every window",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "neo-lance-windows"
+    ],
+    [
+     "neo-lance-order"
+    ],
+    [
+     "neo-lance-roof"
+    ],
+    [
+     "neo-lance-ball"
+    ]
+   ]
+  },
+  {
+   "id": "ps_neo_own",
+   "name": "The Radio Tower: Standby No Longer",
+   "entry": "neo-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1e2e",
+   "mood": "a microphone left on",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "neo-own-duel"
+    ],
+    [
+     "neo-own-chair"
+    ],
+    [
+     "neo-own-hour"
+    ],
+    [
+     "neo-own-hour-2"
+    ],
+    [
+     "neo-own-signal"
+    ],
+    [
+     "neo-own-tails"
+    ],
+    [
+     "neo-own-celebi"
+    ],
+    [
+     "neo-own-call",
+     "neo-own-lost"
+    ]
+   ]
+  },
+  {
+   "id": "ps_static_mary",
+   "name": "Broadcast 1: This Is Mary",
+   "entry": "static-broadcast-1",
+   "themeId": "ghost-dark",
+   "tint": "#1e2a2e",
+   "mood": "a suitcase on a car park roof, in the rain",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "static-mary-roof"
+    ],
+    [
+     "static-mary-switch"
+    ]
+   ]
+  },
+  {
+   "id": "ps_static_air",
+   "name": "Two Frequencies",
+   "entry": "static-two-frequencies",
+   "themeId": "ghost-dark",
+   "tint": "#1e2a2e",
+   "mood": "a kettle whistling on every band",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "static-air-roof"
+    ],
+    [
+     "static-air-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ledger_freighter",
+   "name": "The Vermilion Freighter",
+   "entry": "ledger-audit-2",
+   "themeId": "ghost-dark",
+   "tint": "#1a2230",
+   "mood": "a clipboard on a wet deck",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "ledger-freighter-deck"
+    ],
+    [
+     "ledger-freighter-hold"
+    ],
+    [
+     "ledger-freighter-crane"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ledger_readout",
+   "name": "Silph Co.: The Read-Out",
+   "entry": "ledger-readout",
+   "themeId": "ghost-dark",
+   "tint": "#1e2230",
+   "mood": "six people and a tea towel",
+   "team": "rocket",
+   "start": "opened",
+   "layout": [
+    [
+     "ledger-readout-floors"
+    ],
+    [
+     "ledger-readout-top"
+    ]
+   ]
+  },
+  {
+   "id": "ps_fl_stones",
+   "name": "Route 10: The Stones",
+   "entry": "fl-act3",
+   "themeId": "ghost-dark",
+   "tint": "#1e2418",
+   "mood": "red cables humming between the stones",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "fl-stones-rows"
+    ],
+    [
+     "fl-stones-wiring"
+    ],
+    [
+     "fl-stones-fourth"
+    ],
+    [
+     "fl-stones-last"
+    ],
+    [
+     "fl-stones-tag"
+    ]
+   ]
+  },
+  {
+   "id": "ps_fl_plan",
+   "name": "Geosenge: So Clean",
+   "entry": "fl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1418",
+   "mood": "a table laid for forty, and a countdown",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "fl-plan-lobby"
+    ],
+    [
+     "fl-plan-rival"
+    ],
+    [
+     "fl-plan-sycamore"
+    ],
+    [
+     "fl-plan-petals"
+    ],
+    [
+     "fl-plan-aim"
+    ],
+    [
+     "fl-plan-light"
+    ],
+    [
+     "fl-plan-last"
+    ]
+   ]
+  },
+  {
+   "id": "ps_fl_turn",
+   "name": "Geosenge: No Refunds",
+   "entry": "fl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1418",
+   "mood": "a key, warm in your hand",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "fl-turn-key"
+    ],
+    [
+     "fl-turn-lysandre"
+    ],
+    [
+     "fl-turn-offer"
+    ],
+    [
+     "fl-turn-flower"
+    ],
+    [
+     "fl-turn-rubble"
+    ]
+   ]
+  },
+  {
+   "id": "ps_fl_az",
+   "name": "Geosenge: Back",
+   "entry": "fl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1418",
+   "mood": "a very tall man, stooping",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "fl-az-door"
+    ],
+    [
+     "fl-az-four"
+    ],
+    [
+     "fl-az-four-2"
+    ],
+    [
+     "fl-az-back"
+    ],
+    [
+     "fl-az-hour"
+    ]
+   ]
+  },
+  {
+   "id": "ps_fl_own",
+   "name": "Geosenge: A Bigger Well",
+   "entry": "fl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e1418",
+   "mood": "a coat, and a better question",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "fl-own-console"
+    ],
+    [
+     "fl-own-malva"
+    ],
+    [
+     "fl-own-clapping",
+     "fl-own-lost"
+    ],
+    [
+     "fl-own-list"
+    ],
+    [
+     "fl-own-fees"
+    ],
+    [
+     "fl-own-flower"
+    ],
+    [
+     "fl-own-staff"
+    ],
+    [
+     "fl-own-yarborough"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ember_laundry",
+   "name": "Thursday's Laundry",
+   "entry": "ember-stop-1",
+   "themeId": "ghost-dark",
+   "tint": "#2a2420",
+   "mood": "steam, starch and four hundred red suits",
+   "team": "flare",
+   "start": "opened",
+   "layout": [
+    [
+     "ember-laundry-1"
+    ],
+    [
+     "ember-laundry-2"
+    ],
+    [
+     "ember-laundry-gala"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sk_cold",
+   "name": "Preserved",
+   "entry": "sk-act3",
+   "themeId": "ghost-dark",
+   "tint": "#1a2230",
+   "mood": "B2, from below: a drain, rows of cases, a case your height.",
+   "team": "skull",
+   "start": "opened",
+   "layout": [
+    [
+     "sk-cold-drain"
+    ],
+    [
+     "sk-cold-rows"
+    ],
+    [
+     "sk-cold-case"
+    ],
+    [
+     "sk-cold-last"
+    ],
+    [
+     "sk-cold-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ae_cold",
+   "name": "Preserved",
+   "entry": "ae-act3",
+   "themeId": "ghost-dark",
+   "tint": "#1a2230",
+   "mood": "B2, from above: rows of cases, and something tall at the back.",
+   "team": "aether",
+   "start": "opened",
+   "layout": [
+    [
+     "ae-cold-rows"
+    ],
+    [
+     "ae-cold-tall"
+    ],
+    [
+     "ae-cold-case"
+    ],
+    [
+     "ae-cold-last"
+    ],
+    [
+     "ae-cold-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sk_plan",
+   "name": "Where Nothing Leaves",
+   "entry": "sk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#10101c",
+   "mood": "The upper deck, and through: a sea with no water in it, and a hundred pale bells.",
+   "team": "skull",
+   "start": "opened",
+   "layout": [
+    [
+     "al-plan-hau"
+    ],
+    [
+     "al-plan-rival"
+    ],
+    [
+     "al-plan-nanu"
+    ],
+    [
+     "al-plan-pylons"
+    ],
+    [
+     "al-plan-through-ae",
+     "al-plan-through-sk"
+    ],
+    [
+     "al-plan-stay"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sk_turn",
+   "name": "Come Home, All of You",
+   "entry": "sk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2e",
+   "mood": "Between Lusamine and the gate.",
+   "team": "skull",
+   "start": "opened",
+   "layout": [
+    [
+     "al-turn-between"
+    ],
+    [
+     "al-turn-fight"
+    ],
+    [
+     "al-turn-lillie"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sk_both",
+   "name": "Both Halves",
+   "entry": "sk-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2e",
+   "mood": "A deck, a dock, forty kids, two hundred staff, and a gate, open.",
+   "team": "skull",
+   "start": "opened",
+   "layout": [
+    [
+     "al-both-deck"
+    ],
+    [
+     "al-both-guzma"
+    ],
+    [
+     "al-both-lusamine"
+    ],
+    [
+     "al-both-sign"
+    ],
+    [
+     "al-both-cold"
+    ],
+    [
+     "al-both-gate"
+    ],
+    [
+     "al-both-forty"
+    ],
+    [
+     "al-both-ladle"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ae_plan",
+   "name": "Where Nothing Leaves",
+   "entry": "ae-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#10101c",
+   "mood": "The upper deck, and through: a sea with no water in it, and a hundred pale bells.",
+   "team": "aether",
+   "start": "opened",
+   "layout": [
+    [
+     "al-plan-hau"
+    ],
+    [
+     "al-plan-rival"
+    ],
+    [
+     "al-plan-nanu"
+    ],
+    [
+     "al-plan-pylons"
+    ],
+    [
+     "al-plan-through-ae",
+     "al-plan-through-sk"
+    ],
+    [
+     "al-plan-stay"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ae_turn",
+   "name": "Come Home, All of You",
+   "entry": "ae-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2e",
+   "mood": "Between Lusamine and the gate.",
+   "team": "aether",
+   "start": "opened",
+   "layout": [
+    [
+     "al-turn-between"
+    ],
+    [
+     "al-turn-fight"
+    ],
+    [
+     "al-turn-lillie"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ae_both",
+   "name": "Both Halves",
+   "entry": "ae-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2e",
+   "mood": "A deck, a dock, forty kids, two hundred staff, and a gate, open.",
+   "team": "aether",
+   "start": "opened",
+   "layout": [
+    [
+     "al-both-deck"
+    ],
+    [
+     "al-both-guzma"
+    ],
+    [
+     "al-both-lusamine"
+    ],
+    [
+     "al-both-sign"
+    ],
+    [
+     "al-both-cold"
+    ],
+    [
+     "al-both-gate"
+    ],
+    [
+     "al-both-forty"
+    ],
+    [
+     "al-both-ladle"
+    ]
+   ]
+  },
+  {
+   "id": "ps_ae_case",
+   "name": "Case by Case",
+   "entry": "ae-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a2230",
+   "mood": "A key across the deck, sixty cases, a lift that holds four.",
+   "team": "aether",
+   "start": "opened",
+   "layout": [
+    [
+     "al-case-key"
+    ],
+    [
+     "al-case-pua"
+    ],
+    [
+     "al-case-carry"
+    ],
+    [
+     "al-case-tale"
+    ],
+    [
+     "al-case-gate"
+    ]
+   ]
+  },
+  {
+   "id": "ps_sk_placed",
+   "name": "Placed",
+   "entry": "sk-placed-warn-2",
+   "themeId": "ghost-dark",
+   "tint": "#3a3428",
+   "mood": "A list of forty names, a white boat, and a ledger.",
+   "team": "skull",
+   "start": "opened",
+   "layout": [
+    [
+     "al-placed-list"
+    ],
+    [
+     "al-placed-plumeria"
+    ],
+    [
+     "al-placed-ledger"
+    ],
+    [
+     "al-placed-gate"
+    ]
+   ]
+  },
+  {
+   "id": "ps_tp_entries",
+   "name": "Three Open Entries",
+   "entry": "tp-return-1",
+   "themeId": "ghost-dark",
+   "tint": "#1e3a40",
+   "mood": "The Borrow Book: three not brought back.",
+   "start": "opened",
+   "layout": [
+    [
+     "tp-r1-rockruff"
+    ],
+    [
+     "tp-r1-cutiefly"
+    ],
+    [
+     "tp-r1-mudbray"
+    ]
+   ]
+  },
+  {
+   "id": "ps_tp_still",
+   "name": "Still Here",
+   "entry": "tp-still-here",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2e",
+   "mood": "The upper deck, the gate, and a lot of stairs.",
+   "start": "opened",
+   "layout": [
+    [
+     "tp-still-two"
+    ],
+    [
+     "tp-still-corsola"
+    ],
+    [
+     "tp-still-pelago"
+    ],
+    [
+     "tp-still-close"
+    ],
+    [
+     "tp-still-faba"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mc_flicker",
+   "name": "The Flicker",
+   "entry": "mc-act3",
+   "themeId": "ghost-dark",
+   "tint": "#2a1420",
+   "mood": "Under Hammerlocke: a cage of light, and a board of feeders.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "mc-flicker-plant"
+    ],
+    [
+     "mc-flicker-board"
+    ],
+    [
+     "mc-flicker-hollis"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mc_plan",
+   "name": "Launch Day",
+   "entry": "mc-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#3a1418",
+   "mood": "Rose Tower, and a red wind on the roof.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "mc-plan-hop"
+    ],
+    [
+     "mc-plan-sonia"
+    ],
+    [
+     "mc-plan-leon"
+    ],
+    [
+     "mc-plan-relays"
+    ],
+    [
+     "mc-plan-switch"
+    ],
+    [
+     "mc-plan-roof"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mc_turn",
+   "name": "There's Time",
+   "entry": "mc-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2430",
+   "mood": "The Tower Climb, from the bottom, with a lanyard.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "mc-turn-breaker"
+    ],
+    [
+     "mc-turn-ballguy"
+    ],
+    [
+     "mc-turn-hollis"
+    ],
+    [
+     "mc-turn-pryce"
+    ],
+    [
+     "mc-turn-thirtyone"
+    ],
+    [
+     "mc-turn-oleana"
+    ],
+    [
+     "mc-turn-fifty"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mc_lift",
+   "name": "Sixty in a Lift",
+   "entry": "mc-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2430",
+   "mood": "A brass lever, and sixty people in a lift rated for twelve.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "mc-lift-feeder"
+    ],
+    [
+     "mc-lift-lift"
+    ],
+    [
+     "mc-lift-fifty"
+    ]
+   ]
+  },
+  {
+   "id": "ps_mc_own",
+   "name": "A Thousand Years",
+   "entry": "mc-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2430",
+   "mood": "The roof, the Chair, and the first hour.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "mc-own-roof"
+    ],
+    [
+     "gl-own-rose"
+    ],
+    [
+     "gl-own-mug"
+    ],
+    [
+     "gl-own-map"
+    ],
+    [
+     "gl-own-cage"
+    ],
+    [
+     "gl-own-yell"
+    ],
+    [
+     "gl-own-oleana"
+    ]
+   ]
+  },
+  {
+   "id": "ps_yl_plan",
+   "name": "Is This On?",
+   "entry": "yl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#3a1418",
+   "mood": "The stands, the concourse, the truck, and five stadiums chanting.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "yl-plan-feed"
+    ],
+    [
+     "yl-plan-truck"
+    ],
+    [
+     "yl-plan-aux"
+    ],
+    [
+     "yl-plan-chant"
+    ],
+    [
+     "yl-plan-rounds"
+    ],
+    [
+     "yl-plan-above"
+    ]
+   ]
+  },
+  {
+   "id": "ps_yl_turn",
+   "name": "Go Home and Eat",
+   "entry": "yl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#3a1418",
+   "mood": "Block J, empty, and a towel on a seat.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "yl-turn-coach"
+    ],
+    [
+     "yl-turn-final"
+    ],
+    [
+     "yl-turn-red"
+    ],
+    [
+     "yl-turn-after"
+    ]
+   ]
+  },
+  {
+   "id": "ps_yl_bought",
+   "name": "Bought",
+   "entry": "yl-bought-warn-2",
+   "themeId": "ghost-dark",
+   "tint": "#1a141c",
+   "mood": "A key, a shutter, and a contract four lines long.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "yl-bought-gate"
+    ],
+    [
+     "yl-bought-beck"
+    ],
+    [
+     "yl-bought-offer"
+    ]
+   ]
+  },
+  {
+   "id": "ps_yl_own",
+   "name": "A Thousand Years",
+   "entry": "yl-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1e2430",
+   "mood": "Block J, the roof, the Chair, and the first hour.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "yl-own-blockj"
+    ],
+    [
+     "gl-own-rose"
+    ],
+    [
+     "gl-own-mug"
+    ],
+    [
+     "gl-own-map"
+    ],
+    [
+     "gl-own-cage"
+    ],
+    [
+     "gl-own-yell"
+    ],
+    [
+     "gl-own-oleana"
+    ]
+   ]
+  },
+  {
+   "id": "ps_enc_quarry",
+   "name": "Away Day: The Quarry",
+   "entry": "enc-away-1",
+   "themeId": "ghost-dark",
+   "tint": "#2a2418",
+   "mood": "A coach that does not fit, a generator, and floodlights that come on with a clunk.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "enc-q-road"
+    ],
+    [
+     "enc-q-pitch"
+    ],
+    [
+     "enc-q-match"
+    ]
+   ]
+  },
+  {
+   "id": "ps_enc_island",
+   "name": "Away Day: The Island",
+   "entry": "enc-away-2",
+   "themeId": "ghost-dark",
+   "tint": "#1e3a40",
+   "mood": "An island with one house, and one trainer.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "enc-i-beach"
+    ],
+    [
+     "enc-i-match"
+    ]
+   ]
+  },
+  {
+   "id": "ps_enc_12k",
+   "name": "Twelve Thousand",
+   "entry": "enc-twelve-thousand",
+   "themeId": "ghost-dark",
+   "tint": "#1a141c",
+   "mood": "Spikemuth, with the shutters up.",
+   "team": "yell",
+   "start": "opened",
+   "layout": [
+    [
+     "enc-12k-street"
+    ],
+    [
+     "enc-12k-sky"
+    ],
+    [
+     "enc-12k-chairman"
+    ],
+    [
+     "enc-12k-brothers"
+    ]
+   ]
+  },
+  {
+   "id": "ps_st_file",
+   "name": "Forty-One, One Friday",
+   "entry": "st-act3",
+   "themeId": "ghost-dark",
+   "tint": "#1c2038",
+   "mood": "The Academy at night: lockers, a records room, a torch.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "st-file-corridor"
+    ],
+    [
+     "st-file-records"
+    ],
+    [
+     "st-file-torch"
+    ]
+   ]
+  },
+  {
+   "id": "ps_st_plan",
+   "name": "By Their Own Rules",
+   "entry": "st-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2a",
+   "mood": "Five bonnets, under the clock, one after another.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "st-plan-giacomo"
+    ],
+    [
+     "st-plan-mela"
+    ],
+    [
+     "st-plan-atticus"
+    ],
+    [
+     "st-plan-ortega"
+    ],
+    [
+     "st-plan-eri"
+    ],
+    [
+     "st-plan-rule4"
+    ],
+    [
+     "st-plan-buyers"
+    ],
+    [
+     "st-plan-engines"
+    ]
+   ]
+  },
+  {
+   "id": "ps_st_turn",
+   "name": "By Post",
+   "entry": "st-turn-warn-2",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2a",
+   "mood": "A folded map: five hills, five crosses.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "st-turn-map"
+    ],
+    [
+     "st-turn-eri"
+    ],
+    [
+     "st-turn-post"
+    ],
+    [
+     "st-turn-buyers"
+    ]
+   ]
+  },
+  {
+   "id": "ps_st_academy",
+   "name": "Read in the Yard",
+   "entry": "st-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2a",
+   "mood": "A mop, leaned on a wall, and a box of seventy-one Fridays.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "st-academy-mop"
+    ],
+    [
+     "st-academy-hours"
+    ],
+    [
+     "st-academy-apology"
+    ],
+    [
+     "st-academy-buyers"
+    ]
+   ]
+  },
+  {
+   "id": "ps_st_own",
+   "name": "In Daylight",
+   "entry": "st-final-choice",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2a",
+   "mood": "A sixth bonnet, six battles, and the first hour.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "st-own-bonnet"
+    ],
+    [
+     "st-own-giacomo"
+    ],
+    [
+     "st-own-mela"
+    ],
+    [
+     "st-own-atticus"
+    ],
+    [
+     "st-own-ortega"
+    ],
+    [
+     "st-own-eri"
+    ],
+    [
+     "st-own-penny"
+    ],
+    [
+     "st-own-nascour"
+    ],
+    [
+     "st-own-rule5"
+    ],
+    [
+     "st-own-helmets"
+    ],
+    [
+     "st-own-engines"
+    ],
+    [
+     "st-own-building"
+    ],
+    [
+     "st-own-star"
+    ]
+   ]
+  },
+  {
+   "id": "ps_hr_lunch1",
+   "name": "Eleven Places",
+   "entry": "hr-lunch-1",
+   "themeId": "ghost-dark",
+   "tint": "#1c2038",
+   "mood": "A map of eleven places a person eats alone.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "hr-l1-stall"
+    ],
+    [
+     "hr-l1-boiler"
+    ],
+    [
+     "hr-l1-nurse"
+    ]
+   ]
+  },
+  {
+   "id": "ps_hr_lunch2",
+   "name": "Double Maths",
+   "entry": "hr-lunch-2",
+   "themeId": "ghost-dark",
+   "tint": "#1c2038",
+   "mood": "A hill, a speaker, and a canteen at one o'clock.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "hr-l2-walk"
+    ],
+    [
+     "hr-l2-canteen"
+    ]
+   ]
+  },
+  {
+   "id": "ps_hr_pyjamas",
+   "name": "Pyjamas",
+   "entry": "hr-pyjamas",
+   "themeId": "ghost-dark",
+   "tint": "#1a1a2a",
+   "mood": "The yard, and two hundred children in dressing gowns.",
+   "team": "star",
+   "start": "opened",
+   "layout": [
+    [
+     "hr-pj-count"
+    ],
+    [
+     "hr-pj-mop"
+    ],
+    [
+     "hr-pj-buyers"
+    ]
+   ]
+  }
+ ]
+}

@@ -42,13 +42,13 @@ function playClip(name: string, volume: number, maxMs = 6000): Promise<void> {
 }
 
 /** The Overcharged theme: loops, fades in. Stopped when the battle scene shuts down. */
-export function startMomentTheme(scene: Phaser.Scene, fast = false): void {
+export function startMomentTheme(scene: Phaser.Scene, fast = false, name = 'failure-theme'): void {
   const s = services().session.settings;
   const target = s.muted ? 0 : Math.min(1, s.musicVolume);
   stopMomentTheme();
   if (target <= 0) return;
   try {
-    const a = new Audio(`${BASE}failure-theme.ogg`);
+    const a = new Audio(`${BASE}${name}.ogg`);
     a.loop = true;
     a.volume = fast ? target : 0;
     theme = a;
@@ -82,7 +82,20 @@ export interface MomentSceneOptions {
   speciesId: string;
   /** Skip pressed or animations minimal: keep the text, drop the long waits. */
   fast: boolean;
+  /**
+   * Last-stand scenes (PA17 to PA31, POKEMON_MOMENTS.md Part 2B): the sound in the dark (instead of the static), one voice clip
+   * under all the lines, the theme, the veil colour (PA23 fades to white), the glow it rises in, and the text colour. The clips are
+   * the director's to supply; a missing one plays silent. Without these the scene is Failure Will (NOT) Be Tolerated's.
+   */
+  sound?: string;
+  voice?: string;
+  theme?: string;
+  veil?: string;
+  glow?: string;
+  textColor?: string;
 }
+
+const hex = (c: string | undefined, fallback: number): number => (c && /^#[0-9a-f]{6}$/i.test(c) ? parseInt(c.slice(1), 16) : fallback);
 
 /** Eye spots as fractions (0..1) of a species' front-art frame (its first frame, the one the scene shows); species not listed get two eyes in the upper middle. */
 const EYES: Record<string, [number, number][]> = {
@@ -125,9 +138,10 @@ export async function playMomentScene(scene: Phaser.Scene, opts: MomentSceneOpti
   const wait = (ms: number) => (fast ? Promise.resolve() : new Promise<void>((r) => scene.time.delayedCall(ms, r)));
   const made: Phaser.GameObjects.GameObject[] = [];
   const add = <T extends Phaser.GameObjects.GameObject>(o: T): T => { made.push(o); return o; };
-  const veil = add(scene.add.rectangle(0, 0, w, h, 0x000000, 1).setOrigin(0).setAlpha(0).setDepth(5000));
+  const lastStand = Boolean(opts.sound || opts.voice || opts.theme);
+  const veil = add(scene.add.rectangle(0, 0, w, h, hex(opts.veil, 0x000000), 1).setOrigin(0).setAlpha(0).setDepth(5000));
   const noise = add(scene.add.graphics().setDepth(5003));
-  const text = add(scene.add.text(w / 2, h * 0.86, '', { fontFamily: 'monospace', fontSize: `${Math.max(12, Math.round(h / 26))}px`, color: '#8fe8ff', align: 'center', wordWrap: { width: w * 0.86 } }).setOrigin(0.5).setDepth(5004));
+  const text = add(scene.add.text(w / 2, h * 0.86, '', { fontFamily: 'monospace', fontSize: `${Math.max(12, Math.round(h / 26))}px`, color: opts.textColor ?? '#8fe8ff', align: 'center', wordWrap: { width: w * 0.86 } }).setOrigin(0.5).setDepth(5004));
   try {
     scene.tweens.add({ targets: veil, alpha: 1, duration: fast ? 0 : opts.fadeMs });
     await wait(opts.fadeMs);
@@ -151,7 +165,7 @@ export async function playMomentScene(scene: Phaser.Scene, opts: MomentSceneOpti
       }));
     }
     // Static and electrical crackle (the director's clip) over flickering noise lines.
-    void playClip('failure-static', sfx, 4600);
+    void playClip(opts.sound ?? 'failure-static', sfx, 4600);
     const frames = fast ? 0 : Math.floor(opts.staticMs / 60);
     // Flicker from a tiny fixed-seed generator: presentation code never uses a random number source.
     let seed = 12345;
@@ -162,16 +176,32 @@ export async function playMomentScene(scene: Phaser.Scene, opts: MomentSceneOpti
       await wait(60);
     }
     noise.clear();
-    // The voice, line by line.
+    // The voice, line by line (a last stand has one voice clip under all of them; the lines are paced by time).
+    if (opts.voice && !fast) void playClip(opts.voice, sfx, 20000);
     for (let i = 0; i < opts.lines.length; i++) {
       text.setText(opts.lines[i]!);
       const name = opts.clips?.[i];
       if (name && !fast) await playClip(name, sfx);
-      else await wait(900);
+      else await wait(lastStand ? 1500 : 900);
       await wait(i === opts.lines.length - 1 ? 250 : 350);
     }
-    // After the last line: the eyes open in red, the flash plays, the theme fades in.
     text.setText('');
+    if (lastStand) {
+      // A last stand: the Pokémon rises in its own light, and its theme fades in.
+      startMomentTheme(scene, fast, opts.theme);
+      if (mon) {
+        const tint = hex(opts.glow, 0xffffff);
+        mon.setTint(tint);
+        const aura = add(scene.add.image(mon.x, mon.y, mon.texture.key, mon.frame.name).setScale(mon.scaleX * 1.08).setDepth(5000.5).setTintFill(tint).setAlpha(0).setBlendMode(Phaser.BlendModes.ADD));
+        if (!fast) scene.tweens.add({ targets: mon, y: { from: mon.y + h * 0.04, to: mon.y }, duration: 700 });
+        if (!fast) scene.tweens.add({ targets: aura, alpha: { from: 0, to: 0.45 }, duration: 600, yoyo: true });
+      }
+      const flash = add(scene.add.rectangle(0, 0, w, h, hex(opts.glow, 0xffffff), fast ? 0 : 0.6).setOrigin(0).setDepth(5005));
+      if (!fast) scene.tweens.add({ targets: flash, alpha: 0, duration: 500 });
+      await wait(1400);
+      return;
+    }
+    // After the last line: the eyes open in red, the flash plays, the theme fades in.
     void playClip('failure-flash', sfx, 2400);
     startMomentTheme(scene, fast);
     if (mon) {

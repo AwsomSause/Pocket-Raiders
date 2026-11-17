@@ -11,7 +11,7 @@ import { maxHp } from '../pokemon';
 import { newMon } from '../run';
 import type { PokemonInstance, RunState } from '../state';
 import { addItem } from '../items';
-import { SKY_BALANCE, SKY_FLY_ITEM, fearowLevel, fearowMoves, pidgeotLevel, pushRoom, skyOf } from './story';
+import { SKY_BALANCE, SKY_FLY_ITEM, fearowLevel, fearowMoves, pidgeotLevel, pushRoom, skyOf, sparBoost } from './story';
 import type { SkyState } from './state';
 import { DUEL_HEADER, duelResult, endingLine, finaleEnd } from './text';
 
@@ -38,6 +38,9 @@ export function prepareSpectate(content: Content, run: RunState, eventId: string
     mon.fixedAbility = 'scrappy';
     mon.held = heldOf(sky.gifts);
     setMoves(content, mon, ['wing-attack', 'quick-attack', 'air-slash', 'agility']);
+    // gn.02: each spar adds +2% to its stats, to a cap of 12%.
+    const pct = sparBoost(sky);
+    if (pct > 0) mon.statBoosts = { hp: pct, atk: pct, def: pct, spa: pct, spd: pct, spe: pct };
   }
   mon.hp = maxHp(content, mon);
   run.party = [mon];
@@ -51,7 +54,7 @@ export function shapeSpectateFoe(content: Content, run: RunState, sky: SkyState,
   const finale = eventId === 'sky.finale';
   const level = finale ? fearowLevel(content, run, sky) : SKY_BALANCE.duelLevel;
   const foe = newMon(content, run, finale ? 'fearow' : 'spearow', level, 'e');
-  if (finale) setMoves(content, foe, fearowMoves(sky));
+  if (finale) setMoves(content, foe, fearowMoves((run.stage?.index ?? 0) + 1));
   foe.hp = maxHp(content, foe);
   battle.enemyTeam[0] = foe;
   battle.spectate = finale ? { kind: 'finale', cheerAt: SKY_BALANCE.cheerThreshold } : { kind: 'duel' };
@@ -103,7 +106,16 @@ export function finishSpectate(content: Content, run: RunState, outcome: 'win' |
       sky.ending = 'hm';
       addItem(run.inventory, SKY_FLY_ITEM, 1);
       lines.push('You are given a Flying HM.');
+    } else if (winner === 'pidgey') {
+      // gn.02: backed the Spearow and it lost: nothing. It leaves, and the story never begins.
+      sky.phase = 'done';
+      sky.ending = 'spearow-lost';
+    } else if (sky.backed === 'spearow') {
+      run.story.flags['ev:pidgey-backed-spearow'] = 1;
     }
+    run.story.flags['ev:pidgey-story'] = sky.phase === 'rivalry' ? 1 : 0;
+    // gn.13 Flight North: the bully is from this Spearow's flock when it was seen in the same region.
+    run.story.flags['ev:spearow-seen-region'] = run.regionIndex + 1;
     return lines;
   }
   const winner = outcome === 'win' ? 'pidgeot' : 'fearow';
@@ -118,7 +130,14 @@ export function finishSpectate(content: Content, run: RunState, outcome: 'win' |
   if (winner === 'pidgeot' && cheer === 'pidgeot') pushRoom(run, 'sky.join.pidgeot');
   else if (winner === 'pidgeot') end(cheer === 'fearow' ? 'pidgeot-left' : 'pidgeot-alone');
   else if (cheer === 'fearow') pushRoom(run, 'sky.join.fearow');
-  else end('fearow-alone');
+  else if (cheer === 'pidgeot') {
+    // gn.02: "Nothing now. Next region, the story continues from S1, with a Pidgeot that's one stage wiser."
+    lines.push('Pidgeot drags itself to the cliff edge and looks at the sky. It is not finished. Next region, it will be one stage wiser.');
+    sky.region += 1;
+    sky.wiser += 1;
+    sky.finale = { asked: false };
+    sky.metStages = [];
+  } else end('fearow-alone');
   return lines;
 }
 

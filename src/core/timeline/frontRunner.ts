@@ -7,7 +7,7 @@
 import { z } from 'zod';
 import timelineJson from '../../data/timeline.json';
 import type { Content } from '../contentSchema';
-import { planFirstRival } from '../encounters';
+import { planFirstRival, rivalNamesExcluded } from '../encounters';
 import { hashSeed, Rng } from '../rng';
 import { RIVAL_RANKS, takeoverFlag } from '../rivals/promotion';
 import { rivalProgress } from '../rivals/progression';
@@ -54,7 +54,7 @@ export function pickOriginRival(content: Content, run: Pick<RunState, 'story' | 
   const best = killer ?? [...rivals].sort((a, b) => score(b) - score(a) || a.id.localeCompare(b.id))[0];
   if (best) return structuredClone(best);
   // No rival was sparked: the scripted first rival of this seed (the same trainer the replay meets) takes the role.
-  const plan = planFirstRival(content, run.seed);
+  const plan = planFirstRival(content, run.seed, undefined, rivalNamesExcluded(content, (run as { archetypeId?: string }).archetypeId));
   const personalityId = Object.keys(RIVAL_PROFILES.personalities).sort()[0]!;
   const personality = RIVAL_PROFILES.personalities[personalityId]!;
   const traits = Object.fromEntries(TRAIT_KEYS.map((k) => [k, personality.traits[k]])) as Traits;

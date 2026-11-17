@@ -1,0 +1,1055 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-58-friend",
+   "name": "Old Friend Returns",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "ofDue"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "boat",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lantern-boat-floated",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In its mouth, small and wet and folded, is a paper boat. The one you floated for it, believing it gone. It is not gone. It brought it back."
+    },
+    {
+     "id": "many",
+     "when": [
+      {
+       "kind": "gn",
+       "test": "ofMany"
+      }
+     ],
+     "notice": "It is not alone. At a respectful distance, others have stopped on the road. Pawprints you remember, one after another. They are waiting their turn."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*Something on the road. It was going somewhere else. It has stopped.*\n\n*It tilts its head, the way it always did. You know that tilt. You have known it all this time.*\n\n*It recognises you. Of course it does.*",
+   "choices": [
+    {
+     "label": "Kneel down, and hold out a hand.",
+     "success": {
+      "text": "You kneel in the dust. It crosses the road to you, slowly, as if afraid to be wrong.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofPick"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-trainer",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-minna"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-trainer",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "of-why",
+          "min": 3,
+          "max": 3,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-58-weak"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "of-why",
+          "min": 1,
+          "max": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-58-help"
+           }
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "of-why",
+          "min": 4,
+          "max": 4,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-58-none"
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-minna",
+   "name": "Old Friend Returns: A New Trainer",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*A girl of about twelve is hurrying up the road, a Poké Ball held tight. She stops short.*\n\n**Minna Lindgren:** \"Do you two know each other? It's never done that. It's never *stopped* for anyone.\"\n\n*She looks from {oldfriend:name} to you. She is waiting to be told. Nothing. Or everything. Your choice.*",
+   "choices": [
+    {
+     "label": "It used to be mine.",
+     "success": {
+      "text": "She goes quiet. \"Did you... not want it?\" The words are small. Then you answer her, with the reason you gave once, exactly as you gave it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "of-told",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "oldfriend-told-everything",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "\"I thought it would be happier here.\" She listens. She holds its Ball a little tighter. \"It is,\" she says. \"Mostly.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "\"I had no room.\" She nods slowly. She knows what that costs. She holds the Ball out a little, and then draws it back."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "\"It wasn't strong enough.\" Her face changes. She holds its Ball a little tighter. \"It is now,\" she says, fiercely. \"Look at it.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "You have no reason to give her. You say so. She listens to that, too, for a long time, and then holds the Ball out, just a little."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-weak"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 1,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-help"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-none"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "No. Just a friendly one.",
+     "success": {
+      "text": "{oldfriend:name} looks at you. For a moment it seems about to say something, in whatever way it says things. Then it lets it go. It is kind of you, or cowardly. Nobody says which.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "of-told",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "oldfriend-told-nothing",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-weak"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 1,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-help"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-none"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "It's a good Pokémon. Look after it.",
+     "success": {
+      "text": "**Minna:** \"I do.\" {oldfriend:name} leans against her leg, and looks at you over its shoulder, steadily, the whole way down the road.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "of-told",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-weak"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 1,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-help"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-why",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-none"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-weak",
+   "name": "Old Friend Returns: Stronger Now",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Combat"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*It steps back, and squares up. It is {oldfriend:species} now, and it is not the one you let go.*\n\n*It wants you to see. That is all. It has wanted you to see for a very long time.*\n\n*One on one. Against the Pokémon that took its place.*",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Both of you step forward. Nobody else joins in. This was always going to be just the two of them.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofReplacer"
+       },
+       {
+        "kind": "gn",
+        "op": "bench"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@old-friend"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-58-nod"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-58-nod"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-nod",
+   "name": "Old Friend Returns: It Nods",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*Win or lose, it stops. It looks at you. Then it nods, once, slowly, the way you would nod to someone who finally understood.*\n\n*It is done. It was always only this.*",
+   "choices": [
+    {
+     "label": "Nod back.",
+     "success": {
+      "text": "It goes on down the road. You watch it as far as the bend. It does not look back, because it does not need to.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "An old friend came back to be seen. It was seen.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-help",
+   "name": "Old Friend Returns: A Good Turn",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*It does not fight you. It sits in the road, and looks up at you, content. It is warm, and fed, and well.*\n\n*It is going the same way you are, for a little while. It means to be there for the hard part.*\n\n*Come the next hard fight, it will find you. It said so, in its own way.*",
+   "choices": [
+    {
+     "label": "Come with me?",
+     "success": {
+      "text": "It looks at you for a long moment. Then it looks at the road it was on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-fond",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "ofJoin"
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "oldfriend-rejoined-now",
+          "n": 1
+         },
+         {
+          "kind": "moment",
+          "text": "An old friend came back, and chose to stay.",
+          "importance": 80
+         }
+        ],
+        "text": "It steps forward. Once. Then it leans its whole weight against your leg, the way it always did. It is yours, and it chose to be."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-fond",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "It walks beside you a little way. Then it stops, and looks back at where it came from, and does not follow. That is its answer. You do not ask again."
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "of-free",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Wave it on.",
+     "success": {
+      "text": "You wave. It waves back, the only way it can, with its whole body. Somewhere ahead, in the next hard fight, it will be there.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-none",
+   "name": "Old Friend Returns: Unsaid",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*It looks at you for a long time before it moves. There is a question in it, and it is not asking it out loud.*\n\n*You never said why. It has had all this time to wonder.*",
+   "choices": [
+    {
+     "label": "Battle me.",
+     "success": {
+      "text": "It nods once, as if that is an answer. Then it stands, and you both begin.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofReplacer"
+       },
+       {
+        "kind": "gn",
+        "op": "bench"
+       }
+      ],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "@old-friend"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-58-nod"
+        }
+       ],
+       "exact": true,
+       "friendly": true,
+       "rule": {
+        "noCatch": true
+       },
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "unbench"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-58-nod"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk with me a while.",
+     "success": {
+      "text": "It falls in beside you without a sound. For the rest of the stage, it walks at your heel. At the Gym door, it will stop.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofGuest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Come with me?",
+     "success": {
+      "text": "It looks at you for a long moment. Then it looks at the road it was on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-fond",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "ofJoin"
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "oldfriend-rejoined-now",
+          "n": 1
+         },
+         {
+          "kind": "moment",
+          "text": "An old friend came back, and chose to stay.",
+          "importance": 80
+         }
+        ],
+        "text": "It steps forward. Once. Then it leans its whole weight against your leg, the way it always did. It is yours, and it chose to be."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-fond",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "It walks beside you a little way. Then it stops, and looks back at where it came from, and does not follow. That is its answer. You do not ask again."
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "of-free",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-58-bug",
+   "name": "Old Friend Returns: A Silhouette",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "ofSp",
+     "key": "bug"
+    },
+    {
+     "kind": "flag",
+     "key": "of-sp-bug-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "butterfree",
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*On the ridge, against the pale sky, a small shape. Wings folded. Perfectly still. It is watching the road.*\n\n*You know that outline. You have not forgotten it once since the night it carried a whole team north.*\n\n*It does not come closer. It does not need to.*",
+   "choices": [
+    {
+     "label": "Look up.",
+     "success": {
+      "text": "You look up, and it knows you did. It opens its wings, once, wide, so the light comes through.\n\nThen the cry. Two notes. High, then lower. The call you were told to remember. It is saying: *still here.*",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "bug",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A small Bug-type that once flew north looked back, and called twice.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on with your head down, because looking would be too much. Behind you, high up, something folds its wings and lets you go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "bug",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-cubone",
+   "name": "Old Friend Returns: The Flat Stone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "ofSp",
+     "key": "cubone"
+    },
+    {
+     "kind": "flag",
+     "key": "of-sp-cubone-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "types": [
+    "ghost",
+    "ground"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "cubone",
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*A graveyard by the road. Between the old stones, one small kneeling figure, club laid down beside it.*\n\n*It is setting a flat stone on a mound. The mound is not its mother's. It has never met whoever lies here.*\n\n*It has started doing this for others. Nobody told it to. It looks up, and it is not afraid of you.*",
+   "choices": [
+    {
+     "label": "Help it set the stone.",
+     "success": {
+      "text": "You hold the stone steady while it settles it with both paws. It nods at the mound, then at you. Neither of you says a word.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "cubone",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Cubone set a flat stone on a stranger's grave, and let you help.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You stand at the gate and watch until it has finished. When it picks up its club and goes to the next mound, you let it go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "cubone",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-mimikyu",
+   "name": "Old Friend Returns: The Table Is Laid",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "ofSp",
+     "key": "mimikyu"
+    },
+    {
+     "kind": "flag",
+     "key": "of-sp-mimikyu-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*The mansion, with one window lit. In the doorway, a small shape in a coat far too big for it. The coat is on again.*\n\n*Behind it, through the door, a table. Tea laid out for three now. Not two. Three.*\n\n*It pulls out a chair, and this time it does not wait forty years for you to sit.*",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "The tea is weak, and sweet, and warm. It pours without spilling. It cheats at draughts. You let it win, and it knows, and it does not mind.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "mimikyu",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A Mimikyu laid the table for three, and you sat at it.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it to its house.",
+     "success": {
+      "text": "You nod to the lit window. The coat nods back. A house with someone in it is a different house. You walk on, and it is warm behind you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "mimikyu",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-made",
+   "name": "Old Friend Returns: Something You Made",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "ofSp",
+     "key": "made"
+    },
+    {
+     "kind": "flag",
+     "key": "of-sp-made-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*On a country road, in a place you would never think to look, something very large and very strong is doing something very small.*\n\n*It is the one you shut the facility for. {cast:lab-subject}. It has not noticed you yet. It is busy being gentle.*",
+   "choices": [
+    {
+     "label": "Go closer.",
+     "success": {
+      "text": "It turns, and sees you, and stops, mid-gesture, as if caught. Then it remembers it has nothing to hide.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "of-made-kite",
+        "n": 50
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-made-kite",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-made-kite"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "of-made-kite",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-58-made-farm"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-made-farm",
+   "name": "Old Friend Returns: The Farmer",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*A farmer has a cart stuck to the axle in the mud. {cast:lab-subject} has the back of it in both hands, and is lifting.*\n\n**The farmer:** \"Don't ask me where it came from. Showed up in March. Won't take payment. Eats one apple a day and sits on the fence.\"\n\n*It sets the cart down, and looks at you, and lifts one hand. A wave.*",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "You wave back. It goes to the farmer's side, and stands there, easy, like it has been standing there for years. It never had that before.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "made",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Something made in a lab was helping a farmer, and was glad.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-58-made-kite",
+   "name": "Old Friend Returns: The Kite",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a7a5a",
+    "effect": "none"
+   },
+   "intro": "*A small child is running along the dyke, shrieking, with a kite on a string, and not enough wind.*\n\n*{cast:lab-subject} is carrying the kite. Held high in both hands, as carefully as an egg, jogging beside the child.*\n\n*It lets go. The wind catches. The child screams with joy. It looks, for a moment, exactly like what it is: something that is allowed to be here.*",
+   "choices": [
+    {
+     "label": "Let it be.",
+     "success": {
+      "text": "It looks up at the kite for a long time. Then at you. It nods once. That is all you wanted to know, and more.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "ofSpecial",
+        "key": "made",
+        "n": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A made Pokémon carried a child's kite, and the wind caught it.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

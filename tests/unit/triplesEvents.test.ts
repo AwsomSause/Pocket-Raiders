@@ -56,8 +56,8 @@ describe('Triple Trouble', () => {
     expect(spotCount(battleOf(on, atEvent('tt2', 'triple-battle', 2), 0).battle!)).toBe(2);
     expect(spotCount(battleOf(on, atEvent('tt1', 'triple-battle', 1), 0).battle!)).toBe(1);
   });
-  it('"Just one of them" stays a single battle', () => {
-    expect(spotCount(battleOf(on, atEvent('tt-one', 'triple-battle'), 1).battle!)).toBe(1);
+  it('has the one "Battle." choice the Catalog Overhaul gives it (SF144; the old "Just one of them" is gone)', () => {
+    expect(on.events.get('triple-battle')!.choices.map((c) => c.label)).toEqual(['Battle.']);
   });
   it('is the same every time for the same seed', () => {
     const a = battleOf(on, atEvent('tt-same', 'triple-battle'), 0);
@@ -85,10 +85,9 @@ describe('The Whispering Grove: Wake them', () => {
     }
     expect(run.phase === 'battle' ? run.battle?.outcome : 'done').toBeTruthy();
   });
-  it('"Push on" is still one wild Pokémon, rolled as before', () => {
-    const a = battleOf(on, atEvent('grove-push', 'whispering-grove-1'), 0);
-    expect(a.battle!.enemyTeam).toHaveLength(1);
-    expect(spotCount(a.battle!)).toBe(1);
+  it('the other answers of the rebuilt circle (Sit and listen, Sing back; STORY_FAMILIES_6 SF39) start no battle', () => {
+    expect(battleOf(on, atEvent('grove-calm', 'whispering-grove-1'), 0).battle).toBeFalsy();
+    expect(on.events.get('whispering-grove-1')!.choices[2]!.success.battle).toBeUndefined();
   });
   it('the extra wild Pokémon come from their own generator: the first foe is the one the fight would have without a format', () => {
     const def = structuredClone(on.events.get('whispering-grove-1')!);
@@ -115,7 +114,8 @@ describe('doubles scenes from the pack', () => {
 
 describe('more triple scenes from the packs', () => {
   // [event, choice, foes]: the Shadow Triad, the Plasma Yard guards, three Delibird, the Monster House, the Double Booking brawl.
-  const scenes = [['shadow-triad', 0, 3], ['plasma-substage-yard', 1, 3], ['delibird-y', 2, 3], ['md-1-monster-house', 1, 3], ['xr.fe-72', 1, 3]] as const;
+  // delibird-y left this list: the Catalog Overhaul rebuilt it as a present swap with no battle (STORY_FAMILIES_19 SF139).
+  const scenes = [['shadow-triad', 0, 3], ['plasma-substage-yard', 1, 3], ['md-1-monster-house', 1, 3], ['xr.fe-72', 1, 3]] as const;
   for (const [id, choice, foes] of scenes) {
     it(`${id} is a triple battle when they are on, and doubles while they are off`, () => {
       const tri = battleOf(on, atEvent(`s-${id}`, id), choice);

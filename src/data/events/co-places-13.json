@@ -1,0 +1,2635 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "ss-ticket-ferry",
+   "name": "S.S. Ticket: The Ferry",
+   "group": "Key items and tickets",
+   "rarity": "rare",
+   "keyItem": "ss-ticket",
+   "scene": {
+    "cast": [],
+    "tint": "#103050",
+    "effect": "float"
+   },
+   "intro": "The S.S. Anne sounds its horn, a sound so deep you feel it in your ribs. Streamers, a band on the quay, a hundred people waving at nobody in particular. At the gangplank a purser in a white cap checks tickets. Mr. Ashworth, the purser: \"All aboard for the Gym city! Ticket, please.\"",
+   "choices": [
+    {
+     "label": "Board.",
+     "success": {
+      "text": "He punches your ticket and hands you four little brass keys on a ring. \"Cabins one, two, four and six, and the suite at the end of the voyage. Enjoy the crossing.\" The ship pulls away from the quay as you find the first door, past the ship's shop with its shutters just going up.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rm-1-key-cabin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the cabins.",
+     "success": {
+      "text": "\"Four keys,\" says Mr. Ashworth, \"each a room, and one voyage to see them all. Cabin one's got a trunk nobody's claimed. Cabin two's got a sailor who'll fight anyone. Cabin four's cold, I couldn't tell you why. Cabin six, there's a collector. And then the suite. Best beds on the sea.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ss-ticket-ferry"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rm-1-key-cabin",
+   "name": "Room 1 Key: Abandoned Ship",
+   "group": "Key items and tickets",
+   "keyItem": "rm-1-key",
+   "scene": {
+    "cast": [],
+    "tint": "#182028",
+    "effect": "fog"
+   },
+   "intro": "Cabin 1. A dusty trunk under the porthole, and a note pinned to it in shaky capitals: \"FOR WHOEVER'S NEXT. — A SAILOR WHO RETIRED.\"",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "Inside, folded in an old oilskin, something good. And a postcard: a little house on a hill, a garden, and on the back, \"I grow tomatoes now. They're terrible. I've never been happier.\" You keep the postcard too.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "anne-postcard",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rm-2-key-cabin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the trunk for whoever's after you. That is what the note asked, after all.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rm-2-key-cabin"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rm-2-key-cabin",
+   "name": "Room 2 Key: Abandoned Ship",
+   "group": "Key items and tickets",
+   "keyItem": "rm-2-key",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#182028",
+    "effect": "fog"
+   },
+   "intro": "Cabin 2. A sailor jumps up off his bunk the moment the door opens, fists already up, grinning. \"A battle! Winner takes double! I've been at sea six weeks, I'm going spare!\"",
+   "choices": [
+    {
+     "label": "Battle (double prize).",
+     "success": {
+      "text": "\"YES.\" He kicks the bunk out of the way to make room.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "name": "Sailor",
+       "classId": "black-belt",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "rm-4-key-cabin"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "His face falls, then recovers. \"Fair. Fair. Ask me tomorrow.\" He is already doing press-ups as you close the door.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rm-4-key-cabin"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rm-4-key-cabin",
+   "name": "Room 4 Key: Abandoned Ship",
+   "group": "Key items and tickets",
+   "keyItem": "rm-4-key",
+   "scene": {
+    "cast": [],
+    "tint": "#100818",
+    "effect": "flicker"
+   },
+   "intro": "Cabin 4. Cold, colder than the sea outside. A shadow slides across the wall where there is nothing to cast it: a Haunter that stowed away, grinning at you from the ceiling.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "It laughs, and the light bulb flickers.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "friendly": true,
+       "species": [
+        "haunter"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rm-6-key-cabin"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask why it's here.",
+     "success": {
+      "text": "It drops down, upside down, nose to nose with you. It wants to see the Gym city, it says, as well as a Haunter says anything: it has heard there are lights there all night. You talk until the porthole goes dark. When you open a Ball, it climbs in on its own.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "haunter"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rm-6-key-cabin"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave it to its cold cabin. It waves at you through the door as it shuts.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rm-6-key-cabin"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "rm-6-key-cabin",
+   "name": "Room 6 Key: The Scanner",
+   "group": "Key items and tickets",
+   "keyItem": "rm-6-key",
+   "scene": {
+    "cast": [],
+    "tint": "#182028",
+    "effect": "glint"
+   },
+   "intro": "Cabin 6. On the desk, a strange device with a screen and an aerial: a Scanner, the kind that finds things hidden in walls. A collector in a velvet jacket is already in the doorway. \"That Scanner. I'll trade you for it. Name your price.\"",
+   "choices": [
+    {
+     "label": "Trade it.",
+     "success": {
+      "text": "He opens a case lined with little velvet nests and lets you choose. You choose well. He walks off cradling the Scanner like a baby.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "suite-key-rest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You keep it. On deck, it beeps at a loose plank, and under the plank there is a little tin of things somebody hid years ago.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "scanner",
+        "count": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "pearl",
+         "star-piece"
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "suite-key-rest"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "suite-key-rest",
+   "name": "Suite Key: Luxury Suite",
+   "group": "Key items and tickets",
+   "rarity": "uncommon",
+   "keyItem": "suite-key",
+   "scene": {
+    "cast": [],
+    "tint": "#402838",
+    "effect": "hearts"
+   },
+   "intro": "The Suite. Soft beds, a view of the whole sea going gold, a bowl of fruit nobody has touched. Your team takes one look and flops down on every surface at once.",
+   "choices": [
+    {
+     "label": "Rest.",
+     "success": {
+      "text": "You sleep in a real bed while the sea rocks you. When the horn sounds for the Gym city, everyone wakes up whole.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You crossed on the S.S. Anne and slept in the suite.",
+        "importance": 45
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the team play.",
+     "success": {
+      "text": "You let them have the run of the suite: pillows everywhere, fruit everywhere, someone in the bath. It is the best hour any of you have had in a long time.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "w4-haunted-manor",
+   "name": "The Haunted Manor",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "types": [
+    "ghost",
+    "dark"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#140c1c",
+    "effect": "flicker"
+   },
+   "intro": "An old manor at the end of an overgrown drive. As you reach the steps, the door swings open by itself. Lights flicker on inside, one room at a time, and then off again. Somewhere upstairs, something giggles.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You step over the threshold. The door does not slam behind you. It closes, very gently, as if someone is trying not to wake the house.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "w4-haunted-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out.",
+     "success": {
+      "text": "\"Hello?\" The giggling stops. The whole house holds its breath. Then the giggling starts again, closer, just on the other side of the door.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "w4-haunted-manor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "haunted-house",
+   "name": "Haunted House",
+   "group": "Mysteries and story",
+   "stop": "haunted",
+   "types": [
+    "ghost"
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hex_maniac"
+    ],
+    "tint": "#100820",
+    "effect": "flicker"
+   },
+   "intro": "An old manor at the end of an overgrown drive. As you reach the steps, the door swings open by itself. Lights flicker on inside, one room at a time, and then off again. Somewhere upstairs, something giggles.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You step over the threshold. The door does not slam behind you. It closes, very gently, as if someone is trying not to wake the house.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "w4-haunted-hall"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call out.",
+     "success": {
+      "text": "\"Hello?\" The giggling stops. The whole house holds its breath. Then the giggling starts again, closer, just on the other side of the door.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "haunted-house"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-mansion",
+   "name": "Haunted Mansion",
+   "group": "Dungeon Puzzles",
+   "stop": "dungeon",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#140c1c",
+    "effect": "flicker"
+   },
+   "intro": "Through the broken window of an old manor you can see its hall: three cold lamps on three tables, and portraits whose eyes follow you along the glass. One of the portraits opens its mouth and screams. The door, beside you, is already open.",
+   "choices": [
+    {
+     "label": "Scream back.",
+     "success": {
+      "text": "You scream right back at it. The portrait's mouth snaps shut. Then a Gastly falls out of the frame, laughing so hard it cannot float, and rolls around on the floor. It follows you after that, still giggling.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-kitchen",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-library",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-cellar",
+        "amount": -99
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-kitchen"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "It is a family: a mother, a father, a little girl, and around them their Pokémon, a Gastly, a Shuppet, a Litwick, a Mimikyu in the girl's arms. Under the frame, a date, a long time ago. The portrait stops screaming, as if it is glad to be looked at properly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-family",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-kitchen",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-library",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-cellar",
+        "amount": -99
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-kitchen"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-haunted-hall",
+   "name": "The Haunted Manor: the Hall",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#140c1c",
+    "effect": "flicker"
+   },
+   "intro": "The Hall. Three cold lamps on three tables, wicks black. Portraits up the stairs, whose eyes follow you. One of them opens its mouth and screams.",
+   "choices": [
+    {
+     "label": "Scream back.",
+     "success": {
+      "text": "You scream right back at it. The portrait's mouth snaps shut. Then a Gastly falls out of the frame, laughing so hard it cannot float, and rolls around on the floor. It follows you after that, still giggling.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-kitchen",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-library",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-cellar",
+        "amount": -99
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-kitchen"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "It is a family: a mother, a father, a little girl, and around them their Pokémon, a Gastly, a Shuppet, a Litwick, a Mimikyu in the girl's arms. Under the frame, a date, a long time ago. The portrait stops screaming, as if it is glad to be looked at properly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-family",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-kitchen",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-library",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-cellar",
+        "amount": -99
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-kitchen"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-mansion-kitchen",
+   "name": "Mansion Kitchen",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#241410",
+    "effect": "flicker"
+   },
+   "intro": "The Kitchen. A cold stove with the first lamp sitting on top of it. Pots clatter by themselves on their hooks, and a ladle taps the empty bowls. Something wants feeding.",
+   "choices": [
+    {
+     "label": "Cook something.",
+     "success": {
+      "text": "You light the stove and make soup from what is in your bag. A Shuppet drifts down from the rafters and eats the whole pot, purring. When it is done, the lamp on the stove lights itself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-kitchen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-library"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave a Berry.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You set a Berry on the cold stove. A Shuppet sweeps down and swallows it whole, and does a happy loop of the ceiling. The lamp lights.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-kitchen",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-library"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle the pots.",
+     "success": {
+      "text": "The pots fly off their hooks at you, and behind them, a Shuppet, furious.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "friendly": true,
+       "species": [
+        "shuppet"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "dz-mansion-library"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-mansion-library",
+   "name": "Mansion Library",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1030",
+    "effect": "flicker"
+   },
+   "intro": "The Library. Books float in the air, turning their own pages. The second lamp is on a high shelf, and under it, a riddle carved into the wood: \"Which number comes after all the others?\"",
+   "choices": [
+    {
+     "label": "\"Infinity.\"",
+     "success": {
+      "text": "The books all snap shut at once. Wrong. The lamp stays dark, and a heavy dictionary bonks your lead on the head on the way out.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.03
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-cellar"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Zero.\"",
+     "success": {
+      "text": "A little sigh goes round the room. Wrong. The lamp stays dark.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-cellar"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The last page.\"",
+     "success": {
+      "text": "Every floating book turns to its last page at once. The last book on the shelf is a diary: the family's. Its last page is a drawing of all of them. The lamp lights.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-library",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-cellar"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "dz-mansion-cellar",
+   "name": "Mansion Cellar",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#0c0c18",
+    "effect": "shake"
+   },
+   "intro": "The Cellar. Damp stone, and the third lamp glinting under a floor of loose boards, half of them rotten.",
+   "choices": [
+    {
+     "label": "Test the boards.",
+     "success": {
+      "text": "You test each board before you trust it. One gives under your foot and you go through to the knee. You reach the lamp anyway, scraped and filthy, and light it.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-cellar",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "w4-haunted-attic"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send a Ghost-type.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ghost"
+      }
+     ],
+     "success": {
+      "text": "Your Ghost-type drifts over the rotten boards without touching them, as if it was born to it, and breathes on the wick. The lamp lights.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-lamp-cellar",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": {
+         "types": [
+          "ghost"
+         ]
+        }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "w4-haunted-attic"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "w4-haunted-attic",
+   "name": "The Haunted Manor: the Attic",
+   "group": "World & Traversal",
+   "rarity": "uncommon",
+   "types": [
+    "ghost"
+   ],
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#140c1c",
+    "effect": "fog"
+   },
+   "intro": "The Attic. Dust, a round window, a big old chest. And sitting on the chest, very still, waiting: a Banette, stitched and patched, that was once a doll.",
+   "choices": [
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "You sit down on the floor in front of it, so you are the same height. Its zipper mouth begins to move.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "cursed-doll"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Its zipper mouth opens wide.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "friendly": true,
+       "species": [
+        "banette"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "r151-mimikyu-ruined-stage"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "cursed-doll",
+   "name": "Cursed Doll",
+   "group": "Mysteries and story",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "pokemon": "banette",
+    "tint": "#180818",
+    "effect": "flicker"
+   },
+   "intro": "The doll's zipper mouth moves, and its voice is very small. \"She threw me away. She grew up, and she threw me away.\"",
+   "choices": [
+    {
+     "label": "\"I'm sorry.\"",
+     "success": {
+      "text": "It looks at you for a long time. \"Nobody ever said that,\" it says. It climbs down off the chest and follows you, a little way behind.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "r151-mimikyu-ruined-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who?\"",
+     "success": {
+      "text": "\"The girl in the picture.\" The family's daughter, all grown up now, somewhere far away. \"She had a Mimikyu after me. It's still here. It's still waiting too.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-doll-girl",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "r151-mimikyu-ruined-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come with me.\"",
+     "success": {
+      "text": "It is in your arms before you finish the sentence, light as cloth. It does not say anything else. It does not have to.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "banette"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "doll-thrown-away",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You took the doll that was thrown away with you.",
+        "importance": 65
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "r151-mimikyu-ruined-stage"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "r151-mimikyu-ruined-stage",
+   "name": "Mimikyu Ruined Stage",
+   "group": "Wild Scenes",
+   "rarity": "rare",
+   "types": [
+    "ghost",
+    "fairy"
+   ],
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "pokemon": "mimikyu",
+    "tint": "#241830",
+    "effect": "flicker"
+   },
+   "intro": "The Ballroom. At the far end, a little stage in rags, its curtains torn. A Mimikyu in a patched costume steps out into a spotlight that is not there, and takes a deep bow to an empty house.",
+   "choices": [
+    {
+     "label": "Applaud.",
+     "success": {
+      "text": "You clap. Your team claps, or stamps, or howls. The Mimikyu freezes, and then it bows again, lower, happier. When you go on, it follows you to the vault, skipping.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-mimikyu",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-vault"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join the act.",
+     "success": {
+      "text": "You climb up on the stage and bow beside it. It looks at you, delighted, and you do the whole show together, to nobody, and it is wonderful.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-mimikyu",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-vault"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You leave it bowing to the dark. It does not notice. It is used to an empty house.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "dz-mansion-vault"
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "dz-mansion-vault",
+   "name": "Mansion Vault",
+   "group": "Dungeon Puzzles",
+   "rarity": "rare",
+   "minStage": 2,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1a1030",
+    "effect": "glint"
+   },
+   "intro": "The Vault. A heavy iron door at the end of the hall, three keyholes shaped like flames, all cold.",
+   "choices": [
+    {
+     "label": "Try the door.",
+     "success": {
+      "text": "It does not move. Three cold flames. Somewhere in the house, a lamp is still dark.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sock-puppet-salesman"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lit",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mansion-lamp-kitchen",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "mansion-lamp-library",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "mansion-lamp-cellar",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The Vault. Three lamps lit, and the iron door swings open by itself. Inside, on a little table, the family's photo album. And all around you, every Pokémon in the album is here in the house tonight, in the doorway, on the stairs, waiting.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Read the album.",
+       "success": {
+        "text": "You turn the pages slowly, out loud. Every ghost in the mansion goes quiet to listen. When you close it, they cheer, all of them at once, so loud the windows rattle. On the last page someone has left you a Reaper Cloth.",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "reaper-cloth",
+          "count": 1
+         },
+         {
+          "kind": "flag",
+          "key": "mansion-lamp-kitchen",
+          "amount": -99
+         },
+         {
+          "kind": "flag",
+          "key": "mansion-lamp-library",
+          "amount": -99
+         },
+         {
+          "kind": "flag",
+          "key": "mansion-lamp-cellar",
+          "amount": -99
+         },
+         {
+          "kind": "moment",
+          "text": "You read the haunted family's album to their ghosts, and they cheered.",
+          "importance": 70
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "sock-puppet-salesman"
+         }
+        ]
+       }
+      },
+      {
+       "label": "Take the treasure.",
+       "success": {
+        "text": "Under the album, a strongbox. You take what is in it. Behind you, the ghosts watch you go without a word.",
+        "effects": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "leftovers",
+           "focus-sash",
+           "choice-band",
+           "choice-specs",
+           "choice-scarf",
+           "life-orb",
+           "eviolite",
+           "rocky-helmet"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "mansion-lamp-kitchen",
+          "amount": -99
+         },
+         {
+          "kind": "flag",
+          "key": "mansion-lamp-library",
+          "amount": -99
+         },
+         {
+          "kind": "flag",
+          "key": "mansion-lamp-cellar",
+          "amount": -99
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "sock-puppet-salesman"
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "sock-puppet-salesman",
+   "name": "The Sock Puppet Salesman",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.guitarist"
+    ],
+    "tint": "#1c1c2a",
+    "effect": "none"
+   },
+   "intro": "On your way out, by the front door, a salesman in a floppy hat with a tray of odds and ends. \"Souvenir? Everything's a bargain.\" His shadow on the wall behind him has big pointed ears, and a little crooked smile.",
+   "choices": [
+    {
+     "label": "Buy.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You buy a charm from his tray. He is very pleased, and bows exactly the way the Mimikyu in the ballroom bowed.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "cleanse-tag",
+         "spell-tag"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Point out the shadow.",
+     "success": {
+      "text": "\"Oh,\" he says, in a much smaller voice, and the hat slips, and it is the Mimikyu, practising being a person. It gives you the charm for free, and makes you promise not to tell.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "cleanse-tag",
+         "spell-tag"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "sock-puppet-shadow",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "detective-case",
+   "name": "The Case of the Missing Lantern",
+   "group": "NPC Stories",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker"
+    ],
+    "tint": "#20242e",
+    "effect": "fog"
+   },
+   "intro": "A very slow man in a long coat is crouched in the middle of the square, looking at the cobbles through a magnifying glass, and beside him a Slowpoke is doing exactly the same thing with no glass at all. Inspector Quennell: \"A lantern's missing from the square. Three clues, three stops. Help?\"",
+   "choices": [
+    {
+     "label": "Help.",
+     "success": {
+      "text": "\"Good.\" He stands up, slowly. \"First clue's at the well. Dawdle will meet you there. Dawdle's always there first.\" The Slowpoke is already gone, somehow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "detective-case-1",
+        "amount": 1
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "detective-clue-2",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why me?\"",
+     "success": {
+      "text": "\"Dawdle likes you,\" he says. The Slowpoke is leaning against your leg. \"Dawdle's never wrong. I've been wrong four times. Dawdle, never.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "detective-case"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "detective-clue-2",
+   "name": "Clue: The Well",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker"
+    ],
+    "tint": "#20242e",
+    "effect": "none"
+   },
+   "intro": "The Well. On the stone rim, a wet paw print, small, and a scrap of red ribbon caught on a nail. Quennell holds it up to the light. \"What does it tell you?\"",
+   "choices": [
+    {
+     "label": "\"A Water-type.\"",
+     "success": {
+      "text": "\"Hm. Wet, yes. But everything's wet at a well.\" He writes it down anyway, kindly.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "r171-slowpoke-wellside",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"A small Pokémon.\"",
+     "success": {
+      "text": "\"True. But small isn't a who.\" He writes it down.",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "r171-slowpoke-wellside",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"A child's pet.\"",
+     "success": {
+      "text": "\"Yes.\" He looks at you properly for the first time. \"The ribbon's a collar. Somebody loves this one.\" He writes it down and underlines it twice.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "detective-right",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "r171-slowpoke-wellside",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "r171-slowpoke-wellside",
+   "name": "Slowpoke Wellside",
+   "group": "Wild Scenes",
+   "rarity": "uncommon",
+   "types": [
+    "water",
+    "psychic"
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "slowpoke",
+    "tint": "#2a2038",
+    "effect": "float"
+   },
+   "intro": "Dawdle sits by the well with its tail down in the water, perfectly still. It has been there a long time. Quennell is nowhere to be seen.",
+   "choices": [
+    {
+     "label": "Wait with it.",
+     "success": {
+      "text": "You sit down beside it. You wait a long time. Then its tail comes up out of the water, and on the end of it, snagged, is the other half of the red ribbon, and a name stitched on it: WICK.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "detective-ribbon",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "laterEvent",
+        "eventId": "detective-clue-3",
+        "nodes": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Quennell.",
+     "success": {
+      "text": "He arrives, eventually. \"Dawdle's fishing,\" he says. \"Dawdle's always fishing. Never catches fish.\" He sits down too. \"Next stop, the rooftops.\"",
+      "effects": [
+       {
+        "kind": "laterEvent",
+        "eventId": "detective-clue-3",
+        "nodes": 1
+       }
+      ]
+     }
+    }
+   ],
+   "room": true
+  },
+  {
+   "id": "detective-clue-3",
+   "name": "Clue: The Rooftop",
+   "group": "NPC Stories",
+   "rarity": "uncommon",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker"
+    ],
+    "tint": "#20242e",
+    "effect": "none"
+   },
+   "intro": "The Rooftop. Up the fire stairs, and there it is: the lantern, and curled round it, fast asleep, a little Litwick with a red collar. It was cold. It found the warmest thing in the square.",
+   "choices": [
+    {
+     "label": "Return the lantern.",
+     "success": {
+      "text": "You lift the lantern out of its arms as gently as you can. It wakes, and shivers. Quennell takes the lantern back to the square, and says nothing about it, and you can tell he wishes you had chosen differently.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "detective-case-1-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mem-detective-helped",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it keep it.",
+     "success": {
+      "text": "You leave it sleeping. The square will have one less light. Quennell nods slowly. \"There are worse places for a lantern to be.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "detective-case-1-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mem-detective-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lore-mirror-trainer",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find it a lantern of its own.",
+     "success": {
+      "text": "You go down to the church and ask, and they have an old lantern in the vestry, dented and perfect. The town puts it up on the roof for the Litwick. It moves in that night. Everyone is happy, Dawdle most of all, though you couldn't say how you can tell.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "detective-case-1-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mem-detective-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "lore-mirror-trainer",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You solved the case of the missing lantern, and a cold Litwick got a lantern of its own.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mystery-clue-1",
+   "name": "The Missing Lantern-Keeper",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mystery-clue",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2230",
+    "effect": "none"
+   },
+   "intro": "The lamp at the crossroads is dark. It is never dark. The keeper's chair is empty, his tea cold, and a torn page from his ledger flutters on the step. Somewhere behind you, slowly, a Slowpoke arrives.",
+   "choices": [
+    {
+     "label": "Read the page.",
+     "success": {
+      "text": "\"...checked the cellar, door stuck, will try the...\" and then the tear. Quennell, at your elbow: \"Case two. The Lantern-Keeper.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mystery-clue",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Light the lamp first.",
+     "success": {
+      "text": "You find the matches and light it. All along the dark road, travellers look up and see it and are glad. Then you read the page: \"...door stuck, will try the...\" Quennell nods. \"Lamp first. Good instinct.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mystery-clue",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mystery-clue-2",
+   "name": "Muddy Footprints",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mystery-clue",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2230",
+    "effect": "none"
+   },
+   "intro": "Footprints in the mud by the crossroads, a man's boots, leading to a cracked cellar door half hidden in brambles.",
+   "choices": [
+    {
+     "label": "Follow.",
+     "success": {
+      "text": "You follow them to the cellar step. Under the step, wrapped in a cloth: a key. The keeper's. He must have dropped it going in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mystery-clue",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Call the police.",
+     "success": {
+      "text": "Officer Jenny comes, and looks at the footprints, and looks at you, and says, \"Quennell's case? Then it's Quennell's.\" She leaves. You find the key under the step yourself.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mystery-clue",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mystery-solved",
+   "name": "The Keeper Is Found",
+   "group": "Story and characters",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mystery-clue",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mystery-solved",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2230",
+    "effect": "none"
+   },
+   "intro": "A garden shed. You turn the key, and inside, wrapped in a horse blanket and very embarrassed, is the lantern-keeper. \"Door stuck,\" he says. \"I locked myself in. Three days. I had biscuits.\"",
+   "choices": [
+    {
+     "label": "Laugh with him.",
+     "success": {
+      "text": "You laugh, and he laughs, and Dawdle sits down in the doorway, which is a Slowpoke laughing. Quennell takes off his own hat and puts it on your head. \"Honorary detective. Don't let it go to your head. It's a very big hat.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mystery-solved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honorary-detective",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Inspector Quennell made you an honorary detective.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk him home.",
+     "success": {
+      "text": "You walk him home, slowly, and he tells you about every lamp he has ever lit. At his door Quennell catches up, and puts his own hat on your head. \"Honorary detective. It suits you. It doesn't suit anyone.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mystery-solved",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "honorary-detective",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Inspector Quennell made you an honorary detective.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "tri-pass-ferry",
+   "name": "Tri-Pass: Sevii Ferry",
+   "group": "Key items and tickets",
+   "rarity": "uncommon",
+   "keyItem": "tri-pass",
+   "scene": {
+    "cast": [],
+    "tint": "#103050",
+    "effect": "float"
+   },
+   "intro": "A fast little boat at the quay, painted blue and white. Its captain is chewing a pipe she never lights. Mo, the ferry captain: \"Seagallop to one of three islands. Pick.\"",
+   "choices": [
+    {
+     "label": "Island One.",
+     "success": {
+      "text": "Island One: a fishing town with a market on the harbour and a hot spring up the hill. You shop, and soak, and come back salt-sweet and rested. Mo is waiting at the quay when you are done. \"Back on the mainland by tea.\"",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Island Two.",
+     "success": {
+      "text": "Island Two: a quiet place with an old woman who keeps a rest house for travellers. She feeds you, and puts you all to bed, and nobody asks you for anything. Mo is waiting at the quay when you are done. \"Back on the mainland by tea.\"",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Island Three.",
+     "success": {
+      "text": "Island Three: wild and green, with ruins on the cliffs and something rare in the bracken. You explore until the ferry horn calls you back. Mo is waiting at the quay when you are done. \"Back on the mainland by tea.\"",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rainbow-pass-ferry",
+   "name": "Rainbow Pass: All the Islands",
+   "group": "Key items and tickets",
+   "rarity": "rare",
+   "keyItem": "rainbow-pass",
+   "scene": {
+    "cast": [],
+    "tint": "#103050",
+    "effect": "sparkle"
+   },
+   "intro": "Mo's boat again, flying a flag with every colour on it. \"Rainbow Pass,\" she says. \"Every island. Shop, rest, explore. Your pick, or all of them.\"",
+   "choices": [
+    {
+     "label": "All of them.",
+     "success": {
+      "text": "Mo takes you round them all. Island One: a fishing town with a market on the harbour and a hot spring up the hill. You shop, and soak, and come back salt-sweet and rested. Island Two: a quiet place with an old woman who keeps a rest house for travellers. She feeds you, and puts you all to bed, and nobody asks you for anything. Island Three: wild and green, with ruins on the cliffs and something rare in the bracken. You explore until the ferry horn calls you back. You come home with sunburn and stories.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "focus-sash",
+         "choice-band",
+         "choice-specs",
+         "choice-scarf",
+         "life-orb",
+         "eviolite",
+         "rocky-helmet"
+        ]
+       },
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "You sailed the Rainbow Pass to every island.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just one.",
+     "success": {
+      "text": "Island Two: a quiet place with an old woman who keeps a rest house for travellers. She feeds you, and puts you all to bed, and nobody asks you for anything. Sometimes one is enough.",
+      "effects": [
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ticket-booth",
+   "name": "Ferry Ticket Booth",
+   "group": "Merchants and deals",
+   "stop": "merchant",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#103050",
+    "effect": "float"
+   },
+   "intro": "A ticket booth at the harbour with a clerk behind the glass, stamping things. Clerk: \"Express ferry to the Gym town! Fifteen hundred!\"",
+   "choices": [
+    {
+     "label": "Buy. (1,500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "The express ferry cuts through the waves like a knife. You are at the Gym town before you have finished your sandwich.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "express"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Is there a slow one?\"",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 300
+      }
+     ],
+     "success": {
+      "text": "\"There's the slow one,\" says the clerk, and points at a little tub of a boat with a dog asleep on the deck. \"Three hundred. Two extra stops at sea.\" It is slow. It is lovely.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -300
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "scout",
+        "columns": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "pokemon-daycare-visit",
+   "name": "Daycare Drop-In",
+   "group": "Helpers, gifts and kindness",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#283018",
+    "effect": "hearts"
+   },
+   "intro": "A neat fenced yard full of Pokémon, playing, napping, arguing over a ball. A cheerful man in overalls leans on the gate. Mr. Holloway: \"Leave one with us a while? It'll grow. They always grow here.\"",
+   "choices": [
+    {
+     "label": "Leave one.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "You choose. It looks back once, then sees the ball, and is gone. Mr. Holloway writes its name on a little chalkboard. \"Collect it on your next visit. It'll have grown, I promise.\"",
+      "effects": [
+       {
+        "kind": "sendAway",
+        "key": "daycare-holloway",
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-left",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Visit the others.",
+     "success": {
+      "text": "You spend an hour in the yard. A Pokémon you have never seen before falls asleep in your lap. Mr. Holloway brings you lemonade.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "daycare-holloway-collect",
+   "name": "Collecting from the Day-Care",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "daycare-holloway",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "daycare-collected",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a6a3a",
+    "effect": "none"
+   },
+   "intro": "The Day-Care yard again. Mr. Holloway sees you coming and rings the bell, and the one you left comes running across the grass, bigger than you remember.",
+   "choices": [
+    {
+     "label": "Welcome it back.",
+     "success": {
+      "text": "It nearly knocks you over. Mr. Holloway wipes his eyes on his sleeve. \"They always know,\" he says. \"They always know when it's you.\"",
+      "effects": [
+       {
+        "kind": "bringBack",
+        "key": "daycare-holloway",
+        "levels": 4,
+        "friendship": 10
+       },
+       {
+        "kind": "flag",
+        "key": "daycare-collected",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "daycare-couple",
+   "name": "Daycare Couple",
+   "group": "Helpers, gifts and kindness",
+   "stop": "daycare",
+   "scene": {
+    "cast": [],
+    "effect": "hearts"
+   },
+   "intro": "An old couple at a garden fence, the house behind them quiet. Mrs. Holloway: \"We'll raise one for you. Two, if you like. We miss the noise.\"",
+   "choices": [
+    {
+     "label": "Leave two (eggs may come).",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "You leave two with them for the evening. They spoil them rotten. When you come back, Mrs. Holloway is holding something warm in a tea towel. \"Well. We didn't plan this. It'll hatch in two stages, dear.\"",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 2,
+        "unit": "stage"
+       },
+       {
+        "kind": "moment",
+        "text": "The Holloways gave you an egg.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just visit.",
+     "success": {
+      "text": "You stay for tea. They show you photos of every Pokémon they have ever raised: hundreds. They remember every name.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "breeders-visit",
+   "name": "Breeder's Visit",
+   "group": "Helpers, gifts and kindness",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "A breeder on the road with a basket on each arm and a Chansey trundling behind her. Nan Okafor: \"I can look after one for a bit, on the road. I'll teach it something its parents knew.\"",
+   "choices": [
+    {
+     "label": "Leave one with her.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "She takes it as if it were already hers to love. \"A region,\" she says. \"Then I'll find you. I always find people.\"",
+      "effects": [
+       {
+        "kind": "sendAway",
+        "key": "breeder-okafor",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Fair enough,\" she says, and gives your lead a biscuit anyway.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "wandering-breeder",
+   "name": "Wandering Breeder",
+   "group": "Approved events",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "Nan Okafor again, sitting on a milestone with her baskets and a flask. \"You again! Want me to take one for a bit? I'll teach it an old move.\"",
+   "choices": [
+    {
+     "label": "Leave one with her.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      },
+      {
+       "kind": "flag",
+       "key": "breeder-okafor",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "pick": {},
+     "success": {
+      "text": "\"Lovely,\" she says, and tucks it in beside the eggs. \"A region. I'll find you.\"",
+      "effects": [
+       {
+        "kind": "sendAway",
+        "key": "breeder-okafor",
+        "who": "picked"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "She pours you a cup from her flask anyway. It is very strong tea.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "breeder-okafor-return",
+   "name": "Nan Okafor Returns",
+   "group": "Helpers, gifts and kindness",
+   "stop": "event",
+   "rarity": "common",
+   "types": [],
+   "minStage": 1,
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "breeder-okafor",
+     "atLeast": 1,
+     "atMost": 99,
+     "regionsAgo": 1
+    },
+    {
+     "kind": "flag",
+     "key": "breeder-okafor-back",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4a6a3a",
+    "effect": "none"
+   },
+   "intro": "A whistle on the road, and there is Nan Okafor, waving both arms. Beside her, trotting, the one you left, looking very pleased with itself.",
+   "choices": [
+    {
+     "label": "Welcome it back.",
+     "success": {
+      "text": "\"It learned it in a week,\" says Nan. \"Clever thing. Show them!\" It shows you: an egg move, an old one, its parents' move.",
+      "effects": [
+       {
+        "kind": "bringBack",
+        "key": "breeder-okafor",
+        "levels": 2,
+        "friendship": 10
+       },
+       {
+        "kind": "eggMove"
+       },
+       {
+        "kind": "flag",
+        "key": "breeder-okafor-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "egg-cradle-find",
+   "name": "An Abandoned Egg",
+   "group": "Emergent Stories",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#30281c",
+    "effect": "sparkle"
+   },
+   "intro": "An egg in a hollow of moss under a tree. No nest, no parent, no tracks in the soft earth around it. You touch it. It is cold.",
+   "choices": [
+    {
+     "label": "Warm it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "cradle",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You pick it up and tuck it inside your coat. It is so cold it hurts, and then, slowly, it is not. Against your side, very faintly, it ticks.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "togepi",
+         "pichu",
+         "cleffa",
+         "igglybuff",
+         "elekid",
+         "magby",
+         "smoochum",
+         "azurill"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 2,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "cradle",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You found a cold egg and warmed it.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for a parent.",
+     "success": {
+      "text": "You sit back out of sight and wait. The light changes. Nobody comes. Nobody is going to come.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "egg-cradle-find"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it in its moss. You think about it for a long time after.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "egg-nest",
+   "name": "Egg Nest",
+   "group": "Wild Pokémon scenes",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "An egg in a hollow of moss under a tree. No nest, no parent, no tracks in the soft earth around it. You touch it. It is cold.",
+   "choices": [
+    {
+     "label": "Warm it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "cradle",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You pick it up and tuck it inside your coat. It is so cold it hurts, and then, slowly, it is not. Against your side, very faintly, it ticks.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "togepi",
+         "pichu",
+         "cleffa",
+         "igglybuff",
+         "elekid",
+         "magby",
+         "smoochum",
+         "azurill"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 2,
+        "unit": "stage"
+       },
+       {
+        "kind": "flag",
+        "key": "cradle",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You found a cold egg and warmed it.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for a parent.",
+     "success": {
+      "text": "You sit back out of sight and wait. The light changes. Nobody comes. Nobody is going to come.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "egg-nest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave it in its moss. You think about it for a long time after.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "egg-cradle-night",
+   "name": "A Cold Night With the Egg",
+   "group": "Emergent Stories",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cradle",
+     "atLeast": 1,
+     "atMost": 1
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#16202c",
+    "effect": "fog"
+   },
+   "intro": "Night, and colder than you planned for. The egg ticks against your side, slow and steady, like it is listening to your heart.",
+   "choices": [
+    {
+     "label": "Hold it close.",
+     "success": {
+      "text": "You hold it with both arms all night. By morning it is ticking faster, as if it has decided something.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cradle",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Fire-type sleep next to it.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "fire"
+      }
+     ],
+     "success": {
+      "text": "Your Fire-type curls round the egg like a cat round a hot water bottle, and the egg ticks faster, warm right through. In the morning the two of them are still curled up together.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cradle",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": {
+         "types": [
+          "fire"
+         ]
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wrap it in my coat.",
+     "success": {
+      "text": "You wrap it in your coat and shiver all night. It ticks faster. It is listening, you are sure of it now.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "cradle",
+        "amount": 1
+       },
+       {
+        "kind": "damage",
+        "share": 0.03
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "name-the-egg",
+   "name": "Naming the Egg",
+   "group": "Set Pieces",
+   "stop": "daycare",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cradle",
+     "atLeast": 1,
+     "atMost": 2
+    },
+    {
+     "kind": "flag",
+     "key": "egg-named",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "A caretaker at a little hut by the road, with a pen behind her ear and a shelf of eggs, each one labelled. She sees the egg under your coat. \"It hears its name before it hatches, you know. Give it one.\"",
+   "choices": [
+    {
+     "label": "Name it.",
+     "success": {
+      "text": "You say a name, out loud, to the egg. It ticks twice, very quickly. The caretaker writes it on a little label and ties it on with string.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg-named",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it choose.",
+     "success": {
+      "text": "You hold the egg and say names until one makes it tick. It picks a strange one. It is perfect.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "egg-named",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "egg-cradle-hatch",
+   "name": "The Egg Cracks",
+   "group": "Emergent Stories",
+   "rarity": "rare",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cradle",
+     "atLeast": 2,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#30301c",
+    "effect": "sparkle"
+   },
+   "intro": "A crack. Then another. It has decided it is time.",
+   "choices": [
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "You talk to it the whole time, about nothing, about everything. It comes out into the world already knowing your voice, and turns straight toward it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "newest"
+       },
+       {
+        "kind": "flag",
+        "key": "cradle",
+        "amount": -99
+       },
+       {
+        "kind": "moment",
+        "text": "The egg that listened hatched, and knew your voice.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay quiet.",
+     "success": {
+      "text": "You hold your breath and let it do it alone. It does. Then it looks up, and finds you, as if it knew you were there all along.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 2,
+        "who": "newest"
+       },
+       {
+        "kind": "flag",
+        "key": "cradle",
+        "amount": -99
+       },
+       {
+        "kind": "moment",
+        "text": "The egg that listened hatched, and knew your voice.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

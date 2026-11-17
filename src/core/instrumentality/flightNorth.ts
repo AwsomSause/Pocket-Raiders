@@ -3,6 +3,7 @@
 // as Mega Beedrill or a Gigantamax-sized Butterfree, the whole team is revived and it fights alongside for that battle, once per run.
 // It goes first in the rescue order, so Second Chance never also triggers. No random numbers.
 
+import { CareSchema } from '../care/mods';
 import type { Content } from '../contentSchema';
 import { maxHp } from '../pokemon';
 import type { PokemonInstance, RunState } from '../state';
@@ -35,7 +36,7 @@ export function flightNorthEffect(run: RunState, e: { action: 'name' | 'trust'; 
   if (e.action === 'name') {
     const name = (e.name ?? '').trim().slice(0, 12);
     if (!name) return '';
-    bug.care = { ...(bug.care ?? {}), nickname: name } as PokemonInstance['care'];
+    bug.care = { ...(bug.care ?? CareSchema.parse({})), nickname: name };
     return `You name it ${name}`;
   }
   bug.friendship = Math.min(255, bug.friendship + FLIGHT_NORTH.trustGain);
@@ -92,7 +93,7 @@ export function returnedBug(content: Content, run: RunState, make: (speciesId: s
   mon.shiny = fn.shiny;
   mon.friendship = fn.friendship;
   mon.held = { ...(mon.held ?? {}), [form.stone]: 1 };
-  if (fn.name) mon.care = { ...(mon.care ?? {}), nickname: fn.name } as PokemonInstance['care'];
+  if (fn.name) mon.care = { ...(mon.care ?? CareSchema.parse({})), nickname: fn.name };
   const wind = content.moves.get('norths-wind');
   if (wind) {
     if (mon.moves.length < 4) mon.moves.push({ id: wind.id, pp: wind.pp });

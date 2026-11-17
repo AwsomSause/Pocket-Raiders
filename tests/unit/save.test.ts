@@ -130,7 +130,8 @@ describe('profile and run end', () => {
     const reloaded = new GameSession(content, storage);
     expect(reloaded.profile.stats.runsStarted).toBe(1);
     expect(reloaded.profile.stats.runsEnded).toBe(1);
-    expect(reloaded.profile.unlockedArchetypes).toEqual(['red', 'blue', 'green', 'nate', 'hilda']);
+    // Streamlined trainer unlocks (#1396): a met challenge joins at run end, and Camper Liam's is "Finish a run" (a defeat counts).
+    expect(reloaded.profile.unlockedArchetypes).toEqual(['red', 'blue', 'green', 'nate', 'hilda', 'npc-camper-liam']);
   });
 });
 

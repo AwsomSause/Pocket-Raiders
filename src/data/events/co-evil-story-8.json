@@ -1,0 +1,971 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "rk-shop-likes-them",
+   "name": "The Shop That Likes Them",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A pawnbroker's. A Rocket Grunt has just left with an envelope, and the owner is waving him off. Mr. Yorick Nettlebed: \"You've a face on. You think I'm a victim. Sit down; I'll tell you about before. Before, there were four gangs. Each took what it liked. One took the till. One took the stock. One broke the window so I'd pay the other. Then the men in black came, and there was one, and it took a tenth, and it wrote it down, and it never came twice.\" Mr. Nettlebed: \"I'd pay double to be let alone. He won't take double. A tenth. It's the only honest number in this town. The League's licence fee's fifteen.\"",
+   "choices": [
+    {
+     "label": "\"It's still extortion.\"",
+     "success": {
+      "text": "Mr. Nettlebed: \"Course it is. So's the licence. One of them sends a man round when my window's broken.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What happened to the four gangs?\"",
+     "success": {
+      "text": "Mr. Nettlebed: \"He bought three. The fourth he audited. I never found out what that meant. They left town.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-lore-gangs",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-rules-heard",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do you get for the tenth?\"",
+     "success": {
+      "text": "He opens a drawer: a card with one telephone number. Mr. Nettlebed: \"I rang it once. A lad had robbed me. He was back in an hour, with everything, and a split lip, and an apology he'd been made to write out.\" He lets you copy the number.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-lore-card",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-matori-day-off",
+   "name": "Matori's Day Off",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "matori-met",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "A woman on a park bench with a tablet she isn't looking at and an ice cream she doesn't know how to hold. Matori: \"He told me to take one. A day. I've nine years of them owed. I've been sitting here since eight. I don't know what one does.\" The tablet buzzes. She doesn't look. Matori: \"That's him. He's lost a helicopter. He hasn't lost it. It's where I left it. He doesn't know where I leave things.\"",
+   "choices": [
+    {
+     "label": "\"Eat the ice cream.\"",
+     "success": {
+      "text": "She does. It gets on her cuff. She laughs: once, the way a door opens that hasn't been opened in a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "matori-bench",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did you do before?\"",
+     "success": {
+      "text": "Matori: \"I was a Gym's registrar. Viridian. I kept the challengers' book. He passed every inspection; I wrote them up. I know better than anyone alive that he was good at the honest thing. I think that's why I stayed. Somebody should remember it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "matori-bench",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What are you running from?\"",
+     "success": {
+      "text": "Nobody's ever asked her. Matori: \"...A house with nobody in it who needs to be told where anything is.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "matori-bench",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay a while.",
+     "success": {
+      "text": "You sit. The ice cream melts. She tells you where the helicopter is, and a great deal else, freely, as conversation.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "matori-bench",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-dentist",
+   "name": "The Dentist on B2",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 2,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#2a3a3a",
+    "effect": "sparkle"
+   },
+   "intro": "A door in the Hideout marked DENTAL. A queue of Grunts, holding their jaws, behaving perfectly. Dr. Orsolya Wexford, masked: \"You're not on my list. Are you in pain? Sit. I don't care whose side you're on; I care about your molars. I was struck off. I treated a man who couldn't pay, in a surgery that wasn't mine. He heard. He said: \"I've four hundred staff who've never seen a dentist. Name your equipment.\" I named it. It was here on Monday. I know what they do. I've decided my job's the teeth. Somebody's got to do the teeth. Open.\"",
+   "choices": [
+    {
+     "label": "\"Open.\"",
+     "success": {
+      "text": "She looks at your teeth, and then, without asking, at your lead's. \"A Raticate's a patient like any other.\" Everyone gets a clean bill.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 25,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "wexford-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Does it bother you?\"",
+     "success": {
+      "text": "Dr. Wexford: \"Every day. Then somebody sits in that chair who hasn't been able to chew for a year, and it bothers me less. Open.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wexford-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do the Grunts say, in the chair?\"",
+     "success": {
+      "text": "Dr. Wexford: \"Everything. They can't not; I've my hand in. The big one cries about his mum. The girl by the door's posting her wages home in someone else's name. There's a lad on nineteen-upper they don't mention.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "wexford-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-black-tag-clinic",
+   "name": "The Black Tag Clinic",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "pokemon": "clefairy",
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A van with its back open and a hand-painted sign: TAGS OFF. NO QUESTIONS. A queue of people holding prize Pokémon from the Game Corner. Kingsley Umber, a vet's assistant with bolt-cutters: \"They win one at the Corner. Lovely Pokémon. Does as it's told. Then they notice it does only as it's told. Won't play. Won't choose. That's the tag. Takes a second to cut. Takes a month for them to realise they're allowed to move. Don't order it about for a month. Just ask it things. \"Do you want this?\" Let it not know. Let it find out.\" A girl holds a Clefairy that's sitting exactly where it was put.",
+   "choices": [
+    {
+     "label": "\"Can I help?\"",
+     "success": {
+      "text": "You hold a Growlithe still while the tag's cut. You show a Meowth the cut doesn't hurt: your lead goes first, and lets Kingsley pretend. Then you sit with the Clefairy for a long time, asking it things. The Clefairy moves one paw.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who taught you to cut them?\"",
+     "success": {
+      "text": "Kingsley: \"A woman at the lab. Sotheby. She leaves the cutters in a bin behind the Corner, Wednesdays. I've never met her.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-lore-sotheby",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-plum-tree",
+   "name": "The Plum Tree",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 1,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#3a2a3a",
+    "effect": "none"
+   },
+   "intro": "A garden behind a house with no number in Viridian. A plum tree. An old woman with secateurs, pruning as if she's telling it off. The old woman: \"You've walked in. People don't. There's usually a man. I gave him the afternoon.\" Under the tree is a small flat stone with no name: a carved Pidgey, worn smooth by a thumb. The old woman: \"First thing I ever kept. A boy couldn't pay. I meant to send it back. Then it took to sitting on the ledger while I wrote, and I thought: well. One. My son thinks keeping's the whole of it. He never asked why I only kept one.\"",
+   "choices": [
+    {
+     "label": "\"Why only one?\"",
+     "success": {
+      "text": "The old woman: \"Because once you've loved a thing you took, you know exactly what you've done to the person you took it from. I couldn't do it twice. He's never loved anything he took. That's the trouble. Not that he's wicked. That he's never been caught by it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-madame-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-madame-line",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-rules-heard",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who's your son?\"",
+     "success": {
+      "text": "She smiles. The old woman: \"A Gym Leader. A very good one. Ask anybody.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-madame-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-madame-line",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a good tree.\"",
+     "success": {
+      "text": "\"It is,\" she says, and picks you a plum, and tells you to give it back when you can pay.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-madame-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-madame-line",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-rules-heard",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-induction-day",
+   "name": "Induction Day",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 0,
+     "anyRoute": false,
+     "ends": [
+      "none"
+     ],
+     "inside": false
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#b01030",
+    "effect": "none"
+   },
+   "intro": "A hired hall. Folding chairs. Twenty people who've never met, each holding a uniform in a paper bag. Sergeant Jardine, delighted: \"Welcome to Team Rocket! Tea's at the back. Three things. One: you're paid Fridays. Two: you'll be given a twelfth. Do your twelfth. Three: don't ask what the other eleven are. Questions? No. Lovely. That's the point of three.\" You're taken for a recruit, and handed a bag. Beside you, a woman of fifty in a cleaner's tabard: \"My sister said they've a dentist.\" A boy of seventeen: \"I failed the League entrance twice. They don't have an entrance.\" A man in a good coat worn at the cuffs: \"I was a bank manager. Was. Do you know who came to my leaving do? Nobody. Do you know who rang the day after?\"",
+   "choices": [
+    {
+     "label": "Take the bag.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-offered",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "evil",
+       "team": "rocket",
+       "after": 0,
+       "inside": false
+      }
+     ],
+     "success": {
+      "text": "You take it. Jardine shakes your hand with both of his. You're Team Rocket now, from the inside, and early.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them what the twelfths add up to.",
+     "success": {
+      "text": "You stand up and say it: crates, collars, a Sandshrew with its eyes shut. Silence. The bank manager puts his bag on his chair. Four others do. The cleaner keeps hers: \"I've four grandchildren and no teeth, love. I heard you. I'm stopping.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 3
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-induction-told",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why are you all here?\"",
+     "success": {
+      "text": "Each of them says. Rent. Teeth. A sister. A father who said they'd never be anything. Somebody sent a car. It's the same story in twenty voices.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave quietly.",
+     "success": {
+      "text": "You put the bag on your chair and slip out by the fire door. Nobody stops you.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-griggs-egg",
+   "name": "Griggs's Egg",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#3a2e22",
+    "effect": "none"
+   },
+   "intro": "A miner's hut near Mt. Moon. A big man in a Rocket vest, sitting very carefully, with a hot-water bottle and something wrapped in his coat. Foreman Griggs: \"Don't shout. Don't— it's asleep. I think it's asleep. I don't know what they do.\" In the coat: a stone, round, warm, the size of a loaf. It's a fossil. He doesn't know that. Griggs: \"Found it eleven months back. Should've gone in the crate. It was warm. I thought: that's an egg. That's somebody's. I've kept it by the stove. It's never hatched. I've a bad feeling I've been keeping a rock warm for a year.\"",
+   "choices": [
+    {
+     "label": "\"It's a fossil.\"",
+     "success": {
+      "text": "He looks at it for a long time. \"...So nobody's in there.\" \"Somebody is. They've just been asleep longer than an egg.\" He holds it tighter.",
+      "effects": []
+     }
+    },
+    {
+     "label": "Take it to someone who will wake it properly.",
+     "success": {
+      "text": "He comes too. He's never left the dig. At the Pewter Museum, on the plate, it cracks along a line that was always there. It looks at him first. It's his: he's a father at forty-six, to an Omanyte. He doesn't go back to the dig.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "griggs-left",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why didn't you hand it in?\"",
+     "success": {
+      "text": "Griggs: \"Because they wake them up bound. I've seen it. They come out of the machine screaming with a collar already on. I couldn't— it was warm. I couldn't.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "griggs-egg-kept",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it with him.",
+     "success": {
+      "text": "He keeps it by the stove, and thanks you for not shouting.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "griggs-egg-kept",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-thirty-third-cage",
+   "name": "The Thirty-Third Cage",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "chansey",
+    "tint": "#1e2a1e",
+    "effect": "none"
+   },
+   "intro": "The Safari, after closing. A row of cages on a lorry. A man walking along them with a ledger, counting under his breath. Poacher-Captain Rudd: \"Thirty. Thirty-one. Thirty-two.\" He stops at the last. He looks left. He looks right. He opens it. A Chansey gets down, slowly, and walks back into the long grass. Rudd: \"Thirty-two. That's the count.\" He's seen you. Rudd: \"...You didn't see that. I've a clean count. Thirty-two. Every night for four years: thirty-two.\"",
+   "choices": [
+    {
+     "label": "\"Why that one?\"",
+     "success": {
+      "text": "Rudd: \"Whichever's last. I don't choose. If I chose, I'd have to choose the others too, wouldn't I? This way it's just: the count's short. Counts are sometimes short.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Open the rest.",
+     "success": {
+      "text": "He doesn't stop you. He doesn't help. He stands with his book open and watches thirty-two cages emptied, and at the end he writes one line: \"Count: nil.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "heat": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rudd-nil",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "\"Thirty-two,\" he says, to nobody, and starts the engine.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Make it a decision.\"",
+     "success": {
+      "text": "A long time. He opens a second. Then he sits down on the running board. \"...That's it, then. I've decided. I can't count that.\" He opens them himself.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "rudd-decided",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-collectors-daughter",
+   "name": "The Collector's Daughter",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#3a3428",
+    "effect": "none"
+   },
+   "intro": "A sweet shop. A man behind the counter is counting a tenth into an envelope. The Grunt who's come for it is about eighteen, and won't look at him. The shopkeeper: \"There. A tenth. To the coin. ...Take it, then, Bess.\" Bess Ostrander: \"Dad. Don't— it's a job. I joined so it'd be me. If it's me, nobody leans on you. I thought if I was on the side that collects—\" The shopkeeper: \"You thought it'd stop if you were holding the bag. It's my daughter holding the bag. That's not it stopping. That's it getting in the house.\"",
+   "choices": [
+    {
+     "label": "\"Take it. Then put it back in his till on Sunday.\"",
+     "success": {
+      "text": "She stares. \"That's— that's not collecting.\" \"It's collecting. Then it's a daughter giving her dad some money.\" She does it every week, from then on.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bess-sunday",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Bess. What happens if you don't collect?\"",
+     "success": {
+      "text": "\"They send Cassidy.\" The shopkeeper pays.",
+      "effects": []
+     }
+    },
+    {
+     "label": "(Pay the tenth for him.) (₽500)",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "You put your own coins on the counter. He's furious. She's grateful. Neither of them thanks you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-honest-inspector",
+   "name": "The Honest Inspector",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2e2e3a",
+    "effect": "none"
+   },
+   "intro": "An old man with a League lapel pin, doing a crossword, has noticed your Badges. Mr. Ezra Pilkington: \"Eight slots. You'll be wanting the Earth one, in time. I inspected that Gym. Eleven times. They sent me because I'd failed four Leaders in a year. I wanted to fail him. I'd heard things. I couldn't. The floor was raked. The trainers were paid. He lost to a girl of eleven with a Squirtle, and he lost properly, and he shook her hand, and he gave her the Badge with both of his. I wrote: \"Cleanest Gym in Kanto.\" I've never been easy about it.\"",
+   "choices": [
+    {
+     "label": "\"Were you wrong?\"",
+     "success": {
+      "text": "Mr. Pilkington: \"No. That's what's kept me up. I was right. It was the cleanest Gym in Kanto. He'd simply got another building.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-lore-inspector",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did you hear?\"",
+     "success": {
+      "text": "Mr. Pilkington: \"That the Leader of Viridian owned a casino, a dig and a shipping line. All true, it turned out. None of it in his Gym.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-lore-inspector",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Did he pay you?\"",
+     "success": {
+      "text": "Mr. Pilkington: \"He had me followed home, I think, to see if I could be. I can't. I'd have liked to be asked.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-lore-inspector",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-thursday",
+   "name": "Thursday",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 4,
+     "anyRoute": true
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "vulpix",
+    "tint": "#160e22",
+    "effect": "fog"
+   },
+   "intro": "Thursday. A Rocket lorry, stopped across the road, doors open, engine running. Nobody in it. A cap on the tarmac. In the back: one crate, shaking. Not the crate: what's in it. The air has gone cold in a patch about the size of a room, and the patch is moving along the road toward the lorry. Something's in it: a shape made of smoke and a smell of burnt wire. It isn't after you. It's after the collar. (The Black Fog can't be fought here.)",
+   "choices": [
+    {
+     "label": "Open the crate, and get the collar off.",
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Your fingers find the clasp with the cold coming on. It's a Vulpix. It's got a ribbon. The collar comes away in your hands; the Fog takes it out of them, gently, like something being passed, and it's gone. The Vulpix is in your coat. The ribbon has a name on it, if you ever want to take it home.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "vulpix"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-fog-understood",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "The clasp won't give. The cold comes on, and leans past you, and takes the collar off itself. The Vulpix runs into the dark. It's free. It never needed you to be quick.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-fog-understood",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stand between it and the lorry.",
+     "success": {
+      "text": "It stops. It leans. It goes through you: for one second you're very cold, and you remember something that isn't yours: a tower, a hand fitting a collar, a decision to bite. Then it's past, and the crate is quiet, and the collar is gone. Every one of your Pokémon stepped in front with you.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 25,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-fog-understood",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Get out of its way.",
+     "success": {
+      "text": "It takes the collar. It doesn't hurt the Vulpix. It never has. It only eats Rigs. The Grunts are wrong about what it is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-fog-understood",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

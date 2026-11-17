@@ -46,6 +46,8 @@ export interface FxOptions {
   sprite: (side: Side) => Visual | null;
   /** The player's Move Mastery rank for a move (#107 VFX variants); none when left out. */
   mastery?: (moveId: string) => MoveRank;
+  /** A scene that takes the whole screen is starting (true) or over (false): the battle clears whatever it draws over the canvas. */
+  fullScreen?: (on: boolean) => void;
 }
 
 const BADGES: Record<string, { label: string; color: string }> = {
@@ -168,7 +170,10 @@ export class BattleFx {
       case 'storyAnim':
         return this.flourish(cue.side, cue.anim);
       case 'momentScene':
-        return playMomentScene(this.scene, { speciesId: cue.speciesId, fadeMs: cue.fadeMs, staticMs: cue.staticMs, lines: cue.lines, clips: cue.clips, fast: this.skipping || this.settings.battleAnimations !== 'full' });
+        // The scene is drawn on the canvas: the New look's bars and text box sit over the canvas and would cover its lines.
+        this.opts.fullScreen?.(true);
+        try { await playMomentScene(this.scene, { speciesId: cue.speciesId, fadeMs: cue.fadeMs, staticMs: cue.staticMs, lines: cue.lines, clips: cue.clips, sound: cue.sound, voice: cue.voice, theme: cue.theme, veil: cue.veil, glow: cue.glow, textColor: cue.textColor, fast: this.skipping || this.settings.battleAnimations !== 'full' }); } finally { this.opts.fullScreen?.(false); }
+        return;
     }
   }
 

@@ -1,0 +1,4550 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "evil-skull-offer-alola",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#2a2a34",
+    "effect": "glint"
+   },
+   "intro": "After the Trainers' School. A Grunt who's lost, and is being nice about it: \"Yo, you beat us down respectfully. Nobody does that. Big G wants to meet you. It ain't a trap. We ain't organised enough for traps.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "\"Aight! Po Town. Big gate, lotta rain. Tell 'em you're the respectful one.\" You're Team Skull now, on the inside. Nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "skull-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "\"Aight. No hard feelings. You're still respectful.\" He wanders off, still lost. Team Skull's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would I be doing?\"",
+     "success": {
+      "text": "\"Uh. Eatin'? Mostly eatin'. Bein' loud at people. Big G'll tell you.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "evil-skull-offer-alola-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes. That night, behind the Hau'oli police station, you say it again to a man in a brown coat who calls himself Looker, and to a sleepy officer called Nanu who doesn't get up. Looker: \"So. You will be my eyes. Be careful.\" Nanu: \"Mm. Don't get yourself killed on my island. Paperwork.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-skull-offer-alola-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "\"So, like. You in?\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "\"Aight! Po Town. Big gate, lotta rain. Tell 'em you're the respectful one.\" You're Team Skull now, on the inside. Nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "skull-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "\"Aight. No hard feelings. You're still respectful.\" He wanders off, still lost. Team Skull's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes. That night, behind the Hau'oli police station, you say it again to a man in a brown coat who calls himself Looker, and to a sleepy officer called Nanu who doesn't get up. Looker: \"So. You will be my eyes. Be careful.\" Nanu: \"Mm. Don't get yourself killed on my island. Paperwork.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-aether-offer-alola",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.wicke"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "glint"
+   },
+   "intro": "After the first Ultra Wormhole. Wicke: \"The President would love to meet you. She says you've a gift with Pokémon. She collects people with gifts. I mean— she supports them.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "Wicke: \"Oh, wonderful. There are eleven forms. I'll fill in what I can.\" You're with the Aether Foundation now, on the inside. Nobody outside knows what that means.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "aether-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Wicke: \"Of course. I'll tell her you were busy.\" She looks almost relieved. The Foundation's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aether-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What would I be doing?\"",
+     "success": {
+      "text": "Wicke: \"Helping. Truly. There's a conservation wing. It's the healthiest room in Alola.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "evil-aether-offer-alola-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes. That night, behind the Hau'oli police station, you say it again to a man in a brown coat who calls himself Looker, and to a sleepy officer called Nanu who doesn't get up. Looker: \"So. You will be my eyes. Be careful.\" Nanu: \"Mm. Don't get yourself killed on my island. Paperwork.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-aether-offer-alola-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.wicke"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "Wicke: \"So. Shall I tell her yes?\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "Wicke: \"Oh, wonderful. There are eleven forms. I'll fill in what I can.\" You're with the Aether Foundation now, on the inside. Nobody outside knows what that means.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "aether-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Wicke: \"Of course. I'll tell her you were busy.\" She looks almost relieved. The Foundation's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aether-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes. That night, behind the Hau'oli police station, you say it again to a man in a brown coat who calls himself Looker, and to a sleepy officer called Nanu who doesn't get up. Looker: \"So. You will be my eyes. Be careful.\" Nanu: \"Mm. Don't get yourself killed on my island. Paperwork.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act1",
+   "name": "What's Your Name",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#2a2a34",
+    "effect": "rain"
+   },
+   "intro": "A gate in a wall. Rain. A Grunt on a deckchair under half an umbrella. \"Yo. You the respectful one? Go on in. ...Hey. You ate?\" It's the first thing anyone says. At the fountain, where there's taro: \"You ate?\" On the Shady House steps: \"You ate?\" The Shady House: a chandelier on the floor, a throne made from a sun lounger. Guzma: \"So you're the one. Beat my boys and didn't rub it in. Huh.\" He looks you over. Guzma: \"What's your name.\" You say it. Guzma: \"A'ight. That's it. That's the interview. You're in. Number One Numbskull; I just made it up; it's the top one.\"",
+   "choices": [
+    {
+     "label": "Find your bunk.",
+     "success": {
+      "text": "A villa. A bunk bed with the price tag still on. A lamp: ₽12,000, REDUCED.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act1-bunk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act1-bunk",
+   "name": "The Villa",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#2a2a34",
+    "effect": "rain"
+   },
+   "intro": "Koa Ridgeway, on the top bunk, in the dark: Koa: \"He ask your name?\" Koa: \"Three times I took it. Melemele. Third time, the captain didn't even watch. He was talking to somebody. Just said 'next.' I can tell you the day. I can tell you what I had for breakfast.\" Koa: \"You know what Guzma said, when I showed up here? Soaking. He said, 'What's your name.' That's it. That's the whole reason. Nobody on that island'd used it in a month; I was 'the Ridgeway kid, shame about him.'\"",
+   "choices": [
+    {
+     "label": "\"Would you try again?\"",
+     "success": {
+      "text": "Koa: \"Walk back up there? Past all of 'em? ...If somebody was watchin'. Actually watchin'. I'd— nah. Who's gonna watch.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-koa",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act1-supper"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What'd you have for breakfast?\"",
+     "success": {
+      "text": "Koa: \"Malasada. Two. Mum made 'em. She said, 'For luck.'\" He's quiet a while. Koa: \"Didn't work.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-koa",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act1-supper"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What's he like?\"",
+     "success": {
+      "text": "Koa: \"Loud. He's got forty kids and he don't know what to do with us except be loud at everybody else. It works. Nobody calls us failures to our face.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-koa",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act1-supper"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act1-supper",
+   "name": "Supper",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.plumeria",
+     "trainer.pr/skull_grunt_f"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "A villa kitchen. A pot. Plumeria, with a ladle, counting heads. Plumeria: \"Thirty-nine. Who ain't here. Lux. Where's—\" Lux, fourteen, from under the table, with a Wimpod: Lux: \"I'm here.\" Plumeria: \"You ate?\" Lux: \"I'm eating.\" Plumeria: \"Then be seen doin' it.\" To you: Plumeria: \"You're forty-one. I count G separate. Bowl's on the side. You wash your own.\"",
+   "choices": [
+    {
+     "label": "Wash your bowl.",
+     "success": {
+      "text": "You wash your own. That night, a bandana on your bunk. The skull on it's a bit wonky.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-ate",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-act1",
+   "name": "Get Well.",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.wicke",
+     "boss.lusamine-masters"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "sparkle"
+   },
+   "intro": "A dock. Everything white. A lift that makes no noise. Wicke: \"Welcome. You'll be in the conservation wing. I'm so sorry about the forms; there are eleven. I've filled in what I could.\" A poster, by the lift. A Pikachu, mid-leap. GET WELL. Under it: 98% RECOVERY RATE. The President's office: a woman arranging white flowers. Lusamine: \"So you're the one with the gift. Come into the light. ...Yes. Your Pokémon look at you. Did you know that? Most people's don't. I notice things that look at one.\" Lusamine: \"I'll call you Deputy. I've wanted a deputy. Faba's so eager. You're restful.\"",
+   "choices": [
+    {
+     "label": "Find your room.",
+     "success": {
+      "text": "The staff floor. A white room. Two beds, made with corners.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ae-act1-room"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-act1-room",
+   "name": "The Staff Floor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "Zia Pemberton, a keeper, taking off white gloves a finger at a time: Zia: \"I'm conservation. Third year. We do extraordinary work; I mean that. A Mareanie came in last month with half its spines gone. I've got it eating from my hand.\" Zia: \"We've a ninety-eight per cent recovery rate. It's on the poster. D'you know what our release rate is? I looked. It isn't on the poster.\"",
+   "choices": [
+    {
+     "label": "\"What is it?\"",
+     "success": {
+      "text": "Zia: \"Two. Per cent. I thought I'd misread. I ran it three ways.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-zia",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-rate",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-act1-wing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Where do they go, then?\"",
+     "success": {
+      "text": "She looks at the floor, which is white. Zia: \"Downstairs. That's all anyone says. Downstairs.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-zia",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-rate",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-act1-wing"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why'd you look?\"",
+     "success": {
+      "text": "Zia: \"The Mareanie's better. It's been better for a fortnight. I wrote 'ready for release' on its chart. The next morning the chart said 'ready for preservation.' Somebody'd changed one word. In my handwriting. They're good; I'd not have known, but I never cross my t's.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-zia",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-rate",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-act1-wing"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-act1-wing",
+   "name": "The Wing",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "The wing. Pools. Two hundred Pokémon, glossy, bright, well. It's the healthiest room in Alola. Curator Pua, gently, tidying a chart: \"Aren't they lovely? It's for the best. Out there they'd only get hurt again.\"",
+   "choices": [
+    {
+     "label": "Walk to the back of the dock.",
+     "success": {
+      "text": "A rusted barge. A wheelhouse. Chalk on the wall, faded: two columns. And, propped behind a locker, a board with hand lettering: GET WELL. GO HOME. That night: a white uniform, and a pass. It opens every door but one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aether-sign-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go to bed.",
+     "success": {
+      "text": "A white uniform, and a pass. It opens every door but one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aether-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act2",
+   "name": "One Slowpoke",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/skull_grunt_f"
+    ],
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "A nursery on Akala, run by Aether. Steal a Slowpoke. It's on a list. Plumeria: \"Don't ask who's payin'. I ain't asked. I hate that I ain't asked.\" The squad: Koa, and Lux, who isn't meant to be on it. Koa: \"She followed. I said go home. She said this is—\" Lux: \"I'm lookout.\" Koa: \"She's in the van. With the doors locked. From the outside.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "It's the same Slowpoke. Aether hired Skull to steal it and sent its own people to save it. It wanted a theft on the news and a rescue on the poster.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act2-corridor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act2-corridor",
+   "name": "The Corridor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/aether_grunt_m"
+    ],
+    "pokemon": "slowpoke",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "A corridor. Two squads. One Slowpoke, between them, being held at both ends. Koa: \"Yo. That's ours.\" Zia: \"It's a patient.\" Uri: \"I've been told to take it.\" Koa: \"I been told to take it.\" The Slowpoke yawns. Lux, who was locked in a van: Lux: \"Why's everybody got the same job?\" Nobody asks how she got out.",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "The other squad's lead squares up.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "alola-slowpoke-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/aether_grunt_m",
+       "team": [
+        "arcanine",
+        "hypno"
+       ],
+       "name": "Uri Vandermeer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "\"Whose is it, actually?\"",
+     "success": {
+      "text": "The nursery's keeper: \"Nobody's. It walked in. Two years back. It's got a friend here.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act2-whose"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Put it down. All of us. See where it goes.\"",
+     "success": {
+      "text": "Four hands let go. It sits. It thinks about it. It takes about a minute. It's the longest minute in the corridor's history. It gets up. It goes back into the nursery, slowly, and lies down next to another Slowpoke, which shuffles over without waking. Both squads stand there. Koa: \"...So nobody needed to steal it.\" Zia: \"Nobody needed to have it.\" Uri: \"I was told to take it.\" A pause. Uri: \"I wasn't told what to do if it didn't want to go. Nobody's ever covered that.\" Lux: \"It's got a friend.\" Koa and Zia have met. They swap nothing. He notices her gloves. She notices he's wet.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1,
+        "rank": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-slowpoke-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-uri",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act2-whose",
+   "name": "The Corridor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/aether_grunt_m"
+    ],
+    "pokemon": "slowpoke",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "Nobody's. Everybody is still holding on to it.",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "The other squad's lead squares up.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "alola-slowpoke-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/aether_grunt_m",
+       "team": [
+        "arcanine",
+        "hypno"
+       ],
+       "name": "Uri Vandermeer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "\"Put it down. All of us. See where it goes.\"",
+     "success": {
+      "text": "Four hands let go. It sits. It thinks about it. It takes about a minute. It's the longest minute in the corridor's history. It gets up. It goes back into the nursery, slowly, and lies down next to another Slowpoke, which shuffles over without waking. Both squads stand there. Koa: \"...So nobody needed to steal it.\" Zia: \"Nobody needed to have it.\" Uri: \"I was told to take it.\" A pause. Uri: \"I wasn't told what to do if it didn't want to go. Nobody's ever covered that.\" Lux: \"It's got a friend.\" Koa and Zia have met. They swap nothing. He notices her gloves. She notices he's wet.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1,
+        "rank": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-slowpoke-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-uri",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-act2",
+   "name": "One Slowpoke",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/aether_grunt_m"
+    ],
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "A nursery on Akala. \"Acquire\" a Slowpoke before Team Skull takes it. Faba: \"A specimen of unusual placidity. The President wants it. Skull's been tipped off, by someone; I can't think who.\" He can. The squad: Zia, and Uri Vandermeer, a guard. Uri: \"I'm Uri. I do what I'm told. I've found it's the simplest.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "It's the same Slowpoke. Aether hired Skull to steal it and sent its own people to save it. It wanted a theft on the news and a rescue on the poster.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ae-act2-corridor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-act2-corridor",
+   "name": "The Corridor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/aether_grunt_m"
+    ],
+    "pokemon": "slowpoke",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "A corridor. Two squads. One Slowpoke, between them, being held at both ends. Koa: \"Yo. That's ours.\" Zia: \"It's a patient.\" Uri: \"I've been told to take it.\" Koa: \"I been told to take it.\" The Slowpoke yawns. Lux, who was locked in a van: Lux: \"Why's everybody got the same job?\" Nobody asks how she got out.",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "The other squad's lead squares up.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "alola-slowpoke-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/skull_grunt_m",
+       "team": [
+        "salazzle",
+        "golbat"
+       ],
+       "name": "Koa Ridgeway",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "\"Whose is it, actually?\"",
+     "success": {
+      "text": "The nursery's keeper: \"Nobody's. It walked in. Two years back. It's got a friend here.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-act2-whose"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Put it down. All of us. See where it goes.\"",
+     "success": {
+      "text": "Four hands let go. It sits. It thinks about it. It takes about a minute. It's the longest minute in the corridor's history. It gets up. It goes back into the nursery, slowly, and lies down next to another Slowpoke, which shuffles over without waking. Both squads stand there. Koa: \"...So nobody needed to steal it.\" Zia: \"Nobody needed to have it.\" Uri: \"I was told to take it.\" A pause. Uri: \"I wasn't told what to do if it didn't want to go. Nobody's ever covered that.\" Lux: \"It's got a friend.\" Koa and Zia have met. They swap nothing. He notices her gloves. She notices he's wet.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1,
+        "rank": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-slowpoke-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-uri",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-act2-whose",
+   "name": "The Corridor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/aether_grunt_m"
+    ],
+    "pokemon": "slowpoke",
+    "tint": "#3a4a3a",
+    "effect": "none"
+   },
+   "intro": "Nobody's. Everybody is still holding on to it.",
+   "choices": [
+    {
+     "label": "\"Take it.\"",
+     "success": {
+      "text": "The other squad's lead squares up.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "alola-slowpoke-taken",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/skull_grunt_m",
+       "team": [
+        "salazzle",
+        "golbat"
+       ],
+       "name": "Koa Ridgeway",
+       "size": 2,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "\"Put it down. All of us. See where it goes.\"",
+     "success": {
+      "text": "Four hands let go. It sits. It thinks about it. It takes about a minute. It's the longest minute in the corridor's history. It gets up. It goes back into the nursery, slowly, and lies down next to another Slowpoke, which shuffles over without waking. Both squads stand there. Koa: \"...So nobody needed to steal it.\" Zia: \"Nobody needed to have it.\" Uri: \"I was told to take it.\" A pause. Uri: \"I wasn't told what to do if it didn't want to go. Nobody's ever covered that.\" Lux: \"It's got a friend.\" Koa and Zia have met. They swap nothing. He notices her gloves. She notices he's wet.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1,
+        "rank": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-slowpoke-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-same-job",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ally-uri",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act3",
+   "name": "Preserved",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#1a2230",
+    "effect": "fog"
+   },
+   "intro": "Guzma's had a tip: there's something in the basement worth smashing. He's brought a bat and the Number One Numbskull.",
+   "choices": [
+    {
+     "label": "Go down the drain.",
+     "success": {
+      "text": "Aether Paradise, from below.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-cold-drain"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-cold-drain",
+   "name": "The Drain",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "A drain under Aether Paradise. Dripping. A ladder up, and a door with frost on the handle.",
+   "choices": [
+    {
+     "label": "Up.",
+     "success": {
+      "text": "It's colder at the top.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-cold-rows"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-cold-rows",
+   "name": "The Cold",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#1a2230",
+    "effect": "fog"
+   },
+   "intro": "Rows of glass. Frost on the inside. A Pikachu, mid-leap. A Corsola. A Petilil. Each one bright, whole, at its best. Each with a label: PRESERVED AT ITS MOST BEAUTIFUL. Nothing's dead; they're in stasis, and can be woken. He's got the bat on his shoulder. He's not using it. Guzma: \"She told me I was special. She said, 'You're my favourite broken thing.' I thought that was a nice thing to say. Nobody'd ever said 'favourite.'\" Guzma: \"Look at 'em. That's what she does with favourites.\"",
+   "choices": [
+    {
+     "label": "Walk the row with him.",
+     "success": {
+      "text": "He walks the row. He stops at an empty case, near the end. It's new. It's tall. It's about his height. Guzma: \"...Nah.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzma-saw-case",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-cold-case"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-cold-case",
+   "name": "Preserved",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "The rows hum.",
+   "choices": [
+    {
+     "label": "\"Wake them.\"",
+     "success": {
+      "text": "Curator Pua comes down the far stairs. \"It's for the best,\" she says as she sends each one out.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-cold-last"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Wake one, and carry it out as proof.\"",
+     "success": {
+      "text": "The Pikachu. Guzma lifts the case lid. Guzma: \"It was jumpin'. She froze it jumpin'.\" He carries it inside his jacket.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1,
+        "rank": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-coldroom-one",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-carried-pikachu",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-cold-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Close the door.\"",
+     "success": {
+      "text": "You close the door. Guzma goes back to Po Town and doesn't say anything at supper. Plumeria: \"You ate?\" Guzma: \"...Nah.\" It's never happened before.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 4
+       },
+       {
+        "kind": "flag",
+        "key": "alola-coldroom-shut",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-cold-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-cold-last",
+   "name": "The Last Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "Curator Pua: \"It's for the best.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "A row of glass between you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 4,
+        "rank": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "alola-coldroom-woke",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-cold-after"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/scientist_f",
+       "team": [
+        "comfey",
+        "oranguru",
+        "porygon2"
+       ],
+       "name": "Curator Pua",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-cold-after",
+   "name": "Preserved",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "Behind you, the cold room hums, or doesn't.",
+   "choices": [
+    {
+     "label": "Go back up.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "alola-coldroom-woke",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "A row thaws. A Petilil bolts.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "skull-inside-act3",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Back up, into the warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-act3",
+   "name": "Preserved",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#1a2230",
+    "effect": "fog"
+   },
+   "intro": "The one door. Your pass doesn't open it. Zia's has, today: somebody's upgraded her. It's a test. She knows.",
+   "choices": [
+    {
+     "label": "Go through.",
+     "success": {
+      "text": "The door sighs open. Cold air pours over your shoes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ae-cold-rows"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-cold-rows",
+   "name": "The Cold",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f",
+     "trainer.pr/faba"
+    ],
+    "tint": "#1a2230",
+    "effect": "fog"
+   },
+   "intro": "Rows of glass. Frost on the inside. A Pikachu, mid-leap. A Corsola. A Petilil. Each one bright, whole, at its best. Each with a label: PRESERVED AT ITS MOST BEAUTIFUL. Nothing's dead; they're in stasis, and can be woken. Zia: \"Those are ours. Those are the ones that got better. That's— I nursed that Corsola. Eleven weeks. I signed it 'ready.'\" Faba, behind you, in a coat: Faba: \"The President can't bear for lovely things to change. Is that so wicked? You've pressed a flower.\"",
+   "choices": [
+    {
+     "label": "Go on, to the last case.",
+     "success": {
+      "text": "Zia doesn't move from the Corsola.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "zia-saw-corsola",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-cold-tall"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-cold-tall",
+   "name": "The Last Case",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "pokemon": "exeggutor-alola",
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "The tallest. An Exeggutor with a neck like a palm, and three heads, all smiling. The label's older than the others. Handwritten. TALL TALE. — There. Now one of them has to stay.",
+   "choices": [
+    {
+     "label": "Turn back to the rows.",
+     "success": {
+      "text": "Zia is waiting.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ae-cold-case"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-cold-case",
+   "name": "Preserved",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "The rows hum.",
+   "choices": [
+    {
+     "label": "\"Wake them.\"",
+     "success": {
+      "text": "Faba, behind you, in a coat, already reaching for a Ball.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ae-cold-last"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Wake one, and carry it out as proof.\"",
+     "success": {
+      "text": "The Corsola. Zia lifts it out herself, frost and all, and wraps it in her coat.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1,
+        "rank": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-coldroom-one",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-carried-corsola",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-cold-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Close the door.\"",
+     "success": {
+      "text": "You close the door. Zia goes back to the wing and feeds a Mareanie that's been better for a fortnight.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 4
+       },
+       {
+        "kind": "flag",
+        "key": "alola-coldroom-shut",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-cold-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-cold-last",
+   "name": "The Last Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/faba"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "Faba: \"I am the last line of defence.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "A row of glass between you.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 4,
+        "rank": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "alola-coldroom-woke",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-cold-after"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/faba",
+       "team": [
+        "hypno",
+        "bruxish",
+        "alakazam"
+       ],
+       "name": "Faba",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-cold-after",
+   "name": "Preserved",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "Behind you, the cold room hums, or doesn't.",
+   "choices": [
+    {
+     "label": "Go back up.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "alola-coldroom-woke",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "A row thaws. A Petilil bolts.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "aether-inside-act3",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Back up, into the warm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aether-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act4",
+   "name": "Second",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "beat": 5,
+     "rank": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "A porch light. A woman who's been expecting a knock for six years, answering one. Guzma's mother: \"He's upstairs. He comes sometimes, when his father's out. I leave the back door. I've not moved anything.\" A boy's room. A shelf. Trophies, a dozen. Every one's silver. In the hall, a rack of golf clubs, each bent in the middle, the same way. Guzma, on a bed too short for him: Guzma: \"Second. Second. Second. Old man kept 'em on the shelf so I'd see. Golf club's still in the hall.\" Guzma: \"I passed, y'know. Every trial. They don't know that, back at the house; I let 'em think I washed out like them. I didn't wash out. I got to the end and Hala looked at me and looked at the other guy and picked the other guy.\" Guzma: \"I ain't evil. I'm bad at it. I got forty kids in a wet house who failed a test some dead guy made up. I thought if I was scary enough, nobody'd call 'em failures. Then she comes along and she ain't scared of me at all. She thinks I'm cute. She says there's a fifth island and it needs a kahuna. I'd have done anything.\"",
+   "choices": [
+    {
+     "label": "\"You fed forty kids.\"",
+     "success": {
+      "text": "Guzma: \"Plumes fed 'em. I yelled near 'em.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzma-passed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act4-wimpod"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do they call you?\"",
+     "success": {
+      "text": "Guzma: \"...'Boss.' Lux calls me 'big bro.' I told her to quit it.\" She hasn't.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzma-passed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act4-wimpod"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Come home. Not here. Po Town.\"",
+     "success": {
+      "text": "He looks at the trophies a long time. Guzma: \"...Yeah. Po Town. That's home, huh.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzma-passed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act4-wimpod"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You saw the empty case.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "guzma-saw-case",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He's quiet. Guzma: \"It was my height. I stood next to it. I ain't dumb. I'm her favourite. I seen what she does with favourites.\" A pause. Guzma: \"I'm still gonna go. Tomorrow. If she calls. That's the messed-up part. I know what the case is for and I'm still gonna go, 'cause she's the only one ever picked me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzma-passed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "guzma-knows-case",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act4-wimpod-6"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act4-wimpod",
+   "name": "Under the Bed",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "pokemon": "wimpod",
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Under the bed: a Wimpod. It's been looking at the door for years. It sees him. It doesn't run. It's the only time a Wimpod doesn't run. Guzma: \"...Lil' G. You're still— Ma's been feedin' you?\"",
+   "choices": [
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "You go down. His mother has made tea and doesn't ask. You're an Admin now, beside Plumeria.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "skull-guzma-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act4-wimpod-6",
+   "name": "Under the Bed",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "pokemon": "wimpod",
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "Under the bed: a Wimpod. It's been looking at the door for years. It sees him. It doesn't run. It's the only time a Wimpod doesn't run. Guzma: \"...Lil' G. You're still— Ma's been feedin' you?\"",
+   "choices": [
+    {
+     "label": "Leave them to it.",
+     "success": {
+      "text": "At the door he says it, not looking: \"Second. You're my second. Ain't a title I've had cause to give before.\" You're Guzma's Second.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "skull-guzma-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-act4",
+   "name": "Dead Heads",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "beat": 5,
+     "rank": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters"
+    ],
+    "tint": "#e8e4d8",
+    "effect": "sparkle"
+   },
+   "intro": "A glass roof. White roses. A woman with scissors, cutting the brown ones off, dropping them in a basket. Lusamine: \"Deputy. Hold this. ...One has to take them the moment they turn. Before they spoil the look of the others.\" Lusamine: \"My husband went into one of those holes and didn't come out. The children grew. They changed. Everything I love leaves, or alters. I only want one thing to stay as it was. Is that monstrous? Every mother's wanted it.\" Lusamine: \"The Beast doesn't change. It doesn't leave. It only wants. I understand it better than anyone I've met.\"",
+   "choices": [
+    {
+     "label": "\"Your children are still here.\"",
+     "success": {
+      "text": "The scissors stop. Lusamine: \"They aren't the ones I had.\" Then, quieter: Lusamine: \"...I never met the ones they became. I was busy keeping the ones they'd been.\" Lusamine: \"Deputy. You've never once tried to leave. I can't tell you what that means to me.\" She touches your collar. She straightens it. Lusamine: \"I shan't ever let you.\" You are Branch Chief.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "aether-lusamine-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did your husband love?\"",
+     "success": {
+      "text": "Lusamine: \"Letting things go. He'd stand on the barge and wave. At a Corsola. As if it'd wave back.\" A pause. Lusamine: \"It did, once. A branch. I've never forgiven it.\" Lusamine: \"Deputy. You've never once tried to leave. I can't tell you what that means to me.\" She touches your collar. She straightens it. Lusamine: \"I shan't ever let you.\" You are Branch Chief.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "aether-lusamine-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"And the cold room?\"",
+     "success": {
+      "text": "Lusamine: \"They're safe. Nothing can happen to them now. Do you know how rare that is? For a thing you love to be somewhere nothing can happen to it?\" Lusamine: \"Deputy. You've never once tried to leave. I can't tell you what that means to me.\" She touches your collar. She straightens it. Lusamine: \"I shan't ever let you.\" You are Branch Chief.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "aether-lusamine-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The sign used to say 'Go home.'\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "aether-sign-seen",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "She puts the scissors down. Carefully. In the basket, with the dead heads. Lusamine: \"That was his. He lettered it. I kept the first half. It was the half that was true. They got well. The second half was— he went. The sign told everything to go, and then he went.\" A long time. Lusamine: \"I couldn't have it on the wall saying that.\" Lusamine: \"Deputy. You've never once tried to leave. I can't tell you what that means to me.\" She touches your collar. She straightens it. Lusamine: \"I shan't ever let you.\" You are the President's Favourite.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "aether-lusamine-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-gohome-said",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-favourite",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act5",
+   "name": "The Wrong Signs",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#1a2a3a",
+    "effect": "rain"
+   },
+   "intro": "The inter-island ferry, at night. A bench on deck. Two people on it who've never sat on the same bench: one in a bandana, one in white gloves. Koa: \"She said meet on the boat. I ain't never been on the boat. We got a van.\" Zia: \"I've never been off the Paradise. Three years.\" More or less together: \"We've been comparing.\" Koa: \"You lot make 'em well. Then you don't let 'em go.\" Zia: \"You lot take them in. Then you don't— where do yours go? After? Koa, you've been in that town six years.\" Koa: \"...Nowhere. It's Po Town. There ain't an after.\" Zia: \"We freeze Pokémon and call it a charity.\" Koa: \"We feed kids and call it a gang.\" Both: \"I think we've each got the other's sign up.\" Zia tells you: Zia: \"The white boat's ours. The children's fund. Wicke signs it; she thinks it's the Aether House. You're paid to be noisy. So nobody looks at B2. You're a line item.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "The ferry's engine thrums under the bench. Your last choice of the night: who's told.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-knows-boat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act5-told"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them both: he's alive. The man at the Pelago.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "alola-mohn-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Zia: \"He's— alive?\" Koa: \"Growin' beans?\" Zia: \"She built all of it because he left. The white. The cold. And he's twenty miles off, humming.\" Koa: \"...You gonna tell her?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-knows-boat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-pelago-told",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-act5-told"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-act5-told",
+   "name": "The Wrong Signs",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#1a2a3a",
+    "effect": "rain"
+   },
+   "intro": "The lights of the islands go by. Who's told?",
+   "choices": [
+    {
+     "label": "Tell nobody.",
+     "success": {
+      "text": "Tomorrow goes as planned.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-told-none",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-signs",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the two squads.",
+     "success": {
+      "text": "Koa, Zia, Uri and Lux know. Whatever happens tomorrow, they'll act on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-told-squads",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-signs",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell Po Town.",
+     "success": {
+      "text": "You stand on the dry fountain. \"The white boat's Aether's. You're the noise.\" Forty kids. Nobody shouts. Tupp: \"So we been— a distraction?\" Rapp: \"We've been a distraction for six years. From what, I couldn't have told you. I'd assumed, from ourselves.\" Plumeria takes a book out from behind the brochures. Plumeria: \"Then we got three to bring back, and a house to pay our own rent on. You ate? Good. Get in the van.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-told-town",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-signs",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "sk-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-act5",
+   "name": "The Wrong Signs",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#1a2a3a",
+    "effect": "rain"
+   },
+   "intro": "The inter-island ferry, at night. A bench on deck. Two people on it who've never sat on the same bench: one in a bandana, one in white gloves. Koa: \"She said meet on the boat. I ain't never been on the boat. We got a van.\" Zia: \"I've never been off the Paradise. Three years.\" More or less together: \"We've been comparing.\" Koa: \"You lot make 'em well. Then you don't let 'em go.\" Zia: \"You lot take them in. Then you don't— where do yours go? After? Koa, you've been in that town six years.\" Koa: \"...Nowhere. It's Po Town. There ain't an after.\" Zia: \"We freeze Pokémon and call it a charity.\" Koa: \"We feed kids and call it a gang.\" Both: \"I think we've each got the other's sign up.\" Koa tells you: Koa: \"She's told G there's a fifth island. That he's kahuna. He's goin' through that hole with her tomorrow. He seen a case his own height and he's still goin'. 'Cause she picked him.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "The ferry's engine thrums under the bench. Your last choice of the night: who's told.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aether-knows-fifth",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-act5-told"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them both: he's alive. The man at the Pelago.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "alola-mohn-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Zia: \"He's— alive?\" Koa: \"Growin' beans?\" Zia: \"She built all of it because he left. The white. The cold. And he's twenty miles off, humming.\" Koa: \"...You gonna tell her?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aether-knows-fifth",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-pelago-told",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-act5-told"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-act5-told",
+   "name": "The Wrong Signs",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#1a2a3a",
+    "effect": "rain"
+   },
+   "intro": "The lights of the islands go by. Who's told?",
+   "choices": [
+    {
+     "label": "Tell nobody.",
+     "success": {
+      "text": "Tomorrow goes as planned.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-told-none",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-signs",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the two squads.",
+     "success": {
+      "text": "Koa, Zia, Uri and Lux know. Whatever happens tomorrow, they'll act on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-told-squads",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-signs",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell the conservation wing.",
+     "success": {
+      "text": "You read out the release rate. Two hundred staff. Nobody speaks. Then Curator Pua, gently: \"It's for the—\" She stops. It's the first time. Wicke takes a pile of forms from a drawer. Two hundred and six. She tears the top one in half.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "alola-told-wing",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "alola-signs",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-final-choice"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-op-bus-stop",
+   "name": "Operation: The Bus Stop",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/veteran_f"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "The order: shake down a bus stop on Route 8. \"There's always somebody.\" Koa: \"Always somebody here. Like, always. Old lady's been here every time we come. Three hours, sometimes.\" The old lady, Auntie Haunani: \"It says ten past. It's said ten past since my husband was alive. It's never once been ten past.\"",
+   "choices": [
+    {
+     "label": "Shake it down.",
+     "success": {
+      "text": "She hands over her purse without looking at you. There's always somebody.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fix the timetable.",
+     "success": {
+      "text": "The timetable's behind cracked plastic. It's for a route that was changed nine years ago. \"When does it actually come?\" Auntie Haunani: \"Twenty to. And only Tuesdays and Fridays. Everybody knows. You wait anyway, in case.\" You take it down. Koa's got a marker. Lux, who isn't meant to be here, has the best handwriting. A new one, on the back of a Po Town brochure: BUS: 20 TO. TUES + FRI. — SKULL. Auntie Haunani, reading it: \"...Well. That's the first true thing that's been up there in nine years.\" She gets up. It's a Thursday. \"I'll go home, then.\" There's nobody to shake down, after. That's why there always was.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-op-bus",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "koa-low",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "skull",
+       "inside": true,
+       "suspicion": 0,
+       "suspicionBelow": 4
+      }
+     ],
+     "notice": "Koa: \"You ate?\""
+    }
+   ]
+  },
+  {
+   "id": "sk-op-trial-site",
+   "name": "Operation: The Trial Site",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "The order: wreck a captain's trial. Tags on the gate. Knock the markers down. Night. A trial site, closed. Six of the forty, with spray cans, not spraying. Koa: \"We're s'posed to trash it.\"",
+   "choices": [
+    {
+     "label": "Trash it.",
+     "success": {
+      "text": "Tags on the gate. The markers go down. Koa sprays his name, and then crosses it out.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Or take it.\"",
+     "success": {
+      "text": "A Grunt: \"It ain't official. There's no captain. No stamp.\" \"There's me. I'll watch.\" Each of the six takes the trial. You're the captain. The first is a boy who froze, once. He freezes.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-op-trial-watch"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "koa-mid",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "skull",
+       "inside": true,
+       "standing": 5
+      }
+     ],
+     "notice": "Koa: \"You watch. I noticed that. You actually watch.\""
+    }
+   ]
+  },
+  {
+   "id": "sk-op-trial-watch",
+   "name": "The Trial Site",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "He's frozen at the hard moment, with everybody looking.",
+   "choices": [
+    {
+     "label": "\"Next.\"",
+     "success": {
+      "text": "He goes red, and walks down. The others don't look at you. It's the word.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take your time.\"",
+     "success": {
+      "text": "He unfreezes. It takes forty seconds. He's never been given forty seconds.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-op-trial-rest"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Say nothing. Keep looking.)",
+     "success": {
+      "text": "He unfreezes. It takes forty seconds. He's never been given forty seconds.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "sk-op-trial-rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-op-trial-rest",
+   "name": "The Trial Site",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/skull_grunt_m",
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#1a2a1a",
+    "effect": "none"
+   },
+   "intro": "A twin: she's better than her sister was, and she knows it halfway through. She finishes. She cries. \"She got a party.\" Kimo: his Rattata's hurt, and he stops to sling it. That's a fail, on paper. \"Not here.\" Three more. Koa, after, not having taken it: Koa: \"I ain't goin'. Not here. Not at night with nobody. I want it in the day.\" A pause. Koa: \"...I want it in the day. I ain't said that before.\"",
+   "choices": [
+    {
+     "label": "Oil the gate on the way out.",
+     "success": {
+      "text": "The site isn't wrecked. In the morning, the real captain finds six sets of footprints and a gate that's been oiled. There's one tag. Small. By the stamp box: we came back.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-op-trial",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-op-roof",
+   "name": "Operation: Po Town Roof",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria",
+     "boss.guzma"
+    ],
+    "tint": "#2a2a34",
+    "effect": "rain"
+   },
+   "intro": "The order: guard the Shady House. All night. Guzma's expecting trouble. There are nine buckets on the landing. They're full. Plumeria: \"He thinks somebody's comin' for him. Nobody's comin'. It's rained on that boy's bed for six years and he's put a guard on the door.\"",
+   "choices": [
+    {
+     "label": "Guard the door.",
+     "success": {
+      "text": "You stand at the door all night. Nobody comes. The buckets fill.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mend the roof.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "Tiles, tar, a ladder. The squad helps. It's raining throughout. Guzma, coming out at three in the morning, with a bat: Guzma: \"What's that noise. Who's on my—\" The Number One Numbskull, on his roof, with a hammer. Guzma: \"...You're fixin' it.\" Guzma: \"Nobody's ever—\" He looks at the bat. He puts it down against the wall. Guzma: \"You need somebody to hold the ladder?\" He holds the ladder till it's done. The nine buckets are emptied. They're never needed again. He keeps one, by the bed. He doesn't say why.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-roof-mended",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Tiles, tar, a ladder, and rain. You slip twice. Guzma comes out at three in the morning with a bat, sees you, and puts the bat down. Guzma: \"You need somebody to hold the ladder?\" He holds the ladder till it's done. The buckets are emptied. He keeps one, by the bed.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-roof-mended",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "koa-high",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "skull",
+       "inside": true,
+       "standing": 8
+      }
+     ],
+     "notice": "Koa: \"If I went back up there. You'd come?\""
+    },
+    {
+     "id": "koa-sus",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "skull",
+       "inside": true,
+       "suspicion": 4,
+       "suspicionBelow": 7
+      }
+     ],
+     "notice": "Koa: \"Tupp says you're soft. I said yeah. So?\""
+    }
+   ]
+  },
+  {
+   "id": "ae-op-intake",
+   "name": "Operation: The Intake",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_m",
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "The order: bring in six \"rescues\" from Melemele. Strays. Injured. \"At risk.\"",
+   "choices": [
+    {
+     "label": "Bring in six.",
+     "success": {
+      "text": "Six crates, six forms. Uri signs them.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check each for a trainer.",
+     "success": {
+      "text": "A Pikipek, \"stray\": it's on a wire outside a window; there's a dish on the sill. A Yungoos with a limp, \"injured, unattended\": a boy's two streets off, calling it. A Grubbin, \"at risk\": it's a Grubbin; it's fine. A Meowth with a bell, \"stray\": it's got a bell. A Wingull, oiled, \"injured\": it is; it needs the wing. A Slowpoke, \"unusually placid\": it's a Slowpoke. Uri: \"I was told six.\" Zia: \"You were told six rescues. That's one.\" Uri: \"...I'll bring one. If I'm asked, I'll say there was one.\" A pause. Uri: \"That's true, isn't it? It'd be the first time the form and the day matched.\" One Wingull comes in. Zia's got it flying in a week. It's the first chart she writes \"ready for release\" on.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-op-intake",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zia-low",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "aether",
+       "inside": true,
+       "suspicion": 0,
+       "suspicionBelow": 4
+      }
+     ],
+     "notice": "Zia: \"Gloves, please.\""
+    }
+   ]
+  },
+  {
+   "id": "ae-op-poster",
+   "name": "Operation: The Poster",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f",
+     "boss.wicke"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "The order: hang the new recovery poster at twelve Pokémon Centers. GET WELL. 98%.",
+   "choices": [
+    {
+     "label": "Hang them.",
+     "success": {
+      "text": "Twelve Centers, twelve posters, straight.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write the release rate under it, in pencil.",
+     "success": {
+      "text": "The first Center. You hang it. Straight. Zia holds the tape. A pencil. Zia: \"Small. So they have to come close.\" Under the 98%, in neat grey figures: released: 2%. By the third, somebody's found the first. A nurse, by telephone, to the Paradise: \"There's a figure on your poster. Is it right? Because I've sent you forty this year and I've been telling their trainers 'soon.'\" Wicke, taking the call: \"I— one moment.\" She goes and looks. \"It's right.\" At the twelfth Center, somebody's got there first. Under the pencil, in different pencil: where are the other 96? And under that, in a child's hand, a drawing of a Rockruff.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-op-poster",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zia-mid",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "aether",
+       "inside": true,
+       "standing": 5
+      }
+     ],
+     "notice": "Zia: \"You read the chart before the patient. Good. No: bad. Read the patient.\""
+    },
+    {
+     "id": "zia-sus",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "aether",
+       "inside": true,
+       "suspicion": 4,
+       "suspicionBelow": 7
+      }
+     ],
+     "notice": "Zia: \"Faba's asked for your pass logs. I've given him mine instead. They're very dull.\""
+    }
+   ]
+  },
+  {
+   "id": "ae-op-cold-room",
+   "name": "Operation: The Cold Room",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "tint": "#1a2230",
+    "effect": "fog"
+   },
+   "intro": "The order: log the day's \"preservations.\" Three. Sign. Lock up. B2. The frost. Three new cases, empty, humming, ready. Three trolleys. A Mareanie, glossy, every spine back. A Wingull. A Petilil. Each with a chart. Each chart on the wrong form. Curator Pua: \"It's for the best. It is. They're perfect. They'll never be more— oh, that one's looking at me. They don't usually look.\" The log: three lines. You write them.",
+   "choices": [
+    {
+     "label": "\"Preserved.\" Three times.",
+     "success": {
+      "text": "They're cased. Zia doesn't speak at supper.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-op-cold-latch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Preserved.\" Three times, and don't close the cases.",
+     "success": {
+      "text": "The log says it. The room doesn't. Pua sees. She says nothing. It's for the best.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-op-cold-latch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Deferred: no second signature.\"",
+     "success": {
+      "text": "It's true. Wicke's lost the forms. Pua: \"Is that— can one write that?\" \"It's what happened.\" Pua: \"...I've never written what happened. I've written what was for the best.\" She initials it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "pua-initialled",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "ae-op-cold-latch"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zia-high",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "aether",
+       "inside": true,
+       "standing": 8
+      }
+     ],
+     "notice": "Zia: \"If I'm ever at my best, don't let anyone write it down.\""
+    }
+   ]
+  },
+  {
+   "id": "ae-op-cold-latch",
+   "name": "The Cold Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/scientist_f"
+    ],
+    "tint": "#1a2230",
+    "effect": "none"
+   },
+   "intro": "And the door. A latch. It can be left.",
+   "choices": [
+    {
+     "label": "Leave it on the latch.",
+     "success": {
+      "text": "It's the only door on B2 that's ever been left. That night, something small comes up the stairs from below, with its helmet off, and sits outside it. It's not waiting for orders. Whatever happens, nobody will need a key.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "coldroom-latch",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lock up.",
+     "success": {
+      "text": "You lock up. The key goes back on its hook.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-you-ate-3",
+   "name": "You Ate?",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "Supper. Plumeria counts heads. Lux isn't there. She's under the table.",
+   "choices": [
+    {
+     "label": "Eat.",
+     "success": {
+      "text": "You eat. You wash your own bowl.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-you-ate-4",
+   "name": "You Ate?",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "Supper. Plumeria counts heads. Kimo isn't there. He's at the Ten-Coin Center, with a Grunt's Zubat in a sling. Plumeria takes his bowl over herself.",
+   "choices": [
+    {
+     "label": "Eat.",
+     "success": {
+      "text": "You eat. You wash your own bowl.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-you-ate-5",
+   "name": "You Ate?",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "Supper. Plumeria counts heads. Guzma isn't there. He's eaten, he says. He's on the roof.",
+   "choices": [
+    {
+     "label": "Take a bowl up.",
+     "success": {
+      "text": "He eats it. Guzma: \"Don't tell Plumes.\" She can see you both from the kitchen.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "guzma-fed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Eat.",
+     "success": {
+      "text": "You eat. You wash your own bowl.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-you-ate-6",
+   "name": "You Ate?",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "Supper. Plumeria counts heads. Nobody's missing. Plumeria: \"Forty-one. Huh.\" She counts again. Plumeria: \"First time in a year.\"",
+   "choices": [
+    {
+     "label": "Eat.",
+     "success": {
+      "text": "You eat. You wash your own bowl.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-you-ate-7",
+   "name": "You Ate?",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "Supper. Plumeria counts heads. Plumeria isn't there. She's dished up forty-one and she's on the step in the rain with the book.",
+   "choices": [
+    {
+     "label": "\"You ate?\"",
+     "success": {
+      "text": "She looks up. Nobody's ever said it back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plumeria-heard",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave her be.",
+     "success": {
+      "text": "You leave her with the book.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-rounds-3",
+   "name": "Rounds",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "The wing, at night. Zia does rounds. You carry the clipboard. The Mareanie. \"Eating. Spines at 60%.\" Zia: \"Another fortnight. Then I'll write 'ready.' I'm going to write it very clearly.\"",
+   "choices": [
+    {
+     "label": "Carry on.",
+     "success": {
+      "text": "On to the next pool.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "fav",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "aether-favourite",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zia: \"Don't let her call you that. I've seen where she keeps her favourites.\""
+    }
+   ]
+  },
+  {
+   "id": "ae-rounds-4",
+   "name": "Rounds",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "The wing, at night. Zia does rounds. You carry the clipboard. The Mareanie. \"Ready for release.\" In her hand, t's crossed, underlined. Zia: \"There. Let them change that.\"",
+   "choices": [
+    {
+     "label": "Carry on.",
+     "success": {
+      "text": "On to the next pool.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-rounds-5",
+   "name": "Rounds",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "The wing, at night. Zia does rounds. You carry the clipboard. The Mareanie. \"Ready for preservation.\" Zia: \"They didn't change the word. They changed the form. It's a different sheet. Same clipboard.\" She takes it off. She folds it. She puts it in her glove.",
+   "choices": [
+    {
+     "label": "Carry on.",
+     "success": {
+      "text": "On to the next pool.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-rounds-6",
+   "name": "Rounds",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "The wing, at night. Zia does rounds. You carry the clipboard. No chart. The pool's there. The Mareanie's there. Zia: \"It hasn't got one. If it hasn't got a chart, nobody can sign it. I've lost two hundred and six charts. Wicke's lost the forms. We've not discussed it.\"",
+   "choices": [
+    {
+     "label": "Carry on.",
+     "success": {
+      "text": "On to the next pool.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-rounds-7",
+   "name": "Rounds",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "aether-chalk-given",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aether_grunt_f"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "The wing, at night. Zia does rounds. You carry the clipboard. A wall. Two columns, in chalk: IN. HOME. The second column's empty. Zia: \"For tomorrow.\"",
+   "choices": [
+    {
+     "label": "Carry on.",
+     "success": {
+      "text": "On to the next pool.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-night-run",
+   "name": "The Night Run",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "pokemon": "meowth",
+    "tint": "#1a1a24",
+    "effect": "none"
+   },
+   "intro": "The sales office. Two in the morning. Plumeria, with a ledger, and a Meowth held by the scruff, which has given up. Plumeria: \"You're up. Good. You're comin'. You tell anybody and I'll deny it and they'll believe me.\" Plumeria: \"Entry three-oh-eight. Meowth. 'Borrowed' off a porch in Malie by two of my geniuses on Tuesday. It's got a bell on. It's somebody's baby.\" A road. A porch. A light on upstairs. She sets it down on the mat. It looks at her. It looks at the door. Plumeria: \"Go on.\" It scratches. A light. A voice: \"Is that— MITTENS?\" A door. A shriek. Plumeria's already behind the hedge. She's got the book out. She writes a date in the second column. Plumeria: \"Three hundred and six back. Six to go.\"",
+   "choices": [
+    {
+     "label": "\"Why not tell Guzma?\"",
+     "success": {
+      "text": "Plumeria: \"'Cause he needs to think we're bad. If we ain't bad, what are we? Forty kids in a wet house. He can't look at that straight.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-borrowbook",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why keep the book?\"",
+     "success": {
+      "text": "Plumeria: \"'Cause I gotta be able to. Look at it straight.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-borrowbook",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who's the six?\"",
+     "success": {
+      "text": "She turns the book so you can read it. Six lines without a second date. Plumeria: \"Take one, if you want. By the scruff. To a doorstep. Nobody suspects this of Skull.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "skull-borrowbook",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-borrow-errand",
+   "name": "An Entry in the Book",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "skull-borrowbook",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#1a1a24",
+    "effect": "none"
+   },
+   "intro": "One of the six from the Borrow Book: a Pichu, taken from a market stall in Konikoni. You've got it by the scruff. It's given up.",
+   "choices": [
+    {
+     "label": "Take it to the doorstep.",
+     "success": {
+      "text": "You set it down on the mat. It looks at you. It looks at the door. It scratches. A light, a voice, a door. Plumeria writes a date in the second column when you tell her. Nobody suspects this of Skull.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-borrow-returned",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-as-they-were",
+   "name": "As They Were",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 4,
+     "rank": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters"
+    ],
+    "tint": "#e8e4d8",
+    "effect": "none"
+   },
+   "intro": "The family floor. Two doors, side by side. Lusamine, with a key on a ribbon. Lusamine: \"Deputy. I'd like you to see. I don't show people.\" The first room. A girl's. White. A bed made for someone four feet tall. On it, laid out: a dress, a hat, small white shoes. Fresh. Pressed. Lusamine: \"I lay them out. Every morning. In case she comes down.\" She smooths the collar. Lusamine: \"She's— there's a tall girl about the place who answers to the name. I'm polite to her.\" The second room. A boy's. A height chart on the door frame, in pencil. It stops at ten. Lusamine: \"He was measured every birthday. Then he stopped coming to be measured.\" She holds out the hat. Lusamine: \"Would you? I've a call. Just lay it straight. On the pillow.\"",
+   "choices": [
+    {
+     "label": "(Lay it out.)",
+     "success": {
+      "text": "It's on the pillow tomorrow, and every day.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Put it away. In the wardrobe.)",
+     "success": {
+      "text": "She finds the bed bare. She doesn't shout. She takes it out and lays it down again. Lusamine: \"Deputy. We don't tidy her.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Mark the door frame: a new line, higher, with today's date.)",
+     "success": {
+      "text": "A pencil's there, on the ledge, where it's been for six years. You mark where a boy of sixteen would come to. Lusamine, in the doorway, back from her call: Lusamine: \"...What's that.\" \"Where he is now.\" She comes and stands under it. It's above her eye. Lusamine: \"He's taller than me?\" A long time. Lusamine: \"I'd not— I've been looking down, for him. All this time. I'd have walked straight past.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "aether-height",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-plumeria-alone",
+   "name": "Plumeria, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria"
+    ],
+    "tint": "#2a2a34",
+    "effect": "rain"
+   },
+   "intro": "Po Town's roof, in the rain. Plumeria: \"I'm not their boss. I'm their big sister. Somebody's got to check they ate. Guzma checks they're scary. I check they ate. You tell me which matters.\"",
+   "choices": [
+    {
+     "label": "\"Who checks you ate?\"",
+     "success": {
+      "text": "She laughs. It stops. Plumeria: \"...Nobody. Huh.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plumeria-heard",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"They'd follow you.\"",
+     "success": {
+      "text": "Plumeria: \"They'd follow a bowl. I just carry it.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What does Guzma eat?\"",
+     "success": {
+      "text": "Plumeria: \"Whatever's left. He waits till everyone's done. Thinks I don't see.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-gladion-alone",
+   "name": "Gladion, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.gladion"
+    ],
+    "pokemon": "type-null",
+    "tint": "#2a2430",
+    "effect": "none"
+   },
+   "intro": "A motel. Type: Null, with its helmet half off. Gladion: \"I took it and ran. From her. It was a weapon that failed, so she froze it. I'm with Skull because nobody here asks what I'm running from.\"",
+   "choices": [
+    {
+     "label": "\"It's not a weapon.\"",
+     "success": {
+      "text": "He looks at it a long time. Gladion: \"No. It isn't. It eats cereal out of my hand.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Does it have a name?\"",
+     "success": {
+      "text": "Gladion: \"...I've been calling it 'Null.' That's what the file said.\" A pause. Gladion: \"That's not a name, is it. That's what she called it.\" He gives it one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "null-named",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Go home and tell her.\"",
+     "success": {
+      "text": "Gladion: \"Tell her what? She'd only freeze it again. Or me.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-faba-alone",
+   "name": "Faba, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/faba"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "His office. Every certificate he's ever earned. Faba: \"Branch Chief. The last line of defence. She's never once used my name without 'thank you, that will be all' after it.\"",
+   "choices": [
+    {
+     "label": "\"You could be more.\"",
+     "success": {
+      "text": "Faba: \"More? I'm Branch Chief.\" He says it as if it were a ceiling.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What did you do before?\"",
+     "success": {
+      "text": "Faba: \"Research. Real research. I was going to cure something. I forget what.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Who are you defending her from?\"",
+     "success": {
+      "text": "Faba: \"...I've never asked.\" He looks at the cold room's key on its hook.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "faba-asked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ae-wicke-alone",
+   "name": "Wicke, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.wicke"
+    ],
+    "tint": "#c8c0a0",
+    "effect": "none"
+   },
+   "intro": "The conservation deck. She's feeding something that should've been released. Wicke: \"I sign the intake forms. I've stopped signing the other ones. They pile up. Nobody's noticed. If nobody signs, nothing's 'preserved.' It's the only disobedience I'm capable of.\"",
+   "choices": [
+    {
+     "label": "\"How many?\"",
+     "success": {
+      "text": "Wicke: \"Two hundred and six. They're all still awake.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "wicke-pile",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give me the pile.\"",
+     "success": {
+      "text": "Wicke: \"Oh, I couldn't. If they're with me, they're lost. If they're with you, they're stolen.\" She keeps them.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"That's enough to matter.\"",
+     "success": {
+      "text": "Wicke: \"Is it? I've never been sure anything I did was.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "sk-loyalty-test",
+   "name": "The Loyalty Test",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "suspicion": 7,
+     "suspicionBelow": 10,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.guzma"
+    ],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "Guzma: \"Smash it. That statue. Captain's statue. C'mon. Show me you're one of us.\"",
+   "choices": [
+    {
+     "label": "\"Nah.\"",
+     "success": {
+      "text": "Guzma: \"...Nah?\" He looks at you. He looks at the statue. Guzma: \"Huh. Nah.\" He doesn't press it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Smash it.)",
+     "success": {
+      "text": "It comes apart easier than you'd think. Guzma whoops. It doesn't feel like anything.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -2
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "skull-statue-smashed",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You do it.\"",
+     "success": {
+      "text": "He lifts the bat. He doesn't. Guzma: \"...Ain't his fault I came second.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "skull-test-yours",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "koa",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-koa",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Koa: \"G's gonna make you smash somethin'. Tell him to do it himself. He won't.\""
+    }
+   ]
+  },
+  {
+   "id": "ae-loyalty-test",
+   "name": "The Loyalty Test",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "suspicion": 7,
+     "suspicionBelow": 10,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lusamine-masters"
+    ],
+    "tint": "#e8e4d8",
+    "effect": "none"
+   },
+   "intro": "Lusamine: \"Choose one for the cold room. Any. Whichever you think is at its loveliest.\"",
+   "choices": [
+    {
+     "label": "\"None.\"",
+     "success": {
+      "text": "Lusamine: \"None? Nothing at all is lovely enough to keep?\" She looks at you as if you'd said something cruel.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Point at a rose in her garden.)",
+     "success": {
+      "text": "She follows your finger. A white rose, just open. She laughs, delighted. Lusamine: \"Yes. Oh, yes. You do understand.\" She cuts it herself.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You choose. Look at them first.\"",
+     "success": {
+      "text": "She goes along the pools. She looks. She stops at the Mareanie a long time. She doesn't choose.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "aether-test-looked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zia",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-zia",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zia: \"She'll ask you to choose one for the cold. Point at a rose.\""
+    }
+   ]
+  },
+  {
+   "id": "sk-found-out",
+   "name": "Found Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "skull",
+     "inside": true,
+     "suspicion": 10,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.plumeria",
+     "trainer.pr/skull_grunt_m"
+    ],
+    "tint": "#3a1418",
+    "effect": "rain"
+   },
+   "intro": "The Shady House gate is shut when you come back, and Plumeria is standing in front of it with three Grunts who won't meet your eye. Plumeria: \"Somebody's been talkin' to the cops. Nanu's got a sheet with your name on it. I ain't sayin' it's you. I'm sayin' you're goin' out the long way.\" You've been found out. The only way back outside is through them, with your own party, on worse ground than you'd have chosen.",
+   "choices": [
+    {
+     "label": "Fight your way out.",
+     "success": {
+      "text": "They come at you two at once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "skull-found-out",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Plumeria and a Grunt",
+       "size": 6,
+       "levelBonus": 2,
+       "format": "doubles",
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "koa",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-koa",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Koa is by the gate. He catches your eye, and takes one step sideways, out of their line."
+    }
+   ]
+  },
+  {
+   "id": "ae-found-out",
+   "name": "Found Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "aether",
+     "inside": true,
+     "suspicion": 10,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "alola"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/faba",
+     "trainer.pr/aether_grunt_m"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "The lift stops between floors. When the doors open, Faba is waiting, with two Employees and a clipboard. Faba: \"Deputy. The President is very hurt. I, on the other hand, am delighted.\" You've been found out. The only way back outside is through them, with your own party, on worse ground than you'd have chosen.",
+   "choices": [
+    {
+     "label": "Fight your way out.",
+     "success": {
+      "text": "They come at you two at once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "alola-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "aether-found-out",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Faba and an Employee",
+       "size": 6,
+       "levelBonus": 2,
+       "format": "doubles",
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zia",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-zia",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zia is in the corridor behind them. She takes one step sideways, out of their line."
+    }
+   ]
+  }
+ ]
+}

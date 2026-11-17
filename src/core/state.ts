@@ -2,6 +2,7 @@
 // and the permanent profile. These schemas double as save-file validators,
 // so the game refuses to load a save that doesn't match.
 
+import { REDUX_SKIN_IDS } from './presentation/redux';
 import { UltraRuleIdSchema } from './ultra/beasts';
 import { ExpansionRunSchema, ExpansionSettingsSchema, EXPANSION_SETTINGS_DEFAULTS } from './expansion/schema';
 import { ProfileStorySchema, StorySettingsSchema, STORY_SETTINGS_DEFAULTS } from './story2/schema';
@@ -24,6 +25,7 @@ import { freshHyperBattle } from './battle/hyper';
 import { SpectacleBattleSchema } from './battle/spectacle';
 import { TraitsSchema, type Traits } from './expansion/traits';
 import { StoryTraitsSchema, type StoryTraits } from './expansion/storyTraits';
+import type { TwiceToldStore } from './greenneedle/twiceTold';
 import { PondMarkSchema } from './episodes/poliPond';
 import { TimedStageSchema, VariantsSchema, type TimedStage, type Variants } from './expansion/variantLines';
 import { ArenaSchema, SkillInputSchema } from './battle/w1Play';
@@ -102,6 +104,8 @@ export const PokemonInstanceSchema = z.object({
   abilitySlot: z.number().int().min(-1).default(0),
   /** Poli-Pond (Beta 0.7): the Poliwag of the story (or what it grew into) carries its lessons here. Optional, so older saves load as they are. */
   pond: PondMarkSchema.optional(),
+  /** Greenneedle events: story marks this Pokémon carries (`duelist:caterpie` = the forest duelist, caught as a Caterpie). Optional, so older saves load as they are. */
+  gn: z.array(z.string()).optional(),
   /** An ability it was given outright (Squirtle Squad's Contrary); it beats the slot. Optional, so older saves load as they are. */
   fixedAbility: z.string().optional(),
   /** Pidgey's Resolve (Beta 0.7): Mega Evolves with no Mega Stone and takes the ability Sky's Resolve while Mega. Optional, so older saves load as they are. */
@@ -128,8 +132,15 @@ export const PokemonInstanceSchema = z.object({
   held: z.record(z.string(), z.number().int().min(1)).optional(),
   /** Small permanent stat boosts per stat (Wings): copies taken, each worth its catalog percent. */
   statBoosts: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
+  /** Catalog Overhaul: stat boosts in percent given by event scenes ("+1 to a stat" is 5%), capped per stat; `eventBoostsRegion` is the share that ends with the region. */
+  eventBoosts: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
+  eventBoostsRegion: z.partialRecord(StatNameSchema, z.number().int().min(0)).optional(),
+  /** Fenwick's lesson (`declinedEvolutionBoost`): percent added to every stat for evolutions it was held back from; cleared when it evolves (core/mentorWorld.ts). Optional, so older saves load as they are. */
+  evoDeclineBoost: z.number().int().min(0).optional(),
   /** Max HP bonus in percent from the trainer's HP perks (core/trainerPerks.ts syncHpPerks keeps it current). */
   perkHp: z.number().int().optional(),
+  /** Catalog Overhaul (Alphas): the Alpha Mark. It keeps its size (drawn larger) and has +10% HP (a wild Alpha in a fight has double HP through `statBoosts`). Optional, so older saves load as they are. */
+  alpha: z.literal(true).optional(),
   /** Hatched from an Egg this run (core/eggs.ts; Elm's perk gives these more experience). */
   hatched: z.boolean().optional(),
   /** The Egg tier it hatched from (data/eggs.json), for the hatch screen. */
@@ -140,12 +151,20 @@ export const PokemonInstanceSchema = z.object({
   boosts: z.array(BattleBoostSchema).optional(),
   /** The type it becomes when it Terastallizes (M8.5); unset = its current first type. */
   teraType: TypeNameSchema.optional(),
+  /** Catalog Overhaul (SF93 Heart Crystal): its second type is this one for the rest of the run (core/co/typeShift.ts). */
+  shiftType: TypeNameSchema.optional(),
+  /** Greenneedle gn.32: a crystal carried for it, this stage only (Red: own-type moves +10%; Blue: its second type). Taken off on leaving. */
+  crystal: z.object({ red: z.boolean().optional(), blue: TypeNameSchema.optional() }).optional(),
+  /** Catalog Overhaul (SF102 Bond Ceremony): it made the vow; it can't be released or traded and its friendship can't fall (core/co/placesRules.ts). */
+  vowed: z.boolean().optional(),
   /** Moves that awakened this run (Signature Move Awakening): they hit harder; gone with the run. */
   awakened: z.array(z.string()).optional(),
   /** In battle only: Dynamaxed, so its HP is doubled (core/battle/transform.ts). */
   dynamaxed: z.literal(true).optional(),
   /** In battle only: Overcharged (Failure Will (NOT) Be Tolerated, core/battle/pokemonMoments.ts): all stats doubled, HP x1.5, moves on a one-turn cooldown. */
   overcharged: z.literal(true).optional(),
+  /** In battle only: a revival status (PA17 to PA31: Revenant, Wrathborn... core/battle/revivalStatus.ts), by id in pokemonMoments.json `revivalStatuses`. Ends with the battle. */
+  revivalStatus: z.string().optional(),
   /** Shadow Pokémon (catalog #76-77, core/shadow.ts): the Heart Gauge, 100 (sealed) down to 0 (purified). */
   shadow: z.object({
     heart: z.number().int().min(1).max(100),
@@ -166,6 +185,14 @@ export const PokemonInstanceSchema = z.object({
   bondWith: z.string().optional(),
   /** Beta 0.5 M1: moves this Pokémon has mastered (trainer-side move mastery; core/trainerWorld). */
   mastered: z.array(z.string()).optional(),
+  /** Catalog Overhaul (run v44): a quirk id (core/co/quirks.ts), e.g. a homesick Poipole or a traded Pokémon's habit. */
+  quirk: z.string().optional(),
+  /** Catalog Overhaul (run v44): marks it carries from its story ("alpha", "traded"...); shown on its summary. */
+  marks: z.array(z.string()).max(8).optional(),
+  /** Catalog Overhaul (run v44): its original trainer's name when it came from someone else (a trade). */
+  ot: z.string().optional(),
+  /** Catalog Overhaul (run v44): one line about where its quirk came from. */
+  quirkNote: z.string().optional(),
 });
 export type PokemonInstance = z.infer<typeof PokemonInstanceSchema>;
 
@@ -219,7 +246,7 @@ export const VolatileSchema = z.object({
   /** Hidden in the air, underground, underwater or vanished (first turn of Fly, Dig, Dive, Phantom Force). */
   semi: SemiSchema.nullable().default(null),
   /** Locked into Thrash or Outrage for `turns` more turns. */
-  locked: z.object({ moveId: z.string(), turns: z.number().int().min(0) }).nullable().default(null),
+  locked: z.object({ moveId: z.string(), turns: z.number().int().min(0), /** Encore Performance: the forced move goes first (+1 priority). */ bonus: z.boolean().optional() }).nullable().default(null),
   /** Full turns it has been in battle (Fake Out works only on the first). */
   turnsOut: z.number().int().min(0).default(0),
   /** Growth paths (Patient, Quiet Strength): last turn it only waited / was not hit. Old saves read false. */
@@ -575,10 +602,12 @@ export const freshExtra = () => ({
   ionDeluge: false,
   wonderRoom: 0,
   brokenFace: [] as string[],
+  packCall: null as 'player' | 'enemy' | null,
   variants: {} as Variants,
   variantTimed: [] as TimedStage[],
   traits: {} as Traits,
   storyTraits: {} as StoryTraits,
+  twiceTold: {} as TwiceToldStore,
   /** Lights Out: turns of darkness left (accuracy -10% for both sides). */
   darkTurns: 0,
   /** Payout: its holder knocked out a foe this battle, so the prize money is doubled. */
@@ -815,11 +844,15 @@ export const BattleStateSchema = z.object({
     traits: TraitsSchema,
     /** Beta 0.7 team-wide story traits (core/expansion/storyTraits.ts): uid -> trait. Off unless the run's `storyTraits` setting is on. */
     storyTraits: StoryTraitsSchema,
+    /** gn.new.35 Twice-Told (core/greenneedle/twiceTold.ts): target uid -> the first move used against it and how often. */
+    twiceTold: z.record(z.string(), z.object({ move: z.string(), n: z.number().int() })).default({}),
     darkTurns: z.number().int().min(0).default(0),
     payout: z.boolean().default(false),
     /** Galar big-battle moments already used (evolve-and-survive per Pokémon, the thread, the cheat) and ones pending this hit (galarMoments.ts). */
     galar: z.array(z.string()).default([]),
     delta: z.boolean().default(false),
+    /** Pack Call (catalog overhaul legends, Z7): the side whose next ally to switch in on turn 1 gains +1 Attack. */
+    packCall: z.enum(['player', 'enemy']).nullable().default(null),
     mimic: z.record(z.string(), z.object({ kind: z.enum(['mimic', 'transform']), slot: z.number().int(), moves: z.array(z.object({ id: z.string(), pp: z.number().int() })) })).default({}),
     fairyLock: z.number().int().default(-9),
     passSub: z.object({ player: z.number().int().default(0), enemy: z.number().int().default(0) }).default({ player: 0, enemy: 0 }),
@@ -929,6 +962,8 @@ export const BattleStateSchema = z.object({
   foresight: z.object({ ended: z.boolean(), revealed: z.string().nullable() }).optional(),
   /** Run events B: special rules of this event fight (no switching, no attacks, turn limits...); see EventRuleSchema. */
   eventRule: EventRuleSchema.optional(),
+  /** Catalog Overhaul (Alphas): the Calm bar of a calm fight (core/battle/calm.ts). `balm` is what one thrown balm adds (1, or 1.2 with the Warden sash). */
+  calm: z.object({ bar: z.number().min(0), need: z.number().int().min(1), balm: z.number().positive(), done: z.boolean().default(false) }).optional(),
   /** Beta 0.7 U1: the Ultra Rules in force for this battle (core/ultra/run.ts markBattle): both sides alike. Absent when the system is off. */
   ultra: z.array(UltraRuleIdSchema).optional(),
   /** Every move's accuracy is multiplied by this for both sides (Veridian Forest fog). */
@@ -949,6 +984,13 @@ export const BattleStateSchema = z.object({
   spectacle: SpectacleBattleSchema.optional(),
   /** Auto-Battle (spec §32): the Pokémon chose at least one action this battle by themselves, so its EXP is reduced (core/run.ts awardExperience). Never cleared mid-battle. */
   autoUsed: z.boolean().optional(),
+  /**
+   * Mentor lessons (trainerPerks.ts mentorLessons): once-per-battle marks and the foe's previewed first move.
+   * `koTurnOne`: your side knocked a foe out on turn one; `koSpeedUsed`: the Speed boost was given; `missUsed`: a foe's miss
+   * already paid out; `foeMove`: the foe lead's turn-one move (Foe Move Preview); `xp`: experience each of your Pokémon (uid) earned
+   * this battle while a Lost Battle lesson waits (run.ts awardExperience). Optional, no save bump.
+   */
+  lesson: z.object({ koTurnOne: z.boolean().optional(), koSpeedUsed: z.boolean().optional(), missUsed: z.boolean().optional(), foeMove: z.string().optional(), xp: z.record(z.string(), z.number().int().min(0)).optional() }).optional(),
   /** Pidgey's Resolve (core/sky/spectate.ts): a CPU-versus-CPU fight the player only watches. `cheerAt`: the share of the player-side Pokémon's HP under which the player is asked who to cheer for (once); `cheered` is the answer. Nothing counts: the real party and Bag are put back. */
   spectate: z.object({ kind: z.enum(['duel', 'finale']), cheerAt: z.number().min(0).max(1).optional(), cheered: z.enum(['pidgeot', 'fearow', 'none']).optional() }).optional(),
   /** The wild Pokémon is an Alpha: oversized, stronger, better prize (ideas W1). */
@@ -977,6 +1019,9 @@ export const BattleStateSchema = z.object({
   flair: z.object({ crowdTypes: z.array(z.string()).default([]), cheers: z.number().int().min(0).default(0), floodUntil: z.number().int().default(-1), paired: z.boolean().default(false) }).optional(),
   /** Critical hits in a row per Pokémon (uid); the Streak Lens reads it (ideas W1). */
   critStreak: z.record(z.string(), z.number().int().min(0)).optional(),
+  /** Greenneedle gn.new.06: the uid of the first party Pokémon to land a critical hit this battle, and the last damaging move one of them used (the Duelist's answer). */
+  critBy: z.string().optional(),
+  lastHit: z.string().optional(),
   /** Nuzlocke: this wild Pokémon is not the area's first encounter, so it can't be caught (core/nuzlocke.ts). */
   nuzlockeNoCatch: z.boolean().optional(),
   /** Pacifist run: damage never knocks out this wild Pokémon (core/rules.ts). */
@@ -1109,10 +1154,14 @@ export const StageStateSchema = z.object({
   visited: z.array(z.string()),
   /** Fog of war: the map shows every column up to this one (scouting); 0 = only what you can see. */
   scoutedTo: z.number().int().min(0).default(0),
+  /** gn.new.12: while set, the whole map is on show for a few seconds (the Xatu's map); `scoutedTo` drops back to this value when it blurs. */
+  peekFrom: z.number().int().min(0).optional(),
   /** Weather Prophet (S124): extra columns the weather forecast reaches this stage (an event's `foresight` effect). */
   foresight: z.number().int().min(0).default(0),
   /** Fronts that rolled in during the stage (an event's `front` effect); the stage's own come from its seed (core/world.ts). */
   extraFronts: z.array(z.object({ weather: WeatherSchema, from: z.number().int().min(1), to: z.number().int().min(1) })).default([]),
+  /** Catalog Overhaul (new events, NE9): the storm was waited out, so no weather front for the rest of this stage. */
+  clearSky: z.boolean().optional(),
   /** Roaming Legendaries on this map: where each is now and whether it is still roaming. */
   roamers: z.array(z.object({ species: z.string(), nodeId: z.string().nullable(), status: z.enum(['roaming', 'done', 'gone']) })).default([]),
   /** Ideas W4 traversal (run v34): obstacles on this map, node id → obstacle id (src/data/traversal.json). A crossed one is removed. */
@@ -1471,7 +1520,7 @@ export const RunStateSchema = z.object({
   /** Encore! Hype carried between battles (reset after a boss battle). */
   hype: z.number().int().min(0).default(0),
   /** Signature effects that run out: they leave `perkEffects` after `battles` more battles (of the `until` kind). */
-  tempEffects: z.array(z.object({ effects: z.array(ArchetypeModifierSchema), battles: z.number().int().min(1), until: z.enum(['battle', 'boss', 'wild']) })).default([]),
+  tempEffects: z.array(z.object({ effects: z.array(ArchetypeModifierSchema), battles: z.number().int().min(1), until: z.enum(['battle', 'boss', 'wild', 'region']) })).default([]),
   signatureApplied: z.record(z.string(), z.array(ArchetypeModifierSchema)).default({}),
   /** Mode, difficulty, modifiers and their reward multiplier (core/rules.ts). */
   rules: RunRulesSchema,
@@ -1568,6 +1617,8 @@ export const RunStateSchema = z.object({
   reunion: z.object({ mon: PastPokemonSchema, afterEncounters: z.number().int().min(1), done: z.boolean() }).optional(),
   /** Beta 0.6 INSTRUMENTALITY run state (run v43). Absent until a slice that uses it writes it; older runs load untouched. */
   expansion: ExpansionRunSchema.optional(),
+  /** Catalog Overhaul (places, SF102): Pokémon the player left somewhere for a while (a reef guard); they come back through an event (core/co/placesRules.ts). */
+  coAway: z.array(z.object({ key: z.string(), mon: PokemonInstanceSchema, region: z.number().int().min(0) })).optional(),
 });
 export type RunState = z.infer<typeof RunStateSchema>;
 
@@ -1989,6 +2040,10 @@ export const SettingsSchema = z.object({
   autoRules: z.array(z.enum(['superEffective', 'healLow', 'noItems', 'stayIn'])).default([]),
   /** W11 (UI, accessibility, presentation). All presentation only. */
   uiTheme: z.enum(['classic', 'aero', 'ds', 'wii', 'cyber']).default('classic'),
+  /** UI mock-ups update: 'new' draws the redesigned screens (the default), 'old' keeps the earlier UI. Presentation only. */
+  uiStyle: z.enum(['new', 'old']).default('new'),
+  /** The New UI's look, one of twenty (core/presentation/redux.ts). */
+  reduxSkin: z.enum(REDUX_SKIN_IDS).default('raiders'),
   fontSize: z.enum(['normal', 'large', 'huge']).default('normal'),
   dyslexiaFont: z.boolean().default(false),
   reducedFlash: z.boolean().default(false),

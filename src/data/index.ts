@@ -60,6 +60,10 @@ import itemsJson from './items.json';
 import itemCatalogJson from './itemCatalog.json';
 // Item catalog entries added in their own files (src/data/itemCatalog/*.json, one per batch, auto-discovered like events/*.json).
 const itemCatalogExtra = Object.values(import.meta.glob<unknown[]>('./itemCatalog/*.json', { eager: true, import: 'default' })).flat();
+// Catalog Overhaul Pack: bag items, moves and abilities added by a category in its own file (src/data/catalogOverhaul/items|moves/<category>.json).
+const coItems = Object.values(import.meta.glob<unknown[]>('./catalogOverhaul/items/*.json', { eager: true, import: 'default' })).flat();
+const coMoves = Object.values(import.meta.glob<unknown[]>('./catalogOverhaul/moves/*.json', { eager: true, import: 'default' })).flat();
+const coAbilities = Object.values(import.meta.glob<unknown[]>('./catalogOverhaul/abilities/*.json', { eager: true, import: 'default' })).flat();
 import learnablesJson from './learnables.json';
 import megaStonesJson from './megaStones.json';
 import zMovesJson from './zMoves.json';
@@ -91,6 +95,7 @@ import raidsJson from './raids.json';
 import totemsJson from './totems.json';
 import shadowWorldJson from './shadowWorld.json';
 import evilTeamsJson from './evilTeams.json';
+import jetTeamSwapsJson from './jetTeamSwaps.json';
 import { EvilFileSchema } from '../core/evil/schema';
 import { expandEvilEvents } from '../core/evil/content';
 import { ShadowWorldFileSchema } from '../core/shadowWorld/schema';
@@ -121,13 +126,29 @@ import eventsTrainingJson from './eventsTraining.json';
 import eventsVillainJson from './eventsVillain.json';
 import eventsMerchantsJson from './eventsMerchants.json';
 const eventsExtraFiles = Object.values(import.meta.glob<unknown>('./events/*.json', { eager: true, import: 'default' }));
+// Catalog Overhaul placement blocks, one file per category (src/data/catalogOverhaul/placement/*.json), keyed by event id.
+const coPlacementFiles = Object.values(import.meta.glob<Record<string, Record<string, unknown>>>('./catalogOverhaul/placement/*.json', { eager: true, import: 'default' }));
 import npcStoryJson from './npcStory.json';
 import { isGiftable } from '../core/events';
+import { readPlacement, type CoPlacement } from '../core/co/placement';
 import { chainEvents } from '../core/overhaul/chains';
 import { mythicalChainEvents } from '../core/overhaul/mythicalChains';
 import { dungeonEvents } from '../core/dungeon/compile';
 import { validateAllDungeons } from '../core/dungeon/schema';
 import { pseudoEvents, validateAllPseudo } from '../core/dungeon/pseudo';
+
+/** Catalog Overhaul: merges the placement files. An id in two files is a data problem. An id that is no event is skipped: cut-down copies of
+ *  the content (old-seed fingerprints, small test catalogs) drop events but keep the placement files. Each category's gate test checks that
+ *  its placed ids are real events in the full content (tests/unit/coPeople.test.ts for people). */
+function readCoPlacement(files: Record<string, Record<string, unknown>>[], eventIds: Set<string>, problems: string[]): Map<string, CoPlacement> {
+  const out = new Map<string, CoPlacement>();
+  for (const file of files) for (const [id, raw] of Object.entries(file)) {
+    if (id.startsWith('$')) continue; // "$note" and the like
+    if (out.has(id)) problems.push(`catalogOverhaul/placement: ${id} is placed in two files`);
+    else if (eventIds.has(id)) out.set(id, readPlacement(raw));
+  }
+  return out;
+}
 
 export class ContentError extends Error {
   constructor(public readonly problems: string[]) {
@@ -155,6 +176,8 @@ export interface RawContent {
   trainers: unknown;
   bosses: unknown;
   bossTeams: unknown;
+  /** Beta 0.7: Jet Pokédex species laid over bossTeams / evilTeams (jetTeamSwaps.json). Optional: old-seed fixtures leave it out. */
+  jetTeamSwaps?: unknown;
   regions: unknown;
   themes: unknown;
   shop: unknown;
@@ -210,6 +233,8 @@ export interface RawContent {
   eventsMerchants?: unknown;
   /** Every src/data/events/*.json file, auto-discovered, added to `events`. */
   eventsExtra?: unknown[];
+  /** Catalog Overhaul placement files (event id to placement block). */
+  coPlacement?: Record<string, Record<string, unknown>>[];
 }
 
 /**
@@ -230,11 +255,11 @@ export function mergeSpecies(base: unknown[], custom: unknown[], evolutions: { f
 }
 
 /** Small field changes on existing species (Eevee now evolves from Tuftin). */
-export function patchSpecies(species: unknown[], patches: { id: string; evolvesFrom: string }[]): unknown[] {
+export function patchSpecies(species: unknown[], patches: { id: string; evolvesFrom: string; evolutionStage?: number }[]): unknown[] {
   const by = new Map(patches.map((p) => [p.id, p]));
   return species.map((s) => {
     const p = by.get((s as { id: string }).id);
-    return p ? { ...(s as object), evolvesFrom: p.evolvesFrom } : s;
+    return p ? { ...(s as object), evolvesFrom: p.evolvesFrom, ...(p.evolutionStage ? { evolutionStage: p.evolutionStage } : {}) } : s;
   });
 }
 
@@ -281,13 +306,13 @@ export function applySpeciesFixes(species: unknown[], fixes: SpeciesFixes): unkn
 
 export const RAW_CONTENT: RawContent = {
   species: applySpeciesFixes(
-    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species, ...jetSpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions, ...jetSpeciesJson.evolutions]), storySpeciesJson.patches),
+    patchSpecies(mergeSpecies(speciesJson, [...customSpeciesJson, ...storySpeciesJson.species, ...jetSpeciesJson.species], [...customEvolutionsJson, ...storySpeciesJson.evolutions, ...jetSpeciesJson.evolutions]), [...storySpeciesJson.patches, ...jetSpeciesJson.patches]),
     speciesFixesJson,
   ),
   // Generated: npm run data:mega-moves (Mega signature moves, flagged megasig).
   // Story Run signature moves: npm run data:story-sigs (flagged storysig).
-  moves: [...movesJson, ...megaMovesJson.moves, ...storySignatureMovesJson.moves, ...canonMovesJson.moves, ...jetSpeciesJson.moves],
-  abilities: [...abilitiesJson, ...storySpeciesJson.abilities, ...jetSpeciesJson.abilities],
+  moves: [...movesJson, ...megaMovesJson.moves, ...storySignatureMovesJson.moves, ...canonMovesJson.moves, ...jetSpeciesJson.moves, ...coMoves],
+  abilities: [...abilitiesJson, ...storySpeciesJson.abilities, ...jetSpeciesJson.abilities, ...coAbilities],
   typeChart: typeChartJson,
   archetypes: archetypesJson,
   trainerUnlocks: trainerUnlocksJson,
@@ -297,12 +322,13 @@ export const RAW_CONTENT: RawContent = {
   runPrep: runPrepJson,
   // Mega Stones are generated (npm run data:megas) and kept in their own file.
   rewards: [...rewardsJson, ...megaStonesJson.rewards, ...jetSpeciesJson.rewards],
-  items: [...itemsJson, ...megaStonesJson.items, ...jetSpeciesJson.items],
+  items: [...itemsJson, ...megaStonesJson.items, ...jetSpeciesJson.items, ...coItems],
   itemCatalog: [...itemCatalogJson, ...itemCatalogExtra],
   learnables: { ...learnablesJson, ...storySpeciesJson.learnables, ...jetSpeciesJson.learnables },
   trainers: [...trainersJson, ...trainersDriveJson],
   bosses: bossesJson,
   bossTeams: bossTeamsJson,
+  jetTeamSwaps: jetTeamSwapsJson,
   regions: regionsJson,
   themes: themesJson,
   shop: shopJson,
@@ -342,6 +368,7 @@ export const RAW_CONTENT: RawContent = {
   eventsVillain: eventsVillainJson,
   eventsMerchants: eventsMerchantsJson,
   eventsExtra: eventsExtraFiles,
+  coPlacement: coPlacementFiles,
 };
 
 function parse<T>(schema: z.ZodType<T>, value: unknown, label: string, problems: string[]): T | null {
@@ -366,6 +393,31 @@ function emptyStory(): Record<string, unknown> {
   return { characters: [], events: [], arcs: [], themes: [], remembrances: [], moveMoments: [], dialogue: [], lore: [], news: [], interactables: [], backstories: [], quiz: [], blueprintRules: {}, text: {}, hash: '' };
 }
 
+const TeamSwapsSchema = z.object({
+  boss: z.record(z.string(), z.record(z.string(), z.record(z.string(), z.string()))).default({}),
+  evil: z.record(z.string(), z.record(z.string(), z.record(z.string(), z.string()))).default({}),
+});
+
+/** Lays jetTeamSwaps.json over the boss teams ("<team>.<member>": member text) and the Evil Team rank lists, on copies. */
+function applyTeamSwaps(bossTeams: unknown, evilTeams: unknown, swapsRaw: unknown): { bossTeams: unknown; evilTeams: unknown } {
+  const parsed = TeamSwapsSchema.safeParse(swapsRaw ?? {});
+  if (!parsed.success) return { bossTeams, evilTeams };
+  const swaps = parsed.data;
+  const boss = structuredClone(bossTeams) as Record<string, Record<string, { members: string[] }[]>>;
+  for (const [id, roles] of Object.entries(swaps.boss))
+    for (const [role, edits] of Object.entries(roles))
+      for (const [key, text] of Object.entries(edits)) {
+        const [ti, mi] = key.split('.').map(Number);
+        const members = boss[id]?.[role]?.[ti!]?.members;
+        if (members && mi! < members.length) members[mi!] = text;
+      }
+  const evil = structuredClone(evilTeams) as { teams: { id: string; ranks: Record<string, { species: string[] }> }[] };
+  for (const team of evil.teams ?? [])
+    for (const [rank, edits] of Object.entries(swaps.evil[team.id] ?? {}))
+      for (const [slot, species] of Object.entries(edits)) if (team.ranks[rank]?.species[Number(slot)] !== undefined) team.ranks[rank]!.species[Number(slot)] = species;
+  return { bossTeams: boss, evilTeams: evil };
+}
+
 export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const problems: string[] = [];
   const species = parse(z.array(SpeciesSchema), raw.species, 'species.json', problems);
@@ -376,9 +428,17 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const unlockFile = raw.trainerUnlocks === undefined ? { unlocks: [] } : parse(TrainerUnlocksFileSchema, raw.trainerUnlocks, 'trainerUnlocks.json', problems);
   const unlockById = new Map((unlockFile?.unlocks ?? []).map((u) => [u.trainerId, u]));
   // A trainer's own challenge replaces the generic unlock (and the matching "<Name>'s Team" starter set follows it).
+  const bossIds = new Set(((raw.bosses ?? []) as { id?: string }[]).map((b) => b.id));
   const archetypes = baseArchetypes?.map((a) => {
     const u = unlockById.get(a.id);
-    return u && !a.unlockedByDefault && !a.evolvedFrom ? { ...a, unlock: u.requirement, unlockText: u.text, unlockCost: u.cost, unlockTier: u.tier, unlockFlavor: u.flavor, unlockStatus: u.status } : a;
+    const own = u && !a.unlockedByDefault && !a.evolvedFrom ? { ...a, unlock: u.requirement, unlockText: u.text, unlockTier: u.tier, unlockFlavor: u.flavor, unlockStatus: u.status } : a;
+    // Streamlined unlocks: no Bank Credit claim step. Gym Leaders, Elite Four and Champions also join when beaten as a boss;
+    // npc-* trainers also join when helped in their run event ("recruit" effect). Either way the challenge still works.
+    if (a.unlockedByDefault) return { ...own, unlockCost: 0, unlockRoute: 'start' as const };
+    if (a.evolvedFrom) return { ...own, unlockCost: 0, unlockRoute: 'evolution' as const };
+    const route = bossIds.has(a.id) ? 'battle' as const : a.id.startsWith('npc-') ? 'event' as const : 'challenge' as const;
+    const lead = route === 'battle' ? `Beat ${a.name} in a boss battle during a run. Or: ` : route === 'event' ? `Help ${a.name} when you meet them in a run event. Or: ` : '';
+    return { ...own, unlockCost: 0, unlockRoute: route, unlockText: lead && own.unlockText ? `${lead}${own.unlockText}` : own.unlockText };
   });
   const achievements = parse(z.array(AchievementSchema), raw.achievements, 'achievements.json', problems);
   const quests = parse(TrainerQuestsFileSchema, raw.trainerQuests, 'trainerQuests.json', problems);
@@ -391,7 +451,8 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const learnables = parse(z.record(z.string(), z.object({ egg: z.array(z.string()), other: z.array(z.string()) })), raw.learnables, 'learnables.json', problems);
   const trainers = parse(z.array(TrainerClassSchema), raw.trainers, 'trainers.json', problems);
   const bossProfiles = parse(z.array(BossProfileSchema), raw.bosses, 'bosses.json', problems);
-  const bossTeams = parse(BossTeamsFileSchema, raw.bossTeams, 'bossTeams.json', problems);
+  const swapped = applyTeamSwaps(raw.bossTeams, raw.evilTeams, raw.jetTeamSwaps);
+  const bossTeams = parse(BossTeamsFileSchema, swapped.bossTeams, 'bossTeams.json', problems);
   const regions = parse(z.array(RegionSchema), raw.regions, 'regions.json', problems);
   const themes = parse(ThemesFileSchema, raw.themes, 'themes.json', problems);
   const shop = parse(z.array(ShopEntrySchema), raw.shop, 'shop.json', problems);
@@ -402,16 +463,20 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const baseRaids = parse(RaidFileSchema, raw.raids, 'raids.json', problems);
   const baseTotems = parse(TotemFileSchema, raw.totems, 'totems.json', problems);
   const shadowWorld = parse(ShadowWorldFileSchema, raw.shadowWorld, 'shadowWorld.json', problems);
-  const evilTeams = parse(EvilFileSchema, raw.evilTeams, 'evilTeams.json', problems);
+  const evilTeams = parse(EvilFileSchema, swapped.evilTeams, 'evilTeams.json', problems);
   // Evil Team storyline and operation stops are expanded from templates into ordinary events (core/evil/content.ts).
   const w5Events = [...((raw.eventsW5 as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsHelpers as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsWeather as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMysteries as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsTraining as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonKanto as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonFuchsia as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsCanonSaffron as { events?: unknown[] } | undefined)?.events ?? []), ...(((raw.itemCatalog as unknown[] | undefined) ?? []).length > 0 ? (raw.eventsCanonVermilion as { events?: unknown[] } | undefined)?.events ?? [] : [])];
   const storyEvents = [...((raw.eventsStory as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsFaces as { events?: unknown[] } | undefined)?.events ?? [])];
   const gamesEvents = [...((raw.eventsGames as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRK as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsVillain as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsMerchants as { events?: unknown[] } | undefined)?.events ?? []), ...((raw.eventsRB as { events?: unknown[] } | undefined)?.events ?? [])];
   // An event in src/data/events/*.json replaces any older event with the same id (Beta 0.6 revisions of the pack's REVISE/MERGE events).
-  const extraFiles = (raw.eventsExtra ?? []) as { events?: unknown[]; override?: boolean }[];
+  const extraFiles = (raw.eventsExtra ?? []) as { events?: unknown[]; override?: boolean; catalogOverhaul?: string; remove?: string[] }[];
   // A file marked `"override": true` (hazards.json) also wins over other auto-loaded files.
   const winners = new Set(extraFiles.filter((f) => f.override).flatMap((f) => (f.events ?? []).map((e) => (e as { id?: string }).id)));
-  const extraEvents = extraFiles.flatMap((file) => (file.events ?? []).filter((e) => file.override || !winners.has((e as { id?: string }).id)));
+  // Catalog Overhaul Pack files (co-*.json, built by tools/build-co-events.ts) win over every other file, override or not.
+  const coIds = new Set(extraFiles.filter((f) => f.catalogOverhaul).flatMap((f) => (f.events ?? []).map((e) => (e as { id?: string }).id)));
+  // Old events the pack merged, scrapped or turned into a rule: kept (a saved run may stand on one) but never drawn again.
+  const retired = new Set(extraFiles.filter((f) => f.catalogOverhaul).flatMap((f) => f.remove ?? []).filter((id) => !coIds.has(id)));
+  const extraEvents = extraFiles.flatMap((file) => (file.events ?? []).filter((e) => (file.catalogOverhaul ? true : !coIds.has((e as { id?: string }).id) && (file.override || !winners.has((e as { id?: string }).id)))));
   const extraIds = new Set(extraEvents.map((e) => (e as { id?: string }).id));
   gamesEvents.push(...extraEvents);
   // Overhaul slice 23: the pack's event chains become map events (core/overhaul/chains.ts).
@@ -426,7 +491,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   if (balance?.overhaulChains.enabled) gamesEvents.push(...chainEvents(((raw.itemCatalog as { id: string; family: string; rarity: string; status: string }[] | undefined) ?? []), balance.overhaulChains).events);
   if (balance?.mythicalChains.enabled) gamesEvents.push(...mythicalChainEvents(balance.mythicalChains));
   const extraSet = new Set<unknown>(extraEvents);
-  const replaced = (list: unknown[]): unknown[] => list.filter((e) => extraSet.has(e) || !extraIds.has((e as { id?: string }).id));
+  const replaced = (list: unknown[]): unknown[] => list.filter((e) => extraSet.has(e) || !extraIds.has((e as { id?: string }).id)).map((e) => (retired.has((e as { id: string }).id) ? { ...(e as object), disabled: true } : e));
   const eventsFile = parse(EventsFileSchema, evilTeams ? { events: replaced([...(raw.events as { events: unknown[] }).events, ...expandEvilEvents(evilTeams), ...w5Events, ...storyEvents, ...gamesEvents]) } : { events: replaced([...(raw.events as { events: unknown[] }).events, ...w5Events, ...storyEvents, ...gamesEvents]) }, 'events.json', problems);
   const baseExpeditions = parse(ExpeditionFileSchema, raw.expeditions, 'expeditions.json', problems);
   const legend = parse(LegendaryFileSchema, raw.legendaryEvents, 'legendaryEvents.json', problems);
@@ -473,6 +538,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     assetCredits: parse(AssetCreditsSchema, raw.assetCredits ?? assetCredits, 'assetCredits.json', problems) ?? { sections: [] },
     raids,
     events: toMap(eventsFile.events, 'events.json', problems),
+    coPlacement: readCoPlacement(raw.coPlacement ?? [], new Set(eventsFile.events.map((e) => e.id)), problems),
     totems,
     shadowWorld,
     evilTeams,
@@ -774,14 +840,23 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
   const knownItem = (id: string) => content.items.has(id) || content.catalog.has(id);
   for (const e of content.events.values()) {
     const where = `event "${e.id}"`;
-    const effects = e.choices.flatMap((c) => [c.success, ...(c.failure ? [c.failure] : [])]).flatMap((o) => [...o.effects, ...(o.battle?.win ?? [])]);
+    const effects = e.choices.flatMap((c) => [c.success, ...(c.failure ? [c.failure] : [])]).flatMap((o) => [...o.effects, ...(o.battle?.win ?? [])]).concat(e.choices.flatMap((c) => c.branches.flatMap((b) => b.effects)));
     for (const f of effects) {
       if (f.kind === 'item' && !knownItem(f.id)) problems.push(`${where} gives unknown item "${f.id}"`);
       if (f.kind === 'loseItem' && f.id && !knownItem(f.id)) problems.push(`${where} uses unknown item "${f.id}"`);
+      if (f.kind === 'loseItem' && f.from) for (const id of f.from) if (!knownItem(id)) problems.push(`${where} uses unknown item "${id}"`);
       if (f.kind === 'itemFrom') for (const id of f.ids) if (!knownItem(id)) problems.push(`${where} gives unknown item "${id}"`);
       if (f.kind === 'recruit' && !content.archetypes.has(f.trainer)) problems.push(`${where} recruits unknown trainer "${f.trainer}"`);
-      if (f.kind === 'join') for (const id of f.species) if (!content.species.has(id)) problems.push(`${where} offers unknown species "${id}"`);
-      if (f.kind === 'addEvent' && !content.events.has(f.eventId)) problems.push(`${where} opens unknown event "${f.eventId}"`);
+      // A `@name` is a Greenneedle story Pokémon, cast during the run (core/greenneedle `cast`).
+      if (f.kind === 'join') for (const id of f.species) if (!id.startsWith('@') && !content.species.has(id)) problems.push(`${where} offers unknown species "${id}"`);
+      // A room id may name the region's Evil Team (`evil-{teamId}-hideout-boss`): it must exist for every team that can run a region's story.
+      // Volume III: `{region}` is filled in play (an Offer per region); at least one region's room must exist.
+      if (f.kind === 'addEvent' && f.eventId.includes('{region}')) {
+        const [head, tail] = f.eventId.split('{region}') as [string, string];
+        if (![...content.events.keys()].some((id) => id.startsWith(head) && id.endsWith(tail) && id.length > head.length + tail.length)) problems.push(`${where} opens unknown event "${f.eventId}"`);
+        continue;
+      }
+      if (f.kind === 'addEvent') for (const id of f.eventId.includes('{teamId}') ? content.evilTeams.teams.filter((t) => !t.roaming).map((t) => f.eventId.replaceAll('{teamId}', t.id)) : [f.eventId]) if (!content.events.has(id)) problems.push(`${where} opens unknown event "${id}"`);
       if (f.kind === 'addEventFrom') for (const id of f.ids) if (!content.events.has(id)) problems.push(`${where} opens unknown event "${id}"`);
     }
     for (const r of [...e.requires, ...e.secret, ...e.choices.flatMap((c) => c.requires)]) {
@@ -790,11 +865,14 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
     for (const c of e.choices) {
       for (const o of [c.success, c.failure]) {
         const b = o?.battle;
-        if (b?.kind === 'wild') for (const id of b.species) if (!content.species.has(id)) problems.push(`${where} battles unknown species "${id}"`);
+        if (b?.kind === 'wild') for (const id of b.species) if (!id.startsWith('@') && !content.species.has(id)) problems.push(`${where} battles unknown species "${id}"`);
         if (b?.kind === 'trainer' && b.bossId && !content.bosses.has(b.bossId)) problems.push(`${where} battles unknown boss "${b.bossId}"`);
         if (b?.kind === 'trainer' && b.classId && !content.trainers.has(b.classId)) problems.push(`${where} battles unknown trainer class "${b.classId}"`);
       }
-      for (const r of [...c.requires, ...e.requires]) if (r.kind === 'item' && !knownItem(r.id)) problems.push(`${where} needs unknown item "${r.id}"`);
+      for (const r of [...c.requires, ...e.requires]) {
+        if (r.kind === 'item' && !knownItem(r.id)) problems.push(`${where} needs unknown item "${r.id}"`);
+        if (r.kind === 'itemAny') for (const id of r.ids) if (!knownItem(id)) problems.push(`${where} needs unknown item "${id}"`);
+      }
     }
     if (e.keyItem && !knownItem(e.keyItem)) problems.push(`${where} needs unknown key item "${e.keyItem}"`);
     if (e.scene.pokemon && !content.species.has(e.scene.pokemon)) problems.push(`${where} shows unknown species "${e.scene.pokemon}"`);

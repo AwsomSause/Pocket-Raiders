@@ -1,0 +1,202 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-30-street",
+   "name": "The Cheer Squad",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cheer-on",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#c9a45c",
+    "effect": "none"
+   },
+   "intro": "*A street battle is ending. Two small Pokémon wave pom-poms made of leaves, and they were waving them for both sides.*\n\nA Plusle and a Minun. Plusle shouts for the trainer on the left. Minun shouts, just as loudly, for the trainer on the right. Neither one minds.\n\n*The battle ends. They look around for the next one. Then they see the belt at your hip.*",
+   "choices": [
+    {
+     "label": "Let them come along.",
+     "success": {
+      "text": "They fall in beside you before you can answer, one at each knee, pom-poms up.\n\n*From now to the end of the stage, they cheer from the sideline in every battle. Plusle cheers: your Pokémon hits harder. Minun cheers: it stands firmer.*\n\nBetween battles, they argue in squeaks about which of them mattered more. Neither one wins.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "cheer-on"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cheer-over",
+        "n": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-30-end",
+   "name": "The Cheer Squad: Whose Was It?",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "cheer-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "cheer-over",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "sameStage",
+     "key": "cheer-on"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#c9a45c",
+    "effect": "none"
+   },
+   "intro": "*The road is ending, and so is the stage. Plusle and Minun have stopped arguing. It is worse than the arguing.*\n\nEach, separately, tugs your sleeve. Plusle on the left. Minun on the right. Both are looking at you, very hard, waiting to be told.\n\nYou think about every battle. Every cheer. Every time your Pokémon looked back at the sideline and found something there.",
+   "choices": [
+    {
+     "label": "\"It was you, Plusle.\"",
+     "success": {
+      "text": "Plusle squeaks so loudly that a Pidgey leaves the tree. Minun goes quiet and looks at its leaves.\n\nPlusle joins you. Minun waves from the road, then turns back toward the next street. It will cheer for someone else, next time. Maybe the rival.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "cheerJoin",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cheer-split",
+        "n": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It was you, Minun.\"",
+     "success": {
+      "text": "Minun holds its pom-poms to its chest, shaking. Plusle looks at the sky, trying to look like it did not care.\n\nMinun joins you. Plusle waves from the road, and turns back toward the next street. It will cheer for someone else, next time. Maybe the rival.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "cheerJoin",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cheer-split",
+        "n": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It was both of you.\"",
+     "success": {
+      "text": "They stare at each other. Then they argue about it, at length, in squeaks, all the way up the road.\n\nBoth join you. Still arguing. You would not have it any other way.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "cheerJoin",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cheer-both",
+        "n": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "A Plusle and a Minun joined, arguing the whole way.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It only worked because there were two.\"",
+     "success": {
+      "text": "The argument stops. It is the first silence either of them has ever kept. Plusle takes Minun's paw, and Minun lets it.\n\nBoth join you. They do not argue again for a full day, which, for them, is a world record.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "cheerJoin",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "cheer-truth",
+        "n": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "\"It only worked because there were two.\" They did not argue for a full day.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

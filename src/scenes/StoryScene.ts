@@ -9,6 +9,12 @@ import { playStorySfx } from '../ui/audio';
 import { onInputAction, type InputAction } from '../ui/input';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import { sceneForRun } from './routing';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { talkView } from '../ui/redux/screens/talk';
+import { playerPortrait } from '../ui/redux/templates';
+
+/** New UI: the backdrop behind a story scene (the mock-up's mountain lake). */
+const RX_PLACE = 'packs/memories/eventbg/mountain.png';
 
 export class StoryScene extends Phaser.Scene {
   private view!: View;
@@ -20,6 +26,8 @@ export class StoryScene extends Phaser.Scene {
   private hint!: Phaser.GameObjects.Text;
   private rows: Phaser.GameObjects.Text[] = [];
   private done = false;
+  /** New UI: the mock-ups' talk page over the canvas. */
+  private rx: ReduxView | null = null;
 
   constructor() {
     super('Story');
@@ -45,6 +53,43 @@ export class StoryScene extends Phaser.Scene {
     this.speaker = this.add.text(70, GAME_HEIGHT - 250, '', textStyle(24, '#ffb745')).setName('story-speaker');
     this.body = this.add.text(70, GAME_HEIGHT - 215, '', textStyle(24, COLORS.text, { wordWrap: { width: GAME_WIDTH - 140 } })).setName('story-body');
     this.hint = this.add.text(GAME_WIDTH - 70, GAME_HEIGHT - 55, '', textStyle(18, '#a8a0b0')).setOrigin(1, 0.5);
+    this.rx = null;
+    if (reduxOn()) {
+      // New UI: the mock-ups' story scene is the talk page: the player on the left, the kicker and the page count on
+      // the tag ("An Echo 2/4"), the speaker on the name plate, the choices at the side once the last line is up.
+      const look = session.run?.story?.v2?.protagonist?.look === 'look_b' ? 'b' : 'a';
+      this.rx = mountRedux(this, {
+        render: (c) => {
+          const n = Math.max(1, view.lines.length), at = Math.min(this.page, n - 1), line = view.lines[at], last = at >= n - 1;
+          return talkView(c, {
+            name: view.kicker,
+            tag: n > 1 ? `${view.kicker} ${at + 1}/${n}` : view.kicker,
+            lines: [{ who: line?.speaker ?? null, text: line?.text ?? '' }],
+            speaker: line?.speaker ?? null,
+            // The tag counts the lines; the box's own page mark shows only while more lines wait (it hides the choices).
+            page: last ? { at: 0, of: 1 } : { at, of: n },
+            art: RX_PLACE, tint: null, fx: null, cast: playerPortrait(look), mon: null,
+            choices: view.choices.length ? view.choices.map((x) => ({ label: x.text, sub: '', chance: '', locked: false })) : [{ label: 'Continue', sub: '', chance: '', locked: false }],
+            index: view.choices.length ? this.choice : 0,
+            money: null, outcome: null, pick: null, countdown: '', timer: null,
+          });
+        },
+        acts: {
+          page: () => this.handle('confirm'),
+          pick: (k) => {
+            if (view.choices.length) this.choice = Math.max(0, Math.min(view.choices.length - 1, Number(k)));
+            this.handle('confirm');
+          },
+        },
+        overs: {
+          over: (k) => {
+            if (!view.choices.length || this.choice === Number(k) || this.page < view.lines.length - 1) return;
+            this.choice = Number(k);
+            this.show();
+          },
+        },
+      });
+    }
     this.show();
     onInputAction(this, (a) => this.handle(a));
     this.input.on('pointerdown', () => this.handle('confirm'));
@@ -67,6 +112,7 @@ export class StoryScene extends Phaser.Scene {
       this.body.setY(GAME_HEIGHT - 235);
       this.body.setFontSize(20);
     }
+    this.rx?.refresh();
   }
 
   private handle(action: InputAction): void {

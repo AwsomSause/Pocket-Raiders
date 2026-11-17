@@ -1,0 +1,19 @@
+{
+ "merged": {
+  "world-disaster-flood": "crisis-report-flood",
+  "rk-third-wheel": "companion-meet",
+  "mr-vanished-village": "ghost-town-gate",
+  "sanctuary-found": "wanderer-arrives",
+  "sanctuary-guardian": "blessing-trial",
+  "blissful-encounter": "hurt-wanderer",
+  "blissful-awakening": "legendary-blessing",
+  "ovc-treasure-map-s1": "th-map-3",
+  "ovc-treasure-map-s2": "th-map-4",
+  "mr-spirit-guide": "fog-guide",
+  "dg-treasure-dig-a": "th-dig-a",
+  "dg-treasure-dig-b": "th-dig-b",
+  "dg-treasure-dig-c": "th-dig-c"
+ },
+ "rule": {},
+ "scrapped": []
+}

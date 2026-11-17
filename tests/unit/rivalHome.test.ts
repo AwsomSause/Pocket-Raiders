@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { buildContent } from '../../src/data';
-import { planFirstRival } from '../../src/core/encounters';
+import { planFirstRival, rivalNamesExcluded } from '../../src/core/encounters';
 import { homeStarters, signatureOf } from '../../src/core/rivals/home';
-import { canonPlan } from '../../src/core/rivals/major';
+import { canonPlan, rivalBossFor } from '../../src/core/rivals/major';
 import { familyId } from '../../src/core/mastery';
 import { maybeSpark } from '../../src/core/rivals/manager';
 import { RIVAL_CONFIG } from '../../src/core/rivals/schema';
@@ -55,5 +55,23 @@ describe('a run keeps four live rivals', () => {
     const input = { where: { region: 0, stage: 0 }, classId: 'youngster', name: 'Joey', team: ['rattata'], ended: { id: 'e1' }, hpLeftShare: 1, turns: 9, flawless: false, returning: false } as never;
     const rival = maybeSpark(run, input);
     expect(rival?.name).toBe('Joey');
+  });
+});
+
+describe('Beta rival pool additions: 15 new named rivals', () => {
+  const added = ['Red', 'Manga Red', 'Ethan', 'Manga Gold', 'Dawn', 'Lucas', 'Hilbert', 'Rosa', 'Serena', 'Marnie', 'Tracey Sketchit', 'Alain', 'Kris', 'Lyra', 'Green'];
+  it('are in the rival class; all but Tracey Sketchit (no art yet) have a sprite', () => {
+    for (const n of added) {
+      expect(names, n).toContain(n);
+      if (n !== 'Tracey Sketchit') expect(rivalBossFor(content, n), n).toBeTruthy();
+    }
+  });
+  it('a player who is Red, Kris or Lyra never meets that rival', () => {
+    for (const [arch, banned] of [['red', ['Red', 'Manga Red']], ['kris', ['Kris']], ['lyra', ['Lyra']], ['green', ['Green']]] as const) {
+      const ex = rivalNamesExcluded(content, arch);
+      expect(ex).toEqual([...banned]);
+      for (let i = 0; i < 300; i++) expect(banned).not.toContain(planFirstRival(content, `ex${i}`, undefined, ex).name);
+    }
+    expect(rivalNamesExcluded(content, 'blue')).toEqual([]);
   });
 });

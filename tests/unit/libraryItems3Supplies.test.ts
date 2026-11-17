@@ -37,11 +37,12 @@ describe('Item uses C (supplies)', () => {
       const out = chooseEvent(content, run, 'pw', 0).run;
       expect(out.passives?.[`${c}-canari-pal-1`]).toBeUndefined();
       expect(out.passives?.[`${c}-canari-pal-2`]).toBe(1);
-      expect(out.money).toBe(500);
+      // The Catalog Overhaul pack's Plush Workshop (SF145): "Sew it up a level (₽100)."
+      expect(out.money).toBe(900);
       const poor = atWorkshop(c);
       poor.passives = { [`${c}-canari-pal-2`]: 1 };
-      poor.money = 100;
-      expect(() => chooseEvent(content, poor, 'pw', 1)).toThrow();
+      poor.money = 50;
+      expect(() => chooseEvent(content, poor, 'pw', 0)).toThrow();
       expect(() => chooseEvent(content, atWorkshop(c), 'pw', 0)).toThrow();
     }
   });

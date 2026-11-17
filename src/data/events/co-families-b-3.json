@@ -1,0 +1,2890 @@
+{
+ "catalogOverhaul": "families-b",
+ "override": true,
+ "remove": [
+  "ovc-snow-fox-trail-s1",
+  "ovc-snow-fox-trail-s2",
+  "ovc-snow-fox-trail-s3",
+  "ovc-sunken-bell-s1",
+  "ovc-sunken-bell-s2",
+  "ovc-sunken-bell-s3"
+ ],
+ "events": [
+  {
+   "id": "ovc-tide-lock-s1",
+   "name": "The Sunken City: The Tide Lock",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "city-b1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": false,
+   "room": false,
+   "minStage": 1,
+   "intro": "A sea cave that only opens at low tide. A shellfisher straightens up from her rake as you pass, and points at the black mouth of it with her chin. \"You've got an hour. Then the sea comes back.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "Wet stone, then dry stone, then carved stone. At the back of the cave is a door cut by hands, with a hole in the middle shaped exactly like a bell. Water drips. Somewhere, the sea is already turning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait for next low tide.",
+     "success": {
+      "text": "You sit on the rocks with the shellfisher and watch the sea swallow the cave mouth. \"It'll open again,\" she says. \"It always does. A stage or so.\" She goes back to raking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-wait",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what's inside.",
+     "success": {
+      "text": "Shellfisher: \"My granny said a city. Under the bay. The cave's its front door.\" She smiles. \"She said a lot of things.\" You go in. At the back, a carved door, and a hole in it shaped like a bell.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-granny",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-b1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fb-city-low-tide",
+   "name": "The Sunken City: Low Tide Again",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "city-wait",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "city-on",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "room": false,
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#1c3040",
+    "effect": "none"
+   },
+   "intro": "A stage later, the same cave, the same hour of low water. The shellfisher is still raking. She lifts a hand when she sees you. \"Told you. It always opens.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "Wet stone, then carved stone. At the back is a door cut by hands, with a hole in the middle shaped exactly like a bell.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-on",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what's inside.",
+     "success": {
+      "text": "Shellfisher: \"My granny said a city. Under the bay. The cave's its front door.\" You go in. At the back, a carved door, and a hole in it shaped like a bell.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-granny",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-tide-lock-s2",
+   "name": "The Sunken City: The Chamber",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "city-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "city-b2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#14283a",
+    "effect": "fog"
+   },
+   "room": false,
+   "intro": "Past the bell-shaped door: a chamber, and a mural that covers every wall. A city. A bell tower. A wave as tall as the tower. Tiny painted people pull the bell rope with all their strength to warn the city. Nobody in the painted streets is looking up.",
+   "choices": [
+    {
+     "label": "Look for the bell.",
+     "success": {
+      "text": "You search every corner of the chamber with your light. Rope fixings, a cracked beam, the round mark on the floor where something heavy once stood. It isn't here. It was carried away, or it fell.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-looked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Copy the mural.",
+     "success": {
+      "text": "You copy it line by line onto the back of a map while the water rises around your boots. In the corner of the painting, half rubbed away, the tower stands in the bay: an X where the bell should be.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-sketch",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-b2",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You copied the mural of the Sunken City. Your sketch shows where its bell lies.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave before the tide.",
+     "success": {
+      "text": "The first cold water touches your ankles. You do not argue with it. You are out on the sand before the cave mouth closes, and safe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-b2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "granny",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "city-granny",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "A city under the bay. The shellfisher's granny said a lot of things. This one was true.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-tide-lock-s3",
+   "name": "The Sunken City: The Bell Under the Water",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "city-b2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "city-b3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "partyType",
+     "type": "water"
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#0c2034",
+    "effect": "float"
+   },
+   "room": false,
+   "intro": "The tide is coming in hard. And under the rushing water, somewhere off shore, a bell is ringing. Your Water-type takes you down to it: the drowned tower, still standing in the dark of the bay. The bell hangs in it, swinging by itself, ringing a warning to a city that has been gone for a thousand years.",
+   "choices": [
+    {
+     "label": "Ring it once more.",
+     "success": {
+      "text": "You take the rope. You ring it the way the painted people did, with all your strength, for all of them. Something answers from the deep: a shoal of Relicanth rises around the tower, older than the city, and circles it once in silence.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-rang",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-b3",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "blessing-kyogre",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You take the rope. You ring it the way the painted people did, with all your strength, for all of them. Something answers from the deep: a shoal of Relicanth rises around the tower. Far below them, something vast and blue turns over in its sleep.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "city-rang",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-kyogre",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "city-b3",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Bring it up.",
+     "success": {
+      "text": "It takes two of you and most of an afternoon. The bell comes up out of the bay streaming water and weed, and goes into the hub, where it hangs quiet. They say it rings when a tear opens in the sky of this region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-bell",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-b3",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You raised the bell of the Sunken City. It hangs in the hub and rings when a tear opens in the sky.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stop it ringing.",
+     "success": {
+      "text": "You catch the bell and hold it until it is still. The sea goes quiet. On the shore, the shellfisher is waiting. \"My granny always said that bell kept her up,\" she says, and laughs, and wipes her eyes. \"Thank you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "city-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "city-b3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "vale",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "vale-freed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You know this story. A town that called a warning and nobody listened: the Hollow Vale. The shellfisher's granny was from the Vale.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "sketch",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "city-sketch",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your sketch of the mural shows the X. You swim straight to it.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-singing-whale-s1",
+   "name": "Whale Song",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#24304a",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "whale-b1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "evening",
+      "night"
+     ]
+    }
+   ],
+   "callback": false,
+   "room": false,
+   "minStage": 1,
+   "intro": "Dusk over the bay. A song comes across the water, so low you feel it in your ribs before you hear it. The ferryman ties off his boat. \"It sings to the moon. Every full moon for thirty years.\"",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You sit on the jetty until the moon is high. Your Water-types sit with you, very still, as if the song were in a language they half remember. Nobody wants to leave.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "water"
+         ],
+         "every": true
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "whale-listened",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sing back.",
+     "requires": [
+      {
+       "kind": "partyMoveFlag",
+       "flag": "sound"
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon lifts its voice across the bay. The song stops. Then, very close, the sea bulges, and something enormous comes up to see who answered.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Row out.",
+     "success": {
+      "text": "The ferryman rows you out without a word. In the middle of the bay he ships the oars. The water beside the boat rises like a hill.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-b1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-singing-whale-s2",
+   "name": "Whale Song: The Surfacing",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "whale-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "whale-b2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wailord",
+    "tint": "#1c2c44",
+    "effect": "float"
+   },
+   "room": false,
+   "intro": "A Wailord, so close you could touch it, so big the boat sits in its shadow. Its hide is a map of old scars. It rolls, slowly, and looks at you with one dark eye.",
+   "choices": [
+    {
+     "label": "Touch it.",
+     "success": {
+      "text": "You lay your hand flat on its side. It is warm. It sighs, a long sound that shakes the boat, and a spout of warm water rains down over all of you. The ferryman laughs like a boy.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-touched",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You do nothing. Neither does it. Then it sings again, right beside you, louder than before, and the whole bay hums with it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask why it sings.",
+     "success": {
+      "text": "Ferryman, quietly: \"Lost its calf in a storm. Thirty years back. It's been singing for it every full moon since.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-why",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-b2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pod",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "whale-pod",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You called the pod up the river once, for a Wailmer that had never seen its own kind. This scarred one was in it. It is that calf, grown.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-singing-whale-s3",
+   "name": "Whale Song: The Gift",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "types": [
+    "water"
+   ],
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "whale-b2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "whale-b3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "wailmer",
+    "tint": "#24304a",
+    "effect": "float"
+   },
+   "room": false,
+   "intro": "The great whale dives. Where it was, something small bobs up, round and curious, and bumps the side of the boat: a Wailmer. It looks at you, then down at the dark water, then at you again.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It rolls into the boat, nearly sinking it. The ferryman bails, grinning. Somewhere below, the song changes, softer, the way a parent sounds when a child goes off to see the world.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "wailmer"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-took",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-b3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go back.",
+     "success": {
+      "text": "You push it gently away from the boat. It dives after the Wailord. A moment later there are two voices under the bay, singing together, one very deep and one very new.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-back",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-b3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch them swim off together, side by side, out past the headland. The song comes back on the wind, different now. It does not sound like grief any more.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "whale-watched",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "whale-b3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "why",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "whale-why",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Thirty years of singing for one calf. And now, in the water beside the boat, a small one.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-stone-giant-s1",
+   "name": "The Stone Giant",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a3a2a",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "giant-b1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": false,
+   "room": false,
+   "minStage": 1,
+   "types": [
+    "ground",
+    "ghost"
+   ],
+   "intro": "On the hill above the village lies a rock formation shaped exactly like a giant asleep. A shepherd waves from its knee. \"We picnic on its belly. It's never minded.\"",
+   "choices": [
+    {
+     "label": "Climb on it.",
+     "success": {
+      "text": "You climb up onto the great stone chest. Under your boots, very slowly, the whole hill shifts.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giant-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Knock on it.",
+     "success": {
+      "text": "You knock, three times, on a mossy stone the size of a door. Up on the hilltop, a boulder that is not a boulder slides open. An eye looks at you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giant-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-knocked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the giant to its sleep and the shepherd to his picnic. Some hills should stay hills.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-stone-giant-s2",
+   "name": "The Stone Giant Speaks",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "giant-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "giant-b2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "golurk",
+    "tint": "#3a3a2a",
+    "effect": "shake"
+   },
+   "room": false,
+   "types": [
+    "ground",
+    "ghost"
+   ],
+   "intro": "The giant is a Golurk, older than the village, covered in moss and a hundred years of picnic crumbs. It rumbles. The ground answers. The shepherd nearly faints into his sheep.",
+   "choices": [
+    {
+     "label": "Battle it.",
+     "success": {
+      "text": "It rises, shedding turf, until it blocks out the sun. It is slow. It is enormous. It does not know how to lose.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "golurk"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "giant-fought",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "giant-b2",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Apologise.",
+     "success": {
+      "text": "You tell it you are sorry for waking it. It looks at you for a long time. Then the great eye closes. It will sleep a hundred more years, and the shepherd will picnic on it the whole time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giant-sorry",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit and wait.",
+     "success": {
+      "text": "You sit down in the grass. The giant sits up, very slowly, and looks out at the valley: the village, the river, the roads that were not there last time it looked. It lies back down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giant-waited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-b2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-stone-giant-s3",
+   "name": "The Stone Giant: The Gem",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "giant-b2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "giant-b3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "golurk",
+    "tint": "#3a3a2a",
+    "effect": "glint"
+   },
+   "room": false,
+   "types": [
+    "ground",
+    "ghost"
+   ],
+   "intro": "When you pass the hill again, there is something lying in the grass at the giant's side, where its chest meets the ground. A stone from its heart, glowing faintly. Whatever you chose, it dropped this for you.",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "It is heavy and warm, like a stone that has been in the sun all day. It will be for a long time.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "rock-gem",
+         "moon-stone"
+        ],
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-gem",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-b3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back.",
+     "success": {
+      "text": "You set it back where it came from, against the giant's chest. Deep in the hill, something rumbles. It sounds like thanks.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "giant-returned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "giant-b3",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "blessing-regi",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "You set it back against the giant's chest. Deep in the hill, something rumbles, and far away, something older answers: the rumble of ancient stone that was made, like this one, to keep a promise.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "giant-returned",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "sign-regi",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "giant-b3",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ovc-glass-forest-s1",
+   "name": "The Glass Forest",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#2a3a44",
+    "effect": "sparkle"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "glass-b1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": false,
+   "room": false,
+   "minStage": 1,
+   "types": [
+    "rock",
+    "fairy"
+   ],
+   "intro": "Trees that chime like glass in the wind. Each trunk is crystal, each leaf a sliver of light. Something too clear to see moves between them: you only know it is there by how the light bends.",
+   "choices": [
+    {
+     "label": "Walk carefully.",
+     "success": {
+      "text": "You walk through on the soft moss, touching nothing. The forest lets you pass, chiming quietly all around you. Behind you, the clear one watches you go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ring the trees.",
+     "success": {
+      "text": "You tap a trunk. Then another. A tune runs through the forest, tree to tree. The clear one stops, delighted, and comes out to see who is playing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "glass-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow the clear one.",
+     "success": {
+      "text": "You follow the bending light deep into the forest. It knows. It lets you. In a clearing it stops, and turns, and you see it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "glass-b1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-glass-forest-s2",
+   "name": "The Glass Forest: The Glass Pokémon",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "glass-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "glass-b2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "carbink",
+    "tint": "#2a3a44",
+    "effect": "sparkle"
+   },
+   "room": false,
+   "types": [
+    "rock",
+    "fairy"
+   ],
+   "intro": "A Carbink, clear as water, standing in a ring of crystal trees. Light passes straight through it and comes out the other side in colours.",
+   "choices": [
+    {
+     "label": "Catch it.",
+     "success": {
+      "text": "It does not run. It turns once in the light, as if to show you its best side, and lets the Ball take it.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "carbink"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "glass-caught",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "glass-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch it.",
+     "success": {
+      "text": "You sit and watch. It begins to sing, a thin bright sound, and every tree in the forest answers it, note for note, until the air itself is ringing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-watched",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "glass-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer a gem.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "rock-gem",
+        "ground-gem",
+        "fire-gem",
+        "water-gem",
+        "electric-gem",
+        "ice-gem",
+        "fairy-gem",
+        "steel-gem"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You hold out a gem from your bag. The clear one takes it in its tiny hands, turns it to the light, and presses it into the earth. A crystal sapling rises from the spot while you watch, and starts to chime.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "rock-gem",
+         "ground-gem",
+         "fire-gem",
+         "water-gem",
+         "electric-gem",
+         "ice-gem",
+         "fairy-gem",
+         "steel-gem"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "glass-gave",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "glass-b2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "diancie",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "promise-kept-diancie",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A Diancie, clear as water, standing in a ring of crystal trees. You kept your promise to her. A Carbink hovers at her side, and the light passes through both of them in colours.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-glass-forest-s3",
+   "name": "The Glass Forest: Shards Remain",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "glass-b2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "glass-b3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a34",
+    "effect": "sparkle"
+   },
+   "room": false,
+   "types": [
+    "rock",
+    "fairy"
+   ],
+   "intro": "As you leave, the forest behind you shatters softly, tree by tree, the way it does every night. It is not sad. By morning it will have grown back. The path at your feet glitters with shards.",
+   "choices": [
+    {
+     "label": "Take a shard.",
+     "success": {
+      "text": "You pick up one shard, still faintly warm. In your hand it turns from glass to clay, soft and grey, still holding the light inside it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "light-clay",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "glass-shard",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "glass-b3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave them.",
+     "success": {
+      "text": "You leave every shard where it fell. Behind you, before you are out of sight, the first new trees are already chiming. It grows back faster when nothing is taken.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "glass-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "glass-b3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "gave",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "glass-gave",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The sapling you watched grow is the only tree that does not break. It chimes after you all the way to the edge of the forest.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-quiet-shrine-keeper-s1",
+   "name": "The Fox at the Shrine",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#3a4658",
+    "effect": "snow"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-b1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": false,
+   "room": false,
+   "minStage": 1,
+   "types": [
+    "ice"
+   ],
+   "intro": "A snowy shrine on a hill. Its keeper, an old woman named Aiko, is on her knees in the drifts, searching with bare red hands. \"I've lost the key to the shrine. Three days now. The offerings are inside.\" Tiny tracks lead away through the snow.",
+   "choices": [
+    {
+     "label": "Follow the tracks.",
+     "success": {
+      "text": "Small, neat prints, four toes and a brush mark where a tail dragged. They wind away between the pines. You follow them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Help her search.",
+     "success": {
+      "text": "You search with her until your hands are as red as hers. Nothing. Then you notice the tracks again, circling the shrine, as if someone had been watching you both look. You follow them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-helped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pick the lock.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "dark",
+        "steel"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon has the old lock open in a moment. Aiko goes very quiet. \"That is not how this door is opened.\" She will not go in. The tracks lead away, and you follow them, feeling smaller.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-picked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-b1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-quiet-shrine-keeper-s2",
+   "name": "The Fox Shows Itself",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "fox-b2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "vulpix-alola",
+    "tint": "#3a4658",
+    "effect": "snow"
+   },
+   "room": false,
+   "types": [
+    "ice"
+   ],
+   "intro": "At the end of the tracks, sitting on a stone in the snow, an Alolan Vulpix, white as the drifts, with an iron key in its mouth. It has clearly been waiting. It looks very pleased with itself.",
+   "choices": [
+    {
+     "label": "Ask for the key.",
+     "success": {
+      "text": "You crouch and hold out your hand. It considers you, head on one side, for a long moment. Then it drops the key into your palm.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Chase it (a node).",
+     "success": {
+      "text": "It is off like a snowball down a hill. You chase it through the drifts until neither of you can breathe. It stops, flops down, and drops the key, tired and enormously happy.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-chased",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Offer a trade.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "oran-berry",
+        "sitrus-berry",
+        "lum-berry"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You hold out a Berry. It sniffs the Berry. It sniffs you. It sets the key down in the snow, very precisely, and takes the Berry in exchange, like a merchant.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "fox-traded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-b2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "red",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "kanto",
+        "johto"
+       ]
+      }
+     ],
+     "intro": "At the end of the tracks, sitting on a stone in the snow, a Vulpix, red as a coal against the drifts, with an iron key in its mouth. It has clearly been waiting. It looks very pleased with itself.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-quiet-shrine-keeper-s3",
+   "name": "The Fox at the Shrine: The Offering",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-b2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "fox-b3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a4658",
+    "effect": "snow"
+   },
+   "room": false,
+   "types": [
+    "ice"
+   ],
+   "intro": "Aiko opens the shrine with shaking hands. The offering inside is food for a fox. She has left it every winter for forty years. The Vulpix trots in and sits beside the bowl. \"It took the key so I'd come looking,\" Aiko says. \"It wanted to meet you.\"",
+   "choices": [
+    {
+     "label": "Let it come with me.",
+     "success": {
+      "text": "Aiko kneels and strokes its ears, once. \"Go on, then.\" It walks out of the shrine at your side, and only looks back once.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "vulpix-alola"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-b3",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "region",
+         "ids": [
+          "kanto",
+          "johto"
+         ]
+        }
+       ],
+       "text": "Aiko kneels and strokes its ears, once. \"Go on, then.\" It walks out of the shrine at your side, and only looks back once.",
+       "effects": [
+        {
+         "kind": "join",
+         "shadow": false,
+         "species": [
+          "vulpix"
+         ],
+         "types": [],
+         "levelBonus": 0,
+         "shinyMultiplier": 1
+        },
+        {
+         "kind": "flag",
+         "key": "fox-joined",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "fox-b3",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "label": "Leave it with Aiko.",
+     "success": {
+      "text": "You leave them together, the old woman and the fox, in the warm light of the shrine. As you go, small footprints follow you a little way, and then turn back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fox-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-b3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make the offering together.",
+     "success": {
+      "text": "You kneel with her and set out the food, bowl by bowl, the way she has done alone for forty years. The fox eats. Aiko cries a little. The shrine will keep a fire for travellers now.",
+      "effects": [
+       {
+        "kind": "addStop",
+        "stop": "heal"
+       },
+       {
+        "kind": "flag",
+        "key": "fox-together",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-b3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "picked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "fox-picked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Aiko does not look at the lock you opened. She looks at the fox instead, and her face softens anyway.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "fb-fox-gift",
+   "name": "The Fox at the Shrine: A Gift in the Snow",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "types": [
+    "ice"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "fox-b3",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "fox-joined",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "fox-gift",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "room": false,
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#3a4658",
+    "effect": "snow"
+   },
+   "intro": "Morning frost on your camp. On the stone by your bedroll, someone has left a gift: a shard of ice that does not melt in your hand. A line of small, neat prints leads away into the white.",
+   "choices": [
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "It stays cold all day, and all the next. You know exactly who brought it.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "never-melt-ice",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "fox-gift",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-midnight-circus-s1",
+   "name": "The Midnight Circus",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "scene": {
+    "cast": [],
+    "tint": "#2a1a3a",
+    "effect": "confetti"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circus-b1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "callback": false,
+   "room": false,
+   "minStage": 1,
+   "types": [
+    "psychic",
+    "dark"
+   ],
+   "intro": "A circus has gone up overnight in a field that was empty at sunset. Lanterns, a striped tent, music. A ringmaster in a tall hat spreads his arms. \"Come in, come in! One night only. Every night.\" The performers are all Pokémon. The trainers who should be with them are nowhere.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "The show is wonderful and strange. A Mr. Mime builds a staircase out of nothing and walks up it. A Delibird juggles seven presents and never drops one. A Mimikyu peeks out of a side tent and will not come further.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Where are the trainers?",
+     "success": {
+      "text": "The ringmaster's smile does not move. \"Gone. Years ago. The Pokémon keep the show going.\" He holds the tent flap open for you. You go in.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You walk on. When you look back from the next hill, the field is dark and empty, as if nothing had ever been there.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-midnight-circus-s2",
+   "name": "The Midnight Circus: Join an Act",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circus-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "circus-b2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1a3a",
+    "effect": "confetti"
+   },
+   "room": false,
+   "types": [
+    "psychic",
+    "dark"
+   ],
+   "intro": "The ringmaster, Lazlo, finds you between acts. \"Our tightrope walker's sick. Your Pokémon could fill in?\" Above you, the wire stretches across the tent, very high, very thin.",
+   "choices": [
+    {
+     "label": "Fill in.",
+     "prompt": {
+      "id": "brace-hold",
+      "needs": "good"
+     },
+     "pick": {},
+     "success": {
+      "text": "Your Pokémon steps onto the wire, wobbles, finds its feet, and walks the whole length to a roar from a hundred Pokémon in the stands. It comes down glowing.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "circus-act",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-b2",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your Pokémon steps onto the wire and wobbles all the way across, arms out, nearly falling twice. The crowd holds its breath, and when it makes it, cheers twice as loud.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "picked"
+       },
+       {
+        "kind": "flag",
+        "key": "circus-act",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Fill in myself.",
+     "success": {
+      "text": "You climb the ladder yourself. You walk the wire with your heart in your throat, step by step, not looking down. The crowd of Pokémon goes absolutely wild.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-walked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "Lazlo bows. \"Of course.\" The show goes on without a tightrope act, and it goes badly. The Delibird drops a present. Nobody laughs. Everyone tries very hard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-no",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-b2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-midnight-circus-s3",
+   "name": "The Midnight Circus: The Finale",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circus-b2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "circus-b3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "zoroark",
+    "tint": "#2a1a3a",
+    "effect": "confetti"
+   },
+   "room": false,
+   "types": [
+    "psychic",
+    "dark"
+   ],
+   "intro": "The finale. The Mimikyu comes out of its tent at last, into the middle of the ring. Lazlo kneels to welcome it, and for one moment his tall hat and smile flicker. Lazlo is a Pokémon too: a Zoroark, holding the whole circus together in his illusion.",
+   "choices": [
+    {
+     "label": "Thank him.",
+     "success": {
+      "text": "You thank him, for the show, for keeping it going, for all of them. He bows deep. By morning the field is empty again. The circus has moved on, down the road, ahead of you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-thanked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-b3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the illusion drop.",
+     "success": {
+      "text": "He lets it go. An empty field at dawn, and a dozen Pokémon blinking in the grey light, no lanterns, no tent. \"Find them homes,\" Lazlo says. \"Please.\" One stays with you. The rest walk to the nearest town.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "mr-mime",
+         "delibird"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-dropped",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-b3",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Midnight Circus was a Zoroark's illusion. You found its performers homes.",
+        "importance": 75
+       }
+      ]
+     }
+    },
+    {
+     "label": "Join the circus.",
+     "success": {
+      "text": "Not literally. Lazlo laughs, and puts his ringmaster's hat on your head, and the Mimikyu climbs into your arms and will not be put down.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "mimikyu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-hat",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-b3",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Lazlo the Zoroark gave you his ringmaster's hat.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "pierre",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "pierre-done",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the front row, an old juggler with a Mr. Mime on his knee is crying openly. Pierre. He knows a good act when he sees one.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "fb-circus-again",
+   "name": "The Midnight Circus Comes Back",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "types": [
+    "psychic",
+    "dark"
+   ],
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "circus-thanked",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "circus-again",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "callback": true,
+   "room": false,
+   "minStage": 1,
+   "scene": {
+    "cast": [],
+    "tint": "#2a1a3a",
+    "effect": "confetti"
+   },
+   "intro": "Lanterns in a field that was empty at sunset. The striped tent. The music. A ringmaster in a tall hat sees you coming and spreads his arms. \"Our friend! One night only. Every night. You have a seat in the front row.\"",
+   "choices": [
+    {
+     "label": "Watch the show.",
+     "success": {
+      "text": "You watch it all again from the front row. The Delibird juggles nine presents now. At the end, the Mimikyu waves to you from the middle of the ring.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "flag",
+        "key": "circus-again",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-mirror-lake-s1",
+   "name": "The Mirror Lake",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "none"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mirror-b1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": false,
+   "room": false,
+   "minStage": 1,
+   "types": [
+    "psychic",
+    "water"
+   ],
+   "intro": "A lake so still it looks solid. Your team is reflected in it, but wrong: six Pokémon you could have caught on this road and didn't, and a trainer who looks exactly like you, smiling a little too long.",
+   "choices": [
+    {
+     "label": "Look closer.",
+     "success": {
+      "text": "You lean over the water. The reflection leans up out of it, dry as paper, and steps onto the shore beside you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirror-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirror-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a stone.",
+     "success": {
+      "text": "The stone goes in. Ripples run out across the lake and break the other team into pieces. When the water settles, the reflection is still there, waiting, as if it had all the time in the world.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirror-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirror-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "You walk away fast. But in every puddle on the road, for the rest of this region, you catch it out of the corner of your eye: the other you, the other team, keeping pace.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirror-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirror-follows",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirror-b1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-mirror-lake-s2",
+   "name": "The Mirror Lake: The Other Team",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mirror-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mirror-b2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "flicker"
+   },
+   "room": false,
+   "types": [
+    "psychic",
+    "water"
+   ],
+   "intro": "The reflection stands in front of you, with its six behind it: every Pokémon you passed by on this road. \"You could have had these,\" it says, in your voice. \"Let's see if you chose right.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Your own face across the field, and six Pokémon you know and never knew. It is a hard, strange battle.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "uncaught": true,
+       "name": "Your Reflection",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mirror-won",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mirror-b2",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"I chose right.\"",
+     "success": {
+      "text": "\"Prove it.\" The reflection sends out the first of the six.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "uncaught": true,
+       "name": "Your Reflection",
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "mirror-right",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mirror-won",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "mirror-b2",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Maybe I didn't.\"",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 2
+      }
+     ],
+     "success": {
+      "text": "The reflection tilts its head. Then it holds out one of its six, the one you saw last, and asks for one of yours in return. Both sides of the trade are there in front of you. It is honest.",
+      "effects": [
+       {
+        "kind": "tradeAway",
+        "want": {
+         "label": "one of your Pokémon"
+        }
+       },
+       {
+        "kind": "join",
+        "uncaught": true,
+        "shadow": false,
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirror-traded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirror-b2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "follows",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mirror-follows",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It has followed you in every puddle since the lake. It is tired of waiting.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-mirror-lake-s3",
+   "name": "The Mirror Lake: The Ripple",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "mirror-b2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "mirror-b3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "none"
+   },
+   "room": false,
+   "types": [
+    "psychic",
+    "water"
+   ],
+   "intro": "The lake goes still again. When you look down, the reflection is your real team, every one of them, looking up at you from the water.",
+   "choices": [
+    {
+     "label": "Thank them.",
+     "success": {
+      "text": "You say it out loud, to the water and to the six beside you. You chose right. They know. Every one of them leans in a little closer.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "mirror-thanked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirror-b3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Touch the water.",
+     "success": {
+      "text": "Your fingertip breaks the surface, and you see one future: your team, older, standing in the light of the League. It lasts a heartbeat. It stays with you much longer.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "A glimpse of the League",
+        "effects": [
+         {
+          "kind": "bossDamageMultiplier",
+          "value": 1.05
+         },
+         {
+          "kind": "bossDamageTakenMultiplier",
+          "value": 0.95
+         }
+        ],
+        "battles": 1,
+        "until": "boss"
+       },
+       {
+        "kind": "flag",
+        "key": "mirror-touched",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "mirror-b3",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "right",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "mirror-right",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The reflection smiled when you won. It looked, for a moment, almost relieved.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-day-everything-slept-s1",
+   "name": "The Day Everything Slept",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#141428",
+    "effect": "fog"
+   },
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "slept-b1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": false,
+   "room": false,
+   "minStage": 1,
+   "types": [
+    "dark",
+    "psychic"
+   ],
+   "intro": "Every Pokémon in the area is asleep. Even yours: one by one, they lie down where they stand, and nothing wakes them. Wild Pokémon lie in the road. A town's Pokémon sleep in doorways. At the edge of town, a shadow moves.",
+   "choices": [
+    {
+     "label": "Follow the shadow.",
+     "success": {
+      "text": "It keeps just ahead of you, through the silent streets and up toward a hill. It is leading you. You are almost sure it is leading you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "slept-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Try to wake my starter.",
+     "success": {
+      "text": "You kneel and shake it gently, then not gently. It does not wake. But in its sleep it mumbles something, and you would know that sound anywhere. It is your name.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "slept-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-starter",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-b1",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find someone awake.",
+     "success": {
+      "text": "Only one: a child on a doorstep, holding a sleeping Skitty. She looks up at you. \"It's not a bad dream,\" she says. \"It's a sad one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "slept-on",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-child",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-b1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-day-everything-slept-s2",
+   "name": "The Day Everything Slept: A Dream-Eater",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "slept-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "slept-b2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "hypno",
+    "tint": "#141428",
+    "effect": "fog"
+   },
+   "room": false,
+   "types": [
+    "dark",
+    "psychic"
+   ],
+   "intro": "On the hill, a Hypno, swaying, its pendulum swinging over the sleeping town. It is feeding. And watching it from the shadow of a tree, very still, a dark shape with a white plume: Darkrai.",
+   "choices": [
+    {
+     "label": "Fight the Hypno.",
+     "success": {
+      "text": "No Pokémon of yours can fight. So you walk up the hill yourself, and stand between the Hypno and the town, and do not look at the pendulum. It stares. You stare back. It breaks first, and flees.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "slept-fought",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask Darkrai for help.",
+     "success": {
+      "text": "Darkrai moves once, and the Hypno is gone over the hill. Darkrai looks at you. \"It was eating them. I only bring the dreams.\" Then it is only a shadow under a tree again.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "slept-darkrai",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "telling-darkrai",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-b2",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wake the Hypno.",
+     "success": {
+      "text": "You shout. You throw water from the well. The Hypno jerks awake, staring at the town, at you, at its own pendulum. It was asleep too, sleepwalking and feeding. It is utterly mortified.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "slept-woke",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-b2",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "child",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "slept-child",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Not a bad dream. A sad one. The child was right: the Hypno is not cruel. It is lost.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-day-everything-slept-s3",
+   "name": "The Day Everything Slept: Everyone Wakes",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "slept-b2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "slept-b3",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3048",
+    "effect": "none"
+   },
+   "room": false,
+   "types": [
+    "dark",
+    "psychic"
+   ],
+   "intro": "Everyone wakes at once. Doors bang, people call names, a hundred Pokémon yawn in the road. Your starter is on its feet before anyone, running to you as if you had been gone a year.",
+   "choices": [
+    {
+     "label": "Hug it.",
+     "success": {
+      "text": "You catch it and hold on. It is warm and real and awake, and it does not let go first.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "starter"
+       },
+       {
+        "kind": "flag",
+        "key": "slept-hug",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-b3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Check the town.",
+     "success": {
+      "text": "You go door to door. Everyone is fine, a little dazed, very hungry. The Pokémon Center nurse insists on looking at your team while she is at it.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-town",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-b3",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look for Darkrai.",
+     "success": {
+      "text": "Gone. Under the tree on the hill there is only a single white plume, lying in the grass like a feather from a bird nobody has ever seen.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "slept-plume",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "slept-b3",
+        "amount": 1
+       }
+      ]
+     },
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "telling-darkrai",
+         "atLeast": 0,
+         "atMost": 0
+        }
+       ],
+       "text": "Gone. Under the tree on the hill there is only a single white plume, lying in the grass. You pick it up, and for a moment you hear a voice that is not a voice: I only bring the dreams.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "slept-plume",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "telling-darkrai",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "slept-b3",
+         "amount": 1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "remembers": [
+    {
+     "id": "guest",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "guest-darkrai",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Everyone wakes at once. Doors bang, a hundred Pokémon yawn in the road. And beside your starter, sitting quietly in the grass as if it had been there all along, is Darkrai. It is watching your starter wake up.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  }
+ ]
+}

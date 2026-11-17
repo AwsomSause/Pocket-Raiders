@@ -2809,7 +2809,7 @@
     "description": "Restores 30 HP. Cold from the Celadon rooftop machine.",
     "category": "healing",
     "iconAssetId": "item.gen5/fresh-water",
-    "usableInBattle": true,
+    "usableInBattle": false,
     "usableOutside": true,
     "target": "party",
     "effect": { "kind": "healHp", "amount": 30 }
@@ -2820,7 +2820,7 @@
     "description": "Restores 50 HP. Fizzy, from the Celadon rooftop machine.",
     "category": "healing",
     "iconAssetId": "item.gen5/soda-pop",
-    "usableInBattle": true,
+    "usableInBattle": false,
     "usableOutside": true,
     "target": "party",
     "effect": { "kind": "healHp", "amount": 50 }
@@ -2831,7 +2831,7 @@
     "description": "Restores 70 HP. Sweet, from the Celadon rooftop machine.",
     "category": "healing",
     "iconAssetId": "item.gen5/lemonade",
-    "usableInBattle": true,
+    "usableInBattle": false,
     "usableOutside": true,
     "target": "party",
     "effect": { "kind": "healHp", "amount": 70 }
@@ -2846,5 +2846,42 @@
     "usableOutside": false,
     "target": "enemy",
     "effect": { "kind": "escape" }
+  },
+  {
+    "id": "devon-ball",
+    "name": "Devon Prototype Ball",
+    "description": "A Devon prototype: never fails on a wild Pokémon at half HP or less. Otherwise a plain ball.",
+    "category": "ball",
+    "iconAssetId": "ball.premier",
+    "usableInBattle": true,
+    "usableOutside": false,
+    "target": "enemy",
+    "effect": { "kind": "catch", "multiplier": 255, "rule": "weakened" }
+  },
+  {
+    "id": "camp-curry",
+    "name": "Camp Curry",
+    "description": "Very spicy, packed warm by the girl at the lake. Fully restores one Pokémon (HP and status). Map only.",
+    "category": "healing",
+    "iconAssetId": "item.gen5/packaged-curry",
+    "usableInBattle": false,
+    "usableOutside": true,
+    "target": "party",
+    "effect": {
+      "kind": "fullRestore"
+    }
+  },
+  {
+    "id": "queens-mushroom-stew",
+    "name": "Queen's Mushroom Stew",
+    "description": "The Mushroom Queen's recipe. Fully restores one Pokémon (HP and status). Map only.",
+    "category": "healing",
+    "iconAssetId": "item.gen5/mixed-mushrooms",
+    "usableInBattle": false,
+    "usableOutside": true,
+    "target": "party",
+    "effect": {
+      "kind": "fullRestore"
+    }
   }
 ]

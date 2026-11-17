@@ -1,0 +1,588 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-33-door",
+   "name": "The Old Courier",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 1,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gn-new-33-entered",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#6b5a3a",
+    "effect": "float"
+   },
+   "intro": "A post office is holding a small party. Paper streamers on the sorting table, a sheet cake, and one guest of honour who cannot sit still.\n\nA Dragonite, with grey round its eyes and a mailbag it will not take off. It has worn that bag so long the strap has worn a groove in its shoulder.\n\n**Postmaster, Mr. Okoro:** \"Forty years on the mountain route. Last day. One parcel left.\"\n\n*The Dragonite holds the parcel out to you, then points at its own wing, and makes a small, unsure sound.*",
+   "choices": [
+    {
+     "label": "I'll come.",
+     "success": {
+      "text": "It lets out a breath it has been holding since the morning. You climb on behind the mailbag. The whole post office cheers, and the cake is, you notice, left uncut.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-new-33-entered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-33-foothills"
+       }
+      ]
+     }
+    },
+    {
+     "label": "It can wait for better weather.",
+     "success": {
+      "text": "It puts the parcel back in its bag, and nods, as if you had said something it already knew. Then it goes to the window.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-new-33-entered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-33-alone"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a younger one take it.",
+     "success": {
+      "text": "It looks at you for a long moment. Then it puts the parcel back in its bag, tightens the strap, and goes to the window.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-new-33-entered",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-33-alone"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-33-alone",
+   "name": "The Old Courier: Alone",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#6b5a3a",
+    "effect": "float"
+   },
+   "intro": "It goes out the window in one long, grey-winged push, and the streamers lift and settle behind it. Nobody at the party says anything.\n\nIt is already small over the foothills. It flies the way it has flown for forty years: low, and straight, and not looking back. Almost.",
+   "choices": [
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "You run. You do not catch it. But the mailbag is a dark speck you can keep your eyes on, and one by one it comes down on the first ledge to wait for you, not looking at all as if it were waiting.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "courier-followed",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-33-foothills"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it go.",
+     "success": {
+      "text": "It is a speck, then a thought, then gone. Mr. Okoro cuts the cake, finally, and gives you the first slice without a word.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "courier-let-go",
+        "n": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-33-foothills",
+   "name": "The Old Courier: The Foothills",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "courier-followed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It does not say it is glad you came. It simply flies a little lower, so that your feet find its back."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#3a5a7a",
+    "effect": "float"
+   },
+   "intro": "The ground tips away under you. The foothills slide past, green and gold, a quilt shaken out below.\n\nWild Fearow. They hold these hills the way landlords do, and the courier has crossed their sky every morning for forty years without once being asked for the rent.\n\nToday it is asked. They come up in a spiral, and the party fights from its back.",
+   "choices": [
+    {
+     "label": "Fight from its back.",
+     "success": {
+      "text": "The Dragonite does not turn. It banks, once, so your Pokémon have the angle, and then holds absolutely level, as a thing does when it trusts the people riding it.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "fearow"
+       ],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-33-storm"
+        }
+       ],
+       "caught": [
+        {
+         "kind": "addEvent",
+         "eventId": "gn-new-33-storm"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-33-storm",
+   "name": "The Old Courier: The Storm Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2f3f5a",
+    "effect": "rattle"
+   },
+   "intro": "Ahead the sky stands up like a wall. Grey at the bottom, black at the top, and a wind coming out of it that leans on the two of you like a hand.\n\nThe Dragonite slows. It does not look at you. It looks at the wall, and then, very slightly, at its own wing, and then at you.\n\nThere are three ways, and each costs something different: height, or health, or time.",
+   "choices": [
+    {
+     "label": "Over.",
+     "success": {
+      "text": "It climbs. The air goes thin and bright, and the wall falls away below you like a bad idea. But it breathes hard at the top, and its wingbeats come slower after.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "courier-over",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-33-sea"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Through.",
+     "success": {
+      "text": "It folds its wings and goes in. The wind hits you like a thrown door. Rain, hail, a crack of light far too close. You hold on. You all come out the other side, a little the worse.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-33-sea"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Under.",
+     "success": {
+      "text": "It drops to a hand's breadth over the waves and goes the long way round, with the spray in your teeth. It takes most of the afternoon. Down at the post office, the cake is going stale.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "courier-late",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-33-sea"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-33-sea",
+   "name": "The Old Courier: The Sea Approach",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "over",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "courier-over",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "It is slower than it was. The high thin air took more than it showed, and you both know it."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#2a4f6e",
+    "effect": "float"
+   },
+   "intro": "The sea opens out below, grey, then green, then a very long way down. Far ahead, a white pin standing in the water: the lighthouse.\n\nIts wings are failing. You feel it before you see it, in the way the long strokes shorten, and the way the whole body catches before each push.\n\n*It looks back at you.*",
+   "choices": [
+    {
+     "label": "You can do this.",
+     "success": {
+      "text": "You say it plainly, the way you would say it to a friend on a ladder. Its eyes go bright. It tucks in its chin, and it goes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "courier-down",
+        "n": 15
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "courier-over",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "courier-down",
+          "n": 45
+         }
+        ]
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-33-keeper"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Set down. We'll walk it.",
+     "success": {
+      "text": "It lets out a breath that is half a laugh. It lowers you both onto a spit of rock, gently, the way you set down something you mean to come back for.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "courier-down",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-new-33-keeper"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-33-keeper",
+   "name": "The Old Courier: The Lighthouse",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon"
+   ],
+   "remembers": [
+    {
+     "id": "forced",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "courier-down",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "It could not carry the parcel the last mile. It came down on the shingle with a sound like a sigh, and for a long moment nobody moved.\n\nSo your Pokémon carry the parcel the last mile, passing it between them along the causeway. The Dragonite walks beside them, mailbag on, in no hurry at all.\n\n**Keeper:** \"Forty years ago it brought my mother her first letter. She kept the envelope.\"\n\n*It sets the parcel in the keeper's hands itself. Then it sits down, heavily, and does not take the bag off.*"
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#7a6a4a",
+    "effect": "glint"
+   },
+   "intro": "The lighthouse door is open before you reach it. An old keeper stands in it with both hands out, as if he had been standing there since the morning.\n\n**Keeper:** \"Forty years ago it brought my mother her first letter. She kept the envelope.\"\n\nThe Dragonite lands, folds its wings carefully, one then the other, and holds out the parcel. It takes it with both hands, and doesn't open it.",
+   "choices": [
+    {
+     "label": "Take the egg.",
+     "success": {
+      "text": "The keeper brings out a small egg, wrapped in a postmaster's grey scarf. \"Mr. Okoro sent it ahead. It's his grand-something.\" It is warm. It is, faintly, humming.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 3,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "tailwind-heart"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "courier-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "courier-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "courier-let-go",
+        "n": 0
+       },
+       {
+        "kind": "moment",
+        "text": "Flew the old courier's last parcel to the lighthouse, over three legs of sky.",
+        "importance": 75
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "courier-late",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Take the egg.",
+     "success": {
+      "text": "The keeper brings out a small egg, wrapped in a postmaster's grey scarf. \"Mr. Okoro sent it ahead. It's his grand-something.\" The afternoon cost a little: it will take longer to hatch. It is warm. It is, faintly, humming.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [
+         "dratini"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 5,
+        "unit": "battle"
+       },
+       {
+        "kind": "gn",
+        "op": "eggShape",
+        "key": "tailwind-heart"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "courier-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "courier-stage"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "courier-let-go",
+        "n": 0
+       },
+       {
+        "kind": "moment",
+        "text": "Flew the old courier's last parcel to the lighthouse, over three legs of sky.",
+        "importance": 75
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "courier-late",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-33-roof",
+   "name": "The Old Courier: The Roof",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "courier-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "courier-stage"
+    },
+    {
+     "kind": "flag",
+     "key": "courier-roof",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "dragonite",
+    "tint": "#6b5a3a",
+    "effect": "float"
+   },
+   "intro": "A post office, small and tidy, in a town you have not been to before. On its roof: a Dragonite, retired, asleep in the afternoon sun, a mailbag for a pillow.\n\nIt opens one eye as you pass. Then, with great dignity, it closes it again. Mr. Okoro told everyone. Everyone told everyone.\n\n**Clerk:** \"A parcel for you came in this morning. A step early. We're not allowed to say who arranged that.\"",
+   "choices": [
+    {
+     "label": "Take the parcel.",
+     "success": {
+      "text": "It is addressed in careful, spidery handwriting. Inside: a little something for the road, and a note that just says: *Thank you for the wind.*",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "hyper-potion",
+         "full-heal",
+         "ether",
+         "elixir"
+        ]
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "courier-roof",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it asleep.",
+     "success": {
+      "text": "You go quietly. The Dragonite smiles in its sleep, or perhaps it is only the sun.",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

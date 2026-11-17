@@ -1,0 +1,1631 @@
+{
+ "catalogOverhaul": "places",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "crystal-hollow-entrance",
+   "name": "The Crystal Hollow",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "ice",
+    "psychic"
+   ],
+   "minStage": 3,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "fog"
+   },
+   "intro": "A cave whose walls are ice and whose ceiling is a field of quartz. Your Pokémon hear a hum before you do. At the mouth, a crystal miner named Petra is roping up her packs. \"It sings. Nobody's ever found where from. I'm done looking.\"",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "You duck under the quartz. The hum gets inside your teeth. Behind you Petra calls, \"Mind your reflection. It talks.\"",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "crystal-hollow-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what she found.",
+     "success": {
+      "text": "Petra digs in a pocket and drops a chip of crystal in your palm. It hums. Your starter's ears go up: it is the same note as its own heartbeat. \"Keep it,\" she says. \"It never sang for me like that.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "crystal-chip",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "crystal-hollow-chip",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "starter"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "crystal-hollow-entrance"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "You help Petra with her packs and walk on. Behind you the hollow sings to nobody.",
+      "effects": []
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "chip",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crystal-hollow-chip",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The chip in your pocket hums along with the cave.",
+     "hide": [
+      1
+     ]
+    }
+   ]
+  },
+  {
+   "id": "crystal-hollow-1",
+   "name": "The Crystal Hollow: The Hall of Mirrors",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "ice",
+    "psychic"
+   ],
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "fog"
+   },
+   "intro": "The Hall of Mirrors. Every surface shows a slightly different you. In each one, {lead} is a different evolution: larger, or smaller, or something it never chose to be. The reflection-you speaks. \"This one could have been. Do you mind that it wasn't?\"",
+   "choices": [
+    {
+     "label": "\"No. It's right as it is.\"",
+     "success": {
+      "text": "You put your hand on {lead}'s head, the real one. All the mirror-versions go still and look at the two of you. Then, one by one, they look away, as if embarrassed to have asked.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "crystal-hollow-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Show me.\"",
+     "success": {
+      "text": "The reflection steps aside. The other {lead} stands there in the glass, its numbers written beside it like a scorecard: stronger here, slower there. Nothing changes. You find you do not want it to.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "crystal-hollow-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Smash the mirror.",
+     "success": {
+      "text": "Your fist goes through the glass. A crack runs across the whole hall, every reflection splits, and shards rain down on all of you. The hum stops dead, as if the hollow is holding its breath.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.05
+       },
+       {
+        "kind": "flag",
+        "key": "crystal-hollow-hum-stopped",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "crystal-hollow-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back.",
+     "success": {
+      "text": "You keep what you carry and climb back out of the Crystal Hollow. The hum follows you a long way.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "crystal-hollow-2",
+   "name": "The Crystal Hollow: The Frozen Lake",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "ice",
+    "psychic"
+   ],
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "fog"
+   },
+   "intro": "The Frozen Lake. Black ice, and a single path of white stones across it. Your team listens: one stone hums wrong.",
+   "choices": [
+    {
+     "label": "Step on the stones in order of the hum.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "crystal-hollow-hum-stopped",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "You listen with your eyes closed and step only where the note is right. The wrong stone sinks into black water behind you, singing a flat note all the way down.",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "crystal-hollow-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Send an Ice-type across first.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ice"
+      }
+     ],
+     "success": {
+      "text": "Your Ice-type walks out, puts a foot on each stone, and freezes the wrong one solid where it stands. It waits on the far side for you, very pleased.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "ice"
+         ]
+        }
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "crystal-hollow-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk the ice.",
+     "success": {
+      "text": "The black ice holds for ten steps. On the eleventh it cracks like a shout and everyone goes in to the knees. You drag each other out the far side, blue and shaking.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "crystal-hollow-final"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn back.",
+     "success": {
+      "text": "You keep what you carry and climb back out of the Crystal Hollow. The hum follows you a long way.",
+      "effects": [
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "silent",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "crystal-hollow-hum-stopped",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Since you broke the mirror, the hollow has made no sound. Every stone is silent. You cannot tell which one is wrong."
+    }
+   ]
+  },
+  {
+   "id": "crystal-hollow-final",
+   "name": "The Crystal Hollow: The Heart Crystal",
+   "group": "Landmarks",
+   "rarity": "uncommon",
+   "types": [
+    "ice",
+    "psychic"
+   ],
+   "minStage": 3,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1c2a3a",
+    "effect": "glint"
+   },
+   "intro": "The Heart Crystal: a crystal as big as a house, humming at exactly the note of your highest-Bond Pokémon. It leans toward the crystal as if called. The crystal offers it a shift, for good: its second type will become Fairy. You can see it in the light already.",
+   "choices": [
+    {
+     "label": "Accept the shift.",
+     "success": {
+      "text": "Light pours through your Pokémon, and the hum and its heartbeat become one note. When the light fades it is itself, and a little more: part Fairy, for the rest of the road.",
+      "effects": [
+       {
+        "kind": "typeShift",
+        "type": "fairy",
+        "who": "top"
+       },
+       {
+        "kind": "flag",
+        "key": "crystal-hollow-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       },
+       {
+        "kind": "moment",
+        "text": "The Heart Crystal shifted your partner's type.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "You put a hand on your partner and step back. The crystal dims, gently, as if it understands. A piece of it breaks away at your feet: a Light Clay, still warm.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "light-clay",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "crystal-hollow-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let the Pokémon choose.",
+     "success": {
+      "text": "You step back and leave it to them. Your partner walks up to the crystal and listens for a long moment. Then it turns its back on the light and walks back to you. It chose itself.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 15,
+        "who": "top"
+       },
+       {
+        "kind": "flag",
+        "key": "crystal-hollow-done",
+        "amount": 1
+       },
+       {
+        "kind": "leavePseudo"
+       },
+       {
+        "kind": "moment",
+        "text": "Your partner listened to the Heart Crystal and chose to stay itself.",
+        "importance": 65
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rock",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "kanto",
+        "hoenn",
+        "kalos",
+        "paldea",
+        "grand",
+        "cairnmoor"
+       ]
+      }
+     ],
+     "intro": "The Heart Crystal: a crystal as big as a house, humming at exactly the note of your highest-Bond Pokémon. It leans toward the crystal as if called. The crystal offers it a shift, for good: its second type will become Rock. You can see it in the light already.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Accept the shift.",
+       "success": {
+        "text": "Light pours through your Pokémon, and the hum and its heartbeat become one note. When the light fades it is itself, and a little more: part Rock, for the rest of the road.",
+        "effects": [
+         {
+          "kind": "typeShift",
+          "type": "rock",
+          "who": "top"
+         },
+         {
+          "kind": "flag",
+          "key": "crystal-hollow-done",
+          "amount": 1
+         },
+         {
+          "kind": "leavePseudo"
+         },
+         {
+          "kind": "moment",
+          "text": "The Heart Crystal shifted your partner's type.",
+          "importance": 60
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "ice",
+     "when": [
+      {
+       "kind": "region",
+       "ids": [
+        "johto",
+        "sinnoh",
+        "unova",
+        "galar",
+        "tidewrack-reaches",
+        "orrery-basin"
+       ]
+      }
+     ],
+     "intro": "The Heart Crystal: a crystal as big as a house, humming at exactly the note of your highest-Bond Pokémon. It leans toward the crystal as if called. The crystal offers it a shift, for good: its second type will become Ice. You can see it in the light already.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Accept the shift.",
+       "success": {
+        "text": "Light pours through your Pokémon, and the hum and its heartbeat become one note. When the light fades it is itself, and a little more: part Ice, for the rest of the road.",
+        "effects": [
+         {
+          "kind": "typeShift",
+          "type": "ice",
+          "who": "top"
+         },
+         {
+          "kind": "flag",
+          "key": "crystal-hollow-done",
+          "amount": 1
+         },
+         {
+          "kind": "leavePseudo"
+         },
+         {
+          "kind": "moment",
+          "text": "The Heart Crystal shifted your partner's type.",
+          "importance": 60
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "deliver-devon-goods",
+   "name": "Devon Goods",
+   "group": "Story items",
+   "rarity": "rare",
+   "keyItem": "devon-goods",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A Devon Corp. agent is waiting at the crossroads, checking his watch. \"Those goods! At last! Let me return the favour: half price at our stall.\" The box under your arm is a prototype. You notice, now, that its seal is broken.",
+   "choices": [
+    {
+     "label": "Hand it over sealed.",
+     "success": {
+      "text": "You press the broken seal flat and hand it over with both hands. He never looks inside. \"Devon remembers its friends.\" He opens the stall for you, at half price.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "Devon half price",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.5
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       },
+       {
+        "kind": "addStop",
+        "stop": "shop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look inside first.",
+     "success": {
+      "text": "Inside, in foam: a Poké Ball that catches anything weakened. The agent sees you looking and goes white. \"That is not... please. Take one. Take two. Only don't tell anyone. Promise me.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "devon-ball",
+        "count": 2
+       },
+       {
+        "kind": "flag",
+        "key": "devon-silence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it is.",
+     "success": {
+      "text": "\"A better Ball,\" he says, softly, as if it were a child. \"One that understands when a Pokémon is tired of running. For everyone, eventually. Not yet.\"",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "deliver-devon-goods"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "deliver-devon-goods"
+      }
+     ],
+     "notice": "\"A better Ball. For everyone, eventually.\"",
+     "hide": [
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "deliver-gram-1",
+   "name": "Gram 1",
+   "group": "Story items",
+   "keyItem": "gram-1",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A post-office clerk looks up from her ledger at the parcel in your hands. \"Gram one! One piece of the set.\" She says it like a prayer. It is part of a gramophone. Her late father's.",
+   "choices": [
+    {
+     "label": "Hand it over.",
+     "success": {
+      "text": "She holds it in both hands. \"Thank you. Truly.\" She pays you from her own purse.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "gram-delivered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the gramophone.",
+     "success": {
+      "text": "\"Dad recorded one song on it before he died. Only one. Then it broke into three pieces, and we three took one each and swore to put it back together.\" She looks at the piece. \"We never did. Until now.\" She pays you and holds on to your hand a moment.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "gram-delivered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gram-story",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "deliver-gram-2",
+   "name": "Gram 2",
+   "group": "Story items",
+   "keyItem": "gram-2",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "Another post office, another clerk; the first one's brother, with her eyes. \"You're kind to bring it,\" he says, before you have even said what it is. \"Gram two.\"",
+   "choices": [
+    {
+     "label": "Hand it over.",
+     "success": {
+      "text": "He fits it to nothing, holding it in the air where the rest should be. \"Two of three.\" He pays you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "gram-delivered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the gramophone.",
+     "success": {
+      "text": "\"Dad couldn't sing. He sang anyway. Into a horn, onto wax, the one time.\" He laughs. \"We split the machine so none of us could play it without the others. Stubborn family.\" He pays you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "gram-delivered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gram-story",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "deliver-gram-3",
+   "name": "Gram 3",
+   "group": "Story items",
+   "rarity": "rare",
+   "keyItem": "gram-3",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "Two clerks stand side by side at the third counter, and a third you have not met: the youngest. \"Gram three,\" they all say together. \"The set's complete.\"",
+   "choices": [
+    {
+     "label": "Hand it over.",
+     "success": {
+      "text": "They thank you three times, one each, and pay you three times, one each.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 200
+       },
+       {
+        "kind": "flag",
+        "key": "gram-delivered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the gramophone.",
+     "success": {
+      "text": "\"One song,\" says the youngest. \"We were too angry at each other to play it, after. Then too proud. Then too long had gone by.\" The three of them look at the pieces on the counter.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gram-story",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "deliver-gram-3"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "all",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gram-delivered",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ],
+     "notice": "You carried all three pieces. They have set them on the counter, and look at you.",
+     "addChoices": [
+      {
+       "label": "\"Play it.\"",
+       "success": {
+        "text": "They fit it together, and wind it, and set the needle down. A man's voice comes out of the horn, singing very badly, very happily, a song about three children. The clerks cry. Then they laugh, all three, at the same wrong note. The youngest presses a Soothe Bell into your hands.",
+        "effects": [
+         {
+          "kind": "item",
+          "id": "soothe-bell",
+          "count": 1
+         },
+         {
+          "kind": "money",
+          "amount": 200
+         },
+         {
+          "kind": "attribute",
+          "key": "goodEvil",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "kind-total",
+          "amount": 1
+         },
+         {
+          "kind": "moment",
+          "text": "You helped three siblings play their father's one song.",
+          "importance": 65
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "deliver-letter",
+   "name": "A Letter to Deliver",
+   "group": "Story items",
+   "keyItem": "letter",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A shopkeeper reads the address on the letter you carry and gasps, both hands flying to her mouth. \"That's for me!\"",
+   "choices": [
+    {
+     "label": "Give it.",
+     "success": {
+      "text": "She tears it open right there and reads it twice. Her son is abroad. Her son is coming home. She tells every customer in the shop, then every customer who comes in after, and gives you anything you look at for a week.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Read it first.",
+     "success": {
+      "text": "You read it on the step, while she watches through the glass. It is only a son telling his mother he is coming home. You hand it over. She reads your face before the letter, and does not thank you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask who sent it.",
+     "success": {
+      "text": "\"My boy.\" She does not take her eyes off the envelope. \"Three years. Not a word. That's his writing.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "deliver-letter"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "deliver-letter"
+      }
+     ],
+     "notice": "\"That's his writing,\" she whispers.",
+     "hide": [
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "deliver-oaks-parcel",
+   "name": "Oak's Parcel",
+   "group": "Story items",
+   "rarity": "uncommon",
+   "keyItem": "oaks-parcel",
+   "scene": {
+    "cast": [
+     "boss.oak"
+    ],
+    "effect": "glint"
+   },
+   "intro": "A Mart clerk leans over the counter. \"Is that parcel for Professor Oak? He told us to expect it! He's been ringing every morning.\"",
+   "choices": [
+    {
+     "label": "Yes, take it to him.",
+     "success": {
+      "text": "\"I'll run it over at lunch. Here, for your trouble.\" Five Poké Balls and his thanks.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 5
+       }
+      ]
+     }
+    },
+    {
+     "label": "Deliver it myself.",
+     "success": {
+      "text": "You walk it to the lab yourself. Oak meets you at the door, tears the paper off like a child, and insists on upgrading your Pokédex on the spot. \"The data you'll bring me! Off you go!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "oak-parcel-delivered",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       },
+       {
+        "kind": "moment",
+        "text": "You delivered Professor Oak's parcel by hand.",
+        "importance": 50
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "Inside, wrapped in an old lab coat: a Poké Ball model, hand-carved, from Oak's own youth. When you finally bring it to him he sees the loose paper and laughs until he wheezes. \"I made that at your age! Badly!\"",
+      "effects": [
+       {
+        "kind": "research",
+        "amount": 3
+       },
+       {
+        "kind": "money",
+        "amount": 100
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "deliver-parcel",
+   "name": "A Parcel for the Nurse",
+   "group": "Story items",
+   "keyItem": "parcel",
+   "scene": {
+    "cast": [],
+    "tint": "#302018",
+    "effect": "glint"
+   },
+   "intro": "The clinic healer sees the parcel and almost runs to the door. \"I've been waiting for that! Come in, come in.\"",
+   "choices": [
+    {
+     "label": "Hand it over.",
+     "success": {
+      "text": "Medicine. She goes straight to the back, where a small Pokémon lies under a blanket, and gives it the first dose with you watching. Within the hour it is sitting up and eating. She presses a Potion on you at the door.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what's in it.",
+     "success": {
+      "text": "\"Medicine for a little one in the back. It hasn't eaten in three days.\" She lets you come and watch it work: the first dose, the first sip of water, the first look round the room. Then she sends you off with a Potion.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "delivery-rider",
+   "name": "The Delivery Rider",
+   "group": "Merchants & Deals",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A rider in a scratched helmet skids to a stop and pushes a package into your arms. \"Zelda, Rider Post. Carry this three stops. Don't open it. Pay on delivery.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You tuck it into your bag. It is heavier than it looks, and it does not rattle.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "parcel",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Refuse.",
+     "success": {
+      "text": "\"Your loss.\" She roars off to find somebody else.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "delivery-rider-drop",
+   "name": "The Parcel Is Due",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "parcel",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "Zelda is waiting at the crossing three stops on, helmet under her arm. \"Did you bring it?\"",
+   "choices": [
+    {
+     "label": "\"Here, unopened.\"",
+     "success": {
+      "text": "She checks the seal, nods once, and pays you on the nail. \"Good courier. Rare thing.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": 800
+       },
+       {
+        "kind": "flag",
+        "key": "parcel",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I opened it.\"",
+     "success": {
+      "text": "She goes red, then white. You show her what is inside: papers, maps, names. Evidence against the evil team, being carried by their own couriers. Zelda reads it and sits down on the kerb. \"...I didn't know.\" She takes off her Rider Post badge and leaves it on the road.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "parcel",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "intel",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "zelda-quit",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You showed Zelda what she had been carrying. She quit.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I lost it.\"",
+     "success": {
+      "text": "She looks at you for a long moment. \"Right.\" She does not shout. She writes your name in a small book.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "parcel",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "rep-lost",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "lunar-lantern-walk",
+   "name": "The Lantern Walk",
+   "group": "Holiday events",
+   "types": [
+    "fire",
+    "dragon"
+   ],
+   "gameEvent": "lunar-new-year",
+   "scene": {
+    "cast": [],
+    "tint": "#300808",
+    "effect": "fire"
+   },
+   "intro": "Red lanterns hang over the street, and a dragon dance winds between them. A dancer at the head, Mei, waves you in. \"Hold a lantern! The dragon needs a tail!\"",
+   "choices": [
+    {
+     "label": "Hold one.",
+     "success": {
+      "text": "You hold a lantern at the dragon's tail and run when it runs. Your team runs too, under the red light, and every one of them is grinning by the end.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Dance with them.",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You get the steps on the third try and keep them all the way down the street. Mei gives you a Dragon Fang from the costume's jaw. \"You earned a tooth.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "dragon-fang",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You tread on the dragon's tail twice. Mei laughs so hard the head falls off. No tooth, but a good night.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You sit on a step and watch the dragon go by, again and again, in the lantern light. Your team sleeps against you.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "winter-frost-king",
+   "name": "The Frost King",
+   "group": "Holiday events",
+   "rarity": "uncommon",
+   "types": [
+    "ice"
+   ],
+   "minStage": 2,
+   "gameEvent": "winter-festival",
+   "scene": {
+    "cast": [
+     "trainer.snow_worker_m"
+    ],
+    "tint": "#081828",
+    "effect": "snow"
+   },
+   "intro": "A snow worker crowned with icicles blocks the pass, challenging every passer-by. Beside him stands a huge white horse, breath steaming. \"The Frost King! Best me and pass. Lose and shovel snow.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Ha! To arms, old girl!\" The white horse steps forward.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "name": "The Frost King",
+       "classId": "snow-worker",
+       "team": [
+        "glastrier",
+        "abomasnow",
+        "beartic"
+       ],
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 900
+        },
+        {
+         "kind": "flag",
+         "key": "frost-king-beaten",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Shovel snow. (a node)",
+     "success": {
+      "text": "You shovel snow all afternoon while the Frost King supervises from his throne of ice, shouting encouragement. At sundown he laughs and waves you through. \"Good back on you!\"",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 2,
+        "who": "party"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask about the horse.",
+     "success": {
+      "text": "\"Found her in a drift, starving, ribs like a ladder. Fed her. She stayed.\" He pats the great white neck. \"Sometimes, at night, she looks up the mountain like someone's calling her home.\" Up the mountain, very faintly, something is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-calyrex",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "winter-frost-king"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "asked",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "sign-calyrex",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The white horse watches the mountain.",
+     "hide": [
+      2
+     ]
+    }
+   ]
+  },
+  {
+   "id": "winter-gift-exchange",
+   "name": "The Gift Exchange",
+   "group": "Holiday events",
+   "types": [
+    "ice"
+   ],
+   "gameEvent": "winter-festival",
+   "scene": {
+    "cast": [],
+    "tint": "#0c1a2c",
+    "effect": "snow"
+   },
+   "intro": "Under a glowing tree, trainers swap wrapped gifts. The organiser has a clipboard and a firm voice. \"Bring one, take one. Every gift's tier is on the tag. No tricks.\"",
+   "choices": [
+    {
+     "label": "Swap a gift.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry"
+      }
+     ],
+     "success": {
+      "text": "You wrap an Oran Berry; its tag says Common. You pick a gift with a tag that says Common. It is a treat, wrapped by someone who cared.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry"
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "fresh-water",
+         "soda-pop",
+         "lemonade",
+         "moomoo-milk",
+         "lava-cookie",
+         "old-gateau",
+         "casteliacone",
+         "sweet-heart"
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give without taking.",
+     "success": {
+      "text": "You put a gift under the tree and walk away empty-handed. The organiser writes your name on a bauble and hangs it high, where everyone will see it next year.",
+      "effects": [
+       {
+        "kind": "loseItem"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gift-bauble",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "You watch strangers open strangers' gifts under the lights. Nobody gets anything expensive. Everybody is happy.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 0.25
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "new-year-countdown",
+   "name": "The Countdown",
+   "group": "Holiday events",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "gameEvent": "new-year-countdown",
+   "scene": {
+    "cast": [],
+    "tint": "#100820",
+    "effect": "sparkle"
+   },
+   "intro": "Fireworks wait on the hill for midnight. A trainer in a scarf wants one last battle of the year. It's your rival, grinning in the cold.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "\"Last battle of the year. Make it a good one.\" 3... 2... 1...",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "pseudo": true,
+       "rival": true,
+       "name": "Rival",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "flag",
+         "key": "rival-last-battle-year",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Watch the fireworks together.",
+     "success": {
+      "text": "You sit on the cold grass, side by side, and watch the sky go gold and green. Neither of you says much. You don't need to.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "rival-fireworks",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Make a promise for next year.",
+     "success": {
+      "text": "\"Same place next year. Whoever's stronger buys the cocoa.\" Your rival holds out a gloved hand, and you shake on it as the first rocket goes up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rival-promise-made",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 1
+        }
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "circuit-fans",
+   "name": "Autograph Seekers",
+   "group": "World Callbacks",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "won-circuit",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2038",
+    "effect": "sparkle"
+   },
+   "intro": "A knot of kids recognises you from the Circuit and comes running with a banner. They have drawn your whole team on it in crayon. \"Can you sign it? It's you! And your {starter}!\"",
+   "choices": [
+    {
+     "label": "Sign it.",
+     "success": {
+      "text": "You sign it big, with a flourish. They shriek. A parent slips you a Berry for the road. Somewhere, someone who keeps lists writes your name a little higher on one.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-known-sooner",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Draw something back.",
+     "success": {
+      "text": "You take a crayon and draw them a {starter}, badly. The kids scream with joy. Your {starter} looks at the drawing for a long time, and then at you, with enormous dignity.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "starter"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm busy.\"",
+     "success": {
+      "text": "Their faces fall. They roll up the banner and go.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "merchant-remembers",
+   "name": "You Walked Past Us",
+   "group": "World Callbacks",
+   "rarity": "uncommon",
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ignored-crisis",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "A merchant from a town you hurried past blocks the road: Ilse Brack, arms folded. \"We asked for help. You walked by. Prices are up for you. The inn's closed to you.\"",
+   "choices": [
+    {
+     "label": "\"I'm sorry. What can I do?\" (two nodes)",
+     "success": {
+      "text": "\"You can carry water.\" You do: two long days of hauling and mending in her town. On the second evening Ilse brings you supper herself. Prices are back where they were. The inn has a room.",
+      "effects": [
+       {
+        "kind": "takeNode",
+        "nodes": 2
+       },
+       {
+        "kind": "flag",
+        "key": "ignored-crisis",
+        "amount": -99
+       },
+       {
+        "kind": "flag",
+        "key": "kind-walked-past",
+        "amount": -99
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You went back and made amends to Ilse Brack's town.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I had my reasons.\"",
+     "success": {
+      "text": "She listens to every one. \"Reasons,\" she says, flat, and walks away. The prices stay up.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "brack-prices",
+        "name": "Ilse Brack Remembers",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.15
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk past her the way you walked past her town. The prices stay up. The inn stays closed for the rest of the run.",
+      "effects": [
+       {
+        "kind": "relic",
+        "id": "brack-prices",
+        "name": "Ilse Brack Remembers",
+        "effects": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 1.15
+         }
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "brack-inn-closed",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "crisis",
+     "when": [
+      {
+       "kind": "crisis",
+       "atLeast": 4,
+       "atMost": 5
+      }
+     ],
+     "notice": "You were at the crisis, at the end, when it mattered. You could tell her.",
+     "hide": [
+      1
+     ],
+     "addChoices": [
+      {
+       "label": "\"I had my reasons.\"",
+       "success": {
+        "text": "You tell her where you were: at the climax of the crisis, holding the line. She is quiet for a long time. \"...All right,\" she says. \"All right.\" The prices come down.",
+        "effects": []
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

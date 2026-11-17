@@ -1,0 +1,3206 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "evil-flare-offer-kalos",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#d03028",
+    "effect": "glint"
+   },
+   "intro": "A café in Lumiose. A tall man with a mane of red hair stands to pull out your chair. Lysandre: \"You're magnificent. I mean it clinically. I've watched you give half of what you have to people who'll waste it. It's beautiful, and it can't last. There isn't enough. There never was.\" Lysandre: \"I've a list of people worth saving. It's short. It costs five million to be on it. I'm waiving yours.\"",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "He doesn't smile. He inclines his head, as if you'd accepted a glass of wine. A red card on the table: WITH THE COMPLIMENTS OF M. LYSANDRE. Lysandre Labs; the staff will show you up. You're Team Flare now, on the inside: a Subscriber, the one he waived. Nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Lysandre: \"Of course. It's beautiful that you can.\" He pays for both coffees and is gone before yours is cold. Team Flare's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who isn't on the list?\"",
+     "success": {
+      "text": "Lysandre: \"Almost everyone. I wept, when I worked it out. I do, still, some mornings. Then I comb my hair.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "evil-flare-offer-kalos-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes to Lysandre. That night, from a telephone box on the Rue Verte, you say it again to a tired man in a brown coat who calls himself Looker. \"Team Flare. You are inside? So. You will be my eyes. Be careful; they are very polite, these people, and polite people count everything.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "evil-flare-offer-kalos-2",
+   "name": "The Offer",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#d03028",
+    "effect": "glint"
+   },
+   "intro": "He waits, with his hands folded, as if he has all the time in the world and knows exactly how much that is.",
+   "choices": [
+    {
+     "label": "\"Yes.\"",
+     "success": {
+      "text": "He doesn't smile. He inclines his head, as if you'd accepted a glass of wine. A red card on the table: WITH THE COMPLIMENTS OF M. LYSANDRE. Lysandre Labs; the staff will show you up. You're Team Flare now, on the inside: a Subscriber, the one he waived. Nobody outside knows it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"No.\"",
+     "success": {
+      "text": "Lysandre: \"Of course. It's beautiful that you can.\" He pays for both coffees and is gone before yours is cold. Team Flare's story goes on as it was, with you on the outside of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-offer-refused",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-offered",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Yes.\" (And tell the International Police.)",
+     "success": {
+      "text": "You say yes to Lysandre. That night, from a telephone box on the Rue Verte, you say it again to a tired man in a brown coat who calls himself Looker. \"Team Flare. You are inside? So. You will be my eyes. Be careful; they are very polite, these people, and polite people count everything.\" You have a handler now. Every careless step counts double.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "inside"
+       },
+       {
+        "kind": "evil",
+        "mark": "inside-man"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-looker-met",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-offered",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act1",
+   "name": "A Theme",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "beat": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/artist",
+     "trainer.pr/rich_kid_m"
+    ],
+    "tint": "#d03028",
+    "effect": "sparkle"
+   },
+   "intro": "A fitting room. Three mirrors. A woman with pins in her mouth, and a bolt of red. Couturière Valerie: \"Arms out. ...You stand like someone who carries things. The others stand like someone's about to take their coat.\" She chalks a line, dreamily, round the pins. Valerie: \"It's for a theatre company. That's what I was told. Four hundred and twelve costumes and nobody's told me the play.\" The suite isn't a bunk. A bed the size of a field. A bowl of fruit. A card: WITH THE COMPLIMENTS OF M. LYSANDRE. In the doorway of the next one, in a suit that fits better than anything he's ever done, a young man of twenty-two. Xan Delacroix: \"You're the one he waived! Everyone's talking. I'm Xan. I paid out of an allowance. Don't tell my father; he thinks it's a yacht.\" Xan: \"It's fabulous. The suits are bespoke. There's a wine list. Something about the end of the world; I skimmed it. Is it a theme? I assumed it was a theme.\"",
+   "choices": [
+    {
+     "label": "\"It's not a theme.\"",
+     "success": {
+      "text": "Xan: \"Everything's a theme. Last year it was 'Under the Sea.' I was a Clauncher.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-xan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act1-brochure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What did you think you were buying?\"",
+     "success": {
+      "text": "Xan: \"Somewhere to belong that had a dress code. I've never been anywhere I wasn't paying to be. This felt honest about it.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-xan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act1-brochure"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who else is in the club?\"",
+     "success": {
+      "text": "Xan: \"Oh, everyone. The Vasseurs. A man who owns a river. Malva, off the television! She doesn't speak to us. It's very exclusive, being ignored by her.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-xan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act1-brochure"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act1-brochure",
+   "name": "Page Nine",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "The brochure's on the pillow. A Beautiful Future. Eleven pages. Pages one to eight: photographs. A sunset. A vineyard. \"Preservation.\" \"Stewardship.\" Page nine: one paragraph, in the same pleasant type. \"The device removes the surplus. Holders of a valid key are exempt.\" Pages ten and eleven: the wine list. Xan reads over your shoulder, laughing. Xan: \"'The surplus.' That's so him. What's the surplus?\"",
+   "choices": [
+    {
+     "label": "\"People.\"",
+     "success": {
+      "text": "He goes on smiling for about two seconds too long. Xan: \"...No. It'll be a metaphor. For— clutter. He's very against clutter.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-page9",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act1-concierge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You should read it again.\"",
+     "success": {
+      "text": "He reads it again. He reads it a third time, with his finger under the line, the way he hasn't since school. He doesn't say anything. He puts the brochure down very carefully, the way one puts down something hot.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-page9",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act1-concierge"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Close it.)",
+     "success": {
+      "text": "You close it. Xan picks it up again at once, and turns to the wine list.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-page9",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act1-concierge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act1-concierge",
+   "name": "The Concierge",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "A knock. A man of seventy with a tray. Concierge Wilhelm Yarborough: \"The house red, with M. Lysandre's compliments. I'm Yarborough. I've been with the family forty years. If there's anything you want, you've only to not ask too loudly.\" He sets it down. He squares the tray to the table's edge. Yarborough: \"You'll be shown the building. You'll not be shown the dining room. It isn't in use.\"",
+   "choices": [
+    {
+     "label": "\"Why not?\"",
+     "success": {
+      "text": "He looks at the tray a moment, as if the answer were on it. Yarborough: \"It isn't in use, sir.\" It's the whole of his answer, and he gives it twice.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act1-dining"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Are you a member?\"",
+     "success": {
+      "text": "Yarborough: \"I'm staff, sir.\" The pause is perfectly judged. Yarborough: \"I bring things to the list.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act1-dining"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Forty years. What was he like?\"",
+     "success": {
+      "text": "Yarborough: \"He'd give you his coat. I've seen it done. Twice in one winter; I'd to order a third.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act1-dining"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act1-dining",
+   "name": "The Dining Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#2a2020",
+    "effect": "fog"
+   },
+   "intro": "The dining room can be found. A double door off the staff corridor. It isn't locked. Nobody locks a thing they can't bear to look at.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "Four hundred and eleven places. A red cloth, grey with dust. Glasses. Good china. At the head, a pencil, where it was put down. That night: a red suit, and a key. It chimes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-dining-seen",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it shut.",
+     "success": {
+      "text": "You leave it. That night: a red suit, and a key. It chimes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-inside-act1",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act2",
+   "name": "One Crate",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "beat": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "A service lift. A woman in grey overalls with a mop bucket, who's pressed the button for your floor without asking which. Rue Carmody: \"Guest of Honor. I know; I do your room. You fold your own towels. Nobody else in the building does.\" Rue: \"I'm on the Factory job with you. Not on it. I'm sent to clean up after. Staff pass. Never paid a thing; never been asked to.\" Rue: \"I mop the room with the big flower in it. Tuesdays. I'm not stupid. It's a gun. I've a mum in Lumiose and two brothers in Camphrier, and I've counted the red suits, and there's not one in my size.\"",
+   "choices": [
+    {
+     "label": "\"Why stay?\"",
+     "success": {
+      "text": "Rue: \"The pay's the best in the city. And I've the keys. If I walk out, somebody else has the keys, and she mightn't count.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-rue",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act2-factory"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Have you told anyone?\"",
+     "success": {
+      "text": "She looks at the mop, and then at you. Rue: \"I'm telling you.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-rue",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act2-factory"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What size are you?\"",
+     "success": {
+      "text": "She laughs. First time. Rue: \"Ten. Don't.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ally-rue",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act2-factory"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act2-factory",
+   "name": "The Poké Ball Factory",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/celosia",
+     "trainer.pr/bryony"
+    ],
+    "tint": "#2a2a30",
+    "effect": "none"
+   },
+   "intro": "The Poké Ball Factory. The line's running. Two of the scientists are loading crates. Xan's been given a clipboard; he volunteered. Members don't, as a rule. He wanted to \"do something.\" Celosia: \"Every Ball made in Kalos for a year. It's not theft. It's curation.\" Bryony: \"She's been practising that all morning.\" The factory's president, tied to an office chair, with great dignity: \"Take them. I can't stop you. Leave the line running. I've two hundred on the floor who eat because of it.\" Celosia: \"Guest. Your call. He's asked us to be nice. We've the stock either way. Shut the line and there's no more for a year; leave it and somebody else has Balls by spring.\"",
+   "choices": [
+    {
+     "label": "\"Shut the line.\"",
+     "success": {
+      "text": "The belt stops. It's very quiet. Two hundred people in a canteen hear it stop. Xan: \"Oh, that's a horrid noise. The not-noise.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "flare-factory-shut",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act2-canteen"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Take the stock; leave the line.\"",
+     "success": {
+      "text": "The president: \"Thank you. I shan't say for what; I've a board.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "rank": 2
+       },
+       {
+        "kind": "flag",
+        "key": "flare-factory-left",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act2-canteen"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Rue. What would you do?\"",
+     "success": {
+      "text": "Rue: \"Take one crate. Photograph it. Tell them it was all there was. I've done it with the mop cupboard for years.\" Celosia: \"I can hear you, you know.\" she says, not turning round. Bryony: \"She can. I can't. I've gone deaf. It's very sudden.\" One crate goes to the Labs. The rest goes out the loading bay in a laundry van that Rue's cousin drives.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1,
+        "rank": 2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-factory-crate",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act2-canteen"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act2-canteen",
+   "name": "The Canteen",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m"
+    ],
+    "tint": "#2a2a30",
+    "effect": "none"
+   },
+   "intro": "In the canteen, after. Two hundred workers, being untied by Xan, who's doing it badly. A worker: \"You one of them?\" Xan: \"I'm a member.\" The worker: \"What's that get you?\" Xan: \"A— there's a wine list.\" He hears it. \"There's a wine list,\" he says again, more quietly, to the knot.",
+   "choices": [
+    {
+     "label": "Help him with the knots.",
+     "success": {
+      "text": "You do the rest of them. Xan watches how.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-inside-act2",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act3",
+   "name": "Bijou",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "beat": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m"
+    ],
+    "tint": "#1e2418",
+    "effect": "fog"
+   },
+   "intro": "Route 10. Standing stones in rows, to the horizon. Cables between them, new, red.",
+   "choices": [
+    {
+     "label": "Walk the rows.",
+     "success": {
+      "text": "The grass is cut short between them, as if for an audience.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-stones-rows"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rue-sus",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "flare",
+       "inside": true,
+       "suspicion": 4,
+       "suspicionBelow": 7
+      }
+     ],
+     "notice": "Rue: \"They've checked the stones. They've put it down to weather. Keep it at a tenth.\""
+    }
+   ]
+  },
+  {
+   "id": "fl-stones-rows",
+   "name": "The Rows",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m"
+    ],
+    "tint": "#1e2418",
+    "effect": "none"
+   },
+   "intro": "Xan, in a visor, picking his way: Xan: \"It's an installation. I've seen this. There was one at the Biennale with fridges.\"",
+   "choices": [
+    {
+     "label": "Go on.",
+     "success": {
+      "text": "The cables hum, faintly, like a fridge.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-stones-wiring"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-stones-wiring",
+   "name": "The Wiring",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/xerosic"
+    ],
+    "tint": "#1e2418",
+    "effect": "none"
+   },
+   "intro": "At the foot of each stone: a Pokémon. Lying down. A clip on a foreleg, a wire to the cable. Not hurt. Not asleep, quite. Dimmer than they should be. They're being borrowed from; they'll wake, if they're unclipped. Xerosic, cheerful, on a folding stool, eating a sandwich: Xerosic: \"Ah! The Guest! Come and see. It needs life to run. A little from many's as good as a lot from few! It's very fair. They hardly notice. Hardly.\"",
+   "choices": [
+    {
+     "label": "Go on, to the fourth stone.",
+     "success": {
+      "text": "Xan has gone ahead of you. He's stopped.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-stones-fourth"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-stones-fourth",
+   "name": "The Fourth Stone",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m"
+    ],
+    "pokemon": "furfrou",
+    "tint": "#1e2418",
+    "effect": "none"
+   },
+   "intro": "Xan's taken off his visor. He's looking at a Furfrou. It's been groomed. Recently. By somebody who loved it: the trim's fussy, a little uneven, done at home. There's a tag on its collar. Brass. A heart. BIJOU. And a telephone number. Xan: \"That's got a name tag. That's somebody's— somebody did that trim with kitchen scissors. I can tell. Mine's done at a salon. That's done by someone who minds.\" Xan: \"This isn't a theme. Is it. I paid for this. I paid five million for this.\" He sits down in the grass in a bespoke suit.",
+   "choices": [
+    {
+     "label": "\"Unhook them.\"",
+     "success": {
+      "text": "You start on the first clip. Down the row, somebody shouts. A woman in a red visor comes over the grass, already reaching for a Ball, already sorry about it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "xan-sat-down",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-stones-last"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Unhook one stone's worth, and say the wiring failed.\"",
+     "success": {
+      "text": "Twelve clips. \"A fault.\" Xerosic: \"Tch! Corrosion. It's the sea air.\" That night, Rue: \"That's a tenth. I'll do a tenth a night. Nobody counts stones.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1,
+        "rank": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-stones-tenth",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "xan-sat-down",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-stones-tag"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's the price of the list.\"",
+     "success": {
+      "text": "Xan asks for his money back. Treasurer Garance: \"Oh, darling. There are no refunds. It's on page eleven, under the Burgundies.\" she says, warmly. He laughs. Badly.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 4
+       },
+       {
+        "kind": "flag",
+        "key": "flare-stones-price",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "xan-sat-down",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-stones-tag"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-stones-last",
+   "name": "The Last Stone",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aliana"
+    ],
+    "tint": "#1e2418",
+    "effect": "none"
+   },
+   "intro": "Aliana: \"I'm sorry. I am. Put the clip back, Guest, and I'll say I never saw you.\"",
+   "choices": [
+    {
+     "label": "Battle Aliana.",
+     "success": {
+      "text": "She sends out her Pokémon as if she'd rather not.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 4,
+        "rank": 4
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "flare-stones-unhooked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "route10-woke-row",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-stones-tag"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/aliana",
+       "team": [
+        "druddigon",
+        "mightyena",
+        "houndoom"
+       ],
+       "name": "Aliana",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": []
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-stones-tag",
+   "name": "The Tag",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m"
+    ],
+    "pokemon": "furfrou",
+    "tint": "#1e2418",
+    "effect": "none"
+   },
+   "intro": "Bijou's tag has a number. It can be rung, from any town.",
+   "choices": [
+    {
+     "label": "Ring the number.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-stones-unhooked",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The row is awake. Xan has ripped his own sleeve off for a lead rope and is walking Bijou to the road himself. At the road, you ring the number. A woman's voice: \"Hello? ...Is it about— have you found her? She went from the garden. I only turned round for the pegs.\"",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "flare-bijou-rung",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "flare-bijou-walked",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "flare-inside-act3",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "A woman's voice: \"Hello? ...Is it about— have you found her? She went from the garden. I only turned round for the pegs.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-bijou-rung",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "flare-stones-unhooked",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "The row is awake. Xan has ripped his own sleeve off for a lead rope and is walking Bijou to the road himself.",
+       "effects": [
+        {
+         "kind": "flag",
+         "key": "flare-bijou-walked",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "flare-inside-act3",
+         "amount": 1
+        },
+        {
+         "kind": "evil",
+         "beat": true
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "You leave the number on the tag.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-inside-act3",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act4",
+   "name": "Not Enough Well",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "beat": 5,
+     "rank": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1c1418",
+    "effect": "glint"
+   },
+   "intro": "A study. A fire. A green ledger. A photograph, face down. A man standing at the window with his back to all of it. Lysandre: \"Sit, please. No; take the good chair. I've never liked it. It was my father's. He sat in it to refuse people.\" Lysandre: \"I gave. For twenty years. Everything my family had. Wells. Schools. Thursdays; Wilhelm will have told you about Thursdays. I thought, if I give enough, it will be enough. And each year there were more hands. Not because they were greedy. Because there were more of them. I was pouring into the sea.\" Lysandre: \"I'm not cruel. I've been trying to find the cruelty in it so that I could hate myself and stop. I can't find it. It's arithmetic. The lifeboat holds forty. I didn't build the boat that small.\" He turns the photograph over. A much younger man, at a well, with a village round him, laughing. Lysandre: \"They're all dead. A drought. Six years after. I'd dug the well. It wasn't enough well.\"",
+   "choices": [
+    {
+     "label": "\"Then dig more wells.\"",
+     "success": {
+      "text": "Lysandre: \"Thirty-one. I dug thirty-one. Do you know how many villages there are?\" A pause. Lysandre: \"I do. I looked it up. I wish I hadn't.\" He writes your name in the blank himself. His hand's steady. It's the only thing in the room that is. You're Chosen.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-lysandre-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who told you forty?\"",
+     "success": {
+      "text": "He's very still. Lysandre: \"...The machine has a range. Xerosic gave me a number. I never asked if the number could be made bigger. I asked how to choose.\" A long pause. Lysandre: \"That's a different question, isn't it.\" He writes your name in the blank himself. You're Chosen.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-lysandre-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-who-forty",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll take the seat.\"",
+     "success": {
+      "text": "Lysandre: \"Thank you.\" He says it as if you'd done him a kindness. He writes your name in the blank himself. His hand's steady. It's the only thing in the room that is. You're Chosen.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 5
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-lysandre-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Whose seat is yours?\"",
+     "success": {
+      "text": "He doesn't answer at once. He goes to the desk. He turns the list to face you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act4-list"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "eleventh",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-eleventh",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have the bottle of water from the eleventh well.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Put the Water from the Eleventh Well on his desk.",
+       "success": {
+        "text": "He knows the bottle's dust. He's dug in it. Lysandre: \"...It held.\" \"They built a cistern. And a rule about gardens.\" Lysandre: \"They added to it.\" A long time. Lysandre: \"I never went back to any of them. I thought, if I look, I'll see it wasn't enough. I never thought I'd see that they'd—\" He doesn't finish. He writes your name in the blank himself. You're Chosen.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 3
+         },
+         {
+          "kind": "evil",
+          "standing": 2,
+          "rank": 5
+         },
+         {
+          "kind": "evil",
+          "mark": "confided"
+         },
+         {
+          "kind": "flag",
+          "key": "flare-lysandre-confided",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "flare-inside-act4",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "flare-well-given",
+          "amount": 1
+         },
+         {
+          "kind": "evil",
+          "beat": true
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "column",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-column",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have the census clerk's Other Column.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Show him the Other Column.",
+       "success": {
+        "text": "Lysandre: \"...They grew.\" He reads down. He's fast with figures. Lysandre: \"Nine schools. I built nine. There are sixty in this column.\" \"They built the rest.\" Lysandre: \"I didn't ask what they'd done with it. I only ever asked how many had come to the table.\" He writes your name in the blank himself. You're Chosen.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 2,
+          "rank": 5
+         },
+         {
+          "kind": "evil",
+          "mark": "confided"
+         },
+         {
+          "kind": "flag",
+          "key": "flare-lysandre-confided",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "flare-inside-act4",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "flare-column-shown",
+          "amount": 1
+         },
+         {
+          "kind": "evil",
+          "beat": true
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "brother",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-lore-brother",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "AZ's question is in your head.",
+     "hide": [
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "\"What does it eat?\"",
+       "success": {
+        "text": "Lysandre: \"It— the surplus.\" \"What does it eat?\" He can't say \"people.\" He's never once said it. He says: Lysandre: \"...Thursday.\" He writes your name in the blank himself. You're Chosen.",
+        "effects": [
+         {
+          "kind": "evil",
+          "standing": 2,
+          "rank": 5
+         },
+         {
+          "kind": "evil",
+          "mark": "confided"
+         },
+         {
+          "kind": "flag",
+          "key": "flare-lysandre-confided",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "flare-inside-act4",
+          "amount": 1
+         },
+         {
+          "kind": "evil",
+          "beat": true
+         }
+        ]
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "fl-act4-list",
+   "name": "The List",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1c1418",
+    "effect": "none"
+   },
+   "intro": "Forty names. The margins. Sycamore: struck, and restored. Diantha. A blank, with a note: \"For whoever answers correctly.\" You look for an L. Lysandre: \"You've noticed. Garance thinks it's an oversight. I've forty places. I've given forty away. I couldn't— one doesn't sit while a guest is standing.\"",
+   "choices": [
+    {
+     "label": "\"And the other three hundred and seventy?\"",
+     "success": {
+      "text": "Lysandre: \"Their keys chime. I'll tell them. On the day. So that they may spend it as they'd wish to have spent it.\" A pause. Lysandre: \"They asked. I've never been able to refuse anyone who asked. So I didn't refuse. I only— didn't find more chairs.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-forty-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-list-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act4-staff"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act4-staff",
+   "name": "The Page About the Staff",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1c1418",
+    "effect": "none"
+   },
+   "intro": "The page about the staff's in there, too.",
+   "choices": [
+    {
+     "label": "Turn to it.",
+     "success": {
+      "text": "\"— I cannot do Thursday again.\" Lysandre: \"Mme Carmody does the flower room. She hums. I've stood outside the door to listen. I can't put her on it. If I put her on it I'll put them all on it, and then I'm back at the head of that table with a pencil.\" He writes your name in the blank himself. His hand's steady. It's the only thing in the room that is. You're the Last Guest.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-lysandre-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-forty-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-list-read",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "You leave the page unturned. He writes your name in the blank himself. His hand's steady. It's the only thing in the room that is. You're the Last Guest.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 2,
+        "rank": 6
+       },
+       {
+        "kind": "evil",
+        "mark": "confided"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-lysandre-confided",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-inside-act4",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-forty-known",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-list-read",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "query",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-correction-query",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "On his own copy of the brochure, open on the desk, there's a printer's mark in the margin of page nine, in blue pencil: ? Author to confirm."
+    }
+   ]
+  },
+  {
+   "id": "fl-act5",
+   "name": "She Stayed",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "beat": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m",
+     "boss.npc_gentleman"
+    ],
+    "tint": "#20181c",
+    "effect": "none"
+   },
+   "intro": "The shelter, under Geosenge. A rehearsal. Four hundred people in red, queuing for a lift, complaining. A member: \"Is there to be seating? Nobody's said if there's seating.\" Another: \"The lighting's very harsh. One looks drained.\" Xan, beside you, not in the queue, in a suit with one sleeve: Xan: \"They don't know. Do they. I didn't.\" At the lift: Yarborough, with a list. He's letting people through. One. Then a pause. Then another. Yarborough: \"Madame Vasseur. This way. ...Monsieur, if you'd wait in the upper lounge. There's a buffet.\" The upper lounge has some three hundred and seventy people in it by the end. There's a very good buffet. In the shelter proper: forty chairs. A table. A red cloth, new. Forty places, laid. Yarborough: \"He asked me to lay it. I said, sir, the last time. He said, 'Forty, Wilhelm. I can do forty.'\" He squares a fork.",
+   "choices": [
+    {
+     "label": "\"You've read the list.\"",
+     "success": {
+      "text": "Yarborough: \"I have, sir.\" He lays a knife. He doesn't say what was on it, and he doesn't need to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-forty-laid",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act5-corridor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You're not on it.\"",
+     "success": {
+      "text": "Yarborough: \"No, sir.\" He moves a glass a quarter-inch. Yarborough: \"I've brought his wine for forty years. I'd not know how to stop on the last day. Somebody's to pour.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-forty-laid",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act5-corridor"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why lay it?\"",
+     "success": {
+      "text": "Yarborough: \"Because he asked, sir. And because it'll be laid properly, if it's laid by me.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-forty-laid",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-act5-corridor"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-act5-corridor",
+   "name": "The Staff Corridor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#20181c",
+    "effect": "none"
+   },
+   "intro": "The staff corridor. Night. A kettle. Sixty people on a rota that ends tomorrow. Rue: \"My mum's packed a bag. I told her to go to the coast. She said, 'Is it your work?' I said yes. She said, 'Then I'll stay and see what you've done.'\" Rue: \"She's on her balcony. She's got her good coat on. She's seventy-one and she's going to stand there and look at it.\" The lift man: \"Mine's the same. Wouldn't shift.\" Xan, who's come down to the staff corridor, and has never been in one: Xan: \"Is this where the kettle is? I've wondered for a month where tea came from.\" Your last choice of the night: who's told about the chime.",
+   "choices": [
+    {
+     "label": "Nobody.",
+     "success": {
+      "text": "Some three hundred and seventy people go to bed with a key on the nightstand. In the morning, a note under your door in Yarborough's hand: \"The Chamber. Dusk. He'd like you to bring the key.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-told-none",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Xan and Rue.",
+     "success": {
+      "text": "You tell them. Xan sits on the floor of the staff corridor. Rue doesn't sit; she puts the kettle on again. They know. Whatever happens tomorrow, they'll act on it. In the morning, a note under your door in Yarborough's hand: \"The Chamber. Dusk. He'd like you to bring the key.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-told-two",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-final-choice"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The upper lounge.",
+     "success": {
+      "text": "You stand on a buffet table and say it. They don't riot. They ask for the manager. A member: \"I've a receipt.\" Another: \"This'll be in my review.\" Then one, at the back, an old Friend, in a suit she calls her Thursday: \"He's put himself with us. Hasn't he. He's not on the forty.\" Silence. \"Of course he hasn't. Silly man. He never could sit down first.\" Everyone in the building knows who said it. It doesn't matter now. Tomorrow three hundred and seventy people in red are standing in the lift hall, not complaining, for the first time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-told-all",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-inside-act5",
+        "amount": 1
+       },
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-final-choice"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "lift",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "flare-lift-daughter",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The lift man, Kettering: \"Mine wouldn't shift either. She's on the balcony. She's taken a chair out.\""
+    }
+   ]
+  },
+  {
+   "id": "fl-op-fitting",
+   "name": "Operation: The Fitting",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/clerk_f"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "The order: stand outside the boutique. Catch the ones who're turned away. A brochure; a smile. A man comes out, crushed, with resoled shoes: \"Quite right. Quite right.\"",
+   "choices": [
+    {
+     "label": "A brochure; a smile.",
+     "success": {
+      "text": "He takes the brochure. He takes the smile. Garance is pleased with the corner.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Tell them the price, and what it buys.",
+     "success": {
+      "text": "\"It's five million. You get a suit and a key. Page nine says what the key's for. Read page nine before you pay.\" He reads it, on the pavement. Twice. \"...'The surplus.' Is that— am I the—\" He looks at his shoes. \"Quite right,\" he says, in a different voice, and hands the brochure back, and goes and buys his wife a scarf from a stall. Nobody joins on that corner. Garance: \"Your conversion's nought. Are you being honest with them? Darling. We've discussed this.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-op-fitting-honest",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "xan-low",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "flare",
+       "inside": true,
+       "suspicion": 0,
+       "suspicionBelow": 4
+      }
+     ],
+     "notice": "Xan: \"Are you staff? You fold things.\""
+    }
+   ]
+  },
+  {
+   "id": "fl-op-stone-round",
+   "name": "Operation: The Stone Round",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_kid_m"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "The order: collect Mega Stones from trainers, \"for safekeeping during the emergency.\" Xan's holding the bag.",
+   "choices": [
+    {
+     "label": "Collect them.",
+     "success": {
+      "text": "Forty stones, in a velvet bag. Xan doesn't ask what the emergency is.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give receipts. Real ones. Dated.",
+     "success": {
+      "text": "You write each out. Name. Stone. Date. \"To be returned on demand.\" A signature. A trainer: \"Nobody's given me a receipt for anything in a year.\" Xan: \"Is that binding? If you sign it? Legally?\" \"Yes.\" Xan: \"...Can I sign one? I'd like to be bound to something.\" Forty receipts. Whatever happens, forty people will turn up with a slip of paper, and it'll be honoured.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-receipts",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-op-power-plant",
+   "name": "Operation: The Power Plant",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/aliana",
+     "trainer.pr/janitor"
+    ],
+    "tint": "#202430",
+    "effect": "none"
+   },
+   "intro": "The order: divert Lumiose's current to Geosenge. All of it.",
+   "choices": [
+    {
+     "label": "All of it.",
+     "success": {
+      "text": "Aliana throws the switches. Lumiose dims.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the hospital's line.",
+     "success": {
+      "text": "Aliana: \"It's all one bus. I can't leave a line; I'd have to label a line. Somebody'd have to tell me which.\" Rue, with a mop, not looking up: Rue: \"Feeder nine. It's got a red tag. I dust it.\" Aliana: \"...Why's a cleaner know the feeders?\" Rue: \"My brother was born on it.\" Feeder nine stays live. If the Blackout comes, it won't reach the hospital quarter: its Center heals in full, member or not.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-feeder-nine",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rue-mid",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "flare",
+       "inside": true,
+       "standing": 5
+      }
+     ],
+     "notice": "Rue: \"You do the corners.\""
+    }
+   ]
+  },
+  {
+   "id": "fl-op-holo-caster",
+   "name": "Operation: The Holo Caster",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "The order: push Lysandre's broadcast to every device in Kalos. \"—so that you may spend today as you would wish to have spent it.\"",
+   "choices": [
+    {
+     "label": "Push it.",
+     "success": {
+      "text": "Every Holo Caster in Kalos lights up with his face.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Add one line at the end: the staff entrance's address.",
+     "success": {
+      "text": "A beat. Then, in plain type: \"Lysandre Labs, Rue Verte, the door by the bins. Ask for Rue. Bring something.\" People come. Not many. A dozen, the first night, to a door by the bins. A woman with a tart. A boy with a soldering iron. A typesetter. Rue: \"I didn't say you could put my name on it.\" She puts the kettle on.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-door-by-bins",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "xan-sus",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "flare",
+       "inside": true,
+       "suspicion": 4,
+       "suspicionBelow": 7
+      }
+     ],
+     "notice": "Xan: \"Garance asked if you were 'on message.' I said I didn't know there was one.\""
+    }
+   ]
+  },
+  {
+   "id": "fl-op-guest-list",
+   "name": "Operation: The Guest List",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor",
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "The order: vet a hundred applicants. A tick or a cross. Garance wants ninety crosses: \"It keeps the tone.\"",
+   "choices": [
+    {
+     "label": "Ninety crosses.",
+     "success": {
+      "text": "Ninety crosses, ten ticks. Garance says it keeps the tone.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lose the list for a day.",
+     "success": {
+      "text": "Rue, at the staff photocopier, which jams: Rue: \"Four hundred and eleven names. And a second sheet, in his writing. Forty.\" She looks at it. She looks at the first. Rue: \"They don't match. There's forty on this and four hundred on that.\" Rue: \"He's sold four hundred tickets for a forty-seat bus.\" The lift man, over her shoulder: \"And he's not on the forty.\" Nobody in the corridor says anything for a bit. A cook: \"...He's not wicked, is he. He's just never once in his life said 'we're full.'\" The copies go in sixty lockers. On the day, sixty people already know which keys chime.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-staff-know",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "xan-high",
+     "when": [
+      {
+       "kind": "evil",
+       "team": "flare",
+       "inside": true,
+       "standing": 8
+      }
+     ],
+     "notice": "Xan: \"If there's a list of people I'd give my seat to, you're— well, you've got one. Whoever you'd pick, then.\""
+    }
+   ]
+  },
+  {
+   "id": "fl-op-flower-room",
+   "name": "Operation: The Flower Room",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor"
+    ],
+    "tint": "#18201c",
+    "effect": "fog"
+   },
+   "intro": "The order: mop it. Rue's off; her mum's had a turn. You volunteer. Nobody's ever volunteered. The chamber. The flower. It's very large and very quiet and it smells faintly of cut stems. A mop. A bucket. A floor the size of a square. It's the only Operation that's just the work.",
+   "choices": [
+    {
+     "label": "Mop it.",
+     "success": {
+      "text": "You mop it. It takes all night. The floor shines.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-op-flower-rue"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Mop it. Count the fuses. Remember where they are.",
+     "success": {
+      "text": "While mopping, you find what Rue's found in three years of Tuesdays. Under the console: a biscuit wrapper, Xerosic's. Under the table: chalk marks, forty, for chairs, and a forty-first, rubbed out; somebody drew it and thought better. The grey box: forty fuses, ceramic. They lift out. At a petal's root: a flower. A real one. Small, red, in a crack in the floor. It shouldn't be growing down here. Rue's been watering it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "standing": 1,
+        "suspicion": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-fuses-counted",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-op-flower-rue"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-op-flower-rue",
+   "name": "The Next Day",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/janitor"
+    ],
+    "tint": "#18201c",
+    "effect": "none"
+   },
+   "intro": "Rue: \"You did the corners. Nobody does the corners.\" A pause. Rue: \"You saw my flower.\"",
+   "choices": [
+    {
+     "label": "\"Why water it?\"",
+     "success": {
+      "text": "Rue: \"Because it came up. On its own. Under that. I thought: if it's going to bother, I'll bother.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"I counted the fuses.\"",
+     "success": {
+      "text": "She looks at you for a long moment. Rue: \"So've I. Every Tuesday. It's always forty.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-fuses-told",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Somebody drew a forty-first chair.\"",
+     "success": {
+      "text": "Rue: \"I know. I mop round it.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-house-red-3",
+   "name": "The House Red",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 2
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Yarborough brings a bottle to the suite. It has a year on it: the first Thursday. He says one thing about the year. Yarborough: \"Twelve at table. He carved. Badly. Everyone was very kind about it.\"",
+   "choices": [
+    {
+     "label": "Thank him.",
+     "success": {
+      "text": "He squares the tray, and goes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-house-red-4",
+   "name": "The House Red",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Yarborough brings a bottle to the suite. It has a year on it: the tenth. He says one thing about the year. Yarborough: \"A second table. He said, 'Wilhelm, we'll need more glasses.' He was delighted. That's what I'd have you know: he was delighted.\"",
+   "choices": [
+    {
+     "label": "Thank him.",
+     "success": {
+      "text": "He squares the tray, and goes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-house-red-5",
+   "name": "The House Red",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Yarborough brings a bottle to the suite. It has a year on it: the well. He says one thing about the year. Yarborough: \"He came home brown, with his hands in ribbons. He'd dug. I said, sir, there are men for that. He said, 'I was one of them, for a fortnight.'\"",
+   "choices": [
+    {
+     "label": "Thank him.",
+     "success": {
+      "text": "He squares the tray, and goes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-house-red-6",
+   "name": "The House Red",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Yarborough brings a bottle to the suite. It has a year on it: the drought. He says one thing about the year. He doesn't open it. He sets it down, corked. Yarborough: \"I'll leave this one with you, sir. I don't pour this one.\"",
+   "choices": [
+    {
+     "label": "Open it yourself.",
+     "success": {
+      "text": "You draw the cork. It's very good. You drink it alone, which is how he must have.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-drought-opened",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it corked.",
+     "success": {
+      "text": "You leave it. In the last scene, whichever it is, it will be on Lysandre's desk, still corked.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-drought-corked",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-house-red-7",
+   "name": "The House Red",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman"
+    ],
+    "tint": "#3a1418",
+    "effect": "none"
+   },
+   "intro": "Yarborough brings a bottle to the suite. It has a year on it: the first, again. He says one thing about the year. Yarborough: \"The last of twelve bottles. I've kept it back six years. I thought there'd be an occasion.\" He draws the cork. Yarborough: \"I find I'd rather it were drunk the night before than not at all.\"",
+   "choices": [
+    {
+     "label": "Thank him.",
+     "success": {
+      "text": "He squares the tray, and goes.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-complaints",
+   "name": "Complaints",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_f"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "You're asked to sit the members' desk for a morning. Garance is at the dentist. The first complaint: \"The shelter rehearsal ran over. I'd a fitting.\" From Madame Vasseur.",
+   "choices": [
+    {
+     "label": "Apologise.",
+     "success": {
+      "text": "She accepts it, as one accepts a canapé.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-complaints-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's the end of the world, madame.\"",
+     "success": {
+      "text": "\"That's no excuse for poor scheduling.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-complaints-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-complaints-2",
+   "name": "Complaints",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_f"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "\"My visor fogs.\" From a man who owns a river.",
+   "choices": [
+    {
+     "label": "Send it to the Labs.",
+     "success": {
+      "text": "It goes to the Labs, in a box marked URGENT.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-complaints-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Breathe less.\"",
+     "success": {
+      "text": "He considers it, seriously.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-complaints-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-complaints-3",
+   "name": "Complaints",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_f"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "\"There's a cleaner who hums.\" From a member, anonymous.",
+   "choices": [
+    {
+     "label": "File it.",
+     "success": {
+      "text": "Filed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-complaints-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lose it.",
+     "success": {
+      "text": "It goes behind the radiator.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-complaints-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Write on it: \"Yes. Isn't it nice.\"",
+     "success": {
+      "text": "You write it, and leave it in the tray. By evening it's pinned over the staff kettle. Rue: \"Somebody's written on it. 'Isn't it nice.'\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-hum-nice",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-complaints-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-complaints-4",
+   "name": "Complaints",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_f"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "\"I wasn't told there'd be no pets. I've a Meowstic. Is she on the list?\" From a girl of nineteen, a legacy member.",
+   "choices": [
+    {
+     "label": "\"Pets aren't covered.\"",
+     "success": {
+      "text": "She goes quite white, and then quite red.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-complaints-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'll ask.\"",
+     "success": {
+      "text": "It's the first time anyone's asked whether a member's Pokémon has a key. It hasn't. None of them have.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-pets",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fl-complaints-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-complaints-5",
+   "name": "Complaints",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rich_f"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "\"My key doesn't sound like my husband's.\" From an old Friend, in a suit she calls her Thursday. Her husband's a founder. He's on the forty. She paid later.",
+   "choices": [
+    {
+     "label": "\"It's a software variation.\"",
+     "success": {
+      "text": "She nods, and goes. She doesn't believe you, and she's too polite to say so.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Whose sounds better?\"",
+     "success": {
+      "text": "She: \"His. It's got a hum under it. Mine's just the tune.\" She looks at you, and you don't lie. \"I see.\" She closes her bag. \"Thirty years I've sat next to that man at dinner. I'll not have him sit somewhere I can't.\" She doesn't make a scene. She goes to find her husband. By the next stage, there's a working key on the members' desk, in an envelope: \"For whoever needs it more than a man who won't go without his wife. — H.\" It can be given to anyone. Yarborough won't take it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-spare-key",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-whats-the-play",
+   "name": "What's the Play",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "The fitting room. A final alteration. Valerie, with the pins. Valerie: \"Four hundred and twelve, and I've never been told the play. I've guessed. Something with a chorus. Everyone the same: it must be a chorus. And one sleeve I've had to do again; a young man tore his off. For a lead rope, he said. Is there a dog in it?\"",
+   "choices": [
+    {
+     "label": "\"It's not a play.\"",
+     "success": {
+      "text": "She takes the pins out of her mouth. One at a time. She puts them in the cushion. Valerie: \"...Then what've I dressed?\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-whats-the-play-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"There's a dog in it. She's called Bijou.\"",
+     "success": {
+      "text": "She stops chalking. She asks what the dog's for. You tell her.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-whats-the-play-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"What do you think it's about?\"",
+     "success": {
+      "text": "Valerie: \"People who want to be looked at and not seen. That's what a visor's for. I thought: a tragedy, then.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-whats-the-play-2",
+   "name": "What's the Play",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/artist"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "She's very quiet. She's horrified in a way that doesn't move her face. Valerie: \"I measured every one of them. I know their shoulders. I know who stands as if they're ashamed.\" A pause. Valerie: \"There's a seam, on the left, under the arm. I leave an inch, always, to let out. I could take it in.\"",
+   "choices": [
+    {
+     "label": "Let her.",
+     "success": {
+      "text": "She does. Over a stage, every suit that comes back for alteration goes out a little tight under the left arm. It's nothing. It's enough that nobody can raise that arm above the shoulder.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "valerie-knows",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-between-floors",
+   "name": "Between Floors",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/waiter_m"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "The lift. A man in a pillbox cap, facing the doors. He doesn't turn round. The first ride: two members get in. \"—and I said to Garance, if there isn't a view from the shelter—\" \"There's not. It's underground.\" \"Then what's one paying for?\"",
+   "choices": [
+    {
+     "label": "Ride again.",
+     "success": {
+      "text": "Down, and up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-between-floors-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-between-floors-2",
+   "name": "Between Floors",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/waiter_m",
+     "trainer.pr/xerosic"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "The second ride: Xerosic gets in, eating. Xerosic: \"Four hundred! I could! I've a capacitor on order; it's for a hobby. Nobody's asked. Going down, Everard! Is it Everard? I've been saying Edmund.\" Kettering: \"Either, monsieur.\"",
+   "choices": [
+    {
+     "label": "Ride again.",
+     "success": {
+      "text": "Down, and up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "fl-between-floors-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-between-floors-3",
+   "name": "Between Floors",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.lysandre",
+     "boss.sycamore"
+    ],
+    "tint": "#2a2420",
+    "effect": "none"
+   },
+   "intro": "The third ride: Lysandre and Sycamore. Neither speaks for nine floors. At the fourth: Sycamore: \"You've not touched your glass in six years.\" Lysandre: \"You noticed.\" Sycamore: \"Of course I noticed. I thought you were on a diet.\" It's the worst thing he's ever said, and he knows it as it leaves him. Lysandre laughs. Once. It surprises both of them. After that, the lift's empty. Kettering, still facing the doors: \"Six years. He's never ridden with the Professor without one of them talking. That's the first silence. I'd say something's on his mind.\"",
+   "choices": [
+    {
+     "label": "\"What do you hear, in here?\"",
+     "success": {
+      "text": "\"Everything, monsieur. People don't see a man in a lift. They say what they'd not say in a corridor.\" He doesn't say any of it.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"What's your daughter play?\"",
+     "success": {
+      "text": "He turns round. \"...Viola. Third desk. She's very good. Monsieur thinks it's the cello.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-kind-staff",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-lift-daughter",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why don't you turn round?\"",
+     "success": {
+      "text": "\"Because then they'd see me, monsieur, and stop talking.\" He doesn't turn round.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-xerosic-alone",
+   "name": "Xerosic, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 3
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/xerosic"
+    ],
+    "tint": "#202430",
+    "effect": "none"
+   },
+   "intro": "A lab. He's eating. Xerosic: \"Forty! Yes! I said forty. It was the first number that fitted the capacitor I'd got. I could do four hundred with a bigger one. Nobody asked! He went very pale and started making a list.\"",
+   "choices": [
+    {
+     "label": "\"Tell him four hundred.\"",
+     "success": {
+      "text": "Xerosic: \"Tell him? He's not asked! One doesn't volunteer a capacitor.\" He goes back to his sandwich.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-x-four-hundred",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Could it do everyone?\"",
+     "success": {
+      "text": "Xerosic: \"It'd need to run backwards. Give, not take. Much harder. Much more interesting. Nobody's asked for interesting.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-backwards",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why didn't you say?\"",
+     "success": {
+      "text": "Xerosic: \"Say? To whom? He asked how to choose. I answered the question. That's what one does with questions.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-malva-alone",
+   "name": "Malva, Alone",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.malva"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "The League's green room. She's in both uniforms. Malva: \"I'm Elite Four and I'm Flare. People ask how. I don't see the difference. Both pick who's worth it. One's got better lighting.\"",
+   "choices": [
+    {
+     "label": "\"Who picked you?\"",
+     "success": {
+      "text": "Malva: \"I picked me. Then they agreed.\" She checks her lipstick in the mirror, and doesn't look at herself.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"And the ones who aren't?\"",
+     "success": {
+      "text": "Malva: \"They watch. Somebody has to.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Which would you keep?\"",
+     "success": {
+      "text": "A pause she isn't used to having. Malva: \"...The one where they clap before I've hurt anyone.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-malva-keep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-scientists-alone",
+   "name": "The Four, at Lunch",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "after": 4
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/bryony",
+     "trainer.pr/mable",
+     "trainer.pr/celosia"
+    ],
+    "tint": "#d03028",
+    "effect": "none"
+   },
+   "intro": "The four scientists, together, at lunch. Bryony: \"We've a pool. On whether he'll go through with it.\" Mable: \"I've 'yes.'\" Celosia: \"I've 'no,' and I've started sleeping in my street clothes.\"",
+   "choices": [
+    {
+     "label": "\"What's the pot?\"",
+     "success": {
+      "text": "Bryony: \"Enough.\" Nobody tells you the figure.",
+      "effects": []
+     }
+    },
+    {
+     "label": "\"Put me down for 'he's talked out of it.'\"",
+     "success": {
+      "text": "They look at each other. Aliana: \"...Nobody's got that square.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "flare-pool-talked",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why are you still here?\"",
+     "success": {
+      "text": "Celosia: \"Because it's the most interesting job in Kalos.\" Mable: \"And because nobody's ever asked us to leave.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "fl-loyalty-test",
+   "name": "The Loyalty Test",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "suspicion": 7,
+     "suspicionBelow": 10,
+     "lacks": "loyalty-test"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.lysandre"
+    ],
+    "tint": "#1c1418",
+    "effect": "none"
+   },
+   "intro": "Lysandre: \"Give me one name. One person you love who isn't worth a seat. If you can't, you don't understand what we're doing.\"",
+   "choices": [
+    {
+     "label": "(Give him a name: somebody the run has met.)",
+     "success": {
+      "text": "You say a name. He writes it nowhere. Lysandre: \"Yes. That's what it feels like. Now you understand.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -2
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-test-named",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I can't.\"",
+     "success": {
+      "text": "Lysandre: \"No. Neither could I, at first.\" He doesn't say what came after first.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": 1
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give me yours first.\"",
+     "success": {
+      "text": "He opens his mouth. He shuts it. Lysandre: \"...The village. At the well. All of them.\" He sits.",
+      "effects": [
+       {
+        "kind": "evil",
+        "suspicion": -3
+       },
+       {
+        "kind": "evil",
+        "mark": "loyalty-test"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-test-yours",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "rue-warn",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-rue",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Rue: \"He'll ask you for a name. Somebody you love who's not worth a seat. Ask him for his first.\""
+    }
+   ]
+  },
+  {
+   "id": "fl-found-out",
+   "name": "Found Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "flare",
+     "inside": true,
+     "suspicion": 10,
+     "lacks": "found-out"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kalos"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/celosia",
+     "trainer.pr/mable"
+    ],
+    "tint": "#3a1418",
+    "effect": "glint"
+   },
+   "intro": "The service lift stops between floors. When the doors open on the lab level, Celosia and Mable are waiting in their visors, and behind them a corridor of red suits. Celosia: \"Guest. He'd like you to know he's very disappointed. He said it warmly.\" You've been found out. There's only one way back outside, and it's through them, with your own party, on worse ground than you'd have chosen.",
+   "choices": [
+    {
+     "label": "Fight your way out.",
+     "success": {
+      "text": "They come at you two at once.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "found-out"
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "flare-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "flare-found-out",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Celosia and Mable",
+       "size": 6,
+       "levelBonus": 2,
+       "format": "doubles",
+       "chain": 1,
+       "win": []
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "xan",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ally-xan",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Xan is in the corridor in a suit with one sleeve. He catches your eye, and takes one step sideways, out of their line."
+    }
+   ]
+  }
+ ]
+}

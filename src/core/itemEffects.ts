@@ -135,12 +135,16 @@ function hookText(hook: HeldHook, copies: number): HookText {
       return { text: 'When it is hit, it switches out. Used up.', once: true };
     case 'mentalHerb':
       return { text: 'Shrugs off infatuation, Taunt, Encore and similar once.', once: true };
+    case 'ownTypePower':
+      return { text: `Moves of its own type hit ${pct(hook.percent)} harder.`, when: 'when it uses a move of its own type' };
     case 'damageTaken':
       return { text: `${hook.percent < 0 ? `Takes ${pct(-hook.percent)} less` : `Takes ${pct(hook.percent)} more`} damage${hook.fromWild ? ' from wild Pokémon' : ''}${hook.superEffective ? ' from super-effective hits' : ''}${hook.holderType ? ` while it is ${cap(hook.holderType)}-type` : ''}.` };
     case 'weatherTurns':
       return { text: `${hook.weathers.map(cap).join('/')} it starts lasts ${hook.turns} turns.` };
     case 'exp':
       return { text: `Earns ${times(hook.multiplier)} experience.` };
+    case 'expLevel':
+      return { text: `Earns experience as if it were ${hook.levels} level${hook.levels === 1 ? '' : 's'} lower, so it grows faster.` };
     case 'growth':
       return { text: `Every ${hook.everyLevels} level${hook.everyLevels === 1 ? '' : 's'} it gains, it grows ${cap(statName(hook.stat))} like a vitamin.`, when: 'on level up' };
     case 'noEvolve':
@@ -169,6 +173,8 @@ function hookText(hook: HeldHook, copies: number): HookText {
       return { text: `While it leads the party, wild Pokémon are ${Math.abs(hook.amount)} level${Math.abs(hook.amount) === 1 ? '' : 's'} ${hook.amount < 0 ? 'lower' : 'higher'} (per copy).` };
     case 'dodgeFirst':
       return { text: 'Dodges the first hit of a battle.', once: true, when: 'first hit' };
+    case 'firstMoveSure':
+      return { text: "Its first move each battle can't miss.", when: 'first move' };
     case 'statusShield':
       return { text: `Cuts the chance of being afflicted by ${pct(hook.percent)}.` };
     case 'weatherImmune':
@@ -202,6 +208,8 @@ function hookText(hook: HeldHook, copies: number): HookText {
     case 'berryRetaliate':
       if (hook.stat) return { text: `Hit by a ${hook.category} move: ${cap(statName(hook.stat))} +${hook.stages}. Used up.`, when: `on a ${hook.category} hit`, once: true };
       return { text: `Hurts a ${hook.category} attacker for ${pct((hook.fraction ?? 0) * 100)} of its max HP. Used up.`, when: `on a ${hook.category} hit`, once: true };
+    case 'maxHp':
+      return { text: `Max HP +${hook.percent}%.` };
     case 'terrainSeed':
       return { text: `Under ${cap(hook.terrain)} Terrain, ${cap(statName(hook.stat))} +${hook.stages}. Used up.`, when: `${cap(hook.terrain)} Terrain`, once: true };
     default: {

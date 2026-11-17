@@ -42,11 +42,43 @@ import { whatIf } from '../core/presentation/whatIf';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { paintBackdrop, RUNEND_SKINS } from '../ui/dSkins';
 import { buildShowcase } from '../ui/runEndLooks';
+import { artOf, monFile, partyCards, rivalArt } from '../ui/redux/game';
+import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { cutBeat, cutView } from '../ui/redux/screens/cut';
+import { overView, reportPages, reportView, runCardView, type Fact } from '../ui/redux/screens/over';
+import { partyCols, partyView } from '../ui/redux/screens/party';
+import type { Art } from '../ui/redux/templates';
+
+type EndMode = 'main' | 'report' | 'card' | 'team' | 'witness';
+/** One card of "Witness the Rest" in the New UI: who speaks and what they say. */
+interface WitnessBeat { name: string; role: string; line: string; cast: Art | null }
+/** Everything the New UI run end shows, gathered while the screen is built. */
+interface NewEnd {
+  won: boolean;
+  sub: string;
+  facts: Fact[];
+  payouts: Fact[];
+  report: string[];
+  witness: WitnessBeat[];
+  card: { name: string; facts: Fact[]; badges: number };
+  save: () => boolean;
+  /** The screen's own choices: 0 back to the Hub, 1 retry this seed, 2 roll the credits. */
+  choose: (i: number) => void;
+}
 
 export class GameOverScene extends Phaser.Scene {
   constructor() {
     super('GameOver');
   }
+
+  private rx: ReduxView | null = null;
+  private rxMode: EndMode = 'main';
+  private rxIndex = 0;
+  private rxPage = 0;
+  private rxPoked: number | null = null;
+  private rxSaved: boolean | null = null;
+  private rxCols = 1;
+  private rxKey: (a: 'up' | 'down' | 'left' | 'right' | 'confirm' | 'back') => void = () => undefined;
 
   preload(): void {
     preloadPokemon(this, partySpecies(), { icon: true, front: true });
@@ -58,6 +90,11 @@ export class GameOverScene extends Phaser.Scene {
     // S5: the ending scene a Story Run reached plays before the results (its outcome was recorded when it was reached).
     if (!data.storyShown && session.storyScene()) {
       this.scene.start('Story', { next: 'GameOver' });
+      return;
+    }
+    // NE100 The Road Home: after the final battle, win or lose, the road walked backwards plays before the results (once).
+    if (session.roadHomeDue()) {
+      this.scene.start('Event', { sideId: session.openRoadHome() });
       return;
     }
     const run = session.run;
@@ -82,6 +119,10 @@ export class GameOverScene extends Phaser.Scene {
       frame.strokeRoundedRect(24, 72, 440, 286, 18).strokeRoundedRect(480, 72, GAME_WIDTH - 504, 286, 18);
     }
     const recap = run ? buildRecap(session.content, run) : null;
+    let headLines: string[] = [];
+    let momentLines: string[] = [];
+    let timeText = '';
+    let saveCardNow: () => boolean = () => false;
     const recapLines = recap ? [recap.ending, ...(recap.legend ? [`Legend: ${recap.legend}`] : []), ...(recap.stamps.length ? [`Stamps: ${recap.stamps.join(' · ')}`] : []), ...recap.rivals.slice(0, 1), ...(recap.tip ? [recap.tip] : [])] : [];
     if (run) {
       const archetype = session.content.archetypes.get(run.archetypeId)?.name ?? run.archetypeId;
@@ -103,7 +144,7 @@ export class GameOverScene extends Phaser.Scene {
       this.input.keyboard?.on('keydown-T', () => copy(encodeTeamCode(run.party.map((m) => ({ speciesId: m.speciesId, level: m.level, shiny: !!m.shiny })))));
       this.input.keyboard?.on('keydown-C', () => copy(encodeChallengeCard({ seed: run.seed, archetypeId: run.archetypeId, rules: run.rules }, { from: 'A friend', title: `${archetype} run`, victory: !!run.victory, badges: run.badges.length, encounters: run.encountersCompleted })));
       // S saves a run card picture (core/runCard.ts) to share.
-      const saveCard = (): void => {
+      const saveCard = (): boolean => {
         const card = buildRunCard(session.content, run);
         card.team.forEach((m) => {
           const sp = session.content.species.get(m.speciesId);
@@ -115,7 +156,9 @@ export class GameOverScene extends Phaser.Scene {
         });
         const ok = saveRunCard(card, won);
         saveBtn.setText(ok ? 'Run card saved!' : 'Could not save the card');
+        return ok;
       };
+      saveCardNow = saveCard;
       this.input.keyboard?.on('keydown-S', saveCard);
       const saveBtn = this.add.text(GAME_WIDTH - 16, 528, 'Save run card (S)', textStyle(24, '#ffffff', { backgroundColor: '#1d5fa8', padding: { x: 14, y: 8 } })).setOrigin(1, 1).setDepth(50).setInteractive({ useHandCursor: true }).setName('save-run-card');
       saveBtn.on('pointerdown', saveCard);
@@ -126,6 +169,7 @@ export class GameOverScene extends Phaser.Scene {
         const done = updateSplits(sp, Date.now(), run.badges.length, true);
         device.setSplits(JSON.stringify(done));
         timeLine = [`Run time: ${formatMs(done.finished ?? 0)}`];
+        timeText = formatMs(done.finished ?? 0);
       }
       const runText = this.add.text(
         44,
@@ -151,6 +195,7 @@ export class GameOverScene extends Phaser.Scene {
       );
       // Run summary card (I485): tap it to flip to the team card and back.
       const front = runText.text;
+      headLines = front.split('\n');
       const back = ['Your team', '', ...run.party.map((m) => `${session.content.species.get(m.speciesId)?.name ?? m.speciesId}  Lv${m.level}${m.shiny ? ' ★' : ''}`)].join('\n');
       let showingBack = false;
       runText.setInteractive({ useHandCursor: true }).on('pointerdown', () => {
@@ -170,6 +215,7 @@ export class GameOverScene extends Phaser.Scene {
         };
         const where = (m: (typeof moments)[number]) => `R${m.where.region + 1}${m.where.stage !== null ? `·S${m.where.stage + 1}` : ''}`;
         const lines = moments.map((m) => `${where(m)}  ★ ${m.type === 'runEnded' || m.actors.length !== 1 ? '' : name(m.actors[0])}${m.text}`);
+        momentLines = lines;
         drawPanel(this, 24, 366, GAME_WIDTH - 48, 118, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true });
         this.add.text(44, 374, 'Run timeline', textStyle(17, '#f0d060')).setName('run-timeline');
         // A line from the first moment to the last, with a dot per moment.
@@ -208,7 +254,7 @@ export class GameOverScene extends Phaser.Scene {
       for (const m of summary.modeRewards ?? []) lines.push(`${m.first ? 'New reward' : 'Repeat reward'}: ${m.text}`);
       const ups = summary.masteryUps ?? [];
       if (ups.length > 0) lines.push(`Mastery: ${ups.slice(0, 6).map((u) => `${session.content.species.get(u.speciesId)?.name ?? u.speciesId} ${RANK_NAMES[u.rank]}`).join(', ')}${ups.length > 6 ? ` and ${ups.length - 6} more` : ''}`);
-      if (summary.trainersReady.length) lines.push('', `Ready to claim in the Trainer Archive: ${summary.trainersReady.map((a) => a.name).join(', ')}`);
+      if (summary.trainersReady.length) lines.push('', `New trainers joined your roster: ${summary.trainersReady.map((a) => a.name).join(', ')}`);
       if (run && !campaignCounts(session.content.campaigns.get(run.campaignId)!, run.rules.modeId)) lines.push('', 'Test campaign: achievements and unlocks were not counted.');
       if (run && !run.rules.progressionEligible) lines.push('', 'Adventure run: no Bank Credits, Research Points, candies, unlocks or achievements were earned.');
     } else {
@@ -218,10 +264,19 @@ export class GameOverScene extends Phaser.Scene {
     const newest = session.profile.legacyRuns[0];
     const letter = newest && run && newest.runId === run.runId ? endOfRunLetter(newest, rivalNickname(session.profile.legacyRuns)) : null;
     if (letter) lines.push('', `Letter from ${letter.from}: "${letter.text}"`);
+    const witness: WitnessBeat[] = [];
+    const rivalNamed = (name: string) => run?.story.rivals.find((r) => r.name === name);
+    if (letter) witness.push({ name: letter.from, role: 'Rival', line: letter.text, cast: rivalArt(this, rivalNamed(letter.from)) });
     // Beta 0.6 R11: Witness the Rest. Cards from THIS run's rivals only (no archive); needs a registered rival.
     if (run && (run.expansion?.rival ? Object.keys(run.expansion.rival).length > 0 : false)) {
       const rivals = Object.entries(run.expansion!.rival!).map(([id, rec]) => ({ id, rec, name: run.story.rivals.find((r) => r.id === id)?.name ?? id }));
-      lines.push('', 'Witness the Rest', ...witnessCards({ playerName: 'You', won, rivals }).map((c) => `${c.title}: ${c.body}`));
+      const cards = witnessCards({ playerName: session.content.archetypes.get(run.archetypeId)?.name ?? 'The Trainer', won, rivals });
+      lines.push('', 'Witness the Rest', ...cards.map((c) => `${c.title}: ${c.body}`));
+      const mine = artOf(this, session.content.archetypes.get(run.archetypeId)?.spriteAssetId);
+      for (const c of cards) {
+        const person = c.kind === 'rival' || c.kind === 'friend';
+        witness.push({ name: c.title, role: c.kind === 'friend' ? 'Friend' : c.kind === 'rival' ? 'Rival' : '', line: c.body, cast: person ? rivalArt(this, rivalNamed(c.title)) : c.kind === 'champion' && !won ? rivalArt(this, rivalNamed(rivals.find((r) => r.rec.role === 'main')?.name ?? '')) : mine });
+      }
     }
     const reflection = run && !won ? whatIf(session.content, run) : null;
     if (reflection) lines.unshift(reflection, '');
@@ -231,7 +286,9 @@ export class GameOverScene extends Phaser.Scene {
     fitBlock(endText, GAME_WIDTH - 540, 266);
     const choose = (i: number): void => {
       if (won && i === (run ? 2 : 1)) {
-        this.scene.start('Credits');
+        // Said outright: Phaser would hand the scene its last start data again, and after a look at the asset credits
+        // in Settings that would show those instead of the ending.
+        this.scene.start('Credits', { assets: false });
         return;
       }
       if (i === 1 && run) {
@@ -284,14 +341,148 @@ export class GameOverScene extends Phaser.Scene {
       };
       this.input.keyboard?.on('keydown-TAB', (e: KeyboardEvent) => { e.preventDefault(); toggle(); });
     }
+    this.rx = null;
+    if (run && reduxOn() && !skin) {
+      const content = session.content;
+      const by = run.log.defeatedBy;
+      const region = content.regions.get(run.regionOrder[run.regionIndex] ?? '')?.name ?? 'the road';
+      const caught = Object.values(run.log.dexTally ?? {}).reduce((n, t) => n + t.caught, 0) || run.log.speciesCaught.length;
+      const facts: Fact[] = [['Battles won', `${run.log.battlesWon}`], ['Pokémon caught', `${caught}`], ['Badges', `${run.badges.length}`], timeText ? ['Time', timeText] : ['Day', `${run.clock.day}`], ['Seed', run.seed]];
+      const payouts: Fact[] = [];
+      if (summary && run.rules.progressionEligible) {
+        const research = summary.researchPoints + summary.achievements.reduce((n, a) => n + a.reward.researchPoints, 0);
+        const ups = summary.masteryUps ?? [];
+        payouts.push(['Bank Credits', `+ ${summary.payout.total.toLocaleString('en-US')}`], ['Research', `+ ${research}`]);
+        payouts.push(['Mastery', ups.length ? `${content.species.get(ups[0]!.speciesId)?.name ?? ups[0]!.speciesId} ${RANK_NAMES[ups[0]!.rank]}${ups.length > 1 ? ` +${ups.length - 1}` : ''}` : 'No new rank']);
+        payouts.push(['Achievements', summary.achievements.length ? `${summary.achievements.length} earned` : 'None this run'], ['New species', `${summary.newSpeciesSeen.length} met · ${summary.newSpeciesCaught.length} caught`]);
+      } else if (summary) payouts.push(['Adventure run', 'Nothing is earned'], ['New species', `${summary.newSpeciesSeen.length} met · ${summary.newSpeciesCaught.length} caught`]);
+      else payouts.push(['Profile', 'Already added']);
+      const archetype = content.archetypes.get(run.archetypeId)?.name ?? run.archetypeId;
+      const lead = run.party[0];
+      const mvp = recap?.legend?.split(':')[0] ?? (lead ? content.species.get(lead.speciesId)?.name ?? lead.speciesId : 'Nobody');
+      this.mountNew({
+        won,
+        sub: won ? `${run.regionsCleared.length} of ${run.regionOrder.length} regions cleared · Day ${run.clock.day}` : `Fell in ${region}${by ? ` · ${by.trainer ?? content.species.get(by.speciesId)?.name ?? by.speciesId}` : ''}`,
+        facts,
+        payouts,
+        report: [...headLines, ...(momentLines.length ? ['', 'Run timeline:', ...momentLines] : []), '', 'What it earned:', ...lines],
+        witness,
+        card: { name: session.profile.legacyRuns.length > 0 ? `Run ${session.profile.legacyRuns.length}` : 'This run', facts: [['Result', won ? 'Champion' : `Fell in ${region}`], ['Trainer', archetype], timeText ? ['Time', timeText] : ['Day', `${run.clock.day}`], ['Seed', run.seed], ['MVP', mvp]], badges: run.badges.length },
+        save: saveCardNow,
+        choose,
+      });
+    }
     if (won && session.settings.battleAnimations === 'full') this.confetti();
     // Ignore keys mashed through the battle's last message so the summary
     // isn't skipped the moment it appears.
     let ready = false;
     this.time.delayedCall(450, () => (ready = true));
     onInputAction(this, (a) => {
-      if (ready) menu.handle(a);
+      if (!ready) return;
+      if (this.rx) this.rxKey(a);
+      else menu.handle(a);
     });
+  }
+
+  /**
+   * The New UI run end (the mock-ups' `over` page): title, two windows, the last party and three buttons. From it:
+   * Witness the Rest (the rivals' cards, one cutscene card each), the run card, the final team and the full report.
+   */
+  private mountNew(o: NewEnd): void {
+    const { session } = services();
+    const run = session.run!;
+    const content = session.content;
+    const file = (name: string): string | null => artOf(this, `pack.memories.eventbg.${name}`)?.file ?? artOf(this, `bg.uie.${name}`)?.file ?? null;
+    const backdrop = file(o.won ? 'mountain' : 'cave'), stage = file('mountain');
+    const team = run.party.slice(0, 6).map((m) => ({ file: monFile(this, m.speciesId, 'front', !!m.shiny), name: content.species.get(m.speciesId)?.name ?? m.speciesId, down: m.hp <= 0 }));
+    const player = artOf(this, content.archetypes.get(run.archetypeId)?.spriteAssetId);
+    const pages = reportPages(o.report);
+    const cards = partyCards(this);
+    const first = o.won ? 'Roll credits' : o.witness.length ? 'Witness the rest' : 'Full report';
+    const buttons = [first, 'Run card', 'Back to Hub'];
+    const extras: [string, string, string][] = [...(first === 'Full report' ? [] : [['Tab', 'full report', 'report'] as [string, string, string]]), ['F', 'final team', 'team'], ['R', 'retry seed', 'retry']];
+    this.rxMode = 'main';
+    this.rxIndex = 0;
+    this.rxPage = 0;
+    this.rxPoked = null;
+    this.rxSaved = null;
+    // Where "Witness the Rest" leads when it ends: the credits after a win, back to this page after a loss.
+    const afterWitness = (): void => {
+      if (o.won) o.choose(2);
+      else go('main');
+    };
+    const go = (mode: EndMode): void => {
+      this.rxMode = mode;
+      this.rxPage = 0;
+      this.rx?.refresh();
+    };
+    const press = (i: number): void => {
+      this.rxIndex = i;
+      if (i === 2) return o.choose(0);
+      if (i === 1) return go('card');
+      if (o.won) return o.witness.length ? go('witness') : o.choose(2);
+      go(o.witness.length ? 'witness' : 'report');
+    };
+    const turn = (): void => {
+      // Report: the next page, then close. Witness: the next card, then on.
+      const last = this.rxMode === 'report' ? pages.length - 1 : o.witness.length - 1;
+      if (this.rxPage < last) {
+        this.rxPage += 1;
+        this.rx?.refresh();
+      } else if (this.rxMode === 'witness') afterWitness();
+      else go('main');
+    };
+    const save = (): void => {
+      this.rxSaved = o.save();
+      this.rx?.refresh();
+    };
+    const render = (c: ReduxCtx): string => {
+      this.rxCols = partyCols(c);
+      const main = (): string => overView(c, { win: o.won, title: o.won ? 'CHAMPION!' : 'RUN OVER', sub: o.sub, facts: o.facts, payouts: o.payouts, team, buttons, index: this.rxIndex, extras, backdrop, poked: this.rxPoked });
+      if (this.rxMode === 'witness') {
+        const w = o.witness[this.rxPage]!;
+        return cutView(c, { name: w.name, role: w.role, line: w.line, cast: w.cast, player, backdrop: stage, beat: cutBeat(this.rxPage, o.witness.length), skip: ['Esc', o.won ? 'credits' : 'skip'] });
+      }
+      if (this.rxMode === 'card') return runCardView(c, { title: 'Run card', name: o.card.name, rank: o.won ? 'Win' : 'Loss', facts: o.card.facts, trainer: player, badges: o.card.badges, team: team.map((t) => t.file), hints: [['Enter', 'save'], ['Esc', 'back']], text: this.rxSaved === null ? 'Press Enter to save the card as a PNG you can share.' : this.rxSaved ? 'Saved as a PNG you can share.' : 'The card could not be saved.' });
+      if (this.rxMode === 'team') return partyView(c, { title: 'Final team', area: 'end', hints: [['Esc', 'back']], mons: cards, index: Math.min(this.rxPage, Math.max(0, cards.length - 1)), text: 'Your final team, as it stood at the end.' });
+      return main() + (this.rxMode === 'report' ? reportView(c, { title: 'Full report', pages, page: this.rxPage }) : '');
+    };
+    this.rx = mountRedux(this, {
+      render,
+      acts: {
+        pick: (i) => { if (this.rxMode === 'main') press(Number(i)); else if (this.rxMode === 'team') { this.rxPage = Number(i); this.rx?.refresh(); } },
+        report: () => { if (this.rxMode === 'main') go('report'); },
+        team: () => { if (this.rxMode === 'main') go('team'); },
+        retry: () => { if (this.rxMode === 'main') o.choose(1); },
+        poke: (i) => { if (this.rxMode !== 'main') return; this.rxPoked = Number(i); this.rx?.refresh(); },
+        page: turn,
+        next: turn,
+        save,
+        back: () => go('main'),
+      },
+      overs: { over: (i) => { if (this.rxMode === 'main' && this.rxIndex !== Number(i)) { this.rxIndex = Number(i); this.rx?.refresh(); } else if (this.rxMode === 'team' && this.rxPage !== Number(i)) { this.rxPage = Number(i); this.rx?.refresh(); } } },
+    });
+    this.input.keyboard?.on('keydown-TAB', (e: KeyboardEvent) => { e.preventDefault(); if (this.rxMode === 'main') go('report'); else if (this.rxMode === 'report') go('main'); });
+    this.input.keyboard?.on('keydown-F', () => { if (this.rxMode === 'main') go('team'); });
+    this.input.keyboard?.on('keydown-R', () => { if (this.rxMode === 'main') o.choose(1); });
+    this.rxKey = (a) => {
+      if (this.rxMode === 'main') {
+        if (a === 'left' || a === 'right') { this.rxIndex = (this.rxIndex + (a === 'left' ? buttons.length - 1 : 1)) % buttons.length; this.rx?.refresh(); }
+        else if (a === 'confirm') press(this.rxIndex);
+        return;
+      }
+      if (a === 'back') return this.rxMode === 'witness' ? afterWitness() : go('main');
+      if (this.rxMode === 'report' || this.rxMode === 'witness') {
+        if (a === 'confirm' || a === 'right' || a === 'down') turn();
+        else if ((a === 'left' || a === 'up') && this.rxPage > 0) { this.rxPage -= 1; this.rx?.refresh(); }
+      } else if (this.rxMode === 'card') {
+        if (a === 'confirm') save();
+      } else if (this.rxMode === 'team' && cards.length) {
+        const step = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -this.rxCols : a === 'down' ? this.rxCols : 0;
+        const to = this.rxPage + step;
+        if (step && to >= 0 && to < cards.length) { this.rxPage = to; this.rx?.refresh(); }
+      }
+    };
   }
 
   /** The last party, split either side of the title. */

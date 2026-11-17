@@ -1,0 +1,7 @@
+{
+ "category": "anime",
+ "note": "Door chains of tools/events/co/anime-7.ts (AQ18 turning point).",
+ "chains": [
+  { "id": "ps_aq18_climb", "name": "Carried Home", "entry": "aq18-climb-1", "themeId": "flying-rock", "tint": "#2b2f3a", "mood": "thin air", "start": "opened" }
+ ]
+}

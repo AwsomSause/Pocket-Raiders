@@ -3,16 +3,20 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { cheerBattleStart } from '../greenneedle/cheer';
+import { stageNumber } from '../events';
+import { evolveMoments, noteCocoon } from '../moments/runMoments';
 import { spendRivalSpoils } from '../nodeMenu/special';
 import { endRivalBrain } from '../rivals/brainSetup';
 import { recordRivalBattle, registerFromRival } from '../rivals/overhaul';
+import { recordPackMarks, scoutUsed, type PackBattleFacts } from '../rivals/questlines';
 import { grantSignatureMoves } from '../story2/signature';
 import { periodOf } from '../clock';
 import { addGrowth, bumpGrowth, doublesTurnFacts, bumpGrowthOnce, hitCounters, moveCounters, moveRoleCounters, noteGrowthKo, turnCounters, turnFacts } from '../overhaul/growth';
 import { momentsLeft, noteMoments } from './momentDirector';
 import { noteGimmickUse } from '../gimmicks';
 import { isLastStanding, type Side } from '../battle/engine';
-import { applyMastery } from '../mastery';
+import { applyMastery, familyId } from '../mastery';
 import type { Content } from '../contentSchema';
 import { CHAMPION_CLASS, ELITE_FOUR_CLASS, GYM_LEADER_CLASS } from '../encounters';
 import { maxHp } from '../pokemon';
@@ -86,6 +90,7 @@ export function recordBattleStarted(content: Content, run: RunState): void {
   run.story.majorCuesThisBattle = 0;
   // Story S7d: the partner's signature moves join it for this battle.
   grantSignatureMoves(content, run);
+  cheerBattleStart(run, battle, stageNumber(content, run));
   const lead = run.party[battle.activeIndex]!;
   noteFought(run, lead.uid);
   emit(content, run, 'battleStarted', {
@@ -672,6 +677,8 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
   const totalHp = run.party.reduce((sum, m) => sum + maxHp(content, m), 0);
   const hpLeft = run.party.reduce((sum, m) => sum + m.hp, 0);
   const result = battle.outcome!;
+  // R6: the rival's notes on that class of trainer are used up once you have fought one.
+  scoutUsed(run, battle.trainer?.classId);
   // Night Owl, Sunbather, Dawn Runner: every Pokémon that fought in a won battle counts it.
   if (result === 'win') {
     const period = periodOf(run);
@@ -696,6 +703,22 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
   const playerKos = kos.filter((k) => k.data.side === 'player' && k.actors[1]).map((k) => ({ fainted: k.actors[0]!, by: k.actors[1]! }));
   recordSacrifice(content, run);
   monRivalAfterBattle(content, run, playerKos);
+  // The pack's Marks (First Blood, Swept, By a Thread...) read this battle's knockouts and who was left standing.
+  const packFacts = (rival: Rival): PackBattleFacts => {
+    const most = (ids: string[]): number => Math.max(0, ...Object.values(ids.reduce<Record<string, number>>((n, id) => ({ ...n, [id]: (n[id] ?? 0) + 1 }), {})));
+    const rivalWon = result !== 'win';
+    const standing = rivalWon ? battle.enemyTeam.filter((m) => m.hp > 0) : run.party.filter((m) => m.hp > 0);
+    const top = Math.max(0, ...run.party.map((m) => m.level));
+    return {
+      rivalWon,
+      playerSweep: most(enemyKos.map((k) => k.by)),
+      rivalSweep: most(playerKos.map((k) => k.by)),
+      winnerLastShare: standing.length === 1 ? standing[0]!.hp / Math.max(1, maxHp(content, standing[0]!)) : null,
+      aceDownFirst: !!rival.ace && enemyKos.length > 0 && familyId(content, enemyKos[0]!.foeSpecies) === rival.ace && battle.enemyTeam.length > 1,
+      loserKos: rivalWon ? enemyKos.length : playerKos.length,
+      heldBack: !rivalWon && run.party.length > 1 && run.party.filter((m) => m.level === top).every((m) => !fought.includes(m.uid)),
+    };
+  };
   if (battle.kind === 'wild') {
     const cand = monRivalCandidate(content, run, playerKos);
     const foe = battle.enemyTeam[0];
@@ -718,9 +741,11 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
     // A narrative defeat (M12) is the rival's story win, not an ordinary one.
     rivalProgress(content, run, rivalBack, result === 'win' ? 'lostToPlayer' : battle.narrative ? 'narrativeWin' : 'beatPlayer');
     recordRivalBattle(run, rivalBack.id, { rivalWon: result !== 'win', stageIndex: run.stage?.index ?? 0, playerHpShare: totalHp > 0 ? hpLeft / totalHp : 0 });
+    recordPackMarks(content, run, rivalBack.id, packFacts(rivalBack));
     spendRivalSpoils(run, rivalBack.id);
     endRivalBrain(run, rivalBack.id);
-    rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), foes: fought };
+    // Moves: the rival's own sets (a move lent for the battle, a Hyper or Mega signature slot is not part of its team).
+    rivalBack.memory.lastBattle = { eventId: ended.id, result: result === 'win' ? 'win' : 'lose', hpLeftShare: hpShare, turns: battle.turn - 1, team: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.speciesId), levels: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.level), moves: battle.enemyTeam.filter((m) => m.uid !== battle.monRival?.uid).slice(0, 6).map((m) => m.moves.filter((x) => !x.lent && !x.hyper && !x.megaSig).map((x) => x.id)), foes: fought };
     recordSeenMoves(content, rivalBack, battle.playerMovesSeen, ended.id);
     // W2: everything else it watched (setup, switches, your lead, a sweep, a legend...) for its adaptation triggers.
     const leadUid = run.story.events.find((e) => e.type === 'battleStarted' && e.where.battle === index)?.actors[0];
@@ -763,6 +788,7 @@ function recordBattleEnd(content: Content, run: RunState, where: Where): void {
       registerFromRival(run, major, 'main');
       rivalProgress(content, run, major, result === 'win' ? 'lostToPlayer' : 'beatPlayer');
       recordRivalBattle(run, major.id, { rivalWon: result !== 'win', stageIndex: run.stage?.index ?? 0, playerHpShare: totalHp > 0 ? hpLeft / totalHp : 0 });
+      recordPackMarks(content, run, major.id, packFacts(major));
       emit(content, run, 'rivalryFormed', { where, actors: fought, data: { rival: major.id, archetype: major.archetype, outcome: 'major' }, text: `${trainer.name} swore to keep up with you all the way. A rivalry for the whole journey has begun` });
       for (const text of learnFromBattle(content, run, major, enemyKos, where)) emit(content, run, 'rivalryFormed', { where, actors: fought, data: { rival: major.id, outcome: 'studied' }, text });
     }
@@ -848,6 +874,7 @@ export function recordChanges(content: Content, before: RunState, run: RunState,
       openHistory(content, run, mon.uid, mon.speciesId, starter ? 'starter' : caught ? 'caught' : 'gift');
       // Species Mastery unlocks (egg moves, ability, an awakened move) for a Pokémon that just joined.
       applyMastery(content, run, mon);
+      noteCocoon(run, mon);
       if (starter) emit(content, run, 'starterChosen', { actors: [mon.uid], data: { speciesId: mon.speciesId }, text: 'Chosen as your starter' });
       else if (reunion?.kind === 'reunion') {
         advanceChains(content, run, 'reunion', mon.uid);
@@ -871,6 +898,8 @@ export function recordChanges(content: Content, before: RunState, run: RunState,
         data: { from: prev.speciesId, to: mon.speciesId, trigger: evolutionTrigger },
         text: `Evolved from ${name(content, prev.speciesId)} into ${name(content, mon.speciesId)}`,
       });
+      // Pack Pokémon Moments (PA6 The Slow Road, PA9 What It Becomes): told as a story moment.
+      for (const line of evolveMoments(content, run, mon, prev.speciesId)) emit(content, run, 'storyMoment', { actors: [mon.uid], data: { def: 'pokemon-moment', suppressed: false }, importance: 60, text: line });
       // Determination Evolution: the evolution rules are unchanged; an exceptional story (a boss beaten
       // after surviving a fatal hit) only earns it a named memory and its own record.
       graduateMentorships(content, run, mon.uid);

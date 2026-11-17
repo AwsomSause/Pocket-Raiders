@@ -290,7 +290,7 @@ function finalJournal(content: Content, run: RunState): string[] {
 export function applyRunToProfile(content: Content, profile: Profile, run: RunState, now: string): RunEndSummary {
   // Adventure earns nothing for the account; test campaigns count nothing either.
   const counts = campaignCounts(getCampaign(content, run.campaignId), run.rules.modeId) && run.rules.progressionEligible;
-  const readyBefore = new Set(trainersReadyToClaim(content, profile).map((a) => a.id));
+  const ownedBefore = new Set([...content.archetypes.values()].filter((a) => trainerStatus(profile, a) === 'unlocked').map((a) => a.id));
   const research = content.balance.research;
   const attributesBefore = readAttributes(content, profile.attributes);
   let researchPoints = 0;
@@ -394,7 +394,8 @@ export function applyRunToProfile(content: Content, profile: Profile, run: RunSt
   // The newest runs, plus any older run holding a Legacy Record: those stay in the Hall of Fame for good.
   profile.runHistory = profile.runHistory.filter((r, i) => i < content.balance.runHistorySize || r.legacy.some((c) => (c.records ?? []).length > 0));
 
-  const trainersReady = trainersReadyToClaim(content, profile).filter((a) => !readyBefore.has(a.id));
+  // Streamlined unlocks: a met challenge joins the roster on its own (no claim step); list everyone who joined this run.
+  const trainersReady = joinEarnedTrainers(content, profile).filter((a) => !ownedBefore.has(a.id));
   const attributesAfter = readAttributes(content, profile.attributes);
   return { payout, researchPoints, newSpeciesSeen, newSpeciesCaught, achievements, trainersReady, attributesBefore, attributesAfter, questSteps, runQuestDone: runQuestDone ? runQuest : null, masteryUps, gameEvents, contracts, modeRewards, directive, mentorLines };
 }
@@ -407,8 +408,19 @@ export function trainerStatus(profile: Profile, archetype: Archetype): TrainerSt
   if (archetype.evolvedFrom) return profile.claims?.[`evolution:${archetype.evolvedFrom}`] ? 'unlocked' : archetype.available ? 'locked' : 'comingLater';
   if (archetype.unlockedByDefault || profile.unlockedArchetypes.includes(archetype.id)) return 'unlocked';
   if (!archetype.available) return 'comingLater';
-  if (archetype.unlock && requirementProgress(profile, archetype.unlock).met) return 'claimable';
+  // A met challenge is enough: the trainer is yours (it is written to the roster at the next run end).
+  if (archetype.unlock && requirementProgress(profile, archetype.unlock).met) return 'unlocked';
   return 'locked';
+}
+
+/** True when the player can pick this trainer. */
+export const ownsTrainer = (profile: Profile, archetype: Archetype): boolean => trainerStatus(profile, archetype) === 'unlocked';
+
+/** Writes every earned trainer (met challenge) to `unlockedArchetypes`, so it stays owned. Returns every owned trainer. Mutates `profile`. */
+export function joinEarnedTrainers(content: Content, profile: Profile): Archetype[] {
+  const owned = [...content.archetypes.values()].filter((a) => ownsTrainer(profile, a));
+  for (const a of owned) if (!a.unlockedByDefault && !a.evolvedFrom && !profile.unlockedArchetypes.includes(a.id)) profile.unlockedArchetypes.push(a.id);
+  return owned;
 }
 
 export function trainersReadyToClaim(content: Content, profile: Profile): Archetype[] {

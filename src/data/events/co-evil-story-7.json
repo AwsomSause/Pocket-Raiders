@@ -1,0 +1,2581 @@
+{
+ "catalogOverhaul": "evil-story",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "rk-final-choice",
+   "name": "The Final Choice",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "glint"
+   },
+   "intro": "Dawn. The eleventh floor: a corridor of grey carpet, and at the end of it a door with a brass plate, PRESIDENT. Otis is behind you with his sleeves rolled; Faye has a ledger under her arm that isn't the one she usually carries. In your hand is a key card: ELEVENTH FLOOR. ALL DOORS. Behind the brass plate, unhurried: Giovanni: \"It's open. It's been open for an hour. I was curious whether you'd knock.\" On the fire stairs, one flight down, a man in a brown coat has stopped tying his shoe. Looker: \"I am not here. I am a man with a shoe.\" Faye holds out the other ledger. Faye: \"Four thousand, one hundred and twelve. Names and addresses. I copied it out by hand; it took a year of lunches. I don't know who to give it to. I've decided that's your job.\" You hold two things now: a key and a list. The Final Choice is who gets which.",
+   "choices": [
+    {
+     "label": "\"Open the door for him.\"",
+     "success": {
+      "text": "You open the door. He's at the desk, and he nods to you as if you'd brought the post. The list goes back into Faye's bag.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-final-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-plan-hold"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Lock it. With him inside.\"",
+     "success": {
+      "text": "You close the brass-plated door, from the outside, and turn the key. A pause, from inside. Giovanni: \"Ah. You're one of the looking kind after all. Matori did say \"doesn't know yet.\"\" A chair creaks. Giovanni: \"I'll wait. It's a good door. I chose it.\" Otis: \"What do we do?\" Faye: \"We go down. Floor by floor. And I read the book out at each one.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-turn-11"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Looker. Catch.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-looker-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You throw the key card down the stairwell. A hand comes out of a brown coat and catches it. Looker: \"I asked for evidence. You have brought me a building.\" He's already on a radio. \"All units. Eleventh floor. We have the door, the list, and a person in a uniform who is, I am told, looking.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-final-police",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-police-cordon"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It's a good plan. It doesn't need you.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "rank": 5,
+       "has": "confided"
+      }
+     ],
+     "success": {
+      "text": "You open the door, go in, and shut it behind you. He doesn't turn round from the window. Giovanni: \"...No. It doesn't. That's how I knew it was good.\" Now he turns. Giovanni: \"I've been waiting eleven years for somebody downstairs to say that. I'd rather hoped it would be my son.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-final-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-duel"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "looking",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-matori-looking",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Matori is at the lift as you pass, tablet under her arm. \"Did you find it?\" she asks, and doesn't wait for the answer."
+    },
+    {
+     "id": "bench",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "matori-bench",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Matori: \"You sat with me on a bench. I've moved his one o'clock. I'd have moved it anyway. I'd like you to think I moved it for that.\""
+    }
+   ]
+  },
+  {
+   "id": "rk-plan-hold",
+   "name": "Phase 1: Hold the Line",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "The Saffron police and Gym trainers with warrants contest the lobby, the labs and the stairs. You place the squad.",
+   "choices": [
+    {
+     "label": "Otis in the lobby, Faye in the labs, you on the stairs.",
+     "success": {
+      "text": "In the lobby Otis doesn't fight well; he talks. \"Mind the plant, that's the President's.\" Two officers stop to mind the plant. In the labs, Faye has locked the specimen cabinets and lost the key in her cardigan. The stairs are yours.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 2,
+       "name": "Saffron Police",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-plan-gate"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Keep the squad with you on the stairs.",
+     "success": {
+      "text": "The three of you hold the stairs, and the lobby and the labs come up to meet you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Saffron Police",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-plan-gate"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-plan-gate",
+   "name": "Phase 2: The Gate Locks",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "The last lock is in your hands. Seat it, and the building is sealed.",
+   "choices": [
+    {
+     "label": "Seat the last lock.",
+     "success": {
+      "text": "Over the PA: Giovanni: \"Building sealed. Please remain where you are. ...House Card: the eighth-floor pantry has a secretary in it who's been here nineteen years. Leave her. She makes the tea.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-plan-rival"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-plan-rival",
+   "name": "Phase 3: The Rival",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Your rival comes through the freight lift, and stops dead. \"You're in it. You're wearing it. Tell me there's a reason. I'll believe nearly anything.\"",
+   "choices": [
+    {
+     "label": "\"There's a reason.\"",
+     "success": {
+      "text": "\"Then show me.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-plan-defender"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "\"Go home.\"",
+     "success": {
+      "text": "\"Not without you.\"",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -3
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Your rival",
+       "rival": true,
+       "size": 6,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-plan-defender"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "\"Sixth floor. The Rig Room. There's a switch under the housing, on the left.\"",
+     "success": {
+      "text": "No battle. Your rival looks at you for one long second, and goes. Somewhere below, every Rig in the building goes quiet. Giovanni never learns who.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": 2
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-rival-sabotage",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-plan-defender"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-plan-defender",
+   "name": "Phase 4: The Defender",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "The city's Gym Leader leads the police up the last stair. Sabrina: \"This city isn't yours. Give it back.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "She doesn't raise her voice.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Sabrina",
+       "bossId": "sabrina",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-plan-roof"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-plan-roof",
+   "name": "Phase 5: The Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "tint": "#141a24",
+    "effect": "rain"
+   },
+   "intro": "Rain. The armour, kneeling, cabled. Ein, under an umbrella, writing. Police helicopters are coming in over Saffron. M2, a voice with no mouth: \"You. You're on the wrong side of the glass. I can tell. You keep looking at the cables.\" Giovanni: \"Hold ten turns. Then it's done, and nobody need ever switch it on.\"",
+   "choices": [
+    {
+     "label": "Defend the generator.",
+     "success": {
+      "text": "Ten turns. You hold. At the tenth: Giovanni: \"There. Orderly. You see? Nobody shouting.\" The Master Ball's on a cushion. He doesn't pick it up. He looks at it the way he looked at the photograph.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-plan-verdict"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Do nothing, and let them see you do it.",
+     "success": {
+      "text": "You stand in the rain with your hands at your sides. The game doesn't punish it. M2 notices. M2: \"...Ah. One of you has a conscience and a uniform. I've met the uniform. I'd like to meet the other.\" The tenth turn comes anyway. Giovanni: \"There. Orderly.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "m2-noticed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-plan-verdict"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-plan-verdict",
+   "name": "The Verdict",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "tint": "#141a24",
+    "effect": "rain"
+   },
+   "intro": "On the roof, in the rain, Giovanni turns to you.",
+   "choices": [
+    {
+     "label": "Take the title.",
+     "success": {
+      "text": "Giovanni: \"You held. I don't need loyalty. I need people who finish the job. Executive. Your first task: do not let me down.\" Kanto is under new management. Every Poké Ball sold here pays a tenth to a company nobody's heard of. Prices are stable; shops are open; people have stopped saying the word. Shops charge you less, and call you \"sir\" or \"ma'am.\" The rival won't meet your eye for a region. Otis has a desk, and he's good at it. Faye moves one name a week to \"Returned.\" Matori still takes no day's leave. Domino is promoted. Butch's twelfth commendation says \"Buck.\" Cassidy skims the new company. Dr. Sotheby says nothing about the switch. Jardine drives. Madame, on the telephone: \"He'll be unbearable.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.85
+         }
+        ],
+        "modsText": "Every Kanto shop charges you 15% less for the rest of the region."
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-occupied",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give it back when they can pay.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-madame-line",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Giovanni: \"You held. I don't need loyalty. I need people who finish the job. Executive. Your first task: do not let me down.\" He turns round, slowly. \"...Where did you hear that.\" \"She rang.\" A long time. The rain. \"It was the fourth rule. I took it off the wall the day she retired.\" He picks up the telephone on the roof's wall box. \"Matori. The florist. Vickery. Mark her paid, for good.\" He hangs up. \"One. I'll do one. Don't ask me for four thousand.\" Kanto is under new management. Every Poké Ball sold here pays a tenth to a company nobody's heard of. Prices are stable; shops are open; people have stopped saying the word. Shops charge you less, and call you \"sir\" or \"ma'am.\" The rival won't meet your eye for a region. Otis has a desk, and he's good at it. Faye moves one name a week to \"Returned.\" Matori still takes no day's leave. Domino is promoted. Butch's twelfth commendation says \"Buck.\" Cassidy skims the new company. Dr. Sotheby says nothing about the switch. Jardine drives. Madame, on the telephone: \"He'll be unbearable.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.85
+         }
+        ],
+        "modsText": "Every Kanto shop charges you 15% less for the rest of the region."
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-occupied",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cubone",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-tower-taken",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Cubone from the Tower is still in the Holding Pen. Nobody will remind you. It's there if you go and get it."
+    },
+    {
+     "id": "inspector",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-lore-inspector",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You tell him: \"Pilkington says it was the cleanest Gym in Kanto.\" Giovanni: \"...He said that to you? In words? I had it in writing. I never heard it said.\""
+    }
+   ]
+  },
+  {
+   "id": "rk-turn-11",
+   "name": "11: The Anteroom",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Matori, with her tablet. Faye reads: \"Matori. Nine years. Never a day's leave. Real name: on file. Reason for joining: 'Somebody had to know everyone's.'\" Matori: \"That's not for reading aloud.\" A pause. Matori: \"...He has a helicopter at one. I'll move it.\" She steps aside.",
+   "choices": [
+    {
+     "label": "Go down.",
+     "success": {
+      "text": "No battle. The stairs go down into the building you've worked in.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-turn-10"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask her name.",
+     "success": {
+      "text": "She tells you. It's in no file after today.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "matori-named",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-turn-10"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-turn-10",
+   "name": "10: The Specimen Hall",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "A Rocket scientist with a fossil Pokémon on a lead. Faye reads the fossil's entry: \"Taken from Mt. Moon. Owner: the mountain.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The scientist pushes his glasses up.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "specialist",
+       "name": "Rocket Scientist",
+       "size": 3,
+       "levelBonus": 1,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-turn-9"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Let Griggs do it.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "griggs-left",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The freight lift opens. A big man with a crowbar: Foreman Griggs. \"That's mine. I dug it. I'm putting it back.\" He does the fighting.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-turn-9"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-turn-9",
+   "name": "9: Butch",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Butch, at the top of the ninth-floor stair. Faye reads: \"Butch. Eleven commendations. Name spelled wrong on nine.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "He loses, and says it himself as he does: \"It's Butch.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Butch",
+       "size": 5,
+       "levelBonus": 2,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-turn-7"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"Butch.\" (Say it right.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "butch-named",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Butch: \"...House Card said it right. First go. Let them by.\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-turn-7"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-turn-7",
+   "name": "7: Cassidy",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Cassidy, with her Big Tab. Faye reads: \"Cassidy. Second collection, Vickery's, March to now: forty-one thousand, two hundred.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "She doesn't wait for Faye to finish.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Cassidy",
+       "size": 5,
+       "levelBonus": 2,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-turn-6"
+        }
+       ]
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "owes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cassidy-owes",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She's already put it back. Faye reads: \"Balance: nil.\" Cassidy looks at the floor, and holds the lift.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Take the lift.",
+       "success": {
+        "text": "Nobody fights. Cassidy holds the door until you're in.",
+        "effects": [
+         {
+          "kind": "addEvent",
+          "eventId": "rk-turn-6"
+         }
+        ]
+       }
+      }
+     ]
+    },
+    {
+     "id": "grudge",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "cassidy-grudge",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "She knows who reported her skim. She's brought more than her Big Tab.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Battle.",
+       "success": {
+        "text": "She's been waiting for this.",
+        "effects": [],
+        "battle": {
+         "kind": "trainer",
+         "evil": "executive",
+         "name": "Cassidy",
+         "size": 6,
+         "levelBonus": 3,
+         "pseudo": true,
+         "chain": 1,
+         "win": [
+          {
+           "kind": "addEvent",
+           "eventId": "rk-turn-6"
+          }
+         ]
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "rk-turn-6",
+   "name": "6: The Rig Room",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Dr. Namba, and Dr. Sotheby at the back. Faye reads: \"Dr. Namba. Patent holder. Dr. Sotheby: deputy; no patent.\"",
+   "choices": [
+    {
+     "label": "Battle Namba.",
+     "success": {
+      "text": "\"Do you know what this equipment costs?\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "specialist",
+       "name": "Dr. Namba",
+       "size": 4,
+       "levelBonus": 1,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-turn-b"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Look at Sotheby.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-lore-sotheby",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Sotheby reaches under the housing, on the left. Every Rig in the building opens at once. Dr. Namba: \"What did you— that's not in the— it's NAMBA on the patent!\" No battle. Collars fall off like leaves.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-turn-b"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-turn-b",
+   "name": "B: The Holding Cells",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "A door, and a guard who's had the same sandwich as everyone. Faye reads: \"Remy. Bunk nineteen, upper. Detained eleven weeks. Charge: none written.\" Otis doesn't wait for a choice. He's got the guard's keys before the guard has stood up. A thin man with a beard he didn't have, blinking. Remy: \"...Did you finish my book?\" Otis: \"I never turned it over.\" Remy: \"It's the butler.\"",
+   "choices": [
+    {
+     "label": "Up to the roof, by the service stair.",
+     "success": {
+      "text": "On the way, the trio, lying down next to a potted plant. Meowth: \"So let me get this straight. The new kid's sackin' the Boss.\" James: \"Is there severance?\" Jessie: \"We're with whoever's winning. It's implied in the motto.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "pen": true
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-turn-roof"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-turn-roof",
+   "name": "The Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#141a24",
+    "effect": "rain"
+   },
+   "intro": "M2. The cables. Ein, closing his notebook. Ein: \"The pulse has stopped. Somebody found the switch. How disappointing for Dr. Namba. I have what I came for.\" He leaves by launch. M2: \"The armour's quiet. I can hear myself. Is that your doing?\" No battle. The four seals are unbolted by hand, one at a time. Otis takes the left shoulder (\"You're shaking.\" \"You're eight foot tall.\" \"...Fair.\"). Faye takes the right (\"You've a list. Am I on it?\" \"Entry four thousand, one hundred and thirteen. I added you this morning. Under 'Returned.'\"). Remy takes the chest (\"You were in a cage too. It doesn't leave. But it goes quiet.\"). The crown is yours.",
+   "choices": [
+    {
+     "label": "Unbolt the crown.",
+     "success": {
+      "text": "M2: \"You wore the uniform to get to this bolt. I'll remember that this happened. I think I may even remember it fondly.\" It's gone.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "m2-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "legend-cerulean-cave",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-turn-door"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "cubone",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-tower-taken",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Afterwards you'll carry the Cubone back up Pokémon Tower yourself. The Marowak will be at the grave. She'll take it, and look at you for the length of one breath."
+    }
+   ]
+  },
+  {
+   "id": "rk-turn-door",
+   "name": "The Door",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "pokemon": "persian",
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "The eleventh floor again. You unlock it. He's at the window, with his back to the room; the Persian is on the desk. Giovanni: \"I heard it go. The thing on the roof. I'd know that silence anywhere; it's the silence after you lose something you couldn't afford.\" He straightens his cuffs. Giovanni: \"You've the list. Faye's. I knew she was copying it. I let her. I wanted to see whether anybody in this building would do anything with the truth, if they had it. Eleven years, nobody did. A battle? It's customary.\"",
+   "choices": [
+    {
+     "label": "\"A battle.\"",
+     "success": {
+      "text": "He fights the way he ran his Gym: cleanly, and to the end.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.9
+         }
+        ],
+        "modsText": "Every Kanto shop charges you 10% less, and they don't say why."
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-remnants-hostile",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "evil": "leader",
+       "name": "Giovanni",
+       "size": 6,
+       "levelBonus": 2,
+       "pseudo": true,
+       "chain": 1,
+       "win": []
+      }
+     }
+    },
+    {
+     "label": "\"No. Go.\"",
+     "success": {
+      "text": "He picks up the Persian. At the private lift: \"Customary isn't compulsory.\" He leaves the bowl, full. Rocket falls. Lists in Faye's handwriting are taped to the glass of every Pokémon Center in Kanto. Otis trains as a dental nurse: \"Open wide. I know. I know.\" Faye's lists are on every Center's glass. Remy says, \"It's the butler.\" Matori takes a day's leave, doesn't know what to do with it, and comes back at noon. Domino goes out by a window. Butch: \"It's Butch.\" Dr. Sotheby presses the switch, and Rudd opens every cage he's ever counted. Jardine drives the other way and doesn't ask. Madame: \"He'll sulk for a year. Do drop in.\" Giovanni is gone; the Persian's bowl is full.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.9
+         }
+        ],
+        "modsText": "Every Kanto shop charges you 10% less, and they don't say why."
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-remnants-hostile",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Your son's in Johto. Red hair. He's all right.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-son-found",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He doesn't move for a moment. Giovanni: \"...Is he.\" He picks up the Persian. Giovanni: \"I'll not go to him. He'd think I wanted something.\" At the private lift: Giovanni: \"Tell him the Gym was real. He won't believe it from me.\" Rocket falls. Otis trains as a dental nurse: \"Open wide. I know. I know.\" Faye's lists are on every Center's glass. Remy says, \"It's the butler.\" Matori takes a day's leave, doesn't know what to do with it, and comes back at noon. Domino goes out by a window. Butch: \"It's Butch.\" Dr. Sotheby presses the switch, and Rudd opens every cage he's ever counted. Jardine drives the other way and doesn't ask. Madame: \"He'll sulk for a year. Do drop in.\" Giovanni is gone; the Persian's bowl is full.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-son-told",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give it back when they can pay.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-madame-line",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Giovanni: \"They can't pay. That's the point of them.\" A pause. Giovanni: \"...She'd say: then give it back anyway. She'd be insufferable about it.\" He leaves the Master Ball on the desk. Giovanni: \"There. One.\" He goes, with the Persian. Otis trains as a dental nurse: \"Open wide. I know. I know.\" Faye's lists are on every Center's glass. Remy says, \"It's the butler.\" Matori takes a day's leave, doesn't know what to do with it, and comes back at noon. Domino goes out by a window. Butch: \"It's Butch.\" Dr. Sotheby presses the switch, and Rudd opens every cage he's ever counted. Jardine drives the other way and doesn't ask. Madame: \"He'll sulk for a year. Do drop in.\" Giovanni is gone; the Persian's bowl is full.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "item",
+        "id": "master-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-turn",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "inspector",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "rocket-lore-inspector",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You tell him: \"Pilkington says it was the cleanest Gym in Kanto.\" He stops. Giovanni: \"...He said that to you? In words?\" A pause. Giovanni: \"I had it in writing. I never heard it said.\""
+    }
+   ]
+  },
+  {
+   "id": "rk-police-cordon",
+   "name": "Phase 1: The Cordon",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Forty officers in the stairwells. No battles: they have Faye's floor plan. You walk them up, floor by floor. Each Grunt they pass is offered a form. Most sign. Otis hands out pens.",
+   "choices": [
+    {
+     "label": "Keep walking.",
+     "success": {
+      "text": "At the ninth floor there's one who won't sign.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-police-arrests"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-police-arrests",
+   "name": "Phase 2: The Arrests",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Butch, Cassidy, Namba, Vesper, Griggs and Rudd are led away. Domino doesn't sign. Domino: \"Agent 009. Somebody ought to remember the number.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "She fights like someone with somewhere to be.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Domino",
+       "size": 6,
+       "levelBonus": 2,
+       "pseudo": true,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-police-roof"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-police-roof",
+   "name": "Phase 3: The Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#141a24",
+    "effect": "rain"
+   },
+   "intro": "M2, kneeling. Four officers and a technician with a new set of cables. An International Police helicopter with a cradle. Looker: \"It comes with us. Safekeeping. A secure facility. It is for its own protection, and for— everyone's.\" M2: \"A different man. A different coat. The same cables. Do you see?\"",
+   "choices": [
+    {
+     "label": "\"It walks free. That's the deal.\"",
+     "success": {
+      "text": "Looker: \"I cannot authorise—\" \"I'm not asking the International Police. I'm asking you.\" He looks at the rain for a while. Looker: \"...I am tying my shoe.\" The seals are unbolted while he ties it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "m2-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "legend-cerulean-cave",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-police-door"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"...Safekeeping. For now.\"",
+     "success": {
+      "text": "It's lifted. It doesn't struggle. It looks at you all the way up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "m2-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-police-door"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Ask it.\"",
+     "success": {
+      "text": "M2: \"I want to not be asked for things.\" Looker, slowly: \"...That is a reasonable request. I have made it myself, of my superiors.\" It goes free.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "m2-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "legend-cerulean-cave",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-police-door"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-police-door",
+   "name": "Phase 4: The Door",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Giovanni's gone, by the private lift. On the desk, a note: \"Tell Looker the tea's on the eighth floor.\" Looker: \"And the ledger. The list. This we must keep. For the prosecutions. It will be returned to the public in— there is a process.\" Faye: \"How long's the process?\" Looker: \"Years. Four. Perhaps six. They will be filed.\" Faye: \"They've been filed for forty.\"",
+   "choices": [
+    {
+     "label": "\"It's evidence. Take it.\"",
+     "success": {
+      "text": "Looker takes the list, and thanks you properly. Kanto is safe. There's an International Police office in Saffron where Silph's lobby was, \"temporarily,\" and Silph Co. is held \"for safekeeping.\" It will still be held when the run ends. Shops are open; nobody's afraid; there are a few more forms than there used to be. A man in a brown coat nods to you in every town. You have one favour from Looker, for later. Otis is suspended for six months. Faye gives nine hours of testimony and doesn't miss a figure. Remy gets an apology, at length, from a man in a brown coat. Matori tells them nothing and is released for want of a file. Domino goes out by a window. Butch is arrested as \"Hutch,\" appeals on that ground, and wins. Vesper hands Looker the second book; it's the best evidence in the case. Giovanni is gone, with the Persian, and a note about the tea.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-police",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-safekept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "looker-favour",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Faye. Read it out. Now. All of it. On the PA.\"",
+     "success": {
+      "text": "She does. It takes until evening. The whole of Saffron is listening, behind its seal. Looker stands in the lobby with his hat in his hands and doesn't stop her. By the time it's evidence, it's also common knowledge. Kanto is safe. There's an International Police office in Saffron where Silph's lobby was, \"temporarily,\" and Silph Co. is held \"for safekeeping.\" It will still be held when the run ends. Shops are open; nobody's afraid; there are a few more forms than there used to be. A man in a brown coat nods to you in every town. You have one favour from Looker, for later. Otis is suspended for six months. Faye gives nine hours of testimony and doesn't miss a figure. Remy gets an apology, at length, from a man in a brown coat. Matori tells them nothing and is released for want of a file. Domino goes out by a window. Butch is arrested as \"Hutch,\" appeals on that ground, and wins. Vesper hands Looker the second book; it's the best evidence in the case. Giovanni is gone, with the Persian, and a note about the tea.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-police",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-safekept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "looker-favour",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 2
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Copy it first.\"",
+     "success": {
+      "text": "Faye copies it again, faster this time, while Looker pretends to read the notice board. Kanto is safe. There's an International Police office in Saffron where Silph's lobby was, \"temporarily,\" and Silph Co. is held \"for safekeeping.\" It will still be held when the run ends. Shops are open; nobody's afraid; there are a few more forms than there used to be. A man in a brown coat nods to you in every town. You have one favour from Looker, for later. Otis is suspended for six months. Faye gives nine hours of testimony and doesn't miss a figure. Remy gets an apology, at length, from a man in a brown coat. Matori tells them nothing and is released for want of a file. Domino goes out by a window. Butch is arrested as \"Hutch,\" appeals on that ground, and wins. Vesper hands Looker the second book; it's the best evidence in the case. Giovanni is gone, with the Persian, and a note about the tea.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-police",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-safekept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "looker-favour",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-list-copied",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Give it back when they can pay.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-madame-line",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Looker: \"I do not— pay what?\" Faye: \"Attention.\" He writes it in his notebook, and underlines it. Kanto is safe. There's an International Police office in Saffron where Silph's lobby was, \"temporarily,\" and Silph Co. is held \"for safekeeping.\" It will still be held when the run ends. Shops are open; nobody's afraid; there are a few more forms than there used to be. A man in a brown coat nods to you in every town. You have one favour from Looker, for later. Otis is suspended for six months. Faye gives nine hours of testimony and doesn't miss a figure. Remy gets an apology, at length, from a man in a brown coat. Matori tells them nothing and is released for want of a file. Domino goes out by a window. Butch is arrested as \"Hutch,\" appeals on that ground, and wins. Vesper hands Looker the second book; it's the best evidence in the case. Giovanni is gone, with the Persian, and a note about the tea.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-police",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-safekept",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "looker-favour",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-own-duel",
+   "name": "The Duel",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "pokemon": "rhydon",
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "One on one: his Rhydon, Vault-Breaker, against your lead. No items. The Persian, Chairman, watches from the desk. Mid-fight, he says: Giovanni: \"You'll keep the tenth. Say you'll keep the tenth. It's what stops it becoming a gang.\"",
+   "choices": [
+    {
+     "label": "\"I'll keep the tenth.\"",
+     "success": {
+      "text": "The Rhydon comes on like a wall.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-own-tenth",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-own-lost"
+        }
+       ],
+       "sprite": "boss.giovanni-rocketboss",
+       "team": [
+        "rhydon"
+       ],
+       "name": "Giovanni",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-own-matori"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"I'll keep all four rules.\"",
+     "success": {
+      "text": "The Rhydon comes on like a wall.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-own-rules",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-own-lost"
+        }
+       ],
+       "sprite": "boss.giovanni-rocketboss",
+       "team": [
+        "rhydon"
+       ],
+       "name": "Giovanni",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-own-matori"
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "\"I'll run it my way.\"",
+     "success": {
+      "text": "The Rhydon comes on like a wall.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-own-mine",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "lose": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-own-lost"
+        }
+       ],
+       "sprite": "boss.giovanni-rocketboss",
+       "team": [
+        "rhydon"
+       ],
+       "name": "Giovanni",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rk-own-matori"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-own-matori",
+   "name": "The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "He looks at the Rhydon. He recalls it himself. Giovanni: \"There. I'm told a handshake's customary.\" He means it. He takes the photograph from the drawer, and nothing else. At the lift: Giovanni: \"Mind Matori. She's never had a day's leave. And answer the telephone on Thursdays; she'll only ring your mother otherwise.\" The office is yours. Four people come to the door, one at a time. The first is Matori. Matori: \"You've a helicopter at one, a call with Johto at two, and a decision about the roof that I'd make before lunch. What are you running from? I'm obliged to ask the new ones.\"",
+   "choices": [
+    {
+     "label": "(The same answer as your first day.)",
+     "success": {
+      "text": "She writes it down again, in the same words, and underlines it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-callers"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nothing. I've stopped.\"",
+     "success": {
+      "text": "She looks up from the tablet, for the first time since you've known her.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-callers"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-own-callers",
+   "name": "The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket",
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Domino: Domino: \"I told you to ask again when you had a region. You have a region.\" She names a figure. It's high, and exact. Domino: \"I'm not loyal. I'm contracted. It's better. You'll always know where I am.\" Faye: Faye: \"I've audited you. It's Friday; I audit on Fridays. You've been Boss for forty minutes and you've already an unexplained item.\" She puts the hand-copied list on the desk. Faye: \"That one. What's it filed under?\" Then the telephone. Madame Boss: \"Oh, it's you now. Good. He was getting pompous. I've four rules, dear. He kept three. Let's hear yours.\"",
+   "choices": [
+    {
+     "label": "Decide the list.",
+     "success": {
+      "text": "You pick up the list.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-list"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-own-list",
+   "name": "The Four Decisions: The List",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Four thousand, one hundred and twelve names. What does Team Rocket do with them now?",
+   "choices": [
+    {
+     "label": "Return all of them.",
+     "success": {
+      "text": "Faye closes her eyes, briefly. Then she opens a new ledger.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-own-list-all",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-rigs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Return those who can be found.",
+     "success": {
+      "text": "About half. Faye writes \"Returned\" two thousand times, and starts on the rest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-own-list-half",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-rigs"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "Faye files it. She doesn't say anything. She doesn't have to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-own-list-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-rigs"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-own-rigs",
+   "name": "The Four Decisions: The Rigs",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Dr. Namba's machines, and Dr. Sotheby's off switch.",
+   "choices": [
+    {
+     "label": "Destroy them.",
+     "success": {
+      "text": "Sotheby brings her Growlithe to work the next day.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-own-rigs-destroyed",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-roof"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Lock them away.",
+     "success": {
+      "text": "They go into a room only you have the key to.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-own-rigs-locked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-roof"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep them running.",
+     "success": {
+      "text": "Namba is delighted. Nobody else is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "rocket-own-rigs-running",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-roof"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-own-roof",
+   "name": "The Four Decisions: The Roof",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#141a24",
+    "effect": "rain"
+   },
+   "intro": "The armour on the roof, kneeling, cabled.",
+   "choices": [
+    {
+     "label": "Unbolt it.",
+     "success": {
+      "text": "M2 stands up for the first time in a year, looks at you, and goes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "m2-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "legend-cerulean-cave",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-rule"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it as he did: owned, never used.",
+     "success": {
+      "text": "You lock the roof door, and keep the key on your own ring.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "m2-held",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-rule"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Use it.",
+     "success": {
+      "text": "You reach for the switch. The building goes very quiet. Are you sure? It's a living thing in that armour, and switching it on can't be taken back. You take your hand away, this time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "m2-held",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-own-roof-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "rk-own-rule"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-own-rule",
+   "name": "The Four Decisions: The Fourth Rule",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.teamrocket"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "A pale square on the office wall, where a frame used to hang. Madame's fourth rule: \"Give it back when they can pay.\"",
+   "choices": [
+    {
+     "label": "Put it back on the wall.",
+     "success": {
+      "text": "The frame goes back up. The Heads grumble; it costs you their good opinion for a while. Kanto is yours. Otis is your first Lead, and he knows what's in the crates, because you told him. Faye has the Counting Room and audits you on Fridays. Remy takes the top bunk back. Matori is yours now: \"What are you running from?\" Domino is contracted, which she says is better than loyal. Butch photographs his name on a door, spelled right. Somewhere, a man with a Persian will send one letter in a year.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-own-rule-back",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back on the wall. (Madame asked you to.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "rocket-madame-line",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The frame goes back up. Nobody says a word against it: she rang them all first. Kanto is yours. Otis is your first Lead, and he knows what's in the crates, because you told him. Faye has the Counting Room and audits you on Fridays. Remy takes the top bunk back. Matori is yours now: \"What are you running from?\" Domino is contracted, which she says is better than loyal. Butch photographs his name on a door, spelled right. Somewhere, a man with a Persian will send one letter in a year.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-own-rule-back",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it off.",
+     "success": {
+      "text": "The pale square stays pale. Kanto is yours. Otis is your first Lead, and he knows what's in the crates, because you told him. Faye has the Counting Room and audits you on Fridays. Remy takes the top bunk back. Matori is yours now: \"What are you running from?\" Domino is contracted, which she says is better than loyal. Butch photographs his name on a door, spelled right. Somewhere, a man with a Persian will send one letter in a year.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-own",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "rk-own-lost",
+   "name": "The Verdict",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "The Rhydon stands over your lead. Giovanni doesn't gloat. Giovanni: \"Not today. Executive, then.\"",
+   "choices": [
+    {
+     "label": "Take the title.",
+     "success": {
+      "text": "Giovanni: \"You held. I don't need loyalty. I need people who finish the job. Executive. Your first task: do not let me down.\" Kanto is under new management. Every Poké Ball sold here pays a tenth to a company nobody's heard of. Prices are stable; shops are open; people have stopped saying the word. Shops charge you less, and call you \"sir\" or \"ma'am.\" The rival won't meet your eye for a region. Otis has a desk, and he's good at it. Faye moves one name a week to \"Returned.\" Matori still takes no day's leave. Domino is promoted. Butch's twelfth commendation says \"Buck.\" Cassidy skims the new company. Dr. Sotheby says nothing about the switch. Jardine drives. Madame, on the telephone: \"He'll be unbearable.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "allied",
+        "mods": [
+         {
+          "kind": "priceMultiplier",
+          "group": "all",
+          "value": 0.85
+         }
+        ],
+        "modsText": "Every Kanto shop charges you 15% less for the rest of the region."
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kanto-occupied",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-founding",
+   "name": "Team Ledger",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 3,
+     "ends": [
+      "none"
+     ],
+     "stopped": 1
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "rocket-offer-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "rocket-looker-met",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "sparkle"
+   },
+   "intro": "A woman in a cardigan over a black uniform, at the edge of the firelight, with two ledgers. Faye Coldwell: \"You're the one who keeps breaking things and not taking anything. I've had to write you up four times. I don't know which column you go in. I've the books. All of them. Which shops are skimmed, which Grunts are owed, which crates went where. I don't want to give them to the police; they'll file them. I don't want him to keep them. You said no to both. So did I, in my head, for a year.\" Faye: \"There's a thing I'd like to do. It isn't fighting. It's auditing. I go through the book, line by line, and I put each thing back where it came from, and I leave a receipt. I can't do it alone. I can't carry a Snorlax.\"",
+   "choices": [
+    {
+     "label": "\"I'll carry the Snorlax.\"",
+     "success": {
+      "text": "She almost smiles. Within the week there are six of you: Faye (books: \"I won't lie in a ledger.\"), Otis Blackthorn (hands: \"I won't carry a fourth crate.\"), Sergeant Jardine (wheels: \"I won't ask.\"), Miss Anselma Vickery (heart: \"I won't have anybody leaned on.\"), a crane operator from the Vermilion docks (eyes: \"I've got kids.\"), and LEDGER, a Porygon2 with a black tag. QUERY: IF A THING IS RETURNED, IS THE ENTRY DELETED OR COMPLETED? Faye: \"Completed.\" ...PREFERRED. Miss Vickery stitches the creed on a tea towel, and it's the team's flag: \"Everything gets paid back.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "ledger-founded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who else?\"",
+     "success": {
+      "text": "She counts them off: the boy from the bunk room who joined for his teeth; the sergeant who never asks; a florist; a crane operator; a Porygon2 that asks too many questions. And you. Miss Vickery stitches a tea towel: \"Everything gets paid back.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "ledger-founded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Why receipts?\"",
+     "success": {
+      "text": "Faye: \"Because he taught me one true thing. Write it down. If it's written, it happened. I want it to have happened that they got them back.\" Within the week there are six of you, and a tea towel for a flag: \"Everything gets paid back.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "ledger-founded",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-audit-1",
+   "name": "Audit 1: One Growlithe",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 4,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "pokemon": "growlithe",
+    "tint": "#2a2418",
+    "effect": "sparkle"
+   },
+   "intro": "The book: \"Entry 3,880. One Growlithe. Taken: Celadon, a bike shop's back room. Sold: a collector in Fuchsia. Price: ₽40,000.\" In a room of glass cases, Mr. Zoltan Quarrington: Mr. Quarrington: \"I paid for it. I've a bill of sale. I'm the injured party.\" Faye: \"You are. You were sold something that wasn't theirs to sell. Here's your forty thousand; it's from the count room's float; I've written it as \"refund.\" Here's a receipt. Sign there.\"",
+   "choices": [
+    {
+     "label": "Hold out the pen.",
+     "chance": 0.5,
+     "success": {
+      "text": "He signs. He's never been refunded by a crime before. The Growlithe goes home, and the bike shop's shutter goes up. The receipt: \"Received: one Growlithe, in good health, a little fat. Signed: the boy.\" He's drawn a Growlithe.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ledger-audit-1",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "He folds his arms. He isn't signing. Faye looks at you.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ledger-audit-1-refuse"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-audit-1-refuse",
+   "name": "Audit 1: One Growlithe",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "pokemon": "growlithe",
+    "tint": "#2a2418",
+    "effect": "sparkle"
+   },
+   "intro": "Mr. Quarrington: \"I won't. It's mine. I've a bill of sale.\"",
+   "choices": [
+    {
+     "label": "Battle for it.",
+     "success": {
+      "text": "He calls his collection to the glass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ledger-audit-1-fought",
+        "amount": 1
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Mr. Quarrington",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ledger-audit-1",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Show him the boy's drawing of it.",
+     "success": {
+      "text": "He looks at it for a long time. Then he signs. The receipt comes back with a second drawing on it, by Mr. Quarrington, of a man in a room full of glass.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ledger-audit-1",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave the receipt, and the money, and wait.",
+     "success": {
+      "text": "You leave them on his table and wait in the street. At dusk the door opens, and the Growlithe comes out, and runs for Celadon.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ledger-audit-1",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-audit-2",
+   "name": "Audit 2: Forty Crates",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1a2230",
+    "effect": "sparkle"
+   },
+   "intro": "Entries 2,001 to 2,040: forty crates on the Vermilion freighter, before it sails. The crane operator: \"I can put a crate anywhere on that dock. I've never once been asked to put one back.\" No stealth. Team Ledger walks up the gangway with a clipboard.",
+   "choices": [
+    {
+     "label": "Up the gangway.",
+     "success": {
+      "text": "The deck is wet and the crates are stacked high.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ledger-freighter-deck"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-freighter-deck",
+   "name": "The Deck",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1a2230",
+    "effect": "sparkle"
+   },
+   "intro": "Major Surge is at the top of the gangway. Major Surge: \"What's this? A raid?\" Faye: \"An inventory check. Head office. You'll have had the memo.\" There's no memo. She's so sure of herself that he looks for it.",
+   "choices": [
+    {
+     "label": "Wait while he looks.",
+     "chance": 0.5,
+     "success": {
+      "text": "He finds no memo, and squares up.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ledger-freighter-hold"
+       }
+      ]
+     },
+     "failure": {
+      "text": "He looks, and looks, and decides he must have lost it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ledger-freighter-crane"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-freighter-hold",
+   "name": "The Hold",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1a2230",
+    "effect": "sparkle"
+   },
+   "intro": "Major Surge: \"No memo, no crates. I don't care whose head office.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "The deck hums with his Pokémon's charge.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Major Surge",
+       "bossId": "lt-surge",
+       "size": 5,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "ledger-freighter-crane"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-freighter-crane",
+   "name": "The Crane",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1a2230",
+    "effect": "sparkle"
+   },
+   "intro": "Forty crates are craned ashore while Surge argues with a telephone.",
+   "choices": [
+    {
+     "label": "Sign for them.",
+     "success": {
+      "text": "The receipt runs to forty lines. The last: \"Received by: the dock, and whoever comes to collect. Signed: the crane.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ledger-audit-2",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-audit-3",
+   "name": "Audit 3: One Pidgey",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "after": 5,
+     "has": "third"
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "ledger-audit-2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "pokemon": "pidgey",
+    "tint": "#2a2418",
+    "effect": "sparkle"
+   },
+   "intro": "LEDGER: ENTRY 1. ONE PIDGEY. OWNER: MADAME. STATUS: KEPT. QUERY: IS THIS ENTRY OPEN? Faye: \"Forty years. The boy who couldn't pay his tenth. She meant to give it back.\" It's you who rings her, from the Game Corner's basement. Madame Boss: \"Who's this on my line? ...The auditors. Oh, how lovely. I wondered who'd get to entry one. He never looked that far back. It died, dear, eleven years ago. Old age. It's under the plum tree. But the boy's alive. He's seventy. He keeps a ferry at Fuchsia. He never came for it because he was ashamed; I never sent it because I'd got fond. Go and tell him it had a good life. That's the only way that one closes.\"",
+   "choices": [
+    {
+     "label": "Go to the ferry.",
+     "success": {
+      "text": "An old man is mending a rope. \"A Pidgey? ...I was nine. I traded a marble for it and I couldn't pay the lady's tenth. I've thought about that bird for sixty years. I thought she'd sold it.\" Faye: \"She kept it. Thirty years. It slept on her desk. Here's your receipt.\" He reads it for a long time. \"Returned: the knowledge of one Pidgey. Owner: you, all along. Balance: nil.\" ENTRY 1: COMPLETED. LEDGER's black tag falls off.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ledger-entry1",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "flag",
+        "key": "kind-total",
+        "amount": 2
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-readout",
+   "name": "The Read-Out",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "rocket",
+     "beat": 6,
+     "has": "third",
+     "inside": false
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "kanto"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "sparkle"
+   },
+   "intro": "The night of Silph. Saffron's sealed. Team Ledger walks in through the front. In the lobby there are forty Grunts, and nobody has told them what to do about six people and a tea towel. Faye goes to the reception desk and picks up the building's own PA. Faye: \"Good evening. This is an audit. I'll be reading out what each of you is owed. Please remain where you are.\"",
+   "choices": [
+    {
+     "label": "Stand beside her.",
+     "success": {
+      "text": "She starts at the basement.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "ledger-readout-floors"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-readout-floors",
+   "name": "The Read-Out",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/rocket_grunt_m"
+    ],
+    "tint": "#1e2230",
+    "effect": "sparkle"
+   },
+   "intro": "Floor by floor, over the speakers, in a level voice. \"Basement. Otis Blackthorn: one set of teeth, paid in full. Remy, upper nineteen: eleven weeks' wages, unpaid; and an apology, unpaid.\" \"Fourth floor. Kennel handlers: you were told to stop naming them. Biscuit Two's name is in the book. So's Biscuit One's.\" \"Sixth floor. Dr. Sotheby: one patent, owed.\" \"Ninth. Butch. It's spelled B, U, T, C, H. It's been wrong on your pay slip for nine years. It's right in mine.\" \"Eleventh. Giovanni. One Gym, honestly held, eleven inspections. It's the only entry against your name that's in black.\" For every person you've helped in Kanto, one Grunt goes home. The building is half empty before anybody throws a Ball. Only Domino stays in the lobby, alone, because she's the only one who isn't owed anything.",
+   "choices": [
+    {
+     "label": "Battle Domino.",
+     "success": {
+      "text": "She doesn't make a speech.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "evil": "executive",
+       "name": "Domino",
+       "size": 6,
+       "levelBonus": 2,
+       "chain": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "ledger-readout-top"
+        }
+       ]
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "ledger-readout-top",
+   "name": "The Eleventh Floor",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.giovanni-rocketboss"
+    ],
+    "tint": "#1e2230",
+    "effect": "none"
+   },
+   "intro": "Domino: \"Put me in your book, then. Under what?\" Faye: \"\"Expensive.\"\" Domino: \"...Accurate.\" On the eleventh floor, Giovanni is waiting. Giovanni: \"I heard it. Every floor. You read my Gym out. In black. Nobody's ever audited me and found something to my credit.\" He puts the Master Ball on the desk, and LEDGER's original beside it. Giovanni: \"Finish the book. I never could. I kept getting to the Pidgey.\"",
+   "choices": [
+    {
+     "label": "Take the book.",
+     "success": {
+      "text": "No Boss battle. He goes. The roof is unbolted by six people and a Porygon. Rocket isn't beaten. It's closed, like an account. The Game Corner becomes a bank, of sorts: it lends at a tenth, and gives it back when they can pay. Faye has stopped wearing the uniform under the cardigan. Otis carries, and only good things now. The book is Faye's. Remy gets eleven weeks' back pay and the apology. Matori reads her own entry and laughs, once. Domino is entered as \"Expensive.\" Butch's name is right in the book. Cassidy's balance is nil. The trio are owed nine years and receive it with interest; James cries. Miss Vickery keeps the flag.",
+      "effects": [
+       {
+        "kind": "evil",
+        "beat": true
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "rocket-ending-audit",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "m2-free",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "legend-cerulean-cave",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

@@ -1,6 +1,8 @@
 # Skipped by ripgrep (Claude's Grep tool) in folder-wide searches.
 # Searching one of these files by its exact path still works:
 #   grep -n '"id": "pikachu"' src/data/species.json
+src/data/catalogOverhaul/ledger.json
+src/data/catalogOverhaul/oldPlacement.json
 # Generated data (MAP.md "Data index"); learnables.json is one 1 MB line.
 src/data/species.json
 src/data/learnables.json

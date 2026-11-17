@@ -3,6 +3,8 @@
 // count (no stage index, badge or region clear). Each map node plays a room event (compile.ts). Rules: a Leave option before the first
 // fight, caps and bans, one reward item, and a loss ejects back to the parent stage.
 
+import { endCrystals } from '../greenneedle/crystals';
+import { rivalInPseudo } from '../co/weeks';
 import { z } from 'zod';
 import json from '../../data/pseudoStages.json';
 import type { Content, EventDef } from '../contentSchema';
@@ -30,10 +32,18 @@ export const PseudoRecordSchema = z.object({
   trainerClass: z.string(),
   boss: z.object({ classId: z.string(), name: z.string(), size: z.number().int().min(1).max(6) }).optional(),
   intro: z.string(),
+  /** The species of its `rare` rooms (the world's Legendaries: Giratina, Darkrai, Koraidon, Rayquaza and Deoxys). Without it, the wild list. */
+  rare: z.array(z.string()).min(1).optional(),
+  /** Extra choices added to one room (raw event choices, checked by the content schema): the Faller 3 Ultra Space door in the Celestial Expanse. */
+  extras: z.array(z.object({ node: Id, choice: z.record(z.string(), z.unknown()) })).default([]),
+  /** Choice-memory variants for the gate (core/eventMemory.ts): a Guidance of Giratina run, The Renegade's blessing. */
+  remembers: z.array(z.record(z.string(), z.unknown())).default([]),
 });
 export type PseudoRecord = z.infer<typeof PseudoRecordSchema>;
 /** A pseudo-stage made from an existing chain of story events (Flight North, Sabrina's Labyrinth, Route 25, the Fighting Tournament): the map is drawn from the events' own links, so none of their text, fights or rules change. */
-export const ChainSchema = z.object({ id: z.string().regex(/^ps_[a-z0-9_]+$/), name: z.string().min(1), entry: z.string().min(1), themeId: z.string(), tint: z.string().regex(/^#[0-9a-f]{6}$/i), mood: z.string() });
+export const ChainSchema = z.object({ id: z.string().regex(/^ps_[a-z0-9_]+$/), name: z.string().min(1), entry: z.string().min(1), themeId: z.string(), tint: z.string().regex(/^#[0-9a-f]{6}$/i), mood: z.string(), /** `opened`: the player starts on the room the entry's chosen choice opened (a questline whose first choice picks the route). Without it the map lets the player pick among every room the entry opens. */ start: z.enum(['opened']).optional(), /** Evil Team hideouts (evil-story): the team this chain belongs to. */ team: z.string().optional(),
+  /** Evil Team hideouts (evil-story): the rooms by column instead of the events' own links. Every room is open to every room of the next column, so the map reads like a stage and the player picks the path. Ids may name the team (`evil-{teamId}-rescue`). */
+  layout: z.array(z.array(z.string().min(1)).min(1)).optional() });
 export type PseudoChain = z.infer<typeof ChainSchema>;
 export const PseudoFileSchema = z.object({
   chains: z.array(ChainSchema).default([]),
@@ -42,9 +52,14 @@ export const PseudoFileSchema = z.object({
   records: z.array(PseudoRecordSchema).length(10),
 });
 export const PSEUDO = PseudoFileSchema.parse(json);
+/** Catalog Overhaul Pack: each category adds its own chain pseudo-stages in src/data/catalogOverhaul/pseudo/<category>.json, so threads never share a file. */
+export const PseudoExtraFileSchema = z.object({ category: z.string().optional(), note: z.string().optional(), chains: z.array(ChainSchema) });
+const extraChainFiles = Object.values(import.meta.glob<unknown>('../../data/catalogOverhaul/pseudo/*.json', { eager: true, import: 'default' }));
+/** Every chain pseudo-stage: the four Kanto lines, then each category's own. */
+export const PSEUDO_CHAINS: readonly PseudoChain[] = [...PSEUDO.chains, ...extraChainFiles.flatMap((f) => PseudoExtraFileSchema.parse(f).chains)];
 
 const asDungeon = (r: PseudoRecord): DungeonDef => ({
-  id: r.id, name: r.name, kind: 'themed', tier: r.tier, theme: r.mood, types: [], wild: r.wild, nodes: r.nodes,
+  id: r.id, name: r.name, kind: 'themed', tier: r.tier, theme: r.mood, types: [], wild: r.wild, ...(r.rare ? { rare: r.rare } : {}), nodes: r.nodes,
   supply: { item: DUNGEONS.config.potion[String(r.tier)]!, count: 1 }, reward: r.reward, ...(r.boss ? { boss: r.boss } : {}), intro: r.intro,
 });
 
@@ -71,13 +86,18 @@ export function pseudoEvents(records: readonly PseudoRecord[] = PSEUDO.records):
     const def = roomDef(r);
     const gate = {
       id: gateId(r), name: r.name, group: 'Pseudo Stages', stop: 'delve', rarity: 'rare', tags: ['Dungeon', 'Exploration'], minStage: 1, room: true,
-      types: [], requires: [], scene: { cast: [], effect: 'none', tint: r.tint }, intro: `${r.intro} (${r.mood}.) Ends: ${r.exit}.`,
+      types: [], requires: [], scene: { cast: [], effect: 'none', tint: r.tint }, intro: `${r.intro} (${r.mood}.) Ends: ${r.exit}.`, ...(r.remembers.length ? { remembers: r.remembers } : {}),
       choices: [
         { label: `Enter ${r.name}`, success: { text: 'You step in.', effects: [{ kind: 'enterPseudo', id: r.id }] } },
         { label: 'Leave', success: { text: 'You turn back. Nothing here is forced.', effects: [] } },
       ],
     };
-    return [gate, ...r.nodes.map((_, i) => room(def, i))];
+    const rooms = r.nodes.map((n, i) => {
+      const raw = room(def, i);
+      const extra = r.extras.filter((x) => x.node === n.id).map((x) => x.choice);
+      return extra.length ? { ...raw, choices: [...(raw.choices as unknown[]), ...extra] } : raw;
+    });
+    return [gate, ...rooms];
   });
 }
 
@@ -115,17 +135,19 @@ export function buildPseudoStage(r: PseudoRecord, parent: StageState): StageStat
 }
 
 /** Steps into a pseudo-stage from the current node: the parent stage is kept aside and the pseudo-stage's map takes its place. */
-export function enterPseudoStage(_content: Content, run: RunState, id: string): void {
+export function enterPseudoStage(content: Content, run: RunState, id: string): void {
   const rec = PSEUDO.records.find((r) => r.id === id);
   if (!rec) throw new Error(`Unknown pseudo-stage "${id}"`);
   if (!run.stage || run.stage.pseudo) return;
   run.pseudoParent = structuredClone(run.stage);
   run.stage = buildPseudoStage(rec, run.stage);
+  rivalInPseudo(content, run); // Rivalry weeks: the rival waits in every pseudo-stage
 }
 
 /** Back to the parent stage, standing on the node the pseudo-stage was opened from. A no-op when no pseudo-stage is being played. */
 export function leavePseudoStage(run: RunState): void {
   if (!run.stage?.pseudo || !run.pseudoParent) return;
+  endCrystals(run);
   run.stage = run.pseudoParent;
   delete run.pseudoParent;
 }
@@ -133,7 +155,7 @@ export function leavePseudoStage(run: RunState): void {
 // ---------- chain pseudo-stages ----------
 
 /** Every event id an event can open next (`addEvent` / `addEventFrom` anywhere in its choices, battle wins and losses included). */
-export function opensNext(event: Pick<EventDef, 'choices'>): string[] {
+export function opensNext(event: Pick<EventDef, 'choices'>, team?: string): string[] {
   const out: string[] = [];
   const walk = (o: unknown): void => {
     if (!o || typeof o !== 'object') return;
@@ -143,35 +165,46 @@ export function opensNext(event: Pick<EventDef, 'choices'>): string[] {
     for (const v of Object.values(x)) walk(v);
   };
   walk(event.choices);
-  return [...new Set(out)];
+  // A remembered variant's added choices can open rooms too (Greenneedle).
+  walk((event as { remembers?: unknown }).remembers);
+  return [...new Set(out.flatMap((id) => (id.includes('{teamId}') ? (team ? [id.replaceAll('{teamId}', team)] : []) : [id])))];
 }
 
-const chainOfEntry = (event: string) => PSEUDO.chains.find((c) => c.entry === event);
-export const chainById = (id: string): PseudoChain | undefined => PSEUDO.chains.find((c) => c.id === id);
+const chainOfEntry = (event: string) => PSEUDO_CHAINS.find((c) => c.entry === event);
+export const chainById = (id: string): PseudoChain | undefined => PSEUDO_CHAINS.find((c) => c.id === id);
+
+/** Whether a room holds a fight (a trainer fight wins over a wild one), for the map's node kind. */
+function battleOfRoom(content: Content, id: string): 'trainer' | 'wild' | null {
+  let found: 'trainer' | 'wild' | null = null;
+  for (const c of content.events.get(id)!.choices) for (const o of [c.success, c.failure]) if (o?.battle) found = found === 'trainer' || o.battle.kind === 'trainer' ? 'trainer' : 'wild';
+  return found;
+}
 
 /** The chain's rooms: the events its entry opens (column 1) and everything they open, by shortest distance from the entry. */
 export function chainRooms(content: Content, chain: PseudoChain): { event: string; depth: number; next: string[]; battle: 'trainer' | 'wild' | null }[] {
   const entry = content.events.get(chain.entry);
   if (!entry) return [];
+  if (chain.layout) {
+    const columns = chain.layout.map((col) => col.map((id) => (chain.team ? id.replaceAll('{teamId}', chain.team) : id)).filter((id) => content.events.has(id)));
+    return columns.flatMap((col, i) => col.map((event) => ({ event, depth: i + 1, battle: battleOfRoom(content, event), next: columns[i + 1] ?? [] })));
+  }
   const depth = new Map<string, number>();
   const order: string[] = [];
-  let level = opensNext(entry).filter((id) => content.events.has(id) && !chainOfEntry(id));
+  // A room is never another chain's entry, nor a canon space's gate (a gate stands on the map: Route 25's last rooms open the Tournament's).
+  // A canon event that is itself a room (the Sevii network's islands) is a room.
+  const stops = (id: string): boolean => !!chainOfEntry(id) || (!!content.events.get(id)?.canon && !content.events.get(id)?.room);
+  let level = opensNext(entry, chain.team).filter((id) => content.events.has(id) && !stops(id));
   for (let d = 1; level.length > 0; d++) {
     const nextLevel: string[] = [];
     for (const id of level) {
       if (depth.has(id)) continue;
       depth.set(id, d);
       order.push(id);
-      nextLevel.push(...opensNext(content.events.get(id)!).filter((x) => content.events.has(x) && !chainOfEntry(x) && !depth.has(x)));
+      nextLevel.push(...opensNext(content.events.get(id)!, chain.team).filter((x) => content.events.has(x) && !stops(x) && !depth.has(x)));
     }
     level = nextLevel;
   }
-  const battleOf = (id: string): 'trainer' | 'wild' | null => {
-    let found: 'trainer' | 'wild' | null = null;
-    for (const c of content.events.get(id)!.choices) for (const o of [c.success, c.failure]) if (o?.battle) found = found === 'trainer' || o.battle.kind === 'trainer' ? 'trainer' : 'wild';
-    return found;
-  };
-  return order.map((event) => ({ event, depth: depth.get(event)!, battle: battleOf(event), next: opensNext(content.events.get(event)!).filter((x) => depth.get(x) === depth.get(event)! + 1) }));
+  return order.map((event) => ({ event, depth: depth.get(event)!, battle: battleOfRoom(content, event), next: opensNext(content.events.get(event)!, chain.team).filter((x) => depth.get(x) === depth.get(event)! + 1) }));
 }
 
 /** The stage map of a chain pseudo-stage, drawn like any stage. Rooms are the chain's own events, so the story plays exactly as written. */
@@ -204,11 +237,22 @@ export function routeChainEvent(content: Content, run: RunState, eventId: string
   const st = run.stage;
   if (!st) return false;
   if (!st.pseudo) {
-    const chain = PSEUDO.chains.find((c) => chainRooms(content, c).some((r) => r.depth === 1 && r.event === eventId));
+    // Several Hideouts share their first room: the region's own team's chain wins.
+    const fits = PSEUDO_CHAINS.filter((c) => chainRooms(content, c).some((r) => r.depth === 1 && r.event === eventId));
+    const chain = fits.find((c) => c.team !== undefined && c.team === run.story.evil?.teamId) ?? fits.find((c) => c.team === undefined);
     // Only the entry's own targets step in; the entry event stays on the parent node.
-    if (!chain || !opensNext(content.events.get(chain.entry)!).includes(eventId)) return false;
+    if (!chain || !opensNext(content.events.get(chain.entry)!, chain.team).includes(eventId)) return false;
     run.pseudoParent = structuredClone(st);
     run.stage = buildChainStage(content, chain, st);
+    rivalInPseudo(content, run); // Rivalry weeks: the rival waits in every pseudo-stage
+    if (chain.start === 'opened') {
+      // The entry's choice picked the route: stand on that room at once, and the map opens it.
+      const first = run.stage.map.nodes.find((n) => n.roomEvent === eventId)!;
+      run.stage.current = first.id;
+      run.stage.visited.push(first.id);
+      first.sides.push({ id: `event-room-1-${first.id}`, kind: 'event', used: false, eventId });
+      if (run.itemCounters) delete run.itemCounters[`event-seen:${eventId}`];
+    }
     return true;
   }
   if (!st.pseudo.chain) return false;

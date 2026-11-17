@@ -85,7 +85,8 @@ describe('levels past 100', () => {
     const ghost = typesPool(content, ['ghost'], 'torren', 30).map((p) => p.speciesId);
     expect(ghost).toContain('charmander-delta');
     expect(typesPool(content, ['ghost'], 'kanto', 30).map((p) => p.speciesId)).not.toContain('charmander-delta');
-    expect(regionSpecialWilds(content, 'kanto')).toEqual([]);
+    // Other regions have region-special wilds of their own now (the Jet Pokédex species, #1401), but never a Delta Pokémon.
+    expect(regionSpecialWilds(content, 'kanto').filter((s) => s.id.endsWith('-delta'))).toEqual([]);
   });
 });
 

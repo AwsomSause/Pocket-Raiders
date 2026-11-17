@@ -158,6 +158,8 @@ export interface MenuOption {
   detail?: string;
   /** Tooltip shown after the hover delay (Settings > Tooltip delay). */
   tip?: string;
+  /** The New UI's own picture of this option (a move's type colour, a small second line). The canvas menu ignores it. */
+  rx?: { type?: string; sub?: string };
 }
 
 export interface MenuConfig {
@@ -388,8 +390,12 @@ export class Menu {
     return { x: (i % this.columns) * this.itemWidth, y: Math.floor(i / this.columns) * this.itemHeight };
   }
 
+  /** Called after the focused option changes (the New UI redraws its view from it). */
+  onFocus: ((i: number) => void) | null = null;
+
   focus(i: number, sound = true): void {
     if (i < 0 || i >= this.config.options.length) return;
+    if (i !== this.index) queueMicrotask(() => this.onFocus?.(this.index));
     if (sound && i !== this.index) playSfx(this.scene, 'ui.cursor', 0.5);
     const prev = this.index;
     this.index = i;
@@ -455,6 +461,22 @@ export class Menu {
     playSfx(this.scene, 'ui.select');
     this.wii.press();
     this.config.onSelect(this.index);
+  }
+
+  /** What the menu offers, for a screen that draws the same choices its own way (the New UI). */
+  get options(): readonly MenuOption[] {
+    return this.config.options;
+  }
+
+  get cols(): number {
+    return this.columns;
+  }
+
+  /** A click on option `i` from outside the canvas: focus it and choose it, as a click on its row does. */
+  press(i: number): void {
+    if (!this.enabled || !this.config.options[i] || this.config.options[i]!.disabled) return;
+    this.focus(i, false);
+    this.confirm();
   }
 
   handle(action: InputAction): void {

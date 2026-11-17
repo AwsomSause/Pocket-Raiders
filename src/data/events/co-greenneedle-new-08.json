@@ -1,0 +1,706 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-08-door",
+   "name": "The Understudy",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "understudy-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "again",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kind-walked-past",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You have walked past a small one in trouble before. The stage door is open, and you do not walk past this one."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mime-jr",
+    "tint": "#5a2a3f",
+    "effect": "sparkle"
+   },
+   "intro": "*Backstage at a small theatre. Ropes, sandbags, a painted moon that has seen better years.*\n\n*A Mime Jr. is doing the star's whole act, perfectly, to an audience of mops.*\n\n**Director, Madame Okonjo-Reyes:** \"He's not here. Curtain's in an hour. Forty tickets sold. Forty!\"\n\n*The Mime Jr. freezes mid-gesture, caught. It looks at you the way a child looks at a teacher who has walked in on it.*",
+   "choices": [
+    {
+     "label": "Coach the little one.",
+     "success": {
+      "text": "You kneel until you are its height. \"Show me the whole thing,\" you say, \"and I'll show you what it's missing.\" It nods, very seriously, and takes its place in front of the mops.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-coached",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "understudy-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-coach-1"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look for the star.",
+     "success": {
+      "text": "\"Where does he sleep?\" you ask. Madame Okonjo-Reyes points a pencil at a door, and then, after a moment, at a different door.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-looked",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "understudy-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-search"
+       }
+      ]
+     }
+    },
+    {
+     "label": "I'll go on.",
+     "success": {
+      "text": "\"Me,\" you say. The room goes quiet. Madame Okonjo-Reyes looks at you for a very long time, and then hands you the costume, because there is no one else.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-done",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-went-on",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-ending",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "understudy-at"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-bad"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-08-coach-1",
+   "name": "The Understudy: First Gesture",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mime-jr",
+    "tint": "#5a2a3f",
+    "effect": "sparkle"
+   },
+   "intro": "*Step one. You raise one hand, slowly, and let it fall.*\n\n*Mime Jr. raises its hand at once, and lets it fall at once, and looks up. It is quick, and it is nothing like you.*\n\n\"Again,\" you say. \"But mean it.\"",
+   "choices": [
+    {
+     "label": "Show it a wave goodbye.",
+     "success": {
+      "text": "You wave. It watches your face this time, not your hand. The second wave is smaller, slower, and has someone in it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-coach-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show it a shrug.",
+     "success": {
+      "text": "You shrug. It copies the shoulders, then the eyebrows, then, a beat late, the little breath out. That is the shrug.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-coach-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-08-coach-2",
+   "name": "The Understudy: Second Gesture",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mime-jr",
+    "tint": "#5a2a3f",
+    "effect": "sparkle"
+   },
+   "intro": "*Step two. You walk against an invisible wind, one hand out for the door.*\n\n*Mime Jr. walks against it too. The gap between you is a half-step now. You can hear the mops listening.*",
+   "choices": [
+    {
+     "label": "Show it the invisible wall.",
+     "success": {
+      "text": "You flatten a palm on nothing. It does the same, and pushes, and for a moment the air there is solid enough that you both lean on it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-coach-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Show it the heavy door.",
+     "success": {
+      "text": "You heave at nothing. It heaves with you, and stumbles when you let go, and laughs, silently, with its whole body.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-coach-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-08-coach-3",
+   "name": "The Understudy: Third Gesture",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mime-jr",
+    "tint": "#5a2a3f",
+    "effect": "sparkle"
+   },
+   "intro": "*Step three. You do not do anything. You stand very still, and you look at something that is not there.*\n\n*Mime Jr. stands still beside you. It looks at the same nothing. There is no gap now at all.*\n\n**Madame Okonjo-Reyes:** \"That,\" she says quietly, \"is the first thing it has done tonight that was not him.\"",
+   "choices": [
+    {
+     "label": "Tell it it's ready.",
+     "success": {
+      "text": "\"You're ready,\" you say. \"Not for him. For you.\" It stands a little taller than it did, which is not very much, and holds that.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-show"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-08-search",
+   "name": "The Understudy: The Costume Cupboard",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mr-mime",
+    "tint": "#5a2a3f",
+    "effect": "sparkle"
+   },
+   "intro": "*The first door is a broom closet. The second is a costume cupboard, and the costume cupboard is snoring.*\n\n*A Mr. Mime, in a feathered coat, is asleep on a pile of capes. It has a bow tie. It has a cushion. It does not have a care.*\n\n*Behind you, in the doorway, Mime Jr. has stopped breathing.*",
+   "choices": [
+    {
+     "label": "Wake him.",
+     "success": {
+      "text": "You put a hand on its shoulder. It wakes the way a star wakes: slowly, aware of an audience. It sees Mime Jr., and the mops, and the clock, and something crosses its face that you do not have a name for.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-looked-first",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-woke",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-show"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let him sleep. Coach the little one.",
+     "success": {
+      "text": "You close the door, softly. \"He sleeps,\" you tell Mime Jr. \"You're up.\" It looks at the door, and at you, and then it straightens its back. The coaching takes a while.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-looked-first",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-coached",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-coach-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-08-bad",
+   "name": "The Understudy: The Player Goes On",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mime-jr",
+    "tint": "#5a2a3f",
+    "effect": "sparkle"
+   },
+   "intro": "*It goes exactly as badly as it sounds. You walk into the wrong wing. The invisible wall is not there.*\n\n*A mop falls over. Somewhere in the second row, a child laughs, and then another, and it is not the laugh you wanted.*\n\n*Then something small runs past your knees, onto the boards, into the light.*",
+   "choices": [
+    {
+     "label": "Step aside.",
+     "success": {
+      "text": "You step into the wings. Mime Jr. does not look at you. It looks at the audience, all forty of them, and it takes a breath it has been saving all night.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-show"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-08-show",
+   "name": "The Understudy: The Performance",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mime-jr",
+    "tint": "#5a2a3f",
+    "effect": "sparkle"
+   },
+   "intro": "*Nervous. A dropped invisible ball. Mime Jr. watches it roll off the edge of the stage and decides, after a long moment, to go after it.*\n\n*It finds the wall, and the wall is really there. Forty people lean forward in their seats.*\n\n*In the wings, the star watches the last minute with a face nobody can read.*\n\n*Then the applause, which for a theatre this size is a storm.*",
+   "choices": [
+    {
+     "label": "Wait in the wings.",
+     "success": {
+      "text": "You wait, and when the lights come up, you are still standing there.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-end-gate"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-08-end-gate",
+   "name": "The Understudy: Curtain",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mr-mime",
+    "tint": "#5a2a3f",
+    "effect": "sparkle"
+   },
+   "intro": "*The curtain falls. It comes up again, and again. Mime Jr. bows too deeply and has to be helped up by a mop.*\n\n*The Mr. Mime has come to stand beside you in the wings. It has been awake the whole time, or it has just woken. You will never know which.*",
+   "choices": [
+    {
+     "label": "Look at the star.",
+     "success": {
+      "text": "You turn your head. It is already looking at you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-end-tie"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "understudy-looked-first",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Look at the star.",
+     "success": {
+      "text": "You turn your head. It is already looking at the stage.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-08-end-walk"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "understudy-looked-first",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-new-08-end-tie",
+   "name": "The Understudy: The Bow Tie",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mr-mime",
+    "tint": "#5a2a3f",
+    "effect": "sparkle"
+   },
+   "intro": "*The Mr. Mime looks at Mime Jr., and at the stage, and at you. It reaches up and unties its bow tie.*\n\n*It puts the tie into Mime Jr.'s hands, folded small, like a secret. Then it takes its place at the side of the stage, and bows, and lets the child have the front.*\n\n**Madame Okonjo-Reyes:** \"In thirty years,\" she says, \"I have never seen him share a curtain.\"\n\n*Mime Jr. asks to see the world. It follows you out into the dark, tie and all.*",
+   "choices": [
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "It rides on your shoulder the whole way, one hand on the tie, doing very small impressions of everything you pass.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "mime-jr"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "curtain-call",
+        "mark": "understudy"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-ending",
+        "n": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       },
+       {
+        "kind": "moment",
+        "text": "Mime Jr. stood in the light, and the star let it.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-08-end-walk",
+   "name": "The Understudy: The Door",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mr-mime",
+    "tint": "#5a2a3f",
+    "effect": "sparkle"
+   },
+   "intro": "*The Mr. Mime looks at Mime Jr., and at the stage, and at you. Its face does not change.*\n\n*It walks out, quietly, through the stage door, and does not come back. You see its feathered coat go past the window, and then not.*\n\n**Madame Okonjo-Reyes:** \"He'll be back for the matinee,\" she says, not sounding as though she believes it.\n\n*Mime Jr. asks to see the world. It follows you, and does not look back at the door.*",
+   "choices": [
+    {
+     "label": "Take it with you.",
+     "success": {
+      "text": "It walks beside you, not on your shoulder. At the first crossroads it practises the empty doorway, by itself, twice.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "mime-jr"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "curtain-call",
+        "mark": "understudy"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-ending",
+        "n": 2
+       },
+       {
+        "kind": "moment",
+        "text": "Mime Jr. took the stage on its own, and the star walked out.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-08-poster",
+   "name": "The Understudy: A Poster",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Pokémon",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 3,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "understudy-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "understudy-at"
+    },
+    {
+     "kind": "flag",
+     "key": "understudy-poster-seen",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mime-jr",
+    "tint": "#5a2a3f",
+    "effect": "none"
+   },
+   "intro": "*A poster on a town noticeboard, curling at the corners. A small theatre. A new season.*",
+   "choices": [
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "Two faces on the poster: a Mr. Mime in a feathered coat, with no bow tie, and beside it a Mime Jr. wearing it. THE WALL IS REAL, it says. You find that you are smiling.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-poster-seen",
+        "n": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "understudy-ending",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "One face on the poster: a Mime Jr., mid-gesture, hand flat on a wall. THE LITTLE ONE, it says, under it. The star's name is not on it anywhere. You read it twice.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-poster-seen",
+        "n": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "understudy-ending",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Read it.",
+     "success": {
+      "text": "Your name is on the poster, in very small type, under *Special thanks.* Madame Okonjo-Reyes has spelled it wrong. You decide it is correct.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "understudy-poster-seen",
+        "n": 1
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "understudy-ending",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -281,7 +281,7 @@ describe('the persistent world', () => {
   it('remembers a skipped side stop and sends an Echo that pays when beaten', () => {
     const run = atStage('wd-a', 0, 0);
     const node = run.stage!.map.nodes[0]!;
-    node.sides.push({ id: 'skip', kind: 'minigame', minigameId: 'x', used: false });
+    node.sides = [{ id: 'skip', kind: 'minigame', minigameId: 'x', used: false }]; // only this stop (Catalog Overhaul placement can put an event on the first node)
     run.stage!.visited = [node.id];
     noteSkips(content, run);
     expect(run.story.world.skipped).toHaveLength(1);

@@ -7,12 +7,15 @@ import { freshWorldSim } from '../../src/core/worldSim/tick';
 import { content } from './helpers';
 
 const IDS = ['ev-trainer-reunion', 'ev-rival-emergency', 'ev-evil-team-raid', 'ev-legendary-disturbance', 'ev-rivals-victory', 'ev-rivals-defeat', 'ev-forgotten-research-lab', 'ev-treasure-expedition', 'ev-dimensional-collision'];
+const RETIRED = ['ev-legendary-disturbance', 'ev-dimensional-collision'];
 const newRun = () => structuredClone(chooseStarter(content, createRun(content, { runId: 'dis', seed: 'dis', archetypeId: 'red' }), 0));
 const rivalWith = (result: 'win' | 'lose') => ({ state: 'active', encounters: 2, memory: { lastBattle: { eventId: 'x', result, hpLeftShare: 0.5 } } }) as never;
 
 describe('the nine formerly disabled events', () => {
   it('are all enabled, and everything they open exists', () => {
-    for (const id of IDS) {
+    // Two of them became game rules in the Catalog Overhaul (legends RULE ids: a Legendary Echo and a Giratina Sign) and are retired.
+    for (const id of RETIRED) expect(content.events.get(id)!.disabled, id).toBe(true);
+    for (const id of IDS.filter((x) => !RETIRED.includes(x))) {
       const e = content.events.get(id)!;
       expect(e.disabled, id).toBe(false);
       for (const c of e.choices) for (const o of [c.success, c.failure]) for (const x of o?.effects ?? []) if (x.kind === 'addEvent') expect(content.events.has(x.eventId), x.eventId).toBe(true);
@@ -46,11 +49,13 @@ describe('the nine formerly disabled events', () => {
     applyEffect(content, run, { kind: 'calmDisturbance' }, new Rng(hashSeed('c')));
     expect(conditionMet(content, run, { kind: 'disturbance' })).toBe(false);
   });
-  it('the trainer reunion needs the earlier challenge to have been played', () => {
+  it('Hargrove (Catalog Overhaul SF70): the reunion comes first, and the unexpected challenge waits for it', () => {
     const run = newRun();
-    const e = content.events.get('ev-trainer-reunion')!;
-    expect(e.requires.every((c) => conditionMet(content, run, c))).toBe(false);
-    run.itemCounters = { ...run.itemCounters, 'event-seen:ev-unexpected-challenge': 1 };
-    expect(e.requires.every((c) => conditionMet(content, run, c))).toBe(true);
+    const reunion = content.events.get('ev-trainer-reunion')!;
+    const challenge = content.events.get('ev-unexpected-challenge')!;
+    expect(reunion.requires.every((c) => conditionMet(content, run, c))).toBe(true);
+    expect(challenge.requires.every((c) => conditionMet(content, run, c))).toBe(false);
+    run.story.flags['ev:hargrove-met'] = 1;
+    expect(reunion.requires.every((c) => conditionMet(content, run, c))).toBe(false);
   });
 });

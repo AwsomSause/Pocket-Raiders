@@ -67,6 +67,11 @@ export function switchPunishChance(switchRate: number): number {
   return Math.max(0.3, Math.min(0.7, 0.5 + (switchRate - 0.25)));
 }
 
+/** The win condition as the versus card names it before the fight ("plans to sweep"). */
+export function winConditionLine(w: WinCondition): string {
+  return w === 'sweep' ? 'plans to sweep' : w === 'weather' ? 'plans to set the weather' : 'plans to stall';
+}
+
 /** Names the plan before the battle from the rival's team: a weather mon wins weather, many defensive mons stall, else sweep. */
 export function chooseWinCondition(team: { weatherSetter?: boolean; bulky?: boolean }[]): WinCondition {
   if (team.some((m) => m.weatherSetter)) return 'weather';

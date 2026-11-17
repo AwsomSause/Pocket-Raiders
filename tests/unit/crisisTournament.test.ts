@@ -52,8 +52,10 @@ describe('Regional Crisis', () => {
     run.stage!.current = node.id;
     const side = node.sides.find((s) => s.eventId === id)!;
     const result = chooseEvent(content, run, side.id, 0);
-    expect(crisisLevel(result.run)).toBe(1);
-    expect(crisisAid(result.run)).toBe(1);
+    // Catalog Overhaul (SF1-SF7): the report starts the crisis strand; the meter eases and Aid comes in the strand's own scenes.
+    expect(result.run.story.flags['ev:crisis-strand-open']).toBe(1);
+    expect(crisisLevel(result.run)).toBe(3);
+    expect(crisisAid(result.run)).toBe(0);
   });
 });
 
@@ -62,6 +64,8 @@ describe('Rival Tournament', () => {
     const run = fresh('tour-flow');
     run.money = 2000;
     run.story.rivals.push({ encounters: 2 } as never);
+    expect(eligibleEvents(content, run).map((e) => e.id)).not.toContain('tournament-entry');
+    run.story.flags['ev:circuit-qualified'] = 1; // Catalog Overhaul (SF19): the bracket opens once you qualify on the Circuit
     expect(eligibleEvents(content, run).map((e) => e.id)).toContain('tournament-entry');
     expect(eligibleEvents(content, run).map((e) => e.id)).not.toContain('tournament-quarter');
     expect(tournamentEventId(run)).toBeNull();
@@ -90,7 +94,8 @@ describe('Rival Tournament', () => {
     const quarter = content.events.get('tournament-quarter')!;
     const winEffects = quarter.choices[0]!.success.battle!.win.map((e) => e.kind);
     expect(winEffects).toContain('tournament');
-    expect(content.events.get('tournament-final')!.choices[0]!.success.battle!.win.some((e) => e.kind === 'tournament' && e.round === 9)).toBe(true);
+    // Catalog Overhaul (SF19): the final is a ceremony (its fight is the rival's questline scene), so it closes the bracket in its own effects.
+    expect(content.events.get('tournament-final')!.choices[0]!.success.effects.some((e) => e.kind === 'tournament' && e.round === 9)).toBe(true);
   });
 });
 
@@ -131,7 +136,9 @@ describe('Champion defense', () => {
     expect(eligibleEvents(content, { ...none, regionIndex: 3 }).map((e) => e.id)).not.toContain('champion-defense');
     const won = make(content, { runId: 'cd-1', seed: 'cd-1', archetypeId: 'red', runHistory: [rec(false, 'rattata'), rec(true, 'pikachu'), rec(true, 'charmander')] });
     expect(championTeam(won.story)).toEqual([{ speciesId: 'pikachu', level: 60 }]);
-    expect(eligibleEvents(content, { ...won, regionIndex: 3 }).map((e) => e.id)).toContain('champion-defense');
+    // Catalog batch 5: the Hall reads THIS run's frames only (run memory rule); an earlier run's win no longer opens it.
+    // The same-run version is covered in coPastAllies.test.ts.
+    expect(eligibleEvents(content, { ...won, regionIndex: 3 }).map((e) => e.id)).not.toContain('champion-defense');
   });
 });
 
@@ -145,7 +152,8 @@ describe('Retired team', () => {
     expect(eligibleEvents(content, { ...none, regionIndex: 3 }).map((e) => e.id)).not.toContain('retired-team');
     const lost = make(content, { runId: 'rt-1', seed: 'rt-1', archetypeId: 'red', runHistory: [rec(false, 'rattata'), rec(true, 'pikachu'), rec(false, 'charmander')] });
     expect(retiredTeam(lost.story)).toEqual([{ speciesId: 'rattata', level: 40 }]);
-    expect(eligibleEvents(content, { ...lost, regionIndex: 3 }).map((e) => e.id)).toContain('retired-team');
+    // Catalog batch 5: same-run only; the team that fell is this run's lost big battle (coPastAllies.test.ts).
+    expect(eligibleEvents(content, { ...lost, regionIndex: 3 }).map((e) => e.id)).not.toContain('retired-team');
   });
 });
 
@@ -159,7 +167,8 @@ describe('Rival feud', () => {
     expect(f.openFeud(run)).toBeNull();
     run.story.rivalGraph.push({ a: 'a', b: 'b', kind: 'enemies' });
     expect(f.openFeud(run)!.map((r) => r.id)).toEqual(['b', 'a']);
-    expect(eligibleEvents(content, run).map((e) => e.id)).toContain('rival-feud');
+    // Catalog Overhaul row 12: the feud's scene is now R11 Two Rivals, One Argument, drawn by the rival questline schedule (it needs a second rival).
+    expect(content.events.get('rival-feud')!.requires).toContainEqual({ kind: 'rivalQuest', beat: 'R11.open' });
     expect(f.settleFeud(content, run, 'second')).toContain('is your ally');
     const [a, b] = [run.story.rivals[0]!, run.story.rivals[1]!];
     expect(a.state).toBe('ally');
@@ -171,18 +180,20 @@ describe('Rival feud', () => {
 });
 
 describe('Relics and the Camp Council', () => {
-  it('a relic adds its upside and downside once, and the camp is a rest spot', async () => {
+  // Catalog Overhaul places (SF94): the shrine now trades one Relic Tree line for another (its upside: the other line's
+  // tree at full growth; its downside: your own tree is cut back). The full relic rules are in coPlaces.test.ts.
+  it('the relic shrine trades your tree line for another once, and the camp is a rest spot', async () => {
     const { chooseEvent } = await import('../../src/core/events');
     const run = fresh('relic');
     const node = run.stage!.map.nodes[0]!;
     node.sides.push({ id: 'event-r', kind: 'event', used: false, eventId: 'relic-shrine' });
     run.stage!.current = node.id;
-    const before = run.perkEffects?.length ?? 0;
+    run.story.flags['ev:tree-ember'] = 1;
     const r = chooseEvent(content, run, 'event-r', 0);
-    expect(r.run.perkEffects!.length).toBe(before + 2);
-    expect(r.run.perkEffects!.map((e) => e.kind)).toEqual(expect.arrayContaining(['hyperChanceMultiplier', 'rivalLevelOffset']));
+    expect(r.run.story.flags['ev:tree-ember'] ?? 0).toBe(0);
+    expect(r.run.story.flags['ev:tree-tide']).toBe(3);
     expect(content.events.get('camp-council')!.stop).toBe('rest');
-    expect(content.events.get('camp-council')!.choices).toHaveLength(4);
+    expect(content.events.get('camp-council')!.choices).toHaveLength(3); // Catalog Overhaul (SF45): Train, Play, Sleep
   });
 });
 
@@ -209,12 +220,11 @@ describe('World events', () => {
     expect(oldFoe(run)).toBe('pidgey');
     expect(ids()).toContain('old-foe-returns');
 
+    // The Legend Trail clues and The Legend Appears became the Influence ladder (Catalog Overhaul legends, RULE ids): never drawn now.
     run.regionIndex = Math.min(3, run.regionOrder.length - 1);
-    expect(ids()).toContain('legend-clue-tracks');
-    expect(ids()).not.toContain('legend-encounter');
     run.story.flags['ev:legend-clue'] = 3;
     expect(ids()).not.toContain('legend-clue-tracks');
-    expect(ids()).toContain('legend-encounter');
+    expect(ids()).not.toContain('legend-encounter');
   });
 });
 

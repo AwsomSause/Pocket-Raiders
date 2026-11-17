@@ -7,6 +7,7 @@
 // pillar with a bigger token, and the champion stands in turning gold rays
 // (Visual Bible: "a deliberate escalation from normal stages").
 
+import { waitingStop } from '../core/co/attach';
 import { climaxTick } from '../core/arc/climaxExtended';
 import { epilogueTick } from '../core/epilogue/director';
 import { nodeHint } from '../core/worldSim/tick';
@@ -23,12 +24,16 @@ import { fieldHintId, licenseName, licenseNote } from '../core/license';
 import { SERVICES } from '../core/services/schema';
 import { stopIsHidden } from '../core/events';
 import { leadChatter } from '../core/leadChatter';
+import { xatuBlur } from '../core/greenneedle/cartographer';
 import { forecast, foggedAt, frontAt, isFogged, sightRange, visibleColumn } from '../core/world';
 import Phaser from 'phaser';
+
+/** gn.new.12: when the Xatu's map first went on show (kept across scene restarts; 0 = not running). */
+const peekClock = { key: '', at: 0 };
 import { pinnedObjective } from '../core/objectives';
 import { rerollRunQuest } from '../core/quests';
 import { regionDim } from '../ui/battleFx/transitions';
-import { bracketView, matchReplay } from '../core/galarTournament';
+import { bracketTree, bracketView, matchReplay } from '../core/galarTournament';
 import { regionIdentity } from '../core/presentation/regionIdentity';
 import { FRAME_ASSET_IDS, headerBar } from '../ui/frames';
 import { currentColumn, findNode } from '../core/map';
@@ -36,7 +41,7 @@ import { runPerks } from '../core/archetypes';
 import { frontRunner, isFalseProtagonist, rivalTitle, TIMELINE } from '../core/timeline/frontRunner';
 import { bondOf } from '../core/bond';
 import { boxCapacity } from '../core/trainerPerks';
-import { hiddenItemNode, mapItemSummary, repelActive } from '../core/mapItems';
+import { mapItemSummary, repelActive, visibleHiddenItemNode } from '../core/mapItems';
 import { expeditionPreview } from '../core/expedition/flow';
 import { minigamePreview } from '../core/minigame/flow';
 import { ROUTE_LABELS, routeKind } from '../core/campaign/director';
@@ -64,7 +69,7 @@ import { storyRegionTrack } from '../core/presentation/storyMusic';
 import { isStoryCampaign } from '../core/campaign/circuit';
 import { badgeIconId } from '../assets/storyIcons';
 import { storyIcon } from '../ui/storyIcon';
-import { notify } from '../ui/overlays';
+import { notify, setLogKeyTaken } from '../ui/overlays';
 import { mapTrack, storyRegionMusic } from '../core/presentation/battleMusic';
 import { openBondMenu } from '../ui/bondMenu';
 import { openPartyScene, openScrapbook } from '../ui/partyLifeUi';
@@ -73,8 +78,11 @@ import { openCampMenu } from '../ui/campMenu';
 import { openBagMenu, openBoxMenu, openRivalNotebook, openSaveMenu, openStoryMenu, type FieldMenuHost } from '../ui/fieldMenus';
 import { hasRelationships, openRelationshipsMenu } from '../ui/relationshipsMenu';
 import { hasJournal, openJournalMenu } from '../ui/journalMenu';
+import { hasTeamSky, openSkyMenu } from '../ui/skyMenu';
+import { hasTeamHub, openTeamHub } from '../ui/insideMenu';
+import { barkLine } from '../core/evil/barks';
 import { openRunContentsMenu } from '../ui/runContentsMenu';
-import { onInputAction } from '../ui/input';
+import { onInputAction, type InputAction } from '../ui/input';
 import { Picker, speciesRow, type PickerLike, type PickerRow } from '../ui/partyPanel';
 import { regionFormPrompt } from '../core/regionForms';
 import { STOP_STYLES, stopStyle } from '../ui/stopIcons';
@@ -95,20 +103,36 @@ import { screenStyleOf } from '../core/presentation/screenStyles';
 import { MAP_SKINS } from '../ui/mapStyles';
 import { drawNextStop } from '../ui/mapStyles/nextstopCards';
 import { HUB_LIGHT, hubPeriod } from '../core/hubTown/daylight';
-import { eggLabel, eggRevealed, eggTier } from '../core/eggs';
+import { eggLabel, eggRevealed, eggTier, eggsHatchSooner } from '../core/eggs';
 import { protagonistTitle, topHeadline } from '../core/rivals/recognition';
 import { mentorHudLine } from '../core/mentors';
 import { ensureNarration } from '../core/overhaul/partyNarration';
-import { rivalReport } from '../core/rivals/report';
+import { personalityLabel, rivalReport } from '../core/rivals/report';
+import { FEELING_KEYS } from '../core/rivals/overhaulSchema';
+import { canonEventFor } from '../core/expansion/canonRun';
+import { townRollPages } from '../core/expansion/townRoll';
 import { trackPage } from '../core/expansion/trackView';
-import { fieldNotesView } from '../core/expansion/fieldNotes';
+import { FIELD_TABS, FIELD_TAB_NAMES, fieldNotesView } from '../core/expansion/fieldNotes';
 import { drawFieldNotes, type FieldNotesPage } from '../ui/fieldNotesPage';
-import { drawNodeMenu, type NodeMenuPanel } from '../ui/nodeMenuPanel';
+import { CATEGORY_LOOK, drawNodeMenu, status as menuStatus, type NodeMenuPanel } from '../ui/nodeMenuPanel';
 import { menuBlocker, menuSideIds, type MenuEntryView } from '../core/nodeMenu/flow';
 import { nodeMenuData } from '../core/nodeMenu/data';
 import { drawTrackPage } from '../ui/trackPage';
-import { drawDossier } from '../ui/dossier';
+import { castSpriteId, drawDossier } from '../ui/dossier';
 import { dossierFolders } from '../core/expansion/cast/dossier';
+import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
+import { rxFileOf } from '../ui/redux/assets';
+import { mountRedux, reduxOn, type ReduxCtx, type ReduxView } from '../ui/redux/stage';
+import { askText } from '../ui/redux/ask';
+import { hoverTips, ownAbilityCard } from '../ui/redux/tips';
+import type { BattlePanel } from '../ui/redux/screens/battle';
+import { mapView, type MapLegendRow, type MapModel, type MapNodeView } from '../ui/redux/screens/map';
+import { bestMedalWord } from '../ui/redux/screens/minigame';
+import { confirmBox } from '../ui/redux/screens/saves';
+import { bookRows, bookView, dossierView, nodeMenuView, pauseView, reportView, rollView, trackView, type NodeMenuCard } from '../ui/redux/screens/popups';
+import { bracketView as rxBracketView, galarHome, galarPage } from '../ui/redux/screens/bracket';
+import { artOf, monFile, rivalArt } from '../ui/redux/game';
+import { nodeStyle } from '../ui/redux/kit';
 
 const COL_SPACING = 104;
 const ROW_SPACING = 92;
@@ -161,7 +185,19 @@ const HIDDEN_STYLE = { color: 0x6b5a73, glyph: '?' };
 
 const serviceReusable = (side: SideStop): boolean => SERVICES.services.find((x) => x.id === side.serviceId)?.reusable === true;
 
+/** Town Roll: what kind of place a space is, in a word. */
+const ROLL_KIND: Record<string, string> = { PS: 'Pseudo-stage', MC: 'Challenge', EV: 'Event', HUB: 'Town hub', SHOP: 'Shop', CUT: 'Scene' };
+
 /** Something the cursor can land on. */
+/** A New UI pop-up over the map and where its cursor is. */
+type MapPop =
+  | { kind: 'report'; pick: number }
+  | { kind: 'dossier'; tab: number; pick: number }
+  | { kind: 'notes'; tab: number; sel: number[] }
+  | { kind: 'track' }
+  | { kind: 'roll'; town: number; pick: number }
+  | { kind: 'bracket'; page: number };
+
 type Option =
   | { kind: 'node'; node: MapNode }
   | { kind: 'side'; side: SideStop }
@@ -172,6 +208,8 @@ type Option =
   | { kind: 'story' }
   | { kind: 'relationships' }
   | { kind: 'journal' }
+  | { kind: 'sky' }
+  | { kind: 'teamHub' }
   | { kind: 'contents' }
   | { kind: 'notebook' }
   | { kind: 'bond' }
@@ -199,6 +237,305 @@ export class MapScene extends Phaser.Scene {
   /** Where each node is drawn inside the scrolling map layer (for the travel animation). */
   private nodePos = new Map<string, { x: number; y: number }>();
   private mapLayer: Phaser.GameObjects.Container | null = null;
+  /** New UI: the mock-ups' stage map over this scene, and what it draws from. */
+  private rxView: ReduxView | null = null;
+  private rxModel: Omit<MapModel, 'index' | 'info' | 'notice' | 'going' | 'banner' | 'legend'> | null = null;
+  private rxGoing: string | null = null;
+  private rxBanner: MapModel['banner'] = null;
+  private rxLegend: MapLegendRow[] | null = null;
+  /** New UI: the party chip the pointer rests on ("mon:2"), once the Tooltip delay has passed. */
+  private rxCard: string | null = null;
+  private rxCardOf(): BattlePanel | null {
+    const m = /^mon:(\d+)$/.exec(this.rxCard ?? '');
+    const mon = m ? services().session.run?.party[Number(m[1])] : undefined;
+    return mon ? ownAbilityCard(mon, services().session.content.species.get(mon.speciesId)?.name) : null;
+  }
+
+  /** New UI: the pop-up that is open over the map (R, T, D, F, B), drawn by the layer instead of the canvas. */
+  private rxPop: MapPop | null = null;
+  /** New UI: the pause menu (Esc on the map) and its cursor; `ask` is the cursor of the "End this run?" box while it is open. */
+  private rxPause: { index: number; ask: number | null } | null = null;
+  /** New UI: the node event menu while it is open (the cards, the cursor, and what a pick does). */
+  private rxMenu: { header: string; cards: NodeMenuCard[]; index: number; pick: (k: number) => void } | null = null;
+  /** New UI: a tournament match is being watched (drawn on the canvas, so the layer steps aside). */
+  private rxWatching = false;
+  /** New UI: when a pop-up last opened or closed. Its key can also be a direction (D is "right"), and that same press must not move anything. */
+  private rxPopAt = -1;
+
+  /** Opens a pop-up in the New UI, or closes the one that is open. Nothing opens while the map is busy or the pop-up has nothing to show. */
+  private popToggle(kind: MapPop['kind']): void {
+    if (this.rxPop) return this.popClose();
+    if (this.busy || this.picker || this.legend) return;
+    const { session } = services();
+    const run = session.run;
+    if (!run) return;
+    let pop: MapPop | null;
+    if (kind === 'report') pop = rivalReport(run).length ? { kind, pick: 0 } : null;
+    else if (kind === 'dossier') pop = dossierFolders(run).length ? { kind, tab: 0, pick: 0 } : null;
+    else if (kind === 'track') pop = trackPage(session.content, run) ? { kind } : null;
+    else if (kind === 'notes') pop = { kind, tab: 0, sel: [0, 0, 0, 0] };
+    else if (kind === 'roll') pop = townRollPages(session.content, run).length ? { kind, town: 0, pick: 0 } : null;
+    else pop = { kind, page: galarHome(bracketTree(session.content, run)) };
+    if (!pop) return;
+    this.rxPop = pop;
+    this.rxPopAt = this.time.now;
+    this.rxCard = null;
+    this.busy = true;
+    this.rxView?.refresh();
+  }
+
+  // ---- New UI: the pause menu (the mock-ups' "Paused" overlay) ----
+
+  private static readonly PAUSE = ['Resume', 'Party', 'Bag', 'Settings', 'Save', 'End run'] as const;
+
+  private pauseOpen(): void {
+    if (!this.rxView || this.rxPause || this.busy || this.picker || this.legend) return;
+    this.rxPause = { index: 0, ask: null };
+    this.rxCard = null;
+    this.busy = true;
+    this.rxView.refresh();
+  }
+
+  private pauseClose(): void {
+    this.rxPause = null;
+    this.busy = false;
+    this.rxView?.refresh();
+  }
+
+  private pauseInput(action: InputAction): void {
+    const p = this.rxPause;
+    if (!p) return;
+    if (p.ask !== null) {
+      // The "End this run?" box: Esc keeps playing, the arrows change sides.
+      if (action === 'back') return this.pauseAsk(0);
+      if (action === 'confirm') return this.pauseAsk(p.ask);
+      p.ask = 1 - p.ask;
+      this.rxView?.refresh();
+      return;
+    }
+    if (action === 'back') return this.pauseClose();
+    if (action === 'confirm') return this.pausePick(p.index);
+    const n = MapScene.PAUSE.length;
+    p.index = (p.index + (action === 'up' || action === 'left' ? n - 1 : 1)) % n;
+    this.rxView?.refresh();
+  }
+
+  /** A button of the pause menu (or -1: a click beside them, which resumes). Each one is the map's own action. */
+  private pausePick(k: number): void {
+    const p = this.rxPause;
+    if (!p) return;
+    if (p.ask !== null) return;
+    const name = MapScene.PAUSE[k];
+    if (!name || name === 'Resume') return this.pauseClose();
+    if (name === 'End run') {
+      // Only an Adventure run can be given up from the map (core/run.ts endRunEarly); the mock-up's box asks first, on "Keep playing".
+      p.index = k;
+      if (wipeStatus(services().session.run!)) p.ask = 0;
+      this.rxView?.refresh();
+      return;
+    }
+    if (name === 'Settings') {
+      this.scene.start('Settings', { from: 'Map' });
+      return;
+    }
+    this.pauseClose();
+    if (name === 'Party') openPokemonMenu(this.fieldHost());
+    else if (name === 'Bag') openBagMenu(this.fieldHost());
+    else openSaveMenu(this.fieldHost(), (to) => {
+      this.busy = true;
+      this.scene.start(to);
+    });
+  }
+
+  /** An answer in the "End this run?" box: 1 ends the run; 0 goes back to the pause menu. */
+  private pauseAsk(k: number): void {
+    const p = this.rxPause;
+    if (!p || p.ask === null) return;
+    if (k !== 1) {
+      p.ask = null;
+      this.rxView?.refresh();
+      return;
+    }
+    services().session.endRunEarly();
+    this.scene.start('GameOver');
+  }
+
+  private pauseHtml(): string {
+    const p = this.rxPause;
+    if (!p) return '';
+    const can = !!wipeStatus(services().session.run!);
+    const note = MapScene.PAUSE[p.index] === 'End run' && !can ? 'Only an Adventure run can be ended here. Use Save to leave this one.' : '';
+    if (p.ask === null) return pauseView({ options: MapScene.PAUSE.map((label) => ({ label, off: label === 'End run' && !can })), index: p.index, note });
+    return confirmBox({ title: 'End this run?', body: 'Your progress is banked as a defeat. This cannot be undone.', options: ['Keep playing', 'End run'], index: p.ask }).replace('class="shade"', 'class="shade hit"');
+  }
+
+  private popClose(): void {
+    this.rxPopAt = this.time.now;
+    this.rxPop = null;
+    this.busy = false;
+    this.rxView?.refresh();
+  }
+
+  /** Arrow keys inside a New UI pop-up: folders, tabs and pages go sideways, people and entries go up and down. */
+  private popInput(action: InputAction): void {
+    const p = this.rxPop;
+    const { session } = services();
+    const run = session.run;
+    if (!p || !run) return;
+    if (action === 'back' || action === 'confirm') return this.popClose();
+    const d = action === 'right' || action === 'down' ? 1 : -1;
+    const side = action === 'left' || action === 'right';
+    if (p.kind === 'report') {
+      const n = rivalReport(run).length;
+      p.pick = (p.pick + d + n) % n;
+    } else if (p.kind === 'dossier') {
+      const folders = dossierFolders(run);
+      if (side) {
+        p.tab = (p.tab + d + folders.length) % folders.length;
+        p.pick = 0;
+      } else {
+        const n = folders[p.tab]?.entries.length ?? 1;
+        p.pick = (p.pick + d + n) % n;
+      }
+    } else if (p.kind === 'notes') {
+      if (side) p.tab = (p.tab + d + FIELD_TABS.length) % FIELD_TABS.length;
+      else {
+        const n = fieldNotesView(session.content, run).tabs[FIELD_TABS[p.tab]!].length;
+        if (n) p.sel[p.tab] = Math.max(0, Math.min(n - 1, (p.sel[p.tab] ?? 0) + d));
+      }
+    } else if (p.kind === 'roll') {
+      // The arrows walk the cards in order (the ones on the map, then the ones left out) and on into the next town.
+      const pages = townRollPages(session.content, run);
+      const n = pages[p.town]?.cards.length ?? 0;
+      const k = p.pick + d;
+      if (k >= 0 && k < n) p.pick = k;
+      else if (pages.length > 1) {
+        p.town = (p.town + d + pages.length) % pages.length;
+        p.pick = d > 0 ? 0 : Math.max(0, (pages[p.town]?.cards.length ?? 1) - 1);
+      }
+    } else if (p.kind === 'bracket' && side) p.page = (p.page + d + 5) % 5;
+    this.rxView?.refresh();
+  }
+
+  /** A click in a New UI pop-up: a tab (folder, notes tab) or a row (person, entry, rival). */
+  private popPick(what: 'tab' | 'pick', i: number): void {
+    const p = this.rxPop;
+    if (!p || !Number.isFinite(i)) return;
+    if (p.kind === 'dossier') {
+      if (what === 'tab') {
+        p.tab = i;
+        p.pick = 0;
+      } else p.pick = i;
+    } else if (p.kind === 'notes') {
+      if (what === 'tab') p.tab = Math.max(0, Math.min(FIELD_TABS.length - 1, i));
+      else p.sel[p.tab] = i;
+    } else if ((p.kind === 'report' || p.kind === 'roll') && what === 'pick') {
+      if (p.pick === i) return;
+      p.pick = i;
+    }
+    this.rxView?.refresh();
+  }
+
+  /** Draws the open New UI pop-up from the same core views the old canvas pop-ups read. */
+  private popView(c: ReduxCtx, p: MapPop): string {
+    const { session } = services();
+    const run = session.run!;
+    const content = session.content;
+    const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
+    if (p.kind === 'report') {
+      const rows = rivalReport(run);
+      const r = rows[Math.min(p.pick, rows.length - 1)]!;
+      const rec = run.expansion?.rival?.[r.id];
+      const story = run.story.rivals.find((x) => x.id === r.id);
+      const regionName = (k: string): string => content.regions.get(run.regionOrder[Number(k)] ?? '')?.name ?? `Region ${Number(k) + 1}`;
+      const met = Object.entries(rec?.presence ?? {}).filter(([, m]) => m.meetings > 0 || m.stepIn).map(([k, m]): [string, string] => [regionName(k), `${m.meetings} ${m.meetings === 1 ? 'meeting' : 'meetings'}${m.stepIn ? ', stepped in' : ''}`]);
+      return reportView(c, {
+        rivals: rows.map((x) => x.name),
+        pick: rows.indexOf(r),
+        name: r.name,
+        tag: r.personality,
+        art: rivalArt(this, story)?.file ?? null,
+        facts: [['Role', r.role === 'friend' ? 'Friend' : 'Rival'], ['Style', personalityLabel(rec?.style ?? '') || 'Unknown'], ['Battles with you', String(story?.encounters ?? 0)]],
+        lead: r.lead,
+        feelings: FEELING_KEYS.map((key): [string, number] => [cap(key), (rec?.feelings[key] ?? 0) * 10]).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 4),
+        marks: r.marks,
+        meetings: [...(met.length ? met : [['Meetings', String(r.meetings)] as [string, string]]), ['Seen of yours', `${r.seenMoves} moves, ${r.seenSpecies} Pokémon`]],
+      });
+    }
+    if (p.kind === 'dossier') {
+      const folders = dossierFolders(run);
+      const tab = Math.max(0, Math.min(folders.length - 1, p.tab));
+      const f = folders[tab]!;
+      const pick = Math.max(0, Math.min(f.entries.length - 1, p.pick));
+      const e = f.entries[pick]!;
+      const fileOf = (name: string, id: string): string | null => { const a = artOf(this, castSpriteId(name, id)); return a?.atlas ? a.file : null; };
+      return dossierView(c, {
+        tabs: folders.map((x) => x.label),
+        tab,
+        people: f.entries.map((x) => ({ name: x.name.replace(/\s*\(.*\)$/, ''), rank: x.rank, file: fileOf(x.name, x.id) })),
+        rows: f.rows.filter((r) => r.entries.length > 0).map((r) => ({ label: r.entries[0]!.tierName, people: r.entries.map((x) => f.entries.indexOf(x)) })),
+        pick,
+        file: { name: e.name, mark: cap(e.mark), facts: [['Rank', e.rank], ['Status', cap(e.status)], ['Ace', e.ace], ['Met', `Stop ${(run.expansion?.dossier?.[e.id]?.metAt ?? 0) + 1}`]], voice: e.voice, noteTitle: cap(e.noteTitle.toLowerCase()), note: e.note },
+        shade: this.rxModel?.trainer ?? null,
+      });
+    }
+    if (p.kind === 'notes') {
+      const view = fieldNotesView(content, run);
+      const tab = FIELD_TABS[p.tab] ?? 'special';
+      const entries = view.tabs[tab];
+      const pick = Math.max(0, Math.min(entries.length - 1, p.sel[p.tab] ?? 0));
+      return bookView(c, {
+        tabs: FIELD_TABS.map((t) => ({ name: FIELD_TAB_NAMES[t], short: FIELD_TAB_NAMES[t].replace(' Pokémon', ''), count: t === 'key' ? `${view.counts[t].have} held` : `${view.counts[t].have} of ${view.counts[t].total}` })),
+        tab: p.tab,
+        entries: entries.map((x) => ({ name: x.name, file: x.known && x.speciesId ? monFile(this, x.speciesId) : null, known: x.known, badge: x.species ? `${x.species} · ${x.badge}` : x.badge, lines: x.lines, pips: x.pips, obtain: x.obtain })),
+        pick,
+        shadow: tab === 'shadow',
+        help: view.help[tab],
+        empty: tab === 'rom' && !view.grandArcOn ? 'The Grand Arc is off for this run, so there are no Data ROMs to find.' : 'Nothing here yet. Entries appear as you meet them.',
+      });
+    }
+    if (p.kind === 'roll') {
+      const pages = townRollPages(content, run);
+      const page = pages[Math.min(p.town, pages.length - 1)];
+      if (!page) return '';
+      const pick = Math.max(0, Math.min(page.cards.length - 1, p.pick));
+      const cur = page.cards[pick];
+      const event = cur && cur.state !== 'off' ? canonEventFor(content, cur.id, page.slot) : undefined;
+      return rollView(c, {
+        town: page.town,
+        cards: page.cards.map((x) => ({ name: x.name, state: x.state === 'always' ? 'star' : x.state === 'rolled' ? 'dice' : x.state === 'unlocked' ? 'open' : 'off', note: `${ROLL_KIND[x.kind]}${x.done ? ' · Done' : ''}` })),
+        index: pick,
+        rolled: page.rolled,
+        optional: page.optional,
+        page: pages.length > 1 ? [pages.indexOf(page) + 1, pages.length] : null,
+        text: cur?.state === 'off' ? `${cur.name} is not here this run. Another run may roll it.`
+          : cur && cur.state !== 'always' && event?.intro ? `${cur.name}: ${event.intro}`
+          : 'Each Kanto town rolls which optional spaces appear this run. Starred ones are always there.',
+      });
+    }
+    if (p.kind === 'track') {
+      const page = trackPage(content, run);
+      if (!page) return '';
+      return trackView(c, {
+        kicker: page.kicker,
+        title: page.title,
+        steps: page.steps.map((s) => ({ n: s.step, name: s.name, rule: s.rule, state: s.state })),
+        seen: page.seenCount,
+        scales: page.scales.map((s) => ({ head: `${s.scale} · ${s.note}`, text: s.text, seen: s.seen })),
+        civilian: page.civilian,
+        next: page.nextLine,
+      });
+    }
+    const view = bracketView(content, run);
+    const next = view.rounds.find((r) => r.state === 'next');
+    const watch = view.rounds.filter((r) => r.state === 'won').length;
+    const text = [
+      `${view.standing.length} of 32 still in.`,
+      next ? `Next: ${next.name} against ${next.opponent.name} (${[next.opponent.style, ...next.opponent.types.slice(0, 2).map(cap)].filter(Boolean).join(', ')}), field strength +${next.levelBonus} levels.` : 'The whole bracket is decided.',
+      view.featured.at(-1)?.text ?? '',
+    ].filter(Boolean).join(' ');
+    return rxBracketView(c, { ...galarPage(bracketTree(content, run), (id) => monFile(this, id), p.page, text), extra: watch > 0 ? `W: watch a round ${watch} match` : undefined });
+  }
 
   constructor() {
     super('Map');
@@ -319,8 +656,14 @@ export class MapScene extends Phaser.Scene {
       const cur = run.stage?.current;
       const node = run.stage?.map.nodes.find((x) => x.id === cur);
       if (!node || typeof window === 'undefined' || typeof window.prompt !== 'function') return;
-      const text = window.prompt('Name this place (up to 24 letters, empty clears):', node.name ?? '');
-      if (text === null) return;
+      // The New look asks on the mock-ups' entry page; the Old look in the browser's own box.
+      if (reduxOn()) void askText(this, { title: 'Name this place', area: 'run', heading: 'Name this place', text: 'Up to 24 letters. Leave it empty to clear the name.', value: node.name ?? '' }).then((text) => { if (text !== null) named(node, text); });
+      else {
+        const text = window.prompt('Name this place (up to 24 letters, empty clears):', node.name ?? '');
+        if (text !== null) named(node, text);
+      }
+    };
+    const named = (node: NonNullable<typeof run.stage>['map']['nodes'][number], text: string): void => {
       const renamed = renameNode(run, node.id, text);
       node.name = renamed.stage!.map.nodes.find((x) => x.id === node.id)!.name;
       const names = { ...(session.profile.nook?.nodeNames ?? {}) };
@@ -537,10 +880,25 @@ export class MapScene extends Phaser.Scene {
     // ---------- the map (scrolls sideways) ----------
     // A bike chosen from the Items menu changes where the player can go.
     const choices = mapChoices(content, run);
-    const hidden = hiddenItemNode(content, run);
+    // Itemfinder / Looker: the ✦ stop; with only Juno's lesson it shows once it is a few steps ahead.
+    const hidden = visibleHiddenItemNode(content, run);
     const choiceIds = new Set(choices.map((n) => n.id));
     const mapLayer = this.add.container(0, 0);
     this.mapLayer = mapLayer;
+    // gn.new.12: the Xatu's map is on show for ten seconds (counted across scenes), then it blurs and the fog comes back.
+    if (stage.peekFrom !== undefined) {
+      if (peekClock.key !== `${run.runId}:${stage.index}` || peekClock.at === 0) { peekClock.key = `${run.runId}:${stage.index}`; peekClock.at = Date.now(); }
+      const left = Math.max(0, 10000 - (Date.now() - peekClock.at));
+      this.time.delayedCall(left, () => {
+        const { session: sv } = services();
+        xatuBlur(sv.run!);
+        sv.saveRunNow();
+        peekClock.at = 0;
+        const fade = this.motion === 'off' ? 0 : 900;
+        if (fade) this.tweens.add({ targets: mapLayer, alpha: 0.25, duration: fade, onComplete: () => this.scene.restart({ notice: 'The map blurs, the way a dream does on waking. The Xatu was right about the ten seconds.', focus: this.index }) });
+        else this.scene.restart({ notice: 'The map blurs, the way a dream does on waking. The Xatu was right about the ten seconds.', focus: this.index });
+      });
+    }
     this.nodePos = new Map();
     const colSpacing = league ? Math.min(200, (GAME_WIDTH - MAP_LEFT * 2 - 40) / Math.max(1, stage.map.columns - 1)) : COL_SPACING;
     this.colSpacing = colSpacing;
@@ -561,6 +919,9 @@ export class MapScene extends Phaser.Scene {
       y: MAP_MID_Y + (n.row - (widthOf(n.column) - 1) / 2) * ROW_SPACING + (totalRise ? totalRise / 2 - (n.column - 1) * rise : 0),
     });
 
+    const rxNodes: MapNodeView[] = [];
+    const rxEdges: MapModel['edges'] = [];
+    const rxButtons: MapModel['buttons'] = [];
     const lines = this.add.graphics();
     mapLayer.add(lines);
     const openPaths: [{ x: number; y: number }, { x: number; y: number }][] = [];
@@ -594,6 +955,7 @@ export class MapScene extends Phaser.Scene {
           lines.lineBetween(a.x, a.y, b.x, b.y);
         }
         if (open) openPaths.push([a, b]);
+        rxEdges.push({ a: n.id, b: id, open, walked });
       }
     }
     // Open paths glow, and little lights travel along them toward the choices.
@@ -725,6 +1087,27 @@ export class MapScene extends Phaser.Scene {
         else mapLayer.add(this.add.text(sx, sy, s.glyph, textStyle(18, '#ffffff', { stroke: '#181818', strokeThickness: 3 })).setOrigin(0.5).setAlpha(side.used ? 0.4 : 1));
       });
       if (mapSkin?.labels && !fog) mapLayer.add(this.add.text(x, y + r * 0.95 + 9, KIND_STYLE[n.kind].label.split(' ')[0]!, textStyle(10, '#33475f')).setOrigin(0.5, 0));
+      {
+        // New UI: the same facts, for the mock-up map.
+        const hex = (v: number): string => `#${v.toString(16).padStart(6, '0')}`;
+        const marks: (readonly [string, string])[] = [];
+        if (!fog && n.storyStops?.some((id) => !run.story.v2?.stops.done.includes(id))) marks.push(['★ story', '#ffd860']);
+        if (n.id === hidden && !visited) marks.push(['✦ item', '#f8e070']);
+        if (omen) marks.push(['●', OMEN_COLOR[omen.tier]]);
+        if (front) marks.push([FRONT_LABEL[front.weather] ?? front.weather, hex(FRONT_COLOR[front.weather] ?? 0xffffff)]);
+        if (obstacle) marks.push([obstacle.icon, obstacle.color]);
+        if (n.harder && !fog) marks.push(['! harder', '#d0a0ff']);
+        if (boss && !fog) marks.push([boss.name, '#ffffff']);
+        const text = this.describe({ kind: 'node', node: n });
+        rxNodes.push({
+          id: n.id, col: n.column, row: n.row, rows: widthOf(n.column), kind: n.kind, ...(roomGlyph ? { glyph: roomGlyph } : {}), fog, visited, cur: isCurrent, go: reachable, dim, harder: !!n.harder, opt: -1,
+          sides: n.sides.map((side) => {
+            const special = fog ? HIDDEN_STYLE : side.kind === 'expedition' && legendOf(side.expeditionId) ? LEGEND_STYLE : side.roamer ? ROAMER_STYLE : side.eventId === 'camp-checkpoint' ? CAMP_STYLE : null;
+            return { kind: side.kind, used: !!side.used, ...(special ? { color: hex(special.color), glyph: special.glyph } : {}) };
+          }),
+          marks, title: fog ? 'Fog' : boss?.name ?? n.name ?? KIND_STYLE[n.kind].label, text: text.replace(/\n/g, ' · '),
+        });
+      }
       if (reachable && mapSkin?.cards) cardNodes.push(n);
       else if (reachable) {
         this.addOption({ kind: 'node', node: n }, () => this.ringCursor(mapLayer, x, y, r + (isBoss ? 8 : 10)), {
@@ -733,6 +1116,7 @@ export class MapScene extends Phaser.Scene {
           w: NODE_RADIUS * 2,
           h: NODE_RADIUS * 2,
         });
+        rxNodes[rxNodes.length - 1]!.opt = this.options.length - 1;
       }
     }
 
@@ -807,7 +1191,7 @@ export class MapScene extends Phaser.Scene {
       buttons.push({ option: { kind: 'side', side }, label: side.kind === 'expedition' && legendOf(side.expeditionId) ? 'Legendary' : SIDE_LABEL[side.kind], color: side.kind === 'expedition' && legendOf(side.expeditionId) ? LEGEND_STYLE.color : side.kind === 'event' && !stopIsHidden(content, run, currentNode!, side) ? stopStyle(content.events.get(side.eventId ?? '')?.stop).color : SIDE_STYLE[side.kind].color });
     }
     if (boxCapacity(runPerks(content, services().session.run!)) > 0) buttons.push({ option: { kind: 'box' }, label: 'PC', color: COLORS.panel });
-    buttons.push({ option: { kind: 'party' }, label: 'Party', color: COLORS.panel }, { option: { kind: 'bag' }, label: 'Bag', color: COLORS.panel }, { option: { kind: 'camp' }, label: 'Camp', color: COLORS.panel }, { option: { kind: 'bond' }, label: 'Bonds', color: COLORS.panel }, { option: { kind: 'scrapbook' }, label: 'Album', color: COLORS.panel }, { option: { kind: 'story' }, label: 'Story', color: COLORS.panel }, ...(services().session.run!.story.rivals.length > 0 ? [{ option: { kind: 'notebook' as const }, label: 'Rivals', color: COLORS.panel }] : []), ...(hasRelationships() ? [{ option: { kind: 'relationships' as const }, label: 'People', color: COLORS.panel }] : []), ...(hasJournal() ? [{ option: { kind: 'journal' as const }, label: 'Notes', color: COLORS.panel }] : []), { option: { kind: 'contents' }, label: 'Run', color: COLORS.panel }, { option: { kind: 'save' }, label: 'Save', color: COLORS.panel });
+    buttons.push({ option: { kind: 'party' }, label: 'Party', color: COLORS.panel }, { option: { kind: 'bag' }, label: 'Bag', color: COLORS.panel }, { option: { kind: 'camp' }, label: 'Camp', color: COLORS.panel }, { option: { kind: 'bond' }, label: 'Bonds', color: COLORS.panel }, { option: { kind: 'scrapbook' }, label: 'Album', color: COLORS.panel }, { option: { kind: 'story' }, label: 'Story', color: COLORS.panel }, ...(services().session.run!.story.rivals.length > 0 ? [{ option: { kind: 'notebook' as const }, label: 'Rivals', color: COLORS.panel }] : []), ...(hasRelationships() ? [{ option: { kind: 'relationships' as const }, label: 'People', color: COLORS.panel }] : []), ...(hasJournal() ? [{ option: { kind: 'journal' as const }, label: 'Notes', color: COLORS.panel }] : []), ...(hasTeamSky() ? [{ option: { kind: 'sky' as const }, label: 'Team Sky', color: COLORS.panel }] : []), ...(hasTeamHub() ? [{ option: { kind: 'teamHub' as const }, label: 'Team', color: COLORS.panel }] : []), { option: { kind: 'contents' }, label: 'Run', color: COLORS.panel }, { option: { kind: 'save' }, label: 'Save', color: COLORS.panel });
     if (wipeStatus(services().session.run!)) buttons.push({ option: { kind: 'endRun' }, label: 'End run', color: 0x6a2a38 });
     // Buttons share the width right of the party: one tall row when they fit, else two short rows.
     const areaX = 40 + slots * step + 4;
@@ -824,19 +1208,84 @@ export class MapScene extends Phaser.Scene {
       const label = this.add.text(bxPos + bw / 2, byPos + bh / 2, b.label, textStyle(oneRow && b.label.length <= 6 && bw >= 92 ? 22 : 16, b.color === COLORS.panel ? (chrome?.button.ink ?? '#ffffff') : '#ffffff')).setOrigin(0.5);
       fitLine(label, bw - 12);
       this.addOption(b.option, () => this.boxCursor(bxPos, byPos, bw, bh), { x: bxPos, y: byPos, w: bw, h: bh });
+      rxButtons.push({ label: b.label, opt: this.options.length - 1, hot: b.color !== COLORS.panel });
     });
 
     // Without a notice, the corner shows the map items that are working (Repel ×2 · Black Flute...).
     const riding = run.moveMode ? mapActions(content, run).find((a) => a.on) : undefined;
     const working = [riding ? `Riding the ${content.catalog.get(riding.itemId)!.name}` : '', mapItemSummary(content, run)].filter(Boolean).join(' · ');
     this.notice = this.add
-      .text(GAME_WIDTH - 24, 482, data.notice ?? wealthTaxNotice(run) ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, chrome?.bottom.sub ?? '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
+      .text(GAME_WIDTH - 24, 482, data.notice ?? wealthTaxNotice(run) ?? barkLine(content, run, 'rest', `${run.regionIndex}-${run.stage?.index ?? 0}-${run.stage?.current ?? 'start'}`) ?? (working ? `Working: ${working}` : newsLine(content, run)), textStyle(15, chrome?.bottom.sub ?? '#f0e0a0', { align: 'right', wordWrap: { width: 300 } }))
       .setOrigin(1, 0);
     fitBlock(this.notice, 300, 48);
+    // New UI: the mock-ups' stage map (journey, web, tile map or cards by theme) when no map style is picked.
+    this.rxView = null;
+    this.rxModel = null;
+    this.rxGoing = null;
+    this.rxBanner = null;
+    this.rxLegend = null;
+    this.rxPop = null;
+    this.rxPause = null;
+    this.rxMenu = null;
+    this.rxWatching = false;
+    if (reduxOn() && !mapSkin) {
+      const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
+      const stages = getCampaign(content, run.campaignId).stagesPerRegion;
+      // Every status line the old header drew under its title (mentor, forecast, escort, objectives, pinned quest...).
+      const lines = (this.children.list.filter((o) => o instanceof Phaser.GameObjects.Text && o.y >= 60 && o.y <= 112 && o.depth === 0 && o.text.trim() !== '') as Phaser.GameObjects.Text[]).sort((a, b) => a.y - b.y).map((t) => t.text);
+      const hudBits = hud.text.split('  ·  ').filter((t) => !t.startsWith('₽'));
+      this.rxModel = {
+        title: league ? `${region.name} Pokémon League` : stage.pseudo ? stage.pseudo.name : `${region.name} · Stage ${stage.index + 1}`,
+        chips: [league ? `Battle ${column} / ${stage.map.columns}` : stage.pseudo ? `Inside Stage ${stage.index + 1}` : `Stage ${stage.index + 1} / ${stages}`, league ? `Elite Four, then ${leader.title}` : stage.pseudo ? 'Clear the rooms to walk out' : `Gym in ${Math.max(0, stage.map.columns - column)} stops`, `₽ ${run.money.toLocaleString('en-US')}`, ...hudBits],
+        types: league || blindMap(run.rules) ? [] : theme.types,
+        lines: [league ? 'Healed after every battle' : `${blindMap(run.rules) ? '???' : theme.name}${blindMap(run.rules) ? '' : ` (${theme.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ')})`} · ${stage.pseudo ? `Inside Stage ${stage.index + 1}, not a stage of its own` : leader.title}${stageModifier(run) ? ` · ${stageModifier(run)!.name}` : ''}`, ...lines],
+        party: run.party.map((mon) => { const sp = content.species.get(mon.speciesId)!; return { file: rxFileOf(manifest, pokemonAssetIds(sp.assets).front)?.file ?? null, hp: Math.round((mon.hp / Math.max(1, maxHp(content, mon))) * 100), label: `${sp.name} Lv${mon.level}` }; }),
+        eggs: run.eggs.map((egg) => `${egg.left}${egg.unit === 'battle' ? 'B' : 'S'}`),
+        art: bg ? rxFileOf(manifest, bg)?.file ?? null : null,
+        trainer: rxFileOf(manifest, content.archetypes.get(run.archetypeId)?.spriteAssetId ?? '')?.file ?? null,
+        columns: stage.map.columns, column,
+        nodes: rxNodes, edges: rxEdges, buttons: rxButtons,
+        keys: [['C', 'cry'], ['H', 'paw'], ['N', 'name']],
+        hints: [['L', 'legend'], ['Enter', 'go']],
+      };
+      const keyActs: Record<string, () => void> = { C: doCry, H: doHand, N: doName, R: () => this.toggleRivalReport(), T: () => this.toggleTrackPage(), D: () => this.toggleDossier(), F: () => this.toggleFieldNotes(), O: () => this.popToggle('roll') };
+      this.rxView = mountRedux(this, {
+        render: (c) => this.rxPop ? this.popView(c, this.rxPop) : mapView(c, { ...this.rxModel!, index: this.index, info: this.info?.text ?? '', notice: this.notice?.text ?? '', going: this.rxGoing, banner: this.rxBanner, legend: this.rxLegend, card: this.rxCardOf() }) + this.pauseHtml() + (this.rxMenu ? nodeMenuView(this.rxMenu) : ''),
+        acts: {
+          pick: (i) => { if (this.busy || this.picker) return; if (Number(i) !== this.index) this.focus(Number(i)); this.activate(Number(i)); },
+          go: () => { if (!this.busy && !this.picker) this.activate(this.index); },
+          key: (k) => { if (!this.busy && !this.picker) keyActs[k]?.(); },
+          legend: () => this.toggleLegend(),
+          pop: () => this.popClose(),
+          pause: (k) => this.pausePick(Number(k)),
+          menu: (k) => this.menuPick(Number(k)),
+          confirm: (k) => this.pauseAsk(Number(k)),
+          popTab: (i) => this.popPick('tab', Number(i)),
+          popPick: (i) => this.popPick('pick', Number(i)),
+          bracket: () => this.popClose(),
+          bracketPage: (i) => { if (this.rxPop?.kind === 'bracket') { this.rxPop.page = Math.max(0, Math.min(4, Number(i) || 0)); this.rxView?.refresh(); } },
+          bracketWatch: () => this.watchLast(),
+        },
+        overs: { menuOver: (i) => this.menuFocus(Number(i)), over: (i) => { if (!this.busy && !this.picker && Number(i) !== this.index) this.focus(Number(i)); }, popOver: (i) => this.popPick('pick', Number(i)), pauseOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask === null && k >= 0 && k !== p.index) { p.index = k; this.rxView?.refresh(); } }, confirmOver: (i) => { const p = this.rxPause, k = Number(i); if (p && p.ask !== null && (k === 0 || k === 1) && k !== p.ask) { p.ask = k; this.rxView?.refresh(); } } },
+        // Resting the pointer on a party Pokémon shows its Ability card (the mock-ups' Pokémon info card).
+        tip: hoverTips((key) => { if (this.rxPop) return; this.rxCard = key; this.rxView?.refresh(); }),
+      });
+      // The old pop-ups (legend, reports, the node menu, the bracket) still draw on the canvas: show it while one is open.
+      const sync = (): void => this.rxView?.visible(!(this.report || this.fieldNotes || this.nodeMenuPanel || this.bracket || this.rxWatching));
+      this.events.on('postupdate', sync);
+      this.events.once('shutdown', () => this.events.off('postupdate', sync));
+    }
     this.focus(Math.min(data.focus ?? 0, this.options.length - 1), false);
     showAchievementToasts(this, session.takeAchievementToasts(), this.motion);
 
     onInputAction(this, (action) => {
+      if (this.rxView && this.time.now === this.rxPopAt && action !== 'back' && action !== 'confirm') return;
+      if (this.rxPause) return this.pauseInput(action);
+      if (this.rxMenu) return this.menuInput(action);
+      if (this.rxPop) {
+        if (!this.rxWatching) this.popInput(action);
+        return;
+      }
       if (this.legend) {
         if (action === 'back' || action === 'confirm') this.toggleLegend();
         return;
@@ -858,6 +1307,8 @@ export class MapScene extends Phaser.Scene {
         return;
       }
       if (this.busy) return;
+      // New UI: Esc on the free map opens the pause menu.
+      if (action === 'back') return this.pauseOpen();
       const n = this.options.length;
       if (action === 'up' || action === 'left') this.focus((this.index - 1 + n) % n);
       if (action === 'down' || action === 'right') this.focus((this.index + 1) % n);
@@ -875,6 +1326,9 @@ export class MapScene extends Phaser.Scene {
 
     // Ideas W4: Legend (L) explains every icon on the map.
     this.input.keyboard?.on('keydown-L', () => this.toggleLegend());
+    // New UI: on the map L is the Legend alone (the interaction log's window would lie over it); Shift+L opens the log.
+    setLogKeyTaken(() => reduxOn() && this.scene.isActive() && (Boolean(this.legend) || (!this.busy && !this.picker)));
+    this.events.once('shutdown', () => setLogKeyTaken(null));
     const legendTag = this.add.text(GAME_WIDTH - 24, 402, 'L: map legend', textStyle(12, '#a69cb4')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('legend-tag');
     legendTag.on('pointerdown', () => this.toggleLegend());
     // Beta 0.6 R7: R opens the Rival Report pop-up (only once a rival has been met).
@@ -900,7 +1354,20 @@ export class MapScene extends Phaser.Scene {
     // Galar's Champion Tournament: B opens the bracket.
     if (league && region.id === 'galar' && stage.map.nodes.some((n) => n.sides.length > 0)) {
       this.input.keyboard?.on('keydown-B', () => this.toggleBracket());
+      this.input.keyboard?.on('keydown-W', () => { if (this.rxPop?.kind === 'bracket') this.watchLast(); });
       this.add.text(GAME_WIDTH - 24, 386, 'B: tournament bracket', textStyle(12, '#ffe060')).setOrigin(1, 0).setInteractive({ useHandCursor: true }).setName('bracket-tag').on('pointerdown', () => this.toggleBracket());
+    }
+    if (this.rxModel) {
+      // New UI: the pop-up keys this map has (the old tags down the right edge).
+      const tagKeys: [string, readonly [string, string]][] = [['rival-report-tag', ['R', 'rivals']], ['track-tag', ['T', 'track']], ['dossier-tag', ['D', 'dossier']], ['field-notes-tag', ['F', 'notes']]];
+      this.rxModel.keys = [...tagKeys.filter(([name]) => this.children.getByName(name)).map(([, key]) => key), ...this.rxModel.keys];
+      // Kanto Canon: the Town Roll page (which of this town's spaces the run placed). It exists in New only.
+      if (townRollPages(content, run).length) {
+        this.rxModel.keys = [['O', 'town'], ...this.rxModel.keys];
+        this.input.keyboard?.on('keydown-O', () => this.popToggle('roll'));
+      }
+      if (this.children.getByName('bracket-tag')) this.rxModel.hints = [['L', 'legend'], ['B', 'bracket'], ['Enter', 'go']];
+      this.rxView?.refresh();
     }
     // A run continued from a save (ideas W4): a gentle welcome back, and the map glides to where you stand.
     if (session.takeResumed() && !data.notice) {
@@ -926,8 +1393,10 @@ export class MapScene extends Phaser.Scene {
       }
     }
     // A pseudo-stage room opens as soon as you reach its node, like a stage fight does.
+    // So does an event placed before, or instead of, the node's battle (Catalog Overhaul: it plays first).
     const room = stage.pseudo && stage.current && run.phase === 'map' ? findNode(stage.map, stage.current).sides.find((x) => x.kind === 'event' && !x.used) : undefined;
-    if (room) this.time.delayedCall(450, () => this.scene.start('Event', { sideId: room.id }));
+    const first = room ? room.id : waitingStop(content, run);
+    if (first) this.time.delayedCall(450, () => this.scene.start('Event', { sideId: first }));
     this.askRegionForm();
   }
 
@@ -982,6 +1451,12 @@ export class MapScene extends Phaser.Scene {
   private travel(node: MapNode): number {
     const layer = this.mapLayer;
     const to = this.nodePos.get(node.id);
+    if (this.rxView) {
+      // New UI: the trainer walks to the stop on the mock-up map.
+      this.rxGoing = node.id;
+      this.rxView.refresh();
+      return this.motion === 'off' ? 0 : 420;
+    }
     if (this.motion !== 'full' || !layer || !to) return 0;
     const stage = services().session.run!.stage!;
     const from = (stage.current && this.nodePos.get(stage.current)) || { x: to.x - this.colSpacing, y: to.y };
@@ -1131,7 +1606,7 @@ export class MapScene extends Phaser.Scene {
         }
         return option.side.kind === 'heal' ? 'Healing spot: fully heals your party and restores PP (once).' : 'Shop: buy Poké Balls and medicine with your money.';
       case 'party':
-        return ['Your Pokémon: rearrange the party, make one lead, and read stats, moves, held items, bonds and history.', ...services().session.run!.eggs.map((e) => `${eggLabel(e)}.`)].join(' ');
+        return ['Your Pokémon: rearrange the party, make one lead, and read stats, moves, held items, bonds and history.', ...services().session.run!.eggs.map((e) => `${eggLabel(e, eggsHatchSooner(services().session.content, services().session.run!))}.`)].join(' ');
       case 'bag':
         return 'Everything you own in one place: medicine, balls, held items (and who holds them), passive items and map items.';
       case 'camp':
@@ -1148,6 +1623,10 @@ export class MapScene extends Phaser.Scene {
         return "What's in this run: your rules, picks, the time and tide, the stage bounty and any events.";
       case 'journal':
         return 'Field Notebook: your route so far, the story arcs you are in and the scenes you have seen.';
+      case 'teamHub':
+        return 'Team Hub: your rank, Standing and Suspicion inside the team, its orders and crew.';
+      case 'sky':
+        return 'Team Sky: Renown, Funds and Heat; hire, promote, dispatch, set the doctrine and build the base.';
       case 'relationships':
         return 'The people you have met in this story: how they feel about you and what they remember.';
       case 'save':
@@ -1176,6 +1655,7 @@ export class MapScene extends Phaser.Scene {
     } else if (to && home) to.setPosition(home.x, home.y);
     const option = this.options[i];
     if (option && this.info) fitBlock(this.info, 580, 52, this.describe(option).replace(/\n/g, '  ·  '));
+    this.rxView?.refresh();
   }
 
   private fieldHost(): FieldMenuHost {
@@ -1283,7 +1763,8 @@ export class MapScene extends Phaser.Scene {
         if (option.side.kind === 'heal') {
           playSfxLazy(this, 'me.heal');
           this.busy = true;
-          this.healFx(() => this.scene.restart({ notice: message, focus: 0 }));
+          const heal = barkLine(session.content, session.run!, 'heal', `${option.side.id}-${session.run!.stage?.visited.length ?? 0}`);
+          this.healFx(() => this.scene.restart({ notice: heal ? `${message} ${heal}` : message, focus: 0 }));
         } else {
           this.busy = true;
           this.scene.start(sceneForRun(session.run!));
@@ -1313,6 +1794,12 @@ export class MapScene extends Phaser.Scene {
         break;
       case 'journal':
         openJournalMenu(this.fieldHost());
+        break;
+      case 'sky':
+        openSkyMenu(this.fieldHost());
+        break;
+      case 'teamHub':
+        openTeamHub(this.fieldHost());
         break;
       case 'contents':
         openRunContentsMenu(this.fieldHost());
@@ -1376,7 +1863,9 @@ export class MapScene extends Phaser.Scene {
     if (!preview) return '';
     const content = services().session.content;
     const item = preview.source;
-    const names = preview.team.map((m) => `${content.species.get(m.speciesId)?.name ?? m.speciesId}${withLevels && m.level ? ` Lv${m.level}` : ''}`).join(', ');
+    // Linden's Notebook adds each wild Pokémon's moves.
+    const moves = (ids: string[] | undefined) => (ids && ids.length > 0 ? ` (${ids.map((id) => content.moves.get(id)?.name ?? id).join('/')})` : '');
+    const names = preview.team.map((m) => `${content.species.get(m.speciesId)?.name ?? m.speciesId}${withLevels && m.level ? ` Lv${m.level}` : ''}${moves(m.moves)}`).join(', ');
     if (n.kind === 'gym') return `${item}: ${preview.team.length === 1 ? 'the ace is' : 'the team is'} ${names}`;
     return `${item}: ${preview.trainerName ? `${preview.trainerName} with ` : ''}${names}`;
   }
@@ -1420,13 +1909,26 @@ export class MapScene extends Phaser.Scene {
   private openMinigame(sideId: string): void {
     const { session } = services();
     const pv = minigamePreview(session.content, session.run!, sideId, session.settings.expansion.minigamesDifficulty);
+    // New look: the card's picture is your lead Pokémon, as the mock-up puts one beside the tier.
+    const lead = session.run!.party[0];
     const picker: Picker = new Picker(this, {
-      title: `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
+      // New look: the game's name in the band and the attempts as a chip; the tier list is a menu on the run's teal (a game called "Memory" is not a board).
+      title: reduxOn() ? `${pv.name} · ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left` : `${pv.name} - ${pv.attemptsLeft} attempt${pv.attemptsLeft === 1 ? '' : 's'} left`,
+      kind: 'menu',
+      area: 'run',
       columns: 1,
       rowHeight: 120,
       rows: pv.tiers.map((t) => ({
         problem: pv.attemptsLeft > 0 ? null : 'No attempts left',
-        hint: `${pv.instructions} ${pv.scoring}`,
+        hint: reduxOn() ? pv.blurb : `${pv.instructions} ${pv.scoring}`,
+        // New look: the mock-up's tier list (the tier, what it pays) with the medals and the best on the card.
+        menu: {
+          label: `${t.label}${t.index === pv.recommendedTier ? ' (your setting)' : ''}`,
+          note: `×${t.money} money`,
+          detail: `${pv.instructions} ${pv.scoring}`,
+          sprite: lead ? monFile(this, lead.speciesId, 'front', lead.shiny) : null,
+          facts: [['Kind', pv.category], ['Tiers', pv.tiers.map((x) => x.label).join(', ')], ['Pays', `×${t.money} money${t.items ? ' and maybe an item' : ''}`], ['Medals', pv.medals], ['Best', bestMedalWord(pv.best)]],
+        },
         draw: (scene, box, w) => {
           box.add(scene.add.text(16, 8, `${pv.name}  ·  ${t.label}${t.index === pv.recommendedTier ? '  (your setting)' : ''}`, textStyle(22)));
           box.add(scene.add.text(16, 40, `${pv.instructions} ${pv.scoring}`, textStyle(15, '#ffd0a0', { wordWrap: { width: w - 32 } })));
@@ -1723,9 +2225,12 @@ export class MapScene extends Phaser.Scene {
     const { session } = services();
     const content = session.content;
     const offer = fishingOffer(content, session.run!, sideId);
+    // New UI: the mock-up's fishing window over the map ("! A bite !"), the bites listed in it.
+    const rxOn = reduxOn();
     const picker: Picker = new Picker(this, {
       glass: true,
-      title: 'Something is biting! Which one?',
+      title: rxOn ? 'Which one do you reel in?' : 'Something is biting! Which one?',
+      ...(rxOn ? { dock: true, window: { top: 160, center: true, lead: '! A bite !' } } : {}),
       columns: 1,
       rowHeight: 64,
       rows: offer.map((o) => {
@@ -1734,6 +2239,7 @@ export class MapScene extends Phaser.Scene {
         return {
           ...row,
           hint: `${row.hint}  ·  Lv${o.level}`,
+          ...(rxOn ? { menu: { label: species.name, note: `Lv${o.level}`, detail: `${row.hint}  ·  Lv${o.level}`, sprite: monFile(this, o.speciesId, 'front') } } : {}),
           draw: (scene, box, w, h) => {
             row.draw(scene, box, w, h);
             box.add(scene.add.text(w - 16, h / 2, `Lv${o.level}`, textStyle(22)).setOrigin(1, 0.5));
@@ -1768,7 +2274,7 @@ export class MapScene extends Phaser.Scene {
     const view = session.serviceView(sideId);
     // Trade Posts have their own anime-styled screen (trade stops redesign).
     const run = session.run!;
-    if (view.service.id === 'trade' && view.options.length > 0 && useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, sideId, run.log.counters.tradesMade ?? 0))) {
+    if (view.service.id === 'trade' && view.options.length > 0 && (reduxOn() || useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, sideId, run.log.counters.tradesMade ?? 0)))) {
       this.busy = true;
       this.scene.start('Trade', { source: 'service', sideId, back: { scene: 'Map' } });
       return;
@@ -1830,6 +2336,12 @@ export class MapScene extends Phaser.Scene {
       this.busy = false;
       return;
     }
+    if (this.rxMenu) {
+      this.rxMenu = null;
+      this.busy = false;
+      this.rxView?.refresh();
+      return;
+    }
     if (this.report || this.busy || this.picker || this.legend || this.fieldNotes) return;
     const { session } = services();
     const view = session.nodeMenu();
@@ -1867,13 +2379,53 @@ export class MapScene extends Phaser.Scene {
       }
       this.scene.restart({ notice: res.text ?? undefined, focus: this.index });
     };
-    this.nodeMenuPanel = drawNodeMenu(this, view, label, blurb, pick, () => this.toggleNodeMenu());
     this.busy = true;
+    if (this.rxView) {
+      // New UI: the same cards, drawn by the New layer over the map.
+      const header = view.entries.find((v) => v.entry.kind === 'encounter');
+      const cards = view.entries.filter((v) => v.entry.kind !== 'encounter');
+      this.rxCard = null;
+      this.rxMenu = {
+        header: header?.entry.label ?? '',
+        cards: cards.map((v) => ({ kind: CATEGORY_LOOK[v.entry.category].word, color: `#${CATEGORY_LOOK[v.entry.category].color.toString(16).padStart(6, '0')}`, name: label(v), text: blurb(v), status: menuStatus(v), off: v.done || v.locked, must: !!v.entry.required })),
+        index: Math.max(0, cards.findIndex((v) => !v.done && !v.locked)),
+        pick: (k) => { const v = cards[k]; if (v && !v.done && !v.locked) pick(v); },
+      };
+      this.rxView.refresh();
+      return;
+    }
+    this.nodeMenuPanel = drawNodeMenu(this, view, label, blurb, pick, () => this.toggleNodeMenu());
+  }
+
+  private menuFocus(k: number): void {
+    const m = this.rxMenu;
+    if (!m || !(k >= 0 && k < m.cards.length) || k === m.index) return;
+    m.index = k;
+    this.rxView?.refresh();
+  }
+
+  /** A click: a card picks its stop (a done or locked one only takes the cursor); beside the cards closes the menu. */
+  private menuPick(k: number): void {
+    const m = this.rxMenu;
+    if (!m) return;
+    if (k < 0) return this.toggleNodeMenu();
+    this.menuFocus(k);
+    m.pick(k);
+  }
+
+  private menuInput(action: InputAction): void {
+    const m = this.rxMenu;
+    if (!m) return;
+    if (action === 'back') return this.toggleNodeMenu();
+    if (action === 'confirm') return m.pick(m.index);
+    const n = Math.max(1, m.cards.length);
+    this.menuFocus((m.index + (action === 'left' || action === 'up' ? n - 1 : 1)) % n);
   }
   private bracket: Phaser.GameObjects.Container | null = null;
 
   /** Galar's Champion Tournament bracket: the five rounds, who is left, your next opponent. Presentation only (core/galarTournament.ts bracketView). */
   private toggleBracket(): void {
+    if (this.rxView) return this.popToggle('bracket');
     if (this.bracket) {
       this.bracket.destroy();
       this.bracket = null;
@@ -1945,13 +2497,21 @@ export class MapScene extends Phaser.Scene {
     this.busy = true;
   }
 
+  /** New UI: W (or its chip) in the bracket replays a match of the last round you won. */
+  private watchLast(): void {
+    const { session } = services();
+    const round = session.run ? bracketView(session.content, session.run).rounds.filter((r) => r.state === 'won').length : 0;
+    if (round > 0) this.watchMatch(round);
+  }
+
   /** Watch another match: a short auto-played replay (HP bars drain, commentary). Presentation only; any key or click skips. */
   private watchMatch(round: number): void {
     const { session } = services();
     const replay = matchReplay(session.content, session.run!, round);
-    if (!replay || !this.bracket) return;
+    if (!replay || (!this.bracket && this.rxPop?.kind !== 'bracket') || this.rxWatching) return;
     const layer = this.add.container(0, 0).setDepth(90).setName('match-watch');
-    const close = (): void => { timer.remove(false); layer.destroy(); };
+    this.rxWatching = !!this.rxView;
+    const close = (): void => { timer.remove(false); layer.destroy(); this.rxWatching = false; };
     layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x05020c, 0.92).setOrigin(0).setInteractive().on('pointerdown', close));
     layer.add(this.add.text(GAME_WIDTH / 2, 30, `Round ${round}: ${replay.a.name} vs ${replay.b.name}${replay.upset ? '  (upset!)' : ''}`, textStyle(20, COLORS.gold)).setOrigin(0.5, 0));
     const bar = (x: number, who: typeof replay.a): Phaser.GameObjects.Rectangle => {
@@ -1977,11 +2537,13 @@ export class MapScene extends Phaser.Scene {
     };
     const timer = this.time.addEvent({ delay: 1500, loop: true, callback: step });
     step();
-    this.input.keyboard?.once('keydown', close);
+    // Listen from the next moment on: the W press that opened this is still being handed round, and would close it at once.
+    this.time.delayedCall(60, () => { if (layer.active) this.input.keyboard?.once('keydown', close); });
   }
 
   /** Field Notes (Beta 0.6): the Bestiary Book pop-up. F, Esc, Enter or a click outside closes it. */
   private toggleFieldNotes(): void {
+    if (this.rxView) return this.popToggle('notes');
     if (this.fieldNotes) {
       this.fieldNotes.layer.destroy();
       this.fieldNotes = null;
@@ -2003,6 +2565,7 @@ export class MapScene extends Phaser.Scene {
 
   /** The Dossier (Beta 0.6 E1): Case Folders with the Org Pyramid. D, Esc or a click on a tab's folder edge closes it. */
   private toggleDossier(): void {
+    if (this.rxView) return this.popToggle('dossier');
     if (this.report) return this.closeReport();
     if (this.busy || this.picker || this.legend) return;
     const run = services().session.run;
@@ -2014,6 +2577,7 @@ export class MapScene extends Phaser.Scene {
 
   /** The Notebook's track page (Beta 0.6 E2): a pop-up like the Rival Report. T, Esc or a click closes it. */
   private toggleTrackPage(): void {
+    if (this.rxView) return this.popToggle('track');
     if (this.report) return this.closeReport();
     if (this.busy || this.picker || this.legend) return;
     const run = services().session.run;
@@ -2025,6 +2589,7 @@ export class MapScene extends Phaser.Scene {
 
   /** The Rival Report (Beta 0.6 R7): a pop-up panel, not a screen. Shows Lead, Marks and feelings for each rival. R, Esc or a click closes it. */
   private toggleRivalReport(): void {
+    if (this.rxView) return this.popToggle('report');
     if (this.report) {
       this.report.destroy();
       this.report = null;
@@ -2059,6 +2624,8 @@ export class MapScene extends Phaser.Scene {
       this.legend.destroy();
       this.legend = null;
       this.busy = false;
+      this.rxLegend = null;
+      this.rxView?.refresh();
       return;
     }
     if (this.busy || this.picker) return;
@@ -2095,9 +2662,42 @@ export class MapScene extends Phaser.Scene {
     });
     this.legend = layer;
     this.busy = true;
+    if (this.rxView) {
+      // New UI: the legend window of the mock-ups, with the marks this map draws.
+      layer.setVisible(false);
+      const hex = (v: number): string => `#${v.toString(16).padStart(6, '0')}`;
+      const kind = (k: string, text: string): MapLegendRow => ({ glyph: nodeStyle(k)[1], color: nodeStyle(k)[0], text });
+      this.rxLegend = [
+        ...(Object.keys(KIND_STYLE) as MapNode['kind'][]).map((k) => kind(k, KIND_STYLE[k].label)),
+        { glyph: '?', color: '#56607a', text: 'In the fog: not seen yet' },
+        ...(Object.keys(SIDE_STYLE) as SideStop['kind'][]).map((k) => kind(k, `${SIDE_LABEL[k]} stop`)),
+        { glyph: ROAMER_STYLE.glyph, color: hex(ROAMER_STYLE.color), text: 'Roaming Legendary' },
+        { glyph: LEGEND_STYLE.glyph, color: hex(LEGEND_STYLE.color), text: 'Legendary event' },
+        { glyph: CAMP_STYLE.glyph, color: hex(CAMP_STYLE.color), text: 'Checkpoint camp' },
+        { glyph: '!', color: hex(HARDER_COLOR), text: 'Purple ring: harder route, better rewards' },
+        { glyph: '★', color: '#b08a20', text: 'A Story Stop waits here' },
+        { glyph: '✦', color: '#b09a30', text: 'Itemfinder: an item hides here' },
+        { glyph: '●', color: '#70a070', text: 'Omen: calm, uneasy or dire' },
+        { glyph: '☂', color: hex(FRONT_COLOR.rain!), text: 'Weather front over the stop' },
+        ...obstacles.map((o) => ({ glyph: o.glyph, color: hex(o.color), text: o.text })),
+      ];
+      this.rxView.refresh();
+    }
   }
 
   private showBanner(top: string, title: string, sub: string, plan: readonly string[] = []): void {
+    if (this.rxView) {
+      // New UI: the same sign, drawn on the mock-up map.
+      this.rxBanner = { top, title, sub, plan };
+      this.rxView.refresh();
+      this.busy = true;
+      this.time.delayedCall(plan.length > 0 ? 3600 : 1800, () => {
+        this.rxBanner = null;
+        this.busy = false;
+        this.rxView?.refresh();
+      });
+      return;
+    }
     const layer = this.add.container(0, 0).setDepth(80);
     layer.add(this.add.rectangle(0, 0, GAME_WIDTH, GAME_HEIGHT, 0x000000, 0.55).setOrigin(0));
     // A banner band across the screen, like a Pokémon game's location sign.

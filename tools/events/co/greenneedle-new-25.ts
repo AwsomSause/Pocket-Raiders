@@ -1,0 +1,91 @@
+// Greenneedle gn.new.25 The Mural (doc GREENNEEDLE_PLACED_2.md lines 175–212).
+// Build: npm run co:build -- greenneedle-new-25   then   npm run co:gn
+// Region-long, once per region, no battles. S1: the Smeargle paints the player arriving. S2–S8: one new panel a stage (the subject is
+// picked by core/greenneedle/mural.ts). S8 step 19: the walkable wall, then the Smeargle.
+import { flag, type Json } from '../dsl.ts';
+import { gev, gn, is, laterStage, moment, not, notThisRegion, rm, route, say, scene, setTo, stampRegion, stampStage, type Placement } from './_gn.ts';
+
+export { CATEGORY } from './_gn.ts';
+
+const WALL_TINT = '#8a6f4e';
+const wall = (o: Json = {}): Json => ({ tint: WALL_TINT, tags: ['Story'], effect: 'none', ...o });
+const gnc = (test: string, o: Json = {}): Json => ({ kind: 'gn', test, ...o });
+const here = gnc('thisRegion', { key: 'mural-at' });
+const open = (o: Json = {}): Json => wall({ stop: 'event', rarity: 'rare', ...o });
+
+const PANELS = ['gn-new-25-p0', 'gn-new-25-p1', 'gn-new-25-p2', 'gn-new-25-p3', 'gn-new-25-p4'];
+const ENDING_AT = 6; // panels on the wall before the last one can be reached (a missed stage does not lose the ending)
+
+const ROOMS: { id: string; name: string; text: string; walk: string }[] = [
+  { id: PANELS[0]!, name: 'The Mural: Something You Passed', text: say(
+    'A panel of something you walked past. A door left ajar, a crowd turning round. Nobody in it is looking at you. There is no comment.',
+    'The painter simply kept it. Everything you leave behind, it seems, someone else is carrying.',
+  ), walk: 'You stand there until the figure in the doorway seems to turn. It doesn\'t. You go.' },
+  { id: PANELS[1]!, name: 'The Mural: The Close Call', text: say(
+    'A panel of the fight you nearly lost. Your Pokémon, small and low, the foe huge and bright. The paint on its side is still tacky.',
+    'The painter chose the second before the turn. The moment your Pokémon stood up anyway.',
+  ), walk: 'Your Pokémon looks at its own painted self for a long time, and stands a little straighter.' },
+  { id: PANELS[2]!, name: 'The Mural: Someone New', text: say(
+    'A panel of a Pokémon you caught this stage, painted mid-turn, startled, one paw still raised, as it was in the moment before it chose to stay.',
+    'The painter got its eyes right. You never told anyone what colour they were.',
+  ), walk: 'You look from the panel to your Ball, and back. It\'s warm in your hand.' },
+  { id: PANELS[3]!, name: 'The Mural: A Kindness', text: say(
+    'A panel of a kindness you almost forgot. Your hand held out, someone smaller and braver taking it. The colours are the warmest on the whole wall.',
+    'The painter gave it more paint than the battles. You notice that, and don\'t know what to say.',
+  ), walk: 'You touch the corner of the panel. It doesn\'t come off on your finger, though the paint is wet.' },
+  { id: PANELS[4]!, name: 'The Mural: The Gym', text: say(
+    'A panel of the Gym: the door, the banner, the long way up the steps. Nothing else happened that stage the painter cared to keep.',
+    'It is a good painting of a building. It is also, somehow, a painting of how you stood on the steps.',
+  ), walk: 'You straighten your collar, because the painted you has done the same. Then you go on.' },
+];
+
+const rooms: Json[] = ROOMS.map((r) => rm(r.id, r.name, wall(), r.text, [{ label: 'Walk on.', success: { text: r.walk, effects: [] } }]));
+
+/** Opens the panel the painter chose this stage, and counts it. */
+const painted = (): Json[] => [gn('muralPick'), stampStage('mural-step')];
+
+const opening: Json = gev('gn-new-25-open', 'The Mural', open({ requires: [notThisRegion('mural-at')], forced: true }), say(
+  '*A long blank wall at the edge of the first town. A Smeargle is painting on it, tail dipping and lifting, quick as a heartbeat.*',
+  'It has drawn one figure. It doesn\'t look round when you come closer. By the time you\'re close, the figure is gone, and the paint is wet.',
+  'You know whose shape it was. It was yours, arriving.',
+), [
+  { label: 'Look.', success: { text: 'The wall is full-height and still glistening. At its left edge, a small figure with a pack walks into the town. It was a moment ago. It is already history.', effects: [stampRegion('mural-at'), setTo('mural-panels', 1), stampStage('mural-step')] } },
+  { label: 'Walk on.', success: { text: 'You walk on. Behind you, a brush taps once against a palette, as if the painter were counting you.', effects: [stampRegion('mural-at'), setTo('mural-panels', 1), stampStage('mural-step')] } },
+]);
+
+/** One panel a stage, S2 to S8: you never see it painted. */
+const panel = (n: number): Json => gev(`gn-new-25-panel-${n}`, 'The Mural: A New Panel', open({ requires: [here, laterStage('mural-step'), not('mural-end')], forced: true }), say(
+  '*A new panel on the long wall, next to the last. The paint is wet, and no one is here.*',
+  'You never see it done. The Smeargle is a rumour of a tail at the edge of the corner, and then it is nowhere.',
+), [
+  { label: 'Look.', success: { text: 'You step back until the panel fills your eyes, and the world goes quiet round the edges.', effects: [...painted(), route('mural-subject', ...PANELS)] } },
+  { label: 'Walk on.', success: { text: 'You walk on. Behind you the paint dries, a little more of your road kept for no one in particular.', effects: painted() } },
+]);
+
+const joined = (...extra: Json[]): Json[] => [gn('muralJoin'), flag('mural-walls', 1), moment('Took the Smeargle who painted the wall of this region.', 70), ...extra];
+
+const ending: Json = gev('gn-new-25-end', 'The Mural: The Whole Wall', open({ requires: [here, is('mural-panels', ENDING_AT), not('mural-end')], forced: true }), say(
+  '*The whole wall, walkable, left to right. A figure arriving. A door left open. A Pokémon startled to stay. Steps up to a Gym. Your whole road, in paint.*',
+  'The last panel isn\'t painted yet. The Smeargle is sitting under it, brush out, looking at you.',
+), [
+  { label: 'Come with me.', success: { text: 'It stands, shakes out its tail, and doesn\'t look back at the wall once. The last panel stays blank. You\'ll fill it, somehow.', effects: joined() } },
+  { label: 'Finish it first.', success: { text: 'You sit with it while it paints, and don\'t watch. When it\'s done it hands you the brush, and then, quietly, itself.', effects: joined(flag('kindness', 1)) } },
+  { label: 'Paint me something I\'m not proud of.', success: { text: 'It looks at you for a long moment. Then it lifts a paw and points at a panel already on the wall: the one you tried not to look at. It paints nothing new. It comes along.', effects: joined(flag('intel', 1)) } },
+]);
+
+export const EVENTS: Json[] = [opening, ...[2, 3, 4, 5, 6, 7, 8].map(panel), ending, ...rooms];
+export const REMOVE: string[] = [];
+
+const base = { gn: 'gn.new.25', shape: 'Region-long', earliest: 'A1', home: 5, window: [3, 15] as [number, number], sits: 'must-see' as const, attaches: 'before' as const };
+export const PLACEMENT: Record<string, Placement> = {
+  'gn-new-25-open': {
+    ...base, tags: ['Mystery Episode', 'Region-Wide Story'], level: 'No battles', often: 'region', badge: 'own',
+    beats: [
+      ...[1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({ beat: n === 1 ? 'The Smeargle starts (S1)' : `Panel ${n}`, event: n === 1 ? 'gn-new-25-open' : `gn-new-25-panel-${n}`, stage: `S${n}`, home: 5, window: [3, 15] as [number, number] })),
+      { beat: 'The whole wall', event: 'gn-new-25-end', stage: 'S8', home: 19 },
+    ],
+    dressing: { kanto: 'The Mural', elsewhere: 'The Mural' },
+    note: 'Badge: a paint brush. One panel per stage; the subject (walked-past event, close call, catch, kindness, Gym) is picked in core/greenneedle/mural.ts. Fallback step 15. The ending needs six panels on the wall. Afterstory: the Final Reunion shows one wall per region (flag mural-walls).',
+  },
+};
+export const CHAINS: Json[] = [];

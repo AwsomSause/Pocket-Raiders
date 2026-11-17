@@ -10,3 +10,4 @@
 - Stage Map: no mockup; use the normal map with the slider attached
 - Legendary Blessing opening: option 11 (Side Plinth), using real in-game item sprites (items/gen5/rainbow-wing.png for Ho-Oh). Final: legendary-blessing-ho-oh/final-ho-oh-side-plinth.mp4. Each blessing uses its own item sprite.
 - FINAL (Kice approved 2026-11-13): Ho-Oh opening = promo/beta-0.6-screens/ho-oh-opening-final-v2.mp4 (Side Plinth, Rainbow Wing sprite, no platform, cry plays first at ~0.7s). Cries library: /mnt/project-files/audio/pokemon-cries/ (new/ old/ index.json).
+- 2026-11-16 (Kice): "Remove the spotlight and podium" from the Legendary Blessing opening. The item now floats on plain black; the rest is unchanged.

@@ -1,0 +1,541 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-05-daycare",
+   "name": "The Egg That Listened",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "gn",
+     "test": "notThisRegion",
+     "key": "egg-listen-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#d8c7a0",
+    "effect": "none"
+   },
+   "intro": "*A day-care yard in the early light. Small Pokémon dozing in the grass, a bucket of berries by the gate, and a worker with flour on her sleeves.*\n\nShe walks straight up to you and presses an egg into your hands. It is warm. It is heavier than it looks.\n\n**Day-care worker, Mrs. Holloway:** \"Nobody's claimed it. Talk to it. They hear more than you'd think.\"",
+   "choices": [
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "You feel a little foolish. You say hello anyway, to a shell. Something inside goes still, the way a person does when they are listening.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 9,
+        "unit": "stage"
+       },
+       {
+        "kind": "gn",
+        "op": "eggTake"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "egg-carry",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "egg-listen-at"
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hold it, quietly.",
+     "success": {
+      "text": "You say nothing. You just hold it against your chest. Mrs. Holloway nods, as if that were also an answer, and goes back to her berries.",
+      "effects": [
+       {
+        "kind": "egg",
+        "species": [],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "left": 9,
+        "unit": "stage"
+       },
+       {
+        "kind": "gn",
+        "op": "eggTake"
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "egg-carry",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "egg-listen-at"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-05-rest",
+   "name": "The Egg Listens",
+   "group": "Greenneedle",
+   "tags": [
+    "Recovery",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "common",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "egg-carry",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "notThisStage",
+     "key": "egg-rested"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#d8c7a0",
+    "effect": "none"
+   },
+   "intro": "*A quiet moment at the rest. You take the egg out of the bag and set it in your lap. It is warm, and it is, somehow, waiting.*",
+   "choices": [
+    {
+     "label": "Listen.",
+     "success": {
+      "text": "You hold very still. Something happens to the egg's shell, just under the surface, like writing in frost.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "eggWord"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "egg-rested"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "egg-word",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-05-w-again"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "egg-word",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-05-w-careful"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "egg-word",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-05-w-loud"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "egg-word",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-05-w-soft"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "egg-word",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-05-w-far"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "egg-word",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-05-w-quick"
+         }
+        ]
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it sleep.",
+     "success": {
+      "text": "You leave it in the bag. It ticks softly against your side all the way along. It will have a word for you later.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-05-w-again",
+   "name": "The Word: again",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#d8c7a0",
+    "effect": "none"
+   },
+   "intro": "The egg is warm, and over it, in thin pale letters like breath on glass, one word: *again.*\n\nYou used one move over and over this stage. It heard every one. It ticks, in a rhythm you recognise: yours.",
+   "choices": [
+    {
+     "label": "Say it back.",
+     "success": {
+      "text": "You say the name of the move out loud. The egg ticks along with it, a half-beat behind.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just keep it company.",
+     "success": {
+      "text": "You sit with it a while, saying nothing. It seems to prefer that, too.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-05-w-careful",
+   "name": "The Word: careful",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#d8c7a0",
+    "effect": "none"
+   },
+   "intro": "The egg is warm, and over it, in thin pale letters, one word: *careful.*\n\nYou pulled your hurt Pokémon out of harm's way this stage, again and again. The egg heard the swaps, and it learned what they meant.",
+   "choices": [
+    {
+     "label": "Say it back.",
+     "success": {
+      "text": "You tuck it deeper into the bag. It settles, slow and satisfied, like something that has learned it will be protected.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just keep it company.",
+     "success": {
+      "text": "You sit with it a while, saying nothing. It seems to prefer that, too.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-05-w-loud",
+   "name": "The Word: loud",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#d8c7a0",
+    "effect": "none"
+   },
+   "intro": "The egg is warm, and over it, in thin pale letters, one word: *loud.*\n\nYou kept your hurt Pokémon in the fight this stage, and the fight was loud. The egg heard every bit of it, and it did not flinch.",
+   "choices": [
+    {
+     "label": "Say it back.",
+     "success": {
+      "text": "You shout something silly, to even it out. The egg gives a short, bright knock. It thinks that was great.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just keep it company.",
+     "success": {
+      "text": "You sit with it a while, saying nothing. It seems to prefer that, too.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-05-w-soft",
+   "name": "The Word: soft",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#d8c7a0",
+    "effect": "none"
+   },
+   "intro": "The egg is warm, and over it, in thin pale letters, one word: *soft.*\n\nYou chose kindly this stage, in every conversation, even when it cost you something. The egg heard that too.",
+   "choices": [
+    {
+     "label": "Say it back.",
+     "success": {
+      "text": "You talk to it in the quiet voice you use for strangers who turn out to be friends. The shell seems a little warmer.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just keep it company.",
+     "success": {
+      "text": "You sit with it a while, saying nothing. It seems to prefer that, too.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-05-w-far",
+   "name": "The Word: far",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#d8c7a0",
+    "effect": "none"
+   },
+   "intro": "The egg is warm, and over it, in thin pale letters, one word: *far.*\n\nYou walked past people this stage: waves from the side of the road, doors left shut. The egg heard your footsteps and nothing else.",
+   "choices": [
+    {
+     "label": "Say it back.",
+     "success": {
+      "text": "You stop, just for a moment, and tell it where you are going and why. It ticks twice, as if it was keeping count.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just keep it company.",
+     "success": {
+      "text": "You sit with it a while, saying nothing. It seems to prefer that, too.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-05-w-quick",
+   "name": "The Word: quick",
+   "group": "Greenneedle",
+   "tags": [
+    "Story",
+    "Recovery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#d8c7a0",
+    "effect": "none"
+   },
+   "intro": "The egg is warm, and over it, in thin pale letters, one word: *quick.*\n\nYou won fast this stage, and the fights were over before they began. The egg barely had time to hear them.",
+   "choices": [
+    {
+     "label": "Say it back.",
+     "success": {
+      "text": "You tell it about the last fight, the whole thing, quickly. It ticks fast the entire time, trying to keep up.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just keep it company.",
+     "success": {
+      "text": "You sit with it a while, saying nothing. It seems to prefer that, too.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-05-hatch",
+   "name": "The Egg Decides",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "forced": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "egg-carry",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#d8c7a0",
+    "effect": "none"
+   },
+   "intro": "*The egg is ticking too fast to count. A crack runs across the shell, thin as a hair, and then a second one. It has decided it is time.*\n\nEvery word it heard this region is somewhere in there. It has been keeping them all.",
+   "choices": [
+    {
+     "label": "Talk to it.",
+     "success": {
+      "text": "You kneel and say its name, or what you would have called it. The shell shakes, tickles open, and a small, damp face looks up at you. It knows that voice.\n\n*It looks at the Pokémon that used that move all region. It plants its feet the same way. It falls over.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "eggHatch",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "egg-listened-hatched",
+        "n": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 10,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Stay quiet.",
+     "success": {
+      "text": "You say nothing. You watch. The shell opens on its own, and a small, damp face looks around until it finds yours. It knows you anyway.\n\n*It looks at the Pokémon that used that move all region. It plants its feet the same way. It falls over.*",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "eggHatch",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "egg-listened-hatched",
+        "n": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

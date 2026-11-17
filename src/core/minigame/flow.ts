@@ -9,6 +9,10 @@ import type { Content } from '../contentSchema';
 import type { RunState } from '../state';
 import { gameModule, type MinigameView } from './games';
 import type { Medal, MinigameDef } from './schema';
+import { SAFARI_ID, type SafariState } from '../greenneedle/safari';
+import { safariBegin, safariFinish } from '../greenneedle/safariEnd';
+import { SNAKE_ID, type SnakeState } from '../greenneedle/snake';
+import { psyduckBegin, psyduckFinish } from '../greenneedle/snakeEnd';
 
 export function getMinigame(content: Content, id: string): MinigameDef {
   const g = content.minigames.games.find((m) => m.id === id);
@@ -17,8 +21,9 @@ export function getMinigame(content: Content, id: string): MinigameDef {
 }
 
 export interface MinigamePreview {
-  id: string; name: string; blurb: string; instructions: string; scoring: string; failure: string; replay: string;
-  attemptsLeft: number; recommendedTier: number; tiers: { label: string; index: number }[]; best: Medal; medals: string;
+  id: string; name: string; /** The game's kind (memory, skill, timing, resource, knowledge, puzzle). */ category: string; blurb: string; instructions: string; scoring: string; failure: string; replay: string;
+  attemptsLeft: number; recommendedTier: number; /** Each tier: its money multiplier and whether a medal there can pay an item. */
+  tiers: { label: string; index: number; money: number; items: boolean }[]; best: Medal; medals: string;
 }
 
 export function minigamePreview(content: Content, run: RunState, sideId: string, difficulty: 'easy' | 'normal' | 'hard' = 'normal'): MinigamePreview {
@@ -27,8 +32,8 @@ export function minigamePreview(content: Content, run: RunState, sideId: string,
   const used = run.minigames.attempts[sideId] ?? 0;
   const m = def.medals;
   return {
-    id: def.id, name: def.name, blurb: def.blurb, instructions: def.instructions, scoring: def.scoringRules, failure: def.failureOutcome, replay: def.replayRules,
-    attemptsLeft: Math.max(0, def.attemptLimit - used), recommendedTier: Math.min(def.difficultyTiers.length - 1, { easy: 0, normal: 1, hard: 3 }[difficulty]), tiers: def.difficultyTiers.map((t, index) => ({ label: t.label, index })), best: run.minigames.best[def.id] ?? 'none',
+    id: def.id, name: def.name, category: def.category, blurb: def.blurb, instructions: def.instructions, scoring: def.scoringRules, failure: def.failureOutcome, replay: def.replayRules,
+    attemptsLeft: Math.max(0, def.attemptLimit - used), recommendedTier: Math.min(def.difficultyTiers.length - 1, { easy: 0, normal: 1, hard: 3 }[difficulty]), tiers: def.difficultyTiers.map((t, index) => ({ label: t.label, index, money: content.minigames.economy.tierMultipliers[index] ?? 1, items: index + 1 >= content.minigames.economy.itemMinTier })), best: run.minigames.best[def.id] ?? 'none',
     medals: `Bronze ${Math.round(m.bronze * 100)}% · Silver ${Math.round(m.silver * 100)}% · Gold ${Math.round(m.gold * 100)}%`,
   };
 }
@@ -56,6 +61,8 @@ export function beginMinigame(content: Content, current: RunState, sideId: strin
   const stage = requireStage(run);
   const rs = new Rng(hashSeed(`${run.seed}::minigame::${stage.index}:${sideId}:${used}:${tier}`)).state;
   run.minigame = { id: def.id, sideId, tier, state: gameModule(def.id).start(content, { ...def.difficultyTiers[tier]!.params, ...conditionParams(run) }, rs), outcome: null };
+  if (def.id === SAFARI_ID) safariBegin(content, run, run.minigame.state as SafariState);
+  if (def.id === SNAKE_ID) psyduckBegin(run, run.minigame.state as SnakeState);
   run.phase = 'minigame';
   return run;
 }
@@ -113,6 +120,8 @@ function settle(content: Content, run: RunState): RunState {
   if (!(s.state as { done: boolean }).done || s.outcome) return run;
   const { score, max } = mod.result(s.state as never);
   s.outcome = payout(content, run, getMinigame(content, s.id), s.tier, score, max);
+  if (s.id === SAFARI_ID) s.outcome.lines.push(...safariFinish(content, run, s.state as SafariState));
+  if (s.id === SNAKE_ID) s.outcome.lines.push(...psyduckFinish(content, run, s.state as SnakeState));
   if (s.id === 'berry-blending') {
     const line = poffinConditions(run, s.state as never, s.outcome.medal);
     if (line) s.outcome.lines.push(line);

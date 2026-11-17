@@ -27,7 +27,9 @@ describe('W10 map events', () => {
         Object.values(r).forEach(walk);
       }
     };
-    walk(W10_EVENTS);
+    // A W10 event the Catalog Overhaul rebuilt (src/data/events/co-*.json) is checked by its row's own tests: it no longer opens what its W10 source did.
+    const rebuilt = new Set(Object.values(import.meta.glob<{ events?: { id: string }[] }>('../../src/data/events/co-*.json', { eager: true, import: 'default' })).flatMap((f) => (f.events ?? []).map((e) => e.id)));
+    walk(W10_EVENTS.filter((e) => !rebuilt.has(String(e.id))));
     for (const id of opened) {
       expect(content.events.has(id), `room ${id}`).toBe(true);
       expect(content.events.get(id)!.room, `${id} must be a room`).toBe(true);

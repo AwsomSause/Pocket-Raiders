@@ -5,6 +5,7 @@
 import type { Content, Item } from '../core/contentSchema';
 import { getSpecies } from '../core/pokemon';
 import { itemCount, itemUseProblem } from '../core/items';
+import { oneOnly } from '../core/run';
 import type { RunState } from '../core/state';
 
 /** Frames of `pack.ess.pockets` (Essentials bag pockets). */
@@ -59,6 +60,10 @@ export interface ShopRow {
   sale: boolean;
   /** PokéNet's deal of the visit. */
   deal: boolean;
+  /** Tobias's lesson: this shop's one cheaper item. */
+  mentorDeal?: boolean;
+  /** Tobias's lesson: a held or evolution item worth it for the current team (core/mentorWorld.ts shopWorthIt). */
+  worthIt?: boolean;
   /** Night Market goods no Mart lists. */
   mystery: boolean;
   /** Kecleon's haggle over this item this visit: won (cheaper) or lost (dearer). */
@@ -74,6 +79,10 @@ export interface ShopRow {
   /** Uids of party members who can use it (evolution and form items), else null. */
   users: string[] | null;
   hint: string;
+  /** The focus line without what the item does: who can use it, what you own, what you can spend. */
+  who: string;
+  /** Sold one at a time (a Mega Stone, a Z-Crystal, a key item): no "Buy 5". */
+  single: boolean;
   problem: string | null;
 }
 
@@ -97,6 +106,10 @@ export function shopView(content: Content, run: RunState, deps: {
   mystery?: (item: string) => boolean;
   haggle?: { item: string; won: boolean } | null;
   isBlack: (e: Content['shop'][number]) => boolean;
+  /** Tobias's lesson: the shop's deal item and its price factor. */
+  mentorDeal?: { item: string; value: number } | null;
+  /** Tobias's lesson: whether an item is worth it for the team. */
+  worthIt?: (item: string) => boolean;
   canSell: boolean;
   working: string | null;
 }): ShopView {
@@ -109,16 +122,20 @@ export function shopView(content: Content, run: RunState, deps: {
     const sale = deps.saleItem === entry.item;
     const early = run.badges.length < deps.badgesFor(entry);
     const black = deps.isBlack(entry);
+    const mentorDeal = deps.mentorDeal?.item === entry.item;
+    const worthIt = deps.worthIt?.(entry.item) ?? false;
     const users = item.category === 'evolution' || item.category === 'transformation' ? run.party.filter((m) => itemUseProblem(content, item, m, regionId) === null).map((m) => m.uid) : null;
     return {
       itemId: entry.item,
       name: item.name,
-      label: black ? `${item.name} (black market)` : early ? `${item.name} (early)` : sale ? `${item.name} (on sale!)` : item.name,
+      label: `${black ? `${item.name} (black market)` : early ? `${item.name} (early)` : sale ? `${item.name} (on sale!)` : mentorDeal ? `${item.name} (deal!)` : item.name}${worthIt ? ' ✓ worth it' : ''}`,
       iconAssetId: item.iconAssetId,
       price,
-      wasPrice: sale ? deps.basePrice(entry) : null,
+      wasPrice: sale ? deps.basePrice(entry) : mentorDeal ? Math.round(price / deps.mentorDeal!.value) : null,
       sale,
       deal: deps.deal === entry.item,
+      ...(mentorDeal ? { mentorDeal } : {}),
+      ...(worthIt ? { worthIt } : {}),
       mystery: deps.mystery?.(entry.item) ?? false,
       haggle: deps.haggle?.item === entry.item ? (deps.haggle.won ? 'won' : 'lost') : null,
       early,
@@ -130,6 +147,8 @@ export function shopView(content: Content, run: RunState, deps: {
       description: item.description,
       users,
       hint: `${shopHint(content, run, item)}.${nextStock ? `  ${nextStock}.` : ''}${deps.working ? `  ·  ${deps.working}` : ''}`,
+      who: [shopUsers(content, run, item), item.effect.kind !== 'attribute' && itemCount(run.inventory, entry.item) > 0 ? `You have ${itemCount(run.inventory, entry.item)}` : null, `₽${run.money} to spend`].filter(Boolean).join(' · '),
+      single: oneOnly(content, entry.item),
       problem: run.money < price ? `Not enough money for the ${item.name} (₽${price}, you have ₽${run.money}).` : null,
     };
   });

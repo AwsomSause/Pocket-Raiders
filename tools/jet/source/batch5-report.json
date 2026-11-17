@@ -1,0 +1,95 @@
+{
+ "moveLimits": {
+  "royal-decree": [
+   "Raises the Defense and Sp. Def of the user's allies by 1 stage"
+  ],
+  "ninefold-flame": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "corpse-bloom": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "solar-charge": [
+   "Its power isn't reduced in rain, and it thaws the user"
+  ],
+  "ring-discharge": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "smokestack-blast": [
+   "poison only (the burn half is not rolled)"
+  ],
+  "crystal-bulwark": [
+   "Light Screen is not set (one screen per move)"
+  ],
+  "landslide-nap": [
+   "Hits all adjacent Pokémon (hits one foe)"
+  ],
+  "aurora-wing": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "genesis-spiral": [
+   "Raises the user's highest stat by 1 stage"
+  ],
+  "burrow-slam": [
+   "+1 priority on the first turn after it switches in"
+  ],
+  "supernova-fist": [
+   "Hits the target's weaker defense"
+  ],
+  "lure-overload": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "blossom-waltz": [
+   "Dance move"
+  ],
+  "pollen-gust": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "cotton-storm": [
+   "all opponents (lowers one foe)"
+  ],
+  "dragonstorm-wings": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "sigil-curse": [
+   "It can't use the same move twice in a row for 3 turns"
+  ],
+  "requiem-aria": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "glyph-burst": [
+   "Its type matches the user's most effective type against the target"
+  ],
+  "rebound-blow": [
+   "returns double the damage (not 1.5x)"
+  ],
+  "phantom-frost": [
+   "+1 priority if the target is at full HP"
+  ],
+  "glacial-stampede": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "broadside": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "diamond-dust": [
+   "Hits all opponents (hits one foe)"
+  ],
+  "painted-world": [
+   "Changes the terrain to match the type of the user's last-used move"
+  ],
+  "rainbow-stroke": [
+   "Its type changes to the type that's most effective against the target"
+  ],
+  "thunder-fang-strike": [
+   "+1 priority on the turn it switches in"
+  ],
+  "aurora-spring": [
+   "does not cure the user's status"
+  ],
+  "season-s-turn": [
+   "Its type and effect change with the user's form"
+  ]
+ },
+ "droppedLearn": {}
+}

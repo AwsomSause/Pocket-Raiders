@@ -30,6 +30,9 @@
     "fezandipiti": {
       "discountPercent": 10,
       "communionDiscountPercent": 20
+    },
+    "renegade": {
+      "ghostEncounterWeight": 1.5
     }
   },
   "blessings": [
@@ -240,6 +243,24 @@
       "firstBattleOfStage": false,
       "status": "limited",
       "limits": "The +10% for any move used at full HP is not built. Communion and its Rite are not built."
+    },
+    {
+      "id": "giratina",
+      "name": "The Renegade",
+      "legendary": "Giratina",
+      "speciesId": "giratina",
+      "tier": "primordial",
+      "item": "item.gen5/griseous-orb",
+      "objectText": "a cracked mirror showing a different room",
+      "passage": "It was cast out for its violence into the place behind the world; and there it has had a long while to think about us.",
+      "headline": "THE OTHER SIDE OF EVERY DOOR",
+      "summary": "The Reverse Side: once per stage, step out of any battle that is not a boss's. The node opens again from the other side, and what waits there is different (a Distortion pseudo-stage). Price: Ghost-type Pokémon turn up more often.",
+      "effect": {
+        "kind": "reverseSide"
+      },
+      "pool": false,
+      "status": "limited",
+      "limits": "Never rolled at the start of a run: only The Rift Whisper offers it, mid-run, in place of the run's blessing. The Reverse Side opens Distortion Incident, then Distortion World, inside the node (pseudo-stage caps still hold: past them the step-out alone happens). Communion (see every node's reverse side) and the Rite (a mirror stage) are not built."
     }
   ]
 }

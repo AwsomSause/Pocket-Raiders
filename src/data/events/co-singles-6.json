@@ -1,0 +1,2962 @@
+{
+ "catalogOverhaul": "singles",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "boss-rush-mini",
+   "name": "Boss Rush Mini",
+   "group": "Trainer Challenges",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#241420",
+    "effect": "rattle"
+   },
+   "intro": "Three huge wild Pokémon block the road, one behind the other, and all three are furious: eyes red, fur on end, ground torn up where they have been pacing. They are not hungry. Something has frightened them very badly.",
+   "choices": [
+    {
+     "label": "Fight them.",
+     "success": {
+      "text": "The first one charges the moment you step forward. Three of them, one after another, and no time to breathe.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "chain": 3,
+       "species": [],
+       "types": [],
+       "levelBonus": 3,
+       "shinyMultiplier": 1,
+       "win": [],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Find out why they're angry.",
+     "success": {
+      "text": "You circle wide around them, slow and careful, and follow the torn ground back the way they came. Over the next rise: cages, and nets, and a poacher camp.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "boss-rush-poachers"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "boss-rush-poachers",
+   "name": "The Poacher Camp",
+   "group": "Challenges",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "A poacher camp: cages stacked three high, a cookfire, two men arguing over a ledger. In the cages, the young of the three angry Pokémon on the road, crying for their parents.",
+   "choices": [
+    {
+     "label": "Free them.",
+     "success": {
+      "text": "\"Oi! Those are paid for!\" The poachers grab their Poké Balls.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Poacher",
+       "classId": "worker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "poacher-camp-freed",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Freed the poachers' cages; three angry Pokémon calmed and went home.",
+         "importance": 55
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "camp-counselor-contest",
+   "name": "Camp Counselor Contest",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#233023",
+    "effect": "none"
+   },
+   "intro": "**A camp counsellor** with a whistle and a clipboard: \"Three-legged battle! You get a partner you didn't pick, and you win together or not at all!\"",
+   "choices": [
+    {
+     "label": "Draw a partner.",
+     "success": {
+      "text": "You draw a name out of the hat. Your partner for the day is a road trainer with a Growlithe that immediately licks your hand. \"Don't let me down,\" they say, and grin.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Camp Pair",
+       "classId": "hiker",
+       "ally": "growlithe",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "moment",
+         "text": "Won a three-legged battle with a stranger.",
+         "importance": 30
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "charity-match",
+   "name": "Charity Match",
+   "group": "Trainer Challenges",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#1f2e24",
+    "effect": "none"
+   },
+   "intro": "A banner across the square: ALL PRIZES TO THE TOWN FUND. A trainer is waiting under it, and behind them, a hand-painted thermometer showing how far the fund still has to go. It has a long way to go.",
+   "choices": [
+    {
+     "label": "Battle for the fund.",
+     "success": {
+      "text": "The crowd cheers you both in. Every prize from this fight goes to the town.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Charity Champion",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "rep",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Won a charity match; the prize went to the town fund.",
+         "importance": 45
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Donate instead (₽200).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You drop ₽200 into the bucket. Someone climbs a ladder and paints the thermometer a little higher, and the whole square claps for you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "rep",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "collectors-test",
+   "name": "Collector's Test",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "tint": "#1c2630",
+    "effect": "none"
+   },
+   "intro": "**A collector** in a coat covered in Water-type badges: \"Water-type owners only. Bigger prize.\" He looks you up and down. \"Anyone else can battle too. Normal prize.\"",
+   "choices": [
+    {
+     "label": "Battle (with a Water-type).",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ],
+     "success": {
+      "text": "His eyes light up when he sees your Water-type. \"Now that is a proper trainer.\" Double prize.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Collector",
+       "classId": "psychic",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 1200
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Battle (without).",
+     "success": {
+      "text": "\"Fine, fine.\" He waves a hand. Normal prize.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Collector",
+       "classId": "psychic",
+       "size": 3,
+       "types": [
+        "water"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "double-date-doubles",
+   "name": "Double Date Doubles",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2b1f2b",
+    "effect": "hearts"
+   },
+   "intro": "**Rosa and Hal**, holding hands and looking stricken: \"Our partners cancelled! The tournament starts in five minutes! Borrow my Pokémon. Please.\"",
+   "choices": [
+    {
+     "label": "Team up.",
+     "success": {
+      "text": "Rosa presses a Poké Ball into your hand. \"Pikachu. She bites if you're rude.\" You and her Pikachu take the field together, against a pair who look very pleased about it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Tournament Pair",
+       "classId": "ace-trainer",
+       "ally": "pikachu",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "moment",
+         "text": "Stood in for a cancelled partner at a doubles tournament.",
+         "importance": 30
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "double-trouble",
+   "name": "Double Trouble",
+   "group": "Trainers and challenges",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m",
+     "trainer.fairy_tale_girl"
+    ],
+    "effect": "hearts"
+   },
+   "intro": "Twins in matching scarves, finishing each other's sentences: \"We battle...\" \"...together!\" \"Two against...\" \"...two!\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "They step out side by side, and their Pokémon do too.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Twins",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "eco-ranger-test",
+   "name": "Eco Ranger Test",
+   "group": "Trainer Challenges",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#1f2e24",
+    "effect": "none"
+   },
+   "intro": "**Ranger, Ingrid**, in a green jacket with a capture styler on her belt: \"Calm them. No knockouts. A Ranger never hurts what they're protecting.\"",
+   "choices": [
+    {
+     "label": "Take the test.",
+     "success": {
+      "text": "Three wild Pokémon, frightened and lashing out. Put them to sleep or wear them down, but do not let a single one faint.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "spare": true
+       },
+       "name": "Frightened Pokémon",
+       "classId": "hiker",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "ranger-outpost",
+         "amount": 1
+        },
+        {
+         "kind": "addStop",
+         "stop": "heal"
+        },
+        {
+         "kind": "moment",
+         "text": "Passed the Eco Ranger test without one knockout.",
+         "importance": 50
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gym-scout",
+   "name": "Gym Scout",
+   "group": "Trainers and challenges",
+   "stop": "scout",
+   "scene": {
+    "cast": [
+     "boss.Spr_Pt_Looker"
+    ],
+    "effect": "fog"
+   },
+   "intro": "**A guide** leaning on the Gym town signpost, flipping a coin: \"Want to know what's inside? The Leader's lead, and the ace. Everyone asks eventually.\"",
+   "choices": [
+    {
+     "label": "Yes (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "You pay. She leans in and tells you, plainly, the first Pokémon out and the last one standing.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "gymPreview"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Brave,\" she says. \"Or stubborn.\" She goes back to flipping her coin.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gym-trainer-ambush",
+   "name": "Gym Trainer Practice",
+   "group": "Trainers and challenges",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "effect": "shake"
+   },
+   "intro": "**A gym trainer** in the Gym's colours steps out of a doorway: \"Want to see what the leader uses? Battle me and show me you deserve to know.\"",
+   "choices": [
+    {
+     "label": "Battle me and show me.",
+     "success": {
+      "text": "They take you on with the Gym's own style.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Gym Trainer",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gymPreview"
+        },
+        {
+         "kind": "money",
+         "amount": 300
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "held-item-gauntlet",
+   "name": "Held-Item Gauntlet",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2a2518",
+    "effect": "none"
+   },
+   "intro": "Four trainers in a row along the road, each holding something up: a Quick Claw, a Shell Bell, a Scope Lens, a Muscle Band. **\"Beat us and keep what we were holding.\"**",
+   "choices": [
+    {
+     "label": "Run the gauntlet.",
+     "success": {
+      "text": "The first three step out one after another. The Quick Claw, the Shell Bell and the Scope Lens are on the line.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Gauntlet Trainer",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "quick-claw",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "shell-bell",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "scope-lens",
+         "count": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "held-item-gauntlet-last"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "held-item-gauntlet-last",
+   "name": "The Last of the Gauntlet",
+   "group": "Challenges",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The fourth trainer is the oldest, and holds up the Muscle Band without a word.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "One more.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Gauntlet Veteran",
+       "classId": "veteran",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "muscle-band",
+         "count": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Stop here.",
+     "success": {
+      "text": "You have three of the four. The veteran nods: fair enough.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "hot-dog-duelists",
+   "name": "Hot Dog Duelists",
+   "group": "Trainer Challenges",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2418",
+    "effect": "none"
+   },
+   "intro": "Two hot dog vendors, one street corner, one grudge older than either of their carts. They see you and both shout at once: \"Settle it!\"",
+   "choices": [
+    {
+     "label": "Battle both.",
+     "success": {
+      "text": "They come at you together, still arguing. Whoever wins, you are told, gets fed.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Rival Vendors",
+       "classId": "worker",
+       "size": 4,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Settled the hot dog feud; the feast healed the whole team.",
+         "importance": 30
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "lifeguard-test",
+   "name": "Lifeguard Test",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#16303a",
+    "effect": "none"
+   },
+   "intro": "A whistle, shrill and panicked: \"A swimmer's in trouble!\" Out past the buoys, an arm goes up and goes under.",
+   "choices": [
+    {
+     "label": "Rescue first.",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "water",
+        "flying"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Your Pokémon is in the water or in the air before you have finished shouting, and the swimmer is pulled out, coughing and alive. The lifeguard runs up, soaked, grinning: \"That was my job! Right. Prove you can do it properly.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Lifeguard",
+       "classId": "swimmer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        },
+        {
+         "kind": "moment",
+         "text": "Pulled a swimmer out of the sea.",
+         "importance": 50
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Shout for the lifeguard.",
+     "success": {
+      "text": "You shout until your voice cracks, and the lifeguard hears and goes in, and comes out with the swimmer over one shoulder. She is too busy to battle anyone today.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "marathon",
+   "name": "Pokémon Marathon",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "effect": "float"
+   },
+   "intro": "Runners line up at a chalk line with their Pokémon, stretching. A banner over the finish says the prize: a Choice Scarf. It is a very long way to the finish.",
+   "choices": [
+    {
+     "label": "Run.",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You find your rhythm and keep it, mile after mile, your team running beside you, and you cross the line with your lungs on fire. They hang the Choice Scarf round your lead's neck.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "choice-scarf",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     },
+     "failure": {
+      "text": "You lose your rhythm halfway and finish somewhere in the middle, gasping. No scarf. Your team does not care at all: they had a wonderful time.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mentors-examination",
+   "name": "Mentor's Examination",
+   "group": "Trainer Challenges",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2e2418",
+    "effect": "none"
+   },
+   "intro": "**A veteran** on a folding chair, an Expert Belt laid across her knees: \"No held items. No bag. Just you and them. Pass, and take this.\"",
+   "choices": [
+    {
+     "label": "Accept.",
+     "success": {
+      "text": "Hold items come off. Bag goes on the ground. She stands.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "noItems": true
+       },
+       "name": "Examiner",
+       "classId": "veteran",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "item",
+         "id": "expert-belt",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Passed the veteran's examination with no items.",
+         "importance": 45
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "moot-court-showdown",
+   "name": "Moot Court Showdown",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#2a2a2a",
+    "effect": "none"
+   },
+   "intro": "**A law student** in a gown two sizes too big: \"Out-argue me, and then we enforce the verdict in battle. Every point you win, my lead feels it.\"",
+   "choices": [
+    {
+     "label": "Argue.",
+     "success": {
+      "text": "She clears her throat and asks her first question.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "moot-court-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "moot-court-1",
+   "name": "Moot Court: Question 1",
+   "group": "Challenges",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "\"Question one. A Pokémon is put to sleep, and the trainer switches it out. Is it still asleep when it comes back?\"",
+   "choices": [
+    {
+     "label": "Yes, it stays asleep.",
+     "success": {
+      "text": "\"...Sustained.\" She looks at her notes, rattled. Her lead shifts on its feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "moot-points",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "moot-court-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No, switching wakes it.",
+     "success": {
+      "text": "\"Overruled!\" She looks pleased with herself.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "moot-court-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "moot-court-2",
+   "name": "Moot Court: Question 2",
+   "group": "Challenges",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "\"Question two. Does a Ground-type move hit a Pokémon that is holding an Air Balloon?\"",
+   "choices": [
+    {
+     "label": "No, the balloon lifts it clear.",
+     "success": {
+      "text": "\"...Sustained.\" She looks at her notes, rattled. Her lead shifts on its feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "moot-points",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "moot-court-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Yes, Ground always lands.",
+     "success": {
+      "text": "\"Overruled!\" She looks pleased with herself.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "moot-court-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "moot-court-3",
+   "name": "Moot Court: Question 3",
+   "group": "Challenges",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "\"Question three. Your Pokémon has a burn. Is its Attack lower?\"",
+   "choices": [
+    {
+     "label": "Yes, a burn halves physical attacks.",
+     "success": {
+      "text": "\"...Sustained.\" She looks at her notes, rattled. Her lead shifts on its feet.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "moot-points",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "moot-court-verdict"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No, burns only hurt.",
+     "success": {
+      "text": "\"Overruled!\" She looks pleased with herself.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "moot-court-verdict"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "moot-court-verdict",
+   "name": "Moot Court: The Verdict",
+   "group": "Challenges",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "\"The court will now enforce its verdict.\" She sends out her lead. Every point you won, it carries with it.",
+   "choices": [
+    {
+     "label": "Enforce it.",
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "moot-points",
+         "atLeast": 3,
+         "atMost": 99
+        }
+       ],
+       "text": "Her lead comes out looking shaken: you won all three points, and it feels every one.",
+       "effects": [
+        {
+         "kind": "tempEffect",
+         "label": "Out-argued (3): your damage ×1.3 next battle",
+         "effects": [
+          {
+           "kind": "damageMultiplier",
+           "value": 1.3
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "moot-points",
+         "amount": -3
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "moot-points",
+         "atLeast": 2,
+         "atMost": 99
+        }
+       ],
+       "text": "Her lead comes out looking shaken: you won two points, and it feels every one.",
+       "effects": [
+        {
+         "kind": "tempEffect",
+         "label": "Out-argued (2): your damage ×1.2 next battle",
+         "effects": [
+          {
+           "kind": "damageMultiplier",
+           "value": 1.2
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "moot-points",
+         "amount": -2
+        }
+       ]
+      },
+      {
+       "when": [
+        {
+         "kind": "flag",
+         "key": "moot-points",
+         "atLeast": 1,
+         "atMost": 99
+        }
+       ],
+       "text": "Her lead comes out looking shaken: you won one point, and it feels every one.",
+       "effects": [
+        {
+         "kind": "tempEffect",
+         "label": "Out-argued (1): your damage ×1.1 next battle",
+         "effects": [
+          {
+           "kind": "damageMultiplier",
+           "value": 1.1
+          }
+         ],
+         "battles": 1,
+         "until": "battle"
+        },
+        {
+         "kind": "flag",
+         "key": "moot-points",
+         "amount": -1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "Her lead comes out steady. You did not win a single point.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Law Student",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 3,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "pokeathlon",
+   "name": "Pokéathlon",
+   "group": "Trainers and challenges",
+   "scene": {
+    "cast": [],
+    "effect": "sparkle"
+   },
+   "intro": "A track, hurdles, a crowd in the stands, and a board with the prizes: first place takes a Power Herb; everyone who finishes gets a Potion.",
+   "choices": [
+    {
+     "label": "Enter.",
+     "prompt": {
+      "id": "hurdle-rhythm",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You and your team clear every hurdle on the beat and cross the line first. The Power Herb is yours.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "power-herb",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You clip a hurdle, and then another, and finish in the pack. You still get a Potion, and a pat on the back.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "quiz-master",
+   "name": "Quiz Master",
+   "group": "Trainers and challenges",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "**The Quiz Master**, in a sequined jacket, with a buzzer: \"Three questions about Pokémon! Get all three right and a TM is yours!\"",
+   "choices": [
+    {
+     "label": "Answer.",
+     "check": "intelligence",
+     "success": {
+      "text": "One, two, three. He hits the buzzer three times, delighted, and hands you a TM.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "tm-normal",
+         "tm-fighting",
+         "tm-flying",
+         "tm-poison",
+         "tm-ground",
+         "tm-rock",
+         "tm-bug"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "You get one wrong. \"So close!\" He gives you a sticker instead, which is something.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "relay-battle",
+   "name": "Relay Battle",
+   "group": "Trainer Challenges",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.black_belt_m"
+    ],
+    "tint": "#2a2218",
+    "effect": "none"
+   },
+   "intro": "Three trainers stand along the road with batons, one every hundred paces. Between each, a bench and a water bottle: a breath, no more.",
+   "choices": [
+    {
+     "label": "Run the relay.",
+     "success": {
+      "text": "The first trainer hands you the baton and takes you on. Win, catch your breath, and run on to the next.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chainHeal": 0.25,
+       "chain": 3,
+       "name": "Relay Runner",
+       "classId": "black-belt",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 700
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rookie-hazing",
+   "name": "Rookie Hazing",
+   "group": "Trainer Challenges",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#2a2a1e",
+    "effect": "none"
+   },
+   "intro": "Youngsters, five of them, closing in a circle with their caps on backwards. **\"Welcome to the road, rookie!\"** The last one, at the back, is clutching a Rattata and trying very hard to look tough.",
+   "choices": [
+    {
+     "label": "Battle them all.",
+     "success": {
+      "text": "The first three come at you one after another.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Youngster",
+       "classId": "youngster",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rookie-hazing-joey"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    },
+    {
+     "label": "Ask the last one's name.",
+     "success": {
+      "text": "\"J-Joey,\" he says, and goes bright red, and then the others shove him to the back and come at you anyway, three in a row.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Youngster",
+       "classId": "youngster",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "rookie-hazing-joey"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "rookie-hazing-joey",
+   "name": "Joey",
+   "group": "Challenges",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "Two left: a big kid, and then Joey, who has stopped trying to look tough and is just holding his Rattata. \"It's in the top percentage of Rattata,\" he tells you seriously. \"I checked.\"",
+   "choices": [
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "The big kid, and then Joey, and his top-percentage Rattata.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "team": [
+        "rattata"
+       ],
+       "chain": 2,
+       "name": "Youngster Joey",
+       "classId": "youngster",
+       "size": 1,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 400
+        },
+        {
+         "kind": "moment",
+         "text": "Beat Joey and his top-percentage Rattata.",
+         "importance": 40
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "speed-dating-trainers",
+   "name": "Speed-Dating Trainers",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2b1f2b",
+    "effect": "hearts"
+   },
+   "intro": "A bell rings. Three tables, three trainers, a sign: \"Three minutes per table.\" Somebody pours you a glass of water.",
+   "choices": [
+    {
+     "label": "Sit down.",
+     "success": {
+      "text": "Ding. The first one leans across the table. One Pokémon each, and the clock is running.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Table Trainer",
+       "classId": "ace-trainer",
+       "size": 1,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 450
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "speed-trial",
+   "name": "Speed Trial",
+   "group": "Trainers and challenges",
+   "scene": {
+    "cast": [
+     "trainer.biker"
+    ],
+    "effect": "float"
+   },
+   "intro": "**A runner** with a stopwatch and a Quick Claw on a string round her neck: \"Beat my time! It's yours if you do.\"",
+   "choices": [
+    {
+     "label": "Race.",
+     "prompt": {
+      "id": "dodge-tap",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You go on her whistle and you go fast, and you beat her by a hair. She takes the Quick Claw off and gives it to you, laughing.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "quick-claw",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "You go fast, and she goes faster. \"Next time!\" She is not even out of breath.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "strength-trial",
+   "name": "Boulder Push",
+   "group": "Trainers and challenges",
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "effect": "shake"
+   },
+   "intro": "**A hiker**, sitting on a boulder halfway up a hill: \"Push it up the hill. All the way to the top.\" He pats the boulder. \"Nobody's done it this year.\"",
+   "choices": [
+    {
+     "label": "Push (a Fighting- or Rock-type).",
+     "requires": [
+      {
+       "kind": "partyTypes",
+       "types": [
+        "fighting",
+        "rock"
+       ]
+      }
+     ],
+     "prompt": {
+      "id": "pull-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "Your Pokémon sets its shoulder to the boulder and pushes, and pushes, and it rolls, and you push too, and it goes over the top. The hiker gives you his own Black Belt.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "black-belt",
+        "count": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "It goes halfway, wobbles, and rolls all the way back down. The hiker sighs: \"Nobody, this year.\"",
+      "effects": []
+     }
+    },
+    {
+     "label": "Leave it.",
+     "success": {
+      "text": "\"Nobody, this year,\" the hiker says again, to the boulder.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "time-trial-gate",
+   "name": "Time Trial Gate",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#232a2a",
+    "effect": "none"
+   },
+   "intro": "A gate across the road, shut, with a quiz board bolted to it and a guard beside it. \"Fifteen seconds. Answer it, and through you go.\"",
+   "choices": [
+    {
+     "label": "Take the quiz.",
+     "prompt": {
+      "id": "gauge-hold",
+      "needs": "good"
+     },
+     "success": {
+      "text": "You answer with two seconds to spare. The gate swings open.",
+      "effects": []
+     },
+     "failure": {
+      "text": "Time's up. The guard sighs and picks up his Poké Ball. \"Rules are rules. Battle me, and I'll open it anyway.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Gate Guard",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "trainers-test",
+   "name": "A Trainer's Test",
+   "group": "Trainers and challenges",
+   "scene": {
+    "cast": [
+     "trainer.psychic_m"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "**A trainer** with one Pokémon at her side: \"One Pokémon. Just one. Win, and I'll teach it something.\"",
+   "choices": [
+    {
+     "label": "Battle with one.",
+     "pick": {},
+     "success": {
+      "text": "The Pokémon you chose steps forward alone.",
+      "effects": [
+       {
+        "kind": "leadPicked"
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "rule": {
+        "noSwitch": true
+       },
+       "name": "Teacher",
+       "classId": "psychic",
+       "size": 1,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "train",
+         "what": "learnMove"
+        },
+        {
+         "kind": "friendship",
+         "bond": 1,
+         "who": "picked"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "triple-battle",
+   "name": "Triple Trouble",
+   "group": "Trainers and challenges",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "effect": "shake"
+   },
+   "intro": "Three kids at once, shoving each other to be in front: \"All of us!\" \"At the same time!\" \"That's the rules!\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Three of them, three of their Pokémon, all at once.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "triples",
+       "name": "Three Kids",
+       "classId": "youngster",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 500
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "twin-trainers",
+   "name": "Trainer Pair of Twins",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2a2030",
+    "effect": "none"
+   },
+   "intro": "**Amy and Liv**, in identical everything: \"We fight as one!\" They say it at exactly the same time, and look pleased about it.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "They step out in perfect step.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "format": "doubles",
+       "name": "Amy & Liv",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 600
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "type-specialist",
+   "name": "Type Specialist",
+   "group": "Trainers and challenges",
+   "scene": {
+    "cast": [
+     "trainer.ryme"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "A trainer whose whole team, and whose whole outfit, is one type. They have clearly given their life to it.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "One type. Every one of them.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Type Specialist",
+       "classId": "ace-trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "type-specialist-hired",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Beat a type specialist; they went to work at the next Gym.",
+         "importance": 35
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "underdog-union",
+   "name": "Underdog Union",
+   "group": "Trainer Challenges",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m"
+    ],
+    "tint": "#222a2a",
+    "effect": "none"
+   },
+   "intro": "Three trainers with the scruffiest Pokémon you have ever seen. **\"Each of us carries a rare held item!\"** One of them holds up a Wide Lens. \"This one's yours if you win.\"",
+   "choices": [
+    {
+     "label": "Battle them.",
+     "success": {
+      "text": "They look weak. They are not as weak as they look.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chain": 3,
+       "name": "Underdog",
+       "classId": "youngster",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "item",
+         "id": "wide-lens",
+         "count": 1
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "winstrate-family",
+   "name": "The Winstrate Family",
+   "group": "Trainers and challenges",
+   "scene": {
+    "cast": [
+     "trainer.youngster_m",
+     "trainer.aroma_lady",
+     "trainer.biker"
+    ],
+    "effect": "sparkle"
+   },
+   "intro": "A whole family lines up on their front lawn, from a little boy to a grandmother: \"Beat us all, back to back! You're our guest, so we'll look after your team in between.\"",
+   "choices": [
+    {
+     "label": "Take them on.",
+     "success": {
+      "text": "The first three, one after another. Between each, the grandmother bustles out with a tray, and your team is fully rested.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "chainHeal": 1,
+       "chain": 3,
+       "name": "Winstrate",
+       "classId": "ace-trainer",
+       "size": 2,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "heal",
+         "share": 1
+        },
+        {
+         "kind": "addEvent",
+         "eventId": "winstrate-vicky"
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "winstrate-vicky",
+   "name": "Vicky Winstrate",
+   "group": "Challenges",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The grandmother takes off her apron and hands her tray to her grandson. \"My turn, dear.\" Your team is rested.",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "She is the strongest of them all.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "name": "Vicky Winstrate",
+       "classId": "veteran",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "money",
+         "amount": 800
+        },
+        {
+         "kind": "item",
+         "id": "macho-brace",
+         "count": 1
+        },
+        {
+         "kind": "moment",
+         "text": "Beat the whole Winstrate family, back to back.",
+         "importance": 50
+        }
+       ],
+       "friendly": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "berry-smoothie",
+   "name": "The Pawn Berry Smoothie",
+   "group": "Merchants & Deals",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "**A smoothie cart**, painted like a Berry: \"Blend three Berries into a drink! Good for the next battle only.\" The menu lists what each blend does.",
+   "choices": [
+    {
+     "label": "Three Oran Berries (Defense up).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "A thick blue drink. Your team's Defense is up for the next battle.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry",
+        "count": 3
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Oran smoothie: Defense ×1.2 next battle",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "def",
+          "value": 1.2
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Three Sitrus Berries (Attack up).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "sitrus-berry",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "A sharp yellow drink. Your team's Attack is up for the next battle.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "sitrus-berry",
+        "count": 3
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Sitrus smoothie: Attack ×1.2 next battle",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "atk",
+          "value": 1.2
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Three Pecha Berries (Speed up).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "pecha-berry",
+       "count": 3
+      }
+     ],
+     "success": {
+      "text": "A sweet pink drink. Your team's Speed is up for the next battle.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "pecha-berry",
+        "count": 3
+       },
+       {
+        "kind": "tempEffect",
+        "label": "Pecha smoothie: Speed ×1.2 next battle",
+        "effects": [
+         {
+          "kind": "statMultiplier",
+          "stat": "spe",
+          "value": 1.2
+         }
+        ],
+        "battles": 1,
+        "until": "battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "No thanks.",
+     "success": {
+      "text": "You leave it be and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "capsule-gacha",
+   "name": "The Capsule Gacha",
+   "group": "Merchants & Deals",
+   "scene": {
+    "cast": [],
+    "tint": "#2b2a1e",
+    "effect": "glint"
+   },
+   "intro": "A toy machine with a crank and a glass dome full of capsules. The odds are printed on the side: 1 in 2 a tiny perk, 1 in 2 a little toy just for fun.",
+   "choices": [
+    {
+     "label": "Spin (₽50).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 50
+      }
+     ],
+     "chance": 0.5,
+     "success": {
+      "text": "Crank, crank, clunk. A capsule rolls out and pops open: a tiny perk.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "oran-berry",
+         "x-attack",
+         "x-speed",
+         "dire-hit",
+         "potion"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Crank, crank, clunk. A capsule rolls out and pops open: a tiny plastic Pokémon. Your lead takes it immediately and will not give it back.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -50
+       },
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "lead"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You give the crank a wistful look and walk on.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "final-sale-banner",
+   "name": "The Final Sale Banner",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "A shop with a banner: \"EVERYTHING ₽1.\" **The owner**, in a cardboard crown: \"First, though, a short skit. Store policy.\"",
+   "choices": [
+    {
+     "label": "Watch the skit.",
+     "success": {
+      "text": "It is a play about the region's Legendary, performed by the owner, his wife and a very patient Snorlax. It is terrible, and then, near the end, it is suddenly not: the wife speaks one line so quietly the whole shop leans in, and you know it is true. Then the lights come on. \"Everything ₽1! One of each!\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "sign-region",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "final-sale-shop"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave.",
+     "success": {
+      "text": "\"Philistine!\" the owner shouts after you, cheerfully.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "final-sale-shop",
+   "name": "Everything ₽1",
+   "group": "Shops and workshops",
+   "room": true,
+   "scene": {
+    "cast": [],
+    "effect": "none"
+   },
+   "intro": "The shelves: a Potion, a Poké Ball, an Antidote, a Repel. Every one ₽1. One of each per customer.",
+   "choices": [
+    {
+     "label": "Buy one of everything (₽4).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 4
+      }
+     ],
+     "success": {
+      "text": "You pay ₽4 and walk out with your arms full. The owner bows.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "poke-ball",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "antidote",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "repel",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just the Potion (₽1).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1
+      }
+     ],
+     "success": {
+      "text": "One Potion, ₽1. The owner bows anyway.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1
+       },
+       {
+        "kind": "item",
+        "id": "potion",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy nothing.",
+     "success": {
+      "text": "\"Then the skit was free too!\" the owner says, delighted, and bows you out.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gift-wrap-station",
+   "name": "The Gift Wrap Station",
+   "group": "Merchants & Deals",
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "**A gift-wrap stall** with ribbons in every colour: \"Wrap an item for the next person you meet! Someone down the road will get a lovely surprise.\"",
+   "choices": [
+    {
+     "label": "Wrap a Potion.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "potion",
+       "count": 1
+      }
+     ],
+     "success": {
+      "text": "She wraps it in blue paper with a white bow. \"They'll love it.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "potion",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gift-sent",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wrap a Berry.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "oran-berry",
+       "count": 1
+      }
+     ],
+     "success": {
+      "text": "She wraps it in green paper with a red bow. \"They'll love it.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "oran-berry",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gift-sent",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wrap a Poké Ball.",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "poke-ball",
+       "count": 1
+      }
+     ],
+     "success": {
+      "text": "She wraps it in red paper with a gold bow. \"They'll love it.\"",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "id": "poke-ball",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "gift-sent",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "No.",
+     "success": {
+      "text": "\"Another time!\" She goes back to her ribbons.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gift-wrap-receiver",
+   "name": "The Gift Returned",
+   "group": "Merchants & Deals",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "gift-sent",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "**A stranger** waves you down, holding a box wrapped in silver paper: \"A friend sent this ahead. They said you'd be passing. They said you sent them something first.\"",
+   "choices": [
+    {
+     "label": "Open it.",
+     "success": {
+      "text": "Inside, wrapped in tissue: something better than what you gave. A note says only, \"Thank you. It was a hard week.\"",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "leftovers",
+         "scope-lens",
+         "wide-lens",
+         "muscle-band",
+         "wise-glasses",
+         "expert-belt",
+         "quick-claw"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "gift-sent",
+        "amount": -1
+       },
+       {
+        "kind": "moment",
+        "text": "A stranger you sent a gift to sent one back.",
+        "importance": 40
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "key-item-workshop-bike",
+   "name": "Key Item Workshop: Bikes",
+   "group": "Upgrades",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "**Tinkerer, Bolt**, under a bicycle with only his boots showing: \"Parts cost money. Work's free. Bring it here and I'll make it go further.\"",
+   "choices": [
+    {
+     "label": "Upgrade (₽500).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "bicycle",
+       "count": 1
+      },
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "He takes your bike apart, puts it back together, and hands it over a gear better than it was.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "loseItem",
+        "id": "bicycle",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "mach-bike",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Upgrade the Mach Bike (₽500).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "mach-bike",
+       "count": 1
+      },
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "He swaps half its parts and adds a pop-up wheel. \"Further still.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "loseItem",
+        "id": "mach-bike",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "acro-bike",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "\"Bring it back when it squeaks.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "key-item-workshop-rod",
+   "name": "Key Item Workshop: Rods",
+   "group": "Upgrades",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "**Tinkerer, Bolt**, at a bench covered in reels: \"Same deal for rods. Parts cost money. Work's free.\"",
+   "choices": [
+    {
+     "label": "Upgrade (₽500).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "old-rod",
+       "count": 1
+      },
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "New reel, new line. A Good Rod.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "loseItem",
+        "id": "old-rod",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "good-rod",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Upgrade the Good Rod (₽500).",
+     "requires": [
+      {
+       "kind": "item",
+       "id": "good-rod",
+       "count": 1
+      },
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "New hook, new everything. A Super Rod, that can pull the rare ones.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "loseItem",
+        "id": "good-rod",
+        "count": 1
+       },
+       {
+        "kind": "item",
+        "id": "super-rod",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "\"The fish will wait.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "lost-property",
+   "name": "Lost Property Office",
+   "group": "Key items and tickets",
+   "rarity": "uncommon",
+   "minStage": 2,
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "effect": "rattle"
+   },
+   "intro": "**A clerk** behind a counter piled with boxes: \"Lost property. Nobody comes back for these. Have a look, if you like. About one box in five has something worth keeping.\"",
+   "choices": [
+    {
+     "label": "Look through it.",
+     "chance": 0.2,
+     "success": {
+      "text": "Under a pile of single gloves you find it: something worth keeping, with a paper tag tied on and a date written in careful pencil.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "nugget",
+         "pearl",
+         "stardust",
+         "big-mushroom",
+         "heart-scale"
+        ]
+       }
+      ]
+     },
+     "failure": {
+      "text": "Gloves. Umbrellas. A single roller skate. Nothing you can use, but somebody loved every one of these once.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "street-tailor",
+   "name": "The Street Tailor",
+   "group": "Merchants & Deals",
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#2b2a1e",
+    "effect": "none"
+   },
+   "intro": "**A tailor** with a mouthful of pins and a tape round her neck: \"A new look, and a small perk with it.\" She holds up three outfits, each with a card pinned on: Sharp Suit, Charisma +1; Trail Gear, Strength +1; Scholar's Coat, Intelligence +1. ₽80 each.",
+   "choices": [
+    {
+     "label": "The Sharp Suit (Charisma +1).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 80
+      }
+     ],
+     "success": {
+      "text": "You look the part. People listen when you talk.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -80
+       },
+       {
+        "kind": "attribute",
+        "key": "charisma",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Trail Gear (Strength +1).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 80
+      }
+     ],
+     "success": {
+      "text": "Sturdy boots and a coat that could stop a Tackle.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -80
+       },
+       {
+        "kind": "attribute",
+        "key": "strength",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The Scholar's Coat (Intelligence +1).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 80
+      }
+     ],
+     "success": {
+      "text": "Deep pockets, for notes, and a neat cut.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -80
+       },
+       {
+        "kind": "attribute",
+        "key": "intelligence",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep your clothes.",
+     "success": {
+      "text": "\"Suit yourself.\" She laughs at her own joke for a long time.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "rare-candy-cache",
+   "name": "Candy Cache",
+   "group": "Training and growth",
+   "rarity": "rare",
+   "minStage": 2,
+   "scene": {
+    "cast": [],
+    "tint": "#302838",
+    "effect": "sparkle"
+   },
+   "intro": "Behind a rock, a jar with a lid. Inside, one Rare Candy, and a note in a child's writing: \"for whoever needs it.\"",
+   "choices": [
+    {
+     "label": "Take it.",
+     "success": {
+      "text": "You take it. You do need it. Everyone does.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "rare-candy",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it for the next trainer.",
+     "success": {
+      "text": "You put the lid back on and set the jar where the next trainer will find it. Somewhere down the road, someone who needs it more is going to have a very good day.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-blue",
+   "name": "Plush Workshop: Blue Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** \"Bring me a blue one, the colour of deep water. I'll sew it up a level. Thread costs money; love is free.\"\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.",
+   "choices": [
+    {
+     "label": "Sew it up a level (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "itemAny",
+       "ids": [
+        "blue-canari-pal-1",
+        "blue-canari-pal-2"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "item",
+         "id": "blue-canari-pal-2"
+        }
+       ],
+       "text": "She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** \"Gold at the seams. That's level three, as high as they go.\" She hands it back. \"Look after it. It's looked after you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "loseItem",
+         "id": "blue-canari-pal-2"
+        },
+        {
+         "kind": "item",
+         "id": "blue-canari-pal-3",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** \"There. Level two. It looks happier already. Don't tell it I said so.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "loseItem",
+        "id": "blue-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "blue-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "**Mrs. Brisby:** \"Come back with one when you're ready, dear. I'm not going anywhere. My knees saw to that.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-gold",
+   "name": "Plush Workshop: Gold Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** \"Bring me a gold one, the colour of a Nugget in the sun. I'll sew it up a level. Thread costs money; love is free.\"\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.",
+   "choices": [
+    {
+     "label": "Sew it up a level (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "itemAny",
+       "ids": [
+        "gold-canari-pal-1",
+        "gold-canari-pal-2"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "item",
+         "id": "gold-canari-pal-2"
+        }
+       ],
+       "text": "She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** \"Gold at the seams. That's level three, as high as they go.\" She hands it back. \"Look after it. It's looked after you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "loseItem",
+         "id": "gold-canari-pal-2"
+        },
+        {
+         "kind": "item",
+         "id": "gold-canari-pal-3",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** \"There. Level two. It looks happier already. Don't tell it I said so.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "loseItem",
+        "id": "gold-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "gold-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "**Mrs. Brisby:** \"Come back with one when you're ready, dear. I'm not going anywhere. My knees saw to that.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-green",
+   "name": "Plush Workshop: Green Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** \"Bring me a green one, the colour of new leaves. I'll sew it up a level. Thread costs money; love is free.\"\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.",
+   "choices": [
+    {
+     "label": "Sew it up a level (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "itemAny",
+       "ids": [
+        "green-canari-pal-1",
+        "green-canari-pal-2"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "item",
+         "id": "green-canari-pal-2"
+        }
+       ],
+       "text": "She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** \"Gold at the seams. That's level three, as high as they go.\" She hands it back. \"Look after it. It's looked after you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "loseItem",
+         "id": "green-canari-pal-2"
+        },
+        {
+         "kind": "item",
+         "id": "green-canari-pal-3",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** \"There. Level two. It looks happier already. Don't tell it I said so.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "loseItem",
+        "id": "green-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "green-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "**Mrs. Brisby:** \"Come back with one when you're ready, dear. I'm not going anywhere. My knees saw to that.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-pink",
+   "name": "Plush Workshop: Pink Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** \"Bring me a pink one, the colour of a Pecha Berry. I'll sew it up a level. Thread costs money; love is free.\"\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.",
+   "choices": [
+    {
+     "label": "Sew it up a level (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "itemAny",
+       "ids": [
+        "pink-canari-pal-1",
+        "pink-canari-pal-2"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "item",
+         "id": "pink-canari-pal-2"
+        }
+       ],
+       "text": "She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** \"Gold at the seams. That's level three, as high as they go.\" She hands it back. \"Look after it. It's looked after you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "loseItem",
+         "id": "pink-canari-pal-2"
+        },
+        {
+         "kind": "item",
+         "id": "pink-canari-pal-3",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** \"There. Level two. It looks happier already. Don't tell it I said so.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "loseItem",
+        "id": "pink-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "pink-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "**Mrs. Brisby:** \"Come back with one when you're ready, dear. I'm not going anywhere. My knees saw to that.\"",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "plush-workshop-red",
+   "name": "Plush Workshop: Red Pals",
+   "group": "Plush Workshop",
+   "rarity": "uncommon",
+   "scene": {
+    "cast": [],
+    "effect": "glint"
+   },
+   "intro": "A stall hung with stitched Canari Pals, every one a little different. **Seamstress, Mrs. Brisby**, looks up over her half-moon glasses, a needle in her teeth.\n\n**Mrs. Brisby:** \"Bring me a red one, the colour of a Cheri Berry. I'll sew it up a level. Thread costs money; love is free.\"\n\nA card on the counter, in neat stitching: up to three levels, one Pal of each colour.",
+   "choices": [
+    {
+     "label": "Sew it up a level (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      },
+      {
+       "kind": "itemAny",
+       "ids": [
+        "red-canari-pal-1",
+        "red-canari-pal-2"
+       ]
+      }
+     ],
+     "branches": [
+      {
+       "when": [
+        {
+         "kind": "item",
+         "id": "red-canari-pal-2"
+        }
+       ],
+       "text": "She turns your Lv.2 Pal over twice, then reaches for a spool of gold thread she keeps in a tin.\n\n**Mrs. Brisby:** \"Gold at the seams. That's level three, as high as they go.\" She hands it back. \"Look after it. It's looked after you.\"",
+       "effects": [
+        {
+         "kind": "money",
+         "amount": -100
+        },
+        {
+         "kind": "loseItem",
+         "id": "red-canari-pal-2"
+        },
+        {
+         "kind": "item",
+         "id": "red-canari-pal-3",
+         "count": 1
+        }
+       ]
+      }
+     ],
+     "success": {
+      "text": "She takes your Lv.1 Pal in both hands as if it might wake up. New stitching, a bigger bow, and a careful little patch where the old seam was thin.\n\n**Mrs. Brisby:** \"There. Level two. It looks happier already. Don't tell it I said so.\"",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "loseItem",
+        "id": "red-canari-pal-1"
+       },
+       {
+        "kind": "item",
+        "id": "red-canari-pal-2",
+        "count": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not now.",
+     "success": {
+      "text": "**Mrs. Brisby:** \"Come back with one when you're ready, dear. I'm not going anywhere. My knees saw to that.\"",
+      "effects": []
+     }
+    }
+   ]
+  }
+ ]
+}

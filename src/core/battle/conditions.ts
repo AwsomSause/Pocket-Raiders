@@ -6,10 +6,13 @@ import { shinyMeterText } from '../wildLuck';
 import { TYPE_NAMES, type Content, type TypeName } from '../contentSchema';
 import { typeEffectiveness } from './damage';
 import { abilityOf, calcStats, getSpecies } from '../pokemon';
+import { ownTypes } from '../co/typeShift';
 import { currentEnemy, type PokemonInstance, type RunState, type SideEffects, type Stages } from '../state';
 import { emotionOf } from '../story/emotions';
 import { STANCE_INFO, autoProfile, stanceOf } from './autoBattle';
 import { awakeningLevel, focusOf } from './growthStats';
+import { sweetAirHere } from '../expansion/canonKantoRules';
+import { variantRule } from '../expansion/variantInfo';
 
 export interface Conditions {
   field: string[];
@@ -36,7 +39,7 @@ export function foeIdentityHidden(battle: NonNullable<RunState['battle']>): bool
 /** Types a Pokémon has right now: its Tera type once Terastallized, plus any extra type a boss carries. */
 function currentTypes(content: Content, battle: NonNullable<RunState['battle']>, mon: PokemonInstance): TypeName[] {
   const tera = battle.transform.teraTypes[mon.uid];
-  const base = tera ? [tera] : [...getSpecies(content, mon.speciesId).types];
+  const base = tera ? [tera] : [...ownTypes(content, mon)];
   const extra = battle.transform.bonusTypes[mon.uid];
   return extra && !base.includes(extra) ? [...base, extra] : base;
 }
@@ -156,6 +159,9 @@ export function battleConditions(content: Content, run: RunState, reveals: FoeRe
     out.foe.push(...transformLines(battle, foe, 'enemy'));
     out.foe.push(`Ability: ${reveals.ability ? content.abilities.get(reveals.ability)?.name ?? reveals.ability : 'not shown yet'}`);
     if (reveals.items?.length) out.foe.push(`Held item seen: ${reveals.items.map((id) => content.catalog.get(id)?.name ?? id).join(', ')}`);
+    // The ring at its feet (a variant line): the line's name and what it does.
+    const variant = variantRule(battle.extra?.variants?.[foe.uid]?.line ?? '');
+    if (variant) out.foe.push(`Variant line: ${variant.name}. ${variant.text}`);
     // Overhaul slice 8: each of your moves against what you can see.
     const mon0 = run.party[battle.activeIndex];
     for (const slot of mon0?.moves ?? []) {
@@ -180,6 +186,7 @@ export function battleConditions(content: Content, run: RunState, reveals: FoeRe
   } else if (battle.scanned === 'fail') out.foe.push('Scan unclear');
   if (battle.mindRead) out.foe.push(`Mind-read: likely to use ${content.moves.get(battle.mindRead)?.name ?? battle.mindRead}`);
   if (battle.spectator) out.field.push(`${battle.spectator.name} is watching${battle.spectator.used ? ' (already cheered)' : ''}`);
+  if (sweetAirHere(content, run)) out.field.push('Sweet Air: on the first turn, your lead may fall asleep for a turn');
   if (battle.arena) out.field.push(`Arena: ${battle.arena.kind}${battle.arena.spent ? ' (smashed)' : ' hazard every few turns; Smash it'}`);
   if (battle.alpha) out.foe.push('ALPHA: oversized and stronger, with a bigger prize');
   const foeStatus = statusWord(foe);

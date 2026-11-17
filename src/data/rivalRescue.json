@@ -626,6 +626,7 @@
   ]
  },
  "tuning": {
+  "intelPerPoint": 10,
   "waitMin": 9,
   "waitSpan": 3,
   "secondOfferGap": 5,

@@ -1,12 +1,16 @@
-import { PSEUDO } from '../../src/core/dungeon/pseudo';
+import familiesC from '../../src/data/catalogOverhaul/familiesC.json';
+import { MENTORS } from '../../src/core/mentors';
+import { PSEUDO, PSEUDO_CHAINS } from '../../src/core/dungeon/pseudo';
+import { POKEMON_MOMENTS } from '../../src/core/moments/pokemonMoments';
+import { canonKantoPlaced } from '../../src/data/expansion';
 // Exploration (APPROVED.md §5-6): fog of war, weather fronts, roaming Legendaries, camps, secret
 // paths, callbacks, landmark rooms and the stops of the limited-time events.
 
 import { LANDMARK_STOP, TRAVERSAL } from '../../src/core/traversal';
-import { WANDERER_CHALLENGE, WANDERER_VISIT } from '../../src/core/wanderer';
 import { TREASURE_DIG_EVENT } from '../../src/core/run';
+import { DRAMA_LIBRARY } from '../../src/core/drama/schema';
 import { describe, expect, it } from 'vitest';
-import type { Content } from '../../src/core/contentSchema';
+import type { Content, EventEffect as Effect } from '../../src/core/contentSchema';
 import { addEventStops, chooseEvent, eligibleEvents, stopIsHidden } from '../../src/core/events';
 import { findNode, nextChoices } from '../../src/core/map';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
@@ -228,17 +232,19 @@ describe('secret paths', () => {
 
   it('their choices are locked without the ability and work with it', () => {
     const run = atEvent(newRun(), 'secret-levitate-chasm');
-    expect(() => chooseEvent(content, run, 'test-event', 0)).toThrow(/Levitating/);
+    expect(() => chooseEvent(content, run, 'test-event', 0)).toThrow(/Levitate/);
     setLead(run, 'gastly');
-    const after = chooseEvent(content, run, 'test-event', 0).run;
-    expect(after.stage!.scoutedTo).toBeGreaterThan(0);
+    const result = chooseEvent(content, run, 'test-event', 0);
+    // Catalog Overhaul SF143: floating over finds a random Rare item in the chest.
+    expect(result.success).toBe(true);
+    expect(result.changes.join(' ')).toMatch(/Leftovers|Focus Sash|Life Orb|Choice (Band|Specs|Scarf)/);
   });
 });
 
 describe('follow-up scenes', () => {
   it('a kindness comes back on the next stage as a stop, once', () => {
     const run = newRun();
-    run.story.flags['ev:fed-wild'] = 1;
+    run.story.flags['ev:fed-poochyena'] = 1; // Catalog Overhaul SF63: feeding the thin Poochyena (was `fed-wild`)
     run.stage!.index = 3;
     run.stage!.map.nodes.forEach((n) => (n.sides = []));
     addEventStops(content, run);
@@ -269,10 +275,21 @@ describe('follow-up scenes', () => {
 
 describe('landmarks and dungeons', () => {
   it('a landmark opens its rooms one after another beside the same node', () => {
-    let run = atEvent(newRun(), 'lighthouse-entrance');
-    run = chooseEvent(content, run, 'test-event', 0).run;
+    // The pack's landmarks are pseudo-stage Doors now (Catalog Overhaul; a chain room walks into the Door's map), so the room
+    // mechanism is checked on a test landmark that opens a plain room.
+    const def = structuredClone(content.events.get('lighthouse-entrance')!);
+    def.stop = LANDMARK_STOP;
+    def.id = 'test-landmark';
+    def.pseudo = false;
+    def.choices[0]!.requires = [];
+    def.choices[0]!.branches = [];
+    delete def.choices[0]!.success.battle;
+    def.choices[0]!.success.effects = [{ kind: 'addEvent', eventId: 'fb-last-train-carriage' }];
+    const withRoom = { ...content, events: new Map(content.events).set(def.id, def) };
+    let run = atEvent(newRun(), def.id);
+    run = chooseEvent(withRoom, run, 'test-event', 0).run;
     const here = findNode(run.stage!.map, run.stage!.current!);
-    expect(here.sides.some((s) => s.eventId === 'lighthouse-1' && !s.used)).toBe(true);
+    expect(here.sides.some((s) => s.eventId === 'fb-last-train-carriage' && !s.used)).toBe(true);
   });
 
   it('rooms are never drawn on their own', () => {
@@ -286,28 +303,108 @@ describe('landmarks and dungeons', () => {
 
   it('every room is reached from an event, and every room an event opens exists', () => {
     const opened = new Set<string>();
+    const viaMentor = new Set<string>();
+    // Stops queued some nodes on (`laterEvent`: the Fossil Rush's egg) or placed by code need not be rooms, but they do reach the rooms they are.
+    const queued = new Set<string>();
+    const questOpened = new Set<string>();
+    const retiredOpened = new Set<string>();
+    // Openers: outcome effects, a battle's win and lose effects (a friendly fight's loss still opens its room), choice branches,
+    // and the choices a Remembers variant adds.
     for (const e of content.events.values()) {
-      for (const ch of e.choices) {
-        for (const o of [ch.success, ch.failure]) {
-          for (const ef of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) {
-            if (ef.kind === 'addEvent') opened.add(ef.eventId);
-            if (ef.kind === 'addEventFrom') ef.ids.forEach((i) => opened.add(i));
+      // A retired event (kept for saved runs) isn't checked, but a room it opens still counts as reached (an old save can open it).
+      if (e.disabled) {
+        for (const ch of e.choices) for (const o of [ch.success, ch.failure]) for (const ef of o?.effects ?? []) if (ef.kind === 'addEvent') retiredOpened.add(ef.eventId);
+        continue;
+      }
+      for (const ch of [...e.choices, ...e.remembers.flatMap((v) => v.addChoices)]) {
+        const lists = [...[ch.success, ch.failure].flatMap((o) => [o?.effects ?? [], o?.battle?.win ?? [], o?.battle?.lose ?? [], (o?.battle && 'caught' in o.battle ? o.battle.caught : undefined) ?? []]), ...(ch.branches ?? []).map((b) => b.effects)];
+        // A Greenneedle effect (`gn`) holds more effects: a `when`'s `then`, and a `route`'s `to` (an addEventFrom); a `scene` opens room `key`.
+        const flat = (efs: Effect[]): Effect[] => efs.flatMap((ef) => (ef.kind === 'gn' ? [ef, ...flat([...(ef.then ?? []), ...(ef.to ? [ef.to] : [])] as Effect[])] : [ef]));
+        for (const ef of flat(lists.flat())) {
+          // Catalog Overhaul markets: a stall that stays open after a question opens itself again (not a room: it is drawn on its own
+          // too), and the Game Corner opens its games, which are also drawn on their own (SF91).
+          // An event that opens itself again ("Read it again.", "What's on?") re-shows the same stop; that is not a room.
+          if (ef.kind === 'addEvent' && (ef.eventId === e.id || e.id === 'game-corner') && !content.events.get(ef.eventId)?.room) continue;
+          // Volume III: `{region}` is filled in play (one Offer per region): every region's room counts as opened.
+          if (ef.kind === 'addEvent' && ef.eventId.includes('{region}')) {
+            const [head, tail] = ef.eventId.split('{region}') as [string, string];
+            for (const id of content.events.keys()) if (id.startsWith(head) && id.endsWith(tail)) opened.add(id);
+          } else if (ef.kind === 'addEvent' && ef.eventId !== e.id) opened.add(ef.eventId);
+          if (ef.kind === 'gn' && ef.op === 'scene' && (ef.key !== e.id || content.events.get(ef.key!)?.room)) opened.add(ef.key!); // a scene beside the current node
+          if (ef.kind === 'gn' && ef.op === 'ahead' && ef.key) opened.add(ef.key); // a stop on the nodes just ahead (gn.new.26)
+          if (ef.kind === 'laterEvent') queued.add(ef.eventId);
+          // Catalog Overhaul markets: a prize row that needs its own scene opens it (core/market.ts prize).
+          if (ef.kind === 'market') for (const row of ef.table ?? []) if (row.event) opened.add(row.event);
+          if (ef.kind === 'addEventFrom') ef.ids.forEach((i) => opened.add(i));
+          // Rival questlines (core/rivals/questlines.ts): the first scene whose conditions hold, or stops further along the map.
+          // These may also open a scheduled beat (not a room), so they only count as a way into a room.
+          if (ef.kind === 'rivalQuest') {
+            ef.openFirst?.forEach((i) => questOpened.add(i));
+            ef.ahead?.forEach((a) => questOpened.add(a.event));
+          }
+          // Catalog Overhaul mentors: a shared scene opens the run's mentor's own `mentor-<id>-<part>` (core/mentors/lessons.ts mentorSceneId).
+          // Its Recruit and Story are catalog events it can also open, so these count only as a way in to a room.
+          if (ef.kind === 'mentorScene') for (const m of MENTORS) viaMentor.add(`mentor-${m.id}-${ef.part}`);
+          // Rival questlines (core/rivals/questlines.ts): the first scene whose conditions hold, or stops further along the map.
+          // These may also open a scheduled beat (not a room), so they only count as a way into a room.
+          if (ef.kind === 'rivalQuest') {
+            ef.openFirst?.forEach((i) => questOpened.add(i));
+            ef.ahead?.forEach((a) => questOpened.add(a.event));
           }
         }
       }
     }
+    // Kanto canon: follow-up scenes and road rows are placed by code (core/expansion/canonKantoPlaced.ts).
+    for (const r of [...canonKantoPlaced.followups, ...canonKantoPlaced.routes]) queued.add(r.event);
+
     // Ideas W4: rooms opened by a traversal obstacle, and stops the code places (wanderer, treasure map, landmarks).
     for (const o of TRAVERSAL.obstacles) for (const ef of o.pass) if (ef.kind === 'addEvent') opened.add(ef.eventId);
-    for (const id of [WANDERER_CHALLENGE, WANDERER_VISIT, TREASURE_DIG_EVENT]) opened.add(id);
+    // (The W4 wanderer's two scenes are R13's now, The One Who Follows: they open from the rival questline, not from code.)
+    for (const id of [TREASURE_DIG_EVENT]) opened.add(id);
+    // Catalog Overhaul SF161: a Battle Moment with an after-battle choice opens its room beside the next node (core/drama/events.ts).
+    for (const d of DRAMA_LIBRARY.events) if (d.after) opened.add(d.after);
+    // A game event places its own room on the map (a `placeEvent` modifier, e.g. the Looping Forest).
+    for (const g of content.gameEvents.values()) for (const m of g.modifiers) if (m.kind === 'placeEvent') opened.add(m.eventId);
     for (const e of content.events.values()) if (e.stop === LANDMARK_STOP) opened.add(e.id);
     // Beta 0.7: a pseudo-stage's rooms are the nodes of its own map (core/dungeon/pseudo.ts), entered by walking there.
     for (const r of PSEUDO.records) for (const n of r.nodes) opened.add(`${r.id.replace(/_/g, '-')}-${n.id}`);
+    // Catalog Overhaul: a chain pseudo-stage with a layout (the Evil Team Hideouts) places its rooms by column.
+    for (const c of PSEUDO_CHAINS) for (const col of c.layout ?? []) for (const id of col) opened.add(c.team ? id.replaceAll('{teamId}', c.team) : id);
+    // Catalog Overhaul SF63: the helped rare Pokémon's thanks is queued by code after it strikes (core/events/coHelpers.ts `co:soon`).
+    opened.add('wounded-rare-thanks');
+    // Catalog Overhaul SF73: the Mystery Dungeon's rooms are drawn by code, floor by floor (core/events/coDungeon.ts).
+    for (const id of [...familiesC.dungeon.floors.flat(), familiesC.dungeon.spring, familiesC.dungeon.noShop]) opened.add(id);
     // Beta 0.7 U1: the code places each Ultra Beast Tear (core/ultra/run.ts placeTear).
     for (const id of content.events.keys()) if (id.startsWith('ultra-tear-')) opened.add(id);
     // Beta 0.7: Pidgey's Resolve places its join rooms from code (core/sky/story.ts pushRoom).
     for (const id of content.events.keys()) if (id.startsWith('sky.join.')) opened.add(id);
-    for (const id of opened) expect(content.events.get(id)?.room, id).toBe(true);
-    for (const e of content.events.values()) if (e.room) expect(opened.has(e.id), e.id).toBe(true);
+    // gn.14: the Labyrinth ghost's return is placed by code (core/expansion/canonRun.ts addGhostReturnStop).
+    opened.add('gn-14-return');
+    // gn.16: the Tournament rival's return is placed by code too (addRivalReturnStop).
+    opened.add('gn-16-rival-return');
+    // Rivalry weeks (legends row C): the rival's scene is placed in every pseudo-stage by code (core/co/weeks.ts rivalInPseudo).
+    opened.add('co-week-rival');
+    // gn.60: the Pokémon that followed you walks in beside a rest (core/greenneedle/followed.ts followedRest).
+    opened.add('gn-60-reveal');
+    // Catalog Overhaul: a placed event (core/co/placement.ts) is put on the map at its home step, room or not.
+    for (const id of content.coPlacement?.keys() ?? []) opened.add(id);
+    // gn.29: the lake opens when the Snake game ends (core/greenneedle/snakeEnd.ts psyduckFinish).
+    opened.add('gn-29-lake');
+    // gn.51: the rescued Pokémon's scene opens beside a rest stop (core/greenneedle/smuggling.ts smuggleRest); gn.53: the siege's rescued Pokémon (citysiege.ts sgRest).
+    opened.add('gn-51-rest');
+    opened.add('gn-53-waiting');
+    // gn.62: the prison moves you between its rooms from code (core/greenneedle/prison.ts prNext).
+    // gn.new.03: the Poké Ball's rest and hatch scenes open beside a rest from code (core/greenneedle/ball.ts).
+    opened.add('gn-new-03-rest');
+    opened.add('gn-new-03-hatch');
+    for (const id of ['gn-62-hub', 'gn-62-warden', 'gn-62-warden-bare', 'gn-62-caught', 'gn-62-wing', 'gn-62-cell-room']) opened.add(id);
+    // Damian's "Go again." (gn.05) opens his next meeting, an ordinary drawn event, at once; anything else opened must be a room.
+    const drawnToo = new Set(['gn-05-barn', 'gn-05-hall', 'gn-05-gym']);
+    // Row 17: a rest moment opens its camp scene beside the stop (core/moments/runMoments.ts openEvent).
+    for (const m of POKEMON_MOMENTS) if (m.effect?.openEvent) opened.add(m.effect.openEvent);
+    for (const id of opened) if (!content.coPlacement?.has(id) && !drawnToo.has(id)) expect(content.events.get(id)?.room, id).toBe(true);
+    // A retired room (Catalog Overhaul REMOVE: kept for saved runs, never drawn) need not be reachable.
+    for (const e of content.events.values()) if (e.room && !e.disabled) expect(opened.has(e.id) || retiredOpened.has(e.id) || viaMentor.has(e.id) || queued.has(e.id) || questOpened.has(e.id), e.id).toBe(true);
   });
 
   it('a Mystery Dungeon floor picks its next room from the floor below', () => {

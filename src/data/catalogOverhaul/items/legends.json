@@ -1,0 +1,24 @@
+[
+  {
+    "id": "calming-balm",
+    "name": "Calming Balm",
+    "description": "Thrown at an Alpha, it fills one step of its Calm bar. Does nothing in an ordinary battle. Used up.",
+    "category": "charm",
+    "iconAssetId": "item.gen5/heal-powder",
+    "usableInBattle": true,
+    "usableOutside": false,
+    "target": "enemy",
+    "effect": { "kind": "balm" }
+  },
+  {
+    "id": "az-flute",
+    "name": "AZ's Flute",
+    "description": "One song, played once: it fills an Alpha's whole Calm bar. Used up.",
+    "category": "charm",
+    "iconAssetId": "item.gen5/azure-flute",
+    "usableInBattle": true,
+    "usableOutside": false,
+    "target": "enemy",
+    "effect": { "kind": "balm", "full": true }
+  }
+]

@@ -1,0 +1,1575 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-new-01-open",
+   "name": "The Eevee Who Couldn't Choose",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-on",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "eevee",
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "A crossroads with seven roads. An Eevee sits in the exact middle, turning in a slow circle.\n\n*It looks down each road in turn. Every road gets the same long look.*\n\n*It looks at you. Then it gets up, and follows, ten paces back.*\n\n**A carter, passing:** \"That one's been there since spring. Can't make its mind up. You've given it an eighth road, I suppose.\"",
+   "choices": [
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. Behind you, quick small steps keep time with yours, always ten paces back.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "eeveeStart"
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b0",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "eevee-at"
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-b1",
+   "name": "The Eevee Who Couldn't Choose: Fisherman",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-b1",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "eevee-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "pokemon": "eevee",
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "The Eevee is ten paces back, as always. You can hear it padding along after you, and every time you look round it stops and looks away.\n\nThen someone steps out of the roadside, and stops dead, and looks at it for a long moment.\n\n**Fisherman:** \"It'd love the water. Look at it looking. Here: a Water Stone. No charge.\"\n\n*The Eevee looks at you. It always looks at you.*",
+   "choices": [
+    {
+     "label": "Nod.",
+     "success": {
+      "text": "He holds out the Water Stone, wet and blue. The Eevee sniffs it, and steps back anyway. The stone goes in your bag.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "water-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-nod",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake my head.",
+     "success": {
+      "text": "The fisherman nods, a little hurt, and steps back to let you pass. The Eevee follows you, ten paces back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-refused-fisherman",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shrug.",
+     "success": {
+      "text": "The Eevee shrugs too, in its way: one small shoulder, a flick of the ears. Then it pads on after you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-shrug",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b1",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-b2",
+   "name": "The Eevee Who Couldn't Choose: Street magician",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-b2",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "eevee-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "eevee-stage"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.firebreather"
+    ],
+    "pokemon": "eevee",
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "The Eevee is ten paces back, as always. You can hear it padding along after you, and every time you look round it stops and looks away.\n\nThen someone steps out of the roadside, and stops dead, and looks at it for a long moment.\n\n**Street magician:** \"A little fire in it! The crowds would adore it. Here, take this, with my compliments.\"\n\n*The Eevee looks at you. It always looks at you.*",
+   "choices": [
+    {
+     "label": "Nod.",
+     "success": {
+      "text": "She opens her hand, and a Fire Stone sits in it as if it had always been there. The Eevee sniffs it, and steps back anyway. The stone goes in your bag.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "fire-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-nod",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake my head.",
+     "success": {
+      "text": "The street magician nods, a little hurt, and steps back to let you pass. The Eevee follows you, ten paces back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-refused-magician",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shrug.",
+     "success": {
+      "text": "The Eevee shrugs too, in its way: one small shoulder, a flick of the ears. Then it pads on after you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-shrug",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-b3",
+   "name": "The Eevee Who Couldn't Choose: Electrician",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-b3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "eevee-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "eevee-stage"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "pokemon": "eevee",
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "The Eevee is ten paces back, as always. You can hear it padding along after you, and every time you look round it stops and looks away.\n\nThen someone steps out of the roadside, and stops dead, and looks at it for a long moment.\n\n**Electrician:** \"Quick thing like that? It wants to be quicker. Take a Thunder Stone. I've got spares.\"\n\n*The Eevee looks at you. It always looks at you.*",
+   "choices": [
+    {
+     "label": "Nod.",
+     "success": {
+      "text": "He taps the Thunder Stone against his glove, and it crackles. The Eevee sniffs it, and steps back anyway. The stone goes in your bag.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "thunder-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-nod",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake my head.",
+     "success": {
+      "text": "The electrician nods, a little hurt, and steps back to let you pass. The Eevee follows you, ten paces back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-refused-electrician",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shrug.",
+     "success": {
+      "text": "The Eevee shrugs too, in its way: one small shoulder, a flick of the ears. Then it pads on after you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-shrug",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b3",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-b4",
+   "name": "The Eevee Who Couldn't Choose: Night-shift nurse",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-b4",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "eevee-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "eevee-stage"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "pokemon": "eevee",
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "The Eevee is ten paces back, as always. You can hear it padding along after you, and every time you look round it stops and looks away.\n\nThen someone steps out of the roadside, and stops dead, and looks at it for a long moment.\n\n**Night-shift nurse:** \"It sits with my patients after dark. It's a night creature. I can tell. Please, take this.\"\n\n*The Eevee looks at you. It always looks at you.*",
+   "choices": [
+    {
+     "label": "Nod.",
+     "success": {
+      "text": "She ties a ribbon that holds the moonlight round your wrist. The Eevee sniffs it, and steps back anyway. The ribbon stays; it makes you feel a little closer to your team (Bond +1).",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-nod",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b4",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake my head.",
+     "success": {
+      "text": "The night-shift nurse nods, a little hurt, and steps back to let you pass. The Eevee follows you, ten paces back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-refused-nurse",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b4",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shrug.",
+     "success": {
+      "text": "The Eevee shrugs too, in its way: one small shoulder, a flick of the ears. Then it pads on after you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-shrug",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b4",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-b5",
+   "name": "The Eevee Who Couldn't Choose: Gardener",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-b5",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "eevee-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "eevee-stage"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "pokemon": "eevee",
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "The Eevee is ten paces back, as always. You can hear it padding along after you, and every time you look round it stops and looks away.\n\nThen someone steps out of the roadside, and stops dead, and looks at it for a long moment.\n\n**Gardener:** \"It sleeps in my beds. It's half plant already. A Leaf Stone would do it no harm at all.\"\n\n*The Eevee looks at you. It always looks at you.*",
+   "choices": [
+    {
+     "label": "Nod.",
+     "success": {
+      "text": "She presses the Leaf Stone into your palm, still smelling of soil. The Eevee sniffs it, and steps back anyway. The stone goes in your bag.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "leaf-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-nod",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b5",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake my head.",
+     "success": {
+      "text": "The gardener nods, a little hurt, and steps back to let you pass. The Eevee follows you, ten paces back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-refused-gardener",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b5",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shrug.",
+     "success": {
+      "text": "The Eevee shrugs too, in its way: one small shoulder, a flick of the ears. Then it pads on after you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-shrug",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b5",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-b6",
+   "name": "The Eevee Who Couldn't Choose: Mountain guide",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-b6",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "eevee-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "eevee-stage"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "pokemon": "eevee",
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "The Eevee is ten paces back, as always. You can hear it padding along after you, and every time you look round it stops and looks away.\n\nThen someone steps out of the roadside, and stops dead, and looks at it for a long moment.\n\n**Mountain guide:** \"It doesn't feel the cold. Have you noticed? Here: an Ice Stone. Cold as the pass, and no use to me.\"\n\n*The Eevee looks at you. It always looks at you.*",
+   "choices": [
+    {
+     "label": "Nod.",
+     "success": {
+      "text": "He hands over the Ice Stone with a gloved hand, and frost clings to it. The Eevee sniffs it, and steps back anyway. The stone goes in your bag.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "ice-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-nod",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b6",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake my head.",
+     "success": {
+      "text": "The mountain guide nods, a little hurt, and steps back to let you pass. The Eevee follows you, ten paces back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-refused-guide",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b6",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shrug.",
+     "success": {
+      "text": "The Eevee shrugs too, in its way: one small shoulder, a flick of the ears. Then it pads on after you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-shrug",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b6",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-b7",
+   "name": "The Eevee Who Couldn't Choose: Ribbon-maker",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-b7",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "eevee-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "eevee-stage"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.lady"
+    ],
+    "pokemon": "eevee",
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "The Eevee is ten paces back, as always. You can hear it padding along after you, and every time you look round it stops and looks away.\n\nThen someone steps out of the roadside, and stops dead, and looks at it for a long moment.\n\n**Ribbon-maker:** \"I don't want to change it. I just made it this.\"\n\n*The Eevee looks at you. It always looks at you.*",
+   "choices": [
+    {
+     "label": "Nod.",
+     "success": {
+      "text": "She holds out a ribbon she made herself, no stone, no promise. The Eevee sniffs it, and steps back anyway. You take the ribbon (Bond +1).",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-nod",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b7",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shake my head.",
+     "success": {
+      "text": "The ribbon-maker nods, a little hurt, and steps back to let you pass. The Eevee follows you, ten paces back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-refused-ribbon",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b7",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shrug.",
+     "success": {
+      "text": "The Eevee shrugs too, in its way: one small shoulder, a flick of the ears. Then it pads on after you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-shrug",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "eevee-b7",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "eevee-stage"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-end",
+   "name": "The Eevee Who Couldn't Choose: The Last Rest",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-on",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-done",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "thisRegion",
+     "key": "eevee-at"
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "eevee-stage"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "shrugged",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "eevee-shrug",
+       "atLeast": 3,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "eevee-nod",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "*You shrugged every time, and it shrugged back. It looks at you now like someone who has found a friend.*"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "eevee",
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "At the last rest of the region, the fire is low and the road ahead is quiet.\n\n*The Eevee walks into the firelight and sits down in front of you.*\n\nIt looks at you. It looks at the fire. It looks at all seven roads behind you, and it doesn't look away from any of them.\n\n*It isn't asking any more.*",
+   "choices": [
+    {
+     "label": "Hold out a hand.",
+     "success": {
+      "text": "It steps into your hand, warm and light, and something in it settles. The answer was never in what you said. It was in the road.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "eeveeEnd"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "eevee-form",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "umbreon"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 30
+         }
+        ],
+        "text": "Moon-rings bloom across it like frost on a window. Its eyes go red and steady. It is **Umbreon**, a night creature after all."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "eevee-form",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "espeon"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 30
+         }
+        ],
+        "text": "Its fur lightens to the colour of a good morning, and a small red gem opens on its brow. It is **Espeon**, and it already knew what you were going to do."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "eevee-form",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "sylveon"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 30
+         }
+        ],
+        "text": "Pale ribbons unfurl from its neck and wind around your wrist. It is **Sylveon**, glad to be here, and so is everyone you have healed."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "eevee-form",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "vaporeon"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 30
+         }
+        ],
+        "text": "Its skin goes cool and smooth, and a fin slips out along its back. It is **Vaporeon**, and it has been looking at the water all along."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "eevee-form",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "jolteon"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 30
+         }
+        ],
+        "text": "Its fur stands up in a thousand bright spikes and the air round it crackles. It is **Jolteon**, as quick as the fights you ended."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "eevee-form",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "flareon"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 30
+         }
+        ],
+        "text": "Warmth rolls off it in a wave, and a great fire-coloured ruff flares round its neck. It is **Flareon**, and the firelight loves it."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "eevee-form",
+        "min": 7,
+        "max": 7,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "leafeon"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 30
+         }
+        ],
+        "text": "Leaves unfold along its tail and its ears, and it smells of cut grass. It is **Leafeon**, half plant, just as the gardener said."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "eevee-form",
+        "min": 8,
+        "max": 8,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "glaceon"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 30
+         }
+        ],
+        "text": "Frost crawls over its coat and its ears turn into crystal. It is **Glaceon**, and it doesn't feel the cold at all."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "eevee-form",
+        "min": 9,
+        "max": 9,
+        "then": [
+         {
+          "kind": "join",
+          "shadow": false,
+          "species": [
+           "eevee"
+          ],
+          "types": [],
+          "levelBonus": 0,
+          "shinyMultiplier": 1,
+          "friendship": 30,
+          "ability": "open-road"
+         }
+        ],
+        "text": "It stays an **Eevee**. It never needed the choice. Its first step each fight is a good one, and it knows it (Open Road)."
+       },
+       {
+        "kind": "moment",
+        "text": "The Eevee who couldn't choose chose, by watching how you walked.",
+        "importance": 70
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-after-fisherman",
+   "name": "The Eevee Who Couldn't Choose: The Fisherman, Later",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-refused-fisherman",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-after-fisherman",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "eevee-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fisherman"
+    ],
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "A man at a harbour wall, a net across his knees, and a small blue Pokémon asleep in a bucket beside him.\n\n**Fisherman:** \"Water type. Didn't need a stone. Turns out I'd been looking for the wrong kind of thing.\"",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "You wave. He holds up his catch of the day, and grins like a man with nothing left to prove.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-after-fisherman",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-after-magician",
+   "name": "The Eevee Who Couldn't Choose: The Street Magician, Later",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-refused-magician",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-after-magician",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "eevee-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.firebreather"
+    ],
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "A crowd in a square, and at the middle of it the street magician, a small bright Pokémon on her shoulder.\n\n**Street magician:** \"Not the one I wanted. The one I got. And the crowds adore *her.* Hello again!\"",
+   "choices": [
+    {
+     "label": "Clap.",
+     "success": {
+      "text": "You clap with everyone else. She bows to you a little deeper than to the rest.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-after-magician",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-after-electrician",
+   "name": "The Eevee Who Couldn't Choose: The Electrician, Later",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-refused-electrician",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-after-electrician",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "eevee-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.worker_m"
+    ],
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "A lamp-post with a ladder against it, a coil of wire, and a small yellow Pokémon holding the end of it.\n\n**Electrician:** \"Quick enough. Quick enough as it is, it turns out. Don't know why I ever thought it needed more.\"",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "He waves a screwdriver at you. The little one sneezes sparks, and the lamp flickers on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-after-electrician",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-after-nurse",
+   "name": "The Eevee Who Couldn't Choose: The Night-Shift Nurse, Later",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-refused-nurse",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-after-nurse",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "eevee-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.fairy_tale_girl"
+    ],
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "A quiet clinic at dusk, and a nurse changing shifts, a soft grey Pokémon curled around her ankle.\n\n**Night-shift nurse:** \"It sits with my patients after dark now. Not the one I wanted. A good one, though.\"",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "She lifts a hand in the doorway. The lamps go on one by one behind her.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-after-nurse",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-after-gardener",
+   "name": "The Eevee Who Couldn't Choose: The Gardener, Later",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-refused-gardener",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-after-gardener",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "eevee-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.aroma_lady"
+    ],
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "A row of beds in a town square, freshly dug, and a gardener with a small green Pokémon scratching in the soil.\n\n**Gardener:** \"It sleeps in my beds. Different Pokémon, same habit. I think they all do, in the end.\"",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "She waves a trowel. The seedling Pokémon looks up with soil on its nose.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-after-gardener",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-after-guide",
+   "name": "The Eevee Who Couldn't Choose: The Mountain Guide, Later",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-refused-guide",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-after-guide",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "eevee-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.hiker"
+    ],
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "A signpost at the edge of a town, a heavy pack, and a broad-shouldered guide with a sturdy Pokémon at his heel.\n\n**Mountain guide:** \"Doesn't feel the cold either. I've stopped checking. Funny how they find you, the cold-proof ones.\"",
+   "choices": [
+    {
+     "label": "Wave.",
+     "success": {
+      "text": "He raises one gloved hand. His partner stamps once, like a signature.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-after-guide",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-01-after-ribbon",
+   "name": "The Eevee Who Couldn't Choose: The Ribbon-Maker, Later",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Relationship"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "eevee-refused-ribbon",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "eevee-after-ribbon",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "eevee-at"
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.lady"
+    ],
+    "tint": "#b58a5a",
+    "effect": "none"
+   },
+   "intro": "A little stall hung with ribbons, and the ribbon-maker behind it, a quiet Pokémon draped in a scrap of silk.\n\n**Ribbon-maker:** \"You turned it down, and quite right. I made something else instead. Here: another. For the road.\"",
+   "choices": [
+    {
+     "label": "Accept the ribbon.",
+     "success": {
+      "text": "She ties it on herself, without asking, with a bow neat as a promise (Bond +1).",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "eevee-after-ribbon",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

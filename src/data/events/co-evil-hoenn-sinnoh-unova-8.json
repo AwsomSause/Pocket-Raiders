@@ -1,0 +1,1611 @@
+{
+ "catalogOverhaul": "evil-hoenn-sinnoh-unova",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "mg-final-choice",
+   "name": "The Seafloor Cavern",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.archie-gen6"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "The Seafloor Cavern, in the stolen submarine. Both teams arrive at once: Magma for Groudon, Aqua for Kyogre. Black water. The sub's lamp finds a wall of red stone that is breathing. From the next chamber, a second, slower breath. The leader stands at the edge with the orb. Across the cavern, the other leader, with the other team, has just walked in. Maxie: \"Archie. You're late.\" Archie: \"Maxie. You're wrong.\" Your leader holds the orb out, to you. Maxie: \"My hands aren't steady. Yours are. Wake it.\" Everything stops. Ottoway, Tabitha, the squad, the other team: all of them look at you.",
+   "choices": [
+    {
+     "label": "Carry out the plan.",
+     "success": {
+      "text": "You lift the orb. It's warm, and then it's hot. Maxie, very quietly: \"Thank you.\" The wall opens its eyes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-final-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-plan-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn on the team.",
+     "success": {
+      "text": "You close your hand over the orb, and step back from the edge. Maxie: \"...What are you doing?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-turn-lines"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Side with the other team.",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-double-agent",
+        "hoenn-freed-spy",
+        "hoenn-counter-heard"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You walk across the cavern with the orb, and put it in Archie's hand. Maxie: \"After everything I told you.\" Archie, astonished: \"...Well. I didn't see that in the tide.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-final-cross",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-cross-run"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it all.",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "magma",
+       "rank": 6
+      },
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-squad-hard",
+        "hoenn-lt-knows"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You take the orb. And don't wake anything. And don't give it back. \"Neither of you. Give me the other one.\" Nobody moves. Quince, from the back: \"...You heard the boss.\" The squad steps forward. Then grunts in both colours, who've watched their leaders nearly end the world, and are looking for someone who looks sure.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-final-all",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-all-battle"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "same",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-same-story",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Aqua grunt you asked, in the storeroom, is in the other line. It's the same story, in the other colour."
+    }
+   ]
+  },
+  {
+   "id": "mg-plan-wake",
+   "name": "The Awakening",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6"
+    ],
+    "pokemon": "groudon",
+    "tint": "#14202e",
+    "effect": "fire"
+   },
+   "intro": "Groudon wakes in its Primal form and leaves through the cavern roof. Within one node, the region's weather is fixed: Desolate Land: harsh sun, and Water moves fail. It stays until the story ends.",
+   "choices": [
+    {
+     "label": "(Surface.)",
+     "success": {
+      "text": "The region map redraws: the coast dries to salt flats. Towns you've visited are named as they go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-weather-magma",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-plan-cost"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "wrong",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-orb-wrong",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The orb doesn't control what Maxie woke. It turns on the team first. Tabitha is hurt shielding grunts; they recover. The awakening is shorter by one stage, and everyone knows what you did, and that it didn't help."
+    }
+   ]
+  },
+  {
+   "id": "mg-plan-cost",
+   "name": "The Cost",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.archie-gen6"
+    ],
+    "tint": "#14202e",
+    "effect": "rain"
+   },
+   "intro": "Maxie, watching the sea steam: \"The margin of error. I had it at four per cent. ...It was never four per cent.\" Then the second leader uses the second orb, in desperation. The two meet at Sootopolis.",
+   "choices": [
+    {
+     "label": "(Climb Sky Pillar.)",
+     "success": {
+      "text": "With both leaders, both teams, and whoever is left, you climb. Rayquaza descends, and the two go back to sleep.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mg-plan-after"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "warned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-leader-warned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Maxie: \"You told me.\" They're the first to climb Sky Pillar."
+    }
+   ]
+  },
+  {
+   "id": "mg-plan-after",
+   "name": "Carry Out the Plan",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "Hoenn's Reputation drops to nothing. The team disbands. You keep the rank title as a scar: people in Hoenn use it for the rest of the run.",
+   "choices": [
+    {
+     "label": "(Answer to \"Right Hand.\")",
+     "success": {
+      "text": "It sticks.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-title-scar",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "stayed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-bunkmate-stayed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ottoway's valley was among the towns. They don't speak to you again until the very end, where they say one thing: \"You could've said no.\""
+    }
+   ]
+  },
+  {
+   "id": "mg-turn-lines",
+   "name": "Turn On the Team",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.tabitha"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "Tabitha, if their doubts have run their course: \"I'm with them.\"",
+   "choices": [
+    {
+     "label": "\"Checking your working.\"",
+     "success": {
+      "text": "Whoever stands with you fights beside you: Ottoway, if they follow; Tabitha, if their doubts have run their course; the squad, if you kept it decent; your rival, if they were your contact, who comes down the sub's hatch at the worst possible moment with a sandwich.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mg-turn-battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Keeping my promise to the crew.\"",
+     "success": {
+      "text": "Whoever stands with you fights beside you: Ottoway, if they follow; Tabitha, if their doubts have run their course; the squad, if you kept it decent; your rival, if they were your contact, who comes down the sub's hatch at the worst possible moment with a sandwich.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mg-turn-battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Saying no.\"",
+     "success": {
+      "text": "Whoever stands with you fights beside you: Ottoway, if they follow; Tabitha, if their doubts have run their course; the squad, if you kept it decent; your rival, if they were your contact, who comes down the sub's hatch at the worst possible moment with a sandwich.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mg-turn-battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-turn-battle",
+   "name": "The Battle",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "You against Maxie, in the cavern.",
+   "choices": [
+    {
+     "label": "Battle, with a partner.",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-bunkmate-follows",
+        "hoenn-squad-decent",
+        "hoenn-rival-contact",
+        "hoenn-lt-knows"
+       ]
+      }
+     ],
+     "success": {
+      "text": "They're beside you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.maxie-gen6",
+       "team": [
+        "camerupt",
+        "mightyena",
+        "crobat",
+        "weezing",
+        "torkoal"
+       ],
+       "format": "doubles",
+       "name": "Maxie",
+       "ally": "numel",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mg-turn-other"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Battle, alone.",
+     "success": {
+      "text": "Nobody stands with you. It's one against Maxie and two Admins in a row.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.maxie-gen6",
+       "team": [
+        "camerupt",
+        "mightyena",
+        "crobat",
+        "weezing",
+        "torkoal"
+       ],
+       "name": "Maxie",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mg-turn-other"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-turn-other",
+   "name": "The Other Orb",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.maxie-gen6"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "Team Aqua still has its orb. Archie raises it. Maxie, on the ground: \"Don't. ...Look at me. Look at what it's done to me, and I didn't even use it.\"",
+   "choices": [
+    {
+     "label": "(Let Archie decide.)",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-freed-spy",
+        "hoenn-same-story"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Archie lowers it. You showed their team a kindness once, and they remember it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "mg-turn-pyre"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle Archie.",
+     "success": {
+      "text": "Archie doesn't lower it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.archie-gen6",
+       "team": [
+        "sharpedo",
+        "mightyena",
+        "crobat",
+        "muk",
+        "walrein"
+       ],
+       "name": "Archie",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mg-turn-pyre"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-turn-pyre",
+   "name": "The Orbs Go Home",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman",
+     "boss.npc_lady"
+    ],
+    "tint": "#14202e",
+    "effect": "fog"
+   },
+   "intro": "You carry both orbs back up Mt. Pyre. The old woman: \"You came back and told us. Nobody ever does.\" Both teams disband into what they become: Maxie teaches geology; Archie runs a sea-rescue crew. Ottoway goes home with a job to do.",
+   "choices": [
+    {
+     "label": "(Sit on the bench a while.)",
+     "success": {
+      "text": "Two Signs: Groudon's and Kyogre's.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-turned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orbs-safe",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-cross-run",
+   "name": "The Other Plan",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.archie-gen6"
+    ],
+    "pokemon": "kyogre",
+    "tint": "#14202e",
+    "effect": "rain"
+   },
+   "intro": "The other plan runs instead. Kyogre wakes. Everything happens, in the other colour. Sootopolis, and Sky Pillar, follow. Team Aqua's leader doesn't trust a turncoat: your rank is honorary. First Mate in name; no squad; no vote.",
+   "choices": [
+    {
+     "label": "(Climb Sky Pillar.)",
+     "success": {
+      "text": "Rayquaza descends. The two go back to sleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-weather-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "mg-cross-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-cross-after",
+   "name": "Side With the Other Team",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.tabitha",
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "You're a hero to one team and a traitor to the other. Team Magma hunts you for the rest of Hoenn, led by Tabitha. Ottoway, across a battlefield: \"I'd have followed you anywhere. You went somewhere I couldn't.\"",
+   "choices": [
+    {
+     "label": "(Keep walking.)",
+     "success": {
+      "text": "Reputation: nothing on one side of the map, good on the other.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-crossed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-hunted-magma",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "double",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Shelly: \"You were ours from the day you gave Tolliver that water.\" Team Aqua trusts you fully, and Team Magma's ambushes are led by someone who is crying."
+    }
+   ]
+  },
+  {
+   "id": "mg-all-battle",
+   "name": "Two Leaders",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.archie-gen6"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "Maxie and Archie, who've hated each other for twenty years, stand side by side against you. Maxie: \"Archie. I find I prefer you.\" Archie: \"Ha! Don't make it weird.\" The squad holds off the Admins.",
+   "choices": [
+    {
+     "label": "Battle both.",
+     "success": {
+      "text": "A double battle against both leaders.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.maxie-gen6",
+       "team": [
+        "camerupt",
+        "sharpedo",
+        "crobat",
+        "mightyena",
+        "torkoal",
+        "walrein"
+       ],
+       "format": "doubles",
+       "name": "Maxie and Archie",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "mg-all-gantry"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "mg-all-gantry",
+   "name": "The Gantry",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/magma_grunt_m",
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "You hold both orbs. Both legends stir, and wait. You can feel them: one in each hand, heavy as a held breath. Both teams are yours. Red and blue, in one hall, looking up at the gantry where Maxie stood on day one. You're standing on it now. What is the team for?",
+   "choices": [
+    {
+     "label": "\"Put the orbs back. We guard them now.\"",
+     "success": {
+      "text": "The merged team becomes a watch on Mt. Pyre and the cavern. The old couple get their first day off in sixty years.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-took-all",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-guard",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-hoenn",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"We keep them. Nobody wakes anything unless I say.\"",
+     "success": {
+      "text": "You rule Hoenn's weather by threat. Every town pays \"weather insurance.\" Nobody looks you in the eye. Your rival's last battle of the run is fought to take the orbs away.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-took-all",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-rule",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-hoenn",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Look up. There's a third one.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sky-draconid-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The merged team becomes Team Sky, with every grunt of both teams in it. A hundred recruits instead of three.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-took-all",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-sky",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-founded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-from-all",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "buddy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-bunkmate-follows",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Ottoway: \"So what do we do? ...Boss.\""
+    },
+    {
+     "id": "rival",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-rival-contact",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your rival, from the door: \"I liked you better with the sandwich.\""
+    },
+    {
+     "id": "norman",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-norman-belong",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Norman: \"Dinner's still on. Come as you are, or not at all.\""
+    }
+   ]
+  },
+  {
+   "id": "aq-final-choice",
+   "name": "The Seafloor Cavern",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.maxie-gen6"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "The Seafloor Cavern, in the stolen submarine. Both teams arrive at once: Magma for Groudon, Aqua for Kyogre. Black water. The sub's lamp finds a wall of blue stone that is breathing. From the next chamber, a second, slower breath. The leader stands at the edge with the orb. Across the cavern, the other leader, with the other team, has just walked in. Maxie: \"Archie. You're late.\" Archie: \"Maxie. You're wrong.\" Your leader holds the orb out, to you. Archie: \"My hands aren't steady. Yours are. Wake it.\" Everything stops. Marisca, Shelly, the squad, the other team: all of them look at you.",
+   "choices": [
+    {
+     "label": "Carry out the plan.",
+     "success": {
+      "text": "You lift the orb. It's warm, and then it's hot. Archie, very quietly: \"Thank you.\" The wall opens its eyes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-final-plan",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-plan-wake"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Turn on the team.",
+     "success": {
+      "text": "You close your hand over the orb, and step back from the edge. Archie: \"...What are you doing?\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-turn-lines"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Side with the other team.",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-double-agent",
+        "hoenn-freed-spy",
+        "hoenn-counter-heard"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You walk across the cavern with the orb, and put it in Maxie's hand. Archie: \"After everything I told you.\" Maxie, astonished: \"...Well. I didn't see that in the tide.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-final-cross",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-cross-run"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Take it all.",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "aqua",
+       "rank": 6
+      },
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-squad-hard",
+        "hoenn-lt-knows"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You take the orb. And don't wake anything. And don't give it back. \"Neither of you. Give me the other one.\" Nobody moves. Quince, from the back: \"...You heard the boss.\" The squad steps forward. Then grunts in both colours, who've watched their leaders nearly end the world, and are looking for someone who looks sure.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-final-all",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-all-battle"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "same",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-same-story",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Magma grunt you asked, in the storeroom, is in the other line. It's the same story, in the other colour."
+    }
+   ]
+  },
+  {
+   "id": "aq-plan-wake",
+   "name": "The Awakening",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.archie-gen6"
+    ],
+    "pokemon": "kyogre",
+    "tint": "#14202e",
+    "effect": "rain"
+   },
+   "intro": "Kyogre wakes in its Primal form and leaves through the cavern roof. Within one node, the region's weather is fixed: Primordial Sea: heavy rain, and Fire moves fail. It stays until the story ends.",
+   "choices": [
+    {
+     "label": "(Surface.)",
+     "success": {
+      "text": "The region map redraws: the lowlands go under. Towns you've visited are named as they go.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-weather-aqua",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-plan-cost"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "wrong",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-orb-wrong",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The orb doesn't control what Archie woke. It turns on the team first. Shelly is hurt shielding grunts; they recover. The awakening is shorter by one stage, and everyone knows what you did, and that it didn't help."
+    }
+   ]
+  },
+  {
+   "id": "aq-plan-cost",
+   "name": "The Cost",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.maxie-gen6"
+    ],
+    "tint": "#14202e",
+    "effect": "rain"
+   },
+   "intro": "Archie, watching Slateport's roofs go under: \"It was meant to stop at the shoreline. I told it to stop. It's not listening.\" Then the second leader uses the second orb, in desperation. The two meet at Sootopolis.",
+   "choices": [
+    {
+     "label": "(Climb Sky Pillar.)",
+     "success": {
+      "text": "With both leaders, both teams, and whoever is left, you climb. Rayquaza descends, and the two go back to sleep.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq-plan-after"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "warned",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-leader-warned",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Archie: \"You told me.\" They're the first to climb Sky Pillar."
+    }
+   ]
+  },
+  {
+   "id": "aq-plan-after",
+   "name": "Carry Out the Plan",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "Hoenn's Reputation drops to nothing. The team disbands. You keep the rank title as a scar: people in Hoenn use it for the rest of the run.",
+   "choices": [
+    {
+     "label": "(Answer to \"First Mate.\")",
+     "success": {
+      "text": "It sticks.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-plan",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-title-scar",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "stayed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-bunkmate-stayed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Marisca's harbour was among the towns. They don't speak to you again until the very end, where they say one thing: \"You could've said no.\""
+    }
+   ]
+  },
+  {
+   "id": "aq-turn-lines",
+   "name": "Turn On the Team",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.shelly"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "Shelly, if their doubts have run their course: \"I'm with them.\"",
+   "choices": [
+    {
+     "label": "\"Checking your working.\"",
+     "success": {
+      "text": "Whoever stands with you fights beside you: Marisca, if they follow; Shelly, if their doubts have run their course; the squad, if you kept it decent; your rival, if they were your contact, who comes down the sub's hatch at the worst possible moment with a sandwich.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq-turn-battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Keeping my promise to the crew.\"",
+     "success": {
+      "text": "Whoever stands with you fights beside you: Marisca, if they follow; Shelly, if their doubts have run their course; the squad, if you kept it decent; your rival, if they were your contact, who comes down the sub's hatch at the worst possible moment with a sandwich.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq-turn-battle"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Saying no.\"",
+     "success": {
+      "text": "Whoever stands with you fights beside you: Marisca, if they follow; Shelly, if their doubts have run their course; the squad, if you kept it decent; your rival, if they were your contact, who comes down the sub's hatch at the worst possible moment with a sandwich.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq-turn-battle"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-turn-battle",
+   "name": "The Battle",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.archie-gen6"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "You against Archie, in the cavern.",
+   "choices": [
+    {
+     "label": "Battle, with a partner.",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-bunkmate-follows",
+        "hoenn-squad-decent",
+        "hoenn-rival-contact",
+        "hoenn-lt-knows"
+       ]
+      }
+     ],
+     "success": {
+      "text": "They're beside you.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.archie-gen6",
+       "team": [
+        "sharpedo",
+        "mightyena",
+        "crobat",
+        "muk",
+        "walrein"
+       ],
+       "format": "doubles",
+       "name": "Archie",
+       "ally": "carvanha",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "aq-turn-other"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Battle, alone.",
+     "success": {
+      "text": "Nobody stands with you. It's one against Archie and two Admins in a row.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.archie-gen6",
+       "team": [
+        "sharpedo",
+        "mightyena",
+        "crobat",
+        "muk",
+        "walrein"
+       ],
+       "name": "Archie",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "aq-turn-other"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-turn-other",
+   "name": "The Other Orb",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6",
+     "boss.archie-gen6"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "Team Magma still has its orb. Maxie raises it. Archie, on the ground: \"Don't. ...Look at me. Look at what it's done to me, and I didn't even use it.\"",
+   "choices": [
+    {
+     "label": "(Let Maxie decide.)",
+     "requires": [
+      {
+       "kind": "anyFlag",
+       "keys": [
+        "hoenn-freed-spy",
+        "hoenn-same-story"
+       ]
+      }
+     ],
+     "success": {
+      "text": "Maxie lowers it. You showed their team a kindness once, and they remember it.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "aq-turn-pyre"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Battle Maxie.",
+     "success": {
+      "text": "Maxie doesn't lower it.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.maxie-gen6",
+       "team": [
+        "camerupt",
+        "mightyena",
+        "crobat",
+        "weezing",
+        "torkoal"
+       ],
+       "name": "Maxie",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "aq-turn-pyre"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-turn-pyre",
+   "name": "The Orbs Go Home",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.npc_gentleman",
+     "boss.npc_lady"
+    ],
+    "tint": "#14202e",
+    "effect": "fog"
+   },
+   "intro": "You carry both orbs back up Mt. Pyre. The old woman: \"You came back and told us. Nobody ever does.\" Both teams disband into what they become: Maxie teaches geology; Archie runs a sea-rescue crew. Marisca goes home with a job to do.",
+   "choices": [
+    {
+     "label": "(Sit on the bench a while.)",
+     "success": {
+      "text": "Two Signs: Groudon's and Kyogre's.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-turned",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-orbs-safe",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-cross-run",
+   "name": "The Other Plan",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.maxie-gen6"
+    ],
+    "pokemon": "groudon",
+    "tint": "#14202e",
+    "effect": "rain"
+   },
+   "intro": "The other plan runs instead. Groudon wakes. Everything happens, in the other colour. Sootopolis, and Sky Pillar, follow. Team Magma's leader doesn't trust a turncoat: your rank is honorary. Right Hand in name; no squad; no vote.",
+   "choices": [
+    {
+     "label": "(Climb Sky Pillar.)",
+     "success": {
+      "text": "Rayquaza descends. The two go back to sleep.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "hoenn-weather-magma",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "aq-cross-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-cross-after",
+   "name": "Side With the Other Team",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.shelly",
+     "trainer.pr/aqua_grunt_m"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "You're a hero to one team and a traitor to the other. Team Aqua hunts you for the rest of Hoenn, led by Shelly. Marisca, across a battlefield: \"I'd have followed you anywhere. You went somewhere I couldn't.\"",
+   "choices": [
+    {
+     "label": "(Keep walking.)",
+     "success": {
+      "text": "Reputation: nothing on one side of the map, good on the other.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-crossed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-hunted-aqua",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "double",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-double-agent",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Tabitha: \"You were ours from the day you gave Ashlyn that water.\" Team Magma trusts you fully, and Team Aqua's ambushes are led by someone who is crying."
+    }
+   ]
+  },
+  {
+   "id": "aq-all-battle",
+   "name": "Two Leaders",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.archie-gen6",
+     "boss.maxie-gen6"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "Maxie and Archie, who've hated each other for twenty years, stand side by side against you. Maxie: \"Archie. I find I prefer you.\" Archie: \"Ha! Don't make it weird.\" The squad holds off the Admins.",
+   "choices": [
+    {
+     "label": "Battle both.",
+     "success": {
+      "text": "A double battle against both leaders.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.archie-gen6",
+       "team": [
+        "camerupt",
+        "sharpedo",
+        "crobat",
+        "mightyena",
+        "torkoal",
+        "walrein"
+       ],
+       "format": "doubles",
+       "name": "Maxie and Archie",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "aq-all-gantry"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "aq-all-gantry",
+   "name": "The Gantry",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/aqua_grunt_m",
+     "trainer.pr/magma_grunt_m"
+    ],
+    "tint": "#14202e",
+    "effect": "none"
+   },
+   "intro": "You hold both orbs. Both legends stir, and wait. You can feel them: one in each hand, heavy as a held breath. Both teams are yours. Red and blue, in one hall, looking up at the gantry where Maxie stood on day one. You're standing on it now. What is the team for?",
+   "choices": [
+    {
+     "label": "\"Put the orbs back. We guard them now.\"",
+     "success": {
+      "text": "The merged team becomes a watch on Mt. Pyre and the cavern. The old couple get their first day off in sixty years.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-took-all",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-guard",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-hoenn",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"We keep them. Nobody wakes anything unless I say.\"",
+     "success": {
+      "text": "You rule Hoenn's weather by threat. Every town pays \"weather insurance.\" Nobody looks you in the eye. Your rival's last battle of the run is fought to take the orbs away.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-took-all",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-rule",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-hoenn",
+        "amount": 1
+       },
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        }
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Look up. There's a third one.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "sky-draconid-met",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The merged team becomes Team Sky, with every grunt of both teams in it. A hundred recruits instead of three.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-took-all",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "hoenn-end-sky",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-founded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "sky-from-all",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "buddy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-bunkmate-follows",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Marisca: \"So what do we do? ...Boss.\""
+    },
+    {
+     "id": "rival",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-rival-contact",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Your rival, from the door: \"I liked you better with the sandwich.\""
+    },
+    {
+     "id": "norman",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "hoenn-norman-belong",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Norman: \"Dinner's still on. Come as you are, or not at all.\""
+    }
+   ]
+  }
+ ]
+}

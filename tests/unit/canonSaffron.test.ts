@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
-import { eligibleEvents, chooseEvent, conditionMet, eventBattleLost, eventBattleWon } from '../../src/core/events';
+import { chooseEvent, conditionMet, eventBattleLost, eventBattleWon } from '../../src/core/events';
 import { createPokemon, abilityOf } from '../../src/core/pokemon';
 import { chooseStarter, createRun, debugForceEvent, takeTurn } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
-import { applyCanonEffect, ghostReturnEvent, ghostReturns, labRetryEvent, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
+import { RIVAL_RETURN_EVENT, applyCanonEffect, ghostReturnEvent, ghostReturns, labRetryEvent, leaveCanonStash, nearestBst, restoreStash, ruleEvolution } from '../../src/core/expansion/canonSaffron';
 import { falseSlotFor } from '../../src/core/expansion/labyrinth';
 import { tourneyBracket, TOURNEY_ROUNDS } from '../../src/core/expansion/tourney';
 import { evolutionTarget } from '../../src/core/evolution';
@@ -20,14 +20,19 @@ const withParty = (seed: string, species: string[]) => {
   run.party = species.map((s, i) => { const m = createPokemon(content, s, 30, `t${i}`); m.hp = 999; return m; });
   return run;
 };
-const targets = (id: string): string[] => room(id).choices.flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((x) => (x.kind === 'addEvent' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : []));
+const targets = (id: string): string[] => [...room(id).choices, ...room(id).remembers.flatMap((v) => v.addChoices)].flatMap((c) => [c.success, c.failure]).flatMap((o) => [...(o?.effects ?? []), ...(o?.battle?.win ?? []), ...(o?.battle && 'lose' in o.battle ? o.battle.lose ?? [] : [])]).flatMap((x) => (x.kind === 'addEvent' || x.kind === 'laterEvent' ? [x.eventId] : x.kind === 'addEventFrom' ? x.ids : []));
 
 describe('Saffron canon: the event graph', () => {
   it('every addEvent target exists, and every room is reached from a gate', () => {
-    const ids = [...content.events.keys()].filter((id) => id.startsWith(P)).map((id) => id.slice(P.length));
-    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly', 'rival-return'];
-    const reach = new Set<string>(gates);
-    for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); if (!reach.has(t.slice(P.length))) { reach.add(t.slice(P.length)); again = true; } } }
+    // The Labyrinth (gn.14), Route 25 (gn.15) and the Tournament (gn.16) moved to Greenneedle (the old rooms are retired, kept for saved runs).
+    const ids = [...content.events.keys()].filter((id) => id.startsWith(P) && !content.events.get(id)!.disabled).map((id) => id.slice(P.length));
+    // train-arrive is the Magnet Train's follow-up, placed at the start of the next stage.
+    // lament-flash is Sabrina's Lament (KANTO_PLACED_2), a follow-up after the Labyrinth.
+    // KANTO_PLACED_4 adds Mr. Psychic, the House of Imitation, the Admissions Exam, the Teleport Girl, the Seam and Pidgey Post.
+    const gates = ['r25', 'tournament', 'dojo', 'copycat', 'silph', 'train', 'train-arrive', 'lament-flash', 'labyrinth', 'return-shuppet', 'return-duskull', 'return-drifloon', 'return-gastly', 'rival-return', 'mrpsychic', 'imite', 'exam', 'teleport', 'seam', 'post'];
+    // Greenneedle retired some of these with the rooms they rebuilt (gn.14's ghost returns, gn.16's rival return): a retired gate opens nothing.
+    const reach = new Set<string>(gates.filter((g) => ids.includes(g)));
+    for (let again = true; again;) { again = false; for (const id of [...reach]) for (const t of targets(id)) { expect(content.events.has(t), `${id} -> ${t}`).toBe(true); if (t.startsWith(P) && !reach.has(t.slice(P.length))) { reach.add(t.slice(P.length)); again = true; } } }
     expect([...reach].sort()).toEqual(ids.sort());
   });
   it('the gates carry the catalog ids', () => {
@@ -37,18 +42,10 @@ describe('Saffron canon: the event graph', () => {
 
 describe('Route 25: The Angry Mankey', () => {
   const win = (id: string) => (room(id).choices[0]!.success.battle as { win: object[] }).win;
-  it('is five Mankey in a row with no healing: three, one, then a fifth that stands guard', () => {
-    expect(room('r25').choices[0]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${P}r25-1` });
-    expect(room('r25-1').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'], chain: 3 });
-    expect(room('r25-4').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'] });
-    expect(room('r25-5').choices[0]!.success.battle).toMatchObject({ kind: 'wild', species: ['mankey'], rule: { foeStands: 1 } });
-    for (const id of ['r25-1', 'r25-4', 'r25-5']) expect(JSON.stringify(room(id))).not.toContain('"heal"');
-  });
-  it("the thieves' camp is one node off the path, before or after the fight, and returns the food", () => {
-    expect(room('r25').choices[1]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: `${P}r25-camp` });
-    expect(win('r25-camp')).toContainEqual({ kind: 'flag', key: 'r25-food', amount: 1 });
-    expect(win('r25-camp-after')).toContainEqual({ kind: 'flag', key: 'r25-food', amount: 1 });
-    expect(room('r25-after').choices.some((c) => c.success.effects.some((e) => e.kind === 'addEvent' && e.eventId === `${P}r25-camp-after`))).toBe(true);
+  it('moved to Greenneedle gn.15: the Kanto gate opens its rooms (the gauntlet, or the camp first); the old rooms are retired', () => {
+    expect(room('r25').choices[0]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: 'gn-15-m1' });
+    expect(room('r25').choices[1]!.success.effects).toContainEqual({ kind: 'addEvent', eventId: 'gn-15-camp' });
+    for (const id of ['r25-1', 'r25-4', 'r25-5', 'r25-camp', 'r25-camp-after', 'r25-thanks', 'r25-claim']) expect(room(id).disabled, id).toBe(true);
   });
   it('the reward is Mankey with Swords Dance and Mach Punch; with the food returned it starts fonder (Bond +2) and the troop is in the crowd', () => {
     for (const id of ['r25-thanks', 'r25-claim']) {
@@ -98,7 +95,8 @@ describe('Route 25: The Angry Mankey', () => {
 describe('Fighting Tournament', () => {
   it('only Mankey or Primeape may enter, and entering stashes everyone else', () => {
     const run = withParty('T1', ['mankey', 'pikachu', 'eevee']);
-    expect(room('tournament').choices[0]!.requires).toEqual([{ kind: 'partySpecies', species: 'mankey' }]);
+    // Greenneedle gn.16: the gate itself needs the Route 25 Mankey (its line) in the party.
+    expect(room('tournament').requires).toContainEqual(expect.objectContaining({ kind: 'partyLine', species: 'mankey' }));
     expect(conditionMet(content, run, { kind: 'partySpecies', species: 'mankey' })).toBe(true);
     expect(conditionMet(content, run, { kind: 'partySpecies', species: 'primeape' })).toBe(false);
     eff(run, 'solo', { species: ['mankey', 'primeape'] });
@@ -139,7 +137,7 @@ describe('Fighting Tournament', () => {
     const run = withParty('T5', ['mankey']);
     eff(run, 'champion', { species: ['mankey'] });
     expect(run.expansion!.canon!.rival).toMatchObject({ species: 'mankey', returned: false });
-    expect(room('rival-return')).toBeTruthy();
+    expect(content.events.get(RIVAL_RETURN_EVENT)).toBeTruthy();
   });
   it('losing a round gives the party back', () => {
     const run = withParty('T3', ['mankey', 'pikachu']);
@@ -201,34 +199,42 @@ describe('Heat-of-battle evolution', () => {
   });
 });
 
-describe('Fighting Dojo, Copycat, Silph Lobby, Magnet Train', () => {
-  it('the Dojo offers Hitmontop as a third choice 3 times in 20 (15%)', () => {
-    const ids = (room('dojo').choices[0]!.success.battle as { win: { ids: string[] }[] }).win[0]!.ids;
-    expect(ids.filter((i) => i === `${P}dojo-three`)).toHaveLength(3);
-    expect(ids).toHaveLength(20);
-    expect(room('dojo-two').choices.map((c) => c.success.effects[0])).toEqual([expect.objectContaining({ species: ['hitmonlee'] }), expect.objectContaining({ species: ['hitmonchan'] })]);
-    expect(room('dojo-three').choices).toHaveLength(3);
+describe('Fighting Dojo, Copycat, Silph Lobby, Magnet Train (KANTO_PLACED_2)', () => {
+  it('the Dojo is a one-on-one with his Machamp at A+1; Hitmonlee or Hitmonchan, and 15%: Hitmontop as a third', () => {
+    const b = room('dojo').choices[0]!.success.battle as { team: string[]; size: number; levelBonus: number; win: unknown[] };
+    expect(b.team).toEqual(['machamp']);
+    expect(b.size).toBe(1);
+    expect(b.levelBonus).toBe(1);
+    expect(b.win).toContainEqual({ kind: 'addEvent', eventId: `${P}dojo-prize` });
+    expect(room('dojo-prize').choices[2]!.chance).toBe(0.15);
+    expect(room('dojo-prize2').choices.map((c) => c.success.effects[0])).toEqual([expect.objectContaining({ species: ['hitmonlee'] }), expect.objectContaining({ species: ['hitmonchan'] })]);
+    expect(room('dojo-top').choices).toHaveLength(3);
+    expect(room('dojo').choices[2]!.requires).toEqual([{ kind: 'partyType', type: 'psychic' }]);
   });
-  it('the Copycat game is four claps and pays Mimic', () => {
+  it('the Copycat game is four rounds and pays Mimic, with one more try', () => {
     const c = room('copycat').choices[0]!;
     expect(c.prompt).toEqual({ id: 'copycat-claps', needs: 'good' });
     expect(c.success.effects).toContainEqual({ kind: 'teachMove', move: 'mimic' });
+    expect(c.failure!.effects).toContainEqual({ kind: 'addEvent', eventId: `${P}copycat-again` });
     const { run, sideId } = debugForceEvent(content, structuredClone(begin('CC')), `${P}copycat`);
     const out = chooseEvent(content, run, sideId, 0, undefined, 'perfect').run;
     expect(out.party[0]!.moves.some((m) => m.id === 'mimic')).toBe(true);
   });
-  it('Silph: a Lapras below 40 heat, none above', () => {
+  it('Silph: a Lapras below 40 heat, none above (it is owed after the takeover)', () => {
     const run = begin('SI');
     expect(conditionMet(content, run, { kind: 'evil', heatBelow: 40 })).toBe(true);
     const hunted = structuredClone(run);
     hunted.story.evil = { ...(hunted.story.evil ?? {}), teamId: 'rocket', heat: 60 } as never;
     expect(conditionMet(content, hunted, { kind: 'evil', heatBelow: 40 })).toBe(false);
-    const { run: r2, sideId } = debugForceEvent(content, structuredClone(run), `${P}silph`);
+    const { run: r2, sideId } = debugForceEvent(content, structuredClone(run), `${P}silph-gift`);
     const out = chooseEvent(content, r2, sideId, 0).run;
-    expect(out.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'lapras')).toBe(true);
+    expect(out.pending.some((p) => p.kind === 'caught' && p.mon.speciesId === 'lapras') || out.party.some((m) => m.speciesId === 'lapras')).toBe(true);
+    expect(room('silph-gift').choices[1]!.requires).toEqual([{ kind: 'evil', heat: 40 }]);
   });
-  it('the Magnet Train jumps ahead and can be refused', () => {
-    expect(room('train').choices[0]!.success.effects).toEqual([{ kind: 'skipAhead' }]);
+  it('the Magnet Train: ride and arrive further into the next stage, or walk', () => {
+    expect(room('train').choices[0]!.success.effects).toEqual([{ kind: 'flag', key: 'kanto-train-ride', amount: 1 }]);
+    expect(room('train-arrive').requires).toEqual([{ kind: 'flag', key: 'kanto-train-ride', atLeast: 1, atMost: 99 }]);
+    expect(room('train-arrive').choices[0]!.success.effects).toEqual([{ kind: 'express' }]);
     expect(room('train').choices).toHaveLength(2);
   });
 });
@@ -310,7 +316,7 @@ describe("Sabrina's Labyrinth", () => {
     const lab = run.expansion!.canon!.lab!;
     run.regionIndex = lab.regionIndex + 1;
     run.stage = { ...run.stage!, kind: 'stage', index: lab.stageIndex };
-    expect(ghostReturnEvent(content, run)).toBe(`${P}return-gastly`);
+    expect(ghostReturnEvent(content, run)).toBe('gn-14-return');
     run.stage = { ...run.stage!, index: lab.stageIndex + 1 };
     expect(ghostReturnEvent(content, run)).toBeNull();
     expect(ghostReturns(content, run, 45)).toMatch(/join/);
@@ -367,14 +373,15 @@ describe('Haunting and Haunted', () => {
   });
 });
 
-describe("Sabrina's Labyrinth rebuilt", () => {
-  const ids = ['lab-lost', 'lab-n1', 'lab-n2', 'lab-n3', 'lab-n4', 'lab-n5', 'lab-n6', 'lab-final'];
-  it('has the six rooms and the finale, every one with a way on', () => {
-    for (const id of ids) expect(content.events.has(P + id), id).toBe(true);
-    for (const id of ids.slice(0, -1)) expect(targets(id).length, id).toBeGreaterThan(0);
+describe("Sabrina's Labyrinth rebuilt (Greenneedle gn.14)", () => {
+  const G = 'gn-14-';
+  const ids = ['lost', 'n1', 'n2', 'n3', 'n4', 'n5', 'n6', 'sabrina'];
+  it('has the six rooms and the finale', () => {
+    for (const id of ids) expect(content.events.has(G + id), id).toBe(true);
+    for (const id of ['lab-lost', 'lab-n1', 'lab-final', 'return-gastly']) expect(room(id).disabled, id).toBe(true);
   });
   it('the finale is the false-slot fight with the ghost rescue, and a loss sends you back', () => {
-    const b = room('lab-final').choices[0]!.success.battle as unknown as { rule: Record<string, boolean>; lose: object[] };
+    const b = content.events.get(G + 'sabrina')!.choices[0]!.success.battle as unknown as { rule: Record<string, boolean>; lose: object[] };
     expect(b.rule).toMatchObject({ falseSlot: true, ghostRescue: true });
     expect(b.lose).toContainEqual(expect.objectContaining({ action: 'labRetry' }));
   });
@@ -405,36 +412,32 @@ describe("Sabrina's Labyrinth rebuilt", () => {
     eff(run, 'ghostStart');
     eff(run, 'ghostFree');
     eff(run, 'labRoom', { level: 3 });
-    expect(labRetryEvent(content, run)).toBe(P + 'lab-n1');
+    expect(labRetryEvent(content, run)).toBe('gn-14-n1');
     expect(run.expansion!.canon!.lab!.freed).toEqual([]);
     eff(run, 'ghostFree');
     eff(run, 'labRoom', { level: 3 });
     run.expansion!.canon!.labResume = true;
-    expect(labRetryEvent(content, run)).toBe(P + 'lab-n4');
+    expect(labRetryEvent(content, run)).toBe('gn-14-n4');
     expect(run.expansion!.canon!.lab!.freed).toHaveLength(1);
   });
 });
 
 describe("Sabrina's Labyrinth: the opening in a normal run", () => {
   const plain = (seed: string) => chooseStarter(content, createRun(content, { runId: seed, seed, archetypeId: 'red' }), 0);
-  it('the general opener is a pseudo-stage event any run can draw (no Kanto setting needed)', () => {
-    const ev = content.events.get('ev-sabrina-labyrinth')!;
-    expect(ev.pseudo).toBe(true);
-    expect(ev.canon).toBeFalsy();
-    expect(ev.minStage).toBeLessThanOrEqual(3);
-    const run = plain('LAB-DRAW');
-    run.stage!.index = 3;
-    expect(eligibleEvents(content, run).some((e) => e.id === 'ev-sabrina-labyrinth')).toBe(true);
+  it('the general opener is the Greenneedle door any run can be given (no Kanto setting needed); the old opener is retired', () => {
+    expect(content.events.get('ev-sabrina-labyrinth')!.disabled).toBe(true);
+    expect(content.events.get('gn-14-door')!.canon).toBeFalsy();
+    expect(content.coPlacement!.get('gn-14-door')).toMatchObject({ home: 11, sits: 'optional' });
   });
   it('you are sent in with no Pokémon, lose a fight because of it, and the ghost then offers to help', () => {
     let run = structuredClone(plain('LAB-OPEN'));
     run.party = [createPokemon(content, 'pikachu', 30, 'a'), createPokemon(content, 'eevee', 30, 'b')];
-    const opener = debugForceEvent(content, structuredClone(run), 'ev-sabrina-labyrinth');
+    const opener = debugForceEvent(content, structuredClone(run), 'gn-14-door');
     const entered = chooseEvent(content, opener.run, opener.sideId, 0);
     run = structuredClone(entered.run);
     expect(run.expansion!.canon!.stash).toHaveLength(2);
     expect(run.party).toHaveLength(1);
-    const first = debugForceEvent(content, run, `${P}lab-lost`);
+    const first = debugForceEvent(content, run, 'gn-14-lost');
     const fight = chooseEvent(content, first.run, first.sideId, 0);
     expect(fight.battle).toBe(true);
     expect(fight.run.battle!.eventRule?.noPokemon).toBe(true);
@@ -444,7 +447,7 @@ describe("Sabrina's Labyrinth: the opening in a normal run", () => {
     expect(res.run.phase).toBe('map');
     expect(res.run.expansion!.canon!.lab!.active).toBe(true);
     const here = res.run.stage!.map.nodes.find((n) => n.id === res.run.stage!.current)!;
-    expect(here.sides.some((sd) => sd.eventId === `${P}lab-ghost`)).toBe(true);
+    expect(here.sides.some((sd) => sd.eventId === 'gn-14-ghost')).toBe(true);
   });
 });
 

@@ -1,0 +1,3708 @@
+{
+ "catalogOverhaul": "families-b",
+ "override": true,
+ "remove": [
+  "ovc-ember-pilgrim-s1",
+  "ovc-ember-pilgrim-s2",
+  "ovc-ember-pilgrim-s3",
+  "ovc-fallen-star-s1",
+  "ovc-fallen-star-s2",
+  "ovc-fallen-star-s3",
+  "ovc-ice-library-s1",
+  "ovc-ice-library-s2",
+  "ovc-ice-library-s3",
+  "ovc-last-train-s2",
+  "ovc-last-train-s3",
+  "ovc-legend-aura-crisis-s1",
+  "ovc-legend-aura-crisis-s2",
+  "ovc-legend-aura-crisis-s3",
+  "ovc-legend-beasts-pursuit-s1",
+  "ovc-legend-beasts-pursuit-s2",
+  "ovc-legend-beasts-pursuit-s3",
+  "ovc-legend-birds-trial-s1",
+  "ovc-legend-birds-trial-s2",
+  "ovc-legend-birds-trial-s3",
+  "ovc-legend-eon-pursuit-s1",
+  "ovc-legend-eon-pursuit-s2",
+  "ovc-legend-eon-pursuit-s3",
+  "ovc-legend-eternal-crisis-s1",
+  "ovc-legend-eternal-crisis-s2",
+  "ovc-legend-eternal-crisis-s3",
+  "ovc-legend-giratina-shrine-s1",
+  "ovc-legend-giratina-shrine-s2",
+  "ovc-legend-giratina-shrine-s3",
+  "ovc-legend-guardians-trial-s1",
+  "ovc-legend-guardians-trial-s2",
+  "ovc-legend-guardians-trial-s3",
+  "ovc-legend-hooh-pursuit-s1",
+  "ovc-legend-hooh-pursuit-s2",
+  "ovc-legend-hooh-pursuit-s3",
+  "ovc-legend-ideals-calling-s1",
+  "ovc-legend-ideals-calling-s2",
+  "ovc-legend-ideals-calling-s3",
+  "ovc-legend-justice-trial-s1",
+  "ovc-legend-justice-trial-s2",
+  "ovc-legend-justice-trial-s3",
+  "ovc-legend-lake-trial-s1",
+  "ovc-legend-lake-trial-s2",
+  "ovc-legend-lake-trial-s3",
+  "ovc-legend-lugia-shrine-s1",
+  "ovc-legend-lugia-shrine-s2",
+  "ovc-legend-lugia-shrine-s3",
+  "ovc-legend-mewtwo-crisis-s1",
+  "ovc-legend-mewtwo-crisis-s2",
+  "ovc-legend-mewtwo-crisis-s3",
+  "ovc-legend-necrozma-crisis-s1",
+  "ovc-legend-necrozma-crisis-s2",
+  "ovc-legend-necrozma-crisis-s3",
+  "ovc-legend-regis-shrine-s1",
+  "ovc-legend-regis-shrine-s2",
+  "ovc-legend-regis-shrine-s3",
+  "ovc-legend-ruin-quartet-shrine-s1",
+  "ovc-legend-ruin-quartet-shrine-s2",
+  "ovc-legend-ruin-quartet-shrine-s3",
+  "ovc-legend-sun-moon-shrine-s1",
+  "ovc-legend-sun-moon-shrine-s2",
+  "ovc-legend-sun-moon-shrine-s3",
+  "ovc-legend-sword-shield-calling-s1",
+  "ovc-legend-sword-shield-calling-s2",
+  "ovc-legend-sword-shield-calling-s3",
+  "ovc-legend-time-space-trial-s1",
+  "ovc-legend-time-space-trial-s2",
+  "ovc-legend-time-space-trial-s3",
+  "ovc-legend-weather-crisis-s1",
+  "ovc-legend-weather-crisis-s2",
+  "ovc-legend-weather-crisis-s3",
+  "ovc-mushroom-queen-s1",
+  "ovc-mushroom-queen-s2",
+  "ovc-mushroom-queen-s3",
+  "ovc-paper-city-s1",
+  "ovc-paper-city-s2",
+  "ovc-paper-city-s3",
+  "ovc-rival-gift-s1",
+  "ovc-rival-gift-s2",
+  "ovc-rival-note-s1",
+  "ovc-rival-note-s2",
+  "ovc-sky-whale-s1",
+  "ovc-sky-whale-s2",
+  "ovc-sky-whale-s3",
+  "ovc-star-compass-s1",
+  "ovc-star-compass-s2",
+  "ovc-star-compass-s3",
+  "ovc-strange-researcher-s1",
+  "ovc-strange-researcher-s2",
+  "ovc-strange-researcher-s3",
+  "ovc-the-friend-you-didnt-make-s1",
+  "ovc-the-friend-you-didnt-make-s2",
+  "ovc-the-friend-you-didnt-make-s3",
+  "ovc-the-hundred-year-egg-s1",
+  "ovc-the-hundred-year-egg-s2",
+  "ovc-the-hundred-year-egg-s3",
+  "ovc-thousand-lanterns-s1",
+  "ovc-thousand-lanterns-s2",
+  "ovc-thousand-lanterns-s3",
+  "ovc-wishing-comet-s1",
+  "ovc-wishing-comet-s2",
+  "ovc-wishing-comet-s3"
+ ],
+ "events": [
+  {
+   "id": "ovc-the-last-trainer-of-town-s1",
+   "name": "The Last Trainer of the Town",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#3a3634",
+    "effect": "none"
+   },
+   "intro": "A town with every shutter closed and grass in the streets. One person left: a young trainer in the square, standing very straight. \"Nobody passes through without a battle,\" he says. \"That's the rule here. It was always the rule.\"",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "He fights like the whole empty town is watching. In a way, it is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ovc-the-last-trainer-of-town-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-last-trainer-of-town-s1",
+        "amount": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Last Trainer",
+       "size": 3,
+       "types": [],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "town-battled",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Ask where everyone went.",
+     "success": {
+      "text": "\"The mine closed. They went to the city. Mum, Dad, all my friends.\" He grips his Poké Ball. \"Somebody has to keep the rule. Battle me.\" You do.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "town-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "town-battled",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-last-trainer-of-town-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-last-trainer-of-town-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-last-trainer-of-town-s2",
+   "name": "The Last Trainer of the Town",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-last-trainer-of-town-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-last-trainer-of-town-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3634",
+    "effect": "none"
+   },
+   "intro": "In the town hall, dust and quiet. On the wall, a big photograph: the square, full of people, a festival, a hundred trainers and their Pokémon. In the front row, a small boy with a Poké Ball held up high.",
+   "choices": [
+    {
+     "label": "Take the photo down for him.",
+     "success": {
+      "text": "You carry it out to the square. He sees it and doesn't speak for a long time. \"I forgot what it looked like with people in it,\" he says at last.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "town-photo",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-last-trainer-of-town-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-last-trainer-of-town-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it where it hangs.",
+     "success": {
+      "text": "It's his town. His memory. You leave it on the wall for him to find again when he's ready.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "town-left-photo",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-last-trainer-of-town-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-last-trainer-of-town-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-last-trainer-of-town-2-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "town-asked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "In the town hall, a big photo on the wall: the square, full of people, a festival. Small in the front row, the last trainer, holding up a Poké Ball. Everyone he told you about is in it.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-last-trainer-of-town-s3",
+   "name": "The Last Trainer of the Town",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-last-trainer-of-town-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-last-trainer-of-town-s2",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3634",
+    "effect": "none"
+   },
+   "intro": "Morning. The last trainer stands at the town gate with a pack on his back, the rule-keeper's badge in his hand.",
+   "choices": [
+    {
+     "label": "Walk him to the edge of town.",
+     "success": {
+      "text": "At the last house he stops and pins the badge to the gate. \"Somebody else can keep the rule now. Or nobody.\" He walks out without looking back. You think that's the bravest thing you've seen.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "great-ball",
+         "ultra-ball"
+        ]
+       },
+       {
+        "kind": "moment",
+        "text": "The last trainer of an empty town finally left it, to go and find everyone.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give him something for the road.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "poke-ball",
+        "great-ball"
+       ]
+      }
+     ],
+     "success": {
+      "text": "You give him a Poké Ball, for whoever he meets out there. He weighs it in his hand and laughs, for the first time. \"The rule was a battle. Not a gift.\" He keeps it.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "poke-ball",
+         "great-ball"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 2
+       },
+       {
+        "kind": "moment",
+        "text": "The last trainer of an empty town finally left it, to go and find everyone.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-last-trainer-of-town-3-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "town-photo",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Morning. The last trainer is at the gate, the photo rolled up under his arm. \"I'm going to find them,\" he says. \"All of them. I'll show them this.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-beyond-the-gate-s1",
+   "name": "Beyond the Gate",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a3a",
+    "effect": "fog"
+   },
+   "types": [
+    "psychic",
+    "ghost"
+   ],
+   "intro": "In the ruins, a gate of black iron stands open on its own. No wall either side. Just the gate. Through it, the same ruins. Except through it, the ruins are whole.",
+   "choices": [
+    {
+     "label": "Walk through.",
+     "success": {
+      "text": "One step and the stones are new, the roofs on, the bells ringing. People in old clothes don't see you. Behind you, the gate is still there. You keep a hand on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gate-through",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-beyond-the-gate-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-beyond-the-gate-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look through without going.",
+     "success": {
+      "text": "You watch the whole city go about its morning, a century ago. A child in the street looks right at you. Then the mist comes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gate-looked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-beyond-the-gate-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-beyond-the-gate-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-beyond-the-gate-s2",
+   "name": "Beyond the Gate",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-beyond-the-gate-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-beyond-the-gate-s1",
+     "atLeast": 1,
+     "atMost": 3
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "types": [
+    "psychic",
+    "ghost"
+   ],
+   "intro": "A voice from the other side of the gate. Old, kind, curious. \"What is your name, traveller? We don't get many from the far side.\"",
+   "choices": [
+    {
+     "label": "Tell it your name.",
+     "success": {
+      "text": "The voice repeats it, slowly, like it is writing it somewhere. \"Thank you. We remember everyone who answers. Few do.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gate-named",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-beyond-the-gate-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-beyond-the-gate-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask its name first.",
+     "success": {
+      "text": "A long pause. \"No one has asked that in a very long time.\" It tells you. It is a name from a gravestone you passed this morning.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gate-asked",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-beyond-the-gate-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-beyond-the-gate-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "beyond-the-gate-2-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "gate-looked",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A voice through the gate: the child you saw, grown up and grown old. \"You looked at me once, through here. I remember. What is your name?\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-beyond-the-gate-s3",
+   "name": "Beyond the Gate",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-beyond-the-gate-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-beyond-the-gate-s2",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a3a",
+    "effect": "none"
+   },
+   "types": [
+    "psychic",
+    "ghost"
+   ],
+   "intro": "The gate is closing, slowly, on its own. In the gap, a narrow path of old stones you didn't see before, running ahead along your road.",
+   "choices": [
+    {
+     "label": "Take the old path.",
+     "success": {
+      "text": "It runs straight and true, a road from another century, and it comes out further along than you had any right to be.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 2
+       },
+       {
+        "kind": "foresight",
+        "columns": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You spoke through an open gate in the ruins to someone a century away.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say goodbye first.",
+     "success": {
+      "text": "You say the name the voice told you, once, through the gap. The gate stops for a moment. Then it closes gently. On the other side, someone was glad.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -2
+       },
+       {
+        "kind": "scout",
+        "columns": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You spoke through an open gate in the ruins to someone a century away.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-moon-market-s1",
+   "name": "The Moon Market",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a48",
+    "effect": "sparkle"
+   },
+   "types": [
+    "fairy"
+   ],
+   "intro": "Full moon, and a market where there was a field: silver stalls, Clefairy behind the counters, moonlight in jars. Every price is paid in something that isn't money.",
+   "choices": [
+    {
+     "label": "Pay with a song.",
+     "success": {
+      "text": "You sing something your team knows. Badly. The Clefairy applaud and give you a jar of moonlight that makes your Fairy-types glow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "moon-sang",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": {
+         "types": [
+          "fairy"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-moon-market-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-moon-market-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Pay with a berry.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "oran-berry",
+        "sitrus-berry",
+        "lum-berry",
+        "pecha-berry",
+        "cheri-berry",
+        "chesto-berry",
+        "rawst-berry",
+        "aspear-berry",
+        "leppa-berry"
+       ]
+      }
+     ],
+     "success": {
+      "text": "A berry for a Moon Stone. The Clefairy hold it up to the moon and nod gravely. Fair.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "chesto-berry",
+         "rawst-berry",
+         "aspear-berry",
+         "leppa-berry"
+        ]
+       },
+       {
+        "kind": "item",
+        "id": "moon-stone",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "moon-berry",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-moon-market-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-moon-market-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Just look.",
+     "success": {
+      "text": "You walk the stalls in the silver light. Nobody minds. Looking is free at the Moon Market. It's the only thing that is.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "moon-looked",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-moon-market-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-moon-market-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-moon-market-s2",
+   "name": "The Moon Market",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-moon-market-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-moon-market-s1",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "clefable",
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "types": [
+    "fairy"
+   ],
+   "intro": "The oldest stall, the biggest Clefable. \"A riddle,\" it says, in a voice like bells. \"Answer, and choose anything. Miss, and you'll still go home with something.\"",
+   "choices": [
+    {
+     "label": "\"Ask it.\"",
+     "prompt": {
+      "id": "echo-rhythm",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "\"What do you keep by giving away?\" You think. \"A promise.\" The Clefable claps once and gives you your pick.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "moon-riddle",
+        "amount": 1
+       },
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "moon-stone",
+         "shiny-stone",
+         "dawn-stone"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-moon-market-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-moon-market-s2",
+        "amount": 0
+       }
+      ]
+     },
+     "failure": {
+      "text": "You get it wrong. The Clefable laughs kindly and gives you a Star Piece anyway. \"For trying. The answer was a promise.\"",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "stardust",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "moon-tried",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-moon-market-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-moon-market-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask what it wants for an answer.",
+     "success": {
+      "text": "\"Only that you come back next full moon.\" You can't promise that. You say so. It likes that you said so.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "moon-honest",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-moon-market-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-moon-market-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-moon-market-s3",
+   "name": "The Moon Market",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-moon-market-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-moon-market-s2",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "types": [
+    "fairy"
+   ],
+   "intro": "Dawn is coming. The Moon Market is packing itself into moonbeams, stall by stall. The Clefairy wave.",
+   "choices": [
+    {
+     "label": "Help them pack.",
+     "success": {
+      "text": "You fold silver canvas while the moon sets. The last Clefairy gives you a pebble from the moon. It's warm. Then it's just a field, and dew.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "stardust",
+        "count": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "moment",
+        "text": "Under a full moon you traded at the Moon Market, and paid in things that weren't money.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch it go.",
+     "success": {
+      "text": "One by one the stalls go up the last of the moonlight like steps. When the sun comes up there is nothing there but sleeping grass.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "moment",
+        "text": "Under a full moon you traded at the Moon Market, and paid in things that weren't money.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-mirror-of-your-run-s1",
+   "name": "The Mirror of Your Run",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#2a3040",
+    "effect": "glint"
+   },
+   "types": [
+    "psychic"
+   ],
+   "intro": "A tall old mirror leaning on a tree in the middle of nowhere. In it, not your reflection: your team's best moments from this run, one after another, bright as if they were happening now.",
+   "choices": [
+    {
+     "label": "Watch with your team.",
+     "success": {
+      "text": "They crowd round it, pointing at themselves, pushing each other. When their best moment comes, each of them goes quiet.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "mirrorrun-watched",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-mirror-of-your-run-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-mirror-of-your-run-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Watch alone.",
+     "success": {
+      "text": "You let them sleep and watch it by yourself. It's a good run. You didn't know how good until now.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "mirrorrun-alone",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-mirror-of-your-run-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-mirror-of-your-run-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-mirror-of-your-run-1-0",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "ovc-the-dance-at-the-edge-s1"
+      }
+     ],
+     "intro": "A tall old mirror on a tree. In it, your run: the cliff at dawn, the Pokémon dancing. Your team, watching, the light on their faces.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "the-mirror-of-your-run-1-1",
+     "when": [
+      {
+       "kind": "eventSeen",
+       "id": "ovc-whale-road-s1"
+      }
+     ],
+     "intro": "A tall old mirror on a tree. In it, your run: an island rising out of the sea, and you climbing up its side. Your team at the Ring Game, cheering.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-mirror-of-your-run-s2",
+   "name": "The Mirror of Your Run",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-mirror-of-your-run-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-mirror-of-your-run-s1",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3040",
+    "effect": "none"
+   },
+   "types": [
+    "psychic"
+   ],
+   "intro": "The mirror stops on one moment and holds it. A voice that is almost yours: \"Which would you change, if you could?\"",
+   "choices": [
+    {
+     "label": "\"None of it.\"",
+     "success": {
+      "text": "The mirror is quiet a while. \"Even the bad parts?\" Yes. They're part of how you got here. The glass warms under your hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirrorrun-none",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-mirror-of-your-run-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-mirror-of-your-run-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Name the one you'd change.",
+     "success": {
+      "text": "You say it out loud. It's harder than it sounds. The mirror doesn't change it. It just shows you that you're still here, after it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mirrorrun-named",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-mirror-of-your-run-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-mirror-of-your-run-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-mirror-of-your-run-s3",
+   "name": "The Mirror of Your Run",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-mirror-of-your-run-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-mirror-of-your-run-s2",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3040",
+    "effect": "none"
+   },
+   "types": [
+    "psychic"
+   ],
+   "intro": "The mirror is clouding over. One last picture swims up in it: your team, right now, looking back at you.",
+   "choices": [
+    {
+     "label": "Look at them, not the mirror.",
+     "success": {
+      "text": "You turn round. There they are, the real ones. The mirror closes behind you like an eye. You won't need it.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "moment",
+        "text": "A mirror showed you this run's best moments, and asked what you would change.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Touch the glass.",
+     "success": {
+      "text": "It's warm. For a second you see the run ahead, nothing clear, only light. Then it's just old glass, and your face.",
+      "effects": [
+       {
+        "kind": "tempEffect",
+        "label": "What the mirror showed",
+        "effects": [
+         {
+          "kind": "xpMultiplier",
+          "value": 1.1
+         }
+        ],
+        "battles": 2,
+        "until": "battle"
+       },
+       {
+        "kind": "moment",
+        "text": "A mirror showed you this run's best moments, and asked what you would change.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-orchestra-in-the-ruins-s1",
+   "name": "The Orchestra in the Ruins",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#2a243a",
+    "effect": "flicker"
+   },
+   "types": [
+    "ghost"
+   ],
+   "intro": "Music from a ruined concert hall. Inside, under a broken roof, an orchestra of ghosts: pale players, pale instruments, and Ghost-type Pokémon turning the pages. Every seat is empty but one.",
+   "choices": [
+    {
+     "label": "Sit in the empty seat.",
+     "success": {
+      "text": "You sit. The music finds you. It's a piece nobody has played in a hundred years and it's still beautiful. Your team sits in the aisle, very still.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orch-sat",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-orchestra-in-the-ruins-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-orchestra-in-the-ruins-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let a Ghost-type join the orchestra.",
+     "requires": [
+      {
+       "kind": "partyType",
+       "type": "ghost"
+      }
+     ],
+     "success": {
+      "text": "Your Ghost-type drifts up onto the stage and takes an empty chair. The players make room. It knows the tune. It always knew it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orch-ghost",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 8,
+        "who": {
+         "types": [
+          "ghost"
+         ]
+        }
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-orchestra-in-the-ruins-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-orchestra-in-the-ruins-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-orchestra-in-the-ruins-s2",
+   "name": "The Orchestra in the Ruins",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-orchestra-in-the-ruins-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-orchestra-in-the-ruins-s1",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "chandelure",
+    "tint": "#2a243a",
+    "effect": "none"
+   },
+   "types": [
+    "ghost"
+   ],
+   "intro": "The conductor, a tall pale woman with a Chandelure for a baton-light, turns at the end of the movement and looks straight at you. She nods.",
+   "choices": [
+    {
+     "label": "Nod back.",
+     "success": {
+      "text": "She smiles. \"You stayed for the slow part,\" she says. \"Most living people leave.\" She lifts the baton for the last movement.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orch-nodded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-orchestra-in-the-ruins-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-orchestra-in-the-ruins-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Applaud.",
+     "success": {
+      "text": "One pair of hands in a hall for two thousand. The ghosts turn and look. Then they all stand and bow to you. You've never felt so seen.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "orch-clapped",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-orchestra-in-the-ruins-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-orchestra-in-the-ruins-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-orchestra-in-the-ruins-s3",
+   "name": "The Orchestra in the Ruins",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-orchestra-in-the-ruins-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-orchestra-in-the-ruins-s2",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a243a",
+    "effect": "none"
+   },
+   "types": [
+    "ghost"
+   ],
+   "intro": "The finale. Every instrument at once, the Chandelure blazing, the broken roof open to the stars.",
+   "choices": [
+    {
+     "label": "Stay to the last note.",
+     "success": {
+      "text": "It ends. The silence after is enormous. One by one the players fade, still holding their instruments, smiling. The conductor is last. She leaves her baton on the stand.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "spell-tag",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "moment",
+        "text": "A ghost orchestra played its last concert in a ruined hall, and you stayed for every note.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Hum along.",
+     "success": {
+      "text": "You hum the tune, and the orchestra hears it and plays to it, and when they go, the tune stays in your head for days. Your team hums it too.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "moment",
+        "text": "A ghost orchestra played its last concert in a ruined hall, and you stayed for every note.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-museum-after-closing-s1",
+   "name": "The Museum After Closing",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "A museum, closed for the night, the side door ajar. Inside, fossils in the dark and a Pokémon skeleton the size of a house. A night light glows on a sign: PLEASE DO NOT TOUCH.",
+   "choices": [
+    {
+     "label": "Look around quietly.",
+     "success": {
+      "text": "You walk the halls with your team in a hush. The fossils are older than anything. Your Rock-types stand in front of them for a long time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-quiet",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-museum-after-closing-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-museum-after-closing-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go in and close the door behind you.",
+     "success": {
+      "text": "The latch clicks. You're in, with a whole museum to yourselves. Your team is thrilled. You are too.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-in",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-museum-after-closing-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-museum-after-closing-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-museum-after-closing-s2",
+   "name": "The Museum After Closing",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-museum-after-closing-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-museum-after-closing-s1",
+     "atLeast": 1,
+     "atMost": 3
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "A torch beam. \"Who's there?\" A night guard, old, his Houndour at his heel. He sees you and lowers the torch a little.",
+   "choices": [
+    {
+     "label": "Tell him the truth.",
+     "success": {
+      "text": "\"The door was open and I wanted to see.\" He looks at you a long moment. \"That's why I took this job.\" He clips the torch to his belt. \"Come on. I'll show you the good stuff.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-truth",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-museum-after-closing-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-museum-after-closing-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say you're lost.",
+     "success": {
+      "text": "He doesn't believe you. He doesn't mind either. \"Lost in a museum. I've been lost in this one forty years.\" He shows you to the door, slowly, by the long way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "museum-lie",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-museum-after-closing-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-museum-after-closing-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-museum-after-closing-s3",
+   "name": "The Museum After Closing",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-museum-after-closing-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-museum-after-closing-s2",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a2a34",
+    "effect": "none"
+   },
+   "intro": "A door marked STAFF ONLY. The guard has a key.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "A small room. On a velvet cushion, a fossil nobody has catalogued: a perfect egg, still in its stone. \"I found it,\" he says. \"I never told them. I wanted it to stay a secret a while longer.\" He gives you a piece of stone from its shelf.",
+      "effects": [
+       {
+        "kind": "itemFrom",
+        "ids": [
+         "old-amber",
+         "helix-fossil",
+         "dome-fossil"
+        ]
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "moment",
+        "text": "An old night guard showed you the museum after closing, and a secret.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say it's his secret to keep.",
+     "success": {
+      "text": "He smiles, and puts the key back. \"Then I'll keep it for both of us.\" He lets you out by the front door, like a guest.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "moment",
+        "text": "An old night guard showed you the museum after closing, and a secret.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-museum-after-closing-3-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "museum-truth",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The guard stops at a door marked STAFF ONLY, and takes out his key. \"Nobody sees this. You told me the truth, so you can.\"",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-ferris-wheel-s1",
+   "name": "The Ferris Wheel",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a3a",
+    "effect": "none"
+   },
+   "intro": "An empty fairground, the rides rusted still, except one. A lone Ferris wheel, turning slowly, its lights on, no one at the controls. One car has its door open.",
+   "choices": [
+    {
+     "label": "Get in.",
+     "success": {
+      "text": "You and your team squeeze into the car. The door shuts by itself. You rise, slowly, over the dark fairground.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ferris-in",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-ferris-wheel-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-ferris-wheel-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Find the operator first.",
+     "success": {
+      "text": "In the booth, a Magneton humming at the switches, keeping the wheel going all on its own. It sees you, and opens a door for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ferris-in",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ferris-magneton",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-ferris-wheel-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-ferris-wheel-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-ferris-wheel-s2",
+   "name": "The Ferris Wheel",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-ferris-wheel-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-ferris-wheel-s1",
+     "atLeast": 1,
+     "atMost": 3
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a3a",
+    "effect": "none"
+   },
+   "intro": "At the top of the wheel, the car rocks gently. You can see the whole road you've walked, and much of what's ahead.",
+   "choices": [
+    {
+     "label": "Look ahead.",
+     "success": {
+      "text": "The road ahead, lit by moonlight: every bend, every clearing. You memorise it.",
+      "effects": [
+       {
+        "kind": "scout",
+        "columns": 3
+       },
+       {
+        "kind": "flag",
+        "key": "ferris-ahead",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-ferris-wheel-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-ferris-wheel-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Look back.",
+     "success": {
+      "text": "The road behind, every place you stopped. It is further than you thought. Your team presses against the glass, looking for places they know.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ferris-back",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-ferris-wheel-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-ferris-wheel-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-ferris-wheel-s3",
+   "name": "The Ferris Wheel",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-ferris-wheel-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-ferris-wheel-s2",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2a3a",
+    "effect": "none"
+   },
+   "intro": "The car comes down. At the bottom, the wheel stops, lights going out one by one.",
+   "choices": [
+    {
+     "label": "Thank the wheel.",
+     "success": {
+      "text": "You pat the rusted car. The last light goes out. The fairground is quiet and you are rested, as if you'd slept.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "moment",
+        "text": "A lone Ferris wheel took you up over the whole road, behind and ahead.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the Magneton to come.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "ferris-magneton",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It looks at the wheel, its job for years and years. Then it looks at the road. It comes.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "magneton"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A lone Ferris wheel took you up over the whole road, behind and ahead.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-ferris-wheel-3-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ferris-magneton",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The car comes down. At the bottom, the Magneton floats out of its booth, switches off the wheel, and comes to look at you, humming.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-garden-of-small-battles-s1",
+   "name": "The Garden of Small Battles",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#2e4a2a",
+    "effect": "none"
+   },
+   "types": [
+    "bug",
+    "grass"
+   ],
+   "intro": "In a garden bed, tiny Pokémon are battling over one red flower: a Joltik, a Cutiefly, a Nymble, all of them fierce. They are the size of thumbs. It is the most serious battle you've ever seen.",
+   "choices": [
+    {
+     "label": "Watch.",
+     "success": {
+      "text": "Feints, counters, a dramatic retreat, a comeback. The Cutiefly wins, by a whisker. The others bow, solemnly.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "garden-watched-fight",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 10
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-garden-of-small-battles-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-garden-of-small-battles-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Cheer for the smallest.",
+     "success": {
+      "text": "You cheer for the Joltik. It hears and fights harder. It doesn't win. It looks over at you afterwards anyway, and lifts a leg.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "garden-cheered",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-garden-of-small-battles-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-garden-of-small-battles-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-garden-of-small-battles-s2",
+   "name": "The Garden of Small Battles",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-garden-of-small-battles-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-garden-of-small-battles-s1",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "cutiefly",
+    "tint": "#2e4a2a",
+    "effect": "none"
+   },
+   "types": [
+    "bug",
+    "grass"
+   ],
+   "intro": "The winner, a Cutiefly, buzzes over and lands on your hand. It's holding the red flower. It holds it out to you.",
+   "choices": [
+    {
+     "label": "Take the flower.",
+     "success": {
+      "text": "You take it gently. The Cutiefly buzzes once round your head and goes back to the others. The flower smells of honey.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "honey",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "garden-flower",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-garden-of-small-battles-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-garden-of-small-battles-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it back to the loser.",
+     "success": {
+      "text": "You give the flower to the Joltik. Everyone stops. Then the Cutiefly buzzes, delighted, as if that was the best answer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "garden-shared",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-garden-of-small-battles-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-garden-of-small-battles-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-garden-of-small-battles-s3",
+   "name": "The Garden of Small Battles",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-garden-of-small-battles-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-garden-of-small-battles-s2",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2e4a2a",
+    "effect": "none"
+   },
+   "types": [
+    "bug",
+    "grass"
+   ],
+   "intro": "A whole garden of tiny Pokémon is waiting for you, lined up round a ring of pebbles. They want a referee.",
+   "choices": [
+    {
+     "label": "Referee fairly.",
+     "success": {
+      "text": "You call every bout with total seriousness. They accept every call. At the end, they all bow to you. Your own team is jealous.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "moment",
+        "text": "You refereed the tiny Pokémon of a garden, who fight very seriously over flowers.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let one of them come with you.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "garden-cheered",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Joltik you cheered for steps forward out of the line. It's decided.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "joltik"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You refereed the tiny Pokémon of a garden, who fight very seriously over flowers.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-weight-of-a-single-berry-s1",
+   "name": "The Weight of a Single Berry",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "pokemon": "torkoal",
+    "tint": "#3a3424",
+    "effect": "none"
+   },
+   "intro": "An old Torkoal by the road, its shell cracked with age. It nudges your bag, sniffing. You offer food. It turns away. You offer more. It turns away. It only wants one thing: a berry. Any berry.",
+   "choices": [
+    {
+     "label": "Give it a berry.",
+     "requires": [
+      {
+       "kind": "itemAny",
+       "ids": [
+        "oran-berry",
+        "sitrus-berry",
+        "lum-berry",
+        "pecha-berry",
+        "cheri-berry",
+        "chesto-berry",
+        "rawst-berry",
+        "aspear-berry",
+        "leppa-berry"
+       ]
+      }
+     ],
+     "success": {
+      "text": "It takes it gently in its mouth, doesn't eat it, and walks very slowly off into the scrub. It looks back once.",
+      "effects": [
+       {
+        "kind": "loseItem",
+        "from": [
+         "oran-berry",
+         "sitrus-berry",
+         "lum-berry",
+         "pecha-berry",
+         "cheri-berry",
+         "chesto-berry",
+         "rawst-berry",
+         "aspear-berry",
+         "leppa-berry"
+        ]
+       },
+       {
+        "kind": "flag",
+        "key": "berry-given",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-weight-of-a-single-berry-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-weight-of-a-single-berry-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Say you have none.",
+     "success": {
+      "text": "It looks at you a long time. Then it lies down by the road, as if to wait. You find you don't want to leave it there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "berry-none",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-weight-of-a-single-berry-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-weight-of-a-single-berry-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-weight-of-a-single-berry-s2",
+   "name": "The Weight of a Single Berry",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-weight-of-a-single-berry-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-weight-of-a-single-berry-s1",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3424",
+    "effect": "none"
+   },
+   "intro": "The old Torkoal again, out of the scrub, coming to meet you. It is carrying something in its mouth.",
+   "choices": [
+    {
+     "label": "Take what it brought.",
+     "success": {
+      "text": "It's a seed, polished smooth. The Torkoal nudges it toward you. Then toward the ground. It wants you to plant it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "berry-seed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-weight-of-a-single-berry-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-weight-of-a-single-berry-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Follow it.",
+     "success": {
+      "text": "It leads you to a dry clearing. In the middle, a grave of stones, and a dead berry bush. The berry you gave it is lying there, like an offering.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "berry-seed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "berry-grave",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-weight-of-a-single-berry-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-weight-of-a-single-berry-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-weight-of-a-single-berry-2-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "berry-none",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The old Torkoal again. It looks tired. It has carried a little stone all this way and puts it down at your feet. It wants to swap.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-weight-of-a-single-berry-s3",
+   "name": "The Weight of a Single Berry",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-weight-of-a-single-berry-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-weight-of-a-single-berry-s2",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a3424",
+    "effect": "none"
+   },
+   "intro": "You plant the seed. Somewhere between one breath and the next, a green shoot comes up. The Torkoal watches it, very still.",
+   "choices": [
+    {
+     "label": "Sit with the Torkoal.",
+     "success": {
+      "text": "You stay till the shoot has two leaves. The Torkoal sleeps beside it, smoke puffing softly. You don't wake it when you go.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -2
+       },
+       {
+        "kind": "heal",
+        "share": 0.5
+       },
+       {
+        "kind": "moment",
+        "text": "An old Torkoal wanted one berry, and planted it for someone it had lost.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask it to come with you.",
+     "success": {
+      "text": "It thinks about the shoot. It will grow without it now. It gets up, very slowly, and follows you.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "torkoal"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "An old Torkoal wanted one berry, and planted it for someone it had lost.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-weight-of-a-single-berry-3-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "berry-grave",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "You plant the seed by the grave of stones. The shoot comes up. The Torkoal lays its head beside it. Whoever planted the old bush, this one is for them.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-snow-globe-s1",
+   "name": "The Snow Globe",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "types": [
+    "ice"
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2a3648",
+    "effect": "snow"
+   },
+   "intro": "In the snow by a milestone, a snow globe. Inside it: this road, this milestone, and a tiny you and your tiny team, standing exactly where you are standing now.",
+   "choices": [
+    {
+     "label": "Shake it.",
+     "success": {
+      "text": "Snow swirls in the globe. And around you, real snow begins to fall, very gently, out of a clear sky.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "globe-shook",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-snow-globe-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-snow-globe-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it still.",
+     "success": {
+      "text": "You hold it carefully. In the globe, the tiny you is holding a tiny snow globe. You don't look closer.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "globe-still",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-snow-globe-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-snow-globe-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-snow-globe-s2",
+   "name": "The Snow Globe",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "types": [
+    "ice"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-snow-globe-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-snow-globe-s1",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3648",
+    "effect": "none"
+   },
+   "intro": "You look into the snow globe. The tiny figure of you looks up out of it. And waves.",
+   "choices": [
+    {
+     "label": "Wave back.",
+     "success": {
+      "text": "You wave. It waves. Then it points: along the road, to a place you can't see yet. It looks worried.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "globe-waved",
+        "amount": 1
+       },
+       {
+        "kind": "foresight",
+        "columns": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-snow-globe-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-snow-globe-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it down and back away.",
+     "success": {
+      "text": "You set it on the milestone. The tiny you watches you go, still waving.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "globe-left",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-snow-globe-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-snow-globe-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-snow-globe-s3",
+   "name": "The Snow Globe",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "types": [
+    "ice"
+   ],
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-snow-globe-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-snow-globe-s2",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3648",
+    "effect": "none"
+   },
+   "intro": "A crack runs across the snow globe, through the tiny road and the tiny team.",
+   "choices": [
+    {
+     "label": "Hold it together.",
+     "success": {
+      "text": "You cup it in your hands. The crack stops. Inside, the tiny you holds its tiny globe the same way. It will last a while. Long enough.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "never-melt-ice",
+        "count": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "moment",
+        "text": "You found a snow globe with you inside it, and the tiny you waved.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it break.",
+     "success": {
+      "text": "It breaks, snow and water and glass. Nothing happens. The snow stops falling. Your team crowds round you, real and warm.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "heal",
+        "share": 0.3
+       },
+       {
+        "kind": "moment",
+        "text": "You found a snow globe with you inside it, and the tiny you waved.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-dance-at-the-edge-s1",
+   "name": "The Dance at the Edge",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a4a",
+    "effect": "none"
+   },
+   "intro": "Before dawn at the edge of a cliff, wild Pokémon are dancing in a circle: Oricorio, a Lurantis, Bellossom, Spinda turning on their own, slowly, to a song only they can hear.",
+   "choices": [
+    {
+     "label": "Watch from the rocks.",
+     "success": {
+      "text": "They dance in the grey light like they've done it every morning of their lives. Your team sways where they sit.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dance-watched",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-dance-at-the-edge-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-dance-at-the-edge-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let your team join.",
+     "success": {
+      "text": "Your Pokémon step into the circle, shy at first. The Oricorio shows them the steps. By the third turn they're dancing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dance-joined",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-dance-at-the-edge-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-dance-at-the-edge-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-dance-at-the-edge-s2",
+   "name": "The Dance at the Edge",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-dance-at-the-edge-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-dance-at-the-edge-s1",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "oricorio",
+    "tint": "#4a3a4a",
+    "effect": "none"
+   },
+   "intro": "The Oricorio leading the dance steps out of the circle, comes to you, and holds out a wing.",
+   "choices": [
+    {
+     "label": "Dance with it.",
+     "success": {
+      "text": "You have no idea what you're doing. It doesn't care. It leads you round the circle twice and the whole cliff cheers in its own way.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dance-danced",
+        "amount": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-dance-at-the-edge-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-dance-at-the-edge-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Bow instead.",
+     "success": {
+      "text": "You bow. It bows. Then it goes back to the circle and dances a step it made up just now, for you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "dance-bowed",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-dance-at-the-edge-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-dance-at-the-edge-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-dance-at-the-edge-s3",
+   "name": "The Dance at the Edge",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-dance-at-the-edge-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-dance-at-the-edge-s2",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#4a3a4a",
+    "effect": "none"
+   },
+   "intro": "The sun comes up over the edge of the world and the dancers stop and turn to face it, all together.",
+   "choices": [
+    {
+     "label": "Face the sun with them.",
+     "success": {
+      "text": "Light floods the cliff. Every one of them is golden. So is your team. So are you. You will remember this when nothing else from this run is left.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "moment",
+        "text": "At dawn on a cliff edge, wild Pokémon danced, and you danced with them.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask the Oricorio to come.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "dance-danced",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It looks at its circle, at the sunrise, then at you, and steps over the line.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "oricorio"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "moment",
+        "text": "At dawn on a cliff edge, wild Pokémon danced, and you danced with them.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-song-in-the-well-s1",
+   "name": "The Song in the Well",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#2a3034",
+    "effect": "none"
+   },
+   "intro": "An old stone well in a dead village. You call down into it, and your voice comes back. Not an echo. A song, in your voice, with words you didn't say.",
+   "choices": [
+    {
+     "label": "Sing down into it.",
+     "success": {
+      "text": "You sing. It sings back, the same tune, but kinder, and slower, and you notice your hands have stopped shaking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "well-sang",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-song-in-the-well-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-song-in-the-well-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Drop a coin in.",
+     "success": {
+      "text": "It falls a long way. Then, from far down, a single clear note, like thank you.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -10
+       },
+       {
+        "kind": "flag",
+        "key": "well-coin",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-song-in-the-well-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-song-in-the-well-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-song-in-the-well-s2",
+   "name": "The Song in the Well",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-song-in-the-well-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-song-in-the-well-s1",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3034",
+    "effect": "none"
+   },
+   "intro": "You lean over the well, and it speaks first, in your voice: \"What are you afraid of?\"",
+   "choices": [
+    {
+     "label": "Answer honestly.",
+     "success": {
+      "text": "You tell it. It's quiet for a while. Then, in your voice, it sings a lullaby you'd forgotten anyone ever sang you.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "well-honest",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-song-in-the-well-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-song-in-the-well-s2",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Nothing.\"",
+     "success": {
+      "text": "It laughs, in your voice. It isn't cruel. \"That's what I said too,\" it says.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "well-nothing",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-song-in-the-well-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-song-in-the-well-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-song-in-the-well-s3",
+   "name": "The Song in the Well",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-song-in-the-well-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-song-in-the-well-s2",
+     "atLeast": 3,
+     "atMost": 6
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2a3034",
+    "effect": "none"
+   },
+   "intro": "The well is quiet now. When you look down, there is water at the bottom, clear and still, catching the sky.",
+   "choices": [
+    {
+     "label": "Draw some water.",
+     "success": {
+      "text": "It's the coldest, sweetest water you've ever tasted. Your team drinks and drinks. The village is still dead. It doesn't feel dead any more.",
+      "effects": [
+       {
+        "kind": "heal",
+        "share": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A well in a dead village sang back in your voice, and asked what you were afraid of.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Leave it quiet.",
+     "success": {
+      "text": "You put the cover back on. It has said what it wanted to say.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -2
+       },
+       {
+        "kind": "moment",
+        "text": "A well in a dead village sang back in your voice, and asked what you were afraid of.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-song-in-the-well-3-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "well-honest",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The well is quiet. Down at the bottom, clear water, and your own face in it, looking a little younger than you feel.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-long-night-at-the-inn-s1",
+   "name": "The Long Night at the Inn",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "tint": "#3a2e24",
+    "effect": "rain"
+   },
+   "intro": "A storm drives you into an inn. Four strangers by the fire: a nervous scholar, a woman with a Persian, a huge silent sailor, and a trainer in a hood, back to the room.",
+   "choices": [
+    {
+     "label": "Join them by the fire.",
+     "success": {
+      "text": "The scholar talks, the woman listens, the sailor nods. Nobody asks your name. The hooded trainer doesn't turn round.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "inn-joined",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-long-night-at-the-inn-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-long-night-at-the-inn-s1",
+        "amount": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "Sit apart and watch.",
+     "success": {
+      "text": "From the corner you see things they don't: the scholar's hands shaking, the woman's Persian watching the hood.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "inn-watched",
+        "amount": 1
+       },
+       {
+        "kind": "research",
+        "amount": 5
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-long-night-at-the-inn-s1",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-long-night-at-the-inn-s1",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-long-night-at-the-inn-s2",
+   "name": "The Long Night at the Inn",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-long-night-at-the-inn-s1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-long-night-at-the-inn-s1",
+     "atLeast": 1,
+     "atMost": 3
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2e24",
+    "effect": "none"
+   },
+   "intro": "Midnight. The hooded trainer stands, and turns. It's someone you've battled on this road. They've been beaten by you before, and they haven't forgotten.",
+   "choices": [
+    {
+     "label": "Battle, by the fire.",
+     "success": {
+      "text": "The strangers clear the tables. Rain hammers the roof.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "ovc-the-long-night-at-the-inn-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-long-night-at-the-inn-s2",
+        "amount": 0
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "name": "Hooded Trainer",
+       "size": 4,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "inn-beat-rival",
+         "amount": 1
+        },
+        {
+         "kind": "money",
+         "amount": 500
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Share a drink instead.",
+     "success": {
+      "text": "You hold out a cup. They look at it a long time. Then they sit. The storm is very loud. You talk until the fire's low, about the road and the people on it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "inn-drank",
+        "amount": 1
+       },
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovc-the-long-night-at-the-inn-s2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ovt-the-long-night-at-the-inn-s2",
+        "amount": 0
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-long-night-at-the-inn-2-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "inn-watched",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Midnight. The hooded trainer turns. You already guessed, from the Persian watching: someone you've beaten before. They knew you were here all along.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-the-long-night-at-the-inn-s3",
+   "name": "The Long Night at the Inn",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "ovc-the-long-night-at-the-inn-s2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-the-long-night-at-the-inn-s2",
+     "atLeast": 2,
+     "atMost": 4
+    }
+   ],
+   "callback": true,
+   "scene": {
+    "cast": [],
+    "tint": "#3a2e24",
+    "effect": "none"
+   },
+   "intro": "Morning. The storm has blown itself out. The strangers are going their ways.",
+   "choices": [
+    {
+     "label": "Say goodbye to everyone.",
+     "success": {
+      "text": "The scholar shakes your hand too hard. The woman's Persian lets you stroke it. The sailor lifts you off your feet in a hug, without a word. You walk out into a clean, bright day.",
+      "effects": [
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "friendship",
+        "amount": 3,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "A storm kept you at an inn all night with four strangers, one of them an old opponent.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Slip out early.",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 200
+      }
+     ],
+     "success": {
+      "text": "You leave money for breakfast for all five of you and go out into the washed morning.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -200
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "rest"
+       },
+       {
+        "kind": "moment",
+        "text": "A storm kept you at an inn all night with four strangers, one of them an old opponent.",
+        "importance": 55
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "the-long-night-at-the-inn-3-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "inn-drank",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Morning. The hooded trainer is waiting by the door. \"I'll beat you next time,\" they say. \"But I'll buy the drinks.\" They nearly smile.",
+     "hide": [],
+     "addChoices": []
+    },
+    {
+     "id": "the-long-night-at-the-inn-3-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "inn-beat-rival",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "Morning. The hooded trainer has already gone. On your table, a note: \"Again. Somewhere else.\" The scholar is reading it over your shoulder.",
+     "hide": [],
+     "addChoices": []
+    }
+   ]
+  },
+  {
+   "id": "ovc-last-train-s1",
+   "name": "The Last Train",
+   "group": "Overhaul chains",
+   "rarity": "epic",
+   "scene": {
+    "cast": [],
+    "pokemon": "dusknoir",
+    "tint": "#14141e",
+    "effect": "fog"
+   },
+   "types": [
+    "ghost"
+   ],
+   "callback": true,
+   "room": false,
+   "minStage": 8,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "last-stop-ticket",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "ovt-last-stop",
+     "atLeast": 20,
+     "atMost": 99
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "train-done",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "intro": "The ticket in your pocket has a date on it, and today is that date. The rest stop isn't where it was. There's a platform, one lamp, and a timetable with one line on it, and no times. A train comes in without a sound. Its windows are lit. The conductor holds out a hand. \"Ticket.\" He punches it again, the same hole. \"End of the line. For somebody. Not you. Not yet.\"",
+   "choices": [
+    {
+     "label": "\"Who?\"",
+     "success": {
+      "text": "\"I don't carry names,\" the conductor says. \"I carry seats. Third carriage. You'll know.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "train-done",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "fb-last-train-carriage"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ride anyway.",
+     "success": {
+      "text": "\"One stop,\" says the conductor. \"Then you get off. I'll see to it.\" Out of the window as it goes, lit up one by one: every place on this road where you stopped for somebody.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "train-done",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "train-rode",
+        "amount": 1
+       },
+       {
+        "kind": "skipAhead"
+       },
+       {
+        "kind": "moment",
+        "text": "You rode the Last Train one stop. Every place you had stopped for somebody was lit up as it passed.",
+        "importance": 60
+       }
+      ]
+     }
+    },
+    {
+     "label": "Get off.",
+     "success": {
+      "text": "You step back. The train goes, without a sound. The platform is a rest stop again, and the ticket in your hand is blank.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "train-done",
+        "amount": 1
+       },
+       {
+        "kind": "rest"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "fb-last-train-carriage",
+   "name": "The Last Train: The Third Carriage",
+   "group": "Overhaul chains",
+   "rarity": "rare",
+   "types": [
+    "ghost"
+   ],
+   "requires": [],
+   "callback": false,
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#14141e",
+    "effect": "fog"
+   },
+   "intro": "The third carriage. One empty seat by the window, with a reserved card on it. The name has been rubbed out. \"Kept for a while yet,\" says the conductor, behind you. \"With luck.\"",
+   "remembers": [
+    {
+     "id": "train-lost",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "lost-mon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "The third carriage. By the window, someone you lost this run. It sees you on the platform. It gets up. The door is open, and it's on the step, and it can't come any further. You can.",
+     "hide": [
+      0
+     ],
+     "addChoices": []
+    }
+   ],
+   "choices": [
+    {
+     "label": "Get off, and let it keep its seat.",
+     "success": {
+      "text": "You step back onto the platform. The whistle. The train goes, and the empty seat goes with it, still waiting. You hope it waits a long time.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "ragePeace",
+        "amount": -1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"I'm sorry.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "lost-mon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It puts its head against your hand. The whistle. It goes back to its seat and looks out of the window until the window's gone.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "On the Last Train you said goodbye, properly, to the Pokémon you lost.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Thank you.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "lost-mon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It looks at you like it always did. The whistle. It goes back to its seat and watches you from the window until the window's gone.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "On the Last Train you said goodbye, properly, to the Pokémon you lost.",
+        "importance": 80
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"You were the best of us.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "lost-mon",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It stands a little taller. The whistle. It goes back to its seat, and it doesn't look sad. It looks proud. The window goes.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "party"
+       },
+       {
+        "kind": "moment",
+        "text": "On the Last Train you said goodbye, properly, to the Pokémon you lost.",
+        "importance": 80
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

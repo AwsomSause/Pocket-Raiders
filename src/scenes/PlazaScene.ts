@@ -11,6 +11,10 @@ import { currentRegion } from '../core/regions';
 import { PLAZA_OW_SHEETS, plazaSeason, plazaSheetId, plazaStyleOf, type PlazaStyleId } from '../core/presentation/plazaStyles';
 import { services } from '../game/services';
 import { tradeSalt, useTradeScreen } from '../core/presentation/tradeStyles';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { artOf, monFile } from '../ui/redux/game';
+import { dockView } from '../ui/redux/screens/hub';
+import type { Art } from '../ui/redux/templates';
 import { playMusicLazy, playSfx } from '../ui/audio';
 import { AERO, drawGlass, type MotionLevel } from '../ui/aero';
 import { onInputAction } from '../ui/input';
@@ -35,6 +39,9 @@ export class PlazaScene extends Phaser.Scene {
   private frame: StyleFrame | null = null;
   private bubble: Phaser.GameObjects.Container | null = null;
   private bubbleTimer: Phaser.Time.TimerEvent | null = null;
+  /** New UI: the mock-up Plaza dock (default plaza style only) and the line in its speech bubble. */
+  private rx: ReduxView | null = null;
+  private rxSay = '';
 
   constructor() {
     super('Plaza');
@@ -71,6 +78,8 @@ export class PlazaScene extends Phaser.Scene {
     this.busy = false;
     this.bubble = null;
     this.bubbleTimer = null;
+    this.rx = null;
+    this.rxSay = '';
     this.style = plazaStyleOf(session.settings.plazaStyle);
     playMusicLazy(this, 'bgm.shop');
     if (this.motion !== 'off') setAmbience(this, 'crowd');
@@ -85,8 +94,8 @@ export class PlazaScene extends Phaser.Scene {
     onInputAction(this, (action) => {
       if (this.picker) return this.picker.handle(action);
       if (this.busy || !this.ready) return;
-      if (action === 'left') this.moveFocus(-1);
-      else if (action === 'right') this.moveFocus(1);
+      if (action === 'left' || (this.rx && action === 'up')) this.moveFocus(-1);
+      else if (action === 'right' || (this.rx && action === 'down')) this.moveFocus(1);
       else if (action === 'confirm') this.openDistrict(this.layout.districts[this.focus]!);
       else if (action === 'back') this.leave();
     });
@@ -129,6 +138,47 @@ export class PlazaScene extends Phaser.Scene {
     this.refreshFocus(true);
     this.chatLoop();
     this.ready = true;
+    if (reduxOn() && this.style === 'aero') {
+      // The line-up: your lead in the middle, then the crowd (people and their Pokémon) fanning out.
+      const lineup: { art: Art; scale: number }[] = [];
+      const leadFile = lead ? monFile(this, lead.speciesId, 'front', lead.shiny) : null;
+      if (leadFile) lineup.push({ art: { file: leadFile, atlas: true }, scale: 1.6 });
+      for (const w of this.layout.crowd) {
+        if (lineup.length >= 13) break;
+        const file = w.speciesId ? monFile(this, w.speciesId) : null;
+        const art = file ? { file, atlas: true } : artOf(this, w.spriteId);
+        if (art) lineup.push({ art, scale: file ? 1.3 : 1 });
+      }
+      const blurbOf = (d: DistrictView): string => (d.locked && d.id === 'secret' ? (this.layout.view.alleyHint ?? PLAZA_LIFE.bubbles.secretClosed) : d.locked ? 'Closed right now.' : d.blurb);
+      const districts = this.layout.districts;
+      this.rx = mountRedux(this, {
+        render: (c) =>
+          dockView(c, {
+            town: `Plaza · ${(this.layout.title || this.layout.look.name).replace(/ Look$/i, '')}`,
+            chips: [`₽ ${services().session.run!.money.toLocaleString('en-US')}`, `${this.layout.view.repTitle} (${run.plaza.rep})`],
+            tabs: ['Districts'],
+            tab: 0,
+            buttons: [...districts.map((d) => ({ label: d.name, small: d.count ? String(d.count) : '', off: d.locked })), { label: 'Leave' }],
+            index: this.focus,
+            // The column layout has less ground to stand on.
+            lineup: c.v(3) === 1 ? lineup.slice(0, 11) : lineup,
+            say: this.rxSay,
+            note: this.focus < districts.length ? blurbOf(districts[this.focus]!) : 'Back to the stage map.',
+            hints: [['←→', 'walk'], ['Enter', 'open'], ['Esc', 'leave']],
+          }),
+        acts: {
+          pick: (k) => {
+            if (this.picker || this.busy) return;
+            const i = Number(k);
+            if (i >= districts.length) return this.leave();
+            this.focus = i;
+            this.refreshFocus(false);
+            this.openDistrict(districts[i]!);
+          },
+        },
+        overs: { over: (k) => { const i = Number(k); if (!this.picker && !this.busy && i !== this.focus && i < districts.length) { this.focus = i; this.refreshFocus(false); } } },
+      });
+    }
     const me = this.world.player;
     if (notice) this.say(notice, GAME_WIDTH / 2, 150, 4200);
     else {
@@ -182,11 +232,23 @@ export class PlazaScene extends Phaser.Scene {
     const d = this.layout.districts[this.focus]!;
     this.frame?.focus(this.focus, instant);
     this.world?.walkTo(d, instant);
+    this.rx?.refresh();
   }
 
   private say(text: string, x: number, y: number, ms: number, sound = true): void {
     this.bubble?.destroy();
     this.bubbleTimer?.remove(false);
+    if (this.rx) {
+      // New UI: the line shows in the mock-up text bubble over the line-up.
+      this.rxSay = text;
+      this.rx.refresh();
+      if (sound) playSfx(this, 'ui.move', 0.4);
+      this.bubbleTimer = this.time.delayedCall(ms, () => {
+        this.rxSay = '';
+        this.rx?.refresh();
+      });
+      return;
+    }
     const w = Math.min(360, 60 + text.length * 6.4);
     const t = this.add.text(0, 0, text, textStyle(13, '#ffffff', { wordWrap: { width: w } })).setOrigin(0.5);
     const bw = t.width + 24;
@@ -227,9 +289,13 @@ export class PlazaScene extends Phaser.Scene {
       rowHeight: 64,
       rows: d.sections.map((s) => ({
         problem: s.count === 0 ? 'Nothing here right now.' : null,
-        hint: s.title,
+        hint: reduxOn() ? `${d.name}: ${s.title}, ${s.count} on offer.` : s.title,
         draw: (scene: Phaser.Scene, box: Phaser.GameObjects.Container, w: number) => {
-          box.add(scene.add.text(16, 8, `${s.title}   (${s.count})`, textStyle(22)));
+          // New UI: the count is the row's note at the right (the mock-up's district menu), not part of the name.
+          if (reduxOn()) {
+            box.add(scene.add.text(16, 8, s.title, textStyle(22)));
+            box.add(scene.add.text(w - 16, 8, `${s.count} on offer`, textStyle(15, '#d8d0e0')).setOrigin(1, 0));
+          } else box.add(scene.add.text(16, 8, `${s.title}   (${s.count})`, textStyle(22)));
           box.add(scene.add.text(16, 36, this.sectionBlurb(s.id), textStyle(15, '#d8d0e0', { wordWrap: { width: w - 32 } })));
         },
       })),
@@ -257,7 +323,7 @@ export class PlazaScene extends Phaser.Scene {
     const { session } = services();
     // Specialist traders have their own anime-styled screen (trade stops redesign).
     const run = session.run!;
-    if (section === 'traders' && useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, this.sideId, run.log.counters.tradesMade ?? 0))) {
+    if (section === 'traders' && (reduxOn() || useTradeScreen(session.settings.screenStyles, tradeSalt(run.seed, this.sideId, run.log.counters.tradesMade ?? 0)))) {
       this.picker?.close();
       this.picker = null;
       this.busy = true;

@@ -1,7 +1,7 @@
 // Beta 0.6 workstream 18: Canon Spaces in a run. Puts the town menu's events on the stage map and records a space as
 // finished when its event is played. Own seeded stream; runs without run.expansion.canon (setting off, older saves) are untouched.
 
-import { canonKanto } from '../../data/expansion';
+import { canonKanto, canonKantoPlaced } from '../../data/expansion';
 import type { Content } from '../contentSchema';
 import { Rng, hashSeed } from '../rng';
 import { currentRegion } from '../regions';
@@ -9,6 +9,7 @@ import type { RunState } from '../state';
 import { rememberFlightBug } from '../instrumentality/flightNorth';
 import { ghostReturnEvent, markRivalReturned, rivalReturnEvent } from './canonSaffron';
 import { enterCanonSlot, finishCanonSpace } from './canonSpaces';
+import { addCanonFollowups, nodesForSpace } from './canonKantoPlaced';
 
 /** The story-flag key an event writes for a canon flag: `kanto.flock.seen` -> `ev:kanto-flock-seen`. */
 const evKey = (flag: string) => `ev:${flag.replace(/\./g, '-')}`;
@@ -45,6 +46,7 @@ export function addCanonStops(content: Content, run: RunState): void {
   if (slot) placeCanonSlot(content, run, slot);
   const interlude = run.expansion?.canon && currentRegion(content, run).id === 'kanto' ? canonInterludeOf(run) : null;
   if (interlude) placeCanonSlot(content, run, interlude);
+  addCanonFollowups(content, run, canonKantoPlaced);
 }
 
 function placeCanonSlot(content: Content, run: RunState, slot: string): void {
@@ -54,8 +56,8 @@ function placeCanonSlot(content: Content, run: RunState, slot: string): void {
   if (candidates.length === 0) return;
   const rng = new Rng(hashSeed(`${run.seed}::canon-stops::${slot}`));
   for (const id of menu) {
-    // A raid space (Kaiju Tentacruel) is a raid den beside a node instead of an event stop.
-    const raid = content.raids.raids.find((r) => r.canon === id);
+    // A raid space is a raid den beside a node instead of an event stop, unless an event now plays it (Greenneedle gn.11 plays Kaiju Tentacruel).
+    const raid = canonEventFor(content, id, slot) ? undefined : content.raids.raids.find((r) => r.canon === id);
     if (raid) {
       if (stage.map.nodes.some((n) => n.sides.some((sd) => sd.raidId === raid.id))) continue;
       const free = candidates.filter((n) => !n.sides.some((sd) => sd.kind === 'raid'));
@@ -67,14 +69,16 @@ function placeCanonSlot(content: Content, run: RunState, slot: string): void {
     const event = canonEventFor(content, id, slot);
     if (!event) continue; // a space whose play-through is not built yet is simply not offered
     if (stage.map.nodes.some((n) => n.sides.some((s) => s.eventId === event.id))) continue;
-    const node = rng.pick(candidates);
-    node.sides.push({ id: `canon-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: event.id });
+    // Catalog overhaul: a placed space sits in its doc window (a must-see one on every node of its home column); the rest keep a random node.
+    for (const node of nodesForSpace(stage, canonKanto.spaces.find((x) => x.id === id), rng)) node.sides.push({ id: `canon-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: event.id });
   }
 }
 
 /** After an event is played: if it is a canon space, mark it finished and copy over the flags its choices set. */
 export function noteCanonEvent(run: RunState, event: { canon: string | null }): void {
-  if (!event.canon || !run.expansion?.canon) return;
+  if (!run.expansion?.canon) return;
+  // Any event can be a room of a finished space (a Greenneedle story its canon gate opened): its flags are copied over too.
+  if (!event.canon) return syncCanonFlags(run);
   const space = canonKanto.spaces.find((s) => s.id === event.canon);
   if (!space) return;
   const set = space.flags.filter((f) => Number(run.story.flags[evKey(f)] ?? 0) > 0);
@@ -145,5 +149,6 @@ export function failCanonRaid(content: Content, run: RunState, canon: string): v
   if (canon !== 'cs.kanto.vermilion.kaiju' || !run.stage) return;
   const market = [...content.events.values()].find((e) => e.canon === 'cs.kanto.vermilion.market');
   if (!market) return;
-  for (const n of run.stage.map.nodes) for (const sd of n.sides) if (sd.eventId === market.id) sd.used = true;
+  // Catalog overhaul: the stop stays, and the market's own scene shows the shutters and the sign ("BACK WHEN IT'S GONE").
+  run.story.flags['ev:kanto-kaiju-lost'] = 1;
 }

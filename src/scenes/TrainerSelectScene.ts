@@ -20,6 +20,10 @@ import { WiiCursor } from '../ui/wiiMotion';
 import { TRAINER_LAYOUTS, type TrainerLayout } from '../ui/trainerLayouts';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dressScreen } from '../ui/screenDress';
+import type { AssetManifest } from '../assets/catalog';
+import { rxFileOf } from '../ui/redux/assets';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { gridCols, gridView } from '../ui/redux/templates';
 
 const ORIGINAL_LAYOUT: TrainerLayout = { cols: 4, rows: 3, gridX: 356, gridY: 18, cellW: 140, cellH: 156, gap: 8, profile: 'side', leftW: 324, cellFill: [0x2f2838], lockedFill: 0x1f1b25, cellBorder: COLORS.borderMuted, panelFill: 0x2f2838, panelBorder: COLORS.borderMuted, light: false, spriteMax: 2, names: true };
 // The look's geometry; set once per visit in create() (one scene instance at a time).
@@ -51,6 +55,7 @@ export class TrainerSelectScene extends Phaser.Scene {
   private sortReverse = false;
   /** A run mode picked before this screen (the title's Story Run), handed on to the Preparation Desk. */
   private modeId: string | undefined;
+  private view: ReduxView | null = null;
 
   constructor() {
     super('TrainerSelect');
@@ -90,6 +95,32 @@ export class TrainerSelectScene extends Phaser.Scene {
     this.input.keyboard?.on('keydown-R', () => this.toggleReverse());
     this.updatePageText();
     this.updateSortText();
+    // New UI: the mock-up's Trainer Select (the grid template); this scene stays the controller.
+    this.view = null;
+    if (reduxOn()) {
+      const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
+      const art = (id: string) => rxFileOf(manifest, id);
+      this.view = mountRedux(this, {
+        render: (c) => {
+          COLS = gridCols(c);
+          const real = this.slots.filter((x) => x !== null), slot = this.slots[this.index] ?? null, a = slot?.archetype, open = slot?.status === 'unlocked';
+          const runs = a ? session.profile.runHistory.filter((r) => r.archetypeId === a.id) : [];
+          return gridView(c, {
+            title: 'Trainer Select', area: 'run', hints: [['Enter', 'choose'], ['Tab', `sort: ${TRAINER_SORT_LABELS[this.sortKey]} ${this.sortReverse ? '▼' : '▲'}`], ['R', 'flip'], ['Esc', 'back']],
+            n: real.length,
+            cell: (i) => { const x = real[i]!; return { art: art(x.archetype.spriteAssetId), label: x.status === 'unlocked' ? x.archetype.name : '', off: x.status !== 'unlocked', sil: x.status !== 'unlocked' }; },
+            index: Math.min(this.index, real.length - 1),
+            detail: !a ? { title: '???' } : open
+              ? { title: a.name, sub: a.title, body: a.description, art: art(a.spriteAssetId), facts: [...a.pros.slice(0, 2).map((x) => ['+', x] as const), ...a.cons.slice(0, 2).map((x) => ['−', x] as const), ['Record', runs.length ? `${runs.length} runs · ${runs.filter((r) => r.victory).length} won` : 'No runs yet'] as const] }
+              : { title: '???', sub: statusLine(slot!.status), body: slot!.status === 'comingLater' ? `${a.name} arrives in a later update.` : `How to unlock: ${a.unlockText}${a.unlockCost ? `, then ${a.unlockCost} Bank Credits in the Trainer Archive` : ''}.` },
+            found: real.filter((x) => x.status === 'unlocked').length, total: real.length, foundLabel: 'Unlocked',
+            text: this.notice.text || (open && a ? backstoryFor(session.content, a) : 'Choose a trainer. Each one changes the rules of the run a little.'),
+          });
+        },
+        acts: { pick: (i) => { this.focus(Number(i), false); this.choose(); } },
+        overs: { over: (i) => { if (Number(i) !== this.index) this.focus(Number(i)); } },
+      });
+    }
     this.focus(0, false);
 
     onInputAction(this, (action) => {
@@ -107,7 +138,8 @@ export class TrainerSelectScene extends Phaser.Scene {
   private applySort(): void {
     const { session } = services();
     const p = session.profile;
-    const all = [...session.content.archetypes.values()].filter((a) => isPlayerTrainer(a.id));
+    // Every trainer can be picked once owned; the five starting trainers lead the default order.
+    const all = [...session.content.archetypes.values()].sort((x, y) => Number(!isPlayerTrainer(x.id)) - Number(!isPlayerTrainer(y.id)));
     const data = all.filter((a) => !a.evolvedFrom).flatMap((a) => [a, ...all.filter((e) => e.evolvedFrom === a.id)]);
     const ordered = sortTrainers(data, this.sortKey, p, this.sortReverse);
     this.slots = ordered.map((a) => ({ archetype: a, status: trainerStatus(p, a) }));
@@ -242,6 +274,7 @@ export class TrainerSelectScene extends Phaser.Scene {
     if (focused) this.children.bringToTop(focused);
     this.notice.setText('');
     this.drawProfile(this.slots[i] ?? null);
+    this.view?.refresh();
   }
 
   private get motion(): 'full' | 'reduced' | 'off' {
@@ -402,6 +435,7 @@ export class TrainerSelectScene extends Phaser.Scene {
     if (!slot || slot.status !== 'unlocked') {
       playSfx(this, 'ui.error', 0.5);
       this.notice.setText(!slot ? 'That trainer has not arrived yet.' : slot.status === 'claimable' ? 'Claim this trainer in the Hub\'s Trainer Archive first.' : 'This trainer is still locked.');
+      this.view?.refresh();
       return;
     }
     // The Preparation Desk picks up ?seed=... and ?campaign=dev from the address.

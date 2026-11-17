@@ -79,11 +79,11 @@ describe('Feels Left Out / Campfire: ask to lead (2.3)', () => {
 import { conditionText, conditionMet } from '../../src/core/events';
 
 describe('Kindness peaceful encounter (2.3)', () => {
-  it('A Quiet Hello offers the gentle choice only to a party with a Kindness Pokémon', async () => {
+  it('the Kindness condition holds only for a party with a Kindness Pokémon', async () => {
+    // A Quiet Hello (Catalog Overhaul SF83) now reads the road's record instead; the condition is tested on its own.
     const ev = content.events.get('a-quiet-hello')!;
-    expect(ev).toBeTruthy();
-    const gentle = ev.choices.find((c) => c.requires?.some((r) => r.kind === 'emotion'))!;
-    const cond = gentle.requires!.find((r) => r.kind === 'emotion')!;
+    expect(JSON.stringify(ev.remembers)).toContain('"kind":"record"');
+    const cond = { kind: 'emotion', id: 'kindness' } as const;
     const run = fresh();
     expect(conditionMet(content, run, cond)).toBe(false);
     expect(conditionText(content, cond)).toBe('Needs a Kindness Pokémon in your party');

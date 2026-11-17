@@ -1,0 +1,1602 @@
+{
+ "ev-abandoned-expedition": {
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "optional",
+  "tags": [
+   "snow",
+   "high",
+   "cave"
+  ],
+  "note": "SF31 The Lost Expedition. Rooms: lost-expedition-camp, lost-expedition-cache, ovc-lost-expedition-s2, ovc-lost-expedition-s3, fb-valley-egg."
+ },
+ "lighthouse-entrance": {
+  "shape": "Door",
+  "earliest": "A5",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "optional",
+  "tags": [
+   "water",
+   "high tide"
+  ],
+  "level": "A+1",
+  "note": "SF34 The Sunken Lighthouse. Rooms: lighthouse-1, lighthouse-2, lighthouse-final, fb-lighthouse-farewell. ovc-the-lighthouse-that-remembers-s1 comes back later the same run."
+ },
+ "quarry-entrance": {
+  "shape": "Door",
+  "earliest": "A4",
+  "home": 12,
+  "window": [
+   10,
+   14
+  ],
+  "sits": "optional",
+  "tags": [
+   "cave"
+  ],
+  "level": "A+1",
+  "note": "SF36 The Old Quarry. Rooms: quarry-1, quarry-2, quarry-final; fb-quarry-after."
+ },
+ "w4-dive": {
+  "shape": "Door",
+  "earliest": "A5",
+  "home": 13,
+  "window": [
+   11,
+   15
+  ],
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "level": "A+1",
+  "note": "SF37 The Captain's Chest. Rooms: w4-dive-1, dz-dive-wreck, w4-dive-2, fb-chest-surface."
+ },
+ "whispering-grove-entrance": {
+  "shape": "Door",
+  "earliest": "A6",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "note": "SF39 The Whispering Grove. Rooms: whispering-grove-1, -2, -final."
+ },
+ "windswept-spire-entrance": {
+  "shape": "Door",
+  "earliest": "A5",
+  "home": 14,
+  "window": [
+   12,
+   16
+  ],
+  "sits": "optional",
+  "tags": [
+   "high"
+  ],
+  "level": "A+2",
+  "note": "SF40 The Windswept Spire. A+2 at the top (windswept-spire-final)."
+ },
+ "ovc-the-lighthouse-that-remembers-s1": {
+  "shape": "Single",
+  "earliest": "A5",
+  "home": "a + node, after the Sunken Lighthouse",
+  "sits": "optional",
+  "attaches": "rest",
+  "tags": [
+   "water"
+  ],
+  "note": "SF34.5: same-run callback (the pack said next run; cross-run memory is not allowed)."
+ },
+ "ev-pokemon-migration": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": 8,
+  "window": [
+   5,
+   12
+  ],
+  "sits": "optional",
+  "note": "SF32 The One Far From Home."
+ },
+ "lighthouse": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "home": "town at Night",
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "beats": [
+   "fb-harbour-island",
+   "fb-harbour-return"
+  ],
+  "note": "SF33 The Light at the Harbour. Beats: town at Night; step 12; step 17.",
+  "chain": "sf33-harbour",
+  "beat": 1
+ },
+ "fb-harbour-island": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "home": 12,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf33-harbour",
+  "beat": 2
+ },
+ "fb-harbour-return": {
+  "shape": "Stage-Three",
+  "earliest": "A3",
+  "home": 17,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf33-harbour",
+  "beat": 3
+ },
+ "old-foe-returns": {
+  "shape": "Single",
+  "earliest": "after a loss",
+  "home": 11,
+  "window": [
+   8,
+   14
+  ],
+  "sits": "optional",
+  "level": "A+1",
+  "note": "SF35 The One That Beat You: the second stage after the loss. fb-foe-stalks and fb-foe-after follow it."
+ },
+ "w4-night-watch": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "a + node at Night",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "SF38 Who Keeps Watch. fb-watch-dawn and fb-watch-again follow it."
+ },
+ "ovc-tide-lock-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf41-sunken-city",
+  "beat": 1,
+  "note": "SF41.1 The Sunken City (the sunken bell merges in). fb-city-low-tide repeats beat 1 a stage later. One chain per stage."
+ },
+ "ovc-tide-lock-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 12,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf41-sunken-city",
+  "beat": 2
+ },
+ "ovc-tide-lock-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 17,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf41-sunken-city",
+  "beat": 3
+ },
+ "ovc-singing-whale-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf41-whale-song",
+  "beat": 1,
+  "note": "SF41.2 Whale Song. One chain per stage."
+ },
+ "ovc-singing-whale-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 12,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf41-whale-song",
+  "beat": 2
+ },
+ "ovc-singing-whale-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 17,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf41-whale-song",
+  "beat": 3
+ },
+ "ovc-stone-giant-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "high"
+  ],
+  "chain": "sf41-stone-giant",
+  "beat": 1,
+  "note": "SF41.3 The Stone Giant. One chain per stage."
+ },
+ "ovc-stone-giant-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 12,
+  "sits": "optional",
+  "tags": [
+   "high"
+  ],
+  "chain": "sf41-stone-giant",
+  "beat": 2
+ },
+ "ovc-stone-giant-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 17,
+  "sits": "optional",
+  "tags": [
+   "high"
+  ],
+  "chain": "sf41-stone-giant",
+  "beat": 3
+ },
+ "ovc-glass-forest-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "chain": "sf41-glass-forest",
+  "beat": 1,
+  "note": "SF41.4 The Glass Forest. One chain per stage."
+ },
+ "ovc-glass-forest-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 12,
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "chain": "sf41-glass-forest",
+  "beat": 2
+ },
+ "ovc-glass-forest-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 17,
+  "sits": "optional",
+  "tags": [
+   "forest"
+  ],
+  "chain": "sf41-glass-forest",
+  "beat": 3
+ },
+ "ovc-quiet-shrine-keeper-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "snow"
+  ],
+  "chain": "sf41-fox-shrine",
+  "beat": 1,
+  "note": "SF41.5 The Fox at the Shrine (the snow fox trail merges in). fb-fox-gift comes back the same run. One chain per stage."
+ },
+ "ovc-quiet-shrine-keeper-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 12,
+  "sits": "optional",
+  "tags": [
+   "snow"
+  ],
+  "chain": "sf41-fox-shrine",
+  "beat": 2
+ },
+ "ovc-quiet-shrine-keeper-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 17,
+  "sits": "optional",
+  "tags": [
+   "snow"
+  ],
+  "chain": "sf41-fox-shrine",
+  "beat": 3
+ },
+ "ovc-midnight-circus-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [],
+  "chain": "sf41-midnight-circus",
+  "beat": 1,
+  "note": "SF41.6 The Midnight Circus. fb-circus-again comes back the same run. One chain per stage."
+ },
+ "ovc-midnight-circus-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 12,
+  "sits": "optional",
+  "tags": [],
+  "chain": "sf41-midnight-circus",
+  "beat": 2
+ },
+ "ovc-midnight-circus-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 17,
+  "sits": "optional",
+  "tags": [],
+  "chain": "sf41-midnight-circus",
+  "beat": 3
+ },
+ "ovc-mirror-lake-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf41-mirror-lake",
+  "beat": 1,
+  "note": "SF41.7 The Mirror Lake. One chain per stage."
+ },
+ "ovc-mirror-lake-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 12,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf41-mirror-lake",
+  "beat": 2
+ },
+ "ovc-mirror-lake-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 17,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf41-mirror-lake",
+  "beat": 3
+ },
+ "ovc-the-day-everything-slept-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [],
+  "chain": "sf41-day-everything-slept",
+  "beat": 1,
+  "note": "SF41.8 The Day Everything Slept. One chain per stage."
+ },
+ "ovc-the-day-everything-slept-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 12,
+  "sits": "optional",
+  "tags": [],
+  "chain": "sf41-day-everything-slept",
+  "beat": 2
+ },
+ "ovc-the-day-everything-slept-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 17,
+  "sits": "optional",
+  "tags": [],
+  "chain": "sf41-day-everything-slept",
+  "beat": 3
+ },
+ "fb-city-low-tide": {
+  "shape": "Stage-Three",
+  "earliest": "A2",
+  "home": 6,
+  "sits": "optional",
+  "tags": [
+   "water"
+  ],
+  "chain": "sf41-sunken-city",
+  "beat": 1,
+  "note": "Beat 1 again, a stage after \"Wait for next low tide\"."
+ },
+ "fb-fox-gift": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "a + node",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "SF41.5 afterstory, same run."
+ },
+ "fb-circus-again": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "a + node at Night",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "SF41.6 afterstory, same run (the pack said next run)."
+ },
+ "ovc-roadside-stand-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-roadside-stand-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-roadside-stand-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-lost-hat-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-lost-hat-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-lost-hat-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-fisherman-tip-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-fisherman-tip-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-fisherman-tip-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-lost-child-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-lost-child-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-lost-child-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-tinkering-kid-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-tinkering-kid-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-tinkering-kid-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-herb-gatherer-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-herb-gatherer-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-herb-gatherer-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-abandoned-backpack-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-abandoned-backpack-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-abandoned-backpack-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-mysterious-merchant-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-mysterious-merchant-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-mysterious-merchant-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-dig-up-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-dig-up-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-dig-up-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-researcher-request-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-researcher-request-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-researcher-request-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-stray-trainer-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-stray-trainer-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-stray-trainer-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-whispering-tree-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-whispering-tree-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-whispering-tree-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-traveling-tailor-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-traveling-tailor-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-traveling-tailor-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-mountain-shrine-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-mountain-shrine-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-mountain-shrine-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-ranger-patrol-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-ranger-patrol-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-ranger-patrol-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-lost-pokemon-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-lost-pokemon-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-lost-pokemon-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-snowed-in-inn-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-snowed-in-inn-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-snowed-in-inn-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-runaway-egg-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-runaway-egg-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-runaway-egg-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-rain-dance-festival-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-rain-dance-festival-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-rain-dance-festival-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-tree-house-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-tree-house-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-tree-house-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-shipwreck-find-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-shipwreck-find-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-shipwreck-find-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-midnight-singer-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-midnight-singer-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-midnight-singer-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-bakery-queue-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-bakery-queue-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-bakery-queue-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-scarecrow-trial-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-scarecrow-trial-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-scarecrow-trial-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-sleepy-lighthouse-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-sleepy-lighthouse-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-sleepy-lighthouse-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-collector-request-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "note": "Road chain step 1; ovc-collector-request-s2 comes back 3 to 6 nodes later."
+ },
+ "ovc-collector-request-s2": {
+  "shape": "Single",
+  "earliest": "A2",
+  "home": "3 to 6 nodes after step 1",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "Road chain step 2 (callback)."
+ },
+ "ovc-swap-meet-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-crowded-market-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-trading-card-kid-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-cracked-egg-stand-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-old-ferry-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-midnight-market-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-kitchen-contest-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-bug-contest-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-rain-shelter-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-backyard-battle-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-strange-footprints-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-ancient-puzzle-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-berry-thief-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-wandering-bard-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-old-photographer-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-guarded-item-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-broken-machine-s1": {
+  "shape": "Single",
+  "earliest": "A1",
+  "sits": "optional",
+  "often": "once per run",
+  "note": "Road scene (one step)."
+ },
+ "ovc-long-letter-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-long-letter",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-long-letter-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-long-letter",
+  "beat": 2
+ },
+ "ovc-long-letter-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-long-letter",
+  "beat": 3
+ },
+ "ovc-secret-recipe-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-secret-recipe",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-secret-recipe-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-secret-recipe",
+  "beat": 2
+ },
+ "ovc-secret-recipe-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-secret-recipe",
+  "beat": 3
+ },
+ "ovc-night-nurse-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-night-nurse",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-night-nurse-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-night-nurse",
+  "beat": 2
+ },
+ "ovc-night-nurse-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-night-nurse",
+  "beat": 3
+ },
+ "ovc-rooftop-garden-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-rooftop-garden",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-rooftop-garden-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-rooftop-garden",
+  "beat": 2
+ },
+ "ovc-rooftop-garden-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-rooftop-garden",
+  "beat": 3
+ },
+ "ovc-rain-ridge-rite-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-rain-ridge-rite",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-rain-ridge-rite-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-rain-ridge-rite",
+  "beat": 2
+ },
+ "ovc-rain-ridge-rite-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-rain-ridge-rite",
+  "beat": 3
+ },
+ "ovc-clockwork-cat-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-clockwork-cat",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-clockwork-cat-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-clockwork-cat",
+  "beat": 2
+ },
+ "ovc-clockwork-cat-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-clockwork-cat",
+  "beat": 3
+ },
+ "ovc-marathon-of-three-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-marathon-of-three",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-marathon-of-three-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-marathon-of-three",
+  "beat": 2
+ },
+ "ovc-marathon-of-three-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-marathon-of-three",
+  "beat": 3
+ },
+ "ovc-weather-vane-keeper-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-weather-vane-keeper",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-weather-vane-keeper-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-weather-vane-keeper",
+  "beat": 2
+ },
+ "ovc-weather-vane-keeper-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-weather-vane-keeper",
+  "beat": 3
+ },
+ "ovc-silent-merchant-king-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-silent-merchant-king",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-silent-merchant-king-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-silent-merchant-king",
+  "beat": 2
+ },
+ "ovc-silent-merchant-king-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-silent-merchant-king",
+  "beat": 3
+ },
+ "ovc-memory-lane-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-memory-lane",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-memory-lane-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-memory-lane",
+  "beat": 2
+ },
+ "ovc-memory-lane-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-memory-lane",
+  "beat": 3
+ },
+ "ovc-rift-picnic-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-rift-picnic",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-rift-picnic-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-rift-picnic",
+  "beat": 2
+ },
+ "ovc-rift-picnic-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-rift-picnic",
+  "beat": 3
+ },
+ "ovc-whale-road-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-whale-road",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-whale-road-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-whale-road",
+  "beat": 2
+ },
+ "ovc-whale-road-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-whale-road",
+  "beat": 3
+ },
+ "ovc-dream-bridge-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-dream-bridge",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-dream-bridge-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-dream-bridge",
+  "beat": 2
+ },
+ "ovc-dream-bridge-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-dream-bridge",
+  "beat": 3
+ },
+ "ovc-the-last-trainer-of-town-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-last-trainer-of-town",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-last-trainer-of-town-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-last-trainer-of-town",
+  "beat": 2
+ },
+ "ovc-the-last-trainer-of-town-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-last-trainer-of-town",
+  "beat": 3
+ },
+ "ovc-beyond-the-gate-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-beyond-the-gate",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-beyond-the-gate-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-beyond-the-gate",
+  "beat": 2
+ },
+ "ovc-beyond-the-gate-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-beyond-the-gate",
+  "beat": 3
+ },
+ "ovc-moon-market-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-moon-market",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-moon-market-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-moon-market",
+  "beat": 2
+ },
+ "ovc-moon-market-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-moon-market",
+  "beat": 3
+ },
+ "ovc-the-mirror-of-your-run-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-mirror-of-your-run",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-mirror-of-your-run-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-mirror-of-your-run",
+  "beat": 2
+ },
+ "ovc-the-mirror-of-your-run-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-mirror-of-your-run",
+  "beat": 3
+ },
+ "ovc-the-orchestra-in-the-ruins-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-orchestra-in-the-ruins",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-orchestra-in-the-ruins-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-orchestra-in-the-ruins",
+  "beat": 2
+ },
+ "ovc-the-orchestra-in-the-ruins-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-orchestra-in-the-ruins",
+  "beat": 3
+ },
+ "ovc-the-museum-after-closing-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-museum-after-closing",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-museum-after-closing-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-museum-after-closing",
+  "beat": 2
+ },
+ "ovc-the-museum-after-closing-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-museum-after-closing",
+  "beat": 3
+ },
+ "ovc-the-ferris-wheel-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-ferris-wheel",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-ferris-wheel-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-ferris-wheel",
+  "beat": 2
+ },
+ "ovc-the-ferris-wheel-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-ferris-wheel",
+  "beat": 3
+ },
+ "ovc-the-garden-of-small-battles-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-garden-of-small-battles",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-garden-of-small-battles-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-garden-of-small-battles",
+  "beat": 2
+ },
+ "ovc-the-garden-of-small-battles-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-garden-of-small-battles",
+  "beat": 3
+ },
+ "ovc-the-weight-of-a-single-berry-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-weight-of-a-single-berry",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-weight-of-a-single-berry-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-weight-of-a-single-berry",
+  "beat": 2
+ },
+ "ovc-the-weight-of-a-single-berry-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-weight-of-a-single-berry",
+  "beat": 3
+ },
+ "ovc-the-snow-globe-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-snow-globe",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-snow-globe-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-snow-globe",
+  "beat": 2
+ },
+ "ovc-the-snow-globe-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-snow-globe",
+  "beat": 3
+ },
+ "ovc-the-dance-at-the-edge-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-dance-at-the-edge",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-dance-at-the-edge-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-dance-at-the-edge",
+  "beat": 2
+ },
+ "ovc-the-dance-at-the-edge-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-dance-at-the-edge",
+  "beat": 3
+ },
+ "ovc-the-song-in-the-well-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-song-in-the-well",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-song-in-the-well-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-song-in-the-well",
+  "beat": 2
+ },
+ "ovc-the-song-in-the-well-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-song-in-the-well",
+  "beat": 3
+ },
+ "ovc-the-long-night-at-the-inn-s1": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 6,
+  "sits": "optional",
+  "chain": "road-the-long-night-at-the-inn",
+  "beat": 1,
+  "note": "Miniature Episode. Plays today on the old node timer (steps 2 and 3 a few nodes after the step before)."
+ },
+ "ovc-the-long-night-at-the-inn-s2": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 12,
+  "sits": "optional",
+  "chain": "road-the-long-night-at-the-inn",
+  "beat": 2
+ },
+ "ovc-the-long-night-at-the-inn-s3": {
+  "shape": "Stage-Three",
+  "earliest": "A1",
+  "home": 17,
+  "sits": "optional",
+  "chain": "road-the-long-night-at-the-inn",
+  "beat": 3
+ },
+ "ovc-last-train-s1": {
+  "shape": "Single",
+  "earliest": "A8",
+  "home": "a + node at Night, on the ticket's date",
+  "sits": "optional",
+  "attaches": "rest",
+  "note": "FE8. Needs the ticket from The Last Stop (greenneedle)."
+ }
+}

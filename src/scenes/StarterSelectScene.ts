@@ -16,6 +16,10 @@ import { preloadPokemon } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { dressScreen } from '../ui/screenDress';
 import { STARTER_LAYOUTS, type StarterLayout } from '../ui/starterLayouts';
+import { pokemonAssetIds, type AssetManifest } from '../assets/catalog';
+import { rxFileOf } from '../ui/redux/assets';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { starterView, type StarterPick } from '../ui/redux/screens/run';
 
 const ORIGINAL: StarterLayout = { head: COLORS.textLight, mode: 'cards', shape: 'glass', card: (i) => ({ x: (GAME_WIDTH - (280 * 3 + 48)) / 2 + i * 304, y: 100, w: 280, h: 400, rot: 0 }), ink: COLORS.text, muted: COLORS.textMuted };
 
@@ -35,6 +39,9 @@ export class StarterSelectScene extends Phaser.Scene {
     const { session } = services();
     preloadPokemon(this, (session.run?.starterChoices ?? []).flatMap((id) => session.content.species.get(id) ?? []), { front: true });
   }
+
+  /** New UI view, when on. */
+  private view: ReduxView | null = null;
 
   create(): void {
     this.chosen = false;
@@ -70,6 +77,23 @@ export class StarterSelectScene extends Phaser.Scene {
 
     // Keyboard hints are only for keyboards (on a touch screen they sat on top of the cards).
     if (!this.sys.game.device.input.touch) this.add.text(GAME_WIDTH / 2, 516, 'Arrows choose  ·  Enter confirm  ·  Esc menu (run is saved)', textStyle(18, look === 'original' ? '#a69cb4' : L.head)).setOrigin(0.5).setDepth(5);
+
+    // New UI: the mock-ups' Starter Select (lab table, cards or the grass, by theme) when no screen style is picked.
+    this.view?.destroy();
+    this.view = null;
+    if (reduxOn() && look === 'original') {
+      const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
+      const picks: StarterPick[] = run.starterChoices.map((speciesId) => {
+        const species = getSpecies(content, speciesId), b = species.baseStats;
+        const preview = createPokemon(content, speciesId, content.balance.starterLevel, 'preview');
+        return { name: species.name, file: rxFileOf(manifest, pokemonAssetIds(species.assets).front)?.file ?? null, types: species.types, stats: `HP ${b.hp}  Atk ${b.atk}  Def ${b.def}  SpA ${b.spa}  SpD ${b.spd}  Spe ${b.spe}`, moves: `Lv ${preview.level}: ${preview.moves.map((m) => content.moves.get(m.id)!.name).join(', ')}` };
+      });
+      this.view = mountRedux(this, {
+        render: (c) => starterView(c, { title: 'Starter Select', picks, on: this.index, sub: `Trainer ${archetype.name}, seed ${run.seed}` }),
+        acts: { pick: (i) => (Number(i) === this.index ? this.choose(this.index) : this.focus(Number(i))), yes: () => this.choose(this.index), no: () => this.focus((this.index + 1) % 3) },
+        overs: { over: (i) => this.focus(Number(i)) },
+      });
+    }
 
     onInputAction(this, (action) => {
       if (action === 'left') this.focus((this.index + 2) % 3);
@@ -193,6 +217,7 @@ export class StarterSelectScene extends Phaser.Scene {
 
   private focus(i: number): void {
     this.index = i;
+    this.view?.refresh();
     this.cursors.forEach((c, n) => (c as unknown as Phaser.GameObjects.Graphics).setVisible?.(n === i));
     const L = this.lay;
     if (L.mode !== 'focus') return;

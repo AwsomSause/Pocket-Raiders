@@ -99,6 +99,7 @@ export function damageDealtPerk(perks: Perks | undefined, i: DamageDealtInfo): n
   v *= product(perks, 'moveFlagDamage', (m) => m.flags.some((f) => i.moveFlags?.includes(f)));
   for (const m of of(perks, 'unusualDamageMultiplier')) v *= i.userRarity === 'unusual' ? m.unusual : i.userRarity === 'common' ? m.common : 1;
   if ((i.enemiesDefeated ?? 0) > 0) v *= product(perks, 'afterKoDamageMultiplier');
+  if (i.userTypes.includes(i.moveType)) v *= product(perks, 'stabDamageMultiplier', (m) => i.userTypes.includes(m.type));
   v *= product(perks, 'lowHpDamageMultiplier', (m) => i.hpShare < m.below);
   v *= product(perks, 'levelGapDamageMultiplier', (m) => (m.foe === 'higher' ? i.targetLevel > i.userLevel : i.targetLevel < i.userLevel));
   if (i.targetIsBoss) v *= product(perks, 'bossDamageMultiplier');
@@ -398,13 +399,14 @@ export function enemyHealingBlocked(perks: Perks | undefined): boolean {
 
 /** Moves that hit every foe in double battles (for the perk's damage rule; battle/doubles.ts has the full target list). */
 const SPREAD_MOVES = new Set([
+  'stamp', // Greenneedle gn.26: a giant's footfall shakes the whole field
   'earthquake', 'surf', 'rock-slide', 'blizzard', 'heat-wave', 'discharge', 'razor-leaf', 'muddy-water', 'bulldoze', 'dazzling-gleam', 'hyper-voice',
   'icy-wind', 'snarl', 'electroweb', 'sludge-wave', 'eruption', 'water-spout', 'boomburst', 'lava-plume', 'sparkling-aria', 'origin-pulse',
   'precipice-blades', 'petal-blizzard', 'struggle-bug', 'breaking-swipe', 'glaciate', 'mind-blown', 'self-destruct', 'explosion', 'magnitude',
   'acid', 'powder-snow', 'swift', 'twister', 'air-cutter', 'incinerate', 'clanging-scales', 'core-enforcer', 'burning-jealousy', 'corrosive-gas',
   'dark-void', 'parabolic-charge', 'sandsear-storm', 'wildbolt-storm', 'bleakwind-storm', 'springtide-storm', 'hyper-voice', 'misty-explosion',
   'synchronoise', 'teatime', 'overdrive', 'disarming-voice',
-  'bubble', 'sweet-scent', 'growl', 'leer', 'tail-whip', 'captivate', 'poison-gas',
+  'bubble', 'tidal-surge', 'sweet-scent', 'growl', 'leer', 'tail-whip', 'captivate', 'poison-gas',
 ]);
 export function isSpreadMove(moveId: string): boolean {
   return SPREAD_MOVES.has(moveId);
@@ -420,6 +422,11 @@ export function healingMoveMultiplier(perks: Perks | undefined): number {
 
 export function burnDamageTakenPerk(perks: Perks | undefined): number {
   return product(perks, 'burnDamageTakenMultiplier');
+}
+
+/** The extra damage a curse tag adds to a hit on your own Pokémon (1 = all of it; the Fox's charm halves it). */
+export function curseDamageTakenPerk(perks: Perks | undefined): number {
+  return product(perks, 'curseDamageTakenMultiplier');
 }
 
 export function bossMoneyPerk(perks: Perks | undefined): number {
@@ -483,6 +490,34 @@ export function critChanceBonusPerk(perks: Perks | undefined): number {
 
 export function catchMoneyPerk(perks: Perks | undefined): number {
   return product(perks, 'catchMoneyMultiplier');
+}
+
+// ---------- Mentor lessons (engine.ts reads these; once-per-battle marks live in battle.lesson) ----------
+
+/** Turn-one knockout: Speed stages for the next Pokémon you send in that battle (0 = no lesson). */
+export function turnOneKoSpeedStages(perks: Perks | undefined): number {
+  return Math.max(0, ...of(perks, 'turnOneKoSpeed').map((m) => m.stages));
+}
+
+/** Your Pokémon can't flinch on turn one of a boss or rival battle. */
+export function noFlinchTurnOne(perks: Perks | undefined, battle: { turn: number; trainer?: { classId?: string | null } | null; rival?: boolean; firstRival?: boolean; rivalId?: string; narrative?: unknown }): boolean {
+  if (battle.turn !== 1 || of(perks, 'noFlinchTurnOne').length === 0) return false;
+  return isBossClass(battle.trainer?.classId) || Boolean(battle.rival || battle.firstRival || battle.rivalId || battle.narrative);
+}
+
+/** A foe's first miss in a battle: stages your active Pokémon's higher attacking stat gains (0 = no lesson). */
+export function foeMissBoostStages(perks: Perks | undefined): number {
+  return Math.max(0, ...of(perks, 'foeMissBoost').map((m) => m.stages));
+}
+
+/** The foe's first move of each battle is shown before you pick. */
+export function hasFoeMovePreview(perks: Perks | undefined): boolean {
+  return of(perks, 'foeMovePreview').length > 0;
+}
+
+/** Experience multiplier for the next survivable lost battle (1 = no lesson). */
+export function lostBattleXpMultiplier(perks: Perks | undefined): number {
+  return product(perks, 'lostBattleXp');
 }
 
 /** Move flags a perk can name: the data's flags plus "dance" (Essentials' Dance flag, `npm run data:move-flags`). */

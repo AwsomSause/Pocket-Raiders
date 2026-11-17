@@ -10,6 +10,8 @@ import { AERO, drawGlass, glassPanel as drawPanel } from '../ui/aero';
 import { playSfx } from '../ui/audio';
 import { COLORS, GAME_HEIGHT, GAME_WIDTH, textStyle } from '../ui/theme';
 import type { RunPrepData } from './RunPrepScene';
+import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
+import { formView } from '../ui/redux/screens/run';
 
 export interface RunSeedData {
   desk: RunPrepData;
@@ -24,6 +26,9 @@ export class RunSeedScene extends Phaser.Scene {
   private desk!: RunPrepData;
   private input_: HTMLInputElement | null = null;
   private notice!: Phaser.GameObjects.Text;
+  /** New UI: the mock-ups' Seed & Codes form; the real text box sits in its value window. */
+  private view: ReduxView | null = null;
+  private lit = '';
 
   constructor() {
     super('RunSeed');
@@ -69,6 +74,22 @@ export class RunSeedScene extends Phaser.Scene {
     });
     document.body.appendChild(el);
     this.input_ = el;
+    this.view = reduxOn() ? mountRedux(this, {
+      render: (c) => formView(c, {
+        title: 'Seed & Codes', heading: 'Enter a seed or a share code, or leave it random',
+        buttons: [['Paste', 'paste'], ['Confirm', 'apply'], ['Clear', 'clear']], primary: 1, lit: this.lit,
+        text: this.notice.text || 'The same seed gives the same region, events and rewards. Codes: PR1 seed, GH1 ghost race, CC1 challenge card, TM1 team.',
+        hints: [['Enter', 'confirm'], ['Esc', 'desk']],
+      }),
+      acts: {
+        key: (ch) => { this.lit = ch; this.setText((this.input_?.value ?? '') + ch); this.view?.refresh(); },
+        btn: (b) => (b === 'apply' ? this.apply() : b === 'paste' ? void this.paste() : this.setText('')),
+      },
+    }) : null;
+    if (this.view) {
+      Object.assign(el.style, { zIndex: '41', border: '0', background: 'transparent', textAlign: 'center', letterSpacing: '.12em', fontWeight: '700', padding: '0', borderRadius: '0', textTransform: 'uppercase' } satisfies Partial<CSSStyleDeclaration>);
+      el.addEventListener('input', () => { this.lit = el.value.slice(-1).toUpperCase(); this.view?.refresh(); });
+    }
     this.place();
     this.scale.on('resize', this.place, this);
     this.events.on('postupdate', this.place, this);
@@ -87,6 +108,13 @@ export class RunSeedScene extends Phaser.Scene {
     if (!el) return;
     const rect = this.game.canvas.getBoundingClientRect();
     const k = rect.width / GAME_WIDTH;
+    const field = this.view?.el.querySelector<HTMLElement>('.rx-field');
+    if (field) {
+      // New UI: the box fills the mock-up's value window and takes its lettering.
+      const f = field.getBoundingClientRect(), look = getComputedStyle(field);
+      Object.assign(el.style, { left: `${f.left}px`, top: `${f.top}px`, width: `${f.width}px`, height: `${f.height}px`, fontSize: `${Math.max(16, 26 * k)}px`, fontFamily: look.fontFamily, color: look.color });
+      return;
+    }
     Object.assign(el.style, { left: `${rect.left + BOX.x * k}px`, top: `${rect.top + BOX.y * k}px`, width: `${BOX.w * k}px`, height: `${BOX.h * k}px`, fontSize: `${Math.max(16, 20 * k)}px` });
   }
 
@@ -106,6 +134,7 @@ export class RunSeedScene extends Phaser.Scene {
   private say(text: string): void {
     playSfx(this, 'ui.error', 0.4);
     this.notice.setText(text);
+    this.view?.refresh();
   }
 
   private button(x: number, y: number, w: number, h: number, label: string, fn: () => void, primary = false): void {
@@ -127,6 +156,7 @@ export class RunSeedScene extends Phaser.Scene {
     if (result.kind === 'error') return this.say(result.notice);
     if (result.kind === 'info') {
       this.notice.setText(result.notice);
+      this.view?.refresh();
       return;
     }
     if (result.kind === 'seed') return this.leave({ ...this.desk, seed: result.seed });

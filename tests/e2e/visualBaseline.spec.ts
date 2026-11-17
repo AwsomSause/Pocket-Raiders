@@ -21,6 +21,8 @@ async function startDevRun(page: Page, seed: string) {
     await waitForScene(page, next);
   }
   await expect.poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Map').busy), { timeout: 10_000 }).toBe(false);
+  // A plain first fight: no event (Kanto's attached ones) opens before it.
+  await page.evaluate(() => { for (const n of (window as any).__pkr.session.run.stage.map.nodes) if (n.column === 1) n.sides = []; });
 }
 
 /** Stops every running scene and starts `key` with `data`, after `prep` changed the run. */

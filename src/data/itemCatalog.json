@@ -9682,7 +9682,7 @@
   "name": "Root Fossil",
   "family": "Fossils",
   "description": "Lileep joins your party",
-  "rarity": "rare",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -9698,7 +9698,7 @@
   "name": "Claw Fossil",
   "family": "Fossils",
   "description": "Anorith joins your party",
-  "rarity": "rare",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -9762,7 +9762,7 @@
   "name": "Plume Fossil",
   "family": "Fossils",
   "description": "Archen joins your party",
-  "rarity": "rare",
+  "rarity": "uncommon",
   "stacksOn": "player",
   "max": null,
   "how": "use",
@@ -10918,6 +10918,7 @@
  },
  {
   "id": "oaks-letter",
+  "giftOnly": true,
   "name": "Oak's Letter",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens a special stop with a Gen 1 legendary-bird encounter",
@@ -11056,6 +11057,7 @@
  },
  {
   "id": "secret-key",
+  "giftOnly": true,
   "name": "Secret Key",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens a hidden stop on the next stage with a Fire-type rare Pokémon",
@@ -11171,6 +11173,7 @@
  },
  {
   "id": "works-key",
+  "giftOnly": true,
   "name": "Works Key",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens a power plant stop with an Electric rare Pokémon",
@@ -11378,6 +11381,7 @@
  },
  {
   "id": "eon-ticket",
+  "giftOnly": true,
   "name": "Eon Ticket",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens Southern Island: Latios or Latias",
@@ -11401,6 +11405,7 @@
  },
  {
   "id": "mysticticket",
+  "giftOnly": true,
   "name": "MysticTicket",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens Navel Rock: Ho-Oh or Lugia",
@@ -11424,6 +11429,7 @@
  },
  {
   "id": "auroraticket",
+  "giftOnly": true,
   "name": "AuroraTicket",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens Birth Island: Deoxys",
@@ -11447,6 +11453,7 @@
  },
  {
   "id": "old-sea-map",
+  "giftOnly": true,
   "name": "Old Sea Map",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens Faraway Island: Mew",
@@ -11470,6 +11477,7 @@
  },
  {
   "id": "liberty-pass",
+  "giftOnly": true,
   "name": "Liberty Pass",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens Liberty Garden: Victini",
@@ -11493,6 +11501,7 @@
  },
  {
   "id": "azure-flute",
+  "giftOnly": true,
   "name": "Azure Flute",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens the Hall of Origin: Arceus",
@@ -11516,6 +11525,7 @@
  },
  {
   "id": "meteorite",
+  "giftOnly": true,
   "name": "Meteorite",
   "family": "Key items: tickets, keys and story items",
   "description": "Deoxys: change Forme from the Bag",
@@ -11539,6 +11549,7 @@
  },
  {
   "id": "odd-keystone",
+  "giftOnly": true,
   "name": "Odd Keystone",
   "family": "Key items: tickets, keys and story items",
   "description": "Collect it: after 3 stages, Spiritomb joins your party",
@@ -12364,6 +12375,7 @@
  },
  {
   "id": "dark-stone",
+  "giftOnly": true,
   "name": "Dark Stone",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens the Zekrom event",
@@ -12387,6 +12399,7 @@
  },
  {
   "id": "light-stone",
+  "giftOnly": true,
   "name": "Light Stone",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens the Reshiram event",
@@ -12434,6 +12447,7 @@
  },
  {
   "id": "kyurem-black",
+  "giftOnly": true,
   "name": "DNA Splicers (Black)",
   "family": "Key items: tickets, keys and story items",
   "description": "Kyurem + Zekrom: fuse into Black Kyurem",
@@ -12457,6 +12471,7 @@
  },
  {
   "id": "kyurem-white",
+  "giftOnly": true,
   "name": "DNA Splicers (White)",
   "family": "Key items: tickets, keys and story items",
   "description": "Kyurem + Reshiram: fuse into White Kyurem",
@@ -12480,6 +12495,7 @@
  },
  {
   "id": "tornadus-therian",
+  "giftOnly": true,
   "name": "Reveal Glass (Tornadus)",
   "family": "Key items: tickets, keys and story items",
   "description": "Tornadus: switch to Therian Forme",
@@ -12503,6 +12519,7 @@
  },
  {
   "id": "thundurus-therian",
+  "giftOnly": true,
   "name": "Reveal Glass (Thundurus)",
   "family": "Key items: tickets, keys and story items",
   "description": "Thundurus: switch to Therian Forme",
@@ -12526,6 +12543,7 @@
  },
  {
   "id": "landorus-therian",
+  "giftOnly": true,
   "name": "Reveal Glass (Landorus)",
   "family": "Key items: tickets, keys and story items",
   "description": "Landorus: switch to Therian Forme",
@@ -12590,6 +12608,7 @@
  },
  {
   "id": "magma-stone",
+  "giftOnly": true,
   "name": "Magma Stone",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens the Stark Mountain event: Heatran",
@@ -12636,6 +12655,7 @@
  },
  {
   "id": "rainbow-wing",
+  "giftOnly": true,
   "name": "Rainbow Wing",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens the Bell Tower event: Ho-Oh",
@@ -12659,6 +12679,7 @@
  },
  {
   "id": "silver-wing",
+  "giftOnly": true,
   "name": "Silver Wing",
   "family": "Key items: tickets, keys and story items",
   "description": "Opens the Whirl Islands event: Lugia",

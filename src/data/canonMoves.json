@@ -5,7 +5,7 @@
    "name": "Samurai Slash",
    "type": "bug",
    "category": "physical",
-   "power": 70,
+   "power": 60,
    "accuracy": 100,
    "pp": 10,
    "priority": 0,
@@ -50,6 +50,131 @@
    "effects": {
     "northsWind": true
    }
+  },
+  {
+   "id": "shades-down",
+   "name": "Shades Down",
+   "type": "dark",
+   "category": "special",
+   "power": 90,
+   "accuracy": 100,
+   "pp": 10,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [],
+   "effects": {
+    "statChanges": [
+     {
+      "stat": "spa",
+      "stages": -1,
+      "target": "self",
+      "chance": 100
+     }
+    ]
+   }
+  },
+  {
+   "id": "tidal-surge",
+   "name": "Tidal Surge",
+   "type": "water",
+   "category": "special",
+   "power": 90,
+   "accuracy": 100,
+   "pp": 5,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [],
+   "effects": {
+    "clearHazards": "both"
+   }
+  },
+  {
+   "id": "proof",
+   "name": "Proof",
+   "type": "normal",
+   "category": "physical",
+   "power": 80,
+   "accuracy": 100,
+   "pp": 10,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "contact"
+   ],
+   "effects": {
+    "proof": true
+   }
+  },
+  {
+   "id": "two-trainers",
+   "name": "Two Trainers",
+   "type": "normal",
+   "category": "physical",
+   "power": 75,
+   "accuracy": 100,
+   "pp": 10,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "contact"
+   ],
+   "effects": {
+    "twoTrainers": true
+   }
+  },
+  {
+   "id": "stamp",
+   "name": "Stamp",
+   "type": "ground",
+   "category": "physical",
+   "power": 70,
+   "accuracy": 100,
+   "pp": 10,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "contact"
+   ],
+   "effects": {
+    "flinchChance": 100
+   }
+  },
+  {
+   "id": "foster-wing",
+   "name": "Foster Wing",
+   "type": "flying",
+   "category": "physical",
+   "power": 65,
+   "accuracy": 100,
+   "pp": 10,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [
+    "contact"
+   ],
+   "effects": {
+    "drain": 0.5
+   }
+  },
+  {
+   "id": "last-stop",
+   "name": "Last Stop",
+   "type": "ghost",
+   "category": "special",
+   "power": 85,
+   "accuracy": 100,
+   "pp": 10,
+   "priority": 0,
+   "critStage": 0,
+   "target": "enemy",
+   "flags": [],
+   "effects": {}
   }
  ]
 }

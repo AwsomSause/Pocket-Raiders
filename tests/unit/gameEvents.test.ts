@@ -72,11 +72,17 @@ describe('runs during an event', () => {
 
   it("an event's own map events only appear in runs started while it is on", () => {
     const raw = structuredClone(RAW_CONTENT) as any;
-    raw.events.events.find((e: any) => e.id === 'haunted-house').gameEvent = 'rivalry-week';
+    const plain = buildContent(structuredClone(RAW_CONTENT) as any);
+    const run = (c: typeof plain, ed: string[]) => chooseStarter(c, createRun(c, { runId: 'r', seed: 'own', archetypeId: 'red', gameEvents: ed }), 0);
+    // A copy, under a new id, of an ordinary event drawn on a fresh run (a Catalog Overhaul override would replace the raw entry this
+    // edits, and nearly every raw event is overridden now, so the test brings its own).
+    const base = eligibleEvents(plain, run(plain, [])).map((e) => e.id).find((x) => raw.events.events.some((e: any) => e.id === x))!;
+    expect(base).toBeDefined();
+    const id = 'gate-test-own';
+    raw.events.events.push({ ...structuredClone(plain.events.get(base)), id, gameEvent: 'rivalry-week' });
     const c = buildContent(raw);
-    const run = (ed: string[]) => chooseStarter(c, createRun(c, { runId: 'r', seed: 'own', archetypeId: 'red', gameEvents: ed }), 0);
-    expect(eligibleEvents(c, run([])).some((e) => e.id === 'haunted-house')).toBe(false);
-    expect(eligibleEvents(c, run(['rivalry-week@2026-W44'])).some((e) => e.id === 'haunted-house')).toBe(true);
+    expect(eligibleEvents(c, run(c, [])).some((e) => e.id === id)).toBe(false);
+    expect(eligibleEvents(c, run(c, ['rivalry-week@2026-W44'])).some((e) => e.id === id)).toBe(true);
   });
 });
 

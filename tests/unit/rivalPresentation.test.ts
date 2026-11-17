@@ -5,7 +5,7 @@ import { authoredCount, BANK, BANK_CONTEXTS, categoryOf, fillMon, pickContextLin
 import { clampAttitude, friendAssist, friendInRegion, friendPersonality, friendScene, postcard } from '../../src/core/rivals/friend';
 import { OVERHAUL, registerRival } from '../../src/core/rivals/overhaul';
 import { catchStepIn, pseudoPresence, regionMeetings, PRESENCE } from '../../src/core/rivals/presence';
-import { brainFor, chooseWinCondition, endgamePick, mayCounter, scout, switchPunishChance, tier5Pick, type RivalBrain, type Tier5Input } from '../../src/core/rivals/tier5';
+import { brainFor, chooseWinCondition, winConditionLine, endgamePick, mayCounter, scout, switchPunishChance, tier5Pick, type RivalBrain, type Tier5Input } from '../../src/core/rivals/tier5';
 import { witnessCards } from '../../src/core/rivals/witness';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { chooseEnemyMove, createBattle } from '../../src/core/battle/engine';
@@ -53,6 +53,11 @@ describe('R4 tier-5 AI', () => {
     expect(chooseWinCondition([{ weatherSetter: true }])).toBe('weather');
     expect(chooseWinCondition([{ bulky: true }, { bulky: true }, {}])).toBe('stall');
     expect(chooseWinCondition([{}, {}])).toBe('sweep');
+  });
+  it('the versus card names the plan in words', () => {
+    expect(winConditionLine('sweep')).toBe('plans to sweep');
+    expect(winConditionLine('weather')).toBe('plans to set the weather');
+    expect(winConditionLine('stall')).toBe('plans to stall');
   });
   it('the ledger records this run only, is capped, and gates counter-picks to seen species', () => {
     const r = run();

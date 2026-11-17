@@ -1,0 +1,492 @@
+[
+  {
+    "id": "old-badge-normal",
+    "name": "Old Normal Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Normal moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "silk-scarf",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "normal"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-fire",
+    "name": "Old Fire Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Fire moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "charcoal",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "fire"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-water",
+    "name": "Old Water Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Water moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "mystic-water",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "water"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-grass",
+    "name": "Old Grass Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Grass moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "miracle-seed",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "grass"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-electric",
+    "name": "Old Electric Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Electric moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "magnet",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "electric"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-ice",
+    "name": "Old Ice Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Ice moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "nevermeltice",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "ice"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-fighting",
+    "name": "Old Fighting Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Fighting moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "black-belt",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "fighting"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-poison",
+    "name": "Old Poison Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Poison moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "poison-barb",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "poison"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-ground",
+    "name": "Old Ground Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Ground moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "soft-sand",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "ground"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-flying",
+    "name": "Old Flying Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Flying moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "sharp-beak",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "flying"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-psychic",
+    "name": "Old Psychic Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Psychic moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "twistedspoon",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "psychic"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-bug",
+    "name": "Old Bug Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Bug moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "silverpowder",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "bug"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-rock",
+    "name": "Old Rock Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Rock moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "hard-stone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "rock"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-ghost",
+    "name": "Old Ghost Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Ghost moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "spell-tag",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "ghost"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-dragon",
+    "name": "Old Dragon Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Dragon moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "dragon-fang",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "dragon"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-dark",
+    "name": "Old Dark Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Dark moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "library/ribbon-dark",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "dark"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-steel",
+    "name": "Old Steel Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Steel moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "metal-coat",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "steel"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "old-badge-fairy",
+    "name": "Old Fairy Badge",
+    "family": "Gifts from people",
+    "description": "A Gym badge forty years old. Fairy moves +10%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "fairy-feather",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "typePower",
+          "types": [
+            "fairy"
+          ],
+          "percent": 10
+        }
+      ]
+    }
+  },
+  {
+    "id": "spring-water",
+    "name": "Spring Water",
+    "family": "Gifts from people",
+    "description": "From the spring at the bottom of the Mystery Dungeon. Heals one Pokémon fully, out of battle, once",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": null,
+    "how": "use",
+    "icon": "fresh-water",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "care",
+      "heal": 999
+    }
+  },
+  {
+    "id": "first-badge",
+    "name": "First Badge",
+    "family": "Gifts from people",
+    "description": "The badge of the first Gym, from a forgotten crypt. All stats +5%",
+    "rarity": "rare",
+    "stacksOn": "pokemon",
+    "max": 1,
+    "how": "held",
+    "icon": "hard-stone",
+    "status": "supported",
+    "giftOnly": true,
+    "effect": {
+      "kind": "held",
+      "hooks": [
+        {
+          "hook": "stat",
+          "stat": "all",
+          "multiplier": 1.05
+        }
+      ]
+    }
+  }
+]

@@ -39,7 +39,9 @@ describe('minigame data', () => {
     const ids = content.minigames.games.map((g) => g.id);
     for (const id of ['pokemon-memory', 'catching-challenge', 'rhythm-challenge', 'berry-foraging', 'knowledge-quiz', 'fossil-excavation']) expect(ids).toContain(id);
     expect(ids.length).toBeGreaterThanOrEqual(14);
-    for (const g of content.minigames.games) {
+    // A story-only game (Safari Land) has the one set of rules its story gives it; the map's stop games have Easy, Normal and Hard.
+    for (const g of content.minigames.games.filter((x) => x.eventOnly)) expect(g.difficultyTiers).toHaveLength(1);
+    for (const g of content.minigames.games.filter((x) => !x.eventOnly)) {
       expect(g.difficultyTiers.map((t) => t.id).slice(0, 3)).toEqual(['easy', 'normal', 'hard']);
       expect(g.difficultyTiers.length === 3 || g.difficultyTiers[3]!.id === 'master').toBe(true);
       expect(g.medals.bronze).toBeLessThan(g.medals.silver);
@@ -253,5 +255,12 @@ describe('Master tier (Beta 0.6 MG1)', () => {
     const run = stopRun('mg-pick', 'pokemon-memory');
     const t = (d: 'easy' | 'normal' | 'hard') => minigamePreview(content, run, 'mg-test', d).recommendedTier;
     expect([t('easy'), t('normal'), t('hard')]).toEqual([0, 1, 3]);
+  });
+  it('each tier says what it pays: the money multiplier, and whether a medal can pay an item', () => {
+    const run = stopRun('mg-tiers', 'pokemon-memory');
+    const eco = content.minigames.economy;
+    const tiers = minigamePreview(content, run, 'mg-test').tiers;
+    expect(tiers.map((x) => x.money)).toEqual(eco.tierMultipliers.slice(0, tiers.length));
+    expect(tiers.map((x) => x.items)).toEqual(tiers.map((x) => x.index + 1 >= eco.itemMinTier));
   });
 });

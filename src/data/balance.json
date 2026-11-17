@@ -661,7 +661,7 @@
   "caps": { "baby": 145, "basic": 190, "middle": 195, "final": 270, "legendary": 330, "mythical": 280, "form": 360 },
   "moveCap": 250,
   "access": { "teraPercent": 4, "zPercent": 4, "speciesZPercent": 10, "headroom": 1.12 },
-  "exempt": { "eternatus-eternamax": "Boss-only form (Eternamax Eternatus is never owned).", "galarian-magneton": "Kice's Jet Pokédex stat line (465 base stats, 199 against the middle cap of 195); kept as the director wrote it." }
+  "exempt": { "eternatus-eternamax": "Boss-only form (Eternamax Eternatus is never owned).", "tauros": "Existing stat line (206 against the basic cap of 190); Calfros now comes before it, but Tauros keeps its own stage.", "dracoptera": "Kice's Jet Pokédex stat line (293 against the final cap of 270); kept as the director wrote it.", "chronoceli": "Kice's Jet Pokédex stat line (670 base stats, 338 against the final cap of 270); kept as the director wrote it.", "galarian-magneton": "Kice's Jet Pokédex stat line (465 base stats, 199 against the middle cap of 195); kept as the director wrote it." }
  },
  "rarityCaps": { "offRegionShift": 1, "trade": "epic", "shopItem": "rare", "rewardItem": [{ "badges": 0, "max": "rare" }, { "badges": 2, "max": "epic" }] },
  "wildDampeners": { "enabled": true, "perMeet": 0.6, "perFamilyMeet": 0.8, "noRepeatFirst": 6, "oddOneOutStages": 3, "oddOneOutOffWeight": 0.02 },
@@ -945,5 +945,6 @@
   },
   "itemRework": { "charmGate": true, "charmDraftChance": 0.0001, "luckGainScale": 0.25 },
   "overlevel": { "xpPerItem": 2000, "item": "premier-ball" },
-  "rewind": { "maxTurnsBack": 5, "usesPerStage": 1 }
+  "rewind": { "maxTurnsBack": 5, "usesPerStage": 1 },
+  "co": { "bondFriendship": 5, "bondFriendshipParty": 3, "bondLevelStep": 50, "quietWildWeight": 0.1, "tradeTierCatchRate": [150, 75, 30], "tradeTierWeights": [50, 30, 15, 5], "tradeMuchBetter": 2, "giantHpPercent": 100, "giantSpeed": 0.75, "hideoutPassMarkup": 1.5 }
 }

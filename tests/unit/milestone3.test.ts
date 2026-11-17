@@ -25,7 +25,7 @@ import { pickGymLeader, themePool, trainerClassesFor, wildEligibleSpecies } from
 import { TYPE_NAMES } from '../../src/core/contentSchema';
 import { SaveManager } from '../../src/save/saveManager';
 import { MemoryStorageProvider } from '../../src/save/storage';
-import { content, scaleAt, takeAnyReward, toBattle } from './helpers';
+import { content, scaleAt, takeAnyReward, toBattle, withoutDoors } from './helpers';
 
 const RED = getArchetype(content, 'red');
 const FULL = content.campaigns.get('full')!;
@@ -263,7 +263,7 @@ describe('map flow', () => {
   });
 
   it('a full stage: 20 levels, 2 trainers, the gym leader, a badge, then a new stage with a new theme', () => {
-    let run = powerUp(newRun('full-stage'));
+    let run = withoutDoors(powerUp(newRun('full-stage')));
     const firstTheme = run.stage!.themeId;
     const kinds: string[] = [];
     let guard = 0;

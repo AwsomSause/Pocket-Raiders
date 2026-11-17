@@ -1,0 +1,2291 @@
+{
+ "catalogOverhaul": "evil-hoenn-sinnoh-unova",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "px-final-choice",
+   "name": "The Coronation",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis",
+     "boss.n"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "The balcony of a castle that's finished coming out of the ground. Ten thousand candles below. The Frigate overhead, with frost on its keel. Snow, in summer. At the rail, a figure in a green cap, with a crown held over it, and Ghetsis's hand on its back. Below, six hundred of the Vigil, kneeling. Yara. Emil. Ghetsis, to the crowd: \"Your king has returned! He's seen the world of men and judged it! Kneel, and be free!\" The figure raises a hand. The wave's slightly wrong. A shadow over the candles. A dragon lands on the parapet, and stone cracks, and the real one steps down. N: \"Father. Let him go. He's said it eleven times while you were talking.\" Ten thousand people look from one green cap to the other. Ghetsis, and the smile doesn't move: \"Two kings. How fortunate. The Seventh'll tell you which is true. The Seventh's sat in council. Speak, Sage.\" He's handed it to you. He's sure of you. It's the only mistake he makes, and he's made it because the chair was warm.",
+   "choices": [
+    {
+     "label": "(Stand beside N.) \"This one. Let him ask his question.\"",
+     "success": {
+      "text": "N, to the figure at the rail, in a voice that isn't speech: \"...\" The figure's face runs like wet paint. A Zoroark, in a green cap, shaking. It crosses the balcony and puts its head under his hand.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-final-n",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-asking-kings"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Hold up the ledger. Wind the box.) \"Neither. Look what's under the stair.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "plasma-ledger",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You wind the music box. The tune carries. Thin. A child's. The figure at the rail turns toward it, and its face runs, and there's a Zoroark in a green cap, listening, with its eyes shut. The crowd's silent.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-final-turn",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-turn-box"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Bow to the figure at the rail.) \"That one's the king.\"",
+     "success": {
+      "text": "This is the darkest ending in the script. Unova will be sealed. People who trusted you will see you do it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-final-ghetsis",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-ghetsis-warn"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Step in front of the throne.) \"Neither of them wants it. I'll have it.\"",
+     "requires": [
+      {
+       "kind": "evil",
+       "team": "plasma",
+       "rank": 5
+      }
+     ],
+     "success": {
+      "text": "You walk to the throne. You don't sit. You stand in front of it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-final-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-throne"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "daybook",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-daybook",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The daybook's in your coat. The right-hand column can be read out."
+    },
+    {
+     "id": "lillipup",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-lillipup",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Yara's in the crowd, with something under her tunic."
+    },
+    {
+     "id": "where",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "plasma-asked-where",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "You've already asked it once, in a square. Somebody in the crowd remembers."
+    }
+   ]
+  },
+  {
+   "id": "px-asking-kings",
+   "name": "Phase 1: Two Kings",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.n",
+     "boss.ghetsis"
+    ],
+    "pokemon": "zoroark",
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "N: \"He's my friend. He was made to be me. He's very tired. I'm sorry, everyone; that's what you've been kneeling to. It's not his fault.\" Silence. Six hundred people, on their knees, working out whether to get up. Ghetsis, easily: \"A touching reunion. By all means, boy. Ask them. Ask them all. I've waited two years to hear you say it again.\" He wants N to ask. Every Pokémon let go tonight walks into the Frigate's signal. N knows. He looks up at the keel. N, to you: \"I can't ask while that's listening. Whatever they let go, it takes. Can you make it deaf? I'll talk till you do. I'm good at talking. He made sure.\"",
+   "choices": [
+    {
+     "label": "(Go up. A rope from the keel.)",
+     "success": {
+      "text": "You climb. Below, N's started talking about trains.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-asking-aldith"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Go up on the dragon.)",
+     "success": {
+      "text": "N can spare it. It doesn't like you. It takes you anyway.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-asking-aldith"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-asking-aldith",
+   "name": "Phase 2: The Cargo Deck",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-aldith"
+    ],
+    "pokemon": "liepard",
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "The cargo deck. Commander Aldith, and on her shoulder, a Liepard with a notch in its left ear. Commander Aldith: \"You're the candle. I'd a feeling. Back down the rope.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Aldith: \"Somebody's Purrloin. Go.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.cast-aldith",
+       "team": [
+        "liepard",
+        "scolipede",
+        "scrafty"
+       ],
+       "name": "Commander Aldith",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "px-asking-bronius"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-asking-bronius",
+   "name": "Phase 2: The Relay",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "The Relay room. Sage Bronius, at the breaker, dry: \"I count. It's all I do. Four thousand and eleven in the hold. Three hundred on wages. One Relay. I've counted the tins that pay for it; I know whose tins. I've been waiting for somebody to come up here and make me stop counting.\"",
+   "choices": [
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Excadrill first. It's been ice-breaking all summer.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.cast-sage",
+       "team": [
+        "excadrill",
+        "vanilluxe",
+        "magnezone"
+       ],
+       "name": "Sage Bronius",
+       "size": 3,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "px-asking-breaker"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-asking-breaker",
+   "name": "The Breaker",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "Bronius, beaten: \"The breaker's the red one. I'd pull it myself, but I've never once done anything I wasn't told.\"",
+   "choices": [
+    {
+     "label": "\"Pull it.\"",
+     "success": {
+      "text": "Bronius: \"...Thank you.\" The Relay's dark.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "relay-dark",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-asking-question"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-asking-question",
+   "name": "Phase 3: The Question",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.n",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "pokemon": "lillipup",
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "On the balcony, N's been talking for a quarter of an hour, about trains. N: \"—and that's why it only goes round one way. Oh. It's off? It's off.\" To ten thousand people: N: \"I'm going to ask you something. It isn't my father's question. His has one answer; he built it to. Mine's got as many as there are of you.\" N: \"I'm not asking you to let go. I'm asking you to ask. Tonight. Put it down in front of you. Open your hand; the old way, flat and low. And then don't walk away. That was the trick. You were told not to look back, so you'd never see it follow you. Look. If it comes, it's chosen. If it goes, let it. I'll take no for an answer. I'll take yes for one. I'm told I have to listen to that, too.\" In the square below: ten thousand hands. A field of small lights, each going one way or the other. Most come straight to the hand. A great many look at the hand, look at the trees, and come to the hand. About one in nine go: into the dark, at their own pace. Nobody stops them. Nobody collects them. The Lillipup, mostly, sit down exactly where they were, and wait to see what this is about. Yara, in the crowd, takes a dog out of her shirt and sets it down and opens her hand and keeps her eyes open. It looks at the hand. It looks at her. It gets back in the shirt. Yara: \"...Oh.\" It's all she says. She says it for some time.",
+   "choices": [
+    {
+     "label": "(Open your own hand.)",
+     "success": {
+      "text": "Your lead looks at it. It comes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "unova-asked",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-asking-ghetsis"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-asking-ghetsis",
+   "name": "Phase 4: Ghetsis",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "Ghetsis: \"One in nine. One in nine. I had all of them. I'd a region with its hands open and a ship to catch what fell—\" N: \"I know. I heard the ship.\" Ghetsis: \"You were built to hear them! I built you! And you used it to listen!\"",
+   "choices": [
+    {
+     "label": "Battle, with N beside you.",
+     "success": {
+      "text": "At half Hydreigon's health, the Second Half: he stops performing. Ghetsis: \"Free. Yes. Free of you. One will, one hand, one winter.\" Ten thousand people hear him finish the sentence.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.ghetsis",
+       "team": [
+        "hydreigon",
+        "cofagrigus",
+        "seismitoad",
+        "eelektross",
+        "bouffalant"
+       ],
+       "format": "doubles",
+       "name": "Ghetsis",
+       "ally": "zoroark",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "px-asking-after"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-asking-after",
+   "name": "A Unova That Was Asked",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.n"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "He's beaten. The cane's a cane; he never gets to the Chasm. Fewer trainers, by about a ninth. The ones that stayed, stayed looking. The Ones Who Went are in the wild now: they don't flee, they don't fight first, and they won't join, but they'll walk beside a party for a node, if a hand's held out. Every Pokémon with you was asked, and came. Half the Centers are shut for a week; then they open again, Emil's first. Four thousand and eleven on the snow. N asks each one. It takes him a week. N asks the hold; it takes a week. Ghetsis finished his sentence in front of ten thousand. The Likeness is with N; one's always a few steps behind. Yara kept her eyes open, and opens the gate: it walks through, it walks back, and it got back in the shirt. Emil shuts his Center, and opens it again a week later: wild ones get hurt too. Sister Ianthe reads the right-hand column to N, aloud, all of it. Gorm writes a new speech. It's four words: \"I was wrong. Ask.\" Bronius pulled the red one, when told. Zinzolin is in cold storage, exactly cold enough. Rood's in Driftveil. The Triad took him somewhere quiet. Colress publishes. Hugh: somebody's Purrloin stops. The boy from the square: \"You understood fine.\" The thirty-one fields: gates open.",
+   "choices": [
+    {
+     "label": "(Walk down into the square.)",
+     "success": {
+      "text": "Somebody's Lillipup sits on your foot.",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": 1,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-ending-n",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "unova-asked",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-ones-who-went",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-turn-box",
+   "name": "Phase 1: The Box and the Book",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "pokemon": "zoroark",
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "You hold up the ledger. \"Sixty Pokémon, freed at your fields. Collected on the Monday. Here's where each one went.\" They read the last column. One word. Sixty times. A voice, from the back: \"...Where do they go?\" Another. \"Where do they go?\" It's six hundred, then. Not shouting. Asking. The Knights have turned round, on their knees, and they're looking at the Sages.",
+   "choices": [
+    {
+     "label": "(Read the daybook out.) \"'Not admitted. A Herdier. Content.' Two thousand, one hundred and nineteen.\"",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "plasma-daybook",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Sage Gorm, on the dais, who wrote the first speech: \"...Five in six. He told me the boy'd seen it. He told me we'd a witness.\" He sits down on the steps. He takes off the hood.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gorm-sat",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-turn-vigil"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Let them ask.)",
+     "success": {
+      "text": "You don't say anything else. You don't need to.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-turn-vigil"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-turn-vigil",
+   "name": "Phase 2: The Vigil Stands Up",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage",
+     "boss.cast-sage"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "Plasma breaks in two on the spot. Gorm sits on the steps. Rood was never on the dais: he's in the crowd, in a plain coat. He's been waiting two years for this, in Driftveil, washing up. Ryoku: \"The desert keeps everything. I'll keep this.\" He takes the crown from over the Zoroark's head and puts it in his sleeve. And Giallo comes down the steps.",
+   "choices": [
+    {
+     "label": "Battle Sage Giallo.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "plasma-dreamyard-opened",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "He guards. It's all he's ever done.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.cast-sage",
+       "team": [
+        "conkeldurr",
+        "garbodor",
+        "bisharp"
+       ],
+       "name": "Sage Giallo",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "px-turn-chasm"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "(Giallo stands aside.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "plasma-dreamyard-opened",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "He's already been beaten once, in the Dreamyard. He stands aside.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-turn-chasm"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "zinzolin",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "zinzolin-heard",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Zinzolin: \"There are four more. Yards. I'll give you the keys. I'm cold; I'd like to have done one warm thing.\""
+    }
+   ]
+  },
+  {
+   "id": "px-turn-chasm",
+   "name": "Phase 3: The Chasm, With Six Hundred Behind",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "Ghetsis, and the smile doesn't move: \"A setback of staging. The weather is unaffected.\" He lifts the cane. It isn't a cane. The Frigate turns north. The Giant Chasm, and this time all five bridges are down: the Vigil lowered them, by hand. Every old-uniform Grunt you meet holds out an open hand, and steps aside. Emil and Yara take a Frost Relay each. Emil: \"I'm a nurse. I'm told this is a breaker. I'm going to treat it as a patient that needs to stop.\" Then Ghetsis. The Speechwriter's first move fails: nobody's listening to speeches.",
+   "choices": [
+    {
+     "label": "Battle Ghetsis.",
+     "success": {
+      "text": "N holds a wedge loose.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.ghetsis",
+       "team": [
+        "hydreigon",
+        "cofagrigus",
+        "seismitoad",
+        "eelektross",
+        "bouffalant"
+       ],
+       "name": "Ghetsis",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "px-turn-where"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "colress",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "colress-published",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Colress has published. He has no machine to switch on."
+    },
+    {
+     "id": "triad",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "triad-names-true",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The Shadow Triad pull the second wedge themselves."
+    }
+   ]
+  },
+  {
+   "id": "px-turn-where",
+   "name": "Phase 4: Where They Go",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.n"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "Four thousand and eleven on the ice. You hold the list: sixty rows from the Dreamyard, and the Frigate's manifest gives the rest. Where do they go?",
+   "choices": [
+    {
+     "label": "Send out the lists.",
+     "success": {
+      "text": "Every town gets its page. Every door that's still there is knocked on.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-where-lists",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-turn-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let them choose.",
+     "success": {
+      "text": "The ice is wide. Most go somewhere. Some sit down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-where-choose",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-turn-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Ask N.",
+     "success": {
+      "text": "N: \"Ask them. Not me. I'll help you hear.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-where-n",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-turn-after"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk the fences.",
+     "success": {
+      "text": "The Vigil goes home by way of all thirty-one fields. At each: a gate's taken off its hinges. Every Release Field in Unova becomes a Gate: a rest where a released Pokémon may be waiting for your party to carry word home.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "fences-down",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-gates",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-turn-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-turn-after",
+   "name": "Afterwards",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "N walks out between the two halves. He takes the dragon and the Zoroark, and nothing else. The Society of the Open Gate has its name back. Rood's in the chair. It's got dust on it; he says leave the dust. N walks out between the two halves. Ghetsis is beaten at the Chasm. The Likeness is with N. Yara keeps it. Nobody says a word. Emil's a nurse. The Lillipup's home. Sister Ianthe burns the apron and keeps the book. Gorm sat on the steps. Bronius counts the ones that come back. Zinzolin gave the keys: one warm thing. Rood has the chair; leave the dust. The Triad pulled a wedge, if named. Colress publishes. Hugh: the same. The boy from the square: the same, on the ice. The thirty-one fields: gates off their hinges.",
+   "choices": [
+    {
+     "label": "(Go home.)",
+     "success": {
+      "text": "The hill's full of people walking down it.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "vigil-stood",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-ghetsis-warn",
+   "name": "Are You Sure?",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "This is the darkest ending in the script. Unova will be sealed. People who trusted you will see you do it.",
+   "choices": [
+    {
+     "label": "Bow.",
+     "success": {
+      "text": "Your head's going down.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-ghetsis-warn-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Don't.)",
+     "success": {
+      "text": "You straighten. Too late for the Vigil: they've seen the start of the bow.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-ghetsis-late"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-ghetsis-warn-2",
+   "name": "Are You Sure?",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "This is the darkest ending in the script. Unova will be sealed. People who trusted you will see you do it. Once more.",
+   "choices": [
+    {
+     "label": "Bow.",
+     "success": {
+      "text": "You bow. To the figure at the rail.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-ghetsis-bow"
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Don't.)",
+     "success": {
+      "text": "You straighten. Too late for the Vigil: they've seen the start of the bow.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-ghetsis-late"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-ghetsis-bow",
+   "name": "Phase 1: The Bow",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis",
+     "boss.n"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "\"That one's the king.\" Six hundred people breathe out. It's what they dug a castle for. N: \"...You've read the daybook. You stood in my room.\" Ghetsis, softly: \"The Seventh's spoken. Remove the pretender.\" The Crew come up the stair, in black. N doesn't fight them. He looks at the Zoroark, which is looking at him, and can't move for the hand on its back. N: \"I'll come back for you. I've said it in the voice he can't hear. You heard, though. Didn't you? You've been hearing all night.\" The dragon takes him off the parapet. He isn't caught. He isn't meant to be. In the crowd: Emil: \"You knew.\" He's coming up the steps. He's a nurse. He's only ever been angry at things. He hits Sage Giallo, who's nearest, once, and is astonished at himself, and is taken away. Yara doesn't move. She's got both arms round something under her tunic.",
+   "choices": [
+    {
+     "label": "(Stand beside the throne.)",
+     "success": {
+      "text": "Ghetsis, to ten thousand: \"Your king asks one thing. Open your hands.\" They do. All of them. The Relay's listening. A field of small lights, and every one goes up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-crown",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-ghetsis-wedge"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-ghetsis-wedge",
+   "name": "Phase 3: The Wedge",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.drayden",
+     "boss.hugh"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "The Giant Chasm. You're the Seventh Sage, and the third wedge is in your hand. Ghetsis: \"The seventh seat. I dusted it myself. Hold the Seal. That's all a Sage is for.\" The bridge is held; the Relays are lit. The defenders come: Drayden, Hugh, your rival, a Gym Leader. Drayden: \"I kept those wedges forty years. I'd have broken them if I'd known whose hand they'd end in.\" Hugh: \"Five years. Five years. And there's people like you who knew where they went.\"",
+   "choices": [
+    {
+     "label": "Battle Drayden.",
+     "success": {
+      "text": "He doesn't waste words after that.",
+      "effects": [
+       {
+        "kind": "rivalChange",
+        "feelings": {
+         "trust": -2
+        }
+       }
+      ],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.drayden",
+       "team": [
+        "haxorus",
+        "druddigon",
+        "flygon",
+        "altaria",
+        "salamence"
+       ],
+       "name": "Drayden",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "px-ghetsis-seal"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-ghetsis-seal",
+   "name": "The Seal",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "Absolute lifts its head. You're holding the last wedge in place. Ghetsis: \"Now. Hold. And the bridges go up, and it's winter, and they're mine. Every one that was ever loved enough to be let go.\" It's the same as Sinnoh's lines: the hand can open.",
+   "choices": [
+    {
+     "label": "Hold.",
+     "success": {
+      "text": "The Chasm closes over. The bridges are up. Snow.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-ghetsis-sealed"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let go.",
+     "success": {
+      "text": "The Seal doesn't close. Ghetsis: \"You? I dusted the chair!\"",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "px-ghetsis-late"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-ghetsis-sealed",
+   "name": "The Sealed Unova",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "Ghetsis: \"A weapon that finishes its job is worth keeping. You'll have Castelia. I'd promised it to a man with a badge. He'll be so disappointed.\" You leave Unova by the one bridge the Seventh has a key to. A Crew Grunt salutes. It's the worst salute in the game. Your party saw. You carry the Seventh's Ring: it opens any Plasma door, in any region, for the rest of the run. Nobody's glad to see it. N's a pretender, flying. Ghetsis is king, in all but the crown. The Likeness is on the balcony; it's forgetting which it is. Yara hides a dog under a floor. Emil's in a cell, for striking a Sage. He isn't sorry. Sister Ianthe burns nothing; she posts the daybook to Driftveil, and the House reads it aloud at supper. Gorm's still quoting. Bronius counts. Zinzolin's at Ghetsis's right hand, cold. Rood's in hiding, with the endowment's deeds. The Triad: \"You.\" Colress is promoted; he hasn't read the letter. Hugh's still looking. Angrier. The boy from the square: his was in the hold. The thirty-one fields: fenced, and guarded.",
+   "choices": [
+    {
+     "label": "(Cross the bridge.)",
+     "success": {
+      "text": "On the next region's ferry, a child on the rail says: \"They don't let anyone out of Unova now. My gran's there.\"",
+      "effects": [
+       {
+        "kind": "friendship",
+        "bond": -1,
+        "who": "party"
+       },
+       {
+        "kind": "evil",
+        "end": "exposed"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-ending-ghetsis",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "unova-sealed",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "seventh-ring",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-ghetsis-late",
+   "name": "Where Do They Go, Late",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "No Vigil behind you. Emil's in a cell. N's not there to hold a wedge. Just you, and the Chasm, and a man with a cane that isn't a cane.",
+   "choices": [
+    {
+     "label": "Battle Ghetsis.",
+     "success": {
+      "text": "It can still be won.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.ghetsis",
+       "team": [
+        "hydreigon",
+        "cofagrigus",
+        "seismitoad",
+        "eelektross",
+        "bouffalant"
+       ],
+       "name": "Ghetsis",
+       "size": 5,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "px-ghetsis-late-after"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-ghetsis-late-after",
+   "name": "Afterwards",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "The bridges come down, one at a time, with nobody to lower them but you. N walks out between the two halves. Ghetsis is beaten at the Chasm. The Likeness is with N. Yara keeps it. Nobody says a word. Emil's a nurse. The Lillipup's home. Sister Ianthe burns the apron and keeps the book. Gorm sat on the steps. Bronius counts the ones that come back. Zinzolin gave the keys: one warm thing. Rood has the chair; leave the dust. The Triad pulled a wedge, if named. Colress publishes. Hugh: the same. The boy from the square: the same, on the ice. The thirty-one fields: gates off their hinges.",
+   "choices": [
+    {
+     "label": "(Go home.)",
+     "success": {
+      "text": "It's a long walk, alone.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-ending-turn",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-turn-late",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-own-throne",
+   "name": "Phase 1: The Throne",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis",
+     "boss.n"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "\"Neither of them wants it.\" To N: \"You don't want a throne. You want to go and meet the other four hundred. And the four hundred after that.\" N: \"...I do. I do. Is that allowed?\" \"I'm allowing it.\" He laughs. Nobody on that balcony's heard it before; Sister Ianthe has, once, when he was four. N: \"Then I'm going. I'll write. It'll smell of smoke.\" To the Zoroark: \"And you. Home.\" It doesn't need telling twice. To Ghetsis: \"And you never wanted a king. You wanted a hold. That's mine now, too.\" Ghetsis: \"You'd rule? I offered you a chair. I dusted it.\" Ghetsis: \"Then stand where I stand. And see how long ten thousand soft-hearted amateurs stay grateful.\"",
+   "choices": [
+    {
+     "label": "Battle Ghetsis.",
+     "success": {
+      "text": "Nobody helps him. Not a Sage. Not the Crew, who're waiting to see who pays on Friday. At half Hydreigon's health, he says the second half, aloud, as in every ending. This time it's you who answers: \"I heard. So did they.\"",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.ghetsis",
+       "team": [
+        "hydreigon",
+        "cofagrigus",
+        "seismitoad",
+        "eelektross",
+        "drapion",
+        "bouffalant"
+       ],
+       "name": "Ghetsis",
+       "size": 6,
+       "types": [],
+       "levelBonus": 2,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "px-own-d1"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "triad",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "triad-names-true",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "The Triad stand behind him and don't act. \"We believe that he found us. We don't believe he'd find us again.\""
+    }
+   ]
+  },
+  {
+   "id": "px-own-d1",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "Ten thousand candles. Six hundred Knights. Three hundred Crew, with their hands in their pockets. Four decisions, each one line, said from the balcony. The first: the oath.",
+   "choices": [
+    {
+     "label": "Keep it as he taught it.",
+     "success": {
+      "text": "\"I'll not hold what hasn't chosen me.\" Nobody looks up.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-oath-his",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-d2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Give it back its first meaning.",
+     "success": {
+      "text": "\"It's a promise you make about yourself.\" Loyalty can't be bought, and can't be lost by anything but a lie.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-oath-first",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-d2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Your own line.",
+     "success": {
+      "text": "You say it. They say it back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-oath-own",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-d2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-own-d2",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "The second: the hold.",
+   "choices": [
+    {
+     "label": "Read out the lists.",
+     "success": {
+      "text": "It takes a month of ships.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-hold-read",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-d3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Open the doors.",
+     "success": {
+      "text": "The hold empties onto the snow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-hold-opened",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-d3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep them.",
+     "success": {
+      "text": "An army on day one. Yara's line is crossed: she leaves, tonight.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-hold-kept",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-d3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-own-d3",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "The third: the two uniforms.",
+   "choices": [
+    {
+     "label": "One team, in white.",
+     "success": {
+      "text": "The Crew take their coats off. Some of them leave.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-uniform-white",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-d4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "One team, in black.",
+     "success": {
+      "text": "The Vigil take their hoods off. Some of them leave.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-uniform-black",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-d4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Both, and each knows what the other's for.",
+     "success": {
+      "text": "The Vigil asks, the Crew lifts, and no Knight's lied to about which is which.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-uniform-both",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-d4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-own-d4",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "The fourth: the seven chairs.",
+   "choices": [
+    {
+     "label": "Seat the six Sages.",
+     "success": {
+      "text": "They sit under you without being asked.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-chairs-six",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-bronius"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Empty the Hall.",
+     "success": {
+      "text": "Seven chairs. All with dust.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-chairs-none",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-bronius"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Seat seven who've never sat.",
+     "success": {
+      "text": "Emil, Yara, Sister Ianthe, Rood, a Crew quartermaster, the boy from the square's mother, and one left empty, with dust on it, on purpose.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "plasma-chairs-new",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "px-own-bronius"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "px-own-bronius",
+   "name": "Phase 3: The First Hour",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.cast-sage"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "Sage Bronius, with a ledger: \"I count. What am I counting, under you?\"",
+   "choices": [
+    {
+     "label": "\"The same.\"",
+     "success": {
+      "text": "He counts. N's gone to meet the next four hundred. He writes; it smells of smoke. Ghetsis was beaten on his own balcony. The Likeness is home. Yara's on the council: the line she won't cross is on her card in capitals. Emil runs your Infirmary. The Lillipup has the run of the castle. Sister Ianthe has a chair. Gorm isn't seated. Bronius counts, aloud. Zinzolin's offered a chair by the fire, and sits near it. Rood has a chair. The Triad stood, and didn't act. Colress tests you. Hugh gets a manifest, by post, unsigned. The boy from the square: his is the first name read. The thirty-one fields: your second decision.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-plasma",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bronius-same",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The tins: and you tell them where it goes.\"",
+     "success": {
+      "text": "He looks up from the ledger for the first time in years. N's gone to meet the next four hundred. He writes; it smells of smoke. Ghetsis was beaten on his own balcony. The Likeness is home. Yara's on the council: the line she won't cross is on her card in capitals. Emil runs your Infirmary. The Lillipup has the run of the castle. Sister Ianthe has a chair. Gorm isn't seated. Bronius counts, aloud. Zinzolin's offered a chair by the fire, and sits near it. Rood has a chair. The Triad stood, and didn't act. Colress tests you. Hugh gets a manifest, by post, unsigned. The boy from the square: his is the first name read. The thirty-one fields: your second decision.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-plasma",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bronius-tins",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"The ones that come back.\"",
+     "success": {
+      "text": "Bronius: \"...That's a short column. I'll start it.\" N's gone to meet the next four hundred. He writes; it smells of smoke. Ghetsis was beaten on his own balcony. The Likeness is home. Yara's on the council: the line she won't cross is on her card in capitals. Emil runs your Infirmary. The Lillipup has the run of the castle. Sister Ianthe has a chair. Gorm isn't seated. Bronius counts, aloud. Zinzolin's offered a chair by the fire, and sits near it. Rood has a chair. The Triad stood, and didn't act. Colress tests you. Hugh gets a manifest, by post, unsigned. The boy from the square: his is the first name read. The thirty-one fields: your second decision.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "allied"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-ending-own",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "evil-start-plasma",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bronius-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-founding",
+   "name": "Team Open Hand",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "after": 4,
+     "ends": [
+      "none"
+     ],
+     "inside": false
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "plasma-offer-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "plasma-seat-refused",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "plasma-asked-where",
+     "atLeast": 1,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "boss.cast-concordia",
+     "boss.npc_lady"
+    ],
+    "pokemon": "lillipup",
+    "tint": "#4a3a28",
+    "effect": "none"
+   },
+   "intro": "A kitchen in the House in Driftveil. Soup for forty. Two people in white with the hoods down, and a dog under the table. Emil Hawksmoor, drying a pan: \"You're the one who asked where. In front of him. We heard. We walked out the week after; her with that under her shirt.\" Yara Fairchild: \"I took it back. I'm someone who took it back. I've decided I can be that.\" Emil: \"Here's what I've got. Nineteen years, I handed them back to people who shouldn't have had them. He's right about those people; that's what I can't get round. Then two years of his answer, which is: take them all, from everyone, and put them in a box. Neither's it.\" Emil: \"There's a job between those. Somebody goes and looks. House by house. And asks the one it's about.\" Concordia: \"N would've been good at it.\" Emil: \"N can hear them. We can't. So we'll have to look. I can teach looking. It's all an orderly's got.\" The creed, on a tea towel, in marker: ASK THE ONE IT'S ABOUT.",
+   "choices": [
+    {
+     "label": "(Take a tea towel.)",
+     "success": {
+      "text": "Team Open Hand: Emil, with nineteen years of telling from outside; Yara, who's stood at a fence and knows what it looks like from both sides; the Lillipup with the red collar, who goes first into every house; Anthea and Concordia and a kitchen (\"We don't ask them to say it. We give them something to carry.\"); Hugh, whose \"I'm about to unleash my rage\" has become, lately, \"I'm about to knock on a door\"; the boy from the square, seven, who explains it to other children; Sister Ianthe, with the daybook; and a faithful Grunt from Liberty Garden, who stood aside from a door once and would like to do it on purpose.",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "openhand-founded",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Who else?\"",
+     "success": {
+      "text": "Emil: \"Anyone who can look. Colress keeps writing to ask if he can observe.\" Colress, in the letter: \"The control group! May I observe? I'll not touch anything. I've stopped touching things.\"",
+      "effects": [
+       {
+        "kind": "evil",
+        "mark": "third"
+       },
+       {
+        "kind": "flag",
+        "key": "openhand-founded",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "openhand-colress",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-insp1",
+   "name": "Inspection 1: Number Nine",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "has": "third",
+     "after": 5
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "openhand-insp1",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#4a3a28",
+    "effect": "none"
+   },
+   "intro": "A city. Three doors. Emil's brought his old bag. Emil: \"Look first. Talk after. We take nobody's Pokémon.\"",
+   "choices": [
+    {
+     "label": "(Knock on the first door.)",
+     "success": {
+      "text": "A flat over a shop.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "openhand-house-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-house-1",
+   "name": "Inspection 1: Number Nine",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#4a3a28",
+    "effect": "none"
+   },
+   "intro": "A flat over a shop. A mess. A Trubbish on a heap of laundry. A harassed man. It sleeps on the laundry because it smells of him. The bowl's licked clean. It looks at him when the door opens. Open Hand can't hear Pokémon. It reads them: where it sleeps; what it does when the trainer's hand comes up; the bowl; what it does when the door opens; whether it'll come to an open hand, flat and low, and then whether it goes back. It takes nobody's Pokémon.",
+   "choices": [
+    {
+     "label": "\"It's fine.\"",
+     "success": {
+      "text": "A tea towel's left. It says so. The man: \"They came, the white ones. They said look at the state of it. I nearly—\" He's got the carrier out, by the door, still. He puts it away.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "openhand-house-1-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "openhand-house-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It isn't, and you don't know how.\"",
+     "success": {
+      "text": "Emil: \"...No. Look at it. Look where it's looking.\" You leave a tea towel anyway.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "openhand-house-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It isn't, and you know.\"",
+     "success": {
+      "text": "The door stays open. It doesn't go anywhere. It goes back to the laundry.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "openhand-house-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-house-2",
+   "name": "Inspection 1: Number Nine",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#4a3a28",
+    "effect": "none"
+   },
+   "intro": "A very clean house. A Minccino on a cushion. A ribbon. A woman who's proud. It doesn't move when her hand comes up. Not away. Not toward. The bowl's full, and untouched. Open Hand can't hear Pokémon. It reads them: where it sleeps; what it does when the trainer's hand comes up; the bowl; what it does when the door opens; whether it'll come to an open hand, flat and low, and then whether it goes back. It takes nobody's Pokémon.",
+   "choices": [
+    {
+     "label": "\"It's fine.\"",
+     "success": {
+      "text": "A tea towel's left. Emil looks at it for a long time on the way out.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "openhand-house-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It isn't, and you don't know how.\"",
+     "success": {
+      "text": "She brushes it nine times a day. It hates being brushed. Nobody's ever told her. Emil stays. Emil: \"You're not cruel. You're loud. It's got ears like dinner plates.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "openhand-house-2-right",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "openhand-house-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"It isn't, and you know.\"",
+     "success": {
+      "text": "You sit in the kitchen, with the door open, and the hand out. It doesn't choose. It doesn't know it's allowed.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "openhand-house-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-house-3",
+   "name": "Number Nine, Striaton",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "pokemon": "pansage",
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "A Pansage on a sill. A child's drawing. It's the house from the order. And a van at the end of the lane.",
+   "choices": [
+    {
+     "label": "\"It's fine.\" (And stand in the gate.)",
+     "success": {
+      "text": "The Crew, again. They've a key.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "trainer.pr/plasma_grunt_m",
+       "team": [
+        "liepard",
+        "scrafty",
+        "watchog"
+       ],
+       "format": "doubles",
+       "name": "Crew Grunts",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "openhand-house-3-after"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-house-3-after",
+   "name": "Number Nine, Striaton",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "pokemon": "pansage",
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "The child, after, through the letterbox: \"Are you the good ones or the other ones?\" Yara: \"...We're the ones who knocked.\" A hundred tea towels are printed.",
+   "choices": [
+    {
+     "label": "(Go home.)",
+     "success": {
+      "text": "Open Hand has its first three findings.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "openhand-insp1",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-insp2",
+   "name": "Inspection 2: The Sunday Round",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "has": "third",
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "openhand-insp1",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "openhand-insp2",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m",
+     "boss.hugh"
+    ],
+    "pokemon": "lillipup",
+    "tint": "#4a4a30",
+    "effect": "none"
+   },
+   "intro": "Thirty-one fences. Open Hand walks three. A field. A fence. Eleven Pokémon sitting along it, facing the road. Each with a red collar. Yara: \"That's what I looked like to her. For six months. A person walking off.\" Hugh, very quiet for him: \"They're all facing the same way.\" The collars have numbers. The Dreamyard Ledger, or a Crew manifest, has the towns.",
+   "choices": [
+    {
+     "label": "(Match each collar to a town with the ledger.)",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "plasma-ledger",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "prompt": {
+      "id": "aim-drag",
+      "needs": "ok"
+     },
+     "success": {
+      "text": "All eleven. Open Hand walks them home. Eleven doors. Nine open. Two people have moved away, and didn't leave word, because they were told it was free. The two come to the House. One's a Herdier. A woman's been washing dishes there for a year, every day, in case it turned up. She doesn't look round when the door opens. She's stopped looking round. It crosses the kitchen and sits on her foot.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "openhand-insp2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "emil-herdier",
+        "amount": 1
+       }
+      ]
+     },
+     "failure": {
+      "text": "Two collars don't match a town. Open Hand walks the other nine home, and carries the two to the House. One's a Herdier. A woman's been washing dishes there for a year, every day, in case it turned up. It crosses the kitchen and sits on her foot.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "openhand-insp2",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "emil-herdier",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "(Win a Crew manifest at the gate.)",
+     "success": {
+      "text": "The Crew don't like being asked for paperwork.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "lose": [],
+       "sprite": "trainer.pr/plasma_grunt_m",
+       "team": [
+        "liepard",
+        "watchog",
+        "scolipede"
+       ],
+       "name": "Crew Grunts",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "openhand-insp2",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "emil-herdier",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "openhand-manifest",
+         "amount": 1
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-insp3",
+   "name": "Inspection 3: A Thousand Answers",
+   "group": "Evil Teams",
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "has": "third",
+     "after": 6
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    },
+    {
+     "kind": "flag",
+     "key": "openhand-insp2",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "openhand-insp3",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "period",
+     "in": [
+      "night"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#2a2418",
+    "effect": "none"
+   },
+   "intro": "Emil: \"He's going to ask the whole region a question from that balcony. And they'll answer the way a crowd answers. I want him to have the other answer. The one you get in a kitchen.\" Open Hand's visited a thousand houses. Each finding's on a card: \"Sleeps on his chest. He's got a bad heart. It listens.\" \"Was fine. Left a tea towel. She cried.\" \"Wasn't. Stayed nine days. Is now.\" \"Wasn't. It chose to go. He comes Tuesdays. He's getting better at the soup.\" \"It bit me. Good. It's got opinions.\" \"Number nine. BEST FREND.\" You sort them into what N should hear first. There's no wrong order.",
+   "choices": [
+    {
+     "label": "The fine ones first.",
+     "success": {
+      "text": "So he knows it's most of them.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "openhand-insp3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "openhand-order-fine",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "The ones who chose to go, first.",
+     "success": {
+      "text": "So he knows going's allowed, and nobody's lost.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "openhand-insp3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "openhand-order-go",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "\"Number nine. BEST FREND.\" first.",
+     "success": {
+      "text": "So he starts with a drawing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "openhand-insp3",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "openhand-order-nine",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-climax",
+   "name": "All Night",
+   "group": "Evil Teams",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "evil",
+     "team": "plasma",
+     "beat": 6,
+     "has": "third",
+     "inside": false
+    },
+    {
+     "kind": "region",
+     "ids": [
+      "unova"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [
+     "boss.ghetsis",
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "The square under the balcony. Ten thousand candles. And, coming up the hill from Driftveil, a thousand people, each walking beside a Pokémon. None in a Ball. Ghetsis, from the rail: \"—ask yourself: did it choose this? Did anyone ask it?\" Emil, from the square, in a voice that's called down nineteen years of wards: \"Yes.\" Silence. Emil: \"We did. A thousand houses. D'you want the figures? Nine hundred and four are fine. Sixty-one are learning. Thirty-five chose to go, and went, and we know where each one is, because we walked them there.\" The boy from the square: \"Mine sat down! I said go and he sat down!\" Ghetsis: \"Anecdote.\" The smile arrives a moment late.",
+   "choices": [
+    {
+     "label": "(Wait for the dragon.)",
+     "success": {
+      "text": "N lands. He's heard it from the air.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "openhand-dragon"
+       }
+      ]
+     }
+    }
+   ],
+   "remembers": [
+    {
+     "id": "colress",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "openhand-colress",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Colress, delighted: \"A thousand's a sample! I've checked their method! It's better than mine!\""
+    }
+   ]
+  },
+  {
+   "id": "openhand-dragon",
+   "name": "Phase 2: The Dragon",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.n"
+    ],
+    "pokemon": "pansage",
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "N: \"You asked them. Without being able to hear.\" Emil: \"We looked. It's slower.\" N: \"Will they tell me? Themselves? I'd like— I've only ever heard the ones in his room. And then strangers', one at a time, in passing. I've never had anyone bring me an answer.\"",
+   "choices": [
+    {
+     "label": "(Hold the lamp for him.)",
+     "success": {
+      "text": "He sits on the steps. They come up one at a time. A Trubbish. A Minccino that's stopped being brushed. A fat Pansage with a ribbon. He listens to every one. He writes each down. You're holding the lamp, and there's nothing to press. It takes all night. The crowd doesn't leave. Somebody brings soup. At dawn, to nobody: N: \"\"I'm not afraid.\" Six hundred and twelve. I'd eleven.\" He shuts the notebook. N: \"I'd the wrong room.\"",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "n-wrong-room",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "openhand-dawn"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-dawn",
+   "name": "Phase 4: Ghetsis",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "boss.ghetsis"
+    ],
+    "tint": "#2a2a48",
+    "effect": "snow"
+   },
+   "intro": "He's still at the rail. Nobody's looked at him for six hours. Ghetsis: \"The weather—\" Sage Bronius, by radio, from the Frigate: \"Is off. The Relay. I've pulled the red one. Nobody told me to. I've a thousand cards up here; the Knights brought them aboard. I've been counting. They add up.\"",
+   "choices": [
+    {
+     "label": "Battle him.",
+     "success": {
+      "text": "Ghetsis, alone, with half a team; the Triad have gone to ask for names.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "sprite": "boss.ghetsis",
+       "team": [
+        "hydreigon",
+        "cofagrigus",
+        "seismitoad"
+       ],
+       "name": "Ghetsis",
+       "size": 3,
+       "types": [],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "addEvent",
+         "eventId": "openhand-after"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "(Hold out an open hand.)",
+     "success": {
+      "text": "He looks at it for a long time. He doesn't come. That's allowed. It's the creed.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "openhand-ghetsis-hand",
+        "amount": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "openhand-after"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "openhand-after",
+   "name": "After Open Hand",
+   "group": "Evil Teams",
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.pr/plasma_grunt_m"
+    ],
+    "tint": "#2a2a48",
+    "effect": "none"
+   },
+   "intro": "It doesn't disband. It becomes a thing Unova has: at any town in the region, a tea towel in a window means a visit can be asked for. Your party's looked over, and told what it's doing well. N goes on with the list. It's got a second column now. N has a second column. Ghetsis wasn't looked at for six hours. The Likeness told N something first; he won't say what. Yara: \"We're the ones who knocked.\" Emil said \"Yes,\" from the square. The Lillipup goes first into every house. Sister Ianthe teaches looking. Gorm asks to carry cards. Bronius pulled it without being told. Zinzolin: a visit's made. Finding: \"Wasn't. Is learning.\" Rood dries up. The Triad went to ask for names; N gave three. He'd had them ready. Colress: \"The control group.\" Hugh knocks. The boy from the square explains it to other children. The thirty-one fields are walked, every Sunday.",
+   "choices": [
+    {
+     "label": "(Take a tea towel.)",
+     "success": {
+      "text": "ASK THE ONE IT'S ABOUT.",
+      "effects": [
+       {
+        "kind": "evil",
+        "end": "defeated"
+       },
+       {
+        "kind": "flag",
+        "key": "plasma-ending-openhand",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "relay-dark",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}

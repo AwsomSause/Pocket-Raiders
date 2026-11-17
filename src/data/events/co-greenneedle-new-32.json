@@ -1,0 +1,694 @@
+{
+ "catalogOverhaul": "greenneedle",
+ "override": true,
+ "remove": [],
+ "events": [
+  {
+   "id": "gn-32-pool",
+   "name": "The Storm Chaser",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Legendary"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "raikou-sighting",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4f5f7f",
+    "effect": "rain"
+   },
+   "intro": "*Lightning hits the same hill three times. You count. Then you look up.*\n\nSomething is standing on it. Four legs. A mane like a thunderhead. Drinking from a pool the rain made, as if the storm were its own.",
+   "choices": [
+    {
+     "label": "Approach.",
+     "success": {
+      "text": "You climb. It lets you get to twenty paces. Then it is on the next hill, drinking again, as if you were weather that changed your mind.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-approached",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "raikou-step"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You sit in the wet grass and let it finish. It drinks for a long time. Then it looks at you, once, and goes. The pool is still shaking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-waited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-calm",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "raikou-step"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a Ball.",
+     "success": {
+      "text": "The Ball leaves your hand. It bats it out of the air without turning its head. The Ball rolls away in the rain, and it goes on drinking.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-ball",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "raikou-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-ridge",
+   "name": "The Storm Chaser: The Ridge",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Legendary"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "raikou-sighting",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "raikou-step"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "waits",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "raikou-waited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The air on this hill is the same as the last one. Still, and heavy, and waiting for you to move."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4f5f7f",
+    "effect": "rain"
+   },
+   "intro": "*A town below, lights on in the rain. A ridge above it. The lightning keeps landing on one spot.*\n\nIt is there again. Watching the town from the rock, the way a guard watches, or a child at a window. Water runs off its flanks in sparks.",
+   "choices": [
+    {
+     "label": "Approach.",
+     "success": {
+      "text": "You get close enough to hear it breathe. It turns its head. The town is quiet below. It leaves along the ridge, unhurried, and every light below flickers once.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-approached",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "raikou-step"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You sit down on the wet rock and look at the town too. It looks at you. Then back. Neither of you has anywhere to be.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-waited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-calm",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "raikou-step"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a Ball.",
+     "success": {
+      "text": "The Ball arcs out. It bats it away without turning its head, the same as before, and goes on watching the town as if you were not there.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-ball",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "raikou-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-pichu",
+   "name": "The Storm Chaser: The Pichu",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Legendary"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "raikou-sighting",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "raikou-step"
+    }
+   ],
+   "remembers": [
+    {
+     "id": "waits",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "raikou-waited",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "The air on this hill is the same as the last one. Still, and heavy, and waiting for you to move."
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4f5f7f",
+    "effect": "rain"
+   },
+   "intro": "*A cry in the rain, thin and high. Beneath a tree the lightning has already split once, a tiny yellow shape is trembling.*\n\nA Pichu. It crept too close to the great beast on the hill, and now it cannot move. The beast stands over it, very still.",
+   "choices": [
+    {
+     "label": "Approach.",
+     "success": {
+      "text": "You step forward. The beast lets you, then steps off the hill before you can reach it. The Pichu is still shaking, still alone, and still staring after it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-approached",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "raikou-step"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Wait.",
+     "success": {
+      "text": "You hold your place. The beast looks at the Pichu, at you, at the Pichu. Then it steps back, and back, and is gone into the clouds.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-waited",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-calm",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "raikou-step"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Throw a Ball.",
+     "success": {
+      "text": "The Ball goes wide. It bats it out of the air with a paw, almost bored, and looks down at the Pichu as if to ask what you thought you were doing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-ball",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "raikou-step"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Shelter the Pichu.",
+     "success": {
+      "text": "You kneel over it in the rain. Your coat is over its head. The thunder goes off like a drum, and the Pichu flinches into your arm.\n\nThe beast watches. Then it steps back first, and the lightning, for a breath, stops landing on this hill.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-pichu",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-calm",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "raikou-step"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-meet-fight",
+   "name": "The Storm Chaser: Fair Fight",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Legendary"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "raikou-sighting",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "raikou-step"
+    },
+    {
+     "kind": "flag",
+     "key": "raikou-ball",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4f5f7f",
+    "effect": "rain"
+   },
+   "intro": "*Step 17, optional. The hill again. The storm has been following your Balls for three sightings, and it has stopped being patient.*\n\nIt is standing in the open, no hill to hide behind. Lightning crawls over its back. It looks at you the way you looked at it, three times.",
+   "choices": [
+    {
+     "label": "Fight it.",
+     "success": {
+      "text": "It does not wait. The air goes white. It comes down the hill like a bolt that has finally decided where to land.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "raikou"
+       ],
+       "types": [],
+       "levelBonus": 2,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "raikou-sighting",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "raikou-ran",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You chased the storm three times and finally fought it. It ran when it was losing.",
+         "importance": 80
+        }
+       ],
+       "exact": true,
+       "caught": [
+        {
+         "kind": "flag",
+         "key": "raikou-sighting",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "raikou-caught",
+         "amount": 1
+        },
+        {
+         "kind": "moment",
+         "text": "You chased the storm three times, and caught it.",
+         "importance": 100
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Walk away.",
+     "success": {
+      "text": "You have thrown enough Balls. It watches you go down the hill, with the rain on its back, and does not follow.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-meet-night",
+   "name": "The Storm Chaser: The Night Walk",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Legendary"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "raikou-sighting",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "raikou-step"
+    },
+    {
+     "kind": "flag",
+     "key": "raikou-calm",
+     "atLeast": 3,
+     "atMost": 99
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#2c344a",
+    "effect": "rain"
+   },
+   "intro": "*Camp, in the dark. The fire is low, and the rain has stopped. Something outside the light is walking slowly through the tents.*\n\nIt does not growl. It does not hurry. It stops at every Pokémon in the camp, lowers its head, and looks at each one, as if it were learning your names.",
+   "choices": [
+    {
+     "label": "Stay still.",
+     "success": {
+      "text": "It comes to yours last. Your lead looks up at it and is not afraid. They look at each other for a long moment.\n\nThen it turns, and goes. In the dawn there is a scorch mark in the grass, exactly the shape of a paw. Thundermark.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "thundermark",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-gift",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Storm Chaser walked through your camp at night, looked at every Pokémon, and left a paw print in the grass.",
+        "importance": 100
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-meet-nod",
+   "name": "The Storm Chaser: The Nod",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Legendary"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "raikou-sighting",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "raikou-step"
+    },
+    {
+     "kind": "flag",
+     "key": "raikou-ball",
+     "atLeast": 0,
+     "atMost": 2
+    },
+    {
+     "kind": "flag",
+     "key": "raikou-calm",
+     "atLeast": 0,
+     "atMost": 2
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4f5f7f",
+    "effect": "rain"
+   },
+   "intro": "*The same hill. The same lightning. The same shape against the sky.*\n\nIt is on the hill once more. You were not sure which of you was chasing the other, and you are not sure now.",
+   "choices": [
+    {
+     "label": "Look back.",
+     "success": {
+      "text": "It looks at you for a long time. Then, very slightly, it nods.\n\nNothing else. No gift, no fight. Only the nod. Then the hill is empty, and the storm walks away over the next one.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-sighting",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You saw the storm four times. On the fourth it nodded.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-32-pikachu",
+   "name": "The Storm Chaser: The Pikachu",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Legendary"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "raikou-pichu",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "raikou-step"
+    },
+    {
+     "kind": "flag",
+     "key": "raikou-pika-met",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#4f5f7f",
+    "effect": "rain"
+   },
+   "intro": "*Thunder rolls down a valley, close and loud. A Pikachu is sitting on a fence post, watching it, with its ears up.*\n\nIt is the Pichu from the hill. It has grown, a little. The thunder cracks, and it does not flinch. It looks at you and grins.",
+   "choices": [
+    {
+     "label": "Say hello.",
+     "success": {
+      "text": "It runs along the fence and up your arm and sits on your shoulder, as if it had always done so.\n\nThe next thunderclap rattles the valley. It leans into your neck, laughing. It remembers who stood over it in the rain.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "pikachu"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1,
+        "ability": "lightning-rod"
+       },
+       {
+        "kind": "flag",
+        "key": "raikou-pika-met",
+        "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it be.",
+     "success": {
+      "text": "It watches you go, ears up, perfectly steady. Every time the thunder rolls, it salutes.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "raikou-pika-met",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
