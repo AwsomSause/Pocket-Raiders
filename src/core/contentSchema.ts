@@ -723,9 +723,9 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   /** The map shows what waits at nodes, like the preview items: wild Pokémon, trainers' teams, or the gym leader's team. */
   z.object({ kind: z.literal('preview'), what: z.enum(['wild', 'trainers', 'gymTeam']) }),
   /** Damage dealt by your Pokémon, filtered by their type and/or the move's category (Trainers.md perks). */
-  z.object({ kind: z.literal('damageMultiplier'), type: TypeNameSchema.optional(), types: z.array(TypeNameSchema).min(1).optional(), category: z.enum(['physical', 'special']).optional(), speed: z.enum(['fast', 'slow']).optional(), legendary: z.boolean().optional(), ultraBeast: z.boolean().optional(), value: z.number().positive() }),
+  z.object({ kind: z.literal('damageMultiplier'), type: TypeNameSchema.optional(), types: z.array(TypeNameSchema).min(1).optional(), category: z.enum(['physical', 'special']).optional(), speed: z.enum(['fast', 'slow']).optional(), legendary: z.boolean().optional(), ultraBeast: z.boolean().optional(), /** Legendary Blessings: the move's own type; the lead (party slot 1) or the rest; the user's HP share at least; the battle turn at most / at least. */ moveType: TypeNameSchema.optional(), slot: z.enum(['lead', 'rest']).optional(), hpAtLeast: z.number().min(0).max(1).optional(), turnAtMost: z.number().int().min(1).optional(), turnAtLeast: z.number().int().min(1).optional(), value: z.number().positive() }),
   /** Damage taken by your Pokémon: those of `type`, from moves of `moveType`, or from Legendary/Mythical/Ultra Beast attackers. */
-  z.object({ kind: z.literal('damageTakenMultiplier'), type: TypeNameSchema.optional(), moveType: TypeNameSchema.optional(), fromLegendary: z.boolean().optional(), value: z.number().positive() }),
+  z.object({ kind: z.literal('damageTakenMultiplier'), type: TypeNameSchema.optional(), moveType: TypeNameSchema.optional(), fromLegendary: z.boolean().optional(), /** Legendary Blessings: physical or special hits only; the lead (party slot 1) or the rest; the target at full HP. */ category: z.enum(['physical', 'special']).optional(), slot: z.enum(['lead', 'rest']).optional(), fullHp: z.boolean().optional(), value: z.number().positive() }),
   /** A battle stat (or max HP) of your Pokémon, optionally only those of one type. */
   z.object({ kind: z.literal('statMultiplier'), stat: z.enum(['hp', 'atk', 'def', 'spa', 'spd', 'spe']), type: TypeNameSchema.optional(), value: z.number().positive() }),
   /** Experience for a group of Pokémon: of a type, not of a type, fast (base Speed 90+) or slow (base Speed 60-), or the starter. */
@@ -867,7 +867,7 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   /** Event toolkit: while counter `counter` is at least `atLeast`, your Pokémon (of `type`, if given) deal `base + perPoint × count` times damage (count = the counter, capped at its max). */
   z.object({ kind: z.literal('counterDamage'), counter: z.string(), atLeast: z.number().int().min(0).default(0), type: TypeNameSchema.optional(), base: z.number().positive().default(1), perPoint: z.number().min(0) }),
   /** Event toolkit: a rule that holds at the start of every battle: a weather, a field (Gravity, Trick Room) or Tailwind for you (for `turns` turns). */
-  z.object({ kind: z.literal('battleStart'), weather: WeatherSchema.optional(), field: z.enum(['gravity', 'trickRoom']).optional(), tailwind: z.boolean().optional(), turns: z.number().int().positive().default(5) }),
+  z.object({ kind: z.literal('battleStart'), weather: WeatherSchema.optional(), field: z.enum(['gravity', 'trickRoom']).optional(), tailwind: z.boolean().optional(), terrain: TerrainSchema.optional(), /** Only battles against a trainer, or a boss. */ against: z.enum(['trainer', 'boss']).optional(), turns: z.number().int().positive().default(5) }),
   /** Pokémon of a type recover this share of max HP at the end of every turn. */
   z.object({ kind: z.literal('turnHeal'), type: TypeNameSchema, percent: z.number().positive() }),
   /** HP restored by healing moves your Pokémon use. */
@@ -1007,6 +1007,22 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   /** Heatran's Rite, erupt: the next boss battle starts with every hazard, weather and terrain cleared from the arena. */
   z.object({ kind: z.literal('eruptArena') }),
   /** The next battle you lose without ending the run gives `value`× experience (1.5 = +50%); used up after one loss. */
+  /** Legendary Blessings: your Pokémon cannot be given a status (or this one) in the first `turns` turns of a battle. */
+  z.object({ kind: z.literal('statusImmuneTurns'), status: StatusIdSchema.optional(), turns: z.number().int().min(1) }),
+  /** Legendary Blessings: the added effects (status, flinch, stat drops) of foes' moves on your side happen this much as often. */
+  z.object({ kind: z.literal('foeSecondaryChance'), value: z.number().min(0) }),
+  /** Legendary Blessings: a foe's stat drop on your Pokémon fails (only this stat; with `first`, only the first per Pokémon each battle). */
+  z.object({ kind: z.literal('statDropGuard'), stat: z.enum(['atk', 'def', 'spa', 'spd', 'spe', 'acc', 'eva']).optional(), first: z.boolean().optional() }),
+  /** Legendary Blessings: a Pokémon you switch out below `below` of its HP recovers `percent`, once per Pokémon per battle. */
+  z.object({ kind: z.literal('switchOutHeal'), below: z.number().positive().max(1), percent: z.number().positive() }),
+  /** Legendary Blessings: when one of your Pokémon is knocked out, the foe that did it is burned (up to `times` per battle). */
+  z.object({ kind: z.literal('koBurn'), times: z.number().int().min(1) }),
+  /** Legendary Blessings: your Pokémon that knocks out a foe recovers `percent` of its HP. */
+  z.object({ kind: z.literal('koHeal'), percent: z.number().positive() }),
+  /** Legendary Blessings: on the first turn of a battle your move goes before the foe's move of the same priority (only in this weather, if set). */
+  z.object({ kind: z.literal('leadFirst'), weather: WeatherSchema.optional() }),
+  /** Legendary Blessings (Eternatus, Terapagos): your Pokémon may Dynamax / Terastallize without the key item (once per battle, as usual). */
+  z.object({ kind: z.literal('grantMechanic'), mechanic: z.enum(['dynamax', 'tera']) }),
   z.object({ kind: z.literal('lostBattleXp'), value: z.number().positive() }),
 ]);
 export type ArchetypeModifier = z.infer<typeof ArchetypeModifierSchema>;

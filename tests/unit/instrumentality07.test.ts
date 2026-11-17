@@ -129,19 +129,33 @@ describe('Mythical Promises (M1)', () => {
     expect(breaks(content, twin, 'partyTypePairs', { kind: 'partyChanged' })).toBe(true);
     expect(breaks(content, run, 'partyTypePairs', { kind: 'partyChanged' })).toBe(false);
   });
-  it('no visit before three Tellings; Tellings only about supported Mythicals; one per stage', () => {
+  it('no visit before three Tellings; Tellings name any non-disabled Mythical, one at a time, one per stage', () => {
     const run = base();
     run.party[0]!.hatched = true;
     expect(rollVisit(content, run, 0)).toBeNull();
-    expect(rollVisit(content, run, 0)).toBeNull();
-    expect(believed(run, 'zarude')).toBe(false); // the run's first stage tells nothing
     expect(run.stagePlan?.lines ?? []).toEqual([]);
-    expect(hearTelling(run, 1)).toContain('Rogue of the Jungle');
-    expect(hearTelling(run, 2)).toContain('Rogue of the Jungle');
-    expect(believed(run, 'zarude')).toBe(false);
+    const first = hearTelling(run, 1)!;
+    const told = Object.keys(promiseState(run).tellings);
+    expect(told).toHaveLength(1);
+    const id = told[0]!;
+    expect(MYTHICALS.find((m) => m.id === id)!.status).not.toBe('disabled');
+    expect(first).toContain('(1/3)');
+    expect(hearTelling(run, 2)).toContain('(2/3)');
+    expect(believed(run, id)).toBe(false);
     expect(hearTelling(run, 3)).toContain('You begin to believe it');
-    expect(believed(run, 'zarude')).toBe(true);
-    expect(hearTelling(run, 9)).toBeNull();
+    expect(believed(run, id)).toBe(true);
+    expect(promiseState(run).tellings[id]).toBe(3);
+  });
+  it('the stage Telling is not always Zarude: over many seeds most non-disabled Mythicals get told', () => {
+    const seen = new Set<string>();
+    for (let i = 0; i < 80; i++) {
+      const run = start({ mythicalPromises: true });
+      run.seed = `telling-variety-${i}`;
+      hearTelling(run, 1);
+      for (const id of Object.keys(promiseState(run).tellings)) seen.add(id);
+    }
+    expect(seen.size).toBeGreaterThanOrEqual(15);
+    for (const id of ['arceus', 'marshadow', 'manaphy', 'melmetal']) expect(seen.has(id)).toBe(false);
   });
   it('visit odds: 10% a region, +3% per Telling past the third, capped at 25%', () => {
     expect(visitChance(3)).toBeCloseTo(0.1);
@@ -150,7 +164,7 @@ describe('Mythical Promises (M1)', () => {
   });
   it('a visit needs its trigger; accepting makes a Guest; one Mythical per run', () => {
     const run = base();
-    for (let i = 0; i < 3; i++) hearTelling(run, i + 5);
+    run.expansion = { ...run.expansion, promise: { ...promiseState(run), tellings: { zarude: 3 } } }; // the visit roll only reads Tellings
     let visit = null;
     for (let r = 0; r < 400 && !visit; r++) visit = rollVisit(content, run, r);
     expect(visit).toBeNull(); // no hatched Pokémon yet: no trigger
