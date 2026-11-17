@@ -4,13 +4,15 @@ import creedsRaw from '../../data/evilMode/creeds.json';
 import doctrinesRaw from '../../data/evilMode/doctrines.json';
 import methodsRaw from '../../data/evilMode/methods.json';
 import foundingRaw from '../../data/evilMode/founding.json';
-import { CreedsFileSchema, DoctrinesFileSchema, FoundingFileSchema, MethodsFileSchema } from './schema';
+import districtRaw from '../../data/evilMode/district.json';
+import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FoundingFileSchema, MethodsFileSchema } from './schema';
 
 export const EVIL_DATA = {
   creeds: CreedsFileSchema.parse(creedsRaw).creeds,
   doctrines: DoctrinesFileSchema.parse(doctrinesRaw).doctrines,
   methods: MethodsFileSchema.parse(methodsRaw).methods,
   founding: FoundingFileSchema.parse(foundingRaw),
+  district: DistrictFileSchema.parse(districtRaw),
 };
 export type EvilData = typeof EVIL_DATA;
 export type Creed = EvilData['creeds'][number];

@@ -76,9 +76,108 @@ export const EvilTeamSchema = z.object({
 });
 export type EvilTeam = z.infer<typeof EvilTeamSchema>;
 
-export const EvilModeBlockSchema = z.object({
-  /** The block's own version, for its own migrations. */
-  v: z.literal(1),
+// ---- Slice 2: a district (design Parts 6 and 7, Part 30 sections 3.4 and 3.5) ----
+
+export const MOODS = ['warm', 'easy', 'wary', 'sullen', 'shut'] as const;
+export const MoodSchema = z.enum(MOODS);
+export type Mood = z.infer<typeof MoodSchema>;
+
+export const HOLDING_KINDS = ['local', 'wild', 'alpha', 'safehouse', 'opportunity', 'town', 'gym'] as const;
+export const HoldingKindSchema = z.enum(HOLDING_KINDS);
+export type HoldingKind = z.infer<typeof HoldingKindSchema>;
+
+/** The four methods slice 2 builds. Lean, Take and Expose arrive later (their buttons show, refused, with why). */
+export const JOB_METHODS = ['scout', 'persuade', 'pay', 'outplay'] as const;
+export const JobMethodSchema = z.enum(JOB_METHODS);
+export type JobMethod = z.infer<typeof JobMethodSchema>;
+
+const LocalSchema = z.object({
+  id: z.string().min(1), who: z.string().min(1), trade: z.string().min(1), earns: z.number().int().min(0), take: z.number().int().min(0),
+  want: z.string().min(1), fear: z.string().min(1), mood: MoodSchema, says: z.string().min(1),
+  noPrice: z.string().min(1).optional(), priceTimes: z.number().int().min(1).optional(), minor: z.boolean().optional(),
+});
+export type LocalDef = z.infer<typeof LocalSchema>;
+
+export const DistrictFileSchema = z.object({
+  note: z.string(),
+  districts: z.array(z.object({ region: z.number().int().min(0), n: z.number().int().min(1), town: z.string().min(1), leader: z.string().min(1), grievance: z.string().min(1), status: EvilStatusSchema })).min(1),
+  layout: z.object({ steps: z.literal(20), local: z.number().int().min(1), wild: z.number().int().min(0), alpha: z.number().int().min(0), safehouse: z.number().int().min(0), opportunity: z.number().int().min(0), town: z.literal(1) }),
+  rules: z.object({ days: z.number().int().min(1), toHold: z.number().int().min(1), townStreet: z.number().int().min(1), scoutReach: z.number().int().min(0), fairDays: z.number().int().min(1), crew: z.number().int().min(1), squadMax: z.number().int().min(1), townTakings: z.number().int().min(0), safehouseRent: z.number().int().min(0), wage: z.number().int().min(0), wageCause: z.number().int().min(0) }),
+  streets: z.array(z.object({ name: z.string().min(1), from: z.number().int().min(1), to: z.number().int().min(1) })).min(1),
+  moods: z.array(z.object({ id: MoodSchema, name: z.string().min(1), dot: z.string().regex(/^#[0-9a-f]{6}$/i), persuade: z.number().int().multipleOf(5) })).length(MOODS.length),
+  kinds: z.array(z.object({ id: HoldingKindSchema, name: z.string().min(1), mark: z.string().min(1), methods: z.array(JobMethodSchema), places: z.array(z.string().min(1)).optional(), outplay: z.number().int().multipleOf(5).optional(), price: z.number().int().min(0).optional(), mood: MoodSchema.optional(), why: z.string().optional() })).length(HOLDING_KINDS.length),
+  methods: z.object({
+    persuade: z.object({ base: z.number().int().multipleOf(5), heat: z.number().int(), regard: z.number().int() }),
+    pay: z.object({ heat: z.number().int(), offers: z.array(z.object({ pct: z.number().int().min(1).max(100), odds: z.number().int().multipleOf(5).nullable(), fair: z.boolean(), lowball: z.boolean().optional() })).min(1) }),
+    outplay: z.object({ base: z.number().int().multipleOf(5), heat: z.number().int(), regard: z.number().int() }),
+    scout: z.object({ heat: z.number().int() }),
+  }),
+  terms: z.object({ scouted: z.number().int().multipleOf(5), short: z.number().int().multipleOf(5), triedBefore: z.number().int().multipleOf(5), wantKnown: z.number().int().multipleOf(5), regardPerPoint: z.number().int().multipleOf(5), regardMost: z.number().int().multipleOf(5), dread: z.number().int().multipleOf(5), floor: z.number().int().min(0), ceiling: z.number().int().max(100) }),
+  voices: z.record(z.string(), z.array(z.string().min(1)).min(1)),
+  ends: z.object({ held: z.string().min(1), taken: z.string().min(1) }),
+  locals: z.array(LocalSchema).min(8),
+});
+
+export const HoldingSchema = z.object({
+  id: z.string().min(1),
+  /** 1..20 on the district's road. */
+  step: z.number().int().min(1).max(20),
+  kind: HoldingKindSchema,
+  /** The place or the local's deck id. */
+  ref: z.string().min(1),
+  mood: MoodSchema.nullable(),
+  /** 0 nothing known, 1 who/trade/earns/mood/price, 2 and want and fear (design Part 7 section 8). */
+  scouted: z.number().int().min(0).max(2),
+  owner: z.enum(['team', 'nobody']),
+  method: JobMethodSchema.optional(),
+  since: z.number().int().min(1).optional(),
+  /** "Yours, holds" (true) or "Yours, would turn" (false). */
+  holds: z.boolean(),
+  /** Methods tried here and failed (the next try is +10%). */
+  tried: z.array(JobMethodSchema),
+}).strict();
+export type Holding = z.infer<typeof HoldingSchema>;
+
+export const OddsTermSchema = z.object({ label: z.string().min(1), value: z.number().int() });
+export type OddsTerm = z.infer<typeof OddsTermSchema>;
+
+export const JobSchema = z.object({
+  holdingId: z.string().min(1),
+  method: JobMethodSchema,
+  squad: z.array(z.string().min(1)).min(1),
+  /** Pay only: the offer as a percent of the fair price. */
+  offer: z.number().int().min(1).max(100).optional(),
+  /** Fixed at "Send them" (design Part 30 section 3.5); null while still being built. */
+  odds: z.number().int().min(0).max(100).nullable(),
+  certain: z.boolean(),
+  terms: z.array(OddsTermSchema),
+}).strict();
+export type Job = z.infer<typeof JobSchema>;
+
+export const SheetSchema = z.object({
+  holdingId: z.string().min(1), method: JobMethodSchema, squad: z.array(z.string()), odds: z.number().int(), certain: z.boolean(),
+  roll: z.number().int().min(1).max(100), won: z.boolean(), voice: z.string(), lines: z.array(z.string()),
+}).strict();
+export type Sheet = z.infer<typeof SheetSchema>;
+
+export const DistrictSchema = z.object({
+  region: z.number().int().min(0),
+  n: z.number().int().min(1),
+  /** The run's seed, copied so the day machine stays a pure function of the block. */
+  seed: z.string().min(1),
+  holdings: z.array(HoldingSchema).length(20),
+  /** Street indexes where a Persuade has already given Regard. */
+  regardStreets: z.array(z.number().int().min(0)),
+  end: z.object({ how: z.enum(['held', 'taken']), day: z.number().int().min(1), count: z.number().int().min(0) }).optional(),
+}).strict();
+export type District = z.infer<typeof DistrictSchema>;
+
+export const CrewSchema = z.object({ id: z.string().min(1), name: z.string().min(1), outOn: z.number().int().min(1).nullable() }).strict();
+export type Crew = z.infer<typeof CrewSchema>;
+
+const BlockV2Schema = z.object({
+  /** The block's own version, for its own migrations. 2: slice 2 added the district, the crew, the queue and the sheets. */
+  v: z.literal(2),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -88,5 +187,25 @@ export const EvilModeBlockSchema = z.object({
   draws: z.record(z.enum(STREAMS), z.number().int().min(0)),
   /** Ids of things that happened once and can't again (section 6.4). */
   applied: z.array(z.string()),
+  /** Null only on a block migrated from v1, until the session lays the district (it needs the run's seed). */
+  district: DistrictSchema.nullable(),
+  crew: z.array(CrewSchema),
+  /** Today's jobs, in the order they were queued. */
+  queue: z.array(JobSchema),
+  /** The last Evening's result sheets (shown again in the next Morning's Overnight). */
+  sheets: z.array(SheetSchema),
+  /** The last Evening's money and numbers, one line each. */
+  evening: z.array(z.string()),
 }).strict();
-export type EvilModeBlock = z.infer<typeof EvilModeBlockSchema>;
+
+/** Four unnamed Grunts (slice 4 brings named people). */
+export const firstCrew = (n = 4): Crew[] => Array.from({ length: n }, (_, i) => ({ id: `g${i + 1}`, name: `Grunt ${i + 1}`, outOn: null }));
+
+/** Migration v1 -> v2 (slice 1's block): nothing removed; the district is laid on the next step, the crew are four Grunts. */
+export function migrateEvilBlock(raw: unknown): unknown {
+  if (!raw || typeof raw !== 'object' || (raw as { v?: unknown }).v !== 1) return raw;
+  return { ...(raw as object), v: 2, district: null, crew: firstCrew(), queue: [], sheets: [], evening: [] };
+}
+
+export const EvilModeBlockSchema = z.preprocess(migrateEvilBlock, BlockV2Schema);
+export type EvilModeBlock = z.infer<typeof BlockV2Schema>;

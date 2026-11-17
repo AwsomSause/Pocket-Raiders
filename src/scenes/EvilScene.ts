@@ -14,11 +14,15 @@ import { onInputAction, type InputAction } from '../ui/input';
 import { rxFileOf } from '../ui/redux/assets';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { foundingView, frameView } from '../ui/redux/screens/evilFounding';
+import { boardView } from '../ui/redux/screens/evilBoard';
+import { boardModel, dispatchRows, newDispatch, type DispatchDraft } from '../core/evilMode/boardScreens';
+import { JOB_METHODS, type JobMethod } from '../core/evilMode/schema';
 import { GAME_WIDTH } from '../ui/theme';
 
 export class EvilScene extends Phaser.Scene {
   private view: ReduxView | null = null;
   private draft: FoundingDraft = newDraft();
+  private disp: DispatchDraft = newDispatch();
   private notice: string | null = null;
   private input_: HTMLInputElement | null = null;
   private leaving = false;
@@ -30,10 +34,12 @@ export class EvilScene extends Phaser.Scene {
   create(): void {
     this.cameras.main.setBackgroundColor('#141414');
     this.draft = newDraft();
+    this.disp = newDispatch();
     this.notice = null;
     this.leaving = false;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
+    session.evilEnsure();
     const manifest = this.cache.json.get('manifest') as AssetManifest | undefined;
     const run = session.run;
     const archetype = getArchetype(session.content, run.archetypeId);
@@ -46,6 +52,11 @@ export class EvilScene extends Phaser.Scene {
       render: (c) => {
         const r = services().session.run;
         const block = r?.expansion?.evilMode;
+        if (block?.district) {
+          const frame = frameModel(block, archetype.name);
+          if (block.district.end) frame.button = 'Leave';
+          return frameView(c, frame, this.notice, boardView(boardModel(block, this.disp), frame, this.notice));
+        }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
       },
@@ -55,6 +66,13 @@ export class EvilScene extends Phaser.Scene {
         back: () => this.back(),
         suggest: (n) => this.setName(n),
         advance: () => this.advance(),
+        cell: (i) => this.cell(Number(i)),
+        crew: (id) => this.toggleCrew(id),
+        how: () => this.toHow(),
+        method: (i) => { this.disp = { ...this.disp, how: Number(i), step: 'how' }; this.view?.refresh(); },
+        offer: (pct) => { this.disp = { ...this.disp, offer: Number(pct) }; this.view?.refresh(); },
+        queue: () => this.queue(),
+        clear: (id) => { services().session.evilStep({ type: 'clearJob', holdingId: id }); this.view?.refresh(); },
       },
       overs: { over: (i) => { if (!this.founded()) { this.draft = { ...this.draft, at: Number(i) }; this.view?.refresh(); } } },
     });
@@ -73,11 +91,7 @@ export class EvilScene extends Phaser.Scene {
 
   private key(a: InputAction): void {
     if (this.leaving) return;
-    if (this.founded()) {
-      if (a === 'confirm') this.advance();
-      else if (a === 'back') this.leave();
-      return;
-    }
+    if (this.founded()) return this.dayKey(a);
     const d = this.draft;
     if (a === 'confirm') return this.next();
     if (a === 'back') return this.back();
@@ -144,12 +158,105 @@ export class EvilScene extends Phaser.Scene {
     this.view?.refresh();
   }
 
-  /** The beat strip's button: ends the beat (slice 1's beats are empty). */
+  /** The beat strip's button: ends the beat. When the district's over it leaves (the run is saved). */
   private advance(): void {
     const block = services().session.run?.expansion?.evilMode;
     if (!block) return;
-    services().session.evilStep({ type: BEAT_END[block.here.beat] });
+    if (block.district?.end) return this.leave();
+    const cues = services().session.evilStep({ type: BEAT_END[block.here.beat] });
+    const refused = cues.find((c) => c.id === 'refused');
+    this.notice = refused && 'reason' in refused ? refused.reason : null;
+    this.disp = { ...newDispatch(), at: this.disp.at };
+    this.view?.refresh();
+  }
+
+  private block() {
+    return services().session.run?.expansion?.evilMode;
+  }
+
+  /** Keys on the Board and in Dispatch (design Part 29 section 18): every job can be built and queued without a pointer. */
+  private dayKey(a: InputAction): void {
+    const block = this.block();
+    if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
+    const d = this.disp;
+    const dispatching = block.here.beat === 'dispatch' && !block.district.end;
+    if (!dispatching) {
+      if (a === 'confirm') return this.advance();
+      if (a === 'back') return this.leave();
+      const by = a === 'left' ? -1 : a === 'right' ? 1 : a === 'up' ? -10 : a === 'down' ? 10 : 0;
+      this.disp = { ...d, at: Math.max(0, Math.min(19, d.at + by)) };
+      return this.view?.refresh();
+    }
+    if (d.step === 'where') {
+      const rows = dispatchRows(block);
+      if (a === 'back') return this.leave();
+      if (a === 'confirm') return d.onSend ? this.advance() : this.cell(d.at);
+      const by = a === 'up' || a === 'left' ? -1 : a === 'down' || a === 'right' ? 1 : 0;
+      // The list's rows, then "Send them" as one more row.
+      const pos = d.onSend ? rows.length : Math.max(0, rows.indexOf(d.at));
+      const next = (pos + by + rows.length + 1) % (rows.length + 1);
+      this.disp = next === rows.length ? { ...d, onSend: true } : { ...d, onSend: false, at: rows[next]! };
+      return this.view?.refresh();
+    }
+    if (d.step === 'who') {
+      const n = block.crew.length + 1;
+      if (a === 'back') this.disp = { ...d, step: 'where' };
+      else if (a === 'up' || a === 'down') this.disp = { ...d, who: (d.who + (a === 'up' ? -1 : 1) + n) % n };
+      else if (a === 'confirm') return d.who === block.crew.length ? this.toHow() : this.toggleCrew(block.crew[d.who]!.id);
+      return this.view?.refresh();
+    }
+    // How: left/right the seven methods; up/down the Pay offer; Enter queues.
+    if (a === 'back') this.disp = { ...d, step: 'who' };
+    else if (a === 'left' || a === 'right') this.disp = { ...d, how: (d.how + (a === 'left' ? -1 : 1) + EVIL_DATA.methods.length) % EVIL_DATA.methods.length };
+    else if (a === 'up' || a === 'down') {
+      const offers = EVIL_DATA.district.methods.pay.offers.map((o) => o.pct);
+      const i = offers.indexOf(d.offer);
+      this.disp = { ...d, offer: offers[(i + (a === 'up' ? -1 : 1) + offers.length) % offers.length]! };
+    } else if (a === 'confirm') return this.queue();
+    this.view?.refresh();
+  }
+
+  /** A holding pressed: on the Board it's looked at; in Dispatch it's where the job goes, and Who is next. */
+  private cell(i: number): void {
+    const block = this.block();
+    if (!block?.district) return;
+    const dispatching = block.here.beat === 'dispatch' && !block.district.end;
+    this.disp = { ...this.disp, at: i, onSend: false, ...(dispatching ? { step: 'who' as const, who: 0 } : {}) };
     this.notice = null;
+    this.view?.refresh();
+  }
+
+  private toggleCrew(id: string): void {
+    const d = this.disp;
+    const squad = d.squad.includes(id) ? d.squad.filter((x) => x !== id) : [...d.squad, id];
+    this.disp = { ...d, squad, step: 'who' };
+    this.view?.refresh();
+  }
+
+  private toHow(): void {
+    const block = this.block();
+    if (!block) return;
+    const d = this.disp;
+    // Start on the first built method that this holding offers (the screen never recommends one; this is only the cursor).
+    const first = EVIL_DATA.methods.findIndex((m) => (JOB_METHODS as readonly string[]).includes(m.id));
+    this.disp = { ...d, step: 'how', how: d.step === 'how' ? d.how : first };
+    this.view?.refresh();
+  }
+
+  private queue(): void {
+    const d = this.disp;
+    const block = this.block();
+    const h = block?.district?.holdings[d.at];
+    const m = EVIL_DATA.methods[d.how];
+    if (!h || !m || !(JOB_METHODS as readonly string[]).includes(m.id)) return;
+    const method = m.id as JobMethod;
+    const cues = services().session.evilStep({ type: 'queueJob', job: { holdingId: h.id, method, squad: d.squad, ...(method === 'pay' ? { offer: d.offer } : {}) } });
+    const refused = cues.find((c) => c.id === 'refused');
+    if (refused && 'reason' in refused) this.notice = refused.reason;
+    else {
+      this.notice = `Queued: step ${h.step}, ${m.name}.`;
+      this.disp = { ...newDispatch(), at: d.at };
+    }
     this.view?.refresh();
   }
 
