@@ -12,7 +12,7 @@ import { getCampaign } from '../regions';
 import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
 import type { TypeName } from '../contentSchema';
-import { SLUDGE_TURNS } from './factory';
+import { PIT_PULL, SLUDGE_TURNS, pitsFreed, pitsStart } from './factory';
 import { aceEggSpecies, rememberAce } from './damian';
 import { tourneyAfterTurn, tourneyShape, tourneyStart } from './tournament';
 import { MOON_RAID_LOST, MOON_RAID_WON, moonRaid } from './moon';
@@ -1149,6 +1149,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
     const foe = battle.enemyTeam[0];
     if (foe) foe.hp = Math.max(1, Math.floor(maxHp(content, foe) * 0.2));
   }
+  // gn.17, the Sludge Pits: your Pokémon pull the stuck ones out while the Grimer horde goes on attacking.
+  if (battle.eventRule?.gn === 'pits') pitsStart(battle, gnFlag(run, 'factory-pulls'), gnFlag(run, 'factory-freed'));
   // gn.16: the ring's own counts (first-turn hit, most-used move) and the last exchange's three calls.
   tourneyStart(content, run, battle, lead, BOND_THREE);
 }
@@ -1233,6 +1235,24 @@ export function trainAce(content: Content, ace: PokemonInstance | undefined, plu
   ace.moves = [...kept, ...picked.map((id) => ({ id, pp: content.moves.get(id)!.pp }))];
 }
 
+/**
+ * gn.17, the Sludge Pits in a double or triple fight (called on the commands the turn will really play): each Pokémon told to attack pulls
+ * one out of the pit instead, while any are still stuck. In a single fight the engine's own `gn-you-wait` handling does the same.
+ */
+export function gnShapeDouble<T extends PlayerAction>(run: RunState, action: T): { action: T; events: Cue[] } {
+  const battle = run.battle;
+  if (!battle || battle.eventRule?.gn !== 'pits' || action.kind !== 'double') return { action, events: [] };
+  const events: Cue[] = [];
+  const commands = action.commands.map((cmd) => {
+    const at = battle.storyEffects.indexOf(PIT_PULL);
+    if (!cmd || cmd.action.kind !== 'move' || at < 0) return cmd;
+    battle.storyEffects.splice(at, 1);
+    events.push(cue('player', PIT_PULL.slice(YOU_WAIT.length)));
+    return { ...cmd, action: { kind: 'idle' as const } };
+  });
+  return { action: { ...action, commands }, events };
+}
+
 /** Before the player's command is played: a Greenneedle rule may answer it. Returns the action to play and lines to show first. */
 /** gn.59: the 5th region's look is answered before any rule applies. */
 export function gnShape(content: Content, run: RunState, action: PlayerAction): { action: PlayerAction; events: Cue[] } {
@@ -1290,6 +1310,8 @@ export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   const battle = run.battle;
   const seen = ferrisTurn(content, run);
   if (battle) tourneyAfterTurn(run, battle);
+  const out = battle ? pitsFreed(battle) : undefined;
+  if (out !== undefined && out > gnFlag(run, 'factory-freed')) setGnFlag(run, 'factory-freed', out);
   if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return seen;
   battle.storyEffects.push('gn-counted');
   countForest(content, run, battle);

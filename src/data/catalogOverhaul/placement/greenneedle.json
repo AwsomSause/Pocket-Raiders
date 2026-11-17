@@ -1334,6 +1334,44 @@
   ],
   "tags": []
  },
+ "gn-17-second": {
+  "gn": "gn.17",
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 8,
+  "window": [
+   6,
+   14
+  ],
+  "sits": "optional",
+  "level": "no battle",
+  "often": "run",
+  "note": "Only after the research was sold, in a later region: the buyer's new factory. Poison a step more common, Water a step rarer, on that region's water routes.",
+  "kinds": [
+   "Afterstory"
+  ],
+  "tags": []
+ },
+ "gn-17-kaiju-back": {
+  "gn": "gn.17",
+  "shape": "Single",
+  "earliest": "A7",
+  "home": 10,
+  "window": [
+   8,
+   15
+  ],
+  "sits": "optional",
+  "level": "the Kaiju raid at A+0",
+  "often": "run",
+  "note": "Only when the factory was left running and the Kaiju was cut free at gn.11: it comes back on a later water stage.",
+  "kinds": [
+   "Afterstory"
+  ],
+  "tags": [
+   "water"
+  ]
+ },
  "gn-17-fishing": {
   "gn": "gn.17",
   "shape": "Single",
