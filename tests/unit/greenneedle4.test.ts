@@ -1,6 +1,7 @@
 // Greenneedle part 4 (doc GREENNEEDLE_REWORKED_PLACED_4.md): gn.16 The Fighting Tournament.
 import { describe, expect, it } from 'vitest';
-import type { RunState } from '../../src/core/state';
+import { RunStateSchema, type RunState } from '../../src/core/state';
+import { askButtons, askDue, askPassing, phaseOf } from '../../src/core/greenneedle/ask';
 import { content } from './helpers';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { shopBadgesNeeded, shopStock, takeTurn } from '../../src/core/run';
@@ -170,9 +171,21 @@ describe('gn.17 The Polluted Factory', () => {
     let run = win(choose(win(choose(inside(seed, setup), 'gn-17-pipes', 'Go through.').run), 'gn-17-pipes-2', 'Keep going.').run);
     run = choose(run, 'gn-17-line', 'Walk past him.').run;
     run = choose(run, 'gn-17-desk', 'Take the research.').run;
-    return win(choose(run, 'gn-17-pits', 'Fight the Grimer; leave the pits.').run);
+    return win(choose(run, 'gn-17-pits', 'Wade in.').run);
   };
   const toControl = (seed: string, setup?: (run: RunState) => void, muk = 'Seal the pipe for it (a Steel-, Fire- or Rock-type).'): RunState => choose(toMuk(seed, setup), 'gn-17-muk', muk).run;
+  /** Plays one turn with the Magmuk at the line where its next phase begins (`share` of its HP); it only splashes, so nobody is hurt. */
+  const toPhase = (current: RunState, share: number): RunState => {
+    const run = structuredClone(current);
+    const boss = run.battle!.enemyTeam[0]!;
+    const moves = boss.moves;
+    boss.moves = [{ id: 'splash', pp: 40 }];
+    boss.hp = Math.floor(maxHp(content, boss) * share);
+    for (const m of run.party) { m.hp = maxHp(content, m); m.status = null; }
+    const after = takeTurn(content, run, { kind: 'move', index: 0 }).run;
+    if (after.battle && after.battle.enemyTeam[0]!.moves[0]?.id === 'splash') after.battle.enemyTeam[0]!.moves = moves;
+    return after;
+  };
   const closeValves = (run: RunState): RunState => {
     let r = choose(run, 'gn-17-control', 'Close the valves.').run;
     r = choose(r, 'gn-17-valve1', 'The valve marked COOLANT.').run;
@@ -234,33 +247,40 @@ describe('gn.17 The Polluted Factory', () => {
       return run;
     };
     const run = atPits('t17-pits');
-    expect(scene(run, 'gn-17-pits').labels).toEqual(['Pull them all out.', 'Pull out three, then fight.', 'Fight the Grimer; leave the pits.']);
+    expect(scene(run, 'gn-17-pits').labels).toEqual(['Wade in.']);
     expect(scene(run, 'gn-17-pits').intro).toMatch(/with the Grimer horde still attacking/);
-    // All six: six pulls are queued, and each costs one of your Pokémon its move while the Grimer go on attacking.
-    let all = sturdy(choose(structuredClone(run), 'gn-17-pits', 'Pull them all out.').run);
+    const say = (r: RunState, label: string): RunState => {
+      const ask = askDue(content, r)!;
+      return takeTurn(content, r, { kind: 'answer', ask: ask.id, option: ask.options.find((o) => o.label === label)!.index }).run;
+    };
+    // Asked in the fight itself, on each of the first two turns. Pull: each of yours out there pulls one, and gives up its move.
+    let all = sturdy(choose(structuredClone(run), 'gn-17-pits', 'Wade in.').run);
     expect(all.battle!.eventRule).toMatchObject({ gn: 'pits' });
-    expect(all.battle!.storyEffects.filter((t) => t === PIT_PULL)).toHaveLength(6);
+    expect(all.battle!.storyEffects).not.toContain(PIT_PULL);
+    expect(askDue(content, all)!.options.map((o) => o.label)).toEqual(['Pull them out.', 'Fight the Grimer.']);
+    all = say(all, 'Pull them out.');
+    const queued = all.battle!.storyEffects.filter((t) => t === PIT_PULL).length;
+    expect(queued).toBeGreaterThanOrEqual(1);
+    expect(queued).toBeLessThanOrEqual(3);
+    expect(askDue(content, all)).toBeNull();
     expect(flagOf(all, 'factory-freed')).toBe(0);
     const foeHp = all.battle!.enemyTeam.map((m) => m.hp);
-    const turn = step(content, all);
-    all = turn.run;
-    const pulled = 6 - all.battle!.storyEffects.filter((t) => t === PIT_PULL).length;
-    expect(pulled).toBeGreaterThanOrEqual(1);
-    expect(pulled).toBeLessThanOrEqual(3);
-    expect(flagOf(all, 'factory-freed')).toBe(pulled);
+    all = step(content, all).run;
+    expect(flagOf(all, 'factory-freed')).toBe(queued);
     // A Pokémon that pulled did not attack: on the first turn everyone out was pulling, so no Grimer lost HP.
     expect(all.battle!.enemyTeam.map((m) => m.hp)).toEqual(foeHp);
+    // The second turn: asked again; after it, never again.
+    all = sturdy(all);
+    expect(askDue(content, all)!.id).toBe('pull-2');
+    all = say(all, 'Pull them out.');
     for (let i = 0; i < 12 && all.phase === 'battle' && all.battle!.storyEffects.includes(PIT_PULL); i++) all = step(content, sturdy(all)).run;
-    expect(flagOf(all, 'factory-freed')).toBe(6);
-    // Three: one turn's worth, never more.
-    let three = sturdy(choose(structuredClone(run), 'gn-17-pits', 'Pull out three, then fight.').run);
-    expect(three.battle!.storyEffects.filter((t) => t === PIT_PULL)).toHaveLength(3);
-    for (let i = 0; i < 8 && three.phase === 'battle' && three.battle!.storyEffects.includes(PIT_PULL); i++) three = step(content, sturdy(three)).run;
-    expect(flagOf(three, 'factory-freed')).toBe(3);
-    expect(flagOf(win(three), 'factory-freed')).toBe(3);
-    // None: an ordinary horde fight.
-    const none = choose(structuredClone(run), 'gn-17-pits', 'Fight the Grimer; leave the pits.').run;
+    expect(flagOf(all, 'factory-freed')).toBe(Math.min(6, queued * 2));
+    if (all.phase === 'battle') expect(askDue(content, all)).toBeNull();
+    // Fight both turns: an ordinary horde fight.
+    let none = say(choose(structuredClone(run), 'gn-17-pits', 'Wade in.').run, 'Fight the Grimer.');
     expect(none.battle!.storyEffects).not.toContain(PIT_PULL);
+    none = step(content, sturdy(none)).run;
+    if (none.phase === 'battle' && askDue(content, none)) none = say(none, 'Fight the Grimer.');
     expect(flagOf(win(none), 'factory-freed')).toBe(0);
     // The Trubbish Nobody Wanted: it is already in the pit; all six or nothing.
     const kept = atPits('t17-pits-trub', (r) => setFlag(r, 'trubbish-kept'));
@@ -323,8 +343,13 @@ describe('gn.17 The Polluted Factory', () => {
   it('the raid: uncatchable; Molten Sludge for six turns less one per Pokémon freed; spread moves split it (three at most); the Muk takes one phase\'s first attack', () => {
     let run = closeValves(toControl('t17-raid', (r) => setFlag(r, 'factory-freed', 2)));
     run = choose(run, 'gn-17-control', 'Go down to the furnace.').run;
-    expect(scene(run, 'gn-17-raid1').labels).toEqual(['Fight.', 'Send the Muk in front.']);
-    const fight = choose(run, 'gn-17-raid1', 'Send the Muk in front.').run;
+    expect(scene(run, 'gn-17-raid1').labels).toEqual(['Fight.']);
+    const start = choose(run, 'gn-17-raid1', 'Fight.').run;
+    // At the start of the phase, in the fight: the Muk may go in front (the player picks which phase).
+    expect(askDue(content, start)!.options.map((o) => o.label)).toEqual(['Send the Muk in front.', 'Not yet.']);
+    const fight = takeTurn(content, start, { kind: 'answer', ask: 'muk-1', option: 0 }).run;
+    expect(flagOf(fight, 'factory-muk-used')).toBe(1);
+    expect(askDue(content, fight)).toBeNull();
     const b = fight.battle!;
     expect(b.enemyTeam[0]!.speciesId).toBe('muk-delta-fire');
     expect(b.eventRule).toMatchObject({ gn: 'sludge', noCatch: true });
@@ -348,12 +373,12 @@ describe('gn.17 The Polluted Factory', () => {
     hot.turn = 6;
     factoryTurnEnd(content, hot, cool, []);
     expect(cool.hp).toBe(maxHp(content, cool));
-    expect(scene(win(fight), 'gn-17-raid2').labels).toEqual(['Fight.']);
   });
 
   it('the furnace: Water moves steam and clear the sludge; non-Fire Pokémon may catch a burn; Fire-types never do', () => {
-    const run = win(choose(choose(closeValves(toControl('t17-furnace')), 'gn-17-control', 'Go down to the furnace.').run, 'gn-17-raid1', 'Fight.').run);
-    const b = choose(run, 'gn-17-raid2', 'Fight.').run.battle!;
+    const run = toPhase(choose(choose(closeValves(toControl('t17-furnace')), 'gn-17-control', 'Go down to the furnace.').run, 'gn-17-raid1', 'Fight.').run, 0.66);
+    const b = run.battle!;
+    expect(phaseOf(b)).toBe(2);
     expect(b.eventRule).toMatchObject({ gn: 'furnace' });
     const steam = structuredClone(b);
     factoryTurnEnd(content, steam, createPokemon(content, 'squirtle', 20, 'steam'), [{ type: 'move', side: 'player', moveId: 'water-gun' } as never]);
@@ -374,17 +399,56 @@ describe('gn.17 The Polluted Factory', () => {
     expect(burns('charmander')).toBe(0);
   });
 
-  it('the core: Finish it., Stop attacking. or Let the Muk go to it.; Black Sludge and a pick; the Muk joins with Stopgap', () => {
-    const run = win(choose(win(choose(choose(closeValves(toControl('t17-core')), 'gn-17-control', 'Go down to the furnace.').run, 'gn-17-raid1', 'Fight.').run), 'gn-17-raid2', 'Fight.').run);
-    expect(scene(run, 'gn-17-core').labels).toEqual(['Finish it.', 'Stop attacking.', 'Let the Muk go to it.']);
-    const core = choose(run, 'gn-17-core', 'Finish it.').run.battle!;
+  it('ONE raid in three phases; the core: Finish it., Stop attacking. or Let the Muk go to it.; Black Sludge and a pick; the Muk joins with Stopgap', () => {
+    let run = choose(choose(closeValves(toControl('t17-core')), 'gn-17-control', 'Go down to the furnace.').run, 'gn-17-raid1', 'Fight.').run;
+    const answer = (r: RunState, label: string): RunState => {
+      const ask = askDue(content, r)!;
+      expect(ask.options.map((o) => o.label)).toContain(label);
+      return takeTurn(content, r, { kind: 'answer', ask: ask.id, option: ask.options.find((o) => o.label === label)!.index }).run;
+    };
+    run = answer(run, 'Not yet.');
+    run = toPhase(run, 0.66);
+    expect(askDue(content, run)!.id).toBe('muk-2');
+    run = answer(run, 'Not yet.');
+    expect(askButtons(content, run)).toEqual([]);
+    run = toPhase(run, 0.33);
+    expect(run.phase).toBe('battle');
+    // the core: small, at a third of its HP, weak moves only
+    const core = run.battle!;
+    expect(phaseOf(core)).toBe(3);
+    expect(core.eventRule).toMatchObject({ gn: 'core' });
     expect(core.enemyTeam[0]!.hp * 3).toBeLessThanOrEqual(maxHp(content, core.enemyTeam[0]!));
     expect(core.enemyTeam[0]!.moves.map((m) => m.id)).toEqual(['ember', 'mud-slap', 'acid']);
-    const spared = choose(run, 'gn-17-core', 'Stop attacking.').run;
-    expect(flagOf(spared, 'kanto-factory-cleared')).toBe(1);
-    expect(spared.inventory['black-sludge'] ?? spared.party.some((m) => m.held?.['black-sludge'])).toBeTruthy();
-    expect(scene(spared, 'gn-17-pick').labels).toEqual(['Alolan Grimer', 'Delta Grimer', 'Trubbish', 'The Muk']);
-    const calmed = choose(run, 'gn-17-core', 'Let the Muk go to it.').run;
+    run = answer(run, 'Send the Muk in front.');
+    // saved with the battle: a reload in the middle of the question asks it again
+    run = RunStateSchema.parse(JSON.parse(JSON.stringify(run)));
+    expect(askDue(content, run)!.options.map((o) => o.label)).toEqual(['Finish it.', 'Stop attacking.', 'Let the Muk go to it.']);
+    // Finish it: the fight goes on, and the new button stays on the menu
+    const finish = answer(run, 'Finish it.');
+    expect(askDue(content, finish)).toBeNull();
+    expect(askButtons(content, finish)).toEqual([{ id: 'stop', label: 'Stop attacking.', direct: true }]);
+    const finished = win(finish);
+    expect(flagOf(finished, 'kanto-factory-cleared')).toBe(1);
+    expect(flagOf(finished, 'factory-stopped')).toBe(0);
+    // Stop attacking (the question, or the button later): it stays in the corner. Two turns pass by themselves. Then the raid's won.
+    for (const stopped of [answer(run, 'Stop attacking.'), takeTurn(content, finish, { kind: 'answer', ask: 'stop', option: 0 }).run]) {
+      expect(stopped.phase).toBe('battle');
+      expect(askPassing(stopped.battle)).toBe(true);
+      expect(askButtons(content, stopped)).toEqual([]);
+      const hp = stopped.battle!.enemyTeam[0]!.hp;
+      const one = takeTurn(content, stopped, { kind: 'idle' }).run;
+      expect(one.phase).toBe('battle');
+      expect(one.battle!.enemyTeam[0]!.hp).toBe(hp);
+      const spared = takeTurn(content, one, { kind: 'idle' }).run;
+      expect(spared.phase).not.toBe('battle');
+      expect(flagOf(spared, 'kanto-factory-cleared')).toBe(1);
+      expect(flagOf(spared, 'factory-stopped')).toBe(1);
+      expect(spared.inventory['black-sludge'] ?? spared.party.some((m) => m.held?.['black-sludge'])).toBeTruthy();
+      expect(scene(spared, 'gn-17-pick').labels).toEqual(['Alolan Grimer', 'Delta Grimer', 'Trubbish', 'The Muk']);
+    }
+    const spared = win(takeTurn(content, takeTurn(content, answer(run, 'Stop attacking.'), { kind: 'idle' }).run, { kind: 'idle' }).run);
+    const calmed = win(answer(run, 'Let the Muk go to it.'));
+    expect(calmed.phase).not.toBe('battle');
     expect(flagOf(calmed, 'factory-magmuk-calmed')).toBe(1);
     expect(scene(calmed, 'gn-17-pick').labels).toEqual(['Alolan Grimer', 'Delta Grimer', 'Trubbish']);
     const picked = choose(spared, 'gn-17-pick', 'The Muk');

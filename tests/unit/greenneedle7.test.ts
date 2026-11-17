@@ -1,6 +1,7 @@
 // Greenneedle part 7: gn.31 The Forgotten Forest (tools/events/co/greenneedle-7.ts) and its three abilities.
 import { describe, expect, it } from 'vitest';
-import type { PokemonInstance, RunState } from '../../src/core/state';
+import { RunStateSchema, type PokemonInstance, type RunState } from '../../src/core/state';
+import { askButtons, askDue, phaseOf } from '../../src/core/greenneedle/ask';
 import { content } from './helpers';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { takeTurn } from '../../src/core/run';
@@ -283,7 +284,27 @@ describe('gn.32 The Crystal Caverns', () => {
     open(run, 'gn-32-heart');
     return choose(run, 'gn-32-heart', 'Stand your ground.').run;
   };
-  const golemOf = (run: RunState, phase = 1): RunState => choose(run, `gn-32-phase-${phase}`, 'Fight.').run;
+  const golemOf = (run: RunState): RunState => choose(run, 'gn-32-phase-1', 'Fight.').run;
+  /** Plays one turn that takes the Golem to the line where its next phase begins (it only splashes, so nobody is hurt). */
+  const toNextPhase = (current: RunState): RunState => {
+    const run = structuredClone(current);
+    const g = run.battle!.enemyTeam[0]!;
+    g.moves = [{ id: 'splash', pp: 40 }];
+    const line = Math.floor(maxHp(content, g) * (phaseOf(run.battle!) === 1 ? 0.66 : 0.33));
+    g.hp = line + 1;
+    for (const m of run.party) m.hp = maxHp(content, m);
+    const after = takeTurn(content, run, { kind: 'move', index: 0 }).run;
+    // a hit never takes it past the line
+    expect(after.battle!.enemyTeam[0]!.hp).toBeGreaterThanOrEqual(line);
+    after.battle!.enemyTeam[0]!.hp = line;
+    return takeTurn(content, after, { kind: 'move', index: 0 }).run;
+  };
+  const answer = (run: RunState, label: string): RunState => {
+    const ask = askDue(content, run)!;
+    const o = ask.options.find((x) => x.label === label)!;
+    expect(o, `${ask.id}: ${label}`).toBeTruthy();
+    return takeTurn(content, run, { kind: 'answer', ask: ask.id, option: o.index }).run;
+  };
 
   it('a door at step 13 needing a cave or snow (A7, once a run)', () => {
     expect(content.coPlacement!.get('gn-32-door')).toMatchObject({ home: 13, window: [11, 16], sits: 'optional', attaches: 'instead', earliest: 7, tags: ['cave|snow'] });
@@ -380,30 +401,85 @@ describe('gn.32 The Crystal Caverns', () => {
     if (blue.battle) expect(blue.party.flatMap((m) => content.species.get(m.speciesId)!.types)).toContain(battleTypes(content, blue.battle, blue.battle.enemyTeam[0]!)[1]);
   });
 
-  it('three phases with a choice between; drop a crystal and the next phase reads the bag again', () => {
-    let run = win(golemOf(atHeart('t32-phases', { red: 2, blue: 1 })));
-    expect(flagOf(run, 'crystal-phase')).toBe(1);
-    expect(scene(run, 'gn-32-between-1').labels).toEqual(['Drop a crystal.', 'Keep everything.']);
-    run = choose(run, 'gn-32-between-1', 'Drop a crystal.').run;
-    run = choose(run, 'gn-32-drop', 'The Red one.').run;
+  it('ONE fight in three phases with a choice between; drop a crystal and the next phase reads the bag again', () => {
+    let run = golemOf(atHeart('t32-phases', { red: 2, blue: 1 }));
+    expect(run.battle!.eventRule?.phases).toHaveLength(2);
+    expect(phaseOf(run.battle!)).toBe(1);
+    expect(askDue(content, run)).toBeNull();
+    expect(askButtons(content, run)).toEqual([]);
+    const turnBefore = run.battle!.turn;
+    run = toNextPhase(run);
+    expect(run.phase).toBe('battle');
+    expect(phaseOf(run.battle!)).toBe(2);
+    // between phases, the player gets one action
+    expect(askDue(content, run)!.options.map((o) => o.label)).toEqual(['Drop a crystal.', 'Keep everything.']);
+    // saved with the battle: a reload in the middle of the question asks it again
+    run = RunStateSchema.parse(JSON.parse(JSON.stringify(run)));
+    expect(askDue(content, run)!.id).toBe('between-1');
+    const rng = structuredClone(run.rng);
+    const turn = run.battle!.turn;
+    expect(turn).toBeGreaterThan(turnBefore);
+    run = answer(run, 'Drop a crystal.');
+    // "Which one?": only the colours carried, and a reload in the middle of that works too
+    run = RunStateSchema.parse(JSON.parse(JSON.stringify(run)));
+    expect(askDue(content, run)!.options.map((o) => o.label)).toEqual(['The Red one.', 'The Blue one.', 'The others.']);
+    run = answer(run, 'The Red one.');
+    expect(flagOf(run, 'crystal-red')).toBe(1);
+    // red 1, blue 1: a tie, so it reads plain Rock now
     expect(flagOf(run, 'crystal-most')).toBe(0);
-    expect(openSide(run)!.eventId).toBe('gn-32-phase-2');
-    expect(scene(run, 'gn-32-phase-2').labels).toEqual(['Fight.']);
-    run = win(golemOf(run, 2));
-    run = choose(run, 'gn-32-between-2', 'Keep everything.').run;
-    expect(scene(run, 'gn-32-phase-3').labels).toEqual(['Fight.', 'Give it the crystals.']);
-    run = win(golemOf(run, 3));
+    expect(battleTypes(content, run.battle!, run.battle!.enemyTeam[0]!)).toEqual(['rock']);
+    expect(run.battle!.enemyTeam[0]!.fixedAbility).not.toBe('flame-body');
+    // answering uses no turn and no random number
+    expect(run.battle!.turn).toBe(turn);
+    expect(run.rng).toEqual(rng);
+    expect(askDue(content, run)).toBeNull();
+    // the third phase: the question again, then the new button
+    run = toNextPhase(run);
+    expect(phaseOf(run.battle!)).toBe(3);
+    expect(askButtons(content, run)).toEqual([{ id: 'give', label: 'Give it the crystals.', direct: true }]);
+    run = answer(run, 'Keep everything.');
+    expect(askDue(content, run)).toBeNull();
+    // beaten
+    run = win(run);
     expect(flagOf(run, 'crystal-golem-defeated')).toBe(1);
+    expect(flagOf(run, 'crystal-golem')).toBe(1);
     run = choose(run, 'gn-32-defeated', 'Gather it up.').run;
     run = choose(run, 'gn-32-keep', 'Keep the Red one.').run;
     expect(JSON.stringify(run)).toMatch(/cavern-red-crystal/);
     expect(JSON.stringify(run)).toMatch(/hard-stone/);
   });
 
+  it('the third phase\'s new button: "Give it the crystals." ends the fight; a Carbink comes out of the wall', () => {
+    let run = golemOf(atHeart('t32-give3', { white: 1, black: 1 }));
+    run = answer(toNextPhase(run), 'Keep everything.');
+    expect(askButtons(content, run)).toEqual([]);
+    run = answer(toNextPhase(run), 'Keep everything.');
+    // an answer that is not on offer is refused, and changes nothing
+    expect(() => takeTurn(content, run, { kind: 'answer', ask: 'give', option: 3 })).toThrow();
+    expect(() => takeTurn(content, run, { kind: 'answer', ask: 'give-gentle', option: 0 })).toThrow();
+    const r = takeTurn(content, run, { kind: 'answer', ask: 'give', option: 0 }).run;
+    expect(r.phase).not.toBe('battle');
+    expect(flagOf(r, 'crystal-golem')).toBe(2);
+    expect(flagOf(r, 'crystal-golem-defeated')).toBe(0);
+    expect(flagOf(r, 'crystal-shard-white')).toBe(1);
+    expect(flagOf(r, 'crystal-shard-red')).toBe(0);
+    expect(openSide(r)!.eventId).toBe('gn-32-given');
+  });
+
+  it('the same seed and the same answers give the same fight', () => {
+    const play = (): RunState => {
+      let run = golemOf(atHeart('t32-same', { red: 2, blue: 1 }));
+      run = answer(toNextPhase(run), 'Drop a crystal.');
+      run = answer(run, 'The Blue one.');
+      return takeTurn(content, run, { kind: 'move', index: 0 }).run;
+    };
+    expect(JSON.stringify(play())).toBe(JSON.stringify(play()));
+  });
+
   it('gave the Snorlax room or fed the Guzzlord: "Give it the crystals" from the first phase; a Carbink comes out of the wall', () => {
-    const run = atHeart('t32-give', { white: 1 }, (r) => setFlag(r, 'guzzlord-fed'));
-    expect(scene(run, 'gn-32-phase-1').labels).toEqual(['Fight.', 'Give it the crystals.']);
-    let r = choose(run, 'gn-32-phase-1', 'Give it the crystals.').run;
+    const run = golemOf(atHeart('t32-give', { white: 1 }, (r) => setFlag(r, 'guzzlord-fed')));
+    expect(askButtons(content, run)).toEqual([{ id: 'give-gentle', label: 'Give it the crystals.', direct: true }]);
+    let r = takeTurn(content, run, { kind: 'answer', ask: 'give-gentle', option: 0 }).run;
     expect(flagOf(r, 'crystal-shard-white')).toBe(1);
     r = choose(r, 'gn-32-given', 'Let it come.').run;
     const carbink = [...r.party, ...r.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.speciesId === 'carbink');
