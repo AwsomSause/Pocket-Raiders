@@ -1,0 +1,12 @@
+{
+  "note": "Evil Mode: the seven methods and what the Line allows (design Part 7 section 1, Part 3 section 7). Jobs arrive in slice 2.",
+  "methods": [
+    { "id": "persuade", "name": "Persuade", "word": "Ask", "minLine": "clean", "status": "supported" },
+    { "id": "pay", "name": "Pay", "word": "Buy", "minLine": "clean", "status": "supported" },
+    { "id": "outplay", "name": "Outplay", "word": "Win", "minLine": "clean", "status": "supported" },
+    { "id": "lean", "name": "Lean", "word": "Frighten", "minLine": "grey", "status": "supported" },
+    { "id": "take", "name": "Take", "word": "Steal", "minLine": "grey", "status": "supported" },
+    { "id": "scout", "name": "Scout", "word": "Look", "minLine": "clean", "status": "supported" },
+    { "id": "expose", "name": "Expose", "word": "Publish", "minLine": "clean", "status": "supported" }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "note": "Evil Mode: the eight Doctrines (design Part 4 section 2; Kanto pools from section 4.1). Kits, perks and weaknesses take effect from slice 2 on.",
+  "doctrines": [
+    {
+      "id": "swarm",
+      "name": "Swarm",
+      "line": "There's always more of us.",
+      "perk": "Squads are larger by one.",
+      "weakness": "One strong spread move.",
+      "home": "Towns; roads; anywhere with a crowd",
+      "kanto": [
+        "Rattata",
+        "Zubat",
+        "Spearow",
+        "Pidgey",
+        "Weedle",
+        "Caterpie",
+        "Paras",
+        "Venonat"
+      ],
+      "kits": [
+        [
+          "Rattata",
+          "Zubat",
+          "Spearow"
+        ],
+        [
+          "Pidgey",
+          "Weedle",
+          "Caterpie"
+        ],
+        [
+          "Paras",
+          "Venonat",
+          "Rattata"
+        ]
+      ],
+      "says": "I've got three! They're not very good! There's three, though!",
+      "status": "supported"
+    },
+    {
+      "id": "bruisers",
+      "name": "Bruisers",
+      "line": "We only need to hit it once.",
+      "perk": "Grunt aces are +1 level; Outplay odds +10%.",
+      "weakness": "Speed and status.",
+      "home": "Mountains; caves; mills; docks",
+      "kanto": [
+        "Machop",
+        "Geodude",
+        "Mankey",
+        "Rhyhorn",
+        "Cubone",
+        "Onix"
+      ],
+      "kits": [
+        [
+          "Machop",
+          "Geodude"
+        ],
+        [
+          "Mankey",
+          "Rhyhorn"
+        ],
+        [
+          "Cubone",
+          "Onix"
+        ]
+      ],
+      "says": "It's not complicated. I like that it's not complicated.",
+      "status": "supported"
+    },
+    {
+      "id": "tricksters",
+      "name": "Tricksters",
+      "line": "You'll not see how it was done.",
+      "perk": "A failed dispatch costs half the Heat; Take odds +10%.",
+      "weakness": "A lead that can't be put to sleep.",
+      "home": "Cities; markets; the Game Corner",
+      "kanto": [
+        "Meowth",
+        "Ekans",
+        "Koffing",
+        "Grimer",
+        "Drowzee",
+        "Abra"
+      ],
+      "kits": [
+        [
+          "Meowth",
+          "Ekans"
+        ],
+        [
+          "Koffing",
+          "Grimer"
+        ],
+        [
+          "Drowzee",
+          "Abra"
+        ]
+      ],
+      "says": "I'd tell you how I got in, but then you'd know.",
+      "status": "supported"
+    },
+    {
+      "id": "beasts",
+      "name": "Beasts",
+      "line": "They're not trained. They're ours.",
+      "perk": "Cheap to hire (wages -₽50); Loyalty swings twice as far, both ways.",
+      "weakness": "Their own tempers.",
+      "home": "Farmland; moors; wild ground of any kind",
+      "kanto": [
+        "Growlithe",
+        "Vulpix",
+        "Nidoran♂",
+        "Nidoran♀",
+        "Ponyta",
+        "Doduo"
+      ],
+      "kits": [
+        [
+          "Growlithe",
+          "Vulpix"
+        ],
+        [
+          "Nidoran♂",
+          "Nidoran♀"
+        ],
+        [
+          "Ponyta",
+          "Doduo"
+        ]
+      ],
+      "says": "He's not got a Ball. He just comes.",
+      "status": "supported"
+    },
+    {
+      "id": "machines",
+      "name": "Machines",
+      "line": "It does what it's built to.",
+      "perk": "Rooms build a day faster; base puzzle pieces cost half.",
+      "weakness": "Ground. Plainly.",
+      "home": "Power plants; factories; rail yards; anywhere urban",
+      "kanto": [
+        "Magnemite",
+        "Voltorb",
+        "Porygon",
+        "Pikachu",
+        "Ditto",
+        "Grimer"
+      ],
+      "kits": [
+        [
+          "Magnemite",
+          "Voltorb"
+        ],
+        [
+          "Porygon",
+          "Pikachu"
+        ],
+        [
+          "Ditto",
+          "Grimer"
+        ]
+      ],
+      "says": "It's doing what I told it. I should've told it something else.",
+      "status": "supported"
+    },
+    {
+      "id": "ghosts",
+      "name": "Ghosts",
+      "line": "We were already here.",
+      "perk": "Scouting sees a step further.",
+      "weakness": "Dark; and a brave lead.",
+      "home": "Towers; graveyards; ruins; anything eerie",
+      "kanto": [
+        "Gastly",
+        "Drowzee",
+        "Abra",
+        "Exeggcute",
+        "Slowpoke",
+        "Jynx"
+      ],
+      "kits": [
+        [
+          "Gastly",
+          "Drowzee"
+        ],
+        [
+          "Abra",
+          "Exeggcute"
+        ],
+        [
+          "Slowpoke",
+          "Jynx"
+        ]
+      ],
+      "says": "I don't have her. She has me. It's an arrangement.",
+      "status": "supported"
+    },
+    {
+      "id": "tide",
+      "name": "Tide",
+      "line": "Everything comes down to the water in the end.",
+      "perk": "Sea and river holdings count double toward a district.",
+      "weakness": "Electric; and a dry district.",
+      "home": "Coasts; rivers; ports; anything by the water",
+      "kanto": [
+        "Tentacool",
+        "Poliwag",
+        "Psyduck",
+        "Seel",
+        "Shellder",
+        "Horsea",
+        "Magikarp"
+      ],
+      "kits": [
+        [
+          "Tentacool",
+          "Poliwag"
+        ],
+        [
+          "Psyduck",
+          "Seel"
+        ],
+        [
+          "Shellder",
+          "Horsea"
+        ]
+      ],
+      "says": "Can we do this by the harbour? He's better by the harbour.",
+      "status": "supported"
+    },
+    {
+      "id": "ember",
+      "name": "Ember",
+      "line": "Dig down far enough and it's warm.",
+      "perk": "Digs and labs pay +20%; Digs take a day less.",
+      "weakness": "Water.",
+      "home": "Volcanoes; deserts; quarries; anything hot or underground",
+      "kanto": [
+        "Sandshrew",
+        "Diglett",
+        "Vulpix",
+        "Growlithe",
+        "Ponyta",
+        "Magmar"
+      ],
+      "kits": [
+        [
+          "Sandshrew",
+          "Diglett"
+        ],
+        [
+          "Vulpix",
+          "Growlithe"
+        ],
+        [
+          "Ponyta",
+          "Magmar"
+        ]
+      ],
+      "says": "It's not arson. It's geology.",
+      "status": "supported"
+    }
+  ]
+}

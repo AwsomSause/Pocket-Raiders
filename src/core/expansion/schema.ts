@@ -17,6 +17,7 @@ import { SkyStateSchema } from '../sky/state';
 import { NodeMenuStateSchema } from '../nodeMenu/state';
 import { NodeMenuSpecialStateSchema } from '../nodeMenu/special/schema';
 import { RewindStateSchema } from '../rewindSchema';
+import { EvilModeBlockSchema, RunLengthSchema } from '../evilMode/schema';
 
 /** F1: every expansion setting at its default (plan section 10). Lives in `settings.expansion` (settings v42). */
 export const ExpansionSettingsSchema = z.object({
@@ -62,6 +63,10 @@ export const ExpansionSettingsSchema = z.object({
   heatedMoments: z.boolean().default(true),
   /** Beta 0.7 M1 Mythical Promises (in-run only): Mythicals can be told of, visit and ask for a promise. Read when a run starts. */
   mythicalsEnabled: z.boolean().default(true),
+  /** Evil Mode (own mode on Run Setup; design plans/evil-mode). Off until the mode is whole enough to show (build plan slice 9). */
+  evilMode: z.boolean().default(false),
+  /** Evil Mode run length (Kice's answer 2): Three regions, or Six once six regions are built (slice 19). Read at founding. */
+  evilRunLength: RunLengthSchema.default('three'),
 });
 export type ExpansionSettings = z.infer<typeof ExpansionSettingsSchema>;
 export const EXPANSION_SETTINGS_DEFAULTS: ExpansionSettings = ExpansionSettingsSchema.parse({});
@@ -163,5 +168,7 @@ export const ExpansionRunSchema = z.object({
   sky: SkyStateSchema.optional(),
   /** Team Sky run by the player (catalog row 9, HOENN_TEAMS parts 6-7; core/evil/teamSky.ts). Optional, no save bump. */
   teamSky: TeamSkyStateSchema.optional(),
+  /** Evil Mode (core/evilMode): the run's team, day and beat. Present only in an Evil Mode run once its team is founded. */
+  evilMode: EvilModeBlockSchema.optional(),
 });
 export type ExpansionRun = z.infer<typeof ExpansionRunSchema>;

@@ -1,0 +1,18 @@
+// Evil Mode data, validated once at load (design Part 30 section 2.2). A file that fails throws and names the field.
+
+import creedsRaw from '../../data/evilMode/creeds.json';
+import doctrinesRaw from '../../data/evilMode/doctrines.json';
+import methodsRaw from '../../data/evilMode/methods.json';
+import foundingRaw from '../../data/evilMode/founding.json';
+import { CreedsFileSchema, DoctrinesFileSchema, FoundingFileSchema, MethodsFileSchema } from './schema';
+
+export const EVIL_DATA = {
+  creeds: CreedsFileSchema.parse(creedsRaw).creeds,
+  doctrines: DoctrinesFileSchema.parse(doctrinesRaw).doctrines,
+  methods: MethodsFileSchema.parse(methodsRaw).methods,
+  founding: FoundingFileSchema.parse(foundingRaw),
+};
+export type EvilData = typeof EVIL_DATA;
+export type Creed = EvilData['creeds'][number];
+export type Doctrine = EvilData['doctrines'][number];
+export type Method = EvilData['methods'][number];

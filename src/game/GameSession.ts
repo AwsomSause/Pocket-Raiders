@@ -9,6 +9,9 @@
 import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
+import { foundInRun, stepInRun } from '../core/evilMode/session';
+import type { FoundingChoice } from '../core/evilMode/start';
+import type { EvilAction, EvilCue } from '../core/evilMode/day';
 import * as NodeMenu from '../core/nodeMenu/flow';
 import { playSpecialEntry } from '../core/nodeMenu/special/menu';
 import { playerTrainerFor } from '../core/archetypes';
@@ -1056,6 +1059,24 @@ export class GameSession {
     this.run = run;
     this.persistRun();
     return muted ? 'The Radio crackles back on.' : 'You turn the Radio off. Somebody notices the silence.';
+  }
+
+  /** Evil Mode founding (core/evilMode): writes the team once and saves. Returns why it couldn't, or null. */
+  evilFound(choice: FoundingChoice): string | null {
+    const out = foundInRun(this.requireRun(), choice, this.settings.expansion.evilRunLength);
+    if (out.problem) return out.problem;
+    this.run = out.run;
+    this.persistRun();
+    return null;
+  }
+
+  /** Evil Mode: one action on the day, saved at the end of the beat. The cues are for the screen only. */
+  evilStep(action: EvilAction): EvilCue[] {
+    const out = stepInRun(this.requireRun(), action);
+    if (!out.ok) return out.cues;
+    this.run = out.run;
+    this.persistRun();
+    return out.cues;
   }
 
   /** Team Sky's screens (core/evil/teamSky): one action, saved; the message says what happened. */
