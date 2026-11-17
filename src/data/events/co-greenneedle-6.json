@@ -6256,10 +6256,11 @@
      },
      "showIf": [
       {
-       "kind": "flag",
-       "key": "hideout-lab-key",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "anyFlag",
+       "keys": [
+        "hideout-lab-key",
+        "prison-trench-key"
+       ]
       },
       {
        "kind": "flag",

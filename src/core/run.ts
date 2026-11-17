@@ -24,6 +24,7 @@ import { FOE_WAITS, gnAfterTurn, gnShape } from './greenneedle';
 import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
 import { ofAssist, ofGuestLeaves, ofShadow, recordRelease } from './greenneedle/oldfriend';
+import { prisonWouldOpen } from './greenneedle/prison';
 import { ferrisBossMark, ferrisCatch, ferrisFree, ferrisFreeEnd } from './greenneedle/ferris';
 import { noteFinalLoss } from './co/roadHome';
 import { followedRest, followedRival, followedRoad, followedShop, followedStage, followedStep, longJourney } from './greenneedle/followed';
@@ -149,7 +150,7 @@ import { partnerOwed, quietWildWeight, spendPartner } from './co/neRules';
 import { clearTagPartner, tagPartnerOf, tagPartnerRegion } from './co/pastAllies';
 import { quirkBadgeBond } from './co/quirks';
 import { attachBlocker, holdNodeBattle, releaseNodeBattle, takeNodeLevelShift } from './co/attach';
-import { addEventStops, boostStat, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
+import { addEventStops, boostStat, placeEarnedCoBeats, stageNumber, BETRAYAL_FLAG, continueEventChain, eventBattleCaught, eventBattleEvilRank, eventBattleLost, eventBattleWon, eventChainNext, eventGymPreview, endRegionStatBoosts, isApprenticeBattle, isFriendlyBattle, isPseudoBattle, isStandWithBattle, isStoryEventBattle } from './events';
 import { advanceRoamers, convoyStep, applyFrontWeather, frontAt, spawnRoamers } from './world';
 import { weatherSpawnWeight } from './spawnLocks';
 import { ecosystemWeight, removePredator } from './ecosystem';
@@ -3619,6 +3620,13 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // Greenneedle gn.59: Ferris's 4th-region advice: the region's hardest battle, lost, costs nothing.
   if (battle.outcome === 'lose' && ferrisFree(battle)) {
     ferrisFreeEnd(run);
+    softLossEnd(content, run, false);
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, storyLoss: true };
+  }
+  // Greenneedle gn.62: lost to a team's lieutenant or boss: the Pokémon Prison comes instead of the loss's usual cost (once a run).
+  if (battle.outcome === 'lose' && battle.event && prisonWouldOpen(content, run, eventBattleEvilRank(content, battle.event))) {
+    eventBattleLost(content, run, battle.event);
     softLossEnd(content, run, false);
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, storyLoss: true };

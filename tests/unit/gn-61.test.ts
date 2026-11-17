@@ -15,6 +15,16 @@ function arrived(seed: string, prep: [string, number][] = PREP): RunState {
   return choose(run, 'gn-61-field', 'Walk down into the field.').run;
 }
 const go = (run: RunState, id: string, label: string): RunState => choose(run, id, label).run;
+/** Walks up to everyone, one at a time, and returns every line heard. */
+function walkAll(start: RunState): string {
+  let run = go(start, 'gn-61-hub', 'Walk among them and talk.');
+  const heard = [scene(run, 'gn-61-walk').intro];
+  while (scene(run, 'gn-61-walk').labels.includes('Walk on to the next.')) {
+    run = go(run, 'gn-61-walk', 'Walk on to the next.');
+    heard.push(scene(run, 'gn-61-walk').intro);
+  }
+  return heard.join('\n\n');
+}
 
 describe('gn.61 The Final Reunion', () => {
   it('the field comes first, and is a must-see that needs the last region\'s last stage', () => {
@@ -35,14 +45,13 @@ describe('gn.61 The Final Reunion', () => {
 
   it('everyone has one line, built from what happened (went well / otherwise)', () => {
     let run = arrived('c');
-    run = go(run, 'gn-61-hub', 'Walk among them and talk.');
-    const text = scene(run, 'gn-61-walk').intro;
+    const text = walkAll(run);
     expect(text).toContain('I\'ve got a Gym. With *pillars.*');
     expect(text).toContain('Five Poliwhirl and a Poliwrath');
     expect(text).toContain('on each other\'s shoulders');
     expect(text).toContain('Gym Leader');
     const other = arrived('c2', [['damian-meetings', 1], ['poli-ending-release', 1], ['kanto-mankey', 1]]);
-    const t2 = scene(go(other, 'gn-61-hub', 'Walk among them and talk.'), 'gn-61-walk').intro;
+    const t2 = walkAll(other);
     expect(t2).toContain('Still thinking. — D.');
     expect(t2).toContain('Four Poliwhirl');
     expect(t2).toContain('Four Mankey sit apart');
@@ -135,12 +144,12 @@ describe('gn.61 The Final Reunion', () => {
 describe('gn.61 afterstories from other events', () => {
   it('the Mural (walls), the Impersonator (two of somebody) and the Cheer Squad (split or both) come to the field', () => {
     const run = arrived('j', [['mural-walls', 3], ['impersonator-joined', 1], ['cheer-split', 1]]);
-    const walk = scene(go(run, 'gn-61-hub', 'Walk among them and talk.'), 'gn-61-walk').intro;
+    const walk = walkAll(run);
     expect(walk).toContain('3 walls');
     expect(walk).toContain('Two of somebody');
     expect(walk).toContain('The one you left on the road');
     const both = arrived('k', [['cheer-truth', 1]]);
-    expect(scene(go(both, 'gn-61-hub', 'Walk among them and talk.'), 'gn-61-walk').intro).toContain('cheering in time');
+    expect(walkAll(both)).toContain('cheering in time');
   });
 });
 
@@ -150,6 +159,6 @@ describe('gn.61 Road Roster trainers', () => {
     const ids = gathering(run)!.att.map((a) => a.id);
     expect(ids).toContain('road-joey');
     expect(ids).not.toContain('road-nell');
-    expect(scene(go(run, 'gn-61-hub', 'Walk among them and talk.'), 'gn-61-walk').intro).toContain('Joey');
+    expect(walkAll(run)).toContain('Joey');
   });
 });

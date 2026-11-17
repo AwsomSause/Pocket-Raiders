@@ -34,6 +34,10 @@
     {
      "kind": "gn",
      "test": "notInsideTeam"
+    },
+    {
+     "kind": "gn",
+     "test": "prisonAmbush"
     }
    ],
    "remembers": [
@@ -1747,6 +1751,12 @@
      "key": "prison-reunions",
      "atLeast": 1,
      "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "prison-reunion-n",
+     "atLeast": 0,
+     "atMost": 0
     }
    ],
    "scene": {
@@ -1769,8 +1779,421 @@
        {
         "kind": "gn",
         "op": "setFlag",
-        "key": "prison-reunions",
-        "n": 0
+        "key": "prison-reunion-n",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "prison-reunion-at"
+       },
+       {
+        "kind": "moment",
+        "text": "A stranger's Pokémon you freed found its trainer on the road.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-stranger-2",
+   "name": "The Pokémon Prison: A Trainer on the Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "prison-reunions",
+     "atLeast": 2,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "prison-reunion-n",
+     "atLeast": 1,
+     "atMost": 1
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "prison-reunion-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*A trainer on the road stops, and stares. You have never seen her before. Her Pokémon has seen you.*\n\nIt is already running. It was in the Kennels, in iron. It does not look like that now.\n\n**The trainer:** \"So that's you. It jumps whenever it hears your name. I thought it was the name of a Pokémon it had lost.\"",
+   "choices": [
+    {
+     "label": "Kneel and let it come.",
+     "success": {
+      "text": "It crashes into you, and then, shaking, into its trainer. Neither of them has a word. Both of them have your name.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-reunion-n",
+        "n": 2
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "prison-reunion-at"
+       },
+       {
+        "kind": "moment",
+        "text": "A stranger's Pokémon you freed found its trainer on the road.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-stranger-3",
+   "name": "The Pokémon Prison: A Trainer on the Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "prison-reunions",
+     "atLeast": 3,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "prison-reunion-n",
+     "atLeast": 2,
+     "atMost": 2
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "prison-reunion-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*A boy with a rucksack too big for him stops in the middle of the road, and stares.*\n\nThe small one on his shoulder is off it before he can speak. It was in the Quiet Cells. It is not quiet now.\n\n**The boy:** \"They told me somebody let them all out. They told me the name. I've been saying it to everyone on this road, to see who turned round.\"",
+   "choices": [
+    {
+     "label": "Kneel and let it come.",
+     "success": {
+      "text": "It crashes into you, and then, shaking, into its trainer. Neither of them has a word. Both of them have your name.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-reunion-n",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "prison-reunion-at"
+       },
+       {
+        "kind": "moment",
+        "text": "A stranger's Pokémon you freed found its trainer on the road.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-stranger-4",
+   "name": "The Pokémon Prison: A Trainer on the Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "prison-reunions",
+     "atLeast": 4,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "prison-reunion-n",
+     "atLeast": 3,
+     "atMost": 3
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "prison-reunion-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*Two trainers on the road stop talking, at the same moment, and stare.*\n\nBoth their Pokémon are already running. They were in the Tanks together, behind the same glass.\n\n**One of them:** \"We know your name. We put it on the gate at home. You can see it from the road.\"",
+   "choices": [
+    {
+     "label": "Kneel and let it come.",
+     "success": {
+      "text": "It crashes into you, and then, shaking, into its trainer. Neither of them has a word. Both of them have your name.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-reunion-n",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "prison-reunion-at"
+       },
+       {
+        "kind": "moment",
+        "text": "A stranger's Pokémon you freed found its trainer on the road.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-stranger-5",
+   "name": "The Pokémon Prison: A Trainer on the Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "prison-reunions",
+     "atLeast": 5,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "prison-reunion-n",
+     "atLeast": 4,
+     "atMost": 4
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "prison-reunion-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*An old woman with a walking stick stops, and stares, and then drops the stick.*\n\nHer Pokémon gets to you first. It was tethered in the Yard, under a night sky. It has flown every day since.\n\n**The old woman:** \"I know your name. I say it at night, with the others. I never thought I'd need a face for it.\"",
+   "choices": [
+    {
+     "label": "Kneel and let it come.",
+     "success": {
+      "text": "It crashes into you, and then, shaking, into its trainer. Neither of them has a word. Both of them have your name.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-reunion-n",
+        "n": 5
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "prison-reunion-at"
+       },
+       {
+        "kind": "moment",
+        "text": "A stranger's Pokémon you freed found its trainer on the road.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-stranger-6",
+   "name": "The Pokémon Prison: A Trainer on the Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "prison-reunions",
+     "atLeast": 6,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "prison-reunion-n",
+     "atLeast": 5,
+     "atMost": 5
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "prison-reunion-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*A man mending a fence by the road looks up, and stops, and stares.*\n\nHis Pokémon is over the fence before he has put the hammer down. It was the last one out of its wing. It never forgot who held the door.\n\n**The man:** \"I know who you are. Everyone round here knows your name. Come in. No, come in. It won't let you walk past.\"",
+   "choices": [
+    {
+     "label": "Kneel and let it come.",
+     "success": {
+      "text": "It crashes into you, and then, shaking, into its trainer. Neither of them has a word. Both of them have your name.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-reunion-n",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "prison-reunion-at"
+       },
+       {
+        "kind": "moment",
+        "text": "A stranger's Pokémon you freed found its trainer on the road.",
+        "importance": 60
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-62-stranger-7",
+   "name": "The Pokémon Prison: A Trainer on the Road",
+   "group": "Greenneedle",
+   "tags": [
+    "Evil Team",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "callback": true,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "prison-reunions",
+     "atLeast": 7,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "prison-reunion-n",
+     "atLeast": 6,
+     "atMost": 6
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "prison-reunion-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "tint": "#3a3d45",
+    "effect": "none"
+   },
+   "intro": "*A trainer coming the other way stops dead, and stares.*\n\nTheir Pokémon is already running. Whichever wing it was in, it remembers the door opening, and who was standing there.\n\n**The trainer:** \"You're the one. It knew you before I did. They all know your name, the ones from that place.\"",
+   "choices": [
+    {
+     "label": "Kneel and let it come.",
+     "success": {
+      "text": "It crashes into you, and then, shaking, into its trainer. Neither of them has a word. Both of them have your name.",
+      "effects": [
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "prison-reunion-n",
+        "n": 7
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "prison-reunion-at"
        },
        {
         "kind": "moment",

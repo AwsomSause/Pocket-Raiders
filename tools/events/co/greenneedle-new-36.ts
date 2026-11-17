@@ -83,7 +83,7 @@ const EVENTS: Json[] = [
     'Whose name goes on it?',
   ), [
     chIf([gnc('lsLost')], 'Write the name of one you lost.', out('You write it slowly, the whole name, the way they were called. The letters spread a little in the paper. You don\'t wipe your eyes.', scene('gn-new-36-float'))),
-    chIf([gnc('lsLetGo')], 'Write the name of one you let go.', out('You write it. It looks smaller on paper than it was. You hope wherever they are, they\'re warm.', scene('gn-new-36-float'))),
+    chIf([gnc('lsLetGo')], 'Write the name of one you let go.', out('You write it. It looks smaller on paper than it was. You hope wherever they are, they\'re warm.', setTo('lantern-boat-floated', 1), scene('gn-new-36-float'))),
     ch('Write a name nobody else will read.', out('You write a name that isn\'t a Pokémon\'s. You fold the paper over it before anyone can see.', scene('gn-new-36-float'))),
   ]),
   rm('gn-new-36-float', 'The Lantern Sea: The Boat', sea(), say(

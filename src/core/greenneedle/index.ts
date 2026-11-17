@@ -33,7 +33,7 @@ import { defectorBossStart, defectorClimax, defectorEnd, defectorMeet, defectorR
 import { rivalBeatenOnce } from './missingAce';
 import { taEnd, taLot, taRare, taStart } from './teamauction';
 import { stAssign, stEnd, stStart, strandingTokens } from './stranding';
-import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens } from './prison';
+import { insideTeam, prDo, prEnd, prEnter, prFree, prNext, prStart, prStep, prStranger, prCaught, prWardenStart, prisonTokens, prisonAmbush } from './prison';
 import { type DistrictId, sgAct, sgAssign, sgCommanderStart, sgEnd, sgHalf, sgHomes, sgJoin, sgRescue, sgStart, sgWhole, siegeTokens, waiting } from './citysiege';
 import { duelDue, duelEnd, duelEnter, duelName, duelWorthy, duelistStart, worthyStart } from './duelist';
 import { lanternArrive, lanternHasStory, lanternLetGo, lanternLost, lanternPearl, lanternTokens } from './lantern';
@@ -43,7 +43,7 @@ import { bidoofJoin, bidoofStart } from './bidoof';
 import { alleyStart } from './alley';
 import { leftFates, leftFreeze, leftHas, leftTake, leftTokens } from './left';
 import { isLastStage, ltArrive, ltDawn, ltPage, ltSit, ltTokens } from './longtable';
-import { impClaim, impJoin, impersonatorStart } from './impersonator';
+import { impClaim, impJoin, impersonatorStart, impTokens } from './impersonator';
 import { shedNinjask, shedRest } from './shedinja';
 import { lsAddress, lsDeal, lsTake, lsTicket } from './laststop';
 import { tyrEven, tyrEvolve, tyrLead, tyrResult, tyrTally, tyrogueJoin, tyrogueMon } from './tyrogue';
@@ -52,9 +52,9 @@ import { cheerJoin } from './cheer';
 import { mirrorReady, mirrorStart } from './mirror';
 import { dueFriend, MANY, ofGuest, ofJoin, ofPick, ofReplacer, ofSpecial, oldfriendTokens, releases, specialDue } from './oldfriend';
 import { ferrisArrive, ferrisBest, ferrisHand, ferrisShape, ferrisStart, ferrisTurn } from './ferris';
-import { followedJoin } from './followed';
+import { followedJoin, followedTokens } from './followed';
 import { ballFind, ballForce, ballHatched, ballHold, ballKind, ballTokens } from './ball';
-import { reunionArrive, reunionFar, reunionTokens } from './reunion';
+import { reunionArrive, reunionFar, reunionTokens, reunionWalk } from './reunion';
 import { giveDearest } from './fox';
 import { restsNeeded, smuggleCages, smuggleJoin, smugglePostcard, smuggleRehab, smuggleTokens } from './smuggling';
 import { paradeAll, paradeEgg, paradeEggReady, paradeForget, paradeMemory, paradeNickname, paradeSecret, paradeSwap, paradeWake } from './parade';
@@ -108,6 +108,8 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
   if (text.includes('{draft:')) text = draftTokens(content, run, text);
   if (text.includes('{borrow:')) text = borrowTokens(content, run, text);
   if (text.includes('{reunion:')) text = reunionTokens(run, text);
+  if (text.includes('{imp:')) text = impTokens(content, run, text);
+  if (text.includes('{followed:')) text = followedTokens(run, text);
   // gn.50: the defector.
   if (text.includes('{defector:')) text = defectorTokens(content, run, text);
   // gn.51: the Smuggling Ring.
@@ -294,6 +296,7 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.62: the player is inside a team (the inside route's run flag `team-<id>-inside`, set by core/evil/inside.ts when it exists).
   if (c.test === 'insideTeam') return insideTeam(run);
   if (c.test === 'notInsideTeam') return !insideTeam(run);
+  if (c.test === 'prisonAmbush') return prisonAmbush(run);
   if (c.test === 'defectorGuest') return !!guestOf(run);
   // gn.51: rests of patience enough for it to climb in by itself.
   if (c.test === 'rehabDone') return gnFlag(run, 'smuggle-rehab') >= restsNeeded(run);
@@ -853,7 +856,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     case 'impJoin':
       return impJoin(run, host);
     case 'impClaim':
-      return impClaim(run);
+      // Beaten, it comes: caught in the fight, it takes Many Faces; knocked out, it joins all the same ("It'll come.").
+      return impClaim(run) || impJoin(run, host);
     case 'shedRest':
       return shedRest(content, run, host, e.key ?? '');
     case 'shedNinjask':
@@ -907,6 +911,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       return reunionArrive(content, run);
     case 'reunionFar':
       return reunionFar(run, e.n ?? 3);
+    case 'reunionWalk':
+      return reunionWalk(run, e.n ?? 0);
     // gn.new.31 The Fox at the Shrine (fox.ts).
     case 'giveDearest':
       return giveDearest(content, run, e.key!);

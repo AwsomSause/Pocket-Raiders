@@ -142,17 +142,25 @@ export function ltSit(run: RunState, n: number): string {
 
 const LINES_STONES = (n: number): string => `"One for everything you walked past," says the pile. It is only stones. ${n === 0 ? 'There are none. A bare road, then.' : `${n} of them, each small and grey and set down by a different hand.`}`;
 
-/** Text tokens: {lt:name:<slot>}, {lt:talk:<1|2>}, {lt:count}, {lt:roll}. */
+/** Who the player sat with in the field of the Final Reunion (gn.61 `reunion:beside`): they keep the chair beside the player's here. */
+const besideOf = (run: Pick<RunState, 'story'>): string => {
+  const who = run.story.flags['reunion:beside'];
+  return typeof who === 'string' && who ? `*${who}, who you sat with in the field, has kept the chair right beside yours, and is not giving it up.*` : '';
+};
+
+/** Text tokens: {lt:name:<slot>}, {lt:talk:<1|2>}, {lt:count}, {lt:roll}, {lt:beside}. */
 export function ltTokens(run: RunState, text: string): string {
   const seats = seatsOf(run);
   const at = (i: number): Seat | undefined => seats[i - 1];
   return text
+    .replace(/\{lt:beside\}/g, () => besideOf(run))
     .replace(/\{lt:name:([0-2])\}/g, (_, n: string) => { const s = at(f(run, `lt-slot-${n}`)); return s ? seatName(s) : 'the stones'; })
     .replace(/\{lt:talk:([12])\}/g, (_, n: string) => {
       const s = at(f(run, `lt-n${n}`));
       if (!s) return '';
-      if (!s.guest) return LINES_STONES(stones(run));
-      return s.empty ? `*${s.guest.empty ?? 'The chair is empty.'}*` : `**${s.guest.name}:** ${s.guest.said}`;
+      const beside = n === '1' && besideOf(run) ? `${besideOf(run)}\n\n` : '';
+      if (!s.guest) return beside + LINES_STONES(stones(run));
+      return beside + (s.empty ? `*${s.guest.empty ?? 'The chair is empty.'}*` : `**${s.guest.name}:** ${s.guest.said}`);
     })
     .replace(/\{lt:count\}/g, () => String(f(run, 'lt-filled')))
     .replace(/\{lt:roll\}/g, () => {

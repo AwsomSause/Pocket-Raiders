@@ -2439,7 +2439,7 @@
   "level": "A+0, wherever it is met",
   "often": "region",
   "badge": "own",
-  "note": "Badge: a pawprint. Two or more stages after a Pokémon was let go at the catch screen, in the same kind of place if the stage fits (any place after four stages). One friend an event; others follow if many were let go. Sets gn mark `came-back` on one that rejoins. Within one run.",
+  "note": "Badge: a pawprint. Two or more stages after a Pokémon was let go at the catch screen, in the same kind of place if the stage fits (any place after four stages). One friend an event, one event a region; when many were let go the others follow at a distance and each gets its own meeting later. Sets gn mark `came-back` on one that rejoins. Within one run.",
   "kinds": [
    "Reunion Episode"
   ],
@@ -2730,7 +2730,7 @@
    "kanto": "The Pokémon Prison",
    "elsewhere": "The Pokémon Prison"
   },
-  "note": "Only in a region with an evil-team story, as an ambush at a team node (the doc's 10%); not in a run where Flight North's theft happened. The doc's other trigger, a loss to a team's lieutenant or boss, opens the cell too (core/greenneedle/prison.ts prisonOnLoss, called from eventBattleLost). Four wings, a clock of six steps, the warden.",
+  "note": "Only in a region with an evil-team story, as an ambush: a 10% roll each stage (gn test prisonAmbush); not in a run where Flight North's theft happened. The doc's main trigger, a loss to a team's lieutenant or boss, opens the cell instead of the loss's usual cost (core/greenneedle/prison.ts prisonOnLoss; run.ts). Four wings, a clock of six steps, the warden.",
   "kinds": [
    "Evil Team"
   ],
@@ -2770,7 +2770,127 @@
   "level": "None",
   "often": "run",
   "badge": "own",
-  "note": "Afterstory: one per later stage, for as many strangers' Pokémon as were freed.",
+  "note": "Afterstory: one per later stage, for as many strangers' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-62-stranger-2": {
+  "gn": "gn.62",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 6,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: one per later stage, for as many strangers' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-62-stranger-3": {
+  "gn": "gn.62",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 6,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: one per later stage, for as many strangers' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-62-stranger-4": {
+  "gn": "gn.62",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 6,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: one per later stage, for as many strangers' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-62-stranger-5": {
+  "gn": "gn.62",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 6,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: one per later stage, for as many strangers' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-62-stranger-6": {
+  "gn": "gn.62",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 6,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: one per later stage, for as many strangers' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).",
+  "kinds": [
+   "Evil Team"
+  ],
+  "tags": []
+ },
+ "gn-62-stranger-7": {
+  "gn": "gn.62",
+  "shape": "Single",
+  "earliest": "A8",
+  "home": 6,
+  "window": [
+   2,
+   16
+  ],
+  "sits": "optional",
+  "attaches": "after",
+  "level": "None",
+  "often": "run",
+  "badge": "own",
+  "note": "Afterstory: one per later stage, for as many strangers' Pokémon as were freed (seven strangers can be freed, so up to seven meetings).",
   "kinds": [
    "Evil Team"
   ],

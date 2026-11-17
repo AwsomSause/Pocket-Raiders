@@ -1189,7 +1189,7 @@ const gn54: Json[] = [
     'The band plays the heroic thing again, slowly. The board, chalked up for this year:',
     '{karp:board}',
   ), [ch('Go home.', out('You go home with a paper flag, and a feeling you can\'t quite name. It might be hope. It smells of lake.', moment('Went to the Magikarp Convention. They tried.', 40)))]),
-  gev('gn-54-poster', 'The Magikarp Convention: The Poster', karpcon({ stop: 'event', rarity: 'uncommon', tags: ['Story'], requires: [is('kc-evolved'), notThisRegion('kc-at'), notThisRegion('kc-poster')] }), say(
+  gev('gn-54-poster', 'The Magikarp Convention: The Poster', karpcon({ stop: 'event', rarity: 'uncommon', tags: ['Story'], requires: [is('kc-visits'), notThisRegion('kc-at'), notThisRegion('kc-poster')] }), say(
     'A poster on a noticeboard: the Magikarp Convention, next year, all welcome.',
     'In one corner, in crayon, a small Gyarados. Drawn by a child. It\'s smiling.',
   ), [ch('Smile back.', out('You smile back at it. Nobody sees. That\'s fine.', stampRegion('kc-poster')))]),

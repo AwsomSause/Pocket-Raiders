@@ -2662,6 +2662,12 @@ export function eventBattleCaught(content: Content, run: RunState, event: EventB
   return battle.caught.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }
 
+/** gn.62: the rank of the evil team's officer an event battle is against (`evil: 'executive' | 'leader'` on the battle), if any. */
+export function eventBattleEvilRank(content: Content, event: EventBattleRef): string | undefined {
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
+  return ((event.success ? choice?.success : choice?.failure)?.battle as { evil?: string } | undefined)?.evil;
+}
+
 /** The consolation prize of a lost pseudo-stage fight (`lose` effects of the battle that was lost). */
 export function eventBattleLost(content: Content, run: RunState, event: EventBattleRef): string[] {
   restoreMachine(content, run);

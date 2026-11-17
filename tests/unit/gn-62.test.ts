@@ -2,7 +2,8 @@
 import { describe, expect, it } from 'vitest';
 import type { RunState } from '../../src/core/state';
 import { createPokemon } from '../../src/core/pokemon';
-import { insideTeam, prisonOnLoss, watched, WINGS } from '../../src/core/greenneedle/prison';
+import { insideTeam, PRISON_AMBUSH_PCT, prisonAmbush, prisonOnLoss, prisonWouldOpen, watched, WINGS } from '../../src/core/greenneedle/prison';
+import { conditionMet } from '../../src/core/events';
 import { content } from './helpers';
 import { choose, flagOf, gnRun, lose, open, scene, setFlag, win } from './helpers/gnPlay';
 
@@ -171,5 +172,66 @@ describe('gn.62 The Pokémon Prison', () => {
     run = choose(run, 'gn-62-guard', 'Take the keys.').run;
     run = choose(run, 'gn-62-guard-1', 'Leave it unlatched.').run;
     expect(flagOf(run, 'prison-guard-freed-1')).toBe(1);
+  });
+});
+
+describe('gn.62 fixes against the doc', () => {
+  it('a lost battle with a team\'s lieutenant ends in the cell instead of ending the run, once', () => {
+    let run = gnRun('t62-instead');
+    open(run, 'evil-rocket-rising-star');
+    const r = choose(run, 'evil-rocket-rising-star', 'Battle.');
+    expect(r.battle).toBe(true);
+    run = lose(r.run);
+    expect(run.phase).toBe('map');
+    expect(flagOf(run, 'prison-offered')).toBe(1);
+    expect(here(run)).toBe('gn-62-cell');
+    expect(run.party.some((m) => m.hp > 0)).toBe(true);
+    // Boundary: the prison has been seen, so the next such loss is an ordinary one.
+    const again = gnRun('t62-instead-2');
+    setFlag(again, 'prison-seen', 1);
+    expect(prisonWouldOpen(content, again, 'leader')).toBe(false);
+    expect(prisonWouldOpen(content, gnRun('t62-instead-3'), 'grunt')).toBe(false);
+    expect(prisonWouldOpen(content, gnRun('t62-instead-3'), 'leader')).toBe(true);
+  });
+
+  it('the ambush is a 10% roll a stage, the same every time for one seed and stage', () => {
+    expect(JSON.stringify(content.events.get('gn-62-cell')!.requires)).toContain('prisonAmbush');
+    const run = gnRun('t62-ambush');
+    expect(prisonAmbush(run)).toBe(prisonAmbush(structuredClone(run)));
+    let hits = 0;
+    for (let i = 0; i < 2000; i++) if (prisonAmbush({ seed: `amb-${i}`, regionIndex: 1, stage: run.stage })) hits++;
+    expect(hits).toBeGreaterThan(2000 * (PRISON_AMBUSH_PCT / 100) * 0.7);
+    expect(hits).toBeLessThan(2000 * (PRISON_AMBUSH_PCT / 100) * 1.3);
+  });
+
+  it('freed strangers are met again one per later stage, for as many as were freed', () => {
+    const run = gnRun('t62-meet');
+    setFlag(run, 'prison-reunions', 3);
+    const due = (r: RunState, id: string): boolean => content.events.get(id)!.requires.every((c) => conditionMet(content, r, c));
+    expect(due(run, 'gn-62-stranger')).toBe(true);
+    expect(due(run, 'gn-62-stranger-2')).toBe(false);
+    open(run, 'gn-62-stranger');
+    let next = choose(run, 'gn-62-stranger', 'Kneel and let it come.').run;
+    expect(flagOf(next, 'prison-reunion-n')).toBe(1);
+    expect(due(next, 'gn-62-stranger')).toBe(false);
+    // Not on the same stage; on a later one.
+    expect(due(next, 'gn-62-stranger-2')).toBe(false);
+    next = structuredClone(next);
+    next.stage!.index += 1;
+    expect(due(next, 'gn-62-stranger-2')).toBe(true);
+    // Only three were freed: there is no fourth meeting.
+    setFlag(next, 'prison-reunion-n', 3);
+    next.stage!.index += 1;
+    expect(due(next, 'gn-62-stranger-4')).toBe(false);
+    expect(content.events.has('gn-62-stranger-7')).toBe(true);
+  });
+
+  it('Osei Tarrant\'s key opens the Hideout\'s locked laboratory', () => {
+    const run = gnRun('t62-key');
+    expect(scene(run, 'gn-28-labs').labels).not.toContain('Unlock the laboratory.');
+    setFlag(run, 'prison-trench-key', 1);
+    expect(scene(run, 'gn-28-labs').labels).toContain('Unlock the laboratory.');
+    setFlag(run, 'hideout-lab-open', 1);
+    expect(scene(run, 'gn-28-labs').labels).not.toContain('Unlock the laboratory.');
   });
 });
