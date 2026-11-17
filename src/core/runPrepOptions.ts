@@ -9,7 +9,7 @@ import { LICENSES, type LicenseId } from './license';
 import { availableMentors, getMentor, mentorBlurb } from './mentors';
 import { ownsTrainer } from './progress';
 import { tokenAvailable, tokenLockText } from './runPrep';
-import { RUN_RULES, getMode, heatOf, type RulesChoice } from './rules';
+import { RUN_RULES, getMode, offeredModes, heatOf, type RulesChoice } from './rules';
 import type { Profile, RunPrep } from './state';
 
 export type OptionRow = 'trainer' | 'token' | 'directive' | 'license' | 'loan' | 'vault' | 'mentor' | 'mode' | 'region' | 'difficulty' | 'heat' | 'campaign' | 'weeks';
@@ -65,7 +65,8 @@ export const ROW_HELP: Record<OptionRow | 'start' | 'pool' | 'draft' | 'type' | 
   load: 'Replaces this setup with one from a preset slot.',
 };
 
-export function optionsFor(row: OptionRow, content: Content, profile: Profile, s: PrepState, testing = false): RowOptions {
+/** `evilMode`: the Evil Mode setting (the mode is offered only while it is on). */
+export function optionsFor(row: OptionRow, content: Content, profile: Profile, s: PrepState, testing = false, evilMode = false): RowOptions {
   const none = (label = 'None', detail = 'Nothing chosen.'): Opt => ({ id: NONE, label, detail, ok: true });
   switch (row) {
     case 'trainer': {
@@ -110,7 +111,7 @@ export function optionsFor(row: OptionRow, content: Content, profile: Profile, s
       return { options, chosen, enabled: true };
     }
     case 'mode': {
-      const options = RUN_RULES.modes.filter((m) => m.status === 'supported').map((m) => ({ id: m.id, label: m.name, detail: m.blurb, ok: true }));
+      const options = offeredModes({ evilMode }).map((m) => ({ id: m.id, label: m.name, detail: m.blurb, ok: true }));
       return { options, chosen: s.rules.modeId, enabled: true };
     }
     case 'region': {
@@ -143,8 +144,8 @@ export function optionsFor(row: OptionRow, content: Content, profile: Profile, s
 }
 
 /** The state after picking `id` in `row` (an id that is not in the row's options changes nothing). */
-export function applyOption(row: OptionRow, id: string, s: PrepState, content: Content, profile: Profile, testing = false): PrepState {
-  const opts = optionsFor(row, content, profile, s, testing);
+export function applyOption(row: OptionRow, id: string, s: PrepState, content: Content, profile: Profile, testing = false, evilMode = false): PrepState {
+  const opts = optionsFor(row, content, profile, s, testing, evilMode);
   const opt = opts.options.find((o) => o.id === id);
   if (!opt || !opt.ok || !opts.enabled) return s;
   const val = id === NONE ? null : id;

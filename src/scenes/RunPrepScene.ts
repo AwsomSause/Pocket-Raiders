@@ -30,7 +30,7 @@ import { AERO, drawGlass, glassPanel as drawPanel, type MotionLevel } from '../u
 import { dailyDate, dailySetup, PRACTICE_DAYS } from '../core/daily';
 import { boardLines } from '../core/boards';
 import { weeklyClaimKey, weeklySeed, weeklySetup } from '../core/weekly';
-import { dailyClaimKey, dailySeed, getDifficulty, getMode, getModifier, heatOf, RUN_RULES, rulesLines, STANDARD_CHOICE, type RulesChoice } from '../core/rules';
+import { dailyClaimKey, dailySeed, getDifficulty, getMode, getModifier, heatOf, offeredModes, RUN_RULES, rulesLines, STANDARD_CHOICE, type RulesChoice } from '../core/rules';
 import { isClaimed } from '../core/quests';
 import type { RunModifiersData } from './RunModifiersScene';
 import type { RunSeedData } from './RunSeedScene';
@@ -422,7 +422,7 @@ export class RunPrepScene extends Phaser.Scene {
         return this.refresh({ vaultItem: next<string | null>([null, ...new Set(profile.vault)], this.prep.vaultItem) });
       }
       case 'mode': {
-        const ids = RUN_RULES.modes.filter((m) => m.status === 'supported').map((m) => m.id);
+        const ids = offeredModes({ evilMode: services().session.settings.expansion.evilMode }).map((m) => m.id);
         return this.refresh({}, { rules: { ...this.rules, modeId: next(ids, this.rules.modeId) } });
       }
       case 'region': {
@@ -502,6 +502,8 @@ export class RunPrepScene extends Phaser.Scene {
       if (!rules.noRewards) session.claimOnce(key);
       daily = weekly;
     }
+    // Evil Mode is offered only while its setting is on; a remembered choice with the setting off plays Standard.
+    if (getMode(rules.modeId)?.gate && !offeredModes({ evilMode: session.settings.expansion.evilMode }).some((m) => m.id === rules.modeId)) rules = { ...rules, modeId: STANDARD_CHOICE.modeId };
     session.newRun(this.archetypeId, seed, undefined, prep, rules, daily?.starters);
     const prof = profLine(session.profile.stats.runsStarted - 1);
     notify(prof ?? goodbyeLine(seed ?? this.archetypeId));
