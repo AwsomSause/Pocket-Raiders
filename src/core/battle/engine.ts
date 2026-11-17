@@ -6087,7 +6087,9 @@ function trainerKitTurn(ctx: BattleContext, enemy: Combatant, max: number, event
   if (!kit) return false;
   const name = getSpecies(content, mon.speciesId).name;
   const last = battle.enemyTeam.filter((m) => m.hp > 0).length <= 1;
-  if (kit.restore > 0 && battle.enemyItemsUsed < content.balance.trainerAi.maxHealItems && mon.hp / max < 0.25 && (last || battle.enemyIndex === 0 || mon.level >= Math.max(...battle.enemyTeam.map((m) => m.level)))) {
+  const tai = content.balance.trainerAi;
+  const region = ctx.foeHealTier ?? 0;
+  if (kit.restore > 0 && region >= tai.fullRestoreFromRegion && battle.enemyItemsUsed < tai.maxHealItems && mon.hp / max < 0.25 && (last || battle.enemyIndex === 0 || mon.level >= Math.max(...battle.enemyTeam.map((m) => m.level)))) {
     kit.restore -= 1;
     battle.enemyItemsUsed += 1;
     mon.hp = max;
@@ -6095,8 +6097,9 @@ function trainerKitTurn(ctx: BattleContext, enemy: Combatant, max: number, event
     events.push({ type: 'item', itemId: 'full-restore', targetUid: mon.uid, message: `The trainer used a Full Restore on ${name}!`, hpAfter: mon.hp });
     return true;
   }
-  if (kit.cure > 0 && mon.status) {
+  if (kit.cure > 0 && mon.status && region >= tai.fullHealFromRegion && battle.enemyItemsUsed < tai.maxHealItems) {
     kit.cure -= 1;
+    battle.enemyItemsUsed += 1;
     mon.status = null;
     events.push({ type: 'item', itemId: 'full-heal', targetUid: mon.uid, message: `The trainer used a Full Heal on ${name}!`, hpAfter: mon.hp });
     return true;
