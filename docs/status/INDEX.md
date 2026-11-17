@@ -401,3 +401,4 @@ region-identities.md: Torren/Frontier/Trial/Grand + Hisui/Kitakami taglines and 
 - poli-pond.md: Poli-Pond miniature episode (Poliwag companion, 3 lessons, rematch duel, Kindness, return as Poliwrath), Beta 0.7.
 - new-ui.md: New UI (Settings > UI style New/Old), the mock-ups as an HTML layer over the canvas; event text as pages with speaker lines; what is done and what is still Old-drawn, UI mock-ups update.
 - jet-pokedex-batch5.md: rest of the Jet Pokédex (145 Pokémon, ~64 Megas, 3 G-Max, Mega Mewtwo Z), pending abilities, limits and missing back sprites, Beta 0.7.
+- Jet Mega Stone icons redone from the normal stones (docs/status/jet-mega-stones.md)
