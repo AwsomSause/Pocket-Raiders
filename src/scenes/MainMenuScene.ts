@@ -23,6 +23,7 @@ import { titleView } from '../ui/redux/screens/title';
 import { bg } from '../ui/redux/kit';
 import { clipsPlayable, runTitleClips, titleClipsHtml, titleClipsOnCanvas } from '../ui/titleClips';
 import { VERSION_LABEL } from '../ui/updateSplashGate';
+import { downloadText } from '../ui/files';
 
 export class MainMenuScene extends Phaser.Scene {
   private menu!: Menu;
@@ -110,7 +111,9 @@ export class MainMenuScene extends Phaser.Scene {
     if (latest !== null && !damaged) {
       options.push({ option: { label: `Continue (Slot ${latest})` }, action: () => this.continueRun() });
     } else if (damaged) {
+      // Save safety: the damaged save can be downloaded first (to send in or fix), and discarding it still keeps a copy.
       options.push({ option: { label: 'Discard damaged save' }, action: () => this.discardDamaged() });
+      options.push({ option: { label: 'Export damaged save' }, action: () => this.exportDamaged() });
     } else {
       options.push({ option: { label: 'Continue', disabled: true }, action: () => undefined });
     }
@@ -174,7 +177,8 @@ export class MainMenuScene extends Phaser.Scene {
 
     // Messages: damaged saves, storage problems, save failures.
     const notes: string[] = [...session.warnings];
-    if (damaged) notes.push(`Your saved run could not be loaded: ${saved.reason} Choose "Discard damaged save" to keep a backup copy and start fresh.`);
+    if (saved.status === 'incompatible') notes.push(`Your saved run could not be loaded: ${saved.reason} It is kept safe. Reload the page to get the newest version, or choose "Export damaged save" to keep a copy.`);
+    else if (damaged) notes.push(`Your saved run could not be loaded: ${saved.reason} No backup could be loaded either. Choose "Export damaged save" to keep a copy, or "Discard damaged save" (a copy is still kept) to start fresh.`);
     if (saved.status === 'unavailable') notes.push(saved.reason);
     if (session.lastSaveError) notes.push(`Last save failed: ${session.lastSaveError}`);
     if (notes.length > 0) {
@@ -276,6 +280,11 @@ export class MainMenuScene extends Phaser.Scene {
     const { session } = services();
     if (session.canContinue && !window.confirm(`Slot ${session.slot} has a run in progress. Starting a new run replaces it. Start anyway?`)) return;
     this.scene.start('Prologue', { thenRun: true });
+  }
+
+  private exportDamaged(): void {
+    const text = services().session.damagedRunText();
+    if (text !== null) downloadText(`pkmn-damaged-run-${new Date().toISOString().slice(0, 10)}.json`, text);
   }
 
   private discardDamaged(): void {

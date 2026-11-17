@@ -27,6 +27,7 @@ import { freshEvil } from '../core/evil/schema';
 import { EXPANSION_SETTINGS_DEFAULTS } from '../core/expansion/schema';
 import { freshProfileStory, STORY_SETTINGS_DEFAULTS } from '../core/story2/schema';
 import { StorageUnavailableError, type StorageProvider } from './storage';
+import { checksum, collectExtras, repairBySchema, restoreExtras, savedAtOf, type Extra } from './safety';
 
 export const SAVE_FORMAT = 'pkmn-roguelike';
 export const KEY_PREFIX = 'pkr';
@@ -494,12 +495,22 @@ interface Envelope {
   record: RecordName;
   schemaVersion: number;
   savedAt: string;
+  /** checksum() of JSON.stringify(data); saves written before 2026-11-17 have none. */
+  checksum?: string;
   data: unknown;
 }
 
+/** How many rolling backups each record keeps (`<key>.bak.1` newest), and how far apart in time .bak.2 and .bak.3 are kept. */
+export const BACKUP_COUNT = 3;
+export const BACKUP_GAP_MS = 10 * 60 * 1000;
+/** Damaged copies kept per record (`<key>.corrupt.<time>`); older ones are pruned so storage doesn't fill up. */
+export const CORRUPT_KEEP = 3;
+const HELD_REASON = 'A save from a newer version of the game (or one this version cannot upgrade) is kept safe, so nothing is saved over it. Reload the page to get the newest version.';
+
 export type LoadResult<T> =
   | { status: 'none' }
-  | { status: 'ok'; data: T; migratedFrom?: number }
+  /** `repaired`: fields that were reset to their defaults to load the save. `recoveredFrom`: the backup key it was loaded from because the main copy was damaged. */
+  | { status: 'ok'; data: T; migratedFrom?: number; repaired?: string[]; recoveredFrom?: string }
   | { status: 'corrupt'; reason: string }
   | { status: 'incompatible'; reason: string }
   | { status: 'unavailable'; reason: string };
@@ -592,23 +603,41 @@ export class SaveManager {
 
   // ---------- generic envelope handling ----------
 
+  /** Keys holding a save this build can't read (newer version or no upgrade path): never written over. */
+  private readonly held = new Set<string>();
+  /** Fields the schema dropped on load (a newer build's or another branch's), written back on the next save of the same run/profile. */
+  private readonly extras = new Map<string, { id: string; list: Extra[] }>();
+  /** The text last written or loaded fine per key, so a backup rotation needn't re-check it. */
+  private readonly good = new Map<string, string>();
+
+  /** True when this key holds a save that is kept safe and not written over. */
+  isHeld(record: RecordName): boolean {
+    return this.held.has(this.key(record));
+  }
+
   private write(record: RecordName, data: unknown, key = this.key(record)): SaveResult {
-    const envelope: Envelope = {
-      format: SAVE_FORMAT,
-      record,
-      schemaVersion: CURRENT_VERSIONS[record],
-      savedAt: this.now().toISOString(),
-      data,
-    };
+    if (this.held.has(key)) return { ok: false, reason: HELD_REASON };
+    const kept = this.extras.get(key);
+    const toSave = kept && kept.id === identityOf(data) ? restoreExtras(data, kept.list) : data;
+    const savedAt = this.now().toISOString();
     try {
-      const text = JSON.stringify(envelope);
-      this.storage.set(key, text);
+      const dataText = JSON.stringify(toSave);
+      const head = JSON.stringify({ format: SAVE_FORMAT, record, schemaVersion: CURRENT_VERSIONS[record], savedAt, checksum: checksum(dataText) });
+      const text = `${head.slice(0, -1)},"data":${dataText}}`;
+      this.rotateBackups(key, text);
+      // Write a temporary copy first and check it, then the real key: a write cut short leaves the last good save in place.
+      const tmp = `${key}.tmp`;
+      this.setWithRoom(tmp, text);
+      if (this.storage.get(tmp) !== text) return { ok: false, reason: 'The save could not be verified after writing.' };
+      this.setWithRoom(key, text);
       // Read it back: a write that was cut short must not pass as saved.
       if (this.storage.get(key) !== text) return { ok: false, reason: 'The save could not be verified after writing.' };
+      this.storage.remove(tmp);
+      this.good.set(key, text);
       if (record !== 'meta') {
         this.storage.set(
           this.key('meta'),
-          JSON.stringify({ format: SAVE_FORMAT, record: 'meta', schemaVersion: CURRENT_VERSIONS.meta, savedAt: envelope.savedAt, data: { lastSaved: envelope.savedAt, lastRecord: record } }),
+          JSON.stringify({ format: SAVE_FORMAT, record: 'meta', schemaVersion: CURRENT_VERSIONS.meta, savedAt, data: { lastSaved: savedAt, lastRecord: record } }),
         );
       }
       return { ok: true };
@@ -617,52 +646,203 @@ export class SaveManager {
     }
   }
 
+  /** Writes a key; if storage is full, prunes old backups once and tries again. */
+  private setWithRoom(key: string, text: string): void {
+    try {
+      this.storage.set(key, text);
+    } catch (err) {
+      if (!this.pruneBackups(true)) throw err;
+      this.storage.set(key, text);
+    }
+  }
+
+  /**
+   * Keeps the save about to be replaced: a good one goes to `<key>.bak.1` (the older backups shift down when
+   * `.bak.1` is more than BACKUP_GAP_MS older, so .bak.2/.bak.3 are older checkpoints); a damaged one is kept
+   * under `<key>.corrupt.<time>` instead, so it never pushes a good backup out. A backup that can't be written
+   * never stops the save itself.
+   */
+  private rotateBackups(key: string, next: string): void {
+    try {
+      const old = this.storage.get(key);
+      if (old === null || old === next) return;
+      if (!this.looksGood(key, old)) {
+        this.keepDamaged(key, old);
+        return;
+      }
+      const b1 = this.storage.get(`${key}.bak.1`);
+      if (b1 !== null && b1 !== old) {
+        const t1 = Date.parse(savedAtOf(b1) ?? '');
+        const tOld = Date.parse(savedAtOf(old) ?? '');
+        if (!(tOld - t1 < BACKUP_GAP_MS)) {
+          for (let i = BACKUP_COUNT - 1; i >= 1; i--) {
+            const v = this.storage.get(`${key}.bak.${i}`);
+            if (v !== null) this.storage.set(`${key}.bak.${i + 1}`, v);
+          }
+        }
+      }
+      this.storage.set(`${key}.bak.1`, old);
+    } catch {
+      this.pruneBackups(false);
+    }
+  }
+
+  /** A cheap check of stored text: an envelope for this game, checksum right (when it has one), and a version this build reads. */
+  private looksGood(key: string, raw: string): boolean {
+    if (this.good.get(key) === raw) return true;
+    try {
+      const env = JSON.parse(raw) as Partial<Envelope>;
+      if (!env || env.format !== SAVE_FORMAT || typeof env.schemaVersion !== 'number') return false;
+      if (env.checksum !== undefined && env.checksum !== checksum(JSON.stringify(env.data))) return false;
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private keepDamaged(key: string, raw: string): string | null {
+    try {
+      const backupKey = `${key}.corrupt.${this.now().getTime()}`;
+      this.storage.set(backupKey, raw);
+      this.pruneDamaged(key);
+      return backupKey;
+    } catch {
+      return null;
+    }
+  }
+
+  private pruneDamaged(key: string): void {
+    const keys = this.storage.keys?.() ?? [];
+    const prefix = `${key}.corrupt.`;
+    const mine = keys.filter((k) => k.startsWith(prefix) && /^\d+$/.test(k.slice(prefix.length))).sort((a, b) => Number(b.slice(prefix.length)) - Number(a.slice(prefix.length)));
+    for (const k of mine.slice(CORRUPT_KEEP)) this.storage.remove(k);
+  }
+
+  /** Frees room: the oldest backups first (`.bak.3`, then `.bak.2`; with `hard`, all damaged copies but the newest). True if anything was removed. */
+  private pruneBackups(hard: boolean): boolean {
+    let removed = false;
+    try {
+      const keys = this.storage.keys?.() ?? [];
+      for (const k of keys) {
+        if (!k.startsWith(`${KEY_PREFIX}.`)) continue;
+        const drop = /\.bak\.3$/.test(k) || (hard && /\.bak\.2$/.test(k)) || (hard && /\.tmp$/.test(k));
+        if (drop) {
+          this.storage.remove(k);
+          removed = true;
+        }
+      }
+      if (hard) {
+        const groups = new Map<string, string[]>();
+        for (const k of keys) {
+          const m = /^(.*)\.corrupt\.(\d+)$/.exec(k);
+          if (m) groups.set(m[1]!, [...(groups.get(m[1]!) ?? []), k]);
+        }
+        for (const list of groups.values()) {
+          list.sort((a, b) => Number(b.split('.').pop()) - Number(a.split('.').pop()));
+          for (const k of list.slice(1)) {
+            this.storage.remove(k);
+            removed = true;
+          }
+        }
+      }
+    } catch {
+      /* nothing to prune */
+    }
+    return removed;
+  }
+
   private read<T>(record: RecordName, schema: z.ZodType<T>, key = this.key(record)): LoadResult<T> {
     let raw: string | null;
+    let tmp: string | null;
     try {
       raw = this.storage.get(key);
+      tmp = this.storage.get(`${key}.tmp`);
     } catch (err) {
       return { status: 'unavailable', reason: err instanceof StorageUnavailableError ? err.message : String(err) };
     }
-    if (raw === null) return { status: 'none' };
-    return this.decode(record, raw, schema);
+    if (raw === null && tmp === null) return { status: 'none' };
+    const accept = (r: { result: LoadResult<T>; extras: Extra[] }, text: string, from?: string): LoadResult<T> => {
+      if (r.result.status !== 'ok') return r.result;
+      this.extras.set(key, { id: identityOf(r.result.data), list: r.extras });
+      if (!from && !r.result.repaired) this.good.set(key, text);
+      return from ? { ...r.result, recoveredFrom: from } : r.result;
+    };
+    if (raw !== null) {
+      const first = this.decodeFull(record, raw, schema);
+      if (first.result.status === 'ok') return accept(first, raw);
+      if (first.result.status === 'incompatible') {
+        // A newer (or not upgradable) save: keep it exactly as it is.
+        this.held.add(key);
+        return first.result;
+      }
+      // Damaged: the newest backup that loads wins (the damaged copy is kept on the next save).
+      for (const cand of [`${key}.tmp`, ...Array.from({ length: BACKUP_COUNT }, (_, i) => `${key}.bak.${i + 1}`)]) {
+        let text: string | null = null;
+        try {
+          text = this.storage.get(cand);
+        } catch {
+          text = null;
+        }
+        if (text === null) continue;
+        const r = this.decodeFull(record, text, schema);
+        if (r.result.status === 'ok') return accept(r, text, cand);
+      }
+      // Last try: the main copy with a wrong checksum but data that still loads.
+      const loose = this.decodeFull(record, raw, schema, true);
+      if (loose.result.status === 'ok') return accept({ ...loose, result: { ...loose.result, repaired: ['checksum', ...(loose.result.repaired ?? [])] } }, raw);
+      return first.result;
+    }
+    // Only the temporary copy exists (the first save was cut short after it).
+    const r = this.decodeFull(record, tmp!, schema);
+    return r.result.status === 'ok' ? accept(r, tmp!, `${key}.tmp`) : { status: 'none' };
   }
 
   /** Parses, migrates and validates one record's JSON text. */
   decode<T>(record: RecordName, raw: string, schema: z.ZodType<T>): LoadResult<T> {
+    return this.decodeFull(record, raw, schema).result;
+  }
+
+  private decodeFull<T>(record: RecordName, raw: string, schema: z.ZodType<T>, ignoreChecksum = false): { result: LoadResult<T>; extras: Extra[] } {
+    const fail = (result: LoadResult<T>) => ({ result, extras: [] as Extra[] });
     let envelope: Partial<Envelope>;
     try {
       envelope = JSON.parse(raw) as Partial<Envelope>;
     } catch {
-      return { status: 'corrupt', reason: 'The save is not valid JSON.' };
+      return fail({ status: 'corrupt', reason: 'The save is not valid JSON.' });
     }
     if (!envelope || envelope.format !== SAVE_FORMAT || envelope.record !== record) {
-      return { status: 'corrupt', reason: `This is not a ${record} save for this game.` };
+      return fail({ status: 'corrupt', reason: `This is not a ${record} save for this game.` });
     }
     const version = envelope.schemaVersion;
     if (typeof version !== 'number' || !Number.isInteger(version) || version < 1) {
-      return { status: 'corrupt', reason: 'The save has no valid version number.' };
+      return fail({ status: 'corrupt', reason: 'The save has no valid version number.' });
+    }
+    if (!ignoreChecksum && envelope.checksum !== undefined && envelope.checksum !== checksum(JSON.stringify(envelope.data))) {
+      return fail({ status: 'corrupt', reason: 'The save was cut short or changed outside the game (checksum mismatch).' });
     }
     const current = CURRENT_VERSIONS[record];
     if (version > current) {
-      return { status: 'incompatible', reason: `The save is from a newer version of the game (v${version}, this game reads up to v${current}).` };
+      return fail({ status: 'incompatible', reason: `The save is from a newer version of the game (v${version}, this game reads up to v${current}).` });
     }
     let data = envelope.data;
     for (let v = version; v < current; v++) {
       const migrate = MIGRATIONS[record][v];
-      if (!migrate) return { status: 'incompatible', reason: `No upgrade path from save version ${v} to ${v + 1}.` };
+      if (!migrate) return fail({ status: 'incompatible', reason: `No upgrade path from save version ${v} to ${v + 1}.` });
       try {
         data = migrate(data);
       } catch (err) {
-        return { status: 'corrupt', reason: `Upgrading the save failed: ${String(err)}` };
+        return fail({ status: 'corrupt', reason: `Upgrading the save failed: ${String(err)}` });
       }
     }
+    const migrated = version < current ? { migratedFrom: version } : {};
     const parsed = schema.safeParse(data);
-    if (!parsed.success) {
-      const first = parsed.error.issues[0];
-      return { status: 'corrupt', reason: `The save data is damaged (${first?.path.join('.') || 'root'}: ${first?.message}).` };
-    }
-    return version < current ? { status: 'ok', data: parsed.data, migratedFrom: version } : { status: 'ok', data: parsed.data };
+    if (parsed.success) return { result: { status: 'ok', data: parsed.data, ...migrated }, extras: collectExtras(data, parsed.data) };
+    // Field by field: reset only what's broken to its default instead of losing the whole save. A removed optional
+    // field (e.g. a newer build's Evil Mode block) is still kept as an extra and written back, so nothing is lost.
+    const fixed = repairBySchema(data, schema);
+    if (fixed.ok) return { result: { status: 'ok', data: fixed.data, ...migrated, repaired: fixed.fixes }, extras: collectExtras(data, fixed.data) };
+    const first = parsed.error.issues[0];
+    return fail({ status: 'corrupt', reason: `The save data is damaged (${first?.path.join('.') || 'root'}: ${first?.message}).` });
   }
 
   // ---------- run ----------
@@ -674,8 +854,53 @@ export class SaveManager {
     // Only saves from before the current format (every pre-Beta 0.5 save, since run v42 is Beta 0.5) are converted, so a save and reload of a current run never changes it.
     if (result.migratedFrom !== undefined && !isPlayerTrainer(result.data.archetypeId) && this.content.archetypes.has(result.data.archetypeId)) result.data = { ...result.data, archetypeId: playerTrainerFor(result.data.archetypeId) };
     const problem = this.findRunReferenceProblem(result.data);
-    if (problem) return { status: 'corrupt', reason: problem };
-    return result;
+    if (!problem) return result;
+    // Something the run refers to is gone from the game data (renamed or removed): drop just that, if the run still holds together.
+    const fixed = this.repairRunReferences(result.data);
+    if (fixed.fixes.length > 0 && !this.findRunReferenceProblem(fixed.run)) return { ...result, data: fixed.run, repaired: [...(result.repaired ?? []), ...fixed.fixes] };
+    return { status: 'corrupt', reason: problem };
+  }
+
+  /** Removes unknown items, rewards, moves and Pokémon from a run (a copy); a Pokémon left with no moves gets Tackle. */
+  private repairRunReferences(source: RunState): { run: RunState; fixes: string[] } {
+    const c = this.content;
+    const run = JSON.parse(JSON.stringify(source)) as RunState;
+    const fixes: string[] = [];
+    const fixMoves = (mon: RunState['party'][number]) => {
+      const kept = mon.moves.filter((m) => c.moves.has(m.id));
+      if (kept.length === mon.moves.length) return;
+      fixes.push(`moves of ${mon.speciesId}`);
+      const fallback = c.moves.get('tackle');
+      mon.moves = kept.length > 0 ? kept : fallback ? [{ id: 'tackle', pp: fallback.pp }] : mon.moves;
+    };
+    const party = run.party.filter((m) => c.species.has(m.speciesId));
+    if (party.length > 0 && party.length < run.party.length) {
+      fixes.push('unknown Pokémon in the party');
+      run.party = party;
+      if (run.battle && !run.party[run.battle.activeIndex]) run.battle.activeIndex = 0;
+    }
+    run.party.forEach(fixMoves);
+    run.battle?.enemyTeam.forEach(fixMoves);
+    for (const id of Object.keys(run.inventory)) {
+      if (!c.items.has(id)) {
+        delete (run.inventory as Record<string, unknown>)[id];
+        fixes.push(`item ${id}`);
+      }
+    }
+    if (run.draft) {
+      const draft = run.draft.filter((id) => c.rewards.has(id));
+      if (draft.length > 0 && draft.length < run.draft.length) {
+        run.draft = draft;
+        fixes.push('reward choices');
+      }
+    }
+    const pending = run.pending.filter((d) => (d.kind === 'caught' ? c.species.has(d.mon.speciesId) : d.kind === 'learnMove' ? c.moves.has(d.moveId) : true));
+    if (pending.length < run.pending.length && (pending.length > 0 || run.phase !== 'decision')) {
+      run.pending = pending;
+      fixes.push('pending choices');
+    }
+    for (const d of run.pending) if (d.kind === 'caught') fixMoves(d.mon);
+    return { run, fixes };
   }
 
   /** Checks that everything the run refers to still exists in the game data. */
@@ -775,14 +1000,26 @@ export class SaveManager {
     return this.write('timeline', store);
   }
 
+  /** The stored text of a record exactly as it is (for exporting a damaged save), or null. */
+  rawRecord(record: RecordName): string | null {
+    try {
+      return this.storage.get(this.key(record));
+    } catch {
+      return null;
+    }
+  }
+
   /** Keeps a copy of a damaged save under a backup key instead of deleting it. */
   backupCorrupt(record: RecordName): string | null {
     try {
       const raw = this.storage.get(this.key(record));
       if (raw === null) return null;
-      const backupKey = `${this.key(record)}.corrupt.${this.now().getTime()}`;
-      this.storage.set(backupKey, raw);
+      const backupKey = this.keepDamaged(this.key(record), raw);
+      if (backupKey === null) return null;
       this.storage.remove(this.key(record));
+      this.storage.remove(`${this.key(record)}.tmp`);
+      // The kept copy is safe under its backup key, so the record may be written again.
+      this.held.delete(this.key(record));
       return backupKey;
     } catch {
       return null;
@@ -798,13 +1035,20 @@ export class SaveManager {
    */
   loadOrCreateProfile(newProfileId: () => string): { profile: Profile; warning?: string } {
     const result = this.read('profile', ProfileSchema);
-    if (result.status === 'ok') return { profile: result.data };
+    if (result.status === 'ok') {
+      const note = recoveryNote('profile', result);
+      return note ? { profile: result.data, warning: note } : { profile: result.data };
+    }
     const profile = createProfile(this.content, newProfileId());
     if (result.status === 'none') {
       this.saveProfile(profile);
       return { profile };
     }
     if (result.status === 'unavailable') return { profile, warning: result.reason };
+    if (result.status === 'incompatible') {
+      // Never replace a save this version can't read: play on a stand-in profile that isn't saved.
+      return { profile, warning: `Your profile could not be loaded: ${result.reason} It is kept safe and nothing will be saved over it. Reload the page to get the newest version of the game.` };
+    }
     const backup = this.backupCorrupt('profile');
     this.saveProfile(profile);
     return {
@@ -823,7 +1067,13 @@ export class SaveManager {
   exportSave(): string {
     const envelope = (record: RecordName) => {
       const raw = this.storage.get(this.key(record));
-      return raw === null ? null : (JSON.parse(raw) as unknown);
+      if (raw === null) return null;
+      try {
+        return JSON.parse(raw) as unknown;
+      } catch {
+        // A damaged save is exported as its raw text, so it can still be sent in or fixed by hand.
+        return raw;
+      }
     };
     return JSON.stringify({ format: SAVE_FORMAT, kind: 'export', exportedAt: this.now().toISOString(), profile: envelope('profile'), settings: envelope('settings'), run: envelope('run') }, null, 1);
   }
@@ -891,6 +1141,21 @@ export class SaveManager {
   saveSettings(settings: Settings): SaveResult {
     return this.write('settings', settings);
   }
+}
+
+/** A line telling the player a save was loaded from a backup or had fields reset, or null when it loaded cleanly. */
+export function recoveryNote(what: string, result: LoadResult<unknown>): string | null {
+  if (result.status !== 'ok') return null;
+  if (result.recoveredFrom) return `Your ${what} save was damaged, so its last good backup was loaded. The damaged copy is kept.`;
+  if (result.repaired && result.repaired.length > 0) return `Part of your ${what} save was damaged and reset to defaults (${result.repaired.slice(0, 3).join(', ')}${result.repaired.length > 3 ? ', ...' : ''}). The original is kept as a backup.`;
+  return null;
+}
+
+/** Which run or profile a record belongs to, so kept extra fields only go back into the same one. */
+function identityOf(data: unknown): string {
+  if (typeof data !== 'object' || data === null) return '';
+  const d = data as { runId?: unknown; profileId?: unknown };
+  return typeof d.runId === 'string' ? `run:${d.runId}` : typeof d.profileId === 'string' ? `profile:${d.profileId}` : '';
 }
 
 function isBoss(c: Content, id: string): boolean {
