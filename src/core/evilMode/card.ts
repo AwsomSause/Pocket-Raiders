@@ -2,6 +2,7 @@
 // same order, and the gate that lights CONFIRM. Pure: no number is drawn; a Card is arithmetic over the block.
 // Field 12 is the Ledger's sentence, from ledger.ts, so the line filed is the line the player read.
 
+import { acrossLine } from './neighbour';
 import { fairPrice, holdingName, localOf, payAmount, streetName, streetOf, takings } from './board';
 import { heroField } from './hero';
 import { EVIL_DATA, type EvilData } from './data';
@@ -91,7 +92,7 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   const unknown = f.map(([, u], i) => (u ? data.ledger.fields[i]! : null)).filter((x): x is string => !!x);
   f.push([unknown.length ? unknown.map((n) => `${n}: not scouted.`).join(' ') : L.notKnownNone, unknown.length > 0]);
   // 12 How it's written down: the Ledger's sentence, exactly.
-  f.push([`${sentenceFor(block, job, data)}${asked && wont.length ? fill(peopleText('askedAnyway', data), { names: wont.map((p) => p.name).join(' and ') }) : ''}`, false]);
+  f.push([`${sentenceFor(block, job, data)}${acrossLine(block, h.id, data) ? ` ${data.neighbour.lines.broke}` : ''}${asked && wont.length ? fill(peopleText('askedAnyway', data), { names: wont.map((p) => p.name).join(' and ') }) : ''}`, false]);
   // 13 The other way: never empty.
   const fair = fairPrice(h, data);
   const persuadeOdds = () => oddsFor(block, { holdingId: h.id, method: 'persuade', squad: job.squad }, data);
