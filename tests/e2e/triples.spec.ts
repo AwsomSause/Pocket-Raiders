@@ -152,14 +152,22 @@ test('a triple battle plays turns with a command for each spot, Shift moves an e
     await page.keyboard.press('Enter');
     await page.waitForTimeout(150);
   }
-  // The left Pokémon now stands in the centre, on the screen and in the battle.
-  const centre = await page.evaluate((uid) => {
+  // The left Pokémon now stands in the centre, on the screen and in the battle. The battle moves it at once and the screen
+  // when the turn's animation reaches the Shift, after the turn-start effects, whose lines wait for a key; so keep pressing
+  // Enter until the screen has caught up.
+  const centre = () => page.evaluate((uid) => {
     const s = (window as any).__pkr.game.scene.getScene('Battle');
     const run = (window as any).__pkr.session.run;
     if (!run.battle || run.battle.outcome) return null;
     return { shown: s.shownSpot('player', uid) };
   }, leftUid);
-  if (centre) expect(centre.shown).toBe(1);
+  await expect
+    .poll(async () => {
+      const shown = (await centre())?.shown ?? 1;
+      if (shown !== 1) await page.keyboard.press('Enter');
+      return shown;
+    }, { timeout: 30_000, intervals: [300] })
+    .toBe(1);
 
   for (let i = 0; i < 80; i++) {
     const s = await battleState(page);
