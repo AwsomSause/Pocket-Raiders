@@ -219,26 +219,53 @@ const READ_BAG: Json[] = [
   gn('check', { key: 'crystal-plain', if: [exactly('crystal-most', 0)] }),
   when('crystal-plain', { min: 1 }, [], '*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*'),
 ];
-/** Drop one crystal between phases (two pages: an event holds four choices). After it, the next phase. */
-const toPhase: Json[] = [...READ_BAG, when('crystal-phase', { min: 1, max: 1 }, [scene('gn-32-phase-2')]), when('crystal-phase', { min: 2, max: 2 }, [scene('gn-32-phase-3')])];
-const dropIt = (c: string): Json => chIf([is(`crystal-${c}`)], `The ${COLOUR_LABEL[c]} one.`, out('It rolls a little way, and stops, and the Golem watches it go.', gn('crystalDrop', { key: c }), ...toPhase));
+/** The Golem reads the bag again (the fight's own step: core/greenneedle/crystals.ts golemRead). */
+const REREAD: Json = { kind: 'op', op: 'golemRead' };
+/** Drop one crystal between phases, in the fight itself (two pages: a question holds four answers). After it, the Golem reads the bag again. */
+const dropIt = (c: string): Json => ({ label: `The ${COLOUR_LABEL[c]} one.`, if: [{ key: `crystal-${c}` }], text: 'It rolls a little way, and stops, and the Golem watches it go.', effects: [{ kind: 'op', op: 'crystalDrop', key: c }, REREAD] });
+/** Between phases, the player gets one action: "Drop a crystal." (pick which) / "Keep everything." */
+const between = (phase: number): Json => ({
+  id: `between-${phase - 1}`, at: { phase },
+  prompt: 'It\'s looking at the bag again.',
+  text: '*It\'s looking at the bag again. It isn\'t angry. It\'s hungry, or it\'s lonely; with a rock, it\'s hard to tell.*',
+  options: [
+    { label: 'Drop a crystal.', text: 'You open the bag.', then: 'drop' },
+    { label: 'Keep everything.', text: 'You close the bag. It watches you do it.', effects: [REREAD] },
+  ],
+});
+const GIVE_ANSWER: Json = {
+  label: 'Give it the crystals.',
+  text: 'You hold them out. It takes them, one at a time, very carefully, with something that isn\'t a hand. It sets them into itself. It folds back into the wall. The humming stops.',
+  effects: [{ kind: 'flag', key: 'crystal-golem-given', n: 1 }, { kind: 'end', outcome: 'win' }],
+};
+/** The Golem's questions: between the phases; "Which one?"; and the new button, "Give it the crystals." (third phase; from the first for a gentle hand). */
+const GOLEM_ASKS: Json[] = [
+  between(2), between(3),
+  { id: 'drop', at: { chained: true }, text: 'Which one?', options: [dropIt('red'), dropIt('blue'), dropIt('green'), { label: 'The others.', text: 'You dig deeper in the bag.', then: 'drop-2' }] },
+  { id: 'drop-2', at: { chained: true }, text: 'Which one?', options: [dropIt('white'), dropIt('black'), { label: 'Keep everything after all.', text: 'You close the bag.', effects: [REREAD] }] },
+  { id: 'give', at: { button: 'Give it the crystals.', phase: 3 }, if: [{ key: 'crystal-gentle', min: 0, max: 0 }], text: 'You hold the crystals out.', options: [GIVE_ANSWER] },
+  { id: 'give-gentle', at: { button: 'Give it the crystals.' }, if: [{ key: 'crystal-gentle' }], text: 'You hold the crystals out.', options: [GIVE_ANSWER] },
+];
 /** Keep one crystal as a held item, at half strength (beaten Golem). */
 const keepIt = (c: string): Json => chIf([is(`crystal-${c}`)], `Keep the ${COLOUR_LABEL[c]} one.`, out('It stops humming in your hand, and goes quiet, and stays.', item(`cavern-${c}-crystal`), setTo('crystal-kept', 1), cw('gn-32-follower-check')));
 const GENTLE: Json[] = [gn('check', { key: 'crystal-gentle', if: [is('giants-river')] }), when('guzzlord-fed', { min: 1 }, [setTo('crystal-gentle', 1)])];
-const golemPhase = (n: number): Json => inside({ ...wild({ species: ['gigalith'], lv: 2, win: n < 3 ? [setTo('crystal-phase', n), scene(`gn-32-between-${n}`)] : [setTo('crystal-golem', 1), flag('crystal-golem-defeated'), scene('gn-32-defeated')] }),
-  exact: true, rule: { gn: 'golem', noCatch: true, giant: true, foeStages: { atk: 1, spd: 1 } }, lose: [setTo('crystal-golem', 3), scene('gn-32-folded')] });
-const GIVE_OUT: Json = out(say(
-  'You hold them out. It takes them, one at a time, very carefully, with something that isn\'t a hand.',
-  'It sets them into itself. It folds back into the wall. The humming stops.',
-), setTo('crystal-golem', 2), flag('crystal-golem-given'),
-  // The shards are cosmetic key items: cut with the Keepsakes (Kice, Nov 13). The flags remember the colours given; the text doesn't promise a shard.
-  ...['red', 'blue', 'green', 'white', 'black'].map((c) => when(`crystal-${c}`, { min: 1 }, [flag(`crystal-shard-${c}`)])),
-  scene('gn-32-given'));
+/** How the one fight ended: given the crystals (the shards are cut with the Keepsakes: Kice, Nov 13; the flags remember the colours given), or beaten. */
+const GOLEM_WON: Json[] = [
+  when('crystal-golem-given', { min: 1 }, [setTo('crystal-golem', 2), ...['red', 'blue', 'green', 'white', 'black'].map((c) => when(`crystal-${c}`, { min: 1 }, [flag(`crystal-shard-${c}`)])), scene('gn-32-given')]),
+  when('crystal-golem-given', { min: 0, max: 0 }, [setTo('crystal-golem', 1), flag('crystal-golem-defeated'), scene('gn-32-defeated')]),
+];
+/** The Crystal Golem: ONE fight in three phases (at two thirds and one third of its HP). The type is read at the start of each phase. */
+const GOLEM_FIGHT: Json = inside({ ...wild({ species: ['gigalith'], lv: 2, win: GOLEM_WON }),
+  exact: true, lose: [setTo('crystal-golem', 3), scene('gn-32-folded')],
+  rule: {
+    gn: 'golem', noCatch: true, giant: true, foeStages: { atk: 1, spd: 1 },
+    phases: [
+      { at: 0.66, line: 'The second time, it\'s slower, and it looks at the bag longer.' },
+      { at: 0.33, line: 'The third time, it holds out something that isn\'t a hand.' },
+    ],
+    asks: GOLEM_ASKS,
+  } });
 const CRYSTAL_DONE: Json[] = [flag('crystal-done'), leavePseudo()];
-const phaseRoom = (n: number, intro: string): Json => hall(`gn-32-phase-${n}`, `The Heart: Phase ${n}`, { pokemon: 'gigalith', effect: 'shake' }, intro, [
-  ch('Fight.', fight('It comes at you like a landslide that has decided to.', golemPhase(n))),
-  n === 3 ? ch('Give it the crystals.', GIVE_OUT) : chIf([is('crystal-gentle')], 'Give it the crystals.', GIVE_OUT),
-]);
 
 const gn32: Json[] = [
   gev('gn-32-door', 'The Crystal Caverns', cave({ stop: 'event', rarity: 'rare', types: ['rock', 'ice', 'steel'], pokemon: 'carbink', requires: [not('crystal-done'), not('crystal-entered')] }), say(
@@ -345,17 +372,9 @@ const gn32: Json[] = [
     'The far wall isn\'t a wall. It unfolds.',
     '*A Gigalith, twice the size it should be, grown through with crystal of every colour. It turns toward your bag.*',
   ), [ch('Stand your ground.', out('It reads your bag the way you\'d read a face.', ...GENTLE, ...READ_BAG, scene('gn-32-phase-1'))), useGreen('gn-32-heart')]),
-  phaseRoom(1, 'It leans down toward your bag, and the crystals in it light up.'),
-  ...[1, 2].map((n) => hall(`gn-32-between-${n}`, 'The Heart: Between', { pokemon: 'gigalith' }, say(
-    '*It\'s looking at the bag again. It isn\'t angry. It\'s hungry, or it\'s lonely; with a rock, it\'s hard to tell.*',
-  ), [
-    ch('Drop a crystal.', out('You open the bag.', scene('gn-32-drop'))),
-    ch('Keep everything.', out('You close the bag. It watches you do it.', ...toPhase)),
-  ])),
-  hall('gn-32-drop', 'The Heart: Drop a Crystal', { pokemon: 'gigalith' }, 'Which one?', [dropIt('red'), dropIt('blue'), dropIt('green'), ch('The others.', out('You dig deeper in the bag.', scene('gn-32-drop-2')))]),
-  hall('gn-32-drop-2', 'The Heart: Drop a Crystal', { pokemon: 'gigalith' }, 'Which one?', [dropIt('white'), dropIt('black'), ch('Keep everything after all.', out('You close the bag.', ...toPhase))]),
-  phaseRoom(2, 'The second time, it\'s slower, and it looks at the bag longer.'),
-  phaseRoom(3, 'The third time, it holds out something that isn\'t a hand.'),
+  hall('gn-32-phase-1', 'The Heart: The Crystal Golem', { pokemon: 'gigalith', effect: 'shake' }, 'It leans down toward your bag, and the crystals in it light up.', [
+    ch('Fight.', fight('It comes at you like a landslide that has decided to.', GOLEM_FIGHT)),
+  ]),
   // ---- How it ended ----
   hall('gn-32-defeated', 'The Heart: The Golem Falls', { pokemon: 'gigalith' }, say(
     'It settles. The crystals in it go dim, one by one.',

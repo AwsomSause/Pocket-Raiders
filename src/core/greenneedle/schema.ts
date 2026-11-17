@@ -154,8 +154,77 @@ export const GnRuleSchema = z.enum(GN_RULES);
 export type GnRule = z.infer<typeof GnRuleSchema>;
 
 const Stages = z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(-6).max(6));
+/** A run flag (`ev:<key>`) must be within `min`..`max` (defaults: at least 1). */
+const AskIf = z.object({ key: Key, min: z.number().int().optional(), max: z.number().int().optional() });
+/**
+ * What an answer to a question in the middle of a fight does (core/greenneedle/ask.ts). No random numbers.
+ *  - `flag`: the run flag `key` becomes `n`.  - `stages`: stat stages added on one side.  - `heal`: that side's Pokémon gets a share of its max HP back.
+ *  - `foeWaits` / `youWait`: that side gives up its next attack, with the line.  - `end`: the fight ends now.
+ *  - `pass`: the next `turns` turns pass by themselves (nobody attacks; one of `lines` each turn), then the fight ends as `outcome`.
+ *  - `form`: your Pokémon takes that form for the battle.  - `op`: a named step of one event (`crystalDrop` with `key`, `golemRead`, `pitsPull`).
+ */
+export const GnAskEffectSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('flag'), key: Key, n: z.number().int() }),
+  z.object({ kind: z.literal('stages'), side: z.enum(['you', 'foe']), stages: Stages }),
+  z.object({ kind: z.literal('heal'), side: z.enum(['you', 'foe']), share: z.number().gt(0).max(1) }),
+  z.object({ kind: z.literal('foeWaits'), line: z.string().min(1).max(200) }),
+  z.object({ kind: z.literal('youWait'), line: z.string().min(1).max(200) }),
+  z.object({ kind: z.literal('end'), outcome: z.enum(['win', 'lose']) }),
+  z.object({ kind: z.literal('pass'), turns: z.number().int().min(1).max(5), lines: z.array(z.string().min(1).max(200)).max(5), outcome: z.enum(['win', 'lose']) }),
+  z.object({ kind: z.literal('form'), species: z.string().min(1) }),
+  z.object({ kind: z.literal('op'), op: z.enum(['crystalDrop', 'golemRead', 'pitsPull']), key: Key.optional() }),
+]);
+export type GnAskEffect = z.infer<typeof GnAskEffectSchema>;
+/** One answer: its button, the lines shown after it, what it does, and (`then`) the next question it opens ("Drop a crystal." -> "Which one?"). */
+export const GnAskOptionSchema = z.object({
+  label: z.string().min(1).max(40),
+  if: z.array(AskIf).max(4).optional(),
+  text: z.string().min(1).max(400).optional(),
+  effects: z.array(GnAskEffectSchema).max(8).optional(),
+  then: Key.optional(),
+});
+/**
+ * A choice in the middle of a battle: the fight stops at a stated moment and asks one question with 2 to 4 answers.
+ * `at` says when: the start of turn `turn`; the foe's HP at or under `foeHp` (a share); your Pokémon's HP under `myHp`; the start of
+ * phase `phase`; `chained` (only opened by another answer's `then`); or `button`: a new button on the battle menu (from phase `phase`
+ * on, when given). A button with one option does it at once; with more, it opens the question. Asked once each (a chained one, each time it is opened).
+ */
+export const GnAskSchema = z.object({
+  id: Key,
+  at: z.object({
+    turn: z.number().int().min(1).max(99).optional(),
+    foeHp: z.number().gt(0).lt(1).optional(),
+    myHp: z.number().gt(0).lte(1).optional(),
+    phase: z.number().int().min(1).max(4).optional(),
+    chained: z.literal(true).optional(),
+    button: z.string().min(1).max(28).optional(),
+  }),
+  if: z.array(AskIf).max(4).optional(),
+  text: z.string().min(1).max(400),
+  /** The short line that stays in the text box beside the answers, when `text` is too long to (over 84 characters: it is read first, piece by piece). */
+  prompt: z.string().min(1).max(84).optional(),
+  options: z.array(GnAskOptionSchema).min(1).max(4),
+}).refine((a) => a.at.button !== undefined || a.options.length >= 2, { message: 'a question needs 2 to 4 answers' });
+export type GnAsk = z.infer<typeof GnAskSchema>;
+/** A later phase of a fight in phases: it begins when the foe's HP is at or under `at` (a share of its max; a hit never takes it past that line). */
+export const GnPhaseSchema = z.object({
+  at: z.number().gt(0).lt(1),
+  /** The named rule from this phase on. */
+  gn: GnRuleSchema.optional(),
+  /** Shown when the phase begins. */
+  line: z.string().min(1).max(300).optional(),
+  /** The foe's moves from this phase on. */
+  moves: z.array(z.string().min(1)).min(1).max(4).optional(),
+  foeStages: Stages.optional(),
+});
+export type GnPhase = z.infer<typeof GnPhaseSchema>;
+
 /** Extra fields of an event fight's rule that the Greenneedle events use. */
 export const GnRuleFields = {
+  /** One fight in phases: phases 2, 3... in order (phase 1 is the start). core/greenneedle/ask.ts. */
+  phases: z.array(GnPhaseSchema).min(1).max(3).optional(),
+  /** Choices in the middle of the fight (core/greenneedle/ask.ts): the battle screen stops and asks. */
+  asks: z.array(GnAskSchema).min(1).max(12).optional(),
   /** A named Greenneedle rule. */
   gn: GnRuleSchema.optional(),
   /** Your Pokémon carrying this Greenneedle mark leads (the forest duelist). */

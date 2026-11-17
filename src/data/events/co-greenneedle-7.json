@@ -3883,7 +3883,7 @@
   },
   {
    "id": "gn-32-phase-1",
-   "name": "The Heart: Phase 1",
+   "name": "The Heart: The Crystal Golem",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -3915,26 +3915,115 @@
        "win": [
         {
          "kind": "gn",
-         "op": "setFlag",
-         "key": "crystal-phase",
-         "n": 1
+         "op": "when",
+         "key": "crystal-golem-given",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "crystal-golem",
+           "n": 2
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "crystal-red",
+           "min": 1,
+           "then": [
+            {
+             "kind": "flag",
+             "key": "crystal-shard-red",
+             "amount": 1
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "crystal-blue",
+           "min": 1,
+           "then": [
+            {
+             "kind": "flag",
+             "key": "crystal-shard-blue",
+             "amount": 1
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "crystal-green",
+           "min": 1,
+           "then": [
+            {
+             "kind": "flag",
+             "key": "crystal-shard-green",
+             "amount": 1
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "crystal-white",
+           "min": 1,
+           "then": [
+            {
+             "kind": "flag",
+             "key": "crystal-shard-white",
+             "amount": 1
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "crystal-black",
+           "min": 1,
+           "then": [
+            {
+             "kind": "flag",
+             "key": "crystal-shard-black",
+             "amount": 1
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-32-given"
+          }
+         ]
         },
         {
          "kind": "gn",
-         "op": "scene",
-         "key": "gn-32-between-1"
+         "op": "when",
+         "key": "crystal-golem-given",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "crystal-golem",
+           "n": 1
+          },
+          {
+           "kind": "flag",
+           "key": "crystal-golem-defeated",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-32-defeated"
+          }
+         ]
         }
        ],
        "exact": true,
-       "rule": {
-        "gn": "golem",
-        "noCatch": true,
-        "giant": true,
-        "foeStages": {
-         "atk": 1,
-         "spd": 1
-        }
-       },
        "lose": [
         {
          "kind": "gn",
@@ -3948,1186 +4037,6 @@
          "key": "gn-32-folded"
         }
        ],
-       "pseudo": true
-      }
-     }
-    },
-    {
-     "label": "Give it the crystals.",
-     "success": {
-      "text": "You hold them out. It takes them, one at a time, very carefully, with something that isn't a hand.\n\nIt sets them into itself. It folds back into the wall. The humming stops.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "crystal-golem",
-        "n": 2
-       },
-       {
-        "kind": "flag",
-        "key": "crystal-golem-given",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-red",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-red",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-blue",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-blue",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-green",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-green",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-white",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-white",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-black",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-black",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-32-given"
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "crystal-gentle",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "gn-32-between-1",
-   "name": "The Heart: Between",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Exploration",
-    "Dungeon"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "gigalith",
-    "tint": "#6f8fb8",
-    "effect": "sparkle"
-   },
-   "intro": "*It's looking at the bag again. It isn't angry. It's hungry, or it's lonely; with a rock, it's hard to tell.*",
-   "choices": [
-    {
-     "label": "Drop a crystal.",
-     "success": {
-      "text": "You open the bag.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-32-drop"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Keep everything.",
-     "success": {
-      "text": "You close the bag. It watches you do it.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "crystalMost"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 1,
-        "max": 1,
-        "then": [],
-        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 2,
-        "max": 2,
-        "then": [],
-        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 3,
-        "max": 3,
-        "then": [],
-        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 5,
-        "max": 5,
-        "then": [],
-        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
-       },
-       {
-        "kind": "gn",
-        "op": "check",
-        "key": "crystal-plain",
-        "if": [
-         {
-          "kind": "flag",
-          "key": "crystal-most",
-          "atLeast": 0,
-          "atMost": 0
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-plain",
-        "min": 1,
-        "then": [],
-        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-2"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 2,
-        "max": 2,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-3"
-         }
-        ]
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-32-between-2",
-   "name": "The Heart: Between",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Exploration",
-    "Dungeon"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "gigalith",
-    "tint": "#6f8fb8",
-    "effect": "sparkle"
-   },
-   "intro": "*It's looking at the bag again. It isn't angry. It's hungry, or it's lonely; with a rock, it's hard to tell.*",
-   "choices": [
-    {
-     "label": "Drop a crystal.",
-     "success": {
-      "text": "You open the bag.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-32-drop"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Keep everything.",
-     "success": {
-      "text": "You close the bag. It watches you do it.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "crystalMost"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 1,
-        "max": 1,
-        "then": [],
-        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 2,
-        "max": 2,
-        "then": [],
-        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 3,
-        "max": 3,
-        "then": [],
-        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 5,
-        "max": 5,
-        "then": [],
-        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
-       },
-       {
-        "kind": "gn",
-        "op": "check",
-        "key": "crystal-plain",
-        "if": [
-         {
-          "kind": "flag",
-          "key": "crystal-most",
-          "atLeast": 0,
-          "atMost": 0
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-plain",
-        "min": 1,
-        "then": [],
-        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-2"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 2,
-        "max": 2,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-3"
-         }
-        ]
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-32-drop",
-   "name": "The Heart: Drop a Crystal",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Exploration",
-    "Dungeon"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "gigalith",
-    "tint": "#6f8fb8",
-    "effect": "sparkle"
-   },
-   "intro": "Which one?",
-   "choices": [
-    {
-     "label": "The Red one.",
-     "success": {
-      "text": "It rolls a little way, and stops, and the Golem watches it go.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "crystalDrop",
-        "key": "red"
-       },
-       {
-        "kind": "gn",
-        "op": "crystalMost"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 1,
-        "max": 1,
-        "then": [],
-        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 2,
-        "max": 2,
-        "then": [],
-        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 3,
-        "max": 3,
-        "then": [],
-        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 5,
-        "max": 5,
-        "then": [],
-        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
-       },
-       {
-        "kind": "gn",
-        "op": "check",
-        "key": "crystal-plain",
-        "if": [
-         {
-          "kind": "flag",
-          "key": "crystal-most",
-          "atLeast": 0,
-          "atMost": 0
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-plain",
-        "min": 1,
-        "then": [],
-        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-2"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 2,
-        "max": 2,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-3"
-         }
-        ]
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "crystal-red",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
-    },
-    {
-     "label": "The Blue one.",
-     "success": {
-      "text": "It rolls a little way, and stops, and the Golem watches it go.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "crystalDrop",
-        "key": "blue"
-       },
-       {
-        "kind": "gn",
-        "op": "crystalMost"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 1,
-        "max": 1,
-        "then": [],
-        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 2,
-        "max": 2,
-        "then": [],
-        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 3,
-        "max": 3,
-        "then": [],
-        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 5,
-        "max": 5,
-        "then": [],
-        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
-       },
-       {
-        "kind": "gn",
-        "op": "check",
-        "key": "crystal-plain",
-        "if": [
-         {
-          "kind": "flag",
-          "key": "crystal-most",
-          "atLeast": 0,
-          "atMost": 0
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-plain",
-        "min": 1,
-        "then": [],
-        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-2"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 2,
-        "max": 2,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-3"
-         }
-        ]
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "crystal-blue",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
-    },
-    {
-     "label": "The Green one.",
-     "success": {
-      "text": "It rolls a little way, and stops, and the Golem watches it go.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "crystalDrop",
-        "key": "green"
-       },
-       {
-        "kind": "gn",
-        "op": "crystalMost"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 1,
-        "max": 1,
-        "then": [],
-        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 2,
-        "max": 2,
-        "then": [],
-        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 3,
-        "max": 3,
-        "then": [],
-        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 5,
-        "max": 5,
-        "then": [],
-        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
-       },
-       {
-        "kind": "gn",
-        "op": "check",
-        "key": "crystal-plain",
-        "if": [
-         {
-          "kind": "flag",
-          "key": "crystal-most",
-          "atLeast": 0,
-          "atMost": 0
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-plain",
-        "min": 1,
-        "then": [],
-        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-2"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 2,
-        "max": 2,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-3"
-         }
-        ]
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "crystal-green",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
-    },
-    {
-     "label": "The others.",
-     "success": {
-      "text": "You dig deeper in the bag.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-32-drop-2"
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-32-drop-2",
-   "name": "The Heart: Drop a Crystal",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Exploration",
-    "Dungeon"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "gigalith",
-    "tint": "#6f8fb8",
-    "effect": "sparkle"
-   },
-   "intro": "Which one?",
-   "choices": [
-    {
-     "label": "The White one.",
-     "success": {
-      "text": "It rolls a little way, and stops, and the Golem watches it go.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "crystalDrop",
-        "key": "white"
-       },
-       {
-        "kind": "gn",
-        "op": "crystalMost"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 1,
-        "max": 1,
-        "then": [],
-        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 2,
-        "max": 2,
-        "then": [],
-        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 3,
-        "max": 3,
-        "then": [],
-        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 5,
-        "max": 5,
-        "then": [],
-        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
-       },
-       {
-        "kind": "gn",
-        "op": "check",
-        "key": "crystal-plain",
-        "if": [
-         {
-          "kind": "flag",
-          "key": "crystal-most",
-          "atLeast": 0,
-          "atMost": 0
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-plain",
-        "min": 1,
-        "then": [],
-        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-2"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 2,
-        "max": 2,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-3"
-         }
-        ]
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "crystal-white",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
-    },
-    {
-     "label": "The Black one.",
-     "success": {
-      "text": "It rolls a little way, and stops, and the Golem watches it go.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "crystalDrop",
-        "key": "black"
-       },
-       {
-        "kind": "gn",
-        "op": "crystalMost"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 1,
-        "max": 1,
-        "then": [],
-        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 2,
-        "max": 2,
-        "then": [],
-        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 3,
-        "max": 3,
-        "then": [],
-        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 5,
-        "max": 5,
-        "then": [],
-        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
-       },
-       {
-        "kind": "gn",
-        "op": "check",
-        "key": "crystal-plain",
-        "if": [
-         {
-          "kind": "flag",
-          "key": "crystal-most",
-          "atLeast": 0,
-          "atMost": 0
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-plain",
-        "min": 1,
-        "then": [],
-        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-2"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 2,
-        "max": 2,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-3"
-         }
-        ]
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "crystal-black",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
-    },
-    {
-     "label": "Keep everything after all.",
-     "success": {
-      "text": "You close the bag.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "crystalMost"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 1,
-        "max": 1,
-        "then": [],
-        "text": "*Red light runs through it like heat through iron. It is Rock and Fire now.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 2,
-        "max": 2,
-        "then": [],
-        "text": "*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 3,
-        "max": 3,
-        "then": [],
-        "text": "*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-most",
-        "min": 5,
-        "max": 5,
-        "then": [],
-        "text": "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*"
-       },
-       {
-        "kind": "gn",
-        "op": "check",
-        "key": "crystal-plain",
-        "if": [
-         {
-          "kind": "flag",
-          "key": "crystal-most",
-          "atLeast": 0,
-          "atMost": 0
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-plain",
-        "min": 1,
-        "then": [],
-        "text": "*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*"
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 1,
-        "max": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-2"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-phase",
-        "min": 2,
-        "max": 2,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-32-phase-3"
-         }
-        ]
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-32-phase-2",
-   "name": "The Heart: Phase 2",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Exploration",
-    "Dungeon"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "gigalith",
-    "tint": "#6f8fb8",
-    "effect": "shake"
-   },
-   "intro": "The second time, it's slower, and it looks at the bag longer.",
-   "choices": [
-    {
-     "label": "Fight.",
-     "success": {
-      "text": "It comes at you like a landslide that has decided to.",
-      "effects": [],
-      "battle": {
-       "kind": "wild",
-       "species": [
-        "gigalith"
-       ],
-       "types": [],
-       "levelBonus": 2,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "gn",
-         "op": "setFlag",
-         "key": "crystal-phase",
-         "n": 2
-        },
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-32-between-2"
-        }
-       ],
-       "exact": true,
        "rule": {
         "gn": "golem",
         "noCatch": true,
@@ -5135,287 +4044,266 @@
         "foeStages": {
          "atk": 1,
          "spd": 1
-        }
-       },
-       "lose": [
-        {
-         "kind": "gn",
-         "op": "setFlag",
-         "key": "crystal-golem",
-         "n": 3
         },
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-32-folded"
-        }
-       ],
+        "phases": [
+         {
+          "at": 0.66,
+          "line": "The second time, it's slower, and it looks at the bag longer."
+         },
+         {
+          "at": 0.33,
+          "line": "The third time, it holds out something that isn't a hand."
+         }
+        ],
+        "asks": [
+         {
+          "id": "between-1",
+          "at": {
+           "phase": 2
+          },
+          "prompt": "It's looking at the bag again.",
+          "text": "*It's looking at the bag again. It isn't angry. It's hungry, or it's lonely; with a rock, it's hard to tell.*",
+          "options": [
+           {
+            "label": "Drop a crystal.",
+            "text": "You open the bag.",
+            "then": "drop"
+           },
+           {
+            "label": "Keep everything.",
+            "text": "You close the bag. It watches you do it.",
+            "effects": [
+             {
+              "kind": "op",
+              "op": "golemRead"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "id": "between-2",
+          "at": {
+           "phase": 3
+          },
+          "prompt": "It's looking at the bag again.",
+          "text": "*It's looking at the bag again. It isn't angry. It's hungry, or it's lonely; with a rock, it's hard to tell.*",
+          "options": [
+           {
+            "label": "Drop a crystal.",
+            "text": "You open the bag.",
+            "then": "drop"
+           },
+           {
+            "label": "Keep everything.",
+            "text": "You close the bag. It watches you do it.",
+            "effects": [
+             {
+              "kind": "op",
+              "op": "golemRead"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "id": "drop",
+          "at": {
+           "chained": true
+          },
+          "text": "Which one?",
+          "options": [
+           {
+            "label": "The Red one.",
+            "if": [
+             {
+              "key": "crystal-red"
+             }
+            ],
+            "text": "It rolls a little way, and stops, and the Golem watches it go.",
+            "effects": [
+             {
+              "kind": "op",
+              "op": "crystalDrop",
+              "key": "red"
+             },
+             {
+              "kind": "op",
+              "op": "golemRead"
+             }
+            ]
+           },
+           {
+            "label": "The Blue one.",
+            "if": [
+             {
+              "key": "crystal-blue"
+             }
+            ],
+            "text": "It rolls a little way, and stops, and the Golem watches it go.",
+            "effects": [
+             {
+              "kind": "op",
+              "op": "crystalDrop",
+              "key": "blue"
+             },
+             {
+              "kind": "op",
+              "op": "golemRead"
+             }
+            ]
+           },
+           {
+            "label": "The Green one.",
+            "if": [
+             {
+              "key": "crystal-green"
+             }
+            ],
+            "text": "It rolls a little way, and stops, and the Golem watches it go.",
+            "effects": [
+             {
+              "kind": "op",
+              "op": "crystalDrop",
+              "key": "green"
+             },
+             {
+              "kind": "op",
+              "op": "golemRead"
+             }
+            ]
+           },
+           {
+            "label": "The others.",
+            "text": "You dig deeper in the bag.",
+            "then": "drop-2"
+           }
+          ]
+         },
+         {
+          "id": "drop-2",
+          "at": {
+           "chained": true
+          },
+          "text": "Which one?",
+          "options": [
+           {
+            "label": "The White one.",
+            "if": [
+             {
+              "key": "crystal-white"
+             }
+            ],
+            "text": "It rolls a little way, and stops, and the Golem watches it go.",
+            "effects": [
+             {
+              "kind": "op",
+              "op": "crystalDrop",
+              "key": "white"
+             },
+             {
+              "kind": "op",
+              "op": "golemRead"
+             }
+            ]
+           },
+           {
+            "label": "The Black one.",
+            "if": [
+             {
+              "key": "crystal-black"
+             }
+            ],
+            "text": "It rolls a little way, and stops, and the Golem watches it go.",
+            "effects": [
+             {
+              "kind": "op",
+              "op": "crystalDrop",
+              "key": "black"
+             },
+             {
+              "kind": "op",
+              "op": "golemRead"
+             }
+            ]
+           },
+           {
+            "label": "Keep everything after all.",
+            "text": "You close the bag.",
+            "effects": [
+             {
+              "kind": "op",
+              "op": "golemRead"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "id": "give",
+          "at": {
+           "button": "Give it the crystals.",
+           "phase": 3
+          },
+          "if": [
+           {
+            "key": "crystal-gentle",
+            "min": 0,
+            "max": 0
+           }
+          ],
+          "text": "You hold the crystals out.",
+          "options": [
+           {
+            "label": "Give it the crystals.",
+            "text": "You hold them out. It takes them, one at a time, very carefully, with something that isn't a hand. It sets them into itself. It folds back into the wall. The humming stops.",
+            "effects": [
+             {
+              "kind": "flag",
+              "key": "crystal-golem-given",
+              "n": 1
+             },
+             {
+              "kind": "end",
+              "outcome": "win"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "id": "give-gentle",
+          "at": {
+           "button": "Give it the crystals."
+          },
+          "if": [
+           {
+            "key": "crystal-gentle"
+           }
+          ],
+          "text": "You hold the crystals out.",
+          "options": [
+           {
+            "label": "Give it the crystals.",
+            "text": "You hold them out. It takes them, one at a time, very carefully, with something that isn't a hand. It sets them into itself. It folds back into the wall. The humming stops.",
+            "effects": [
+             {
+              "kind": "flag",
+              "key": "crystal-golem-given",
+              "n": 1
+             },
+             {
+              "kind": "end",
+              "outcome": "win"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
        "pseudo": true
       }
-     }
-    },
-    {
-     "label": "Give it the crystals.",
-     "success": {
-      "text": "You hold them out. It takes them, one at a time, very carefully, with something that isn't a hand.\n\nIt sets them into itself. It folds back into the wall. The humming stops.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "crystal-golem",
-        "n": 2
-       },
-       {
-        "kind": "flag",
-        "key": "crystal-golem-given",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-red",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-red",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-blue",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-blue",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-green",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-green",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-white",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-white",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-black",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-black",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-32-given"
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "crystal-gentle",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "gn-32-phase-3",
-   "name": "The Heart: Phase 3",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Exploration",
-    "Dungeon"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "gigalith",
-    "tint": "#6f8fb8",
-    "effect": "shake"
-   },
-   "intro": "The third time, it holds out something that isn't a hand.",
-   "choices": [
-    {
-     "label": "Fight.",
-     "success": {
-      "text": "It comes at you like a landslide that has decided to.",
-      "effects": [],
-      "battle": {
-       "kind": "wild",
-       "species": [
-        "gigalith"
-       ],
-       "types": [],
-       "levelBonus": 2,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "gn",
-         "op": "setFlag",
-         "key": "crystal-golem",
-         "n": 1
-        },
-        {
-         "kind": "flag",
-         "key": "crystal-golem-defeated",
-         "amount": 1
-        },
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-32-defeated"
-        }
-       ],
-       "exact": true,
-       "rule": {
-        "gn": "golem",
-        "noCatch": true,
-        "giant": true,
-        "foeStages": {
-         "atk": 1,
-         "spd": 1
-        }
-       },
-       "lose": [
-        {
-         "kind": "gn",
-         "op": "setFlag",
-         "key": "crystal-golem",
-         "n": 3
-        },
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-32-folded"
-        }
-       ],
-       "pseudo": true
-      }
-     }
-    },
-    {
-     "label": "Give it the crystals.",
-     "success": {
-      "text": "You hold them out. It takes them, one at a time, very carefully, with something that isn't a hand.\n\nIt sets them into itself. It folds back into the wall. The humming stops.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "crystal-golem",
-        "n": 2
-       },
-       {
-        "kind": "flag",
-        "key": "crystal-golem-given",
-        "amount": 1
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-red",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-red",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-blue",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-blue",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-green",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-green",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-white",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-white",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "crystal-black",
-        "min": 1,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "crystal-shard-black",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-32-given"
-       }
-      ]
      }
     }
    ]

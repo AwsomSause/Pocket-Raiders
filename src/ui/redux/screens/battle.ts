@@ -226,7 +226,9 @@ export function battleView(c: ReduxCtx, d: BattleModel): string {
     const tc = o.type ? TYPE_COLORS[cap(o.type)] : undefined;
     // A long move name beside its PP ("Struggle Bug  PP 20/20") steps down a size so the whole name fits the button.
     const long = o.sub ? o.label.length + o.sub.length : 0;
-    const fit = long > 22 ? 'font-size:12px;padding:0 8px;gap:4px;' : long > 17 ? 'font-size:14px;padding:0 10px;gap:6px;' : '';
+    // A whole sentence on a button (an answer in the middle of a fight: "Give it the crystals.") steps down too, so it is not cut short.
+    const words = o.sub ? 0 : o.label.length;
+    const fit = long > 22 || words > 21 ? 'font-size:12px;padding:0 8px;gap:4px;' : long > 17 || words > 15 ? 'font-size:14px;padding:0 10px;gap:6px;' : '';
     return `<div class="btn${k === on ? ' on' : ''}${tc ? ' mv' : ''}" style="${tc ? `--tc:${tc};` : ''}${o.off ? 'opacity:.5;' : ''}${many ? 'font-size:15px;' : ''}${fit}min-width:0;${st}"${act('pick', k)} data-over="over"${o.tip ? ` data-tip="${esc(o.tip)}"` : ''}><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">${esc(o.label)}</span>${o.sub ? `<small style="flex-shrink:0${fit ? ';font-size:11px' : ''}">${esc(o.sub)}</small>` : ''}</div>`;
   };
   const msg = esc(d.text).replace(/\n/g, '<br>');

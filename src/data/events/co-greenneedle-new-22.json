@@ -121,7 +121,7 @@
        },
        {
         "kind": "addEvent",
-        "eventId": "gn-new-22-call-1"
+        "eventId": "gn-new-22-fight"
        }
       ]
      }
@@ -173,228 +173,6 @@
    ]
   },
   {
-   "id": "gn-new-22-call-1",
-   "name": "The Alley Court: Call 1",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Story",
-    "Relationship"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "meowth",
-    "tint": "#8a7a6a",
-    "effect": "none"
-   },
-   "intro": "The Persian drops from the tank. The first call is yours: how does the Meowth open?",
-   "choices": [
-    {
-     "label": "\"Pounce!\"",
-     "success": {
-      "text": "The Meowth crouches, wiggles, and is ready.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "alley-call-1",
-        "n": 1
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-new-22-call-2"
-       }
-      ]
-     }
-    },
-    {
-     "label": "\"Dodge!\"",
-     "success": {
-      "text": "The Meowth goes light on its feet.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "alley-call-1",
-        "n": 2
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-new-22-call-2"
-       }
-      ]
-     }
-    },
-    {
-     "label": "\"Steady!\"",
-     "success": {
-      "text": "The Meowth breathes out, and sets its paws.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "alley-call-1",
-        "n": 3
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-new-22-call-2"
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-new-22-call-2",
-   "name": "The Alley Court: Call 2",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Story",
-    "Relationship"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "meowth",
-    "tint": "#8a7a6a",
-    "effect": "none"
-   },
-   "intro": "Halfway through, when both are breathing hard. The second call is yours.",
-   "choices": [
-    {
-     "label": "\"Pounce!\"",
-     "success": {
-      "text": "The Meowth crouches, wiggles, and is ready.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "alley-call-2",
-        "n": 1
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-new-22-call-3"
-       }
-      ]
-     }
-    },
-    {
-     "label": "\"Dodge!\"",
-     "success": {
-      "text": "The Meowth goes light on its feet.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "alley-call-2",
-        "n": 2
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-new-22-call-3"
-       }
-      ]
-     }
-    },
-    {
-     "label": "\"Steady!\"",
-     "success": {
-      "text": "The Meowth breathes out, and sets its paws.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "alley-call-2",
-        "n": 3
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-new-22-call-3"
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
-   "id": "gn-new-22-call-3",
-   "name": "The Alley Court: Call 3",
-   "group": "Greenneedle",
-   "tags": [
-    "Pokémon",
-    "Story",
-    "Relationship"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "meowth",
-    "tint": "#8a7a6a",
-    "effect": "none"
-   },
-   "intro": "When it is nearly over, and neither of them will give way. The third call is yours.",
-   "choices": [
-    {
-     "label": "\"Pounce!\"",
-     "success": {
-      "text": "The Meowth crouches, wiggles, and is ready.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "alley-call-3",
-        "n": 1
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-new-22-fight"
-       }
-      ]
-     }
-    },
-    {
-     "label": "\"Dodge!\"",
-     "success": {
-      "text": "The Meowth goes light on its feet.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "alley-call-3",
-        "n": 2
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-new-22-fight"
-       }
-      ]
-     }
-    },
-    {
-     "label": "\"Steady!\"",
-     "success": {
-      "text": "The Meowth breathes out, and sets its paws.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "alley-call-3",
-        "n": 3
-       },
-       {
-        "kind": "addEvent",
-        "eventId": "gn-new-22-fight"
-       }
-      ]
-     }
-    }
-   ]
-  },
-  {
    "id": "gn-new-22-fight",
    "name": "The Alley Court: The Challenge",
    "group": "Greenneedle",
@@ -410,7 +188,7 @@
     "tint": "#8a7a6a",
     "effect": "none"
    },
-   "intro": "*Thirty strays, not breathing. The Meowth on the stones, the Persian above it.*\n\nYou have called your three. Now the Meowth does the rest.",
+   "intro": "*Thirty strays, not breathing. The Meowth on the stones, the Persian above it.*\n\nThree calls are yours to make, during the fight. The Meowth does the rest.",
    "choices": [
     {
      "label": "Let them fight.",
@@ -430,7 +208,150 @@
        "rule": {
         "gn": "alley",
         "leadMark": "alley-meowth",
-        "noCatch": true
+        "noCatch": true,
+        "asks": [
+         {
+          "id": "call-1",
+          "at": {
+           "turn": 1
+          },
+          "text": "The Persian drops from the tank. The first call is yours: how does the Meowth open?",
+          "prompt": "The first call is yours.",
+          "options": [
+           {
+            "label": "\"Pounce!\"",
+            "text": "**You:** \"Pounce!\" The Meowth crouches, wiggles, and is ready.",
+            "effects": [
+             {
+              "kind": "stages",
+              "side": "you",
+              "stages": {
+               "atk": 1
+              }
+             }
+            ]
+           },
+           {
+            "label": "\"Dodge!\"",
+            "text": "**You:** \"Dodge!\" The Meowth goes light on its feet.",
+            "effects": [
+             {
+              "kind": "stages",
+              "side": "you",
+              "stages": {
+               "spe": 1
+              }
+             }
+            ]
+           },
+           {
+            "label": "\"Steady!\"",
+            "text": "**You:** \"Steady!\" The Meowth breathes out, and sets its paws.",
+            "effects": [
+             {
+              "kind": "heal",
+              "side": "you",
+              "share": 0.25
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "id": "call-2",
+          "at": {
+           "turn": 3
+          },
+          "text": "Halfway through, when both are breathing hard. The second call is yours.",
+          "prompt": "The second call is yours.",
+          "options": [
+           {
+            "label": "\"Pounce!\"",
+            "text": "**You:** \"Pounce!\" The Meowth crouches, wiggles, and is ready.",
+            "effects": [
+             {
+              "kind": "stages",
+              "side": "you",
+              "stages": {
+               "atk": 1
+              }
+             }
+            ]
+           },
+           {
+            "label": "\"Dodge!\"",
+            "text": "**You:** \"Dodge!\" The Meowth goes light on its feet.",
+            "effects": [
+             {
+              "kind": "stages",
+              "side": "you",
+              "stages": {
+               "spe": 1
+              }
+             }
+            ]
+           },
+           {
+            "label": "\"Steady!\"",
+            "text": "**You:** \"Steady!\" The Meowth breathes out, and sets its paws.",
+            "effects": [
+             {
+              "kind": "heal",
+              "side": "you",
+              "share": 0.25
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "id": "call-3",
+          "at": {
+           "turn": 5
+          },
+          "text": "When it is nearly over, and neither of them will give way. The third call is yours.",
+          "prompt": "The third call is yours.",
+          "options": [
+           {
+            "label": "\"Pounce!\"",
+            "text": "**You:** \"Pounce!\" The Meowth crouches, wiggles, and is ready.",
+            "effects": [
+             {
+              "kind": "stages",
+              "side": "you",
+              "stages": {
+               "atk": 1
+              }
+             }
+            ]
+           },
+           {
+            "label": "\"Dodge!\"",
+            "text": "**You:** \"Dodge!\" The Meowth goes light on its feet.",
+            "effects": [
+             {
+              "kind": "stages",
+              "side": "you",
+              "stages": {
+               "spe": 1
+              }
+             }
+            ]
+           },
+           {
+            "label": "\"Steady!\"",
+            "text": "**You:** \"Steady!\" The Meowth breathes out, and sets its paws.",
+            "effects": [
+             {
+              "kind": "heal",
+              "side": "you",
+              "share": 0.25
+             }
+            ]
+           }
+          ]
+         }
+        ]
        },
        "team": [
         "persian"

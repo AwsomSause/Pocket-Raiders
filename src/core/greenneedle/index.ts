@@ -50,7 +50,6 @@ import { applianceRepair } from './appliance';
 import { nsClear, nsPost, nsRaid } from './nightshift';
 import { foxSilence } from './fox';
 import { bidoofJoin, bidoofStart } from './bidoof';
-import { alleyStart } from './alley';
 import { leftFates, leftFreeze, leftHas, leftTake, leftTokens } from './left';
 import { isLastStage, ltArrive, ltDawn, ltPage, ltSit, ltTokens } from './longtable';
 import { impClaim, impJoin, impersonatorStart, impTokens } from './impersonator';
@@ -1199,7 +1198,6 @@ export function gnBattleStart(content: Content, run: RunState): void {
   // gn.55: the Angry Bidoof, tripled.
   if (rule === 'bidoof') bidoofStart(content, run, battle);
   // gn.new.22: the Alley Court's challenge, with the player's three calls.
-  if (rule === 'alley') alleyStart(run, battle);
   // gn.57: the Impersonator's Illusion opens as the player's lead.
   if (rule === 'impersonator') impersonatorStart(run, battle);
   // gn.new.06: the Duelist, and the chosen one's Worthy Opponent.

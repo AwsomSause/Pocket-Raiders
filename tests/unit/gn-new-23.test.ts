@@ -1,6 +1,8 @@
 // Greenneedle gn.new.23: The Appliance Shop (tools/events/co/greenneedle-new-23.ts; rules in src/core/greenneedle/appliance.ts).
 import { describe, expect, it } from 'vitest';
-import type { RunState } from '../../src/core/state';
+import { RunStateSchema, type RunState } from '../../src/core/state';
+import { askDue } from '../../src/core/greenneedle/ask';
+import { takeTurn } from '../../src/core/run';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
 import { createPokemon } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
@@ -72,40 +74,77 @@ describe('gn.new.23 The Appliance Shop', () => {
     expect(rotom.fixedAbility).toBe('house-call');
     expect(rotom.moves.some((m) => m.id === 'house-call')).toBe(false);
   });
-  it('House Call: once a battle, on entry, a plain Rotom takes the form that hits the foe hardest, and keeps it when it is withdrawn', () => {
-    const mk = (foeId: string, seed: string) => {
+  it('House Call on a foe (nobody to ask): once a battle, on entry, a plain Rotom takes the form that hits hardest', () => {
+    const mk = (mineId: string, seed: string, ability = true) => {
       const rotom = createPokemon(content, 'rotom', 40, 'r1');
-      rotom.fixedAbility = 'house-call';
-      const ally = createPokemon(content, 'snorlax', 40, 'a1');
-      const foe = createPokemon(content, foeId, 40, 'e1');
-      foe.moves = [{ id: 'splash', pp: 40 }];
-      const battle = createBattle('wild', [foe], 0, rotom.uid);
-      const ctx: BattleContext = { content, battle, party: [rotom, ally], inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}-c`)), catchMultiplier: 1 };
-      return { rotom, ctx, battle };
+      if (ability) rotom.fixedAbility = 'house-call';
+      rotom.moves = [{ id: 'splash', pp: 40 }];
+      const mine = createPokemon(content, mineId, 40, 'p1');
+      mine.moves = [{ id: 'splash', pp: 40 }];
+      const battle = createBattle('wild', [rotom], 0, mine.uid);
+      const ctx: BattleContext = { content, battle, party: [mine], inventory: {}, rng: new Rng(hashSeed(seed)), captureRng: new Rng(hashSeed(`${seed}-c`)), catchMultiplier: 1 };
+      resolveTurn(ctx, { kind: 'move', index: 0 });
+      return { rotom, battle };
     };
     // Scizor (Bug/Steel): fire hits it four times as hard, so it is the oven.
     const a = mk('scizor', 'hc-a');
-    resolveTurn(a.ctx, { kind: 'move', index: 0 });
     expect(a.rotom.speciesId).toBe('rotom-heat');
     expect(a.battle.storyEffects).toContain('house-call:r1');
-    // "stays that form until it faints": withdrawn and sent back, it is still the oven
-    resolveTurn(a.ctx, { kind: 'switch', partyIndex: 1 });
-    expect(a.rotom.speciesId).toBe('rotom-heat');
-    resolveTurn(a.ctx, { kind: 'switch', partyIndex: 0 });
-    expect(a.rotom.speciesId).toBe('rotom-heat');
-    // Garchomp (Dragon/Ground): water and grass hit it twice as hard, ice four times: the fridge.
-    const b = mk('garchomp', 'hc-b');
-    resolveTurn(b.ctx, { kind: 'move', index: 0 });
-    expect(b.rotom.speciesId).toBe('rotom-frost');
+    // Garchomp (Dragon/Ground): ice four times: the fridge.
+    expect(mk('garchomp', 'hc-b').rotom.speciesId).toBe('rotom-frost');
     // Nothing an appliance does hits a Kingdra (Water/Dragon) hard: it stays plain.
-    const c = mk('kingdra', 'hc-c');
-    resolveTurn(c.ctx, { kind: 'move', index: 0 });
-    expect(c.rotom.speciesId).toBe('rotom');
+    expect(mk('kingdra', 'hc-c').rotom.speciesId).toBe('rotom');
     // A Rotom without the ability never changes.
-    const d = mk('scizor', 'hc-d');
-    d.rotom.fixedAbility = undefined;
-    resolveTurn(d.ctx, { kind: 'move', index: 0 });
-    expect(d.rotom.speciesId).toBe('rotom');
+    expect(mk('scizor', 'hc-d', false).rotom.speciesId).toBe('rotom');
+  });
+
+  it('House Call on your own Rotom: the battle asks which form, on entry, once a battle; it stays that form when withdrawn', () => {
+    const start = (seed: string): RunState => {
+      const run = gnRun(seed);
+      const rotom = createPokemon(content, 'rotom', run.party[0]!.level, 'r1');
+      rotom.fixedAbility = 'house-call';
+      run.party = [rotom, createPokemon(content, 'snorlax', rotom.level, 'a1')];
+      open(run, 'gn-32-phase-1');
+      const r = choose(run, 'gn-32-phase-1', 'Fight.').run;
+      r.battle!.enemyTeam[0]!.moves = [{ id: 'splash', pp: 40 }];
+      return r;
+    };
+    const say = (r: RunState, label: string): RunState => {
+      const ask = askDue(content, r)!;
+      return takeTurn(content, r, { kind: 'answer', ask: ask.id, option: ask.options.find((o) => o.label === label)!.index }).run;
+    };
+    let run = start('hc-ask');
+    // asked before the first command; two pages of answers (a question holds four)
+    expect(askDue(content, run)!.options.map((o) => o.label)).toEqual(['The oven.', 'The washing machine.', 'The fridge.', 'Another.']);
+    run = say(run, 'Another.');
+    // saved with the battle: a reload in the middle of the question asks the same page again
+    run = RunStateSchema.parse(JSON.parse(JSON.stringify(run)));
+    expect(askDue(content, run)!.options.map((o) => o.label)).toEqual(['The fan.', 'The mower.', 'Stay as it is.', 'Back.']);
+    run = say(run, 'Back.');
+    const rng = structuredClone(run.rng);
+    run = say(run, 'The washing machine.');
+    // the player's pick, whatever the foe is; no turn used, nothing rolled
+    expect(run.party[0]!.speciesId).toBe('rotom-wash');
+    expect(run.battle!.turn).toBe(1);
+    expect(run.rng).toEqual(rng);
+    expect(run.battle!.storyEffects).toContain('house-call:r1');
+    expect(askDue(content, run)).toBeNull();
+    expect(() => takeTurn(content, run, { kind: 'answer', ask: 'house-call', option: 0 })).toThrow();
+    // "stays that form until it faints": withdrawn and sent back, it is still the washing machine, and is not asked again
+    run = takeTurn(content, run, { kind: 'switch', partyIndex: 1 }).run;
+    run = takeTurn(content, run, { kind: 'switch', partyIndex: 0 }).run;
+    expect(run.party[0]!.speciesId).toBe('rotom-wash');
+    expect(askDue(content, run)).toBeNull();
+    // "it may": staying plain is an answer too, and it is the one change this battle
+    let plain = say(say(start('hc-plain'), 'Another.'), 'Stay as it is.');
+    expect(plain.party[0]!.speciesId).toBe('rotom');
+    expect(askDue(content, plain)).toBeNull();
+    plain = takeTurn(content, plain, { kind: 'move', index: 0 }).run;
+    expect(plain.party[0]!.speciesId).toBe('rotom');
+    // a Rotom without the ability, or one already in a form, is never asked
+    const none = start('hc-none');
+    none.party[0]!.fixedAbility = undefined;
+    expect(askDue(content, none)).toBeNull();
   });
   it('the shop is once per run and does not come back once done', () => {
     let run = afterErrands('appl-once', 1);

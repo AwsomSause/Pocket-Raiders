@@ -112,6 +112,32 @@ export function golemStart(run: RunState, battle: BattleState): void {
   if (colour === 'red') golem.fixedAbility = 'flame-body';
 }
 
+/** What the Golem shows when it reads the bag. */
+const GOLEM_READ: Record<Colour | 'none', string> = {
+  red: '*Red light runs through it like heat through iron. It is Rock and Fire now.*',
+  blue: '*Blue light pools in its joints. It is Rock and Water now, and the water keeps changing its mind.*',
+  green: '*Green light, and moss, and something growing. It is Rock and Grass now. Cracks close as you watch.*',
+  white: '*White light, everywhere at once. It is Rock and Fairy now. It sees exactly where you are.*',
+  black: "*It goes dark. Rock and Dark. Your Pokémon don't want to go near it.*",
+  none: '*Nothing in your bag wins. It stays plain grey rock, and seems almost disappointed.*',
+};
+
+/** A new phase of the one fight: the Golem reads the bag again and takes the type of the colour carried most now. Returns the line. */
+export function golemRead(run: RunState, battle: BattleState): string {
+  const most = mostCarried(run);
+  setFlag(run, 'crystal-most', most);
+  const colour = COLOURS[most - 1];
+  const golem = battle.enemyTeam[0];
+  battle.storyEffects = battle.storyEffects.filter((t) => !t.startsWith('golem:'));
+  battle.storyEffects.push(`golem:${colour ?? 'none'}`);
+  battle.enemyVolatile.typeList = colour ? ['rock', GOLEM_TYPE[colour]] : ['rock'];
+  if (golem) {
+    if (colour === 'red') golem.fixedAbility = 'flame-body';
+    else if (golem.fixedAbility === 'flame-body') delete golem.fixedAbility;
+  }
+  return GOLEM_READ[colour ?? 'none'];
+}
+
 /** The colour the Golem took this phase, or null. */
 export function golemColour(battle: Pick<BattleState, 'storyEffects'>): Colour | null {
   const tag = battle.storyEffects.find((t) => t.startsWith('golem:'))?.slice('golem:'.length);

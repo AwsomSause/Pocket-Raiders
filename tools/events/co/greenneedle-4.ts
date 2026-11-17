@@ -177,6 +177,17 @@ const plant = (o: Json = {}): Json => ({ tint: FACTORY_TINT, tags: ['Combat', 'P
 const FACTORY_POOL = ['grimer', 'grimer-alola', 'grimer-delta', 'koffing', 'trubbish', 'stunky', 'gulpin'];
 /** Every wild battle here has Sludge on the field: Poison moves +10% for everyone. */
 const SLUDGE: Json = { typeBoost: { type: 'poison', pct: 10 } };
+/** In the pit fight itself, on each of the first two turns: pull, or fight (not asked when the Trubbish has already decided: `factory-pulls` 6). */
+const pitAsk = (n: number): Json => ({
+  id: `pull-${n}`, at: { turn: n }, if: [{ key: 'factory-pulls', min: 0, max: 0 }],
+  text: n === 1 ? 'In the pits, stuck fast, six Pokémon that couldn\'t get out. Each of yours can pull one free this turn, instead of fighting.' : 'Some are still stuck. One of them is still trying. Pull again, or fight?',
+  prompt: 'Pull them out, or fight?',
+  options: [
+    { label: 'Pull them out.', text: 'The muck lets go with a sound like a boot in mud. The Grimer don\'t wait.', effects: [{ kind: 'op', op: 'pitsPull' }] },
+    { label: 'Fight the Grimer.', text: 'Behind the Grimer, in the pits, something stops trying.' },
+  ],
+});
+const PIT_ASKS: Json[] = [pitAsk(1), pitAsk(2)];
 const MARK = 'factory-in';
 /** A lost raid: the factory locks down. Wild Pokémon caught inside are lost; the party you came in with is safe. */
 const LOCKDOWN: Json[] = [
@@ -204,12 +215,57 @@ const FLOAT_GATE = say(
   'He looks at it a long time. Then he unlocks the gate himself.',
   '**Mr. Scrimshaw:** "Control room valves. Ignore the labels. Black stain first, then green, then yellow. Don\'t tell them I told you."',
 );
-/** A raid phase: the Magmuk, uncatchable, at A+2. */
-const magmuk = (rule: string, win: Json[]): Json => inside({ ...wild({ species: ['muk-delta-fire'], lv: 2, win }), rule: { gn: rule, noCatch: true }, lose: LOCKDOWN });
-/** Once in the raid, the Muk that was helped takes the first attack of the phase the player picks. */
-const MUK_IN_FRONT = (text: string, battle: Json): Json =>
-  chIf([is('factory-muk-helped'), not('factory-muk-used')], 'Send the Muk in front.', fight(text, battle, setTo('factory-muk-now', 1), flag('factory-muk-used')));
 const WON = (text: string, ...more: Json[]): Json[] => [flag('kanto-factory-cleared'), item('black-sludge'), moment(text, 75), ...more, when('factory-shutdown', { min: 0, max: 0 }, [flag('factory-left-running')]), scene('gn-17-pick')];
+/** "If the Muk was helped, it flows in front of the party at the start of one phase (the player picks which) and takes that phase's first attack." */
+const mukAsk = (n: number, at: Json): Json => ({
+  id: `muk-${n}`, at, if: [{ key: 'factory-muk-helped' }, { key: 'factory-muk-used', min: 0, max: 0 }],
+  text: 'Your Muk is at your side. It could flow in front of the party now, and take this phase\'s first attack.',
+  prompt: 'Send your Muk in front for this phase?',
+  options: [
+    { label: 'Send the Muk in front.', text: 'Your Muk flows out in front of everyone, without being asked twice.', effects: [{ kind: 'flag', key: 'factory-muk-used', n: 1 }, { kind: 'foeWaits', line: 'Your Muk flows in front of the party and takes the first blow. It doesn\'t make a sound.' }] },
+    { label: 'Not yet.' },
+  ],
+});
+const STOP_ANSWER: Json = {
+  label: 'Stop attacking.', text: 'You call your team back. It stays in the corner.',
+  effects: [
+    { kind: 'flag', key: 'factory-stopped', n: 1 },
+    { kind: 'foeWaits', line: 'It doesn\'t come out of the corner.' }, { kind: 'foeWaits', line: 'It keeps looking at the pipe.' },
+    { kind: 'pass', turns: 2, lines: ['One turn.', 'Two. Then it slides into the pipe it came out of, and is gone.'], outcome: 'win' },
+  ],
+};
+/** The raid's questions: the Muk at the start of each phase; the third phase's choice; and the new button, "Stop attacking." */
+const RAID_ASKS: Json[] = [
+  mukAsk(1, { turn: 1 }), mukAsk(2, { phase: 2 }), mukAsk(3, { phase: 3 }),
+  {
+    id: 'core', at: { phase: 3 }, text: '*It\'s pressed against the furnace door. It keeps looking at the pipe it came out of.*', prompt: 'It keeps looking at the pipe it came out of.',
+    options: [
+      { label: 'Finish it.', text: 'It only has weak moves left. It uses them anyway.' },
+      STOP_ANSWER,
+      { label: 'Let the Muk go to it.', if: [{ key: 'factory-muk-helped' }], text: 'Your Muk slides over. It puts an arm round it. The small one stops shaking. They go into the pipe together. Neither looks back.', effects: [{ kind: 'flag', key: 'factory-magmuk-calmed', n: 1 }, { kind: 'end', outcome: 'win' }] },
+    ],
+  },
+  { id: 'stop', at: { button: 'Stop attacking.', phase: 3 }, text: 'It stays in the corner.', options: [STOP_ANSWER] },
+];
+/** The raid: ONE fight with the Magmuk (uncatchable, A+2) in three phases: Sludge, Furnace (from two thirds of its HP), Core (from one third). */
+const RAID: Json = inside({
+  ...wild({ species: ['muk-delta-fire'], lv: 2, win: [
+    when('factory-magmuk-calmed', { min: 1 }, [kindness(2), ...WON('The Muk you freed took the Magmuk home.')]),
+    when('factory-magmuk-calmed', { min: 0, max: 0 }, [
+      when('factory-stopped', { min: 1 }, WON('You stopped attacking, and the Magmuk went home down its pipe.')),
+      when('factory-stopped', { min: 0, max: 0 }, WON('You finished the Magmuk in the Polluted Factory.')),
+    ]),
+  ] }),
+  lose: LOCKDOWN,
+  rule: {
+    gn: 'sludge', noCatch: true,
+    phases: [
+      { at: 0.66, gn: 'furnace', line: 'It\'s burning now, and so is the floor. Anything that isn\'t a Fire-type may catch a burn each turn. Water moves go up as steam: half damage. But they clear the Molten Sludge.' },
+      { at: 0.33, gn: 'core', moves: ['ember', 'mud-slap', 'acid'], line: 'It\'s small now. Small, fast and frightened. The size of a Grimer, backing into a corner.' },
+    ],
+    asks: RAID_ASKS,
+  },
+});
 /** After the pick: the research, if it was taken, then out. */
 const PICKED = (n: number): Json[] => [setTo('kanto-factory-pick', n), when('factory-research', { min: 1 }, [scene('gn-17-research')]), when('factory-research', { min: 0, max: 0 }, [leavePseudo()])];
 /** A valve: the right one (by the stain) closes; a wrong one bangs, sprays and opens the others again. */
@@ -252,7 +308,7 @@ const gn17: Json[] = [
       // The Trubbish Nobody Wanted (SF69), caught or kept: it won't leave the sludge pits until every one's out.
       id: 'trubbish', when: [is('trubbish-kept')],
       notice: 'Your Trubbish is over the rail before you have decided anything. It is in the pit, up to its middle, pulling. It won\'t leave the sludge pits until every one\'s out. It knows what it is to be left.',
-      hide: [0, 1, 2],
+      hide: [0],
       addChoices: [ch('Pull them out.', fight(
         'Your team wades in after the Trubbish. The Grimer don\'t wait. Six pulls, with the horde at your back: a Pokémon that is pulling is not fighting.',
         HORDE(true), setTo('factory-pulls', 6),
@@ -263,9 +319,7 @@ const gn17: Json[] = [
     'And in the pits, stuck fast, six Pokémon that wandered in and couldn\'t get out. One of them is still trying.',
     'Each of yours can pull one free in a turn, instead of fighting. Six stuck: two turns to get them all, with the Grimer horde still attacking.',
   ), [
-    ch('Pull them all out.', fight('Your team wades in and pulls. The muck lets go with a sound like a boot in mud. The Grimer don\'t wait.', HORDE(true), setTo('factory-pulls', 6))),
-    ch('Pull out three, then fight.', fight('One turn of pulling, with the Grimer coming on. Then you turn and face them.', HORDE(true), setTo('factory-pulls', 3))),
-    ch('Fight the Grimer; leave the pits.', fight('The three Grimer come on together, slow and sure. Behind them, in the pits, something stops trying.', HORDE(false), setTo('factory-pulls', 0))),
+    ch('Wade in.', fight('The three Grimer come on together, slow and sure. The muck is up to your knees.', HORDE(true), setTo('factory-pulls', 0))),
   ]),
   rm('gn-17-muk', 'The Polluted Factory: The Muk in the Wall', plant({ pokemon: 'muk' }), say(
     'A Muk is pressed against a split in the pipe wall, holding a leak shut with its own body.',
@@ -324,29 +378,7 @@ const gn17: Json[] = [
     'Wherever it touches, the floor glows. It lays Molten Sludge on its first turn.',
     'Spread moves split it. Each one makes a small one that has to be beaten too. Hit it once at a time.',
   ), [
-    ch('Fight.', fight('It rears up. The heat comes off it in waves.', magmuk('sludge', [scene('gn-17-raid2')]))),
-    MUK_IN_FRONT('Your Muk flows out in front of everyone, without being asked.', magmuk('sludge', [scene('gn-17-raid2')])),
-  ]),
-  rm('gn-17-raid2', 'The Polluted Factory: The Furnace Burns', plant({ pokemon: 'muk', effect: 'fire' }), say(
-    'It\'s burning now, and so is the floor. Anything that isn\'t a Fire-type may catch a burn each turn.',
-    'Water moves go up as steam: half damage. But they clear the Molten Sludge.',
-  ), [
-    ch('Fight.', fight('The floor glows under your feet.', magmuk('furnace', [scene('gn-17-core')]))),
-    MUK_IN_FRONT('Your Muk flows out in front, its edges hissing on the floor.', magmuk('furnace', [scene('gn-17-core')])),
-  ]),
-  rm('gn-17-core', 'The Polluted Factory: The Core', plant({ pokemon: 'grimer' }), say(
-    'It\'s small now. Small, fast and frightened. The size of a Grimer, backing into a corner.',
-    '*It\'s pressed against the furnace door. It keeps looking at the pipe it came out of.*',
-  ), [
-    ch('Finish it.', fight('It only has weak moves left. It uses them anyway.', magmuk('core', WON('You finished the Magmuk in the Polluted Factory.')))),
-    ch('Stop attacking.', out(say(
-      'You call your team back. It stays in the corner. One turn. Two.',
-      'Then it slides into the pipe it came out of, and is gone.',
-    ), ...WON('You stopped attacking, and the Magmuk went home down its pipe.'))),
-    chIf([is('factory-muk-helped')], 'Let the Muk go to it.', out(say(
-      'Your Muk slides over. It puts an arm round it.',
-      'The small one stops shaking. They go into the pipe together. Neither looks back.',
-    ), flag('factory-magmuk-calmed'), kindness(2), ...WON('The Muk you freed took the Magmuk home.'))),
+    ch('Fight.', fight('It rears up. The heat comes off it in waves.', RAID)),
   ]),
   rm('gn-17-pick', 'The Polluted Factory: After', plant({ pokemon: 'grimer' }), say(
     'The furnace ticks as it cools. On the floor, a lump of Black Sludge, still warm.',
@@ -377,7 +409,7 @@ function PIPE_FIGHT(win: Json[]): Json {
   return inside(eitherWay({ ...wild({ types: ['poison'], species: FACTORY_POOL, lv: 1, win }), rule: { gn: 'pipes', ...SLUDGE } }));
 }
 function HORDE(pull: boolean): Json {
-  return inside(eitherWay({ ...wild({ format: 'triples', species: ['grimer'], lv: 1, win: [scene('gn-17-muk')] }), rule: pull ? { gn: 'pits', ...SLUDGE } : SLUDGE }));
+  return inside(eitherWay({ ...wild({ format: 'triples', species: ['grimer'], lv: 1, win: [scene('gn-17-muk')] }), rule: pull ? { gn: 'pits', ...SLUDGE, asks: PIT_ASKS } : SLUDGE }));
 }
 const FLOAT_IN: Json = FLOAT_IN_DOOR();
 // In Kanto the canon door is the factory's door: with the stamped float from the Kaiju, the foreman recognises it there too.
