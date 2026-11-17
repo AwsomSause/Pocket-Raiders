@@ -3,13 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pocket Raiders: 100,000 run survey</title>
+<title>Pocket Raiders Run Survey</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <style>
 :root{--page:#f9f9f7;--surf:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--mute:#898781;--grid:#e1e0d9;--axis:#c3c2b7;--s1:#2a78d6;--s1soft:#cde2fb;--s2:#eb6834;--good:#0ca30c;--warn:#fab219;--crit:#d03b3b;--chip:#efeee9}
-@media (prefers-color-scheme:dark){:root{--page:#0d0d0d;--surf:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--mute:#898781;--grid:#2c2c2a;--axis:#383835;--s1:#3987e5;--s1soft:#184f95;--s2:#d95926;--chip:#262624}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0d0d0d;--surf:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--mute:#898781;--grid:#2c2c2a;--axis:#383835;--s1:#3987e5;--s1soft:#184f95;--s2:#d95926;--chip:#262624;color-scheme:dark}}
+:root[data-theme="dark"]{--page:#0d0d0d;--surf:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--mute:#898781;--grid:#2c2c2a;--axis:#383835;--s1:#3987e5;--s1soft:#184f95;--s2:#d95926;--chip:#262624;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{position:sticky;top:0;z-index:5;background:var(--surf);border-bottom:1px solid var(--grid);padding:10px 16px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surf);border-bottom:1px solid var(--grid);padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surf)}
+#ftog{display:none;margin-top:6px}
 h1{font-size:18px;margin:0 0 2px}
 .sub{color:var(--ink2);font-size:12px}
 .filters{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;align-items:center}
@@ -19,12 +23,16 @@ h1{font-size:18px;margin:0 0 2px}
 .chip.on{background:var(--s1);border-color:var(--s1);color:#fff}
 select,input[type=search]{background:var(--surf);color:var(--ink);border:1px solid var(--axis);border-radius:6px;padding:3px 6px;font:inherit;font-size:12px}
 .layout{display:grid;grid-template-columns:190px minmax(0,1fr);min-height:80vh}
-nav{border-right:1px solid var(--grid);padding:10px 8px;position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto}
+nav{border-right:1px solid var(--grid);padding:10px 8px;position:sticky;top:env(safe-area-inset-top,0px);align-self:start;max-height:100vh;overflow:auto}
 nav a{display:block;padding:5px 9px;border-radius:6px;color:var(--ink2);text-decoration:none;cursor:pointer;font-size:13px}
 nav a.on{background:var(--s1);color:#fff}
-main{padding:14px 16px 60px;min-width:0}
-@media (max-width:760px){.layout{grid-template-columns:1fr}nav{position:static;display:flex;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--grid);max-height:none}}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:12px}
+main{padding-block:14px 60px;padding-left:16px;padding-right:max(16px,env(safe-area-inset-right,0px));min-width:0}
+@media (max-width:760px){.layout{grid-template-columns:minmax(0,1fr)}header{position:static}#ftog{display:inline-block}header:not(.open) .filters{display:none}
+nav{z-index:5;background:var(--surf);display:flex;flex-wrap:nowrap;gap:4px;overflow-x:auto;border-right:0;border-bottom:1px solid var(--grid);max-height:none;padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));scrollbar-width:none}
+nav a{white-space:nowrap;flex:none;padding:7px 12px;background:var(--chip);border-radius:999px}
+main{padding-left:max(16px,env(safe-area-inset-left,0px))}.chip{padding:5px 11px}select{padding:6px 8px;max-width:100%}button{padding:6px 12px}
+th:first-child,td:first-child{max-width:190px;position:sticky;left:0;background:var(--surf);z-index:1}th:first-child{z-index:2}th,td{padding:5px 8px}}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(430px,100%),1fr));gap:12px}
 @media (max-width:520px){.cards{grid-template-columns:1fr}}
 .card{background:var(--surf);border:1px solid var(--grid);border-radius:10px;padding:12px;min-width:0}
 .card.wide{grid-column:1/-1}
@@ -64,6 +72,7 @@ p.lead{max-width:860px;color:var(--ink2)}
 <header>
   <h1>Pocket Raiders: run survey</h1>
   <div class="sub" id="sub"></div>
+  <button id="ftog" type="button">Filters</button>
   <div class="filters" id="filters"></div>
 </header>
 <div class="layout"><nav id="nav"></nav><main id="main"></main></div>
@@ -80,6 +89,8 @@ const pct = (a, b, d = 1) => (b ? fmt((100 * a) / b, d) + '%' : '');
 const pretty = (id) => String(id).replace(/^item:/, '');
 const nameOf = (kind, id) => { const raw = pretty(id); const n = kind && names[kind] && (names[kind][id] || names[kind][raw]); return n && n !== raw ? `${n}` : raw; };
 const tip = $('#tip');
+$('#ftog').addEventListener('click', () => document.querySelector('header').classList.toggle('open'));
+document.addEventListener('click', (e) => { if (!matchMedia('(hover:none)').matches) return; const t = e.target.closest && e.target.closest('[data-tip]'); if (!t || t.classList.contains('chip')) { tip.style.display = 'none'; return; } tip.textContent = t.getAttribute('data-tip'); tip.style.display = 'block'; tip.style.left = Math.max(8, Math.min(window.innerWidth - 330, e.clientX + 12)) + 'px'; tip.style.top = e.clientY + 14 + 'px'; });
 document.addEventListener('mousemove', (e) => { const t = e.target.closest && e.target.closest('[data-tip]'); if (!t) { tip.style.display = 'none'; return; } tip.textContent = t.getAttribute('data-tip'); tip.style.display = 'block'; tip.style.left = Math.min(window.innerWidth - 330, e.clientX + 12) + 'px'; tip.style.top = e.clientY + 14 + 'px'; });
 
 /* ---------- filters ---------- */
@@ -357,7 +368,7 @@ const PAGES = {
     h('p', {}, 'Mix of runs: Classic standard 40%, Veteran 6%, Champion 5%, Nightmare 4%, Story Run 15% (random backstory), and 2% for each other mode. Half use one of the five player trainers (Red, Blue, Green, Hilda, Nate) and half a random one of all 287. The starter is a random one of the three offered.'),
     h('p', {}, 'Settings: 85% of runs use the default settings (Blessings, Ultra Beasts, Mythical Promises, Node Menus, Kanto canon, Grand Arc, World Tracks, Whole-Run Events, Heated Moments on). 15% also switch on the Finale, Region of Doom, Story Traits, Labyrinth resume, full event density and the Extended Cut.'),
     h('p', {}, 'Help: about 70% of runs get no help, about 30% get a free full heal every time they are on the map, and about 0.3% cannot lose (healed mid-battle) so the late game shows up at all. Bot skill is half "smart" and half "strong" (better catching, reviving and team building). Curiosity is how often it takes optional stops: never, half, or always.'),
-    h('p', {}, 'Bot habits (changed on 2026-11-16 at Kice's request, and the count was restarted so every run uses them): it throws up to four balls at a wild Pokémon once it is at half HP or lower (straight away if it is a new species and clearly weaker), buys balls first in shops and goes to a shop when it is low on balls, never keeps two of the same species on the team, swaps a new type into a full team in place of a covered one, and spreads reward picks (no repeats, fossils marked down, balls marked up). Limits: the bot cannot play minigames, expeditions, the plaza or services, never rewinds, and plays the first open choice on required events. It is a weak player, so win rates are far below what a person gets.'))],
+    h('p', {}, 'Bot habits (changed on 2026-11-16 at Kice’s request, and the count was restarted so every run uses them): it throws up to four balls at a wild Pokémon once it is at half HP or lower (straight away if it is a new species and clearly weaker), buys balls first in shops and goes to a shop when it is low on balls, never keeps two of the same species on the team, swaps a new type into a full team in place of a covered one, and spreads reward picks (no repeats, fossils marked down, balls marked up). Limits: the bot cannot play minigames, expeditions, the plaza or services, never rewinds, and plays the first open choice on required events. It is a weak player, so win rates are far below what a person gets.'))],
 };
 const cards = (...specs) => [h('div', { class: 'cards' }, specs.map((s) => { if (s.title && tables && s.rows) { const c = tableCard(s); return c; } return s; }))];
 
@@ -365,7 +376,7 @@ let page = 'Overview';
 function refresh(filtersChanged) {
   if (filtersChanged) { recompute(); buildFilters(); }
   $('#sub').textContent = `${fmt(runsInFilter)} of ${fmt(meta.runs)} runs match the Mode and Help filters${rowCount !== runsInFilter ? ` (${fmt(rowCount)} after the per-run filters)` : ''}. ${meta.runs < meta.target ? `Early version: ${fmt(meta.runs)} of ${fmt(meta.target)} runs so far.` : ''}`;
-  const nav = $('#nav'); nav.textContent = ''; for (const p of Object.keys(PAGES)) nav.append(h('a', { class: p === page ? 'on' : '', onclick: () => { page = p; refresh(); window.scrollTo(0, 0); } }, p));
+  const nav = $('#nav'); nav.textContent = ''; for (const p of Object.keys(PAGES)) nav.append(h('a', { class: p === page ? 'on' : '', onclick: () => { page = p; refresh(); window.scrollTo(0, 0); } }, p)); const on = nav.querySelector('.on'); if (on && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = on.offsetLeft - 40;
   const main = $('#main'); main.textContent = ''; main.append(h('h2', { style: 'margin:0 0 8px;font-size:17px' }, page), ...PAGES[page]().flat());
 }
 recompute(); buildFilters(); refresh();
