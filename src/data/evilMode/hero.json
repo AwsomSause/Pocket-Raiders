@@ -25,7 +25,7 @@
     { "id": "prodigy", "word": "Prodigy", "steps": [2], "afterLoss": 0, "how": "Two a day, by the book." },
     { "id": "underdog", "word": "Underdog", "steps": [1], "afterLoss": 0, "how": "One a day. Two, from Badge 4." }
   ],
-  "loud": { "scout": 0, "persuade": 0, "pay": 1, "payUnder": 2, "outplay": 2 },
+  "loud": { "scout": 0, "persuade": 0, "pay": 1, "payUnder": 2, "outplay": 2, "lean": 3, "take": 3, "expose": 1 },
   "reasons": [
     { "n": 1, "team": "Took a local's Pokémon", "says": "They took Mr Onuoha's Growlithe. He's had it since before I was born.", "kind": "find", "trigger": "take", "status": "disabled", "waits": "Take, slice 6" },
     { "n": 2, "team": "Leaned on the Hero's street", "says": "My mum won't say what happened in the shop. She's started locking the door.", "kind": "stop", "trigger": "homeStreet", "status": "limited", "waits": "Until Lean (slice 6), any loud job on the Hero's street" },

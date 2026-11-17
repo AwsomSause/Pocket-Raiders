@@ -7,6 +7,7 @@ import { hashSeed, Rng } from '../rng';
 import starterTable from '../../data/rivalHome.json';
 import bankJson from '../../data/rivalBank.json';
 import { holdingName, localOf, streetOf, townStreet } from './board';
+import { goWithHero } from './line';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill } from './ledger';
 import type { District, EvilModeBlock, Fight, Hero, Holding, LogEntry, Personality } from './schema';
@@ -273,6 +274,10 @@ export function holdResult(block: EvilModeBlock, won: boolean, fielded: readonly
     lines.push(fill(sub('fightLost', 'hold', data), { person, where }));
     if (bank) lines.push(`"${bank.won[hero.battlesWithTeam % bank.won.length]}"`);
     out = appendLog({ ...out, hero }, { kind: 'hero', who: f.personId ? [f.personId] : [], to: h.id, text: `Day ${block.here.day}. ${fill(line('heroPassed', data), { person, where })}` });
+    // Slice 6: beaten, at Loyalty under 5, they may go with the kid (Part 9 section 10, way 4).
+    const g = goWithHero(out, f.personId, data);
+    out = g.block;
+    if (g.line) lines.push(g.line);
   }
   hero = { ...hero, today: [...hero.today, ...lines] };
   return { block: { ...out, hero }, lines };

@@ -8,7 +8,9 @@ import { crewProblem, jobProblem, payAmount } from './dispatch';
 import { oddsFor, oddsText } from './odds';
 import { lineIndex } from './start';
 import { likelyRoad, postProblem } from './hero';
-import { JOB_METHODS, type EvilModeBlock, type Holding, type JobMethod, type LineId } from './schema';
+import { JOB_METHODS, type EvilModeBlock, type Holding, type JobMethod, type LineId, type TakeThing } from './schema';
+import { heatForecast, lineWhy, thingProblem } from './line';
+import { wontText } from './people';
 
 export type DispatchStep = 'where' | 'who' | 'how';
 
@@ -21,11 +23,13 @@ export interface DispatchDraft {
   how: number;
   squad: string[];
   offer: number;
+  /** Slice 6: what a Take takes. */
+  thing: TakeThing;
   /** Keys only: the cursor sits on the list's last row, "Send them". */
   onSend: boolean;
 }
 
-export const newDispatch = (): DispatchDraft => ({ step: 'where', at: 0, who: 0, how: 0, squad: [], offer: 100, onSend: false });
+export const newDispatch = (): DispatchDraft => ({ step: 'where', at: 0, who: 0, how: 0, squad: [], offer: 100, thing: 'stock', onSend: false });
 
 export interface CellModel {
   id: string; step: number; mark: string; kind: string; name: string;
@@ -56,6 +60,12 @@ export interface BoardModel {
     sendSel: boolean;
     methods: MethodButton[];
     offers: { pct: number; cost: string; chosen: boolean }[] | null;
+    /** Slice 6: what a Take takes, each with why it can't be (null when it can). */
+    things: { id: TakeThing; name: string; chosen: boolean; why: string | null }[] | null;
+    /** Slice 6: "Heat tonight: 5 → 7 (Lean, step 4). At this pace: a Raid in three days." */
+    heat: string;
+    /** Slice 6: field 8 of the Card, before it's opened: who on the squad won't. */
+    wont: string;
     oddsLine: string;
     problem: string | null;
     canQueue: boolean;
@@ -82,7 +92,8 @@ function methodButtons(block: EvilModeBlock, h: Holding | undefined, d: Dispatch
   const line: LineId = block.team.line;
   return data.methods.map((m, i) => {
     let dark: string | null = null;
-    if (lineIndex(line) < lineIndex(m.minLine)) dark = 'Not on a Clean hands team.';
+    // Slice 6: refused by the Line, by name. Every method is built now.
+    if (lineIndex(line) < lineIndex(m.minLine)) dark = lineWhy(block, data);
     else if (!(JOB_METHODS as readonly string[]).includes(m.id)) dark = 'Not in this build yet.';
     else if (h && !methodsFor(h, data).includes(m.id as JobMethod)) dark = kindDef(h.kind, data).why ?? `Not at ${kindDef(h.kind, data).name.toLowerCase()}.`;
     return { id: m.id, name: m.name, word: m.word, key: i + 1, on: !dark, dark, chosen: d.how === i };
@@ -163,7 +174,7 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
   const methods = methodButtons(block, sel, d, data);
   const chosen = methods[d.how];
   const method = chosen && chosen.on ? (chosen.id as JobMethod) : null;
-  const job = method ? { holdingId: sel.id, method, squad: d.squad, ...(method === 'pay' ? { offer: d.offer } : {}) } : null;
+  const job = method ? { holdingId: sel.id, method, squad: d.squad, ...(method === 'pay' ? { offer: d.offer } : {}), ...(method === 'take' ? { thing: d.thing } : {}) } : null;
   const problem = !chosen ? 'Pick a method.' : chosen.dark ?? (job ? jobProblem(block, job, data) : null);
   let oddsLine = '';
   if (job && (sel.owner !== 'team' || method === 'scout')) {
@@ -177,6 +188,9 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
     sendSel: d.step === 'where' && d.onSend,
     methods,
     offers: method === 'pay' && price !== null ? data.district.methods.pay.offers.map((o) => ({ pct: o.pct, cost: money(payAmount(sel, o.pct, data)), chosen: o.pct === d.offer })) : null,
+    things: method === 'take' ? data.line.things.map((t) => ({ id: t.id, name: t.name, chosen: t.id === d.thing, why: thingProblem(sel, t.id, data) })) : null,
+    heat: heatForecast(block, data),
+    wont: job && job.squad.length ? wontText(block, job, data) : '',
     oddsLine,
     problem,
     canQueue: !problem,

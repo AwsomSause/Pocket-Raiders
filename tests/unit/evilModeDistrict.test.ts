@@ -291,7 +291,7 @@ describe('saves: block v2 and the migration from v1', () => {
     const v1 = { ...rest, v: 1 };
     const parsed = EvilModeBlockSchema.parse(v1);
     // Slice 4 took the block to v4; a v1 block goes through v2 and v3 to v4 in one load.
-    expect(parsed).toMatchObject({ v: 5, applicants: [], refusal: null, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
+    expect(parsed).toMatchObject({ v: 6, applicants: [], refusal: null, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
     expect(parsed.crew.map((c) => c.name)).toEqual(['Grunt 1', 'Grunt 2', 'Grunt 3', 'Grunt 4']);
     expect(parsed.team).toEqual(b2.team);
     const storage = new MemoryStorageProvider();
@@ -320,6 +320,6 @@ describe('saves: block v2 and the migration from v1', () => {
   it('a damaged district does not pass the schema (failure)', () => {
     const b = found();
     expect(EvilModeBlockSchema.safeParse({ ...b, district: { ...b.district!, holdings: b.district!.holdings.slice(0, 19) } }).success).toBe(false);
-    expect(EvilModeBlockSchema.safeParse({ ...b, queue: [{ holdingId: 's1', method: 'lean', squad: ['g1'], odds: null, certain: false, terms: [] }] }).success).toBe(false);
+    expect(EvilModeBlockSchema.safeParse({ ...b, queue: [{ holdingId: 's1', method: 'shadow', squad: ['g1'], odds: null, certain: false, terms: [] }] }).success).toBe(false);
   });
 });

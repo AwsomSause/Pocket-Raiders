@@ -69,10 +69,10 @@ export function frameView(_c: ReduxCtx, f: FrameModel, notice: string | null, bo
   const slot = (label: string, body: string, tip: string, id: string): string => W(`<div class="sm" style="line-height:14px">${esc(label)}</div><div style="font-weight:700">${body}</div>`, `padding:4px 10px${id === 'funds' ? ';cursor:pointer' : ''}`, '', ` title="${esc(tip)}" data-testid="evil-${id}"${id === 'funds' ? act('ledger') : ''}`);
   const strip = `<div class="abs row" style="left:16px;right:16px;top:52px;gap:6px">
     ${slot('Funds', `₽${s.funds.toLocaleString('en-GB')}`, `Funds ₽${s.funds}. Opens the Ledger.`, 'funds')}
-    ${slot('Heat', lamps(s.heat, (i) => (i < 5 ? '#e8a020' : '#d8483a')), `Heat ${s.heat}`, 'heat')}
+    ${slot('Heat', `${lamps(s.heat, (i) => (i < s.amberTo ? '#e8a020' : '#d8483a'))}${s.rule ? '<div data-testid="evil-heat-rule" style="height:2px;background:#d8483a;margin-top:2px"></div>' : ''}`, s.heatTip, 'heat')}
     ${slot('Loyalty', esc(s.loyalty.name), `${s.loyalty.name}. ${s.loyalty.face}.`, 'loyalty')}
     ${slot('Regard', lamps(s.regard, () => '#6fb0e8'), `Regard ${s.regard}`, 'regard')}
-    ${slot('Dread', lamps(s.dread, () => '#8a5ab8'), `Dread ${s.dread}`, 'dread')}
+    ${slot('Dread', lamps(s.dread, () => '#8a5ab8'), s.dreadTip, 'dread')}
     ${s.corruption !== null ? slot('Corruption', String(s.corruption), `Corruption ${s.corruption}`, 'corruption') : ''}</div>`;
   const chips = `<div class="abs col" style="right:16px;top:112px;gap:4px;align-items:flex-end">${f.chips.map((c) => `<span class="tg" data-testid="evil-chip">${esc(c)}</span>`).join('')}</div>`;
   const t = f.team;

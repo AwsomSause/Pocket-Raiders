@@ -4,7 +4,8 @@
 
 import { hashSeed, Rng } from '../rng';
 import { EVIL_DATA, type EvilData } from './data';
-import type { Crew, EvilModeBlock, JobMethod, Rank, Talent } from './schema';
+import type { Crew, EvilModeBlock, Holding, JobMethod, Rank, Talent } from './schema';
+import { localOf } from './board';
 
 export type DeckPerson = EvilData['people']['people'][number];
 
@@ -61,18 +62,44 @@ export function wageOf(block: EvilModeBlock, p: Crew, income: number, data: Evil
 
 // ---- Lines (Part 9 section 4, Part 7 section 11) ----
 
-/** The tags a job carries for the lines to read (people.json `tags`). Only the four built methods so far. */
-export function jobTags(block: EvilModeBlock, job: { holdingId: string; method: JobMethod }): string[] {
+/** The tags a job carries for the lines to read (people.json `tags`). */
+export function jobTags(block: EvilModeBlock, job: { holdingId: string; method: JobMethod }, data: EvilData = EVIL_DATA): string[] {
   const tags: string[] = [];
   if (block.here.day % 7 === 0) tags.push('sunday');
   const h = block.district?.holdings.find((x) => x.id === job.holdingId);
   if (job.method === 'outplay' && h?.kind === 'local') tags.push('fightLocal');
+  // Slice 6: Lean, Take and Expose.
+  tags.push(...darkTags(h, job.method, data));
   return tags;
 }
 
+/** A local's age, read off their name ("Mrs. Chiamaka Eze, 61"). */
+const ageOf = (who: string): number | null => {
+  const m = /, (\d+)(?:,|$)/.exec(who);
+  return m ? Number(m[1]) : null;
+};
+
+/** The tags the three new methods carry for the lines to read (people.json `tags`, Part 9 section 4.1). */
+export function darkTags(h: Holding | undefined, method: JobMethod, data: EvilData = EVIL_DATA): string[] {
+  const l = h ? localOf(h, data) : undefined;
+  const tags: string[] = [];
+  if (method === 'lean') {
+    tags.push('lean');
+    if (l && ((ageOf(l.who) ?? 0) >= 60 || l.fear === 'Being alone')) tags.push('leanSmall');
+    if (l && l.earns < 500) tags.push('leanPoor');
+  }
+  if (method === 'take') {
+    tags.push('take');
+    if (l && l.earns < 500) tags.push('takePoor');
+  }
+  if (method === 'expose') tags.push('exposePerson');
+  return tags;
+}
+
+
 /** Everyone on the squad whose line this job crosses, and nobody else. */
 export function crossers(block: EvilModeBlock, job: { holdingId: string; method: JobMethod; squad: readonly string[] }, data: EvilData = EVIL_DATA): Crew[] {
-  const tags = jobTags(block, job);
+  const tags = jobTags(block, job, data);
   if (!tags.length) return [];
   return job.squad.map((id) => block.crew.find((c) => c.id === id)).filter((p): p is Crew => {
     if (!p || p.line === null) return false;

@@ -9,6 +9,7 @@ import { crewNames, fill, holdingTo, money, sentenceFor } from './ledger';
 import { oddsFor, oddsText, type JobDraft } from './odds';
 import type { CardField, EvilModeBlock, StoredCard } from './schema';
 import { crossers, peopleText, wontText } from './people';
+import { heatIfSent, proofFor } from './line';
 
 export type CardDraft = Omit<StoredCard, 'id'>;
 
@@ -23,7 +24,10 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   const to = holdingTo(h, data);
   const m = job.method;
   const offer = m === 'pay' ? data.district.methods.pay.offers.find((o) => o.pct === (job.offer ?? 100)) : undefined;
-  const clean = !(offer && !offer.fair);
+  const dark = m === 'lean' || m === 'take' || m === 'expose';
+  const C = data.line.card;
+  const thing = m === 'take' ? data.line.things.find((t) => t.id === (job.thing ?? 'stock'))! : undefined;
+  const clean = !(offer && !offer.fair) && m !== 'lean' && m !== 'take';
   const daily = takings({ ...h, owner: 'team' }, data);
   const street = data.district.streets[streetOf(h.step, data)]!.name;
   const o = oddsFor(block, job, data);
@@ -33,7 +37,10 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   // 1 The name: plainly.
   f.push([`${methodName.toUpperCase()} · ${holdingName(h, data).toUpperCase()} · ${L.day}`, false]);
   // 2 Takes
-  if (m === 'scout') f.push([L.takes.scout, false]);
+  if (m === 'lean') f.push([blind ? fill(C.lean!.takes!, { amount: '?' }) : l && l.take > 0 ? fill(C.lean!.takes!, { amount: money(l.take) }) : C.lean!.takesNothing!, blind]);
+  else if (thing) f.push([fill(C.take!.takes!, { thing: thing.name }), false]);
+  else if (m === 'expose') f.push([C.expose!.takes!, false]);
+  else if (m === 'scout') f.push([L.takes.scout, false]);
   else if (m === 'pay') f.push([fill(L.takes.pay, { amount: money(payAmount(h, job.offer, data)) }), false]);
   else if (m === 'outplay') f.push([h.kind === 'local' ? L.takes.outplayLocal : L.takes.outplay, false]);
   else if (h.kind === 'safehouse') f.push([L.takes.persuadeRooms, false]);
@@ -47,18 +54,25 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   else if (l) f.push([fill(l.earns > 0 ? L.from.local : L.from.localNothing, { to, earns: money(l.earns) }), false]);
   else f.push([fill(L.from.place, { to: h.ref }), false]);
   // 4 Gives
-  if (m === 'scout') f.push([fill(L.gives.scout, { step: h.step, reach: data.district.rules.scoutReach }), false]);
+  const stock = (l?.take ?? 0) * data.line.take.stockDays;
+  if (m === 'lean') f.push([blind ? L.gives.notKnown : fill(C.lean!.gives!, { amount: money(daily) }), blind]);
+  else if (thing) f.push([fill(thing.gives, { amount: money(stock) }), false]);
+  else if (m === 'expose') f.push([fill(C.expose!.gives!, { street }), false]);
+  else if (m === 'scout') f.push([fill(L.gives.scout, { step: h.step, reach: data.district.rules.scoutReach }), false]);
   else if (blind) f.push([L.gives.notKnown, true]);
   else if (h.kind === 'safehouse') f.push([fill(L.gives.rooms, { rent: money(data.district.rules.safehouseRent) }), false]);
   else if (daily > 0) f.push([fill(L.gives.money, { amount: money(daily) }), false]);
   else if (l) f.push([L.gives.favour, false]);
   else f.push([L.gives.ground, false]);
   // 5 Moves: the five numbers, each drawn; a dash where it doesn't move.
-  const heat = data.district.methods[m].heat;
-  const funds = m === 'pay' ? `↓ ${money(payAmount(h, job.offer, data))}` : blind && m !== 'scout' ? '?' : m !== 'scout' && daily > 0 ? `↑ ${money(daily)} a day` : m !== 'scout' && daily < 0 ? `↓ ${money(-daily)} a day` : '—';
+  const heat = heatIfSent(m, data);
+  const leanDaily = m === 'lean' ? Math.floor((daily * data.line.lean.takings) / 100) : daily;
+  const funds = m === 'expose' ? '—' : thing ? (thing.id === 'stock' ? `↑ ${money(stock)} once` : thing.id === 'deed' && daily > 0 ? `↑ ${money(daily)} a day` : '—') : m === 'lean' ? (blind ? '?' : leanDaily > 0 ? `↑ ${money(leanDaily)} a day` : '—') : m === 'pay' ? `↓ ${money(payAmount(h, job.offer, data))}` : blind && m !== 'scout' ? '?' : m !== 'scout' && daily > 0 ? `↑ ${money(daily)} a day` : m !== 'scout' && daily < 0 ? `↓ ${money(-daily)} a day` : '—';
   const heatText = heat > 0 ? `↑ ${heat} if the day's loudest` : heat < 0 ? `↓ ${-heat} if nothing louder goes today` : '—';
-  const regard = m === 'persuade' && !d.regardStreets.includes(streetOf(h.step, data)) ? `↑ ${data.district.methods.persuade.regard} if the first on ${street}` : m === 'outplay' ? `↑ ${data.district.methods.outplay.regard} if won` : '—';
-  f.push([`Funds ${funds} · Heat ${heatText} · Loyalty — · Regard ${regard} · Dread —`, funds === '?']);
+  const proof = m === 'expose' ? proofFor(block, h, data) : null;
+  const dread = m === 'lean' ? `↑ ${data.line.lean.dread}` : m === 'take' ? `↑ ${data.line.take.dread}` : '—';
+  const regard = m === 'expose' ? (proof?.how === 'witness' ? `↑ ${data.line.expose.regard} if it's printed: clean hands` : '—') : m === 'persuade' && !d.regardStreets.includes(streetOf(h.step, data)) ? `↑ ${data.district.methods.persuade.regard} if the first on ${street}` : m === 'outplay' ? `↑ ${data.district.methods.outplay.regard} if won` : '—';
+  f.push([`Funds ${funds} · Heat ${heatText} · Loyalty ${m === 'lean' ? '↓ 1 each if it fails' : '—'} · Regard ${regard} · Dread ${dread}`, funds === '?']);
   // 6 Odds: the same function the Evening rolls against.
   f.push([oddsText(o), o.lo !== o.hi]);
   // 7 Who's going
@@ -67,7 +81,8 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   const wont = crossers(block, job, data);
   f.push([wontText(block, job, data), false]);
   // 9 Holds or turns
-  f.push([m === 'scout' ? L.holds.nothing : offer && !offer.fair ? L.holds.turns : L.holds.holds, false]);
+  if (dark) f.push([m === 'lean' ? C.lean!.holds! : thing ? thing.holds : C.expose!.holds!, false]);
+  else f.push([m === 'scout' ? L.holds.nothing : offer && !offer.fair ? L.holds.turns : L.holds.holds, false]);
   // 10 The Hero (slice 5)
   f.push([heroField(block, h, data), false]);
   // 11 Not known: every field that's a guess, listed.
@@ -77,10 +92,14 @@ export function cardFor(block: EvilModeBlock, job: JobDraft, data: EvilData = EV
   f.push([`${sentenceFor(block, job, data)}${asked && wont.length ? fill(peopleText('askedAnyway', data), { names: wont.map((p) => p.name).join(' and ') }) : ''}`, false]);
   // 13 The other way: never empty.
   const fair = fairPrice(h, data);
-  f.push([clean ? L.clean : fill(L.underPrice, { fair: money(fair ?? 0) }), false]);
+  const persuadeOdds = () => oddsFor(block, { holdingId: h.id, method: 'persuade', squad: job.squad }, data);
+  if (m === 'lean') f.push([fill(C.lean!.other!, { odds: oddsText(persuadeOdds()).split(' · ')[0]!.replace('%', ''), fair: money(fair ?? 0) }), false]);
+  else if (m === 'take') f.push([fill(C.take!.other!, { odds: oddsText(persuadeOdds()).split(' · ')[0]!.replace('%', ''), fair: money(fair ?? 0) }), false]);
+  else if (m === 'expose') f.push([`${C.expose!.other!} ${proof?.how === 'witness' ? fill(data.line.proof.witness!, { who: proof.who ?? '' }) : data.line.proof.ledger!}`, false]);
+  else f.push([clean ? L.clean : fill(L.underPrice, { fair: money(fair ?? 0) }), false]);
 
   const fields: CardField[] = f.map(([text, u], i) => ({ label: data.ledger.fields[i]!, text, unknown: u }));
-  return { day: block.here.day, region: d.region, district: d.n, holdingId: h.id, method: m, ...(m === 'pay' ? { offer: job.offer ?? 100 } : {}), clean, fields };
+  return { day: block.here.day, region: d.region, district: d.n, holdingId: h.id, method: m, ...(m === 'pay' ? { offer: job.offer ?? 100 } : {}), ...(thing ? { thing: thing.id } : {}), clean, fields };
 }
 
 /** How many fields are still red ink (field 11's own count). */
@@ -88,6 +107,8 @@ export const unknownCount = (c: Pick<StoredCard, 'fields'>): number => c.fields.
 
 /** The job field 13's button swaps to, where there is one: a Pay under the price swaps to the fair price. */
 export function otherWay(job: JobDraft, data: EvilData = EVIL_DATA): JobDraft | null {
+  // Slice 6: a Lean or a Take swaps to asking them (Part 12 section 1: "The other way").
+  if (job.method === 'lean' || job.method === 'take') return { holdingId: job.holdingId, method: 'persuade', squad: job.squad };
   if (job.method !== 'pay') return null;
   const offer = data.district.methods.pay.offers.find((o) => o.pct === (job.offer ?? 100));
   if (!offer || offer.fair) return null;

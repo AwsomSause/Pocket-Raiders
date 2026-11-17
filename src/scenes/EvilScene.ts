@@ -28,6 +28,9 @@ import { applicantActs, isQuestionAct, newRoster, personActs, refusalModel, rost
 import { officeView, refusalView, rosterView } from '../ui/redux/screens/evilRoster';
 import { fileModel } from '../core/evilMode/heroScreens';
 import { fileView } from '../ui/redux/screens/evilFile';
+import { lineModel } from '../core/evilMode/lineScreens';
+import { lineView } from '../ui/redux/screens/evilLine';
+import { LINE_IDS } from '../core/evilMode/schema';
 import { crossers } from '../core/evilMode/people';
 
 /** Keys that confirm (input.ts KEY_MAP), read raw on the Card so a held key can be told from a press. */
@@ -53,6 +56,10 @@ export class EvilScene extends Phaser.Scene {
   private refuseSel = 0;
   /** Slice 5: the File's open tab, or null when it's shut. */
   private file: number | null = null;
+  /** Slice 6: the Line page's chosen stop, or null when it's shut; when a hold to confirm began, and the timer that redraws it. */
+  private line: number | null = null;
+  private lineHeldAt: number | null = null;
+  private lineTimer: Phaser.Time.TimerEvent | null = null;
 
   constructor() {
     super('Evil');
@@ -70,6 +77,9 @@ export class EvilScene extends Phaser.Scene {
     this.roster = null;
     this.refuseSel = 0;
     this.file = null;
+    this.line = null;
+    this.lineHeldAt = null;
+    this.lineTimer = null;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
     session.evilEnsure();
@@ -95,12 +105,13 @@ export class EvilScene extends Phaser.Scene {
           const roster = rm ? rosterView(rm) : undefined;
           const fm = this.file !== null ? fileModel(block, this.file, this.heroTeam(), (id) => services().session.content.species.get(id)?.name ?? id) : null;
           const file = fm ? fileView(fm) : undefined;
+          const line = this.line !== null && !ledger && !roster && !file ? lineView(lineModel(block, this.line), this.lineHeldAt === null ? null : Math.min(1, (this.time.now - this.lineHeldAt) / 2000), this.notice) : undefined;
           if (block.fight) frame.button = 'Fight';
           // An order across a line is answered in the yard before anything else moves (Part 7 section 11.1).
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -138,6 +149,9 @@ export class EvilScene extends Phaser.Scene {
         hold: () => this.hold(),
         unpost: (id) => { services().session.evilStep({ type: 'unpost', holdingId: id }); this.view?.refresh(); },
         go: (id) => this.goYourself(id),
+        thing: (id) => { this.disp = { ...this.disp, thing: id as DispatchDraft['thing'] }; this.view?.refresh(); },
+        line: () => this.toggleLine(),
+        lstop: (i) => { if (this.line !== null) { this.line = Number(i); this.cancelLineHold(); } },
       },
       overs: { over: (i) => { if (!this.founded()) { this.draft = { ...this.draft, at: Number(i) }; this.view?.refresh(); } } },
     });
@@ -150,6 +164,10 @@ export class EvilScene extends Phaser.Scene {
     kb?.on('keyup', up);
     const onScroll = (e: Event) => this.cardScrolled(e);
     this.view.el.addEventListener('scroll', onScroll, true);
+    // Slice 6: the Line's button is pressed and held (a tap that lets go early cancels).
+    const holdTarget = (e: Event) => !!(e.target as HTMLElement | null)?.closest?.('[data-hold]');
+    this.view.el.addEventListener('pointerdown', (e) => { if (holdTarget(e)) this.startLineHold(); });
+    for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) this.view.el.addEventListener(ev, () => this.cancelLineHold());
     this.events.once('shutdown', () => { kb?.off('keydown', down); kb?.off('keyup', up); });
     this.events.on('postupdate', this.place, this);
     this.events.once('shutdown', () => {
@@ -257,6 +275,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.ledger) return this.ledgerKey(a);
     if (this.roster) return this.rosterKey(a);
     if (this.file !== null) return this.fileKey(a);
+    if (this.line !== null) return this.lineKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
     const d = this.disp;
@@ -289,7 +308,10 @@ export class EvilScene extends Phaser.Scene {
     // How: left/right the seven methods; up/down the Pay offer; Enter queues.
     if (a === 'back') this.disp = { ...d, step: 'who' };
     else if (a === 'left' || a === 'right') this.disp = { ...d, how: (d.how + (a === 'left' ? -1 : 1) + EVIL_DATA.methods.length) % EVIL_DATA.methods.length };
-    else if (a === 'up' || a === 'down') {
+    else if ((a === 'up' || a === 'down') && EVIL_DATA.methods[d.how]?.id === 'take') {
+      const things = EVIL_DATA.line.things.map((t) => t.id);
+      this.disp = { ...d, thing: things[(things.indexOf(d.thing) + (a === 'up' ? -1 : 1) + things.length) % things.length]! };
+    } else if (a === 'up' || a === 'down') {
       const offers = EVIL_DATA.district.methods.pay.offers.map((o) => o.pct);
       const i = offers.indexOf(d.offer);
       this.disp = { ...d, offer: offers[(i + (a === 'up' ? -1 : 1) + offers.length) % offers.length]! };
@@ -331,7 +353,7 @@ export class EvilScene extends Phaser.Scene {
     const m = EVIL_DATA.methods[d.how];
     if (!h || !m || !(JOB_METHODS as readonly string[]).includes(m.id)) return null;
     const method = m.id as JobMethod;
-    return { holdingId: h.id, method, squad: d.squad, ...(method === 'pay' ? { offer: d.offer } : {}) };
+    return { holdingId: h.id, method, squad: d.squad, ...(method === 'pay' ? { offer: d.offer } : {}), ...(method === 'take' ? { thing: d.thing } : {}) };
   }
 
   /** "Read the Card": no job goes without its Honest Card. `byKey`: the press that opened it is still down. */
@@ -409,6 +431,13 @@ export class EvilScene extends Phaser.Scene {
   }
 
   private rawKey(e: KeyboardEvent, type: 'down' | 'up'): void {
+    if (e.code === 'KeyN' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleLine();
+    // The Line: Enter held two seconds moves it; letting go early cancels (Part 3 section 7.1).
+    if (this.line !== null && !this.card && CONFIRM_CODES.has(e.code)) {
+      if (type === 'down' && !e.repeat) return this.startLineHold();
+      if (type === 'up') return this.cancelLineHold();
+      return;
+    }
     if (e.code === 'KeyL' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.toggleLedger();
     if (e.code === 'KeyR' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleRoster();
     if (e.code === 'KeyF' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleFile();
@@ -546,6 +575,53 @@ export class EvilScene extends Phaser.Scene {
     this.ledger = null;
     this.roster = null;
     this.notice = null;
+    this.view?.refresh();
+  }
+
+  private toggleLine(): void {
+    if (this.card) return;
+    const block = this.block();
+    this.line = this.line === null ? Math.max(0, LINE_IDS.indexOf(block?.team.line ?? 'grey')) : null;
+    this.ledger = null;
+    this.roster = null;
+    this.file = null;
+    this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  private lineKey(a: InputAction): void {
+    if (a === 'back') { this.line = null; this.cancelLineHold(); return; }
+    if (a === 'left' || a === 'right') { this.line = ((this.line ?? 0) + (a === 'left' ? -1 : 1) + LINE_IDS.length) % LINE_IDS.length; this.cancelLineHold(); }
+    // Confirm is read raw (rawKey), so the hold can be timed.
+  }
+
+  private startLineHold(): void {
+    if (this.line === null || this.lineHeldAt !== null) return;
+    const block = this.block();
+    if (!block || lineModel(block, this.line).problem) return;
+    this.lineHeldAt = this.time.now;
+    this.lineTimer = this.time.addEvent({ delay: 100, loop: true, callback: () => {
+      if (this.lineHeldAt === null) return;
+      if (this.time.now - this.lineHeldAt >= 2000) return this.commitLine();
+      this.view?.refresh();
+    } });
+    this.view?.refresh();
+  }
+
+  private cancelLineHold(): void {
+    this.lineTimer?.remove();
+    this.lineTimer = null;
+    if (this.lineHeldAt === null) return void this.view?.refresh();
+    this.lineHeldAt = null;
+    this.view?.refresh();
+  }
+
+  private commitLine(): void {
+    const to = LINE_IDS[this.line ?? 0]!;
+    this.lineTimer?.remove();
+    this.lineTimer = null;
+    this.lineHeldAt = null;
+    this.said(services().session.evilStep({ type: 'moveLine', to }));
     this.view?.refresh();
   }
 

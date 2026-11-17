@@ -1,5 +1,6 @@
 // Evil Mode view models (design Part 29): what each screen needs, as plain data. Screens draw these and decide nothing.
 
+import { dreadWord, heatStep } from './line';
 import { EVIL_DATA, type EvilData } from './data';
 import { beatStrip } from './day';
 import { checkName, foundingProblem, loyaltyBand, methodsLit, type FoundingChoice } from './start';
@@ -110,7 +111,9 @@ export const moveLine = (line: LineId, by: number): LineId => LINE_IDS[Math.max(
 export interface FrameModel {
   team: { name: string; creed: string; line: string; doctrine: string; boss: string; a: string; b: string };
   /** The top strip (design Part 29 section 2.1). Corruption is null at 0: the slot isn't drawn. */
-  strip: { funds: number; heat: number; loyalty: { name: string; face: string }; regard: number; dread: number; corruption: number | null };
+  strip: { funds: number; heat: number; loyalty: { name: string; face: string }; regard: number; dread: number; corruption: number | null;
+    /** Slice 6: the Heat ladder's word and what the law's doing; amber lamps up to `amberTo`, red after; a red rule from `rule`; Dread's word. */
+    heatTip: string; amberTo: number; rule: boolean; dreadTip: string };
   chips: string[];
   beats: { id: Beat; name: string; state: 'done' | 'now' | 'later' }[];
   button: string;
@@ -131,7 +134,11 @@ export function frameModel(block: EvilModeBlock, bossName: string, data: EvilDat
       a: t.look.a,
       b: t.look.b,
     },
-    strip: { funds: t.funds, heat: t.heat, loyalty: loyaltyBand(block, data), regard: t.regard, dread: t.dread, corruption: t.corruption > 0 ? t.corruption : null },
+    strip: {
+      funds: t.funds, heat: t.heat, loyalty: loyaltyBand(block, data), regard: t.regard, dread: t.dread, corruption: t.corruption > 0 ? t.corruption : null,
+      heatTip: `Heat ${t.heat}. ${heatStep(t.heat, data).word}: ${heatStep(t.heat, data).doing}`, amberTo: data.line.heat.lamps.amberTo, rule: t.heat >= data.line.heat.lamps.rule,
+      dreadTip: `Dread ${t.dread}. ${dreadWord(t.dread, data)}.`,
+    },
     chips: [`${data.founding.region.name} · District ${block.here.stage} · Day ${block.here.day}`],
     beats: beatStrip(block).map((s) => ({ id: s.beat, name: beatDef(s.beat).name, state: s.state })),
     button: now.button,

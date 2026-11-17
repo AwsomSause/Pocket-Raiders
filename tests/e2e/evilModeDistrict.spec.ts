@@ -79,10 +79,11 @@ test('queue one job with keys only and one with taps only; Send rolls them at th
   await s.getByTestId('evil-card-confirm').click();
   await expect(s.getByTestId('evil-queued')).toHaveCount(2);
 
-  // A dark method shows why and can't be queued.
+  // Slice 6: Lean is built now (Grey); with nobody picked it isn't queued, and tonight's Heat is forecast.
   await s.getByTestId('evil-row-' + local.step).click();
   await s.getByTestId('evil-method-lean').click();
-  await expect(s.getByText('Not in this build yet.')).toBeVisible();
+  await expect(s.getByText('Not in this build yet.')).toHaveCount(0);
+  await expect(s.getByTestId('evil-heat-forecast')).toContainText('Heat tonight');
 
   // Saved mid-Dispatch: a reload keeps the queue.
   await page.goto('/?ui=new');
