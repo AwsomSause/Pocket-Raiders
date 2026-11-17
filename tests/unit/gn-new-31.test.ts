@@ -7,6 +7,9 @@ import { itemCount } from '../../src/core/items';
 import { content } from './helpers';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { takeTurn } from '../../src/core/run';
+import { chooseEvent } from '../../src/core/events';
+import { laterEventStep } from '../../src/core/events/questline';
+import { foxSilent } from '../../src/core/greenneedle/fox';
 import { choose, flagOf, gnRun, open, scene, setFlag } from './helpers/gnPlay';
 
 const met = (seed: string): RunState => {
@@ -54,15 +57,44 @@ describe('gn.new.31 The Fox at the Shrine', () => {
     expect([1, 2, 3].every((n) => flagOf(run, `fox-l${n}`) === 1)).toBe(true);
   });
 
-  it('silence: two rooms whose only choice is "…"', () => {
+  it('silence: for the rest of that step every choice of every other event reads "…"; the lantern lights one node on', () => {
     let run = met('g31-e');
+    // before the task, another event on this step reads as written
+    expect(scene(run, 'gn-new-21').labels).toEqual(['Step up to the stump.', 'Go and find the conductor.']);
     run = doIt(run, 4);
-    expect(scene(run, 'gn-31-quiet-1').labels).toEqual(['…']);
     expect(flagOf(run, 'fox-l4')).toBe(0);
-    run = room(run, 'gn-31-quiet-1', '…');
+    expect(foxSilent(run)).toBe(true);
+    expect(scene(run, 'gn-new-21').labels).toEqual(['…', '…']);
+    expect(scene(run, 'gn-new-37-nest').labels).toEqual(['…', '…', '…']);
+    // the shrine's own scenes keep their words
+    expect(scene(run, 'gn-31-l5').labels).toEqual(['Do it.', 'Refuse.']);
+    // a choice can still be made: it does what it always did
+    open(run, 'gn-new-21');
+    const picked = chooseEvent(content, structuredClone(run), run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.sides.at(-1)!.id, 1).run;
+    expect(flagOf(picked, 'orchestra-returned')).toBe(1);
+    // one node on: the silence is over, and the closing room lights the lantern
+    const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
+    const next = run.stage!.map.nodes.find((n) => n.column === here.column + 1)!;
+    run.stage!.current = next.id;
+    expect(foxSilent(run)).toBe(false);
+    expect(scene(run, 'gn-new-21').labels).toEqual(['Step up to the stump.', 'Go and find the conductor.']);
+    expect(laterEventStep(content, run)).toEqual(['gn-31-quiet-2']);
     expect(scene(run, 'gn-31-quiet-2').labels).toEqual(['…']);
     run = room(run, 'gn-31-quiet-2', '…');
     expect(flagOf(run, 'fox-l4')).toBe(1);
+  });
+
+  it('the debt is real: forgiving it lights the lantern and costs the six hundred; refusing takes the money and leaves it dark', () => {
+    const run = met('g31-debt');
+    const money = run.money;
+    const forgave = doIt(structuredClone(run), 3);
+    expect(forgave.money).toBe(money);
+    expect(flagOf(forgave, 'fox-l3')).toBe(1);
+    open(run, 'gn-31-l3');
+    const took = choose(run, 'gn-31-l3', 'Refuse.').run;
+    expect(took.money).toBe(money + 600);
+    expect(flagOf(took, 'fox-l3')).toBe(0);
+    expect(flagOf(took, 'fox-r3')).toBe(1);
   });
 
   it('a game: winning leaves the lantern dark, losing on purpose lights it', () => {
@@ -124,7 +156,8 @@ describe('gn.new.31 The Fox at the Shrine', () => {
     run.money = 1000;
     run.inventory = { potion: 2 };
     for (const n of [1, 2, 3, 6, 8, 7]) run = doIt(run, n);
-    run = room(doIt(run, 4), 'gn-31-quiet-1', '…');
+    run = doIt(run, 4);
+    expect(laterEventStep(content, run)).toEqual(['gn-31-quiet-2']);
     run = room(run, 'gn-31-quiet-2', '…');
     run = room(doIt(run, 5), 'gn-31-game', 'Let her win.');
     expect(flagOf(run, 'fox-lit')).toBe(8);
