@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocket Raiders: 100,000 run survey</title>
+<style>
+:root{--page:#f9f9f7;--surf:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--mute:#898781;--grid:#e1e0d9;--axis:#c3c2b7;--s1:#2a78d6;--s1soft:#cde2fb;--s2:#eb6834;--good:#0ca30c;--warn:#fab219;--crit:#d03b3b;--chip:#efeee9}
+@media (prefers-color-scheme:dark){:root{--page:#0d0d0d;--surf:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--mute:#898781;--grid:#2c2c2a;--axis:#383835;--s1:#3987e5;--s1soft:#184f95;--s2:#d95926;--chip:#262624}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--surf);border-bottom:1px solid var(--grid);padding:10px 16px}
+h1{font-size:18px;margin:0 0 2px}
+.sub{color:var(--ink2);font-size:12px}
+.filters{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;align-items:center}
+.fgroup{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.flabel{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em;margin-right:2px}
+.chip{border:1px solid var(--grid);background:var(--chip);color:var(--ink2);border-radius:999px;padding:2px 9px;font-size:12px;cursor:pointer;user-select:none}
+.chip.on{background:var(--s1);border-color:var(--s1);color:#fff}
+select,input[type=search]{background:var(--surf);color:var(--ink);border:1px solid var(--axis);border-radius:6px;padding:3px 6px;font:inherit;font-size:12px}
+.layout{display:grid;grid-template-columns:190px minmax(0,1fr);min-height:80vh}
+nav{border-right:1px solid var(--grid);padding:10px 8px;position:sticky;top:0;align-self:start;max-height:100vh;overflow:auto}
+nav a{display:block;padding:5px 9px;border-radius:6px;color:var(--ink2);text-decoration:none;cursor:pointer;font-size:13px}
+nav a.on{background:var(--s1);color:#fff}
+main{padding:14px 16px 60px;min-width:0}
+@media (max-width:760px){.layout{grid-template-columns:1fr}nav{position:static;display:flex;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--grid);max-height:none}}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(430px,1fr));gap:12px}
+@media (max-width:520px){.cards{grid-template-columns:1fr}}
+.card{background:var(--surf);border:1px solid var(--grid);border-radius:10px;padding:12px;min-width:0}
+.card.wide{grid-column:1/-1}
+.card h3{margin:0 0 2px;font-size:14px}
+.card .note{color:var(--ink2);font-size:12px;margin-bottom:6px}
+.tools{display:flex;gap:8px;align-items:center;margin:4px 0 6px;flex-wrap:wrap}
+.tools .cnt{color:var(--mute);font-size:12px}
+.twrap{overflow:auto;max-height:520px}
+table{border-collapse:collapse;width:100%;font-size:12.5px}
+th,td{padding:3px 8px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--grid)}
+th:first-child,td:first-child{text-align:left;max-width:330px;overflow:hidden;text-overflow:ellipsis}
+th{position:sticky;top:0;background:var(--surf);color:var(--ink2);font-weight:600;cursor:pointer}
+th.sorted::after{content:" ▾"}th.sorted.asc::after{content:" ▴"}
+td.bar{position:relative;min-width:110px}
+td.bar i{position:absolute;left:0;top:3px;bottom:3px;background:var(--s1soft);border-radius:0 4px 4px 0;z-index:0}
+td.bar span{position:relative;z-index:1}
+td small{color:var(--mute)}
+.more{margin-top:6px}
+button{background:var(--chip);color:var(--ink);border:1px solid var(--axis);border-radius:6px;padding:3px 10px;font:inherit;font-size:12px;cursor:pointer}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.kpi{background:var(--surf);border:1px solid var(--grid);border-radius:10px;padding:10px 12px}
+.kpi b{display:block;font-size:22px;font-weight:650}
+.kpi span{color:var(--ink2);font-size:12px}
+svg text{fill:var(--mute);font-size:10.5px}
+svg .bar{fill:var(--s1)}svg .bar:hover{fill:var(--s2)}
+svg .ln{fill:none;stroke:var(--s1);stroke-width:2}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--page);padding:4px 8px;border-radius:6px;font-size:12px;display:none;z-index:9;max-width:320px}
+.err{border-left:4px solid var(--crit);padding:6px 10px;margin:8px 0;background:var(--chip);border-radius:0 8px 8px 0}
+.err.w{border-left-color:var(--warn)}
+.err code{display:block;font-size:11.5px;color:var(--ink2);white-space:pre-wrap;word-break:break-word;margin-top:3px}
+.pill{display:inline-block;border-radius:999px;padding:0 8px;font-size:11.5px;background:var(--crit);color:#fff;margin-right:6px}
+.pill.w{background:var(--warn);color:#0b0b0b}
+p.lead{max-width:860px;color:var(--ink2)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Pocket Raiders: run survey</h1>
+  <div class="sub" id="sub"></div>
+  <div class="filters" id="filters"></div>
+</header>
+<div class="layout"><nav id="nav"></nav><main id="main"></main></div>
+<div id="tip"></div>
+<script id="data" type="application/json">/*DATA*/</script>
+<script>
+'use strict';
+const DATA = JSON.parse(document.getElementById('data').textContent);
+const { meta, cols, tables } = DATA; const N = cols.enc.length; const names = meta.names || {};
+const $ = (s, el = document) => el.querySelector(s);
+const h = (tag, attrs = {}, ...kids) => { const e = document.createElement(tag); for (const k in attrs) { if (k === 'class') e.className = attrs[k]; else if (k.startsWith('on')) e.addEventListener(k.slice(2), attrs[k]); else if (attrs[k] !== null && attrs[k] !== undefined) e.setAttribute(k, attrs[k]); } for (const c of kids.flat()) if (c !== null && c !== undefined) e.append(c.nodeType ? c : document.createTextNode(c)); return e; };
+const fmt = (v, d = 0) => (v === null || v === undefined || Number.isNaN(v) ? '' : Number(v).toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d }));
+const pct = (a, b, d = 1) => (b ? fmt((100 * a) / b, d) + '%' : '');
+const pretty = (id) => String(id).replace(/^item:/, '');
+const nameOf = (kind, id) => { const raw = pretty(id); const n = kind && names[kind] && (names[kind][id] || names[kind][raw]); return n && n !== raw ? `${n}` : raw; };
+const tip = $('#tip');
+document.addEventListener('mousemove', (e) => { const t = e.target.closest && e.target.closest('[data-tip]'); if (!t) { tip.style.display = 'none'; return; } tip.textContent = t.getAttribute('data-tip'); tip.style.display = 'block'; tip.style.left = Math.min(window.innerWidth - 330, e.clientX + 12) + 'px'; tip.style.top = e.clientY + 14 + 'px'; });
+
+/* ---------- filters ---------- */
+const SCN_LABEL = (s) => s.replace('classic-', 'Classic: ').replace('mode-', 'Mode: ').replace('story', 'Story Run');
+const ASSIST_LABEL = { none: 'No help', heal: 'Free heal on the map', god: 'Cannot lose (deep runs)' };
+const F = { scn: new Set(meta.dims.scn), assist: new Set(meta.dims.assist), skill: 'all', cur: 'all', set: 'all', arch: 'all', starter: 'all', bless: 'all', evil: 'all' };
+let segOn = [], runsInFilter = 0, rowMask = null, rowCount = 0;
+function recompute() {
+  segOn = meta.segs.map((s) => F.scn.has(s.scn) && F.assist.has(s.assist));
+  runsInFilter = meta.segs.reduce((a, s, i) => a + (segOn[i] ? s.runs : 0), 0);
+  const scnOn = meta.dims.scn.map((s) => F.scn.has(s)), asOn = meta.dims.assist.map((s) => F.assist.has(s));
+  const want = {}; for (const k of ['skill', 'cur', 'set', 'arch', 'starter', 'bless', 'evil']) want[k] = F[k] === 'all' ? -1 : meta.dims[k].indexOf(F[k]);
+  rowMask = new Uint8Array(N); rowCount = 0;
+  for (let i = 0; i < N; i++) {
+    if (!scnOn[cols.scn[i]] || !asOn[cols.assist[i]]) continue;
+    let ok = true; for (const k in want) if (want[k] >= 0 && cols[k][i] !== want[k]) { ok = false; break; }
+    if (ok) { rowMask[i] = 1; rowCount++; }
+  }
+}
+function buildFilters() {
+  const box = $('#filters'); box.textContent = '';
+  const chips = (label, dim, lab) => h('div', { class: 'fgroup' }, h('span', { class: 'flabel' }, label),
+    h('span', { class: 'chip', onclick: () => { const all = F[dim].size === meta.dims[dim].length; F[dim] = new Set(all ? [] : meta.dims[dim]); refresh(true); } }, 'all / none'),
+    meta.dims[dim].map((v) => h('span', { class: 'chip' + (F[dim].has(v) ? ' on' : ''), onclick: (e) => { if (e.shiftKey) F[dim] = new Set([v]); else if (F[dim].has(v)) F[dim].delete(v); else F[dim].add(v); refresh(true); }, 'data-tip': 'Click to switch on or off. Shift+click to show only this one.' }, lab(v))));
+  box.append(chips('Mode', 'scn', SCN_LABEL), chips('Help', 'assist', (v) => ASSIST_LABEL[v] || v));
+  const sel = (label, dim, lab = (v) => v) => { const s = h('select', { onchange: (e) => { F[dim] = e.target.value; refresh(true); } }, h('option', { value: 'all' }, `${label}: all`), [...meta.dims[dim]].sort().map((v) => h('option', { value: v }, lab(v)))); s.value = F[dim]; return s; };
+  box.append(h('div', { class: 'fgroup' }, h('span', { class: 'flabel', 'data-tip': 'These five only change the Overview and Compare pages (they work on the per-run list).' }, 'Per-run filters ⓘ'), sel('Bot', 'skill'), sel('Curiosity', 'cur'), sel('Settings', 'set'), sel('Trainer', 'arch', (v) => nameOf('arch', v)), sel('Starter', 'starter', (v) => nameOf('species', v)), sel('Blessing', 'bless'), sel('Evil Team', 'evil')));
+}
+
+/* ---------- table maths ---------- */
+function sumAt(t, i) { const d = t.d[i]; let tot = 0, rn = 0; for (let j = 0; j < d.length; j += 3) if (segOn[d[j]]) { tot += d[j + 1]; rn += d[j + 2]; } return [tot, rn]; }
+function flatRows(name) { const t = tables[name]; if (!t) return []; const out = []; for (let i = 0; i < t.k.length; i++) { const [tot, rn] = sumAt(t, i); if (tot || rn) out.push({ key: t.k[i], tot, rn }); } return out; }
+function lookup(name) { const m = new Map(); for (const r of flatRows(name)) m.set(r.key, r); return m; }
+
+/* ---------- generic sortable table ---------- */
+function tableCard(spec) {
+  const card = h('div', { class: 'card' + (spec.wide ? ' wide' : '') }, h('h3', {}, spec.title), spec.note ? h('div', { class: 'note' }, spec.note) : null);
+  const data = spec.rows(); // {head:[{label,tip,bar}], rows:[[label, ...numbers]], fmt:[fn]}
+  if (!data.rows.length) { card.append(h('div', { class: 'note' }, 'Nothing recorded for this filter.')); return card; }
+  let sortCol = data.sort ?? 1, asc = !!data.asc, shown = spec.top ?? 25, q = '';
+  const search = h('input', { type: 'search', placeholder: 'search…', oninput: (e) => { q = e.target.value.toLowerCase(); draw(); } });
+  const cnt = h('span', { class: 'cnt' }); const wrap = h('div', { class: 'twrap' }); const more = h('div', { class: 'more' });
+  card.append(h('div', { class: 'tools' }, data.rows.length > 12 ? search : null, cnt), wrap, more);
+  function draw() {
+    let rows = q ? data.rows.filter((r) => String(r[0]).toLowerCase().includes(q) || String(r.id || '').toLowerCase().includes(q)) : data.rows;
+    rows = [...rows].sort((a, b) => { const x = a[sortCol], y = b[sortCol]; const c = typeof x === 'string' || typeof y === 'string' ? String(x).localeCompare(String(y)) : (y ?? -Infinity) - (x ?? -Infinity); return asc ? -c : c; });
+    const maxes = data.head.map((hd, ci) => (hd.bar ? Math.max(1e-9, ...rows.map((r) => r[ci] || 0)) : 0));
+    cnt.textContent = `${fmt(rows.length)} rows`;
+    const tb = h('table', {}, h('thead', {}, h('tr', {}, data.head.map((hd, ci) => h('th', { class: ci === sortCol ? 'sorted' + (asc ? ' asc' : '') : '', 'data-tip': hd.tip || null, onclick: () => { if (sortCol === ci) asc = !asc; else { sortCol = ci; asc = false; } draw(); } }, hd.label)))),
+      h('tbody', {}, rows.slice(0, shown).map((r) => h('tr', {}, r.map((v, ci) => { if (ci === 0) return h('td', { 'data-tip': r.id && r.id !== v ? r.id : null }, v); const f = data.head[ci].fmt || fmt; const txt = typeof v === 'string' ? v : f(v); if (data.head[ci].bar) return h('td', { class: 'bar' }, h('i', { style: `width:${Math.max(0, Math.min(100, (100 * (v || 0)) / maxes[ci]))}%` }), h('span', {}, txt)); return h('td', {}, txt); })))));
+    wrap.textContent = ''; wrap.append(tb); more.textContent = '';
+    if (rows.length > shown) more.append(h('button', { onclick: () => { shown += 200; draw(); } }, `Show more (${fmt(rows.length - shown)} left)`), ' ', h('button', { onclick: () => { shown = rows.length; draw(); } }, 'Show all'));
+  }
+  draw(); return card;
+}
+const P1 = { fmt: (v) => fmt(v, 1) }, P2 = { fmt: (v) => fmt(v, 2) }, PC = { fmt: (v) => (v === null || v === undefined ? '' : fmt(v, 1) + '%') };
+/* flat counter: key | total | runs | % of runs | per run */
+const flat = (title, table, o = {}) => ({ title, note: o.note, wide: o.wide, top: o.top, rows: () => { const rows = flatRows(table).filter((r) => !o.filter || o.filter(r.key)).map((r) => { const row = [nameOf(o.names, o.label ? o.label(r.key) : r.key), r.tot, r.rn, runsInFilter ? (100 * r.rn) / runsInFilter : 0, runsInFilter ? r.tot / runsInFilter : 0]; row.id = r.key; return row; }); return { head: [{ label: o.keyLabel || 'What' }, { label: o.totalLabel || 'Total', bar: true }, { label: 'Runs with it' }, { label: '% of runs', ...PC }, { label: 'Per run', ...P2, tip: 'Total divided by all runs in the current filter' }], rows }; } });
+/* pivot: rows = one part of the key, columns = another part */
+const pivot = (title, table, rowPart, colPart, o = {}) => ({ title, note: o.note, wide: o.wide, top: o.top, rows: () => {
+  const acc = new Map(), colTot = new Map();
+  for (const r of flatRows(table)) { const p = r.key.split('|'); if (o.filterRow && !o.filterRow.test(p[[].concat(rowPart)[0]])) continue; const rk = [].concat(rowPart).map((i) => p[i]).join(' · '), ck = [].concat(colPart).map((i) => p[i]).join(' · '); let m = acc.get(rk); if (!m) acc.set(rk, (m = {})); m[ck] = (m[ck] || 0) + r.tot; colTot.set(ck, (colTot.get(ck) || 0) + r.tot); }
+  let colsK = o.cols || [...colTot.entries()].sort((a, b) => b[1] - a[1]).slice(0, o.maxCols || 8).map((e) => e[0]); if (o.sortCols) colsK = [...colsK].sort();
+  const head = [{ label: o.keyLabel || 'What' }, { label: 'Total', bar: true }, ...colsK.map((c) => ({ label: o.colLabel ? o.colLabel(c) : c }))];
+  const rates = o.rates || []; for (const rt of rates) head.push({ label: rt.label, ...PC, tip: rt.tip });
+  const rows = [...acc.entries()].map(([rk, m]) => { const tot = Object.values(m).reduce((a, b) => a + b, 0); const row = [nameOf(o.names, o.label ? o.label(rk) : rk), tot, ...colsK.map((c) => m[c] || 0)]; for (const rt of rates) { const num = rt.num.reduce((a, c) => a + (m[c] || 0), 0), den = rt.den ? rt.den.reduce((a, c) => a + (m[c] || 0), 0) : tot; row.push(den ? (100 * num) / den : null); } row.id = rk; return row; });
+  return { head, rows }; } });
+/* join: one row per key, one column per table, plus ratios */
+const join = (title, colsSpec, o = {}) => ({ title, note: o.note, wide: o.wide, top: o.top, rows: () => {
+  const maps = colsSpec.filter((c) => c.table).map((c) => lookup(c.table)); const keys = new Set(); (o.keysFrom !== undefined ? [maps[o.keysFrom]] : maps).forEach((m) => m.forEach((_, k) => keys.add(k)));
+  const head = [{ label: o.keyLabel || 'What' }, ...colsSpec.map((c, i) => ({ label: c.label, bar: i === 0, tip: c.tip, ...(c.fmt || {}) }))];
+  const rows = [...keys].map((k) => { const vals = []; let ti = 0; for (const c of colsSpec) { if (c.table) { const r = maps[ti++].get(k); vals.push(r ? (c.runs ? r.rn : r.tot) : 0); } else vals.push(null); } colsSpec.forEach((c, i) => { if (c.ratio) { const [a, b] = c.ratio; vals[i] = vals[b] ? (c.pct ? 100 : 1) * vals[a] / vals[b] : null; } if (c.ofRuns !== undefined) vals[i] = runsInFilter ? (100 * vals[c.ofRuns]) / runsInFilter : null; }); const row = [nameOf(o.names, o.label ? o.label(k) : k), ...vals]; row.id = k; return row; });
+  return { head, rows, sort: o.sort, asc: o.asc }; } });
+
+/* ---------- per-run stats ---------- */
+function runStats(groupDim) {
+  const g = new Map();
+  const oc = meta.dims.outcome; const iv = oc.indexOf('victory'), idf = oc.indexOf('defeat'), icr = oc.indexOf('crash');
+  for (let i = 0; i < N; i++) { if (!rowMask[i]) continue; const k = groupDim ? cols[groupDim][i] : 0; let a = g.get(k); if (!a) g.set(k, (a = { n: 0, win: 0, def: 0, crash: 0, enc: 0, lv: 0, reg: 0, badges: 0, caught: 0, turns: 0, stage: 0, encs: [] })); a.n++; const o = cols.outcome[i]; if (o === iv) a.win++; else if (o === idf) a.def++; else if (o === icr) a.crash++; a.enc += cols.enc[i]; a.lv += cols.topLv[i]; a.reg += cols.reg[i]; a.badges += cols.badges[i]; a.caught += cols.caught[i]; a.turns += cols.turns[i]; a.stage += cols.stage[i]; a.encs.push(cols.enc[i]); }
+  return g;
+}
+const median = (a) => { if (!a.length) return 0; const s = Float64Array.from(a).sort(); return s[Math.floor(s.length / 2)]; };
+function histSvg(values, { bins = 40, max = null, label = '', cum = false } = {}) {
+  const W = 560, H = 190, L = 44, B = 26, T = 8, R = 8; if (!values.length) return h('div', { class: 'note' }, 'No runs in this filter.');
+  let mx = max ?? 0; if (max === null) { const s = Float64Array.from(values).sort(); mx = s[Math.floor(s.length * 0.995)] || 1; }
+  const step = Math.max(1, Math.ceil(mx / bins)); const nb = Math.ceil((mx + 1) / step); const counts = new Array(nb).fill(0);
+  for (const v of values) counts[Math.min(nb - 1, Math.floor(v / step))]++;
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.style.width = '100%';
+  const mk = (tag, at, txt) => { const e = document.createElementNS('http://www.w3.org/2000/svg', tag); for (const k in at) e.setAttribute(k, at[k]); if (txt !== undefined) e.textContent = txt; svg.append(e); return e; };
+  const pw = W - L - R, ph = H - T - B;
+  if (cum) { // share of runs still alive after x
+    let alive = values.length; const pts = [];
+    for (let i = 0; i < nb; i++) { pts.push([L + (pw * i) / nb, T + ph * (1 - alive / values.length)]); alive -= counts[i]; }
+    for (let gy = 0; gy <= 4; gy++) { const y = T + (ph * gy) / 4; mk('line', { x1: L, x2: W - R, y1: y, y2: y, stroke: 'var(--grid)' }); mk('text', { x: L - 6, y: y + 3, 'text-anchor': 'end' }, `${100 - gy * 25}%`); }
+    mk('path', { class: 'ln', d: pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ') });
+    let al = values.length; for (let i = 0; i < nb; i++) { mk('rect', { x: L + (pw * i) / nb, y: T, width: pw / nb, height: ph, fill: 'transparent', 'data-tip': `${pct(al, values.length)} of runs got past ${i * step} ${label}` }); al -= counts[i]; }
+  } else {
+    const cm = Math.max(...counts);
+    for (let gy = 0; gy <= 4; gy++) { const y = T + (ph * gy) / 4; mk('line', { x1: L, x2: W - R, y1: y, y2: y, stroke: 'var(--grid)' }); mk('text', { x: L - 6, y: y + 3, 'text-anchor': 'end' }, fmt((cm * (4 - gy)) / 4)); }
+    const bw = pw / nb;
+    counts.forEach((c, i) => { const bh = (ph * c) / cm; mk('rect', { class: 'bar', x: L + i * bw + 1, y: T + ph - bh, width: Math.max(1, bw - 2), height: bh, rx: Math.min(3, bw / 3), 'data-tip': `${i * step}${step > 1 ? '–' + (i * step + step - 1) : ''} ${label}: ${fmt(c)} runs (${pct(c, values.length)})` }); });
+  }
+  mk('line', { x1: L, x2: W - R, y1: T + ph, y2: T + ph, stroke: 'var(--axis)' });
+  for (let i = 0; i <= 5; i++) mk('text', { x: L + (pw * i) / 5, y: H - 8, 'text-anchor': 'middle' }, fmt(((nb * step) * i) / 5));
+  return svg;
+}
+const colVals = (name) => { const out = []; const c = cols[name]; for (let i = 0; i < N; i++) if (rowMask[i]) out.push(c[i]); return out; };
+const chartCard = (title, note, el) => h('div', { class: 'card' }, h('h3', {}, title), h('div', { class: 'note' }, note), el);
+
+/* ---------- pages ---------- */
+const dimLabel = { scn: 'Mode', assist: 'Help given', skill: 'Bot skill', cur: 'Bot curiosity', set: 'Settings', arch: 'Trainer', starter: 'Starter picked', bless: 'Blessing', evil: 'Evil Team', region0: 'First region', deathCls: 'What ended the run', rival: 'Main rival personality', ub: 'Ultra Beast contact', bs: 'Story backstory', outcome: 'Outcome' };
+let compareDim = 'arch';
+function groupTable(dim) {
+  return tableCard({ title: `Results by ${dimLabel[dim].toLowerCase()}`, note: 'Click a column to sort. All header filters apply.', wide: true, top: 40, rows: () => {
+    const g = runStats(dim); const kind = dim === 'arch' ? 'arch' : dim === 'starter' ? 'species' : null;
+    const rows = [...g.entries()].map(([k, a]) => { const id = meta.dims[dim][k]; const row = [dim === 'scn' ? SCN_LABEL(id) : dim === 'assist' ? ASSIST_LABEL[id] || id : nameOf(kind, id), a.n, (100 * a.win) / a.n, a.enc / a.n, median(a.encs), a.lv / a.n, a.stage / a.n + 1, a.reg / a.n, a.badges / a.n, a.caught / a.n, a.turns / a.n, (100 * a.crash) / a.n]; row.id = id; return row; });
+    return { head: [{ label: dimLabel[dim] }, { label: 'Runs', bar: true }, { label: 'Win %', ...PC, tip: 'Runs that finished the whole campaign' }, { label: 'Avg battles', ...P1, tip: 'Encounters completed before the run ended' }, { label: 'Median battles' }, { label: 'Avg top level', ...P1 }, { label: 'Avg last stage', ...P1, tip: 'Stage number (inside its region) where the run ended' }, { label: 'Avg regions cleared', ...P2 }, { label: 'Avg badges', ...P2 }, { label: 'Avg caught', ...P1 }, { label: 'Avg turns', ...P1 }, { label: 'Crash %', ...P2 }], rows };
+  } });
+}
+const PAGES = {
+  'Overview': () => {
+    const g = runStats(null).get(0) || { n: 0, encs: [] }; const n = g.n || 1;
+    const k = (v, l) => h('div', { class: 'kpi' }, h('b', {}, v), h('span', {}, l));
+    return [h('p', { class: 'lead' }, `${fmt(meta.runs)} bot-played runs of the full game rules (no screen, no animation), each from its own seed. The bot is a simple player: it picks its best-scoring move, heals with potions, catches while it has room, and (depending on its curiosity) visits optional stops. It is far weaker than a person, so read the numbers as comparisons between things, not as how a real player will do. Use the chips above to pick modes and how much help the bot got.`),
+      h('div', { class: 'kpis' }, k(fmt(g.n), 'runs in this filter'), k(pct(g.win || 0, n, 2), 'won the campaign'), k(fmt((g.enc || 0) / n, 1), 'battles per run (avg)'), k(fmt(median(g.encs)), 'battles per run (median)'), k(fmt((g.lv || 0) / n, 1), 'top level at the end (avg)'), k(fmt((g.badges || 0) / n, 2), 'badges per run'), k(fmt((g.reg || 0) / n, 3), 'regions cleared per run'), k(fmt((g.caught || 0) / n, 1), 'Pokémon caught per run'), k(pct(g.crash || 0, n, 3), 'runs that crashed')),
+      h('div', { class: 'cards' },
+        chartCard('How far runs get', 'Share of runs still alive after this many battles.', histSvg(colVals('enc'), { cum: true, label: 'battles' })),
+        chartCard('Battles completed', 'How many runs ended after this many battles.', histSvg(colVals('enc'), { label: 'battles' })),
+        chartCard('Highest level at the end', 'Level of the strongest party member when the run ended.', histSvg(colVals('topLv'), { label: 'level' })),
+        chartCard('Badges earned', 'Gym badges when the run ended.', histSvg(colVals('badges'), { bins: 30, label: 'badges' })),
+        chartCard('Turns played', 'Battle turns in the whole run.', histSvg(colVals('turns'), { label: 'turns' })),
+        chartCard('Pokémon caught', 'Catches in the whole run.', histSvg(colVals('caught'), { bins: 30, label: 'caught' })),
+        groupTable('outcome'), groupTable('scn'), groupTable('assist'))];
+  },
+  'Compare': () => {
+    const sel = h('select', { onchange: (e) => { compareDim = e.target.value; refresh(); } }, Object.keys(dimLabel).map((d) => h('option', { value: d }, dimLabel[d]))); sel.value = compareDim;
+    return [h('p', { class: 'lead' }, 'Pick what to compare. Each row is one value (one trainer, one starter, one blessing…) with how its runs went.'), h('div', { class: 'tools' }, 'Compare by ', sel), h('div', { class: 'cards' }, groupTable(compareDim))];
+  },
+  'Regions & stages': () => cards(
+    join('Stage by stage', [{ table: 'tlN', label: 'Runs that reached it' }, { label: '% of runs', ofRuns: 0, fmt: PC }, { table: 'tlLv', label: 'Avg top level', ratio: [2, 0], fmt: P1 }, { table: 'tlParty', label: 'Avg party size', ratio: [3, 0], fmt: P2 }, { table: 'tlEnc', label: 'Avg battles so far', ratio: [4, 0], fmt: P1 }, { table: 'tlMoney', label: 'Avg money', ratio: [5, 0] }, { table: 'deathStage', label: 'Runs that ended here' }, { label: 'Ended here %', ratio: [6, 0], pct: true, fmt: PC, tip: 'Of the runs that reached this stage, how many died in it' }], { wide: true, top: 60, sort: 0, asc: true, keyLabel: 'Region slot · stage', label: (k) => k.replace('|', ' · '), note: 'Region 1 is the first region of the run, whichever one it was. Numbers are taken at the moment the stage starts.' }),
+    join('Regions', [{ table: 'regReach', label: 'Runs that entered it' }, { table: 'firstRegion', label: 'Was the first region' }, { table: 'regCleared', label: 'Runs that cleared it' }, { label: 'Cleared %', ratio: [2, 0], pct: true, fmt: PC }], { names: 'regions', keyLabel: 'Region' }),
+    pivot('Which slot each region shows up in', 'regionOrder', 0, 1, { names: 'regions', sortCols: true, maxCols: 12, note: 'The planned region order of each run (not how far it got).' }),
+    flat('Gym / stage leaders drawn', 'stageLeader', { keyLabel: 'Leader', note: 'How often each leader was the boss of a stage a run reached.' }),
+    flat('Stage themes drawn', 'stageTheme', { keyLabel: 'Theme' }),
+    flat('Badges won', 'badgeIds', { keyLabel: 'Badge (leader)' }),
+    flat('Paths chosen on the map', 'route', { keyLabel: 'Node kind (+ = harder road)' }),
+    pivot('Battle type by node kind', 'bnode', 0, 1, { keyLabel: 'Node kind' })),
+  'Deaths': () => cards(
+    flat('What ended the run', 'deathCls', { keyLabel: 'Opponent type', totalLabel: 'Runs ended' }),
+    flat('Pokémon that landed the final blow', 'deathSp', { names: 'species', keyLabel: 'Species', totalLabel: 'Runs ended' }),
+    flat('Trainers that ended runs', 'deathTrainer', { keyLabel: 'Trainer name', totalLabel: 'Runs ended' }),
+    flat('Leaders that ended runs', 'deathLeader', { keyLabel: 'Leader', totalLabel: 'Runs ended' }),
+    flat('Level of the killer', 'deathLv', { keyLabel: 'Level band (5 wide, from)', totalLabel: 'Runs ended' }),
+    flat('Where on the map', 'deathNode', { keyLabel: 'Node kind', totalLabel: 'Runs ended' }),
+    flat('Stage theme when the run ended', 'deathTheme', { keyLabel: 'Theme', totalLabel: 'Runs ended' }),
+    flat('Enemy species that knocked out your Pokémon', 'koBy', { names: 'species', keyLabel: 'Species', totalLabel: 'Knockouts' }),
+    flat('Moves that knocked out your Pokémon', 'koMove', { names: 'moves', keyLabel: 'Move', totalLabel: 'Knockouts' }),
+    flat('Your Pokémon that fainted most', 'koOf', { names: 'species', keyLabel: 'Species', totalLabel: 'Times fainted' })),
+  'Wild Pokémon': () => cards(
+    join('Every wild species', [{ table: 'wild', label: 'Times met' }, { table: 'wild', label: 'Runs met in', runs: true }, { label: '% of runs', ofRuns: 1, fmt: PC }, { table: 'caught', label: 'Caught' }, { label: 'Caught / met %', ratio: [3, 0], pct: true, fmt: PC }, { table: 'wildShiny', label: 'Shiny met' }, { table: 'deathSp', label: 'Ended a run', tip: 'Any battle, wild or trainer-owned' }, { table: 'koBy', label: 'KOs on your team', tip: 'Any battle' }], { wide: true, top: 40, names: 'species', keyLabel: 'Species', keysFrom: 0 }),
+    pivot('How wild battles ended, by species', 'wb', 0, 1, { names: 'species', keyLabel: 'Lead species', rates: [{ label: 'Caught %', num: ['caught'] }, { label: 'Run ended %', num: ['lost', 'lose'] }], note: 'The first wild Pokémon of each wild battle.' }),
+    flat('Wild level bands', 'wildLv', { keyLabel: 'Level band (5 wide, from)' }),
+    pivot('Balls thrown', 'ball', 0, 1, { names: 'items', keyLabel: 'Ball', colLabel: (c) => (c === '1' ? 'Caught' : 'Broke out'), rates: [{ label: 'Catch %', num: ['1'] }] }),
+    flat('Shiny Pokémon caught', 'shinyCaught', { names: 'species', keyLabel: 'Species' }),
+    flat('Released', 'rel', { names: 'species', keyLabel: 'Species' }),
+    flat('How Pokémon joined', 'join', { keyLabel: 'How' })),
+  'Trainers & bosses': () => cards(
+    pivot('Trainer classes: results', 'tb', 0, 1, { wide: true, top: 40, keyLabel: 'Trainer class', rates: [{ label: 'Player win %', num: ['win', 'won'], den: ['win', 'won', 'lose', 'lost'] }], note: 'Every trainer battle. "lost" means the run ended there; "lose" is a loss the run survived (story losses, rivals).' }),
+    join('Trainer classes: length and level gap', [{ table: 'tbN', label: 'Battles' }, { table: 'tbTurns', label: 'Avg turns', ratio: [1, 0], fmt: P1 }, { table: 'tbGap', label: 'Avg level gap', ratio: [2, 0], fmt: P1, tip: 'Their highest level minus your highest level. Positive = they are stronger.' }], { keyLabel: 'Trainer class' }),
+    pivot('Named opponents: results', 'nb', 0, 1, { top: 40, keyLabel: 'Class : name', rates: [{ label: 'Player win %', num: ['win', 'won'], den: ['win', 'won', 'lose', 'lost'] }], note: 'Gym Leaders, Elite Four, Champions, rivals, bosses and admins.' }),
+    flat('Leaders met in battle', 'leaderMet', { keyLabel: 'Leader' }),
+    flat('Pokémon on trainer teams', 'tsp', { names: 'species', keyLabel: 'Species', totalLabel: 'Times fielded' }),
+    pivot('Team size by class', 'tsize', 0, 1, { keyLabel: 'Trainer class', sortCols: true }),
+    flat('Trainer battle plans', 'strategy', { keyLabel: 'Strategy' }),
+    flat('Trainer specialities', 'spec', { keyLabel: 'Speciality' }),
+    pivot('Trainer memory (met / their wins / their losses)', 'trainersMet', 0, 1, { keyLabel: 'Trainer class', colLabel: (c) => ({ meet: 'Meetings', w: 'Their wins', l: 'Their losses' }[c] || c) }),
+    flat('Trainers who escaped', 'esc', { keyLabel: 'Trainer class' }),
+    flat('Special battle tags', 'btag', { keyLabel: 'Tag', note: 'sos = wild call for help possible, arena = arena rules, grudgeMons = a grudge match, memory = ghost/echo fight.' })),
+  'Rivals': () => cards(
+    pivot('Rival personality', 'xrPers', 0, 1, { keyLabel: 'Personality' }),
+    pivot('Rival battle style', 'xrStyle', 0, 1, { keyLabel: 'Style' }),
+    pivot('Rival story arc', 'xrArc', 0, 1, { keyLabel: 'Arc' }),
+    pivot('Rival marks earned', 'xrMark', 0, 1, { keyLabel: 'Mark' }),
+    join('Rival feelings at the end (average)', [{ table: 'xrFeel', label: 'Sum' }, { table: 'xrFeel', label: 'Rivals', runs: true }, { label: 'Average', ratio: [0, 1], fmt: P2 }], { keyLabel: 'Feeling | role', label: (k) => k.replace('|', ' · ') }),
+    flat('Rival progress events', 'rp', { keyLabel: 'Event' }),
+    pivot('Rival step-ins', 'stepIn', 0, 1, { keyLabel: 'Kind', note: 'A rival cutting into one of your battles.' }),
+    flat('Rivalries formed between Pokémon', 'rivf', { keyLabel: 'Kind' }),
+    pivot('Story rivals: archetype', 'rivArch', 0, 1, { keyLabel: 'Archetype' }),
+    pivot('Story rivals: arc and how it resolved', 'rivArc', 0, 1, { keyLabel: 'Arc' }),
+    flat('Story rivals: style', 'rivStyle', { keyLabel: 'Style' }), flat('Story rivals: state at the end', 'rivState', { keyLabel: 'State' }), flat('Story rivals: faction', 'rivFaction', { keyLabel: 'Faction' }),
+    flat('Main rival names', 'rivName', { keyLabel: 'Name' }), flat('Trainer classes that became rivals', 'rivClass', { keyLabel: 'Class' }),
+    pivot('Nemeses: type and cause', 'nem', 0, 1, { keyLabel: 'Archetype' }), flat('Nemesis source', 'nemSrc', { keyLabel: 'Source' }), flat('Nemesis phase at the end', 'nemPhase', { keyLabel: 'Phase' }), flat('Nemesis settled as', 'nemSettled', { keyLabel: 'How' }), flat('Nemesis species', 'nemSpecies', { names: 'species', keyLabel: 'Species' })),
+  'Evil Teams': () => cards(
+    join('Evil Teams', [{ table: 'evilTeam', label: 'Runs' }, { label: '% of runs', ofRuns: 0, fmt: PC }, { table: 'evilHeat', label: 'Avg heat', ratio: [2, 0], fmt: P2 }, { table: 'evilOps', label: 'Avg ops', ratio: [3, 0], fmt: P2 }, { table: 'evilDefector', label: 'Defector runs' }], { wide: true, keyLabel: 'Team', note: 'For win rates per team, open Compare and pick "Evil Team".' }),
+    pivot('Story beat reached, by team', 'evilBeat', 0, 1, { wide: true, keyLabel: 'Team', sortCols: true, maxCols: 14 }),
+    pivot('How the team story ended', 'evilEnd', 0, 1, { keyLabel: 'Team' }),
+    flat('Villains met', 'evilVillain', { keyLabel: 'Villain' }), flat('Operations', 'evilOp', { keyLabel: 'Operation' }), flat('Earlier teams this run', 'evilPast', { keyLabel: 'Team:end' }), flat('Team modifiers', 'evilMods', { keyLabel: 'Modifier' }), flat('First plan', 'evilPlan', { keyLabel: 'Plan' }),
+    pivot('Evil Team trainer battles', 'tb', 0, 1, { keyLabel: 'Trainer class', filterRow: /grunt|admin|rocket|magma|aqua|galactic|plasma|flare|skull|aether|yell|macro|star|peon|cipher|boss/i, rates: [{ label: 'Player win %', num: ['win', 'won'], den: ['win', 'won', 'lose', 'lost'] }] })),
+  'Events': () => cards(
+    flat('Events seen', 'evSeen', { wide: true, top: 40, names: 'events', keyLabel: 'Event', totalLabel: 'Times seen', note: `From the game's own "seen" counters. ${tables.evSeen ? tables.evSeen.dropped : 0} very rare ones are folded away.` }),
+    pivot('Event choices and results', 'evc', 0, [1, 2], { wide: true, top: 40, names: 'events', keyLabel: 'Event', maxCols: 10, colLabel: (c) => { const [ch, ok] = c.split(' · '); return `Choice ${Number(ch) + 1} ${ok === '1' ? '✓' : '✗'}`; }, note: '✓ = the choice succeeded, ✗ = it failed. The bot takes the first open choice on required events and a random open one on optional stops.' }),
+    flat('Optional stops the bot visited', 'ex', { names: null, keyLabel: 'Kind | category | id', top: 30 }),
+    flat('Optional stops the bot cannot play', 'exSkip', { keyLabel: 'Kind', note: 'Minigames, expeditions, plazas and services need a screen, so the bot walks past them.' }),
+    flat('Decisions asked', 'pend', { keyLabel: 'Decision' }),
+    flat('Node menus', 'menus', { keyLabel: 'What' }),
+    flat('Kanto canon scenes completed', 'canonDone', { keyLabel: 'Scene' }),
+    flat('Trainers recruited', 'recruits', { names: 'arch', keyLabel: 'Trainer' }),
+    flat('Dungeons seen', 'dungeonsSeen', { keyLabel: 'Dungeon' }), flat('Pseudo-stages seen', 'pseudoSeen', { keyLabel: 'Pseudo-stage' }),
+    flat('Legendary events offered', 'legOffered', { keyLabel: 'Event' }), flat('Legendary events completed', 'legDone', { keyLabel: 'Event' }), flat('Legendary events failed', 'legFailed', { keyLabel: 'Event' }), flat('Legendary outcomes', 'legOutcome', { keyLabel: 'Outcome' }),
+    flat('Raids and Totems', 'raidTotem', { keyLabel: 'What' }), flat('Best raid tier', 'raidTier', { keyLabel: 'Tier' }), flat('Run quest drawn', 'quest', { keyLabel: 'Quest' })),
+  'Blessings': () => cards(
+    join('Legendary Blessings', [{ table: 'blessId', label: 'Runs' }, { label: '% of runs', ofRuns: 0, fmt: PC }, { table: 'blessInf', label: 'Avg influence', ratio: [2, 0], fmt: P2 }, { table: 'blessSeen', label: 'Seen' }, { table: 'blessComm', label: 'Communion' }, { table: 'blessRite', label: 'Rite used' }, { table: 'blessStages', label: 'Avg stages done', ratio: [6, 0], fmt: P2 }, { table: 'blessAsh', label: 'Ash regions' }], { wide: true, keyLabel: 'Blessing', top: 60, note: 'For win rates and depth per blessing, open Compare and pick "Blessing".' }),
+    pivot('Blessing tier', 'blessTier', 0, 1, { keyLabel: 'Blessing' }),
+    flat('Blessing flags set', 'flags', { keyLabel: 'Flag', filter: (k) => /bless/.test(k) }),
+    flat('Mythical Promises: tellings', 'prTell', { names: 'species', keyLabel: 'Mythical' }), flat('Mythical visited', 'prVisited', { keyLabel: 'Mythical' }), flat('Mythical guest', 'prGuest', { keyLabel: 'Mythical' }), flat('Promises kept', 'prKept', { keyLabel: 'Promise' }), flat('Promises left', 'prLeft', { keyLabel: 'Promise' }),
+    flat('Ultra Beasts: contact', 'ubContact', { keyLabel: 'Contact' }), flat('Ultra Beasts: which Beast', 'ubBeast', { keyLabel: 'Beast' }), flat('Ultra Beasts met', 'ubMet', { keyLabel: 'Beast' }), flat('Ultra Beast appetites (sum)', 'ubApp', { keyLabel: 'Appetite' }), flat('Ultra Beast flags', 'ubFlags', { keyLabel: 'Flag' }), flat('Ultra Beasts that left', 'ubLeft', { keyLabel: 'Beast' })),
+  'Moments': () => cards(
+    join('Story moments', [{ table: 'mom', label: 'Times' }, { table: 'mom', label: 'Runs', runs: true }, { label: '% of runs', ofRuns: 1, fmt: PC }, { table: 'momSup', label: 'Held back', tip: 'Triggered but not shown (cooldowns and limits)' }], { wide: true, top: 40, keyLabel: 'Moment' }),
+    pivot('Pokémon Moments: by trigger', 'pmo', 1, 3, { wide: true, top: 40, keyLabel: 'Moment', maxCols: 10 }),
+    pivot('Pokémon Moments: by tier', 'pmo', 1, 2, { keyLabel: 'Moment' }),
+    pivot('Pokémon Moments: whose side', 'pmo', 1, 0, { keyLabel: 'Moment' }),
+    flat('Species that had a Pokémon Moment', 'pmoSp', { names: 'species', keyLabel: 'Species' }),
+    flat('Drama moments', 'drama', { keyLabel: 'Drama event' }),
+    pivot('Turning points by emotion', 'tp', 1, 0, { keyLabel: 'Emotion' }),
+    flat('Feelings recorded', 'feel', { keyLabel: 'Feeling' }), flat('Survived a fatal hit', 'sf', { keyLabel: 'Cause' }), flat('Friendship milestones', 'fm', { keyLabel: 'Friendship value' })),
+  'Hyper & Overdrive': () => cards(
+    pivot('Hyper states', 'hyp', 1, 0, { wide: true, top: 40, keyLabel: 'State (:variant)', note: 'Every Hyper / Overdrive trigger in battle, split by whose Pokémon it was.' }),
+    flat('Drama moments (includes Overdrive breakthroughs)', 'drama', { keyLabel: 'Drama event' }),
+    flat('Battle spectacle lines', 'tx', { keyLabel: 'Kind', filter: (k) => k.startsWith('spectacle|'), label: (k) => k.split('|')[1] }),
+    pivot('Form changes (Mega, Tera, Dynamax, Z)', 'tf', 1, 0, { keyLabel: 'Kind' }),
+    pivot('Form changes by Pokémon', 'tf', 2, 1, { names: 'species', keyLabel: 'Becomes', maxCols: 8 }),
+    flat('Player gimmick uses', 'gimmicks', { keyLabel: 'Gimmick' }),
+    flat('Raid messages', 'tx', { keyLabel: 'Tone', filter: (k) => k.startsWith('raid|'), label: (k) => k.split('|')[1] })),
+  'Story': () => cards(
+    flat('Story log: event types', 'sev', { keyLabel: 'Event type', top: 40 }),
+    flat('Story flags set', 'flags', { keyLabel: 'Flag', top: 40, note: 'How many runs set each story flag. Flags with a Pokémon or number in them are grouped (shown with # or *).' }),
+    flat('Other story events', 'sx', { keyLabel: 'Event | details' }),
+    flat('Run counters', 'counters', { keyLabel: 'Counter', top: 40 }),
+    flat('Run totals', 'misc2', { keyLabel: 'What', top: 40 }),
+    flat('Item / event counters', 'ic', { keyLabel: 'Counter' }),
+    flat('Trainer attributes at the end (sum)', 'attrs', { keyLabel: 'Attribute' }),
+    flat('Faction standing (sum)', 'factions', { keyLabel: 'Faction' }), flat('Sponsor', 'sponsor', { keyLabel: 'Sponsor' }),
+    flat('Expansion parts active', 'xkeys', { keyLabel: 'Part' })),
+  'Items': () => cards(
+    flat('Rewards taken', 'rewards', { wide: true, top: 40, names: 'items', keyLabel: 'Reward' }),
+    flat('Held items on the final party', 'heldEnd', { names: 'items', keyLabel: 'Item' }),
+    flat('Passive items owned at the end', 'passives', { names: 'items', keyLabel: 'Item' }),
+    flat('Bag at the end', 'invEnd', { names: 'items', keyLabel: 'Item' }),
+    flat('Items used in battle', 'itu', { names: 'items', keyLabel: 'Item' }),
+    pivot('Held items that triggered', 'heldUse', 1, 0, { names: 'items', keyLabel: 'Item' }),
+    flat('Materials at the end', 'materials', { keyLabel: 'Material' })),
+  'Battle & moves': () => cards(
+    flat('Moves used by the player', 'pm', { names: 'moves', keyLabel: 'Move', top: 30 }), flat('Moves used by enemies', 'em', { names: 'moves', keyLabel: 'Move', top: 30 }),
+    pivot('Abilities that triggered', 'ab', 1, 0, { keyLabel: 'Ability' }), pivot('Status conditions', 'st', 1, 0, { keyLabel: 'Status' }),
+    flat('Weather and terrain', 'wx', { keyLabel: 'What' }), flat('Battle event types', 'tev', { keyLabel: 'Event', top: 40 }), flat('Other battle events', 'tx', { keyLabel: 'Event | detail', top: 30 }),
+    flat('Hits', 'misc', { keyLabel: 'What', note: 'crit = critical hit, se = super effective, nve = not very effective. The side is who got hit.' }),
+    pivot('Battle results', 'bres', 0, 1, { keyLabel: 'Kind' }),
+    flat('Evolutions (yours)', 'evo', { keyLabel: 'From > to | trigger' }), flat('Evolutions in battle', 'bevo', { keyLabel: 'Side | from > to' }),
+    flat('Very long battles (150+ turns)', 'longB', { keyLabel: 'Class | lead species' })),
+  'Party': () => cards(
+    join('Starters', [{ table: 'startersOffered', label: 'Times offered' }, { table: 'starterPicked', label: 'Times picked' }], { names: 'species', keyLabel: 'Starter', note: 'The bot picks one of the three at random. For results per starter, open Compare and pick "Starter picked".' }),
+    join('Final party', [{ table: 'partySp', label: 'On final teams' }, { table: 'partyLv', label: 'Avg level', ratio: [1, 0], fmt: P1 }, { table: 'partyFr', label: 'Avg friendship', ratio: [2, 0], fmt: P1 }, { table: 'partyShiny', label: 'Shiny' }, { table: 'myKo', label: 'KOs scored (all run)' }], { names: 'species', keyLabel: 'Species', top: 40, wide: true, keysFrom: 0 }),
+    flat('Pokémon that scored the most KOs', 'myKo', { names: 'species', keyLabel: 'Species', totalLabel: 'KOs' }),
+    flat('Caught', 'caught', { names: 'species', keyLabel: 'Species' }),
+    flat('Moves on final teams', 'partyMoves', { names: 'moves', keyLabel: 'Move' }), flat('Natures', 'natures', { keyLabel: 'Nature' }), flat('Tera types', 'tera', { keyLabel: 'Type' }), flat('Shiny Pokémon owned', 'shinyOwned', { names: 'species', keyLabel: 'Species' })),
+  'Bugs & crashes': () => {
+    const block = (title, list, cls, body) => [h('h3', {}, `${title} (${list.length} kinds, ${fmt(list.reduce((a, e) => a + e.count, 0))} runs)`), list.length ? list.map((e) => h('div', { class: 'err ' + cls }, h('span', { class: 'pill ' + cls }, `${fmt(e.count)} run${e.count === 1 ? '' : 's'}`), h('b', {}, body(e)), h('code', {}, [e.where ? `where: ${e.where}\n` : '', e.stack ? `code path: ${e.stack}\n` : '', e.example ? `example: ${e.example}\n` : '', `modes: ${Object.entries(e.scn).sort((a, b) => b[1] - a[1]).slice(0, 8).map(([k, v]) => `${k} ${v}`).join(', ')}\nseeds to replay: ${e.seeds.join('; ')}`].join('')))) : h('div', { class: 'note' }, 'None found.')];
+    return [h('p', { class: 'lead' }, 'Everything here is across all runs (the header filters do not apply to the lists). A crash stops that run where it happened. Each entry lists seeds that reproduce it with tools/sim100k.'),
+      ...block('Crashes (the game code threw an error)', DATA.errors, '', (e) => e.msg), ...block('Rule checks that failed (numbers that should never happen)', DATA.bugs, 'w', (e) => e.key), ...block('Stalls (nothing changed for 80 steps)', DATA.stalls, 'w', (e) => e.key), ...block('Console warnings and errors from the game', DATA.cons, 'w', (e) => e.key),
+      h('div', { class: 'cards', style: 'margin-top:12px' }, ...[flat('Runs cut off by the bot limits', 'caps', { keyLabel: 'Limit' }), flat('Optional stops that refused the bot', 'exErr', { keyLabel: 'Kind: message', wide: true }), flat('Odd numbers seen', 'misc', { keyLabel: 'What', filter: (k) => /negDamage|partyOverCap|storyLogGap|battleOpenAtEnd/.test(k), note: 'negDamage = a damage event below zero. partyOverCap = steps spent with more Pokémon than the party limit.' }), flat('Very long battles (150+ turns)', 'longB', { keyLabel: 'Class | lead species' }),
+        join('Speed', [{ table: 'perf', label: 'Total' }], { keyLabel: 'What' })].map(tableCard))];
+  },
+  'About': () => [h('div', { class: 'card' }, h('h3', {}, 'How this was made'), h('p', {}, `Runs: ${fmt(meta.runs)} of ${fmt(meta.target)} planned. Made ${meta.made.slice(0, 16).replace('T', ' ')} UTC from commit ${meta.commit || '?'} (branch ui-mockups). Tool: tools/sim100k in the thread branch.`),
+    h('p', {}, 'Mix of runs: Classic standard 40%, Veteran 6%, Champion 5%, Nightmare 4%, Story Run 15% (random backstory), and 2% for each other mode. Half use one of the five player trainers (Red, Blue, Green, Hilda, Nate) and half a random one of all 287. The starter is a random one of the three offered.'),
+    h('p', {}, 'Settings: 85% of runs use the default settings (Blessings, Ultra Beasts, Mythical Promises, Node Menus, Kanto canon, Grand Arc, World Tracks, Whole-Run Events, Heated Moments on). 15% also switch on the Finale, Region of Doom, Story Traits, Labyrinth resume, full event density and the Extended Cut.'),
+    h('p', {}, 'Help: about 70% of runs get no help, about 30% get a free full heal every time they are on the map, and about 0.3% cannot lose (healed mid-battle) so the late game shows up at all. Bot skill is half "smart" and half "strong" (better catching, reviving and team building). Curiosity is how often it takes optional stops: never, half, or always.'),
+    h('p', {}, 'Limits: the bot cannot play minigames, expeditions, the plaza or services, never rewinds, and plays the first open choice on required events. It is a weak player, so win rates are far below what a person gets.'))],
+};
+const cards = (...specs) => [h('div', { class: 'cards' }, specs.map((s) => { if (s.title && tables && s.rows) { const c = tableCard(s); return c; } return s; }))];
+
+let page = 'Overview';
+function refresh(filtersChanged) {
+  if (filtersChanged) { recompute(); buildFilters(); }
+  $('#sub').textContent = `${fmt(runsInFilter)} of ${fmt(meta.runs)} runs match the Mode and Help filters${rowCount !== runsInFilter ? ` (${fmt(rowCount)} after the per-run filters)` : ''}. ${meta.runs < meta.target ? `Early version: ${fmt(meta.runs)} of ${fmt(meta.target)} runs so far.` : ''}`;
+  const nav = $('#nav'); nav.textContent = ''; for (const p of Object.keys(PAGES)) nav.append(h('a', { class: p === page ? 'on' : '', onclick: () => { page = p; refresh(); window.scrollTo(0, 0); } }, p));
+  const main = $('#main'); main.textContent = ''; main.append(h('h2', { style: 'margin:0 0 8px;font-size:17px' }, page), ...PAGES[page]().flat());
+}
+recompute(); buildFilters(); refresh();
+</script>
+</body>
+</html>
