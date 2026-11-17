@@ -151,6 +151,8 @@ export function makeVow(run: RunState, mythical: string): string | null {
   if (!def || def.status === 'disabled' || !run.expansion?.promises) return null;
   const p = run.expansion.promise ?? { tellings: {}, visited: null, guest: null, kept: [], left: [] };
   if (p.guest || (p.visited && p.visited !== mythical)) return null;
+  // Same-run chains: Manaphy only after Phione's Promise was kept, Melmetal only after eight Meltan merged.
+  if ((mythical === 'manaphy' && !p.kept.includes('phione')) || (mythical === 'melmetal' && !p.kept.includes('meltan'))) return null;
   run.expansion = { ...run.expansion, promise: { ...p, visited: mythical, guest: { id: mythical, forgiven: false } } };
   syncLegendFlags(run);
   return `${def.title} walks beside you now. ${def.promise}`;

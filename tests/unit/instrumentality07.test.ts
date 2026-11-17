@@ -9,6 +9,8 @@ import { resolveWonder, startWonder, wonderActions } from '../../src/core/instru
 import { MYTHICALS } from '../../src/core/instrumentality/promisesData';
 import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/instrumentality/secondChance';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
+import { beginMinigame, leaveMinigame } from '../../src/core/minigame/flow';
+import { wonderFollowUp } from '../../src/core/instrumentality/wonders';
 import { chooseStarter, createRun, takeTurn, useDraftItem, wishCandidates, wishRedraw } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content, toBattle } from './helpers';
@@ -105,7 +107,7 @@ describe('Mythical Promises (M1)', () => {
       expect(m.tellings).toHaveLength(3);
       if (m.status !== 'supported') expect(m.note).toBeTruthy();
     }
-    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id).sort()).toEqual(['darkrai', 'deoxys', 'diancie', 'genesect', 'hoopa', 'jirachi', 'keldeo', 'magearna', 'manaphy', 'melmetal', 'meltan', 'mew', 'phione', 'victini', 'zarude', 'zeraora']);
+    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id).sort()).toEqual(['darkrai', 'deoxys', 'diancie', 'genesect', 'hoopa', 'jirachi', 'keldeo', 'magearna', 'manaphy', 'melmetal', 'meloetta', 'meltan', 'mew', 'phione', 'victini', 'zarude', 'zeraora']);
   });
   it('every Promise is a checkable rule: it breaks on its event and not on an unrelated one', () => {
     const run = base();
@@ -557,6 +559,39 @@ describe('Mythical Promises stage 2 (Phione, Manaphy, Magearna)', () => {
     expect(magearnaOnFaint(run)).toContain('+1 Sp. Atk');
     expect(magearnaOnFaint(run)).toBeNull();
     expect(run.battle!.playerStages.spa).toBe(2);
+  });
+});
+
+describe('Mythical Promises stage 2 (Meloetta)', () => {
+  const stop = () => {
+    const run = structuredClone(chooseStarter(content, createRun(content, { runId: 'mg', seed: 'mel', archetypeId: 'red', expansion: { mythicalPromises: true } }), 0));
+    const node = run.stage!.map.nodes.find((n) => n.column === 1)!;
+    node.sides = [{ id: 'mg-test', kind: 'minigame', minigameId: 'pokemon-memory', used: false }];
+    run.stage!.current = node.id;
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: 'meloetta', guest: { id: 'meloetta', forgiven: false }, kept: [], left: [] } };
+    return run;
+  };
+  it('the first try at a stop is free; leaving a game that is not over breaks the Promise', () => {
+    let run = stop();
+    const limit = content.minigames.games.find((g) => g.id === 'pokemon-memory')!.attemptLimit;
+    run = beginMinigame(content, run, 'mg-test', 0);
+    expect(run.minigames.attempts['mg-test'] ?? 0).toBe(0); // free
+    run = leaveMinigame(run, content);
+    expect(promiseState(run).guest!.forgiven).toBe(true); // quitting broke it once
+    run = beginMinigame(content, run, 'mg-test', 0);
+    expect(run.minigames.attempts['mg-test']).toBe(1); // later tries count
+    expect(limit).toBeGreaterThan(0);
+  });
+  it('retune: pick a Pokémon, then one of six natures; once a region', () => {
+    const run = stop();
+    const { decision } = startWonder(content, run, 'retune');
+    const next = wonderFollowUp(content, run, decision!, 0)!;
+    expect(next.options).toHaveLength(6);
+    expect(resolveWonder(content, run, decision!, 0)).toContain('hums');
+    const msg = resolveWonder(content, run, next, 2);
+    expect(msg).toContain('retuned');
+    expect(run.party[0]!.nature).toBe(next.options[2]!.label.toLowerCase());
+    expect(wonderActions(content, run)[0]!.problem).toContain('Already');
   });
 });
 

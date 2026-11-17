@@ -4,6 +4,8 @@
 import type { Content } from '../contentSchema';
 import type { PendingDecision, RunState } from '../state';
 import { addItem, consumeItem } from '../items';
+import { hashSeed, Rng } from '../rng';
+import { natureName, NATURE_IDS, NATURES, effectiveNature, type NatureId } from '../natures';
 import { bouquetHolder, bumpTrack, guestId, itemValue, MELTAN_TO_MERGE, metalItems, promiseState, STANCE_NAME, stageKeyOf, trackOf } from './promises';
 import { MYTHICALS } from './promisesData';
 
@@ -30,6 +32,9 @@ export function wonderActions(_content: Content, run: RunState): WonderAction[] 
   if (id === 'magearna') {
     const holder = bouquetHolder(run);
     out.push({ id: 'bouquet', title: "Magearna: the bouquet", text: holder ? `${holder.speciesId} carries it. Choose another to hand it over.` : 'Choose who carries her bouquet to the last stage.', problem: run.party.length === 0 ? 'No one to carry it.' : null });
+  }
+  if (id === 'meloetta') {
+    out.push({ id: 'retune', title: 'Meloetta: retune a Pokémon', text: "Change one Pokémon's nature to one of six she offers (once a region).", problem: trackOf(run, 'retuneRegion') === run.regionIndex + 1 ? 'Already used this region.' : run.party.length === 0 ? 'No one to retune.' : null });
   }
   if (id === 'diancie') {
     const have = Object.keys(run.inventory).filter((i) => (run.inventory[i] ?? 0) > 0);
@@ -63,6 +68,9 @@ export function startWonder(_content: Content, run: RunState, wonderId: string):
   if (wonderId === 'bouquet' && guest === 'magearna') {
     return { decision: { kind: 'wonderChoice', mythicalId: 'magearna', wonderId, title: 'Who carries the bouquet?', options: run.party.map((m) => ({ label: _content.species.get(m.speciesId)?.name ?? m.speciesId, description: `Lv${m.level}`, value: m.uid })) }, message: '' };
   }
+  if (wonderId === 'retune' && guest === 'meloetta') {
+    return { decision: { kind: 'wonderChoice', mythicalId: 'meloetta', wonderId, title: 'Meloetta: who will she retune?', options: run.party.map((m) => ({ label: _content.species.get(m.speciesId)?.name ?? m.speciesId, description: `Lv${m.level}, ${natureName(effectiveNature(m) ?? 'hardy')}`, value: m.uid })) }, message: '' };
+  }
   if (wonderId === 'copy' && guest === 'diancie') {
     const ids = Object.keys(_run_inv(run)).sort();
     return { decision: { kind: 'wonderChoice', mythicalId: 'diancie', wonderId, title: 'Diancie: which item should she copy?', options: ids.slice(0, 12).map((i) => ({ label: _content.items.get(i)?.name ?? i, description: `You have ${run.inventory[i]}.`, value: i })) }, message: '' };
@@ -93,6 +101,15 @@ export function resolveWonder(_content: Content, run: RunState, decision: Wonder
     bumpTrack(run, 'bouquet', Number(pick.value.replace(/\D/g, '')) || 0);
     return `${pick.label} carries Magearna's bouquet. Keep it in the party to the last stage.`;
   }
+  if (decision.wonderId === 'retune' && guestId(run) === 'meloetta') return `Meloetta hums to ${pick.label}…`;
+  if (decision.wonderId === 'retune2' && guestId(run) === 'meloetta') {
+    const [uid, nature] = pick.value.split('|') as [string, NatureId];
+    const mon = run.party.find((m) => m.uid === uid);
+    if (!mon || !(nature in NATURES)) return 'The song fades.';
+    mon.nature = nature;
+    bumpTrack(run, 'retuneRegion', run.regionIndex + 1);
+    return `${_content.species.get(mon.speciesId)?.name ?? mon.speciesId} is retuned: ${natureName(nature)}.`;
+  }
   if (decision.wonderId === 'copy' && guestId(run) === 'diancie') {
     addItem(run.inventory, pick.value, 1);
     bumpTrack(run, 'copyRegion', run.regionIndex + 1);
@@ -112,4 +129,21 @@ export function resolveWonder(_content: Content, run: RunState, decision: Wonder
     return `Meltan eats your ${pick.label}: ${n}/${MELTAN_TO_MERGE}, +${n * 2}% Defense.`;
   }
   return '';
+}
+
+/** A Wonder that asks twice (Meloetta: who, then which tuning): the second question, or null. */
+export function wonderFollowUp(_content: Content, run: RunState, decision: WonderDecision, optionIndex: number): WonderDecision | null {
+  if (decision.wonderId !== 'retune' || guestId(run) !== 'meloetta') return null;
+  const pick = decision.options[optionIndex] ?? decision.options[0]!;
+  const mon = run.party.find((m) => m.uid === pick.value);
+  if (!mon) return null;
+  const rng = new Rng(hashSeed(`${run.seed}::meloetta-retune::${mon.uid}::${trackOf(run, 'retuneRegion')}::${run.regionIndex}`));
+  const current = effectiveNature(mon);
+  const pool = NATURE_IDS.filter((n) => n !== current);
+  const picks: NatureId[] = [];
+  while (picks.length < 6 && pool.length > 0) picks.push(pool.splice(rng.int(0, pool.length - 1), 1)[0]!);
+  return {
+    kind: 'wonderChoice', mythicalId: 'meloetta', wonderId: 'retune2', title: `Meloetta: how should ${pick.label} be tuned?`,
+    options: picks.map((n) => ({ label: natureName(n), description: `+${NATURES[n][0]}, -${NATURES[n][1]}`, value: `${mon.uid}|${n}` })),
+  };
 }

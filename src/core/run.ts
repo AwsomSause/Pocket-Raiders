@@ -64,7 +64,7 @@ import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
-import { resolveWonder, startWonder, wonderActions } from './instrumentality/wonders';
+import { resolveWonder, startWonder, wonderActions, wonderFollowUp } from './instrumentality/wonders';
 import { hearTelling, hoopaRing, hoopaStage, magearnaOnFaint, manaphyVisit, onReleased as promiseOnReleased, onRegionStarted as promiseOnRegion, onSold as promiseOnSold, onStageLeft as promiseOnLeft, stageKeyOf as promiseStageKey, bumpTrack, wishesLeft, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
@@ -4657,7 +4657,13 @@ function resolveDecisionCore(content: Content, current: RunState, choice: Decisi
 
   if (decision.kind === 'wonderChoice') {
     run.pending.shift();
-    const message = resolveWonder(content, run, decision, choice.kind === 'circuit' ? choice.optionIndex : 0);
+    const at = choice.kind === 'circuit' ? choice.optionIndex : 0;
+    const message = resolveWonder(content, run, decision, at);
+    const next = wonderFollowUp(content, run, decision, at);
+    if (next) {
+      run.pending.unshift(next);
+      run.afterDecisions = 'map';
+    }
     continueAfterDecisions(content, run);
     return { run, message };
   }

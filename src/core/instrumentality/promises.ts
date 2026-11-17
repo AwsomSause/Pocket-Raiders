@@ -441,3 +441,6 @@ export function magearnaOnFaint(run: RunState): string | null {
   battle.playerStages.spa += 1;
   return "Magearna's heart answers the fall: +1 Sp. Atk.";
 }
+
+/** Leaving a minigame that is not over (Meloetta: Finish the song). */
+export const onMinigameQuit = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'quitMinigame' }) : []);
