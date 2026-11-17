@@ -182,33 +182,69 @@ describe('Poli-Pond: the return', () => {
     run.stage!.map.nodes[0]!.kind = 'champion';
     return { run, battle };
   };
-  it('waits until you are losing, then a Poliwrath and three Poliwhirl fight beside you for three turns with their own moves', () => {
+  // The return on the field (allies the game plays) is tested through the engine in gnscreen-allies.test.ts. Here: when it starts,
+  // who comes, and the old strikes that a battle saved in the middle of the old return still finishes with.
+  it('waits until you are losing, then asks the engine to put a Poliwrath and three Poliwhirl on the field for three turns', () => {
     const { run, battle } = champion('pp10', FLAGS.release);
-    expect(pondAfterTurn(content, run)).toEqual([]);
+    const calls: { species: string[]; opts: object }[] = [];
+    const join = (allies: { speciesId: string; uid: string }[], opts: object) => {
+      calls.push({ species: allies.map((m) => m.speciesId), opts });
+      battle.guests = { uids: allies.map((m) => m.uid) };
+    };
+    expect(pondAfterTurn(content, run, join)).toEqual([]);
     run.party[0]!.hp = 1; // badly hurt is not "losing": three are still standing
     run.party[3]!.hp = 0;
-    expect(pondAfterTurn(content, run)).toEqual([]);
+    expect(pondAfterTurn(content, run, join)).toEqual([]);
     run.party[2]!.hp = 0; // two left
-    const foe = battle.enemyTeam[0]!;
-    const full = maxHp(content, foe);
-    // The allies are real Pokémon at the party's average level, and what they take off is what their own best moves do.
+    // Without the engine there is no field to stand on: the return waits.
+    expect(pondAfterTurn(content, run)).toEqual([]);
+    expect(pondFlag(run, FLAGS.fired)).toBe(0);
     const allies = pondAllies(content, run, 'release');
     expect(allies.map((m) => m.speciesId)).toEqual(['poliwrath', 'poliwhirl', 'poliwhirl', 'poliwhirl']);
     const avg = Math.round(run.party.reduce((n, m) => n + m.level, 0) / run.party.length);
     expect(allies.every((m) => m.level === avg)).toBe(true);
+    const first = pondAfterTurn(content, run, join);
+    expect(first.map((c) => c.text)).toEqual([
+      'A cry from off the field. Your lead turns its head before you do.',
+      'A Poliwrath walks onto the field. It looks at you. It recognises you first.',
+      'Behind it, three Poliwhirl. They take the field beside you, as allies, a turn each beside the Poliwrath.',
+    ]);
+    expect(calls).toEqual([{ species: ['poliwrath', 'poliwhirl', 'poliwhirl', 'poliwhirl'], opts: { turns: 3, rotate: true, anchor: 'pond-ally-0' } }]);
+    expect(pondFlag(run, FLAGS.fired)).toBe(1);
+    expect(pondFlag(run, 'poli-returned')).toBe(1);
+    // While they are out nothing more is said; when the engine has taken them off the field, the last line.
+    expect(pondAfterTurn(content, run, join)).toEqual([]);
+    battle.guests = undefined;
+    expect(pondAfterTurn(content, run, join).map((c) => c.text)).toEqual(['The pond steps back to the edge of the field. The rest is yours.']);
+    expect(pondAfterTurn(content, run, join)).toEqual([]); // once only
+    expect(calls).toHaveLength(1);
+  });
+  it('Reconcile brings four Poliwhirl (Burl among them) for four turns', () => {
+    const { run, battle } = champion('pp11', FLAGS.reconcile);
+    run.party[2]!.hp = 0;
+    run.party[3]!.hp = 0;
+    let asked: object | null = null;
+    const lines = pondAfterTurn(content, run, (allies, opts) => {
+      asked = { n: allies.length, ...opts };
+      battle.guests = { uids: allies.map((m) => m.uid) };
+    });
+    expect(lines.some((c) => c.text.includes('four Poliwhirl, Burl among them'))).toBe(true);
+    expect(asked).toEqual({ n: 5, turns: 4, rotate: true, anchor: 'pond-ally-0' });
+  });
+  it('a battle saved in the middle of the old return finishes the old way: strikes with their own moves, the foe never under 1 HP', () => {
+    const { run, battle } = champion('pp11c', FLAGS.release);
+    run.party[2]!.hp = 0;
+    run.party[3]!.hp = 0;
+    setPondFlag(run, FLAGS.fired, 1);
+    battle.storyEffects.push('pond-return:3');
+    const foe = battle.enemyTeam[0]!;
+    const full = maxHp(content, foe);
+    const allies = pondAllies(content, run, 'release');
     const wrath = pondAllyHit(content, battle, allies[0]!, foe)!;
     const whirl = pondAllyHit(content, battle, allies[1]!, foe)!;
     expect(wrath.damage).toBeGreaterThan(0);
     expect(whirl.damage).toBeGreaterThan(0);
-    const first = pondAfterTurn(content, run);
-    // Two lines for the arrival (the doc's), then Poliwrath's move and the Poliwhirl's.
-    expect(first.map((c) => c.text)).toEqual([
-      'A cry from off the field. Your lead turns its head before you do.',
-      'A Poliwrath walks onto the field. It looks at you. It recognises you first.',
-      'Behind it, three Poliwhirl. They take the field beside you, as allies.',
-      `Poliwrath uses ${wrath.move} on Snorlax.`,
-      `The three Poliwhirl follow, one after another: ${whirl.move}.`,
-    ]);
+    expect(pondAfterTurn(content, run).map((c) => c.text)).toEqual([`Poliwrath uses ${wrath.move} on Snorlax.`, `The three Poliwhirl follow, one after another: ${whirl.move}.`]);
     expect(foe.hp).toBe(Math.max(1, full - wrath.damage - 3 * whirl.damage));
     pondAfterTurn(content, run);
     const last = pondAfterTurn(content, run);
@@ -216,29 +252,12 @@ describe('Poli-Pond: the return', () => {
     const afterThree = foe.hp;
     expect(pondAfterTurn(content, run)).toEqual([]);
     expect(foe.hp).toBe(afterThree);
-    expect(pondFlag(run, FLAGS.fired)).toBe(1);
-    expect(pondFlag(run, 'poli-returned')).toBe(1);
-    foe.hp = 2;
-    battle.storyEffects = [];
-    expect(pondAfterTurn(content, run)).toEqual([]); // once only
-  });
-  it('Reconcile brings four Poliwhirl (Burl among them) for four turns; a foe is never left under 1 HP', () => {
-    const { run, battle } = champion('pp11', FLAGS.reconcile);
-    run.party[2]!.hp = 0;
-    run.party[3]!.hp = 0;
-    const foe = battle.enemyTeam[0]!;
-    const full = maxHp(content, foe);
-    const allies = pondAllies(content, run, 'reconcile');
-    expect(allies).toHaveLength(5);
-    const perTurn = pondAllyHit(content, battle, allies[0]!, foe)!.damage + 4 * pondAllyHit(content, battle, allies[1]!, foe)!.damage;
-    const lines = pondAfterTurn(content, run);
-    expect(lines.some((c) => c.text.includes('four Poliwhirl, Burl among them'))).toBe(true);
-    for (let i = 0; i < 6; i++) pondAfterTurn(content, run);
-    expect(foe.hp).toBe(Math.max(1, full - 4 * perTurn));
-    // Boundary: a foe on its last HP is not fainted by the allies.
+    // Boundary: a foe on its last HP is not fainted by the old strikes.
     const again = champion('pp11b', FLAGS.release);
     again.run.party[2]!.hp = 0;
     again.run.party[3]!.hp = 0;
+    setPondFlag(again.run, FLAGS.fired, 1);
+    again.battle.storyEffects.push('pond-return:3');
     again.battle.enemyTeam[0]!.hp = 3;
     pondAfterTurn(content, again.run);
     expect(again.battle.enemyTeam[0]!.hp).toBe(1);
@@ -249,7 +268,9 @@ describe('Poli-Pond: the return', () => {
     run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!.kind = 'battle' as never;
     run.party[2]!.hp = 0;
     run.party[3]!.hp = 0;
-    expect(pondAfterTurn(content, run)).toEqual([]);
+    let asked = false;
+    expect(pondAfterTurn(content, run, () => { asked = true; })).toEqual([]);
+    expect(asked).toBe(false);
   });
 });
 

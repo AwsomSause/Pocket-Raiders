@@ -908,6 +908,23 @@ export const BattleStateSchema = z.object({
   finaleAssist: z.object({ id: z.string(), name: z.string(), speciesId: z.string(), level: z.number().int().min(1), strikesLeft: z.number().int().min(0) }).optional(),
   /** A temporary ally (event battle): its uid. It fights beside you in a double battle and leaves the party when the battle ends. */
   loaner: z.string().optional(),
+  /**
+   * Allies the game controls (core/battle/guests.ts): temporary Pokémon at the end of the party that stand in your spots of a double
+   * or triple battle, pick their own moves, can be hit and can faint, and leave when the battle ends (or after `turns` full turns).
+   * `uids`: the allies still here, in the order they take the field. `rotate`: the ones waiting trade places with the ones out, a turn
+   * each. `anchor`: an ally that never rotates out. `closed`: spots added when a smaller battle grew to make room: the player's are for
+   * allies only and the foe's stay empty. `grown`: what the battle was before it grew (a single battle goes back when the allies leave).
+   */
+  guests: z
+    .object({
+      uids: z.array(z.string()),
+      turns: z.number().int().min(0).optional(),
+      rotate: z.boolean().optional(),
+      anchor: z.string().optional(),
+      closed: z.object({ player: z.array(z.number().int().min(0).max(2)), enemy: z.array(z.number().int().min(0).max(2)) }).optional(),
+      grown: z.enum(['single', 'double']).optional(),
+    })
+    .optional(),
   /** How each enemy's level was worked out (shown in the debug panel). */
   levelInfo: z.array(LevelBreakdownSchema).default([]),
   /** 0–1: the chance each turn that the enemy picks its best move (bosses), otherwise a random one. */

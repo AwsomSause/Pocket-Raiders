@@ -47,7 +47,7 @@ import { applyCatalog, catalogTargetProblem, isFreeReroll } from './catalog';
 import { addItem } from './items';
 import { applyMarket, marketWords, noteSpend } from './market';
 import { evolve } from './evolution';
-import { canBeDoubles, makeDoubles } from './battle/doubles';
+import { canBeDoubles, makeDoubles, makeGuestTriples } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
 import { championTeam, retiredTeam } from './story/championDefense';
 import { oldFoe } from './story/promises';
@@ -2525,6 +2525,13 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       run.battle.doubles!.player.index = run.party.length - 1;
       run.battle.participants = [run.party[activeIndex]!.uid, ally.uid];
       run.battle.loaner = ally.uid;
+    }
+    // Allies the game controls (gn.25): a triple battle, your lead on the left and the allies beside it. They go home when it ends.
+    const guestIds = (b.allies ?? []).filter((id) => content.species.has(id));
+    if (guestIds.length > 0 && team.length >= 2 && !run.battle.doubles) {
+      const guests = guestIds.map((id) => newMon(content, run, id, Math.max(1, base), 'p'));
+      run.party.push(...guests);
+      makeGuestTriples(run.battle, run.party, guests.map((m) => m.uid));
     }
   }
   if (event.eventId.startsWith('sky.')) shapeSkyFoe(content, run, event.eventId);
