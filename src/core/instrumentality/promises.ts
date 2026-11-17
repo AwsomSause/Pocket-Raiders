@@ -39,6 +39,7 @@ const COMES_WHEN: Record<string, (content: Content, run: RunState) => boolean> =
   zarude: (_c, run) => [...run.party, ...run.box].some((m) => m.hatched === true),
   mew: (_c, run) => Object.keys(promiseState(run).track ?? {}).filter((k) => k.startsWith('caught:')).length >= 20,
   darkrai: (_c, run) => trackOf(run, 'restsPassed') >= 2,
+  deoxys: (_c, run) => trackOf(run, 'leadChanges') >= 4,
   victini: (_c, run) => trackOf(run, 'winStreak') >= 10,
   genesect: (_c, run) => [...run.party, ...run.box].some((m) => FOSSILS.has(m.speciesId)),
 };
@@ -231,6 +232,7 @@ export function onRestUsed(content: Content, run: RunState): string[] {
   const lines = noteEvent(content, run, { kind: 'restUsed', previousUsed });
   bumpTrack(run, 'restPrevUsed', 1);
   bumpTrack(run, 'restsPassed', 0);
+  bumpTrack(run, 'restsUsed', (n) => n + 1); // Deoxys: a new rest, a new stance
   return lines;
 }
 
@@ -244,6 +246,8 @@ export function onStageEntered(run: RunState, previous: { heals: number; used: n
 
 /** A TM or technical item used (Genesect: No more machines). */
 export const onTmUsed = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'useTm' }) : []);
+
+export const STANCE_NAME: Record<string, string> = { atk: 'Attack', def: 'Defense', spe: 'Speed', norm: 'Normal' };
 
 /** The opposing lead at battle start. Darkrai: it loses 1/8 of its HP. Genesect: a free boost to the lead's stronger attacking stat. */
 export function wonderAtBattleStart(content: Content, run: RunState): string[] {
@@ -273,6 +277,13 @@ export function wonderAtBattleStart(content: Content, run: RunState): string[] {
   if (id === 'keldeo') {
     battle.storyEffects.push('promise:keldeo');
     lines.push('Keldeo steadies you: once this battle a move strikes the weaker of the foe\'s defenses.');
+  }
+  if (id === 'deoxys') {
+    const stance = ['', 'atk', 'def', 'spe', 'norm'][trackOf(run, 'stance')] ?? '';
+    if (stance) {
+      battle.storyEffects.push(`promise:stance-${stance}`);
+      lines.push(`Deoxys holds its ${STANCE_NAME[stance]} stance.`);
+    }
   }
   if (id === 'genesect') {
     const lead = run.party[battle.activeIndex];
@@ -324,3 +335,16 @@ export function hoopaRing(content: Content, run: RunState, regionKey: number): {
 
 /** An assist taken (a friend or shadow steps in; a rival's step-in help): Keldeo's Promise, Fight your own battles. */
 export const onAssistAccepted = (content: Content, run: RunState): string[] => (run.expansion?.promises ? noteEvent(content, run, { kind: 'acceptAssist' }) : []);
+
+const uidNumber = (uid: string): number => Number(uid.replace(/\D/g, '')) || 0;
+/** The player moved a different Pokémon to the front (Deoxys's trigger counts these). */
+export const onLeadChanged = (run: RunState): void => { if (run.expansion?.promises) bumpTrack(run, 'leadChanges', (n) => n + 1); };
+/** A new stage begins: Deoxys's Promise, never lead with the same Pokémon two stages running. */
+export function onLeadAtStage(content: Content, run: RunState): string[] {
+  if (!run.expansion?.promises || !run.party[0]) return [];
+  const now = uidNumber(run.party[0].uid);
+  const before = trackOf(run, 'lastLead');
+  const lines = noteEvent(content, run, { kind: 'lead', uid: String(now), previousLead: before > 0 ? String(before) : null });
+  bumpTrack(run, 'lastLead', now);
+  return lines;
+}

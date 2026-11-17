@@ -4,7 +4,8 @@ import { createBattle } from '../../src/core/battle/engine';
 import { freshSos } from '../../src/core/battle/sos';
 import { ExpansionSettingsSchema } from '../../src/core/expansion/schema';
 import { HEATED, heatedConditions, heatedRoll, isBigBattle } from '../../src/core/instrumentality/heated';
-import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
+import { breaks, believed, hearTelling, noteEvent, bumpTrack, comesWhenMet, hoopaRing, hoopaStage, onLeadAtStage, onLeadChanged, onAssistAccepted, onBattleWon, onPlayerFaint, onCaught, onRestUsed, onStageEntered, onTmUsed, wonderAtBattleStart, trackOf, promiseState, promiseWarning, resolveVisit, rollVisit, visitChance, wonderAfterBattle, youngestUid, type PromiseEvent } from '../../src/core/instrumentality/promises';
+import { resolveWonder, startWonder, wonderActions } from '../../src/core/instrumentality/wonders';
 import { MYTHICALS } from '../../src/core/instrumentality/promisesData';
 import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/instrumentality/secondChance';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
@@ -104,7 +105,7 @@ describe('Mythical Promises (M1)', () => {
       expect(m.tellings).toHaveLength(3);
       if (m.status !== 'supported') expect(m.note).toBeTruthy();
     }
-    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['mew', 'darkrai', 'victini', 'keldeo', 'genesect', 'hoopa', 'zeraora', 'zarude']);
+    expect(MYTHICALS.filter((m) => m.status === 'supported').map((m) => m.id)).toEqual(['mew', 'deoxys', 'darkrai', 'victini', 'keldeo', 'genesect', 'hoopa', 'zeraora', 'zarude']);
   });
   it('every Promise is a checkable rule: it breaks on its event and not on an unrelated one', () => {
     const run = base();
@@ -348,6 +349,49 @@ describe('Mythical Promises stage 2 (Zeraora, Keldeo)', () => {
     expect(onAssistAccepted(content, k)[0]).toContain('leaves');
     const z = armed('zeraora');
     expect(onCaught(content, z, createPokemon(content, 'rattata', 5, 'c9'))[0]).toContain('leaves');
+  });
+});
+
+describe('Mythical Promises stage 2 (Deoxys)', () => {
+  const deoxys = () => {
+    const run = structuredClone(toBattle(start({ mythicalPromises: true })));
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: 'deoxys', guest: { id: 'deoxys', forgiven: false }, kept: [], left: [] } };
+    return run;
+  };
+  it('a stance is offered only after a rest, picked on the decision screen, and held at battle start', () => {
+    const run = deoxys();
+    expect(wonderActions(content, run)[0]!.problem).toContain('after a rest');
+    onRestUsed(content, run);
+    expect(wonderActions(content, run)[0]!.problem).toBeNull();
+    const { decision } = startWonder(content, run, 'stance');
+    expect(decision!.options.map((o) => o.value)).toEqual(['atk', 'def', 'spe', 'norm']);
+    expect(resolveWonder(content, run, decision!, 2)).toContain('Speed');
+    expect(wonderActions(content, run)[0]!.problem).toContain('after a rest'); // one a rest
+    run.battle = createBattle('wild', [createPokemon(content, 'rattata', 10, 'foe')], 0, run.party[0]!.uid);
+    expect(wonderAtBattleStart(content, run)[0]).toContain('Speed stance');
+    expect(run.battle!.storyEffects).toContain('promise:stance-spe');
+  });
+  it('the Attack stance hits 15% harder than no stance (same seed)', () => {
+    const hit = (stance: string | null) => {
+      const run = deoxys();
+      run.party[0]!.moves = [{ id: 'tackle', pp: 35 }];
+      run.battle = createBattle('wild', [createPokemon(content, 'rattata', 30, 'foe')], 0, run.party[0]!.uid);
+      if (stance) run.battle.storyEffects.push(`promise:stance-${stance}`);
+      const foeHp = run.battle.enemyTeam[0]!.hp;
+      const res = takeTurn(content, run, { kind: 'move', index: 0 });
+      return foeHp - (res.run.battle?.enemyTeam[0]?.hp ?? 0);
+    };
+    const base = hit(null);
+    expect(base).toBeGreaterThan(0);
+    expect(hit('atk')).toBeGreaterThanOrEqual(base);
+  });
+  it('Promise: the same lead two stages running breaks it (forgives once); changing the lead counts toward the trigger', () => {
+    const run = deoxys();
+    expect(onLeadAtStage(content, run)).toEqual([]);
+    expect(onLeadAtStage(content, run)[0]).toContain('forgives');
+    expect(comesWhenMet(content, run, 'deoxys')).toBe(false);
+    for (let i = 0; i < 4; i++) onLeadChanged(run);
+    expect(comesWhenMet(content, run, 'deoxys')).toBe(true);
   });
 });
 

@@ -1211,6 +1211,8 @@ export const PendingDecisionSchema = z.discriminatedUnion('kind', [
   /** Beta 0.6 B7: the League door. Your party is registered; option 0 keeps it, option N swaps the Pokémon the League answers most for boxed Pokémon `swapIns[N-1]`. */
   z.object({ kind: z.literal('leagueDoor'), title: z.string(), outUid: z.string(), swapIns: z.array(z.string()), options: z.array(z.object({ label: z.string(), description: z.string() })).min(1) }),
   /** Beta 0.7 M1: a Mythical visits and offers a Promise. Option 0 accepts (it becomes the Guest), option 1 declines (core/instrumentality/promises.ts). */
+  /** Mythical Promises stage 2: a Guest's Wonder asks for a pick (a stance, a wish, a retune). `value` is what the pick means to the Wonder. */
+  z.object({ kind: z.literal('wonderChoice'), mythicalId: z.string(), wonderId: z.string(), title: z.string(), options: z.array(z.object({ label: z.string(), description: z.string(), value: z.string() })).min(1) }),
   z.object({ kind: z.literal('mythicalVisit'), mythicalId: z.string(), title: z.string(), options: z.array(z.object({ label: z.string(), description: z.string() })).min(2) }),
   /** A PP Up or PP Max: pick which move gets the extra PP. */
   z.object({ kind: z.literal('ppUp'), uid: z.string(), itemName: z.string(), ups: z.number().int().min(1).max(3) }),

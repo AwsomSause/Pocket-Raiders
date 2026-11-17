@@ -64,7 +64,8 @@ import { syncLegendFlags, weekInfluence } from './legends/signs';
 import { noteSpirits, syncLegendKeys } from './legends/keys';
 import { weekFlags, weekLegends } from './co/weeks';
 import { drawWholeRun } from './legends/wholeRun';
-import { hearTelling, hoopaRing, hoopaStage, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
+import { resolveWonder, startWonder, wonderActions } from './instrumentality/wonders';
+import { hearTelling, hoopaRing, hoopaStage, onLeadAtStage as promiseOnLeadStage, onLeadChanged as promiseOnLead, onAssistAccepted as promiseOnAssist, onBattleWon as promiseOnWin, onPlayerFaint as promiseOnFaint, noteEvent as notePromiseEvent, onCaught as promiseOnCaught, onPartyChanged as promiseOnPartyChanged, onRestUsed as promiseOnRest, onStageEntered as promiseOnStage, onTmUsed as promiseOnTm, resolveVisit, rollVisit, wonderAfterBattle, wonderAtBattleStart } from './instrumentality/promises';
 import { gearTeam, playerItemsPer, type GearTier } from './bossGear';
 import { drawRemembranceStarters } from './story2/starterDraw';
 import { endBorrow, endFeudWatch, noteCalm, feudWatching, mainRival, notePlayerLoss, scoutedLead, secondRival } from './rivals/questlines';
@@ -780,6 +781,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   const leftBehind = run.stage ? { heals: run.stage.map.nodes.flatMap((n) => n.sides).filter((x) => x.kind === 'heal').length, used: run.stage.map.nodes.flatMap((n) => n.sides).filter((x) => x.kind === 'heal' && x.used).length } : null;
   promiseOnStage(run, leftBehind);
   promiseSay(content, run, hoopaStage(content, run, run.regionIndex * 100 + index));
+  promiseSay(content, run, promiseOnLeadStage(content, run));
   ofGuestLeaves(content, run);
   // Swap Day (NE39) never outlasts its stage.
   if (swapRunning(run)) endSwap(content, run, partyCapacity(content, run));
@@ -1297,10 +1299,12 @@ export function mapChoices(content: Content, run: RunState): MapNode[] {
   return plain;
 }
 
-export type MapActionKind = 'treasureMap' | 'escapeRope' | 'bicycle' | 'acroBike' | 'machBike' | 'airship' | 'rematch' | 'transceiver' | 'pail' | 'sprayduck' | 'squirt' | 'tmDeck';
+export type MapActionKind = `wonder:${string}` | 'treasureMap' | 'escapeRope' | 'bicycle' | 'acroBike' | 'machBike' | 'airship' | 'rematch' | 'transceiver' | 'pail' | 'sprayduck' | 'squirt' | 'tmDeck';
 
 export interface MapAction {
   kind: MapActionKind;
+  /** A Guest's Wonder row: its own name (it has no catalog item). */
+  title?: string;
   itemId: string;
   /** What the item does now, for the Items menu. */
   text: string;
@@ -1425,6 +1429,7 @@ export function mapActions(content: Content, run: RunState): MapAction[] {
     const used = usedThisStage(run, itemId) ? 'Already used on this stage.' : null;
     out.push({ kind: c.kind, itemId, text: `${c.text} (once per stage)`, problem: league ?? used ?? c.problem, on: false });
   }
+  for (const w of wonderActions(content, run)) out.push({ kind: `wonder:${w.id}`, itemId: `wonder:${w.id}`, title: w.title, text: w.text, problem: w.problem, on: false });
   return out;
 }
 
@@ -1435,6 +1440,15 @@ export function useMapAction(content: Content, current: RunState, kind: MapActio
   if (!action) throw new Error("You don't have that item");
   if (action.problem && !action.on) throw new Error(action.problem);
   const run = structuredClone(current);
+  if (kind.startsWith('wonder:')) {
+    const started = startWonder(content, run, kind.slice('wonder:'.length));
+    if (started.decision) {
+      run.pending.push(started.decision);
+      run.afterDecisions = 'map';
+      continueAfterDecisions(content, run);
+    }
+    return { run, message: started.message };
+  }
   const stage = run.stage!;
   const name = content.catalog.get(action.itemId)!.name;
   switch (kind) {
@@ -1496,7 +1510,7 @@ export function useMapAction(content: Content, current: RunState, kind: MapActio
         delete run.moveMode;
         return { run, message: `You put the ${name} away.` };
       }
-      run.moveMode = kind;
+      run.moveMode = kind as 'bicycle' | 'acroBike' | 'machBike' | 'airship';
       return { run, message: kind === 'airship' ? `The ${name} is ready. Choose where to fly.` : `You got on the ${name}. Choose where to ride.` };
     }
   }
@@ -4597,6 +4611,12 @@ function resolveDecisionCore(content: Content, current: RunState, choice: Decisi
   let message: string;
   let followUp: PendingDecision | null = null;
 
+  if (decision.kind === 'wonderChoice') {
+    run.pending.shift();
+    const message = resolveWonder(content, run, decision, choice.kind === 'circuit' ? choice.optionIndex : 0);
+    continueAfterDecisions(content, run);
+    return { run, message };
+  }
   if (decision.kind === 'mythicalVisit') {
     run.pending.shift();
     const message = resolveVisit(run, decision, choice.kind === 'circuit' ? choice.optionIndex : 1);
@@ -4876,6 +4896,7 @@ export function setLead(current: RunState, partyIndex: number): RunState {
   const run = structuredClone(current);
   const [mon] = run.party.splice(partyIndex, 1);
   run.party.unshift(mon!);
+  if (partyIndex !== 0) promiseOnLead(run);
   return run;
 }
 

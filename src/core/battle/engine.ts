@@ -3012,7 +3012,7 @@ function speedOf(ctx: BattleContext, c: Combatant): number {
 function priorityOf(ctx: BattleContext, c: Combatant, move: Move): number {
   // §29 enraged after a rival's sacrifice: its next moves go first.
   const rage = ctx.battle.enraged;
-  return basePriority(ctx, c, move) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c) + (c.side === 'player' ? callPriority(ctx.battle, c.mon.uid) : 0) + (c.side === 'player' ? quirkPriority(c.mon, c.vol.turnsOut) : 0) + (c.side === 'player' ? boltPriority(ctx, move) : 0);
+  return basePriority(ctx, c, move) + (c.side === 'player' && ctx.battle.turn <= 1 && ctx.battle.storyEffects.includes('promise:stance-spe') ? 1 : 0) + variantPriorityBonus(ctx.battle.extra.variants, c.mon.uid) + (rage && rage.left > 0 && c.side === 'player' && rage.uid === c.mon.uid ? rage.priority : 0) + momentPriority(ctx, c) + (c.side === 'player' ? callPriority(ctx.battle, c.mon.uid) : 0) + (c.side === 'player' ? quirkPriority(c.mon, c.vol.turnsOut) : 0) + (c.side === 'player' ? boltPriority(ctx, move) : 0);
 }
 
 /** Legendary Blessing, The Bolt (Thundurus): your status moves go first on the battle's first turn (two in Communion). */
@@ -4896,6 +4896,14 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       });
       damage = applyTypeModifiers(ctx, user, target, effectiveness, damage, physical, moveType, move);
       if (zeraoraArc) damage = Math.max(1, Math.floor(damage * 1.2));
+      {
+        // Deoxys's stances (Mythical Promises): Attack +15% dealt, Defense -15% taken, Normal +5% dealt and -5% taken.
+        const se = ctx.battle.storyEffects;
+        let stance = 1;
+        if (user.side === 'player') { if (se.includes('promise:stance-atk')) stance *= 1.15; if (se.includes('promise:stance-norm')) stance *= 1.05; }
+        else if (target.side === 'player') { if (se.includes('promise:stance-def')) stance *= 0.85; if (se.includes('promise:stance-norm')) stance *= 0.95; }
+        if (stance !== 1) damage = Math.max(1, Math.floor(damage * stance));
+      }
       if (ctx.moments) { const boost = momentDamageMult(ctx, user, moveType, move.id); if (boost !== 1) damage = Math.max(1, Math.floor(damage * boost)); }
       // Catalog Overhaul quirks (core/co/quirks.ts): a habit of this Pokémon changes its damage.
       if (user.side === 'player' && user.mon.quirk) { const q = quirkDamageMult(content, user.mon, { moveType, vsTrainer: ctx.battle.kind === 'trainer', atGym: Boolean(ctx.battle.trainer?.leaderId), firstMove: user.vol.turnsOut === 0 }); if (q !== 1) damage = Math.max(1, Math.floor(damage * q)); }
