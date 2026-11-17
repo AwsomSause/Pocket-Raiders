@@ -61,7 +61,7 @@ export function spiritMarketView(_c: ReduxCtx, d: SpiritMarketModel): string {
     const plate = `<div class="abs" style="left:6px;top:134px;width:${sw - 12}px;height:48px;text-align:center;line-height:1.2;color:#f4e8c8"><div style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(s.name)}</div><div style="font-size:11.5px;opacity:.85">${esc(inLanes && s.shut ? s.shut : s.trade)}</div></div>`;
     const count = s.used > 0 ? `<span class="abs tg" style="right:10px;top:40px">${s.used} trade${s.used === 1 ? '' : 's'}</span>` : '';
     lane += `<div class="abs" data-stall="${s.id}" style="left:${x}px;top:0;width:${sw}px;height:${LANE.h}px;opacity:${faded ? 0.45 : 1}">${glow}${awning}${keeper}${table}${plate}${count}`
-      + `<div class="abs" data-cell="${i}" style="left:4px;top:4px;right:4px;bottom:4px;border-radius:8px;${inLanes && !s.shut ? 'cursor:pointer;' : ''}${ring(on || (here && !d.outcome))}"${inLanes && !s.shut ? `${act('pick', i)} data-over="over"` : ''}></div></div>`;
+      + `<div class="abs"${inLanes ? ` data-cell="${i}"` : ''} style="left:4px;top:4px;right:4px;bottom:4px;border-radius:8px;${inLanes && !s.shut ? 'cursor:pointer;' : ''}${ring(on || (here && !d.outcome))}"${inLanes && !s.shut ? `${act('pick', i)} data-over="over"` : ''}></div></div>`;
   });
   // The gate, and the Misdreavus that keeps it. In the lanes it is the way out (the last choice).
   const gx = LANE.w - GATE_W, gi = d.stalls.length, gateOn = inLanes && d.index === gi;
@@ -69,7 +69,7 @@ export function spiritMarketView(_c: ReduxCtx, d: SpiritMarketModel): string {
     + `<i class="abs" style="left:22px;top:20px;width:8px;height:112px;background:#7a2a2a"></i><i class="abs" style="left:${GATE_W - 30}px;top:20px;width:8px;height:112px;background:#7a2a2a"></i><i class="abs" style="left:10px;top:14px;width:${GATE_W - 20}px;height:10px;border-radius:3px;background:#9a3a3a"></i><i class="abs" style="left:18px;top:34px;width:${GATE_W - 36}px;height:6px;background:#7a2a2a"></i>`
     + (d.gate ? foot(GATE_W / 2, 124, tall(d.gate, 66)) : '')
     + `<div class="abs" style="left:4px;top:134px;width:${GATE_W - 8}px;text-align:center;line-height:1.2;color:#f4e8c8"><div style="font-size:14px;font-weight:700">The gate</div><div style="font-size:11.5px;opacity:.85">${inLanes ? 'Leave the market.' : 'A Misdreavus keeps it.'}</div></div>`
-    + `<div class="abs" data-cell="${gi}" style="left:4px;top:4px;right:4px;bottom:4px;border-radius:8px;${inLanes ? 'cursor:pointer;' : ''}${ring(gateOn || ((d.at === 'gate' || d.at === 'dark') && !d.outcome))}"${inLanes ? `${act('pick', gi)} data-over="over"` : ''}></div></div>`;
+    + `<div class="abs"${inLanes ? ` data-cell="${gi}"` : ''} style="left:4px;top:4px;right:4px;bottom:4px;border-radius:8px;${inLanes ? 'cursor:pointer;' : ''}${ring(gateOn || ((d.at === 'gate' || d.at === 'dark') && !d.outcome))}"${inLanes ? `${act('pick', gi)} data-over="over"` : ''}></div></div>`;
   if (dark) lane += '<div class="abs" style="left:0;top:0;right:0;bottom:0;background:#0a0814aa;pointer-events:none"></div>';
   lane += '</div>';
   // Under the lane: what is said, and (at a stall, the gate or in the dark) the answers.

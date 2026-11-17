@@ -157,7 +157,7 @@ function prompt(s: MarketState): string {
     case 'mismagius':
       return '"A name you gave. Give it back. I give you a secret in exchange, and a good one."';
     default:
-      return s.step === 0 ? '"Teach me what yours knows. I will teach it what its grandparents knew. Sit. Who learns?"' : s.step === 1 ? `Every move ${mon?.name ?? 'its'} grandparents knew is laid out. "Any one," says the Dusclops.` : `"And what does ${mon?.name ?? 'it'} teach me?"`;
+      return s.step === 0 ? '"Teach me what yours knows. I will teach it what its grandparents knew. Sit. Who learns?"' : s.step === 1 ? `Every move ${mon ? `${mon.name}'s` : 'its'} grandparents knew is laid out. "Any one," says the Dusclops.` : `"And what does ${mon?.name ?? 'it'} teach me?"`;
   }
 }
 
