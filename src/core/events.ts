@@ -2493,7 +2493,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     }
     const startAt = watching ? 0 : activeIndex;
     const trainerName = evil ? evil.name : partner && rival ? `${rival.name} & ${partner.name}` : rival ? (b.kind === 'trainer' && b.quest?.as) || rival.name : mentorFoe ? mentorFoe.name : fellow ? fellow.name : b.kind === 'trainer' && b.friend ? friendName(run) : b.name;
-    run.battle = createBattle('trainer', team, startAt, run.party[startAt]!.uid, { classId: b.classId ?? 'event', name: trainerName, leaderId: null });
+    run.battle = createBattle('trainer', team, startAt, run.party[startAt]!.uid, { classId: (rival && rivalTeam.length > 0 && !partner ? rival.classId : undefined) ?? b.classId ?? 'event', name: trainerName, leaderId: null });
     if (watching) {
       run.battle.spectate = { kind: 'duel' };
       // The side you cheered for starts a little braver (Attack and Special Attack +1).
@@ -2502,7 +2502,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
       if (side) for (const st of ['atk', 'spa'] as const) side[st] = Math.min(6, (side[st] ?? 0) + 1);
     }
     // A questline fight against the rival themself is a real rival battle: tier 5 play, and Lead, Marks and feelings move with the result.
-    if (rival && rivalTeam.length > 0 && b.kind === 'trainer' && b.quest && !b.quest.as && !partner && !watching) {
+    // Any scene that sets `rival: true` (Route 22, the gate fights...) fights the run's real rival, not a stand-in.
+    if (rival && rivalTeam.length > 0 && b.kind === 'trainer' && !b.quest?.as && !partner && !watching) {
       run.battle.rivalId = rival.id;
       beginRivalBrain(content, run, rival.id);
       starterRivalryStages(run, run.battle);
