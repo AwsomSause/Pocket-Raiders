@@ -99,6 +99,7 @@ import { uiTiming } from '../ui/wiiMotion';
 import { addAmbience } from '../ui/battleFx/ambience';
 import { PARALLAX_RANGE, parallaxOffset, pointerShare, type ParallaxLayer } from '../core/presentation/parallax';
 import { sceneForRun } from './routing';
+import { parkWaiting } from '../core/minigame/flow';
 import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { MAP_SKINS } from '../ui/mapStyles';
@@ -582,6 +583,11 @@ export class MapScene extends Phaser.Scene {
     void ensureNarration().catch(() => undefined);
     const { session } = services();
     const run = session.run!;
+    // gn.18: a Safari Land visit is waiting on an event inside the park; the park's screen takes it from here.
+    if (parkWaiting(run)) {
+      this.scene.start('Minigame');
+      return;
+    }
     // Beat 9: the Field Trial plays before anything else on a save's first Story Run.
     if (session.fieldTrialDue()) {
       this.scene.start('FieldTrial');

@@ -10,7 +10,7 @@ import type { RunState } from '../state';
 import { gameModule, type MinigameView } from './games';
 import type { Medal, MinigameDef } from './schema';
 import { SAFARI_ID, type SafariState } from '../greenneedle/safari';
-import { safariBegin, safariFinish } from '../greenneedle/safariEnd';
+import { pausedPark, safariBegin, safariFinish, safariStepBack, safariStepOut } from '../greenneedle/safariEnd';
 import { SNAKE_ID, type SnakeState } from '../greenneedle/snake';
 import { psyduckBegin, psyduckFinish } from '../greenneedle/snakeEnd';
 import { ARCADE_ID, type ArcadeState } from '../greenneedle/arcade';
@@ -104,7 +104,40 @@ export function minigameAct(content: Content, current: RunState, cellId: string)
   if (s.outcome) return run;
   const mod = gameModule(s.id);
   mod.act(content, s.state as never, cellId);
+  // gn.18: an event inside the park (Kanto's Stampede and Gold Teeth) plays on the map phase; the visit waits for it.
+  if (s.id === SAFARI_ID && safariStepOut(content, run, s.state as SafariState)) return run;
   return settle(content, run);
+}
+
+/** gn.18: whether a Safari Land visit is waiting while an event inside the park plays (the run is on the map phase meanwhile). */
+export const parkWaiting = (run: RunState): boolean => pausedPark(run) !== null;
+
+/**
+ * gn.18: after an event inside the park closes. `sideId` is the next room that event opened (play it next), or null once the visit
+ * is back on (the minigame phase again). If the node no longer holds the park (the event led somewhere else), the visit ends there and pays out.
+ */
+export function continuePark(content: Content, current: RunState): { run: RunState; sideId: string | null } {
+  if (!pausedPark(current)) return { run: current, sideId: null };
+  const run = structuredClone(current);
+  const m = run.minigame!;
+  const node = requireStage(run).map.nodes.find((n) => n.id === run.stage!.current);
+  if (!node?.sides.some((x) => x.id === m.sideId)) {
+    const s = m.state as SafariState;
+    s.away = null;
+    s.done = true;
+    run.phase = 'minigame';
+    return { run: settle(content, run), sideId: null };
+  }
+  return { run, sideId: safariStepBack(run) };
+}
+
+/** gn.18: the stop of the event the waiting visit stepped out to (the screen opens it). */
+export const parkEventSide = (run: RunState): string | null => pausedPark(run)?.away?.opened.at(-1) ?? null;
+
+/** gn.18: the stop of the door taken at the far gate, once the visit has ended (the screen opens it after the outcome). */
+export function parkDoorSide(run: RunState): string | null {
+  const m = run.minigame;
+  return m?.id === SAFARI_ID && m.outcome ? ((m.state as SafariState).doorSide ?? null) : null;
 }
 
 export function minigameTick(content: Content, current: RunState): RunState {

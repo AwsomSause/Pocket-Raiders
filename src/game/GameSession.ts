@@ -506,6 +506,13 @@ export class GameSession {
     return this.setRun(Mini.minigameTick(this.content, this.requireRun()));
   }
 
+  /** gn.18: back from an event inside Safari Land. Returns the next room's stop id to play, or null once the visit is on again. */
+  continuePark(): string | null {
+    const next = Mini.continuePark(this.content, this.requireRun());
+    this.setRun(next.run);
+    return next.sideId;
+  }
+
   leaveMinigame(): RunState {
     return this.setRun(Mini.leaveMinigame(this.requireRun()));
   }
