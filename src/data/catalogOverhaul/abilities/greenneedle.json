@@ -1,3 +1,6 @@
 [
-  {"id": "before-the-fall", "name": "Before the Fall", "description": "Once a battle, it names the foe's strongest move. The first critical hit against its side each battle is an ordinary hit."}
+  {"id": "before-the-fall", "name": "Before the Fall", "description": "Once a battle, it names the foe's strongest move. The first critical hit against its side each battle is an ordinary hit."},
+  {"id": "rope-a-dope", "name": "Rope-a-Dope", "description": "Each time it is hit by a contact move, its next attack gains 10% power, up to 20%."},
+  {"id": "foster-wing", "name": "Foster Wing", "description": "Once a battle, when it is sent in for an ally that left with less than half its HP, its Defense rises by one stage."},
+  {"id": "house-call", "name": "House Call", "description": "Once a battle, on entry, a plain Rotom takes the appliance form that suits the foe best, and keeps it until it faints or the battle ends."}
 ]

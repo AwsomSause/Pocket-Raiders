@@ -309,23 +309,18 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "roll",
-        "key": "courier-down",
-        "n": 15
-       },
-       {
-        "kind": "gn",
         "op": "when",
         "key": "courier-over",
         "min": 1,
         "then": [
          {
           "kind": "gn",
-          "op": "roll",
+          "op": "setFlag",
           "key": "courier-down",
-          "n": 45
+          "n": 1
          }
-        ]
+        ],
+        "text": "It goes. For a mile it goes. Then the long strokes stop, and it comes down on the shingle, short of the door. The high thin air took what it had."
        },
        {
         "kind": "addEvent",

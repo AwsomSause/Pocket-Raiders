@@ -237,6 +237,7 @@
         "matchLead": true,
         "bstMatch": true,
         "noItems": true,
+        "gn": "twin",
         "myStages": {
          "spe": 1
         }
@@ -278,6 +279,32 @@
           }
          ],
          "text": "It won from behind! The crowd is on its feet."
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
         },
         {
          "kind": "heal",
@@ -425,14 +452,8 @@
         "label": "Training: Guard",
         "effects": [
          {
-          "kind": "statMultiplier",
-          "stat": "def",
-          "value": 1.1
-         },
-         {
-          "kind": "statMultiplier",
-          "stat": "spd",
-          "value": 1.1
+          "kind": "damageTakenMultiplier",
+          "value": 0.9
          }
         ],
         "battles": 5,
@@ -599,6 +620,32 @@
          "text": "It won from behind! The crowd is on its feet."
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
+        },
+        {
          "kind": "heal",
          "share": 0.4
         },
@@ -701,6 +748,32 @@
          "text": "It won from behind! The crowd is on its feet."
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
+        },
+        {
          "kind": "heal",
          "share": 0.4
         },
@@ -801,14 +874,8 @@
         "label": "Training: Guard",
         "effects": [
          {
-          "kind": "statMultiplier",
-          "stat": "def",
-          "value": 1.1
-         },
-         {
-          "kind": "statMultiplier",
-          "stat": "spd",
-          "value": 1.1
+          "kind": "damageTakenMultiplier",
+          "value": 0.9
          }
         ],
         "battles": 5,
@@ -960,6 +1027,32 @@
          "text": "It won from behind! The crowd is on its feet."
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
+        },
+        {
          "kind": "heal",
          "share": 0.4
         },
@@ -1060,14 +1153,8 @@
         "label": "Training: Guard",
         "effects": [
          {
-          "kind": "statMultiplier",
-          "stat": "def",
-          "value": 1.1
-         },
-         {
-          "kind": "statMultiplier",
-          "stat": "spd",
-          "value": 1.1
+          "kind": "damageTakenMultiplier",
+          "value": 0.9
          }
         ],
         "battles": 5,
@@ -1239,6 +1326,32 @@
          "text": "It won from behind! The crowd is on its feet."
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
+        },
+        {
          "kind": "heal",
          "share": 0.4
         },
@@ -1272,7 +1385,7 @@
    "room": true,
    "scene": {
     "cast": [],
-    "pokemon": "primeape",
+    "pokemon": "mankey",
     "tint": "#7a3b2e",
     "effect": "none",
     "tourney": 4
@@ -1356,14 +1469,8 @@
         "label": "Training: Guard",
         "effects": [
          {
-          "kind": "statMultiplier",
-          "stat": "def",
-          "value": 1.1
-         },
-         {
-          "kind": "statMultiplier",
-          "stat": "spd",
-          "value": 1.1
+          "kind": "damageTakenMultiplier",
+          "value": 0.9
          }
         ],
         "battles": 5,
@@ -1458,6 +1565,12 @@
        },
        {
         "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-call",
+        "n": 0
+       },
+       {
+        "kind": "gn",
         "op": "when",
         "key": "tournament-bowed",
         "min": 1,
@@ -1503,8 +1616,34 @@
        "types": [
         "fighting"
        ],
-       "levelBonus": -1,
+       "levelBonus": 0,
        "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "tc-first-hit",
+         "min": 1,
+         "then": [
+          {
+           "kind": "flag",
+           "key": "tournament-crowd",
+           "amount": 1
+          },
+          {
+           "kind": "gn",
+           "op": "capFlag",
+           "key": "tournament-crowd",
+           "n": 5
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "tc-first-hit",
+           "n": 0
+          }
+         ],
+         "text": "First turn, first hit: it landed one before the bell had stopped ringing. The crowd roars."
+        },
         {
          "kind": "gn",
          "op": "when",
@@ -1576,13 +1715,20 @@
     "effect": "none",
     "tourney": 5
    },
-   "intro": "If either hasn't evolved, it did, in the heat of the match.\n\n**Brannock:** \"It's— Cordelia, it's EVOLVING! In the RING! Is that ALLOWED?\"\n\n**Fane:** \"Nobody's ever been brave enough to tell one it isn't.\"\n\nBoth are below a quarter. The hall holds its breath. The game slows.",
+   "intro": "Both are below a quarter. The hall holds its breath. The game slows.\n\nYour fighter does not look at the rival. It looks at you.",
    "choices": [
     {
      "label": "Now!",
      "success": {
-      "text": "You shout. It goes.",
-      "effects": [],
+      "text": "You shout. It goes at once: its first move lands before the rival's.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-call",
+        "n": 1
+       }
+      ],
       "battle": {
        "kind": "trainer",
        "friendly": true,
@@ -1649,8 +1795,15 @@
     {
      "label": "Wait for it.",
      "success": {
-      "text": "You hold it back, one beat, two. Then you let it go.",
-      "effects": [],
+      "text": "You hold it back, one beat, two. The rival comes to it. It will strike second, and much harder.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "tc-call",
+        "n": 2
+       }
+      ],
       "battle": {
        "kind": "trainer",
        "friendly": true,
@@ -1722,8 +1875,34 @@
        {
         "kind": "gn",
         "op": "setFlag",
+        "key": "tc-call",
+        "n": 3
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
         "key": "tc-you-choose",
         "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "tc-trusts",
+        "if": [
+         {
+          "kind": "friendship",
+          "atLeast": 85
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "tc-trusts",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "It looks back at you, and waits. It does not know you well enough yet to be left to it. You call the moves."
        }
       ],
       "battle": {
@@ -2569,91 +2748,134 @@
     "Pokémon",
     "Story"
    ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "grimer",
-    "tint": "#4a4a2a",
-    "effect": "fog"
-   },
-   "intro": "The sludge pits. Three Grimer slide up out of the muck to meet you.\n\nAnd in the pits, stuck fast, six Pokémon that wandered in and couldn't get out. One of them is still trying.\n\nEach of yours could pull one free. It would take two goes, with the Grimer at your back.",
-   "choices": [
+   "remembers": [
     {
-     "label": "Pull them out.",
-     "success": {
-      "text": "Your team wades in and pulls. The muck lets go with a sound like a boot in mud. The Grimer don't wait.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "addParty",
-        "key": "factory-freed"
-       },
-       {
-        "kind": "gn",
-        "op": "capFlag",
-        "key": "factory-freed",
-        "n": 6
-       },
-       {
-        "kind": "damage",
-        "share": 0.15
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-17-pits-2"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Fight the Grimer first.",
-     "success": {
-      "text": "The three Grimer come on together, slow and sure.",
-      "effects": [],
-      "battle": {
-       "kind": "wild",
-       "format": "triples",
-       "species": [
-        "grimer"
-       ],
-       "types": [],
-       "levelBonus": 1,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-muk"
-        }
-       ],
-       "rule": {
-        "typeBoost": {
-         "type": "poison",
-         "pct": 10
-        }
-       },
-       "caught": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-muk"
-        }
-       ],
-       "pseudo": true
+     "id": "trubbish",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "trubbish-kept",
+       "atLeast": 1,
+       "atMost": 99
       }
-     }
+     ],
+     "notice": "Your Trubbish is over the rail before you have decided anything. It is in the pit, up to its middle, pulling. It won't leave the sludge pits until every one's out. It knows what it is to be left.",
+     "hide": [
+      0
+     ],
+     "addChoices": [
+      {
+       "label": "Pull them out.",
+       "success": {
+        "text": "Your team wades in after the Trubbish. The Grimer don't wait. Six pulls, with the horde at your back: a Pokémon that is pulling is not fighting.",
+        "effects": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "factory-pulls",
+          "n": 6
+         }
+        ],
+        "battle": {
+         "kind": "wild",
+         "format": "triples",
+         "species": [
+          "grimer"
+         ],
+         "types": [],
+         "levelBonus": 1,
+         "shinyMultiplier": 1,
+         "win": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-17-muk"
+          }
+         ],
+         "rule": {
+          "gn": "pits",
+          "typeBoost": {
+           "type": "poison",
+           "pct": 10
+          },
+          "asks": [
+           {
+            "id": "pull-1",
+            "at": {
+             "turn": 1
+            },
+            "if": [
+             {
+              "key": "factory-pulls",
+              "min": 0,
+              "max": 0
+             }
+            ],
+            "text": "In the pits, stuck fast, six Pokémon that couldn't get out. Each of yours can pull one free this turn, instead of fighting.",
+            "prompt": "Pull them out, or fight?",
+            "options": [
+             {
+              "label": "Pull them out.",
+              "text": "The muck lets go with a sound like a boot in mud. The Grimer don't wait.",
+              "effects": [
+               {
+                "kind": "op",
+                "op": "pitsPull"
+               }
+              ]
+             },
+             {
+              "label": "Fight the Grimer.",
+              "text": "Behind the Grimer, in the pits, something stops trying."
+             }
+            ]
+           },
+           {
+            "id": "pull-2",
+            "at": {
+             "turn": 2
+            },
+            "if": [
+             {
+              "key": "factory-pulls",
+              "min": 0,
+              "max": 0
+             }
+            ],
+            "text": "Some are still stuck. One of them is still trying. Pull again, or fight?",
+            "prompt": "Pull them out, or fight?",
+            "options": [
+             {
+              "label": "Pull them out.",
+              "text": "The muck lets go with a sound like a boot in mud. The Grimer don't wait.",
+              "effects": [
+               {
+                "kind": "op",
+                "op": "pitsPull"
+               }
+              ]
+             },
+             {
+              "label": "Fight the Grimer.",
+              "text": "Behind the Grimer, in the pits, something stops trying."
+             }
+            ]
+           }
+          ]
+         },
+         "caught": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-17-muk"
+          }
+         ],
+         "pseudo": true
+        }
+       }
+      }
+     ]
     }
-   ]
-  },
-  {
-   "id": "gn-17-pits-2",
-   "name": "The Polluted Factory: The Sludge Pits",
-   "group": "Greenneedle",
-   "tags": [
-    "Combat",
-    "Pokémon",
-    "Story"
    ],
    "room": true,
    "scene": {
@@ -2662,27 +2884,18 @@
     "tint": "#4a4a2a",
     "effect": "fog"
    },
-   "intro": "Some are out, shaking off the sludge on the walkway. Some are still in.\n\nThe Grimer are closing in.",
+   "intro": "The sludge pits. Three Grimer slide up out of the muck to meet you.\n\nAnd in the pits, stuck fast, six Pokémon that wandered in and couldn't get out. One of them is still trying.\n\nEach of yours can pull one free in a turn, instead of fighting. Six stuck: two turns to get them all, with the Grimer horde still attacking.",
    "choices": [
     {
-     "label": "Keep pulling.",
+     "label": "Wade in.",
      "success": {
-      "text": "One more heave, all together. Then you turn to the Grimer.",
+      "text": "The three Grimer come on together, slow and sure. The muck is up to your knees.",
       "effects": [
        {
         "kind": "gn",
-        "op": "addParty",
-        "key": "factory-freed"
-       },
-       {
-        "kind": "gn",
-        "op": "capFlag",
-        "key": "factory-freed",
-        "n": 6
-       },
-       {
-        "kind": "damage",
-        "share": 0.15
+        "op": "setFlag",
+        "key": "factory-pulls",
+        "n": 0
        }
       ],
       "battle": {
@@ -2702,10 +2915,75 @@
         }
        ],
        "rule": {
+        "gn": "pits",
         "typeBoost": {
          "type": "poison",
          "pct": 10
-        }
+        },
+        "asks": [
+         {
+          "id": "pull-1",
+          "at": {
+           "turn": 1
+          },
+          "if": [
+           {
+            "key": "factory-pulls",
+            "min": 0,
+            "max": 0
+           }
+          ],
+          "text": "In the pits, stuck fast, six Pokémon that couldn't get out. Each of yours can pull one free this turn, instead of fighting.",
+          "prompt": "Pull them out, or fight?",
+          "options": [
+           {
+            "label": "Pull them out.",
+            "text": "The muck lets go with a sound like a boot in mud. The Grimer don't wait.",
+            "effects": [
+             {
+              "kind": "op",
+              "op": "pitsPull"
+             }
+            ]
+           },
+           {
+            "label": "Fight the Grimer.",
+            "text": "Behind the Grimer, in the pits, something stops trying."
+           }
+          ]
+         },
+         {
+          "id": "pull-2",
+          "at": {
+           "turn": 2
+          },
+          "if": [
+           {
+            "key": "factory-pulls",
+            "min": 0,
+            "max": 0
+           }
+          ],
+          "text": "Some are still stuck. One of them is still trying. Pull again, or fight?",
+          "prompt": "Pull them out, or fight?",
+          "options": [
+           {
+            "label": "Pull them out.",
+            "text": "The muck lets go with a sound like a boot in mud. The Grimer don't wait.",
+            "effects": [
+             {
+              "kind": "op",
+              "op": "pitsPull"
+             }
+            ]
+           },
+           {
+            "label": "Fight the Grimer.",
+            "text": "Behind the Grimer, in the pits, something stops trying."
+           }
+          ]
+         }
+        ]
        },
        "caught": [
         {
@@ -2717,105 +2995,6 @@
        "pseudo": true
       }
      }
-    },
-    {
-     "label": "That's enough.",
-     "success": {
-      "text": "You leave the rest. You turn to the Grimer.",
-      "effects": [],
-      "battle": {
-       "kind": "wild",
-       "format": "triples",
-       "species": [
-        "grimer"
-       ],
-       "types": [],
-       "levelBonus": 1,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-muk"
-        }
-       ],
-       "rule": {
-        "typeBoost": {
-         "type": "poison",
-         "pct": 10
-        }
-       },
-       "caught": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-muk"
-        }
-       ],
-       "pseudo": true
-      }
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "trubbish-kept",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ]
-    },
-    {
-     "label": "That's enough.",
-     "success": {
-      "text": "Your Trubbish won't come. It stays in the pit, up to its middle, pulling.\n\nIt won't leave the sludge pits until every one's out. It knows what it is to be left. All six come out.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "factory-freed",
-        "n": 6
-       }
-      ],
-      "battle": {
-       "kind": "wild",
-       "format": "triples",
-       "species": [
-        "grimer"
-       ],
-       "types": [],
-       "levelBonus": 1,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-muk"
-        }
-       ],
-       "rule": {
-        "typeBoost": {
-         "type": "poison",
-         "pct": 10
-        }
-       },
-       "caught": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-muk"
-        }
-       ],
-       "pseudo": true
-      }
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "trubbish-kept",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
     }
    ]
   },
@@ -2877,12 +3056,22 @@
     {
      "label": "Feed it.",
      "success": {
-      "text": "You hold food up to it. It eats from your hand without moving off the wall. It still can't leave. But it's a little less tired.",
+      "text": "You hold food up to it. It eats from your hand without moving off the wall. Then it eats again. Days of nothing go out of its edges.\n\nWith something in it at last, it does what it was too spent to do: it leaves a piece of itself in the split, a plug the size of a fist, and the leak stays shut without it.\n\n*It slides off the wall. It looks at the place where it was. It looks at you. It's never been thanked, so it doesn't know what this is.*\n\nIt follows you. Quietly, a little behind.",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-muk-helped",
+        "amount": 1
+       },
        {
         "kind": "attribute",
         "key": "goodEvil",
         "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "You fed a Muk that had held a pipe shut for days, until it could let go of the wall.",
+        "importance": 70
        },
        {
         "kind": "addEvent",
@@ -3352,327 +3541,146 @@
        "win": [
         {
          "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-raid2"
-        }
-       ],
-       "rule": {
-        "gn": "sludge",
-        "noCatch": true
-       },
-       "lose": [
-        {
-         "kind": "gn",
-         "op": "dropUnmarked",
-         "key": "factory-in"
-        },
-        {
-         "kind": "flag",
-         "key": "factory-lost",
-         "amount": 1
-        },
-        {
-         "kind": "gn",
          "op": "when",
-         "key": "factory-lost",
+         "key": "factory-magmuk-calmed",
          "min": 1,
-         "then": [],
-         "text": "Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there."
-        }
-       ],
-       "pseudo": true
-      }
-     }
-    },
-    {
-     "label": "Send the Muk in front.",
-     "success": {
-      "text": "Your Muk flows out in front of everyone, without being asked.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "factory-muk-now",
-        "n": 1
-       },
-       {
-        "kind": "flag",
-        "key": "factory-muk-used",
-        "amount": 1
-       }
-      ],
-      "battle": {
-       "kind": "wild",
-       "species": [
-        "muk-delta-fire"
-       ],
-       "types": [],
-       "levelBonus": 2,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-raid2"
-        }
-       ],
-       "rule": {
-        "gn": "sludge",
-        "noCatch": true
-       },
-       "lose": [
-        {
-         "kind": "gn",
-         "op": "dropUnmarked",
-         "key": "factory-in"
-        },
-        {
-         "kind": "flag",
-         "key": "factory-lost",
-         "amount": 1
-        },
-        {
-         "kind": "gn",
-         "op": "when",
-         "key": "factory-lost",
-         "min": 1,
-         "then": [],
-         "text": "Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there."
-        }
-       ],
-       "pseudo": true
-      }
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "factory-muk-helped",
-       "atLeast": 1,
-       "atMost": 99
-      },
-      {
-       "kind": "flag",
-       "key": "factory-muk-used",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "gn-17-raid2",
-   "name": "The Polluted Factory: The Furnace Burns",
-   "group": "Greenneedle",
-   "tags": [
-    "Combat",
-    "Pokémon",
-    "Story"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "muk",
-    "tint": "#4a4a2a",
-    "effect": "fire"
-   },
-   "intro": "It's burning now, and so is the floor. Anything that isn't a Fire-type may catch a burn each turn.\n\nWater moves go up as steam: half damage. But they clear the Molten Sludge.",
-   "choices": [
-    {
-     "label": "Fight.",
-     "success": {
-      "text": "The floor glows under your feet.",
-      "effects": [],
-      "battle": {
-       "kind": "wild",
-       "species": [
-        "muk-delta-fire"
-       ],
-       "types": [],
-       "levelBonus": 2,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-core"
-        }
-       ],
-       "rule": {
-        "gn": "furnace",
-        "noCatch": true
-       },
-       "lose": [
-        {
-         "kind": "gn",
-         "op": "dropUnmarked",
-         "key": "factory-in"
-        },
-        {
-         "kind": "flag",
-         "key": "factory-lost",
-         "amount": 1
-        },
-        {
-         "kind": "gn",
-         "op": "when",
-         "key": "factory-lost",
-         "min": 1,
-         "then": [],
-         "text": "Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there."
-        }
-       ],
-       "pseudo": true
-      }
-     }
-    },
-    {
-     "label": "Send the Muk in front.",
-     "success": {
-      "text": "Your Muk flows out in front, its edges hissing on the floor.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "factory-muk-now",
-        "n": 1
-       },
-       {
-        "kind": "flag",
-        "key": "factory-muk-used",
-        "amount": 1
-       }
-      ],
-      "battle": {
-       "kind": "wild",
-       "species": [
-        "muk-delta-fire"
-       ],
-       "types": [],
-       "levelBonus": 2,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-core"
-        }
-       ],
-       "rule": {
-        "gn": "furnace",
-        "noCatch": true
-       },
-       "lose": [
-        {
-         "kind": "gn",
-         "op": "dropUnmarked",
-         "key": "factory-in"
-        },
-        {
-         "kind": "flag",
-         "key": "factory-lost",
-         "amount": 1
-        },
-        {
-         "kind": "gn",
-         "op": "when",
-         "key": "factory-lost",
-         "min": 1,
-         "then": [],
-         "text": "Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there."
-        }
-       ],
-       "pseudo": true
-      }
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "factory-muk-helped",
-       "atLeast": 1,
-       "atMost": 99
-      },
-      {
-       "kind": "flag",
-       "key": "factory-muk-used",
-       "atLeast": 0,
-       "atMost": 0
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "gn-17-core",
-   "name": "The Polluted Factory: The Core",
-   "group": "Greenneedle",
-   "tags": [
-    "Combat",
-    "Pokémon",
-    "Story"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "grimer",
-    "tint": "#4a4a2a",
-    "effect": "fog"
-   },
-   "intro": "It's small now. Small, fast and frightened. The size of a Grimer, backing into a corner.\n\n*It's pressed against the furnace door. It keeps looking at the pipe it came out of.*",
-   "choices": [
-    {
-     "label": "Finish it.",
-     "success": {
-      "text": "It only has weak moves left. It uses them anyway.",
-      "effects": [],
-      "battle": {
-       "kind": "wild",
-       "species": [
-        "muk-delta-fire"
-       ],
-       "types": [],
-       "levelBonus": 2,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "flag",
-         "key": "kanto-factory-cleared",
-         "amount": 1
-        },
-        {
-         "kind": "item",
-         "id": "black-sludge",
-         "count": 1
-        },
-        {
-         "kind": "moment",
-         "text": "You finished the Magmuk in the Polluted Factory.",
-         "importance": 75
-        },
-        {
-         "kind": "gn",
-         "op": "when",
-         "key": "factory-shutdown",
-         "min": 0,
-         "max": 0,
          "then": [
           {
+           "kind": "attribute",
+           "key": "goodEvil",
+           "amount": 2
+          },
+          {
            "kind": "flag",
-           "key": "factory-left-running",
+           "key": "kanto-factory-cleared",
            "amount": 1
+          },
+          {
+           "kind": "item",
+           "id": "black-sludge",
+           "count": 1
+          },
+          {
+           "kind": "moment",
+           "text": "The Muk you freed took the Magmuk home.",
+           "importance": 75
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "factory-shutdown",
+           "min": 0,
+           "max": 0,
+           "then": [
+            {
+             "kind": "flag",
+             "key": "factory-left-running",
+             "amount": 1
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-17-pick"
           }
          ]
         },
         {
          "kind": "gn",
-         "op": "scene",
-         "key": "gn-17-pick"
+         "op": "when",
+         "key": "factory-magmuk-calmed",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "factory-stopped",
+           "min": 1,
+           "then": [
+            {
+             "kind": "flag",
+             "key": "kanto-factory-cleared",
+             "amount": 1
+            },
+            {
+             "kind": "item",
+             "id": "black-sludge",
+             "count": 1
+            },
+            {
+             "kind": "moment",
+             "text": "You stopped attacking, and the Magmuk went home down its pipe.",
+             "importance": 75
+            },
+            {
+             "kind": "gn",
+             "op": "when",
+             "key": "factory-shutdown",
+             "min": 0,
+             "max": 0,
+             "then": [
+              {
+               "kind": "flag",
+               "key": "factory-left-running",
+               "amount": 1
+              }
+             ]
+            },
+            {
+             "kind": "gn",
+             "op": "scene",
+             "key": "gn-17-pick"
+            }
+           ]
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "factory-stopped",
+           "min": 0,
+           "max": 0,
+           "then": [
+            {
+             "kind": "flag",
+             "key": "kanto-factory-cleared",
+             "amount": 1
+            },
+            {
+             "kind": "item",
+             "id": "black-sludge",
+             "count": 1
+            },
+            {
+             "kind": "moment",
+             "text": "You finished the Magmuk in the Polluted Factory.",
+             "importance": 75
+            },
+            {
+             "kind": "gn",
+             "op": "when",
+             "key": "factory-shutdown",
+             "min": 0,
+             "max": 0,
+             "then": [
+              {
+               "kind": "flag",
+               "key": "factory-left-running",
+               "amount": 1
+              }
+             ]
+            },
+            {
+             "kind": "gn",
+             "op": "scene",
+             "key": "gn-17-pick"
+            }
+           ]
+          }
+         ]
         }
        ],
-       "rule": {
-        "gn": "core",
-        "noCatch": true
-       },
        "lose": [
         {
          "kind": "gn",
@@ -3693,111 +3701,246 @@
          "text": "Shutters slam down over every door. A siren. The factory locks down, and you are put out on the coast road. Anything you caught in there stays in there."
         }
        ],
+       "rule": {
+        "gn": "sludge",
+        "noCatch": true,
+        "phases": [
+         {
+          "at": 0.66,
+          "gn": "furnace",
+          "line": "It's burning now, and so is the floor. Anything that isn't a Fire-type may catch a burn each turn. Water moves go up as steam: half damage. But they clear the Molten Sludge."
+         },
+         {
+          "at": 0.33,
+          "gn": "core",
+          "moves": [
+           "ember",
+           "mud-slap",
+           "acid"
+          ],
+          "line": "It's small now. Small, fast and frightened. The size of a Grimer, backing into a corner."
+         }
+        ],
+        "asks": [
+         {
+          "id": "muk-1",
+          "at": {
+           "turn": 1
+          },
+          "if": [
+           {
+            "key": "factory-muk-helped"
+           },
+           {
+            "key": "factory-muk-used",
+            "min": 0,
+            "max": 0
+           }
+          ],
+          "text": "Your Muk is at your side. It could flow in front of the party now, and take this phase's first attack.",
+          "prompt": "Send your Muk in front for this phase?",
+          "options": [
+           {
+            "label": "Send the Muk in front.",
+            "text": "Your Muk flows out in front of everyone, without being asked twice.",
+            "effects": [
+             {
+              "kind": "flag",
+              "key": "factory-muk-used",
+              "n": 1
+             },
+             {
+              "kind": "foeWaits",
+              "line": "Your Muk flows in front of the party and takes the first blow. It doesn't make a sound."
+             }
+            ]
+           },
+           {
+            "label": "Not yet."
+           }
+          ]
+         },
+         {
+          "id": "muk-2",
+          "at": {
+           "phase": 2
+          },
+          "if": [
+           {
+            "key": "factory-muk-helped"
+           },
+           {
+            "key": "factory-muk-used",
+            "min": 0,
+            "max": 0
+           }
+          ],
+          "text": "Your Muk is at your side. It could flow in front of the party now, and take this phase's first attack.",
+          "prompt": "Send your Muk in front for this phase?",
+          "options": [
+           {
+            "label": "Send the Muk in front.",
+            "text": "Your Muk flows out in front of everyone, without being asked twice.",
+            "effects": [
+             {
+              "kind": "flag",
+              "key": "factory-muk-used",
+              "n": 1
+             },
+             {
+              "kind": "foeWaits",
+              "line": "Your Muk flows in front of the party and takes the first blow. It doesn't make a sound."
+             }
+            ]
+           },
+           {
+            "label": "Not yet."
+           }
+          ]
+         },
+         {
+          "id": "muk-3",
+          "at": {
+           "phase": 3
+          },
+          "if": [
+           {
+            "key": "factory-muk-helped"
+           },
+           {
+            "key": "factory-muk-used",
+            "min": 0,
+            "max": 0
+           }
+          ],
+          "text": "Your Muk is at your side. It could flow in front of the party now, and take this phase's first attack.",
+          "prompt": "Send your Muk in front for this phase?",
+          "options": [
+           {
+            "label": "Send the Muk in front.",
+            "text": "Your Muk flows out in front of everyone, without being asked twice.",
+            "effects": [
+             {
+              "kind": "flag",
+              "key": "factory-muk-used",
+              "n": 1
+             },
+             {
+              "kind": "foeWaits",
+              "line": "Your Muk flows in front of the party and takes the first blow. It doesn't make a sound."
+             }
+            ]
+           },
+           {
+            "label": "Not yet."
+           }
+          ]
+         },
+         {
+          "id": "core",
+          "at": {
+           "phase": 3
+          },
+          "text": "*It's pressed against the furnace door. It keeps looking at the pipe it came out of.*",
+          "prompt": "It keeps looking at the pipe it came out of.",
+          "options": [
+           {
+            "label": "Finish it.",
+            "text": "It only has weak moves left. It uses them anyway."
+           },
+           {
+            "label": "Stop attacking.",
+            "text": "You call your team back. It stays in the corner.",
+            "effects": [
+             {
+              "kind": "flag",
+              "key": "factory-stopped",
+              "n": 1
+             },
+             {
+              "kind": "foeWaits",
+              "line": "It doesn't come out of the corner."
+             },
+             {
+              "kind": "foeWaits",
+              "line": "It keeps looking at the pipe."
+             },
+             {
+              "kind": "pass",
+              "turns": 2,
+              "lines": [
+               "One turn.",
+               "Two. Then it slides into the pipe it came out of, and is gone."
+              ],
+              "outcome": "win"
+             }
+            ]
+           },
+           {
+            "label": "Let the Muk go to it.",
+            "if": [
+             {
+              "key": "factory-muk-helped"
+             }
+            ],
+            "text": "Your Muk slides over. It puts an arm round it. The small one stops shaking. They go into the pipe together. Neither looks back.",
+            "effects": [
+             {
+              "kind": "flag",
+              "key": "factory-magmuk-calmed",
+              "n": 1
+             },
+             {
+              "kind": "end",
+              "outcome": "win"
+             }
+            ]
+           }
+          ]
+         },
+         {
+          "id": "stop",
+          "at": {
+           "button": "Stop attacking.",
+           "phase": 3
+          },
+          "text": "It stays in the corner.",
+          "options": [
+           {
+            "label": "Stop attacking.",
+            "text": "You call your team back. It stays in the corner.",
+            "effects": [
+             {
+              "kind": "flag",
+              "key": "factory-stopped",
+              "n": 1
+             },
+             {
+              "kind": "foeWaits",
+              "line": "It doesn't come out of the corner."
+             },
+             {
+              "kind": "foeWaits",
+              "line": "It keeps looking at the pipe."
+             },
+             {
+              "kind": "pass",
+              "turns": 2,
+              "lines": [
+               "One turn.",
+               "Two. Then it slides into the pipe it came out of, and is gone."
+              ],
+              "outcome": "win"
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
        "pseudo": true
       }
      }
-    },
-    {
-     "label": "Stop attacking.",
-     "success": {
-      "text": "You call your team back. It stays in the corner. One turn. Two.\n\nThen it slides into the pipe it came out of, and is gone.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "kanto-factory-cleared",
-        "amount": 1
-       },
-       {
-        "kind": "item",
-        "id": "black-sludge",
-        "count": 1
-       },
-       {
-        "kind": "moment",
-        "text": "You stopped attacking, and the Magmuk went home down its pipe.",
-        "importance": 75
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "factory-shutdown",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "factory-left-running",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-17-pick"
-       }
-      ]
-     }
-    },
-    {
-     "label": "Let the Muk go to it.",
-     "success": {
-      "text": "Your Muk slides over. It puts an arm round it.\n\nThe small one stops shaking. They go into the pipe together. Neither looks back.",
-      "effects": [
-       {
-        "kind": "flag",
-        "key": "factory-magmuk-calmed",
-        "amount": 1
-       },
-       {
-        "kind": "attribute",
-        "key": "goodEvil",
-        "amount": 2
-       },
-       {
-        "kind": "flag",
-        "key": "kanto-factory-cleared",
-        "amount": 1
-       },
-       {
-        "kind": "item",
-        "id": "black-sludge",
-        "count": 1
-       },
-       {
-        "kind": "moment",
-        "text": "The Muk you freed took the Magmuk home.",
-        "importance": 75
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "factory-shutdown",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "flag",
-          "key": "factory-left-running",
-          "amount": 1
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-17-pick"
-       }
-      ]
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "factory-muk-helped",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ]
     }
    ]
   },
@@ -4065,6 +4208,11 @@
         "amount": 1
        },
        {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "factory-sold-at"
+       },
+       {
         "kind": "leavePseudo"
        }
       ]
@@ -4073,12 +4221,12 @@
     {
      "label": "Hand it to a professor.",
      "success": {
-      "text": "The professor reads it twice and goes pale. \"This changes how we make Balls.\" They send you a special one to try.",
+      "text": "The professor reads it twice and goes pale. \"This changes how we make Balls. Properly.\" They send you one to try, and word goes round: from now on every shop on your road stocks the Dream Ball.",
       "effects": [
        {
         "kind": "item",
         "id": "dream-ball",
-        "count": 3
+        "count": 1
        },
        {
         "kind": "flag",
@@ -4180,6 +4328,59 @@
      "key": "factory-entered",
      "atLeast": 0,
      "atMost": 0
+    }
+   ],
+   "remembers": [
+    {
+     "id": "float",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "kaiju-stamp",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "intro": "A chain-link gate, a smokestack, and the smell of the same slick you saw on the sea.\n\nYou hold up the float from the Kaiju's net. The stamp is the factory's own: a ball inside a cog.\n\n**Mr. Scrimshaw:** \"...That's ours. That's one of ours. I told them the nets would drift.\"\n\nHe looks at it a long time. Then he unlocks the gate himself.\n\n**Mr. Scrimshaw:** \"Control room valves. Ignore the labels. Black stain first, then green, then yellow. Don't tell them I told you.\"",
+     "hide": [
+      0,
+      1,
+      2
+     ],
+     "addChoices": [
+      {
+       "label": "Go in.",
+       "success": {
+        "text": "Mr. Scrimshaw writes the valve order on the back of your hand in marker, so you won't forget.",
+        "effects": [
+         {
+          "kind": "flag",
+          "key": "factory-valve-order",
+          "amount": 1
+         },
+         {
+          "kind": "flag",
+          "key": "factory-entered",
+          "amount": 1
+         },
+         {
+          "kind": "gn",
+          "op": "stampStage",
+          "key": "factory-at"
+         },
+         {
+          "kind": "gn",
+          "op": "markParty",
+          "key": "factory-in"
+         },
+         {
+          "kind": "addEvent",
+          "eventId": "gn-17-pipes"
+         }
+        ]
+       }
+      }
+     ]
     }
    ],
    "scene": {
@@ -4287,6 +4488,205 @@
     }
    ],
    "canon": "cs.kanto.fuchsia.factory"
+  },
+  {
+   "id": "gn-17-second",
+   "name": "The Same Stamp",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "factory-research-sold",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "factory-sold-at"
+    },
+    {
+     "kind": "flag",
+     "key": "factory-second",
+     "atLeast": 0,
+     "atMost": 0
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "grimer",
+    "tint": "#4a4a2a",
+    "effect": "fog"
+   },
+   "intro": "A river you have never seen before, and a smell you have. A struck match, dropped in a drain.\n\nUpstream there is a new smokestack, the brick still clean. A new chain-link gate. On the gate, the same stamp: a ball inside a cog. Under it, in fresh paint, a name you last saw on a receipt.\n\nThe buyer built it. With the graph that only goes up, and the pencil note at the bottom crossed out.",
+   "choices": [
+    {
+     "label": "Look at the water.",
+     "success": {
+      "text": "The river below the outfall is the colour the other one was. Something small and purple slides off the bank into it, quite at home.\n\nFor the rest of this region, on water routes, Poison-types are a step more common, and Water-types a step rarer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "factory-second"
+       },
+       {
+        "kind": "moment",
+        "text": "The research you sold built a second factory, on a new river.",
+        "importance": 65
+       }
+      ]
+     }
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "You walk on. You can smell it for a long way.\n\nFor the rest of this region, on water routes, Poison-types are a step more common, and Water-types a step rarer.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "factory-second"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-17-kaiju-back",
+   "name": "It Came Back",
+   "group": "Greenneedle",
+   "tags": [
+    "Combat",
+    "Pokémon",
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "rare",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "factory-left-running",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "kaiju-freed",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "factory-at"
+    },
+    {
+     "kind": "flag",
+     "key": "factory-kaiju-back",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "stageTypes",
+     "types": [
+      "water"
+     ]
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "tentacruel",
+    "tint": "#1d3a4a",
+    "effect": "shake"
+   },
+   "intro": "The slick is on this water too. It followed the coast, the way the factory's runoff does, because nobody stopped the line.\n\n*Out in the bay, the sea bulges. The Kaiju. It came back.*\n\nThere is a new net across its body, the same cheap cord, the same stamped floats, cutting in. It is not looking at the town. It is looking for whoever keeps doing this.",
+   "choices": [
+    {
+     "label": "Cut it free again.",
+     "success": {
+      "text": "You have done this before, and so has it. It holds still this time, mostly. The cords part. It hangs in the water a moment, looking at you, and at the slick, and at you.\n\nThen it goes. It will be back for as long as the factory runs.",
+      "effects": [
+       {
+        "kind": "damage",
+        "share": 0.2
+       },
+       {
+        "kind": "attribute",
+        "key": "goodEvil",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "factory-kaiju-back",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "The Kaiju came back in a new net from the same factory, and you cut it free again.",
+        "importance": 65
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "cutter"
+      }
+     ]
+    },
+    {
+     "label": "Drive it away from the harbour.",
+     "success": {
+      "text": "It rises to meet you, and the bay rises with it. It is hurt, and it is angrier than last time.",
+      "effects": [],
+      "battle": {
+       "kind": "raid",
+       "raidId": "kaiju-tentacruel",
+       "name": "Kaiju Tentacruel",
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "flag",
+         "key": "factory-kaiju-back",
+         "amount": 1
+        },
+        {
+         "kind": "item",
+         "id": "poison-barb",
+         "count": 1
+        }
+       ],
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "factory-kaiju-back",
+         "amount": 1
+        }
+       ]
+      }
+     }
+    },
+    {
+     "label": "Leave the harbour to it.",
+     "success": {
+      "text": "You leave. Behind you a pier goes, plank by plank, and nobody on it is the one who made the net.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "factory-kaiju-back",
+        "amount": 1
+       }
+      ]
+     }
+    }
+   ]
   },
   {
    "id": "gn-18-gate",

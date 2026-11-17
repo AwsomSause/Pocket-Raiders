@@ -69,7 +69,8 @@ const gn33: Json[] = [
   ), [
     ch('You can do this.', out(
       'You say it plainly, the way you would say it to a friend on a ladder. Its eyes go bright. It tucks in its chin, and it goes.',
-      roll('courier-down', 15), when('courier-over', { min: 1 }, [roll('courier-down', 45)]),
+      // Going over the storm wall cost it its height: it cannot make the last mile, however it is asked. Any other way, it does.
+      when('courier-over', { min: 1 }, [setTo('courier-down', 1)], 'It goes. For a mile it goes. Then the long strokes stop, and it comes down on the shingle, short of the door. The high thin air took what it had.'),
       room('gn-new-33-keeper'),
     )),
     ch('Set down. We\'ll walk it.', out('It lets out a breath that is half a laugh. It lowers you both onto a spit of rock, gently, the way you set down something you mean to come back for.', setTo('courier-down', 1), room('gn-new-33-keeper'))),

@@ -69,6 +69,12 @@
        },
        {
         "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-end",
+        "n": 0
+       },
+       {
+        "kind": "gn",
         "op": "cast",
         "key": "ridge-one",
         "species": [
@@ -597,6 +603,20 @@
            "key": "gn-35-shelter"
           }
          ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-summit"
+          }
+         ]
         }
        ],
        "caught": [
@@ -672,6 +692,20 @@
            "key": "gn-35-shelter"
           }
          ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-summit"
+          }
+         ]
         }
        ],
        "lose": [
@@ -745,6 +779,20 @@
            "kind": "gn",
            "op": "scene",
            "key": "gn-35-shelter"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-summit"
           }
          ]
         }
@@ -859,6 +907,20 @@
            "key": "gn-35-shelter"
           }
          ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-summit"
+          }
+         ]
         }
        ],
        "caught": [
@@ -934,6 +996,20 @@
            "key": "gn-35-shelter"
           }
          ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-summit"
+          }
+         ]
         }
        ],
        "lose": [
@@ -1007,6 +1083,20 @@
            "kind": "gn",
            "op": "scene",
            "key": "gn-35-shelter"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ridge-back",
+         "min": 6,
+         "max": 6,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-35-summit"
           }
          ]
         }
@@ -1146,6 +1236,20 @@
           "kind": "gn",
           "op": "scene",
           "key": "gn-35-shelter"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-back",
+        "min": 6,
+        "max": 6,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-35-summit"
          }
         ]
        }
@@ -1709,6 +1813,57 @@
         "n": 20
        },
        {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-followers",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "ridge-followers",
+          "n": 3
+         }
+        ]
+       },
+       {
         "kind": "addEvent",
         "eventId": "gn-35-summit"
        }
@@ -2064,6 +2219,18 @@
    ],
    "remembers": [
     {
+     "id": "followed",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*Something is following the crystal's hum. You can hear it in the rocks behind you, keeping pace.*"
+    },
+    {
      "id": "again",
      "when": [
       {
@@ -2085,6 +2252,68 @@
    },
    "intro": "*It's standing on the highest rock. Every strike on the ridge bends toward it.*\n\n*It's shaking. Sparks fall off it like water off a dog. Where they land, the stone goes to glass.*\n\n*It sees you. It tries to back away. A bolt hits it. It screams, and the scream's a Thunder.*",
    "choices": [
+    {
+     "label": "Face what's following you.",
+     "success": {
+      "text": "You stop, and turn round, and wait for it.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "ridge-back",
+        "n": 6
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "ridge-friendly",
+          "n": 50
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ridge-crystals",
+        "min": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "roll",
+          "key": "ridge-friendly",
+          "n": 33
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "roll",
+        "key": "ridge-local",
+        "n": 33
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-35-follower"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
     {
      "label": "Defeat it.",
      "success": {
@@ -2130,7 +2359,15 @@
        ],
        "pseudo": true
       }
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
      "label": "Earth it.",
@@ -2182,6 +2419,12 @@
       }
      },
      "showIf": [
+      {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 0,
+       "atMost": 0
+      },
       {
        "kind": "partyTypes",
        "types": [
@@ -2247,6 +2490,12 @@
      },
      "showIf": [
       {
+       "kind": "flag",
+       "key": "ridge-followers",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
        "kind": "partyTypes",
        "types": [
         "ground"
@@ -2281,14 +2530,18 @@
    "intro": "It goes down. The sparks stop falling. For the first time in a month, nothing on the ridge is shaking.\n\nIt lies on its side in the glass it made, breathing. When the next bolt comes, it goes somewhere else.\n\nSomething glints in the glass: a capsule, fused in, still warm.",
    "choices": [
     {
-     "label": "Take the capsule.",
+     "label": "Take the capsule, for one of mine.",
+     "pick": {
+      "types": []
+     },
      "success": {
       "text": "It comes free with a crack. Behind you, slowly, it gets up, and limps away down the far side.",
       "effects": [
        {
         "kind": "item",
         "id": "summit-ability-capsule",
-        "count": 1
+        "count": 1,
+        "who": "picked"
        },
        {
         "kind": "flag",
@@ -2327,14 +2580,18 @@
    "intro": "*It looks at your Ground-type. It walks over, slowly, and leans its whole weight against it.*\n\nThe sky over the summit has cleared, in a circle. Stars, in the middle of a storm.\n\nSomething glints in the glass where it stood: a capsule, fused in, still warm.",
    "choices": [
     {
-     "label": "Take the capsule, and go down.",
+     "label": "Take the capsule, for one of mine, and go down.",
+     "pick": {
+      "types": []
+     },
      "success": {
       "text": "The capsule comes free with a crack. You start down the mountain.\n\nIt follows you. All the way down. At the bottom, you hold out a Ball, and it steps into it, on its own.",
       "effects": [
        {
         "kind": "item",
         "id": "summit-ability-capsule",
-        "count": 1
+        "count": 1,
+        "who": "picked"
        },
        {
         "kind": "friendship",
@@ -2448,6 +2705,12 @@
      "atMost": 99
     },
     {
+     "kind": "flag",
+     "key": "ridge-end",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
      "kind": "gn",
      "test": "laterStage",
      "key": "ridge-at"
@@ -2498,7 +2761,7 @@
   },
   {
    "id": "gn-36-door",
-   "name": "The Great Desert",
+   "name": "The Endless Desert",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -2556,6 +2819,24 @@
        },
        {
         "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-flygon",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-pack",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-idris-dunes",
+        "n": 0
+       },
+       {
+        "kind": "gn",
         "op": "stampRegion",
         "key": "desert-region"
        },
@@ -2577,7 +2858,7 @@
   },
   {
    "id": "gn-36-well",
-   "name": "The Great Desert: The Last Well",
+   "name": "The Endless Desert: The Last Well",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -2595,19 +2876,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -2619,7 +2888,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "A village at the desert's edge: six houses, a well, a goat that judges you.\n\nA guide sits by the well, very old, with eyes like she's still looking at the horizon. Old Hadiza-Nour.\n\nHadiza-Nour: \"Three oases. Count them. If you see a fourth, it isn't.\"",
+   "intro": "Water: {flag:desert-water}.\n\nA village at the desert's edge: six houses, a well, a goat that judges you.\n\nA guide sits by the well, very old, with eyes like she's still looking at the horizon. Old Hadiza-Nour.\n\nHadiza-Nour: \"Three oases. Count them. If you see a fourth, it isn't.\"",
    "choices": [
     {
      "label": "Ask about the fourth.",
@@ -2832,7 +3101,7 @@
   },
   {
    "id": "gn-36-dunes",
-   "name": "The Great Desert: The First Dunes",
+   "name": "The Endless Desert: The First Dunes",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -2850,19 +3119,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -2872,7 +3129,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "Dunes like slow waves. Things move under the sand, and stop when you stop.\n\nOn the far side of the next dune, something shimmers.",
+   "intro": "Water: {flag:desert-water}.\n\nDunes like slow waves. Things move under the sand, and stop when you stop.\n\nOn the far side of the next dune, something shimmers.",
    "choices": [
     {
      "label": "Look at the shimmer.",
@@ -3086,6 +3343,21 @@
          "text": "Water: 5 left."
         },
         {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-water",
+         "n": 4
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 4,
+         "max": 4,
+         "then": [],
+         "text": "You fill every flask to the brim. Water: 4."
+        },
+        {
          "kind": "addEvent",
          "eventId": "gn-36-oasis-1"
         }
@@ -3219,6 +3491,21 @@
          "max": 5,
          "then": [],
          "text": "Water: 5 left."
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-water",
+         "n": 4
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 4,
+         "max": 4,
+         "then": [],
+         "text": "You fill every flask to the brim. Water: 4."
         },
         {
          "kind": "addEvent",
@@ -3356,6 +3643,21 @@
          "text": "Water: 5 left."
         },
         {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "desert-water",
+         "n": 4
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "desert-water",
+         "min": 4,
+         "max": 4,
+         "then": [],
+         "text": "You fill every flask to the brim. Water: 4."
+        },
+        {
          "kind": "addEvent",
          "eventId": "gn-36-oasis-1"
         }
@@ -3371,7 +3673,7 @@
   },
   {
    "id": "gn-36-pool",
-   "name": "The Great Desert: A Pool with Palm Trees",
+   "name": "The Endless Desert: A Pool with Palm Trees",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -3389,19 +3691,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -3411,7 +3701,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "A pool, blue as glass, with palm trees leaning over it. It looks cool. It looks close.",
+   "intro": "Water: {flag:desert-water}.\n\nA pool, blue as glass, with palm trees leaning over it. It looks cool. It looks close.",
    "choices": [
     {
      "label": "Look closer.",
@@ -3809,7 +4099,7 @@
   },
   {
    "id": "gn-36-chest",
-   "name": "The Great Desert: A Chest on a Dune",
+   "name": "The Endless Desert: A Chest on a Dune",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -3827,19 +4117,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -3849,7 +4127,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "A chest, half out of the sand on the crest of a dune, its lock rusted open.",
+   "intro": "Water: {flag:desert-water}.\n\nA chest, half out of the sand on the crest of a dune, its lock rusted open.",
    "choices": [
     {
      "label": "Look closer.",
@@ -4144,7 +4422,7 @@
   },
   {
    "id": "gn-36-figure",
-   "name": "The Great Desert: A Figure, Waving",
+   "name": "The Endless Desert: A Figure, Waving",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -4162,19 +4440,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -4184,7 +4450,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "A figure on a far dune, waving to you. Both arms, over its head. Waving.",
+   "intro": "Water: {flag:desert-water}.\n\nA figure on a far dune, waving to you. Both arms, over its head. Waving.",
    "choices": [
     {
      "label": "Look closer.",
@@ -4238,8 +4504,33 @@
     {
      "label": "Go to it.",
      "success": {
-      "text": "By the time you get there, they've gone on ahead. Only a dip in the sand where somebody sat, and a dropped map, upside down.",
+      "text": "A person, sitting in the sand, with a map held upside down.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-idris-dunes",
+          "n": 1
+         }
+        ],
+        "text": "The traveller: \"Oh, good. A person. I waved at a cactus for an hour. It didn't wave back.\" They get up, and set off ahead of you: the wrong way, and then the right way."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-at",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "Idris: \"You again! I waved. You saw. That's twice you've found me, and I'm the one who's been here before.\" They wave you on ahead. \"I walk slow.\""
+       },
        {
         "kind": "flag",
         "key": "desert-saw-idris",
@@ -4518,7 +4809,7 @@
   },
   {
    "id": "gn-36-oasis-1",
-   "name": "The Great Desert: The First Oasis",
+   "name": "The Endless Desert: The First Oasis",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -4539,6 +4830,18 @@
      "notice": "Idris: \"Wait. The Deep Savanna, the Donphan? That was you? Everyone's heard. Keep your water. I've got some.\""
     },
     {
+     "id": "waved",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "desert-idris-dunes",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "*The one who waved to you from the dune. They got here first, somehow.*"
+    },
+    {
      "id": "water-0",
      "when": [
       {
@@ -4548,19 +4851,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -4572,7 +4863,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "Water. Real water, and real palms, and real shade. You've never been so glad of shade.\n\n*Someone's sitting under a palm with a map held upside down.*\n\nThe traveller, Idris Calloway: \"Don't tell me. I'll get it. ...It's the other way up, isn't it.\"\n\nIdris: \"I've been here before. Thirty years ago. You'd think I'd remember a thing like a desert.\"",
+   "intro": "Water: {flag:desert-water}.\n\nWater. Real water, and real palms, and real shade. You've never been so glad of shade.\n\n*Someone's sitting under a palm with a map held upside down.*\n\nThe traveller, Idris Calloway: \"Don't tell me. I'll get it. ...It's the other way up, isn't it.\"\n\nIdris: \"I've been here before. Thirty years ago. You'd think I'd remember a thing like a desert.\"",
    "choices": [
     {
      "label": "Where are you going?",
@@ -4605,21 +4896,6 @@
      "success": {
       "text": "Idris folds the map the right way up, and walks with you to the edge of the shade. \"I walk slow. Go on. I'll catch you up.\"",
       "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "desert-water",
-        "n": 4
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "desert-water",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "You fill every flask to the brim. Water: 4."
-       },
        {
         "kind": "gn",
         "op": "setFlag",
@@ -4675,6 +4951,19 @@
           "op": "setFlag",
           "key": "desert-sight",
           "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-sight",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "mapShow",
+          "key": "gn-36-oasis-2"
          }
         ]
        },
@@ -5053,7 +5342,7 @@
   },
   {
    "id": "gn-36-storm",
-   "name": "The Great Desert: The Storm",
+   "name": "The Endless Desert: The Storm",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -5083,19 +5372,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -5105,7 +5382,7 @@
     "tint": "#c79a52",
     "effect": "fog"
    },
-   "intro": "A sandstorm, a wall of it, brown to the sky. You walk into it with your eyes shut.\n\nThe next stretch is gone: no shape, no sound, nothing you could put a name to.",
+   "intro": "Water: {flag:desert-water}.\n\nA sandstorm, a wall of it, brown to the sky. You walk into it with your eyes shut.\n\nThe next stretch is gone: no shape, no sound, nothing you could put a name to.",
    "choices": [
     {
      "label": "Look at the shimmer.",
@@ -5175,6 +5452,11 @@
         "op": "setFlag",
         "key": "desert-sight",
         "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "mapShow",
+        "key": "gn-36-oasis-2"
        },
        {
         "kind": "gn",
@@ -5333,6 +5615,21 @@
         "text": "Water: 5 left."
        },
        {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "You fill every flask to the brim. Water: 4."
+       },
+       {
         "kind": "addEvent",
         "eventId": "gn-36-oasis-2"
        }
@@ -5343,7 +5640,7 @@
   },
   {
    "id": "gn-36-oasis-2",
-   "name": "The Great Desert: The Second Oasis",
+   "name": "The Endless Desert: The Second Oasis",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -5361,19 +5658,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -5385,28 +5670,13 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "The second oasis. Smaller, muddier, and yours.\n\n*Idris, sitting in the same way, with no pack, no boots and no map.*\n\nIdris: \"Sandile. A whole family. Very organised. They took the boots *first.* I respect that.\"",
+   "intro": "Water: {flag:desert-water}.\n\nThe second oasis. Smaller, muddier, and yours.\n\n*Idris, sitting in the same way, with no pack, no boots and no map.*\n\nIdris: \"Sandile. A whole family. Very organised. They took the boots *first.* I respect that.\"",
    "choices": [
     {
      "label": "I'll get your things back.",
      "success": {
       "text": "Idris points, with a bare foot, at a line of very small, very proud tracks. \"That way. Mind the little one. It bites.\"",
       "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "desert-water",
-        "n": 4
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "desert-water",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "You fill every flask to the brim. Water: 4."
-       },
        {
         "kind": "gn",
         "op": "when",
@@ -5548,21 +5818,6 @@
      "success": {
       "text": "You hand over your spare pair of socks and your second flask. It isn't boots. Idris treats it like it's more than boots.",
       "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "desert-water",
-        "n": 4
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "desert-water",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "You fill every flask to the brim. Water: 4."
-       },
        {
         "kind": "flag",
         "key": "desert-spare",
@@ -5711,21 +5966,6 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "setFlag",
-        "key": "desert-water",
-        "n": 4
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "desert-water",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "You fill every flask to the brim. Water: 4."
-       },
-       {
-        "kind": "gn",
         "op": "when",
         "key": "desert-water",
         "min": 1,
@@ -5864,7 +6104,7 @@
   },
   {
    "id": "gn-36-den",
-   "name": "The Great Desert: The Sandile Den",
+   "name": "The Endless Desert: The Sandile Den",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -5882,19 +6122,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -5904,7 +6132,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "A hollow in the dune, very tidy. A pair of boots, side by side, the way you'd leave them at a door.\n\nA family of Sandile is sitting on the pack. The biggest one looks at you over sunglasses it can't possibly own.",
+   "intro": "Water: {flag:desert-water}.\n\nA hollow in the dune, very tidy. A pair of boots, side by side, the way you'd leave them at a door.\n\nA family of Sandile is sitting on the pack. The biggest one looks at you over sunglasses it can't possibly own.",
    "choices": [
     {
      "label": "Battle them for it.",
@@ -6104,7 +6332,7 @@
   },
   {
    "id": "gn-36-pack",
-   "name": "The Great Desert: The Pack",
+   "name": "The Endless Desert: The Pack",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -6122,19 +6350,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -6144,7 +6360,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "The pack, the boots, the map. At the bottom of the pack, folded small, a child's drawing, very old.\n\nA small figure on the back of something with wings.",
+   "intro": "Water: {flag:desert-water}.\n\nThe pack, the boots, the map. At the bottom of the pack, folded small, a child's drawing, very old.\n\nA small figure on the back of something with wings.",
    "choices": [
     {
      "label": "Take them back to Idris.",
@@ -6152,9 +6368,10 @@
       "text": "Idris puts the boots on first. Then they see the drawing's been looked at, and go quiet, and fold it away.",
       "effects": [
        {
-        "kind": "flag",
+        "kind": "gn",
+        "op": "setFlag",
         "key": "desert-pack",
-        "amount": 1
+        "n": 1
        },
        {
         "kind": "gn",
@@ -6296,7 +6513,7 @@
   },
   {
    "id": "gn-36-pack-lost",
-   "name": "The Great Desert: Very Organised",
+   "name": "The Endless Desert: Very Organised",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -6314,19 +6531,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -6336,7 +6541,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "The Sandile family sits back down on the pack. You were outnumbered, and they were organised.",
+   "intro": "Water: {flag:desert-water}.\n\nThe Sandile family sits back down on the pack. You were outnumbered, and they were organised.",
    "choices": [
     {
      "label": "Go back without it.",
@@ -6483,7 +6688,7 @@
   },
   {
    "id": "gn-36-ruin",
-   "name": "The Great Desert: The Buried Ruin",
+   "name": "The Endless Desert: The Buried Ruin",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -6501,19 +6706,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -6523,7 +6716,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "Pillars in the sand, tops only, like the masts of a buried ship. Baltoy turn slowly between them, humming.\n\nThree places look dug-at: by the leaning pillar, by the broken arch, by the step that goes down into nothing.",
+   "intro": "Water: {flag:desert-water}.\n\nPillars in the sand, tops only, like the masts of a buried ship. Baltoy turn slowly between them, humming.\n\nThree places look dug-at: by the leaning pillar, by the broken arch, by the step that goes down into nothing.",
    "choices": [
     {
      "label": "Dig with a Ground move.",
@@ -6872,6 +7065,21 @@
         "text": "Water: 5 left."
        },
        {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "desert-water",
+        "n": 4
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "You fill every flask to the brim. Water: 4."
+       },
+       {
         "kind": "addEvent",
         "eventId": "gn-36-oasis-3"
        }
@@ -6882,7 +7090,7 @@
   },
   {
    "id": "gn-36-oasis-3",
-   "name": "The Great Desert: The Third Oasis",
+   "name": "The Endless Desert: The Third Oasis",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -6900,19 +7108,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -6924,28 +7120,13 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "*Idris is lying on their back in the shallows, laughing at the sky.*\n\nIdris: \"I remembered. I remembered which way. It was never on the map. It's where the wind *stops.*\"\n\nIdris: \"I was six. I wandered off from the caravan. Two days. I don't remember being frightened; I remember being tired.\"\n\nIdris: \"And then something landed. It didn't ask me anything. It let me climb on. It flew me to the Last Well and it left before anyone came out.\"\n\nIdris: \"I never said thank you. I was six. I've been trying to get back and say it ever since.\"",
+   "intro": "Water: {flag:desert-water}.\n\n*Idris is lying on their back in the shallows, laughing at the sky.*\n\nIdris: \"I remembered. I remembered which way. It was never on the map. It's where the wind *stops.*\"\n\nIdris: \"I was six. I wandered off from the caravan. Two days. I don't remember being frightened; I remember being tired.\"\n\nIdris: \"And then something landed. It didn't ask me anything. It let me climb on. It flew me to the Last Well and it left before anyone came out.\"\n\nIdris: \"I never said thank you. I was six. I've been trying to get back and say it ever since.\"",
    "choices": [
     {
      "label": "Come with me. We'll find it.",
      "success": {
       "text": "Idris gets up, dripping, and laughs again. \"We. All right. We.\" They carry their own water.",
       "effects": [
-       {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "desert-water",
-        "n": 4
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "desert-water",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "You fill every flask to the brim. Water: 4."
-       },
        {
         "kind": "flag",
         "key": "desert-traveller-with",
@@ -7093,21 +7274,6 @@
       "text": "Idris looks at you for a long moment. Then they unfold the drawing and put it in your hands.\n\n\"Tell it I got lost. Tell it I was trying.\"",
       "effects": [
        {
-        "kind": "gn",
-        "op": "setFlag",
-        "key": "desert-water",
-        "n": 4
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "desert-water",
-        "min": 4,
-        "max": 4,
-        "then": [],
-        "text": "You fill every flask to the brim. Water: 4."
-       },
-       {
         "kind": "flag",
         "key": "desert-drawing",
         "amount": 1
@@ -7246,18 +7412,131 @@
         "eventId": "gn-36-hidden"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-pack",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
     },
     {
-     "label": "Good luck.",
+     "label": "I'll tell it for you.",
      "success": {
-      "text": "Idris raises a hand from the water. \"You too.\" When you look back, they're still lying there, looking at the sky.",
+      "text": "Idris looks at you for a long moment. \"There was a drawing, in the pack. I'd have given you that. The Sandile have it now.\"\n\n\"Tell it I got lost. Tell it I was trying.\"",
       "effects": [
        {
         "kind": "gn",
-        "op": "setFlag",
+        "op": "when",
         "key": "desert-water",
-        "n": 4
+        "min": 1,
+        "max": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 2
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 4,
+        "max": 4,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 3
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "desert-water",
+          "n": 4
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Water: none left. Your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "Water: 1 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "Water: 2 left."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "Water: 3 left."
        },
        {
         "kind": "gn",
@@ -7266,8 +7545,37 @@
         "min": 4,
         "max": 4,
         "then": [],
-        "text": "You fill every flask to the brim. Water: 4."
+        "text": "Water: 4 left."
        },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "desert-water",
+        "min": 5,
+        "max": 5,
+        "then": [],
+        "text": "Water: 5 left."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-36-hidden"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "desert-pack",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Good luck.",
+     "success": {
+      "text": "Idris raises a hand from the water. \"You too.\" When you look back, they're still lying there, looking at the sky.",
+      "effects": [
        {
         "kind": "gn",
         "op": "when",
@@ -7408,7 +7716,7 @@
   },
   {
    "id": "gn-36-hidden",
-   "name": "The Great Desert: The Hidden Oasis",
+   "name": "The Endless Desert: The Hidden Oasis",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -7448,7 +7756,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "*The wind stops.*\n\n*Green. A deep pool. Trapinch in the sand at the edge, dozens, small.*\n\n*On a rock over the water, something old, with red lenses gone pale, and wings with pieces missing.*",
+   "intro": "Water: {flag:desert-water}.\n\n*The wind stops.*\n\n*Green. A deep pool. Trapinch in the sand at the edge, dozens, small.*\n\n*On a rock over the water, something old, with red lenses gone pale, and wings with pieces missing.*",
    "choices": [
     {
      "label": "Wait.",
@@ -7596,7 +7904,7 @@
   },
   {
    "id": "gn-36-after",
-   "name": "The Great Desert: Where the Wind Stops",
+   "name": "The Endless Desert: Where the Wind Stops",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -7636,7 +7944,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "The pool is cold and deep. Trapinch watch you from the sand at its edge, dozens of them, small.",
+   "intro": "Water: {flag:desert-water}.\n\nThe pool is cold and deep. Trapinch watch you from the sand at its edge, dozens of them, small.",
    "choices": [
     {
      "label": "Take the one it nudges forward.",
@@ -7721,7 +8029,7 @@
   },
   {
    "id": "gn-36-turned",
-   "name": "The Great Desert: Turned Away",
+   "name": "The Endless Desert: Turned Away",
    "group": "Greenneedle",
    "tags": [
     "Pokémon",
@@ -7739,19 +8047,7 @@
        "atMost": 0
       }
      ],
-     "notice": "Water: none. Your party starts each fight at 90% HP."
-    },
-    {
-     "id": "water-n",
-     "when": [
-      {
-       "kind": "flag",
-       "key": "desert-water",
-       "atLeast": 1,
-       "atMost": 99
-      }
-     ],
-     "notice": "Water: you check the flasks. Enough, for now."
+     "notice": "No water left. Your party starts each fight at 90% HP."
     }
    ],
    "room": true,
@@ -7761,7 +8057,7 @@
     "tint": "#c79a52",
     "effect": "none"
    },
-   "intro": "Its wings beat once, and the sand stands up, and you're walking back the way you came with your eyes shut.",
+   "intro": "Water: {flag:desert-water}.\n\nIts wings beat once, and the sand stands up, and you're walking back the way you came with your eyes shut.",
    "choices": [
     {
      "label": "Walk back.",
@@ -7801,15 +8097,15 @@
    "requires": [
     {
      "kind": "flag",
-     "key": "desert-flygon",
+     "key": "desert-done",
      "atLeast": 1,
-     "atMost": 1
+     "atMost": 99
     },
     {
      "kind": "flag",
-     "key": "desert-traveller-with",
-     "atLeast": 1,
-     "atMost": 99
+     "key": "desert-flygon",
+     "atLeast": 0,
+     "atMost": 1
     },
     {
      "kind": "gn",
@@ -8004,11 +8300,6 @@
         "n": 1
        },
        {
-        "kind": "flag",
-        "key": "mansion-hall-seen",
-        "amount": 1
-       },
-       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-37-hall"
@@ -8056,11 +8347,6 @@
          "n": 1
         },
         {
-         "kind": "flag",
-         "key": "mansion-hall-seen",
-         "amount": 1
-        },
-        {
          "kind": "gn",
          "op": "scene",
          "key": "gn-37-hall"
@@ -8083,11 +8369,6 @@
          "op": "setFlag",
          "key": "mansion-ghost-1",
          "n": 1
-        },
-        {
-         "kind": "flag",
-         "key": "mansion-hall-seen",
-         "amount": 1
         },
         {
          "kind": "gn",
@@ -8223,11 +8504,6 @@
         "text": "*Somewhere below, a heavy door unlocks, all by itself.*"
        },
        {
-        "kind": "flag",
-        "key": "mansion-hall-seen",
-        "amount": 1
-       },
-       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-37-hall"
@@ -8246,11 +8522,6 @@
      "success": {
       "text": "You back out. The pot lid drops, disappointed.",
       "effects": [
-       {
-        "kind": "flag",
-        "key": "mansion-hall-seen",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
@@ -8383,6 +8654,24 @@
         "kind": "flag",
         "key": "mansion-door-once",
         "amount": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back down to the hall.",
+     "success": {
+      "text": "Down the stairs. They creak in different places going down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-hall-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-hall"
        }
       ]
      }
@@ -8725,6 +9014,24 @@
        {
         "kind": "addEvent",
         "eventId": "gn-37-study"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go back down to the hall.",
+     "success": {
+      "text": "Down the stairs. They creak in different places going down.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "mansion-hall-seen",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-37-hall"
        }
       ]
      }
@@ -9526,12 +9833,16 @@
       "types": []
      },
      "success": {
-      "text": "It shows your Pokémon how to hold on to someone at the door. Welcome Home.",
+      "text": "It shows your Pokémon how to hold on to someone at the door. Welcome Home.\n\nThen it turns down the beds, the way it has every night for forty years. Tonight, somebody sleeps in them. The house is a place to rest.",
       "effects": [
        {
         "kind": "teachMove",
         "move": "welcome-home",
         "who": "picked"
+       },
+       {
+        "kind": "heal",
+        "share": 1
        },
        {
         "kind": "gn",
@@ -9794,6 +10105,18 @@
         "kind": "flag",
         "key": "lab-entered",
         "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-stays",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-answer",
+        "n": 0
        },
        {
         "kind": "gn",
@@ -10642,6 +10965,12 @@
        },
        {
         "kind": "gn",
+        "op": "setFlag",
+        "key": "lab-stays",
+        "n": 1
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-38-researchers"
        }
@@ -10686,6 +11015,7 @@
        "kind": "anyFlag",
        "keys": [
         "hoenn-took-all",
+        "hoenn-final-all",
         "called-it-for-us"
        ]
       }
@@ -10709,6 +11039,42 @@
      "success": {
       "text": "They both turn to you. So does it.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-answer",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*It looks at you, not at them. You said: whatever you want. It's waiting to see if you meant it.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-answer",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*It comes to stand beside you. You said: come with me.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-answer",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*It doesn't get up from under the tree. You said you'd stay a while.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-answer",
+        "min": 4,
+        "max": 4,
+        "then": [],
+        "text": "*It watches you the way you watched it. You said you didn't know. Neither does it.*"
+       },
        {
         "kind": "gn",
         "op": "scene",
@@ -10896,8 +11262,38 @@
     {
      "label": "Help Dr. Oyelaran-Shaw.",
      "success": {
-      "text": "She sits on the floor. She tells it everything: who ordered it, who refused, what its name was going to be. Lodestar. It listens to all of it.\n\nIt keeps its shape, and gains a name. When she leaves, it goes with her.\n\nShe gives you her old key card. \"It opens one door. I never used it for the right one.\"",
+      "text": "She sits on the floor. She tells it everything: who ordered it, who refused, what its name was going to be. Lodestar. It listens to all of it.\n\nIt keeps its shape, and gains a name.\n\nShe gives you her old key card. \"It opens one door. I never used it for the right one.\"",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "lab-with-her",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "lab-stays",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-with-her",
+        "min": 1,
+        "then": [],
+        "text": "When she leaves, it goes with her."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "lab-with-her",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "When she leaves, it doesn't follow. You told it you'd stay a while, and it has decided that staying is allowed. She says she'll come back tomorrow. This time she will."
+       },
        {
         "kind": "gn",
         "op": "setFlag",

@@ -22,8 +22,6 @@ const MAX_RECORDS = 24;
 const FOND = 85;
 /** "A great many": the first one met is followed by others. */
 export const MANY = 5;
-/** How many others follow the first when so many were let go. */
-const FOLLOWERS = 3;
 /** Stages that must pass after a release, and the stage count after which any place will do. */
 const MIN_AWAY = 2;
 const ANY_PLACE = 4;
@@ -113,18 +111,10 @@ export function ofPick(content: Content, run: RunState, stage: number, float: ()
   put(run, 'of-many', all.length >= MANY ? 1 : 0);
   all[i] = { ...rec, m: 1 };
   save(run, i, all[i]!);
-  // Many let go: three of the others are met with it, at a distance.
-  let followers = 0;
-  if (all.length >= MANY) {
-    all.forEach((r, j) => {
-      if (j === i || r.m || followers >= FOLLOWERS) return;
-      all[j] = { ...r, m: 1 };
-      save(run, j, all[j]!);
-      followers++;
-    });
-  }
+  // Many let go: the others follow it at a distance (the event's "many" line). They are not met yet: each waits its turn, and gets its
+  // own meeting later ("once per released Pokémon").
   // The doc's flags: `oldfriend.met.*` for the Final Reunion to read.
-  put(run, 'oldfriend-met', flag(run, 'oldfriend-met') + 1 + followers);
+  put(run, 'oldfriend-met', flag(run, 'oldfriend-met') + 1);
   run.story.flags[`oldfriend.met.${rec.s}`] = 1;
   return '';
 }
@@ -198,7 +188,15 @@ export function ofGuestLeaves(content: Content, run: RunState): string {
 }
 
 const HARD = ['gym-leader', 'elite-four', 'champion'];
-const isHard = (battle: BattleState): boolean => HARD.includes(battle.trainer?.classId ?? '');
+/** The rank of an evil team's officer in an event battle (`evil: 'executive' | 'leader'` on the event's battle), if this is one. */
+function evilRank(content: Content, battle: BattleState): string | undefined {
+  const ref = battle.event;
+  if (!ref) return undefined;
+  const choice = content.events.get(ref.eventId)?.choices[ref.choiceIndex];
+  return ((ref.success ? choice?.success : choice?.failure)?.battle as { evil?: string } | undefined)?.evil;
+}
+/** "The stage's Gym or boss battle": a Gym Leader, the Elite Four, a Champion, or an evil team's lieutenant or boss. */
+const isHard = (content: Content, battle: BattleState): boolean => HARD.includes(battle.trainer?.classId ?? '') || ['executive', 'leader'].includes(evilRank(content, battle) ?? '');
 /** The stage as one number (region and stage), for "that stage" checks that do not need the campaign. */
 export const stageKeyOf = (run: Pick<RunState, 'regionIndex' | 'stage'>): number => run.regionIndex * 100 + (run.stage?.index ?? 0) + 1;
 
@@ -207,7 +205,7 @@ export const stageKeyOf = (run: Pick<RunState, 'regionIndex' | 'stage'>): number
  * uses its best move for real (the game's damage formula, the foe's type and stats, an average roll), and goes. Once.
  */
 export function ofAssist(content: Content, run: RunState, battle: BattleState): string {
-  if (flag(run, 'of-help') < 1 || flag(run, 'of-help-used') > 0 || !isHard(battle)) return '';
+  if (flag(run, 'of-help') < 1 || flag(run, 'of-help-used') > 0 || !isHard(content, battle)) return '';
   const sp = castNow(run);
   const foe = battle.enemyTeam[battle.enemyIndex];
   if (!sp || !foe) return '';
@@ -246,7 +244,7 @@ export function ofShadowMark(run: RunState): void {
 }
 export const SHADOW = 'of-shadow';
 export function ofShadow(run: RunState, battle: BattleState): string {
-  if (flag(run, 'of-shadow') !== stageKeyOf(run) || flag(run, 'of-shadow-used') === stageKeyOf(run) || !isHard(battle)) return '';
+  if (flag(run, 'of-shadow') !== stageKeyOf(run) || flag(run, 'of-shadow-used') === stageKeyOf(run) || !HARD.includes(battle.trainer?.classId ?? '')) return '';
   put(run, 'of-shadow-used', stageKeyOf(run));
   battle.enemyStages.acc = Math.max(-6, (battle.enemyStages.acc ?? 0) - 1);
   battle.storyEffects.push(SHADOW);

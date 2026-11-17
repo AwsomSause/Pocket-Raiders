@@ -272,6 +272,56 @@
         "min": 1,
         "then": [
          {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-sat",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-pool",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-shrine",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-legend",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-mill",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-hat",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-food",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-fall",
+        "min": 1,
+        "then": [
+         {
           "kind": "flag",
           "key": "kanto-bridge-fell",
           "amount": 1
@@ -864,31 +914,13 @@
     {
      "label": "Climb the steps.",
      "success": {
-      "text": "You climb. Something that lives on the steps does not like being climbed past.",
-      "effects": [],
-      "battle": {
-       "kind": "wild",
-       "species": [],
-       "types": [
-        "grass",
-        "bug"
-       ],
-       "levelBonus": 0,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "addEvent",
-         "eventId": "gn-06-mill"
-        }
-       ],
-       "caught": [
-        {
-         "kind": "addEvent",
-         "eventId": "gn-06-mill"
-        }
-       ],
-       "pseudo": true
-      }
+      "text": "You climb. The steps go on a long way. Nothing stops you. At the top, the smell of woodsmoke.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-06-mill"
+       }
+      ]
      }
     }
    ]
@@ -958,6 +990,11 @@
      "success": {
       "text": "You sit. Somebody puts a bowl in your hands. It is hot, and plain, and the best thing you have eaten in weeks. Around you the village goes back to its day, and lets you be part of it.",
       "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-sat",
+        "amount": 1
+       },
        {
         "kind": "gn",
         "op": "when",
@@ -1258,37 +1295,296 @@
        {
         "kind": "gn",
         "op": "scene",
+        "key": "gn-06-village"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-village-sat",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Walk round the village.",
+     "success": {
+      "text": "You get up and walk. Nobody minds where you go.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-walk"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-village-sat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "See who needs a hand.",
+     "success": {
+      "text": "There is always something that needs doing, in a place this small.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-tasks"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-village-sat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Go to the rope.",
+     "success": {
+      "text": "Granny Tamsel walks you to the foot of the cliff, where the rope hangs down.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-rope"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-village-sat",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-06-walk",
+   "name": "The Hidden Village: Round the Houses",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A pool that steams. A little roofed shelf at the edge of the orchard. A fire, with an old woman beside it.",
+   "choices": [
+    {
+     "label": "Go to the Healing Pool.",
+     "success": {
+      "text": "You follow the steam, down between the houses.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-went-pool",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
         "key": "gn-06-pool"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-village-went-pool",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go to the Berry Shrine.",
+     "success": {
+      "text": "You walk out to the edge of the orchard.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-went-shrine",
+        "amount": 1
        },
        {
         "kind": "gn",
         "op": "scene",
         "key": "gn-06-shrine"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-village-went-shrine",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Sit by Granny Tamsel's fire.",
+     "success": {
+      "text": "You find a place by the fire.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-went-legend",
+        "amount": 1
        },
        {
         "kind": "gn",
         "op": "scene",
         "key": "gn-06-legend"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-village-went-legend",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You walk back to the middle of the village.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-06-tasks",
+   "name": "The Hidden Village: A Hand",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#24402e",
+    "effect": "none"
+   },
+   "intro": "A stopped waterwheel. A small boy standing very still in the lane. A long table being laid under the trees.",
+   "choices": [
+    {
+     "label": "Go to the mill.",
+     "success": {
+      "text": "You walk down to the stopped wheel.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-went-mill",
+        "amount": 1
        },
        {
         "kind": "gn",
         "op": "scene",
         "key": "gn-06-task-mill"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-village-went-mill",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Talk to the small boy.",
+     "success": {
+      "text": "A small boy is standing very still in the lane, looking at nothing.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-went-hat",
+        "amount": 1
        },
        {
         "kind": "gn",
         "op": "scene",
         "key": "gn-06-task-hat"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-village-went-hat",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Go to the long table.",
+     "success": {
+      "text": "Under the trees, they are laying the long table.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "gn-village-went-food",
+        "amount": 1
        },
        {
         "kind": "gn",
         "op": "scene",
         "key": "gn-06-task-food"
-       },
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "gn-village-went-food",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Back to the square.",
+     "success": {
+      "text": "You walk back to the middle of the village.",
+      "effects": [
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-06-rope"
+        "key": "gn-06-village"
        }
       ]
      }
@@ -1319,6 +1615,11 @@
        {
         "kind": "heal",
         "share": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
      }
@@ -1350,6 +1651,11 @@
         "kind": "gn",
         "op": "itemEach",
         "key": "oran-berry"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
      }
@@ -1381,6 +1687,11 @@
         "kind": "flag",
         "key": "intel",
         "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
      }
@@ -1468,6 +1779,11 @@
           ]
          }
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
      },
@@ -1547,6 +1863,11 @@
           ]
          }
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
      }
@@ -1651,6 +1972,11 @@
             ]
            }
           ]
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-village"
          }
         ],
         "text": "It is in the stream, caught on a stone. You fish it out. Pip puts it on wet, and it comes down over his eyes, and he does not care."
@@ -1722,6 +2048,11 @@
             ]
            }
           ]
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-06-village"
          }
         ],
         "text": "It is on the mill roof. You climb. You do not look down. Pip claps when you hand it over."
@@ -1768,6 +2099,10 @@
      "success": {
       "text": "You hold out a Berry. The Lotad thinks about it for a long time, then tips its head, and the hat slides off into Pip's arms. It eats the Berry like it has won.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "payBerry"
+       },
        {
         "kind": "flag",
         "key": "gn-village-hat",
@@ -1828,9 +2163,20 @@
           ]
          }
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ]
     },
     {
      "label": "Let it keep it; weave him a new one.",
@@ -1897,6 +2243,11 @@
           ]
          }
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
      }
@@ -1924,6 +2275,10 @@
      "success": {
       "text": "You put a Berry in the big bowl in the middle. Somebody cuts it into enough pieces for everyone, somehow.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "payBerry"
+       },
        {
         "kind": "flag",
         "key": "gn-village-food",
@@ -1984,9 +2339,20 @@
           ]
          }
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "gn",
+       "test": "holdsBerry"
+      }
+     ]
     },
     {
      "label": "Cook something.",
@@ -2053,6 +2419,11 @@
           ]
          }
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
      }
@@ -2122,6 +2493,11 @@
           ]
          }
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
      }
@@ -2608,6 +2984,19 @@
        },
        {
         "kind": "leavePseudo"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Not yet.",
+     "success": {
+      "text": "You let go of the rope. The village is still there behind you.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-village"
        }
       ]
      }
@@ -3677,10 +4066,14 @@
     "tint": "#24402e",
     "effect": "none"
    },
-   "intro": "The first gap. The roof on the far side is lower, and wet.",
+   "intro": "The first gap. The roof on the far side is lower, and wet. The elder is already in the air.",
    "choices": [
     {
-     "label": "Jump now.",
+     "label": "Jump.",
+     "prompt": {
+      "id": "roof-leap",
+      "needs": "ok"
+     },
      "success": {
       "text": "You land, skid, keep going. The elder glances back, surprised.",
       "effects": [
@@ -3690,12 +4083,9 @@
         "key": "gn-06-st-treecko-3"
        }
       ]
-     }
-    },
-    {
-     "label": "Wait a beat.",
-     "success": {
-      "text": "The elder is already two roofs on. You will not catch it now.",
+     },
+     "failure": {
+      "text": "A beat late. The elder is already two roofs on. You will not catch it now.",
       "effects": [
        {
         "kind": "gn",
@@ -3753,9 +4143,13 @@
    "intro": "A long roof, a loose tile halfway along, and the elder going straight over it without slowing.",
    "choices": [
     {
-     "label": "Go round the loose tile.",
+     "label": "Jump the loose tile.",
+     "prompt": {
+      "id": "roof-leap",
+      "needs": "ok"
+     },
      "success": {
-      "text": "Round it, and on. You lose a step. You keep your feet.",
+      "text": "Over it, and on. You lose a step. You keep your feet.",
       "effects": [
        {
         "kind": "gn",
@@ -3763,11 +4157,8 @@
         "key": "gn-06-st-treecko-4"
        }
       ]
-     }
-    },
-    {
-     "label": "Follow the elder straight over.",
-     "success": {
+     },
+     "failure": {
       "text": "The tile goes. So do you, very nearly. By the time you are up, the race is over.",
       "effects": [
        {
@@ -3826,7 +4217,11 @@
    "intro": "The last roof, and the old tree beyond it. The elder is beside you, neck and neck.",
    "choices": [
     {
-     "label": "Wait a beat, then jump.",
+     "label": "Jump.",
+     "prompt": {
+      "id": "roof-leap",
+      "needs": "ok"
+     },
      "success": {
       "text": "The elder jumps first, too early, and has to scramble. You land clean. It looks at you a long time, then steps aside.",
       "effects": [
@@ -3836,11 +4231,8 @@
         "key": "gn-06-st-treecko-5"
        }
       ]
-     }
-    },
-    {
-     "label": "Jump now.",
-     "success": {
+     },
+     "failure": {
       "text": "Too early. You catch the edge, and hang there, and the elder looks down at you, not unkindly.",
       "effects": [
        {
@@ -5239,12 +5631,26 @@
     "tint": "#24402e",
     "effect": "none"
    },
-   "intro": "A Snorlax across the path, snoring like a bellows.",
+   "intro": "A Snorlax across the path, snoring like a bellows. The only way is round by the fence, between the posts, slowly.",
    "choices": [
     {
-     "label": "Climb over it, softly.",
+     "label": "Creep round by the fence.",
+     "prompt": {
+      "id": "night-tiptoe",
+      "needs": "ok"
+     },
      "success": {
-      "text": "Its eyes open. It sits up. So does every light in the village.",
+      "text": "Round by the fence, between the posts. It snores on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-06-st-rowlet-3"
+       }
+      ]
+     },
+     "failure": {
+      "text": "Your foot finds the one dry stick. Its eyes open. It sits up. So does every light in the village.",
       "effects": [
        {
         "kind": "gn",
@@ -5281,19 +5687,6 @@
        }
       ]
      }
-    },
-    {
-     "label": "Go round by the fence.",
-     "success": {
-      "text": "Round by the fence, between the posts. It snores on.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "scene",
-        "key": "gn-06-st-rowlet-3"
-       }
-      ]
-     }
     }
    ]
   },
@@ -5312,10 +5705,14 @@
     "tint": "#24402e",
     "effect": "none"
    },
-   "intro": "A Growlithe asleep on a step, one ear twitching.",
+   "intro": "A Growlithe asleep on a step, one ear twitching. You are downwind. You only have to be slow.",
    "choices": [
     {
-     "label": "Walk past downwind.",
+     "label": "Walk past, downwind.",
+     "prompt": {
+      "id": "night-tiptoe",
+      "needs": "ok"
+     },
      "success": {
       "text": "The wind takes your smell away. The ear stops twitching.",
       "effects": [
@@ -5325,12 +5722,9 @@
         "key": "gn-06-st-rowlet-4"
        }
       ]
-     }
-    },
-    {
-     "label": "Walk past quickly.",
-     "success": {
-      "text": "It wakes, and barks, and barks.",
+     },
+     "failure": {
+      "text": "Too quick. It wakes, and barks, and barks.",
       "effects": [
        {
         "kind": "gn",
@@ -5385,10 +5779,14 @@
     "tint": "#24402e",
     "effect": "none"
    },
-   "intro": "A Hoothoot on the chimney's own roof, eyes shut, one foot tucked up.",
+   "intro": "A Hoothoot on the chimney's own roof, eyes shut, one foot tucked up. Hoothoot never fully sleep. You wait for it to turn its head.",
    "choices": [
     {
-     "label": "Wait for it to turn its head.",
+     "label": "Climb while its head is turned.",
+     "prompt": {
+      "id": "night-tiptoe",
+      "needs": "ok"
+     },
      "success": {
       "text": "It turns its head, all the way round, the other way. You climb.",
       "effects": [
@@ -5398,12 +5796,9 @@
         "key": "gn-06-st-rowlet-5"
        }
       ]
-     }
-    },
-    {
-     "label": "Climb while it sleeps.",
-     "success": {
-      "text": "Hoothoot never fully sleep. It hoots. Lights come on.",
+     },
+     "failure": {
+      "text": "You move a breath too soon. It hoots. Lights come on.",
       "effects": [
        {
         "kind": "gn",
@@ -5608,7 +6003,11 @@
    "intro": "It plays a pattern on the stumps, and holds the stick out to you. *Long. Short. Short. Long.* Your turn.",
    "choices": [
     {
-     "label": "Long, short, short, long.",
+     "label": "Play it back.",
+     "prompt": {
+      "id": "stump-drum",
+      "needs": "ok"
+     },
      "success": {
       "text": "You play it back. It plays it again, louder, faster, and the whole village starts clapping along. It finds the beat. It keeps it. It keeps you.",
       "effects": [
@@ -5669,53 +6068,9 @@
         ]
        }
       ]
-     }
-    },
-    {
-     "label": "Short, long, long, short.",
-     "success": {
-      "text": "It stops. It looks at the stick. The beat falls apart again.",
-      "effects": [
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "gn-st-failed",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "item",
-          "id": "miracle-seed",
-          "count": 1
-         },
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-06-st-grookey"
-         }
-        ],
-        "text": "The Grookey watches you go. Granny Tamsel presses a Miracle Seed into your hand. \"It'll let you try once more. Once.\""
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "gn-st-failed",
-        "min": 1,
-        "then": [],
-        "text": "The Grookey turns away for good. Some doors only open twice."
-       },
-       {
-        "kind": "flag",
-        "key": "gn-st-failed",
-        "amount": 1
-       }
-      ]
-     }
-    },
-    {
-     "label": "Long, long, short, short.",
-     "success": {
-      "text": "Close. Not close enough. It sits back down on its stump.",
+     },
+     "failure": {
+      "text": "Close. Not close enough. It stops. It looks at the stick. The beat falls apart again.",
       "effects": [
        {
         "kind": "gn",
@@ -6178,6 +6533,56 @@
           "kind": "gn",
           "op": "setFlag",
           "key": "gn-st-chiko-thanked",
+          "n": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "gn-bridge-fall",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-sat",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-pool",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-shrine",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-legend",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-mill",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-hat",
+          "n": 0
+         },
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "gn-village-went-food",
           "n": 0
          }
         ]
@@ -10618,18 +11023,12 @@
     {
      "label": "Sit down with the Lesser members first.",
      "success": {
-      "text": "You sit on the kerb. They shuffle along to make room, suspicious.",
+      "text": "You sit on the kerb. They shuffle along to make room, suspicious. Then one of them stands up, and Officer Jenny lets it.",
       "effects": [
        {
         "kind": "gn",
-        "op": "setFlag",
-        "key": "squad-standoff-talk",
-        "n": 1
-       },
-       {
-        "kind": "gn",
         "op": "scene",
-        "key": "gn-08-specs"
+        "key": "gn-08-fight-1"
        }
       ]
      }
@@ -10652,7 +11051,7 @@
     "tint": "#2b4a63",
     "effect": "none"
    },
-   "intro": "One of them hops down off the wall, pushes its shades up its nose, and points at you. A challenge. The others cheer.",
+   "intro": "One of them steps out in front of the others, pushes its shades up its nose, and points at you. A challenge. The others cheer.",
    "choices": [
     {
      "label": "Take on the next one.",
@@ -10720,30 +11119,8 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "when",
-        "key": "squad-standoff-talk",
-        "min": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-08-tank"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "squad-standoff-talk",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-08-fight-2"
-         }
-        ]
+        "op": "scene",
+        "key": "gn-08-fight-2"
        }
       ]
      }
@@ -10766,30 +11143,8 @@
        },
        {
         "kind": "gn",
-        "op": "when",
-        "key": "squad-standoff-talk",
-        "min": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-08-tank"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "squad-standoff-talk",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-08-fight-2"
-         }
-        ]
+        "op": "scene",
+        "key": "gn-08-fight-2"
        }
       ]
      }
@@ -10812,7 +11167,7 @@
     "tint": "#2b4a63",
     "effect": "none"
    },
-   "intro": "Another one hops down. The others cheer exactly as loudly as last time.",
+   "intro": "Another one steps out. The others cheer exactly as loudly as last time.",
    "choices": [
     {
      "label": "Take on the next one.",
@@ -10891,30 +11246,8 @@
        },
        {
         "kind": "gn",
-        "op": "when",
-        "key": "squad-standoff-talk",
-        "min": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-08-smoulder"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "squad-standoff-talk",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-08-fight-3"
-         }
-        ]
+        "op": "scene",
+        "key": "gn-08-fight-3"
        }
       ]
      }
@@ -10926,30 +11259,8 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "when",
-        "key": "squad-standoff-talk",
-        "min": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-08-smoulder"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "squad-standoff-talk",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-08-fight-3"
-         }
-        ]
+        "op": "scene",
+        "key": "gn-08-fight-3"
        }
       ]
      }
@@ -10972,7 +11283,7 @@
     "tint": "#2b4a63",
     "effect": "none"
    },
-   "intro": "Another one hops down. The others cheer exactly as loudly as last time.",
+   "intro": "Another one steps out. The others cheer exactly as loudly as last time.",
    "choices": [
     {
      "label": "Take on the next one.",
@@ -11114,30 +11425,8 @@
        },
        {
         "kind": "gn",
-        "op": "when",
-        "key": "squad-standoff-talk",
-        "min": 1,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-08-leader"
-         }
-        ]
-       },
-       {
-        "kind": "gn",
-        "op": "when",
-        "key": "squad-standoff-talk",
-        "min": 0,
-        "max": 0,
-        "then": [
-         {
-          "kind": "gn",
-          "op": "scene",
-          "key": "gn-08-leader"
-         }
-        ]
+        "op": "scene",
+        "key": "gn-08-leader"
        }
       ]
      }
@@ -11468,7 +11757,13 @@
         "key": "gn-08-recruit"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ]
     },
     {
      "label": "Smoulder, with me.",
@@ -12068,12 +12363,26 @@
      ]
     },
     {
-     "label": "Give up for tonight.",
+     "label": "Walk back to the first sign.",
      "success": {
-      "text": "The sky goes grey before you find it. The beacon fades into the morning, and the cape is just a cape again.",
+      "text": "Five signs, and not enough of them read right. The night is long. You walk back along the shore to where you started, and look again.",
       "effects": [
        {
-        "kind": "leavePseudo"
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bill-read",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "bill-clues",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-search"
        }
       ]
      },
@@ -12145,6 +12454,11 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "bill-wrong",
+        "amount": 1
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-09-walk"
@@ -12202,6 +12516,11 @@
        {
         "kind": "flag",
         "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bill-wrong",
         "amount": 1
        },
        {
@@ -12265,6 +12584,11 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "bill-wrong",
+        "amount": 1
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-09-walk"
@@ -12322,6 +12646,11 @@
        {
         "kind": "flag",
         "key": "bill-read",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "bill-wrong",
         "amount": 1
        },
        {
@@ -12385,6 +12714,11 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "bill-wrong",
+        "amount": 1
+       },
+       {
         "kind": "gn",
         "op": "scene",
         "key": "gn-09-walk"
@@ -12409,37 +12743,19 @@
     "tint": "#1c2a44",
     "effect": "none"
    },
-   "intro": "The wrong way is a long way. The shore goes on in the dark, and something on it does not want you there.",
+   "intro": "The wrong way is a long way. The shore goes on in the dark, and the beacon is no nearer.",
    "choices": [
     {
-     "label": "Push on.",
+     "label": "Walk back.",
      "success": {
-      "text": "A wild Pokémon comes up out of the surf at you.",
-      "effects": [],
-      "battle": {
-       "kind": "wild",
-       "species": [],
-       "types": [
-        "water"
-       ],
-       "levelBonus": -1,
-       "shinyMultiplier": 1,
-       "win": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-09-search"
-        }
-       ],
-       "caught": [
-        {
-         "kind": "gn",
-         "op": "scene",
-         "key": "gn-09-search"
-        }
-       ],
-       "pseudo": true
-      }
+      "text": "It costs you the walk, and nothing else. You come back to the signs with sand in your shoes.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-09-search"
+       }
+      ]
      }
     }
    ]
@@ -13025,7 +13341,8 @@
         "count": 1
        },
        {
-        "kind": "eggMove"
+        "kind": "gn",
+        "op": "eggNotes"
        },
        {
         "kind": "gn",
@@ -13079,7 +13396,8 @@
         "count": 1
        },
        {
-        "kind": "eggMove"
+        "kind": "gn",
+        "op": "eggNotes"
        },
        {
         "kind": "gn",
@@ -13133,7 +13451,8 @@
         "count": 1
        },
        {
-        "kind": "eggMove"
+        "kind": "gn",
+        "op": "eggNotes"
        },
        {
         "kind": "gn",
@@ -13421,6 +13740,39 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
          "kind": "leavePseudo"
         }
        ],
@@ -13460,6 +13812,11 @@
          "kind": "gn",
          "op": "scene",
          "key": "gn-10-galley"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-10-secret"
         },
         {
          "kind": "gn",
@@ -13617,28 +13974,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-1"
+        "key": "gn-10-secret-1"
        }
       ]
      },
@@ -13666,6 +14007,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-1"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-1",
+   "name": "S.S. Anne: The Secret Trade, Cabin 1",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-1"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-1"
        }
       ]
      }
@@ -13827,7 +14358,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -14305,6 +14837,39 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
          "kind": "leavePseudo"
         }
        ],
@@ -14501,28 +15066,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-2"
+        "key": "gn-10-secret-2"
        }
       ]
      },
@@ -14550,6 +15099,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-2"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-2",
+   "name": "S.S. Anne: The Secret Trade, Cabin 2",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-2"
        }
       ]
      }
@@ -14630,7 +15369,7 @@
          "ninetales": "ninetales-alola",
          "diglett": "diglett-alola",
          "dugtrio": "dugtrio-alola",
-         "meowth": "meowth-alola",
+         "meowth": "meowth-galar",
          "persian": "persian-alola",
          "geodude": "geodude-alola",
          "graveler": "graveler-alola",
@@ -14711,7 +15450,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -15189,6 +15929,39 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
          "kind": "leavePseudo"
         }
        ],
@@ -15399,28 +16172,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-3"
+        "key": "gn-10-secret-3"
        }
       ]
      },
@@ -15448,6 +16205,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-3"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-3",
+   "name": "S.S. Anne: The Secret Trade, Cabin 3",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-3"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-3"
        }
       ]
      }
@@ -15609,7 +16556,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -16075,7 +17023,7 @@
     {
      "label": "Battle.",
      "success": {
-      "text": "**Dobbs-Leary:** \"Ha! Lost. Right. See you upstairs.\"",
+      "text": "Battle on the open deck.",
       "effects": [],
       "battle": {
        "kind": "trainer",
@@ -16085,6 +17033,39 @@
          "kind": "flag",
          "key": "ssanne-ashore",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
         },
         {
          "kind": "leavePseudo"
@@ -16125,6 +17106,14 @@
          "kind": "flag",
          "key": "ssanne-dobbs",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-dobbs",
+         "min": 1,
+         "then": [],
+         "text": "**Dobbs-Leary:** \"Ha! Lost. Right. See you upstairs.\""
         },
         {
          "kind": "gn",
@@ -16282,28 +17271,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-4"
+        "key": "gn-10-secret-4"
        }
       ]
      },
@@ -16331,6 +17304,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-4"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-4",
+   "name": "S.S. Anne: The Secret Trade, Cabin 4",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-4"
        }
       ]
      }
@@ -16411,7 +17574,7 @@
          "ninetales": "ninetales-alola",
          "diglett": "diglett-alola",
          "dugtrio": "dugtrio-alola",
-         "meowth": "meowth-alola",
+         "meowth": "meowth-galar",
          "persian": "persian-alola",
          "geodude": "geodude-alola",
          "graveler": "graveler-alola",
@@ -16492,7 +17655,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -16970,6 +18134,39 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
          "kind": "leavePseudo"
         }
        ],
@@ -17166,28 +18363,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-5"
+        "key": "gn-10-secret-5"
        }
       ]
      },
@@ -17215,6 +18396,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-5"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-5",
+   "name": "S.S. Anne: The Secret Trade, Cabin 5",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-5"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-5"
        }
       ]
      }
@@ -17376,7 +18747,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -17854,6 +19226,39 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
          "kind": "leavePseudo"
         }
        ],
@@ -18051,28 +19456,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-6"
+        "key": "gn-10-secret-6"
        }
       ]
      },
@@ -18100,6 +19489,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-6"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-6",
+   "name": "S.S. Anne: The Secret Trade, Cabin 6",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-6"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-6"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-6"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-6"
        }
       ]
      }
@@ -18180,7 +19759,7 @@
          "ninetales": "ninetales-alola",
          "diglett": "diglett-alola",
          "dugtrio": "dugtrio-alola",
-         "meowth": "meowth-alola",
+         "meowth": "meowth-galar",
          "persian": "persian-alola",
          "geodude": "geodude-alola",
          "graveler": "graveler-alola",
@@ -18261,7 +19840,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -18739,6 +20319,39 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
          "kind": "leavePseudo"
         }
        ],
@@ -18935,28 +20548,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-7"
+        "key": "gn-10-secret-7"
        }
       ]
      },
@@ -18984,6 +20581,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-7"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-7",
+   "name": "S.S. Anne: The Secret Trade, Cabin 7",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-7"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-7"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-7"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-7"
        }
       ]
      }
@@ -19145,7 +20932,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -19611,7 +21399,7 @@
     {
      "label": "Battle.",
      "success": {
-      "text": "**Dobbs-Leary:** \"Still not enough. Still! Upstairs, then.\"",
+      "text": "He has learned from what beat him: his team is built for yours this time.",
       "effects": [],
       "battle": {
        "kind": "trainer",
@@ -19621,6 +21409,161 @@
          "kind": "flag",
          "key": "ssanne-ashore",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "name": "Sailor Dobbs-Leary",
+       "size": 3,
+       "types": [
+        "grass",
+        "electric"
+       ],
+       "levelBonus": 0,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ssanne-at",
+         "n": 8
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ssanne-took-a",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ssanne-took-b",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ssanne-took-c",
+         "n": 0
+        },
+        {
+         "kind": "flag",
+         "key": "ssanne-dobbs",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-dobbs",
+         "min": 1,
+         "then": [],
+         "text": "**Dobbs-Leary:** \"Still not enough. Still! Upstairs, then.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-10-contest"
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-10-deck-8"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-at",
+       "atLeast": 7,
+       "atMost": 7
+      },
+      {
+       "kind": "partyType",
+       "type": "water"
+      }
+     ]
+    },
+    {
+     "label": "Battle.",
+     "success": {
+      "text": "Battle on the open deck.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ssanne-ashore",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
         },
         {
          "kind": "leavePseudo"
@@ -19665,6 +21608,14 @@
         },
         {
          "kind": "gn",
+         "op": "when",
+         "key": "ssanne-dobbs",
+         "min": 1,
+         "then": [],
+         "text": "**Dobbs-Leary:** \"Still not enough. Still! Upstairs, then.\""
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-10-contest"
         },
@@ -19682,6 +21633,11 @@
        "key": "ssanne-at",
        "atLeast": 7,
        "atMost": 7
+      },
+      {
+       "kind": "partyType",
+       "type": "water",
+       "absent": true
       }
      ]
     },
@@ -19824,28 +21780,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-8"
+        "key": "gn-10-secret-8"
        }
       ]
      },
@@ -19873,6 +21813,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-8"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-8",
+   "name": "S.S. Anne: The Secret Trade, Cabin 8",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-8"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-8"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-8"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-8"
        }
       ]
      }
@@ -19953,7 +22083,7 @@
          "ninetales": "ninetales-alola",
          "diglett": "diglett-alola",
          "dugtrio": "dugtrio-alola",
-         "meowth": "meowth-alola",
+         "meowth": "meowth-galar",
          "persian": "persian-alola",
          "geodude": "geodude-alola",
          "graveler": "graveler-alola",
@@ -20034,7 +22164,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -20512,6 +22643,39 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
          "kind": "leavePseudo"
         }
        ],
@@ -20708,28 +22872,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-9"
+        "key": "gn-10-secret-9"
        }
       ]
      },
@@ -20757,6 +22905,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-9"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-9",
+   "name": "S.S. Anne: The Secret Trade, Cabin 9",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-9"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-9"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-9"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-9"
        }
       ]
      }
@@ -20918,7 +23256,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -21396,6 +23735,39 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
          "kind": "leavePseudo"
         }
        ],
@@ -21607,28 +23979,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-10"
+        "key": "gn-10-secret-10"
        }
       ]
      },
@@ -21656,6 +24012,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-10"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-10",
+   "name": "S.S. Anne: The Secret Trade, Cabin 10",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-10"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-10"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-10"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-10"
        }
       ]
      }
@@ -21736,7 +24282,7 @@
          "ninetales": "ninetales-alola",
          "diglett": "diglett-alola",
          "dugtrio": "dugtrio-alola",
-         "meowth": "meowth-alola",
+         "meowth": "meowth-galar",
          "persian": "persian-alola",
          "geodude": "geodude-alola",
          "graveler": "graveler-alola",
@@ -21817,7 +24363,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -22295,6 +24842,39 @@
          "amount": 1
         },
         {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
          "kind": "leavePseudo"
         }
        ],
@@ -22506,28 +25086,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-11"
+        "key": "gn-10-secret-11"
        }
       ]
      },
@@ -22555,6 +25119,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-11"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-11",
+   "name": "S.S. Anne: The Secret Trade, Cabin 11",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-11"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-11"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-11"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-11"
        }
       ]
      }
@@ -22716,7 +25470,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -23182,6 +25937,138 @@
     {
      "label": "Battle.",
      "success": {
+      "text": "He has learned from what beat him: his team is built for yours this time.",
+      "effects": [],
+      "battle": {
+       "kind": "trainer",
+       "friendly": true,
+       "lose": [
+        {
+         "kind": "flag",
+         "key": "ssanne-ashore",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
+        },
+        {
+         "kind": "leavePseudo"
+        }
+       ],
+       "name": "Sailor Dobbs-Leary",
+       "size": 3,
+       "types": [
+        "dragon",
+        "flying"
+       ],
+       "levelBonus": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ssanne-at",
+         "n": 12
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ssanne-took-a",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ssanne-took-b",
+         "n": 0
+        },
+        {
+         "kind": "gn",
+         "op": "setFlag",
+         "key": "ssanne-took-c",
+         "n": 0
+        },
+        {
+         "kind": "flag",
+         "key": "ssanne-dobbs",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-dobbs",
+         "min": 3,
+         "then": [
+          {
+           "kind": "item",
+           "id": "amulet-coin",
+           "count": 1
+          }
+         ],
+         "text": "**Dobbs-Leary:** \"Three times. Fair's fair.\" He presses something warm into your hand. \"My lucky coin. Hasn't been lucky for me.\""
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-dobbs",
+         "min": 0,
+         "max": 2,
+         "then": [],
+         "text": "**Dobbs-Leary:** \"Well. That's that, then.\""
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-10-deck-12"
+        }
+       ]
+      }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-at",
+       "atLeast": 11,
+       "atMost": 11
+      },
+      {
+       "kind": "partyType",
+       "type": "grass"
+      }
+     ]
+    },
+    {
+     "label": "Battle.",
+     "success": {
       "text": "Battle on the open deck.",
       "effects": [],
       "battle": {
@@ -23192,6 +26079,39 @@
          "kind": "flag",
          "key": "ssanne-ashore",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
         },
         {
          "kind": "leavePseudo"
@@ -23250,6 +26170,15 @@
         },
         {
          "kind": "gn",
+         "op": "when",
+         "key": "ssanne-dobbs",
+         "min": 0,
+         "max": 2,
+         "then": [],
+         "text": "**Dobbs-Leary:** \"Well. That's that, then.\""
+        },
+        {
+         "kind": "gn",
          "op": "scene",
          "key": "gn-10-deck-12"
         }
@@ -23262,6 +26191,11 @@
        "key": "ssanne-at",
        "atLeast": 11,
        "atMost": 11
+      },
+      {
+       "kind": "partyType",
+       "type": "grass",
+       "absent": true
       }
      ]
     },
@@ -23404,28 +26338,12 @@
     {
      "label": "The secret trade.",
      "success": {
-      "text": "Behind the kitchen, someone takes your Pokémon, and hands back something stranger than the last one.",
+      "text": "Behind the kitchen, the traders look up from their cards.",
       "effects": [
-       {
-        "kind": "tradeFor",
-        "want": {
-         "label": "a Pokémon of yours"
-        },
-        "similar": {
-         "region": true,
-         "bst": 200
-        },
-        "honest": true
-       },
-       {
-        "kind": "flag",
-        "key": "ssanne-took-c",
-        "amount": 1
-       },
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-10-trades-12"
+        "key": "gn-10-secret-12"
        }
       ]
      },
@@ -23453,6 +26371,196 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-10-deck-12"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret-12",
+   "name": "S.S. Anne: The Secret Trade, Cabin 12",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "A card table, a lamp, and a Poké Ball pushed across the felt. Each trade in this room is stranger than the last.",
+   "choices": [
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "Someone takes your Pokémon, and hands back something a little odd: from this region, but not what you would have picked.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 80
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-12"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The second trader does not look at your Pokémon at all. What comes back is stranger than the last one.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "region": true,
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-12"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Trade.",
+     "success": {
+      "text": "The third trader smiles. What comes back is not from this region, and nobody says where it is from.",
+      "effects": [
+       {
+        "kind": "tradeFor",
+        "want": {
+         "label": "a Pokémon of yours"
+        },
+        "similar": {
+         "pool": [
+          "raichu-alola",
+          "rattata-alola",
+          "raticate-alola",
+          "sandshrew-alola",
+          "sandslash-alola",
+          "vulpix-alola",
+          "ninetales-alola",
+          "diglett-alola",
+          "dugtrio-alola",
+          "meowth-alola",
+          "persian-alola",
+          "geodude-alola",
+          "graveler-alola",
+          "golem-alola",
+          "grimer-alola",
+          "muk-alola",
+          "exeggutor-alola",
+          "marowak-alola",
+          "ponyta-galar",
+          "rapidash-galar",
+          "slowpoke-galar",
+          "slowbro-galar",
+          "farfetchd-galar",
+          "weezing-galar",
+          "mr-mime-galar",
+          "growlithe-hisui",
+          "arcanine-hisui",
+          "voltorb-hisui",
+          "electrode-hisui",
+          "qwilfish-hisui",
+          "meowth-galar"
+         ],
+         "bst": 200
+        },
+        "honest": true
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-took-c",
+        "amount": 1
+       },
+       {
+        "kind": "flag",
+        "key": "ssanne-secret-n",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-12"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "ssanne-secret-n",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back.",
+     "success": {
+      "text": "\"Suit yourself.\"",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-10-trades-12"
        }
       ]
      }
@@ -23533,7 +26641,7 @@
          "ninetales": "ninetales-alola",
          "diglett": "diglett-alola",
          "dugtrio": "dugtrio-alola",
-         "meowth": "meowth-alola",
+         "meowth": "meowth-galar",
          "persian": "persian-alola",
          "geodude": "geodude-alola",
          "graveler": "graveler-alola",
@@ -23614,7 +26722,8 @@
           "arcanine-hisui",
           "voltorb-hisui",
           "electrode-hisui",
-          "qwilfish-hisui"
+          "qwilfish-hisui",
+          "meowth-galar"
          ],
          "bst": 200
         },
@@ -24226,9 +27335,35 @@
      ]
     },
     {
-     "label": "Ask what is behind the kitchen.",
+     "label": "Walk past.",
      "success": {
-      "text": "She looks at you for a long moment, then jerks her head at a door behind the stoves. \"Traders. The odd kind. Don't tell the purser.\" For the rest of the voyage, there is a third trade at every cabin.",
+      "text": "You walk past. There will be other rooms.",
+      "effects": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-10-secret",
+   "name": "The Secret Trade Room",
+   "group": "Greenneedle",
+   "tags": [
+    "Dungeon",
+    "Story",
+    "Trainer"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#2f5d73",
+    "effect": "none"
+   },
+   "intro": "Behind the kitchen, past the stoves, a door with no handle on the outside. Somebody has wedged it open with a ladle.\n\nInside: a card table, a lamp, and people who do not give their names.",
+   "choices": [
+    {
+     "label": "Go in.",
+     "success": {
+      "text": "Madame Brioche watches you go, and says nothing. \"Traders. The odd kind. Don't tell the purser.\" For the rest of the voyage, there is a third trade at every cabin, each stranger than the last.",
       "effects": [
        {
         "kind": "flag",
@@ -24254,7 +27389,7 @@
     {
      "label": "Walk past.",
      "success": {
-      "text": "You walk past. There will be other rooms.",
+      "text": "You leave the door as it is. Whatever is traded in there, it is not for you.",
       "effects": []
      }
     }
@@ -24296,6 +27431,39 @@
          "kind": "flag",
          "key": "ssanne-ashore",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
         },
         {
          "kind": "leavePseudo"
@@ -24412,6 +27580,39 @@
          "kind": "flag",
          "key": "ssanne-ashore",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
         },
         {
          "kind": "leavePseudo"
@@ -24690,16 +27891,12 @@
     {
      "label": "Enter your lead.",
      "success": {
-      "text": "A polite round of applause, and second place. The judges liked it, but they could tell it was nervous.",
+      "text": "A polite round of applause, and second place. The judges liked it, but they could tell: its condition, or how far it trusts you, was not quite there.",
       "effects": [
        {
         "kind": "flag",
         "key": "ssanne-rooms",
         "amount": 1
-       },
-       {
-        "kind": "money",
-        "amount": 300
        }
       ]
      },
@@ -24718,9 +27915,13 @@
          "kind": "bondLevel",
          "atLeast": 3,
          "who": "lead"
+        },
+        {
+         "kind": "gn",
+         "test": "leadFit"
         }
        ],
-       "text": "It walks out like it owns the ballroom, and looks back at you once, at the end. First place. The judges stand up.",
+       "text": "It walks out like it owns the ballroom, in perfect condition, and looks back at you once, at the end. First place. The judges stand up.",
        "effects": [
         {
          "kind": "flag",
@@ -24728,8 +27929,9 @@
          "amount": 1
         },
         {
-         "kind": "money",
-         "amount": 1500
+         "kind": "flag",
+         "key": "ssanne-contest-won",
+         "amount": 1
         },
         {
          "kind": "friendship",
@@ -24908,9 +28110,10 @@
       "text": "He sighs, very deeply, and gives you his card. *Cornelius Quayle. Collector. Always buying.* \"You'll hear from me.\"",
       "effects": [
        {
-        "kind": "flag",
+        "kind": "gn",
+        "op": "setFlag",
         "key": "ssanne-collector-refused",
-        "amount": 1
+        "n": 3
        }
       ]
      }
@@ -24976,6 +28179,39 @@
          "kind": "flag",
          "key": "ssanne-ashore",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
         },
         {
          "kind": "leavePseudo"
@@ -25050,6 +28286,39 @@
          "kind": "flag",
          "key": "ssanne-ashore",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
         },
         {
          "kind": "leavePseudo"
@@ -25156,16 +28425,42 @@
    ],
    "remembers": [
     {
-     "id": "engine",
+     "id": "show",
      "when": [
       {
-       "kind": "flag",
-       "key": "ssanne-engine-opened",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "rivalQuest",
+       "personality": [
+        "prodigy",
+        "enthusiast"
+       ]
       }
      ],
-     "notice": "**Rival:** \"And I saw you go down to the engine room. What was in those crates?\""
+     "notice": "**Rival:** \"Front row for my next win. You're welcome.\""
+    },
+    {
+     "id": "plan",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "personality": [
+        "strategist"
+       ]
+      }
+     ],
+     "notice": "**Rival:** \"Twelve cabins, one captain, one top deck. I worked out you'd end up here before I boarded.\""
+    },
+    {
+     "id": "gentle",
+     "when": [
+      {
+       "kind": "rivalQuest",
+       "personality": [
+        "protector",
+        "idealist"
+       ]
+      }
+     ],
+     "notice": "**Rival:** \"Did you see the seasick one on the main deck? I hope somebody sat with it.\""
     }
    ],
    "room": true,
@@ -25180,7 +28475,82 @@
      "label": "Battle.",
      "success": {
       "text": "A full battle on the top deck, the sea all round.",
-      "effects": [],
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ssanne-rv-ahead",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "rivalAhead"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ssanne-rv-won",
+        "if": [
+         {
+          "kind": "rivalLast",
+          "result": "win"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "ssanne-rv-lost",
+        "if": [
+         {
+          "kind": "rivalLast",
+          "result": "lose"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ssanne-rv-ahead",
+        "min": 1,
+        "then": [],
+        "text": "**Rival:** \"I'm ahead, you know. I counted on the way up the stairs.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ssanne-rv-ahead",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "**Rival:** \"You're ahead. For now. Boats are good for catching up.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ssanne-rv-won",
+        "min": 1,
+        "then": [],
+        "text": "**Rival:** \"Last time you beat me. I've thought about it every day since.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ssanne-rv-lost",
+        "min": 1,
+        "then": [],
+        "text": "**Rival:** \"Last time I beat you. Don't let the sea air fool you: I can do it again.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "ssanne-engine-opened",
+        "min": 1,
+        "then": [],
+        "text": "**Rival:** \"And I saw you go down to the engine room. What was in those crates?\""
+       }
+      ],
       "battle": {
        "kind": "trainer",
        "friendly": true,
@@ -25189,6 +28559,39 @@
          "kind": "flag",
          "key": "ssanne-ashore",
          "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "ssanne-ashore",
+         "min": 1,
+         "then": [],
+         "text": "You wake on the harbour wall with your bag beside you. Nothing is missing. The passengers and their trades have sailed on. A steward has left a parcel: \"From the captain. The Network Machine, and his compass.\""
+        },
+        {
+         "kind": "item",
+         "id": "network-machine",
+         "count": 1
+        },
+        {
+         "kind": "item",
+         "id": "captains-compass",
+         "count": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-done",
+         "amount": 1
+        },
+        {
+         "kind": "flag",
+         "key": "kanto-ssanne-machine",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "ssanne-region"
         },
         {
          "kind": "leavePseudo"
@@ -25294,15 +28697,33 @@
      "kind": "flag",
      "key": "ssanne-after",
      "atLeast": 0,
-     "atMost": 0
+     "atMost": 2
     },
     {
      "kind": "gn",
-     "test": "regionChanged",
-     "key": "ssanne-region"
+     "test": "notThisStage",
+     "key": "ssanne-after-stage"
     }
    ],
    "remembers": [
+    {
+     "id": "seasick",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "ssanne-seasick",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "ssanne-after",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "It is the owner of the seasick Pokémon. It is not green any more. It sees you first, and pulls its trainer across the road by the sleeve. **The owner:** \"You! It remembers you. So do I.\""
+    },
     {
      "id": "collector",
      "when": [
@@ -25313,7 +28734,7 @@
        "atMost": 99
       }
      ],
-     "notice": "Across the street, a velvet coat and a monocle. Mr. Quayle raises his hat to you, and then, unmistakably, looks at the same Pokémon as before."
+     "notice": "Across the street, a velvet coat and a monocle. Mr. Quayle raises his hat to you, and then, unmistakably, looks at the same Pokémon as before. **Quayle:** \"Still not for sale? I'm still asking.\""
     }
    ],
    "scene": {
@@ -25321,17 +28742,22 @@
     "tint": "#2f5d73",
     "effect": "none"
    },
-   "intro": "A face you know from the ship: the seasick passenger, or someone from the dining room. They wave. \"The S.S. Anne! You were on her too!\"",
+   "intro": "A face you know from the ship: someone from the dining room, or the card tables, or the rail. They wave. \"The S.S. Anne! You were on her too!\"",
    "choices": [
     {
      "label": "Wave back.",
      "success": {
-      "text": "You talk about the voyage for a while, the way people do.",
+      "text": "You talk about the voyage for a while, the way people do. The passengers got off at every port along this coast; you will see more of them.",
       "effects": [
        {
         "kind": "flag",
         "key": "ssanne-after",
         "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampStage",
+        "key": "ssanne-after-stage"
        }
       ]
      }

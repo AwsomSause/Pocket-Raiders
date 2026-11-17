@@ -713,7 +713,104 @@
     "tint": "#8a6f4e",
     "effect": "none"
    },
-   "intro": "*The whole wall, walkable, left to right. A figure arriving. A door left open. A Pokémon startled to stay. Steps up to a Gym. Your whole road, in paint.*\n\nThe last panel isn't painted yet. The Smeargle is sitting under it, brush out, looking at you.",
+   "intro": "*The whole wall, walkable, left to right. Your whole road, in paint.*\n\nYou are standing at its left end, where it began.",
+   "choices": [
+    {
+     "label": "Walk the wall.",
+     "success": {
+      "text": "You start at the left, and walk.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralWalkStart"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-25-walk"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-walk",
+   "name": "The Mural: Along the Wall",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "{mural:walk}",
+   "choices": [
+    {
+     "label": "Walk on along the wall.",
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mural-walk-more",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "You take a few steps to the right. The paint changes colour under the next lamp.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralWalkOn"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-25-walk"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go on to the end of the wall.",
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mural-walk-more",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "success": {
+      "text": "There is one more panel. It is the size of all the others, and it is bare plaster.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-25-last"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-last",
+   "name": "The Mural: The Last Panel",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "*The last panel isn't painted yet. The Smeargle's sitting under it, brush out, looking at you.*",
    "choices": [
     {
      "label": "Come with me.",
@@ -733,6 +830,23 @@
         "kind": "moment",
         "text": "Took the Smeargle who painted the wall of this region.",
         "importance": 70
+       },
+       {
+        "kind": "gn",
+        "op": "muralSketchOpen"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mural-sk-0",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-25-sketch"
+         }
+        ]
        }
       ]
      }
@@ -757,9 +871,21 @@
         "importance": 70
        },
        {
-        "kind": "flag",
-        "key": "kindness",
-        "amount": 1
+        "kind": "gn",
+        "op": "muralSketchOpen"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mural-sk-0",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-25-sketch"
+         }
+        ]
        }
       ]
      }
@@ -784,11 +910,114 @@
         "importance": 70
        },
        {
-        "kind": "flag",
-        "key": "intel",
-        "amount": 1
+        "kind": "gn",
+        "op": "muralSketchOpen"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "mural-sk-0",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-new-25-sketch"
+         }
+        ]
        }
       ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-new-25-sketch",
+   "name": "The Mural: The First Sketch",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "tint": "#8a6f4e",
+    "effect": "none"
+   },
+   "intro": "The Smeargle lifts its tail, and waits. It has watched every fight you had in this region from somewhere you couldn't see.\n\n*Its first Sketch may copy any move that was used against you here. Which one?*",
+   "choices": [
+    {
+     "label": "{mural:move:0}.",
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mural-sk-0",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Smeargle watches your mouth while you say it, the way it watched the road.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralSketch",
+        "n": 0
+       }
+      ]
+     }
+    },
+    {
+     "label": "{mural:move:1}.",
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mural-sk-1",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "The Smeargle watches your mouth while you say it, the way it watched the road.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralSketch",
+        "n": 1
+       }
+      ]
+     }
+    },
+    {
+     "label": "Other moves.",
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "mural-sk-more",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "It tilts its head, and thinks of others.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "muralSketchPage"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-new-25-sketch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Let it keep its Sketch for now.",
+     "success": {
+      "text": "It lowers its tail. It will know the right one when it sees it.",
+      "effects": []
      }
     }
    ]
@@ -806,7 +1035,7 @@
     "tint": "#8a6f4e",
     "effect": "none"
    },
-   "intro": "A panel of something you walked past. A door left ajar, a crowd turning round. Nobody in it is looking at you. There is no comment.\n\nThe painter simply kept it. Everything you leave behind, it seems, someone else is carrying.",
+   "intro": "A panel of something you walked past: {mural:passed}. Nobody in it is looking at you. There is no comment.\n\nThe painter simply kept it. Everything you leave behind, it seems, someone else is carrying.",
    "choices": [
     {
      "label": "Walk on.",
@@ -830,7 +1059,7 @@
     "tint": "#8a6f4e",
     "effect": "none"
    },
-   "intro": "A panel of the fight you nearly lost. Your Pokémon, small and low, the foe huge and bright. The paint on its side is still tacky.\n\nThe painter chose the second before the turn. The moment your Pokémon stood up anyway.",
+   "intro": "A panel of the fight you nearly lost. Your Pokémon, small and low, the {mural:foe} huge and bright. The paint on its side is still tacky.\n\nThe painter chose the second before the turn. The moment your Pokémon stood up anyway.",
    "choices": [
     {
      "label": "Walk on.",
@@ -854,7 +1083,7 @@
     "tint": "#8a6f4e",
     "effect": "none"
    },
-   "intro": "A panel of a Pokémon you caught this stage, painted mid-turn, startled, one paw still raised, as it was in the moment before it chose to stay.\n\nThe painter got its eyes right. You never told anyone what colour they were.",
+   "intro": "A panel of the {mural:caught} you caught, painted mid-turn, startled, one paw still raised, as it was in the moment before it chose to stay.\n\nThe painter got its eyes right. You never told anyone what colour they were.",
    "choices": [
     {
      "label": "Walk on.",

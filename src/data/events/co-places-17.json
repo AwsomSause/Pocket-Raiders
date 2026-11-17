@@ -831,6 +831,11 @@
        {
         "kind": "research",
         "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "museum-relics-returned",
+        "amount": 1
        }
       ]
      }
@@ -867,6 +872,11 @@
        {
         "kind": "research",
         "amount": 3
+       },
+       {
+        "kind": "flag",
+        "key": "museum-relics-returned",
+        "amount": 1
        }
       ]
      }

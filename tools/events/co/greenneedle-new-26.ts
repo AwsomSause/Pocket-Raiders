@@ -81,7 +81,7 @@ export const REMOVE: string[] = [];
 /** Placement as the doc gives it (written to src/data/catalogOverhaul/placement/greenneedle.json by tools/catalog-overhaul/gn-placement.ts). */
 export const PLACEMENT: Record<string, Placement> = {
   'gn-new-26-door': {
-    gn: 'gn.new.26', shape: 'Chain', earliest: 'A6', home: 11, window: [11, 13], sits: 'optional', attaches: 'after', tags: ['Rival Episode'],
+    gn: 'gn.new.26', shape: 'Chain', earliest: 'A6', home: 11, window: [11, 16], sits: 'optional', attaches: 'after', tags: ['Rival Episode'],
     level: 'No battles', often: 'run',
     dressing: { kanto: 'The Rival\'s Missing Ace', elsewhere: 'The Rival\'s Missing Ace' },
     note: 'A chain inside one stage: three steps (11, then 12 and 13), the rival walks alongside; fallback steps 16, 17, 18. Any region from A6, after the rival has lost to the player at least once. Once per run. Afterstory: in the rival\'s next battle the ace is sent out first, and bows (core/greenneedle/missingAce.ts).',

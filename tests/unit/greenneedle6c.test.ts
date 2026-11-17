@@ -33,10 +33,16 @@ describe('gn.10 and gn.12: the honest trades', () => {
   it('the apprentice sets the new one\'s nature, or leaves it be', () => {
     const { run, side } = withTrader('t-honest-nature', 'gn-12-swap');
     const out = chooseEvent(content, run, side, 0, 'p-trade').run;
-    expect(scene(out, 'gn-12-nature').labels).toEqual(['Bold and steady (Adamant).', 'Quick on its feet (Jolly).', 'Clever and careful (Modest).', 'Leave it as it is.']);
+    // Any of the twenty changing natures: pick what it gains (two screens), then what it gives up.
+    expect(scene(out, 'gn-12-nature').labels).toEqual(['Stronger (Attack).', 'Cleverer (Sp. Atk).', 'Some other way.', 'Leave it as it is.']);
+    expect(scene(out, 'gn-12-nature-more').labels).toEqual(['Quicker (Speed).', 'Tougher (Defence).', 'Calmer (Sp. Def).', 'Back.']);
     const uid = String(out.story.flags['ev:last-trade-uid']);
-    const after = choose(out, 'gn-12-nature', 'Clever and careful (Modest).').run;
+    const gain = choose(out, 'gn-12-nature', 'Cleverer (Sp. Atk).').run;
+    expect(scene(gain, 'gn-12-nature-spa').labels).toEqual(['Modest (less Attack).', 'Quiet (less Speed).', 'Mild (less Defence).', 'Rash (less Sp. Def).']);
+    const after = choose(gain, 'gn-12-nature-spa', 'Modest (less Attack).').run;
     expect(after.party.find((m) => m.uid === uid)!.nature).toBe('modest');
+    const far = choose(choose(choose(out, 'gn-12-nature', 'Some other way.').run, 'gn-12-nature-more', 'Calmer (Sp. Def).').run, 'gn-12-nature-spd', 'Sassy (less Speed).').run;
+    expect(far.party.find((m) => m.uid === uid)!.nature).toBe('sassy');
     const before = out.party.find((m) => m.uid === uid)!.nature;
     const left = choose(out, 'gn-12-nature', 'Leave it as it is.').run;
     expect(left.party.find((m) => m.uid === uid)!.nature).toBe(before);
@@ -77,7 +83,7 @@ describe('gn.30 The Island of Pink Pokémon', () => {
   };
 
   it('a door at step 11 needing water (A6, once a run) into five nodes', () => {
-    expect(content.coPlacement!.get('gn-30-door')).toMatchObject({ home: 11, window: [9, 14], sits: 'optional', attaches: 'instead', earliest: 6, tags: ['water'] });
+    expect(content.coPlacement!.get('gn-30-door')).toMatchObject({ home: 11, window: [9, 14], sits: 'side-branch', attaches: 'instead', earliest: 6, tags: ['water'] });
     const run = landed('t30-door');
     expect(openSide(run)!.eventId).toBe('gn-30-landing');
     expect(flagOf(run, 'pink-entered')).toBe(1);
@@ -120,12 +126,12 @@ describe('gn.30 The Island of Pink Pokémon', () => {
 
   it('leaving: a pink islander joins with its mark, or your lead eats the fruit and keeps the colour', () => {
     const run = choose(toHill(landed('t30-gift')), 'gn-30-after', 'Decline, politely.').run;
-    expect(scene(run, 'gn-30-gift').labels).toEqual(['A pink islander comes with you.', 'Let your lead try the fruit.']);
+    expect(scene(run, 'gn-30-gift').labels).toEqual(['A pink islander comes with you.', 'Let one of yours try the fruit.']);
     const joined = choose(run, 'gn-30-gift', 'A pink islander comes with you.').run;
     const pink = [...joined.party, ...joined.pending.flatMap((p) => (p.kind === 'caught' ? [p.mon] : []))].find((m) => m.marks?.includes('pink from the island fruit'));
     expect(pink).toBeTruthy();
     expect(flagOf(joined, 'pink-done')).toBe(1);
-    const ate = choose(run, 'gn-30-gift', 'Let your lead try the fruit.');
+    const ate = choose(run, 'gn-30-gift', 'Let one of yours try the fruit.');
     expect(ate.run.party[0]!.marks).toContain('pink from the island fruit');
     expect(said(ate)).toMatch(/very pale pink/);
   });

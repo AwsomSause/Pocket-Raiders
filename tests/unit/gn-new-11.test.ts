@@ -35,9 +35,12 @@ describe('gn.new.11 The Night Parade', () => {
     expect(flagOf(run, 'parade-lanterns')).toBe(6);
     expect(stops(run)).toContain('gn-new-11-lane-a');
     run = choose(run, 'gn-new-11-lane-a', 'The Masked Banette.').run;
-    run = choose(run, 'gn-new-11-banette', 'Night Slash.').run;
+    run.party[0]!.moves = ['tackle', 'growl', 'leer', 'scratch'].map((id) => ({ id, pp: 10 }));
+    run = choose(run, 'gn-new-11-banette', 'Trade a move.').run;
     expect(flagOf(run, 'parade-lanterns')).toBe(5);
-    expect(run.party[0]!.moves.some((m) => m.id === 'night-slash')).toBe(true);
+    // Three moves are shown; the player takes one, then picks which of the lead's four to give (the game's teach-a-move choice).
+    const offer = run.pending.find((p) => p.kind === 'teachMove');
+    expect(offer?.kind === 'teachMove' && offer.moveIds.length).toBe(3);
     expect(stops(run)).toContain('gn-new-11-lane-a');
   });
 
@@ -61,7 +64,10 @@ describe('gn.new.11 The Night Parade', () => {
     setFlag(run, 'parade-lanterns', 1);
     expect(scene(run, 'gn-new-11-lane-a').intro).toContain('**1** of six');
     run = choose(run, 'gn-new-11-lane-a', 'The Masked Banette.').run;
-    run = choose(run, 'gn-new-11-banette', 'Shadow Sneak.').run;
+    run.party[0]!.moves = ['tackle', 'growl', 'leer', 'scratch'].map((id) => ({ id, pp: 10 }));
+    run = choose(run, 'gn-new-11-banette', 'Trade a move.').run;
+    run.pending = [];
+    run.phase = 'map';
     expect(flagOf(run, 'parade-lanterns')).toBe(0);
     expect(stops(run)).toContain('gn-new-11-dark');
     run.inventory = { 'rare-candy': 1 };

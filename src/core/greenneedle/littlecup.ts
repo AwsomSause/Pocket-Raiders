@@ -134,8 +134,8 @@ export function lcStartBattle(content: Content, battle: BattleState, slot: numbe
     2: [{ sp: 'wooper' }],
     // Mr. Prendergast: three perfectly bred, perfectly dull.
     3: [{ sp: 'rattata' }, { sp: 'pidgey' }, { sp: 'geodude' }],
-    // Tansy-Jane's Sunkern: Sunny Day, then Solar Beam. Only that. Perfectly.
-    4: [{ sp: 'sunkern', moves: ['sunny-day', 'solar-beam'], held: 'power-herb' }],
+    // Tansy-Jane's Sunkern: Sunny Day, then Solar Beam with a Choice-style item (Sun Specs: the Choice boost, no lock, so the trick still works). Only that. Perfectly.
+    4: [{ sp: 'sunkern', moves: ['sunny-day', 'solar-beam'], held: 'sun-specs' }],
   };
   const team = (pools[slot] ?? []).filter((p) => content.species.has(p.sp)).map((p, i) => {
     const mon = make(p.sp, CUP_LEVEL, battle.enemyTeam[i]?.uid ?? `lc-${slot}-${i}`);

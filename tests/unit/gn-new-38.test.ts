@@ -1,7 +1,7 @@
 // gn.new.38 The Long Table: seats from what the run remembers, the pages, the neighbours, the cap, dawn.
 import { describe, expect, it } from 'vitest';
 import { choose, flagOf, gnRun, open, scene, setFlag } from './helpers/gnPlay';
-import { seatsOf, ltDawn, GUESTS } from '../../src/core/greenneedle/longtable';
+import { seatsOf, ltDawn, ltArrive, ltSit, giftOf, stones, GUESTS } from '../../src/core/greenneedle/longtable';
 import { gnConditionMet } from '../../src/core/greenneedle';
 import { maxHp } from '../../src/core/pokemon';
 import { content } from './helpers';
@@ -64,5 +64,67 @@ describe('gn.new.38 The Long Table', () => {
   it('with no places the party goes on with +0%', () => {
     const run = gnRun('lt-empty');
     expect(ltDawn(content, run)).toContain('+0%');
+  });
+  it('seats the later events too: a filled place for the good ending, an empty chair for the bad one', () => {
+    const cases: [string, string, string | null][] = [
+      ['dog', 'dog-reunited', null], ['arcade', 'arcade-cleared', 'arcade-sold'], ['court', 'court-kittens', 'court-persian'],
+      ['daycare', 'daycare-defended', 'daycare-egg-taken'], ['bridge', 'ring-freed', 'ring-threw'], ['cheer', 'cheer-both', 'cheer-split'],
+      ['fox', 'fox-l9', 'fox-declined'], ['courier', 'courier-done', 'courier-let-go'], ['warning', 'warning-kept', 'absol-driven'],
+      ['nest', 'second-nest-carried', 'second-nest-watched'], ['mural', 'mural-walls', null], ['lantern', 'lantern-boat', null],
+    ];
+    for (const [id, good, bad] of cases) {
+      const a = gnRun(`lt-g-${id}`);
+      setFlag(a, good);
+      expect(seatsOf(a).map((s) => [s.guest?.id ?? 'stones', s.empty])).toEqual([[id, false], ['stones', false]]);
+      if (!bad) continue;
+      const b = gnRun(`lt-b-${id}`);
+      setFlag(b, bad);
+      expect(seatsOf(b).map((s) => [s.guest?.id ?? 'stones', s.empty])).toEqual([[id, true], ['stones', false]]);
+      // a good ending wins over a bad memory of the same event
+      setFlag(b, good);
+      expect(seatsOf(b)[0]!.empty).toBe(false);
+    }
+  });
+  it('every guest has a line, unique id, and an empty-chair line wherever it has a bad flag', () => {
+    expect(new Set(GUESTS.map((g) => g.id)).size).toBe(GUESTS.length);
+    for (const g of GUESTS) {
+      expect(g.said.length).toBeGreaterThan(10);
+      expect(g.good.length).toBeGreaterThan(0);
+      if (g.bad?.length) expect(g.empty, g.id).toBeTruthy();
+      // a dish names an item the game has (or falls back to the plain berry)
+      const id = giftOf(content, g);
+      expect(content.items.has(id) || content.catalog.has(id), g.id).toBe(true);
+      if (g.gift) expect(id, g.id).toBe(g.gift);
+    }
+  });
+  it('the stones count what was walked past (kind-walked-past), not anything else', () => {
+    const run = gnRun('lt-stones');
+    expect(stones(run)).toBe(0);
+    setFlag(run, 'kind-walked-past', 3);
+    setFlag(run, 'abandoned-mon', 2);
+    expect(stones(run)).toBe(3);
+  });
+  it('whatever was on the plate goes in the bag: the dishes of the two filled neighbours, once', () => {
+    const run = gnRun('lt-plate');
+    setFlag(run, 'ranch-dug'); setFlag(run, 'well-lifted');
+    const had = (id: string): number => run.inventory[id] ?? 0;
+    const before = { oran: had('oran-berry'), stone: had('hard-stone') };
+    ltArrive(run);
+    ltSit(run, 0);
+    const told = ltDawn(content, run);
+    expect(had('oran-berry')).toBe(before.oran + 1);
+    expect(had('hard-stone')).toBe(before.stone + 1);
+    expect(told).toContain('In your bag');
+    expect(ltDawn(content, run)).toBe('');
+    expect(had('oran-berry')).toBe(before.oran + 1);
+  });
+  it('an empty chair and the stones put nothing on the plate', () => {
+    const run = gnRun('lt-noplate');
+    setFlag(run, 'bibarel-dam-broken');
+    const bag = JSON.stringify(run.inventory);
+    ltArrive(run);
+    ltSit(run, 0);
+    ltDawn(content, run);
+    expect(JSON.stringify(run.inventory)).toBe(bag);
   });
 });

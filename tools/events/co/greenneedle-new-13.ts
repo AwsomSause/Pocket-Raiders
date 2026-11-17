@@ -5,18 +5,19 @@ import { bondAll, chIf, gev, gn, is, moment, rm, say, scene, setTo, type Placeme
 
 export { CATEGORY } from './_gn.ts';
 
-// A cold fire at the camp where the last lost run ended. Six Poké Balls on a log, and the notebook in the player's handwriting.
-// The newest lost run's team (core/greenneedle/left.ts) waits; you may take one back, or bury the notebook. The others each decide.
+// Kice's rule: no memory across runs. The camp is for the Pokémon the player left on THIS road (released, boxed, or lost in a Nuzlocke run;
+// core/greenneedle/left.ts), one to six of them. The doc's script is kept where it still fits; the lines about six Balls and a lost team are
+// written from the count instead (`{left:row}`, `{left:open}`, `{left:first}`, `{left:others}`, `{left:morning}`).
 const CAMP_TINT = '#3b3a4e';
 const camp = (o: Json = {}): Json => ({ tint: CAMP_TINT, tags: ['Story', 'Recovery'], effect: 'none', ...o });
 const left = (n: number): Json => ({ kind: 'gn', test: 'leftHas', n });
 
 const door = gev('gn-new-13-door', 'The Ones You Left', camp({ stop: 'event', rarity: 'uncommon', requires: [left(1)] }), say(
-  'A cold fire. A bedroll, still rolled. Poké Balls in a row on a log, and beside them, a notebook in your own handwriting.',
-  'The last page lists every Pokémon you let go, boxed or lost on this road, by name. Under it, in a hurry: "Tomorrow, the Gym."',
-  'The Balls open by themselves. They have been waiting. They look at you the way a Pokémon looks at someone it remembers losing with.',
+  'A cold fire. A bedroll, still rolled. {left:row}, a notebook in your own handwriting.',
+  'You never made this camp. The last page is a list, the ones you left on this road, by name: {left:list}. Under it, in a hurry: "Later. After the Gym."',
+  '{left:open}',
 ), [
-  ch('Take one.', out('You kneel by the log. Nobody asks you to hurry. The Balls wait for you to choose, and they do not look away.', gn('leftFreeze'), scene('gn-new-13-pick-a'))),
+  ch('Take one.', out('You kneel by the log. Nobody asks you to hurry. Nobody looks away.', gn('leftFreeze'), scene('gn-new-13-pick-a'))),
   ch('Take none. Bury the notebook.', out(say(
     'You dig a hole beside the fire, with your hands, and it takes longer than it should.',
     'The notebook goes in. Your Pokémon stand around the little grave and watch, the way you watch a friend do something hard. Nobody says anything.',
@@ -25,29 +26,27 @@ const door = gev('gn-new-13-door', 'The Ones You Left', camp({ stop: 'event', ra
 ]);
 
 const take = (n: number): Json => chIf([left(n)], `The ${['first', 'second', 'third', 'fourth', 'fifth', 'sixth'][n - 1]} Ball: {left:${n}}.`, out(
-  'You lift the Ball. It is warm, as if someone has been holding it. It opens in your hand, and the one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.',
+  'You lift the Ball. It is warm, as if someone has been holding it. The one inside steps out and leans against you without a word. It remembers one thing it knew then, and shows you.',
   gn('leftTake', { n }), gn('leftFates'), scene('gn-new-13-goodbye'),
 ));
 
 const pickA = rm('gn-new-13-pick-a', 'The Ones You Left: The Balls', camp(), say(
   'The notebook says who they were. The Balls say who they still are.',
-  'The first three, on the left of the log: {left:1}, {left:2}, {left:3}.',
-), [take(1), take(2), take(3), ch('Look at the others.', out('You move down the log, past the cold fire.', scene('gn-new-13-pick-b')))]);
+  '{left:first}',
+), [take(1), take(2), take(3), chIf([left(4)], 'Look at the others.', out('You move down the log, past the cold fire.', scene('gn-new-13-pick-b')))]);
 
 const pickB = rm('gn-new-13-pick-b', 'The Ones You Left: The Other Balls', camp(), say(
-  'The three on the right of the log. One of them is already looking toward the trees.',
-  'The last three: {left:4}, {left:5}, {left:6}.',
+  'Further down the log, past the cold fire.',
+  '{left:others}',
 ), [take(4), take(5), take(6), ch('Look at the first three.', out('You move back along the log.', scene('gn-new-13-pick-a')))]);
 
 const goodbye = rm('gn-new-13-goodbye', 'The Ones You Left: Morning', camp({ remembers: [
-  { id: 'took', when: [is('left-took')], notice: 'The one you took walks beside you, a little behind, the way it used to. It looks back once, at the rest, and then ahead.' },
+  { id: 'took', when: [is('left-took')], notice: 'The one you took walks beside you, a little behind, the way it used to. It looks back once, at the camp, and then ahead.' },
   { id: 'buried', when: [is('left-buried')], notice: 'The fresh earth is the only thing left to look at. Your Pokémon walk past it slowly, one at a time, and touch it.' },
 ] }), say(
-  'The others decide for themselves, and you do not get a vote. That is the whole of it.',
-  'Two go with a passing trainer, who calls out, "Good ones, these. I\'ll look after them." Two stay at the camp. They will keep the fire going.',
-  'One walks into the woods, {left:woods}, and does not look back. You watch the trees until you cannot tell which one it was.',
+  '{left:morning}',
 ), [
-  ch('Walk on.', out('You put out the last of the fire. The camp stays where it is. You do not turn around, because the one in the woods would not want you to.', moment('Met the team I lost, and let them choose.', 70))),
+  ch('Walk on.', out('You put out the last of the fire. The camp stays where it is. You do not turn around. Nobody there would want you to.', moment('Met the ones I left on this road, and let them choose.', 70))),
 ]);
 
 export const EVENTS: Json[] = [door, pickA, pickB, goodbye];
@@ -58,7 +57,7 @@ export const PLACEMENT: Record<string, Placement> = {
     gn: 'gn.new.13', shape: 'Single', earliest: 'A4', home: 13, window: [13, 17], sits: 'optional', attaches: 'after', tags: ['Reunion'],
     level: 'The left Pokémon, scaled to this absolute stage', often: 'run', badge: 'own',
     dressing: { kanto: 'The Ones You Left', elsewhere: 'The Ones You Left' },
-    note: 'Needs Pokémon left earlier in THIS run (released catches, the Nuzlocke fallen, boxed ones; run memory only, no earlier runs). Once per run. Step 13, fallback step 17. The other Pokémon decide by a seeded shuffle: one walks into the woods, the rest split between a passing trainer and the camp (run flag `left:fates`, read by gn.61). Boxed ones keep their nickname.',
+    note: 'Needs Pokémon left earlier in THIS run (released catches, the Nuzlocke fallen, boxed ones; run memory only, no earlier runs). Once per run. Step 13, fallback step 17. The others decide by a seeded shuffle: of the released and the fallen, one walks into the woods and the rest split between a passing trainer and the camp; a boxed one is still yours and waits (run flag `left:fates`). The script is written from the count (one to six Balls). Boxed ones keep their nickname.',
   },
 };
 export const CHAINS: Json[] = [];

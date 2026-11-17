@@ -103,6 +103,11 @@
       "text": "You go in. People make room without being asked, and then close up behind you.",
       "effects": [
        {
+        "kind": "gn",
+        "op": "reunionWalk",
+        "n": 0
+       },
+       {
         "kind": "addEvent",
         "eventId": "gn-61-walk"
        }
@@ -155,7 +160,7 @@
     {
      "label": "Sit down where you are.",
      "success": {
-      "text": "Somebody has left a chair empty beside you. You sit in it. Where you sat is where you will be remembered at the table.",
+      "text": "Somebody has left a chair empty beside you. You sit in it. Whoever you were last standing with sits down on your other side. Where you sat is where you will be at the table.",
       "effects": [
        {
         "kind": "gn",
@@ -226,8 +231,33 @@
     "tint": "#5a4a6b",
     "effect": "none"
    },
-   "intro": "{reunion:lines}",
+   "intro": "{reunion:one}",
    "choices": [
+    {
+     "label": "Walk on to the next.",
+     "success": {
+      "text": "You walk on. Somebody else has been waiting, and trying not to look as if they were.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "reunionWalk",
+        "n": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-61-walk"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "reunion-walkleft",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
     {
      "label": "Stand at the far edge.",
      "success": {

@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
-import { applyEffect } from '../../src/core/events';
+import { applyEffect, conditionMet, placeEarnedCoBeats } from '../../src/core/events';
+import { nodesAhead } from '../../src/core/co/placement';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { chooseStarter, createRun } from '../../src/core/run';
 import { hashSeed, Rng } from '../../src/core/rng';
-import { FLAGS, lessonsTaught, pondAfterTurn, pondFlag, pondMon, pondShape, recordLesson, setPondFlag, POND_RETURN } from '../../src/core/episodes/poliPond';
+import { FLAGS, lessonsTaught, pondAfterTurn, pondFlag, pondMon, pondAllies, pondAllyHit, pondShape, recordLesson, setPondFlag, POND_JOIN_BELOW, POND_RETURN } from '../../src/core/episodes/poliPond';
 import { RunStateSchema } from '../../src/core/state';
 import { content } from './helpers';
 
@@ -21,7 +22,7 @@ describe('Poli-Pond: events', () => {
   const ids = [...content.events.keys()].filter((id) => id.startsWith('pp-'));
   it('loads every event and every addEvent target exists', () => {
     // gn.01 (catalog overhaul): the exceptional rematch is a choice of pp-rematch now (the old event is retired, never drawn); stepping aside has an afterstory; a lost rematch has its own scene.
-    expect(ids.sort()).toEqual(['pp-cold-open', 'pp-ending', 'pp-lesson-aim', 'pp-lesson-footing', 'pp-lesson-stand', 'pp-pond-visit', 'pp-rematch', 'pp-rematch-exceptional', 'pp-rematch-lost', 'pp-return-join', 'pp-walked-past'].sort());
+    expect(ids.sort()).toEqual(['pp-cold-open', 'pp-ending', 'pp-lesson-aim', 'pp-lesson-footing', 'pp-lesson-stand', 'pp-pond-visit', 'pp-rematch', 'pp-rematch-again', 'pp-rematch-exceptional', 'pp-rematch-lost', 'pp-return-join', 'pp-walked-past'].sort());
     expect(content.events.get('pp-rematch-exceptional')!.disabled).toBe(true);
     for (const id of ids) for (const c of content.events.get(id)!.choices) for (const o of [c.success, c.failure]) for (const e of [...(o?.effects ?? []), ...(o?.battle?.win ?? [])]) if (e.kind === 'addEvent') expect(content.events.has(e.eventId)).toBe(true);
   });
@@ -99,22 +100,18 @@ describe('Poli-Pond: nerves and tricks', () => {
     pondAfterTurn(content, run);
     expect(mon.pond!.shy).toBe(false);
   });
-  it('each lesson cancels its own nerve in an ordinary fight', () => {
+  it('gn.01: outside the rematch an untaught lesson costs nothing (no nerves): only the first battle is lost to shyness', () => {
     const { run, mon } = setup('pp8');
     mon.pond!.shy = false;
+    // Turn 3 (the old "aim" nerve), first turn out (the old "footing" nerve), under half HP (the old "stand" nerve): it just attacks.
     run.battle!.turn = 3;
-    expect(pondShape(content, run, { kind: 'move', index: 0 }).action).toEqual({ kind: 'idle' });
-    mon.pond!.aim = true;
-    expect(pondShape(content, run, { kind: 'move', index: 0 }).action).toEqual({ kind: 'idle' }); // footing: first turn out
-    mon.pond!.footing = true;
-    run.battle!.playerVolatile.turnsOut = 1;
-    expect(pondShape(content, run, { kind: 'move', index: 0 }).action.kind).toBe('move');
+    expect(pondShape(content, run, { kind: 'move', index: 0 })).toEqual({ action: { kind: 'move', index: 0 }, events: [] });
     mon.hp = 1;
-    expect(pondShape(content, run, { kind: 'move', index: 0 }).action.kind).toBe('switch'); // tries to run, once
-    expect(pondShape(content, run, { kind: 'move', index: 0 }).action.kind).toBe('move');
-    mon.pond!.stand = true;
-    run.battle!.turn = 2;
-    expect(pondShape(content, run, { kind: 'move', index: 0 }).events).toEqual([]);
+    expect(pondShape(content, run, { kind: 'move', index: 0 })).toEqual({ action: { kind: 'move', index: 0 }, events: [] });
+    expect(run.battle!.storyEffects).toEqual([]);
+    // Failure case: a switch or an item is never touched, even while it is shy.
+    mon.pond!.shy = true;
+    expect(pondShape(content, run, { kind: 'switch', partyIndex: 1 }).action).toEqual({ kind: 'switch', partyIndex: 1 });
   });
   it("the rematch: Burl's three tricks (Splash-Blind turns 1-2, Shove every other turn, the Slap on turn 3), each cancelled by its lesson", () => {
     const { run, mon } = setup('pp8b');
@@ -185,7 +182,7 @@ describe('Poli-Pond: the return', () => {
     run.stage!.map.nodes[0]!.kind = 'champion';
     return { run, battle };
   };
-  it('waits until you are losing, then Poliwrath and three Poliwhirl strike for three turns and never finish the foe', () => {
+  it('waits until you are losing, then a Poliwrath and three Poliwhirl fight beside you for three turns with their own moves', () => {
     const { run, battle } = champion('pp10', FLAGS.release);
     expect(pondAfterTurn(content, run)).toEqual([]);
     run.party[0]!.hp = 1; // badly hurt is not "losing": three are still standing
@@ -194,27 +191,58 @@ describe('Poli-Pond: the return', () => {
     run.party[2]!.hp = 0; // two left
     const foe = battle.enemyTeam[0]!;
     const full = maxHp(content, foe);
+    // The allies are real Pokémon at the party's average level, and what they take off is what their own best moves do.
+    const allies = pondAllies(content, run, 'release');
+    expect(allies.map((m) => m.speciesId)).toEqual(['poliwrath', 'poliwhirl', 'poliwhirl', 'poliwhirl']);
+    const avg = Math.round(run.party.reduce((n, m) => n + m.level, 0) / run.party.length);
+    expect(allies.every((m) => m.level === avg)).toBe(true);
+    const wrath = pondAllyHit(content, battle, allies[0]!, foe)!;
+    const whirl = pondAllyHit(content, battle, allies[1]!, foe)!;
+    expect(wrath.damage).toBeGreaterThan(0);
+    expect(whirl.damage).toBeGreaterThan(0);
     const first = pondAfterTurn(content, run);
-    expect(first.length).toBe(3);
-    expect(foe.hp).toBe(full - Math.round(full * (POND_RETURN.wrathShare + 3 * POND_RETURN.whirlShare)));
+    // Two lines for the arrival (the doc's), then Poliwrath's move and the Poliwhirl's.
+    expect(first.map((c) => c.text)).toEqual([
+      'A cry from off the field. Your lead turns its head before you do.',
+      'A Poliwrath walks onto the field. It looks at you. It recognises you first.',
+      'Behind it, three Poliwhirl. They take the field beside you, as allies.',
+      `Poliwrath uses ${wrath.move} on Snorlax.`,
+      `The three Poliwhirl follow, one after another: ${whirl.move}.`,
+    ]);
+    expect(foe.hp).toBe(Math.max(1, full - wrath.damage - 3 * whirl.damage));
     pondAfterTurn(content, run);
-    pondAfterTurn(content, run);
+    const last = pondAfterTurn(content, run);
+    expect(last[last.length - 1]!.text).toBe('The pond steps back to the edge of the field. The rest is yours.');
     const afterThree = foe.hp;
     expect(pondAfterTurn(content, run)).toEqual([]);
     expect(foe.hp).toBe(afterThree);
     expect(pondFlag(run, FLAGS.fired)).toBe(1);
+    expect(pondFlag(run, 'poli-returned')).toBe(1);
     foe.hp = 2;
     battle.storyEffects = [];
     expect(pondAfterTurn(content, run)).toEqual([]); // once only
   });
-  it('Reconcile brings four Poliwhirl for four turns', () => {
+  it('Reconcile brings four Poliwhirl (Burl among them) for four turns; a foe is never left under 1 HP', () => {
     const { run, battle } = champion('pp11', FLAGS.reconcile);
     run.party[2]!.hp = 0;
     run.party[3]!.hp = 0;
+    const foe = battle.enemyTeam[0]!;
+    const full = maxHp(content, foe);
+    const allies = pondAllies(content, run, 'reconcile');
+    expect(allies).toHaveLength(5);
+    const perTurn = pondAllyHit(content, battle, allies[0]!, foe)!.damage + 4 * pondAllyHit(content, battle, allies[1]!, foe)!.damage;
+    const lines = pondAfterTurn(content, run);
+    expect(lines.some((c) => c.text.includes('four Poliwhirl, Burl among them'))).toBe(true);
     for (let i = 0; i < 6; i++) pondAfterTurn(content, run);
-    const full = maxHp(content, battle.enemyTeam[0]!);
-    const total = 4 * Math.round(full * (POND_RETURN.wrathShare + 4 * POND_RETURN.whirlShare));
-    expect(battle.enemyTeam[0]!.hp).toBe(Math.max(1, full - total));
+    expect(foe.hp).toBe(Math.max(1, full - 4 * perTurn));
+    // Boundary: a foe on its last HP is not fainted by the allies.
+    const again = champion('pp11b', FLAGS.release);
+    again.run.party[2]!.hp = 0;
+    again.run.party[3]!.hp = 0;
+    again.battle.enemyTeam[0]!.hp = 3;
+    pondAfterTurn(content, again.run);
+    expect(again.battle.enemyTeam[0]!.hp).toBe(1);
+    expect(again.battle.outcome).toBeFalsy();
   });
   it('is not played in an ordinary fight', () => {
     const { run } = champion('pp12', FLAGS.release);
@@ -255,5 +283,96 @@ describe('Kindness', () => {
     resolveTurn(ctx, { kind: 'switch', partyIndex: 1 });
     expect(battle.storyEffects.some((e) => e.startsWith('kind:'))).toBe(false);
     expect(a.fixedAbility).toBe('kindness');
+  });
+});
+
+describe('gn.01 fixes: levels, steps, the retry', () => {
+  it('the Poliwag joins two levels under the party, so Burl (two above it) is at the party\'s level', () => {
+    const run = begin('ppf1');
+    run.party.forEach((m) => (m.level = 9));
+    eff(run, 'begin');
+    expect(POND_JOIN_BELOW).toBe(2);
+    expect(pondMon(run)!.level).toBe(7);
+    // Boundary: never under level 2.
+    const low = begin('ppf1b');
+    low.party.forEach((m) => (m.level = 2));
+    eff(low, 'begin');
+    expect(pondMon(low)!.level).toBe(2);
+  });
+  it('the lessons and the pond visit are placed ahead in the doc\'s order: Aim (7), Footing (11), the guilty Poliwhirl (14), Standing its ground (17)', () => {
+    for (const seed of ['ppf2', 'ppf3', 'ppf4', 'ppf5']) {
+      const run = begin(seed);
+      const stage = run.stage!;
+      stage.index = 1; // gn.01 starts at A2
+      // Standing on a node of the cold open's own step (3).
+      const col = Math.max(1, Math.round((3 * stage.map.columns) / 20));
+      stage.current = stage.map.nodes.find((n) => n.column === col)!.id;
+      for (const n of stage.map.nodes) n.sides = n.sides.filter((x) => !x.eventId?.startsWith('pp-'));
+      eff(run, 'begin');
+      applyEffect(content, run, { kind: 'gn', op: 'stampStage', key: 'pp-stage' } as never, new Rng(hashSeed('pp')));
+      const columnOf = (id: string): number[] => stage.map.nodes.filter((n) => n.sides.some((x) => x.eventId === id)).map((n) => n.column);
+      const cols = ['pp-lesson-aim', 'pp-lesson-footing', 'pp-pond-visit', 'pp-lesson-stand'].map(columnOf);
+      for (const c of cols) expect(c.length).toBeGreaterThan(0);
+      // Each sits in one column, all ahead of the player, in order.
+      const one = cols.map((c) => { expect(new Set(c).size).toBe(1); return c[0]!; });
+      expect(one[0]!).toBeGreaterThan(col);
+      expect(one[0]!).toBeLessThan(one[1]!);
+      expect(one[1]!).toBeLessThan(one[2]!);
+      expect(one[2]!).toBeLessThan(one[3]!);
+      // The doc's steps, as columns of this map.
+      expect(one).toEqual([7, 11, 14, 17].map((step) => Math.round((step * stage.map.columns) / 20)));
+      // Each is on every node of its column that the player can still reach (no route misses it); the placer adds nothing more.
+      const ahead = nodesAhead(stage.map, stage.current!);
+      for (const [i, id] of ['pp-lesson-aim', 'pp-lesson-footing', 'pp-pond-visit', 'pp-lesson-stand'].entries()) {
+        expect(columnOf(id).length).toBe(stage.map.nodes.filter((n) => n.column === one[i] && ahead.has(n.id)).length);
+      }
+      const before = stage.map.nodes.flatMap((n) => n.sides).length;
+      placeEarnedCoBeats(content, run);
+      expect(stage.map.nodes.flatMap((n) => n.sides).length).toBe(before);
+    }
+  });
+  it('boundary: a cold open found late still places all four ahead, in order, and never on the Gym column', () => {
+    const run = begin('ppf7');
+    const stage = run.stage!;
+    const col = Math.round((15 * stage.map.columns) / 20);
+    stage.current = stage.map.nodes.find((n) => n.column === col)!.id;
+    for (const n of stage.map.nodes) n.sides = n.sides.filter((x) => !x.eventId?.startsWith('pp-'));
+    eff(run, 'begin');
+    const at = (id: string): number => stage.map.nodes.find((n) => n.sides.some((x) => x.eventId === id))!.column;
+    const cols = ['pp-lesson-aim', 'pp-lesson-footing', 'pp-pond-visit', 'pp-lesson-stand'].map(at);
+    expect(cols[0]!).toBeGreaterThan(col);
+    for (let i = 1; i < cols.length; i++) expect(cols[i]!).toBeGreaterThanOrEqual(cols[i - 1]!);
+    expect(Math.max(...cols)).toBeLessThan(stage.map.columns);
+    // Failure case: a second `begin` adds no second Poliwag and no second set of scenes.
+    const sides = stage.map.nodes.flatMap((n) => n.sides).length;
+    eff(run, 'begin');
+    expect(stage.map.nodes.flatMap((n) => n.sides).length).toBe(sides);
+    expect(run.party.filter((m) => m.pond)).toHaveLength(1);
+  });
+  it('a lost rematch comes back only on a water stage; the first rematch needs no water', () => {
+    const first = content.events.get('pp-rematch')!;
+    const again = content.events.get('pp-rematch-again')!;
+    expect(first.requires.some((c) => c.kind === 'stageTypes')).toBe(false);
+    expect(again.requires).toContainEqual({ kind: 'stageTypes', types: ['water'] });
+    expect(content.coPlacement!.get('pp-rematch')).toMatchObject({ home: 2, window: [1, 4], sits: 'must-see', level: 0 });
+    expect(content.coPlacement!.get('pp-rematch-again')!.tags).toEqual(['water']);
+    const run = begin('ppf6');
+    eff(run, 'begin');
+    run.story.flags['ev:pp-stage'] = 1;
+    run.stage!.index = 1; // the stage after the one it joined on
+    const ok = (id: string): boolean => content.events.get(id)!.requires.every((c) => conditionMet(content, run, c));
+    const water = [...content.themes.values()].find((t) => t.types.includes('water'))!;
+    const dry = [...content.themes.values()].find((t) => !t.types.includes('water'))!;
+    run.stage!.themeId = dry.id;
+    expect(ok('pp-rematch')).toBe(true);
+    expect(ok('pp-rematch-again')).toBe(false);
+    // Lost on an earlier stage.
+    run.story.flags['ev:pp-lost-stage'] = 1;
+    expect(ok('pp-rematch')).toBe(false);
+    expect(ok('pp-rematch-again')).toBe(false); // not a water stage
+    run.stage!.themeId = water.id;
+    expect(ok('pp-rematch-again')).toBe(true);
+    // Both scenes are the same fight.
+    expect(again.choices.map((c) => c.label)).toEqual(first.choices.map((c) => c.label));
   });
 });

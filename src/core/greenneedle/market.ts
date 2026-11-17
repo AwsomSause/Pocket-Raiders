@@ -97,10 +97,13 @@ export function marketOffer(run: RunState, v: string, base: number, percent: num
   return { price: null, line: '"No." They turn the lot face down. Next time the market comes, there\'ll be nothing on this stall for you.' };
 }
 
-const UNDERCUT: Record<string, (p: string) => string> = {
-  tanager: (p) => `**Tanager:** "*That* much? For a rock with a leaf in it? ${p}. And mine's nicer."`,
-  carmela: (p) => `**Carmela:** "He said *what?* ${p}. And you can tell him I said his awning's crooked."`,
+const UNDERCUT: Record<string, (was: string, p: string) => string> = {
+  tanager: (was, p) => `**Tanager:** "*${was}?* For a rock with a leaf in it? ${p}. And it's a nicer leaf."`,
+  carmela: (_was, p) => `**Carmela:** "He said *what?* ${p}. And you can tell him I said his awning's crooked."`,
 };
+const coins = (n: number): string => `₽${n.toLocaleString('en-GB')}`;
+/** Text token `{market:<vendor>:<asking price>}`: what this player would pay now, shown before they pay. */
+export const marketPriceToken = (run: RunState, v: string, base: number): string => coins(marketPrice(run, v, base));
 /** The player tells vendor `v` what the rival asks. */
 export function marketUndercut(run: RunState, v: string, base: number): string {
   if (rivalsCaught(run)) return '**Both, from behind one stall:** "Full price. We said."';
@@ -110,9 +113,10 @@ export function marketUndercut(run: RunState, v: string, base: number): string {
     set(run, 'rivals-this', 1);
     return '**Both, from behind one stall:** "We compared notes. Full price. For a month."';
   }
+  const was = coins(marketPrice(run, v, base));
   set(run, `under-${v}`, 1);
   set(run, 'rivals-this', 1);
   set(run, 'rivals-played', f(run, 'rivals-played') + 1);
-  return UNDERCUT[v]!(`₽${marketPrice(run, v, base).toLocaleString('en-GB')}`);
+  return UNDERCUT[v]!(was, coins(marketPrice(run, v, base)));
 }
 

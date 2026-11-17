@@ -277,7 +277,7 @@ describe('gn.45 The Champion\'s Training Session', () => {
 });
 
 // ---------- gn.46 The All-Star Tournament ----------
-import { allstarRecord, allstarTurn, answerTo, logOf, RARE } from '../../src/core/greenneedle/allstar';
+import { allstarRecord, allstarTurn, answerTo, logOf, regionRarest } from '../../src/core/greenneedle/allstar';
 import { FOE_WAITS } from '../../src/core/greenneedle';
 import { featuredRival } from '../../src/core/rivals/living';
 
@@ -347,7 +347,7 @@ describe('gn.46 The All-Star Tournament', () => {
     expect(sf).toContain('One Pokémon. You had *one* left.');
   });
 
-  it('the quarter-finalist changed most: evolved, plus one that answers your finisher; the semi-finalist unchanged; a Rare item each', () => {
+  it('the quarter-finalist changed most: evolved, plus one that answers your finisher; the semi-finalist the same; a Rare item each', () => {
     let run = gnRun('t46-teams');
     seven(run);
     open(run, 'gn-46-door');
@@ -365,7 +365,9 @@ describe('gn.46 The All-Star Tournament', () => {
     expect(owned(run)).toBeGreaterThan(items);
     run = choose(run, 'gn-46-crowd-1', 'Go to the ring.').run;
     const sf = choose(run, 'gn-46-sf', 'Battle.');
-    expect(sf.run.battle!.enemyTeam.map((m) => m.speciesId)).toEqual(['rattata', 'pidgey']);
+    // The doc's "upgraded teams": the semi-finalist's team is evolved too, with one new Pokémon that answers how you beat them.
+    expect(sf.run.battle!.enemyTeam.map((m) => m.speciesId).slice(0, 2)).toEqual(['raticate', 'pidgeotto']);
+    expect(sf.run.battle!.enemyTeam).toHaveLength(3);
     for (const foe of sf.run.battle!.enemyTeam) Object.assign(foe, makeStrong(foe));
     const out = lose(sf.run);
     expect(opened(out, 'gn-46-out')).toBe(true);
@@ -410,7 +412,7 @@ describe('gn.46 The All-Star Tournament', () => {
     r = win(r);
     expect(flagOf(r, 'allstar-champion')).toBe(1);
     const rare = castOf(r, 'allstar-rare')!;
-    expect(RARE[region(r)]).toContain(rare);
+    expect(regionRarest(content, region(r))).toContain(rare);
     const go = choose(r, 'gn-46-champion', 'Go to it.');
     expect(go.run.battle!.enemyTeam[0]!.speciesId).toBe(rare);
     expect(go.run.battle!.eventRule?.catchTimes).toBe(4);
@@ -418,7 +420,8 @@ describe('gn.46 The All-Star Tournament', () => {
 });
 
 // ---------- gn.47 The Pokémon League Exhibition ----------
-import { exRipple, MATCHUPS, matchupOf, nextMatchup, winnerOf } from '../../src/core/greenneedle/exhibition';
+import { exRipple, MATCHUPS, matchupOf, nextMatchup } from '../../src/core/greenneedle/exhibition';
+import { watchMatch } from './helpers/gnExhibition';
 import { serviceView, useService } from '../../src/core/services/flow';
 
 /** Into the queue at the Exhibition. */
@@ -428,15 +431,15 @@ function queue(seed: string, prep?: (run: RunState) => void): RunState {
   open(run, 'gn-47-door');
   return choose(run, 'gn-47-door', 'Join the queue.').run;
 }
-/** Backs a side for a reason, and makes the three moments. */
-function watch(run: RunState, back: 'a' | 'b' | 'none', reason: string | null, moments: [string, string, string]): { run: RunState; text: string; changes: string[] } {
+/** Backs a side for a reason, takes the seat, and watches the match with the three moments; `wins` holds the other side at 1 HP. */
+function watch(run: RunState, back: 'a' | 'b' | 'none', reason: string | null, moments: [string, string, string], wins: 'a' | 'b' = 'a'): { run: RunState; text: string; changes: string[] } {
   const m = matchupOf(run)!;
   const name = (id: string) => content.bosses.get(id)!.name;
   run = back === 'none' ? choose(run, 'gn-47-queue', '"I don\'t mind who wins. I want to see it."').run : choose(run, 'gn-47-queue', `${name(back === 'a' ? m.a : m.b)}.`).run;
   if (reason) run = choose(run, 'gn-47-why', reason).run;
-  run = choose(run, 'gn-47-match-1', moments[0]).run;
-  run = choose(run, 'gn-47-match-2', moments[1]).run;
-  return choose(run, 'gn-47-match-3', moments[2]);
+  const seat = choose(run, 'gn-47-match-1', 'Watch the match.');
+  const w = watchMatch(seat.run, moments, wins);
+  return { run: w.run, text: w.lines.join(' '), changes: w.said.flat() };
 }
 
 describe('gn.47 The Pokémon League Exhibition', () => {
@@ -455,14 +458,13 @@ describe('gn.47 The Pokémon League Exhibition', () => {
   it('back the winner because they\'re stronger: a nod and a Rare item; watch closely three times and you\'re invited down', () => {
     const run = queue('t47-strong');
     const m = matchupOf(run)!;
-    const side = winnerOf(run, m) === 1 ? 'a' : 'b';
-    const r = watch(run, side, '"They\'re stronger."', ['Watch closely.', 'Watch closely.', 'Watch closely.']);
+    const r = watch(run, 'b', '"They\'re stronger."', ['Watch closely.', 'Watch closely.', 'Watch closely.'], 'b');
     expect(said(r)).toContain('They look up at your seat, and nod.');
     expect(flagOf(r.run, 'ex-invite')).toBe(1);
     expect(scene(r.run, 'gn-47-after').labels).toEqual(['Go down.', 'Stay in your seat.']);
     expect(scene(r.run, 'gn-47-after').intro).toContain('Come down. Let\'s see what you saw.');
     const fight = choose(r.run, 'gn-47-after', 'Go down.');
-    const winner = content.bosses.get(winnerOf(run, m) === 1 ? m.a : m.b)!;
+    const winner = content.bosses.get(m.b)!;
     expect(fight.run.battle!.enemyTeam.map((x) => x.speciesId)).toEqual(winner.signature.slice(0, 3));
     expect(fight.run.battle!.trainer!.name).toBe(winner.name);
     const lost = lose(fight.run);
@@ -473,6 +475,7 @@ describe('gn.47 The Pokémon League Exhibition', () => {
   it('watching closely teaches a move free, once, at any move tutor (if it can legally learn it)', () => {
     const run = queue('t47-tutor');
     const r = watch(run, 'none', null, ['Watch closely.', 'Cheer.', 'Look at the crowd.']);
+    // Watched before the first move: the matchup's own opening move is the one seen.
     const move = matchupOf(r.run)!.seen[0];
     expect(flagOf(r.run, `ex-seen:${move}`)).toBe(1);
     expect(flagOf(r.run, 'ex-outcome')).toBe(5);
@@ -495,8 +498,8 @@ describe('gn.47 The Pokémon League Exhibition', () => {
   it('back the loser: they find you after; back the same one twice and the reporter remembers', () => {
     const run = queue('t47-loser');
     const m = matchupOf(run)!;
-    const side = winnerOf(run, m) === 1 ? 'b' : 'a';
-    const r = watch(run, side, '"They\'ve got more to prove."', ['Cheer.', 'Cheer.', 'Cheer.']);
+    const side = 'b' as 'a' | 'b';
+    const r = watch(run, side, '"They\'ve got more to prove."', ['Cheer.', 'Cheer.', 'Cheer.'], 'a');
     expect(said(r)).toContain('"You backed me. On air. That was either kind or foolish."');
     const who = side === 'a' ? m.a : m.b;
     expect(flagOf(r.run, `ex-backed-${who}`)).toBe(1);
@@ -508,7 +511,8 @@ describe('gn.47 The Pokémon League Exhibition', () => {
     const run = queue('t47-treat');
     const m = matchupOf(run)!;
     const lead = run.party[0]!.friendship;
-    const r = watch(run, winnerOf(run, m) === 1 ? 'a' : 'b', '"I like how they treat their Pokémon."', ['Look at the crowd.', 'Cheer.', 'Cheer.']);
+    const r = watch(run, 'a', '"I like how they treat their Pokémon."', ['Look at the crowd.', 'Cheer.', 'Cheer.'], 'a');
+    void m;
     expect(said(r)).toContain('Their ace comes over to the barrier');
     expect(r.run.party[0]!.friendship).toBe(lead + 5);
   });
@@ -521,9 +525,14 @@ describe('gn.47 The Pokémon League Exhibition', () => {
     expect(exRipple(content, r)).toBe('');
     r.stage!.index += 1;
     const line = exRipple(content, r);
-    expect(line).toContain('Youngster Joey: "Did you see');
+    expect(line).toContain('Youngster Joey: "');
     expect(r.battle!.enemyTeam[0]!.moves.some((x) => x.id === move)).toBe(true);
     expect(r.battle!.storyEffects).toContain(`ex-copied:foe:${move}`);
+    // The rest of that stage's trainers talk about the match too (no second copy); the stage after, nobody does.
+    const talk = exRipple(content, r);
+    expect(talk).toContain('Youngster Joey: "');
+    expect(talk).not.toContain('knows');
+    r.stage!.index += 1;
     expect(exRipple(content, r)).toBe('');
   });
 });
@@ -638,7 +647,7 @@ describe('gn.48 The Pokémon Draft', () => {
     mon.gn = [DRAFTED, 'draft-trait:first', 'draft-by:Hesper Quill'];
     r = choose(run, 'gn-48-recruit', 'Choose one.');
     expect(flagOf(r.run, 'draft-result')).toBe(2);
-    expect(said(r)).toContain('She\'s my first.');
+    expect(said(r)).toContain('First one I ever caught.');
     expect(r.run.party.some((m) => m.gn?.includes(DRAFTED))).toBe(false);
   });
 
@@ -894,7 +903,14 @@ describe('gn.50 The Evil Team\'s Betrayal', () => {
     const all = win(choose(r, 'gn-50-cabinet', 'Take them all.').run);
     expect(flagOf(all, 'defector-files')).toBe(2);
     expect(trustOf(all)).toBe(1);
-    const boss = win(choose(r, 'gn-50-cabinet', 'Take the boss\'s file too.').run);
+    // "Too": the fourteen first (the first alarm), then a second alarm for the boss's file.
+    const first = win(choose(r, 'gn-50-cabinet', 'Take the boss\'s file too.').run);
+    expect(flagOf(first, 'defector-files')).toBe(2);
+    expect(trustOf(first)).toBe(1);
+    expect(flagOf(first, 'team-rocket-files') ?? 0).toBe(0);
+    const caught = lose(choose(first, 'gn-50-second-alarm', 'Battle.').run);
+    expect(flagOf(caught, 'defector-files')).toBe(2);
+    const boss = win(choose(first, 'gn-50-second-alarm', 'Battle.').run);
     expect(flagOf(boss, 'defector-files')).toBe(3);
     expect(flagOf(boss, 'team-rocket-files')).toBe(1);
     r = choose(r, 'gn-50-cabinet', 'There\'s no time. Just yours.').run;
@@ -985,7 +1001,7 @@ const rest = (run: RunState): void => {
 };
 
 describe('gn.51 The Pokémon Smuggling Ring', () => {
-  it('the yard: the doc\'s four ways in; the front is four guard battles at A+1, the last the foreman', () => {
+  it('the yard: the doc\'s four ways in; the front is four guard battles at A+1, then the foreman gives up the keys', () => {
     const run = yard('t51-front');
     expect(scene(run, 'gn-51-yard').labels).toEqual(['Go in through the front.', 'Go in through the roof.', 'Let the air out of the lorries\' tyres first.', 'Fetch the Rangers.']);
     let r = choose(run, 'gn-51-yard', 'Go in through the front.').run;
@@ -994,6 +1010,10 @@ describe('gn.51 The Pokémon Smuggling Ring', () => {
       expect(b.battle!.enemyTeam[0]!.level).toBeGreaterThan(0);
       r = win(b);
     }
+    expect(opened(r, 'gn-51-foreman')).toBe(true);
+    const money = r.money;
+    r = choose(r, 'gn-51-foreman', 'Take the keys.').run;
+    expect(r.money).toBeGreaterThanOrEqual(money + 2500);
     expect(opened(r, 'gn-51-cages')).toBe(true);
     expect(flagOf(r, 'smuggle-entry')).toBe(1);
   });
@@ -1125,6 +1145,12 @@ const settle = (run: RunState): RunState => {
   for (let i = 0; i < 5 && r.phase === 'decision'; i += 1) r = step(content, r).run;
   return r;
 };
+/** Raises on lot `n` until the gavel falls (the room moves on). */
+const bid = (run: RunState, n: number, label: string): RunState => {
+  let r = run;
+  for (let i = 0; i < 8 && opened(r, `gn-52-lot-${n}`) && scene(r, `gn-52-lot-${n}`).labels.includes(label); i += 1) r = choose(r, `gn-52-lot-${n}`, label).run;
+  return r;
+};
 const rareOf = (run: RunState) => [...run.party, ...run.box].find((m) => m.gn?.some((t) => t.startsWith('afraid-rooms:')));
 
 describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
@@ -1143,14 +1169,21 @@ describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
   it('the bidder keeps cover by winning three lots and dodging both traps: the ledger (a File), and the lieutenant wonders later', () => {
     let run = choose(choose(manor('t52-buyer'), 'gn-52-manor', 'Go as a rich buyer.').run, 'gn-52-viewing', 'Go to the floor.').run;
     expect(scene(run, 'gn-52-lot-1').intro).toContain('fox mask');
-    run = choose(run, 'gn-52-lot-1', 'Bid to its fair value.').run;
+    // Real bidding: the room tops each bid until the lot's worth is reached (three raises to ₽1,200).
+    const m1 = run.money;
+    const once = choose(run, 'gn-52-lot-1', 'Raise your paddle.');
+    expect(opened(once.run, 'gn-52-lot-1')).toBe(true);
+    expect(once.run.money).toBe(m1);
+    expect(scene(once.run, 'gn-52-lot-1').intro).toContain('The bid stands at ₽600');
+    run = bid(run, 1, 'Raise your paddle.');
+    expect(run.money).toBe(m1 - 1200);
     run = choose(run, 'gn-52-lot-2', 'Drop out early.').run;
-    run = settle(choose(run, 'gn-52-lot-3', 'Bid.').run);
+    run = settle(bid(run, 3, 'Bid.'));
     run = choose(run, 'gn-52-lot-4', 'Let it go.').run;
-    run = choose(run, 'gn-52-lot-5', 'Bid low, like everyone.').run;
+    run = bid(run, 5, 'Bid low, like everyone.');
     expect(flagOf(run, 'ta-lots')).toBe(3);
     const before = run.money;
-    run = choose(run, 'gn-52-lot-6', 'Bid it home.').run;
+    run = bid(run, 6, 'Bid it home.');
     expect(run.money).toBe(before - 4500);
     expect(rareOf(run)).toBeDefined();
     run = choose(run, 'gn-52-out', 'Walk home.').run;
@@ -1169,7 +1202,13 @@ describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
     run = choose(r.run, 'gn-52-lot-4', 'Let it go.').run;
     run = choose(run, 'gn-52-lot-5', 'Let it go.').run;
     expect(scene(run, 'gn-52-lot-6').labels).toEqual(['Raise the alarm.']);
-    const after = win(choose(run, 'gn-52-lot-6', 'Raise the alarm.').run);
+    // The alarm: two guards, then the lieutenant.
+    let after = win(choose(run, 'gn-52-lot-6', 'Raise the alarm.').run);
+    expect(flagOf(after, 'ta-rare')).toBe(0);
+    after = win(choose(after, 'gn-52-alarm-2', 'Battle.').run);
+    const lt = choose(after, 'gn-52-alarm-lt', 'Battle.').run;
+    expect(lt.battle!.enemyTeam.length).toBeGreaterThan(0);
+    after = win(lt);
     expect(flagOf(after, 'ta-rare')).toBe(3);
     const out = choose(after, 'gn-52-out', 'Walk home.').run;
     expect(flagOf(out, 'ta-cover')).toBe(0);
@@ -1180,7 +1219,7 @@ describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
     run = choose(run, 'gn-52-office', 'Read the ledger.').run;
     run = choose(run, 'gn-52-lot-1', 'Let it go.').run;
     run = choose(run, 'gn-52-lot-2', 'Drop out early.').run;
-    run = settle(choose(run, 'gn-52-lot-3', 'Bid.').run);
+    run = settle(bid(run, 3, 'Bid.'));
     expect(scene(run, 'gn-52-question').intro).toContain('settled in Rare Candy');
     expect(flagOf(choose(run, 'gn-52-question', '"Cash, as always."').run, 'ta-blown')).toBe(1);
     run = choose(run, 'gn-52-question', '"In Rare Candy."').run;
@@ -1192,7 +1231,7 @@ describe('gn.52 The Evil Team\'s Pokémon Auction', () => {
     u = choose(u, 'gn-52-office', 'Go to the floor.').run;
     u = choose(u, 'gn-52-lot-1', 'Let it go.').run;
     u = choose(u, 'gn-52-lot-2', 'Drop out early.').run;
-    u = settle(choose(u, 'gn-52-lot-3', 'Bid.').run);
+    u = settle(bid(u, 3, 'Bid.'));
     expect(opened(u, 'gn-52-lot-4')).toBe(true);
   });
 
@@ -1245,13 +1284,14 @@ const muster = (run: RunState, to = 'The Gate.'): RunState => {
   let r = choose(run, 'gn-53-alarm', 'Answer the alarm.').run;
   for (let i = 0; i < 12 && scene(r, 'gn-53-muster').labels.includes('Give orders.'); i += 1) {
     r = choose(r, 'gn-53-muster', 'Give orders.').run;
-    r = choose(r, 'gn-53-orders', to).run;
+    r = choose(r, 'gn-53-orders', to === 'The Gate.' ? scene(r, 'gn-53-orders').labels[2]! : to).run;
   }
   return choose(r, 'gn-53-muster', 'Into the city.').run;
 };
 /** One turn: a district, one action (a fight is won). */
 const go = (run: RunState, where: string, action: string): RunState => {
-  const d = choose(run, 'gn-53-turn', `The ${where}.`).run;
+  let d = choose(run, 'gn-53-turn', where === 'Gate' ? scene(run, 'gn-53-turn').labels[2]! : `The ${where}.`).run;
+  if (opened(d, 'gn-53-roof')) d = choose(d, 'gn-53-roof', 'Stay with the Hall.').run;
   const r = choose(d, `gn-53-${where.toLowerCase()}`, action);
   return r.battle ? win(r.run) : r.run;
 };
@@ -1275,7 +1315,7 @@ describe('gn.53 The Region Under Siege', () => {
     expect(names).toEqual(expect.arrayContaining(['Damian', 'The Squirtle Squad', 'The fourteen ex-Grunts']));
     expect(names).not.toContain('The Samurai');
     expect(scene(r, 'gn-53-muster').labels).toEqual(['Give orders.']);
-    expect(scene(r, 'gn-53-orders').labels).toEqual(['The Market.', 'The Homes.', 'The Gate.', 'The Hall.']);
+    expect(scene(r, 'gn-53-orders').labels).toEqual(['The Market.', 'The Homes.', expect.stringMatching(/^The (Gate|Harbour)\.$/), 'The Hall.']);
     const done = muster(run, 'The Hall.');
     expect(alliesOf(done).filter((a) => names.includes(a.n) && a.d === '')).toHaveLength(0);
     expect(scene(done, 'gn-53-turn').intro).toContain('Turn 1 of 8');

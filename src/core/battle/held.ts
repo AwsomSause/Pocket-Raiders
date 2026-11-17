@@ -270,6 +270,7 @@ export function heldStatMultiplier(ctx: Pick<HeldContext, 'content' | 'teamItems
   for (const { hook } of hooks(hooksOf(ctx, mon, side), 'stat')) {
     if (hook.stat !== stat && hook.stat !== 'all') continue;
     if (hook.canEvolve && !canEvolve) continue;
+    if (hook.firstStage && getSpecies(ctx.content, mon.speciesId).evolvesFrom) continue;
     const bonus = side === 'player' ? scaleHeldBonus(ctx.perks, hook.multiplier) : hook.multiplier;
     if (hook.canEvolve) evolveBonus *= bonus;
     else m *= bonus;

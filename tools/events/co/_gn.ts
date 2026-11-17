@@ -96,6 +96,9 @@ export const notThisRegion = (key: string): Json => ({ kind: 'gn', test: 'notThi
 export const stampStage = (key: string): Json => gn('stampStage', { key });
 export const laterStage = (key: string): Json => ({ kind: 'gn', test: 'laterStage', key });
 export const sameStage = (key: string): Json => ({ kind: 'gn', test: 'sameStage', key });
+/** Exactly `n` stages after the stamp (`stageGap`), or `n` or more (`stageGapMin`). */
+export const stageGap = (key: string, n: number): Json => ({ kind: 'gn', test: 'stageGap', key, n });
+export const stageGapMin = (key: string, n: number): Json => ({ kind: 'gn', test: 'stageGapMin', key, n });
 export const notThisStage = (key: string): Json => ({ kind: 'gn', test: 'notThisStage', key });
 export const leavePseudo = (): Json => ({ kind: 'leavePseudo' });
 export const teach = (move: string, o: Json = {}): Json => ({ kind: 'teachMove', move, ...o });
@@ -136,5 +139,7 @@ export interface Placement {
   /** A Region story's beat number and the id its beats share (core/co/placement.ts places beats 2 and 3 once earned). */
   beat?: number;
   chain?: string;
+  /** Placed by its own system (the placer leaves it alone; the entry still records the doc's step). */
+  own?: boolean;
   note?: string;
 }

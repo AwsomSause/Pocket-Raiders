@@ -20,6 +20,7 @@ import { applyMastery, familyId } from '../mastery';
 import type { Content } from '../contentSchema';
 import { CHAMPION_CLASS, ELITE_FOUR_CLASS, GYM_LEADER_CLASS } from '../encounters';
 import { maxHp } from '../pokemon';
+import { breakVow } from '../blessings';
 import { isLegendaryLike } from '../trainerPerks';
 import { withStream } from '../rng';
 import type { RunEvent } from '../run';
@@ -105,10 +106,12 @@ export function recordRewardTaken(content: Content, run: RunState, rewardId: str
 
 export function recordTraded(content: Content, run: RunState, given: PokemonInstance, gotSpeciesId: string): void {
   emit(content, run, 'traded', { actors: [given.uid], data: { gave: given.speciesId, got: gotSpeciesId }, text: `Traded ${name(content, given.speciesId)} for ${name(content, gotSpeciesId)}` });
+  breakVow(run, 'no-one-behind'); // Zekrom's vow: Leave no Pokémon behind
 }
 
 export function recordReleased(content: Content, run: RunState, mon: PokemonInstance): void {
   emit(content, run, 'released', { actors: [mon.uid], data: { speciesId: mon.speciesId, level: mon.level } });
+  breakVow(run, 'no-one-behind'); // Zekrom's vow: Leave no Pokémon behind
 }
 
 // ---------- one battle turn ----------

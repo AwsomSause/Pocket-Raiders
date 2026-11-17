@@ -2098,6 +2098,11 @@
       "text": "You raise a hand, and it comes, and it isn't asking.",
       "effects": [
        {
+        "kind": "flag",
+        "key": "called-it-for-us",
+        "amount": 1
+       },
+       {
         "kind": "addEvent",
         "eventId": "sky-ours"
        }

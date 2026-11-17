@@ -11,11 +11,13 @@ import { maxHp } from '../pokemon';
 import { newMon } from '../run';
 import type { PokemonInstance, RunState } from '../state';
 import { addItem } from '../items';
-import { SKY_BALANCE, SKY_FLY_ITEM, fearowLevel, fearowMoves, pidgeotLevel, pushRoom, skyOf, sparBoost } from './story';
+import { SKY_BALANCE, SKY_FLY_ITEM, fearowLevel, fearowMoves, pidgeotLevel, pushRoom, scheduleLevel, skyOf, sparBoost } from './story';
 import type { SkyState } from './state';
 import { DUEL_HEADER, duelResult, endingLine, finaleEnd } from './text';
 
 export const SPECTATE_EVENTS: ReadonlySet<string> = new Set(['sky.opening', 'sky.finale']);
+/** Kice (2026-11-16): the player plays none of this story's fights. The spar and the rematch are watched too: the player's lead fights by itself. */
+export const OWN_WATCH_EVENTS: ReadonlySet<string> = new Set(['sky.meet', 'sky.rematch']);
 
 const setMoves = (content: Content, mon: PokemonInstance, ids: readonly string[]): void => {
   mon.moves = ids.filter((id) => content.moves.has(id)).slice(0, 4).map((id) => ({ id, pp: content.moves.get(id)!.pp }));
@@ -30,10 +32,22 @@ const heldOf = (gifts: readonly string[]): Record<string, number> => {
 /** Sets the player's team and Bag aside and puts the player-side bird in the party. Called when the event battle starts, before the battle exists. */
 export function prepareSpectate(content: Content, run: RunState, eventId: string): void {
   const sky = skyOf(run);
+  if (sky && !sky.stash && OWN_WATCH_EVENTS.has(eventId)) {
+    // The spar and the rematch: a healthy copy of the lead fights by itself; the real team and Bag wait untouched, so nothing counts.
+    const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
+    if (!lead) return;
+    sky.stash = { party: structuredClone(run.party), inventory: structuredClone(run.inventory), own: true };
+    const copy = structuredClone(lead);
+    copy.hp = maxHp(content, copy);
+    copy.status = null;
+    run.party = [copy];
+    run.inventory = {};
+    return;
+  }
   if (!sky || !SPECTATE_EVENTS.has(eventId) || sky.stash) return;
   sky.stash = { party: structuredClone(run.party), inventory: structuredClone(run.inventory) };
   const finale = eventId === 'sky.finale';
-  const mon = newMon(content, run, finale ? 'pidgeot' : 'pidgey', finale ? pidgeotLevel(content, run, sky) : SKY_BALANCE.duelLevel, 'p');
+  const mon = newMon(content, run, finale ? 'pidgeot' : 'pidgey', finale ? pidgeotLevel(content, run, sky) : scheduleLevel(content, run), 'p');
   if (finale) {
     mon.fixedAbility = 'scrappy';
     mon.held = heldOf(sky.gifts);
@@ -52,7 +66,7 @@ export function shapeSpectateFoe(content: Content, run: RunState, sky: SkyState,
   const battle = run.battle;
   if (!battle) return;
   const finale = eventId === 'sky.finale';
-  const level = finale ? fearowLevel(content, run, sky) : SKY_BALANCE.duelLevel;
+  const level = finale ? fearowLevel(content, run, sky) : scheduleLevel(content, run);
   const foe = newMon(content, run, finale ? 'fearow' : 'spearow', level, 'e');
   if (finale) setMoves(content, foe, fearowMoves((run.stage?.index ?? 0) + 1));
   foe.hp = maxHp(content, foe);
@@ -60,12 +74,24 @@ export function shapeSpectateFoe(content: Content, run: RunState, sky: SkyState,
   battle.spectate = finale ? { kind: 'finale', cheerAt: SKY_BALANCE.cheerThreshold } : { kind: 'duel' };
 }
 
-/** True when the scene must ask the player who to cheer for now: the finale, not asked yet, and Pidgeot is under the threshold. */
+/** True while the spar or the rematch is being watched (the player's own lead, played by the AI). */
+export const ownWatching = (run: RunState): boolean => skyOf(run)?.stash?.own === true;
+
+/** The watched spar or rematch is over: the real team and Bag come back exactly as they were. */
+export function endOwnWatch(run: RunState): void {
+  const sky = skyOf(run);
+  if (!sky?.stash?.own) return;
+  run.party = sky.stash.party as RunState['party'];
+  run.inventory = sky.stash.inventory;
+  delete sky.stash;
+}
+
+/** True when the scene must ask the player who to cheer for now: the finale, not asked yet, and Pidgeot is at or under the threshold (1: always, before the first turn). */
 export function cheerDue(content: Content, run: RunState): boolean {
   const spec = run.battle?.spectate;
   if (!spec || spec.cheerAt === undefined || spec.cheered !== undefined || run.battle!.outcome) return false;
   const mon = run.party[run.battle!.activeIndex];
-  return !!mon && mon.hp > 0 && mon.hp / maxHp(content, mon) < spec.cheerAt;
+  return !!mon && mon.hp > 0 && mon.hp / maxHp(content, mon) <= spec.cheerAt;
 }
 
 /** The player's cheer: Pidgeot Mega Evolves from resolve alone, or Pidgeot is furious (Attack +2). */

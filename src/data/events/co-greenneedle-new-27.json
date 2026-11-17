@@ -50,13 +50,6 @@
        }
       ]
      }
-    },
-    {
-     "label": "Walk on.",
-     "success": {
-      "text": "Through the fence, somebody small is already cheering. You hear it for a long time.",
-      "effects": []
-     }
     }
    ]
   },

@@ -261,8 +261,10 @@ export const MoveSchema = z.object({
       disrupt: z.enum(['disable', 'encore', 'torment', 'taunt', 'healBlock', 'spite', 'throatChop']).optional(),
       /** Uses another move: a random one (Metronome), the target's last (Mirror Move), or the last one used by anyone (Copycat). */
       callMove: z.enum(['metronome', 'mirrorMove', 'copycat']).optional(),
-      /** Which stat the attack uses: the target's Attack (Foul Play), the user's Defense (Body Press), or the higher of Atk and Sp. Atk (Photon Geyser). */
-      attackFrom: z.enum(['targetAtk', 'def', 'spd', 'best']).optional(),
+      /** Which stat the attack uses: the target's Attack (Foul Play), the user's Defense (Body Press), the higher of Atk and Sp. Atk (Photon Geyser), or whichever of the user's Attack, Defense or Speed is highest right now (`highest`, Greenneedle's Three Schools). */
+      attackFrom: z.enum(['targetAtk', 'def', 'spd', 'best', 'highest']).optional(),
+      /** Greenneedle gn.new.09 (Last Stop): if it knocks out its target, the user switches out for free. */
+      switchOutOnKo: z.literal(true).optional(),
       /** Only works on a sleeping target (Dream Eater). */
       requiresSleepingTarget: z.literal(true).optional(),
       /** Fails unless the target chose an attack and the user moved first (Sucker Punch, Thunderclap). */
@@ -991,6 +993,19 @@ export const ArchetypeModifierSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('foeMissBoost'), stages: z.number().int().min(1).max(2) }),
   /** The foe's first move of each battle is shown before you pick. */
   z.object({ kind: z.literal('foeMovePreview') }),
+  // ---------- Legendary Blessings (core/blessings) ----------
+  /** Heatran: the first damaging Fire move used against your side in each battle is absorbed; its target gains +1 Sp. Atk. */
+  z.object({ kind: z.literal('fireAbsorbFirst') }),
+  /** Thundurus: your status moves have +1 priority on the first `turns` turns of every battle. */
+  z.object({ kind: z.literal('statusPriorityTurns'), turns: z.number().int().min(1).max(3) }),
+  /** Landorus: at the start of every boss and rival battle the opposing lead's stats move by `value` stages. */
+  z.object({ kind: z.literal('foeLeadStages'), stats: z.array(z.enum(['atk', 'def', 'spa', 'spd', 'spe'])).min(1), value: z.number().int().min(-2).max(2) }),
+  /** Thundurus's Rite: the opposing lead of the next trainer battle starts paralysed (not a boss's last Pokémon, not an Electric-type). */
+  z.object({ kind: z.literal('foeLeadParalysed') }),
+  /** Lugia's Rite, the Song: the next wild battle ends in peace on its first turn, with full rewards. */
+  z.object({ kind: z.literal('peacefulWild') }),
+  /** Heatran's Rite, erupt: the next boss battle starts with every hazard, weather and terrain cleared from the arena. */
+  z.object({ kind: z.literal('eruptArena') }),
   /** The next battle you lose without ending the run gives `value`× experience (1.5 = +50%); used up after one loss. */
   z.object({ kind: z.literal('lostBattleXp'), value: z.number().positive() }),
 ]);
@@ -1205,6 +1220,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
     multiplier: z.number().positive(),
     species: Species,
     canEvolve: z.boolean().optional(),
+    /** Only while the holder is a first-stage Pokémon: not the evolution of anything (the Little Cup, gn.new.27). */
+    firstStage: z.boolean().optional(),
   }),
   /** Locked into the first move it uses until it switches out (Choice items). */
   z.object({ hook: z.literal('choiceLock') }),
@@ -1266,6 +1283,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   z.object({ hook: z.literal('clearAmulet') }),
   /** Immune to Intimidate; the first use of each status move goes first (Cool Shades, Squirtle Squad). */
   z.object({ hook: z.literal('coolShades') }),
+  /** Holders of these types act first on the first turn of a battle fought in rain (the Thundermark, gn.new.32). */
+  z.object({ hook: z.literal('rainFirst'), types: z.array(TypeNameSchema).min(1) }),
   /** Multi-hit moves hit at least 4 times (Loaded Dice). */
   z.object({ hook: z.literal('loadedDice') }),
   /** Punching moves do more damage and don't make contact (Punching Glove). */
@@ -1274,6 +1293,8 @@ export const HeldHookSchema = z.discriminatedUnion('hook', [
   z.object({ hook: z.literal('protectivePads') }),
   /** Entry hazards don't hurt it (Heavy-Duty Boots). */
   z.object({ hook: z.literal('heavyDutyBoots') }),
+  /** Greenneedle gn.new.19 (Herd Bell): allies switching in take no entry-hazard damage the turn after the holder leaves. */
+  z.object({ hook: z.literal('herdBell') }),
   /** Weather doesn't boost, weaken or hurt it or its moves (Utility Umbrella). */
   z.object({ hook: z.literal('utilityUmbrella') }),
   /** Its ability can't be ignored, swapped, copied or suppressed by opponents (Ability Shield). */
@@ -3216,7 +3237,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Kanto Canon Spaces rebuild (core/expansion/canonKantoRules.ts). */
   KcEffectSchema,
   z.object({ kind: z.literal('money'), amount: z.number().int() }),
-  z.object({ kind: z.literal('item'), id: z.string(), count: z.number().int().positive().default(1) }),
+  z.object({ kind: z.literal('item'), id: z.string(), count: z.number().int().positive().default(1), /** Greenneedle gn.35: a Pokémon item goes to the Pokémon the choice's `pick` named, when it can take it (else the first that can). */ who: z.literal('picked').optional() }),
   /** One of these items, picked by the event's roll. */
   z.object({ kind: z.literal('itemFrom'), ids: z.array(z.string()).min(1), count: z.number().int().positive().default(1) }),
   /** A random item from the Bag is lost (never a key item). */
@@ -3378,7 +3399,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Catalog Overhaul (legends, row C, The Haze Lifts): the first party Shadow Pokémon that is ready (Heart Gauge at or under `ready`) is purified for good. A Named Shadow whose key is still waiting is eased to its last step instead (its key stays its own). Core: co/shadowChain.ts. */
   z.object({ kind: z.literal('purifyShadow'), ready: z.number().int().min(1).max(100).default(100) }),
   /** Beta 0.7 Pidgey's Resolve: one step of the Rivalry of the Sky (core/sky/story.ts applySky). */
-  z.object({ kind: z.literal('sky'), act: z.enum(['duel', 'meetSpar', 'sparWon', 'sparLost', 'giftBerry', 'giftItem', 'finaleGiftBerry', 'finaleGiftItem', 'meetAlone', 'aloneGift', 'joinBird', 'freeBird', 'overhead', 'rematchWon', 'rematchLost', 'passBy', /** gn.02 (catalog overhaul) */ 'watch', 'giftAny', 'aloneLeave', 'aloneCall']), side: z.enum(['pidgey', 'spearow']).optional(), bird: z.enum(['pidgeot', 'fearow']).optional() }),
+  z.object({ kind: z.literal('sky'), act: z.enum(['duel', 'meetSpar', 'sparWon', 'sparLost', 'giftBerry', 'giftItem', 'finaleGiftBerry', 'finaleGiftItem', 'meetAlone', 'aloneGift', 'joinBird', 'freeBird', 'overhead', 'rematchWon', 'rematchLost', 'passBy', /** gn.02 (catalog overhaul) */ 'watch', 'giftAny', 'aloneLeave', 'aloneCall', 'finaleShow']), side: z.enum(['pidgey', 'spearow']).optional(), bird: z.enum(['pidgeot', 'fearow']).optional() }),
   z.object({ kind: z.literal('track'), input: z.enum(['raidFailed', 'raidDeclined', 'climaxScheduled', 'raidSuccess', 'officerTurned']) }),
   /** Grand Arc: gains a Stock step (1 to 5). */
   /** Field Notes: the player has now met this special Pokémon (`sv.*`). */
@@ -3698,7 +3719,7 @@ export const EventRuleSchema = z.object({
   accuracyTurns: z.number().int().min(1).max(10).optional(),
   noSwitchFirstTurn: z.boolean().optional(),
   /** Beta 0.7 Route 25: the foe stands guard and does not attack for this many turns (the fifth Mankey, in front of the other four). */
-  foeStands: z.number().int().min(1).max(3).optional(),
+  foeStands: z.number().int().min(1).max(99).optional(),
   /** Greenneedle gn.26 (Island of Giants): the foes have grown, not Dynamaxed: double HP, three-quarter Speed. */
   giant: z.boolean().optional(),
   /** Catalog Overhaul new events: the foe has lost every move with this flag (the Alpha that lost its voice: no sound moves). */
@@ -3799,6 +3820,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
      * Greenneedle gn.11: what earlier choices did to the boss, once per point of a story flag (`flag` effect key): its stat stages
      * (the pylons that anger it) and the share of its HP it has already lost when the fight opens (rescued helpers, the boats, stuns).
      */
+    /** Greenneedle gn.11: an event rule for this raid (`surviveTurns: 2`: holding out two turns while the net is cut is a win). */
+    rule: EventRuleSchema.optional(),
     flagMods: z.array(z.object({ flag: z.string().min(1), foeStages: z.partialRecord(z.enum(['atk', 'def', 'spa', 'spd', 'spe']), z.number().int().min(-2).max(2)).default({}), hpPercent: z.number().int().min(0).max(20).default(0) })).max(6).default([]),
     win: z.array(EventEffectSchema).default([]),
     lose: z.array(EventEffectSchema).optional(),
@@ -3824,6 +3847,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Catalog Overhaul (Greenneedle): rarer foes. Each entry is tried in order on its own seeded roll (`chance` 0 to 1, only while run flag `flag` is set when given); the first hit replaces the foe ("10%: a Pinsir", "1% in the fog: Shedinja"). */
     // `rare: true` (the markets row's Guide for Hire) carries no list: it reads as none, as it did before this field existed.
     rare: z.preprocess((v) => (v === true ? undefined : v), z.array(z.object({ species: z.array(z.string().min(1)).min(1), chance: z.number().min(0).max(1), flag: z.string().optional() })).max(3).optional()),
+    /** Greenneedle gn.32 ("...and this region's own"): at `chance` (its own seeded roll), the foe is a wild Pokémon of these types from the region's own pool instead of the named list. */
+    local: z.object({ types: z.array(TypeNameSchema).min(1).max(4), chance: z.number().min(0).max(1) }).optional(),
     /** The wild Pokémon is one that beat a party member earlier this run (catalog 28). */
     recall: z.boolean().default(false),
     /** Battles in a row at this stop without healing in between (a detour); `win` pays after the last. */

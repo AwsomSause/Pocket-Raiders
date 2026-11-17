@@ -26,6 +26,20 @@
      "atMost": 0
     }
    ],
+   "remembers": [
+    {
+     "id": "trophy",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "allstar-champion",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the middle of the table, as a centrepiece: the All-Star trophy, every name on it and yours last. Somebody's put flowers in it."
+    }
+   ],
    "scene": {
     "cast": [],
     "tint": "#5a4a2e",
@@ -285,11 +299,6 @@
      "success": {
       "text": "The grass is wet. Your Pokémon walk a little closer than usual. {lt:count} chairs, and one pile of stones, behind you.",
       "effects": [
-       {
-        "kind": "item",
-        "id": "oran-berry",
-        "count": 1
-       },
        {
         "kind": "gn",
         "op": "ltDawn"

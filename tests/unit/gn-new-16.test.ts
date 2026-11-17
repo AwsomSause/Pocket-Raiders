@@ -50,7 +50,9 @@ describe('gn.new.16 The Thing in the Well', () => {
     expect(flagOf(run, 'well-gift')).toBe(3);
     expect(run.inventory['prism-scale']).toBe(1);
     run = choose(run, 'gn-new-16-choose', 'Leave it its bucket.').run;
-    expect(run.pending.some((p) => p.kind === 'caught' && p.mon.fixedAbility === 'unlooked-for')).toBe(true);
+    // The doc: the bucket comes up once more, with the best pebble. The Feebas keeps its well.
+    expect(run.pending.some((p) => p.kind === 'caught')).toBe(false);
+    expect(run.party.some((m) => (m.held?.['smooth-rock'] ?? 0) > 0)).toBe(true);
     expect(flagOf(run, 'well-left')).toBe(1);
     expect(flagOf(run, 'well-done')).toBe(1);
   });

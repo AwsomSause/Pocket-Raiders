@@ -58,7 +58,6 @@ const EVENTS: Json[] = [
     '**A girl with a Sunkern, Tansy-Jane:** "It\'s never lost. I don\'t know why either."',
   ), [
     ch('Enter.', out('Prendergast hands you a pen. It is, you notice, also on a string.', stampRegion('lc-at'), scene('gn-new-27-pick'))),
-    ch('Walk on.', out('Through the fence, somebody small is already cheering. You hear it for a long time.')),
   ]),
   rm('gn-new-27-pick', 'The Little Cup: Your Three', cup(), 'Choose who you enter, one at a time. Up to three. Everyone is set to level 5. The rest wait on the bench and shout advice.', [
     ch('Enter this one.', out('You point. Prendergast looks it up and down, and checks something off.', gn('lcBring'), when('lc-picked', { min: 3 }, [gn('bench'), gn('lcStart'), scene('gn-new-27-r1')], 'Three. The others go to the bench, and everyone entered is set to level 5.'), when('lc-picked', { min: 0, max: 2 }, [scene('gn-new-27-pick')])), { pick: {} }),

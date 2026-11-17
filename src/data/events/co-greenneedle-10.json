@@ -1499,7 +1499,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Imara:** \"I've thought about you every day since. Unhealthily.\"\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
+       "text": "**Imara:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:tower}.*\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
        "effects": []
       },
       {
@@ -1511,7 +1511,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Imara:** \"Back. Good.\"\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
+       "text": "**Imara:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:tower}.*\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
        "effects": []
       }
      ],
@@ -1613,7 +1613,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Imara:** \"I've thought about you every day since. Unhealthily.\"\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
+       "text": "**Imara:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:tower}.*\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
        "effects": []
       },
       {
@@ -1625,7 +1625,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Imara:** \"Back. Good.\"\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
+       "text": "**Imara:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:tower}.*\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
        "effects": []
       }
      ],
@@ -1728,7 +1728,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Imara:** \"I've thought about you every day since. Unhealthily.\"\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
+       "text": "**Imara:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:tower}.*\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
        "effects": []
       },
       {
@@ -1740,7 +1740,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Imara:** \"Back. Good.\"\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
+       "text": "**Imara:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:tower}.*\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
        "effects": []
       }
      ],
@@ -1844,7 +1844,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Imara:** \"I've thought about you every day since. Unhealthily.\"\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
+       "text": "**Imara:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:tower}.*\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
        "effects": []
       },
       {
@@ -1856,7 +1856,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Imara:** \"Back. Good.\"\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
+       "text": "**Imara:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:tower}.*\n\nShe takes off one glove, finger by finger, and lays it on the rail.",
        "effects": []
       }
      ],
@@ -1965,10 +1965,11 @@
      "id": "swapped",
      "when": [
       {
-       "kind": "flag",
-       "key": "x-rival-swapped-teams",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "anyFlag",
+       "keys": [
+        "x-rival-swapped-teams",
+        "borrow-result"
+       ]
       }
      ],
      "notice": "**The Foreman** has heard. \"You swapped teams with your rival. You've handled other people's Pokémon. You'll be fine here.\""
@@ -3843,8 +3844,46 @@
     "tint": "#2e3b55",
     "effect": "none"
    },
-   "intro": "The attendant holds out the loser's Cloyster on a lead. \"Swap one? It's the rules. Well. It's allowed.\"",
+   "intro": "The attendant lines up the loser's three: Raichu, Sandslash, Cloyster. \"Swap one of yours for one of these? It's the rules. Well. It's allowed.\"",
    "choices": [
+    {
+     "label": "Trade one of yours for their Raichu.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "raichu"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade one of yours for their Sandslash.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "sandslash"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-2"
+       }
+      ]
+     }
+    },
     {
      "label": "Trade one of yours for their Cloyster.",
      "pick": {},
@@ -3895,8 +3934,46 @@
     "tint": "#2e3b55",
     "effect": "none"
    },
-   "intro": "The attendant holds out the loser's Pelipper on a lead. \"Swap one? It's the rules. Well. It's allowed.\"",
+   "intro": "The attendant lines up the loser's three: Ninetales, Golem, Pelipper. \"Swap one of yours for one of these? It's the rules. Well. It's allowed.\"",
    "choices": [
+    {
+     "label": "Trade one of yours for their Ninetales.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "ninetales"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-3"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade one of yours for their Golem.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "golem"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-3"
+       }
+      ]
+     }
+    },
     {
      "label": "Trade one of yours for their Pelipper.",
      "pick": {},
@@ -3947,8 +4024,46 @@
     "tint": "#2e3b55",
     "effect": "none"
    },
-   "intro": "The attendant holds out the loser's Exeggutor on a lead. \"Swap one? It's the rules. Well. It's allowed.\"",
+   "intro": "The attendant lines up the loser's three: Electabuzz, Rhydon, Exeggutor. \"Swap one of yours for one of these? It's the rules. Well. It's allowed.\"",
    "choices": [
+    {
+     "label": "Trade one of yours for their Electabuzz.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "electabuzz"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-4"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade one of yours for their Rhydon.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "rhydon"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-4"
+       }
+      ]
+     }
+    },
     {
      "label": "Trade one of yours for their Exeggutor.",
      "pick": {},
@@ -3999,8 +4114,46 @@
     "tint": "#2e3b55",
     "effect": "none"
    },
-   "intro": "The attendant holds out the loser's Skarmory on a lead. \"Swap one? It's the rules. Well. It's allowed.\"",
+   "intro": "The attendant lines up the loser's three: Magmar, Quagsire, Skarmory. \"Swap one of yours for one of these? It's the rules. Well. It's allowed.\"",
    "choices": [
+    {
+     "label": "Trade one of yours for their Magmar.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "magmar"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-5"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade one of yours for their Quagsire.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "quagsire"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-5"
+       }
+      ]
+     }
+    },
     {
      "label": "Trade one of yours for their Skarmory.",
      "pick": {},
@@ -4051,8 +4204,46 @@
     "tint": "#2e3b55",
     "effect": "none"
    },
-   "intro": "The attendant holds out the loser's Ursaring on a lead. \"Swap one? It's the rules. Well. It's allowed.\"",
+   "intro": "The attendant lines up the loser's three: Kingdra, Houndoom, Ursaring. \"Swap one of yours for one of these? It's the rules. Well. It's allowed.\"",
    "choices": [
+    {
+     "label": "Trade one of yours for their Kingdra.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "kingdra"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-6"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade one of yours for their Houndoom.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "houndoom"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-6"
+       }
+      ]
+     }
+    },
     {
      "label": "Trade one of yours for their Ursaring.",
      "pick": {},
@@ -4103,8 +4294,46 @@
     "tint": "#2e3b55",
     "effect": "none"
    },
-   "intro": "The attendant holds out the loser's Crobat on a lead. \"Swap one? It's the rules. Well. It's allowed.\"",
+   "intro": "The attendant lines up the loser's three: Chansey, Donphan, Crobat. \"Swap one of yours for one of these? It's the rules. Well. It's allowed.\"",
    "choices": [
+    {
+     "label": "Trade one of yours for their Chansey.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "chansey"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-7"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Trade one of yours for their Donphan.",
+     "pick": {},
+     "success": {
+      "text": "The attendant takes yours back to the rack.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "swapIn",
+        "key": "donphan"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-42-factory-7"
+       }
+      ]
+     }
+    },
     {
      "label": "Trade one of yours for their Crobat.",
      "pick": {},
@@ -4169,7 +4398,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Kestrin Adebayo:** \"I've thought about you every day since. Unhealthily.\"\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
+       "text": "**Kestrin Adebayo:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:factory}.*\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
        "effects": []
       },
       {
@@ -4181,7 +4410,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Kestrin Adebayo:** \"Back. Good.\"\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
+       "text": "**Kestrin Adebayo:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:factory}.*\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
        "effects": []
       }
      ],
@@ -4291,7 +4520,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Kestrin Adebayo:** \"I've thought about you every day since. Unhealthily.\"\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
+       "text": "**Kestrin Adebayo:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:factory}.*\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
        "effects": []
       },
       {
@@ -4303,7 +4532,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Kestrin Adebayo:** \"Back. Good.\"\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
+       "text": "**Kestrin Adebayo:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:factory}.*\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
        "effects": []
       }
      ],
@@ -4414,7 +4643,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Kestrin Adebayo:** \"I've thought about you every day since. Unhealthily.\"\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
+       "text": "**Kestrin Adebayo:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:factory}.*\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
        "effects": []
       },
       {
@@ -4426,7 +4655,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Kestrin Adebayo:** \"Back. Good.\"\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
+       "text": "**Kestrin Adebayo:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:factory}.*\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
        "effects": []
       }
      ],
@@ -4538,7 +4767,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Kestrin Adebayo:** \"I've thought about you every day since. Unhealthily.\"\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
+       "text": "**Kestrin Adebayo:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:factory}.*\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
        "effects": []
       },
       {
@@ -4550,7 +4779,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Kestrin Adebayo:** \"Back. Good.\"\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
+       "text": "**Kestrin Adebayo:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:factory}.*\n\nHe takes his cap off for the battle. He says it's out of respect for the rentals.",
        "effects": []
       }
      ],
@@ -5238,7 +5467,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Theodora Ansah:** \"I've thought about you every day since. Unhealthily.\"\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
+       "text": "**Theodora Ansah:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:arena}.*\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
        "effects": []
       },
       {
@@ -5250,7 +5479,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Theodora Ansah:** \"Back. Good.\"\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
+       "text": "**Theodora Ansah:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:arena}.*\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
        "effects": []
       }
      ],
@@ -5353,7 +5582,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Theodora Ansah:** \"I've thought about you every day since. Unhealthily.\"\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
+       "text": "**Theodora Ansah:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:arena}.*\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
        "effects": []
       },
       {
@@ -5365,7 +5594,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Theodora Ansah:** \"Back. Good.\"\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
+       "text": "**Theodora Ansah:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:arena}.*\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
        "effects": []
       }
      ],
@@ -5469,7 +5698,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Theodora Ansah:** \"I've thought about you every day since. Unhealthily.\"\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
+       "text": "**Theodora Ansah:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:arena}.*\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
        "effects": []
       },
       {
@@ -5481,7 +5710,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Theodora Ansah:** \"Back. Good.\"\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
+       "text": "**Theodora Ansah:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:arena}.*\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
        "effects": []
       }
      ],
@@ -5586,7 +5815,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Theodora Ansah:** \"I've thought about you every day since. Unhealthily.\"\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
+       "text": "**Theodora Ansah:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:arena}.*\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
        "effects": []
       },
       {
@@ -5598,7 +5827,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Theodora Ansah:** \"Back. Good.\"\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
+       "text": "**Theodora Ansah:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:arena}.*\n\n\"Three turns,\" she says. \"Make them worth marking.\"",
        "effects": []
       }
      ],
@@ -8833,7 +9062,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Lucasta Ferro:** \"I've thought about you every day since. Unhealthily.\"\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
+       "text": "**Lucasta Ferro:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:pike}.*\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
        "effects": []
       },
       {
@@ -8845,7 +9074,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Lucasta Ferro:** \"Back. Good.\"\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
+       "text": "**Lucasta Ferro:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:pike}.*\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
        "effects": []
       }
      ],
@@ -8947,7 +9176,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Lucasta Ferro:** \"I've thought about you every day since. Unhealthily.\"\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
+       "text": "**Lucasta Ferro:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:pike}.*\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
        "effects": []
       },
       {
@@ -8959,7 +9188,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Lucasta Ferro:** \"Back. Good.\"\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
+       "text": "**Lucasta Ferro:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:pike}.*\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
        "effects": []
       }
      ],
@@ -9062,7 +9291,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Lucasta Ferro:** \"I've thought about you every day since. Unhealthily.\"\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
+       "text": "**Lucasta Ferro:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:pike}.*\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
        "effects": []
       },
       {
@@ -9074,7 +9303,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Lucasta Ferro:** \"Back. Good.\"\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
+       "text": "**Lucasta Ferro:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:pike}.*\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
        "effects": []
       }
      ],
@@ -9178,7 +9407,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Lucasta Ferro:** \"I've thought about you every day since. Unhealthily.\"\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
+       "text": "**Lucasta Ferro:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:pike}.*\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
        "effects": []
       },
       {
@@ -9190,7 +9419,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Lucasta Ferro:** \"Back. Good.\"\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
+       "text": "**Lucasta Ferro:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:pike}.*\n\nShe flips a coin before the battle, and doesn't look at how it lands.",
        "effects": []
       }
      ],
@@ -10166,7 +10395,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Rafferty Blaise:** \"I've thought about you every day since. Unhealthily.\"\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
+       "text": "**Rafferty Blaise:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:dome}.*\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
        "effects": []
       },
       {
@@ -10178,7 +10407,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Rafferty Blaise:** \"Back. Good.\"\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
+       "text": "**Rafferty Blaise:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:dome}.*\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
        "effects": []
       }
      ],
@@ -10288,7 +10517,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Rafferty Blaise:** \"I've thought about you every day since. Unhealthily.\"\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
+       "text": "**Rafferty Blaise:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:dome}.*\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
        "effects": []
       },
       {
@@ -10300,7 +10529,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Rafferty Blaise:** \"Back. Good.\"\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
+       "text": "**Rafferty Blaise:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:dome}.*\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
        "effects": []
       }
      ],
@@ -10411,7 +10640,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Rafferty Blaise:** \"I've thought about you every day since. Unhealthily.\"\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
+       "text": "**Rafferty Blaise:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:dome}.*\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
        "effects": []
       },
       {
@@ -10423,7 +10652,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Rafferty Blaise:** \"Back. Good.\"\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
+       "text": "**Rafferty Blaise:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:dome}.*\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
        "effects": []
       }
      ],
@@ -10535,7 +10764,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Rafferty Blaise:** \"I've thought about you every day since. Unhealthily.\"\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
+       "text": "**Rafferty Blaise:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:dome}.*\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
        "effects": []
       },
       {
@@ -10547,7 +10776,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Rafferty Blaise:** \"Back. Good.\"\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
+       "text": "**Rafferty Blaise:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:dome}.*\n\nHe throws his hat into the crowd. It lands on an empty seat. He seems satisfied.",
        "effects": []
       }
      ],
@@ -11214,7 +11443,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Master Hōzan:** \"I've thought about you every day since. Unhealthily.\"\n\nHe sits back down. His Pokémon step forward without being asked.",
+       "text": "**Master Hōzan:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:palace}.*\n\nHe sits back down. His Pokémon step forward without being asked.",
        "effects": []
       },
       {
@@ -11226,7 +11455,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Master Hōzan:** \"Back. Good.\"\n\nHe sits back down. His Pokémon step forward without being asked.",
+       "text": "**Master Hōzan:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:palace}.*\n\nHe sits back down. His Pokémon step forward without being asked.",
        "effects": []
       }
      ],
@@ -11328,7 +11557,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Master Hōzan:** \"I've thought about you every day since. Unhealthily.\"\n\nHe sits back down. His Pokémon step forward without being asked.",
+       "text": "**Master Hōzan:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:palace}.*\n\nHe sits back down. His Pokémon step forward without being asked.",
        "effects": []
       },
       {
@@ -11340,7 +11569,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Master Hōzan:** \"Back. Good.\"\n\nHe sits back down. His Pokémon step forward without being asked.",
+       "text": "**Master Hōzan:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:palace}.*\n\nHe sits back down. His Pokémon step forward without being asked.",
        "effects": []
       }
      ],
@@ -11443,7 +11672,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Master Hōzan:** \"I've thought about you every day since. Unhealthily.\"\n\nHe sits back down. His Pokémon step forward without being asked.",
+       "text": "**Master Hōzan:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:palace}.*\n\nHe sits back down. His Pokémon step forward without being asked.",
        "effects": []
       },
       {
@@ -11455,7 +11684,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Master Hōzan:** \"Back. Good.\"\n\nHe sits back down. His Pokémon step forward without being asked.",
+       "text": "**Master Hōzan:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:palace}.*\n\nHe sits back down. His Pokémon step forward without being asked.",
        "effects": []
       }
      ],
@@ -11559,7 +11788,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Master Hōzan:** \"I've thought about you every day since. Unhealthily.\"\n\nHe sits back down. His Pokémon step forward without being asked.",
+       "text": "**Master Hōzan:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:palace}.*\n\nHe sits back down. His Pokémon step forward without being asked.",
        "effects": []
       },
       {
@@ -11571,7 +11800,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Master Hōzan:** \"Back. Good.\"\n\nHe sits back down. His Pokémon step forward without being asked.",
+       "text": "**Master Hōzan:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:palace}.*\n\nHe sits back down. His Pokémon step forward without being asked.",
        "effects": []
       }
      ],
@@ -12876,7 +13105,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Thurstan:** \"I've thought about you every day since. Unhealthily.\"\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
+       "text": "**Thurstan:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:pyramid}.*\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
        "effects": []
       },
       {
@@ -12888,7 +13117,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Thurstan:** \"Back. Good.\"\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
+       "text": "**Thurstan:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:pyramid}.*\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
        "effects": []
       }
      ],
@@ -12998,7 +13227,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Thurstan:** \"I've thought about you every day since. Unhealthily.\"\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
+       "text": "**Thurstan:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:pyramid}.*\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
        "effects": []
       },
       {
@@ -13010,7 +13239,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Thurstan:** \"Back. Good.\"\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
+       "text": "**Thurstan:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:pyramid}.*\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
        "effects": []
       }
      ],
@@ -13121,7 +13350,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Thurstan:** \"I've thought about you every day since. Unhealthily.\"\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
+       "text": "**Thurstan:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:pyramid}.*\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
        "effects": []
       },
       {
@@ -13133,7 +13362,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Thurstan:** \"Back. Good.\"\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
+       "text": "**Thurstan:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:pyramid}.*\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
        "effects": []
       }
      ],
@@ -13245,7 +13474,7 @@
          "atMost": 1
         }
        ],
-       "text": "**Thurstan:** \"I've thought about you every day since. Unhealthily.\"\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
+       "text": "**Thurstan:** \"I've thought about you every day since. Unhealthily.\" *They count your last team off on their fingers: {brainteam:pyramid}.*\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
        "effects": []
       },
       {
@@ -13257,7 +13486,7 @@
          "atMost": 2
         }
        ],
-       "text": "**Thurstan:** \"Back. Good.\"\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
+       "text": "**Thurstan:** \"Back. Good.\" *They count your last team off on their fingers: {brainteam:pyramid}.*\n\nHe shakes the sand out of his hat, and his Pokémon shake it out of their ears.",
        "effects": []
       }
      ],
@@ -13394,6 +13623,30 @@
         "kind": "gn",
         "op": "stampRegion",
         "key": "auction-at"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "auction-silent",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "auction-seen-later",
+          "min": 0,
+          "max": 0,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "setFlag",
+            "key": "auction-seen-later",
+            "n": 1
+           }
+          ],
+          "text": "On the steps outside, two grunts of the team that works this region were passing something between them, and laughing. You knew it at once. It was the lot you kept your paddle in your lap for."
+         }
+        ]
        },
        {
         "kind": "gn",
@@ -13971,6 +14224,24 @@
    ],
    "remembers": [
     {
+     "id": "seen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 1,
+       "atMost": 1
+      },
+      {
+       "kind": "flag",
+       "key": "museum-visits",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else. And you have seen the shape of this lot before, this run: an empty case in a museum, a card where the thing should be, and dust the size of it."
+    },
+    {
      "id": "eyes",
      "when": [
       {
@@ -14333,6 +14604,24 @@
     "Story"
    ],
    "remembers": [
+    {
+     "id": "seen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 2,
+       "atMost": 2
+      },
+      {
+       "kind": "flag",
+       "key": "museum-visits",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else. And you have seen the shape of this lot before, this run: an empty case in a museum, a card where the thing should be, and dust the size of it."
+    },
     {
      "id": "eyes",
      "when": [
@@ -14697,6 +14986,24 @@
    ],
    "remembers": [
     {
+     "id": "seen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 3,
+       "atMost": 3
+      },
+      {
+       "kind": "flag",
+       "key": "museum-visits",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else. And you have seen the shape of this lot before, this run: an empty case in a museum, a card where the thing should be, and dust the size of it."
+    },
+    {
      "id": "eyes",
      "when": [
       {
@@ -15059,6 +15366,24 @@
     "Story"
    ],
    "remembers": [
+    {
+     "id": "seen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 4,
+       "atMost": 4
+      },
+      {
+       "kind": "flag",
+       "key": "museum-visits",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else. And you have seen the shape of this lot before, this run: an empty case in a museum, a card where the thing should be, and dust the size of it."
+    },
     {
      "id": "eyes",
      "when": [
@@ -15423,6 +15748,24 @@
    ],
    "remembers": [
     {
+     "id": "seen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 5,
+       "atMost": 5
+      },
+      {
+       "kind": "flag",
+       "key": "museum-visits",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else. And you have seen the shape of this lot before, this run: an empty case in a museum, a card where the thing should be, and dust the size of it."
+    },
+    {
      "id": "eyes",
      "when": [
       {
@@ -15785,6 +16128,24 @@
     "Story"
    ],
    "remembers": [
+    {
+     "id": "seen",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "auction-stolen",
+       "atLeast": 6,
+       "atMost": 6
+      },
+      {
+       "kind": "flag",
+       "key": "museum-visits",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "In the third row, a young woman in grey gloves sits up for the first time. She checks a note inside her glove, and looks at the lot, and nothing else. And you have seen the shape of this lot before, this run: an empty case in a museum, a card where the thing should be, and dust the size of it."
+    },
     {
      "id": "eyes",
      "when": [

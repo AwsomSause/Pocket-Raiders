@@ -18,6 +18,9 @@ export const MUSEUM_LINKS: readonly (readonly string[])[] = [
 /** The locked gallery's resident, by region (in turn): a Sigilyph; a Golett that dusts; a Cofagrigus that's part of the collection; a Bronzor. */
 export const MUSEUM_SECRET = ['sigilyph', 'golett', 'cofagrigus', 'bronzor'] as const;
 
+/** How many different collections the museums have (tools/events/co/greenneedle-9.ts BONE_SETS, HIDDEN_SETS). */
+export const MUSEUM_SETS = 3;
+
 const f = (run: RunState, k: string): number => Number(run.story.flags[`ev:${k}`] ?? 0);
 const set = (run: RunState, k: string, n: number): void => {
   run.story.flags[`ev:${k}`] = n;
@@ -26,6 +29,8 @@ const set = (run: RunState, k: string, n: number): void => {
 export function museumArrive(run: RunState, region: string): string {
   const r = Math.max(0, (MUSEUM_REGIONS as readonly string[]).indexOf(region));
   set(run, 'museum-region', r + 1);
+  // Each region's museum is different: its collection (the bones on the tray, the plaques, the Relics behind the exhibits), in turn.
+  set(run, 'museum-set', (run.regionIndex % MUSEUM_SETS) + 1);
   let wrong = 6;
   for (let i = 0; i < MUSEUM_LINKS.length; i += 1) {
     const k = (run.regionIndex + i) % MUSEUM_LINKS.length;

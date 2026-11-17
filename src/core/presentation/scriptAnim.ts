@@ -67,6 +67,12 @@ export type ScriptLayer = z.infer<typeof Layer>;
 
 export const ScriptAnimSchema = z.object({
   v: z.literal(1),
+  /**
+   * An auto-drafted timeline (tools/gen-ebdx-scripts.py), not checked by eye. Status: disabled. Many drafts draw wrong (a whole sprite
+   * sheet as one particle, or nothing at all), so a draft never plays: the move shows its Essentials or PokeRogue animation instead.
+   * Remove the flag once the script has been fixed and looked at.
+   */
+  draft: z.boolean().default(false),
   /** Total length (ms); the last particle and the target's reaction must fit. */
   length: z.number().positive().max(4000),
   /** A colour veil over the field, to make the effect stand out. */
@@ -145,4 +151,10 @@ export function scriptAssets(file: EbdxAnimsFile): { images: string[]; sounds: s
     s.sfx.forEach((f) => sounds.add(f.id));
   }
   return { images: [...images].sort(), sounds: [...sounds].sort() };
+}
+
+/** The script a move may play: hand-checked ones only (see `draft`). */
+export function playableScript(file: { scripts: Record<string, ScriptAnim> }, name: string | undefined): ScriptAnim | null {
+  const script = name ? file.scripts[name] : undefined;
+  return script && !script.draft ? script : null;
 }

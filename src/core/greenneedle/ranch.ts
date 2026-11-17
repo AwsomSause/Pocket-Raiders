@@ -11,6 +11,8 @@ const f = (run: Pick<RunState, 'story'>, k: string): number => Number(run.story.
 /** At a rest stop: a Fresh Milk from the ranch, in the region where the channel was dug. Returns the line to show, or ''. */
 export function ranchRest(content: Content, run: Pick<RunState, 'story' | 'regionIndex' | 'inventory'>): string {
   if (f(run, 'ranch-dug') < 1 || f(run, 'ranch-dug-region') !== run.regionIndex + 1 || !(content.items.has(FRESH_MILK) || content.catalog.has(FRESH_MILK))) return '';
+  // One can, for this rest: a can left unused is still there, and no second one is set beside it ("once per rest").
+  if ((run.inventory[FRESH_MILK] ?? 0) > 0) return '';
   addItem(run.inventory, FRESH_MILK, 1);
   return 'A can of Fresh Milk is waiting by the door, with a note: "From the ranch. Both channels are running."';
 }

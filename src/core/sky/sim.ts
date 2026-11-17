@@ -73,10 +73,10 @@ export function cpuDuel(content: Content, seed: string, key: string, a: Duelist,
   let firstBlood = false;
   for (; turns < 120 && !battle.outcome; turns++) {
     // The moment: side A is under the threshold for the first time.
-    if (opts.threshold !== undefined && !cheered && !asked && mineMon.hp > 0 && mineMon.hp / startA < opts.threshold) {
+    if (opts.threshold !== undefined && !cheered && !asked && mineMon.hp > 0 && mineMon.hp / startA <= opts.threshold) {
       if (opts.atThreshold === undefined) {
         asked = true;
-        lines.push(`${nameA} is down to the last of its strength.`);
+        if (mineMon.hp / startA < 0.5) lines.push(`${nameA} is down to the last of its strength.`);
         break;
       }
       if (opts.atThreshold === 'cheerA') {

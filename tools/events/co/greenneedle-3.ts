@@ -47,7 +47,8 @@ const rescue = (who: string, label: string, water: string, slow: string, back: s
   chIf([not(`kaiju-${who}`), TURNS_LEFT], label, out(slow, flag(`kaiju-${who}`), flag('kaiju-rescued'), flag('kaiju-turns', 2), cap('kaiju-turns', 4), scene(back)), {
     branches: ['water', 'flying'].map((t) => ({ when: [ptype(t)], text: water, effects: [flag(`kaiju-${who}`), flag('kaiju-rescued'), flag('kaiju-turns', 1), scene(back)] })),
   });
-const SWARM_LOST: Json[] = [flag('kaiju-lost'), scene('gn-11-retreat')];
+/** The raid is lost: it retreats, and the harbour market is shut for the stage (every shop still open on the stage shuts). */
+const SWARM_LOST: Json[] = [flag('kaiju-lost'), gn('shutMarket'), scene('gn-11-retreat')];
 const swarmFight = (format: 'doubles' | undefined): Json => ({ ...eitherWay(wild({ species: ['tentacool'], lv: 0, format, win: [scene('gn-11-seawall')] })), friendly: true, lose: SWARM_LOST });
 
 /** What the rescued, the boats and the pylons did before the boss fight: once per point of each flag (core/events raidFlagMods). */
@@ -115,11 +116,16 @@ const gn11: Json[] = [
     '*It isn\'t attacking anything now. It\'s guarding.*',
     'Under it, caught in a net, is a Tentacool. Small. Hurt. The net\'s float has a factory stamp on it.',
   ), [
-    chIf([test('cutter')], 'Cut the net.', out(say(
+    // Free the injured one: two turns inside the raid. One Pokémon cuts the net and is out of the fight; the rest protect it.
+    chIf([test('netCutter')], 'Cut the net.', fight(say(
       'One of your Pokémon goes for the net. The rest stand between it and the Kaiju, which panics, swinging blind, because something is near its little one.',
-      'Two turns. The cords part. The net falls away.',
-    ), hurt(0.15), when('kaiju-pylons', { min: 1 }, [hurt(0.05)], 'It is angry from the pylons. Its swings land harder.'), when('kaiju-pylons', { min: 3 }, [hurt(0.05)]),
-    flag('kaiju-freed'), ...KAIJU_DONE, scene('gn-11-freed'))),
+      'Two turns. That is how long the cords will take. Hold it off for two turns.',
+    ), {
+      kind: 'raid', raidId: 'kaiju-tentacruel', name: 'Kaiju Tentacruel', levelBonus: -1, rule: { surviveTurns: 2 },
+      flagMods: [{ flag: 'kaiju-pylons', foeStages: { atk: 1 } }],
+      win: [gn('kaijuBack'), flag('kaiju-freed'), ...KAIJU_DONE, scene('gn-11-freed')],
+      lose: [gn('kaijuBack'), ...SWARM_LOST],
+    }, gn('kaijuCut'))),
     ch('Break its last shield.', fight(say(
       'You step out onto the reef. It rises to meet you, and the bay rises with it.',
       'Three shield bars glow across its body. Out in the shallows, the Tentacool gather to its call.',
@@ -135,9 +141,9 @@ const gn11: Json[] = [
     'Then it sets the small one down in the shallows at your feet, and waits.',
   ), [
     chIf([not('kaiju-kept')], 'Hold out a hand.', out(say(
-      'The small Tentacool drifts to you. Behind it, the Kaiju lowers itself, slowly, into the bay, watching the whole way down.',
+      'The cords part. The net falls away. The small Tentacool drifts to you. Behind it, the Kaiju lowers itself, slowly, into the bay, watching the whole way down.',
       'It is the one from the net. It stays.',
-    ), PSYDUCK_GIRL, { ...join({ species: ['tentacool'], lv: -6 }), ability: 'huge-power', moves: ['liquidation'] }, item('poison-barb'), item('mystic-water'), flag('kaiju-kept'),
+    ), PSYDUCK_GIRL, flag('kaiju-kept'),
     moment('The Kaiju Tentacruel lifted its little one out of the net, looked at you for a long time, and let it go with you.', 75), scene('gn-11-freed'))),
     takeFloat('gn-11-freed', 'The float is still in the cut net. Under the weed:'),
     chIf([is('kaiju-kept')], 'Leave the harbour.', out(say('Ffion watches the bay close over it. "Right," she says. "Pier first."', PIER), flag('kaiju-left'))),
@@ -165,6 +171,25 @@ const gn11: Json[] = [
     ), trainer('Net Crew', { cls: 'roughneck', size: 3, format: 'doubles', lv: 1, types: ['water', 'poison'], ally: 'tentacruel', friendly: true, lose: [flag('kaiju-returned')], win: [flag('kaiju-returned'), kindness(1), moment('The Kaiju Tentacruel rose out of the sea to fight beside you.', 70)] }))),
     ch('Let it go.', leave('You walk on. Out in the bay, something very large follows the trawler, just under the surface.')),
   ]),
+  // Remembers: freed, and the Polluted Factory was later left running: it comes back to the harbour, and this time it isn't looking for anything.
+  gev('gn-11-anger', 'The Harbour, Again', harbour({ stop: 'event', rarity: 'rare', forced: true, types: ['water', 'poison'], requires: [is('kaiju-freed'), is('factory-left-running'), not('kaiju-anger-done'), laterStage('kaiju-at')] }), say(
+    'The bay runs the colour of the factory\'s last night. A harbour bell is ringing, and this time nobody stops to look.',
+    '*Out past the breakwater, something rises. You know its shape. It does not look at the reef. It does not look at anything.*',
+    'It let you take its little one, and then the water went bad again. It has come back to the harbour, and this time it isn\'t looking for anything.',
+  ), [
+    ch('Stand on the sea wall.', fight(say(
+      'You stand on the sea wall. It sees you. For a moment it stops, and you think it remembers.',
+      'Then it comes on.',
+    ), {
+      ...wild({ species: ['tentacruel'], lv: 2, win: [flag('kaiju-anger-done'), flag('kaiju-anger-held'), moment('The Kaiju came back angry, because the factory was still running. You held the sea wall.', 70)] }),
+      rule: { giant: true, noCatch: true, foeStages: { atk: 1 } }, foeMoves: ['wrap', 'acid-armor', 'hydro-pump', 'tidal-surge'], friendly: true,
+      lose: [flag('kaiju-anger-done'), gn('shutMarket')],
+    })),
+    ch('Get people off the quay instead.', out(say(
+      'You do not fight it. You run along the quay shouting, and people run, and the stalls go over behind them.',
+      'It takes the pier again, and a warehouse, and goes. Nobody is hurt. The market will not open today.',
+    ), flag('kaiju-anger-done'), gn('shutMarket'), kindness(1))),
+  ]),
 ];
 const KANTO_KAIJU: Json = { ...gev('cs-kanto-vermilion-kaiju', 'Kaiju Tentacruel', harbour({ stop: 'event', rarity: 'common', types: ['water'], requires: [not('kaiju-entered'), not('kaiju-done')] }), KAIJU_OPEN, KAIJU_DOOR), canon: 'cs.kanto.vermilion.kaiju' };
 
@@ -175,6 +200,25 @@ const MAIDEN_TINT = '#3b2f52';
 const peak = (o: Json = {}): Json => ({ tint: MAIDEN_TINT, tags: ['Mystery', 'Shop', 'Story'], effect: 'none', ...o });
 const toSquare = (n: 1 | 2 | 3, label = 'Back to the square.'): Json => ch(label, out('You step back into the crowd. Somebody is selling lanterns shaped like Pokémon. Everybody is laughing.', scene(n === 1 ? 'gn-12-square' : `gn-12-square-${n}`)));
 const buy = (label: string, price: number, text: string, back: string, ...effects: Json[]): Json => ch(`${label} (₽${price.toLocaleString('en-GB')})`, out(text, $(-price), ...effects, scene(back)), { requires: [{ kind: 'money', atLeast: price }] });
+
+/** Lantern Row's shelves: key, name, the walk over, and the goods (id, label, the ordinary shop price; the row adds 10%). */
+const LANTERN_SHELVES: [string, string, string, [string, string, number][]][] = [
+  ['balls', 'The Poké Ball shelf.', 'Balls in paper cones, like sweets.', [['poke-ball', 'A Poké Ball', 200], ['great-ball', 'A Great Ball', 600], ['ultra-ball', 'An Ultra Ball', 800]]],
+  ['cures', 'The status cures.', 'Brown bottles, each with a hand-written label.', [['full-heal', 'A Full Heal', 400], ['full-restore', 'A Full Restore', 3000], ['revive', 'A Revive', 2000]]],
+  ['supplies', 'The out-of-battle supplies.', 'Everything a trainer runs out of on the road.', [['potion', 'A Potion', 200], ['super-potion', 'A Super Potion', 700], ['hyper-potion', 'A Hyper Potion', 2500]]],
+];
+/** Swap Alley's natures: the stat it favours, then four natures that raise it (each gives up something different). */
+const NATURES: [string, string, string, [string, string][]][] = [
+  ['atk', 'Stronger (Attack).', 'It flexes.', [['adamant', 'Adamant (less Sp. Atk)'], ['brave', 'Brave (less Speed)'], ['lonely', 'Lonely (less Defence)'], ['naughty', 'Naughty (less Sp. Def)']]],
+  ['spa', 'Cleverer (Sp. Atk).', 'It sits down and thinks about it.', [['modest', 'Modest (less Attack)'], ['quiet', 'Quiet (less Speed)'], ['mild', 'Mild (less Defence)'], ['rash', 'Rash (less Sp. Def)']]],
+  ['spe', 'Quicker (Speed).', 'It bounces, twice.', [['jolly', 'Jolly (less Sp. Atk)'], ['timid', 'Timid (less Attack)'], ['hasty', 'Hasty (less Defence)'], ['naive', 'Naive (less Sp. Def)']]],
+  ['def', 'Tougher (Defence).', 'It squares its shoulders.', [['impish', 'Impish (less Sp. Atk)'], ['bold', 'Bold (less Attack)'], ['relaxed', 'Relaxed (less Speed)'], ['lax', 'Lax (less Sp. Def)']]],
+  ['spd', 'Calmer (Sp. Def).', 'It breathes out.', [['careful', 'Careful (less Sp. Atk)'], ['calm', 'Calm (less Attack)'], ['sassy', 'Sassy (less Speed)'], ['gentle', 'Gentle (less Defence)']]],
+];
+/** What resets when you walk into the market: one of each Swap Alley card, one egg move, one true thing, per visit. */
+/** The Egg Move Tutor's price by the lead's rarity tier (core/rarity.ts). */
+const TUTOR_PRICES: [string[], number][] = [[['common'], 600], [['uncommon', 'rare'], 1200], [['veryRare', 'epic', 'legendary', 'mythical', 'special'], 2400]];
+const MAIDEN_VISIT: Json[] = ['maiden-swap-1', 'maiden-swap-2', 'maiden-swap-3', 'maiden-tutor', 'maiden-roux-told'].map((k) => setTo(k, 0));
 
 /** TM Hall: two boards of 24 moves (eight types, three each); the board changes each visit; the price goes by power (₽20 a point). */
 const BOARDS: { type: string; name: string; moves: [string, string, number][] }[][] = [
@@ -255,7 +299,7 @@ const gn12: Json[] = [
     'A cliff town, all stairs and lanterns. It is festival week. The old woman selling tea says it is always festival week.',
     'Above the market, at the far end of a street, a woman in a veil is walking away. She does not hurry. She does not look back.',
   ), [
-    ch('Walk into the market.', out('The crowd takes you in. Somewhere ahead, a lantern turns a corner.', flag('maiden-entered'), stampRegion('maiden-region'), room('gn-12-square'))),
+    ch('Walk into the market.', out('The crowd takes you in. Somewhere ahead, a lantern turns a corner.', flag('maiden-entered'), ...MAIDEN_VISIT, stampRegion('maiden-region'), room('gn-12-square'))),
     ch('Not today.', leave('You keep to the road. Behind you, festival music, and one lantern, high up, that does not move with the wind.')),
   ]),
   rm('gn-12-square', "Maiden's Peak: The Market", peak(), say(
@@ -280,34 +324,46 @@ const gn12: Json[] = [
     toSquare(1),
   ]),
   rm('gn-12-lantern', 'Lantern Row', peak(), say('Poké Balls, status cures, out-of-battle supplies. Prices are ten per cent higher than anywhere else; nobody minds.', 'At the end of the row, a veil turns a corner.'), [
-    buy('Poké Balls ×5', 1100, 'Five Poké Balls, wrapped in festival paper.', 'gn-12-lantern', item('poke-ball', 5)),
-    buy('Full Heal ×2 and Super Potion ×2', 1540, 'The stallholder adds a lantern-shaped sweet for free.', 'gn-12-lantern', item('full-heal', 2), item('super-potion', 2)),
+    ...LANTERN_SHELVES.map(([key, name, line]) => ch(name, out(line, scene(`gn-12-lantern-${key}`)))),
     toSquare(1),
   ]),
+  ...LANTERN_SHELVES.map(([key, name, , goods]) => rm(`gn-12-lantern-${key}`, `Lantern Row: ${name.replace(/\.$/, '')}`, peak(), 'Every price card has the festival mark on it: ten per cent on top.', [
+    ...goods.map(([id, label, price]) => buy(label, Math.round(price * 1.1), 'Wrapped in festival paper, with a lantern-shaped sweet for free.', `gn-12-lantern-${key}`, item(id))),
+    ch('Back along the row.', out('You step back under the lanterns.', scene('gn-12-lantern'))),
+  ])),
   ...tmHall(0), ...tmHall(1),
   rm('gn-12-swap', 'Swap Alley', peak({ pokemon: 'meowth' }), say(
     'The trading district. Three traders hold up cards: what they will take, and roughly what they give. Each card is honest.',
     'Ask anyone who the lady is, and they will tell you. Ask two, and you will get two names.',
   ), [
-    ch('The first card: something of similar strength.', out('A handshake, a swap of Poké Balls.', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 20 }, honest: true }, scene('gn-12-nature'))),
-    ch('The second card: a little further off.', out('The trader grins. "A little gamble. Not much of one."', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 60 }, honest: true }, scene('gn-12-nature'))),
-    ch('The third card: anything goes.', out('"No promises," says the third trader, "except that it\'s alive and it\'s yours."', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 200 }, honest: true }, scene('gn-12-nature'))),
+    chIf([not('maiden-swap-1')], 'The first card: something of similar strength.', out('A handshake, a swap of Poké Balls.', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 20 }, honest: true }, flag('maiden-swap-1'), scene('gn-12-nature'))),
+    chIf([not('maiden-swap-2')], 'The second card: a little further off.', out('The trader grins. "A little gamble. Not much of one."', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 60 }, honest: true }, flag('maiden-swap-2'), scene('gn-12-nature'))),
+    chIf([not('maiden-swap-3')], 'The third card: anything goes.', out('"No promises," says the third trader, "except that it\'s alive and it\'s yours."', { kind: 'tradeFor', want: { label: 'a Pokémon of yours' }, similar: { region: true, bst: 200 }, honest: true }, flag('maiden-swap-3'), scene('gn-12-nature'))),
     toSquare(2),
   ]),
-  // Swap Alley: each trade comes with a choice of nature (the doc). The trader's apprentice knows four tricks.
+  // Swap Alley: each trade comes with a choice of nature (the doc): any of the twenty that lean one way, or as it is.
   rm('gn-12-nature', 'Swap Alley: A Choice of Nature', peak({ pokemon: 'meowth' }), say(
     'The trader\'s apprentice looks your new Pokémon over. "First day with you. It could go a few ways. Which way do you want it to go?"',
   ), [
-    ch('Bold and steady (Adamant).', out('It squares its shoulders.', gn('natureLast', { key: 'adamant' }), scene('gn-12-swap'))),
-    ch('Quick on its feet (Jolly).', out('It bounces, twice.', gn('natureLast', { key: 'jolly' }), scene('gn-12-swap'))),
-    ch('Clever and careful (Modest).', out('It sits down and thinks about it.', gn('natureLast', { key: 'modest' }), scene('gn-12-swap'))),
+    ...NATURES.slice(0, 2).map(([key, label, text]) => ch(label, out(text, scene(`gn-12-nature-${key}`)))),
+    ch('Some other way.', out('"There are other ways," says the apprentice.', scene('gn-12-nature-more'))),
     ch('Leave it as it is.', out('"Good answer," says the apprentice.', scene('gn-12-swap'))),
   ]),
+  rm('gn-12-nature-more', 'Swap Alley: A Choice of Nature', peak({ pokemon: 'meowth' }), '"Quick, tough, or calm?"', [
+    ...NATURES.slice(2).map(([key, label, text]) => ch(label, out(text, scene(`gn-12-nature-${key}`)))),
+    ch('Back.', out('"Take your time. It will."', scene('gn-12-nature'))),
+  ]),
+  ...NATURES.map(([key, , , four]) => rm(`gn-12-nature-${key}`, 'Swap Alley: A Choice of Nature', peak({ pokemon: 'meowth' }), '"And what does it give up for that? Everything gives up something."',
+    four.map(([id, label]) => ch(`${label}.`, out('The apprentice nods. "That one. Yes. It was nearly that already."', gn('natureLast', { key: id }), scene('gn-12-swap')))))),
   rm('gn-12-eggs', 'Egg Row', peak({ pokemon: 'togepi' }), say('Mystery eggs in straw. A warm-sand hatchery. Egg traders. And the Egg Move Tutor, who teaches one egg move a visit and charges by how rare it is.', 'Above the row, on a stone bridge, somebody laughs.'), [
     buy('A mystery Egg', 1500, 'It is warm in your hands, and it moves once.', 'gn-12-eggs', egg({ left: 3, unit: 'battle' })),
     ch('Trade a Pokémon for a sand-warmed Egg.', out('The hatchery keeper digs an Egg out of the warm sand. "It\'s nearly there," she says. It hatches after your next battle.', { kind: 'tradeAway', want: { label: 'a Pokémon of yours' } }, egg({ left: 1, unit: 'battle' }), scene('gn-12-eggs'))),
-    buy('The Egg Move Tutor', 1000, 'The old man whispers a secret to your lead. It looks at you, startled, as if it had always known.', 'gn-12-eggs', eggMove()),
+    ch('The Egg Move Tutor.', out('The old man looks your lead over, and names his price. "The rarer it is, the older the secret."', scene('gn-12-tutor'))),
     toSquare(2),
+  ]),
+  rm('gn-12-tutor', 'Egg Row: The Egg Move Tutor', peak({ pokemon: 'togepi' }), 'One egg move a visit, for your lead. He charges by how rare the Pokémon is: ₽600 for a common one, ₽1,200 for an uncommon or rare one, ₽2,400 for anything rarer.', [
+    ...TUTOR_PRICES.map(([tiers, price]) => chIf([not('maiden-tutor'), test('leadRarity', { types: tiers })], `Pay him (₽${price.toLocaleString('en-GB')}).`, out('The old man whispers a secret to your lead. It looks at you, startled, as if it had always known.', $(-price), eggMove(), flag('maiden-tutor'), scene('gn-12-eggs')), { requires: [{ kind: 'money', atLeast: price }] })),
+    ch('Back to the row.', out('"One a visit," he says. "It\'s a lot to carry."', scene('gn-12-eggs'))),
   ]),
   rm('gn-12-stalls', 'The Costume Stalls and the Mystery Boxes', peak(), say(
     'Outfits on hooks for trainers, ribbons on spools for their Pokémon. Next door, sealed boxes, ₽1,000 each. The odds are printed on every lid, in small, honest letters:',
@@ -332,7 +388,7 @@ const gn12: Json[] = [
     '**Madame Roux**, in a different shawl. She does not look up from the cards.',
     '"One true thing about where you\'re going next. Only one. The rest you can find out like everybody else."',
   ), [
-    buy('Cross her palm', 600, 'She turns one card, and tells you a true thing. You will remember it on the next stage.', 'gn-12-roux', ...weighted('maiden-roux', [['roux-wild', 1], ['roux-trainers', 1], ['roux-gym', 1]])),
+    chIf([not('maiden-roux-told')], 'Ask for the one true thing.', out('She turns one card, and tells you a true thing. You will remember it on the next stage.', ...weighted('maiden-roux', [['roux-wild', 1], ['roux-trainers', 1], ['roux-gym', 1]]), flag('maiden-roux-told'), scene('gn-12-roux'))),
     toSquare(3),
   ]),
   rm('gn-12-tea', 'The Tea House', peak(), say(
@@ -363,7 +419,16 @@ const gn12: Json[] = [
     'The statue on the cliff has her face.',
   ), [
     chIf([hasNot('fairium-z')], 'Pick it up.', out('A Z-Crystal, humming with a Fairy light. Fairium Z.', item('fairium-z'), flag('kanto-maiden-zcrystal'), ...LADY_GIFTS, flag('maiden-done'), flag('maiden-top'), leavePseudo())),
-    chIf([has('fairium-z')], 'Pick them up.', out('You already hold her crystal. She left three Fairy HMs instead: Dazzling Gleam, Play Rough, Moonblast.', item('hm-dazzling-gleam'), item('hm-play-rough'), item('hm-moonblast'), flag('kanto-maiden-hms'), ...LADY_GIFTS, flag('maiden-done'), flag('maiden-top'), leavePseudo())),
+    chIf([has('fairium-z')], 'Pick them up.', out('You already hold her crystal. She left three Fairy HMs instead: Dazzling Gleam, Play Rough, Moonblast.', item('hm-dazzling-gleam'), item('hm-play-rough'), item('hm-moonblast'), flag('kanto-maiden-hms'), stampStage('maiden-hms-at'), ...LADY_GIFTS, flag('maiden-done'), flag('maiden-top'), leavePseudo())),
+  ]),
+  // The three Fairy HMs: each is reusable, for any Pokémon that can learn it. Used once at the cliff, then their case opens again once on every later stage.
+  gev('gn-12-hms', "The Lady's HMs", peak({ stop: 'event', rarity: 'common', callback: true, types: ['fairy'], requires: [is('kanto-maiden-hms'), notThisStage('maiden-hms-at')] }), say(
+    'Three discs, pale pink, that never seem to wear out: HM Dazzling Gleam, HM Play Rough, HM Moonblast.',
+    'Each can be used again and again, on any Pokémon that can learn the move.',
+  ), [
+    ...([['dazzling-gleam', 'Dazzling Gleam'], ['play-rough', 'Play Rough'], ['moonblast', 'Moonblast']] as const).map(([id, name]) =>
+      ch(`Use HM ${name}.`, out(`The disc hums. It is not used up.`, item(`hm-${id}`), again('gn-12-hms')))),
+    ch('Put them away.', out('You put the three discs back in their case. They will be there.', stampStage('maiden-hms-at'), again('gn-12-hms'))),
   ]),
   // The Lady's Blessing: the Tea House stays open as a hub for the rest of the run (a stop on every later stage).
   gev('gn-12-teahouse', 'The Tea House', peak({ stop: 'event', rarity: 'common', callback: true, types: ['fairy'], requires: [is('maiden-blessing'), notThisStage('maiden-tea-at')] }), say(
@@ -449,10 +514,10 @@ const gn13: Json[] = [
       ] }],
     }),
   ]),
-  rm('gn-13-meadow', 'Flight North: The Meadow', north({ pokemon: 'pidgey' }), say(
+  rm('gn-13-meadow', 'Flight North: The Meadow', north(), say(
     'It follows you into the long grass. Every few steps it rears up and looks round, checking you\'re still there.',
     'Two wild Pokémon are in the way. It is the only one of you that can fight. It knows it.',
-  ), [ch('Let it try.', fight('It squares up, trembling, and gives two rising notes: its cry. You will know it anywhere, later.', inFlight({ kind: 'wild', species: ['rattata', 'pidgey', 'nidoran-f', 'nidoran-m', 'oddish', 'bellsprout', 'sentret', 'zigzagoon'], types: [], level: 6, chain: 2, levelBonus: 0, shinyMultiplier: 1,
+  ), [ch('Let it try.', fight('It squares up, trembling, and gives two rising notes: its cry. You will know it anywhere, later.', inFlight({ kind: 'wild', species: ['rattata', 'nidoran-f', 'nidoran-m', 'oddish', 'bellsprout'], types: [], level: 6, chain: 2, levelBonus: 0, shinyMultiplier: 1,
     win: [{ kind: 'levels', amount: 2, who: 'lead' }, fn('trust'), FLOCK('High up, the Spearow flock passes over, once. It doesn\'t come down.'), room('gn-13-cocoon')] })))]),
   rm('gn-13-cocoon', 'Flight North: Cocoon Night', north(), say(
     '*It wins. It hops. It nearly falls over. It looks back to see if you saw.*',
@@ -462,17 +527,17 @@ const gn13: Json[] = [
     ch('Carry it inside my coat.', out('You carry it against your chest, out of the wind. Through the shell, very faintly, you can feel it settle.', ...EVOLVE_COCOON, heal(1), bond(1), fn('trust'), room('gn-13-stream'))),
     ch('Carry it where it can see.', out('You carry it in your hands, held up, so it can watch the stars go over. It doesn\'t move. You think it\'s looking.', ...EVOLVE_COCOON, heal(1), bond(1), fn('trust'), room('gn-13-stream'))),
   ]),
-  rm('gn-13-stream', 'Flight North: The Stream', north({ pokemon: 'poliwag' }), say(
+  rm('gn-13-stream', 'Flight North: The Stream', north(), say(
     'At the stream, something bigger comes out of the water. Your cocoon can\'t run. It can only Harden, and wait.',
   ), [ch('Stay with it.', fight('You put yourself beside it on the stones, close enough to feel the shell tick as it hardens.', inFlight({ kind: 'wild', species: ['poliwag', 'psyduck', 'tentacool', 'goldeen'], types: [], level: 9, levelBonus: 0, shinyMultiplier: 1, rule: { noAttacks: true, surviveTurns: 4 },
-    win: [{ kind: 'levels', amount: 1, who: 'lead' }, fn('trust'), room('gn-13-hatch')] })))]),
+    win: [{ kind: 'levels', amount: 2, who: 'lead' }, fn('trust'), room('gn-13-hatch')] })))]),
   rm('gn-13-hatch', 'Flight North: Hatching', north({ pokemon: 'pidgey' }), say(
     '*It takes every hit. It doesn\'t make a sound.*',
     'In the morning the shell splits. It comes out changed.',
     '*It\'s never had wings before. It flies into a tree. It tries again.*',
     'A flock of Pidgey lifts out of a dead oak, all at once, and turns on it.',
   ), [ch('Stand together.', fight('It doesn\'t look away from them. Neither do you.', { ...inFlight({ kind: 'wild', species: ['pidgey'], types: [], level: 10, chain: 2, levelBonus: 0, shinyMultiplier: 1,
-    win: [{ kind: 'levels', amount: 4, who: 'lead' }, heal(1), fn('trust'), FLOCK('The Spearow flock passes over again, higher. This time it keeps going.'), room('gn-13-camp')] }) }, ...EVOLVE_FINAL))]),
+    win: [{ kind: 'levels', amount: 4, who: 'lead' }, heal(1), fn('trust'), FLOCK('The Spearow flock passes over again, higher. This time it keeps going.'), room('gn-13-camp')] }) }, ...EVOLVE_FINAL, { kind: 'levels', amount: 1, who: 'lead' }))]),
   rm('gn-13-camp', "Flight North: The Trio's Camp", north({ pokemon: 'meowth' }), say(
     'A campfire, a balloon tethered to a tree, and by the fire, a cage. Your team is in it.',
     '*Your lead sees you through the bars. It doesn\'t make a sound either. It\'s learned that from somebody.*',
@@ -481,8 +546,15 @@ const gn13: Json[] = [
     '**James:** "It\'s a *bug.* You\'ve come to rescue six Pokémon with a *bug.*"',
     '**Jessie:** "Venomoth, dear. Do tidy up."',
   ), [ch('Fight!', fight('It looks back at you once. Then it goes.', inFlight({ kind: 'trainer', name: 'Jessie & James', team: ['venomoth'], level: 20, size: 1, types: [], levelBonus: 0, rule: { shinyRescue: true, evolveMid: true }, win: [room('gn-13-goodbye')] }), ...EVOLVE_FINAL))]),
-  rm('gn-13-goodbye', 'Flight North: Goodbye', north(), say(
-    '**Meowth:** "Dere\'s TWO of \'em?!"',
+  // Meowth only counts two of them when the shiny one really came down (run flag flight-shiny-came, set at the end of the boss fight).
+  rm('gn-13-goodbye', 'Flight North: Goodbye', north({
+    remembers: [{ id: 'two', when: [is('flight-shiny-came')], intro: say(
+      '**Meowth:** "Dere\'s TWO of \'em?!"',
+      '**All three:** "We\'re blasting off agaaaain!"',
+      'You open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.',
+      '*The shiny one\'s waiting, on a branch, looking north.*',
+    ) }],
+  }), say(
     '**All three:** "We\'re blasting off agaaaain!"',
     'You open the cage. Your team pours out, every one of them talking at once, and every one of them at full strength.',
     '*The shiny one\'s waiting, on a branch, looking north.*',
@@ -491,6 +563,11 @@ const gn13: Json[] = [
     '*It does its victory hop, one more time. It doesn\'t fall over.*',
     '*They go.*',
   ), { kind: 'restoreParty' }, heal(1), flag('kanto-flight-gratitude'), flag('flight-done'), gn('ofSpecial', { key: 'bug' }), moment('A small Bug-type saved your whole team, then flew north.', 85), leavePseudo()))]),
+  // Release ending: its silhouette crosses the sky at Step 1 of later regions (core/instrumentality/flightNorth.ts skySilhouette).
+  gev('gn-13-sky', 'A Shape in the Sky', north({ stop: 'event', rarity: 'common', forced: true, callback: true, requires: [test('flightReleased'), notThisRegion('flight-sky-at')] }), say(
+    'High above, a small winged shape crosses the sky from south to north and does not stop.',
+    'Two rising notes come down on the wind, very faint. You would know them anywhere.',
+  ), [ch('Watch it go.', out('You watch until it is too small to see. Then you watch a little longer.', stampRegion('flight-sky-at'), again('gn-13-sky')))]),
 ];
 const KANTO_FLIGHT: Json = { ...gev('cs-kanto-vermilion-flight', 'Flight North', north({ stop: 'event', rarity: 'common', types: ['normal', 'flying'], pokemon: 'meowth', requires: [not('flight-checked')] }), (gn13[0] as { intro: string }).intro, FLIGHT_CHECK), canon: 'cs.kanto.vermilion.flightnorth' };
 
@@ -564,7 +641,7 @@ const gn14: Json[] = [
     ch('Walk to your left.', out(say(
       'Your reflection walks the other way, right up to the lantern, and puts its hand on it.',
       'The glass lets go of the light. One of the waving shapes at the end of the corridor stops waving and comes to you.',
-    ), ...lantern(2, 'gn-14-n3'))),
+    ), ...lantern(2, 'gn-14-n3')), { prompt: { id: 'mirror-walk', needs: 'ok' }, fail: shoved('gn-14-n2', 'You start the right way, and drift. Your reflection stops a pace short of the lantern. The glass ripples like a laugh, and something cold shoves the ghost back to the start.') }),
     ch('Walk into the mirror.', shoved('gn-14-n2', 'You walk into the glass. It is very much glass. The ghost winces for you, a moment late.')),
   ]),
   rm('gn-14-n3', "Sabrina's Labyrinth: Four Doors", lab({ pokemon: 'haunter' }), say(
@@ -606,7 +683,7 @@ const gn14: Json[] = [
     ch('Step where it steps.', out(say(
       'You put your feet exactly where it floats. Not one tile tips.',
       'At the far side, it stops under the drawing of itself. It looks at the gold star for a long time.',
-    ), ...lantern(5, 'gn-14-n6'))),
+    ), ...lantern(5, 'gn-14-n6')), { prompt: { id: 'floating-tiles', needs: 'ok' }, fail: shoved('gn-14-n5', 'One foot lands a hand\'s width off. The tile tips. You fall a long way, slowly, and land at the start. The ghost comes down after you, holding your sleeve.') }),
     ch('Run for the far side.', shoved('gn-14-n5', 'Three tiles in, the floor tips. You fall a long way, slowly, and land at the start. The ghost comes down after you, holding your sleeve.')),
     ch('Pick the steadiest tiles.', shoved('gn-14-n5', 'The steadiest tile is the one that flips. Of course it is. You land back at the start with a crayon in your hair.')),
   ]),
@@ -615,7 +692,7 @@ const gn14: Json[] = [
     '*"I\'m with you all your life and you\'ve never touched me."*',
   ), [
     ch('A shadow.', out('The chalk smudges, as if someone breathed on it. The last lantern opens.',
-      when('lost-mon', { min: 1 }, [], 'The grave has a name on it. You know the name. The ghost floats over and stays by it, very still, for as long as you need.'),
+      when('lost-mon', { min: 1 }, [], 'The grave has a name on it. {lost:name} The ghost floats over and stays by it, very still, for as long as you need.'),
       when('lost-mon', { min: 0, max: 0 }, [], 'The stone is blank. The ghost won\'t go near it. It waits by the lantern instead, with its back to the grave.'),
       when('shedinja-answered', { min: 1 }, [], 'The Shedinja is standing by the grave, a little apart. It doesn\'t move. You think it came to see you through.'),
       ...lantern(6, 'gn-14-sabrina'))),
@@ -680,6 +757,12 @@ const R25_DOOR: Json[] = [
 const SEEN_THE_LOOK: Json[] = [is('fed-poochyena')];
 const SEEN_THE_EGG: Json[] = [is('egg-returned')];
 const WAITED: Json[] = [flag('mankey-waited'), flag('mankey-fifth-earned'), room('gn-15-reward')];
+const FIFTH_OPENS = 'It doesn\'t move out of the way. It doesn\'t attack. It stands in front of the others with its arms out, and waits to see what you do.';
+/** The fifth's fight. Wait `waits` turns ("Wait." on the battle screen) and it lowers its arms; hit it and it fights like a Primeape, with Rage. */
+const fifthFight = (waits: number): Json => troopFight([
+  when('mankey-waited-out', { min: 1 }, WAITED),
+  when('mankey-waited-out', { min: 0, max: 0 }, [flag('mankey-fifth-beaten'), flag('mankey-hit-fifth'), room('gn-15-reward')]),
+], { levelBonus: 3, foeMoves: ['rage'], rule: { waits, foeStages: { atk: 1, def: 1, spe: 1 } } });
 const LOWERS = say(
   '*It lowers its arms.*',
   'It doesn\'t trust you. It watches every step you take. But it lets you pass, and it lets the four crawl back behind it.',
@@ -701,7 +784,7 @@ const gn15: Json[] = [
   rm('gn-15-m1', 'Route 25: The First', r25(), say(
     'The first Mankey comes in low and screaming. It opens its mouth wider than its face.',
     'There will be no healing between them. They won\'t give you time.',
-  ), [ch('Hold the line.', fight('It opens with a Screech. Your lead flinches; its guard drops.', troopFight([room('gn-15-m2')], { rule: { myStages: { def: -2 } } })))]),
+  ), [ch('Hold the line.', fight('It opens with a Screech. Your lead flinches; its guard drops.', troopFight([room('gn-15-m2')], { rule: { myStages: { def: -2 }, foeOpensLine: 'Mankey opens with Screech! Your lead flinches; its guard drops.' } })))]),
   rm('gn-15-m2', 'Route 25: The Second', r25(), say(
     'The second doesn\'t wait for the first to get up. It\'s all claws and noise.',
   ), [ch('Hold the line.', fight('It goes for you with Fury Swipes, over and over, like it\'s digging.', troopFight([room('gn-15-m3')], { foeMoves: ['fury-swipes'] })))]),
@@ -721,22 +804,10 @@ const gn15: Json[] = [
     '*It stands in front of them, with its arms out.*',
     'It doesn\'t attack. It\'s waiting to see what you do.',
   ), [
-    ch('Attack it.', fight('It doesn\'t move out of the way. When it does fight back, it fights like a Primeape, and it\'s furious.', troopFight([flag('mankey-fifth-beaten'), room('gn-15-reward')], { levelBonus: 3, foeMoves: ['rage'], rule: { foeStands: 1, foeStages: { atk: 1, def: 1, spe: 1 } } }), flag('mankey-hit-fifth'))),
-    ch('Wait.', out(say(
-      '*It looks at you. It looks at the bag. It makes a small, tired sound.*',
-      '*The other four are thin. You can see that now.*',
-    ), room('gn-15-fifth-2')), {
-      branches: [
-        { when: SEEN_THE_LOOK, text: say('*It looks at you. It looks at the bag.*', 'Then it looks at your face, for a long time. It\'s seen that look before. You gave a starving Poochyena your lunch once, and it shows.', LOWERS), effects: WAITED },
-        { when: SEEN_THE_EGG, text: say('*It looks at you. It looks at the bag.*', 'Then it looks at your face, for a long time. It\'s seen that look before. You rolled a stolen Egg back to its parents once, and it shows.', LOWERS), effects: WAITED },
-      ],
-    }),
-  ]),
-  rm('gn-15-fifth-2', 'Route 25: The Fifth', r25(), say(
-    'It still has its arms out. They\'re shaking now. It\'s been holding them up for a long time.',
-  ), [
-    ch('Wait.', out(LOWERS, ...WAITED)),
-    ch('Attack it.', fight('It doesn\'t move out of the way. When it does fight back, it fights like a Primeape, and it\'s furious.', troopFight([flag('mankey-fifth-beaten'), room('gn-15-reward')], { levelBonus: 3, foeMoves: ['rage'], rule: { foeStands: 1, foeStages: { atk: 1, def: 1, spe: 1 } } }), flag('mankey-hit-fifth'))),
+    // On its first turn a new button appears in the battle: "Wait." (rule `waits`: twice, or once if it has seen that look before).
+    chIf([not('fed-poochyena'), not('egg-returned')], 'Step up to it.', fight(FIFTH_OPENS, fifthFight(2))),
+    chIf(SEEN_THE_LOOK, 'Step up to it.', fight(say(FIFTH_OPENS, 'It looks at your face, for a long time. It\'s seen that look before. You gave a starving Poochyena your lunch once, and it shows.'), fifthFight(1))),
+    chIf([not('fed-poochyena'), ...SEEN_THE_EGG], 'Step up to it.', fight(say(FIFTH_OPENS, 'It looks at your face, for a long time. It\'s seen that look before. You rolled a stolen Egg back to its parents once, and it shows.'), fifthFight(1))),
   ]),
   rm('gn-15-bow', 'Route 25: The Fifth', r25(), say(
     'The gauntlet doesn\'t happen.',
@@ -786,7 +857,9 @@ export const PLACEMENT: Record<string, Placement> = {
     level: 'A+2', often: 'run', dressing: { kanto: 'Kaiju Tentacruel', kantoStage: 'Vermilion harbour (the canon space)', elsewhere: 'Kaiju Tentacruel' },
     note: 'Badge: a wave. Kanto shows it through cs-kanto-vermilion-kaiju (the canon raid den is no longer placed).',
   },
+  'gn-11-anger': { gn: 'gn.11', shape: 'Single', earliest: 'A6', home: 14, window: [1, 20], sits: 'must-see', tags: ['Afterstory'], needs: ['water'], level: 'A+2', often: 'run', note: 'Only when the Kaiju was freed and the Polluted Factory was left running (flag factory-left-running).' },
   'gn-11-return': { gn: 'gn.11', shape: 'Single', earliest: 'A6', home: 8, window: [1, 20], sits: 'optional', tags: ['Afterstory'], needs: ['water'], level: 'A+1', often: 'run', note: 'Only when the Kaiju was freed.' },
+  'gn-13-sky': { gn: 'gn.13', shape: 'Single', earliest: 'A1', home: 1, window: [1, 3], sits: 'must-see', badge: 'none', tags: ['Afterstory'], level: 'A+0', often: 'region', note: 'Only after the returned Bug-type was released; once in each later region.' },
   'gn-13-check': {
     gn: 'gn.13', shape: 'Single', earliest: 'A4', home: 17, window: [15, 19], sits: 'must-see', attaches: 'before', tags: ['Interrupting Episode', 'Pseudo Stage', 'Companion Story', 'Finale'],
     level: 'Always levels 5 to 20 inside', often: 'run', dressing: { kanto: 'Flight North', kantoStage: 'The road north of Vermilion (the canon space)', elsewhere: 'Flight North' },

@@ -3,9 +3,9 @@ import { describe, expect, it } from 'vitest';
 import type { RunState } from '../../src/core/state';
 import { visitSide } from '../../src/core/run';
 import { maxHp } from '../../src/core/pokemon';
-import { cryOf, followedCue, followedSpecies, followedStep, FOLLOW_POOL } from '../../src/core/greenneedle/followed';
+import { cryOf, followedCue, followedSpecies, followedStep, followedTokens, FOLLOW_POOL } from '../../src/core/greenneedle/followed';
 import { content } from './helpers';
-import { choose, flagOf, gnRun, setFlag } from './helpers/gnPlay';
+import { choose, flagOf, gnRun, scene, setFlag } from './helpers/gnPlay';
 
 const rest = (run: RunState): { run: RunState; message: string } => {
   const node = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
@@ -100,5 +100,35 @@ describe('gn.60 The Pokémon That Followed You Home', () => {
   it('a one-syllable cry', () => {
     expect(cryOf('Sentret')).toBe('Sen');
     expect(cryOf('Yamper')).toBe('Yam');
+  });
+});
+
+describe('gn.60 fixes: other events notice it', () => {
+  const telling = (run: RunState, id: string): string => scene(run, id).intro;
+
+  it('the Storyteller\'s story has a seventh in the trainer\'s team, in one telling, while it is following', () => {
+    const run = gnRun('t60-story');
+    followedSpecies(content, run);
+    expect(telling(run, 'gn-new-35-s3')).toContain('has a seventh');
+    expect(telling(run, 'gn-new-35-s2')).not.toContain('has a seventh');
+    expect(telling(run, 'gn-new-35-s3')).not.toContain('{followed:');
+    // After it has walked in, she no longer says it.
+    setFlag(run, 'followed-revealed', 2);
+    expect(telling(run, 'gn-new-35-s3')).not.toContain('has a seventh');
+    // Nothing is following (no species cast yet): no line, and no stray token.
+    const none = gnRun('t60-story-none');
+    none.story.flags['ev:followed-species'] = 0;
+    expect(followedTokens(none, 'x{followed:seventh}')).toBe('x');
+  });
+
+  it('the run ended before the reveal: it is at the Road Home, on the step, and it comes in', () => {
+    const run = gnRun('t60-step');
+    followedSpecies(content, run);
+    expect(followedTokens(run, 'A light on.{followed:step}')).toBe('A light on.');
+    run.phase = 'over';
+    expect(followedTokens(run, 'A light on.{followed:step}')).toContain('On the step, something small is sitting');
+    expect(telling(run, 'ne100-road-home')).toContain('it comes in');
+    setFlag(run, 'followed-revealed', 2);
+    expect(telling(run, 'ne100-road-home')).not.toContain('On the step');
   });
 });

@@ -228,3 +228,15 @@ export function followedJoin(content: Content, run: RunState, host: { apply: (e:
 export function followedRoad(content: Content, run: RunState): void {
   if (followedSpecies(content, run) && !done(run)) set(run, 'followed-at-road', 1);
 }
+
+/**
+ * Text tokens other events carry (each resolves to nothing unless it is following and has not walked in yet):
+ * `{followed:seventh}`: the Storyteller's story has a seventh in the trainer's team (gn.new.35, in one telling);
+ * `{followed:step}`: the run ended before the reveal, so it is at the Road Home, sitting on the step (NE100). It comes in.
+ */
+export function followedTokens(run: RunState, text: string): string {
+  const near = f(run, 'followed-species') > 0 && !done(run);
+  return text
+    .replace(/\{followed:seventh\}/g, () => (near ? '\n\n*In her story, the trainer\'s team has a seventh. She doesn\'t explain.*' : ''))
+    .replace(/\{followed:step\}/g, () => (near && run.phase === 'over' ? '\n\nOn the step, something small is sitting. It could be a rock. It has been on the same road as you the whole way. It gets up when it sees you, and it comes in.' : ''));
+}

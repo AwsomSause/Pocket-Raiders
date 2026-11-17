@@ -95,6 +95,20 @@
        },
        {
         "kind": "gn",
+        "op": "when",
+        "key": "river-shared",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "savanna-hippo",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-19-thirsty"
        }
@@ -202,6 +216,20 @@
        },
        {
         "kind": "gn",
+        "op": "when",
+        "key": "river-shared",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "savanna-hippo",
+          "n": 1
+         }
+        ]
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-19-thirsty"
        }
@@ -234,10 +262,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -294,8 +322,36 @@
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-19-cross"
+        "op": "roll",
+        "key": "savanna-herd",
+        "n": 35
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-herd-edge"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-cross"
+         }
+        ]
        }
       ]
      },
@@ -346,8 +402,36 @@
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-19-cross"
+        "op": "roll",
+        "key": "savanna-herd",
+        "n": 35
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-herd-edge"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-cross"
+         }
+        ]
        }
       ]
      },
@@ -394,8 +478,36 @@
        },
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-19-cross"
+        "op": "roll",
+        "key": "savanna-herd",
+        "n": 35
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-herd-edge"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-cross"
+         }
+        ]
        }
       ]
      },
@@ -415,8 +527,36 @@
       "effects": [
        {
         "kind": "gn",
-        "op": "scene",
-        "key": "gn-19-cross"
+        "op": "roll",
+        "key": "savanna-herd",
+        "n": 35
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-herd-edge"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-cross"
+         }
+        ]
        }
       ]
      }
@@ -440,10 +580,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -534,6 +674,303 @@
        "pseudo": true
       }
      }
+    },
+    {
+     "label": "Cross, and pour a flask into the pit that opens (two flasks).",
+     "success": {
+      "text": "Halfway across, the sand opens. You pour before it can spring. A Trapinch drinks with its whole head under, and when it comes up it shoves a pouch of fine sand out of the pit toward you, and sinks, and lets you by.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -2
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "item",
+        "id": "soft-sand",
+        "count": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-waterhole"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Cross, pour it a flask, and wait by the pit (two flasks).",
+     "success": {
+      "text": "Halfway across, the sand opens. You pour, and you wait. A Trapinch drinks, and looks at the flask, and at you, and climbs out of its pit, and does not go back.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -2
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "trapinch"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-waterhole"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 2,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-19-herd-edge",
+   "name": "The Deep Savanna: A Herd Crossing",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: {count:savanna-water} of 3 flasks."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "tauros",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "Tauros. A hundred of them, crossing your path at a walk, heads down, following the smell of water somewhere you cannot see.\n\nThe way ahead is blocked until they have gone by. You can wait, or go round them: the long way, in the sun, a flask's worth.",
+   "choices": [
+    {
+     "label": "Wait for the herd to pass.",
+     "success": {
+      "text": "You sit down in what shade your own shadow makes. They go by for most of an hour, calves in the middle, and the dust they raise hangs a long time after. Then the way is clear.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-cross"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round (one flask).",
+     "success": {
+      "text": "You go the long way round, with the herd a brown line on your left the whole time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-cross"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-19-herd-ridge",
+   "name": "The Deep Savanna: A Herd Crossing",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "water-1",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Water: {count:savanna-water} of 3 flasks."
+    },
+    {
+     "id": "water-0",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Water: none. Your party starts each fight at 90% HP."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "rhyhorn",
+    "tint": "#b08a3a",
+    "effect": "none"
+   },
+   "intro": "Rhyhorn, in a long grey file between the waterhole and the ridge, nose to tail, and not one of them looks at you.\n\nThe way ahead is blocked until they have gone by. You can wait, or go round them: the long way, in the sun, a flask's worth.",
+   "choices": [
+    {
+     "label": "Wait for the herd to pass.",
+     "success": {
+      "text": "You sit down in what shade your own shadow makes. They go by for most of an hour, calves in the middle, and the dust they raise hangs a long time after. Then the way is clear.",
+      "effects": [
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-watch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Go round (one flask).",
+     "success": {
+      "text": "You go the long way round, with the herd a brown line on your left the whole time.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "addEvent",
+        "eventId": "gn-19-watch"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
     }
    ]
   },
@@ -554,10 +991,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -597,8 +1034,36 @@
         "share": 0.3
        },
        {
-        "kind": "addEvent",
-        "eventId": "gn-19-watch"
+        "kind": "gn",
+        "op": "roll",
+        "key": "savanna-herd",
+        "n": 35
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-herd-ridge"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-19-watch"
+         }
+        ]
        }
       ]
      },
@@ -627,8 +1092,36 @@
         "share": 0.3
        },
        {
-        "kind": "addEvent",
-        "eventId": "gn-19-watch"
+        "kind": "gn",
+        "op": "roll",
+        "key": "savanna-herd",
+        "n": 35
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-herd-ridge"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-19-watch"
+         }
+        ]
        }
       ]
      }
@@ -660,8 +1153,36 @@
         "amount": 1
        },
        {
-        "kind": "addEvent",
-        "eventId": "gn-19-watch"
+        "kind": "gn",
+        "op": "roll",
+        "key": "savanna-herd",
+        "n": 35
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-19-herd-ridge"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-herd",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "addEvent",
+          "eventId": "gn-19-watch"
+         }
+        ]
        }
       ]
      }
@@ -687,8 +1208,36 @@
          "n": 3
         },
         {
-         "kind": "addEvent",
-         "eventId": "gn-19-watch"
+         "kind": "gn",
+         "op": "roll",
+         "key": "savanna-herd",
+         "n": 35
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "savanna-herd",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-19-herd-ridge"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "savanna-herd",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-19-watch"
+          }
+         ]
         }
        ],
        "rule": {
@@ -702,8 +1251,36 @@
          "n": 3
         },
         {
-         "kind": "addEvent",
-         "eventId": "gn-19-watch"
+         "kind": "gn",
+         "op": "roll",
+         "key": "savanna-herd",
+         "n": 35
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "savanna-herd",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-19-herd-ridge"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "savanna-herd",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "addEvent",
+           "eventId": "gn-19-watch"
+          }
+         ]
         }
        ],
        "pseudo": true
@@ -729,10 +1306,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -820,10 +1397,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -923,6 +1500,60 @@
        "atMost": 99
       }
      ]
+    },
+    {
+     "label": "Hold a flask out to the eyes in the dark.",
+     "success": {
+      "text": "One pair of eyes comes closer. A Krokorok, alone, thinner than the others. It drinks. Then it walks you through the herd by a gap you would never have seen, and stops, and points with its snout at the dust ahead: round it, not through it.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "savanna-water",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "clampFlag",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 9
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "savanna-water",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Your flasks are empty. Until a refill, your party starts each fight at 90% HP."
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "savanna-path",
+        "n": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-19-devil"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "savanna-water",
+       "atLeast": 1,
+       "atMost": 99
+      },
+      {
+       "kind": "flag",
+       "key": "savanna-path",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     }
    ]
   },
@@ -943,10 +1574,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -1122,10 +1753,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -1217,10 +1848,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -1296,10 +1927,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -1432,10 +2063,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -1560,10 +2191,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -1641,10 +2272,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -1751,10 +2382,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -1968,10 +2599,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -2160,10 +2791,10 @@
        "kind": "flag",
        "key": "savanna-water",
        "atLeast": 1,
-       "atMost": 1
+       "atMost": 99
       }
      ],
-     "notice": "Water: one flask left."
+     "notice": "Water: {count:savanna-water} of 3 flasks."
     },
     {
      "id": "water-0",
@@ -3194,6 +3825,368 @@
        }
       ]
      }
+    },
+    {
+     "label": "Look up.",
+     "success": {
+      "text": "Nests in every tree, here too: woven, stuck, hung. One is close enough to touch.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jungle-looked-2",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-nest-2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "jungle-watched",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "jungle-looked-2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-20-nest-2",
+   "name": "The Lush Jungle: Nests",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "spinarak",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "Above the vine tangle, a nest of moss and spider-silk, slung between two creepers. Something small is breathing in it.",
+   "choices": [
+    {
+     "label": "Disturb a nest.",
+     "success": {
+      "text": "The parent comes back. Fast.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "oddish",
+        "bellsprout",
+        "paras",
+        "exeggcute",
+        "tangela",
+        "venonat",
+        "ledian",
+        "foongus",
+        "bounsweet",
+        "roselia",
+        "budew",
+        "seedot",
+        "lotad",
+        "petilil",
+        "spinarak"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-vines"
+        }
+       ],
+       "rule": {
+        "gn": "jungle"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-vines"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You leave the nests to their owners.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-vines"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-nest-4",
+   "name": "The Lush Jungle: Nests",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "spinarak",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "In the tree that leans over the humming hill, a nest lined with shed wing-cases. The parent is down on the hill, with the others. For now.",
+   "choices": [
+    {
+     "label": "Disturb a nest.",
+     "success": {
+      "text": "The parent comes back. Fast.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [
+        "oddish",
+        "bellsprout",
+        "paras",
+        "exeggcute",
+        "tangela",
+        "venonat",
+        "ledian",
+        "foongus",
+        "bounsweet",
+        "roselia",
+        "budew",
+        "seedot",
+        "lotad",
+        "petilil",
+        "spinarak"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-hill"
+        }
+       ],
+       "rule": {
+        "gn": "jungle"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-hill"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    },
+    {
+     "label": "Leave them be.",
+     "success": {
+      "text": "You leave the nests to their owners.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-hill"
+       }
+      ]
+     }
     }
    ]
   },
@@ -3268,10 +4261,11 @@
     {
      "label": "Catch one.",
      "success": {
-      "text": "They fight together, two against one.",
+      "text": "They fight together, the two of them, side by side.",
       "effects": [],
       "battle": {
        "kind": "wild",
+       "format": "doubles",
        "species": [
         "ledian"
        ],
@@ -3622,6 +4616,38 @@
        }
       ]
      }
+    },
+    {
+     "label": "Look up.",
+     "success": {
+      "text": "Nests in every tree, here too: woven, stuck, hung. One is close enough to touch.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "jungle-looked-4",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-nest-4"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "jungle-watched",
+       "atLeast": 0,
+       "atMost": 0
+      },
+      {
+       "kind": "flag",
+       "key": "jungle-looked-4",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
      "label": "Turn to the other Ledian.",
@@ -3975,7 +5001,7 @@
        {
         "kind": "gn",
         "op": "scene",
-        "key": "gn-20-river2"
+        "key": "gn-20-roses"
        }
       ]
      }
@@ -4357,7 +5383,7 @@
         {
          "kind": "gn",
          "op": "scene",
-         "key": "gn-20-river2"
+         "key": "gn-20-roses"
         }
        ],
        "rule": {
@@ -4396,12 +5422,307 @@
         {
          "kind": "gn",
          "op": "scene",
-         "key": "gn-20-river2"
+         "key": "gn-20-roses"
         }
        ],
        "pseudo": true
       }
      }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-roses",
+   "name": "The Lush Jungle: Two Roselia",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "roselia",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "On the far side of the hill, two Roselia are standing in the one patch of light, turned toward each other, a rose of each touching.\n\nThey come in twos here. They will fight as two. And whatever happens to one of them, the other will not be left behind.",
+   "choices": [
+    {
+     "label": "Walk round them.",
+     "success": {
+      "text": "You go round the patch of light. Neither of them looks up.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-river2"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Catch one.",
+     "success": {
+      "text": "They turn together, the two of them, side by side.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "format": "doubles",
+       "species": [
+        "roselia"
+       ],
+       "types": [],
+       "levelBonus": 1,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-rose-pair"
+        }
+       ],
+       "rule": {
+        "gn": "jungle"
+       },
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "jungle-harmed",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "jungle-unharmed",
+           "min": 1,
+           "then": [
+            {
+             "kind": "gn",
+             "op": "setFlag",
+             "key": "jungle-unharmed",
+             "n": 0
+            }
+           ],
+           "text": "*Somewhere above, a ladder is pulled up.*"
+          },
+          {
+           "kind": "gn",
+           "op": "setFlag",
+           "key": "jungle-harmed",
+           "n": 0
+          }
+         ]
+        },
+        {
+         "kind": "flag",
+         "key": "jungle-rose-caught",
+         "amount": 1
+        },
+        {
+         "kind": "gn",
+         "op": "scene",
+         "key": "gn-20-rose-pair"
+        }
+       ],
+       "pseudo": true
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-rose-pair",
+   "name": "The Lush Jungle: The Other One",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Story"
+   ],
+   "remembers": [
+    {
+     "id": "unharmed-yes",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "notice": "Unharmed: yes."
+    },
+    {
+     "id": "unharmed-no",
+     "when": [
+      {
+       "kind": "flag",
+       "key": "jungle-unharmed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ],
+     "notice": "Unharmed: no."
+    }
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "roselia",
+    "tint": "#1e5a2a",
+    "effect": "fog"
+   },
+   "intro": "The other Roselia has not run. It stands at your boot, looking at the Ball its pair went into. It will follow you until it's caught too, or the first is let go.",
+   "choices": [
+    {
+     "label": "Catch it too.",
+     "success": {
+      "text": "It goes into a Ball of its own without a fight. The two Balls click together in your bag.",
+      "effects": [
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "roselia"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "jungle-rose-caught",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-river2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "jungle-rose-caught",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Let the first one go.",
+     "success": {
+      "text": "You open the first Ball. They find each other's roses again, and walk back into the patch of light.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "releaseLast",
+        "species": [
+         "roselia"
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "jungle-rose-caught",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-river2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "jungle-rose-caught",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The patch of light is empty. You walk on.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-20-river2"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "jungle-rose-caught",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     }
    ]
   },
@@ -5896,6 +7217,90 @@
        },
        {
         "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-20-lantern",
+   "name": "A Gourd Lantern",
+   "group": "Greenneedle",
+   "tags": [
+    "Story"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "jungle-lantern",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "flag",
+     "key": "jungle-lantern-found",
+     "atLeast": 0,
+     "atMost": 0
+    },
+    {
+     "kind": "gn",
+     "test": "laterStage",
+     "key": "jungle-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "bounsweet",
+    "tint": "#1e5a2a",
+    "effect": "glint"
+   },
+   "intro": "You stop to rest, and go through your bag for something to eat, and your hand closes on a thing that was not there this morning.\n\nA gourd lantern. Dried, hollowed, cut with a pattern of leaves. There is a stub of candle in it, never lit.\n\nNobody put it there.",
+   "choices": [
+    {
+     "label": "Light it.",
+     "success": {
+      "text": "It burns green at the edges, the way light looks under leaves. Your Pokémon come and sit round it without being called. Somewhere a long way behind you, you are fairly sure, somebody who has never seen the ground is pleased.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "gourd-lantern",
+        "count": 1
+       },
+       {
+        "kind": "friendship",
+        "amount": 5,
+        "who": "lead"
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-lantern-found",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "A gourd lantern from the Lush Jungle turned up in your bag. Nobody put it there.",
+        "importance": 55
+       }
+      ]
+     }
+    },
+    {
+     "label": "Put it back, carefully.",
+     "success": {
+      "text": "You put it back where it was not, and it sits among your things as if it always had.",
+      "effects": [
+       {
+        "kind": "item",
+        "id": "gourd-lantern",
+        "count": 1
+       },
+       {
+        "kind": "flag",
+        "key": "jungle-lantern-found",
+        "amount": 1
        }
       ]
      }

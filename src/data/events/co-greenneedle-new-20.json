@@ -189,6 +189,11 @@
          "key": "ranch-region"
         },
         {
+         "kind": "laterEvent",
+         "eventId": "gn-new-20-road",
+         "nodes": 3
+        },
+        {
          "kind": "gn",
          "op": "scene",
          "key": "gn-new-20-broke"
@@ -590,28 +595,7 @@
     "Story",
     "Relationship"
    ],
-   "stop": "event",
-   "rarity": "uncommon",
-   "callback": true,
-   "requires": [
-    {
-     "kind": "flag",
-     "key": "ranch-broke",
-     "atLeast": 1,
-     "atMost": 99
-    },
-    {
-     "kind": "gn",
-     "test": "laterStage",
-     "key": "ranch-stage"
-    },
-    {
-     "kind": "flag",
-     "key": "ranch-road",
-     "atLeast": 0,
-     "atMost": 0
-    }
-   ],
+   "room": true,
    "scene": {
     "cast": [],
     "tint": "#8a7a4c",

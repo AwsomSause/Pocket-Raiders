@@ -79,9 +79,9 @@ import { scavengerBonus } from './bank';
 import { ALPHA_MARK_HP, addLevels, calcStats, maxHp, maxPp } from './pokemon';
 import { startCalm } from './battle/calm';
 import { legendFlag, syncLegendFlags } from './legends/signs';
-import { takeBlessing } from './blessings';
+import { effectBlessing, takeBlessing } from './blessings';
 import { count, countShiny, discover } from './progress';
-import { FLAGS as POND_FLAGS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
+import { FLAGS as POND_FLAGS, POND_JOIN_BELOW, POND_STEPS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
 import { beginSwap, endSwap, swapReady } from './co/swap';
 import { anyFlagSet, eggWarm, hasEgg, itemForType, owePartner, quietWild, runPlaceMet, stageTypesMet, stageWeatherMet, stripFoeMoves } from './co/neRules';
@@ -107,7 +107,10 @@ import { currentRegion, getCampaign, levelCap, runLevelCap } from './regions';
 import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } from './encounterDirector';
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon, partyCapacity, startRaidBattle } from './run';
+import { allstarDeclined } from './greenneedle/allstar';
+import { draftGoesHome } from './greenneedle/draft';
 import { prepareSpectate } from './sky/spectate';
+import { rivalMayRecruit } from './rivals/eventRecruit';
 import { applySky, shapeSkyFoe, skyCondition, skyConditionText } from './sky/story';
 import { NATURE_IDS } from './natures';
 
@@ -136,7 +139,7 @@ import { beginRivalBrain } from './rivals/brainSetup';
 import { borrowTeamView, type TeamView } from './greenneedle/borrowed';
 import { applyQuestEffect, beginBorrow, beginFeudWatch, interleave, mainRival, secondRival, planRivalTeam, starterRivalryStages, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
-import { fitsStage, nodesAhead, planCoStage, positioned, SAME_STAGE, stageTags, type CoEntry } from './co/placement';
+import { fitsStage, nodesAhead, planCoStage, positioned, SAME_STAGE, stageTags, stepColumn, type CoEntry } from './co/placement';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
 
@@ -1139,7 +1142,8 @@ export function eventView(content: Content, run: RunState, sideId: string): Even
   // Rival questline tokens ({rival}, {say ...}) are filled for the reader; the stored event keeps them.
   const say = (t: string): string => questText(content, run, base.id, t);
   const event = seen.intro.includes('{') || seen.choices.some((c) => c.label.includes('{')) ? { ...seen, intro: say(seen.intro), choices: seen.choices.map((c) => (c.label.includes('{') ? { ...c, label: say(c.label) } : c)) } : seen;
-  const insight = hasPerk(content, run, 'eventInsight');
+  // Reshiram's blessing, The Truth: every choice shows what it will cause (as the Insight items do).
+  const insight = hasPerk(content, run, 'eventInsight') || effectBlessing(run)?.effect.kind === 'insight';
   const choices = event.choices.map((c) => {
     const unmet = c.requires.find((r) => !conditionMet(content, run, r));
     const missing = unmet ? conditionText(content, unmet) : tradeMissing(content, run, c);
@@ -1149,7 +1153,10 @@ export function eventView(content: Content, run: RunState, sideId: string): Even
   });
   const standing = base.group === RIVAL_QUEST_GROUP ? rivalStanding(content, run) : null;
   const team = base.group === RIVAL_QUEST_GROUP || base.id.startsWith('gn-new-29-') ? borrowTeamView(content, run) : null;
-  return { event: { ...event, intro: fillMentorText(run, fillCoText(content, run, event.intro)) }, choices, ...(standing ? { standing } : {}), ...(team ? { team } : {}) };
+  // Greenneedle gn.21: an event picture may name a story Pokémon (`@wontevolve`); the screen shows the species it was cast as (nothing before it is cast).
+  const castMon = event.scene.pokemon?.startsWith('@') ? resolveCast(run, [event.scene.pokemon])[0] : undefined;
+  const shown = event.scene.pokemon?.startsWith('@') ? { ...event, scene: { ...event.scene, pokemon: castMon } } : event;
+  return { event: { ...shown, intro: fillMentorText(run, fillCoText(content, run, event.intro)) }, choices, ...(standing ? { standing } : {}), ...(team ? { team } : {}) };
 }
 
 export interface EventResult {
@@ -1203,6 +1210,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   const base = success ? choice.success : choice.failure!;
   const branch = success ? choice.branches.find((b) => b.when.every((c) => conditionMet(content, run, c))) : undefined;
   const outcome = branch ? { ...base, text: branch.text, effects: branch.effects } : base;
+  // Greenneedle gn.46: a named trainer's offered battle, walked past, is remembered for the All-Star Tournament.
+  allstarDeclined(run, event.choices, outcome);
   const outcomeText = questText(content, run, event.id, gnTokens(content, current, fillCoText(content, current, fillEventText(content, current, outcome.text))));
   // The Event Director remembers important choices (and whether you took a risk).
   const risky = chance !== null || choice.prompt !== undefined;
@@ -1218,7 +1227,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
   for (const effect of outcome.effects) {
     const doubled = contest && effect.kind === 'attribute' && effect.key === 'charisma' ? { ...effect, amount: effect.amount * 2 } : effect;
     const words = applyEffect(content, run, doubled, rng, tradeUid);
-    if (words) changes.push(words);
+    // gn.14: a conditional line may name the Pokémon lost this run ({lost:name}).
+    if (words) changes.push(words.includes('{lost:name}') ? gnTokens(content, run, words) : words);
   }
   noteCanonEvent(run, event);
   meetFromEvent(run, event);
@@ -1234,7 +1244,8 @@ export function chooseEvent(content: Content, current: RunState, sideId: string,
     clearNodeHold(run);
     startEventBattle(content, run, node, outcome.battle, rng, { eventId: event.id, choiceIndex, sideId, success });
     battle = true;
-  } else {
+  } else if (run.phase !== 'minigame') {
+    // (An effect that opened a minigame at once, gn.41's jigsaw, keeps the run in it.)
     run.afterDecisions = 'map';
     continueAfterDecisions(content, run);
   }
@@ -1533,7 +1544,7 @@ export function pickByRarity(content: Content, ids: readonly string[], rng: Rng)
   return rng.pick(tiers.get(tier)!);
 }
 
-export function giveItem(content: Content, run: RunState, id: string, times: number, rng: Rng): string {
+export function giveItem(content: Content, run: RunState, id: string, times: number, rng: Rng, /** gn.35: the Pokémon the player picked takes it, if it can. */ preferUid?: string): string {
   const name = itemName(content, id);
   if (content.items.has(id)) {
     addItem(run.inventory, id, times);
@@ -1557,7 +1568,8 @@ export function giveItem(content: Content, run: RunState, id: string, times: num
     }
     const entry = content.catalog.get(id);
     if (!entry || entry.status !== 'supported' || isFreeReroll(content, run, entry)) { words.push(sold()); continue; }
-    const target = entry.stacksOn === 'pokemon' ? run.party.find((m) => catalogTargetProblem(content, run, entry, m) === null) : undefined;
+    const fits = (m: PokemonInstance): boolean => catalogTargetProblem(content, run, entry, m) === null;
+    const target = entry.stacksOn === 'pokemon' ? (run.party.find((m) => m.uid === preferUid && fits(m)) ?? run.party.find(fits)) : undefined;
     if (entry.stacksOn === 'pokemon' && !target) { words.push(sold()); continue; }
     const result = applyCatalog(content, run, entry, target, { moneyMultiplier: 1, rng });
     run.pending.push(...result.pending);
@@ -1588,7 +1600,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return amount === 0 ? '' : amount > 0 ? `+₽${amount}` : `−₽${-amount}`;
     }
     case 'item':
-      return giveItem(content, run, e.id, e.count, rng);
+      return giveItem(content, run, e.id, e.count, rng, e.who === 'picked' ? pickedUid : undefined);
     case 'itemFrom':
       return giveItem(content, run, pickByRarity(content, e.ids, rng), e.count, rng);
     case 'loseItem': {
@@ -1617,7 +1629,8 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       const mon = fits.find((m) => m.uid === tradeUid) ?? fits[0];
       if (!mon || run.party.length < 2) return '';
       run.party.splice(run.party.indexOf(mon), 1);
-      return `Traded away ${content.species.get(mon.speciesId)?.name ?? mon.speciesId}`;
+      // gn.48: a drafted Pokémon that stayed goes back to its first trainer.
+      return [`Traded away ${content.species.get(mon.speciesId)?.name ?? mon.speciesId}`, draftGoesHome(content, run, mon)].filter(Boolean).join('. ');
     }
     case 'honestTrade':
       return applyHonestTrade(content, run, e, tradeUid);
@@ -1662,8 +1675,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       discover(run, gotId, true);
       return `Traded ${given?.name ?? mon.speciesId} for ${got.name}`;
     }
-    case 'pond':
-      return applyPondEffect(content, run, e);
+    case 'pond': {
+      const said = applyPondEffect(content, run, e);
+      // You own the Poliwag now: Burl the Poliwhirl may go to your rival.
+      return e.action === 'keep' ? [said, rivalMayRecruit(content, run, 'poliwhirl', 'pond')].filter(Boolean).join('\n\n') : said;
+    }
     case 'gn':
       return applyGnEffect(content, run, e, { float: () => rng.float(), apply: (x) => applyEffect(content, run, x as EventEffect, rng, tradeUid), stage: stageNumber(content, run), region: currentRegion(content, run).id, met: (c) => conditionMet(content, run, c as EventCondition), picked: pickedUid });
     case 'stashParty':
@@ -1974,8 +1990,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (first) applyEffect(content, run, { kind: 'addEvent', eventId: first }, rng);
       return words;
     }
-    case 'sky':
-      return applySky(content, run, e);
+    case 'sky': {
+      const said = applySky(content, run, e);
+      // You own the Pidgeot now: the Fearow may go to your rival.
+      return e.act === 'joinBird' && (e.bird ?? 'pidgeot') === 'pidgeot' && said ? [said, rivalMayRecruit(content, run, 'fearow', 'sky')].filter(Boolean).join('\n\n') : said;
+    }
     case 'laterEvent':
       queueLaterEvent(run, e.eventId, e.nodes);
       return '';
@@ -2289,9 +2308,27 @@ function raidFlagMods(content: Content, run: RunState, mods: Extract<EventBattle
   if (battle.raid) battle.raid.pendingShields = battle.raid.pendingShields.filter((at) => at < share);
 }
 
+const STAND_IN_SPECIES = 'unown';
+const STAND_IN_FLAG = 'ev:stand-in-uid';
+/** The stand-in of a "no Pokémon of your own" fight leaves the party (called when that fight ends, won or lost). */
+function dropStandIn(run: RunState): void {
+  const uid = run.story.flags[STAND_IN_FLAG];
+  if (typeof uid !== 'string') return;
+  run.party = run.party.filter((m) => m.uid !== uid);
+  delete run.story.flags[STAND_IN_FLAG];
+}
+
 export function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
   // Pidgey's Resolve: the two watched CPU fights set the player's team aside first.
   prepareSpectate(content, run, event.eventId);
+  // Sabrina's Labyrinth, the first fight (Kice 2026-11-16): you have no Pokémon of your own, and the companion has not been met yet.
+  // The engine needs someone on your side, so a level 1 Unown stands there for this one fight and is gone when it ends.
+  if (b.kind === 'trainer' && b.rule?.noPokemon && content.species.has(STAND_IN_SPECIES) && typeof run.story.flags[STAND_IN_FLAG] !== 'string') {
+    const standIn = newMon(content, run, STAND_IN_SPECIES, 1, 'p');
+    standIn.hp = maxHp(content, standIn);
+    run.story.flags[STAND_IN_FLAG] = standIn.uid;
+    run.party = [standIn, ...run.party];
+  }
   // Greenneedle gn.28: at full Alert every Grunt has one more Pokémon.
   if (b.kind === 'trainer' && b.moreIf && Number(run.story.flags[`ev:${b.moreIf.key}`] ?? 0) >= b.moreIf.at) b = { ...b, size: Math.min(7, b.size + 1) };
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
@@ -2301,7 +2338,9 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
   const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng, content.coPlacement?.get(event.eventId)?.level ?? 0) + b.levelBonus);
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
-  const cap = levelCap(content, run.regionIndex);
+  // A foe that is matched to your fighter (the Fighting Tournament) is exactly its level, even above the region's cap.
+  const exact = b.kind === 'trainer' && (b.rule?.matchLead || b.mirror) ? run.party[activeIndex]!.level : 0;
+  const cap = Math.max(levelCap(content, run.regionIndex), exact);
   if (b.kind === 'raid') {
     const def = content.raids.raids.find((r) => r.id === b.raidId);
     if (!def) throw new Error(`Event raid ${b.raidId} does not exist`);
@@ -2309,6 +2348,7 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     startRaidBattle(content, run, def, rng.pick(def.species), level);
     if (b.spikesUnless && Number(run.story.flags[`ev:${b.spikesUnless.flag}`] ?? 0) < b.spikesUnless.atLeast) run.battle!.sideEffects.player.toxicSpikes = 1;
     raidFlagMods(content, run, b.flagMods);
+    if (b.rule) run.battle!.eventRule = b.rule;
     run.battle!.event = event;
     return;
   }
@@ -2317,7 +2357,10 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const rareRng = b.rare?.length ? new Rng(hashSeed(`${run.seed}::event-rare::${event.eventId}::${stageKey(run)}::${event.sideId}`)) : null;
     const rare = rareRng ? b.rare!.find((r) => (!r.flag || Number(run.story.flags[`ev:${r.flag}`] ?? 0) > 0) && rareRng.float() < r.chance) : undefined;
     const first = b.exact ? resolveCast(run, b.species).find((x) => content.species.has(x)) : undefined;
-    const speciesId = first ?? (b.recall ? oldFoe(run) : null) ?? (b.blessed ? blessedSpecies(run) : null) ?? (rare ? rareRng!.pick(rare.species.filter((x) => content.species.has(x))) : pickSpecies(content, run, b.species, b.types, rng));
+    // Greenneedle gn.32 ("...and this region's own"): at `chance`, a wild Pokémon of these types from the region's own pool, on its own stream.
+    const localRng = b.local ? new Rng(hashSeed(`${run.seed}::event-local::${event.eventId}::${stageKey(run)}::${event.sideId}`)) : null;
+    const local = localRng && localRng.float() < b.local!.chance ? pickSpecies(content, run, [], b.local!.types, localRng) : null;
+    const speciesId = first ?? (b.recall ? oldFoe(run) : null) ?? (b.blessed ? blessedSpecies(run) : null) ?? (rare ? rareRng!.pick(rare.species.filter((x) => content.species.has(x))) : (local ?? pickSpecies(content, run, b.species, b.types, rng)));
     const level = Math.min(cap, Math.max(1, base));
     const enemy = newMon(content, run, (b.exact || b.alpha) ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'e');
     enemy.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);
@@ -2350,6 +2393,8 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     if (b.weather) run.battle.weather = { id: b.weather, turns: 999 };
     if (b.rule) { run.battle.eventRule = b.rule; ruleStages(run.battle, b.rule); }
     if (b.rule?.giant) growGiants(content, run.battle.enemyTeam);
+    // gn.15: the foe's told opening move (the first Mankey's Screech) takes its first turn.
+    if (b.rule?.foeOpensLine) run.battle.storyEffects.push(`gn-foe-waits:${b.rule.foeOpensLine}`);
     if (b.alpha) run.battle.alpha = true;
     if (b.rule?.calmBar) run.battle.calm = startCalm(b.rule.calmBar, Number(run.story.flags['ev:warden-sash'] ?? 0) >= 1);
     if (b.aura) for (const s of ['atk', 'def', 'spa', 'spd', 'spe'] as const) run.battle.enemyStages[s] = 1;
@@ -2634,6 +2679,7 @@ export function startClubBattle(content: Content, run: RunState, b: EventBattle,
 
 /** After an event battle you won: its `win` effects (mutates `run`). Returns the changes in words. */
 export function eventBattleWon(content: Content, run: RunState, event: EventBattleRef, turns = 0, calmedFight = false): string[] {
+  dropStandIn(run);
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   if (!battle) return [];
@@ -2658,8 +2704,15 @@ export function eventBattleCaught(content: Content, run: RunState, event: EventB
   return battle.caught.map((e) => applyEffect(content, run, e, rng)).filter(Boolean);
 }
 
+/** gn.62: the rank of the evil team's officer an event battle is against (`evil: 'executive' | 'leader'` on the battle), if any. */
+export function eventBattleEvilRank(content: Content, event: EventBattleRef): string | undefined {
+  const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
+  return ((event.success ? choice?.success : choice?.failure)?.battle as { evil?: string } | undefined)?.evil;
+}
+
 /** The consolation prize of a lost pseudo-stage fight (`lose` effects of the battle that was lost). */
 export function eventBattleLost(content: Content, run: RunState, event: EventBattleRef): string[] {
+  dropStandIn(run);
   restoreMachine(content, run);
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
@@ -2712,7 +2765,8 @@ function applyPondEffect(content: Content, run: RunState, e: Extract<EventEffect
       if (mon || Number(run.story.flags[`ev:${POND_FLAGS.begun}`] ?? 0) > 0) return '';
       const levels = run.party.map((m) => m.level);
       const avg = levels.length > 0 ? Math.round(levels.reduce((a, b) => a + b, 0) / levels.length) : 5;
-      const guest = newMon(content, run, 'poliwag', Math.max(2, Math.min(runLevelCap(content, run), avg - 3)), 'p');
+      // gn.01: the lead bully is at A+0 and two levels above the Poliwag, so it joins two under the party.
+      const guest = newMon(content, run, 'poliwag', Math.max(2, Math.min(runLevelCap(content, run), avg - POND_JOIN_BELOW)), 'p');
       guest.pond = freshMark();
       // gn.01 "Pick it up": Bond +1 at the start (friendship +5).
       guest.friendship = e.gentle ? 45 : 40;
@@ -2720,14 +2774,18 @@ function applyPondEffect(content: Content, run: RunState, e: Extract<EventEffect
       if (run.party.length < partyCapacity(content, run)) run.party.push(guest);
       else run.pending.push({ kind: 'caught', mon: guest });
       setPondFlag(run, POND_FLAGS.begun, 1);
-      // The three lessons (at rests) and the pond visit go on later nodes of this stage, by a fixed hash. Anything unplayed returns next stage as a callback.
+      // gn.01: the lessons at Steps 7, 11 and 17 and the guilty Poliwhirl at Step 14, in that order. Each goes on every node of its
+      // step that is still ahead (so no route misses it); a step already behind moves to the next one ahead. Nothing is rolled.
       const stage = run.stage;
       const here = stage?.map.nodes.find((n) => n.id === stage.current);
-      const later = stage && here ? stage.map.nodes.filter((n) => n.column > here.column && n.column < stage.map.columns) : [];
-      if (stage && later.length > 0) {
-        for (const id of ['pp-lesson-aim', 'pp-pond-visit', 'pp-lesson-footing', 'pp-lesson-stand']) {
-          const node = later[fnv1a(`${run.seed}::pond::${id}::${run.stage!.index}`) % later.length]!;
-          node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: id });
+      if (stage && here && stage.kind === 'stage') {
+        const ahead = nodesAhead(stage.map, here.id);
+        let column = here.column;
+        for (const [id, step] of POND_STEPS) {
+          column = Math.min(stage.map.columns - 1, Math.max(column + 1, stepColumn(step, stage.map.columns)));
+          for (const node of stage.map.nodes.filter((n) => n.column === column && ahead.has(n.id))) {
+            node.sides.push({ id: `event-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: id });
+          }
         }
       }
       if (e.gentle) setPondFlag(run, POND_FLAGS.gentle, 1);
@@ -2804,6 +2862,9 @@ function applyHonestTrade(content: Content, run: RunState, e: Extract<EventEffec
   flags['ev:trades-made'] = Number(flags['ev:trades-made'] ?? 0) + 1;
   if (mon) {
     if (bondLevel(content, mon) >= 4) flags['ev:traded-bond4'] = 1;
+    // gn.48: a drafted Pokémon that stayed goes back to its first trainer (the card said so).
+    const home = draftGoesHome(content, run, mon);
+    if (home) words += `. ${home}`;
     run.party.splice(run.party.indexOf(mon), 1, fresh);
   } else {
     run.pending.push({ kind: 'caught', mon: fresh });

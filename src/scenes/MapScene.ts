@@ -25,6 +25,7 @@ import { SERVICES } from '../core/services/schema';
 import { stopIsHidden } from '../core/events';
 import { leadChatter } from '../core/leadChatter';
 import { xatuBlur } from '../core/greenneedle/cartographer';
+import { sgHeader } from '../core/greenneedle/citysiege';
 import { forecast, foggedAt, frontAt, isFogged, sightRange, visibleColumn } from '../core/world';
 import Phaser from 'phaser';
 
@@ -98,6 +99,7 @@ import { uiTiming } from '../ui/wiiMotion';
 import { addAmbience } from '../ui/battleFx/ambience';
 import { PARALLAX_RANGE, parallaxOffset, pointerShare, type ParallaxLayer } from '../core/presentation/parallax';
 import { sceneForRun } from './routing';
+import { parkWaiting } from '../core/minigame/flow';
 import { partySpecies, preloadPokemon, queueAssets } from '../ui/lazyAssets';
 import { screenStyleOf } from '../core/presentation/screenStyles';
 import { MAP_SKINS } from '../ui/mapStyles';
@@ -468,7 +470,7 @@ export class MapScene extends Phaser.Scene {
       const f = folders[tab]!;
       const pick = Math.max(0, Math.min(f.entries.length - 1, p.pick));
       const e = f.entries[pick]!;
-      const fileOf = (name: string, id: string): string | null => { const a = artOf(this, castSpriteId(name, id)); return a?.atlas ? a.file : null; };
+      const fileOf = (name: string, id: string) => artOf(this, castSpriteId(name, id));
       return dossierView(c, {
         tabs: folders.map((x) => x.label),
         tab,
@@ -581,6 +583,11 @@ export class MapScene extends Phaser.Scene {
     void ensureNarration().catch(() => undefined);
     const { session } = services();
     const run = session.run!;
+    // gn.18: a Safari Land visit is waiting on an event inside the park; the park's screen takes it from here.
+    if (parkWaiting(run)) {
+      this.scene.start('Minigame');
+      return;
+    }
     // Beat 9: the Field Trial plays before anything else on a save's first Story Run.
     if (session.fieldTrialDue()) {
       this.scene.start('FieldTrial');
@@ -774,7 +781,7 @@ export class MapScene extends Phaser.Scene {
       this.add.text(26, 44, `Elite Four, then ${leader.title}  ·  Healed after every battle`, textStyle(16, hSub));
     } else {
       const blind = blindMap(run.rules);
-      this.add.text(24, 12, stage.pseudo ? `${stage.pseudo.name}` : `Stage ${stage.index + 1}: ${blind ? '???' : theme.name}`, textStyle(28, hInk));
+      this.add.text(24, 12, stage.pseudo ? `${stage.pseudo.name}` : `Stage ${stage.index + 1}: ${sgHeader(run, stage) ?? (blind ? '???' : theme.name)}`, textStyle(28, hInk));
       const stageMod = stageModifier(run);
       if (stageMod) this.add.text(24 + 560, 14, stageMod.name, textStyle(18, hSub));
       let bx = 26;
@@ -1238,7 +1245,7 @@ export class MapScene extends Phaser.Scene {
         title: league ? `${region.name} Pokémon League` : stage.pseudo ? stage.pseudo.name : `${region.name} · Stage ${stage.index + 1}`,
         chips: [league ? `Battle ${column} / ${stage.map.columns}` : stage.pseudo ? `Inside Stage ${stage.index + 1}` : `Stage ${stage.index + 1} / ${stages}`, league ? `Elite Four, then ${leader.title}` : stage.pseudo ? 'Clear the rooms to walk out' : `Gym in ${Math.max(0, stage.map.columns - column)} stops`, `₽ ${run.money.toLocaleString('en-US')}`, ...hudBits],
         types: league || blindMap(run.rules) ? [] : theme.types,
-        lines: [league ? 'Healed after every battle' : `${blindMap(run.rules) ? '???' : theme.name}${blindMap(run.rules) ? '' : ` (${theme.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ')})`} · ${stage.pseudo ? `Inside Stage ${stage.index + 1}, not a stage of its own` : leader.title}${stageModifier(run) ? ` · ${stageModifier(run)!.name}` : ''}`, ...lines],
+        lines: [league ? 'Healed after every battle' : `${sgHeader(run, stage) ?? (blindMap(run.rules) ? '???' : theme.name)}${blindMap(run.rules) ? '' : ` (${theme.types.map((t) => t[0]!.toUpperCase() + t.slice(1)).join(' / ')})`} · ${stage.pseudo ? `Inside Stage ${stage.index + 1}, not a stage of its own` : leader.title}${stageModifier(run) ? ` · ${stageModifier(run)!.name}` : ''}`, ...lines],
         party: run.party.map((mon) => { const sp = content.species.get(mon.speciesId)!; return { file: rxFileOf(manifest, pokemonAssetIds(sp.assets).front)?.file ?? null, hp: Math.round((mon.hp / Math.max(1, maxHp(content, mon))) * 100), label: `${sp.name} Lv${mon.level}` }; }),
         eggs: run.eggs.map((egg) => `${egg.left}${egg.unit === 'battle' ? 'B' : 'S'}`),
         art: bg ? rxFileOf(manifest, bg)?.file ?? null : null,
@@ -1389,7 +1396,7 @@ export class MapScene extends Phaser.Scene {
       } else if (stage.index === 0) {
         this.showBanner(`Region ${run.regionIndex + 1} of ${regions}  ·  ${identity.motif}`, region.name, `${region.tagline ? `${region.tagline}  ·  ` : ''}Level cap ${cap}  ·  Stage 1: ${blindMap(run.rules) ? '???' : theme.name}  ·  ${leader.title}`);
       } else {
-        this.showBanner(`Stage ${stage.index + 1}`, blindMap(run.rules) ? '???' : theme.name, `${blindMap(run.rules) ? 'Blind Research' : theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  ${leader.title}`, run.stagePlan?.lines ?? []);
+        this.showBanner(`Stage ${stage.index + 1}`, sgHeader(run, stage) ?? (blindMap(run.rules) ? '???' : theme.name), `${blindMap(run.rules) ? 'Blind Research' : theme.types.map((t) => t.toUpperCase()).join(' / ')}  ·  ${leader.title}`, run.stagePlan?.lines ?? []);
       }
     }
     // A pseudo-stage room opens as soon as you reach its node, like a stage fight does.

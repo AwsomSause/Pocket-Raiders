@@ -47,6 +47,7 @@ export function smuggleCages(content: Content, run: RunState, float: () => numbe
   set(run, 'smuggle-ability', 1 + Math.floor(float() * SPECIAL.length));
   set(run, 'smuggle-freed', 1);
   set(run, 'smuggle-cards', 0);
+  set(run, 'smuggle-home', 0);
   // The S.S. Anne's engine-room crates (gn.10), the Ring Under the Bridge (gn.new.28) and this: the ring's finished for the run.
   if (f(run, 'ssanne-engine-opened') > 0 && f(run, 'bridge-ring-stopped') > 0) set(run, 'ring-finished', 1);
   return '';
@@ -103,6 +104,11 @@ export function farFromHome(run: Pick<RunState, 'regionOrder' | 'regionIndex'>, 
   mon.gn = want ? [...(mon.gn ?? []), 'far-boosted'] : (mon.gn ?? []).filter((t) => t !== 'far-boosted');
 }
 
+/** A new stage: the Rangers get one more of the four home (the list ticks one a stage, over the stages that follow). */
+export function smuggleStage(run: RunState): void {
+  if (f(run, 'smuggle-freed') > 0 && f(run, 'smuggle-home') < FREED) set(run, 'smuggle-home', f(run, 'smuggle-home') + 1);
+}
+
 /** A postcard from a region one of them went home to (one a region, until all four are home). */
 export function smugglePostcard(run: RunState): string {
   set(run, 'smuggle-cards', Math.min(FREED, f(run, 'smuggle-cards') + 1));
@@ -113,8 +119,10 @@ export function smugglePostcard(run: RunState): string {
 export function smuggleTokens(content: Content, run: RunState, text: string): string {
   const name = (sp: string | null) => (sp ? (content.species.get(sp)?.name ?? sp) : 'Pokémon');
   const cards = f(run, 'smuggle-cards');
+  // Ticked as each is returned, one a stage; a postcard can only come from one that is home.
+  const home = Math.max(cards, f(run, 'smuggle-home'));
   const list = Array.from({ length: FREED }, (_, i) => castOf(run, `smuggle-freed-${i + 1}`))
-    .map((sp, i) => `${i < cards ? '☑' : '☐'} ${name(sp)}, home to ${REGION_NAME[homeOf(sp ?? '')] ?? 'its region'}`).join('\n\n');
+    .map((sp, i) => `${i < home ? '☑' : '☐'} ${name(sp)}, home to ${REGION_NAME[homeOf(sp ?? '')] ?? 'its region'}`).join('\n\n');
   const card = castOf(run, `smuggle-freed-${Math.min(FREED, cards + 1)}`);
   const ability = rescueAbility(run);
   const rest = f(run, 'smuggle-rehab');

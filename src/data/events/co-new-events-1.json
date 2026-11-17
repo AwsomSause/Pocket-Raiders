@@ -1021,6 +1021,11 @@
         "amount": 1
        },
        {
+        "kind": "flag",
+        "key": "crowned-calf-calmed",
+        "amount": 1
+       },
+       {
         "kind": "item",
         "id": "moomoo-milk",
         "count": 3
