@@ -54,9 +54,12 @@ describe('rollBlessing', () => {
     // Event-only blessings (pool: false, The Renegade from The Rift Whisper) are never rolled.
     const playable = BLESSINGS.filter((b) => b.status !== 'disabled' && b.pool);
     for (const b of playable) expect(counts[b.id] ?? 0, b.id).toBeGreaterThan(0);
-    // Divine 17% + the Primordial and Origin rolls (8%) that fall down to it, shared by Ho-Oh and Dialga.
-    expect(counts['ho-oh']! / 4000).toBeGreaterThan(0.09);
-    expect(counts['ho-oh']! / 4000).toBeLessThan(0.17);
+    // Divine 17%, shared by Ho-Oh, Dialga, Reshiram and Zekrom (about 4.25% each).
+    expect(counts['ho-oh']! / 4000).toBeGreaterThan(0.03);
+    expect(counts['ho-oh']! / 4000).toBeLessThan(0.07);
+    // Primordial 6.5% + the Origin rolls (1.5%) that fall down to it: Kyurem, The Empty Vessel, is the only rolled one (The Renegade is event-only).
+    expect(counts.kyurem! / 4000).toBeGreaterThan(0.06);
+    expect(counts.kyurem! / 4000).toBeLessThan(0.1);
   });
 });
 

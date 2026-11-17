@@ -65,8 +65,8 @@ describe('join with a quirk', () => {
 });
 
 describe('run save v44', () => {
-  it('is the current run version and its migration is the identity', () => {
-    expect(CURRENT_VERSIONS.run).toBe(44);
+  it('is a current-or-older run version and its migration is the identity', () => {
+    expect(CURRENT_VERSIONS.run).toBeGreaterThanOrEqual(44);
     const run = { a: 1 };
     expect(MIGRATIONS.run[43]!(run)).toBe(run);
   });
