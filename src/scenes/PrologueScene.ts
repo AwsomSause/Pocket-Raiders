@@ -357,7 +357,7 @@ export class PrologueScene extends Phaser.Scene {
       speaker: pageSpeaker(page),
       page: { at, of: pages.length },
       art: RX_ROOM, tint: null, fx: null,
-      cast: m.looks ? portrait(`packs/mc/look_${m.looks[index] ?? 'a'}/portrait.png`, 128, 0.8) : m.vance ? vance(m.vance) : pageSpeaker(page)?.startsWith('Prof. Vance') ? vance('confident') : me(),
+      cast: m.looks ? (m.looks[index] === 'b' ? portrait('packs/mc/look_b/portrait.png', 128, 0.8) : playerPortrait('a')) : m.vance ? vance(m.vance) : pageSpeaker(page)?.startsWith('Prof. Vance') ? vance('confident') : me(),
       mon: null,
       choices: m.next ? [{ label: 'Continue', sub: '', chance: '', locked: false }] : m.options.map((o) => ({ label: o.label, sub: '', chance: '', locked: !!o.disabled })),
       index: m.next ? 0 : index,
@@ -422,12 +422,12 @@ export class PrologueScene extends Phaser.Scene {
     const y = this.body(['Choose your Look. Your name and pronouns come later, and the Look never changes them. You can change the Look in Settings.']);
     // A portrait preview above each Look, lined up with its menu entry.
     const looks = LOOKS.filter((l) => lookReady(l.id));
-    const ids = looks.map((l) => playerAnimId(l.id === 'look_b' ? 'b' : 'a', 'portrait'));
+    const ids = looks.map((l) => (l.id === 'look_b' ? playerAnimId('b', 'portrait') : 'boss.hilda'));
     void loadAssets(this, ids).then(() => {
       if (!this.sys.isActive()) return;
       looks.forEach((l, n) => {
         const x = GAME_WIDTH / 2 + (n - (looks.length - 1) / 2) * 220;
-        this.add.image(x, 400, ids[n]!, '0001.png').setOrigin(0.5, 1).setScale(1.5);
+        (l.id === 'look_b' ? this.add.image(x, 400, ids[n]!, '0001.png').setScale(1.5) : this.add.image(x, 400, ids[n]!).setScale(3)).setOrigin(0.5, 1);
         this.add.text(x, 410, l.label, textStyle(20, COLORS.text)).setOrigin(0.5, 0);
       });
     });
