@@ -51,6 +51,18 @@ export function crystalOp(content: Content, run: RunState, op: 'crystal' | 'crys
     setFlag(run, 'crystal-bag', bagCount(run));
     return `You set the ${colour} crystal down on the cave floor.`;
   }
+  if (colour === 'green' && type === 'use') {
+    // A Green crystal that was carried, used later: it leaves the bag only if the Pokémon can change.
+    if (!picked || flagOf(run, 'crystal-green') <= 0) return '';
+    const sp = getSpecies(content, picked.speciesId);
+    const to = sp.evolutions.map((e) => e.to).find((id) => content.species.has(id));
+    if (!to) return `${sp.name} holds the crystal, and nothing happens. It goes back in the bag.`;
+    evolve(content, picked, to);
+    setFlag(run, 'crystal-green', flagOf(run, 'crystal-green') - 1);
+    setFlag(run, 'crystal-bag', bagCount(run));
+    setFlag(run, 'crystal-green-used', 1);
+    return `${sp.name} evolved into ${getSpecies(content, to).name}! The crystal goes dark.`;
+  }
   if (bagCount(run) >= BAG_MAX) return 'Your bag is full. Six is all it holds.';
   if (colour === 'green' && picked) {
     // Green: the evolution is for good, and the crystal is used up.

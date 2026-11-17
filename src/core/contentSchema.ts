@@ -3216,7 +3216,7 @@ export const EventEffectSchema = z.discriminatedUnion('kind', [
   /** Kanto Canon Spaces rebuild (core/expansion/canonKantoRules.ts). */
   KcEffectSchema,
   z.object({ kind: z.literal('money'), amount: z.number().int() }),
-  z.object({ kind: z.literal('item'), id: z.string(), count: z.number().int().positive().default(1) }),
+  z.object({ kind: z.literal('item'), id: z.string(), count: z.number().int().positive().default(1), /** Greenneedle gn.35: a Pokémon item goes to the Pokémon the choice's `pick` named, when it can take it (else the first that can). */ who: z.literal('picked').optional() }),
   /** One of these items, picked by the event's roll. */
   z.object({ kind: z.literal('itemFrom'), ids: z.array(z.string()).min(1), count: z.number().int().positive().default(1) }),
   /** A random item from the Bag is lost (never a key item). */
@@ -3824,6 +3824,8 @@ export const EventBattleSchema = z.discriminatedUnion('kind', [
     /** Catalog Overhaul (Greenneedle): rarer foes. Each entry is tried in order on its own seeded roll (`chance` 0 to 1, only while run flag `flag` is set when given); the first hit replaces the foe ("10%: a Pinsir", "1% in the fog: Shedinja"). */
     // `rare: true` (the markets row's Guide for Hire) carries no list: it reads as none, as it did before this field existed.
     rare: z.preprocess((v) => (v === true ? undefined : v), z.array(z.object({ species: z.array(z.string().min(1)).min(1), chance: z.number().min(0).max(1), flag: z.string().optional() })).max(3).optional()),
+    /** Greenneedle gn.32 ("...and this region's own"): at `chance` (its own seeded roll), the foe is a wild Pokémon of these types from the region's own pool instead of the named list. */
+    local: z.object({ types: z.array(TypeNameSchema).min(1).max(4), chance: z.number().min(0).max(1) }).optional(),
     /** The wild Pokémon is one that beat a party member earlier this run (catalog 28). */
     recall: z.boolean().default(false),
     /** Battles in a row at this stop without healing in between (a detour); `win` pays after the last. */

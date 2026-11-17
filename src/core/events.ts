@@ -1533,7 +1533,7 @@ export function pickByRarity(content: Content, ids: readonly string[], rng: Rng)
   return rng.pick(tiers.get(tier)!);
 }
 
-export function giveItem(content: Content, run: RunState, id: string, times: number, rng: Rng): string {
+export function giveItem(content: Content, run: RunState, id: string, times: number, rng: Rng, /** gn.35: the Pokémon the player picked takes it, if it can. */ preferUid?: string): string {
   const name = itemName(content, id);
   if (content.items.has(id)) {
     addItem(run.inventory, id, times);
@@ -1557,7 +1557,8 @@ export function giveItem(content: Content, run: RunState, id: string, times: num
     }
     const entry = content.catalog.get(id);
     if (!entry || entry.status !== 'supported' || isFreeReroll(content, run, entry)) { words.push(sold()); continue; }
-    const target = entry.stacksOn === 'pokemon' ? run.party.find((m) => catalogTargetProblem(content, run, entry, m) === null) : undefined;
+    const fits = (m: PokemonInstance): boolean => catalogTargetProblem(content, run, entry, m) === null;
+    const target = entry.stacksOn === 'pokemon' ? (run.party.find((m) => m.uid === preferUid && fits(m)) ?? run.party.find(fits)) : undefined;
     if (entry.stacksOn === 'pokemon' && !target) { words.push(sold()); continue; }
     const result = applyCatalog(content, run, entry, target, { moneyMultiplier: 1, rng });
     run.pending.push(...result.pending);
@@ -1588,7 +1589,7 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       return amount === 0 ? '' : amount > 0 ? `+₽${amount}` : `−₽${-amount}`;
     }
     case 'item':
-      return giveItem(content, run, e.id, e.count, rng);
+      return giveItem(content, run, e.id, e.count, rng, e.who === 'picked' ? pickedUid : undefined);
     case 'itemFrom':
       return giveItem(content, run, pickByRarity(content, e.ids, rng), e.count, rng);
     case 'loseItem': {
@@ -2317,7 +2318,10 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
     const rareRng = b.rare?.length ? new Rng(hashSeed(`${run.seed}::event-rare::${event.eventId}::${stageKey(run)}::${event.sideId}`)) : null;
     const rare = rareRng ? b.rare!.find((r) => (!r.flag || Number(run.story.flags[`ev:${r.flag}`] ?? 0) > 0) && rareRng.float() < r.chance) : undefined;
     const first = b.exact ? resolveCast(run, b.species).find((x) => content.species.has(x)) : undefined;
-    const speciesId = first ?? (b.recall ? oldFoe(run) : null) ?? (b.blessed ? blessedSpecies(run) : null) ?? (rare ? rareRng!.pick(rare.species.filter((x) => content.species.has(x))) : pickSpecies(content, run, b.species, b.types, rng));
+    // Greenneedle gn.32 ("...and this region's own"): at `chance`, a wild Pokémon of these types from the region's own pool, on its own stream.
+    const localRng = b.local ? new Rng(hashSeed(`${run.seed}::event-local::${event.eventId}::${stageKey(run)}::${event.sideId}`)) : null;
+    const local = localRng && localRng.float() < b.local!.chance ? pickSpecies(content, run, [], b.local!.types, localRng) : null;
+    const speciesId = first ?? (b.recall ? oldFoe(run) : null) ?? (b.blessed ? blessedSpecies(run) : null) ?? (rare ? rareRng!.pick(rare.species.filter((x) => content.species.has(x))) : (local ?? pickSpecies(content, run, b.species, b.types, rng)));
     const level = Math.min(cap, Math.max(1, base));
     const enemy = newMon(content, run, (b.exact || b.alpha) ? speciesId : evolvedFormAt(content, speciesId, level, rng), level, 'e');
     enemy.shiny = rollShiny(content, rng, runAttributeEffects(content, run).shinyChance * b.shinyMultiplier);

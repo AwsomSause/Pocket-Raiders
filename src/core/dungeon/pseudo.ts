@@ -43,7 +43,9 @@ export type PseudoRecord = z.infer<typeof PseudoRecordSchema>;
 /** A pseudo-stage made from an existing chain of story events (Flight North, Sabrina's Labyrinth, Route 25, the Fighting Tournament): the map is drawn from the events' own links, so none of their text, fights or rules change. */
 export const ChainSchema = z.object({ id: z.string().regex(/^ps_[a-z0-9_]+$/), name: z.string().min(1), entry: z.string().min(1), themeId: z.string(), tint: z.string().regex(/^#[0-9a-f]{6}$/i), mood: z.string(), /** `opened`: the player starts on the room the entry's chosen choice opened (a questline whose first choice picks the route). Without it the map lets the player pick among every room the entry opens. */ start: z.enum(['opened']).optional(), /** Evil Team hideouts (evil-story): the team this chain belongs to. */ team: z.string().optional(),
   /** Evil Team hideouts (evil-story): the rooms by column instead of the events' own links. Every room is open to every room of the next column, so the map reads like a stage and the player picks the path. Ids may name the team (`evil-{teamId}-rescue`). */
-  layout: z.array(z.array(z.string().min(1)).min(1)).optional() });
+  layout: z.array(z.array(z.string().min(1)).min(1)).optional(),
+  /** Rooms the map keeps blank until the player walks in (gn.31: "clearings the map doesn't show") or something shows them (gn.36: the node behind the sandstorm). */
+  hidden: z.array(z.string().min(1)).optional() });
 export type PseudoChain = z.infer<typeof ChainSchema>;
 export const PseudoFileSchema = z.object({
   chains: z.array(ChainSchema).default([]),
@@ -223,9 +225,11 @@ export function buildChainStage(content: Content, chain: PseudoChain, parent: St
     roomEvent: r.event, roomKind: r.battle ?? 'story', note: `pseudo ${chain.id}`,
   }));
   const trainerColumns = [...new Set(nodes.map((x) => x.column))].filter((c) => nodes.filter((x) => x.column === c).every((x) => x.kind === 'trainer'));
+  const hidden = (chain.hidden ?? []).flatMap((event) => (idOf.has(event) ? [idOf.get(event)!] : []));
   return {
     kind: 'stage', index: parent.index, themeId: chain.themeId, leaderId: parent.leaderId, eliteFour: [], map: { columns, nodes, trainerColumns }, current: null, visited: [],
     scoutedTo: columns, foresight: 0, extraFronts: [], roamers: [], convoy: null, pseudo: { id: chain.id, name: chain.name, chain: true },
+    ...(hidden.length ? { hidden } : {}),
   };
 }
 

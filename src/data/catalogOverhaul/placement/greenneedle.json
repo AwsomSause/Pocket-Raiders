@@ -2785,7 +2785,7 @@
    10,
    15
   ],
-  "sits": "optional",
+  "sits": "side-branch",
   "attaches": "instead",
   "level": "A+0; the Trevenant A+2",
   "often": "run",
@@ -2838,7 +2838,7 @@
    10,
    15
   ],
-  "sits": "optional",
+  "sits": "side-branch",
   "attaches": "instead",
   "level": "A+1; the Relicanth A+2",
   "often": "run",
@@ -2922,8 +2922,8 @@
   "often": "run",
   "badge": "own",
   "dressing": {
-   "kanto": "The Great Desert",
-   "elsewhere": "The Great Desert"
+   "kanto": "The Endless Desert",
+   "elsewhere": "The Endless Desert"
   },
   "note": "Badge: a dune. Eight nodes, three oases, and the traveller's story through it. Water 4, one less a node, refilled at oases; at none, fights start at 90% HP.",
   "kinds": [
@@ -2942,7 +2942,7 @@
    12,
    17
   ],
-  "sits": "optional",
+  "sits": "side-branch",
   "attaches": "instead",
   "level": "A+0; the owner A+1",
   "often": "run",
@@ -2969,7 +2969,7 @@
    11,
    16
   ],
-  "sits": "optional",
+  "sits": "side-branch",
   "attaches": "instead",
   "level": "A+1",
   "often": "run",
