@@ -13,6 +13,8 @@ import { SAFARI_ID, type SafariState } from '../greenneedle/safari';
 import { safariBegin, safariFinish } from '../greenneedle/safariEnd';
 import { SNAKE_ID, type SnakeState } from '../greenneedle/snake';
 import { psyduckBegin, psyduckFinish } from '../greenneedle/snakeEnd';
+import { ARCADE_ID, type ArcadeState } from '../greenneedle/arcade';
+import { arcadeFinish, arcadeLeave } from '../greenneedle/arcadeEnd';
 
 export function getMinigame(content: Content, id: string): MinigameDef {
   const g = content.minigames.games.find((m) => m.id === id);
@@ -122,6 +124,8 @@ function settle(content: Content, run: RunState): RunState {
   s.outcome = payout(content, run, getMinigame(content, s.id), s.tier, score, max);
   if (s.id === SAFARI_ID) s.outcome.lines.push(...safariFinish(content, run, s.state as SafariState));
   if (s.id === SNAKE_ID) s.outcome.lines.push(...psyduckFinish(content, run, s.state as SnakeState));
+  // gn.new.14: the cabinet pays no medal money; what it leaves behind is the story's (the Porygon, or the walk away).
+  if (s.id === ARCADE_ID) s.outcome.lines = arcadeFinish(content, run, s.state as ArcadeState);
   if (s.id === 'berry-blending') {
     const line = poffinConditions(run, s.state as never, s.outcome.medal);
     if (line) s.outcome.lines.push(line);
@@ -205,6 +209,7 @@ function applyEffect(content: Content, run: RunState, kind: 'heal' | 'research' 
 export function leaveMinigame(current: RunState): RunState {
   const run = structuredClone(current);
   const s = session(run);
+  if (s.id === ARCADE_ID && !s.outcome) arcadeLeave(run, s.state as ArcadeState);
   run.minigame = null;
   run.phase = 'map';
   return run;

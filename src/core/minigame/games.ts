@@ -10,6 +10,7 @@ import { MINIGAMES_2 } from './games2';
 import { MINIGAMES_3 } from './games3';
 import { SAFARI_GAMES } from '../greenneedle/safari';
 import { SNAKE_GAMES } from '../greenneedle/snake';
+import { ARCADE_MODULES } from '../greenneedle/arcade';
 
 export interface Cell {
   id: string;
@@ -25,6 +26,24 @@ export interface MinigameView {
   cols: number;
   cells: Cell[];
   done: boolean;
+  /** A drawn play field (the Arcade Cabinet's screen). Games without one are only the grid of choices. */
+  board?: Board;
+  /** Keys that press a cell straight away (arrows, confirm) instead of moving the cursor over the choices. */
+  keys?: Partial<Record<'up' | 'down' | 'left' | 'right' | 'confirm', string>>;
+  /** Nothing moves until the player chooses: the screen stops its clock. */
+  waiting?: boolean;
+}
+
+/** A play field as plain data: one letter per tile (row by row), the pieces standing on it, and the text beside it. The screen decides how a letter looks. */
+export interface Board {
+  w: number;
+  h: number;
+  tiles: string;
+  sprites: { x: number; y: number; k: string }[];
+  /** The score table, top line first. */
+  table: string[];
+  title: string;
+  text: string;
 }
 
 export interface BaseState {
@@ -854,6 +873,7 @@ export const MINIGAMES: Record<string, MinigameModule<never>> = {
   ...FRONTIER_GAMES,
   ...SAFARI_GAMES,
   ...SNAKE_GAMES,
+  ...ARCADE_MODULES,
 };
 
 export function gameModule(id: string): MinigameModule<BaseState> {
