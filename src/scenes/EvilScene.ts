@@ -29,6 +29,8 @@ import { officeView, refusalView, rosterView } from '../ui/redux/screens/evilRos
 import { fileModel } from '../core/evilMode/heroScreens';
 import { fileView } from '../ui/redux/screens/evilFile';
 import { lineModel } from '../core/evilMode/lineScreens';
+import { gymView } from '../ui/redux/screens/evilGym';
+import { gymModel } from '../core/evilMode/gymScreens';
 import { lineView } from '../ui/redux/screens/evilLine';
 import { LINE_IDS } from '../core/evilMode/schema';
 import { crossers } from '../core/evilMode/people';
@@ -60,6 +62,8 @@ export class EvilScene extends Phaser.Scene {
   private line: number | null = null;
   private lineHeldAt: number | null = null;
   private lineTimer: Phaser.Time.TimerEvent | null = null;
+  /** Slice 8: the Gym page's chosen door, or null when it's shut. */
+  private gym: number | null = null;
 
   constructor() {
     super('Evil');
@@ -80,6 +84,7 @@ export class EvilScene extends Phaser.Scene {
     this.line = null;
     this.lineHeldAt = null;
     this.lineTimer = null;
+    this.gym = null;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
     session.evilEnsure();
@@ -106,12 +111,14 @@ export class EvilScene extends Phaser.Scene {
           const fm = this.file !== null ? fileModel(block, this.file, this.heroTeam(), (id) => services().session.content.species.get(id)?.name ?? id) : null;
           const file = fm ? fileView(fm) : undefined;
           const line = this.line !== null && !ledger && !roster && !file ? lineView(lineModel(block, this.line), this.lineHeldAt === null ? null : Math.min(1, (this.time.now - this.lineHeldAt) / 2000), this.notice) : undefined;
+          const gm = this.gym !== null && !ledger && !roster && !file && !line ? gymModel(block, this.gym) : null;
+          const gym = gm ? gymView(gm, this.notice) : undefined;
           if (block.fight) frame.button = 'Fight';
           // An order across a line is answered in the yard before anything else moves (Part 7 section 11.1).
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -151,6 +158,9 @@ export class EvilScene extends Phaser.Scene {
         go: (id) => this.goYourself(id),
         thing: (id) => { this.disp = { ...this.disp, thing: id as DispatchDraft['thing'] }; this.view?.refresh(); },
         line: () => this.toggleLine(),
+        gym: () => this.toggleGym(),
+        gdoor: (i) => { if (this.gym !== null) { this.gym = Number(i); this.view?.refresh(); } },
+        gdo: () => this.gymDo(),
         lstop: (i) => { if (this.line !== null) { this.line = Number(i); this.cancelLineHold(); } },
       },
       overs: { over: (i) => { if (!this.founded()) { this.draft = { ...this.draft, at: Number(i) }; this.view?.refresh(); } } },
@@ -276,6 +286,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.roster) return this.rosterKey(a);
     if (this.file !== null) return this.fileKey(a);
     if (this.line !== null) return this.lineKey(a);
+    if (this.gym !== null) return this.gymKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
     const d = this.disp;
@@ -438,6 +449,7 @@ export class EvilScene extends Phaser.Scene {
       if (type === 'up') return this.cancelLineHold();
       return;
     }
+    if (e.code === 'KeyY' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleGym();
     if (e.code === 'KeyL' && type === 'down' && !e.repeat && !this.card && this.block()?.district) return this.toggleLedger();
     if (e.code === 'KeyR' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleRoster();
     if (e.code === 'KeyF' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleFile();
@@ -586,6 +598,45 @@ export class EvilScene extends Phaser.Scene {
     this.roster = null;
     this.file = null;
     this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  // ---- Slice 8: the Gym page ----
+
+  private toggleGym(): void {
+    if (this.card) return;
+    const block = this.block();
+    if (this.gym === null && (!block || !gymModel(block, 0))) {
+      this.notice = 'The Gym has nothing to show yet.';
+      return void this.view?.refresh();
+    }
+    this.gym = this.gym === null ? 0 : null;
+    this.ledger = null;
+    this.roster = null;
+    this.file = null;
+    this.line = null;
+    this.notice = null;
+    this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  private gymKey(a: InputAction): void {
+    if (a === 'back') { this.gym = null; return void this.view?.refresh(); }
+    if (a === 'left' || a === 'right') { this.gym = ((this.gym ?? 0) + (a === 'left' ? 4 : 1)) % 5; return void this.view?.refresh(); }
+    if (a === 'confirm') this.gymDo();
+  }
+
+  /** Enter (or "Do it") on the chosen door: the step refuses anything the page wouldn't allow. A Beat or a challenge goes to the battle. */
+  private gymDo(): void {
+    const block = this.block();
+    const m = block && this.gym !== null ? gymModel(block, this.gym) : null;
+    if (!m) return;
+    const door = m.doors.find((d) => d.sel)!;
+    const cues = services().session.evilStep({ type: 'gymWay', way: door.way });
+    if (cues.some((c) => c.id === 'fight')) { this.gym = null; return this.startFight(); }
+    const refused = cues.find((c) => c.id === 'refused') as { reason?: string } | undefined;
+    const said = cues.filter((c) => c.id === 'said').map((c) => (c as { line: string }).line);
+    this.notice = refused?.reason ?? (said.length ? said.join(' ') : null);
     this.view?.refresh();
   }
 

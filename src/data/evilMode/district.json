@@ -25,7 +25,7 @@
     { "id": "safehouse", "name": "A safehouse", "mark": "+", "methods": ["scout", "persuade", "pay"], "places": ["Mrs. Okafor's rooms", "The bike-shop loft", "The fishermen's hostel"], "price": 600, "mood": "wary" },
     { "id": "opportunity", "name": "An opportunity", "mark": "?", "methods": ["scout"], "places": ["The water board office", "The bicycle shop nobody can afford", "The bridge prize stall"], "why": "Schemes come in a later build." },
     { "id": "town", "name": "The Town", "mark": "T", "methods": ["scout"], "places": ["Cerulean Town"], "why": "The Town follows its street: hold most of the four nearest locals." },
-    { "id": "gym", "name": "The Gym", "mark": "G", "methods": [], "places": ["Cerulean Gym"], "why": "The Gym's five ways come in a later build." }
+    { "id": "gym", "name": "The Gym", "mark": "G", "methods": ["scout"], "places": ["Cerulean Gym"], "why": "Only scouted from Dispatch (a talk with the caretaker). The five ways are in person: the Gym page (Y)." }
   ],
   "methods": {
     "persuade": { "base": 50, "heat": -1, "regard": 1 },

@@ -1,0 +1,204 @@
+{
+  "note": "Evil Mode slice 8, the Gym (design Part 8a, Part 8b section KANTO, Part 29 section 12.2). Five ways to deal with a Leader: Beat, Buy, Bend, Replace, Befriend. Kanto's eight Leaders (and Janine, who inherits Fuchsia if Koga's Bend gets him his seat). Numbers are starting values, none playtested. `on: false` is the slice's undo: the Gym's a holding like any other and the panel isn't shown.",
+  "on": true,
+  "ways": ["beat", "buy", "bend", "replace", "befriend"],
+  "names": { "beat": "Beat", "buy": "Buy", "bend": "Bend", "replace": "Replace", "befriend": "Befriend" },
+  "words": { "beat": "Win", "buy": "Pay", "bend": "Earn", "replace": "Unseat", "befriend": "Ask" },
+  "numbers": {
+    "beat": { "offset": 2, "heat": 2, "dread": 1, "townColder": 50, "heroOffset": -1 },
+    "buy": { "heat": 1, "foundOut": 10, "dread": 1 },
+    "bend": { "regard": 1, "loyalty": 1, "seat": 2, "seatOf": 3 },
+    "replace": { "offset": 2, "heat": 3, "regard": 1, "officerLoyalty": 2, "loseLoyalty": 1 },
+    "befriend": { "regard": 2, "needRegard": 6, "lostRegard": -2 },
+    "price": { "first": 6000, "perDistrict": 1500, "perRegion": 3000 },
+    "heroTries": { "bend": [2, 3] }
+  },
+  "card": {
+    "beat": { "needs": "The Boss, in person. A Gym's never dispatched to.", "costs": "A Gym battle at A+2, by the Gym's rule, with the Leader's gimmicks and boss gear.", "moves": "Heat +2 (it's always the day's loudest). Dread +1. The Town's street, one colder at one in two.", "after": "They stay. Sullen. Beating her doesn't remove her.", "hero": "Easy: the Leader's stopped trying. The Hero learns everything the Leader knows.", "badge": "Half a tier.", "lose": "Lose and the party's healed, the day goes on. Come back tomorrow: the Leader leads differently." },
+    "buy": { "needs": "A Leader with a price, scouted to depth 2, and the money.", "costs": "The price, once. There's no haggle.", "moves": "Heat +1 if it's the day's loudest. Logged as a bribe. Each Heart: Loyalty −1.", "after": "They stay. Ashamed, and good at hiding it. Holds while it's not found out: one in ten, each Evening.", "hero": "Ugly. The Hero wins anyway, and learns the Gym was bought.", "badge": "Half a tier.", "lose": "" },
+    "bend": { "needs": "A depth-2 scout: it shows what bends them. Then the scheme, one step a day, in person.", "costs": "The scheme's days. No odds: do them all and it's done.", "moves": "Regard +1. The whole Roster, Loyalty +1, at the scene. The Town's street, one warmer.", "after": "Yours, for good. Not on the Roster; on the team's side when the Hero comes.", "hero": "The hardest in the region. They lose the first time; the district's clock isn't theirs any more. The Hero learns nothing.", "badge": "A full tier.", "lose": "" },
+    "replace": { "needs": "An Officer, and a fair League challenge they win, under the Gym's rule. Grey or darker.", "costs": "The Officer, for the region: they hold the chair and can't be sent.", "moves": "Heat +3 (the League's told by tea-time). Regard +1 with the Saturdays kept. The Officer, Loyalty +2.", "after": "Gone. Where depends on who they are.", "hero": "Against the Officer. The Hero learns what the team's people are like.", "badge": "A full tier.", "lose": "Lost: the Officer's Loyalty +1 anyway (they were trusted to try). The way's shut for this district." },
+    "befriend": { "needs": "Clean hands: Regard 6, a Creed they respect, and nothing on the Town's street that would turn. Grey: one road only, a Work done for them with nothing asked.", "costs": "A reputation. No days: it's a conversation.", "moves": "Regard +2. The Town's street, one warmer.", "after": "They stay, and look the other way. For good, unless the team breaks what earned it.", "hero": "Fair. The Hero learns that it's complicated.", "badge": "A full tier.", "lose": "" }
+  },
+  "shut": {
+    "line": "Shut by your Line",
+    "leader": "Shut by {them}",
+    "region": "Shut by the region",
+    "arrival": "Hasn't heard of you.",
+    "hero": "The Hero's there.",
+    "number": "Not yet",
+    "scout": "Not scouted.",
+    "age": "Shut by {their} age",
+    "officer": "Shut: no Officer",
+    "build": "Not built yet",
+    "done": "Dealt with already",
+    "gone": "Shut: the Leader's gone",
+    "tried": "Shut: tried and lost here"
+  },
+  "lines": {
+    "notClean": "Not at Clean hands.",
+    "notWhatever": "{They}'d not have you in the building.",
+    "regardShort": "Regard {have}; needs {need}.",
+    "creed": "{They} won't hear a {creed} team out.",
+    "wouldTurn": "Somebody on the Town's street would turn. {They}'ve noticed.",
+    "work": "One road only at Grey: a Work done for {them}, with nothing asked for it. Works come with a later build.",
+    "noOfficer": "No Officer.",
+    "short": "{price} needed; {funds} in hand.",
+    "notScouted": "Not scouted to depth 2.",
+    "shutLeader": "\"I've nothing left to lose to you.\"",
+    "beatOpen": "A+2, the Gym's rule.",
+    "replaceRefused": "Nobody on any Roster'll make the challenge.",
+    "inPersonOnly": "In person only: the Gym's dealt with at the In person beat.",
+    "outToday": "The Boss has already been out today.",
+    "already": "The Gym's dealt with: {way}.",
+    "bendStep": "Bend, step {n} of {of}: {text}",
+    "bendDone": "The lights are off in the Gym. {name}'s sitting on the challenger's side of the floor.",
+    "bought": "{name} took {price}. It's logged as a bribe.",
+    "beatWon": "Beaten. {name} stays.",
+    "beatLost": "Lost to {name}. The party's healed; nothing ends. \"Come back when it's yours to ask for.\"",
+    "challengeWon": "{officer} won the challenge. {name} hands over the keys.",
+    "challengeLost": "{officer} lost the challenge. Loyalty +1 anyway: they were trusted to try. The way's shut for this district.",
+    "befriended": "{name} keeps the Gym and looks the other way.",
+    "foundOut": "It's out: the team bought {name}. The Town's street goes one colder. Dread +1. {They}'re Shut.",
+    "secondInsult": "{name} heard about the Lean on the Town's street. {They}'re Shut: \"I've nothing left to lose to you.\"",
+    "firstWarning": "A note from {name}: \"I said a short list.\"",
+    "heroLost": "The kid lost to {name} at the Gym. They'll heal, train a day and try again.",
+    "heroBadge": "The kid won the Badge off {name}. {how}",
+    "seat": "Koga fought for the Elite Four seat himself, and got it. The Gym's Janine's.",
+    "noSeat": "Koga fought for the Elite Four seat himself, and didn't get it. He got the hearing.",
+    "neverAsked": "The Gym: never asked.",
+    "admittedFails": "\"You believe it. You don't do it. I can't work with the first without the second.\"",
+    "heroFight": { "beat": "Easy: the Leader had stopped trying.", "buy": "Ugly: the wrong sort of hard.", "bend": "The hardest fight in the region.", "replace": "Against the team's own Officer.", "befriend": "Fair." }
+  },
+  "standing": {
+    "start": "wary",
+    "words": { "warm": "Warm", "easy": "Easy", "wary": "Wary", "sullen": "Sullen", "shut": "Shut", "gone": "Gone" },
+    "startMoved": "Never asked anything."
+  },
+  "file": {
+    "beat": "The Leader said: they're strong. She said it like it was the least interesting thing about them.",
+    "buy": "It was the wrong sort of hard. They'd been paid. I don't think they liked it either.",
+    "bend": "Why's the Leader with them?",
+    "replace": "Spent an hour with {officer}. They were kind about it.",
+    "befriend": "They hurt some people."
+  },
+  "befriend": {
+    "leader": [
+      "You mended the roof. I didn't ask you to. I've been waiting to find out what it cost.",
+      "I had the constable round on Tuesday asking what I knew about you. I said: they pay on time and their lot are polite.",
+      "I'm not going to help you. I'm also not going to hinder you, and in this town that's nearly the same thing. Don't make me regret it."
+    ],
+    "boss": {
+      "profit": ["It cost what a roof costs. I've the receipt.", "I'd rather trade in a town with a Gym than one without."],
+      "cause": ["Nothing. That's the point of it.", "You don't have to agree with us. I'd like you to have seen us properly before you decide."],
+      "power": ["Somebody's in charge of every street. I'd sooner it was someone who shows up.", "I'm not asking you to like it."],
+      "wonder": ["There's something under the hill. We'd like to look. We'd like you to know we're looking.", "If it's what I think, it's yours as much as anyone's."],
+      "belonging": ["Half my people learned on your floor. They asked me to.", "We're not going anywhere. I thought we should meet."],
+      "spite": ["I know who I'm after.", "You've met him."]
+    }
+  },
+  "leaders": [
+    {
+      "id": "brock", "boss": "brock", "name": "Brock", "town": "Pewter", "region": 0, "n": 0, "role": "first", "them": "him", "they": "He", "their": "his", "minor": false, "type": "rock",
+      "says": "You're not from Pewter. You're not here to challenge either: you've not looked at the board once. There's tea in the back if you're waiting for somebody.",
+      "rule": null, "buy": null, "bend": null, "respects": [], "replace": null, "beaten": null, "toHero": {}, "gate": null, "walksIn": null
+    },
+    {
+      "id": "misty", "boss": "misty", "name": "Misty", "town": "Cerulean", "region": 0, "n": 1, "role": "district", "them": "her", "they": "She", "their": "her", "minor": false, "type": "water",
+      "says": "A river town with a cape. The Tide Doctrine's at home here.",
+      "rule": { "kind": "field", "text": "Water covers half the floor. Grounded Pokémon on the wet half move last. Doubles, on request.", "status": "limited", "waits": "The wet half of the floor isn't in the battle engine yet: it's written on the door and the fight is singles." },
+      "buy": { "price": null, "why": "She hasn't a price. Her sisters have: it's not the same thing." },
+      "bend": { "kind": "protected", "text": "She wants it to be a Gym, not a show. The sisters' water show is in debt to a promoter, and the promoter's Rocket's.", "steps": ["Scout the promoter's books, down by the Day Care.", "Burn the debt: his ledger-house, quietly, or the ledger in the paper.", "Tell the sisters, in person, that the debt's gone. They liked the show."], "scene": ["The pool's quiet. No show tonight; there won't be one tomorrow.", "\"I know what you are. I know who you paid it off from.\"", "\"There's a child coming. I'll give them the best fight I've got. If they ask whose side I'm on: the town's.\""] },
+      "respects": ["cause", "belonging", "wonder", "profit"], "respectsNote": "Profit, if every Pay in the district's been fair.",
+      "replace": { "can": true, "goes": "Goes north, up the cape. Meets the Hero on Nugget Bridge and spends a day teaching them to fight on wet ground." },
+      "beaten": "Fine. You're good. You're also about forty, and you came all this way to beat a Gym Leader half your age in her own pool. I hope it was everything you wanted.",
+      "toHero": { "beat": "They beat me. Six, well trained. Write it down.", "bend": "I'm going to try very hard to drown you. Nothing personal. Ask me nothing about anything.", "befriend": "There's a team. They paid off something they didn't owe. I don't know why. Be careful, and be fair. Both.", "replace": "I've gone up the cape. Wet ground: lead with something that doesn't mind it." },
+      "gate": "I told them I'd say one thing and go. It's this: they're not him. You've met him now. You know the difference.",
+      "walksIn": "I spoke for you. To the constable, to my sisters, to a child with a Badge case. I'd like those words back, and I can't have them."
+    },
+    {
+      "id": "lt-surge", "boss": "lt-surge", "name": "Lt. Surge", "town": "Vermilion", "region": 0, "n": 2, "role": "district", "them": "him", "they": "He", "their": "his", "minor": false, "type": "electric",
+      "says": "A port. The S.S. Anne's in; so's everybody's contraband.",
+      "rule": { "kind": "room", "text": "The bins. Two switches under two bins, next to each other; miss the second and they reset. The Boss does them too. Then singles, and his lead always outpaces.", "status": "limited", "waits": "Rooms come with the base's defences (slice 10): the bins are on the door, the fight is singles." },
+      "buy": { "price": null, "why": "He was paid by a government once. He didn't like what it bought." },
+      "bend": { "kind": "found", "text": "The seamen's hostel on the dock shut when the fan club bought the building. Four men he served with slept there.", "steps": ["Buy the deed off the Fan Club chairman, fairly. Listen to him about Rapidash for a whole afternoon.", "Reopen the hostel: beds, a stove, a sign.", "Let one of the four tell him."], "scene": ["The dock's lights are on. Somebody's cooking in the hostel.", "\"I vouch for nobody. You know that.\"", "\"Kid's coming. I'll hit them with everything. Ask me about you and I've got nothing to say, loud.\""] },
+      "respects": ["power", "belonging"], "respectsNote": "Not Cause: \"I've heard a lot of causes.\"",
+      "replace": { "can": true, "goes": "Goes aboard the Anne. The Hero meets him at the next port, where he's the retired Ace of that district." },
+      "beaten": "Huh. Okay. You can fight. So could every guy I ever didn't like. Door's that way.",
+      "toHero": { "beat": "They beat me fair. Don't let that fool you: fair in a ring isn't fair on a dock.", "bend": "Kid. I'm gonna hit you with everything. If you ask me about those people, I got nothing to say and I'll say it loud.", "befriend": "They keep the docks quiet. I like quiet. That's not a recommendation. That's a weather report.", "replace": "I'm on the Anne now. See you at the next port, kid." },
+      "gate": "I've seen kids your age walk into buildings like that one angry. Walk in curious.",
+      "walksIn": "I vouched. I don't vouch. Stand up when I'm talking to you."
+    },
+    {
+      "id": "erika", "boss": "erika", "name": "Erika", "town": "Celadon", "region": 0, "n": 3, "role": "district", "them": "her", "they": "She", "their": "her", "minor": false, "type": "grass",
+      "says": "A city: a department store, and the Game Corner under her window.",
+      "rule": { "kind": "items", "text": "Berries only. No bought items for either side. Status sticks: her team's built on sleep and powder.", "status": "limited", "waits": "The battle engine has no berries-only switch yet: the rule's on the door." },
+      "buy": { "price": null, "why": "She's a perfumer with a waiting list. You've nothing she's short of." },
+      "bend": { "kind": "protected", "text": "The Game Corner. Children from her Saturday class go there after. She's written to the League four times.", "steps": ["Find out whose Front the Game Corner is.", "Close it: a war job, two squads, a day. Buying it and keeping it open doesn't count.", "Leave the shutters down a week, and say nothing."], "scene": ["The window over the Game Corner's dark. It smells of her perfume, not smoke.", "\"Somebody has shut the place under my window. I have my suspicions as to who.\"", "\"I shan't be gentle with the child. Please don't take it for dislike.\""] },
+      "respects": ["cause", "wonder", "belonging"], "respectsNote": "Never Profit: \"I've met the men who say it's only business.\"",
+      "replace": { "can": true, "goes": "Stays in Celadon: the shop. The Gym's juniors go with her, all of them." },
+      "beaten": "Oh. Well done. I'd rather hoped you wouldn't be able to. Will you take some tea, or is that not something you people do?",
+      "toHero": { "beat": "They beat me, and then they were perfectly civil, which I found harder.", "bend": "I shan't be gentle. Please don't take it for dislike.", "befriend": "Somebody has shut the place under my window. I'm told I should mind. I find I don't.", "replace": "I keep a shop now. The juniors came with me. Mind your powders." },
+      "gate": "In case it's the sort of room where one needs to stay awake.",
+      "walksIn": "I've come without an appointment. I gather that's how it's done here."
+    },
+    {
+      "id": "koga", "boss": "koga", "name": "Koga", "town": "Fuchsia", "region": 0, "n": 4, "role": "district", "them": "him", "they": "He", "their": "his", "minor": false, "type": "poison", "heir": "janine",
+      "says": "Marsh, a Safari Zone, a warden who's lost his teeth.",
+      "rule": { "kind": "room", "text": "Walls nobody can see: a room before the fight, and the Boss walks it. Then poison and evasion, and a clock of fifteen turns. He wins on the clock if he's ahead.", "status": "limited", "waits": "Rooms and the turn clock aren't in the battle engine yet: they're on the door, the fight is singles." },
+      "buy": { "price": null, "why": "He'd take the money and tell the League which pocket it came from. He thinks that's funny." },
+      "bend": { "kind": "chance", "text": "He's been passed over for the Elite Four twice. Arrange the hearing: arranged, not fixed.", "steps": ["Find the League official who lives in Fuchsia, and ask him to look at Koga properly.", "Drive Koga to Indigo: two days, Wheels at the wheel."], "scene": ["The Gym's walls are where they always are. You walk into one anyway.", "\"Arranged, not fixed. Good. I'd have known.\"", "\"If I get the seat, the Gym's my daughter's. You'll find you can't touch it. I thought of that. It's why I said yes.\""] },
+      "respects": ["wonder", "power", "spite"], "respectsNote": "Not Belonging: \"A clan's a fine thing. Yours is six weeks old.\"",
+      "replace": { "can": true, "goes": "Vanishes. Is seen twice more in the region, behind the Hero, at a distance." },
+      "beaten": "Good. Now do it when you don't know where I am.",
+      "toHero": { "beat": "They've beaten me. A ninja's beaten often; it's how he learns where the walls are. I'll tell you where theirs are.", "bend": "Hardest fight I have, and nothing about anybody. You'll understand later.", "befriend": "There's a team in the marsh that asks before it takes. I've been waiting twenty years to see one. Watch it while it lasts.", "replace": "(He isn't seen. The Hero's Pokémon stop being poisoned in the grass.)" },
+      "gate": "(Not seen. The Hero's bag has a full antidote in it that wasn't there.)",
+      "walksIn": "Your door-keeper's good. Promote her. As for the rest: I withdraw."
+    },
+    {
+      "id": "janine", "boss": "janine", "name": "Janine", "town": "Fuchsia", "region": 0, "n": 4, "role": "heir", "them": "her", "they": "She", "their": "her", "minor": true, "age": 16, "type": "poison",
+      "says": "Koga's daughter. Sixteen. The Gym's hers now.",
+      "rule": { "kind": "room", "text": "Walls nobody can see, the same as her father's. She moves them.", "status": "limited", "waits": "Rooms come with the base's defences (slice 10)." },
+      "buy": { "price": null, "why": "No. She's sixteen." },
+      "bend": { "kind": "protected", "text": "Already done: her father's seat.", "steps": ["Already done."], "scene": ["\"Dad says hi. Dad says nothing else.\""] },
+      "respects": ["wonder", "belonging"], "respectsNote": "Asked of Koga, by letter, as her guardian.",
+      "replace": null,
+      "beaten": "Ugh! Fine. Dad's going to hear about this.",
+      "toHero": { "beat": "They beat me. Dad says that's how you learn where the walls are.", "bend": "Dad says I'm to give you the hardest fight I can and say nothing about anybody. So. Hi. I'm going to be really annoying.", "befriend": "Dad wrote me a letter about them. He never writes letters." },
+      "gate": null, "walksIn": null
+    },
+    {
+      "id": "sabrina", "boss": "sabrina", "name": "Sabrina", "town": "Saffron", "region": 0, "n": 5, "role": "district", "them": "her", "they": "She", "their": "her", "minor": false, "type": "psychic",
+      "says": "The biggest city. Silph Co.'s tower's the neighbour's great job of the region.",
+      "rule": { "kind": "room", "text": "The pads: rooms joined by warp tiles, one path's right. Then singles, and she leads with whatever resists the challenger's lead.", "status": "limited", "waits": "Rooms come with the base's defences (slice 10): the pads are on the door, the fight is singles." },
+      "buy": { "price": null, "why": "She already knows the figure. She's already said no. She'd like you to stop composing the offer." },
+      "bend": { "kind": "admitted", "text": "She knows what the team's for better than the Roster does. One conversation, in person, checked against the Ledger: has the team done here what its Creed says?", "steps": ["Sit across from her and say what the team's for. She checks it against what the team's done in this district."], "scene": ["She's already poured two cups.", "\"Yes. You believe it, and you do it. That's rarer than you'd think.\"", "\"The child will lose to me twice. They'll learn more from the second.\""] },
+      "respects": ["profit", "cause", "power", "wonder", "belonging", "spite"], "respectsNote": "Whatever's true.",
+      "replace": { "can": true, "goes": "Can't be, in any test anyone's run. It's allowed. She leads with the counter to a Pokémon the Officer hasn't sent out yet." },
+      "beaten": "Yes. I saw that you would. I'd hoped I was wrong about what you'd do next.",
+      "toHero": { "beat": "They beat me. You'll beat them, on a Thursday. I'm not going to tell you which.", "bend": "You're going to lose to me twice. You'll learn more from the second.", "befriend": "You've a question about them. So have they, about you. It's the same question. I find that restful.", "replace": "I'm not at the Gym. I knew you'd come here first." },
+      "gate": "The door on the left sticks. The person behind it's more frightened than you are. That's all I'm permitted.",
+      "walksIn": "(She doesn't. Everyone who crossed a line in Saffron dreams of it the same night.)"
+    },
+    {
+      "id": "blaine", "boss": "blaine", "name": "Blaine", "town": "Cinnabar", "region": 0, "n": 6, "role": "district", "them": "him", "they": "He", "their": "his", "minor": false, "type": "fire",
+      "says": "An island with a volcano, a lab and a burned mansion.",
+      "rule": { "kind": "room", "text": "The quiz. Six doors, six questions about Pokémon; a wrong answer's a junior to fight.", "status": "limited", "waits": "Rooms come with the base's defences (slice 10): the quiz is on the door, the fight is singles." },
+      "buy": { "price": 13500, "why": "The mountain's going to go. The League says not in our lifetime. I've done the sums. It's for boats.", "other": "Buy the boats yourself, and ask for nothing: a Work, about ₽9,000 and three days. It opens Befriend at Grey." },
+      "bend": { "kind": "debt", "text": "The Mansion's diaries: he was on the project that made what's in the cave past Cerulean. Find the one with his name, hand it to him, say nothing.", "steps": ["Dig the Mansion's archive.", "Find the diary with his name in it.", "Hand it to him. Say nothing."], "scene": ["He burns it in front of the Boss.", "\"There's a copy in my head. That one I can't burn. Sit down.\"", "\"I'm seventy and I'm going to give the child a thrashing. It's a privilege. Theirs, I mean.\""] },
+      "respects": ["wonder", "cause", "belonging", "profit"], "respectsNote": "Profit: \"If you're honest about it. Nobody is.\"",
+      "replace": { "can": true, "goes": "Stays on the island. Takes the Hero through the Mansion himself and tells them what he did." },
+      "beaten": "Hah! Burned by an amateur. No, no, sit down, you've earned a riddle. What's got six legs and no future? This island.",
+      "toHero": { "beat": "They beat me. Quiz: what do you do with someone stronger than you? You get stronger.", "buy": "That was a poor fight and I knew it. There are boats in the harbour that weren't there Monday. I'll let you connect the two.", "bend": "I'm seventy and I'm going to give you a thrashing. It's a privilege. Yours, I mean.", "befriend": "They bought the island boats. Thieves. I've checked the hulls for a catch. There isn't one. I'm very put out.", "replace": "Come through the Mansion with me. I'll tell you what I did." },
+      "gate": "Quiz. What do you do with a fire you didn't start? ... No. You find out what it's burning. Go on in.",
+      "walksIn": "I've seen what clever people do when nobody's told them no. I was one. I'm telling you no."
+    },
+    {
+      "id": "giovanni", "boss": "giovanni", "name": "Giovanni", "town": "Viridian", "region": 0, "n": 7, "role": "eighth", "them": "him", "they": "He", "their": "his", "minor": false, "type": "ground",
+      "says": "The neighbour's Boss, in his other chair. The Hero's eighth Badge is won off the head of Team Rocket the day before they come for the team.",
+      "rule": null, "buy": null, "bend": null, "respects": [], "replace": null, "beaten": null,
+      "toHero": { "beat": "There's a new outfit by the coast. I meant to have them looked at. I see I've left it to a child." },
+      "gate": null, "walksIn": null
+    }
+  ]
+}

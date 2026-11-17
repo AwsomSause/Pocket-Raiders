@@ -155,7 +155,9 @@ describe('dispatch: who can go, and what is refused (failure cases, checked in s
   });
   it('the Gym, an opportunity\'s Persuade, Shut doors, a child, unknown methods and short Funds are refused with a reason', () => {
     const gym = first(b, (x) => x.kind === 'gym');
-    expect(step(b, { type: 'queueJob', job: { holdingId: gym.id, method: 'scout', squad: ['g1'] } }).ok).toBe(false);
+    // Slice 8: the Gym can be scouted (a talk with the caretaker); every other method is refused (its five ways are in person).
+    expect(step(b, { type: 'queueJob', job: { holdingId: gym.id, method: 'persuade', squad: ['g1', 'g2'] } }).ok).toBe(false);
+    expect(step(b, { type: 'queueJob', job: { holdingId: gym.id, method: 'scout', squad: ['g1'] } }).ok).toBe(true);
     const opp = first(b, (x) => x.kind === 'opportunity');
     expect(step(b, { type: 'queueJob', job: { holdingId: opp.id, method: 'persuade', squad: ['g1', 'g2'] } }).ok).toBe(false);
     const shut = withHoldings(b, (x) => (x.id === local.id ? { ...x, mood: 'shut' } : x));
@@ -291,7 +293,7 @@ describe('saves: block v2 and the migration from v1', () => {
     const v1 = { ...rest, v: 1 };
     const parsed = EvilModeBlockSchema.parse(v1);
     // Slice 4 took the block to v4; a v1 block goes through v2 and v3 to v4 in one load.
-    expect(parsed).toMatchObject({ v: 6, applicants: [], refusal: null, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
+    expect(parsed).toMatchObject({ v: 7, applicants: [], refusal: null, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
     expect(parsed.crew.map((c) => c.name)).toEqual(['Grunt 1', 'Grunt 2', 'Grunt 3', 'Grunt 4']);
     expect(parsed.team).toEqual(b2.team);
     const storage = new MemoryStorageProvider();

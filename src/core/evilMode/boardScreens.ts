@@ -11,6 +11,7 @@ import { likelyRoad, postProblem } from './hero';
 import { JOB_METHODS, type EvilModeBlock, type Holding, type JobMethod, type LineId, type TakeThing } from './schema';
 import { heatForecast, lineWhy, thingProblem } from './line';
 import { wontText } from './people';
+import { currentLeader, gymDoors, gymOn, standingText } from './gym';
 
 export type DispatchStep = 'where' | 'who' | 'how';
 
@@ -48,7 +49,9 @@ export interface BoardModel {
   warn: boolean;
   count: string;
   cells: CellModel[];
-  panel: { name: string; kind: string; mood: string; earns: string; wants: string; fears: string; says: string; held: string; price: string };
+  panel: { name: string; kind: string; mood: string; earns: string; wants: string; fears: string; says: string; held: string; price: string;
+    /** Slice 8: on the Gym, the right rail: the five ways, open or shut with a word why (Part 8a section 1.2). */
+    rail: { name: string; open: boolean; done: boolean; why: string }[] };
   overnight: { title: string; lines: string[] }[];
   evening: string[];
   end: { how: 'held' | 'taken'; text: string; rows: [string, string][] } | null;
@@ -133,7 +136,12 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
     says: l && known ? `"${l.says.replace(/^"|"$/g, '')}"` : '',
     held: sel.owner === 'team' ? `Yours. Day ${sel.since}. ${methodWord(sel.method)}. ${sel.holds ? 'It holds.' : 'It would turn.'}` : 'Nobody\'s.',
     price: (l || sel.kind === 'safehouse') && known ? (price === null ? (l?.noPrice ?? 'No price') : money(price)) : '—',
+    rail: sel.kind === 'gym' && gymOn(data) ? gymDoors(block, data).map((x) => ({ name: x.name, open: x.open, done: x.done, why: x.open || x.done ? x.why : `${x.shutBy}: ${x.why}` })) : [],
   };
+  // Slice 8: the Gym's panel names its Leader and their standing with the team.
+  const leader = sel.kind === 'gym' && gymOn(data) ? currentLeader(block, data) : undefined;
+  const st = leader ? standingText(block, data) : null;
+  if (leader && st) Object.assign(panel, { name: `${leader.town} Gym · ${leader.name}`, mood: st.word, held: st.moved, says: leader.says });
   const name = (id: string) => dist.holdings.find((h) => h.id === id);
   const sheetLines = block.sheets.map((s) => ({ title: `Step ${name(s.holdingId)!.step} · ${holdingName({ ...name(s.holdingId)!, scouted: Math.max(1, name(s.holdingId)!.scouted) }, data)} · ${methodWord(s.method)} · ${s.won ? (s.method === 'scout' ? 'DONE' : 'WON') : 'LOST'}`, lines: [...s.lines, s.voice, s.played ? 'Played in person: not rolled.' : s.certain ? 'Certain.' : `Odds ${s.odds}%, rolled ${s.roll}.`] }));
   const count = heldCount(block);

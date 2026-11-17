@@ -10,6 +10,7 @@ import { cardFor, unknownCount } from './card';
 import { appendLog, fill, lineFor, money, takingsAt } from './ledger';
 import type { Crew, EvilModeBlock, Holding, Job, LogEntry, Sheet } from './schema';
 import { crossers, districtKey, inRoster, moveLoyalty, peopleText, talentDef, wageOf } from './people';
+import { gymHeatToday, inChair } from './gym';
 import { exposeProblem, heatFor, lineAllows, lineRoll, lineWhy, thingProblem } from './line';
 
 /** The roll for the n-th number `evil-dispatch` gives out in this run: 1..100. The count is stored, so a reload rolls the same. */
@@ -30,6 +31,7 @@ export function crewProblem(block: EvilModeBlock, id: string, ignoreHolding?: st
   if (c.outOn === block.here.day) return `${c.name} is resting after yesterday's battle.`;
   if (block.queue.some((j) => j.holdingId !== ignoreHolding && j.squad.includes(id))) return `${c.name} is already going somewhere today.`;
   if (block.posted.some((p) => p.id === id)) return `${c.name} is posted somewhere today.`;
+  if (inChair(block, id)) return `${c.name} holds the Gym's chair.`;
   return null;
 }
 
@@ -263,6 +265,9 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     // Not paid: −1 each, a day (Part 5 section 5.2). Belonging's shares never fall short.
     crew = crew.map((c) => (c.where === 'in' ? { ...moveLoyalty(c, P.loyalty.unpaid, data), unpaid: c.unpaid + 1 } : c));
   }
+  // Slice 8: what the Boss did at the Gym today counts toward the loudest (Part 8a section 12).
+  const gymHeat = gymHeatToday(block);
+  if (gymHeat !== null) loudest = Math.max(loudest ?? -99, gymHeat);
   if (loudest !== null) {
     const h0 = team.heat;
     team = { ...team, heat: cap(team.heat + loudest) };

@@ -298,7 +298,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'line', 'law', 'gym'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -407,7 +407,8 @@ export type Hero = z.infer<typeof HeroSchema>;
 
 /** A battle the day's waiting on (design Part 30 section 6.2 `battleResult`): Outplay in person, or a person posted against the Hero. */
 export const FightSchema = z.object({
-  kind: z.enum(['outplay', 'hold']),
+  /** Slice 8: 'gym' is the Boss's Beat; 'challenge' an Officer's Replace challenge (their kit fights, the Boss's party waits in the box). */
+  kind: z.enum(['outplay', 'hold', 'gym', 'challenge']),
   holdingId: z.string().min(1),
   /** Hold: who's standing there. */
   personId: z.string().min(1).optional(),
@@ -421,9 +422,96 @@ export const PostSchema = z.object({ holdingId: z.string().min(1), id: z.string(
 
 export const RateSchema = z.enum(['halved', 'waived']);
 
-const BlockV6Schema = z.object({
-  /** The block's own version, for its own migrations. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
-  v: z.literal(6),
+// ---- Slice 8: the Gym (design Part 8a, Part 8b, Part 30 section 3.4) ----
+
+export const GYM_WAYS = ['beat', 'buy', 'bend', 'replace', 'befriend'] as const;
+export const GymWaySchema = z.enum(GYM_WAYS);
+export type GymWay = z.infer<typeof GymWaySchema>;
+export const STANDINGS = ['warm', 'easy', 'wary', 'sullen', 'shut', 'gone'] as const;
+export const StandingSchema = z.enum(STANDINGS);
+export type Standing = z.infer<typeof StandingSchema>;
+
+/** One Leader's state (Part 30 section 3.4, Part 8a section 14). */
+export const GymStateSchema = z.object({
+  leaderId: z.string().min(1),
+  region: z.number().int().min(0),
+  district: z.number().int().min(0),
+  /** The way carried through and still holding, or null (undealt). */
+  way: GymWaySchema.nullable(),
+  /** The Leader's standing with the team, as a word, and the last thing that moved it. */
+  standing: StandingSchema,
+  moved: z.string().min(1),
+  /** Ways shut for this district by what happened (a lost challenge; a second insult). */
+  closed: z.array(GymWaySchema),
+  /** Beats the Boss has lost here (the Leader leads differently next time). */
+  tried: z.number().int().min(0),
+  /** Steps of the Bend done. */
+  bend: z.number().int().min(0),
+  /** Replace: the Officer in the chair. */
+  officer: z.string().min(1).nullable(),
+  /** A Befriended Leader's warnings (a Lean on the Town's street). */
+  insults: z.number().int().min(0),
+  foundOut: z.boolean(),
+  /** The day the way was done and its Heat, for the Evening's loudest. */
+  loud: z.object({ day: z.number().int().min(1), heat: z.number().int() }).strict().nullable(),
+  /** The Hero at this Gym: tries so far, and how many a Bent Leader makes them take (drawn once from `evil-gym`). */
+  heroTries: z.number().int().min(0),
+  heroNeeds: z.number().int().min(1).nullable(),
+}).strict();
+export type GymState = z.infer<typeof GymStateSchema>;
+
+const GS = z.string().min(1);
+const GymCardSchema = z.object({ needs: GS, costs: GS, moves: GS, after: GS, hero: GS, badge: GS, lose: z.string() }).strict();
+export const LeaderDefSchema = z.object({
+  id: GS, boss: GS, name: GS, town: GS,
+  region: z.number().int().min(0), n: z.number().int().min(0),
+  /** first: the Arrival's (untouchable); eighth: the Hero's road in (untouchable); heir: takes a Gym over (Janine). */
+  role: z.enum(['first', 'district', 'eighth', 'heir']),
+  them: GS, they: GS, their: GS,
+  minor: z.boolean(), age: z.number().int().min(1).optional(),
+  type: GS, heir: GS.optional(),
+  says: GS,
+  rule: z.object({ kind: z.enum(['field', 'weather', 'format', 'order', 'count', 'items', 'clock', 'gauntlet', 'room', 'condition']), text: GS, status: EvilStatusSchema, waits: z.string() }).strict().nullable(),
+  buy: z.object({ price: z.number().int().min(0).nullable(), why: GS, other: GS.optional() }).strict().nullable(),
+  bend: z.object({ kind: z.enum(['wrong', 'chance', 'found', 'protected', 'admitted', 'debt']), text: GS, steps: z.array(GS).min(1).max(4), scene: z.array(GS).min(1) }).strict().nullable(),
+  respects: z.array(GS),
+  respectsNote: GS.optional(),
+  replace: z.object({ can: z.boolean(), goes: GS }).strict().nullable(),
+  beaten: GS.nullable(),
+  toHero: z.partialRecord(GymWaySchema, GS),
+  gate: GS.nullable(),
+  walksIn: GS.nullable(),
+}).strict();
+export type LeaderDef = z.infer<typeof LeaderDefSchema>;
+const N = z.number().int();
+export const GymFileSchema = z.object({
+  note: z.string(),
+  /** The slice's undo: false and the Gym's a holding like any other. */
+  on: z.boolean(),
+  ways: z.array(GymWaySchema).length(GYM_WAYS.length),
+  names: z.record(GymWaySchema, GS),
+  words: z.record(GymWaySchema, GS),
+  numbers: z.object({
+    beat: z.object({ offset: N, heat: N, dread: N, townColder: N.min(0).max(100), heroOffset: N }).strict(),
+    buy: z.object({ heat: N, foundOut: N.min(1), dread: N }).strict(),
+    bend: z.object({ regard: N, loyalty: N, seat: N.min(1), seatOf: N.min(1) }).strict(),
+    replace: z.object({ offset: N, heat: N, regard: N, officerLoyalty: N, loseLoyalty: N }).strict(),
+    befriend: z.object({ regard: N, needRegard: N.min(0).max(10), lostRegard: N }).strict(),
+    price: z.object({ first: N.min(0), perDistrict: N.min(0), perRegion: N.min(0) }).strict(),
+    heroTries: z.object({ bend: z.tuple([N.min(1), N.min(1)]) }).strict(),
+  }).strict(),
+  card: z.record(GymWaySchema, GymCardSchema),
+  shut: z.object({ line: GS, leader: GS, region: GS, arrival: GS, hero: GS, number: GS, scout: GS, age: GS, officer: GS, build: GS, done: GS, gone: GS, tried: GS }).strict(),
+  lines: z.record(z.string(), z.union([GS, z.record(z.string(), GS)])),
+  standing: z.object({ start: StandingSchema, words: z.record(StandingSchema, GS), startMoved: GS }).strict(),
+  file: z.record(GymWaySchema, GS),
+  befriend: z.object({ leader: z.array(GS).length(3), boss: z.record(z.string(), z.array(GS).length(2)) }).strict(),
+  leaders: z.array(LeaderDefSchema).min(8),
+});
+
+const BlockV7Schema = z.object({
+  /** The block's own version, for its own migrations. 7: slice 8 added the Gyms. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a waiting fight, who's posted, and the day's in-person job. 6: slice 6 added proof held and the last move of the Line. */
+  v: z.literal(7),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -460,6 +548,8 @@ const BlockV6Schema = z.object({
   /** Slice 6: holdings the team holds proof about (a taken ledger), spent by an Expose; and the Line's last move (Hearts go within three days of a move to Whatever it takes). */
   proof: z.array(z.string().min(1)),
   lineMove: z.object({ day: z.number().int().min(1), region: z.number().int().min(0), from: LineIdSchema, to: LineIdSchema }).strict().nullable(),
+  /** Slice 8: each Leader the team has had to do with (design Part 30 section 3.4 `gym`), made when first needed. */
+  gyms: z.array(GymStateSchema),
 }).strict();
 
 /** A nameless Grunt (slices 2 and 3; a block migrated from v3 keeps its four). */
@@ -476,6 +566,7 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * v3 -> v4 (slice 3's block): the four Grunts stay, nameless, as people at the Creed's starting Loyalty; nobody at the notice board, nobody drawn, no refusal.
  * v4 -> v5 (slice 4's block): no Hero yet (the session makes them on the next load, from the run's seed), no fight, nobody posted, nobody gone in person.
  * v5 -> v6 (slice 5's block): no proof held, and the Line never moved (a Line chosen at founding stays where it is).
+ * v6 -> v7 (slice 6's block): no Gym dealt with yet (each Leader starts Wary and never asked).
  */
 export function migrateEvilBlock(raw: unknown): unknown {
   if (!raw || typeof raw !== 'object') return raw;
@@ -489,11 +580,12 @@ export function migrateEvilBlock(raw: unknown): unknown {
   }
   if (b.v === 4) b = { ...b, v: 5, hero: null, fight: null, posted: [], inPerson: null };
   if (b.v === 5) b = { ...b, v: 6, proof: [], lineMove: null };
+  if (b.v === 6) b = { ...b, v: 7, gyms: [] };
   return b;
 }
 
-export const EvilModeBlockSchema = z.preprocess(migrateEvilBlock, BlockV6Schema);
-export type EvilModeBlock = z.infer<typeof BlockV6Schema>;
+export const EvilModeBlockSchema = z.preprocess(migrateEvilBlock, BlockV7Schema);
+export type EvilModeBlock = z.infer<typeof BlockV7Schema>;
 
 // ---- Slice 6: the Line (design Part 3 section 7, Part 5 sections 4 and 6, Part 7 sections 6, 7, 9 and 11) ----
 

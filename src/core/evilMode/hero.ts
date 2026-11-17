@@ -8,6 +8,7 @@ import starterTable from '../../data/rivalHome.json';
 import bankJson from '../../data/rivalBank.json';
 import { holdingName, localOf, streetOf, townStreet } from './board';
 import { goWithHero } from './line';
+import { badgeHow, gymDealt, heroAtGym } from './gym';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill } from './ledger';
 import type { District, EvilModeBlock, Fight, Hero, Holding, LogEntry, Personality } from './schema';
@@ -173,10 +174,11 @@ export function takeBadge(block: EvilModeBlock, how: 'gym' | 'day7', data: EvilD
   const d = block.district;
   const hero = block.hero;
   if (!d || !hero || hero.badges.some((b) => b.region === d.region && b.district === d.n)) return block;
-  const badge = { region: d.region, district: d.n, how: 'full' as const, day: block.here.day };
+  // Slice 8: half a tier off a Beaten or Bought Leader; and a Gym that's dealt with no longer ends the district when they win.
+  const badge = { region: d.region, district: d.n, how: badgeHow(block, data), day: block.here.day };
   let out: EvilModeBlock = { ...block, hero: { ...hero, badges: [...hero.badges, badge] } };
   const text = line(how === 'gym' ? 'badge' : 'badgeDay7', data);
-  if (how === 'gym' && !d.end) {
+  if (how === 'gym' && !d.end && !gymDealt(block, data)) {
     const count = d.holdings.reduce((n, h) => n + (h.owner === 'team' && h.kind !== 'gym' ? 1 : 0), 0);
     out = { ...out, district: { ...d, end: { how: 'taken', day: block.here.day, count } }, evening: [...block.evening, text] };
   } else out = { ...out, evening: [...out.evening, text] };
@@ -204,6 +206,15 @@ export function walkHero(block: EvilModeBlock, data: EvilData = EVIL_DATA): Evil
     hero = { ...hero, at: s };
     const h = out.district!.holdings.find((x) => x.step === s)!;
     if (h.kind === 'gym') {
+      // Slice 8: who they fight at Step 20 depends on how the Gym was dealt with. A Bent Leader beats them first.
+      const g = heroAtGym({ ...out, hero }, data);
+      out = g.block;
+      hero = out.hero!;
+      lines.push(...g.lines);
+      if (!g.took) {
+        hero = { ...hero, at: s - 1, restOn: day + 1 };
+        break;
+      }
       out = takeBadge({ ...out, hero }, 'gym', data);
       hero = out.hero!;
       lines.push(line('badge', data));
