@@ -70,7 +70,7 @@ async function playGolem(page: Page, query: string, shot: string | null) {
   const text = await page.evaluate(() => String((window as any).__pkr.game.scene.getScene('Battle').message.text));
   expect(text).toBe("It's looking at the bag again.");
   await page.waitForTimeout(500);
-  if (shot) await page.screenshot({ path: shot });
+  if (shot) await page.screenshot({ path: shot }).catch(() => {}); // the shots folder is missing on CI
   // "Drop a crystal." -> "Which one?": only the colours carried.
   await page.keyboard.press('Enter');
   await confirmUntil(page, has(page, 'The Red one.'), 20_000);

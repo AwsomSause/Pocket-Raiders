@@ -62,7 +62,7 @@ test('the Museum\'s jigsaw: twelve pieces from the tray into the sandbox, one fo
   }
   await click(trayCell(7, s0.tray));
   await page.waitForTimeout(500);
-  await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/jigsaw.png' });
+  await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/jigsaw.png' }).catch(() => {});
   await click(slotCell(7));
   for (let n = 8; n < rows * cols; n += 1) {
     await click(trayCell(n, s0.tray));
@@ -73,7 +73,7 @@ test('the Museum\'s jigsaw: twelve pieces from the tray into the sandbox, one fo
   const after = await page.evaluate(() => ({ money: (window as any).__pkr.session.run.money as number, at: (window as any).__pkr.session.run.story.flags['ev:museum-jigsaw-at'] }));
   expect(after.money).toBe(money + 800);
   expect(after.at).toBeGreaterThan(0);
-  await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/jigsaw-done.png' });
+  await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/jigsaw-done.png' }).catch(() => {});
   await jig.locator('[data-act="pick"]').first().click();
   await waitForScene(page, 'Event');
   await expect(view(page, 'Event')).toContainText('Activities Desk');

@@ -51,7 +51,7 @@ test('the Exhibition: queue, back a side, watch the six-on-six on the battle scr
       await expect(battle).toContainText('Look at the crowd.');
       if (!shot) {
         await page.waitForTimeout(400);
-        await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/exhibition.png' });
+        await page.screenshot({ path: '/mnt/project-files/shots/gnscreens/exhibition.png' }).catch(() => {}); // the folder only exists on Kice's machine
         shot = true;
       }
       asked.push(st.moment + 1);
