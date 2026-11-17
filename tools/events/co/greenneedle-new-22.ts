@@ -22,14 +22,23 @@ const ROOF = say(
   '*An Alley Purrloin acts out the charge, with great drama: the Meowth caught a fish, and gave half away.*',
 );
 
-const CALLS = (n: number, next: string, lines: string): Json => aroom(`gn-new-22-call-${n}`, `The Alley Court: Call ${n}`, { pokemon: 'meowth' }, lines, [
-  ch('"Pounce!"', out('The Meowth crouches, wiggles, and is ready.', setTo(`alley-call-${n}`, 1), room(next))),
-  ch('"Dodge!"', out('The Meowth goes light on its feet.', setTo(`alley-call-${n}`, 2), room(next))),
-  ch('"Steady!"', out('The Meowth breathes out, and sets its paws.', setTo(`alley-call-${n}`, 3), room(next))),
-]);
+/** The player coaches the Meowth: three calls during the fight (the battle stops and asks, at the start of turns 1, 3 and 5). */
+const CALL = (n: number, turn: number, text: string): Json => ({
+  id: `call-${n}`, at: { turn }, text,
+  options: [
+    { label: '"Pounce!"', text: '**You:** "Pounce!" The Meowth crouches, wiggles, and is ready.', effects: [{ kind: 'stages', side: 'you', stages: { atk: 1 } }] },
+    { label: '"Dodge!"', text: '**You:** "Dodge!" The Meowth goes light on its feet.', effects: [{ kind: 'stages', side: 'you', stages: { spe: 1 } }] },
+    { label: '"Steady!"', text: '**You:** "Steady!" The Meowth breathes out, and sets its paws.', effects: [{ kind: 'heal', side: 'you', share: 0.25 }] },
+  ],
+});
+const CALLS: Json[] = [
+  CALL(1, 1, 'The Persian drops from the tank. The first call is yours: how does the Meowth open?'),
+  CALL(2, 3, 'Halfway through, when both are breathing hard. The second call is yours.'),
+  CALL(3, 5, 'When it is nearly over, and neither of them will give way. The third call is yours.'),
+];
 
 const MEOWTH_FIGHT = trainer('The Persian', {
-  size: 1, team: ['persian'], lv: -1, friendly: true, rule: { gn: 'alley', leadMark: MEOWTH, noCatch: true },
+  size: 1, team: ['persian'], lv: -1, friendly: true, rule: { gn: 'alley', leadMark: MEOWTH, noCatch: true, asks: CALLS },
   win: [scene('gn-new-22-won')], lose: [scene('gn-new-22-lost')],
 });
 
@@ -48,19 +57,16 @@ export const EVENTS: Json[] = [
       'The ring goes silent. The Persian stands up on its tank, slowly, all the way. It was never going to let this go.',
       'A challenge, cat against cat. The Meowth steps forward, small, shaking, and does not step back.',
       'The Persian looks at you. You may call the moves.',
-    ), MEOWTH_JOINS, flag('court-meowth'), room('gn-new-22-call-1'))),
+    ), MEOWTH_JOINS, flag('court-meowth'), room('gn-new-22-fight'))),
     ch('"Ask what the kittens think."', out(say(
       'Six kittens are fetched from a box. They are asked. They hold a vote, by sitting on things: the Purrloin, the Persian\'s tail, the fish.',
       'It is chaos. It works. Somehow the fish is shared out, bone by bone, thirty ways, and the Persian takes the head with great dignity.',
       'The little Meowth looks at you as if you had hung the moon.',
     ), MEOWTH_JOINS, flag('court-kittens'), ...SEEN)),
   ]),
-  CALLS(1, 'gn-new-22-call-2', 'The Persian drops from the tank. The first call is yours: how does the Meowth open?'),
-  CALLS(2, 'gn-new-22-call-3', 'Halfway through, when both are breathing hard. The second call is yours.'),
-  CALLS(3, 'gn-new-22-fight', 'When it is nearly over, and neither of them will give way. The third call is yours.'),
   aroom('gn-new-22-fight', 'The Alley Court: The Challenge', { pokemon: 'meowth' }, say(
     '*Thirty strays, not breathing. The Meowth on the stones, the Persian above it.*',
-    'You have called your three. Now the Meowth does the rest.',
+    'Three calls are yours to make, during the fight. The Meowth does the rest.',
   ), [ch('Let them fight.', { ...out('The Persian does not hold back. Neither does the Meowth.'), battle: MEOWTH_FIGHT })]),
   aroom('gn-new-22-won', 'The Alley Court: The Verdict', { pokemon: 'persian' }, say(
     'The Persian stops. Its chest heaves. It looks at the Meowth for a long time, and then, deliberately, it lies down.',

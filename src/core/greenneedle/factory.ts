@@ -97,6 +97,23 @@ export function pitsStart(battle: BattleState, pulls: number, alreadyFreed: numb
   battle.storyEffects.push(`gn-pits:${n}:${alreadyFreed}`);
 }
 
+/**
+ * "Pull them out." asked in the fight itself (core/greenneedle/ask.ts): each of your Pokémon able to stand pulls one out this turn
+ * (at most three stand in the pit fight, and no more than are still stuck), giving up its move. Returns the line.
+ */
+export function pitsPull(content: Content, run: Pick<RunState, 'party'>, battle: BattleState): string {
+  const at = battle.storyEffects.findIndex((t) => t.startsWith('gn-pits:'));
+  if (at < 0) return '';
+  const [, pulls, before] = battle.storyEffects[at]!.split(':').map(Number);
+  const queued = battle.storyEffects.filter((t) => t === PIT_PULL).length;
+  const stuck = PIT_STUCK - (before ?? 0) - (pulls ?? 0);
+  const hands = Math.min(battle.doubles ? (battle.doubles.trio ? 3 : 2) : 1, run.party.filter((m) => m.hp > 0).length);
+  const n = Math.max(0, Math.min(hands - queued, stuck));
+  for (let i = 0; i < n; i++) battle.storyEffects.push(PIT_PULL);
+  battle.storyEffects[at] = `gn-pits:${(pulls ?? 0) + n}:${before ?? 0}`;
+  return n > 0 ? 'Your team turns from the Grimer and wades into the pit.' : 'There is nobody left to pull out.';
+}
+
 /** How many are out of the pits now: those out before the fight, plus one for every pull made so far. Undefined outside the pits fight. */
 export function pitsFreed(battle: Pick<BattleState, 'storyEffects'>): number | undefined {
   const note = battle.storyEffects.find((t) => t.startsWith('gn-pits:'));

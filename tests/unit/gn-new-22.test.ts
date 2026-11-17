@@ -1,11 +1,13 @@
 // Greenneedle gn.new.22 The Alley Court (tools/events/co/greenneedle-new-22.ts; rule and ability in src/core/greenneedle/alley.ts).
 import { describe, expect, it } from 'vitest';
 import { content } from './helpers';
-import { alleyStart, alleyTurn, FAIR_SHARE_DUE, fairShare } from '../../src/core/greenneedle/alley';
+import { FAIR_SHARE_DUE, fairShare } from '../../src/core/greenneedle/alley';
 import { createBattle, resolveTurn, type BattleContext } from '../../src/core/battle/engine';
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { hashSeed, Rng } from '../../src/core/rng';
-import { choose, flagOf, gnRun, lose, open, openSide, setFlag, win } from './helpers/gnPlay';
+import { choose, flagOf, gnRun, lose, open, openSide, win } from './helpers/gnPlay';
+import { askDue } from '../../src/core/greenneedle/ask';
+import { takeTurn } from '../../src/core/run';
 
 const meowth = (run: ReturnType<typeof gnRun>) => run.party.find((m) => m.speciesId === 'meowth');
 const E = 'gn-new-22-court';
@@ -38,14 +40,12 @@ describe('gn.new.22 The Alley Court', () => {
     expect(meowth(r)).toBeTruthy();
   });
 
-  it('rule for the Meowth: three calls, then the challenge; a win and a loss both end with the Meowth', () => {
+  it('rule for the Meowth: straight to the challenge; a win and a loss both end with the Meowth', () => {
     for (const fight of [win, lose]) {
       const run = gnRun(`alley-meowth-${fight.name}`);
       open(run, E);
       let r = choose(run, E, '"Rule for the Meowth."').run;
       expect(flagOf(r, 'court-meowth')).toBe(1);
-      r = through(r, '"Pounce!"', '"Dodge!"', '"Steady!"');
-      expect([1, 2, 3].map((n) => flagOf(r, `alley-call-${n}`))).toEqual([1, 2, 3]);
       r = choose(r, openSide(r)!.eventId, 'Let them fight.').run;
       expect(r.phase).toBe('battle');
       expect(r.battle!.enemyTeam[0]!.speciesId).toBe('persian');
@@ -57,30 +57,39 @@ describe('gn.new.22 The Alley Court', () => {
     }
   });
 
-  it('the calls land on turns 1, 3 and 5: Attack +1, Speed +1, a quarter back', () => {
+  it('three calls during the fight, asked at the start of turns 1, 3 and 5: Attack +1, Speed +1, a quarter back', () => {
     const run = gnRun('alley-calls');
     open(run, E);
     let r = choose(run, E, '"Rule for the Meowth."').run;
-    r = through(r, '"Pounce!"', '"Dodge!"', '"Steady!"');
     r = choose(r, openSide(r)!.eventId, 'Let them fight.').run;
-    const battle = structuredClone(r.battle!);
-    setFlag(r, 'alley-call-1', 1);
-    alleyStart(r, battle);
-    const mon = meowth(r)!;
+    // turn 1: the first call is asked before any command; answering uses no turn
+    let ask = askDue(content, r)!;
+    expect(ask.id).toBe('call-1');
+    expect(ask.options.map((o) => o.label)).toEqual(['"Pounce!"', '"Dodge!"', '"Steady!"']);
+    r = takeTurn(content, r, { kind: 'answer', ask: 'call-1', option: 0 }).run;
+    expect(r.battle!.turn).toBe(1);
+    expect(r.battle!.playerStages.atk).toBe(1);
+    expect(askDue(content, r)).toBeNull();
+    // the second call waits for turn 3, the third for turn 5
+    r = structuredClone(r);
+    r.battle!.turn = 2;
+    expect(askDue(content, r)).toBeNull();
+    r.battle!.turn = 3;
+    ask = askDue(content, r)!;
+    expect(ask.id).toBe('call-2');
+    r = takeTurn(content, r, { kind: 'answer', ask: 'call-2', option: 1 }).run;
+    expect(r.battle!.playerStages.spe).toBe(1);
+    r = structuredClone(r);
+    r.battle!.turn = 5;
+    const mon = r.party[r.battle!.activeIndex]!;
+    expect(mon.speciesId).toBe('meowth');
     mon.hp = 1;
-    const said: string[] = [];
-    battle.turn = 1;
-    alleyTurn(content, battle, mon, (t) => said.push(t));
-    expect(battle.playerStages.atk).toBe(1);
-    battle.turn = 2;
-    alleyTurn(content, battle, mon, (t) => said.push(t));
-    expect(battle.playerStages.spe).toBe(1);
-    battle.turn = 4;
-    alleyTurn(content, battle, mon, (t) => said.push(t));
-    expect(mon.hp).toBeGreaterThanOrEqual(Math.floor(maxHp(content, mon) / 4));
-    expect(said).toHaveLength(3);
-    alleyTurn(content, battle, mon, (t) => said.push(t));
-    expect(said).toHaveLength(3);
+    expect(askDue(content, r)!.id).toBe('call-3');
+    r = takeTurn(content, r, { kind: 'answer', ask: 'call-3', option: 2 }).run;
+    expect(r.party[r.battle!.activeIndex]!.hp).toBe(1 + Math.max(1, Math.floor(maxHp(content, mon) / 4)));
+    expect(askDue(content, r)).toBeNull();
+    // a call can't be made twice
+    expect(() => takeTurn(content, r, { kind: 'answer', ask: 'call-3', option: 0 })).toThrow();
   });
 
   it('Fair Share: the Meowth joins with it and with Thief; a stolen item heals the next Pokémon sent in by 10%, once', () => {

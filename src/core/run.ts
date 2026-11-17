@@ -22,6 +22,7 @@ import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
 import { FOE_WAITS, gnAfterTurn, gnShape, gnShapeDouble } from './greenneedle';
+import { answerAsk } from './greenneedle/ask';
 import { bidoofPeace } from './greenneedle/bidoof';
 import { aceBows } from './greenneedle/missingAce';
 import { ofAssist, ofGuestLeaves, ofShadow, recordRelease } from './greenneedle/oldfriend';
@@ -95,7 +96,7 @@ import { catchable, forcedStepInRival, legendKind, planStepIn, rivalAce, recordR
 import { captureMultiplier, getArchetype, runArchetype, runPerks, badgeTypesOf, healingMultiplier, moneyMultiplier, priceMultiplier, shopUnlockOffset, trainerPreviews, typeModifiers, xpMultiplier } from './archetypes';
 import { chooseSignatureOption, signatureDecisions } from './signature';
 import { boxCapacity, catchLevelOffset, encounterWeightPerk, partyLimit, postBattleHealShare, hasStarterSignature, releaseLimit, signatureMoveFor, evolutionLevelOffset, isBossClass, regionLevelOffset, startingAttributes, startingLevelOffset, syncHpPerks, xpPerk, bossMoneyPerk, championMoneyPerk, ordinaryMoneyPerk, catchMoneyPerk, doubleBattleRewardPerk, singleBattleXpPerk, shopEarlyStockPerk, shopEarlyRareStockPerk, shopRefreshPerk, thirdBossLevels, isUltraBeast, fishingRareTriesPerk, bonusRewardChancePerk } from './trainerPerks';
-import { createBattle, itemProblem, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
+import { createBattle, itemProblem, resolveAnswer, resolveTurn, startBattle, type BattleContext, type BattleEvent, type PlayerAction } from './battle/engine';
 import { autoCommands, canBeDoubles, makeDoubles, primarySpot, resolveDoublesTurn, startDoubles } from './battle/doubles';
 import { canBeTriples, makeTriples } from './battle/triples';
 import { endBattle as endHeldBattle, expLevelShift, expMultiplier, giveBossItems, growthOnLevelUp } from './battle/held';
@@ -3385,8 +3386,10 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
   // S7: the Story Run partner's banked Impossible Feat (the engine checks the moment; no RNG).
   turnCtx.feat = featGate(content, run) ?? undefined;
   // gn.17, the Sludge Pits: in a double or triple fight the pulling answers the commands the turn really plays.
-  const pits = battle.doubles ? gnShapeDouble(run, doublesAction(turnCtx, action)) : null;
-  const engineEvents: BattleEvent[] = [...shaped.events, ...(pits ? [...(pits.events as BattleEvent[]), ...resolveDoublesTurn(turnCtx, pits.action)] : resolveTurn(turnCtx, shaped.action))];
+  // A choice in the middle of the battle (core/greenneedle/ask.ts): the answer is applied here, uses no turn and rolls nothing.
+  const answered: BattleEvent[] | null = action.kind === 'answer' ? [...answerAsk(content, run, action.ask, action.option).map((text): BattleEvent => ({ type: 'raid', tone: 'info', text })), ...resolveAnswer(turnCtx)] : null;
+  const pits = battle.doubles && !answered ? gnShapeDouble(run, doublesAction(turnCtx, action)) : null;
+  const engineEvents: BattleEvent[] = answered ? [...shaped.events, ...answered] : [...shaped.events, ...(pits ? [...(pits.events as BattleEvent[]), ...resolveDoublesTurn(turnCtx, pits.action)] : resolveTurn(turnCtx, shaped.action))];
   // Beta 4.4: a Hyper moment unlocks a move in the Hyper slot for the rest of the battle.
   engineEvents.push(...grantHyperMoves(content, run, engineEvents));
   // A practiced pair hands over after a faint (yours, or a rival's).

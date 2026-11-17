@@ -31,7 +31,7 @@ import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
 import { draftTurn } from '../greenneedle/draft';
 import { snorlaxTurn } from '../greenneedle/snorlax';
 import { bidoofTurn, NO_FLINCH } from '../greenneedle/bidoof';
-import { alleyTurn, FAIR_SHARE_DUE, fairShare } from '../greenneedle/alley';
+import { FAIR_SHARE_DUE, fairShare } from '../greenneedle/alley';
 import { callPriority, cheerTurn } from '../greenneedle/cheer';
 import { trustHolds } from '../greenneedle/ball';
 import { champPower, lessonOpens, lessonTurn, seenItFirst, seenItSpend, summitSaves } from '../greenneedle/champion';
@@ -134,6 +134,7 @@ import { rivalStrikeDamage } from '../raid/rivalAlly';
 import { finaleStrikeDamage } from '../rivals/living';
 import { absorbHit, advanceRaid, botMend, botStrike, chargedDamage, cheerProblem, coopOwner, crowdStep, hazardDamage, playerHits, puzzleProgress, raidBot, raidDef, type Cheer, CHEER_TURNS, HEALING_CHEER, raidFieldMultiplier, raidItemProblem, raidRoleMultiplier, supportHeal, reinforcementDue, takeExtraAction } from '../raid/raid';
 import { FACTORY_RULES, factoryTurnEnd } from '../greenneedle/factory';
+import { passTurnEnd, phaseFloor, phaseSync, takeAskForm } from '../greenneedle/ask';
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { enemyLastResort } from './lastResort';
@@ -298,6 +299,8 @@ export type PlayerAction =
   | { kind: 'deal'; accept: boolean }
   /** Greenneedle gn.59: your read of the Gym Leader's feet (no turn used). */
   | { kind: 'predict'; yes: boolean }
+  /** A choice in the middle of the battle (core/greenneedle/ask.ts): answer `option` of the question `ask`. No turn used; run.ts applies it. */
+  | { kind: 'answer'; ask: string; option: number }
   /** Smash the arena (rocks, lava, flood): hurts the foe once per battle and uses the turn (ideas W1). */
   | { kind: 'arena' }
   /** Greenneedle gn.61: call a helper from the Final Reunion (`slot` 1 to 3). Uses the turn; the helper acts once. */
@@ -772,6 +775,7 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   const { battle, content, rng } = ctx;
   if (battle.outcome) throw new Error('Battle is already over');
   if (action.kind === 'double' || battle.doubles) throw new Error('A double battle takes its turn in battle/doubles.ts');
+  if (action.kind === 'answer') throw new Error('An answer is applied by the run (core/greenneedle/ask.ts), not played as a turn');
   const events: BattleEvent[] = [];
   announceContent = content;
   // Shadow II: the battle stream as this turn begins (read only), so the obey check matches what the player was shown.
@@ -1192,8 +1196,34 @@ export function resolveTurn(ctx: BattleContext, action: PlayerAction): BattleEve
   return events;
 }
 
+/**
+ * A choice in the middle of the battle was answered (the run applied it): the engine's own part. A `form` answer changes your
+ * Pokémon's form now (House Call). No turn is used and nothing is rolled.
+ */
+export function resolveAnswer(ctx: BattleContext): BattleEvent[] {
+  const events: BattleEvent[] = [];
+  const to = takeAskForm(ctx.battle);
+  if (to && !ctx.battle.doubles) {
+    announceContent = ctx.content;
+    ctx.battle.playerVolatile ??= freshVolatile();
+    const me = activeCombatants(ctx).player;
+    if (me.mon.hp > 0) {
+      announce(me, abilityIn(ctx, me) ?? 'house-call', events);
+      swapForm(ctx, me, to, events);
+    }
+  }
+  return events;
+}
+
 /** Run events B: an event fight's own end rules, checked after each turn (survive N turns; sudden death). */
 export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?: PokemonInstance[], content?: Content): void {
+  // A fight in phases, and turns that pass by themselves after an answer (core/greenneedle/ask.ts).
+  if (content && !battle.outcome) for (const text of phaseSync(content, battle)) events.push({ type: 'raid', tone: 'phase', text });
+  if (!battle.outcome) {
+    const passed = passTurnEnd(battle);
+    if (passed) events.push({ type: 'raid', tone: battle.outcome ? 'phase' : 'info', text: passed });
+    if (battle.outcome) return;
+  }
   // The Cheer Squad (gn.new.30): they cheer from the sideline in every battle for the rest of the stage.
   if (!battle.outcome) cheerTurn(battle, (text) => events.push({ type: 'raid', tone: 'info', text }));
   const rule = battle.eventRule;
@@ -1211,8 +1241,6 @@ export function eventRuleEnd(battle: BattleState, events: BattleEvent[], party?:
   }
   // The Angry Bidoof (gn.55): its trainer explains, throughout, that it's a perfectly ordinary Bidoof.
   if (rule.gn === 'bidoof' && content) bidoofTurn(content, battle, party, events as Parameters<typeof bidoofTurn>[3], (text) => events.push({ type: 'raid', tone: 'info', text }));
-  // The Alley Court (gn.new.22): the player's three calls; and the Fair Share ability.
-  if (rule.gn === 'alley' && content && mine) alleyTurn(content, battle, mine, (text) => events.push({ type: 'raid', tone: 'info', text }));
   // The Polluted Factory (gn.17): burst pipes, the Molten Sludge, the splitting Magmuk and the burning floor.
   if (content && rule.gn && FACTORY_RULES.has(rule.gn)) factoryTurnEnd(content, battle, mine, events);
   if (rule.thinLight && content && battle.turn > 0 && battle.turn % 3 === 0) {
@@ -2631,8 +2659,9 @@ function entryAbility(ctx: BattleContext, c: Combatant, other: Combatant, events
       if (best) events.push(say(c.side, 'signature', `${getSpecies(ctx.content, c.mon.speciesId).name} knows what is coming: ${best.name}.`, c.mon.uid));
     }
   }
-  if (ability === 'house-call' && c.mon.speciesId === 'rotom' && !ctx.battle.storyEffects.includes(`house-call:${c.mon.uid}`)) {
-    // House Call (gn.new.23): once a battle, on entry, it takes the appliance form whose type hits the foe hardest (none, if no form hits it hard).
+  if (ability === 'house-call' && c.mon.speciesId === 'rotom' && !ctx.battle.storyEffects.includes(`house-call:${c.mon.uid}`) && (c.side !== 'player' || ctx.battle.doubles)) {
+    // House Call (gn.new.23): once a battle, on entry. Your own Rotom in a single battle is the player's pick (the battle screen asks: core/greenneedle/ask.ts).
+    // A foe's, or yours in a double battle (no question there), takes the appliance form whose type hits the foe hardest (none, if no form hits it hard).
     const foeTypes = battleTypes(ctx.content, ctx.battle, other.mon);
     let best: { id: string; eff: number } | null = null;
     for (const [id, type] of HOUSE_CALL_FORMS) {
@@ -4869,6 +4898,11 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     if (ctx.battle.eventRule?.gn === 'truce' && user.side === 'enemy' && target.side === 'player') truceHurt(ctx.content, ctx.battle, ctx.party, user.mon.uid, target.mon, damage);
     // Greenneedle gn.21 (a scripted duel): that side's Pokémon holds on at 1 HP through any hit.
     if (ctx.battle.eventRule?.holdOn === (target.side === 'enemy' ? 'foe' : 'you')) damage = Math.min(damage, target.mon.hp - 1);
+    // A fight in phases (core/greenneedle/ask.ts): a hit never takes the boss past the line where its next phase begins.
+    if (target.side === 'enemy' && ctx.battle.eventRule?.phases) {
+      const floor = phaseFloor(ctx.battle, target.mon, maxHp(ctx.content, target.mon));
+      if (target.mon.hp > floor) damage = Math.min(damage, target.mon.hp - floor);
+    }
     // Sturdy: a hit at full HP leaves it with at least 1 HP.
     const sturdy = foeAbility === 'sturdy' && target.mon.hp >= targetMax && target.mon.hp > 1 && damage >= target.mon.hp;
     if (sturdy) damage = target.mon.hp - 1;
