@@ -34,3 +34,29 @@ describe('enemy healing cap and scaling', () => {
     expect(fight(3, cap, true).item).toBeUndefined();
   });
 });
+
+describe('Full Heal and Full Restore wait for later regions', () => {
+  const kitFight = (region: number, kit: { cure: number; restore: number }, hp: number, status: boolean) => {
+    const player = createPokemon(content, 'rattata', 50, 'p');
+    player.moves = [{ id: 'splash', pp: 40 }];
+    const enemy = createPokemon(content, 'snorlax', 50, 'e');
+    enemy.moves = [{ id: 'splash', pp: 40 }];
+    enemy.hp = hp;
+    if (status) enemy.status = 'poison';
+    const battle = createBattle('trainer', [enemy], 0, player.uid);
+    battle.ai = 0;
+    battle.trainerKit = { ...kit, boost: 0, boostStat: 'atk' };
+    battle.trainerWealth = 0; // no potions, so the kit items are the ones that can fire
+    const ctx: BattleContext = { content, battle, party: [player], inventory: {}, rng: new Rng(hashSeed('kit')), captureRng: new Rng(hashSeed('kitc')), catchMultiplier: 1, foeHealTier: region };
+    const events = resolveTurn(ctx, { kind: 'move', index: 0 });
+    return events.filter((e) => e.type === 'item').map((e) => (e as { itemId: string }).itemId);
+  };
+  it('no Full Heal in region 1, one from region 2 (counts toward the cap)', () => {
+    expect(kitFight(0, { cure: 1, restore: 0 }, 9999, true)).not.toContain('full-heal');
+    expect(kitFight(1, { cure: 1, restore: 0 }, 9999, true)).toContain('full-heal');
+  });
+  it('no Full Restore before region 4', () => {
+    expect(kitFight(0, { cure: 0, restore: 1 }, 2, false)).not.toContain('full-restore');
+    expect(kitFight(3, { cure: 0, restore: 1 }, 2, false)).toContain('full-restore');
+  });
+});

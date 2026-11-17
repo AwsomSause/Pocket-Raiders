@@ -5,3 +5,4 @@
 - Test: tests/unit/enemyHealCap.test.ts.
 - Difficulty keeps its edge: `runRules.json` difficulties have `enemyHeal` (0.7 casual .. 1.6 mythic) multiplying the potion's share of max HP; harder presets heal more per item, never use more than 4.
 - Tiers set to Potion 20%, Super 30%, Hyper 45%, Hyper 60%. Re-pinned STORY1/2/5/6/8 fingerprints.
+- Full Heal (status cure) and Full Restore were not capped or scaled (trainer kit). Now they count toward the 4 and wait for later regions: Full Heal from region 2, Full Restore from region 4 (`trainerAi.fullHealFromRegion`, `fullRestoreFromRegion`). Applies to rivals, gym leaders, E4 and champions alike (all use the same turn code).
