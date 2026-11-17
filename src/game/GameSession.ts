@@ -9,7 +9,8 @@
 import { openRoadHome, roadHomeDue } from '../core/co/roadHome';
 import { applyEvilEffect, evilTeam } from '../core/evil/teams';
 import { skyAct, type SkyAction } from '../core/evil/teamSky';
-import { ensureDistrict, foundInRun, stepInRun } from '../core/evilMode/session';
+import { ensureEvil, foundInRun, stepInRun } from '../core/evilMode/session';
+import { beginEvilFight } from '../core/evilMode/fight';
 import type { FoundingChoice } from '../core/evilMode/start';
 import type { EvilAction, EvilCue } from '../core/evilMode/day';
 import * as NodeMenu from '../core/nodeMenu/flow';
@@ -1074,10 +1075,19 @@ export class GameSession {
   evilEnsure(): void {
     const run = this.run;
     if (!run) return;
-    const out = ensureDistrict(run);
+    const out = ensureEvil(run);
     if (out === run) return;
     this.run = out;
     this.persistRun();
+  }
+
+  /** Evil Mode (slice 5): starts the battle the day is waiting on and saves. False when there's none to start. */
+  evilFight(): boolean {
+    const out = beginEvilFight(this.content, this.requireRun());
+    if (!out) return false;
+    this.run = out;
+    this.persistRun();
+    return true;
   }
 
   /** Evil Mode: one action on the day, saved at the end of the beat. The cues are for the screen only. */

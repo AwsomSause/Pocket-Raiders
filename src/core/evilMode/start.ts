@@ -74,7 +74,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   // Slice 4: the starting Roster, drawn from the Founders on `evil-people` (design Part 10a section 2).
   const roster = foundingRoster(opts.seed ?? opts.boss, creed.id, data);
   const block: EvilModeBlock = {
-    v: 5,
+    v: 6,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -109,6 +109,10 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     applicants: [],
     drawn: roster.crew.map((c) => c.id),
     refusal: null,
+    hero: null,
+    fight: null,
+    posted: [],
+    inPerson: null,
     night: emptyNight(),
   };
   block.draws['evil-people'] = roster.draws;

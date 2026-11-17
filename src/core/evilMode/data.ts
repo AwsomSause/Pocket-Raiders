@@ -8,8 +8,9 @@ import districtRaw from '../../data/evilMode/district.json';
 import ledgerRaw from '../../data/evilMode/ledger.json';
 import peopleRaw from '../../data/evilMode/people.json';
 import facesRaw from '../../data/evilMode/faces.json';
+import heroRaw from '../../data/evilMode/hero.json';
+import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FacesFileSchema, FoundingFileSchema, HeroFileSchema, LedgerFileSchema, MethodsFileSchema, NightFileSchema, PeopleFileSchema } from './schema';
 import nightRaw from '../../data/evilMode/night.json';
-import { CreedsFileSchema, DistrictFileSchema, DoctrinesFileSchema, FacesFileSchema, FoundingFileSchema, LedgerFileSchema, MethodsFileSchema, NightFileSchema, PeopleFileSchema } from './schema';
 
 export const EVIL_DATA = {
   creeds: CreedsFileSchema.parse(creedsRaw).creeds,
@@ -20,6 +21,7 @@ export const EVIL_DATA = {
   ledger: LedgerFileSchema.parse(ledgerRaw),
   people: PeopleFileSchema.parse(peopleRaw),
   faces: FacesFileSchema.parse(facesRaw).faces,
+  hero: HeroFileSchema.parse(heroRaw),
   night: NightFileSchema.parse(nightRaw),
 };
 export type EvilData = typeof EVIL_DATA;

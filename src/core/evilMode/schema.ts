@@ -154,12 +154,16 @@ export const JobSchema = z.object({
   terms: z.array(OddsTermSchema),
   /** Slice 3: the Honest Card this job was confirmed on (absent only on a job queued before slice 3). */
   cardId: z.string().min(1).optional(),
+  /** Slice 5: the Boss went in person and played it (Part 7 section 10): it isn't rolled at Evening. */
+  played: z.enum(['won', 'lost']).optional(),
 }).strict();
 export type Job = z.infer<typeof JobSchema>;
 
 export const SheetSchema = z.object({
   holdingId: z.string().min(1), method: JobMethodSchema, squad: z.array(z.string()), odds: z.number().int(), certain: z.boolean(),
   roll: z.number().int().min(1).max(100), won: z.boolean(), voice: z.string(), lines: z.array(z.string()),
+  /** Slice 5: played in person, not rolled. */
+  played: z.boolean().optional(),
 }).strict();
 export type Sheet = z.infer<typeof SheetSchema>;
 
@@ -285,7 +289,7 @@ export const StoredCardSchema = z.object({
 }).strict();
 export type StoredCard = z.infer<typeof StoredCardSchema>;
 
-export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'knock', 'heard', 'wall'] as const;
+export const LOG_KINDS = ['card', 'job', 'pay', 'waive', 'halve', 'ask', 'asked', 'hire', 'turned', 'leave', 'promote', 'hero', 'knock', 'heard', 'wall'] as const;
 
 /** One line of the Log (Part 30 section 7.1, the kinds slice 3 writes). Never edited, never removed. */
 export const LogEntrySchema = z.object({
@@ -327,6 +331,84 @@ export const LedgerFileSchema = z.object({
   tabs: z.array(S).length(4),
   givenTaken: S,
 });
+
+// ---- Slice 5: the Hero (design Part 18) ----
+
+export const PERSONALITIES = ['protector', 'champion-chaser', 'strategist', 'bitter-challenger', 'enthusiast', 'idealist', 'prodigy', 'underdog'] as const;
+export const PersonalitySchema = z.enum(PERSONALITIES);
+export type Personality = z.infer<typeof PersonalitySchema>;
+export const REASON_KINDS = ['stop', 'ask', 'find'] as const;
+const HS = z.string().min(1);
+export const HeroFileSchema = z.object({
+  note: z.string(),
+  /** The slice's undo (Part 31): false and no Hero is made; slices 1 to 4 still play. */
+  on: z.boolean(),
+  rivalId: HS,
+  kids: z.array(z.object({ name: HS, look: z.string().regex(/^trainer\.[a-z0-9_/]+$/), raisedBy: HS }).strict()).min(1),
+  lookProvenance: HS,
+  homeRegion: HS,
+  openers: z.record(z.string(), z.array(HS).min(1)),
+  counters: z.record(z.string(), HS),
+  counterAt: z.number().int().min(1),
+  personalities: z.array(z.object({ id: PersonalitySchema, word: HS, steps: z.array(z.number().int().min(1).max(3)).min(1), afterLoss: z.number().int().min(0), how: HS }).strict()).length(PERSONALITIES.length),
+  loud: z.object({ scout: z.number().int().min(0).max(3), persuade: z.number().int().min(0).max(3), pay: z.number().int().min(0).max(3), payUnder: z.number().int().min(0).max(3), outplay: z.number().int().min(0).max(3) }).strict(),
+  reasons: z.array(z.object({ n: z.number().int().min(1).max(16), team: HS, says: HS, kind: z.enum(REASON_KINDS), trigger: HS, status: EvilStatusSchema, waits: HS }).strict()).length(16),
+  kinds: z.object({ stop: HS, ask: HS, find: HS }).strict(),
+  tiers: z.array(z.object({ min: z.number().int().min(0), level: z.number().int(), ace: z.number().int().min(0), party: z.number().int().min(1).max(6) }).strict()).min(1),
+  levels: z.object({ kit: z.number().int(), local: z.number().int(), wild: z.number().int(), alpha: z.number().int() }).strict(),
+  marks: z.object({ grunt: z.number().int().min(1), lostToGrunt: z.number().int().min(1), max: z.number().int().min(1), words: z.array(z.tuple([z.number().int().min(1), HS])).min(1) }).strict(),
+  /** Trainer classes the battle draws (trainers.json ids; a save checks them). */
+  classes: z.object({ hero: HS, local: HS, wild: HS, alpha: HS }).strict(),
+  fights: z.object({ locals: z.record(z.string(), z.array(HS).min(1).max(6)), wild: z.array(HS).min(1), alpha: z.array(HS).min(1) }).strict(),
+  lines: z.record(z.string(), z.union([HS, z.record(z.string(), HS)])),
+  file: z.object({ tabs: z.array(HS).length(3), unknown: HS, blank: HS, temper: HS, fires: HS, letters: HS, others: HS, seenNone: HS, saidNone: HS }).strict(),
+});
+
+/** The Hero in the block (design Part 30 section 3.8, slice 5's part). The party isn't here: it's the rival record's (`rivalId`). */
+export const HeroSchema = z.object({
+  rivalId: z.string().min(1),
+  name: z.string().min(1),
+  look: z.string().min(1),
+  raisedBy: z.string().min(1),
+  personality: PersonalitySchema,
+  /** The home street: the Town's street of the district they set out from (holding ids). */
+  home: z.object({ region: z.number().int().min(0), district: z.number().int().min(1), street: z.string().min(1), holdings: z.array(z.string().min(1)) }).strict(),
+  /** The starter's region (for the File's line). */
+  starterRegion: z.string().min(1),
+  /** Their step on the district's road. */
+  at: z.number().int().min(1).max(20),
+  /** The last day they walked, and a day they sit out (after a loss). */
+  walked: z.number().int().min(0),
+  restOn: z.number().int().min(0),
+  marks: z.number().int().min(0),
+  battlesWithTeam: z.number().int().min(0),
+  lostDays: z.number().int().min(0),
+  badges: z.array(z.object({ region: z.number().int().min(0), district: z.number().int().min(1), how: z.enum(['full', 'half']), day: z.number().int().min(1) }).strict()),
+  /** Species ids a Grunt has seen them field (the File's slots fill from these). */
+  seen: z.array(z.string().min(1)),
+  /** The File's lines: what they've seen, and what they've said about the team. Newest last. */
+  learned: z.array(z.string().min(1)),
+  said: z.array(z.string().min(1)),
+  /** The last Hero beat's road, shown at the next Morning. */
+  today: z.array(z.string().min(1)),
+  /** Their personality has been seen in a line (the File shows the word from then). */
+  met: z.boolean(),
+}).strict();
+export type Hero = z.infer<typeof HeroSchema>;
+
+/** A battle the day's waiting on (design Part 30 section 6.2 `battleResult`): Outplay in person, or a person posted against the Hero. */
+export const FightSchema = z.object({
+  kind: z.enum(['outplay', 'hold']),
+  holdingId: z.string().min(1),
+  /** Hold: who's standing there. */
+  personId: z.string().min(1).optional(),
+  /** Uids of the Boss's party, put in the box while a posted person's kit fights (put back when it ends). */
+  lent: z.array(z.string().min(1)).optional(),
+  /** Set once the battle has been started (a reload mid-battle reopens it as the game already does). */
+  begun: z.boolean(),
+}).strict();
+export type Fight = z.infer<typeof FightSchema>;
+export const PostSchema = z.object({ holdingId: z.string().min(1), id: z.string().min(1) }).strict();
 
 export const RateSchema = z.enum(['halved', 'waived']);
 
@@ -404,8 +486,8 @@ export const NightFileSchema = z.object({
 });
 
 const BlockV5Schema = z.object({
-  /** The block's own version, for its own migrations. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 7 added the Night, and each person's mood and knocks. */
-  v: z.literal(5),
+  /** The block's own version, for its own migrations. 2: slice 2 added the district, the crew, the queue and the sheets. 3: slice 3 added the Log, the Cards, Given and Taken, and rates. 4: slice 4 made the crew people, and added applicants, the drawn list and a refusal. 5: slice 5 added the Hero, a fight, Hold and going in person. 6: slice 7 added the Night, and each person's mood and knocks. */
+  v: z.literal(6),
   from: z.enum(['founding', 'charter', 'turn']),
   /** Copied from Settings at founding, so a setting changed mid-run never changes this run. */
   settings: z.object({ length: RunLengthSchema }),
@@ -434,6 +516,11 @@ const BlockV5Schema = z.object({
   applicants: z.array(ApplicantSchema),
   drawn: z.array(z.string().min(1)),
   refusal: RefusalSchema.nullable(),
+  /** Slice 5: the Hero (null only until the session makes them: it needs the run's seed and the Boss's starter), a battle the day waits on, who's posted where today (Hold), and the holding the Boss went to in person today. */
+  hero: HeroSchema.nullable(),
+  fight: FightSchema.nullable(),
+  posted: z.array(PostSchema),
+  inPerson: z.object({ day: z.number().int().min(1), holdingId: z.string().min(1) }).strict().nullable(),
   /** Slice 7: the Night (Part 30 section 3.10). */
   night: NightStateSchema,
 }).strict();
@@ -450,7 +537,8 @@ const startLoyalty = (creed: unknown): number => (creedsRaw.creeds.find((c) => c
  * v1 -> v2 (slice 1's block): the district is laid on the next step, the crew are four Grunts.
  * v2 -> v3 (slice 2's block): an empty Log and no Cards (the Log starts here; jobs already queued keep going without one), Given and Taken at 0, no rates.
  * v3 -> v4 (slice 3's block): the four Grunts stay, nameless, as people at the Creed's starting Loyalty; nobody at the notice board, nobody drawn, no refusal.
- * v4 -> v5 (slice 4's block): an empty Night (no knocks had, nothing on the Wall); everyone Easy, nobody's knocked yet.
+ * v4 -> v5 (slice 4's block): no Hero yet (the session makes them on the next load, from the run's seed), no fight, nobody posted, nobody gone in person.
+ * v5 -> v6 (slice 5's block): an empty Night (no knocks had, nothing on the Wall); everyone Easy, nobody's knocked yet.
  */
 export function migrateEvilBlock(raw: unknown): unknown {
   if (!raw || typeof raw !== 'object') return raw;
@@ -462,9 +550,10 @@ export function migrateEvilBlock(raw: unknown): unknown {
     const crew = Array.isArray(b.crew) ? (b.crew as { id: string; name: string; outOn: number | null }[]).map((c) => ({ ...namelessGrunt(1, loyalty), id: c.id, name: c.name, outOn: c.outOn })) : b.crew;
     b = { ...b, v: 4, crew, applicants: [], drawn: [], refusal: null };
   }
-  if (b.v === 4) {
+  if (b.v === 4) b = { ...b, v: 5, hero: null, fight: null, posted: [], inPerson: null };
+  if (b.v === 5) {
     const crew = Array.isArray(b.crew) ? (b.crew as Record<string, unknown>[]).map((c) => ({ mood: 'easy', knocks: 0, ...c })) : b.crew;
-    b = { ...b, v: 5, crew, night: emptyNight() };
+    b = { ...b, v: 6, crew, night: emptyNight() };
   }
   return b;
 }
