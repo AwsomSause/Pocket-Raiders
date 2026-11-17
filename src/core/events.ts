@@ -79,7 +79,7 @@ import { scavengerBonus } from './bank';
 import { ALPHA_MARK_HP, addLevels, calcStats, maxHp, maxPp } from './pokemon';
 import { startCalm } from './battle/calm';
 import { legendFlag, syncLegendFlags } from './legends/signs';
-import { takeBlessing } from './blessings';
+import { effectBlessing, takeBlessing } from './blessings';
 import { count, countShiny, discover } from './progress';
 import { FLAGS as POND_FLAGS, POND_JOIN_BELOW, POND_STEPS, freshMark, pondMon, recordLesson, setPondFlag } from './episodes/poliPond';
 import { eggStatus, eggTier, layEgg, warmEggs } from './eggs';
@@ -1142,7 +1142,8 @@ export function eventView(content: Content, run: RunState, sideId: string): Even
   // Rival questline tokens ({rival}, {say ...}) are filled for the reader; the stored event keeps them.
   const say = (t: string): string => questText(content, run, base.id, t);
   const event = seen.intro.includes('{') || seen.choices.some((c) => c.label.includes('{')) ? { ...seen, intro: say(seen.intro), choices: seen.choices.map((c) => (c.label.includes('{') ? { ...c, label: say(c.label) } : c)) } : seen;
-  const insight = hasPerk(content, run, 'eventInsight');
+  // Reshiram's blessing, The Truth: every choice shows what it will cause (as the Insight items do).
+  const insight = hasPerk(content, run, 'eventInsight') || effectBlessing(run)?.effect.kind === 'insight';
   const choices = event.choices.map((c) => {
     const unmet = c.requires.find((r) => !conditionMet(content, run, r));
     const missing = unmet ? conditionText(content, unmet) : tradeMissing(content, run, c);

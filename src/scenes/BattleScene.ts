@@ -98,6 +98,7 @@ import { itemCard, itemFooter } from '../core/itemPreview';
 import { battleOpening, runHealMultiplier } from '../core/run';
 import { rewindTurnsAvailable } from '../core/rewind';
 import { reverseSideProblem } from '../core/legends/reverseSide';
+import { calmProblem } from '../core/blessings';
 import { partyPreviews, quickSummaryText } from '../ui/itemScreen';
 import { animationStrength, animationTimeScale, animSettingsFrom } from '../core/accessibility';
 import { transformAnimId } from '../core/presentation/transformAnims';
@@ -129,6 +130,8 @@ import { COLORS, GAME_HEIGHT, GAME_WIDTH, PIXEL_SCALE, STATUS_LABELS, TYPE_COLOR
 import { Bar, badge, drawPanel, Menu } from '../ui/widgets';
 import { sceneForRun } from './routing';
 import { battleSkinFor, type BattleFrameInfo, type BattleHud, type BattleSkin, type BoxSpec, type MenuLayout, type MenuSpec, type Rect } from '../ui/battleStyles';
+import { fallbackFoeArt } from '../core/presentation/foeArt';
+import { reduxLayout, reduxSkinIndex } from '../core/presentation/redux';
 import { useLookFont } from '../ui/redux/canvasFont';
 import { mountRedux, reduxOn, type ReduxView } from '../ui/redux/stage';
 import { battleView, panelOf, splitChoice, type BattleBox, type BattleEvolve, type BattleLevel, type BattleModel, type BattlePanel } from '../ui/redux/screens/battle';
@@ -839,6 +842,15 @@ export class BattleScene extends Phaser.Scene {
 
   private frontEdgeMask?: Phaser.Display.Masks.GeometryMask;
 
+  /**
+   * Whether your Pokémon is cut at the arena's front edge. Only where a bar hides the cut: the Old bar, a battle style with a bar, and the
+   * New look's two layouts whose text box reaches up to that edge. The New look's top-bar and side-menu layouts leave the field open there.
+   */
+  private standClipped(): boolean {
+    if (this.skin) return Boolean(this.skin.layout.bar);
+    return !reduxOn() || reduxLayout(reduxSkinIndex(services().session.settings.reduxSkin), 4) < 2;
+  }
+
   /** Clips your Pokémon at the arena's front edge (the top of the message bar). Built once per battle. */
   private standMask(): Phaser.Display.Masks.GeometryMask {
     if (!this.frontEdgeMask?.geometryMask?.scene) {
@@ -1171,7 +1183,7 @@ export class BattleScene extends Phaser.Scene {
       actor.idle();
       // Off screen until it walks in for the throw (the reference: your trainer only appears on your side).
       actor.sprite.setVisible(false).setX(TRAINER_OFF_X);
-      if (!this.skin || this.skin.layout.bar) actor.sprite.setMask(this.standMask());
+      if (this.standClipped()) actor.sprite.setMask(this.standMask());
       this.trainerActor = actor;
     });
     const skip = (): void => this.trainerActor?.skip();
@@ -1266,7 +1278,13 @@ export class BattleScene extends Phaser.Scene {
     // A map event's trainer is drawn with the event's first cast member.
     const eventId = this.run.battle?.event?.eventId;
     const cast = eventId ? content.events.get(eventId)?.scene.cast[0] : undefined;
-    return cast ? { assetId: cast, label: trainer.name } : null;
+    if (cast && rxFileOf(this.cache.json.get('manifest') as AssetManifest | undefined, cast)) return { assetId: cast, label: trainer.name };
+    // An event that names nobody to draw (or names something that is not a picture): a stand-in read from the Trainer's name.
+    const stand = fallbackFoeArt(content, trainer.name, evilTeam(content, this.run)?.ranks.grunt.sprite);
+    if (!stand) return cast ? { assetId: cast, label: trainer.name } : null;
+    if ('assetId' in stand) return { assetId: stand.assetId, label: trainer.name };
+    const sp = content.species.get(stand.speciesId);
+    return sp ? { assetId: pokemonAssetIds(sp.assets).front, label: trainer.name } : null;
   }
 
   private names(trainer: string | null): Names {
@@ -1316,7 +1334,7 @@ export class BattleScene extends Phaser.Scene {
       this.field.add(this.playerSprite);
       // It stands in the foreground, so its lower part is hidden at the arena's front edge (where the message bar starts),
       // never drawn over the bar, even a see-through one. Styles with no bar (Ring, Cinematic, Ink) show it whole.
-      if (!this.skin || this.skin.layout.bar) this.playerSprite.setMask(this.standMask());
+      if (this.standClipped()) this.playerSprite.setMask(this.standMask());
       this.skin?.sprite?.(this.playerSprite);
       this.wearPink(this.playerSprite, pinkTint(mon));
       this.prefetchMoves(mon);
@@ -3235,7 +3253,7 @@ export class BattleScene extends Phaser.Scene {
     let over = false;
     this.time.delayedCall(150, () => {
       // S257: when the player skips and Skip recap is on, a text line says what the cutscene showed.
-      if (!over) this.advance = recap && services().session.settings.skipRecap ? () => { b.skip(); interactionLog.add(recap); showRecapBanner(this, recap); } : b.skip;
+      if (!over) this.advance = recap && services().session.settings.skipRecap ? () => { b.skip(); interactionLog.add(recap); showRecapBanner(this, recap, 2600, this.rx ? MESSAGE_Y - 34 : undefined); } : b.skip;
     });
     await b.done;
     over = true;
@@ -3870,6 +3888,9 @@ export class BattleScene extends Phaser.Scene {
     // Catalog Overhaul (legends row B): The Renegade's Reverse Side, once per stage, out of a battle that is not a boss's.
     const reverseAt = (!this.duo || this.cmdSpot === 0) && reverseSideProblem(this.run) === null ? options.length : -1;
     if (reverseAt >= 0) options.push({ label: 'Reverse Side' });
+    // Lugia's blessing: the Calm, once per stage (single battles; it does not take the turn).
+    const calmAt = !this.duo && calmProblem(this.run) === null ? options.length : -1;
+    if (calmAt >= 0) options.push({ label: 'Calm' });
     // A combined style (Wii channel grid) puts the moves in place of Fight: picking one opens the move menu and uses it.
     const combined = this.skin?.layout.combined && !this.duo ? this.combinedMoves() : [];
     const k = combined.length;
@@ -3919,6 +3940,7 @@ export class BattleScene extends Phaser.Scene {
         }
         else if (i === rewindAt) this.showRewindMenu(rewindMax);
         else if (i === reverseAt) void this.stepToReverseSide();
+        else if (i === calmAt) void this.callCalm();
         else if (i === lastResortAt) {
           void this.playLastResort();
         } else if (i >= hotbarAt && i < hotbarAt + hotbar.length) this.submit({ kind: 'item', itemId: hotbar[i - hotbarAt]! });
@@ -3987,6 +4009,16 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /** The three raid cheers: Offense, Defense, Healing (each costs one of three cheers and the turn). */
+  /** Lugia's Calm: clears weather, terrain and stat changes (core/blessings callCalm), then the screen redraws from the run. */
+  private async callCalm(): Promise<void> {
+    this.menu?.destroy();
+    this.menu = null;
+    const message = services().session.callCalm();
+    if (!message) return this.showRootMenu();
+    await this.say(message);
+    this.scene.start(sceneForRun(services().session.run!));
+  }
+
   /** The Renegade's Reverse Side: the battle ends with nothing won or lost, and the map shows the node's other side. */
   private async stepToReverseSide(): Promise<void> {
     this.menu?.destroy();
@@ -4950,6 +4982,8 @@ export class BattleScene extends Phaser.Scene {
     const look = artOverride?.look ?? (this.stadium && (isFoe ? boss?.role === 'champion' : Boolean(this.hostArtFor(speaker))) ? 'champion' : undefined);
     // New UI: a stadium broadcast line (the reporter, a guest in the stands, a round's opponent) is the mock-ups' talk page.
     if (this.rx && this.stadium && (artOverride?.look === 'crowd' || speaker === 'Reporter')) return this.rxBroadcast(speaker, plain, artOverride?.assetId ?? this.hostArtFor(speaker));
+    // New UI: the cut-in is drawn on the canvas, under the HUD layer; the HUD steps aside so nothing covers the words.
+    this.rx?.visible(false);
     const line = storyLine(this, {
       speaker,
       role,
@@ -4973,6 +5007,7 @@ export class BattleScene extends Phaser.Scene {
         auto?.remove(false);
         this.advance = null;
         if (this.message.active) this.message.setText(before);
+        this.rx?.visible(true);
         resolve();
       });
     });

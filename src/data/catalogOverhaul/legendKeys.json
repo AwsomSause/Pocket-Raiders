@@ -8,7 +8,8 @@
     { "item": "works-key", "place": "works-key-plant", "kind": "trial", "earn": [
       [{ "kind": "flag", "key": "birds-trial-zapdos" }],
       [{ "kind": "flag", "key": "blessing-zapdos" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }],
-      [{ "kind": "flag", "key": "blessing-raikou" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+      [{ "kind": "flag", "key": "blessing-raikou" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }],
+      [{ "kind": "flag", "key": "blessing-thundurus" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
     ] },
     { "item": "secret-key", "place": "secret-key-volcano", "kind": "trial", "earn": [
       [{ "kind": "flag", "key": "birds-trial-moltres" }],
@@ -42,11 +43,13 @@
     ] },
     { "item": "light-stone", "place": "light-stone-reshiram", "kind": "trial", "earn": [
       [{ "kind": "flag", "key": "tao-done" }],
-      [{ "kind": "flag", "key": "blessing-reshiram" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+      [{ "kind": "flag", "key": "blessing-reshiram" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }],
+      [{ "kind": "flag", "key": "blessing-kyurem" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
     ] },
     { "item": "dark-stone", "place": "dark-stone-zekrom", "kind": "trial", "earn": [
       [{ "kind": "flag", "key": "tao-done" }],
-      [{ "kind": "flag", "key": "blessing-zekrom" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
+      [{ "kind": "flag", "key": "blessing-zekrom" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }],
+      [{ "kind": "flag", "key": "blessing-kyurem" }, { "kind": "flag", "key": "blessing-influence", "atLeast": 5 }]
     ] },
     { "item": "auroraticket", "place": "auroraticket-island", "kind": "visit", "earn": [
       [{ "kind": "flag", "key": "believed-deoxys" }, { "kind": "flag", "key": "mythical-visited", "atLeast": 0, "atMost": 0 }]

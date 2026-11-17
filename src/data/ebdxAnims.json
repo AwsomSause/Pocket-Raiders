@@ -629,6 +629,7 @@
     },
     "psychic": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -682,6 +683,7 @@
     },
     "leer": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -721,6 +723,7 @@
     },
     "bite": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -774,6 +777,7 @@
     },
     "crunch": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -848,6 +852,7 @@
     },
     "scaryface": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -887,6 +892,7 @@
     },
     "slash": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -936,6 +942,7 @@
     },
     "astonish": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -1027,6 +1034,7 @@
     },
     "headbutt": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -1097,6 +1105,7 @@
     },
     "screech": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -1203,6 +1212,7 @@
     },
     "endure": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -1255,6 +1265,7 @@
     },
     "focusenergy": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -1307,6 +1318,7 @@
     },
     "scratch": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -1356,6 +1368,7 @@
     },
     "hydropump": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -1411,6 +1424,7 @@
     },
     "protect": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -1460,6 +1474,7 @@
     },
     "charm": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -1524,6 +1539,7 @@
     },
     "ancientpower": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -1615,6 +1631,7 @@
     },
     "taunt": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -1664,6 +1681,7 @@
     },
     "psybeam": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -1712,6 +1730,7 @@
     },
     "waterpulse": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -1797,6 +1816,7 @@
     },
     "swordsdance": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -1849,6 +1869,7 @@
     },
     "harden": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -1902,6 +1923,7 @@
     },
     "thrash": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -1999,6 +2021,7 @@
     },
     "confuseray": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -2050,6 +2073,7 @@
     },
     "furyswipes": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -2099,6 +2123,7 @@
     },
     "nastyplot": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -2151,6 +2176,7 @@
     },
     "rollout": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -2220,6 +2246,7 @@
     },
     "airslash": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -2294,6 +2321,7 @@
     },
     "zenheadbutt": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -2370,6 +2398,7 @@
     },
     "rockslide": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -2433,6 +2462,7 @@
     },
     "discharge": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -2535,6 +2565,7 @@
     },
     "swift": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -2593,6 +2624,7 @@
     },
     "leechseed": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -2635,6 +2667,7 @@
     },
     "mudslap": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -2720,6 +2753,7 @@
     },
     "growth": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -2772,6 +2806,7 @@
     },
     "hypnosis": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -2873,6 +2908,7 @@
     },
     "nightslash": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -2962,6 +2998,7 @@
     },
     "metalclaw": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -3009,6 +3046,7 @@
     },
     "calmmind": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -3088,6 +3126,7 @@
     },
     "recover": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -3133,6 +3172,7 @@
     },
     "toxic": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -3176,6 +3216,7 @@
     },
     "lightscreen": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -3225,6 +3266,7 @@
     },
     "safeguard": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -3274,6 +3316,7 @@
     },
     "curse": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -3319,6 +3362,7 @@
     },
     "raindance": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -3377,6 +3421,7 @@
     },
     "shadowball": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -3479,6 +3524,7 @@
     },
     "closecombat": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -3564,6 +3610,7 @@
     },
     "counter": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -3603,6 +3650,7 @@
     },
     "dragonbreath": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -3679,6 +3727,7 @@
     },
     "flamethrower": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -3743,6 +3792,7 @@
     },
     "outrage": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -3840,6 +3890,7 @@
     },
     "playrough": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [
         {
@@ -3931,6 +3982,7 @@
     },
     "dragonpulse": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -4007,6 +4059,7 @@
     },
     "aerialace": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -4077,6 +4130,7 @@
     },
     "charge": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -4150,6 +4204,7 @@
     },
     "earthpower": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -4199,6 +4254,7 @@
     },
     "razorleaf": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -4311,6 +4367,7 @@
     },
     "spark": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -4393,6 +4450,7 @@
     },
     "bubble": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -4476,6 +4534,7 @@
     },
     "roost": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -4515,6 +4574,7 @@
     },
     "thunderwave": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [
         {
@@ -4617,6 +4677,7 @@
     },
     "uproar": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -4723,6 +4784,7 @@
     },
     "bugbite": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -4787,6 +4849,7 @@
     },
     "hex": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -4840,6 +4903,7 @@
     },
     "rockthrow": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -4904,6 +4968,7 @@
     },
     "sweetscent": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -4959,6 +5024,7 @@
     },
     "babydolleyes": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -4992,6 +5058,7 @@
     },
     "bubblebeam": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -5098,6 +5165,7 @@
     },
     "ironhead": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -5174,6 +5242,7 @@
     },
     "stomp": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -5244,6 +5313,7 @@
     },
     "gust": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -5302,6 +5372,7 @@
     },
     "moonblast": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -5409,6 +5480,7 @@
     },
     "supersonic": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -5515,6 +5587,7 @@
     },
     "aquatail": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -5612,6 +5685,7 @@
     },
     "doublekick": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -5682,6 +5756,7 @@
     },
     "furycutter": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -5731,6 +5806,7 @@
     },
     "hyperbeam": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -5832,6 +5908,7 @@
     },
     "encore": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -5881,6 +5958,7 @@
     },
     "wingattack": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -5972,6 +6050,7 @@
     },
     "mist": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -6015,6 +6094,7 @@
     },
     "sandstorm": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -6073,6 +6153,7 @@
     },
     "stoneedge": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -6170,6 +6251,7 @@
     },
     "synthesis": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -6209,6 +6291,7 @@
     },
     "blizzard": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -6271,6 +6354,7 @@
     },
     "poisonjab": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -6320,6 +6404,7 @@
     },
     "firefang": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -6400,6 +6485,7 @@
     },
     "brine": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -6478,6 +6564,7 @@
     },
     "batonpass": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -6536,6 +6623,7 @@
     },
     "energyball": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -6632,6 +6720,7 @@
     },
     "hammerarm": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -6708,6 +6797,7 @@
     },
     "stunspore": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -6751,6 +6841,7 @@
     },
     "detect": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -6800,6 +6891,7 @@
     },
     "explosion": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -6891,6 +6983,7 @@
     },
     "metalsound": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -6997,6 +7090,7 @@
     },
     "rage": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [
         {
@@ -7082,6 +7176,7 @@
     },
     "stealthrock": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -7145,6 +7240,7 @@
     },
     "disarmingvoice": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -7203,6 +7299,7 @@
     },
     "hypervoice": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -7305,6 +7402,7 @@
     },
     "icefang": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -7390,6 +7488,7 @@
     },
     "lastresort": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -7475,6 +7574,7 @@
     },
     "gigaimpact": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -7566,6 +7666,7 @@
     },
     "lick": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -7651,6 +7752,7 @@
     },
     "wrap": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -7704,6 +7806,7 @@
     },
     "bulkup": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -7756,6 +7859,7 @@
     },
     "darkpulse": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -7851,6 +7955,7 @@
     },
     "icywind": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -7920,6 +8025,7 @@
     },
     "mudshot": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -7965,6 +8071,7 @@
     },
     "bulletseed": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -8071,6 +8178,7 @@
     },
     "magicalleaf": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -8183,6 +8291,7 @@
     },
     "poisonsting": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -8280,6 +8389,7 @@
     },
     "powergem": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -8371,6 +8481,7 @@
     },
     "sunnyday": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -8429,6 +8540,7 @@
     },
     "dragonclaw": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -8524,6 +8636,7 @@
     },
     "smackdown": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -8609,6 +8722,7 @@
     },
     "firespin": {
       "v": 1,
+      "draft": true,
       "length": 1470,
       "layers": [
         {
@@ -8668,6 +8782,7 @@
     },
     "tailwind": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -8716,6 +8831,7 @@
     },
     "twister": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -8788,6 +8904,7 @@
     },
     "acrobatics": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [
         {
@@ -8873,6 +8990,7 @@
     },
     "flamecharge": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -8918,6 +9036,7 @@
     },
     "hurricane": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -8990,6 +9109,7 @@
     },
     "withdraw": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -9049,6 +9169,7 @@
     },
     "bugbuzz": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -9155,6 +9276,7 @@
     },
     "flareblitz": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -9252,6 +9374,7 @@
     },
     "reflect": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -9301,6 +9424,7 @@
     },
     "strugglebug": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -9359,6 +9483,7 @@
     },
     "heavyslam": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -9416,6 +9541,7 @@
     },
     "seedbomb": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -9507,6 +9633,7 @@
     },
     "torment": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -9556,6 +9683,7 @@
     },
     "watersport": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -9595,6 +9723,7 @@
     },
     "gyroball": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -9664,6 +9793,7 @@
     },
     "healpulse": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -9770,6 +9900,7 @@
     },
     "incinerate": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -9834,6 +9965,7 @@
     },
     "leafstorm": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -9935,6 +10067,7 @@
     },
     "meanlook": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -9974,6 +10107,7 @@
     },
     "memento": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -10071,6 +10205,7 @@
     },
     "sleeppowder": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -10114,6 +10249,7 @@
     },
     "fairywind": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -10163,6 +10299,7 @@
     },
     "psychup": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -10238,6 +10375,7 @@
     },
     "retaliate": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -10293,6 +10431,7 @@
     },
     "rockblast": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -10399,6 +10538,7 @@
     },
     "belch": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -10448,6 +10588,7 @@
     },
     "electroball": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -10538,6 +10679,7 @@
     },
     "whirlwind": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -10587,6 +10729,7 @@
     },
     "xscissor": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -10663,6 +10806,7 @@
     },
     "destinybond": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -10708,6 +10852,7 @@
     },
     "dragondance": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -10760,6 +10905,7 @@
     },
     "echoedvoice": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -10866,6 +11012,7 @@
     },
     "fling": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -10957,6 +11104,7 @@
     },
     "foresight": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -10996,6 +11144,7 @@
     },
     "icebeam": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -11074,6 +11223,7 @@
     },
     "laserfocus": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -11113,6 +11263,7 @@
     },
     "smokescreen": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -11156,6 +11307,7 @@
     },
     "sweetkiss": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -11220,6 +11372,7 @@
     },
     "liquidation": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -11269,6 +11422,7 @@
     },
     "bravebird": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -11358,6 +11512,7 @@
     },
     "flashcannon": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -11465,6 +11620,7 @@
     },
     "mudsport": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -11504,6 +11660,7 @@
     },
     "pinmissile": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -11556,6 +11713,7 @@
     },
     "stockpile": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -11601,6 +11759,7 @@
     },
     "willowisp": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -11665,6 +11824,7 @@
     },
     "leafblade": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -11741,6 +11901,7 @@
     },
     "zapcannon": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -11831,6 +11992,7 @@
     },
     "aquaring": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -11914,6 +12076,7 @@
     },
     "dragontail": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -12005,6 +12168,7 @@
     },
     "mirrorcoat": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -12044,6 +12208,7 @@
     },
     "psywave": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -12150,6 +12315,7 @@
     },
     "sludgebomb": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -12228,6 +12394,7 @@
     },
     "vinewhip": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -12319,6 +12486,7 @@
     },
     "psychocut": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -12418,6 +12586,7 @@
     },
     "thunderfang": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -12494,6 +12663,7 @@
     },
     "toxicspikes": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -12557,6 +12727,7 @@
     },
     "brickbreak": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -12627,6 +12798,7 @@
     },
     "chargebeam": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -12688,6 +12860,7 @@
     },
     "dragonrage": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -12764,6 +12937,7 @@
     },
     "featherdance": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -12813,6 +12987,7 @@
     },
     "mudbomb": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -12898,6 +13073,7 @@
     },
     "sing": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -12977,6 +13153,7 @@
     },
     "dazzlinggleam": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -13079,6 +13256,7 @@
     },
     "healingwish": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -13118,6 +13296,7 @@
     },
     "ingrain": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [
         {
@@ -13178,6 +13357,7 @@
     },
     "luckychant": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -13217,6 +13397,7 @@
     },
     "poisongas": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -13260,6 +13441,7 @@
     },
     "surf": {
       "v": 1,
+      "draft": true,
       "length": 1550,
       "layers": [
         {
@@ -13338,6 +13520,7 @@
     },
     "fireblast": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -13435,6 +13618,7 @@
     },
     "healblock": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -13484,6 +13668,7 @@
     },
     "electricterrain": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -13557,6 +13742,7 @@
     },
     "flameburst": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -13621,6 +13807,7 @@
     },
     "hail": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -13679,6 +13866,7 @@
     },
     "muddywater": {
       "v": 1,
+      "draft": true,
       "length": 1550,
       "layers": [
         {
@@ -13757,6 +13945,7 @@
     },
     "ominouswind": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -13811,6 +14000,7 @@
     },
     "sandtomb": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -13860,6 +14050,7 @@
     },
     "thunderpunch": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -13921,6 +14112,7 @@
     },
     "autotomize": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -13973,6 +14165,7 @@
     },
     "overheat": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -14070,6 +14263,7 @@
     },
     "shellsmash": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -14129,6 +14323,7 @@
     },
     "spitup": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -14230,6 +14425,7 @@
     },
     "wildcharge": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -14327,6 +14523,7 @@
     },
     "coil": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -14366,6 +14563,7 @@
     },
     "falseswipe": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -14440,6 +14638,7 @@
     },
     "inferno": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -14504,6 +14703,7 @@
     },
     "megahorn": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -14587,6 +14787,7 @@
     },
     "recycle": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -14662,6 +14863,7 @@
     },
     "wakeupslap": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -14732,6 +14934,7 @@
     },
     "whirlpool": {
       "v": 1,
+      "draft": true,
       "length": 1470,
       "layers": [
         {
@@ -14785,6 +14988,7 @@
     },
     "attract": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -14849,6 +15053,7 @@
     },
     "aurasphere": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -14944,6 +15149,7 @@
     },
     "mistyterrain": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -15017,6 +15223,7 @@
     },
     "highhorsepower": {
       "v": 1,
+      "draft": true,
       "length": 1470,
       "layers": [
         {
@@ -15093,6 +15300,7 @@
     },
     "iciclecrash": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -15178,6 +15386,7 @@
     },
     "moonlight": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -15217,6 +15426,7 @@
     },
     "petaldance": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -15314,6 +15524,7 @@
     },
     "silverwind": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -15368,6 +15579,7 @@
     },
     "woodhammer": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -15444,6 +15656,7 @@
     },
     "drillpeck": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -15520,6 +15733,7 @@
     },
     "irontail": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -15611,6 +15825,7 @@
     },
     "lavaplume": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -15660,6 +15875,7 @@
     },
     "perishsong": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -15739,6 +15955,7 @@
     },
     "petalblizzard": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -15851,6 +16068,7 @@
     },
     "round": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -15957,6 +16175,7 @@
     },
     "clearsmog": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -16000,6 +16219,7 @@
     },
     "headsmash": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -16091,6 +16311,7 @@
     },
     "hornattack": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -16182,6 +16403,7 @@
     },
     "lockon": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -16221,6 +16443,7 @@
     },
     "triattack": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -16269,6 +16492,7 @@
     },
     "aurorabeam": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -16326,6 +16550,7 @@
     },
     "allyswitch": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -16390,6 +16615,7 @@
     },
     "firepunch": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -16449,6 +16675,7 @@
     },
     "magnetrise": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -16501,6 +16728,7 @@
     },
     "poisonfang": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -16577,6 +16805,7 @@
     },
     "refresh": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -16652,6 +16881,7 @@
     },
     "switcheroo": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -16716,6 +16946,7 @@
     },
     "throatchop": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -16798,6 +17029,7 @@
     },
     "freezedry": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -16885,6 +17117,7 @@
     },
     "signalbeam": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -16942,6 +17175,7 @@
     },
     "snarl": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -17012,6 +17246,7 @@
     },
     "avalanche": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -17075,6 +17310,7 @@
     },
     "beatup": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [
         {
@@ -17160,6 +17396,7 @@
     },
     "teeterdance": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -17199,6 +17436,7 @@
     },
     "finalgambit": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -17284,6 +17522,7 @@
     },
     "guillotine": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -17352,6 +17591,7 @@
     },
     "razorshell": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -17428,6 +17668,7 @@
     },
     "quiverdance": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -17486,6 +17727,7 @@
     },
     "sacredsword": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -17560,6 +17802,7 @@
     },
     "shadowclaw": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -17651,6 +17894,7 @@
     },
     "skillswap": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -17715,6 +17959,7 @@
     },
     "wavecrash": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -17800,6 +18045,7 @@
     },
     "block": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -17853,6 +18099,7 @@
     },
     "hiddenpower": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -17954,6 +18201,7 @@
     },
     "highjumpkick": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [
         {
@@ -18057,6 +18305,7 @@
     },
     "icepunch": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -18143,6 +18392,7 @@
     },
     "infestation": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -18186,6 +18436,7 @@
     },
     "snore": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -18256,6 +18507,7 @@
     },
     "weatherball-up": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -18295,6 +18547,7 @@
     },
     "crushclaw": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -18342,6 +18595,7 @@
     },
     "gunkshot": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -18420,6 +18674,7 @@
     },
     "spikes": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -18483,6 +18738,7 @@
     },
     "tearfullook": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -18547,6 +18803,7 @@
     },
     "cottonspore": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -18590,6 +18847,7 @@
     },
     "dualchop": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -18679,6 +18937,7 @@
     },
     "forcepalm": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -18768,6 +19027,7 @@
     },
     "glare": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -18807,6 +19067,7 @@
     },
     "magiccoat": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -18846,6 +19107,7 @@
     },
     "stickyweb": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -18915,6 +19177,7 @@
     },
     "boomburst": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -19021,6 +19284,7 @@
     },
     "guardswap": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -19085,6 +19349,7 @@
     },
     "heatwave": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -19133,6 +19398,7 @@
     },
     "poisontail": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -19224,6 +19490,7 @@
     },
     "psychoshift": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -19288,6 +19555,7 @@
     },
     "sonicboom": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -19394,6 +19662,7 @@
     },
     "jumpkick": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -19464,6 +19733,7 @@
     },
     "horndrill": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -19547,6 +19817,7 @@
     },
     "megapunch": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -19632,6 +19903,7 @@
     },
     "morningsun": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -19671,6 +19943,7 @@
     },
     "ragepowder": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -19714,6 +19987,7 @@
     },
     "rockclimb": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [
         {
@@ -19799,6 +20073,7 @@
     },
     "sludgewave": {
       "v": 1,
+      "draft": true,
       "length": 1550,
       "layers": [
         {
@@ -19877,6 +20152,7 @@
     },
     "barrier": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -19926,6 +20202,7 @@
     },
     "crosschop": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -19996,6 +20273,7 @@
     },
     "mysticalfire": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -20060,6 +20338,7 @@
     },
     "powerswap": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -20124,6 +20403,7 @@
     },
     "vitalthrow": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -20194,6 +20474,7 @@
     },
     "crosspoison": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -20276,6 +20557,7 @@
     },
     "shadowpunch": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -20356,6 +20638,7 @@
     },
     "spikyshield": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -20405,6 +20688,7 @@
     },
     "crabhammer": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -20507,6 +20791,7 @@
     },
     "drillrun": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -20583,6 +20868,7 @@
     },
     "eruption": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -20680,6 +20966,7 @@
     },
     "leaftornado": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -20752,6 +21039,7 @@
     },
     "meditate": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -20804,6 +21092,7 @@
     },
     "meteormash": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -20901,6 +21190,7 @@
     },
     "psychicterrain": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -20974,6 +21264,7 @@
     },
     "grasswhistle": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -21053,6 +21344,7 @@
     },
     "iceball": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -21144,6 +21436,7 @@
     },
     "iondeluge-up": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -21202,6 +21495,7 @@
     },
     "megakick": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -21287,6 +21581,7 @@
     },
     "spotlight": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -21336,6 +21631,7 @@
     },
     "strengthsap": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -21391,6 +21687,7 @@
     },
     "bonerush": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -21433,6 +21730,7 @@
     },
     "payday": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -21503,6 +21801,7 @@
     },
     "steelwing": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -21594,6 +21893,7 @@
     },
     "vacuumwave": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -21683,6 +21983,7 @@
     },
     "clamp": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -21736,6 +22037,7 @@
     },
     "healbell": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -21815,6 +22117,7 @@
     },
     "iciclespear": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -21873,6 +22176,7 @@
     },
     "needlearm": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -21974,6 +22278,7 @@
     },
     "spiderweb": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -22052,6 +22357,7 @@
     },
     "thief": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -22101,6 +22407,7 @@
     },
     "waterspout": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -22204,6 +22511,7 @@
     },
     "firelash": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -22286,6 +22594,7 @@
     },
     "headlongrush": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -22377,6 +22686,7 @@
     },
     "magnetbomb": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -22447,6 +22757,7 @@
     },
     "eggbomb": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -22538,6 +22849,7 @@
     },
     "expandingforce": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -22591,6 +22903,7 @@
     },
     "naturesmadness": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -22693,6 +23006,7 @@
     },
     "conversion": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -22768,6 +23082,7 @@
     },
     "dragonhammer": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -22844,6 +23159,7 @@
     },
     "electroweb": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -22937,6 +23253,7 @@
     },
     "fleurcannon": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -22992,6 +23309,7 @@
     },
     "geargrind": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [
         {
@@ -23037,6 +23355,7 @@
     },
     "psystrike": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -23134,6 +23453,7 @@
     },
     "tailslap": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -23219,6 +23539,7 @@
     },
     "terrainpulse": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -23320,6 +23641,7 @@
     },
     "barbbarrage": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -23372,6 +23694,7 @@
     },
     "bleakwindstorm": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -23420,6 +23743,7 @@
     },
     "cut": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -23469,6 +23793,7 @@
     },
     "darkvoid": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -23564,6 +23889,7 @@
     },
     "dragonascent": {
       "v": 1,
+      "draft": true,
       "length": 1020,
       "layers": [
         {
@@ -23653,6 +23979,7 @@
     },
     "jetpunch": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -23754,6 +24081,7 @@
     },
     "lusterpurge": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -23851,6 +24179,7 @@
     },
     "mistball": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -23941,6 +24270,7 @@
     },
     "mistyexplosion": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -24019,6 +24349,7 @@
     },
     "octazooka": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -24125,6 +24456,7 @@
     },
     "originpulse": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -24232,6 +24564,7 @@
     },
     "present": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [
         {
@@ -24274,6 +24607,7 @@
     },
     "psychicfangs": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -24350,6 +24684,7 @@
     },
     "roaroftime": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -24399,6 +24734,7 @@
     },
     "sacredfire": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -24463,6 +24799,7 @@
     },
     "smartstrike": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -24554,6 +24891,7 @@
     },
     "spacialrend": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -24609,6 +24947,7 @@
     },
     "syrupbomb": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -24666,6 +25005,7 @@
     },
     "transform": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -24741,6 +25081,7 @@
     },
     "aeroblast": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -24836,6 +25177,7 @@
     },
     "attackorder": {
       "v": 1,
+      "draft": true,
       "length": 1470,
       "layers": [
         {
@@ -24943,6 +25285,7 @@
     },
     "boltstrike": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -25028,6 +25371,7 @@
     },
     "crushgrip": {
       "v": 1,
+      "draft": true,
       "length": 1630,
       "layers": [
         {
@@ -25081,6 +25425,7 @@
     },
     "luminacrash": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -25188,6 +25533,7 @@
     },
     "defendorder": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -25221,6 +25567,7 @@
     },
     "dragondarts": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -25305,6 +25652,7 @@
     },
     "floralhealing": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -25344,6 +25692,7 @@
     },
     "focusblast": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -25451,6 +25800,7 @@
     },
     "judgment": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -25558,6 +25908,7 @@
     },
     "pollenpuff": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -25654,6 +26005,7 @@
     },
     "powder": {
       "v": 1,
+      "draft": true,
       "length": 1118,
       "layers": [
         {
@@ -25697,6 +26049,7 @@
     },
     "risingvoltage": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -25805,6 +26158,7 @@
     },
     "scaleshot": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -25896,6 +26250,7 @@
     },
     "silktrap": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [
         {
@@ -25944,6 +26299,7 @@
     },
     "spiritshackle": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -26041,6 +26397,7 @@
     },
     "tropkick": {
       "v": 1,
+      "draft": true,
       "length": 1502,
       "layers": [
         {
@@ -26115,6 +26472,7 @@
     },
     "blastburn": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -26170,6 +26528,7 @@
     },
     "chatter": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -26261,6 +26620,7 @@
     },
     "alluringvoice": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -26361,6 +26721,7 @@
     },
     "fierywrath": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -26446,6 +26807,7 @@
     },
     "grasspledge": {
       "v": 1,
+      "draft": true,
       "length": 1060,
       "layers": [
         {
@@ -26497,6 +26859,7 @@
     },
     "poltergeist": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [
         {
@@ -26550,6 +26913,7 @@
     },
     "trailblaze": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [
         {
@@ -26641,6 +27005,7 @@
     },
     "volttackle": {
       "v": 1,
+      "draft": true,
       "length": 1374,
       "layers": [
         {
@@ -26738,6 +27103,7 @@
     },
     "takedown": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [],
       "veil": {
@@ -26771,6 +27137,7 @@
     },
     "doubleteam": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "veil": {
@@ -26797,6 +27164,7 @@
     },
     "earthquake": {
       "v": 1,
+      "draft": true,
       "length": 1470,
       "layers": [],
       "veil": {
@@ -26824,6 +27192,7 @@
     },
     "bulletpunch": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "veil": {
@@ -26850,6 +27219,7 @@
     },
     "feintattack": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "veil": {
@@ -26876,6 +27246,7 @@
     },
     "tailwhip": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [],
       "veil": {
@@ -26902,6 +27273,7 @@
     },
     "helpinghand": {
       "v": 1,
+      "draft": true,
       "length": 1150,
       "layers": [],
       "veil": {
@@ -26921,6 +27293,7 @@
     },
     "superpower": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -26934,6 +27307,7 @@
     },
     "aquajet": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "veil": {
@@ -26966,6 +27340,7 @@
     },
     "splash": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [],
       "veil": {
@@ -26992,6 +27367,7 @@
     },
     "roar": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [],
       "veil": {
@@ -27011,6 +27387,7 @@
     },
     "powertrip": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27024,6 +27401,7 @@
     },
     "futuresight": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27037,6 +27415,7 @@
     },
     "rocksmash": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27050,6 +27429,7 @@
     },
     "dig": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27063,6 +27443,7 @@
     },
     "nightshade": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [],
       "veil": {
@@ -27093,6 +27474,7 @@
     },
     "solarbeam": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27106,6 +27488,7 @@
     },
     "bounce": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27119,6 +27502,7 @@
     },
     "shadowsneak": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "veil": {
@@ -27145,6 +27529,7 @@
     },
     "iceshard": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "veil": {
@@ -27171,6 +27556,7 @@
     },
     "howl": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [],
       "veil": {
@@ -27190,6 +27576,7 @@
     },
     "shadowforce": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27203,6 +27590,7 @@
     },
     "uturn": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "veil": {
@@ -27229,6 +27617,7 @@
     },
     "shockwave": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27242,6 +27631,7 @@
     },
     "razorwind": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27255,6 +27645,7 @@
     },
     "focuspunch": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27268,6 +27659,7 @@
     },
     "skyattack": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27281,6 +27673,7 @@
     },
     "dynamicpunch": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27294,6 +27687,7 @@
     },
     "wish": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27307,6 +27701,7 @@
     },
     "dive": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27320,6 +27715,7 @@
     },
     "quickattack": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "veil": {
@@ -27346,6 +27742,7 @@
     },
     "skullbash": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27359,6 +27756,7 @@
     },
     "fly": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27372,6 +27770,7 @@
     },
     "machpunch": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "veil": {
@@ -27398,6 +27797,7 @@
     },
     "dizzypunch": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27411,6 +27811,7 @@
     },
     "flash": {
       "v": 1,
+      "draft": true,
       "length": 1342,
       "layers": [],
       "veil": {
@@ -27437,6 +27838,7 @@
     },
     "skydrop": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27450,6 +27852,7 @@
     },
     "sleeptalk": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [],
       "veil": {
@@ -27469,6 +27872,7 @@
     },
     "scald": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27482,6 +27886,7 @@
     },
     "solarblade": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27495,6 +27900,7 @@
     },
     "aurawheel": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [],
       "sfx": [
@@ -27508,6 +27914,7 @@
     },
     "shoreup": {
       "v": 1,
+      "draft": true,
       "length": 1800,
       "layers": [],
       "veil": {
@@ -27539,6 +27946,7 @@
     },
     "doomdesire": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27552,6 +27960,7 @@
     },
     "shelltrap": {
       "v": 1,
+      "draft": true,
       "length": 990,
       "layers": [],
       "hit": {
@@ -27565,6 +27974,7 @@
     },
     "coaching": {
       "v": 1,
+      "draft": true,
       "length": 900,
       "layers": [],
       "veil": {
@@ -27584,6 +27994,7 @@
     },
     "duskvolley": {
       "v": 1,
+      "draft": true,
       "length": 1100,
       "veil": {
         "color": "#1a0f33",

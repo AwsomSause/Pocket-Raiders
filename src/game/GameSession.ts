@@ -60,7 +60,7 @@ import * as Run from '../core/run';
 import { cheerSky } from '../core/sky/spectate';
 import { EX_MOMENT_CHOICES, exMomentAnswer, exMomentAsk, exMomentDue, exMomentLines, exWatchAction, exWatching } from '../core/greenneedle/exhibition';
 import { rewindBattle } from '../core/rewind';
-import { useBlessingRite } from '../core/blessings';
+import { swearVow, useBlessingRite } from '../core/blessings';
 import { markRumorShown, nodeHint } from '../core/worldSim/tick';
 import { applyNursery, type NurseryChoice } from '../core/nursery';
 import { applyFormShift } from '../core/formShift';
@@ -707,6 +707,22 @@ export class GameSession {
     this.run = result.run;
     this.persistRun();
     return result.message;
+  }
+
+  /** Lugia's blessing: the Calm (core/blessings callCalm). The message, or null when it can't be used. */
+  callCalm(): string | null {
+    const result = Run.callLugiaCalm(this.requireRun());
+    if (!result) return null;
+    this.run = result.run;
+    this.persistRun();
+    return result.message;
+  }
+
+  /** Zekrom's blessing: swears the run's vow at the opening. */
+  swearVow(vow: 'no-one-behind' | 'strike-no-one-first'): boolean {
+    const ok = swearVow(this.requireRun(), vow);
+    if (ok) this.persistRun();
+    return ok;
   }
 
   /** Beta 0.7 Legendary Blessings: uses the run's Rite (Tapu Lele's heal, Dialga's stage rewind). Returns the message, or null when it can't be used. */
