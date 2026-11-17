@@ -11,17 +11,21 @@ export { CATEGORY } from './_gn.ts';
 // this region. Fights and joins name it `@wontevolve`. Its move Proof and its ability Unwavering live in canonMoves.json / abilities.json.
 // =====================================================================================================================
 const STONE_TINT = '#8a8f6a';
-const won = (o: Json = {}): Json => ({ tint: STONE_TINT, tags: ['Pokémon', 'Story', 'Relationship'], effect: 'none', cast: ['trainer.youngster_m'], ...o });
-const wroom = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, won(o), intro, choices);
+// The picture shows the rolled Pokémon (`@wontevolve`, once it is cast) beside Linus.
 const ME = '@wontevolve';
+const won = (o: Json = {}): Json => ({ tint: STONE_TINT, tags: ['Pokémon', 'Story', 'Relationship'], effect: 'none', cast: ['trainer.youngster_m'], pokemon: ME, ...o });
+const wroom = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, won(o), intro, choices);
 const CAST = gn('cast', { key: 'wontevolve', species: ['pikachu', 'piplup', 'torchic', 'eevee', 'growlithe'], n: 1 });
 const SOLO: Json = { kind: 'canon', action: 'solo', species: [] };
 const UNSOLO: Json = { kind: 'canon', action: 'unsolo', species: [] };
 const SIDE = 'wontevolve-side';
 const FOUGHT = 'wontevolve-fought';
 const END = 'wontevolve-end';
-/** A one-on-one with the player's strongest Pokémon. It can't be caught, and nobody is out if it wins. */
-const duel = (stages: Json, win: Json[], lose: Json[]): Json => ({ ...wild({ species: [ME], lv: 0, win: [...win, UNSOLO] }), friendly: true, rule: { noCatch: true, foeStages: stages }, lose: [UNSOLO, ...lose] });
+/**
+ * A one-on-one with the player's strongest Pokémon. It can't be caught, and nobody is out if it wins. The doc scripts both results
+ * (beat 1 "It loses. Narrowly.", beat 2 "it wins, narrowly"): `hold` names the side that hangs on at 1 HP through every hit, so that side wins.
+ */
+const duel = (stages: Json, hold: 'you' | 'foe', win: Json[], lose: Json[]): Json => ({ ...wild({ species: [ME], lv: 0, win: [...win, UNSOLO] }), friendly: true, rule: { noCatch: true, foeStages: stages, holdOn: hold }, lose: [UNSOLO, ...lose] });
 const ending = (n: number, ...effects: Json[]): Json[] => [setTo(END, n), flag('wontevolve-done'), flag('wontevolve-3'), stampStage('wontevolve-end-at'), ...effects];
 const JOINS: Json = { ...join({ species: [ME] }), ability: 'unwavering', moves: ['proof'] };
 
@@ -54,7 +58,7 @@ const gn21: Json[] = [
     'It wants your strongest Pokémon. One on one. Nobody else.',
     'It isn\'t angry. It wants to prove a point, and this is the only language it has for it.',
   ), [
-    ch('Accept.', fight('It fights like something with a great deal to prove. It\'s faster than it should be.', { ...duel({ spe: 1 },
+    ch('Accept.', fight('It fights like something with a great deal to prove. It\'s faster than it should be.', { ...duel({ spe: 1 }, 'you',
       [gn('hpCap', { n: 30 }), flag(FOUGHT), scene('gn-21-bow')],
       [flag(FOUGHT), scene('gn-21-bow-lost')]) }, SOLO)),
   ]),
@@ -89,7 +93,7 @@ const gn21: Json[] = [
     ch('Show me again, on me.', out('It looks at your strongest Pokémon, and grins.', flag('wontevolve-2'), scene('gn-21-again'))),
   ]),
   wroom('gn-21-again', 'It Comes Back: Again', { cast: [] }, say('A second challenge. Same rules. It has been practising.'), [
-    ch('Go.', fight('It moves first. Then it moves again, before you have finished seeing the first one.', { ...duel({ atk: 2, spe: 2 },
+    ch('Go.', fight('It moves first. Then it moves again, before you have finished seeing the first one.', { ...duel({ atk: 2, spe: 2 }, 'foe',
       [flag(FOUGHT), scene('gn-21-again-held')],
       [flag(FOUGHT), scene('gn-21-again-won')]) }, SOLO)),
   ]),
@@ -120,7 +124,7 @@ const gn21: Json[] = [
       '*The Pokémon walks forward, and puts its paw on Linus\'s knee.*',
       'Linus puts the stone away. **Linus:** "All right. All right. Your way."',
       'One of your own small ones watched every move of Proof today. It has it now.',
-    ), ...ending(2, teach('proof', { unevolved: true }), moment('Linus finally said who the other one was, and put the stone away.', 80)))),
+    ), ...ending(2, flag('wontevolve-stayed'), teach('proof', { unevolved: true }), moment('Linus finally said who the other one was, and put the stone away.', 80)))),
   ]),
   wroom('gn-21-step', 'The Stone: Between Them', {}, say(
     'It steps out from behind you. It isn\'t hiding. It\'s choosing where to stand.',
@@ -204,7 +208,7 @@ const REST = (next: Json): Json[] => [
   ch('Just watch.', out('You watch it draw. It glances up now and then to check you\'re still there. You are.', next)),
   ch('Sit closer.', out('You shift closer. It goes very still, then carries on drawing, a little nearer to your knee.', flag('cubone-close'), next)),
 ];
-const BIRDS = (species: string[], lv: number, win: Json[], o: Json = {}): Json => inside({ ...wild({ species, lv, win, ...o }), exact: true, rule: { leadMark: GUEST, aimMark: GUEST, noCatch: true }, lose: RAN });
+const BIRDS = (species: string[], lv: number, win: Json[], o: Json = {}, rule: Json = {}): Json => inside({ ...wild({ species, lv, win, ...o }), exact: true, rule: { leadMark: GUEST, aimMark: GUEST, noCatch: true, ...rule }, lose: RAN });
 const joinCubone = (extra: Json = {}): Json[] => [
   when('cubone-sat', { min: 1 }, [{ ...join({ species: ['cubone'], lv: -1 }), ability: 'inherited-strength', friendship: 30, mark: 'cubone-friend', ...extra }]),
   when('cubone-sat', { min: 0, max: 0 }, [{ ...join({ species: ['cubone'], lv: -1 }), ability: 'inherited-strength', mark: 'cubone-friend', ...extra }]),
@@ -220,12 +224,12 @@ const gn22: Json[] = [
   ), [
     ch('Approach it.', out('It\'s gone before you\'re halfway there. It\'s behind the next tree now, watching you round the bark.', scene('gn-22-behind'))),
     LEAVE_IT(LEFT_BERRY),
-    ch('Walk away.', out('It watches you go. You can feel it watching all the way to the bend.', flag('cubone-walked'), stampStage('cubone-walked-at'))),
+    ch('Walk away.', out('It watches you go. You can feel it watching all the way to the bend.', flag('cubone-walked'), flag('kind-walked-past'), stampStage('cubone-walked-at'))),
   ]),
   broom('gn-22-behind', 'The Lonely Cubone', {}, say('It\'s behind the next tree. One eye, round the bark. It hasn\'t run far.'), [
     ch('Approach it.', out('It runs again, and this time it doesn\'t stop. You hear it crashing through the undergrowth, a long way.', flag('cubone-gone'))),
     LEAVE_IT(LEFT_BERRY),
-    ch('Walk away.', out('It watches you go.', flag('cubone-walked'), stampStage('cubone-walked-at'))),
+    ch('Walk away.', out('It watches you go.', flag('cubone-walked'), flag('kind-walked-past'), stampStage('cubone-walked-at'))),
   ]),
   gev('gn-22-again', 'The Lonely Cubone', bone({ stop: 'event', rarity: 'rare', callback: true, minStage: 2, requires: [is('cubone-walked'), { kind: 'gn', test: 'laterStage', key: 'cubone-walked-at' }, not('cubone-trusted'), not('cubone-gone'), not('cubone-again')] }), say(
     'It\'s there again. A different tree, the same Cubone, the same club across its knees.',
@@ -258,7 +262,7 @@ const gn22: Json[] = [
   ), REST(room('gn-22-hollow'))),
   // ---- Node 3. The Hollow ----
   broom('gn-22-hollow', 'The Lonely Cubone: The Hollow', {
-    remembers: [{ id: 'dog', when: [is('dog-sat')], notice: '*In the corner of its drawing, a second small figure, sitting. Waiting for someone. It doesn\'t explain.*' }],
+    remembers: [{ id: 'dog', when: [is('dog-station-sat')], notice: '*In the corner of its drawing, a second small figure, sitting. Waiting for someone. It doesn\'t explain.*' }],
   }, say(
     'A fallen tree, hollow and dry inside. Rain starts the moment you\'re under it.',
     'It draws by the light coming through the bark.',
@@ -270,7 +274,7 @@ const gn22: Json[] = [
     'A clearing full of mounds. Any of them could be a grave.',
     'Ghost-types drift between them. They don\'t attack. They watch the Cubone.',
   ), [
-    ch('Walk among them.', fight('A ghost drifts into your path and stays there, looking. It won\'t raise a hand to you.', inside(eitherWay({ ...wild({ types: ['ghost'], lv: -1, win: onward(scene('gn-22-stones-rest')) }), rule: { foeStands: 3 } })))),
+    ch('Walk among them.', fight('A ghost drifts into your path and stays there, looking. It won\'t raise a hand to you.', inside(eitherWay({ ...wild({ types: ['ghost'], lv: -1, win: onward(scene('gn-22-stones-rest')) }), rule: { foeStands: 99 } })))),
     ch('Go round.', out('You keep to the edge. The ghosts turn to watch you pass, all of them, at once.', scene('gn-22-stones-rest'))),
   ]),
   broom('gn-22-stones-rest', 'The Lonely Cubone: The Field of Stones', {}, say(
@@ -294,7 +298,7 @@ const gn22: Json[] = [
   ), [ch('Let it.', fight('It doesn\'t look back at you. It raises the club.', BIRDS(['mandibuzz'], 1, [
     when(SETTLED, { min: 2 }, [], 'The last hit is the Cubone\'s. It lands it itself, with everything it has.'),
     ...onward(room('gn-22-grave')),
-  ])))]),
+  ], {}, { beside: true })))]),
   broom('gn-22-ran', 'The Lonely Cubone', {}, say(
     'The Cubone goes down. When it gets up again, it doesn\'t look at you.',
     'It runs, crying, the club dragging in the grass behind it.',
@@ -366,18 +370,22 @@ const SALESMAN_CHOICES: Json[] = [
   ch('No.', out('He nods. The Magikarp flops in a way that may be a wave.')),
 ];
 /** One appearance: what it does this time, who is on the bank, and the four choices. */
+/** "Level: 4 levels higher at each appearance": its level is stamped at the first appearance and grows by four at each later one. */
+const GROWN = (n: number): Json[] => (n === 1 ? [stampRegion('karp-at'), gn('stampLevel', { key: 'karp-level' })] : [flag('karp-level', 4)]);
+/** It joins at the level it has reached (never past the level cap). */
+const AT_ITS_LEVEL: Json = gn('raiseMarked', { key: 'karp-notch', type: 'karp-level' });
 const appearance = (n: number, name: string, falls: string, tries: string, bank: string, extra: Json = {}): Json => gev(`gn-23-a${n}`, name, karp({
   stop: 'event', rarity: 'rare',
   requires: n === 1 ? [not('karp-1')] : [is(`karp-${n - 1}`), not(`karp-${n}`), { kind: 'gn', test: 'thisRegion', key: 'karp-at' }],
   remembers: [OWN, ...((extra.remembers as Json[]) ?? [])],
 }), say(falls, tries, bank), [
-  ch('Go on! You can do it!', out('It jumps again at once. A little higher than the first try.', flag(ENC), flag(`karp-${n}`), ...(n === 1 ? [stampRegion('karp-at')] : []))),
-  ch('Give it something.', out('You look for something to give it.', flag(`karp-${n}`), ...(n === 1 ? [stampRegion('karp-at')] : []), scene('gn-23-give'))),
-  ch('Race it up the bank.', out('You beat it to the top rock by a fin. It doesn\'t care. It splashes you, delighted.', flag(ENC), flag('karp-raced'), flag(`karp-${n}`), ...(n === 1 ? [stampRegion('karp-at')] : [])), {
+  ch('Go on! You can do it!', out('It jumps again at once. A little higher than the first try.', flag(ENC), flag(`karp-${n}`), ...GROWN(n))),
+  ch('Give it something.', out('You look for something to give it.', flag(`karp-${n}`), ...GROWN(n), scene('gn-23-give'))),
+  ch('Race it up the bank.', out('You beat it to the top rock by a fin. It doesn\'t care. It splashes you, delighted.', flag(ENC), flag('karp-raced'), flag(`karp-${n}`), ...GROWN(n)), {
     prompt: { id: 'bank-race', needs: 'ok' },
-    fail: out('It beats you to the top rock. It splashes you, delighted, and does it again.', flag(ENC), flag('karp-raced'), flag(`karp-${n}`), ...(n === 1 ? [stampRegion('karp-at')] : [])),
+    fail: out('It beats you to the top rock. It splashes you, delighted, and does it again.', flag(ENC), flag('karp-raced'), flag(`karp-${n}`), ...GROWN(n)),
   }),
-  ch('Walk on.', out('It watches you go. It jumps anyway.', flag('karp-ignored'), flag(`karp-${n}`), ...(n === 1 ? [stampRegion('karp-at')] : []))),
+  ch('Walk on.', out('It watches you go. It jumps anyway.', flag('karp-ignored'), flag(`karp-${n}`), ...GROWN(n))),
 ]);
 const LENT_BACK = gn('returnLent', { key: 'karp' });
 const gyarados = (extra: Json = {}): Json[] => [
@@ -398,7 +406,7 @@ const gn23: Json[] = [
   appearance(5, 'The Magikarp That Could', 'The foot of the falls. Spray everywhere. Rainbows in it.',
     'It makes the jump. It\'s up. It\'s at the top. It\'s still only a Magikarp. It looks down at you, and it can\'t believe it either.',
     'The fisher, three children and a dog are on the bank. Nobody says anything. One of the children is holding their breath.',
-    { remembers: [{ id: 'league', when: [is('little-league-losing')], notice: '*The children on the bank are your Little League team. One of them is mouthing: "losing\'s how you learn."*' }] }),
+    { remembers: [{ id: 'league', when: [is('little-league-coached')], notice: '*The children on the bank are your Little League team. One of them is mouthing: "losing\'s how you learn."*' }] }),
   kroom('gn-23-give', 'The Magikarp That Could', {}, say('It watches your hands. It knows what giving looks like.'), [
     ch('A Berry.', out('It eats it on the spot, in one gulp, and jumps again at once.', gn('payBerry'), flag(ENC), flag('karp-item-berry')), { requires: [{ kind: 'gn', test: 'holdsBerry' }] }),
     ch('Something to carry.', out('It takes it in its mouth, very carefully, and keeps it. It will carry it for the rest of the region.', gn('lendHeld', { key: 'karp' }), flag(ENC), flag('karp-item-held')), { requires: [{ kind: 'gn', test: 'holdsItem' }] }),
@@ -408,7 +416,7 @@ const gn23: Json[] = [
   gev('gn-23-falls', 'The Falls', karp({ stop: 'event', rarity: 'rare', pokemon: 'gyarados', requires: [is('karp-5'), not('karp-falls'), { kind: 'gn', test: 'thisRegion', key: 'karp-at' }] }), say(
     'The falls. The whole bank is there: the fisher, the children, the dog, people you have never seen.',
     'Up at the top, a Magikarp with a notch in its tail fin is looking down.',
-  ), [ch('Watch.', out('Everyone holds their breath.', flag('karp-falls'), LENT_BACK,
+  ), [ch('Watch.', out('Everyone holds their breath.', flag('karp-falls'), flag('karp-level', 4), LENT_BACK,
     gn('check', { key: 'karp-in-party', if: [{ kind: 'gn', test: 'hasMark', key: 'karp-notch' }] }),
     when('karp-in-party', { min: 1 }, [scene('gn-23-party')]),
     when('karp-in-party', { min: 0, max: 0 }, [
@@ -424,20 +432,20 @@ const gn23: Json[] = [
     'Mr. Pettigrew is on the bank. He is weeping, and he doesn\'t care who sees.',
   ), [ch('Welcome it back.', out('It lowers its great head to your hand.', { kind: 'formChange', from: 'magikarp', to: 'gyarados', mark: 'karp-notch', ability: 'impossible-leap' },
     when('karp-raced', { min: 3 }, [{ kind: 'statBoost', stat: 'spe', percent: 5, who: { species: ['gyarados'] }, until: 'run' }], 'It learned to be quick from you: Speed +1, for good.'),
-    setTo('karp-end', 4), flag('karp-pettigrew-saw'), moment('Your Magikarp cleared the falls, and Mr. Pettigrew wept on the bank.', 95)))]),
+    AT_ITS_LEVEL, setTo('karp-end', 4), flag('karp-pettigrew-saw'), moment('Your Magikarp cleared the falls, and Mr. Pettigrew wept on the bank.', 95)))]),
   kroom('gn-23-rise', 'The Falls', { pokemon: 'gyarados' }, say(
     'It clears the falls.',
     '*The water goes white. Something very long comes up out of it, and looks down, and it\'s got a notch in its tail.*',
     'The whole bank roars.',
   ), [
-    ch('Hold out your hand.', out('It lowers its head to your hand.', ...gyarados(), setTo('karp-end', 1), moment('The notched Magikarp cleared the falls, and chose you.', 90))),
+    ch('Hold out your hand.', out('It lowers its head to your hand.', ...gyarados(), AT_ITS_LEVEL, setTo('karp-end', 1), moment('The notched Magikarp cleared the falls, and chose you.', 90))),
     ch('Let it go free.', out('It roars once, at the sky, and is gone upriver. The children talk about nothing else.', setTo('karp-end', 1))),
   ]),
   kroom('gn-23-top', 'The Falls', {}, say(
     'It clears the falls. It\'s a Magikarp at the top.',
     'It looks at you, and waits to see whether you\'re coming.',
   ), [
-    ch('Climb up to it.', out('You climb the wet rocks to the top. It\'s still there when you get there.', { ...join({ species: ['magikarp'] }), mark: 'karp-notch' }, setTo('karp-end', 3))),
+    ch('Climb up to it.', out('You climb the wet rocks to the top. It\'s still there when you get there.', { ...join({ species: ['magikarp'] }), asIs: true, mark: 'karp-notch' }, AT_ITS_LEVEL, setTo('karp-end', 3))),
     ch('Wave.', out('It flops, once. It may be a wave. Then it\'s gone upriver.', setTo('karp-end', 3))),
   ]),
   kroom('gn-23-hostile', 'The Falls', { pokemon: 'gyarados' }, say(
@@ -556,13 +564,20 @@ const gn24: Json[] = [
 
 // =====================================================================================================================
 // gn.25  THE UNLIKELY FRIENDSHIP  (single, step 7, optional, before the battle; A5; once a run). The node's wild battle becomes
-// the pack fight: six Mightyena in two double battles, the Zangoose beside you in the first, the Seviper in the second (the engine
-// has two places a side). New paired ability Truce.
+// the pack fight: six Mightyena in one double battle with both of the pair on your side (the engine has two places a side, so
+// the Zangoose stands beside you and the Seviper waits right behind it; rule `truce`). New paired ability Truce.
 // =====================================================================================================================
 const TRUCE_TINT = '#7a6b8f';
 const tru = (o: Json = {}): Json => ({ tint: TRUCE_TINT, tags: ['Pokémon', 'Story', 'Relationship'], effect: 'none', pokemon: 'zangoose', ...o });
 const troom = (id: string, name: string, o: Json, intro: string, choices: Json[]): Json => rm(id, name, tru(o), intro, choices);
-const PACK = (ally: string, win: Json[]): Json => trainer('The Pack', { size: 3, team: ['mightyena', 'mightyena', 'mightyena'], format: 'doubles', ally, lv: 0, friendly: true, win, lose: [flag('truce-pack-lost'), scene('gn-25-after')] });
+const TRUCE_GUEST = 'truce-guest';
+const GUEST_GOES: Json = gn('dropMarked', { key: TRUCE_GUEST });
+/**
+ * The pack fight: one double battle, six Mightyena, with both of the pair on your side. The Zangoose stands beside you (the fight's
+ * ally); the Seviper is right behind it, in your party for this fight (mark `truce-guest`). Rule `truce`: they cover each other.
+ */
+const PACK: Json = { ...trainer('The Pack', { size: 6, team: ['mightyena', 'mightyena', 'mightyena', 'mightyena', 'mightyena', 'mightyena'], format: 'doubles', ally: 'zangoose', lv: 0, friendly: true, win: [GUEST_GOES, scene('gn-25-after')], lose: [GUEST_GOES, flag('truce-pack-lost'), scene('gn-25-after')] }), rule: { gn: 'truce' } };
+const SEVIPER_IN: Json[] = [{ ...join({ species: ['seviper'] }), asIs: true, direct: true }, gn('markLast', { key: TRUCE_GUEST, species: ['seviper'] })];
 const truceJoin = (species: string): Json => ({ ...join({ species: [species] }), ability: 'truce' });
 const OTHER: Json[] = [when('truce-one', { min: 1, max: 1 }, [truceJoin('seviper')]), when('truce-one', { min: 2, max: 2 }, [truceJoin('zangoose')])];
 const sightReq = (n: number): Json[] => [is('truce-one'), is('truce-sight', n - 1, n - 1), { kind: 'gn', test: 'laterStage', key: n === 1 ? 'truce-at' : `truce-sight${n - 1}-at` }];
@@ -587,18 +602,15 @@ const gn25: Json[] = [
   troom('gn-25-pack', 'The Unlikely Friendship: The Pack', { pokemon: 'mightyena' }, say(
     '*A pack comes out of the grass. Mightyena, six, and they\'ve done this before.*',
     'The Zangoose and the Seviper are already back to back. There\'s room beside them. Just.',
-  ), [ch('Fight beside them.', fight('The first three come in low. The Zangoose takes the place beside you.', PACK('zangoose', [scene('gn-25-pack-2')])))]),
-  troom('gn-25-pack-2', 'The Unlikely Friendship: The Pack', { pokemon: 'seviper' }, say(
-    'Three more. When the Zangoose is hit hard, the Seviper goes straight for whatever did it.',
-    'Now the Seviper slides in beside you, and the Zangoose watches its back.',
-  ), [ch('Hold together.', fight('The last of the pack circle, and come in.', PACK('seviper', [scene('gn-25-after')])))]),
+    '*When one of them is hit hard, the other goes straight for whatever did it. When one is nearly down, the other stands in front.*',
+  ), [ch('Fight beside them.', fight('The pack comes in low, two at a time. The Zangoose takes the place beside you. The Seviper is right behind it.', PACK, ...SEVIPER_IN))]),
   troom('gn-25-after', 'The Unlikely Friendship', {}, say(
     'The grass goes still.',
     'They check each other for injuries before they look at you.',
   ), [
     ch('Come with me.', out('You crouch, and hold out your hand. Both of them look at it. Only one of them can take it first.', scene('gn-25-which'))),
     ch('Both of you.', out(say('They try to get into the same Ball, if you let them. They don\'t fit.', 'They take two.'), truceJoin('zangoose'), truceJoin('seviper'), flag('truce-both'), stampRegion('truce-region'))),
-    ch('Stay together. Good luck.', out(say('They go. The Zangoose looks back, and lifts a paw.', 'On the path where they slept: a Berry, split neatly in two.'), item('sitrus-berry', 2), flag('truce-left'), stampRegion('truce-region'))),
+    ch('Stay together. Good luck.', out(say('They go. The Zangoose looks back, and lifts a paw.', 'On the path where they slept: a Rare Berry, split neatly in two.'), any('liechi-berry', 'ganlon-berry', 'salac-berry', 'petaya-berry', 'apicot-berry'), flag('truce-left'), stampRegion('truce-region'))),
   ]),
   troom('gn-25-which', 'The Unlikely Friendship', {}, say('Which one?'), [
     ch('The Zangoose.', out('It comes. It looks back.', truceJoin('zangoose'), setTo('truce-one', 1), stampStage('truce-at'), stampRegion('truce-region'))),

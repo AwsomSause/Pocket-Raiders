@@ -22,6 +22,7 @@ import { TAILWIND_HEART, unflinching } from '../greenneedle/daycare';
 import { arenaTurn, arenaVerdict } from '../greenneedle/frontier';
 import { gavelFirst, gavelSpent } from '../greenneedle/auction';
 import { agencyArrives, callHelper, fieldOf, helperProblem, reunionTakeHit } from '../greenneedle/reunion';
+import { truceCover, truceHurt } from '../greenneedle/part3';
 import { ferrisPredicted } from '../greenneedle/ferris';
 import { starEntry, starGuard, starPinch } from '../greenneedle/onevone';
 import { draftTurn } from '../greenneedle/draft';
@@ -1900,7 +1901,8 @@ function gnYouWait(ctx: BattleContext, player: Combatant, events: BattleEvent[])
 function foeStands(ctx: BattleContext, enemy: Combatant, events: BattleEvent[]): boolean {
   const turns = ctx.battle.eventRule?.foeStands;
   if (!turns || ctx.battle.turn > turns || enemy.mon.hp <= 0) return false;
-  events.push({ type: 'raid', tone: 'info', text: `${getSpecies(ctx.content, enemy.mon.speciesId).name} stands in front of the others, arms wide. It does not attack.` });
+  // 99 = the whole fight (gn.22: the ghosts in the Field of Stones never attack; they only watch).
+  events.push({ type: 'raid', tone: 'info', text: turns >= 99 ? `${getSpecies(ctx.content, enemy.mon.speciesId).name} does not attack. It only watches.` : `${getSpecies(ctx.content, enemy.mon.speciesId).name} stands in front of the others, arms wide. It does not attack.` });
   return true;
 }
 
@@ -4266,6 +4268,12 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
       events.push({ type: 'raid', tone: 'info', text: `${guard} takes the hit. ${nameOf(ctx, target.mon)} is untouched.` });
       return;
     }
+    // Greenneedle gn.25 (the pack fight): one of the pair is below a third, so the other stands in front and takes this hit.
+    const cover = truceCover(ctx.content, ctx.battle, ctx.party, target.mon);
+    if (cover) {
+      events.push({ type: 'raid', tone: 'info', text: `${cover} stands in front of ${nameOf(ctx, target.mon)}, and takes the hit.` });
+      return;
+    }
   }
   if (targetsEnemy && target.protected && !fx.breaksProtect && !piercesProtect && !move.flags.includes('zmove') && !move.flags.includes('max')) {
     events.push({ type: 'protected', side: target.side });
@@ -4788,6 +4796,10 @@ function runMoveInner(ctx: BattleContext, user: Combatant, target: Combatant, mo
     damage = Held.survive(ctx, target, damage, events as Held.HeldEvent[]);
     damage = galarHold(ctx, user, target, damage);
     if (fx.leaveOne || target.vol.endure || ((ctx.battle.pacifist || ctx.battle.eventRule?.spare || ctx.battle.eventRule?.contest) && target.side === 'enemy')) damage = Math.min(damage, target.mon.hp - 1);
+    // Greenneedle gn.25 (the pack fight): a foe hit one of the pair hard; its partner answers after the turn.
+    if (ctx.battle.eventRule?.gn === 'truce' && user.side === 'enemy' && target.side === 'player') truceHurt(ctx.content, ctx.battle, ctx.party, user.mon.uid, target.mon, damage);
+    // Greenneedle gn.21 (a scripted duel): that side's Pokémon holds on at 1 HP through any hit.
+    if (ctx.battle.eventRule?.holdOn === (target.side === 'enemy' ? 'foe' : 'you')) damage = Math.min(damage, target.mon.hp - 1);
     // Sturdy: a hit at full HP leaves it with at least 1 HP.
     const sturdy = foeAbility === 'sturdy' && target.mon.hp >= targetMax && target.mon.hp > 1 && damage >= target.mon.hp;
     if (sturdy) damage = target.mon.hp - 1;

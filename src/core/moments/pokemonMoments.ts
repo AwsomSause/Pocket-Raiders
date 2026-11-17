@@ -305,6 +305,8 @@ export const PokemonMomentSchema = z.object({
   chanceBond: z.object({ above: z.number().int().min(0).max(5), perStep: z.number().min(0).max(1), max: z.number().min(0).max(1) }).optional(),
   /** These evolution lines (by root or member) get `plus` on top. */
   chancePlus: z.object({ species: z.array(z.string()), plus: z.number().min(0).max(1), /** Only these species, not their whole lines (the revivals' signature species). */ exact: z.boolean().optional() }).optional(),
+  /** A Pokémon carrying this story mark (`gn`) gets the chance times `times` (gn.29: the Psyduck from the migration, PS14 at double the chance). */
+  chanceMark: z.object({ mark: z.string().min(1), times: z.number().min(1).max(4) }).optional(),
   /** Run-end order (pack §0.3): individual, species, group, archetype, type. Lower goes first. */
   layer: z.enum(['individual', 'species', 'group', 'archetype', 'type']).optional(),
   /** `region`: once per region (rest moments). */

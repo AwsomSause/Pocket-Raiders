@@ -875,7 +875,7 @@ export function buildContent(raw: RawContent = RAW_CONTENT): Content {
       }
     }
     if (e.keyItem && !knownItem(e.keyItem)) problems.push(`${where} needs unknown key item "${e.keyItem}"`);
-    if (e.scene.pokemon && !content.species.has(e.scene.pokemon)) problems.push(`${where} shows unknown species "${e.scene.pokemon}"`);
+    if (e.scene.pokemon && !e.scene.pokemon.startsWith('@') && !content.species.has(e.scene.pokemon)) problems.push(`${where} shows unknown species "${e.scene.pokemon}"`);
   }
   for (const id of balance.events.explorerItems) if (!isGiftable(content, id)) problems.push(`balance.events.explorerItems has "${id}", which isn't a working item`);
   for (const entry of content.catalog.values()) {

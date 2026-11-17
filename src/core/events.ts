@@ -1149,7 +1149,10 @@ export function eventView(content: Content, run: RunState, sideId: string): Even
   });
   const standing = base.group === RIVAL_QUEST_GROUP ? rivalStanding(content, run) : null;
   const team = base.group === RIVAL_QUEST_GROUP || base.id.startsWith('gn-new-29-') ? borrowTeamView(content, run) : null;
-  return { event: { ...event, intro: fillMentorText(run, fillCoText(content, run, event.intro)) }, choices, ...(standing ? { standing } : {}), ...(team ? { team } : {}) };
+  // Greenneedle gn.21: an event picture may name a story Pokémon (`@wontevolve`); the screen shows the species it was cast as (nothing before it is cast).
+  const castMon = event.scene.pokemon?.startsWith('@') ? resolveCast(run, [event.scene.pokemon])[0] : undefined;
+  const shown = event.scene.pokemon?.startsWith('@') ? { ...event, scene: { ...event.scene, pokemon: castMon } } : event;
+  return { event: { ...shown, intro: fillMentorText(run, fillCoText(content, run, event.intro)) }, choices, ...(standing ? { standing } : {}), ...(team ? { team } : {}) };
 }
 
 export interface EventResult {

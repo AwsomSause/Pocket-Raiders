@@ -2640,8 +2640,8 @@
   "badge": "own",
   "note": "Badge: a small duck. At the town; until towns exist, step 5. Snake in three rounds (core/greenneedle/snake.ts).",
   "kinds": [
-   "Hub Destination",
-   "Minigame"
+   "Miniature Episode",
+   "Snake minigame"
   ],
   "tags": []
  },
@@ -2654,7 +2654,7 @@
    9,
    14
   ],
-  "sits": "optional",
+  "sits": "side-branch",
   "attaches": "instead",
   "level": "A+0; the grove's guards A+1; the Slowking A+1",
   "often": "run",

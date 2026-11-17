@@ -1847,6 +1847,12 @@
    "choices": [
     {
      "label": "Show them.",
+     "requires": [
+      {
+       "kind": "partySize",
+       "atLeast": 6
+      }
+     ],
      "success": {
       "text": "You walk into the clearing, and call out your whole party, and stand them in it.\n\nIt's full. Six small Pokémon, and there's no more room.\n\nThe giants look. They look at each other. They leave, in opposite directions.",
       "effects": [
@@ -2913,6 +2919,12 @@
        },
        {
         "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-curtain",
+        "n": 0
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-27-top"
        }
@@ -2966,10 +2978,8 @@
      "id": "bill",
      "when": [
       {
-       "kind": "flag",
-       "key": "roux-met",
-       "atLeast": 1,
-       "atMost": 99
+       "kind": "eventSeen",
+       "id": "festival-day"
       }
      ],
      "notice": "*Lower down the bill, in smaller letters: Madame Roux, Fortunes.*"
@@ -3337,10 +3347,10 @@
     "tint": "#b0453a",
     "effect": "none"
    },
-   "intro": "Three Mr. Mime. Two are illusions. Only the real one's wall will hold your weight.\n\nOne ticket, and you may lean once.",
+   "intro": "Three Mr. Mime. Two are illusions. Only the real one's wall will hold your weight.\n\nOne ticket. Spot the real one: lean on each, if you must.",
    "choices": [
     {
-     "label": "Lean on a wall.",
+     "label": "Step up to the walls.",
      "requires": [
       {
        "kind": "flag",
@@ -3350,7 +3360,7 @@
       }
      ],
      "success": {
-      "text": "You pick one.",
+      "text": "The three of them press their palms flat against nothing at all.",
       "effects": [
        {
         "kind": "flag",
@@ -3366,6 +3376,30 @@
          1,
          1
         ]
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-mime-falls",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-mime-tried-1",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-mime-tried-2",
+        "n": 0
+       },
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-mime-tried-3",
+        "n": 0
        },
        {
         "kind": "gn",
@@ -3439,10 +3473,16 @@
    "intro": "Left, middle or right?",
    "choices": [
     {
-     "label": "The left one.",
+     "label": "Lean on the left one.",
      "success": {
       "text": "You lean on the left one.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-mime-tried-1",
+        "n": 1
+       },
        {
         "kind": "gn",
         "op": "when",
@@ -3480,39 +3520,110 @@
         "kind": "gn",
         "op": "when",
         "key": "circus-mime",
-        "min": 0,
-        "max": 0,
+        "min": 2,
+        "max": 2,
         "then": [
          {
+          "kind": "flag",
+          "key": "circus-mime-falls",
+          "amount": 1
+         },
+         {
           "kind": "gn",
-          "op": "scene",
-          "key": "gn-27-mime"
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 0,
+          "max": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime-lean"
+           }
+          ],
+          "text": "You fall straight through it into the sawdust. The crowd loves it. An illusion. Two left."
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime"
+           }
+          ],
+          "text": "You fall straight through that one too. The last Mr. Mime, the real one, bows very low. No prize for the last wall standing."
          }
-        ],
-        "text": "You fall straight through it into the sawdust. The crowd loves it."
+        ]
        },
        {
         "kind": "gn",
         "op": "when",
         "key": "circus-mime",
-        "min": 2,
+        "min": 3,
+        "max": 3,
         "then": [
          {
+          "kind": "flag",
+          "key": "circus-mime-falls",
+          "amount": 1
+         },
+         {
           "kind": "gn",
-          "op": "scene",
-          "key": "gn-27-mime"
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 0,
+          "max": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime-lean"
+           }
+          ],
+          "text": "You fall straight through it into the sawdust. The crowd loves it. An illusion. Two left."
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime"
+           }
+          ],
+          "text": "You fall straight through that one too. The last Mr. Mime, the real one, bows very low. No prize for the last wall standing."
          }
-        ],
-        "text": "You fall straight through it into the sawdust. The crowd loves it."
+        ]
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-mime-tried-1",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
-     "label": "The middle one.",
+     "label": "Lean on the middle one.",
      "success": {
       "text": "You lean on the middle one.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-mime-tried-2",
+        "n": 1
+       },
        {
         "kind": "gn",
         "op": "when",
@@ -3550,39 +3661,110 @@
         "kind": "gn",
         "op": "when",
         "key": "circus-mime",
-        "min": 0,
+        "min": 1,
         "max": 1,
         "then": [
          {
+          "kind": "flag",
+          "key": "circus-mime-falls",
+          "amount": 1
+         },
+         {
           "kind": "gn",
-          "op": "scene",
-          "key": "gn-27-mime"
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 0,
+          "max": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime-lean"
+           }
+          ],
+          "text": "You fall straight through it into the sawdust. The crowd loves it. An illusion. Two left."
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime"
+           }
+          ],
+          "text": "You fall straight through that one too. The last Mr. Mime, the real one, bows very low. No prize for the last wall standing."
          }
-        ],
-        "text": "You fall straight through it into the sawdust. The crowd loves it."
+        ]
        },
        {
         "kind": "gn",
         "op": "when",
         "key": "circus-mime",
         "min": 3,
+        "max": 3,
         "then": [
          {
+          "kind": "flag",
+          "key": "circus-mime-falls",
+          "amount": 1
+         },
+         {
           "kind": "gn",
-          "op": "scene",
-          "key": "gn-27-mime"
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 0,
+          "max": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime-lean"
+           }
+          ],
+          "text": "You fall straight through it into the sawdust. The crowd loves it. An illusion. Two left."
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime"
+           }
+          ],
+          "text": "You fall straight through that one too. The last Mr. Mime, the real one, bows very low. No prize for the last wall standing."
          }
-        ],
-        "text": "You fall straight through it into the sawdust. The crowd loves it."
+        ]
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-mime-tried-2",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
-     "label": "The right one.",
+     "label": "Lean on the right one.",
      "success": {
       "text": "You lean on the right one.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "setFlag",
+        "key": "circus-mime-tried-3",
+        "n": 1
+       },
        {
         "kind": "gn",
         "op": "when",
@@ -3620,30 +3802,135 @@
         "kind": "gn",
         "op": "when",
         "key": "circus-mime",
-        "min": 0,
-        "max": 2,
+        "min": 1,
+        "max": 1,
         "then": [
          {
+          "kind": "flag",
+          "key": "circus-mime-falls",
+          "amount": 1
+         },
+         {
           "kind": "gn",
-          "op": "scene",
-          "key": "gn-27-mime"
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 0,
+          "max": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime-lean"
+           }
+          ],
+          "text": "You fall straight through it into the sawdust. The crowd loves it. An illusion. Two left."
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime"
+           }
+          ],
+          "text": "You fall straight through that one too. The last Mr. Mime, the real one, bows very low. No prize for the last wall standing."
          }
-        ],
-        "text": "You fall straight through it into the sawdust. The crowd loves it."
+        ]
        },
        {
         "kind": "gn",
         "op": "when",
         "key": "circus-mime",
-        "min": 4,
+        "min": 2,
+        "max": 2,
         "then": [
          {
+          "kind": "flag",
+          "key": "circus-mime-falls",
+          "amount": 1
+         },
+         {
           "kind": "gn",
-          "op": "scene",
-          "key": "gn-27-mime"
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 0,
+          "max": 1,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime-lean"
+           }
+          ],
+          "text": "You fall straight through it into the sawdust. The crowd loves it. An illusion. Two left."
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "circus-mime-falls",
+          "min": 2,
+          "then": [
+           {
+            "kind": "gn",
+            "op": "scene",
+            "key": "gn-27-mime"
+           }
+          ],
+          "text": "You fall straight through that one too. The last Mr. Mime, the real one, bows very low. No prize for the last wall standing."
          }
-        ],
-        "text": "You fall straight through it into the sawdust. The crowd loves it."
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-mime-tried-3",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    },
+    {
+     "label": "Watch them first.",
+     "success": {
+      "text": "You stand back and watch the floor, not the hands.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 1,
+        "max": 1,
+        "then": [],
+        "text": "*Sawdust drifts across the ring. It blows straight through two of the walls. At the foot of the left one, it piles up.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 2,
+        "max": 2,
+        "then": [],
+        "text": "*Sawdust drifts across the ring. It blows straight through two of the walls. At the foot of the middle one, it piles up.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-mime",
+        "min": 3,
+        "max": 3,
+        "then": [],
+        "text": "*Sawdust drifts across the ring. It blows straight through two of the walls. At the foot of the right one, it piles up.*"
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-mime-lean"
        }
       ]
      }
@@ -3761,6 +4048,174 @@
         "kind": "gn",
         "op": "scene",
         "key": "gn-27-machamp"
+       }
+      ]
+     }
+    },
+    {
+     "label": "The strongman's rematch.",
+     "success": {
+      "text": "The Machamp has seen you. It unfolds the other two arms.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-rematch"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-visits",
+       "atLeast": 3,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Back to the Big Top.",
+     "success": {
+      "text": "Back under the big top. The band hasn't stopped once.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-rematch",
+   "name": "The Strongman's Rematch",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "pokemon": "machamp",
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "Enter one Pokémon. Attack decides.\n\nThis time the Machamp uses all four arms. It says that is only fair too.",
+   "choices": [
+    {
+     "label": "Enter your strongest.",
+     "requires": [
+      {
+       "kind": "flag",
+       "key": "circus-tickets",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ],
+     "success": {
+      "text": "Your strongest steps up. The Machamp takes hold with all four hands.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "circus-strong",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "strength",
+          "key": "machamp",
+          "n": 100
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-strong",
+        "min": 1,
+        "then": [
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "protein",
+           "calcium",
+           "carbos",
+           "hp-up",
+           "iron",
+           "zinc"
+          ]
+         },
+         {
+          "kind": "itemFrom",
+          "ids": [
+           "protein",
+           "calcium",
+           "carbos",
+           "hp-up",
+           "iron",
+           "zinc"
+          ]
+         },
+         {
+          "kind": "flag",
+          "key": "circus-rematch-won",
+          "amount": 1
+         }
+        ],
+        "text": "Four arms go down, one at a time. The Machamp stares at its hands. Then it roars with laughter, and presses two bottles on you."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-strong",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "Four arms. It was never going to be close. The Machamp pats your Pokémon on the head, very gently, with the fourth."
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-rematch"
+       }
+      ]
+     }
+    },
+    {
+     "label": "Buy a ticket (₽100).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 100
+      }
+     ],
+     "success": {
+      "text": "A striped ticket, still warm from the machine.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -100
+       },
+       {
+        "kind": "flag",
+        "key": "circus-tickets",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-rematch"
        }
       ]
      }
@@ -4478,6 +4933,429 @@
        },
        {
         "kind": "gn",
+        "op": "check",
+        "key": "circus-second",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "circus-visits",
+          "atLeast": 2,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "circus-curtain",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-second",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "circus-curtain",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "circus-tier",
+          "weights": [
+           3,
+           2,
+           1
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mystery-offer-2"
+         }
+        ],
+        "text": "*Behind it, a second curtain.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-second",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-top"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-tier",
+       "atLeast": 1,
+       "atMost": 1
+      }
+     ]
+    },
+    {
+     "label": "Pay ₽1,500 (Rare).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 1500
+      }
+     ],
+     "success": {
+      "text": "The curtain goes back.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -1500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "dratini",
+         "larvitar",
+         "bagon",
+         "gible",
+         "beldum",
+         "riolu",
+         "scyther",
+         "togepi"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-mystery-bought",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "circus-second",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "circus-visits",
+          "atLeast": 2,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "circus-curtain",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-second",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "circus-curtain",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "circus-tier",
+          "weights": [
+           3,
+           2,
+           1
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mystery-offer-2"
+         }
+        ],
+        "text": "*Behind it, a second curtain.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-second",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-top"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-tier",
+       "atLeast": 2,
+       "atMost": 2
+      }
+     ]
+    },
+    {
+     "label": "Pay ₽4,000 (Very rare).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 4000
+      }
+     ],
+     "success": {
+      "text": "The curtain goes back.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -4000
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "lapras",
+         "snorlax",
+         "chansey",
+         "aerodactyl",
+         "porygon",
+         "kangaskhan"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-mystery-bought",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "circus-second",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "circus-visits",
+          "atLeast": 2,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "circus-curtain",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-second",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "circus-curtain",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "circus-tier",
+          "weights": [
+           3,
+           2,
+           1
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mystery-offer-2"
+         }
+        ],
+        "text": "*Behind it, a second curtain.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-second",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-top"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "circus-tier",
+       "atLeast": 3,
+       "atMost": 3
+      }
+     ]
+    },
+    {
+     "label": "Walk on.",
+     "success": {
+      "text": "The silhouette sits down. You will never know.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "circus-second",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "circus-visits",
+          "atLeast": 2,
+          "atMost": 99
+         },
+         {
+          "kind": "flag",
+          "key": "circus-curtain",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-second",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "setFlag",
+          "key": "circus-curtain",
+          "n": 1
+         },
+         {
+          "kind": "gn",
+          "op": "pick",
+          "key": "circus-tier",
+          "weights": [
+           3,
+           2,
+           1
+          ]
+         },
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-mystery-offer-2"
+         }
+        ],
+        "text": "*Behind it, a second curtain.*"
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "circus-second",
+        "min": 0,
+        "max": 0,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-27-top"
+         }
+        ]
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-27-mystery-offer-2",
+   "name": "The Mystery Tent",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Story",
+    "Shop"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [
+     "trainer.gentleman"
+    ],
+    "tint": "#b0453a",
+    "effect": "none"
+   },
+   "intro": "The second curtain. A different silhouette. A different card.",
+   "choices": [
+    {
+     "label": "Pay ₽500 (Common).",
+     "requires": [
+      {
+       "kind": "money",
+       "atLeast": 500
+      }
+     ],
+     "success": {
+      "text": "The curtain goes back.",
+      "effects": [
+       {
+        "kind": "money",
+        "amount": -500
+       },
+       {
+        "kind": "join",
+        "shadow": false,
+        "species": [
+         "eevee",
+         "pikachu",
+         "growlithe",
+         "vulpix",
+         "ponyta",
+         "abra",
+         "magnemite",
+         "shellder"
+        ],
+        "types": [],
+        "levelBonus": 0,
+        "shinyMultiplier": 1
+       },
+       {
+        "kind": "flag",
+        "key": "circus-mystery-bought",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
         "op": "scene",
         "key": "gn-27-top"
        }
@@ -4980,8 +5858,55 @@
         },
         {
          "kind": "gn",
-         "op": "scene",
-         "key": "gn-27-top"
+         "op": "check",
+         "key": "circus-asks",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "circus-shy-helped",
+           "atLeast": 1,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-visits",
+           "atLeast": 2,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-shy-joined",
+           "atLeast": 0,
+           "atMost": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-27-after"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-27-top"
+          }
+         ]
         }
        ],
        "sprite": "gentleman",
@@ -5043,6 +5968,12 @@
            "key": "circus-visits",
            "atLeast": 2,
            "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-shy-joined",
+           "atLeast": 0,
+           "atMost": 0
           }
          ]
         },
@@ -5095,8 +6026,55 @@
         },
         {
          "kind": "gn",
-         "op": "scene",
-         "key": "gn-27-top"
+         "op": "check",
+         "key": "circus-asks",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "circus-shy-helped",
+           "atLeast": 1,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-visits",
+           "atLeast": 2,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-shy-joined",
+           "atLeast": 0,
+           "atMost": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-27-after"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-27-top"
+          }
+         ]
         }
        ],
        "sprite": "gentleman",
@@ -5159,6 +6137,12 @@
            "key": "circus-visits",
            "atLeast": 2,
            "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-shy-joined",
+           "atLeast": 0,
+           "atMost": 0
           }
          ]
         },
@@ -5259,8 +6243,55 @@
         },
         {
          "kind": "gn",
-         "op": "scene",
-         "key": "gn-27-top"
+         "op": "check",
+         "key": "circus-asks",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "circus-shy-helped",
+           "atLeast": 1,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-visits",
+           "atLeast": 2,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-shy-joined",
+           "atLeast": 0,
+           "atMost": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-27-after"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-27-top"
+          }
+         ]
         }
        ],
        "sprite": "gentleman",
@@ -5322,6 +6353,12 @@
            "key": "circus-visits",
            "atLeast": 2,
            "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-shy-joined",
+           "atLeast": 0,
+           "atMost": 0
           }
          ]
         },
@@ -5374,8 +6411,55 @@
         },
         {
          "kind": "gn",
-         "op": "scene",
-         "key": "gn-27-top"
+         "op": "check",
+         "key": "circus-asks",
+         "if": [
+          {
+           "kind": "flag",
+           "key": "circus-shy-helped",
+           "atLeast": 1,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-visits",
+           "atLeast": 2,
+           "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-shy-joined",
+           "atLeast": 0,
+           "atMost": 0
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 1,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-27-after"
+          }
+         ]
+        },
+        {
+         "kind": "gn",
+         "op": "when",
+         "key": "circus-asks",
+         "min": 0,
+         "max": 0,
+         "then": [
+          {
+           "kind": "gn",
+           "op": "scene",
+           "key": "gn-27-top"
+          }
+         ]
         }
        ],
        "sprite": "gentleman",
@@ -5438,6 +6522,12 @@
            "key": "circus-visits",
            "atLeast": 2,
            "atMost": 99
+          },
+          {
+           "kind": "flag",
+           "key": "circus-shy-joined",
+           "atLeast": 0,
+           "atMost": 0
           }
          ]
         },
@@ -5584,6 +6674,11 @@
         "kind": "flag",
         "key": "circus-shy-joined",
         "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
        }
       ]
      }
@@ -5592,7 +6687,13 @@
      "label": "Stay. They need you here.",
      "success": {
       "text": "It nods. It goes back to the ring and does the whole routine again, just for you.",
-      "effects": []
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "scene",
+        "key": "gn-27-top"
+       }
+      ]
      }
     }
    ]
@@ -5661,6 +6762,25 @@
        {
         "kind": "gn",
         "op": "check",
+        "key": "hideout-inside",
+        "if": [
+         {
+          "kind": "gn",
+          "test": "insideTeam"
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-inside",
+        "min": 1,
+        "then": [],
+        "text": "*You know the smell. You work here. Today you are not here to work.*"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
         "key": "hideout-looped",
         "if": [
          {
@@ -5702,9 +6822,25 @@
           "op": "capFlag",
           "key": "hideout-alert",
           "n": 10
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "hideout-inside",
+          "min": 0,
+          "max": 0,
+          "then": [],
+          "text": "A camera turns, slowly, to follow you. (Alert +2)"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "hideout-inside",
+          "min": 1,
+          "then": [],
+          "text": "A camera turns, slowly, to follow you. You are staff. Staff don't usually come down here. (Suspicion +2)"
          }
-        ],
-        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        ]
        },
        {
         "kind": "addEvent",
@@ -5742,7 +6878,7 @@
        "atMost": 4
       }
      ],
-     "notice": "*Alert low: the office is bored. Some of them could be talked past.*"
+     "notice": "*{hideout:meter} low: the office is bored. Some of them could be talked past.*"
     },
     {
      "id": "patrol",
@@ -5754,7 +6890,7 @@
        "atMost": 9
       }
      ],
-     "notice": "*Alert: patrols. Torches sweep the office. Nobody's talking their way past anyone now.*"
+     "notice": "*{hideout:meter}: patrols. Torches sweep the office. {hideout:patrol}*"
     },
     {
      "id": "full",
@@ -5766,7 +6902,7 @@
        "atMost": 99
       }
      ],
-     "notice": "*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
+     "notice": "*{hideout:meter} 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
     }
    ],
    "room": true,
@@ -5836,9 +6972,25 @@
           "op": "capFlag",
           "key": "hideout-alert",
           "n": 10
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "hideout-inside",
+          "min": 0,
+          "max": 0,
+          "then": [],
+          "text": "A camera turns, slowly, to follow you. (Alert +2)"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "hideout-inside",
+          "min": 1,
+          "then": [],
+          "text": "A camera turns, slowly, to follow you. You are staff. Staff don't usually come down here. (Suspicion +2)"
          }
-        ],
-        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        ]
        },
        {
         "kind": "gn",
@@ -5872,8 +7024,25 @@
     {
      "label": "Talk your way past.",
      "success": {
-      "text": "\"New starter,\" you say. \"They sent me down to Labs.\" The {grunt}s shrug. Neither of them wants the stapler that much.",
+      "text": "You walk up to them as if you had every right to.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-inside",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "\"New starter,\" you say. \"They sent me down to Labs.\" The {grunt}s shrug. Neither of them wants the stapler that much."
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-inside",
+        "min": 1,
+        "then": [],
+        "text": "\"Audit,\" you say, and hold up a clipboard from the nearest desk. They know your face. They don't like it, but they know it. They let you by."
+       },
        {
         "kind": "gn",
         "op": "check",
@@ -5918,9 +7087,25 @@
           "op": "capFlag",
           "key": "hideout-alert",
           "n": 10
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "hideout-inside",
+          "min": 0,
+          "max": 0,
+          "then": [],
+          "text": "A camera turns, slowly, to follow you. (Alert +2)"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "hideout-inside",
+          "min": 1,
+          "then": [],
+          "text": "A camera turns, slowly, to follow you. You are staff. Staff don't usually come down here. (Suspicion +2)"
          }
-        ],
-        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        ]
        },
        {
         "kind": "addEvent",
@@ -5930,10 +7115,9 @@
      },
      "showIf": [
       {
-       "kind": "flag",
-       "key": "hideout-alert",
-       "atLeast": 0,
-       "atMost": 4
+       "kind": "gn",
+       "test": "canTalkPast",
+       "key": "hideout-alert"
       }
      ]
     },
@@ -5995,9 +7179,25 @@
            "op": "capFlag",
            "key": "hideout-alert",
            "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "hideout-inside",
+           "min": 0,
+           "max": 0,
+           "then": [],
+           "text": "A camera turns, slowly, to follow you. (Alert +2)"
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "hideout-inside",
+           "min": 1,
+           "then": [],
+           "text": "A camera turns, slowly, to follow you. You are staff. Staff don't usually come down here. (Suspicion +2)"
           }
-         ],
-         "text": "A camera turns, slowly, to follow you. (Alert +2)"
+         ]
         },
         {
          "kind": "addEvent",
@@ -6192,7 +7392,7 @@
        "atMost": 9
       }
      ],
-     "notice": "*Alert: patrols. Torches sweep the lab floor. Nobody's talking their way past anyone now.*"
+     "notice": "*{hideout:meter}: patrols. Torches sweep the lab floor. {hideout:patrol}*"
     },
     {
      "id": "full",
@@ -6204,7 +7404,7 @@
        "atMost": 99
       }
      ],
-     "notice": "*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
+     "notice": "*{hideout:meter} 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
     }
    ],
    "room": true,
@@ -6319,9 +7519,25 @@
           "op": "capFlag",
           "key": "hideout-alert",
           "n": 10
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "hideout-inside",
+          "min": 0,
+          "max": 0,
+          "then": [],
+          "text": "A camera turns, slowly, to follow you. (Alert +2)"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "hideout-inside",
+          "min": 1,
+          "then": [],
+          "text": "A camera turns, slowly, to follow you. You are staff. Staff don't usually come down here. (Suspicion +2)"
          }
-        ],
-        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        ]
        },
        {
         "kind": "addEvent",
@@ -6610,7 +7826,7 @@
        "atMost": 9
       }
      ],
-     "notice": "*Alert: patrols. Torches sweep the pen. Nobody's talking their way past anyone now.*"
+     "notice": "*{hideout:meter}: patrols. Torches sweep the pen. {hideout:patrol}*"
     },
     {
      "id": "full",
@@ -6622,7 +7838,7 @@
        "atMost": 99
       }
      ],
-     "notice": "*Alert 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
+     "notice": "*{hideout:meter} 10. Every alarm in the building is going. Every Grunt left has called up one more Pokémon.*"
     }
    ],
    "room": true,
@@ -6718,9 +7934,25 @@
            "op": "capFlag",
            "key": "hideout-alert",
            "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "hideout-inside",
+           "min": 0,
+           "max": 0,
+           "then": [],
+           "text": "A camera turns, slowly, to follow you. (Alert +2)"
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "hideout-inside",
+           "min": 1,
+           "then": [],
+           "text": "A camera turns, slowly, to follow you. You are staff. Staff don't usually come down here. (Suspicion +2)"
           }
-         ],
-         "text": "A camera turns, slowly, to follow you. (Alert +2)"
+         ]
         },
         {
          "kind": "addEvent",
@@ -6737,8 +7969,33 @@
     {
      "label": "Ask the keeper to help.",
      "success": {
-      "text": "She looks at you for a long time. \"...They bite the boss. They never bite me.\"\n\nShe hands you the keys, folds her jacket on the bucket, and helps you open every cage. Then she walks out with them.",
+      "text": "You ask her, quietly, the way you would ask for the salt.",
       "effects": [
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-inside",
+        "min": 0,
+        "max": 0,
+        "then": [],
+        "text": "She looks at you for a long time. \"...They bite the boss. They never bite me.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-inside",
+        "min": 1,
+        "then": [],
+        "text": "\"You're from upstairs,\" she says. \"I've seen you in the canteen.\" She looks at the cages, and at you. \"...Go on, then. Before I think about it.\""
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "hideout-entered",
+        "min": 1,
+        "then": [],
+        "text": "She hands you the keys, folds her jacket on the bucket, and helps you open every cage. Then she walks out with them."
+       },
        {
         "kind": "flag",
         "key": "hideout-keeper-quit",
@@ -6808,9 +8065,25 @@
           "op": "capFlag",
           "key": "hideout-alert",
           "n": 10
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "hideout-inside",
+          "min": 0,
+          "max": 0,
+          "then": [],
+          "text": "A camera turns, slowly, to follow you. (Alert +2)"
+         },
+         {
+          "kind": "gn",
+          "op": "when",
+          "key": "hideout-inside",
+          "min": 1,
+          "then": [],
+          "text": "A camera turns, slowly, to follow you. You are staff. Staff don't usually come down here. (Suspicion +2)"
          }
-        ],
-        "text": "A camera turns, slowly, to follow you. (Alert +2)"
+        ]
        },
        {
         "kind": "addEvent",
@@ -6820,10 +8093,9 @@
      },
      "showIf": [
       {
-       "kind": "flag",
-       "key": "hideout-alert",
-       "atLeast": 0,
-       "atMost": 4
+       "kind": "gn",
+       "test": "canTalkPast",
+       "key": "hideout-alert"
       }
      ]
     },
@@ -6905,9 +8177,25 @@
            "op": "capFlag",
            "key": "hideout-alert",
            "n": 10
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "hideout-inside",
+           "min": 0,
+           "max": 0,
+           "then": [],
+           "text": "A camera turns, slowly, to follow you. (Alert +2)"
+          },
+          {
+           "kind": "gn",
+           "op": "when",
+           "key": "hideout-inside",
+           "min": 1,
+           "then": [],
+           "text": "A camera turns, slowly, to follow you. You are staff. Staff don't usually come down here. (Suspicion +2)"
           }
-         ],
-         "text": "A camera turns, slowly, to follow you. (Alert +2)"
+         ]
         },
         {
          "kind": "addEvent",
@@ -6922,10 +8210,9 @@
      },
      "showIf": [
       {
-       "kind": "flag",
-       "key": "hideout-alert",
-       "atLeast": 5,
-       "atMost": 99
+       "kind": "gn",
+       "test": "noTalkPast",
+       "key": "hideout-alert"
       }
      ]
     }
@@ -7008,7 +8295,7 @@
     {
      "label": "Fight.",
      "success": {
-      "text": "{lt} snaps their fingers. Two {grunt}s step out from behind the shelves.",
+      "text": "{lt} snaps their fingers. Two {grunt}s step out from behind the shelves, and stand with them.",
       "effects": [
        {
         "kind": "flag",
@@ -7018,64 +8305,11 @@
       ],
       "battle": {
        "kind": "trainer",
-       "evil": "grunt",
-       "name": "{grunt}",
-       "size": 2,
-       "levelBonus": 0,
-       "pseudo": true,
-       "chain": 2,
-       "win": [
-        {
-         "kind": "addEvent",
-         "eventId": "gn-28-vault-2"
-        }
-       ],
-       "moreIf": {
-        "key": "hideout-alert",
-        "at": 10
-       }
-      }
-     },
-     "showIf": [
-      {
-       "kind": "flag",
-       "key": "hideout-alert",
-       "atLeast": 10,
-       "atMost": 99
-      }
-     ]
-    }
-   ]
-  },
-  {
-   "id": "gn-28-vault-2",
-   "name": "{team} Hideout: The Vault",
-   "group": "Greenneedle",
-   "tags": [
-    "Evil Team",
-    "Dungeon",
-    "Story"
-   ],
-   "room": true,
-   "scene": {
-    "cast": [],
-    "pokemon": "persian",
-    "tint": "#2a1f24",
-    "effect": "shake"
-   },
-   "intro": "The two {grunt}s are down. {lt} hasn't moved from behind the desk.\n\n**{lt}:** \"Fine. I'll do it myself. I always do.\"",
-   "choices": [
-    {
-     "label": "Fight.",
-     "success": {
-      "text": "{lt} stands.",
-      "effects": [],
-      "battle": {
-       "kind": "trainer",
        "evil": "executive",
        "name": "{lt}",
-       "size": 3,
+       "size": 5,
        "levelBonus": 2,
+       "format": "doubles",
        "pseudo": true,
        "chain": 1,
        "win": [
@@ -7105,7 +8339,15 @@
         }
        ]
       }
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-alert",
+       "atLeast": 10,
+       "atMost": 99
+      }
+     ]
     }
    ]
   },
@@ -7165,7 +8407,15 @@
         "kind": "leavePseudo"
        }
       ]
-     }
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "hideout-shadow-freed",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
     },
     {
      "label": "A stolen evolution item.",
@@ -7460,23 +8710,45 @@
     {
      "label": "Come with us.",
      "success": {
-      "text": "It comes. It already knows your voice. (Bond +1)",
-      "effects": [
-       {
-        "kind": "join",
-        "shadow": false,
-        "species": [],
-        "types": [],
-        "levelBonus": 0,
-        "shinyMultiplier": 1,
-        "friendship": 50
+      "text": "It waits. It won't raise a paw against you. Whether it stays is up to the Ball.",
+      "effects": [],
+      "battle": {
+       "kind": "wild",
+       "species": [],
+       "types": [],
+       "levelBonus": 0,
+       "shinyMultiplier": 1,
+       "win": [
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "hideout-asked"
+        }
+       ],
+       "friendly": true,
+       "rule": {
+        "foeStands": 99
        },
-       {
-        "kind": "gn",
-        "op": "stampRegion",
-        "key": "hideout-asked"
-       }
-      ]
+       "caught": [
+        {
+         "kind": "gn",
+         "op": "bondNewest",
+         "n": 50
+        },
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "hideout-asked"
+        }
+       ],
+       "lose": [
+        {
+         "kind": "gn",
+         "op": "stampRegion",
+         "key": "hideout-asked"
+        }
+       ]
+      }
      }
     },
     {
@@ -7535,11 +8807,15 @@
     {
      "label": "Go in.",
      "success": {
-      "text": "She looks after your whole team, and won't take a thing for it. The ones you freed built the place themselves.",
+      "text": "She looks after your whole team, and won't take a thing for it. The ones you freed built the place themselves. The door stays open: a place to rest, here, for as long as you are on this road.",
       "effects": [
        {
         "kind": "heal",
         "share": 1
+       },
+       {
+        "kind": "addStop",
+        "stop": "heal"
        },
        {
         "kind": "flag",
@@ -9034,20 +10310,25 @@
         "key": "pink-at"
        },
        {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "pink-shade-at"
+       },
+       {
         "kind": "leavePseudo"
        }
       ]
      }
     },
     {
-     "label": "Let your lead try the fruit.",
+     "label": "Let one of yours try the fruit.",
+     "pick": {},
      "success": {
       "text": "It eats the fruit for a day. By evening it's a very pale pink, and very pleased with itself.",
       "effects": [
        {
         "kind": "gn",
-        "op": "markLead",
-        "text": "pink from the island fruit"
+        "op": "markPink"
        },
        {
         "kind": "gn",
@@ -9066,7 +10347,216 @@
         "key": "pink-at"
        },
        {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "pink-shade-at"
+       },
+       {
         "kind": "leavePseudo"
+       }
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "gn-30-fade",
+   "name": "The Colour",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "stop": "event",
+   "rarity": "uncommon",
+   "callback": true,
+   "minStage": 2,
+   "requires": [
+    {
+     "kind": "flag",
+     "key": "pink-done",
+     "atLeast": 1,
+     "atMost": 99
+    },
+    {
+     "kind": "gn",
+     "test": "hasPink",
+     "key": "pink"
+    },
+    {
+     "kind": "gn",
+     "test": "regionChanged",
+     "key": "pink-shade-at"
+    }
+   ],
+   "scene": {
+    "cast": [],
+    "pokemon": "mareep",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "A whole region of mainland food. Your pink one has been looking at its own feet a good deal lately.\n\n*The colour is going. Not fast. But it is going.*",
+   "choices": [
+    {
+     "label": "Give it a Pink Fruit.",
+     "success": {
+      "text": "It eats the fruit in three bites, and sits with the stone in its mouth for a while, like a sweet.\n\nThe colour holds. One more region.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-fruit",
+        "amount": -1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "pink-shade-at"
+       },
+       {
+        "kind": "gn",
+        "op": "check",
+        "key": "pink-last",
+        "if": [
+         {
+          "kind": "flag",
+          "key": "pink-fruit",
+          "atLeast": 0,
+          "atMost": 0
+         }
+        ]
+       },
+       {
+        "kind": "gn",
+        "op": "when",
+        "key": "pink-last",
+        "min": 1,
+        "then": [
+         {
+          "kind": "gn",
+          "op": "scene",
+          "key": "gn-30-stone"
+         }
+        ]
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-fruit",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "Keep the fruit for later.",
+     "success": {
+      "text": "You keep the fruit in the bag. It is a shade paler than it was. It doesn't seem to mind.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pinkFade"
+       },
+       {
+        "kind": "flag",
+        "key": "pink-shade",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "pink-shade-at"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-fruit",
+       "atLeast": 1,
+       "atMost": 99
+      }
+     ]
+    },
+    {
+     "label": "There is no fruit.",
+     "success": {
+      "text": "There is nothing to give it but what the mainland grows. It is a shade paler than it was. It doesn't seem to mind.",
+      "effects": [
+       {
+        "kind": "gn",
+        "op": "pinkFade"
+       },
+       {
+        "kind": "flag",
+        "key": "pink-shade",
+        "amount": 1
+       },
+       {
+        "kind": "gn",
+        "op": "stampRegion",
+        "key": "pink-shade-at"
+       }
+      ]
+     },
+     "showIf": [
+      {
+       "kind": "flag",
+       "key": "pink-fruit",
+       "atLeast": 0,
+       "atMost": 0
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "gn-30-stone",
+   "name": "The Colour: The Last Stone",
+   "group": "Greenneedle",
+   "tags": [
+    "Pokémon",
+    "Exploration",
+    "Mystery"
+   ],
+   "room": true,
+   "scene": {
+    "cast": [],
+    "pokemon": "mareep",
+    "tint": "#e48fb4",
+    "effect": "none"
+   },
+   "intro": "That was the last of the fruit. What is left is its stone, the size of a thumbnail, pink all the way through.\n\n*Plant the stone?*",
+   "choices": [
+    {
+     "label": "Plant it.",
+     "success": {
+      "text": "You press it into the soft ground at the edge of the camp, and pour a little water over it.\n\nOne day, a small pink tree. You won't pass this way again to see it. Somebody will.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-stone-planted",
+        "amount": 1
+       },
+       {
+        "kind": "moment",
+        "text": "Planted the last Pink Fruit's stone by a camp, for whoever comes next.",
+        "importance": 70
+       }
+      ]
+     }
+    },
+    {
+     "label": "Keep it.",
+     "success": {
+      "text": "You put it in your pocket. It weighs nothing at all.",
+      "effects": [
+       {
+        "kind": "flag",
+        "key": "pink-stone-kept",
+        "amount": 1
        }
       ]
      }

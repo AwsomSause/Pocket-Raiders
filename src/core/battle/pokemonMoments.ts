@@ -595,6 +595,7 @@ function chanceFor(ctx: BattleContext, m: PokemonMoment, mon: PokemonInstance): 
   let chance = m.chance;
   if (m.chanceBond) chance = Math.min(m.chanceBond.max, chance + Math.max(0, bondLevel(ctx.content, mon) - m.chanceBond.above) * m.chanceBond.perStep);
   if (m.chancePlus && (m.chancePlus.exact ? m.chancePlus.species.includes(mon.speciesId) : momentMatches(ctx.content, { ...m, scope: { lines: m.chancePlus.species } }, mon.speciesId))) chance += m.chancePlus.plus;
+  if (m.chanceMark && mon.gn?.includes(m.chanceMark.mark)) chance = Math.min(1, chance * m.chanceMark.times);
   for (const r of remembered(ctx, m, mon)) chance += r.chance ?? 0;
   // The Named One (PI4): a Pokémon you named gets +5% on whichever revival would bring it back.
   if (m.trigger === 'runEnd' && mon.care?.nickname) chance += 0.05;

@@ -9,6 +9,8 @@ import type { GnCond, GnEffect } from './schema';
 import { abilityOf, addLevels, calcStats, createPokemon, getSpecies, isUsableMove, maxHp } from '../pokemon';
 import { levelScale } from '../encounters';
 import { getCampaign } from '../regions';
+import { makeDoubles } from '../battle/doubles';
+import { bondNewest, hasPink, markPink, oldEggMove, pinkFade, raiseMarked, truceAnswers } from './part3';
 import { addItem } from '../items';
 import { typeEffectiveness } from '../battle/damage';
 import type { TypeName } from '../contentSchema';
@@ -90,6 +92,11 @@ export function gnTokens(content: Content, run: RunState, text: string): string 
     const id = castOf(run, name) ?? '';
     return content.species.get(id)?.name ?? content.items.get(id)?.name ?? content.catalog.get(id)?.name ?? content.bosses.get(id)?.name ?? content.moves.get(id)?.name ?? 'that one';
   });
+  // gn.28 "Remembers": inside the team the Hideout is your workplace and the Alert meter is called Suspicion; a colleague can still talk past patrols.
+  if (text.includes('{hideout:')) {
+    const staff = insideTeam(run);
+    text = text.replaceAll('{hideout:meter}', staff ? 'Suspicion' : 'Alert').replaceAll('{hideout:patrol}', staff ? 'A colleague can still talk their way past. Just.' : "Nobody's talking their way past anyone now.");
+  }
   // gn.58: the returning friend.
   if (text.includes('{oldfriend:')) text = oldfriendTokens(content, run, text);
   // gn.43: the auction catalogue ({lot:<n>:prov}, {lot:<n>:photo}) and a sum of money ({money:<key>}).
@@ -214,6 +221,13 @@ export function gnConditionMet(content: Content, run: RunState, c: GnCond, stage
   // gn.16: the fighter won from behind (the first Pokémon able to fight is at half its HP or less).
   // gn.33: the tide is low (the Sunken City's causeway is out of the water).
   if (c.test === 'lastStage') { const camp = getCampaign(content, run.campaignId); return isLastStage(content, run, camp.stagesPerRegion, camp.regularRegions); }
+  if (c.test === 'hasPink') return hasPink(run);
+  // gn.28: Alert 0 to 4, anyone can be talked past; inside the team the floors are your workplace, and a colleague still can up to 9.
+  if (c.test === 'canTalkPast' || c.test === 'noTalkPast') {
+    const alert = gnFlag(run, c.key!);
+    const can = alert <= 4 || (insideTeam(run) && alert <= 9);
+    return c.test === 'canTalkPast' ? can : !can;
+  }
   if (c.test === 'paradeMemory') return paradeMemory(run);
   if (c.test === 'paradeNickname') return paradeNickname(run);
   if (c.test === 'paradeEggReady') return paradeEggReady(content, run);
@@ -549,7 +563,8 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
       const known = new Set(mon.moves.map((m) => m.id));
       const dropped = getSpecies(content, mon.speciesId).learnset.filter((x) => x.level <= mon.level && !known.has(x.move) && isUsableMove(content, x.move)).map((x) => x.move);
       // The oldest move it has dropped: the one it used back then.
-      const id = dropped[0];
+      // "...something its level-up list has dropped, or an egg move": the egg move when nothing was dropped.
+      const id = dropped[0] ?? oldEggMove(content, mon);
       if (!id) return '';
       const slot = { id, pp: content.moves.get(id)!.pp };
       // A full moveset gives up its last move, never Two Trainers (taught just before, at high Bond).
@@ -954,6 +969,21 @@ export function applyGnEffect(content: Content, run: RunState, e: GnEffect, host
     }
     case 'marketUndercut':
       return marketUndercut(run, e.key!, e.n!);
+    // gn.21–gn.30 fixes (part3.ts).
+    case 'stampLevel': {
+      const column = run.stage?.map.nodes.find((x) => x.id === run.stage!.current)?.column ?? 1;
+      const sc = levelScale(content, getCampaign(content, run.campaignId), run.regionIndex, run.stage?.index ?? 0, column);
+      setGnFlag(run, e.key!, Math.max(1, Math.round(sc.start + (sc.end - sc.start) * sc.t)));
+      return '';
+    }
+    case 'raiseMarked':
+      return raiseMarked(content, run, e.key!, e.type!);
+    case 'markPink':
+      return markPink(content, run, host.picked);
+    case 'pinkFade':
+      return pinkFade(content, run);
+    case 'bondNewest':
+      return bondNewest(content, run, e.n ?? 0);
     case 'markLead': {
       // gn.30: a history mark on the lead (the pink one that ate the island fruit for a day).
       const lead = run.party.find((m) => m.hp > 0) ?? run.party[0];
@@ -1042,6 +1072,8 @@ export function gnBattleStart(content: Content, run: RunState): void {
   const battle = run.battle;
   if (!battle) return;
   if (gnFlag(run, FOREST.inside) > 0 && gnFlag(run, FOREST.fog) > 0) battle.accuracyMult = 0.9;
+  // gn.22 (the third wave): two of yours against one foe. The Cubone leads (`leadMark`), your next Pokémon stands beside it.
+  if (battle.eventRule?.beside && !battle.doubles && run.party.filter((m) => m.hp > 0).length >= 2) makeDoubles(battle, run.party);
   // gn.42: a Frontier Brain brings the answer to the ace you brought last time.
   const rule = battle.eventRule?.gn;
   if (rule?.startsWith('brain-')) brainStart(content, run, battle, rule.slice('brain-'.length), makeFull(content));
@@ -1279,6 +1311,8 @@ function countForest(content: Content, run: RunState, battle: BattleState): void
 export function gnAfterTurn(content: Content, run: RunState): Cue[] {
   const battle = run.battle;
   const seen = ferrisTurn(content, run);
+  // gn.25: the pair answer for each other (part3.ts).
+  if (battle && !battle.outcome) for (const line of truceAnswers(content, battle, run.party)) seen.push(cue('player', line));
   if (!battle || (battle.outcome !== 'win' && battle.outcome !== 'caught') || battle.storyEffects.includes('gn-counted')) return seen;
   battle.storyEffects.push('gn-counted');
   countForest(content, run, battle);
