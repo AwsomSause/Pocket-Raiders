@@ -7,6 +7,7 @@ import { answerRefusal, askAnyway, clearJob, fixOdds, queueJob, resolveEvening, 
 import { arriveApplicants, askQuestion, hire, leaveAtZero, letGo, promote, turnAway } from './roster';
 import type { JobDraft } from './odds';
 import { askAbout, setRate } from './ledger';
+import { holdResult, post, takeBadge, unpost, walkHero } from './hero';
 import { BEATS, type Beat, type EvilModeBlock, type Question } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
@@ -38,6 +39,11 @@ export type EvilAction =
   | { type: 'turnAway'; ref: string; rude: boolean }
   | { type: 'promote'; id: string; answer: number }
   | { type: 'letGo'; id: string; kindly: boolean }
+  /** Slice 5: Hold (post somebody at a holding the Hero's about to reach), going in person, and a battle's result. */
+  | { type: 'post'; holdingId: string; id: string }
+  | { type: 'unpost'; holdingId: string }
+  | { type: 'goYourself'; holdingId: string }
+  | { type: 'battleResult'; won: boolean; fielded?: string[] }
   | { type: 'dismissOvernight' }
   | { type: 'send' }
   | { type: 'stayIn' }
@@ -45,7 +51,7 @@ export type EvilAction =
   | { type: 'lightsOut' }
   | { type: 'watchRoad' };
 
-export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' };
+export type EvilCue = { id: 'beat'; beat: Beat } | { id: 'newDay'; day: number } | { id: 'refused'; reason: string } | { id: 'queued'; holdingId: string } | { id: 'districtEnd'; how: 'held' | 'taken' } | { id: 'filed'; text: string } | { id: 'asked'; line: string } | { id: 'said'; line: string } | { id: 'refusal' } | { id: 'fight' } | { id: 'road'; lines: string[] };
 
 export interface StepResult {
   block: EvilModeBlock;
@@ -58,10 +64,44 @@ export interface StepResult {
 export const nextBeat = (beat: Beat): Beat => BEATS[(BEATS.indexOf(beat) + 1) % BEATS.length]!;
 
 /** One action. The input block is never changed; a new one is returned. */
-export function step(block: EvilModeBlock, action: EvilAction): StepResult {
+export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
+  let block = block0;
   const { beat } = block.here;
-  const no = (reason: string): StepResult => ({ block, cues: [{ id: 'refused', reason }], ok: false });
+  const no = (reason: string): StepResult => ({ block: block0, cues: [{ id: 'refused', reason }], ok: false });
   if (block.district?.end) return no("The district's over.");
+  // Slice 5: a battle the day's waiting on comes first; only its result moves anything.
+  if (action.type === 'battleResult') {
+    const f = block.fight;
+    if (!f) return no('No battle is waiting.');
+    if (f.kind === 'hold') {
+      const r = holdResult(block, action.won, action.fielded ?? []);
+      return { block: endIfTaken(r.block), cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+    }
+    const queue = block.queue.map((j) => (j.holdingId === f.holdingId && j.method === 'outplay' ? { ...j, played: action.won ? ('won' as const) : ('lost' as const) } : j));
+    return { block: { ...block, queue, fight: null }, cues: [{ id: 'said', line: action.won ? 'Won fairly. It holds, from this Evening.' : 'Lost. The party is healed; nothing ends.' }], ok: true };
+  }
+  if (block.fight) return no('A battle is waiting.');
+  if (action.type === 'post' || action.type === 'unpost') {
+    if (beat !== 'dispatch') return no(`${action.type} does nothing at ${beat}`);
+    if (action.type === 'unpost') return { block: unpost(block, action.holdingId), cues: [], ok: true };
+    const r = post(block, action.holdingId, action.id);
+    return r.problem ? no(r.problem) : { block: r.block, cues: [], ok: true };
+  }
+  if (action.type === 'goYourself') {
+    if (beat !== 'inPerson') return no(`goYourself does nothing at ${beat}`);
+    if (block.inPerson?.day === block.here.day) return no('The Boss has already been out today.');
+    const j = block.queue.find((x) => x.holdingId === action.holdingId);
+    if (!j) return no('Nothing is queued there today.');
+    if (j.method !== 'outplay') return no('In person, only an Outplay is played yet. The rest come with a later build.');
+    return { block: { ...block, inPerson: { day: block.here.day, holdingId: j.holdingId }, fight: { kind: 'outplay', holdingId: j.holdingId, begun: false } }, cues: [{ id: 'fight' }], ok: true };
+  }
+  // Slice 5: watching the road walks the Hero first; a fight on the way stops the walk, and the beat waits on it.
+  if (action.type === 'watchRoad' && beat === 'hero' && block.hero && block.hero.walked !== block.here.day) {
+    const walked = endIfTaken(walkHero(block));
+    if (walked.fight) return { block: walked, cues: [{ id: 'road', lines: walked.hero!.today }, { id: 'fight' }], ok: true };
+    if (walked.district?.end) return { block: walked, cues: [{ id: 'road', lines: walked.hero!.today }, { id: 'districtEnd', how: walked.district.end.how }], ok: true };
+    block = walked;
+  }
   // Slice 4: the notice board and the Office, at any beat.
   if (action.type === 'hire' || action.type === 'question' || action.type === 'turnAway' || action.type === 'promote' || action.type === 'letGo') {
     const r = action.type === 'hire' ? hire(block, action.ref) : action.type === 'question' ? askQuestion(block, action.ref, action.q) : action.type === 'turnAway' ? turnAway(block, action.ref, action.rude) : action.type === 'promote' ? promote(block, action.id, action.answer) : letGo(block, action.id, action.kindly);
@@ -104,6 +144,13 @@ export function step(block: EvilModeBlock, action: EvilAction): StepResult {
   if (to === 'evening') out = resolveEvening(out);
   const cues: EvilCue[] = [{ id: 'beat', beat: to }];
   // Slice 4: Morning. Anyone at Loyalty 0 is gone, with a note; then the notice board (Part 30 section 6.2).
+  // Slice 5: nobody stays posted overnight. The road's lines are shown at the Morning.
+  if (to === 'morning') {
+    out = { ...out, posted: [] };
+    if (out.hero?.today.length) cues.push({ id: 'road', lines: out.hero.today });
+  }
+  // The seventh day: the Hero takes the Badge on their way through, either way (Part 2 section 4).
+  out = endIfTaken(out);
   if (to === 'morning' && !out.district?.end) {
     const z = leaveAtZero(out);
     out = arriveApplicants(z.block);
@@ -112,6 +159,11 @@ export function step(block: EvilModeBlock, action: EvilAction): StepResult {
   if (to === 'morning') cues.push({ id: 'newDay', day });
   if (out.district?.end) cues.push({ id: 'districtEnd', how: out.district.end.how });
   return { block: out, cues, ok: true };
+}
+
+/** A district that's ended gives the Hero its Badge once (on the seventh day, on their way through). */
+function endIfTaken(block: EvilModeBlock): EvilModeBlock {
+  return block.district?.end && block.hero ? takeBadge(block, 'day7') : block;
 }
 
 /** The beats already done today, the one lit now, and those still to come (the beat strip, design Part 29 section 2.2). */

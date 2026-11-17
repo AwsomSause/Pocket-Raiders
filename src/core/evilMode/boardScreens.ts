@@ -7,6 +7,7 @@ import { EVIL_DATA, type EvilData } from './data';
 import { crewProblem, jobProblem, payAmount } from './dispatch';
 import { oddsFor, oddsText } from './odds';
 import { lineIndex } from './start';
+import { likelyRoad, postProblem } from './hero';
 import { JOB_METHODS, type EvilModeBlock, type Holding, type JobMethod, type LineId } from './schema';
 
 export type DispatchStep = 'where' | 'who' | 'how';
@@ -31,6 +32,8 @@ export interface CellModel {
   ring: 'none' | 'scouted' | 'holds' | 'turn';
   dot: string | null; mood: string | null;
   queued: boolean; lit: boolean; sel: boolean;
+  /** Slice 5: the Hero's marker, their likely road tomorrow (the faint line), their home street, and somebody posted. */
+  hero: boolean; road: boolean; home: boolean; posted: boolean;
 }
 
 export interface MethodButton { id: string; name: string; word: string; key: number; on: boolean; dark: string | null; chosen: boolean }
@@ -58,7 +61,14 @@ export interface BoardModel {
     canQueue: boolean;
     queue: { holdingId: string; text: string }[];
     funds: string;
+    /** Slice 5: Hold, on a holding that's yours: one person stands there against the kid (no Card). */
+    hold: null | { label: string; problem: string | null };
+    posted: { holdingId: string; text: string }[];
   };
+  /** Slice 5: In person, the queued Outplays the Boss can go and play. */
+  inPerson: null | { go: { holdingId: string; text: string; sel: boolean }[]; done: string | null };
+  /** Slice 5: a battle the day's waiting on. */
+  fight: string | null;
 }
 
 const money = (n: number): string => `₽${n.toLocaleString('en-GB')}`;
@@ -88,12 +98,15 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
   const isDispatch = block.here.beat === 'dispatch' && !dist.end;
   const sel = dist.holdings[d.at] ?? dist.holdings[0]!;
   const queuedOn = (h: Holding) => block.queue.find((j) => j.holdingId === h.id);
+  const road = likelyRoad(block, data);
   const cells: CellModel[] = dist.holdings.map((h, i) => ({
     id: h.id, step: h.step, mark: kindDef(h.kind, data).mark, kind: kindDef(h.kind, data).name, name: holdingName(h, data),
     ring: h.owner === 'team' ? (h.holds ? 'holds' : 'turn') : h.scouted > 0 ? 'scouted' : 'none',
     dot: h.scouted > 0 && h.mood ? data.district.moods.find((m) => m.id === h.mood)!.dot : null,
     mood: h.scouted > 0 ? moodName(h, data) : null,
     queued: !!queuedOn(h), lit: !isDispatch || methodsFor(h, data).length > 0, sel: i === d.at,
+    hero: block.hero?.at === h.step && block.hero.home.district === dist.n, road: road.includes(h.step), home: !!block.hero?.home.holdings.includes(h.id) && block.hero.home.district === dist.n,
+    posted: block.posted.some((p) => p.holdingId === h.id),
   }));
   const l = localOf(sel, data);
   const known = sel.scouted;
@@ -111,7 +124,7 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
     price: (l || sel.kind === 'safehouse') && known ? (price === null ? (l?.noPrice ?? 'No price') : money(price)) : '—',
   };
   const name = (id: string) => dist.holdings.find((h) => h.id === id);
-  const sheetLines = block.sheets.map((s) => ({ title: `Step ${name(s.holdingId)!.step} · ${holdingName({ ...name(s.holdingId)!, scouted: Math.max(1, name(s.holdingId)!.scouted) }, data)} · ${methodWord(s.method)} · ${s.won ? (s.method === 'scout' ? 'DONE' : 'WON') : 'LOST'}`, lines: [...s.lines, s.voice, s.certain ? 'Certain.' : `Odds ${s.odds}%, rolled ${s.roll}.`] }));
+  const sheetLines = block.sheets.map((s) => ({ title: `Step ${name(s.holdingId)!.step} · ${holdingName({ ...name(s.holdingId)!, scouted: Math.max(1, name(s.holdingId)!.scouted) }, data)} · ${methodWord(s.method)} · ${s.won ? (s.method === 'scout' ? 'DONE' : 'WON') : 'LOST'}`, lines: [...s.lines, s.voice, s.played ? 'Played in person: not rolled.' : s.certain ? 'Certain.' : `Odds ${s.odds}%, rolled ${s.roll}.`] }));
   const count = heldCount(block);
   const model: BoardModel = {
     title: `${def.town} · ${def.leader}'s district`,
@@ -124,8 +137,26 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
     evening: block.here.beat === 'evening' ? block.evening : [],
     end: dist.end ? { how: dist.end.how, text: data.district.ends[dist.end.how], rows: [['Held', `${dist.end.count} of ${R.toHold}`], ['Holds', String(dist.holdings.filter((h) => h.owner === 'team' && h.holds).length)], ['Would turn', String(dist.holdings.filter((h) => h.owner === 'team' && !h.holds).length)], ['Day', `${dist.end.day} of ${R.days}`], ['Funds', money(block.team.funds)], ['Heat', String(block.team.heat)], ['Regard', String(block.team.regard)]] } : null,
     dispatch: null,
+    inPerson: null,
+    fight: null,
   };
   if (block.here.beat === 'evening') model.overnight = sheetLines;
+  // Slice 5: the road. At the Morning, yesterday's walk; at beat 6, today's once walked.
+  const hero = block.hero;
+  if (hero?.today.length && (block.here.beat === 'morning' || (block.here.beat === 'hero' && hero.walked === day))) model.overnight = [{ title: `The kid · ${hero.name}`, lines: hero.today }, ...model.overnight];
+  if (block.fight) {
+    const fh = name(block.fight.holdingId)!;
+    const who = block.crew.find((c) => c.id === block.fight!.personId)?.name ?? 'Somebody';
+    model.fight = block.fight.kind === 'hold' ? `${who} is standing at ${holdingName({ ...fh, scouted: Math.max(1, fh.scouted) }, data)}, and the kid is here. Fight (Enter).` : `The Boss is at ${holdingName({ ...fh, scouted: Math.max(1, fh.scouted) }, data)}. Fight (Enter).`;
+  }
+  if (block.here.beat === 'inPerson' && !dist.end) {
+    const outplays = block.queue.filter((j) => j.method === 'outplay' && !j.played);
+    const went = block.inPerson?.day === day ? name(block.inPerson.holdingId) : undefined;
+    model.inPerson = {
+      go: went ? [] : outplays.map((j) => ({ holdingId: j.holdingId, text: `Go yourself: Outplay at step ${name(j.holdingId)!.step} · ${holdingName({ ...name(j.holdingId)!, scouted: Math.max(1, name(j.holdingId)!.scouted) }, data)}`, sel: name(j.holdingId)!.step - 1 === d.at })),
+      done: went ? `The Boss went to step ${went.step} today.` : outplays.length ? null : 'Nothing to go to in person. (In person, only an Outplay is played yet.)',
+    };
+  }
   if (!isDispatch) return model;
 
   const rows = dispatchRows(block, data).map((i) => ({ h: dist.holdings[i]!, i }));
@@ -151,6 +182,8 @@ export function boardModel(block: EvilModeBlock, d: DispatchDraft, data: EvilDat
     canQueue: !problem,
     queue: block.queue.map((j) => ({ holdingId: j.holdingId, text: `${j.squad.map((id) => block.crew.find((c) => c.id === id)?.name ?? id).join(', ')} → step ${name(j.holdingId)!.step} · ${methodWord(j.method)}${j.method === 'pay' ? ` (${money(payAmount(name(j.holdingId)!, j.offer, data))})` : ''}` })),
     funds: money(block.team.funds),
+    hold: sel.owner === 'team' && block.hero ? { label: d.squad.length === 1 ? `Hold: ${block.crew.find((c) => c.id === d.squad[0])?.name ?? ''} stands here` : 'Hold: pick one person to stand here', problem: d.squad.length === 1 ? postProblem(block, sel.id, d.squad[0]!) : 'Pick one person to stand here.' } : null,
+    posted: block.posted.map((p) => ({ holdingId: p.holdingId, text: `${block.crew.find((c) => c.id === p.id)?.name ?? p.id} holds step ${name(p.holdingId)!.step} against the kid` })),
   };
   return model;
 }
