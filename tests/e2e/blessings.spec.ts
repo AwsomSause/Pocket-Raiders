@@ -120,3 +120,31 @@ test("Zekrom's blessing asks for a vow on the opening screen before the briefing
   expect(await page.evaluate(() => (window as any).__pkr.session.run.expansion.blessing.vow)).toBe('strike-no-one-first');
   expect(errors).toEqual([]);
 });
+
+test('the Reliquary in the hub shows the blessings found and blank plinths for the rest', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+  await page.goto('/?debug=1');
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr?.activeScene() ?? null), { timeout: 20_000 }).toBe('MainMenu');
+  await page.evaluate(() => {
+    const s = (window as any).__pkr.session;
+    s.changeProfile((p: any) => ({ ...p, blessings: { found: ['zapdos'], dealt: [] } }));
+    (window as any).__pkr.game.scene.getScenes(true)[0].scene.start('Hub');
+  });
+  await expect.poll(() => page.evaluate(() => (window as any).__pkr.activeScene()), { timeout: 20_000 }).toBe('Hub');
+  await page.waitForTimeout(400);
+  await page.evaluate(() => { const hub = (window as any).__pkr.game.scene.getScene('Hub'); hub.picker?.close?.(); hub.picker = null; hub.openLegacy('reliquary'); });
+  await page.waitForTimeout(300);
+  const text = await page.evaluate(() => {
+    const out: string[] = [];
+    const walk = (o: any) => { if (typeof o.text === 'string') out.push(o.text); for (const c of o.list ?? []) walk(c); };
+    for (const sc of (window as any).__pkr.game.scene.getScenes(true)) for (const o of sc.children.list) walk(o);
+    return out.join('\n');
+  });
+  expect(text).toContain('11 of 71 blessings found');
+  expect(text).toContain('Zapdos');
+  expect(text).toContain('An empty plinth');
+  await page.screenshot({ path: 'test-results/blessing-reliquary.png' });
+  expect(errors).toEqual([]);
+});
