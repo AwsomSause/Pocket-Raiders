@@ -1,6 +1,6 @@
 // Offline support (W12 F213). Plain, small and safe:
 // - the page and its files are cached as they are fetched (network first for pages, so updates show up);
-// - everything under assets/ is cache first (art and sound never change under the same name within a build);
+// - everything under assets/ (except manifest.json, network first) is cache first (art and sound never change under the same name within a build);
 // - only complete 200 answers are cached (audio range requests are passed through).
 // The build id comes from the registration URL (sw.js?b=...), so each build gets its own cache and old ones are deleted.
 const BUILD = new URL(self.location.href).searchParams.get('b') || 'dev';
@@ -22,7 +22,8 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET' || req.headers.has('range')) return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin || url.pathname.endsWith('/version.json')) return;
-  const isAsset = url.pathname.includes('/assets/');
+  // The manifest lists which art exists: always ask the network first, or the first load after an update uses the old build's list and every new Pokémon shows a placeholder.
+  const isAsset = url.pathname.includes('/assets/') && !url.pathname.endsWith('/assets/manifest.json');
   event.respondWith(
     (async () => {
       const cache = await caches.open(CACHE);
