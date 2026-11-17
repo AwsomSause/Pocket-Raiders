@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { confirmToMenu, confirmUntil } from './battleInput';
 import { start, waitForScene, watch } from './helpers/newUi';
 
+// Victory poses on: finish() used to read the cleared battle ("Cannot read properties of null (reading 'activeIndex')") and every button died.
 // A won fight where the lead levels up and a Quirk reaction line ("is relieved it's over") follows must never stop the game.
 test('Old UI: a win with a level-up and a Quirk reaction line goes on to the map', async ({ page }) => {
   test.setTimeout(120_000);
@@ -17,6 +18,7 @@ test('Old UI: a win with a level-up and a Quirk reaction line goes on to the map
   await confirmToMenu(page);
   await page.evaluate(() => {
     const run = (window as any).__pkr.session.run;
+    (window as any).__pkr.session.settings.victoryPoses = true; // the winning Pokémon's pose reads the party after the battle is cleared
     run.battle.enemyTeam.forEach((m: any) => (m.hp = 1));
     const mon = run.party[0];
     // Pick a uid whose Quirk is Stage Fright (its win line is "is relieved it's over and does a little hop").
