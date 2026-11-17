@@ -3221,6 +3221,7 @@ function battleContext(content: Content, run: RunState, rng: Rng, captureRng: Rn
     gimmicks: gimmickContext(content, run),
     lastStand: () => galarLastStandMon(content, run),
     galar: galarScope(content, run) ?? undefined,
+    foeHealTier: run.regionIndex,
     starterUid: run.log.starterUid,
     attributes,
     disabledMechanics: run.disabledMechanics,
