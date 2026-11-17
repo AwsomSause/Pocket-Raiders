@@ -3,14 +3,17 @@
 // `evil-dispatch` stream, in queue order, then pays takings and wages. Pure: new blocks are returned.
 
 import { hashSeed, Rng } from '../rng';
-import { countsFor, fairPrice, payAmount, heldCount, holdingName, kindDef, localOf, methodsFor, settleTown, shiftMood, streetOf } from './board';
+import { countsFor, fairPrice, payAmount, heldCount, holdingName, kindDef, localOf, methodsFor, settleTown, shiftMood, streetName, streetOf } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { oddsFor, type JobDraft } from './odds';
 import { cardFor, unknownCount } from './card';
 import { appendLog, fill, lineFor, money, takingsAt } from './ledger';
 import type { Crew, EvilModeBlock, Holding, Job, LogEntry, Sheet } from './schema';
 import { crossers, districtKey, inRoster, moveLoyalty, peopleText, talentDef, wageOf } from './people';
+import { gymHeatToday, inChair } from './gym';
 import { exposeProblem, heatFor, lineAllows, lineRoll, lineWhy, thingProblem } from './line';
+import { allows, modify } from './regionRule';
+import { dayIn, drift, pastTakings, stageKind } from './region';
 
 /** The roll for the n-th number `evil-dispatch` gives out in this run: 1..100. The count is stored, so a reload rolls the same. */
 export const dispatchRoll = (seed: string, n: number): number => new Rng(hashSeed(`${seed}::evil-dispatch::${n}`)).int(1, 100);
@@ -30,6 +33,7 @@ export function crewProblem(block: EvilModeBlock, id: string, ignoreHolding?: st
   if (c.outOn === block.here.day) return `${c.name} is resting after yesterday's battle.`;
   if (block.queue.some((j) => j.holdingId !== ignoreHolding && j.squad.includes(id))) return `${c.name} is already going somewhere today.`;
   if (block.posted.some((p) => p.id === id)) return `${c.name} is posted somewhere today.`;
+  if (inChair(block, id)) return `${c.name} holds the Gym's chair.`;
   return null;
 }
 
@@ -43,9 +47,20 @@ export function jobProblem(block: EvilModeBlock, job: JobDraft, data: EvilData =
   const kind = kindDef(h.kind, data);
   // Slice 6: the Line. A method darker than the team's Line is refused here, whatever the screen shows.
   if (!lineAllows(block, job.method, data)) return lineWhy(block, data);
+  // Slice 9: the region's doors (the first Arrival: Persuade, Pay, Outplay and scouting only). Refused here too.
+  const door = allows(block, job.method, data);
+  if (!door.ok) return door.why ?? `Shut by ${door.shutBy}.`;
   if (!methodsFor(h, data).includes(job.method)) return kind.why ?? `Not by ${job.method} at ${kind.name.toLowerCase()}.`;
   if (h.owner === 'team' && job.method !== 'scout') return "It's already yours.";
   const local = localOf(h, data);
+  // Slice 9: a canon face's locks (Mr. Fuji can't be Leaned on or Taken from) and the tower's stair rule (Part 26a 2.3).
+  if (local?.locks?.includes(job.method as never)) return local.lockWhy ?? 'Not them.';
+  if (h.kind === 'floor' && job.method !== 'scout' && (h.floor ?? 1) > 1) {
+    const below = d.holdings.find((x) => x.kind === 'floor' && x.floor === (h.floor ?? 1) - 1);
+    if (below && below.owner !== 'team' && below.mood !== 'warm') return `Floors are held from the bottom: ${below.ref} first, or its tenant Warm.`;
+  }
+  const limit = squadLimit(block, data);
+  if (!block.queue.some((j) => j.holdingId === h.id) && block.queue.length >= limit) return limit === 1 ? data.region.arrival.squadsWhy : `${limit} squads at most today.`;
   if (local?.minor && job.method !== 'persuade' && job.method !== 'scout') return local.noPrice ?? 'Not with a child.';
   if (job.method === 'persuade' && h.mood === 'shut') return "Shut. They won't open the door.";
   if (job.method === 'take') {
@@ -174,7 +189,9 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     const lines: string[] = [];
     const m = data.district.methods;
     // Heat by the day's loudest job, not the sum (Part 5 section 4.1); what a job adds depends on how it went.
-    loudest = Math.max(loudest ?? -99, heatFor(j.method, won, lead(j)?.talent === 'hands', data));
+    // Slice 9: the region's rule may add to a job's Heat (Kanto: a Take from a deeded holding, +1), only when it went.
+    const baseHeat = heatFor(j.method, won, lead(j)?.talent === 'hands', data);
+    loudest = Math.max(loudest ?? -99, won ? modify(block, 'heat', { method: j.method, tags: h.tags }, baseHeat, data) : baseHeat);
     let takenBy = 0;
     if (j.method === 'scout') {
       set(h.id, (x) => ({ ...x, scouted: Math.min(2, x.scouted + 1) }));
@@ -190,7 +207,7 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
         if (!regardStreets.includes(st)) {
           regardStreets.push(st);
           team = { ...team, regard: cap(team.regard + m.persuade.regard) };
-          lines.push(`Regard +${m.persuade.regard}: the first on ${data.district.streets[st]!.name}.`);
+          lines.push(`Regard +${m.persuade.regard}: the first on ${streetName(d0, st, data)}.`);
         }
       } else {
         set(h.id, (x) => ({ ...x, mood: shiftMood(x.mood, 1), scouted: 2, tried: x.tried.includes('persuade') ? x.tried : [...x.tried, 'persuade'] }));
@@ -251,18 +268,23 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     }
   }
   let district = settleTown({ ...d0, holdings, regardStreets }, day, data);
-  const income = district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0);
+  // Slice 9: the districts behind pay too (full with an Officer there, half without; Part 2 section 4.1).
+  const past = pastTakings(block, data);
+  const income = district.holdings.reduce((n, h) => n + takingsAt(h, block.rates, data), 0) + past.amount;
   const paid = crew.filter((c) => c.where === 'in');
   const wages = team.creed === 'belonging' ? Math.max(0, Math.floor(income / 2)) : paid.reduce((n, c) => n + wageOf({ ...block, team }, c, income, data), 0);
   const before = team.funds;
   team = { ...team, funds: Math.max(0, team.funds + income - wages) };
-  evening.push(`Takings ₽${income.toLocaleString('en-GB')}.`);
+  evening.push(`Takings ₽${income.toLocaleString('en-GB')}.`, ...past.lines);
   evening.push(team.creed === 'belonging' ? `Shares ₽${wages.toLocaleString('en-GB')}: half of today, split.` : `Wages ₽${wages.toLocaleString('en-GB')} for ${paid.length}.`);
   if (before + income - wages < 0) {
     evening.push(`Short ₽${(wages - before - income).toLocaleString('en-GB')}: they were paid what there was.`);
     // Not paid: −1 each, a day (Part 5 section 5.2). Belonging's shares never fall short.
     crew = crew.map((c) => (c.where === 'in' ? { ...moveLoyalty(c, P.loyalty.unpaid, data), unpaid: c.unpaid + 1 } : c));
   }
+  // Slice 8: what the Boss did at the Gym today counts toward the loudest (Part 8a section 12).
+  const gymHeat = gymHeatToday(block);
+  if (gymHeat !== null) loudest = Math.max(loudest ?? -99, gymHeat);
   if (loudest !== null) {
     const h0 = team.heat;
     team = { ...team, heat: cap(team.heat + loudest) };
@@ -286,11 +308,19 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     const text = fill(!full ? W.short : team.creed === 'belonging' ? W.shares : W.wages, { amount: money(full ? wages : Math.max(0, before + income)), heads });
     out = appendLog(out, { kind: 'pay', who: paid.map((c) => c.id), text: `Day ${day}. ${text}`, ...(full ? { given: paid.length * data.ledger.count.wageHead } : {}) });
   }
+  // Slice 9: drift in the districts behind that nobody holds, on its own stream.
+  if (out.region.past.length) {
+    const dr = drift(out, data);
+    out = dr.block;
+    evening.push(...dr.lines);
+  }
   const count = heldCount(out);
-  if (count >= R.toHold) district = { ...district, end: { how: 'held', day, count } };
-  else if (day >= R.days) district = { ...district, end: { how: 'taken', day, count } };
+  // Slice 9: only a district ends at eleven or on its seventh day; the Arrival and the Reckoning end with the Hero.
+  const kind = data.region.on ? stageKind(block.here.stage) : 'district';
+  if (kind === 'district' && count >= R.toHold) district = { ...district, end: { how: 'held', day, count } };
+  else if (kind === 'district' && dayIn(block) >= R.days) district = { ...district, end: { how: 'taken', day, count } };
   if (district.end) {
-    evening.push(data.district.ends[district.end.how]);
+    evening.push(data.district.ends[district.end.how as 'held' | 'taken']);
     // A district ends: Heat −3; Dread −1 if nothing in it was Leaned or Taken (Part 5 sections 4.1 and 6.1).
     const loud = out.log.some((e) => e.kind === 'job' && e.result === 'went' && e.region === d0.region && e.district === d0.n && (e.method === 'lean' || e.method === 'take'));
     const t = out.team;
@@ -455,4 +485,10 @@ function darkResult(j: Job, h: Holding, won: boolean, s: { holdings: Holding[]; 
     lines.push(`The squad's out ${L.expose.days} days.`);
   }
   return { holdings, team, crew, proof, lineDraws, lines, taken };
+}
+
+/** Squads a day (Part 2 section 2.1): one in the first region's Arrival (a former Executive makes it two); otherwise no limit but the Roster. */
+export function squadLimit(block: EvilModeBlock, data: EvilData = EVIL_DATA): number {
+  if (!data.region.on || block.here.stage !== 1 || block.here.region !== 0) return Number.POSITIVE_INFINITY;
+  return modify(block, 'squads', {}, data.region.arrival.squads, data);
 }

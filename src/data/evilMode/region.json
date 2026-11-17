@@ -1,0 +1,119 @@
+{
+  "note": "Evil Mode slice 9, a region (design Part 2 sections 2, 4, 5 and 6; Part 3 sections 8 and 9; Part 26a sections 1 and 2; Part 29 section 3.2; Part 30 section 9). Kanto played whole: the Arrival, six districts, a soft Reckoning; the Road between districts and an Officer left behind; drift; the tally; the region's rule on one hook; the Look, Patron and first-region pages; the ways forward. Numbers are starting values; none are playtested. Text is data; the save keeps ids.",
+  "on": true,
+  "regions": [
+    {
+      "id": "kanto",
+      "index": 0,
+      "name": "Kanto",
+      "neighbour": "Rocket (Giovanni)",
+      "status": "supported",
+      "ticket": ["The neighbour: Rocket (Giovanni).", "Everything's owned: Pay +10%; taking from a deeded holding, Heat +1 more.", "Your Doctrine: at home in {homes} of six.", "He'll send a fruit basket. Read the card."],
+      "rule": { "id": "kanto-owned", "name": "Everything's owned", "text": "Half the holdings have deeds. Pay +10%; a Take from a deeded holding, Heat +1 more.", "mods": [{ "kind": "odds", "method": "pay", "add": 10, "label": "Kanto: everything's owned" }, { "kind": "heat", "method": "take", "tag": "deeded", "add": 1, "label": "Kanto: a deed has a lawyer" }], "doors": [] },
+      "deeds": { "tag": "deeded", "share": 50, "kinds": ["local", "safehouse", "floor"], "word": "Deeded" },
+      "homes": { "tricksters": [3, 5], "machines": [3, 5], "tide": [2, 6], "ember": [6], "beasts": [4] },
+      "eighth": "Viridian"
+    },
+    { "id": "johto", "index": 1, "name": "Johto", "neighbour": "Rocket's remnant (Archer)", "status": "disabled", "waits": "The Crossing, slice 16", "ticket": ["The neighbour: what's left of Rocket (Archer).", "Everybody knows everybody: Persuade +10%; Take −20%.", "Your Doctrine: at home in some of six.", "A kept place lapses if you miss its upkeep."] },
+    { "id": "hoenn", "index": 2, "name": "Hoenn", "neighbour": "Aqua and Magma (Archie; Maxie)", "status": "disabled", "waits": "The Crossing, slice 16", "ticket": ["The neighbours: Aqua and Magma (Archie; Maxie).", "Sea and mountain: half the holdings are tide or hot.", "Your Doctrine: at home in some of six.", "A second clock runs when the Reckoning starts."] },
+    { "id": "sinnoh", "index": 3, "name": "Sinnoh", "neighbour": "Galactic (Cyrus)", "status": "disabled", "waits": "Slice 19", "ticket": ["The neighbour: Galactic (Cyrus).", "People don't say: Loyalty moves half as far, both ways.", "Your Doctrine: at home in some of six.", "A second clock runs when the Reckoning starts."] },
+    { "id": "unova", "index": 4, "name": "Unova", "neighbour": "Plasma (Ghetsis)", "status": "disabled", "waits": "Slice 19", "ticket": ["The neighbour: Plasma (Ghetsis).", "Everyone's got an opinion: Regard and Dread move twice as far.", "Your Doctrine: at home in some of six.", "They'll ask you to free something."] },
+    { "id": "kalos", "index": 5, "name": "Kalos", "neighbour": "Flare (Lysandre)", "status": "disabled", "waits": "Slice 19", "ticket": ["The neighbour: Flare (Lysandre).", "Money and taste: Fronts pay +50%.", "Your Doctrine: at home in some of six.", "A second clock runs when the Reckoning starts."] },
+    { "id": "alola", "index": 6, "name": "Alola", "neighbour": "Skull and Aether", "status": "disabled", "waits": "Slice 20", "ticket": ["The neighbours: Skull and Aether.", "No Gyms: Trials. Buy and Replace are shut everywhere.", "Your Doctrine: at home in some of six.", "The Captains are nearly all children."] },
+    { "id": "galar", "index": 7, "name": "Galar", "neighbour": "Macro Cosmos and Yell", "status": "disabled", "waits": "Slice 20", "ticket": ["The neighbours: Macro Cosmos and Yell.", "On television: whatever's done on a pitch moves Regard or Dread at once.", "Your Doctrine: at home in some of six.", "A second clock runs when the Reckoning starts."] },
+    { "id": "paldea", "index": 8, "name": "Paldea", "neighbour": "Star", "status": "disabled", "waits": "Slice 20", "ticket": ["The neighbour: Star.", "A school and open country: every Gym has a test first.", "Your Doctrine: at home in some of six.", "The Hero's on three roads at once."] }
+  ],
+  "stages": { "names": ["The Arrival", "District 1", "District 2", "District 3", "District 4", "District 5", "District 6", "The Reckoning"] },
+  "arrival": {
+    "days": [3, 4],
+    "doors": [{ "method": "lean", "why": "Nobody Leans in a town they got off the boat in this morning." }, { "method": "take", "why": "Nobody Takes in a town they got off the boat in this morning." }, { "method": "expose", "why": "Nobody here knows you well enough to believe you yet." }],
+    "squads": 1,
+    "squadsWhy": "One squad in the Arrival. The team's new here.",
+    "home": "The Hero's at home on {street}. They'll leave town tomorrow.",
+    "leaves": "The Hero's left home with their bag and their starter. Their mother's watching from the step.",
+    "badge": "The Hero beat Brock. First Badge. They'll be quicker now.",
+    "end": "The Arrival's over. Whatever you hold here pays all region.",
+    "lessons": {
+      "patron": ["The Board. The Hero's marker. \"That's them. Don't stare.\"", "Dispatch and the Honest Card. \"Read it to the end. I'll know if you didn't.\"", "The Evening and the Ledger. \"Every coin's got a name. Learn them.\"", "The Hero. \"There. First Badge. They'll be quicker now.\""],
+      "nobody": ["A note on the door, in your own hand: the Board first. The kid with the bag is the Hero. Don't stare.", "A note on the door: read every Card to the end before you send anyone.", "A note on the door: every coin in the Ledger has a name. Learn them.", "A note on the door: they'll have a Badge by tonight. They'll be quicker after."]
+    }
+  },
+  "reckoning": {
+    "days": 3,
+    "day": ["The eighth Badge. The Hero fights at Viridian without you: this Gym's always theirs. Everything of yours on their way is a fight or a wave.", "The approach. The Hero sits outside. You have one last day.", "The walk. The Hero comes up the road to the door."],
+    "badge": "The Hero beat Giovanni. Eight Badges. Tomorrow they sit outside.",
+    "outside": "The Hero's sitting on the wall across the road. They've been there since breakfast.",
+    "arrives": "The Hero's at the door.",
+    "end": "The Hero came to the door, and Kanto's over. The last room is built in a later slice; the run goes on.",
+    "over": "Kanto's over. The Crossing to the next region comes in a later build. The run's saved here."
+  },
+  "road": {
+    "minRank": ["officer", "executive"],
+    "title": "The Road",
+    "stay": "Leave {name} to hold it. It pays in full while they do.",
+    "nobody": "Leave nobody. It pays half, and holdings drift back.",
+    "carried": "Funds, the command party and the box come with you. The base stays where it is.",
+    "heroAhead": "The Hero's already on the next map.",
+    "heard": { "regard": ["A front page: \"Strangers Mend the Bridge.\" Somebody's cut it out and pinned it up.", "A letter from a local: they say thank you, and spell your name wrong."], "dread": ["A child's drawing on a wall: a coat in your colours, and teeth.", "A front page: \"Who Are They?\" The photograph's of the back of somebody's head."], "plain": ["Nothing much. A shop changed its sign.", "The ferry's running late again. Nobody blames you. Yet."] },
+    "letter": "{name}, from {town}: \"Quiet. The baker's mother's better. I said you'd asked.\"",
+    "letters": ["\"Quiet. The baker's mother's better. I said you'd asked.\"", "\"Rain all week. Nobody's turned. I'm eating well.\"", "\"Somebody tried the back door. It was a cat. I'm telling you anyway.\"", "\"They've started saying good morning. I don't know what to do with that.\""],
+    "recall": "{name}'s back from {town}. Nobody holds it now.",
+    "doubleBack": "A letter from someone who still lives in {town}: \"One of the kids who walks with the Hero came back through. {n} of yours turned.\"",
+    "doubleBackNone": "A letter from someone who still lives in {town}: \"One of the kids who walks with the Hero came back through. Nothing of yours turned. They looked.\""
+  },
+  "drift": { "oneIn": 6, "share": 50, "line": "{where} in {town} drifted back to its owner. Nobody was there to hold it.", "takings": "From the districts behind: ₽{amount}." },
+  "tally": { "said": "Nobody said anything worth writing down.", "labels": { "holdings": "Holdings", "gym": "The Gym", "numbers": "The numbers", "people": "People", "hero": "The Hero", "log": "The Log", "said": "One thing somebody said" } },
+  "waysForward": [
+    { "id": "bankrupt", "state": "Bankrupt", "means": "Wages unpaid. Loyalty falls for those paid least, first.", "way": "Hold cheaper: let somebody go kindly, or take a holding that pays. One Last Job and the whip-round come with the economy.", "status": "limited", "waits": "One Last Job and the Whip-Round, slice 11" },
+    { "id": "nobody", "state": "Nobody left", "means": "The Roster's empty. No squads.", "way": "The Boss can still take one holding a day in person. One applicant always comes the next morning: someone who's always wanted to.", "status": "supported" },
+    { "id": "mutinyLost", "state": "Mutiny, lost", "means": "The Boss is a Grunt in their own team.", "way": "The run goes on from the other side of the Roster.", "status": "disabled", "waits": "Mutiny, a later slice" },
+    { "id": "mutinyWon", "state": "Mutiny, won", "means": "Rule by fear: Loyalty capped at 5 for the region.", "way": "The cap lifts at the Crossing.", "status": "disabled", "waits": "Mutiny, a later slice" },
+    { "id": "raided", "state": "Raided", "means": "The base is gone.", "way": "A safehouse becomes the base, at Small, with one room. Heat falls to 4.", "status": "disabled", "waits": "The Raid, slice 10" },
+    { "id": "noBase", "state": "No safehouse and no base", "means": "Nowhere to work from.", "way": "The Town always has a room to let. At Dread 8 a local the team once helped offers their barn.", "status": "limited", "waits": "The base, slice 10" },
+    { "id": "fainted", "state": "The command party's all fainted", "means": "A lost battle.", "way": "Healed at once. The job fails; the day goes on.", "status": "supported" },
+    { "id": "schemeLost", "state": "The Scheme's part was lost", "means": "A relic taken; a Key that turned out false.", "way": "Every part has a second source in a later district, at a higher price.", "status": "disabled", "waits": "The Scheme, slice 14" },
+    { "id": "heroAhead", "state": "The Hero's far ahead", "means": "Badges up on the team.", "way": "Nothing needs doing. The Reckoning comes on its own day whatever the Hero's pace. A fast Hero arrives knowing less.", "status": "supported" },
+    { "id": "corruption", "state": "Corruption 10", "means": "The team's something else.", "way": "The Scheme ending's still open. So's the last room.", "status": "disabled", "waits": "Corruption, slices 14 and 15" },
+    { "id": "everyLost", "state": "Every district lost", "means": "The Hero's got the Badges and the team's got none.", "way": "The base still stands. The Reckoning's still the Reckoning. A team that held nothing and built a kitchen has still built a kitchen.", "status": "supported" },
+    { "id": "bossQuits", "state": "The Boss doesn't want to go on", "means": "—", "way": "The Hand-Off's open from Region 2 with any Officer. Walking into the station's on the Board from Heat 6.", "status": "disabled", "waits": "The endings, slice 15" }
+  ],
+  "patrons": [
+    { "id": "executive", "name": "A former Executive", "who": "Carrow", "line": "I gave eleven years to a man who never learned my name. You've asked it twice already. That's two more than him. Where d'you want the desk?", "gives": "Dispatch is one squad larger, all run.", "person": { "name": "Carrow", "age": 52, "talent": "books", "flaw": "proud", "note": "A Rocket clerk who kept the books and was never once in the room." }, "mods": [{ "kind": "squads", "add": 1, "label": "Carrow: one more squad" }], "status": "supported" },
+    {
+      "id": "leader",
+      "name": "A disgraced Gym Leader",
+      "who": "Hartley Moss",
+      "line": "I lost it fairly. That's the worst part. I'd like it back the same way. I'm told you can arrange a challenge.",
+      "gives": "Replace is open from the first District, with the Patron as the Officer. Outplay +10% while they're on the Roster.",
+      "person": { "name": "Hartley Moss", "age": 47, "talent": "nerve", "flaw": "proud", "note": "Held a Kanto Gym nine years and lost it fairly." },
+      "mods": [{ "kind": "odds", "method": "outplay", "add": 10, "label": "Hartley Moss trains them", "whileIn": true }],
+      "status": "limited",
+      "limit": "Their old Gym in Region 2 waits for the Crossing."
+    },
+    {
+      "id": "professor",
+      "name": "A struck-off Professor",
+      "who": "Professor Aurelia Sedgwick-Otieno",
+      "line": "They said the readings were impossible. They didn't say they were wrong. I need a room, a generator and four people who don't ask what it's for.",
+      "gives": "Scouting reaches one step further.",
+      "person": { "name": "Prof. Aurelia Sedgwick-Otieno", "age": 58, "talent": "eyes", "flaw": "doubts", "note": "Struck off for bad method. Not for that." },
+      "mods": [{ "kind": "scoutReach", "add": 1, "label": "The Professor's notes" }],
+      "status": "limited",
+      "limit": "Her free first room waits for the base (slice 10)."
+    },
+    { "id": "champion", "name": "A Champion who quit", "who": "Marisol Teague", "line": "I held it six years. I walked out the day I worked out what it was for. I'm not here to help you. I'll tell you which Gym the child's heading for; that's all.", "gives": "The Hero's next Gym is always shown, and how many days until they reach it.", "person": null, "mods": [{ "kind": "heroGym", "add": 1, "label": "Marisol watches" }], "status": "limited", "limit": "Her one battle waits for a later slice. She doesn't go on jobs or draw a wage." },
+    { "id": "grunt", "name": "A Grunt who's seen three Bosses", "who": "Old Obadiah Gribble", "line": "First one shouted. Second one cried. Third one left in the night with the float. I'll tell you now what I want: a pension. In writing.", "gives": "Team Loyalty never drops below 2. He wants ₽200 a day as a pension.", "person": { "name": "Old Obadiah Gribble", "age": 70, "talent": "books", "flaw": "drinks", "note": "Won't sign anything.", "wage": 200 }, "mods": [{ "kind": "loyaltyFloor", "add": 2, "label": "Obadiah's seen worse" }], "status": "supported" },
+    { "id": "nobody", "name": "Nobody", "who": "Nobody", "line": "An empty building. An echo.", "gives": "+50% starting Funds. No teacher: four notes on the door in your own hand.", "person": null, "mods": [{ "kind": "funds", "scale": 1.5, "label": "Nobody's money" }], "status": "supported" }
+  ],
+  "look": {
+    "a": [["Black", "#1a1a1a"], ["Charcoal", "#36393d"], ["Navy", "#1f2a4a"], ["Bottle green", "#1f4a33"], ["Oxblood", "#5a1a1e"], ["Brown", "#5a3a22"], ["Plum", "#4a2445"], ["Slate", "#4a5560"], ["Rust", "#8a3e1c"], ["Olive", "#5a5a24"], ["Teal", "#1f5a5a"], ["White", "#f2f0ea"]],
+    "b": [["Red", "#c8282a"], ["Gold", "#d8a820"], ["Cream", "#efe6c8"], ["Sky", "#7ab8e8"], ["Lime", "#9ad83a"], ["Orange", "#e87a20"], ["Pink", "#e88ab0"], ["Silver", "#b8bcc4"], ["Violet", "#8a5ad8"], ["Mustard", "#c8a030"], ["Mint", "#8ad8b0"], ["Grey", "#8a8a8a"]],
+    "symbols": ["The name's first letter", "A tool", "An animal's outline", "A shape", "A star", "A hand", "A door", "A flame", "A wave", "An eye", "A key", "Nothing"],
+    "cuts": ["Boiler suit", "Long coat", "Tabard", "Tracksuit", "Suit and tie", "Apron", "Cagoule", "Whatever they came in, with an armband"],
+    "heads": ["Cap", "Hood", "Helmet", "Beret", "Visor", "Headscarf", "Flat cap", "None"],
+    "motto": [["For", "Until", "Because", "Never", "Always", "Somebody's got to", "Not without", "After"], ["the money", "the ones left out", "what's owed", "the door", "the chair", "them", "each other", "the truth"], ["no questions", "and no further", "whatever it takes", "and mean it", "on time", "this time", "if you please", ""]],
+    "cold": { "a": "Black", "b": "Red", "line": "People have seen this before. Every local's first mood is one colder." },
+    "warm": { "cut": "Whatever they came in, with an armband", "line": "Grunts can't be told from townsfolk. Locals trust them a mood warmer." },
+    "eyebrow": "The Patron raises an eyebrow: \"whatever it takes\" on a Clean hands team."
+  }
+}

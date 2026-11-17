@@ -57,7 +57,7 @@ export function speakers(block: EvilModeBlock, k: KnockDef): Crew[] {
 export type Candidate = { n: number; who: string | null; weight: number };
 
 const isSunday = (block: EvilModeBlock, data: EvilData): boolean => block.here.day % data.night.rules.sunday === 0;
-const isFirstNight = (block: EvilModeBlock): boolean => block.here.day === 1 && block.here.region === 0 && (block.district?.n ?? 1) === 1;
+const isFirstNight = (block: EvilModeBlock): boolean => block.here.day === 1 && block.here.region === 0;
 
 /**
  * The deck tonight (Part 24a section 1.3): every knock whose needs hold, not had this run, with someone to say it.

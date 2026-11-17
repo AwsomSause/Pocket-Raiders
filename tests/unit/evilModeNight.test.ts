@@ -330,12 +330,12 @@ describe('the Office screen', () => {
 });
 
 describe('saves', () => {
-  it('v6 -> v7: an empty Night, everyone Easy; save and reload keeps a knock at the door', () => {
+  it('v8 -> v9: an empty Night, everyone Easy; save and reload keeps a knock at the door', () => {
     const b = toNight(found());
     const { night: _n, ...rest } = b;
-    const v6 = { ...rest, v: 6, crew: b.crew.map(({ mood: _m, knocks: _k, ...c }) => c) };
-    const out = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(v6)));
-    expect(out.v).toBe(7);
+    const v8 = { ...rest, v: 8, crew: b.crew.map(({ mood: _m, knocks: _k, ...c }) => c) };
+    const out = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(v8)));
+    expect(out.v).toBe(9);
     expect(out.night).toEqual(emptyNight());
     expect(out.crew.every((c) => c.mood === 'easy' && c.knocks === 0)).toBe(true);
     const again = EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(b)));

@@ -18,7 +18,7 @@ import { MemoryStorageProvider } from '../../src/save/storage';
 import { content } from './helpers';
 
 const found = (seed = 'd1', creed = 'profit', line: 'clean' | 'grey' | 'whatever' = 'grey'): EvilModeBlock => {
-  const r = foundTeam({ name: 'Kettle', creed, line, doctrine: 'swarm' }, { boss: 'red', length: 'three', seed });
+  const r = foundTeam({ name: 'Kettle', creed, line, doctrine: 'swarm' }, { boss: 'red', length: 'three', seed, stage: 2 });
   if (!r.ok) throw new Error(r.problem);
   // These suites test the district and the Card with the four nameless Grunts of slices 2 and 3 (a migrated block's crew):
   // no talents, no lines. Named people are tested in evilModePeople.test.ts.
@@ -59,7 +59,7 @@ describe('the district (board.ts)', () => {
   });
   it('laying a district draws from no gameplay stream (a run\'s streams are unchanged by founding)', () => {
     const run = chooseStarter(content, createRun(content, { runId: 'r', seed: 'r', archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: EVIL_MODE_ID } }), 0);
-    const after = foundInRun(run, { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three').run;
+    const after = foundInRun(run, { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three', 2).run;
     expect(after.rng).toEqual(run.rng);
     expect(after.expansion!.evilMode!.draws['evil-dispatch']).toBe(0);
   });
@@ -155,7 +155,9 @@ describe('dispatch: who can go, and what is refused (failure cases, checked in s
   });
   it('the Gym, an opportunity\'s Persuade, Shut doors, a child, unknown methods and short Funds are refused with a reason', () => {
     const gym = first(b, (x) => x.kind === 'gym');
-    expect(step(b, { type: 'queueJob', job: { holdingId: gym.id, method: 'scout', squad: ['g1'] } }).ok).toBe(false);
+    // Slice 8: the Gym can be scouted (a talk with the caretaker); every other method is refused (its five ways are in person).
+    expect(step(b, { type: 'queueJob', job: { holdingId: gym.id, method: 'persuade', squad: ['g1', 'g2'] } }).ok).toBe(false);
+    expect(step(b, { type: 'queueJob', job: { holdingId: gym.id, method: 'scout', squad: ['g1'] } }).ok).toBe(true);
     const opp = first(b, (x) => x.kind === 'opportunity');
     expect(step(b, { type: 'queueJob', job: { holdingId: opp.id, method: 'persuade', squad: ['g1', 'g2'] } }).ok).toBe(false);
     const shut = withHoldings(b, (x) => (x.id === local.id ? { ...x, mood: 'shut' } : x));
@@ -285,13 +287,13 @@ describe('the Evening and the end of a district', () => {
 describe('saves: block v2 and the migration from v1', () => {
   it('a slice-1 block (v1, no district) migrates: nothing lost, four Grunts, and the district is laid from the run\'s seed', () => {
     const run = chooseStarter(content, createRun(content, { runId: 'mig', seed: 'mig', archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: EVIL_MODE_ID } }), 0);
-    const v2 = foundInRun(run, { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three').run;
+    const v2 = foundInRun(run, { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three', 2).run;
     const b2 = v2.expansion!.evilMode!;
     const { district: _d, crew: _c, queue: _q, sheets: _s, evening: _e, log: _l, cards: _k, given: _g, taken: _t, rates: _r, applicants: _a, drawn: _dr, refusal: _rf, ...rest } = b2;
     const v1 = { ...rest, v: 1 };
     const parsed = EvilModeBlockSchema.parse(v1);
     // Slice 4 took the block to v4; a v1 block goes through v2 and v3 to v4 in one load.
-    expect(parsed).toMatchObject({ v: 7, applicants: [], refusal: null, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
+    expect(parsed).toMatchObject({ v: 9, applicants: [], refusal: null, district: null, queue: [], sheets: [], log: [], cards: [], given: 0, taken: 0, rates: {} });
     expect(parsed.crew.map((c) => c.name)).toEqual(['Grunt 1', 'Grunt 2', 'Grunt 3', 'Grunt 4']);
     expect(parsed.team).toEqual(b2.team);
     const storage = new MemoryStorageProvider();
@@ -305,7 +307,7 @@ describe('saves: block v2 and the migration from v1', () => {
   });
   it('a queued job survives a save mid-Dispatch and a reload rolls the same Evening', () => {
     const run = chooseStarter(content, createRun(content, { runId: 'q', seed: 'q', archetypeId: 'red', rules: { ...STANDARD_CHOICE, modeId: EVIL_MODE_ID } }), 0);
-    let r = foundInRun(run, { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three').run;
+    let r = foundInRun(run, { name: 'Kettle', creed: 'profit', line: 'grey', doctrine: 'swarm' }, 'three', 2).run;
     r = stepInRun(r, { type: 'dismissOvernight' }).run;
     const h = r.expansion!.evilMode!.district!.holdings.find((x) => x.kind === 'local')!;
     r = stepInRun(r, { type: 'queueJob', job: { holdingId: h.id, method: 'persuade', squad: ['g1', 'g2'] } }).run;

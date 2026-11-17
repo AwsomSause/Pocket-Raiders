@@ -5,12 +5,16 @@
 
 import type { Content } from '../contentSchema';
 import { createBattle } from '../battle/engine';
-import { curveLevel, levelScale } from '../encounters';
-import { getCampaign } from '../regions';
+import { bossTeamIndex, curveLevel, createPlannedPokemon, GYM_LEADER_CLASS, levelScale, remixMembers, type PlannedMember } from '../encounters';
+import { gearTeam, playerItemsPer } from '../bossGear';
+import { giveBossItems } from '../battle/held';
+import { gimmickSlots, planBossGimmicks } from '../battle/bossGimmicks';
+import { currentLeader } from './gym';
+import { getBoss, getCampaign } from '../regions';
 import { hashSeed, Rng } from '../rng';
-import { newMon } from '../run';
+import { newMon, nextUid } from '../run';
 import { rivalFightTeam } from '../rivals/living';
-import type { RunState } from '../state';
+import type { PokemonInstance, RunState } from '../state';
 import { localOf } from './board';
 import { EVIL_DATA, type EvilData } from './data';
 import { heroRival } from './fightEnd';
@@ -55,6 +59,27 @@ export function heroParty(content: Content, run: RunState, block: EvilModeBlock)
   return rivalFightTeam(content, rival).slice(0, tier.party).map((species, i) => ({ species, level: Math.max(1, A + tier.level + (i === 0 ? tier.ace : 0)) }));
 }
 
+
+/**
+ * A Gym Leader's team for an Evil Mode Gym battle (Part 8a section 2): the main game's own team for that Gym (species,
+ * moves, training), at A + `offset`, with boss gear (held items, trained stats) by the main game's rules. A Leader who's
+ * already beaten the Boss leads differently (the order turns). No gameplay stream: the items' generator is hashed.
+ */
+export function leaderTeam(content: Content, run: RunState, block: EvilModeBlock, bossId: string, n: number, offset: number, tried: number): { team: PokemonInstance[]; ai: number } {
+  const boss = getBoss(content, bossId);
+  const authored = boss.teams.gym[bossTeamIndex('gym', block.here.region * 8 + n)]!;
+  const A = stageLevel(content, run, block);
+  const level = Math.max(1, A + offset);
+  let members: PlannedMember[] = remixMembers(authored.members, tried > 0, `evil-gym:${bossId}:${tried}`).map((m) => ({ speciesId: m.speciesId, level, moves: m.moves, training: m.training }));
+  if (content.balance.bossGear) members = gearTeam(content, members, 'gym', playerItemsPer(run.party));
+  const team = members.filter((m) => content.species.has(m.speciesId)).map((m) => {
+    const uid = nextUid(run, 'e');
+    return createPlannedPokemon(content, m, uid, `${run.seed}:${uid}`);
+  });
+  giveBossItems(content, team, 'gym', block.here.region, new Rng(hashSeed(`${block.district?.seed ?? ''}::evil-gym-items::${bossId}::${tried}`)));
+  return { team, ai: authored.ai };
+}
+
 /**
  * Starts the battle `block.fight` describes and marks it begun. Returns null when there's nothing to start. A Hold lends
  * the posted person's kit to the player for the fight: the Boss's party waits in the box (`fight.lent`) and comes back
@@ -68,6 +93,32 @@ export function beginEvilFight(content: Content, current: RunState): RunState | 
   const run = structuredClone(current);
   const A = stageLevel(content, run, block);
   let lent: string[] = [];
+  if (f.kind === 'gym' || f.kind === 'challenge') {
+    // Slice 8: Beat (the Boss's party) or the Officer's challenge (their kit, the Boss's party in the box), against the
+    // Leader at A+2 with the main game's gimmick count (one after Stage 5 of Region 1, one more a region, to four).
+    const L = currentLeader(block);
+    if (!L) return null;
+    const N = EVIL_DATA.gym.numbers;
+    const g = (block.gyms ?? []).find((x) => x.region === block.district?.region && x.district === block.district?.n);
+    const { team, ai } = leaderTeam(content, run, block, L.boss, L.n, f.kind === 'gym' ? N.beat.offset : N.replace.offset, g?.tried ?? 0);
+    if (f.kind === 'challenge') {
+      const kit = kitSpecies(content, kitFor(block, f.personId!)).map((s) => newMon(content, run, s, Math.max(1, A + N.replace.offset), 'p'));
+      if (!kit.length) return null;
+      lent = run.party.map((m) => m.uid);
+      run.box = [...(run.box ?? []), ...run.party];
+      run.party = kit;
+    }
+    const active = Math.max(0, run.party.findIndex((m) => m.hp > 0));
+    if (!team.length || !run.party[active]) return null;
+    run.battle = createBattle('trainer', team, active, run.party[active]!.uid, { classId: GYM_LEADER_CLASS, name: L.name, leaderId: L.boss });
+    run.battle.ai = ai;
+    const plan = planBossGimmicks(content, L.boss, run.battle.enemyTeam, gimmickSlots(block.here.region, L.n + 1, content.balance.transformations.bossGimmickAfterStage), run.disabledMechanics);
+    run.battle.transform.bossPlan = plan;
+    run.battle.transform.enemyMechanics = [...new Set(Object.values(plan))];
+    run.phase = 'battle';
+    run.expansion = { ...(run.expansion ?? {}), evilMode: { ...block, fight: { ...f, begun: true, ...(lent.length ? { lent } : {}) } } };
+    return run;
+  }
   let foes: { species: string; level: number }[];
   let trainer: { classId: string; name: string };
   if (f.kind === 'hold') {
