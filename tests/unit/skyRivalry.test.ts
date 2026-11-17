@@ -14,6 +14,7 @@ import { applySky, scheduleLevel, fearowLevel, fearowMoves, giftCandidate, isFin
 import { freshSky, SkyStateSchema } from '../../src/core/sky/state';
 import { cpuDuel } from '../../src/core/sky/sim';
 import { ExpansionRunSchema } from '../../src/core/expansion/schema';
+import { regionOneStory } from '../../src/core/co/regionOneStory';
 import type { RunState } from '../../src/core/state';
 import { content } from './helpers';
 
@@ -72,8 +73,18 @@ describe('Pidgey\'s Resolve: the opening', () => {
   it('is offered on the first stage of a run with story events on, and not without them', () => {
     // gn.02: the opening is placed on its own step of S1 (home step 2), never drawn at random.
     const placed = (r: RunState) => r.stage!.map.nodes.some((n) => n.sides.some((x) => x.eventId === 'sky.opening'));
-    expect(placed(newRun())).toBe(true);
-    expect(eligibleEvents(content, newRun()).some((e) => e.id === 'sky.opening')).toBe(true);
+    // Director 2026-11-16: the first region shows one of three stories (co/regionOneStory.ts); these are runs where it is this one.
+    const seeds = Array.from({ length: 40 }, (_, i) => `sky-r1-${i}`);
+    const mine = seeds.filter((seed) => regionOneStory(newRun(seed)) === 'sky');
+    expect(mine.length).toBeGreaterThan(5);
+    for (const seed of mine.slice(0, 5)) {
+      expect(placed(newRun(seed))).toBe(true);
+      expect(eligibleEvents(content, newRun(seed)).some((e) => e.id === 'sky.opening')).toBe(true);
+    }
+    // In a run where another story has the first region, it waits for the second region.
+    const other = newRun(seeds.find((seed) => regionOneStory(newRun(seed)) !== 'sky')!);
+    expect(placed(other)).toBe(false);
+    expect(eligibleEvents(content, other).some((e) => e.id === 'sky.opening')).toBe(false);
     const plain = chooseStarter(content, createRun(content, { runId: 'p', seed: 'p', archetypeId: 'red' }), 0);
     expect(placed(plain)).toBe(false);
   });

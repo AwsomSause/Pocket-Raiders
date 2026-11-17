@@ -134,9 +134,10 @@ const priority = (e: CoEntry): number => (OWED.has(e.p.shape) && e.p.beat >= 2 ?
  * Places the stage's positioned events (pack section 7). `only` limits the nodes that may be used (the ones still ahead of the player, when
  * placing a beat mid-stage). Events that find no place are left out: a single waits for a later stage; an owed beat takes the next free
  * chokepoint after its window, and failing that every node of its home column, so it is never dropped. `featured` (a calendar week's
- * questline openings) are placed first within their priority tier, so the week raises their odds of making the stage.
+ * questline openings) are placed first within their priority tier, so the week raises their odds of making the stage. `promised` (the
+ * first region's story, co/regionOneStory.ts) is placed like an owed must-see beat: before everything else, on every route, never dropped.
  */
-export function planCoStage(map: StageMap, entries: readonly CoEntry[], seed: string, only?: ReadonlySet<string>, featured?: ReadonlySet<string>): CoPlaced[] {
+export function planCoStage(map: StageMap, entries: readonly CoEntry[], seed: string, only?: ReadonlySet<string>, featured?: ReadonlySet<string>, promised?: ReadonlySet<string>): CoPlaced[] {
   const usable = map.nodes.filter((n) => n.column < map.columns && (!only || only.has(n.id)));
   const byColumn = new Map<number, MapNode[]>();
   for (const n of usable) byColumn.set(n.column, [...(byColumn.get(n.column) ?? []), n]);
@@ -154,14 +155,15 @@ export function planCoStage(map: StageMap, entries: readonly CoEntry[], seed: st
   const out: CoPlaced[] = [];
   // A calendar week's featured openings go first inside their tier (they win the budget); with no week the order is unchanged.
   const boost = (e: CoEntry): number => (featured?.has(e.id) ? 0 : 1);
-  const order = [...entries].sort((a, b) => priority(a) - priority(b) || boost(a) - boost(b) || hash(`${seed}::${a.id}`) - hash(`${seed}::${b.id}`) || a.id.localeCompare(b.id));
+  const tier = (e: CoEntry): number => (promised?.has(e.id) ? 0 : priority(e));
+  const order = [...entries].sort((a, b) => tier(a) - tier(b) || boost(a) - boost(b) || hash(`${seed}::${a.id}`) - hash(`${seed}::${b.id}`) || a.id.localeCompare(b.id));
   const free = (n: MapNode, alone: boolean) => !doorNodes.has(n.id) && (alone ? (badges.get(n.id) ?? 0) === 0 : (badges.get(n.id) ?? 0) < CO_BUDGET.badges);
 
   for (const e of order) {
     const { p } = e;
-    const owed = priority(e) === 0;
+    const owed = tier(e) === 0;
     const isDoor = e.door || p.shape === 'door';
-    const must = p.sits === 'must-see';
+    const must = p.sits === 'must-see' || promised?.has(e.id) === true;
     if (!owed && total >= CO_BUDGET.events) continue;
     if (must && !owed && mustSee >= CO_BUDGET.mustSee) continue;
     if (isDoor && doors >= CO_BUDGET.doors) continue;
