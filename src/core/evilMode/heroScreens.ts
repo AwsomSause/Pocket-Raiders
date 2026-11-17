@@ -4,6 +4,8 @@
 import { EVIL_DATA, type EvilData } from './data';
 import { heroReason, likelyRoad, marksWord, personalityDef } from './hero';
 import type { EvilModeBlock } from './schema';
+import { temperDoes, temperWord } from './temper';
+import { letterText } from './road';
 
 export interface FileModel {
   tab: number;
@@ -35,7 +37,8 @@ export function fileModel(block: EvilModeBlock, tab: number, party: readonly str
     blank('Who', `${hero.name}. ${hero.home.street}. Raised by ${hero.raisedBy}.`);
     blank('Personality', hero.met ? personalityDef(hero.personality, data).word : null);
     blank('The reason', reason ? `"${reason.reason.says}"` : null, reason ? { mark: data.hero.kinds[reason.reason.kind] } : {});
-    blank('Temper', null, { text: F.temper });
+    // Slice 12: the temper's word under its marker, and what it does (Part 18 section 5). Known once they've been met.
+    blank('Temper', hero.met || hero.fires.some((f) => !f.missed) ? `${temperWord(hero.temper, data)}. ${temperDoes(hero.temper, data)}` : null, hero.met ? { mark: `${hero.temper + 1}/5` } : {});
     blank('Where', `Step ${hero.at}.${road.length ? ` Likely tomorrow: step ${road[0]}${road.length > 1 ? ` to ${road.at(-1)}` : ''}.` : ' Resting tomorrow.'}`);
   } else if (t === 1) {
     const origin = (i: number): string => {
@@ -53,9 +56,15 @@ export function fileModel(block: EvilModeBlock, tab: number, party: readonly str
   } else {
     const reason = heroReason(block, data);
     m.lists.push({ title: "What they've said about you", lines: [...(reason ? [`"${reason.reason.says}"`] : []), ...hero.said], empty: F.saidNone });
-    m.lists.push({ title: "What you've said to them", lines: [], empty: F.fires });
-    m.lists.push({ title: "Their mother's letters", lines: [], empty: F.letters });
-    m.lists.push({ title: 'The other three', lines: [], empty: F.others });
+    // Slice 12: the fires (your own line, word for word; a missed fire says so), the letters, the other three, the pages.
+    const fires = hero.fires.map((f) => (f.missed ? `Region ${f.region + 1}: ${data.fires.flame.missed}` : `Region ${f.region + 1}, the ${f.n} fire: ${f.own ? `"${f.own}"` : 'Nothing. You put a log on.'}`));
+    m.lists.push({ title: "What you've said to them", lines: [...fires, ...(hero.told ? [data.fires.third.answers.find((a) => a.id === 'charge')?.say ?? ''] : [])].filter(Boolean), empty: F.fires });
+    const letters = hero.mother.letters.map((l) => (l.mood === 'none' ? data.road.mother.none : l.read ? letterText(hero, l, data).join(' ') : `Region ${l.region + 1}, district ${l.district}: sealed.`));
+    m.lists.push({ title: "Their mother's letters", lines: letters, empty: F.letters });
+    const met = block.road.filter((t) => t.today || t.helped.length || t.talked.length || t.misled);
+    m.lists.push({ title: 'The other three', lines: met.map((t) => (t.state === 'home' ? `${t.name}: gone home.` : `${t.name}: ${t.today ?? data.road.approach[t.role]}`)), empty: F.others });
+    if (hero.notebook.length) m.lists.push({ title: 'The Office notebook', lines: hero.notebook.map((x) => `"${x}"`), empty: '' });
+    for (const [i, page] of hero.pages.entries()) m.lists.push({ title: `Page ${i + 1}`, lines: page, empty: '' });
   }
   return m;
 }

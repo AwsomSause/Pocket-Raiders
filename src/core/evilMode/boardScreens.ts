@@ -16,6 +16,7 @@ import { wontText } from './people';
 import { currentLeader, gymDoors, gymOn, standingText } from './gym';
 import { dayIn, heardOf, mayStay, morningNotes, stageDays, stageKind, stageName, tallyOf, waysForward } from './region';
 import { regionOf } from './regionRule';
+import { postAtNight, postNotes } from './base';
 import { stageRow } from './board';
 
 export type DispatchStep = 'where' | 'who' | 'how';
@@ -244,6 +245,9 @@ function regionBlocks(block: EvilModeBlock, data: EvilData): { title: string; li
   }
   const ways = waysForward(block, data);
   if (ways.length) out.push({ title: 'The way forward', lines: ways.map((w) => `${w.state}: ${w.way}${w.waits ? ` (${w.waits}.)` : ''}`) });
+  // Slice 10: the Listening Post's report, at Morning (the same Night with a Post next to the Office).
+  const post = block.here.beat === 'morning' || (block.here.beat === 'night' && postAtNight(block, data)) ? postNotes(block, data) : [];
+  if (post.length) out.push({ title: 'The Listening Post', lines: post });
   return out;
 }
 

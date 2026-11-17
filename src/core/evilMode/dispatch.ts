@@ -198,7 +198,7 @@ export function resolveEvening(block: EvilModeBlock, data: EvilData = EVIL_DATA)
     if (j.method === 'scout') {
       set(h.id, (x) => ({ ...x, scouted: Math.min(2, x.scouted + 1) }));
       // Eyes leading: two steps deeper (Part 7 section 2.4).
-      const reach = R.scoutReach + (lead(j)?.talent === 'eyes' ? P.odds.eyesReach : 0);
+      const reach = modify(block, 'scoutReach', {}, R.scoutReach, data) + (lead(j)?.talent === 'eyes' ? P.odds.eyesReach : 0);
       for (const n of holdings) if (n.id !== h.id && Math.abs(n.step - h.step) <= reach && n.scouted === 0) set(n.id, (x) => ({ ...x, scouted: 1 }));
       lines.push(`Scouted step ${h.step}, and what touches it within ${reach} steps.`);
     } else if (j.method === 'persuade') {

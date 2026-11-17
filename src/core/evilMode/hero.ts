@@ -3,6 +3,7 @@
 // The Hero's road is a pure function of the block (the Log and the map): no roll anywhere on it. Their party isn't here:
 // it's the rival record's (`run.story.rivals`, id `hero.rivalId`), and the session reads it there.
 
+import { baseDelay } from './base';
 import { hashSeed, Rng } from '../rng';
 import starterTable from '../../data/rivalHome.json';
 import bankJson from '../../data/rivalBank.json';
@@ -13,7 +14,9 @@ import { badgeHow, gymDealt, heroAtGym } from './gym';
 import { EVIL_DATA, type EvilData } from './data';
 import { appendLog, fill } from './ledger';
 import { tradeProblem } from './economy';
-import type { District, EvilModeBlock, Fight, Hero, Holding, LogEntry, Personality } from './schema';
+import { heroSlice12Start, type District, type EvilModeBlock, type Fight, type Hero, type Holding, type LogEntry, type Personality } from './schema';
+import { angrySteps, monName, moveTemper } from './temper';
+import { approachLines, eighthLines, openLastRoom, reckOn } from './reckoning';
 
 const STARTERS = starterTable.regionStarters as Record<string, string[]>;
 const BANK = bankJson.personalities as Record<string, { open: string[]; won: string[]; lost: string[] }>;
@@ -61,6 +64,7 @@ export function makeHero(seed: string, district: District, bossStarter: string |
     home: { region: district.region, district: district.n, street, holdings: townStreet(district, data).map((h) => h.id) },
     starterRegion: given.region, at: town.step, walked: 0, restOn: 0, marks: 0, battlesWithTeam: 0, lostDays: 0,
     badges: [], seen: [], learned: [], said: [], today: [], met: false,
+    ...heroSlice12Start(monName(given.species)),
   };
   return { hero, team: [given.species, opener], traits };
 }
@@ -70,7 +74,8 @@ export const personalityDef = (p: Personality, data: EvilData = EVIL_DATA) => da
 /** Steps they walk on `day` (design Part 18 section 7.2). */
 export function stepsOn(hero: Hero, day: number, data: EvilData = EVIL_DATA): number {
   const s = personalityDef(hero.personality, data).steps;
-  return s[(day - 1) % s.length]!;
+  // Slice 12: at Angry or above, three steps a day whatever the personality.
+  return angrySteps(hero, data) ?? s[(day - 1) % s.length]!;
 }
 
 /** Tiers: one a Badge won in a real fight, half for a bought or beaten one (Part 18 section 7.1). */
@@ -294,6 +299,11 @@ export function holdResult(block: EvilModeBlock, won: boolean, fielded: readonly
     out = g.block;
     if (g.line) lines.push(g.line);
   }
+  // Slice 12: a Proud one who won gloats (+1); a Kind one was decent to them (−1, once a region).
+  const c = block.crew.find((x) => x.id === f.personId);
+  if (won && c?.flaw === 'proud') hero = moveTemper(hero, 1, 'proud', data);
+  const decent = `temper:decent:${d.region}`;
+  if (c?.flaw === 'kind' && !out.applied.includes(decent)) { hero = moveTemper(hero, -1, 'decent', data); out = { ...out, applied: [...out.applied, decent] }; }
   hero = { ...hero, today: [...hero.today, ...lines] };
   return { block: { ...out, hero }, lines };
 }
@@ -347,9 +357,18 @@ function stageWalk(block: EvilModeBlock, data: EvilData): EvilModeBlock {
     if (out.fight) return out;
     const today = out.hero!.today;
     out = badge(out, R.reckoning.badge);
-    return done(out, [...today, R.reckoning.badge]);
+    // Slice 12: what the eighth Leader says to them, and their answer (Part 21 section 2).
+    return done(out, [...today, R.reckoning.badge, ...eighthLines(out, data)]);
   }
-  if (di === 2) return done(badge(block, R.reckoning.badge), [R.reckoning.outside]);
+  if (di === 2) return done(badge(block, R.reckoning.badge), [R.reckoning.outside, ...(reckOn(data) ? approachLines(block, data) : [])]);
+  // Slice 10: the base can delay the Hero, at most two days a region (Part 17 section 3.3).
+  const late = baseDelay(block, data);
+  if (di < R.reckoning.days + late) return done(block, [R.reckoning.outside, fill(data.base.delay.word, { days: late, s: late === 1 ? '' : 's' })]);
+  // Slice 12: the gate, the walk, and the last room. The region ends when the room does (reckoning.ts finishRoom).
+  if (reckOn(data)) {
+    const r = openLastRoom(block, data);
+    return done(r.block, [R.reckoning.arrives, ...r.lines]);
+  }
   const out: EvilModeBlock = { ...block, district: { ...d, end: { how: 'reckoning', day, count: ownedCount(block) } }, evening: [...block.evening, R.reckoning.arrives, R.reckoning.end] };
   return done(out, [R.reckoning.arrives]);
 }

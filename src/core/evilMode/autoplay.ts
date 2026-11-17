@@ -5,6 +5,7 @@
 import { EVIL_DATA, type EvilData } from './data';
 import { BEAT_END, step, type EvilAction } from './day';
 import { jobProblem } from './dispatch';
+import { makeRoad } from './road';
 import { makeHero } from './hero';
 import { inRoster } from './people';
 import { mayStay } from './region';
@@ -33,7 +34,10 @@ export function foundForPlay(seed: string, choice: FoundingChoice, data: EvilDat
   const r = foundTeam(choice, { boss: 'red', length: 'three', seed }, data);
   if (!r.ok) throw new Error(r.problem);
   const b = r.block;
-  return data.hero.on && b.district ? { ...b, hero: makeHero(seed, b.district, null, data).hero } : b;
+  if (!data.hero.on || !b.district) return b;
+  const hero = makeHero(seed, b.district, null, data).hero;
+  // Slice 12: the other three, as the session makes them.
+  return { ...b, hero, road: data.road.on ? makeRoad(seed, hero, b.district, 'red', data).road : [] };
 }
 
 /** The policy's jobs for today: scout the unknown, then work what's known, one squad at a time, while people are free. */
@@ -132,6 +136,11 @@ export function playRegion(block0: EvilModeBlock, policy: Policy, data: EvilData
     // A battle the day waits on: the policy loses every one it's in (the soft-loss path; nothing ends).
     if (block.fight) {
       act({ type: 'battleResult', won: false });
+      continue;
+    }
+    // Slice 12: the last room: the policy says nothing (the Hero answers their own question, and leaves).
+    if (block.reck?.room && !block.reck.room.outcome) {
+      act({ type: 'roomAct', what: 'nothing' });
       continue;
     }
     if (block.refusal) {

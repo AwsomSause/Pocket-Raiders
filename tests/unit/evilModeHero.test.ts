@@ -308,7 +308,7 @@ describe('Outplay in person (Part 7 section 5.3): played, not rolled', () => {
 });
 
 describe('the File (Part 18 section 11): blanks for what isn\'t known', () => {
-  it('a fresh Hero: personality, reason and every slot blank; the later builds\' sections say so', () => {
+  it('a fresh Hero: personality, reason and every slot blank; the slice-12 lists start empty', () => {
     const r = evilRun();
     const team = heroRival(r, B(r))!.memory!.lastBattle.team;
     const report = fileModel(B(r), 0, team, species)!;
@@ -337,7 +337,7 @@ describe('saves', () => {
     const r = evilRun();
     const { hero: _h, fight: _f, posted: _p, inPerson: _i, ...rest } = B(r);
     const v4 = EvilModeBlockSchema.parse({ ...rest, v: 4 });
-    expect(v4).toMatchObject({ v: 11, hero: null, fight: null, posted: [], inPerson: null });
+    expect(v4).toMatchObject({ v: 13, hero: null, fight: null, posted: [], inPerson: null });
     const old: RunState = { ...r, story: { ...r.story, rivals: [] }, expansion: { ...r.expansion, evilMode: v4 } };
     const made = ensureEvil(old);
     expect(B(made).hero).toEqual(B(r).hero);
