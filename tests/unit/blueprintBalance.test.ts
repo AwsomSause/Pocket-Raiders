@@ -27,10 +27,13 @@ function stopRun(seed: string, gameId: string, region = 0): RunState {
 /** A player who takes the first enabled choice at random: the floor of skill. */
 function botPlay(run: RunState, seed: string): RunState {
   const r = new Rng(hashSeed(seed));
-  for (let step = 0; step < 800 && !run.minigame!.outcome; step++) {
+  // A story screen can end without a result: the random hand walks away from the Arcade Cabinet, or walks into a room of a
+  // walked zone (the game then waits on the map). The bot stops there; the test counts it as no medal and no money.
+  const playing = (): boolean => run.phase === 'minigame' && !!run.minigame && !run.minigame.outcome;
+  for (let step = 0; step < 800 && playing(); step++) {
     const open = minigameView(content, run).cells.filter((c) => !c.disabled);
     if (open.length > 0) run = minigameAct(content, run, r.pick(open).id);
-    if (!run.minigame!.outcome && step % 3 === 2) run = minigameTick(content, run);
+    if (playing() && step % 3 === 2) run = minigameTick(content, run);
   }
   return run;
 }
@@ -97,10 +100,13 @@ describe('minigame payouts', () => {
         let money = 0;
         for (let i = 0; i < 30; i++) {
           const run = botPlay(beginMinigame(content, stopRun(`bal-${def.id}-${i}`, def.id), 'mg', tier), `bot-${i}`);
-          medals[run.minigame!.outcome!.medal] += 1;
-          money += run.minigame!.outcome!.money;
+          const out = run.minigame?.outcome ?? { medal: 'none' as const, money: 0 };
+          medals[out.medal] += 1;
+          money += out.money;
         }
-        const best = Math.round(def.rewardTable.gold.money * eco.tierMultipliers[tier]!);
+        // A game its event pays for (the Museum's jigsaw: the tier's `pay`, the doc's fee for the finished work) can pay that much at best.
+        const storyPay = Number((def.difficultyTiers[tier]!.params as Record<string, unknown>).pay ?? 0);
+        const best = Math.max(Math.round(def.rewardTable.gold.money * eco.tierMultipliers[tier]!), storyPay);
         report.push(`| ${def.id} | ${tier + 1} | ${medals.gold}/${medals.silver}/${medals.bronze}/${medals.none} | ${(money / 30).toFixed(0)} | ${best} |`);
         // A random player must not be handed gold on most runs: games need skill.
         expect(medals.gold, `${def.id} tier ${tier + 1}`).toBeLessThanOrEqual(15);

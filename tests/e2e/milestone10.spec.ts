@@ -60,8 +60,10 @@ test('the battle screen uses the Aero look and pack art', async ({ page }) => {
   expect(await page.evaluate(() => Boolean((window as any).__pkr.game.scene.getScene('Battle').menu.config.glass))).toBe(true);
   await page.screenshot({ path: 'test-results/m10-battle.png' });
 
-  // Fight: the focused move shows Essentials' type label and category icon.
-  await page.keyboard.press('Enter');
+  // Fight: the focused move shows Essentials' type label and category icon. (confirmToMenu's last Enter can land just as the menu
+  // comes up and open Fight already; pressing again would then pick a move, so Fight is opened only from the root menu.)
+  const atRoot = await page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').menu?.config?.options?.some((o: any) => o.label === 'Fight') ?? false);
+  if (atRoot) await page.keyboard.press('Enter');
   await expect
     .poll(() => page.evaluate(() => (window as any).__pkr.game.scene.getScene('Battle').moveBadges?.list.map((o: any) => o.texture.key).slice(0, 2)))
     .toEqual(['pack.ebdx.types', 'pack.ebdx.category']);

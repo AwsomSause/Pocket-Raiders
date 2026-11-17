@@ -139,6 +139,7 @@ import { beginRivalBrain } from './rivals/brainSetup';
 import { borrowTeamView, type TeamView } from './greenneedle/borrowed';
 import { applyQuestEffect, beginBorrow, beginFeudWatch, interleave, mainRival, secondRival, planRivalTeam, starterRivalryStages, shapeRivalMons, questConditionMet, questText, rivalAllySpecies, rivalStanding, RIVAL_QUEST_GROUP } from './rivals/questlines';
 import { getTheme, typesPool } from './themes';
+import { regionOneHeld, regionOneOwed } from './co/regionOneStory';
 import { fitsStage, nodesAhead, planCoStage, positioned, SAME_STAGE, stageTags, stepColumn, type CoEntry } from './co/placement';
 import { anyRoaming, endRoamer, healConvoy, startConvoy, partyHasAbility, placeCamp, scoutAhead, CAMP_EVENT_ID } from './world';
 import { MAX_FOES, MAX_FOES_LISTED } from './bossLimits';
@@ -702,7 +703,11 @@ function coSeen(content: Content, run: RunState, id: string): boolean {
 export function coFits(content: Content, run: RunState, id: string): boolean {
   const p = content.coPlacement?.get(id);
   if (!p || !run.stage) return true;
-  return fitsStage(p, stageNumber(content, run), run.stage.index + 1, stageTags(getTheme(content, run.stage.themeId).types, periodOf(run), tideOf(content, run)));
+  const tags = stageTags(getTheme(content, run.stage.themeId).types, periodOf(run), tideOf(content, run));
+  // The first region's story (co/regionOneStory.ts) must happen there: from the region's third stage it no longer waits for a stage
+  // of its own kind (Poli-Pond's water), only for its earliest stage and its in-region stages.
+  if (regionOneOwed(run, id) && run.stage.index >= 2) return fitsStage({ ...p, tags: [] }, stageNumber(content, run), run.stage.index + 1, tags);
+  return fitsStage(p, stageNumber(content, run), run.stage.index + 1, tags);
 }
 
 /** Is this event put on a chosen step by the placer (so it is never drawn at random)? */
@@ -816,6 +821,8 @@ export function eligibleEvents(content: Content, run: RunState): EventDef[] {
       (!e.mode || run.rules.modeId === e.mode) &&
       !coSeen(content, run, e.id) &&
       coFits(content, run, e.id) &&
+      // The first region shows one of three stories (co/regionOneStory.ts); the other two wait for the second region.
+      !regionOneHeld(run, e.id) &&
       !recruitsOwned(run, e) &&
       e.requires.every((c) => conditionMet(content, run, c)),
   );
@@ -881,7 +888,7 @@ export function addEventStops(content: Content, run: RunState): void {
     // A same-stage story's later beats are placed when they are earned (placeEarnedCoBeats), not at the start of the stage.
     const entries = coOpen.map((id) => ({ id, p: content.coPlacement!.get(id)!, door: content.events.get(id)!.pseudo })).filter((e) => !(SAME_STAGE.has(e.p.shape) && e.p.beat >= 2));
     // Calendar weeks (legends, row C): the week's questline openings (its `mapEvents`) get first claim on the stage's budget.
-    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`, undefined, featuredOpenings(run, featuredMapEvents(content, run))));
+    coPut(run, planCoStage(stage.map, entries, `${run.seed}::co-place::${stageKey(run)}`, undefined, featuredOpenings(run, featuredMapEvents(content, run)), new Set(coOpen.filter((id) => regionOneOwed(run, id)))));
     for (const id of coOpen) { taken.add(id); open.delete(id); }
   }
   // A run milestone (catalog 99) is offered at the middle stage of every region.

@@ -7,6 +7,7 @@ import { Rng, hashSeed } from '../rng';
 import { currentRegion } from '../regions';
 import type { RunState } from '../state';
 import { rememberFlightBug } from '../instrumentality/flightNorth';
+import { regionOneHeld } from '../co/regionOneStory';
 import { ghostReturnEvent, markRivalReturned, rivalReturnEvent } from './canonSaffron';
 import { enterCanonSlot, finishCanonSpace } from './canonSpaces';
 import { addCanonFollowups, nodesForSpace } from './canonKantoPlaced';
@@ -68,6 +69,7 @@ function placeCanonSlot(content: Content, run: RunState, slot: string): void {
     }
     const event = canonEventFor(content, id, slot);
     if (!event) continue; // a space whose play-through is not built yet is simply not offered
+    if (regionOneHeld(run, event.id)) continue; // one of the two stories that wait while the run is in its first region
     if (stage.map.nodes.some((n) => n.sides.some((s) => s.eventId === event.id))) continue;
     // Catalog overhaul: a placed space sits in its doc window (a must-see one on every node of its home column); the rest keep a random node.
     for (const node of nodesForSpace(stage, canonKanto.spaces.find((x) => x.id === id), rng)) node.sides.push({ id: `canon-${node.sides.length + 1}-${node.id}`, kind: 'event', used: false, eventId: event.id });
