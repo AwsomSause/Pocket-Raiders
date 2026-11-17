@@ -12,6 +12,7 @@ import { backWayWing, detectiveOf } from './raid';
 import { defOf } from './neighbour';
 import { runIndex } from './region';
 import type { Crew, EndingId, EndingState, EvilModeBlock, PartId } from './schema';
+import { logOf } from './pack';
 
 // ---- The data's shapes (endings.json is checked by EndingsFileSchema; these are the views the code reads) ----
 
@@ -70,8 +71,8 @@ const notCleanParts = (block: EvilModeBlock): PartId[] => (Object.entries(block.
 /** Fronts that turned a profit for a whole district with the back room shut throughout (Part 13), and aren't open now. */
 export const straightFronts = (block: EvilModeBlock) => block.economy.running.filter((v) => v.kind === 'front' && v.straight.length > 0 && v.backRoom !== true);
 /** Times each person was ordered across their line anyway (the Log's 'asked'). */
-const crossedOf = (block: EvilModeBlock, id: string): number => block.log.filter((e) => e.kind === 'asked' && e.who.includes(id)).length;
-const historyOf = (block: EvilModeBlock, id: string): number => block.log.filter((e) => e.who.includes(id)).length;
+const crossedOf = (block: EvilModeBlock, id: string): number => logOf(block).filter((e) => e.kind === 'asked' && e.who.includes(id)).length;
+const historyOf = (block: EvilModeBlock, id: string): number => logOf(block).filter((e) => e.who.includes(id)).length;
 const hasRoom = (block: EvilModeBlock, type: string): boolean => !!block.base?.rooms.some((r) => r.type === type);
 const rankIx = (c: Crew, data: EvilData): number => data.people.ranks.findIndex((r) => r.id === c.rank);
 
@@ -113,7 +114,7 @@ export const walkInProblem = (block: EvilModeBlock, data: EvilData = EVIL_DATA):
 /** The three things the Hero names (section 6.2): kind entries in the Ledger, from districts they walked. */
 export function threeThings(block: EvilModeBlock): string[] {
   const walked = new Set((block.hero?.badges ?? []).map((b) => `${b.region}:${b.district}`));
-  return block.log.filter((e) => (e.given ?? 0) > 0 && e.kind !== 'pay' && walked.has(`${e.region}:${e.district}`)).slice(0, 3).map((e) => e.text.replace(/^Day \d+\. /, ''));
+  return logOf(block).filter((e) => (e.given ?? 0) > 0 && e.kind !== 'pay' && walked.has(`${e.region}:${e.district}`)).slice(0, 3).map((e) => e.text.replace(/^Day \d+\. /, ''));
 }
 
 /** The Recruit's conditions (section 6.1), each a File line; null when they all hold. */
@@ -344,7 +345,7 @@ function lastRoomScenes(block: EvilModeBlock, picks: Picks, sub: string, data: E
   if (sub === 'alone') {
     const A = L.alone;
     const plates = block.crew.map((c) => c.name);
-    const worst = [...block.log].filter((e) => (e.taken ?? 0) > 0).sort((a, b) => (b.taken ?? 0) - (a.taken ?? 0)).slice(0, 3).map((e) => fill(A.worst, { line: e.text }));
+    const worst = [...logOf(block)].filter((e) => (e.taken ?? 0) > 0).sort((a, b) => (b.taken ?? 0) - (a.taken ?? 0)).slice(0, 3).map((e) => fill(A.worst, { line: e.text }));
     out.push(scene('plates', title, [say(block, A.plates, { names: plates.length ? plates.join('. ') : 'Nobody' })]));
     out.push(scene('office', title, [say(block, A.office, { n: plates.length }), ...worst]));
     out.push(scene('last', title, [A.last], NEXT, { still: true }));
@@ -418,13 +419,13 @@ function straightScenes(block: EvilModeBlock, picks: Picks, data: EvilData): End
 export function firstDay(block: EvilModeBlock, heir: Crew, oathKept: boolean | null, data: EvilData = EVIL_DATA): string[] {
   const H = D(data).handOff;
   const d = H.day;
-  const has = (k: string) => block.log.some((e) => e.kind === k);
-  const dispatch = has('waive') ? d.waived : block.log.some((e) => e.kind === 'job' && e.result === 'went' && (e.method === 'lean' || e.method === 'take')) && block.inPerson ? d.wentBad
+  const has = (k: string) => logOf(block).some((e) => e.kind === k);
+  const dispatch = has('waive') ? d.waived : logOf(block).some((e) => e.kind === 'job' && e.result === 'went' && (e.method === 'lean' || e.method === 'take')) && block.inPerson ? d.wentBad
     : !has('asked') ? d.noCross : block.economy.broke === 0 && !block.crew.some((c) => c.unpaid > 0) ? d.paid : block.base?.walked ? d.walked : d.none;
   const beats = [
     Object.keys(block.rates).length ? d.readLedger : d.readBoard,
     oathKept === false ? d.none : dispatch,
-    block.log.some((e) => e.kind === 'gym') ? d.goes : d.stays,
+    logOf(block).some((e) => e.kind === 'gym') ? d.goes : d.stays,
     teamLoyalty(block, data) >= 7 ? d.eatsSquad : d.eatsOffice,
     block.crew.filter((c) => c.lineHeard).length * 2 >= Math.max(1, inRoster(block).length) ? d.opens : d.sleeps,
     `${H.question[(heir.talent ?? 'none') as 'voice'] ?? H.question.none}`,
@@ -458,8 +459,8 @@ function handOffScenes(block: EvilModeBlock, ending: EndingState, data: EvilData
 /** A Plateau room's signature (section 6.4): Persuade and Expose need the Ledger's entry; Scout, the eight Badges; Outplay, the battle. */
 function roomSigned(block: EvilModeBlock, i: number, method: string, result: string | undefined): boolean {
   if (method === 'outplay') return result === 'won';
-  if (method === 'persuade') return block.log.filter((e) => (e.given ?? 0) > 0).length > i;
-  if (method === 'expose') return block.log.filter((e) => (e.taken ?? 0) > 0).length > i;
+  if (method === 'persuade') return logOf(block).filter((e) => (e.given ?? 0) > 0).length > i;
+  if (method === 'expose') return logOf(block).filter((e) => (e.taken ?? 0) > 0).length > i;
   return (block.hero?.badges.filter((b) => b.region === block.here.region).length ?? 0) >= 8;
 }
 
@@ -516,7 +517,7 @@ function witness(block: EvilModeBlock, c: Crew, data: EvilData): CountStep | nul
   const W = D(data).caught.witness;
   const R = D(data).rules;
   if (c.minor) return null;
-  const moment = c.jobs > 0 ? fill(D(data).caught.moments.job, { n: c.jobs }) : c.unpaid === 0 && block.log.some((e) => e.kind === 'pay' && e.who.includes(c.id)) ? D(data).caught.moments.pay : D(data).caught.moments.none;
+  const moment = c.jobs > 0 ? fill(D(data).caught.moments.job, { n: c.jobs }) : c.unpaid === 0 && logOf(block).some((e) => e.kind === 'pay' && e.who.includes(c.id)) ? D(data).caught.moments.pay : D(data).caught.moments.none;
   if (c.cell && c.where === 'away') return { line: fill(W.cells, { name: c.name }), delta: 2 };
   const crossed = crossedOf(block, c.id);
   if (crossed > 0) return { line: fill(W.crossed, { name: c.name, times: crossed }), delta: 1 };
@@ -529,7 +530,7 @@ function witness(block: EvilModeBlock, c: Crew, data: EvilData): CountStep | nul
 
 /** The list (Part 17): what the detective can prove, from the Log. */
 export const listItems = (block: EvilModeBlock): string[] =>
-  block.log.filter((e) => e.kind === 'job' && e.result === 'went' && (e.method === 'lean' || e.method === 'take' || e.method === 'expose')).map((e) => e.text);
+  logOf(block).filter((e) => e.kind === 'job' && e.result === 'went' && (e.method === 'lean' || e.method === 'take' || e.method === 'expose')).map((e) => e.text);
 
 /**
  * The count, line by line (sections 7.2 and 7.6): one per list item, minus two for walking in and two more for the Ledger;
@@ -575,7 +576,7 @@ export function countSteps(block: EvilModeBlock, sub: string | null, data: EvilD
   }
   const oba = block.crew.find((c) => c.ref === 'obadiah');
   if (oba) {
-    const missed = block.log.filter((e) => e.kind === 'pay' && !e.given).length;
+    const missed = logOf(block).filter((e) => e.kind === 'pay' && !e.given).length;
     if (missed === 0) out.push({ line: C.obadiah.paid, delta: -1 });
     else if (missed < 3) out.push({ line: C.obadiah.missed, delta: -1 });
     else out.push({ line: C.obadiah.sits, delta: 0 });
@@ -719,7 +720,7 @@ export function ledgerSays(block: EvilModeBlock, data: EvilData = EVIL_DATA): st
   const map = D(data).creedOf as Txt;
   const tally: Record<string, number> = {};
   const add = (k: string | undefined) => { const c = k ? map[k] : undefined; if (c) tally[c] = (tally[c] ?? 0) + 1; };
-  for (const e of block.log) if (e.kind === 'job' && e.result === 'went') add(e.method);
+  for (const e of logOf(block)) if (e.kind === 'job' && e.result === 'went') add(e.method);
   for (const v of block.economy.running) add(v.kind);
   for (const _h of block.scheme.heists) add('heist');
   for (const _d of block.scheme.digs) add('dig');
@@ -747,11 +748,11 @@ export function ledgerPage(block: EvilModeBlock, data: EvilData = EVIL_DATA): st
   const cells = block.crew.filter((c) => c.cell).length;
   if (cells) ways['In the cells'] = cells;
   out.push(fill(P.roster, { hired: block.crew.length, ways: Object.entries(ways).map(([k, n]) => ` ${k}: ${n}.`).join(''), here: inRoster(block).length }));
-  const crossed = block.log.filter((e) => e.kind === 'asked').length;
+  const crossed = logOf(block).filter((e) => e.kind === 'asked').length;
   if (crossed || block.crew.some((c) => c.asked)) out.push(fill(P.lines, { crossed }));
-  const missed = block.log.filter((e) => e.kind === 'pay' && !e.given).length;
-  if (block.log.some((e) => e.kind === 'pay')) out.push(missed ? fill(P.wage.missed, { n: missed }) : P.wage.all);
-  if (block.base || block.applied.some((a) => a.startsWith('base:'))) out.push(block.base?.walked || block.log.some((e) => e.kind === 'base' && /[Ww]alk/.test(e.text)) ? P.base.walked : P.base.not);
+  const missed = logOf(block).filter((e) => e.kind === 'pay' && !e.given).length;
+  if (logOf(block).some((e) => e.kind === 'pay')) out.push(missed ? fill(P.wage.missed, { n: missed }) : P.wage.all);
+  if (block.base || block.applied.some((a) => a.startsWith('base:'))) out.push(block.base?.walked || logOf(block).some((e) => e.kind === 'base' && /[Ww]alk/.test(e.text)) ? P.base.walked : P.base.not);
   const hero = block.hero;
   if (hero && hero.fires.length) {
     const lies = hero.lies.length;
@@ -782,7 +783,7 @@ export function yearOn(block: EvilModeBlock, c: Crew, data: EvilData = EVIL_DATA
 }
 
 /** Knocks at Night, as the Log has them: questions asked and lines heard. The first person card's whoever knocked most. */
-const knocks = (block: EvilModeBlock, id: string): number => block.log.filter((e) => (e.kind === 'ask' || e.kind === 'asked') && e.who.includes(id)).length;
+const knocks = (block: EvilModeBlock, id: string): number => logOf(block).filter((e) => (e.kind === 'ask' || e.kind === 'asked') && e.who.includes(id)).length;
 
 /** The run-end page's cards (section 9.1): up to fourteen, each left out when there's nothing true to put on it. */
 export function endingCards(block: EvilModeBlock, data: EvilData = EVIL_DATA): EndCard[] {

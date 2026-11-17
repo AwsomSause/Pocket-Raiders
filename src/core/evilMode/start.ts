@@ -2,6 +2,7 @@
 // Slice 1 built pages 1 to 5 (Boss, name, Creed, Line, Doctrine); slice 9 adds the Look, the Patron and the first region
 // (Kanto is the only one open), and a team begins at the region's Arrival.
 
+import { lengthFor } from './runLength';
 import { ensureNeighbour } from './neighbour';
 import { EVIL_DATA, type EvilData } from './data';
 import { layDistrict } from './board';
@@ -89,7 +90,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const creed = data.creeds.find((c) => c.id === choice.creed)!;
   const line = data.founding.lines.find((l) => l.id === choice.line)!;
   const cap = (n: number): number => Math.min(10, n);
-  const regard = cap(creed.start.regard + line.regard);
+  const regard0 = cap(creed.start.regard + line.regard);
   const dread = cap(creed.start.dread);
   // Slice 4: the starting Roster, drawn from the Founders on `evil-people` (design Part 10a section 2).
   const roster = foundingRoster(opts.seed ?? opts.boss, creed.id, data);
@@ -102,11 +103,15 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   // Slice 16: the first region's picked on its page (Kanto, Johto or Hoenn, whichever's open).
   const first = data.region.on ? data.region.regions.find((r) => r.id === choice.region)?.index ?? 0 : 0;
   const seed = opts.seed ?? opts.boss;
+  // Slice 19 (Kalos): a coat with no symbol lands with Regard +1 (Part 26b section 3.1).
+  const plain = data.region.on && choice.look?.symbol === data.region.look.symbols[data.region.look.symbols.length - 1];
+  const regard = cap(regard0 + (plain ? (data.region.regions.find((r) => r.index === first)?.rule?.mods ?? []).filter((m) => m.kind === 'arrivalRegard').reduce((n, m) => n + (m.add ?? 0), 0) : 0));
   const funds = patron ? Math.floor(modify({ here: { region: first, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
     v: 15,
     from: 'founding',
-    settings: { length: opts.length },
+    // Slice 19: "Six regions" only once six are written; otherwise the run is Three.
+    settings: { length: lengthFor(opts.length, data.region.regions) },
     team: {
       name: checkName(choice.name, data).name,
       sayable: true,

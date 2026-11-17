@@ -47,6 +47,7 @@ import { LINE_IDS } from '../core/evilMode/schema';
 import { crossers } from '../core/evilMode/people';
 import { roadChoice, roadForced, roadModel } from '../core/evilMode/roadScreens';
 import { roadView } from '../ui/redux/screens/evilRoad';
+import { cardsOf } from '../core/evilMode/pack';
 
 /** Keys that confirm (input.ts KEY_MAP), read raw on the Card so a held key can be told from a press. */
 const CONFIRM_CODES = new Set(['Enter', 'NumpadEnter', 'Space', 'KeyZ']);
@@ -662,7 +663,8 @@ export class EvilScene extends Phaser.Scene {
   }
 
   private readCard(id: string): void {
-    const card = this.block()?.cards.find((c) => c.id === id);
+    const b = this.block();
+    const card = b ? cardsOf(b).find((c) => c.id === id) : undefined;
     if (!card) return;
     this.card = { read: card, scroll: 0 };
     this.cardOpenedAt = performance.now();

@@ -74,18 +74,20 @@ describe('founding: the Arrival, the Look, the Patron, the first region', () => 
       expect(order.indexOf(cold.holdings[i]!.mood!)).toBe(Math.max(0, order.indexOf(h.mood!) - 1));
     });
   });
-  it('the founding pages: Look rows turn and wrap; nine tickets, Kanto, Johto and Hoenn open (slice 16); Nobody gives +50% Funds', () => {
+  it('the founding pages: Look rows turn and wrap; nine tickets, Kanto to Kalos open (slices 16 and 19); Nobody gives +50% Funds', () => {
     let d: FoundingDraft = { ...newDraft(), page: 'look' };
     d = turnLook(d, 'a', -1);
     expect(lookOf(d).a).toBe(EVIL_DATA.region.look.a[10]![1]);
     const m = foundingModel({ ...d, doctrine: 'tricksters', page: 'region' }, { bossName: 'Red', bossFile: null, starter: 'Bulbasaur', starterFile: null, oldLook: false, length: 'three' });
     expect(m.regions).toHaveLength(9);
-    expect(m.regions.filter((r) => r.open).map((r) => r.id)).toEqual(['kanto', 'johto', 'hoenn']);
+    expect(m.regions.filter((r) => r.open).map((r) => r.id)).toEqual(['kanto', 'johto', 'hoenn', 'sinnoh', 'unova', 'kalos']);
     expect(m.regions[0]!.ticket[2]).toBe('Your Doctrine: at home in 2 of six.');
     expect(pageReady({ ...d, page: 'region', region: 'johto' })).toBe(true);
     expect(foundTeam(choice({ region: 'johto' }), { boss: 'red', length: 'three' }).ok).toBe(true);
-    expect(pageReady({ ...d, page: 'region', region: 'sinnoh' })).toBe(false);
-    expect(foundTeam(choice({ region: 'sinnoh' }), { boss: 'red', length: 'three' }).ok).toBe(false);
+    expect(pageReady({ ...d, page: 'region', region: 'sinnoh' })).toBe(true);
+    // Slice 19: the newer three stay switched off (Kice: not in the first release).
+    expect(pageReady({ ...d, page: 'region', region: 'alola' })).toBe(false);
+    expect(foundTeam(choice({ region: 'alola' }), { boss: 'red', length: 'three' }).ok).toBe(false);
     const nobody = foundTeam(choice({ patron: 'nobody' }), { boss: 'red', length: 'three' });
     const creed = EVIL_DATA.creeds.find((c) => c.id === 'profit')!;
     expect(nobody.ok && nobody.block.team.funds).toBe(Math.floor(creed.start.funds * 1.5));

@@ -7,6 +7,7 @@ import { EVIL_DATA, type EvilData } from './data';
 import type { JobDraft } from './odds';
 import type { EvilModeBlock, Holding, LogEntry } from './schema';
 import { inRoster, wageOf } from './people';
+import { logCount, logOf } from './pack';
 
 export const money = (n: number): string => `₽${n.toLocaleString('en-GB')}`;
 
@@ -65,13 +66,13 @@ export const lineFor = (block: EvilModeBlock, who: readonly string[], text: stri
 /** Adds one entry. The only way the Log grows; there is no way it shrinks. */
 export function appendLog(block: EvilModeBlock, e: Omit<LogEntry, 'id' | 'day' | 'region' | 'district'>): EvilModeBlock {
   const d = block.district;
-  const entry: LogEntry = { id: `L${block.log.length + 1}`, day: block.here.day, region: d?.region ?? block.here.region, district: d?.n ?? block.here.stage, ...e };
+  const entry: LogEntry = { id: `L${logCount(block) + 1}`, day: block.here.day, region: d?.region ?? block.here.region, district: d?.n ?? block.here.stage, ...e };
   return { ...block, log: [...block.log, entry], given: block.given + (e.given ?? 0), taken: block.taken + (e.taken ?? 0) };
 }
 
 /** Given and Taken as sums over the Log. Never subtracted from each other (Part 23 section 8.2). */
 export const logSums = (block: EvilModeBlock): { given: number; taken: number } =>
-  block.log.reduce((s, e) => ({ given: s.given + (e.given ?? 0), taken: s.taken + (e.taken ?? 0) }), { given: 0, taken: 0 });
+  logOf(block).reduce((s, e) => ({ given: s.given + (e.given ?? 0), taken: s.taken + (e.taken ?? 0) }), { given: 0, taken: 0 });
 
 /** What a holding pays this Evening, after a waive or a halve. A safehouse's rent is never waived (it isn't income). */
 export function takingsAt(h: Holding, rates: EvilModeBlock['rates'], data: EvilData = EVIL_DATA): number {
@@ -119,8 +120,8 @@ export type RunMark = 'went' | 'didnt' | 'called off' | 'pending';
 /** The run: every Card confirmed, by day, as the Ledger's sentence, with its mark in the margin. */
 export function runLines(block: EvilModeBlock): { cardId: string; day: number; text: string; mark: RunMark; unseen: boolean; who: string[] }[] {
   const result = new Map<string, RunMark>();
-  for (const e of block.log) if (e.kind === 'job' && e.cardId && e.result) result.set(e.cardId, e.result);
-  return block.log.filter((e) => e.kind === 'card' && e.cardId).map((e) => ({ cardId: e.cardId!, day: e.day, text: e.text, mark: result.get(e.cardId!) ?? 'pending', unseen: (e.unknowns ?? 0) > 0, who: e.who }));
+  for (const e of logOf(block)) if (e.kind === 'job' && e.cardId && e.result) result.set(e.cardId, e.result);
+  return logOf(block).filter((e) => e.kind === 'card' && e.cardId).map((e) => ({ cardId: e.cardId!, day: e.day, text: e.text, mark: result.get(e.cardId!) ?? 'pending', unseen: (e.unknowns ?? 0) > 0, who: e.who }));
 }
 
 /** By person: the same lines, sorted by who they name, in the order people joined. */
@@ -157,8 +158,8 @@ export function setRate(block: EvilModeBlock, holdingId: string, act: 'waive' | 
 
 /** Who collects a line: the lead of the last job that went there, or the first of the crew. */
 function collector(block: EvilModeBlock, holdingId: string): string {
-  const went = new Set(block.log.filter((e) => e.kind === 'job' && e.result === 'went').map((e) => e.cardId));
-  const card = [...block.log].reverse().find((e) => e.kind === 'card' && e.to === holdingId && went.has(e.cardId));
+  const went = new Set(logOf(block).filter((e) => e.kind === 'job' && e.result === 'went').map((e) => e.cardId));
+  const card = [...logOf(block)].reverse().find((e) => e.kind === 'card' && e.to === holdingId && went.has(e.cardId));
   return card?.who[0] ?? block.crew[0]?.id ?? '';
 }
 
