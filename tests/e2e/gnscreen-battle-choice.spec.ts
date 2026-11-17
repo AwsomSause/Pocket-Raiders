@@ -117,7 +117,7 @@ test.describe('New UI', () => {
   test.use({ deviceScaleFactor: 2 });
   test('the Golem asks between phases, and "Give it the crystals." ends the fight', async ({ page }) => {
     test.setTimeout(420_000);
-    await playGolem(page, 'seed=gnscreen-choice&campaign=dev&debug=1&ui=new', 'test-results/gnscreens/battle-choice.png');
+    await playGolem(page, 'seed=gnscreen-choice&campaign=dev&debug=1&ui=new', '/mnt/project-files/shots/gnscreens/battle-choice.png');
   });
 });
 
