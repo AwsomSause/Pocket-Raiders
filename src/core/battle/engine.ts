@@ -138,7 +138,7 @@ import { passTurnEnd, phaseFloor, phaseSync, takeAskForm } from '../greenneedle/
 import type { RaidPhase } from '../raid/schema';
 import { allyDue, allyLevel, getTotem } from '../totem/totem';
 import { enemyLastResort } from './lastResort';
-import { friendshipBond, WEALTH_HEAL, WEALTH_POTIONS } from '../trainerWorld/trainerWorld';
+import { friendshipBond, WEALTH_POTIONS } from '../trainerWorld/trainerWorld';
 import { specializationBonus, specializationPersonality } from '../trainerWorld/behavior';
 import { falseSlotFor } from '../expansion/labyrinth';
 import { addMomentum, cfgOf as spectacleCfg, duePhases, isBossFight, rallyProblem, rollLastStand, spectacleOf, spectacleRoll as spectacleRollExt, type SpectacleEvent } from './spectacle';
@@ -400,6 +400,8 @@ export interface BattleContext {
   lastStand?: () => PokemonInstance | null;
   /** Galar gym / tournament / Champion battles: the comeback moments below are on (set by run.ts, never in other regions). */
   galar?: 'gym' | 'tournament' | 'champion';
+  /** Region number of this battle: picks which potion enemy trainers drink (balance trainerAi.healTiers). */
+  foeHealTier?: number;
   /** Set during a double battle's turn (battle/doubles.ts). */
   doublesTurn?: DoublesTurn;
   /** S7 Impossible Feats: the Story Run partner and the Feats it may fire this turn (core/story2/feats.ts). `fired` is set by the engine. */
@@ -5967,20 +5969,25 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   const bonus = Math.floor(topLevel / cfg.healCaps.perLevels);
   const classCap = battle.rival || classId === 'champion' ? null : classId === 'gym-leader' ? cfg.healCaps.gym + bonus : classId === 'elite-four' ? cfg.healCaps.elite + bonus : cfg.healCaps.ordinary + (battle.trainer?.leaderId ? bonus : 0);
   const kit = classCap !== null ? Math.min(base, classCap) : bossy ? Math.max(base, caps.healsPerBattle) : base;
-  if (battle.enemyItemsUsed < kit && mon.hp / max < cfg.healBelow) {
-    const gain = Math.min(max - mon.hp, Math.floor(max * (wealth === undefined ? cfg.healFraction : WEALTH_HEAL[wealth]!)));
+  // Every enemy trainer: at most `maxHealItems` healing items (potions, Full Restores, Revives) per battle.
+  const roomLeft = battle.enemyItemsUsed < cfg.maxHealItems;
+  if (roomLeft && battle.enemyItemsUsed < kit && mon.hp / max < cfg.healBelow) {
+    const tier = cfg.healTiers[Math.min(ctx.foeHealTier ?? 0, cfg.healTiers.length - 1)]!;
+    const gain = Math.min(max - mon.hp, Math.floor(max * tier.fraction));
     if (gain > 0) {
       battle.enemyItemsUsed += 1;
       mon.hp += gain;
-      events.push({ type: 'item', itemId: 'hyper-potion', targetUid: mon.uid, message: `The trainer used a Hyper Potion on ${getSpecies(content, mon.speciesId).name}!`, hpAfter: mon.hp });
+      const itemName = tier.item.split('-').map((w) => w[0]!.toUpperCase() + w.slice(1)).join(' ');
+      events.push({ type: 'item', itemId: tier.item, targetUid: mon.uid, message: `The trainer used a ${itemName} on ${getSpecies(content, mon.speciesId).name}!`, hpAfter: mon.hp });
       return true;
     }
   }
-  if (bossy && (battle.enemyRevivesUsed ?? 0) < caps.revivesPerBattle) {
+  if (roomLeft && bossy && (battle.enemyRevivesUsed ?? 0) < caps.revivesPerBattle) {
     // Revive the strongest fallen teammate once the team is down to its last two; never on a full team.
     const fallen = battle.enemyTeam.filter((m) => m.hp <= 0).sort((a, b) => b.level - a.level)[0];
     if (fallen && battle.enemyTeam.filter((m) => m.hp > 0).length <= 2) {
       battle.enemyRevivesUsed = (battle.enemyRevivesUsed ?? 0) + 1;
+      battle.enemyItemsUsed += 1;
       fallen.hp = Math.max(1, Math.floor(calcStats(content, fallen).hp * 0.5));
       events.push({ type: 'item', itemId: 'revive', targetUid: fallen.uid, message: `The trainer used a Revive on ${getSpecies(content, fallen.speciesId).name}!`, hpAfter: fallen.hp });
       return true;
@@ -6043,8 +6050,9 @@ function trainerKitTurn(ctx: BattleContext, enemy: Combatant, max: number, event
   if (!kit) return false;
   const name = getSpecies(content, mon.speciesId).name;
   const last = battle.enemyTeam.filter((m) => m.hp > 0).length <= 1;
-  if (kit.restore > 0 && mon.hp / max < 0.25 && (last || battle.enemyIndex === 0 || mon.level >= Math.max(...battle.enemyTeam.map((m) => m.level)))) {
+  if (kit.restore > 0 && battle.enemyItemsUsed < content.balance.trainerAi.maxHealItems && mon.hp / max < 0.25 && (last || battle.enemyIndex === 0 || mon.level >= Math.max(...battle.enemyTeam.map((m) => m.level)))) {
     kit.restore -= 1;
+    battle.enemyItemsUsed += 1;
     mon.hp = max;
     mon.status = null;
     events.push({ type: 'item', itemId: 'full-restore', targetUid: mon.uid, message: `The trainer used a Full Restore on ${name}!`, hpAfter: mon.hp });
