@@ -31,6 +31,8 @@ import { fileModel } from '../core/evilMode/heroScreens';
 import { fileView } from '../ui/redux/screens/evilFile';
 import { lineModel } from '../core/evilMode/lineScreens';
 import { gymView } from '../ui/redux/screens/evilGym';
+import { neighbourView } from '../ui/redux/screens/evilNeighbour';
+import { neighbourModel } from '../core/evilMode/neighbourScreens';
 import { gymModel } from '../core/evilMode/gymScreens';
 import { newTrade, tradeModel, type TradeSel } from '../core/evilMode/tradeScreens';
 import { tradeView } from '../ui/redux/screens/evilTrade';
@@ -72,6 +74,8 @@ export class EvilScene extends Phaser.Scene {
   private gym: number | null = null;
   /** Slice 11: the Trade page's tab, row and street/holding, or null when it's shut. */
   private trade: TradeSel | null = null;
+  /** Slice 13: the neighbour page's chosen row, or null when it's shut. */
+  private nb: number | null = null;
   /** Slice 10: the Base page's tab, square and option, or null when it's shut (Walk it and a Raid hold it open). */
   private base: BaseSel | null = null;
   private bgOf: (id: string) => string | null = () => null;
@@ -97,6 +101,7 @@ export class EvilScene extends Phaser.Scene {
     this.lineTimer = null;
     this.gym = null;
     this.trade = null;
+    this.nb = null;
     this.base = null;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
@@ -129,6 +134,9 @@ export class EvilScene extends Phaser.Scene {
           const gym = gm ? gymView(gm, this.notice) : undefined;
           const tm = this.trade !== null && !ledger && !roster && !file && !line && !gym ? tradeModel(block, this.trade) : null;
           const trade = tm ? tradeView(tm, this.notice) : undefined;
+          // Slice 13: the neighbour page; a Sit-Down going on keeps it open.
+          const nm = (this.nb !== null || block.neighbour?.sitting) && !ledger && !roster && !file && !line && !gym ? neighbourModel(block, this.nb ?? 0) : null;
+          const nbPage = nm ? neighbourView(nm, this.notice) : undefined;
           // Slice 10: the Base page. Walk it and a Raid hold it open over everything else.
           const bsel = this.baseSel();
           const bm = bsel && (this.baseForced() || (!ledger && !roster && !file && !line && !gym)) ? baseModel(block, bsel) : null;
@@ -138,7 +146,7 @@ export class EvilScene extends Phaser.Scene {
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(base ? { base } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(file && !ledger && !roster ? { file } : {}), ...(line ? { line } : {}), ...(gym ? { gym } : {}), ...(trade ? { trade } : {}), ...(nbPage ? { neighbour: nbPage } : {}), ...(base ? { base } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -186,6 +194,8 @@ export class EvilScene extends Phaser.Scene {
         trow: (i) => { if (this.trade) this.trade = { ...this.trade, row: Number(i), pick: 0 }; this.view?.refresh(); },
         tpick: () => { if (this.trade) this.trade = { ...this.trade, pick: this.trade.pick + 1 }; this.view?.refresh(); },
         tbtn: (i) => this.tradeDo(Number(i)),
+        nb: () => this.toggleNeighbour(),
+        nrow: (i) => { this.nb = Number(i); this.neighbourDo(); },
         base: () => this.toggleBase(),
         btab: (i) => { if (this.base) { this.base = { ...this.base, tab: Number(i), opt: 0 }; this.view?.refresh(); } },
         bsq: (at) => this.baseSquare(at),
@@ -363,6 +373,7 @@ export class EvilScene extends Phaser.Scene {
     if (this.gym !== null) return this.gymKey(a);
     if (this.trade !== null) return this.tradeKey(a);
     if (this.base !== null) return this.baseKey(a);
+    if (this.nb !== null || this.block()?.neighbour?.sitting) return this.neighbourKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
     const d = this.disp;
@@ -532,6 +543,7 @@ export class EvilScene extends Phaser.Scene {
       const by: Record<string, string> = { KeyV: 'Waive', KeyE: 'End', KeyM: 'Make it honest', KeyB: 'back room' };
       if (by[e.code]) return this.tradeDo(-1, by[e.code]);
     }
+    if (e.code === 'KeyK' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleNeighbour();
     if (e.code === 'KeyY' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleGym();
     if (e.code === 'KeyB' && type === 'down' && !e.repeat && !this.card && !this.block()?.refusal && this.block()?.district) return this.toggleBase();
     if (e.code === 'KeyQ' && type === 'down' && !e.repeat && !this.card && this.base) { this.base = { ...this.base, tab: (this.base.tab + 1) % BASE_TABS.length, opt: 0 }; return void this.view?.refresh(); }
@@ -724,6 +736,8 @@ export class EvilScene extends Phaser.Scene {
     if (this.baseForced()) return;
     this.base = this.base === null ? newBaseSel() : null;
     this.trade = null;
+    if (this.block()?.neighbour?.sitting) this.base = null;
+    this.nb = null;
     this.ledger = null;
     this.roster = null;
     this.file = null;
@@ -826,6 +840,57 @@ export class EvilScene extends Phaser.Scene {
     this.line = null;
     this.notice = null;
     this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  // ---- Slice 13: the neighbour page ----
+
+  private toggleNeighbour(): void {
+    if (this.card) return;
+    const block = this.block();
+    if (block?.neighbour?.sitting) return;
+    if (this.nb === null && (!block || !neighbourModel(block, 0))) {
+      this.notice = 'There is no neighbour here yet.';
+      return void this.view?.refresh();
+    }
+    if (this.baseForced()) return;
+    this.nb = this.nb === null ? 0 : null;
+    this.base = null;
+    this.ledger = null;
+    this.roster = null;
+    this.file = null;
+    this.line = null;
+    this.gym = null;
+    this.notice = null;
+    this.cancelLineHold();
+    this.view?.refresh();
+  }
+
+  private neighbourKey(a: InputAction): void {
+    const block = this.block();
+    const m = block ? neighbourModel(block, this.nb ?? 0) : null;
+    if (a === 'back') { if (!block?.neighbour?.sitting) this.nb = null; return void this.view?.refresh(); }
+    if (!m) { this.nb = null; return void this.view?.refresh(); }
+    const n = Math.max(1, m.rows.length);
+    if (a === 'up' || a === 'down' || a === 'left' || a === 'right') { this.nb = ((this.nb ?? 0) + (a === 'up' || a === 'left' ? n - 1 : 1)) % n; return void this.view?.refresh(); }
+    if (a === 'confirm') this.neighbourDo();
+  }
+
+  /** Enter (or a tap) on the chosen row: the step refuses anything the page wouldn't allow. The Chair and the cave go to the battle. */
+  private neighbourDo(): void {
+    const block = this.block();
+    const m = block ? neighbourModel(block, this.nb ?? 0) : null;
+    const row = m?.rows.find((r) => r.sel);
+    if (!row) return;
+    const cues = services().session.evilStep(row.action);
+    const refused = cues.find((c) => c.id === 'refused') as { reason?: string } | undefined;
+    const said = cues.filter((c) => c.id === 'said').map((c) => (c as { line: string }).line);
+    this.notice = refused?.reason ?? (said.length ? said.join(' ') : null);
+    if (cues.some((c) => c.id === 'fight')) { this.nb = null; return this.startFight(); }
+    if (this.nb === null) this.nb = 0;
+    const after = this.block();
+    const rows = after ? neighbourModel(after, 0)?.rows.length ?? 0 : 0;
+    if ((this.nb ?? 0) >= rows) this.nb = 0;
     this.view?.refresh();
   }
 

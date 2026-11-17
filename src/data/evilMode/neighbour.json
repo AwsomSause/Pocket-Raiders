@@ -1,0 +1,197 @@
+{
+  "note": "Evil Mode slice 13, 'a neighbour' (design Part 15a sections 1 to 7; build plan Part 31 slice 13). Kanto's neighbour, Giovanni and Team Rocket: the seven stances, five ticks on fixed days, his messages, the Sit-Down, the Chair, the Betrayal and the Legend, and what's left of a team that falls. All text is from Part 15a. Numbers are starting values; none are playtested. 'on': false is the undo: the neighbour's holdings are nobody's.",
+  "on": true,
+  "stances": [
+    { "id": "war", "word": "War", "means": "Take what you can. They answer each one.", "board": "Their holdings outlined in red." },
+    { "id": "rivals", "word": "Rivals", "means": "No deal and no love. Each war job's a step toward War.", "board": "Their colour, plain." },
+    { "id": "wary", "word": "Wary", "means": "Nobody's said anything. Their Grunts watch the team's from across the street.", "board": "Their colour, and a small eye on the border." },
+    { "id": "truce", "word": "Truce", "means": "A line on the Board. Neither crosses.", "board": "A drawn line. Their holdings can't be approached." },
+    { "id": "front", "word": "Front", "means": "The team poses as a chapter of theirs, and pays a tenth.", "board": "The team's holdings wear their colour as a stripe." },
+    { "id": "merger", "word": "Merger", "means": "One team. Whose was decided by a Boss battle.", "board": "One colour." },
+    { "id": "understanding", "word": "Understanding", "means": "Not a deal. Two Bosses said one true thing to each other.", "board": "Nothing. The word's on the Ledger and not on the Board." }
+  ],
+  "ladder": ["war", "rivals", "wary", "truce"],
+  "allies": ["truce", "front", "merger", "understanding"],
+  "opinion": {
+    "words": ["Thinks you're a gang.", "Thinks you're untidy.", "Hasn't made up his mind.", "A competitor. He respects those.", "Likes being asked a real question.", "An equal. He'd say so to nobody.", "Sends soup back washed."]
+  },
+  "neighbours": [
+    {
+      "id": "giovanni", "team": "rocket", "region": 0, "boss": "Giovanni", "teamName": "Team Rocket", "sign": "G.", "colour": "#b01030", "minors": false,
+      "dread": 6, "pen": 20, "penAfter": 43,
+      "holds": { "1": 3, "2": 2, "3": 3, "4": 2, "5": 2, "6": 2 },
+      "kinds": ["local", "opportunity", "safehouse"],
+      "base": 3,
+      "ground": "The Game Corner's back room. Two chairs. He's already seated.",
+      "refuses": "The team's Café. \"I don't eat where I'm discussed.\"",
+      "does": "He knows who he's taking from. Every holding he leans on's in a ledger with the local's name, their debts and their mother's health. The player's got a Ledger too. His is better kept.",
+      "ticks": [
+        { "n": 1, "stage": 3, "day": 1, "name": "The first move", "text": "Mt. Moon. Fossils. A Grunt's beaten by a child and tells everyone.", "radio": "On the Radio: a Rocket Grunt beaten at Mt. Moon by a child, and telling everyone. It's how the team hears the Hero's name." },
+        { "n": 2, "stage": 4, "day": 3, "name": "The reach", "text": "The Game Corner's back room fills. The Pen goes from twenty to forty-three.", "radio": "On the Radio: the Game Corner shut early. Nobody says why. Rocket's Dread +2." },
+        { "n": 3, "stage": 6, "day": 2, "name": "The big job", "text": "Silph. Saffron's sealed.", "radio": "On the Radio: Silph Co. taken. Saffron's sealed, and Rocket's people are on its streets." },
+        { "n": 4, "stage": 7, "day": 4, "name": "The Legend", "text": "The cave.", "radio": "The sky's wrong this morning. Every holding's one mood colder for a day. The kits are restless." },
+        { "n": 5, "stage": 8, "day": 1, "name": "The fall", "text": "Viridian. The Hero's eighth Badge.", "radio": "The Hero walked into the Viridian Gym and out again. Rocket's colour comes off the Board, holding by holding, over an evening." }
+      ],
+      "basket": {
+        "stage": 1, "day": 2,
+        "text": "A fruit basket. A card: \"Welcome to Kanto. — G.\" The fruit's excellent. There's a business card under the pears.",
+        "choices": ["Eat it", "Send it back", "Send one in return", "Have someone look at it"],
+        "said": [
+          "Nothing. The Mess has pears for three days. They're the best anyone's had. \"They would be.\"",
+          "Sent back. Opinion: down a step. \"Wasteful.\"",
+          "Sent one in return. Opinion: up a step. It goes back and forth all region. Nobody mentions it at any Sit-Down.",
+          "There's nothing in it. No wire, no note, no trick. \"It's a fruit basket. That's worse, somehow.\""
+        ],
+        "opinion": [0, -1, 1, 0],
+        "war": "Another fruit basket, at War, as he said. The card: \"— G.\"",
+        "chair": "The last basket. The card says \"Well done. — G.\" There's no business card under the pears."
+      },
+      "rules": [
+        { "n": 1, "rule": "Know who you're taking from", "broken": "You leaned on {holding} on my side of the river. It was untidy. {who}'s mother's ill." },
+        { "n": 2, "rule": "Pay your people on the day", "broken": "You missed a Friday. I heard from one of yours. He's one of mine now. He's better paid and less happy. Does that trouble you? It should trouble one of us." },
+        { "n": 3, "rule": "Never take from someone who'll have nothing left", "broken": "{holding}. One rod, one boat, one Pokémon. You took it. I've sent it back with a card. The card has your name on it. You're welcome." },
+        { "n": 4, "rule": "Don't confuse the firm with yourself", "broken": "" }
+      ],
+      "sitDown": {
+        "first": {
+          "opens": "\"You've a district. I've six. You'll want to know whether I mind.\"",
+          "mess": "\"I don't mind competition. I mind mess. You leaned on {holding} on my side of the river. It was untidy. {who}'s mother's ill.\"",
+          "warm": "\"I don't mind competition. I mind mess. You haven't made any. I looked.\"",
+          "you": "\"How d'you know about that?\"",
+          "book": "\"It's in my ledger. Everything's in my ledger. Is it in yours?\"",
+          "choices": ["It is now.", "We'll stay our side.", "I want your six.", "What's in yours about us?"],
+          "voiceOnly": 3,
+          "answers": [
+            "\"Good. Then we understand each other. A firm that doesn't know who it's taking from's a gang.\" A Truce is offered.",
+            "\"You'll stay your side until you're large enough not to. I did. I'd rather you told me so now than in six weeks.\" A Truce is offered, with a shorter line. He's noted the answer.",
+            "He's not offended. \"Then you'll have to be better at it than I am. I've rules. Four of them. Have you rules?\" War. And he sends the fruit basket anyway, monthly, till it's over.",
+            "He takes a book from his jacket. It's small. He reads. \"'Arrived the ninth. One van. The Boss went to the lighthouse the first night and looked at the sea for an hour.' Was it an hour?\" Opinion: up. He likes being asked a real question."
+          ],
+          "offer": "\"A tenth. Paid on Fridays. You'll find I'm fair.\"",
+          "frontCard": [["Takes", "A tenth of takings, every seventh day. Your name off your own door."], ["From", "You."], ["Gives", "Heat −1 a day, floor 2. His lawyers. His fences. Applicants from his waiting list."], ["Moves", "Proud −2. Belonging −1 a district."], ["Not known", "What he'll ask you to do."], ["How it's written down", "\"Worked for Giovanni.\""], ["The other way", "Say no. He's fair about that, too."]],
+          "frontChoices": ["Take the Front", "Say no"],
+          "frontSaid": ["\"Fridays, then.\" The team's holdings wear Rocket's colour as a stripe.", "\"No. Fair.\" He doesn't look disappointed. He doesn't look anything."],
+          "ask": "\"One question and then I've a Gym to open. Why are you doing this? I don't mean the Creed on your wall. I had mine painted too. I mean the reason.\"",
+          "dontKnow": "I don't know yet.",
+          "wrote": "He writes it in the small book."
+        },
+        "second": {
+          "opens": "\"You came. Sit. I've a list.\"",
+          "stands": "He stands up. It's the only time. \"Sit. No: I'll sit when you have.\"",
+          "kept": "\"Four rules. You've kept the three I'd have checked. I didn't expect that.\""
+        },
+        "whys": {
+          "profit": ["\"Money. It's honest. It's the only thing that is.\"", "\"Because somebody's going to own this street, and it'll be somebody worse.\""],
+          "cause": ["\"Because the people who run this region won't fix it.\"", "\"Somebody has to be the one who's wrong out loud.\""],
+          "power": ["\"Because I'm tired of asking.\"", "\"To find out how far it goes.\""],
+          "wonder": ["\"There's something out there nobody's allowed to see. I want to see it.\"", "\"Because the old stories were true, and nobody's looking.\""],
+          "belonging": ["\"Because these sixteen haven't got anybody else.\"", "\"Because nobody ever picked us. So we picked each other.\""],
+          "spite": ["\"Because somebody once told me I wouldn't.\"", "\"So they'll have to look at me.\""]
+        },
+        "pen": {
+          "you": "\"Open your Pen.\"",
+          "laughs": "He laughs. Properly. Then: \"You've counted.\"",
+          "count": "\"Forty-three.\"",
+          "goOn": "\"Forty-three. I did know. Go on.\"",
+          "empty": "He's quiet. \"You've never kept one. Not one. ...Then you're not in my business at all. I've been sending fruit to a stranger.\" He opens eleven: the ones taken from children. \"The other thirty-two are sold. I don't break a sale. That's a rule too; it isn't one of the four.\"",
+          "opens": 11
+        },
+        "son": {
+          "you": "\"You've a son.\"",
+          "lines": ["He doesn't move. It's the longest pause in the scene: four seconds.", "Giovanni: \"That isn't in anybody's ledger.\"", "You: \"No. He's in Johto. Red hair. He thinks strength's the only thing because he watched you lose it.\"", "Giovanni: \"...I haven't lost yet.\"", "You: \"You will. There's a child on the road with three Badges. You know there is.\"", "Giovanni: \"Yes.\" A pause. \"What would you do. With six weeks.\""],
+          "choices": ["Write to him.", "Stop now.", "I don't know. I haven't got one."],
+          "said": [
+            "He does. It isn't shown.",
+            "\"No. But I'll stop after.\"",
+            "\"No. You've {crew}.\" He looks at the second chair. Stance: Understanding. It's on the Ledger and not on the Board. Nobody on either Roster knows why the border's gone quiet."
+          ],
+          "stop": "When the Hero beat him at Viridian he disbanded Rocket in the room, and added one sentence: \"Somebody told me six weeks ago. I needed to lose first. I'm sorry it had to be you who showed me; you seem a decent child.\""
+        },
+        "table": {
+          "line": "A line on the Board. Neither crosses. Truce.",
+          "person": "Handed over. He doesn't say thank you. He nods.",
+          "minor": "Minors are never on the table. The slot refuses them.",
+          "job": "\"Tick two. The Game Corner. ...Fine. Not this week.\" The reach is called off; the big job comes two days late.",
+          "jobNo": "\"No.\"",
+          "money": "\"A tenth. Accepted.\" Opinion: up a step.",
+          "fact": "Where the Hero is. He writes it down. \"Thank you. I knew, but thank you.\"",
+          "promise": "\"Neither of us touches the child.\" \"Agreed.\" Every one of them agrees."
+        },
+        "rise": "He leaves first.",
+        "noTable": "Nothing else goes on the table."
+      },
+      "asks": [
+        { "n": 1, "job": "Carry a crate from Vermilion to Celadon. Don't open it.", "from": "Not known", "why": "It's forty Poké Balls. Anyone with Hands knows by the weight." },
+        { "n": 2, "job": "Lend six Grunts for Silph.", "from": "Silph's staff: 212 people, held a day.", "why": "It's the big job. The team's uniforms are in the lobby when the Hero walks in." },
+        { "n": 3, "job": "Put the Lavender tower's caretaker out.", "from": "Mr Fuji.", "why": "He's the man who takes in what Rocket leaves behind. Every Kind on the Roster refuses." }
+      ],
+      "askSaid": { "did": "Done. It's on the Ledger under the team's name. The Card for it had \"The other way\" filled in, and you read it.", "no": "\"I'd have thought less of you.\" The Front ends. Rivals." },
+      "chair": {
+        "says": "\"The loser works for the winner. I'd be a difficult employee. I expect you would too. Shall we find out which of us has to manage it?\"",
+        "won": "Giovanni's beaten, in front of both Rosters. Rocket is the team's.",
+        "lost": "Lost, in front of both Rosters. Soft loss: the team isn't ended. It's his: a Merger the wrong way up. One order a district.",
+        "again": "One more try, in the next district.",
+        "free": "Giovanni fell to the Hero. The team's its own again, smaller, with his Grunts asking what happens now."
+      },
+      "betrayal": { "who": "Proton", "grabs": "The Master Ball from Silph, and the cave.", "says": "\"He had four rules. I never saw the point of the fourth.\"" },
+      "legend": "mewtwo",
+      "fall": {
+        "boss": "Giovanni leaves. He's the Boss who'd never serve. He hands you the small book. \"You'll want this. Page one's you.\"",
+        "admins": [
+          { "id": "archer", "name": "Archer", "joins": false, "says": "Won't join. \"I'll wait for him.\" He goes to Johto." },
+          { "id": "ariana", "name": "Ariana", "joins": true, "talent": "books", "flaw": "proud", "says": "Joins, as an Officer: Books, Proud. \"Won't work for a fool.\"" },
+          { "id": "proton", "name": "Proton", "joins": false, "never": true, "says": "The Betrayal. A cell, or gone. He can't be hired: his card's got no line at all." },
+          { "id": "petrel", "name": "Petrel", "joins": false, "says": "Turns up as an applicant, in a bad disguise. The third time he's himself." }
+        ],
+        "grunts": 26,
+        "gruntsSaid": "Twenty-six want to stay. {beds} take a bed. The rest wait at the Town. Two get jobs at the Café.",
+        "holdings": "Rocket's holdings are the team's, at mood Wary. \"Is it the same rent?\"",
+        "pen": { "clean": "Clean hands: the doors are opened that night and the game doesn't ask.", "choice": "Rocket's Pen is the team's to decide.", "choices": ["Open the doors", "Keep it"], "said": ["The doors are opened that night.", "Kept. It's on the Ledger."] },
+        "scheme": { "name": "Rocket's plan", "parts": ["Means", "Place", "Key", "Moment"], "other": "Don't. It was never a good idea." },
+        "hero": "The Hero's reason was about Rocket. That evening it's rewritten in their own hand: it's about you now."
+      },
+      "vault": {
+        "title": "A LEGEND IN THE VAULT",
+        "card": [["Takes", "Nothing more."], ["From", "Nobody. The sea, perhaps. The sky."], ["Gives", "The strongest Pokémon this team'll ever field."], ["Moves", "Dread +3. Heat +4, and its floor's now 5. Every Kind Grunt's Loyalty −1."], ["The Hero", "Will hear by tomorrow. This is the day the Hero stops thinking the team's small."], ["Not known", "Whether it wants to be here."], ["How it's written down", "\"We kept it.\""], ["The other way", "Open the ball. Regard +3. It goes. It looks at the Boss first."]],
+        "choices": ["Keep it", "Open the ball"],
+        "kept": "We kept it.",
+        "freed": "Opened the ball. It looked at the Boss first, and went. The weather's right by morning; locals are one warmer."
+      }
+    }
+  ],
+  "numbers": { "chairFromStage": 4, "chairOffset": 2, "legendOffset": 3, "warSlow": 4, "stopLate": 2, "frontHeatFloor": 2, "frontTenth": 10, "frontEvery": 7, "frontProud": -2, "warHeat": 2, "legendDread": 3, "legendHeat": 4, "legendHeatFloor": 5, "freedRegard": 3, "joinLoyalty": 4, "basketEvery": 30, "brokeOpinion": -2, "maxTable": 3 },
+  "lines": {
+    "off": "There's no neighbour in this build.",
+    "inPersonOnly": "In person only: at the In person beat.",
+    "outToday": "The Boss has already been out today.",
+    "fallen": "Their chair's empty.",
+    "once": "One Sit-Down a district. A second needs a reason he accepts.",
+    "sitting": "A Sit-Down is going on.",
+    "notSitting": "Nobody's sitting down.",
+    "chairEarly": "Never before District 3.",
+    "chairShut": "The Chair opens after a Sit-Down, or at War with the count in the team's favour.",
+    "chairDone": "The Chair's been tried, and the next try waits for the next district.",
+    "chairMinors": "Children can't be challenged for a chair.",
+    "fight": "A battle is waiting.",
+    "noLegend": "Nobody's in the cave.",
+    "legendDone": "The Legend's been met this region.",
+    "broke": "Broke our word.",
+    "brokeSaid": "A job across the Truce's line. Stance: Rivals. Opinion down two. It travels.",
+    "warStep": "A war job. Stance one step toward War: {stance}.",
+    "quiet": "A quiet district. Stance one step back: {stance}.",
+    "slowed": "The war's going the team's way. Rocket's clock slows four days.",
+    "stopped": "Tick {n} didn't happen. The next comes two days late.",
+    "invite": "A message: \"Tomorrow. The same room. Bring your count. — G.\"",
+    "frontTenth": "Paid Giovanni his tenth: {amount}.",
+    "ask": "A job on the Board in Rocket's colour: {job}",
+    "under": "An order from Giovanni: {job}",
+    "fellHero": "Giovanni fell to the Hero.",
+    "betrayalRadio": "On the Radio: {who} made a grab. {grabs}",
+    "race": "The Betrayal's tonight. Whoever gets to the cave first. Go in person.",
+    "heroLegend": "The Hero met the Legend in the cave. Whether they've got it with them at the Reckoning is theirs to know.",
+    "caught": "Caught. It's in the ball. Read the Card in the morning.",
+    "notCaught": "It got away. The cave is quiet now.",
+    "legendLost": "Lost to it. The party is healed; nothing ends. It's gone from the cave.",
+    "pick": "Up/Down picks. Enter answers. Esc closes."
+  }
+}

@@ -2,6 +2,7 @@
 // Slice 1 built pages 1 to 5 (Boss, name, Creed, Line, Doctrine); slice 9 adds the Look, the Patron and the first region
 // (Kanto is the only one open), and a team begins at the region's Arrival.
 
+import { ensureNeighbour } from './neighbour';
 import { EVIL_DATA, type EvilData } from './data';
 import { layDistrict } from './board';
 import { bandOf, foundingRoster, teamLoyalty } from './people';
@@ -100,7 +101,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   const seed = opts.seed ?? opts.boss;
   const funds = patron ? Math.floor(modify({ here: { region: 0, stage, day: 1, beat: 'morning' }, team: { patron } as never, crew }, 'funds', {}, creed.start.funds, data)) : creed.start.funds;
   const block: EvilModeBlock = {
-    v: 10,
+    v: 11,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -144,11 +145,13 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     gyms: [],
     region: null as never,
     economy: emptyEconomy(),
+    neighbour: null,
     base: null,
     raid: null,
     law: { hot: 0, raids: [], heatHeld: null },
   };
   block.region = newRegion(block, seed, data);
+  block.neighbour = ensureNeighbour(block, data).neighbour;
   block.draws['evil-people'] = roster.draws;
   return { ok: true, block: EvilModeBlockSchema.parse(arriveApplicants(block, data)) };
 }

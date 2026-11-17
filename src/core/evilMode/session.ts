@@ -40,7 +40,14 @@ export function stepInRun(run0: RunState, action: EvilAction): { run: RunState; 
   if (!block) return { run: run0, cues: [], ok: false };
   const r = step(block, action);
   if (!r.ok) return { run: run0, cues: r.cues, ok: false };
-  return { run: { ...run, expansion: { ...(run.expansion ?? {}), evilMode: r.block } }, cues: r.cues, ok: true };
+  let out: RunState = { ...run, expansion: { ...(run.expansion ?? {}), evilMode: r.block } };
+  // Slice 13: "Open the ball": the Legend goes, out of the party or the box, once.
+  const nb = r.block.neighbour;
+  if (nb?.legend === 'freed' && nb.legendUid) {
+    const uid = nb.legendUid;
+    out = { ...out, party: out.party.filter((m) => m.uid !== uid), box: (out.box ?? []).filter((m) => m.uid !== uid), expansion: { ...(out.expansion ?? {}), evilMode: { ...r.block, neighbour: { ...nb, legendUid: null } } } };
+  }
+  return { run: out, cues: r.cues, ok: true };
 }
 
 /** Everything a block saved by an earlier slice is missing, made once: the district, then the Hero. */

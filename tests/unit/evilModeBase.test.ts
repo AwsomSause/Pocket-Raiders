@@ -616,7 +616,7 @@ describe('saves: block v9', () => {
     const b = based();
     const { base: _b, raid: _r, law: _l, ...rest } = b;
     const v9 = EvilModeBlockSchema.parse({ ...rest, v: 8 });
-    expect(v9).toMatchObject({ v: 10, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } });
+    expect(v9).toMatchObject({ v: 11, neighbour: null, base: null, raid: null, law: { hot: 0, raids: [], heatHeld: null } });
     expect(EvilModeBlockSchema.parse(JSON.parse(JSON.stringify(b)))).toEqual(b);
   });
   it('a damaged base is refused: an unknown room, a size of four', () => {

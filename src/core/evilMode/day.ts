@@ -12,11 +12,12 @@ import { heartsGo, moveLine } from './line';
 import { gymAct, gymEvening, gymResult } from './gym';
 import { recall, goOn, tallyOf, toRoad } from './region';
 import { bust, trade, ventureAct, type BustWay, type TradeReq, type VentureAct } from './economy';
+import { answerPost, chairAct, chairResult, legendAct, legendResult, neighbourDistrictEnd, neighbourEvening, neighbourMorning, putOnTable, rise, sitAnswer, sitDown } from './neighbour';
 import { EVIL_DATA } from './data';
 import { baseDistrict, baseEvening, build, enlarge, guard, moveRoom, pickSite, place, sellRoom, setLatch, staff, standAtWindow, unplace, walkBase, type PieceDraft } from './base';
 import { closeWalk, walkedLine, walkIt, walkResult } from './walk';
 import { bail, raidDone, raidDoor, raidEvening, raidOffice, raidOn, raidOrder, raidQueue, raidResult, raidTurn, visit, warnChoice } from './raid';
-import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type Question, type RoomType, type WingId } from './schema';
+import { BEATS, type Beat, type EvilModeBlock, type GymWay, type LineId, type OrderId, type Question, type RoomType, type TableThing, type WingId } from './schema';
 
 /** The action that ends each beat in slice 1 (the empty day). Later slices add more actions inside a beat. */
 export const BEAT_END: Record<Beat, BeatEndType> = {
@@ -51,7 +52,7 @@ export type EvilAction =
   | { type: 'post'; holdingId: string; id: string }
   | { type: 'unpost'; holdingId: string }
   | { type: 'goYourself'; holdingId: string }
-  | { type: 'battleResult'; won: boolean; fielded?: string[] }
+  | { type: 'battleResult'; won: boolean; fielded?: string[]; caught?: string }
   /** Slice 6: move the Line, once a region, at Night (Part 3 section 7.1). */
   | { type: 'moveLine'; to: LineId }
   /** Slice 8: one of the Gym's five ways, at the In person beat (Part 8a). */
@@ -64,6 +65,14 @@ export type EvilAction =
   | { type: 'trade'; req: TradeReq }
   | { type: 'venture'; id: string; act: VentureAct }
   | { type: 'bust'; way: BustWay; id?: string }
+  /** Slice 13: the neighbour. A Sit-Down (called at In person, three exchanges, then the table), the Chair, the cave, and answering a message. */
+  | { type: 'sitDown' }
+  | { type: 'sitAnswer'; i: number }
+  | { type: 'table'; thing: TableThing; personId?: string }
+  | { type: 'rise' }
+  | { type: 'chair' }
+  | { type: 'legend' }
+  | { type: 'answerPost'; id: string; i: number }
   /** Slice 10: the base (Part 16): a site, rooms at Night, staffing, Defend's pieces and people, the latch, the Night's walk and window. */
   | { type: 'pickSite'; site: string }
   | { type: 'build'; room: RoomType; at: string }
@@ -112,7 +121,8 @@ export const nextBeat = (beat: Beat): Beat => BEATS[(BEATS.indexOf(beat) + 1) % 
 /** One action. The input block is never changed; a new one is returned. */
 export function step(block0: EvilModeBlock, action: EvilAction): StepResult {
   const r = stepInner(block0, action);
-  return r.ok ? { ...r, block: settleRegion(r.block) } : r;
+  // Slice 13: the neighbour's Morning (messages, and each tick on its day) comes with every Morning, however it's reached.
+  return r.ok ? { ...r, block: neighbourMorning(settleRegion(neighbourDistrictEnd(r.block))) } : r;
 }
 
 /** Slice 9: a district that's just ended is tallied once, and the region waits on the tally (Part 2 section 4.2). */
@@ -145,6 +155,10 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
       const r = holdResult(block, action.won, action.fielded ?? []);
       return { block: endIfTaken(r.block), cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
     }
+    if (f.kind === 'chair' || f.kind === 'legend') {
+      const r = f.kind === 'chair' ? chairResult(block, action.won) : legendResult(block, action.won, action.caught ?? null);
+      return { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+    }
     if (f.kind === 'walk' || f.kind === 'raid') {
       const r = f.kind === 'walk' ? walkResult(block, action.won) : raidResult(block, action.won);
       return r.problem ? no(r.problem) : { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...('fight' in r && r.fight ? [{ id: 'fight' as const }] : [])], ok: true };
@@ -157,6 +171,17 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
     return { block: { ...block, queue, fight: null }, cues: [{ id: 'said', line: action.won ? 'Won fairly. It holds, from this Evening.' : 'Lost. The party is healed; nothing ends.' }], ok: true };
   }
   if (block.fight) return no('A battle is waiting.');
+  // Slice 13: a message can be answered at any beat. A Sit-Down going on takes the whole In person beat.
+  if (action.type === 'answerPost') {
+    const r = answerPost(block, action.id, action.i);
+    return r.problem ? no(r.problem) : { block: r.block, cues: r.lines.map((line) => ({ id: 'said' as const, line })), ok: true };
+  }
+  if (block.neighbour?.sitting && action.type !== 'sitAnswer' && action.type !== 'table' && action.type !== 'rise') return no('A Sit-Down is going on.');
+  if (action.type === 'sitDown' || action.type === 'sitAnswer' || action.type === 'table' || action.type === 'rise' || action.type === 'chair' || action.type === 'legend') {
+    const r = action.type === 'sitDown' ? sitDown(block) : action.type === 'sitAnswer' ? sitAnswer(block, action.i) : action.type === 'table' ? putOnTable(block, action.thing, action.personId) : action.type === 'rise' ? rise(block) : action.type === 'chair' ? chairAct(block) : legendAct(block);
+    if (r.problem) return no(r.problem);
+    return { block: r.block, cues: [...r.lines.map((line) => ({ id: 'said' as const, line })), ...(r.block.fight && !block.fight ? [{ id: 'fight' as const }] : [])], ok: true };
+  }
   // Slice 10: the base, the walk and the Raid. Each refuses here what doesn't fit, not only on screen.
   const baseStep = stepBase(block, action);
   if (baseStep) return baseStep.problem ? no(baseStep.problem) : { block: baseStep.block, cues: [...baseStep.lines.map((line) => ({ id: 'said' as const, line })), ...(baseStep.fight ? [{ id: 'fight' as const }] : [])], ok: true };
@@ -238,7 +263,7 @@ function stepInner(block0: EvilModeBlock, action: EvilAction): StepResult {
   let out: EvilModeBlock = { ...block, here: { ...block.here, day, beat: to } };
   // "Send them" fixes the odds; going into the Evening rolls every job once (design Part 30 section 5.2).
   if (action.type === 'send') out = fixOdds(out);
-  if (to === 'evening') out = raidEvening(baseEvening(gymEvening(resolveEvening(out))));
+  if (to === 'evening') out = raidEvening(baseEvening(neighbourEvening(gymEvening(resolveEvening(out)))));
   const cues: EvilCue[] = [{ id: 'beat', beat: to }];
   // Slice 4: Morning. Anyone at Loyalty 0 is gone, with a note; then the notice board (Part 30 section 6.2).
   // Slice 5: nobody stays posted overnight. The road's lines are shown at the Morning.
