@@ -85,7 +85,7 @@ export function rosterModel(block: EvilModeBlock, d: RosterDraft, data: EvilData
   if (d.tab === 0) {
     // Everyone who's ever had a card: those in first, then those who left (dimmed, with how).
     const list = [...inRoster(block), ...block.crew.filter((c) => c.where === 'left')];
-    const how = { line: 'over their line', loyalty: 'gone by morning', letGo: 'let go' } as const;
+    const how = { line: 'over their line', loyalty: 'gone by morning', letGo: 'let go', handshake: 'with a handshake', coat: 'and left the coat' } as const;
     return {
       ...base, applicants: null, empty: null, rows: list.length,
       people: list.map((p, i) => {

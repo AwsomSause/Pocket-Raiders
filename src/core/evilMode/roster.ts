@@ -104,7 +104,9 @@ export function promote(block: EvilModeBlock, id: string, answer: number, data: 
     if (c.where === 'in' && c.rank === p.rank && c.jobs > p.jobs) return moveLoyalty(c, L.passedOver, data);
     return c;
   });
-  let b: EvilModeBlock = { ...block, crew };
+  // Slice 7: anyone passed over knocks the next Night (Part 24a section 1.2, rule 6).
+  const passed = block.crew.filter((c) => c.id !== id && c.where === 'in' && c.rank === p.rank && c.jobs > p.jobs).map((c) => ({ id: c.id, day: block.here.day }));
+  let b: EvilModeBlock = { ...block, crew, night: { ...block.night, passed: [...block.night.passed, ...passed] } };
   b = appendLog(b, { kind: 'promote', who: [id], text: `Day ${block.here.day}. ${p.name} made ${rankDef('lead', data).title}. "${promoteLine(p, data)}" The Boss: "${said}"` });
   return { block: b, problem: null, line: `${p.name}: "${promoteLine(p, data)}"` };
 }

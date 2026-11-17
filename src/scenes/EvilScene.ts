@@ -26,6 +26,8 @@ import { cardModel, LEDGER_ACTS, ledgerModel, newLedger, type LedgerDraft } from
 import { cardView, filedCorner, ledgerView } from '../ui/redux/screens/evilLedger';
 import { applicantActs, isQuestionAct, newRoster, personActs, refusalModel, rosterModel, type RosterDraft } from '../core/evilMode/rosterScreens';
 import { officeView, refusalView, rosterView } from '../ui/redux/screens/evilRoster';
+import { newNight, nightModel, type NightDraft } from '../core/evilMode/nightScreens';
+import { nightView } from '../ui/redux/screens/evilNight';
 import { crossers } from '../core/evilMode/people';
 
 /** Keys that confirm (input.ts KEY_MAP), read raw on the Card so a held key can be told from a press. */
@@ -49,6 +51,9 @@ export class EvilScene extends Phaser.Scene {
   /** Slice 4: the Roster (and the Office inside it), and the cursor on the yard's three answers. */
   private roster: RosterDraft | null = null;
   private refuseSel = 0;
+  /** Slice 7: the Office at Night; who answered the door last (for their reply). */
+  private night: NightDraft = newNight();
+  private lastWho: { name: string; ref: string | null } | null = null;
 
   constructor() {
     super('Evil');
@@ -65,6 +70,8 @@ export class EvilScene extends Phaser.Scene {
     this.filed = null;
     this.roster = null;
     this.refuseSel = 0;
+    this.night = newNight();
+    this.lastWho = null;
     const { session } = services();
     if (!session.run) return void this.scene.start('MainMenu');
     session.evilEnsure();
@@ -92,7 +99,9 @@ export class EvilScene extends Phaser.Scene {
           const yard = refusalModel(block);
           const over = yard ? refusalView(yard, this.refuseSel) : rm?.office ? officeView(rm.office) : '';
           const look = `<div style="--team-a:${block.team.look.a};--team-b:${block.team.look.b}">`;
-          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
+          // Slice 7: at Night the Office takes the board's place (design Part 29 section 11).
+          const night = block.here.beat === 'night' && !block.district.end && !ledger && !roster ? nightView(nightModel(block, this.night, this.lastWho), this.notice) : undefined;
+          return frameView(c, frame, this.notice, `${look}${boardView(boardModel(block, this.disp), frame, this.notice, { ...(ledger ? { ledger } : {}), ...(roster && !ledger ? { roster } : {}), ...(night ? { night } : {}), filed: filedCorner(this.filed) })}${over}</div>`);
         }
         if (block) return frameView(c, frameModel(block, archetype.name), this.notice);
         return foundingView(c, foundingModel(this.draft, { bossName: archetype.name, bossFile, starter: species?.name ?? '—', starterFile, oldLook, length: services().session.settings.expansion.evilRunLength }));
@@ -124,6 +133,13 @@ export class EvilScene extends Phaser.Scene {
         oanswer: (i) => this.officeAnswer(Number(i)),
         ocancel: () => { if (this.roster) this.roster = { ...this.roster, office: null }; this.view?.refresh(); },
         refuse: (id) => this.answer(id as 'withdraw' | 'swap' | 'insist'),
+        nanswer: (i) => this.knockAnswer(Number(i)),
+        nreply: () => this.replyNext(),
+        ndesk: (i) => this.deskAct(Number(i)),
+        nhear: (i) => this.hearOut(Number(i)),
+        nwall: (i) => this.wallPick(Number(i)),
+        ndown: (i) => this.wallDown(Number(i)),
+        nkeep: () => { this.night = { ...this.night, confirm: null }; this.view?.refresh(); },
         clear: (id) => { services().session.evilStep({ type: 'clearJob', holdingId: id }); this.view?.refresh(); },
       },
       overs: { over: (i) => { if (!this.founded()) { this.draft = { ...this.draft, at: Number(i) }; this.view?.refresh(); } } },
@@ -228,6 +244,7 @@ export class EvilScene extends Phaser.Scene {
     const refused = cues.find((c) => c.id === 'refused');
     this.notice = refused && 'reason' in refused ? refused.reason : null;
     this.disp = { ...newDispatch(), at: this.disp.at };
+    this.night = newNight();
     this.view?.refresh();
   }
 
@@ -241,6 +258,8 @@ export class EvilScene extends Phaser.Scene {
     if (this.block()?.refusal) return this.refusalKey(a);
     if (this.ledger) return this.ledgerKey(a);
     if (this.roster) return this.rosterKey(a);
+    const nb = this.block();
+    if (nb?.district && !nb.district.end && nb.here.beat === 'night') return this.nightKey(a);
     const block = this.block();
     if (!block?.district) return a === 'confirm' ? this.advance() : a === 'back' ? this.leave() : undefined;
     const d = this.disp;
@@ -588,6 +607,88 @@ export class EvilScene extends Phaser.Scene {
     const filed = services().session.run?.expansion?.evilMode?.log.at(-1)?.text;
     if (!cues.some((c) => c.id === 'refused') && filed) this.filed = filed;
     this.view?.refresh();
+  }
+
+  // ---- Slice 7: the Office at Night ----
+
+  private knockAnswer(i: number): void {
+    const block = this.block();
+    const k = block?.night.knock;
+    if (!block || !k) return;
+    const p = k.who ? block.crew.find((c) => c.id === k.who) : undefined;
+    const who = { name: p?.name ?? (EVIL_DATA.night.knocks.find((x) => x.n === k.n)?.who.outside ?? 'Nobody'), ref: p?.ref ?? null };
+    const cues = services().session.evilStep({ type: 'answerKnock', answer: i });
+    const refused = cues.find((c) => c.id === 'refused');
+    if (refused && 'reason' in refused) { this.notice = refused.reason; return this.view?.refresh(); }
+    const said = cues.find((c) => c.id === 'said');
+    const moved = cues.find((c) => c.id === 'moved');
+    this.lastWho = who;
+    this.notice = null;
+    this.night = { ...newNight(), reply: { line: said && 'line' in said ? said.line : '', moved: moved && 'line' in moved ? moved.line : EVIL_DATA.night.text.nothingMoved!, step: 0 } };
+    this.view?.refresh();
+  }
+
+  /** After an answer: a press shows what moved, as one line; another and they go. */
+  private replyNext(): void {
+    const r = this.night.reply;
+    if (!r) return;
+    this.night = r.step === 0 ? { ...this.night, reply: { ...r, step: 1 } } : newNight();
+    this.view?.refresh();
+  }
+
+  private deskAct(i: number): void {
+    const block = this.block();
+    if (!block || this.night.reply || block.night.knock && i !== 3 && i !== 2) return;
+    const id = ['hear', 'sleep', 'wall', 'lights'][i];
+    if (id === 'lights') return this.advance();
+    if (id === 'wall') this.night = { ...newNight(), pane: 'wall' };
+    else if (id === 'hear') {
+      if (this.block()?.night.actedOn === block.here.day) { this.notice = EVIL_DATA.night.text.acted!; return this.view?.refresh(); }
+      this.night = { ...newNight(), pane: 'hear' };
+    } else this.said(services().session.evilStep({ type: 'nightAction', action: 'sleep' }));
+    this.view?.refresh();
+  }
+
+  private hearOut(i: number): void {
+    const block = this.block();
+    const p = block ? block.crew.filter((c) => c.where === 'in')[i] : undefined;
+    if (!p) return;
+    this.said(services().session.evilStep({ type: 'nightAction', action: 'hear', id: p.id }));
+    this.night = newNight();
+    this.view?.refresh();
+  }
+
+  private wallPick(i: number): void {
+    const w = this.block()?.night.wall[i];
+    const desk = w ? EVIL_DATA.night.wall.find((x) => x.id === w.item)?.kind === 'desk' : true;
+    this.night = { ...this.night, pane: 'wall', row: i, confirm: w && w.down === null && !desk ? i : null };
+    this.view?.refresh();
+  }
+
+  private wallDown(i: number): void {
+    this.said(services().session.evilStep({ type: 'takeDown', index: i }));
+    this.night = { ...this.night, confirm: null };
+    this.view?.refresh();
+  }
+
+  /** Keys in the Office: Up/Down the answers or the desk, Enter does, Esc backs out (to the desk, or leaves from it). */
+  private nightKey(a: InputAction): void {
+    const block = this.block()!;
+    const N = this.night;
+    if (N.reply) return a === 'confirm' ? this.replyNext() : undefined;
+    const m = nightModel(block, N, this.lastWho);
+    const by = a === 'up' || a === 'left' ? -1 : a === 'down' || a === 'right' ? 1 : 0;
+    if (by && m.rows) { this.night = { ...N, row: (N.row + by + m.rows) % m.rows, confirm: null }; return this.view?.refresh(); }
+    if (a === 'back') {
+      if (N.pane === 'room') return this.leave();
+      this.night = N.confirm !== null ? { ...N, confirm: null } : newNight();
+      return this.view?.refresh();
+    }
+    if (a !== 'confirm') return;
+    if (N.pane === 'hear') return this.hearOut(N.row);
+    if (N.pane === 'wall') return N.confirm === N.row ? this.wallDown(N.row) : this.wallPick(N.row);
+    if (m.door) return this.knockAnswer(N.row);
+    return this.deskAct(N.row);
   }
 
   private leave(): void {

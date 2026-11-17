@@ -42,7 +42,7 @@ const deck = (id: string) => EVIL_DATA.people.people.find((p) => p.id === id)!;
 /** A person straight from the deck, put on the Roster (for scenes that need a particular someone). */
 const withPerson = (b: EvilModeBlock, id: string, patch: Partial<Crew> = {}): EvilModeBlock => {
   const d = deck(id);
-  const p: Crew = { id: d.id, ref: d.id, name: d.name, age: d.age, minor: !!d.minor, talent: d.talent, flaw: d.flaw, flawFound: true, line: d.line, lineHeard: false, rank: 'grunt', loyalty: 5, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, ...patch };
+  const p: Crew = { id: d.id, ref: d.id, name: d.name, age: d.age, minor: !!d.minor, talent: d.talent, flaw: d.flaw, flawFound: true, line: d.line, lineHeard: false, rank: 'grunt', loyalty: 5, where: 'in', outOn: null, jobs: 0, asked: 0, unpaid: 0, fitIn: null, mood: 'easy', knocks: 0, ...patch };
   return { ...b, crew: [...b.crew.filter((c) => c.id !== id), p] };
 };
 const local = (b: EvilModeBlock) => b.district!.holdings.find((h) => h.kind === 'local' && h.mood !== 'shut' && !EVIL_DATA.district.locals.find((l) => l.id === h.ref)?.minor && EVIL_DATA.district.locals.find((l) => l.id === h.ref)?.noPrice === undefined)!;
@@ -364,7 +364,7 @@ describe('saves', () => {
     const { applicants: _a, drawn: _d, refusal: _r, ...rest } = b;
     const v3 = { ...rest, v: 3, crew: [1, 2, 3, 4].map((i) => ({ id: `g${i}`, name: `Grunt ${i}`, outOn: null })) };
     const out = EvilModeBlockSchema.parse(v3);
-    expect(out.v).toBe(4);
+    expect(out.v).toBe(5);
     expect(out.crew.map((c) => [c.id, c.name, c.ref, c.loyalty])).toEqual([1, 2, 3, 4].map((i) => [`g${i}`, `Grunt ${i}`, null, 8]));
     expect(out.applicants).toEqual([]);
     expect(out.refusal).toBeNull();

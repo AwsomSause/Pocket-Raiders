@@ -6,7 +6,7 @@ import { EVIL_DATA, type EvilData } from './data';
 import { layDistrict } from './board';
 import { bandOf, foundingRoster, teamLoyalty } from './people';
 import { arriveApplicants } from './roster';
-import { LINE_IDS, STREAMS, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
+import { LINE_IDS, STREAMS, emptyNight, type EvilModeBlock, EvilModeBlockSchema, type LineId, type RunLength } from './schema';
 
 export interface FoundingChoice {
   name: string;
@@ -74,7 +74,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
   // Slice 4: the starting Roster, drawn from the Founders on `evil-people` (design Part 10a section 2).
   const roster = foundingRoster(opts.seed ?? opts.boss, creed.id, data);
   const block: EvilModeBlock = {
-    v: 4,
+    v: 5,
     from: 'founding',
     settings: { length: opts.length },
     team: {
@@ -109,6 +109,7 @@ export function foundTeam(choice: FoundingChoice, opts: { boss: string; length: 
     applicants: [],
     drawn: roster.crew.map((c) => c.id),
     refusal: null,
+    night: emptyNight(),
   };
   block.draws['evil-people'] = roster.draws;
   return { ok: true, block: EvilModeBlockSchema.parse(arriveApplicants(block, data)) };
