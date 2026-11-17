@@ -60,6 +60,7 @@ export function editionKey(event: GameEvent, date: Date): string {
   if (event.seedRule === 'day') return `${event.id}@${ymd(date)}`;
   // A window that wraps the new year (Dec–Jan) belongs to the year it started in.
   const s = event.schedule;
+  if (s.kind === 'dated') return `${event.id}@${s.start}`;
   const year = date.getUTCFullYear();
   const wrapped = s.kind === 'yearly' && s.start > s.end && monthDay(date) <= s.end;
   return `${event.id}@${wrapped ? year - 1 : year}`;
@@ -104,13 +105,14 @@ export interface ActiveGameEvent {
 }
 
 const yearlyEvents = (content: Content) => [...content.gameEvents.values()].filter((e) => e.schedule.kind === 'yearly');
-const calendarEvents = (content: Content) => [...content.gameEvents.values()].filter((e) => e.schedule.kind === 'yearly' || e.schedule.kind === 'daily');
+const calendarEvents = (content: Content) => [...content.gameEvents.values()].filter((e) => e.schedule.kind === 'yearly' || e.schedule.kind === 'daily' || e.schedule.kind === 'dated');
 const dayStart = (date: Date) => Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
 
 /** The window of a calendar event in words: "01-25 to 02-12", "every Friday", "new moon". */
 export function scheduleText(event: GameEvent): string {
   const s = event.schedule;
   if (s.kind === 'yearly') return s.start === s.end ? s.start : `${s.start} to ${s.end}`;
+  if (s.kind === 'dated') return `${s.start} to ${s.end}`;
   if (s.kind === 'daily') return { friday13: 'every Friday the 13th', newMoon: 'every new moon', fullMoon: 'every full moon', friday: 'every Friday', tuesday: 'every Tuesday', palindrome: 'palindrome dates (11/11...)' }[s.rule];
   return 'weekly';
 }
@@ -144,6 +146,12 @@ export function activeGameEvents(content: Content, date: Date): ActiveGameEvent[
       if (DAILY_RULES[s.rule]!(date)) out.push({ event, edition: editionKey(event, date), endsIn: dayStart(date) + DAY - date.getTime() });
       continue;
     }
+    if (s.kind === 'dated') {
+      const from = Date.parse(`${s.start}T00:00:00Z`);
+      const to = Date.parse(`${s.end}T00:00:00Z`) + DAY;
+      if (date.getTime() >= from && date.getTime() < to) out.push({ event, edition: editionKey(event, date), endsIn: to - date.getTime() });
+      continue;
+    }
     if (s.kind !== 'yearly' || !inYearlyWindow(md, s.start, s.end)) continue;
     const [m, d] = s.end.split('-').map(Number) as [number, number];
     let end = Date.UTC(date.getUTCFullYear(), m - 1, d + 1);
@@ -164,6 +172,11 @@ export function nextWindowIn(event: GameEvent, date: Date): number {
       if (DAILY_RULES[s.rule]!(day)) return i === 0 ? 0 : day.getTime() - date.getTime();
     }
     return Number.MAX_SAFE_INTEGER;
+  }
+  if (s.kind === 'dated') {
+    const from = Date.parse(`${s.start}T00:00:00Z`);
+    const to = Date.parse(`${s.end}T00:00:00Z`) + DAY;
+    return date.getTime() >= to ? Number.MAX_SAFE_INTEGER : Math.max(0, from - date.getTime());
   }
   if (s.kind !== 'yearly') return 0;
   if (inYearlyWindow(monthDay(date), s.start, s.end)) return 0;
@@ -299,4 +312,14 @@ export function gameRewardText(content: Content, r: QuestReward): string {
   if (r.title) parts.push(`title "${r.title}"`);
   if (r.trainer) parts.push(`the trainer ${content.archetypes.get(r.trainer)?.name ?? r.trainer}`);
   return parts.join(', ') || 'nothing';
+}
+
+/** Region weights the editions in force give to being a run's first region (1 = unboosted). */
+export function firstRegionWeights(content: Content, editions: readonly string[]): Record<string, number> {
+  const out: Record<string, number> = {};
+  for (const ed of editions) {
+    const b = content.gameEvents.get(eventIdOf(ed))?.firstRegionBoost;
+    if (b) for (const r of b.regions) out[r] = (out[r] ?? 1) * b.weight;
+  }
+  return out;
 }

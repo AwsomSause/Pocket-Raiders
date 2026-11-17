@@ -1625,7 +1625,7 @@ function sosCall(ctx: BattleContext, events: BattleEvent[]): void {
   const { player } = activeCombatants(ctx);
   const scary = ['intimidate', 'unnerve', 'pressure'].includes(abilityIn(ctx, player) ?? '');
   const orb = (ctx.party[battle.activeIndex]?.boosts ?? []).some((b) => b.kind === 'sos');
-  const result = rollSos({ battle, caller, maxHp: maxHp(content, caller), scary, orb });
+  const result = rollSos({ battle, caller, maxHp: maxHp(content, caller), scary, orb, scale: content.balance.sos.callScale });
   if (result.kind === 'none') return;
   const sos = (battle.sos ??= freshSos());
   sos.lastTurnCalled = battle.turn;
@@ -5960,7 +5960,13 @@ function trainerAiTurn(ctx: BattleContext, enemy: Combatant, events: BattleEvent
   // Beta 0.6 B5: bosses, rivals, the Elite Four and Champions get the player's budget: 10 heals + 6 revives.
   const bossy = Boolean(battle.trainer?.leaderId || battle.rival);
   const caps = content.balance.itemCaps;
-  const kit = bossy ? Math.max(wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!, caps.healsPerBattle) : wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!;
+  const base = wealth === undefined ? cfg.maxItems : WEALTH_POTIONS[wealth]!;
+  // Gym Leaders, Elite Four and ordinary trainers are capped (a bit more as their Pokémon level up); Rivals and Champions keep the player's budget.
+  const classId = battle.trainer?.classId;
+  const topLevel = Math.max(1, ...battle.enemyTeam.map((m) => m.level));
+  const bonus = Math.floor(topLevel / cfg.healCaps.perLevels);
+  const classCap = battle.rival || classId === 'champion' ? null : classId === 'gym-leader' ? cfg.healCaps.gym + bonus : classId === 'elite-four' ? cfg.healCaps.elite + bonus : cfg.healCaps.ordinary + (battle.trainer?.leaderId ? bonus : 0);
+  const kit = classCap !== null ? Math.min(base, classCap) : bossy ? Math.max(base, caps.healsPerBattle) : base;
   if (battle.enemyItemsUsed < kit && mon.hp / max < cfg.healBelow) {
     const gain = Math.min(max - mon.hp, Math.floor(max * (wealth === undefined ? cfg.healFraction : WEALTH_HEAL[wealth]!)));
     if (gain > 0) {

@@ -831,13 +831,18 @@ function pickEvent(content: Content, run: RunState, rng: Rng, taken: Set<string>
   const theme = run.stage ? getTheme(content, run.stage.themeId) : null;
   const cfg = content.balance.events;
   const featured = featuredMapEvents(content, run);
-  const pool = eligibleEvents(content, run)
+  const open = eligibleEvents(content, run)
     // Story events (`xe.*`) are placed by the quiet-node scheduler, never drawn at random.
-    .filter((e) => !taken.has(e.id) && !e.forced && !e.id.startsWith('xe.'))
+    .filter((e) => !taken.has(e.id) && !e.forced && !e.id.startsWith('xe.'));
+  // Kice 2026-11-17: flatten the odds. A rarity's weight is shared out among the events of that rarity (halfway: / sqrt of
+  // how many there are), so a rarity with many events no longer buries each of them, and one with few no longer lifts them.
+  const perRarity: Record<string, number> = {};
+  for (const e of open) perRarity[e.rarity] = (perRarity[e.rarity] ?? 0) + 1;
+  const pool = open
     .map((e) => ({
       item: e,
       weight:
-        (cfg.rarityWeights[e.rarity] ?? 0) *
+        ((cfg.rarityWeights[e.rarity] ?? 0) / Math.sqrt(perRarity[e.rarity] ?? 1)) *
         (theme && e.types.some((t) => theme.types.includes(t)) ? cfg.themeWeight : 1) *
         (featured.has(e.id) || e.gameEvent || e.mode ? cfg.gameEventWeight : 1) *
         (regionOnly(e, run) ? cfg.regionEventWeight : 1) *

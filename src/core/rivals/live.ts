@@ -69,6 +69,8 @@ export function rivalResultLine(run: RunState, rivalId: string, rivalWon: boolea
 const friendId = (run: RunState): string => `friend-${run.seed}`;
 
 /** The Friend's record, registered the first time a region has them. Needs the main rival and the rivalFriend setting. */
+/** Friend arcs (Kice 2026-11-17): the Friend is no longer always rivals-become-friends. */
+const FRIEND_ARCS = ['rivals-become-friends', 'loner-learns-to-trust', 'burnout-rediscovers-joy', 'showboat-finds-meaning'] as const;
 function friendRecord(run: RunState) {
   const all = run.expansion?.rival;
   if (!all) return undefined;
@@ -76,7 +78,7 @@ function friendRecord(run: RunState) {
   if (all[id]) return all[id];
   const main = Object.values(all).find((r) => r.role === 'main');
   if (!main) return undefined;
-  return registerRival(run, { id, role: 'friend', personality: friendPersonality(run.seed, main.personality), style: main.style, arc: 'rivals-become-friends' });
+  return registerRival(run, { id, role: 'friend', personality: friendPersonality(run.seed, main.personality), style: main.style, arc: FRIEND_ARCS[fnv1a(`${run.seed}:friend-arc`) % FRIEND_ARCS.length]! });
 }
 
 export const friendName = (run: RunState): string => PRESENCE.friend.names[fnv1a(`${run.seed}:friend-name`) % PRESENCE.friend.names.length]!;

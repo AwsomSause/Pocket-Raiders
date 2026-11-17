@@ -37,7 +37,7 @@ export const PlayConfigSchema = z.object({
   /** A spectator's one-time buff. */
   spectator: z.object({ chance: z.number().min(0).max(1), boost: z.record(z.string(), z.number().int()), names: z.array(z.string()).min(1) }),
   /** Arena hazards hit both sides every `every` turns; smashing the arena once hurts the foe. */
-  arena: z.object({ every: z.number().int().min(2), fraction: z.number().min(0).max(0.5), interact: z.number().min(0).max(0.5), types: z.record(z.string(), ArenaKindSchema) }),
+  arena: z.object({ every: z.number().int().min(2), fraction: z.number().min(0).max(0.5), interact: z.number().min(0).max(0.5), chance: z.number().min(0).max(1).default(0.5), types: z.record(z.string(), ArenaKindSchema) }),
 });
 export type PlayConfig = z.infer<typeof PlayConfigSchema>;
 
