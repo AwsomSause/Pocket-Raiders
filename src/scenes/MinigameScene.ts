@@ -3,7 +3,9 @@
 // rules code the moment the game ends; this screen only shows the outcome.
 
 import Phaser from 'phaser';
-import { getMinigame, minigameView } from '../core/minigame/flow';
+import { getMinigame, minigameView, parkDoorSide, parkEventSide, parkWaiting } from '../core/minigame/flow';
+import { SAFARI_ID } from '../core/greenneedle/safari';
+import { openPark } from './safariPark';
 import { services } from '../game/services';
 import { paintSkinBackdrop, skinFor } from '../ui/screenSkins';
 import { aeroBackdrop, bounceIn, floatIdle } from '../ui/aero';
@@ -32,6 +34,14 @@ export class MinigameScene extends Phaser.Scene {
 
   create(data?: { focus?: number; slow?: boolean; paused?: boolean }): void {
     const { session } = services();
+    // gn.18: back from an event inside Safari Land. Its next room plays first; otherwise the visit is on again.
+    if (parkWaiting(session.run!)) {
+      const next = session.continuePark();
+      if (next) {
+        this.scene.start('Event', { sideId: next });
+        return;
+      }
+    }
     const run = session.run!;
     const motion = session.settings.battleAnimations;
     if (run.phase !== 'minigame' || !run.minigame) {
@@ -47,6 +57,11 @@ export class MinigameScene extends Phaser.Scene {
     const view = minigameView(session.content, run);
     const view0 = view;
     const outcome = run.minigame.outcome;
+    // gn.18 in the New UI: the park is a grid you walk (scenes/safariPark.ts) until the visit ends; the outcome uses this screen.
+    if (reduxOn() && !skin && run.minigame.id === SAFARI_ID && !outcome) {
+      openPark(this, { title: def.name, onDone: () => this.scene.restart({ focus: 0 }), onEvent: (sideId) => this.scene.start('Event', { sideId }) });
+      return;
+    }
     this.add.text(GAME_WIDTH / 2, 22, `${def.name}  ·  ${def.difficultyTiers[run.minigame.tier]!.label}`, textStyle(30, COLORS.textLight)).setOrigin(0.5);
     drawPanel(this, 16, 48, GAME_WIDTH - 32, 96, { fill: COLORS.panelDark, border: COLORS.borderMuted, thin: true });
     this.add.text(28, 54, view.hud.filter((h) => h.length > 0).join('   ·   '), textStyle(18, '#f0e0a0', { wordWrap: { width: GAME_WIDTH - 56 } }));
@@ -81,6 +96,9 @@ export class MinigameScene extends Phaser.Scene {
         if (cell.disabled) return;
         playSfx(this, 'ui.select');
         const after = session.minigameAct(cell.id);
+        // gn.18: an event inside the park opens (the visit waits for it).
+        const inside = parkEventSide(after);
+        if (inside) return void this.scene.start('Event', { sideId: inside });
         playSfx(this, MEDAL_SFX[after.minigame?.outcome?.medal ?? 'pending'] ?? 'se.exp', 0.7);
         this.scene.restart({ focus: i, slow: this.slow, paused: this.paused });
       },
@@ -152,7 +170,10 @@ export class MinigameScene extends Phaser.Scene {
   private leave(): void {
     const { session } = services();
     const finished = session.run!.minigame?.outcome != null;
+    // gn.18: the door taken at Safari Land's far gate opens as soon as the visit is over.
+    const door = parkDoorSide(session.run!);
     const run = session.leaveMinigame();
+    if (door) return void this.scene.start('Event', { sideId: door });
     this.scene.start(sceneForRun(run), { notice: finished ? '' : 'You left the minigame.', focus: 0 });
   }
 }

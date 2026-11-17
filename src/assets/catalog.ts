@@ -490,6 +490,13 @@ export const overworldAssetIds = {
   indicator: (name: OverworldIndicator) => `ow.ind.${name}`,
 };
 
+/** The same overworld sheets as files under images/ (the New UI draws them as HTML: Safari Land's park). */
+export const overworldSheetFiles = {
+  props: 'overworld/hubtown_props',
+  trainer: (name: string) => `overworld/trainers/${name}.png`,
+  follower: (key: string) => `overworld/followers/${key}.png`,
+};
+
 /** The Event Indicators flairs in images/overworld/indicators (file names kept from the pack). */
 export const OVERWORLD_INDICATORS = ['flair_talk', 'flair_important', 'flair_item', 'flair_pokeball', 'flair_quest', 'flair_question', 'event_question'] as const;
 export type OverworldIndicator = (typeof OVERWORLD_INDICATORS)[number] | 'quest_available_simple_anim';

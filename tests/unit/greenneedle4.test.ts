@@ -543,9 +543,11 @@ describe('gn.18 Safari Land', () => {
     expect(s.quiet).toBe(2);
     s.mode = 'walk';
     s.mon = null;
-    act(s, 'run');
+    // The park is a grid: a run is two tiles (one step a tile) the way you face.
+    act(s, 'run:right');
     expect(s.quiet).toBe(1);
-    expect(s.steps).toBe(500 - 3 - 5 - 5);
+    expect([s.x, s.y]).toEqual([3, 3]);
+    expect(s.steps).toBe(500 - 3 - 5 - 2);
     // An encounter: Ball, bait, rock or leave, with the chances.
     s.mode = 'meet';
     s.mon = { species: 'tauros', catchP: 0.3, fleeP: 0.12, behaviour: 'grazing', noticed: true, star: false, hungry: null, fed: false, dragonair: false };
@@ -565,11 +567,11 @@ describe('gn.18 Safari Land', () => {
 
   it('a Kangaskhan family crosses the plain once; nothing can be thrown at it; the warden buys a photo of the young one', () => {
     const s = fresh();
-    act(s, 'camera');
-    act(s, 'walk');
-    if (s.mode === 'meet') act(s, 'leave');
-    act(s, 'walk');
+    s.camera = true;
+    // Ten tiles walked on the plain (the path along the middle is short grass: nothing comes out of it).
+    for (let i = 0; i < 5; i++) act(act(s, 'go:right'), 'go:left');
     expect(s.mode).toBe('family');
+    expect(s.fam).toEqual({ x: 4, y: 3 });
     expect(cells(s).find((c) => c.id === 'ball')).toMatchObject({ disabled: true, detail: "Not while the young one's out of the pouch" });
     act(s, 'photo');
     expect(s.photoBest).toBe(10);
@@ -580,7 +582,15 @@ describe('gn.18 Safari Land', () => {
 
   it('two herds at the waterhole: wait three times and one backs down, which changes who lives there', () => {
     const s = fresh();
-    act(s, 'next');
+    // Walk east along the path to the edge of the plain: the next area opens.
+    s.familySeen = true;
+    for (let i = 0; i < 13; i++) {
+      act(s, 'go:right');
+      if (s.mode === 'meet') act(s, 'leave');
+      if (s.mode === 'spot') act(s, 'stay');
+    }
+    expect(s.area).toBe(1);
+    expect([s.x, s.y]).toEqual([1, 3]);
     expect(s.mode).toBe('herd');
     act(act(act(s, 'wait'), 'wait'), 'wait');
     expect(['rhyhorn', 'tauros']).toContain(s.herd);
@@ -589,7 +599,14 @@ describe('gn.18 Safari Land', () => {
 
   it('tracking to a nest (two forks): leaving the egg is Quiet +2; a wrong print loses the trail', () => {
     const s = fresh();
+    // The prints are a tile in the Long Grass: stepping on it asks.
     s.area = 2;
+    Object.assign(s, { x: 10, y: 2 });
+    for (let i = 0; i < 20 && s.mode !== 'spot'; i++) {
+      Object.assign(s, { x: 10, y: 2, mode: 'walk', mon: null });
+      act(s, 'go:right');
+    }
+    expect(s.spot).toBe('prints');
     act(s, 'track');
     const right = s.track!.print;
     act(act(s, `print:${right}`), `print:${right}`);
@@ -599,6 +616,7 @@ describe('gn.18 Safari Land', () => {
     expect([s.quiet, s.nestLeft]).toEqual([q + 2, true]);
     const t = fresh();
     t.area = 3;
+    Object.assign(t, { mode: 'spot', spot: 'prints' });
     act(t, 'track');
     act(t, `print:${(t.track!.print + 1) % 3}`);
     expect([t.mode, t.egg]).toEqual(['walk', null]);
@@ -620,12 +638,14 @@ describe('gn.18 Safari Land', () => {
   it('at Quiet 8 or more, a Dragonair asleep on a rock in the Far Marsh, and only then', () => {
     const s = fresh();
     s.area = 3;
+    Object.assign(s, { x: 1, y: 1 });
     s.migrationSeen = true;
     s.quiet = 9;
     for (let i = 0; i < 40 && s.mode !== 'meet'; i++) act(s, 'wait');
     expect(s.mon).toMatchObject({ species: 'dragonair', behaviour: 'sleeping', noticed: false });
     const low = fresh();
     low.area = 3;
+    Object.assign(low, { x: 1, y: 1 });
     low.migrationSeen = true;
     low.quiet = 4;
     for (let i = 0; i < 40; i++) {
@@ -651,7 +671,8 @@ describe('gn.18 Safari Land', () => {
     expect(flagOf(run, 'safari-free')).toBe(run.regionIndex + 1);
     expect(flagOf(run, 'safari-quiet')).toBe(9);
     const here = run.stage!.map.nodes.find((n) => n.id === run.stage!.current)!;
-    if (run.regionOrder[run.regionIndex] === 'kanto') expect(here.sides.some((x) => x.eventId === 'cs-kanto-fuchsia-tauros')).toBe(true);
+    // The Stampede and the Gold Teeth are spots inside the park now (tests/unit/gnscreen-safari.test.ts), not stops left behind.
+    expect(here.sides.some((x) => x.eventId === 'cs-kanto-fuchsia-tauros')).toBe(false);
     const loud = visit('t18-loud');
     (loud.minigame!.state as SafariState).quiet = 2;
     const after = minigameAct(content, loud, 'exit');
