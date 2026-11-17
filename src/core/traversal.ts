@@ -9,6 +9,7 @@
 // own hash, never a gameplay stream), so adding obstacles moves no other roll. Placement happens once at stage
 // start and is stored on the stage (run v34), so the season or a front changing later never moves an obstacle.
 
+import { scaledCap } from './stageLength';
 import { z } from 'zod';
 import json from '../data/traversal.json';
 import { runPerks } from './archetypes';
@@ -100,7 +101,7 @@ export function placeObstacles(content: Content, run: RunState): void {
   const stage = run.stage;
   if (!stage || stage.kind !== 'stage' || !content.balance.world.traversal) return;
   const { extra, weight } = perkTweaks(content, run);
-  const want = TRAVERSAL.perStage + extra;
+  const want = scaledCap(TRAVERSAL.perStage, run) + extra;
   stage.obstacles = {};
   if (want <= 0) return;
   const rng = new Rng(hashSeed(`${run.seed}::traversal::${run.regionIndex}::${stage.index}`));

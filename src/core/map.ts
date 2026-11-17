@@ -7,6 +7,7 @@
 // exactly two trainers. The last column is the gym leader. Healing stops and
 // shops sit beside nodes and don't count as levels.
 
+import { BASE_STAGE_COLUMNS, scaleColumn } from './regions';
 import type { Campaign, Content } from './contentSchema';
 import type { Rng } from './rng';
 import type { MapNode, SideStop, StageMap, StageState } from './state';
@@ -24,6 +25,20 @@ export interface PacingOptions {
   regionIndex: number;
 }
 
+/** The trainer-column windows for a stage of `C` columns: the configured ones on 20, an even spread (more of them) on a longer stage. */
+export function pacingWindows(C: number, base: readonly (readonly [number, number])[]): [number, number][] {
+  if (C <= BASE_STAGE_COLUMNS) return base.map(([first, last]) => [Math.min(first, C - 1), Math.min(last, C - 1)] as [number, number]);
+  const n = Math.round(base.length * (C / BASE_STAGE_COLUMNS));
+  const lo = scaleColumn(base[0]![0], C);
+  const span = scaleColumn(base[base.length - 1]![1], C) - lo + 1;
+  const out: [number, number][] = [];
+  for (let i = 0; i < n; i++) {
+    const a = lo + Math.floor((i * span) / n);
+    out.push([a, Math.min(C - 1, a + Math.max(1, Math.floor(span / n) - 1))]);
+  }
+  return out;
+}
+
 export function generateStageMap(content: Content, campaign: Campaign, rng: Rng, pacing?: PacingOptions): StageMap {
   const cfg = { ...content.balance.stage, columns: campaign.columns, trainerColumns: campaign.trainerColumns };
   const C = cfg.columns;
@@ -36,18 +51,19 @@ export function generateStageMap(content: Content, campaign: Campaign, rng: Rng,
   let usePacing = !!pacing;
   if (pacing) {
     // Stage pacing: 4–5 trainer columns, one from each window; 1–2 of them skippable (a wild node beside the trainer).
-    const total = Math.min(rng.int(pc.totalMin, pc.totalMax), pc.windows.length);
+    // A longer stage gets proportionally more trainer columns (6 to 8 on 30 nodes); on the old 20 nothing changes, roll for roll.
+    const factor = C / BASE_STAGE_COLUMNS;
+    const windows = pacingWindows(C, pc.windows);
+    const total = Math.min(Math.round(rng.int(pc.totalMin, pc.totalMax) * Math.max(1, factor)), windows.length);
     const picked: number[] = [];
-    for (const [first, last] of pc.windows.slice(0, total)) {
-      const lo = Math.min(first, C - 1);
-      const hi = Math.min(last, C - 1);
+    for (const [lo, hi] of windows.slice(0, total)) {
       let col = rng.int(lo, hi);
       while (picked.includes(col) && col < hi) col += 1;
       if (!picked.includes(col)) picked.push(col);
     }
-    if (picked.length < pc.totalMin) usePacing = false;
+    if (picked.length < Math.round(pc.totalMin * Math.max(1, factor))) usePacing = false;
     else {
-      const avoidable = Math.min(rng.int(pc.avoidableMin, pc.avoidableMax), Math.max(0, picked.length - 3));
+      const avoidable = Math.min(Math.round(rng.int(pc.avoidableMin, pc.avoidableMax) * Math.max(1, factor)), Math.max(0, picked.length - 3));
       const pool = [...picked];
       while (optionalColumns.length < avoidable) optionalColumns.push(pool.splice(rng.int(0, pool.length - 1), 1)[0]!);
       optionalColumns.sort((a, b) => a - b);
@@ -221,8 +237,10 @@ export function validateStageMap(map: StageMap): string[] {
     if (map.trainerColumns.length !== 2) problems.push(`expected 2 trainer columns, found ${map.trainerColumns.length}`);
   } else {
     const total = map.trainerColumns.length + map.optionalTrainerColumns.length;
-    if (total < 4 || total > 5) problems.push(`expected 4–5 trainer columns, found ${total}`);
-    if (map.optionalTrainerColumns.length > 2) problems.push(`expected at most 2 skippable trainer columns, found ${map.optionalTrainerColumns.length}`);
+    const f = Math.max(1, map.columns / BASE_STAGE_COLUMNS);
+    const [lo, hi, skippable] = [Math.round(4 * f), Math.round(5 * f), Math.round(2 * f)];
+    if (total < lo || total > hi) problems.push(`expected ${lo}–${hi} trainer columns, found ${total}`);
+    if (map.optionalTrainerColumns.length > skippable) problems.push(`expected at most ${skippable} skippable trainer columns, found ${map.optionalTrainerColumns.length}`);
     for (const c of map.optionalTrainerColumns) if (map.nodes.filter((n) => n.column === c).length < 2) problems.push(`skippable trainer column ${c} has no wild node beside the trainer`);
   }
   // No crossing lines between neighbouring columns (keeps the map readable).

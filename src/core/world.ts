@@ -8,7 +8,7 @@ import { effectiveAttributes } from './attributes';
 import type { Content, Weather } from './contentSchema';
 import { runGameEventIds } from './gameEvents';
 import { currentColumn, findNode } from './map';
-import { getCampaign } from './regions';
+import { getCampaign, runCampaign } from './regions';
 import { stageKey } from './mapItems';
 import { abilityOf } from './pokemon';
 import { hashSeed, Rng } from './rng';
@@ -18,7 +18,7 @@ import type { MapNode, RunState, StageState } from './state';
 const worldOf = (content: Content) => content.balance.world;
 
 /** Stages finished before this one, counted from the start of the run. */
-const stagesDone = (content: Content, run: RunState): number => run.regionIndex * getCampaign(content, run.campaignId).stagesPerRegion + (run.stage?.index ?? 0);
+const stagesDone = (content: Content, run: RunState): number => run.regionIndex * runCampaign(content, run).stagesPerRegion + (run.stage?.index ?? 0);
 
 // ---------- fog of war ----------
 

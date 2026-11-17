@@ -11,6 +11,7 @@
 // rarity roll (story.rarity.momentChance), and the returning Pokémon is built from
 // the battle the run had already planned, so no other roll changes.
 
+import { scaledCap } from '../stageLength';
 import type { Content, TypeName } from '../contentSchema';
 import { typeEffectiveness } from '../battle/damage';
 import { CHAMPION_CLASS, ELITE_FOUR_CLASS, evolvedFormAt, type PlannedMember, type TrainerPlan } from '../encounters';
@@ -83,7 +84,7 @@ function incident(content: Content, run: RunState, where: Where): NemesisMoment[
   const flags = run.story.flags;
   if (battle.outcome === 'caught' || !battle.outcome || battle.raid || battle.event || battle.totem || battle.rivalId || battle.returning || battle.firstRival || battle.fishing || battle.hunted) return [];
   if (!cfg.enabled || openNemeses(run).length >= cfg.maxActive) return [];
-  if (run.story.nemeses.filter((n) => n.formedAt.region === where.region).length >= cfg.perRegion) return [];
+  if (run.story.nemeses.filter((n) => n.formedAt.region === where.region).length >= scaledCap(cfg.perRegion, run)) return [];
   const trainer = battle.trainer;
   const source: Nemesis['source'] = battle.kind === 'wild' ? 'wild' : trainer?.leaderId ? 'boss' : 'trainer';
   const team = battle.enemyTeam;

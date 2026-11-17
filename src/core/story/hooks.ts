@@ -3,6 +3,7 @@
 // really happened and never decides an outcome itself (Hyper moments are
 // decided by the battle engine; this file only tells their story).
 
+import { scaledCap } from '../stageLength';
 import { cheerBattleStart } from '../greenneedle/cheer';
 import { stageNumber } from '../events';
 import { evolveMoments, noteCocoon } from '../moments/runMoments';
@@ -574,7 +575,7 @@ function trainerVow(content: Content, run: RunState, triggers: StoryTrigger[], a
   const last = standing[0];
   if (standing.length !== 1 || !last || last.hp > maxHp(content, last) * rule.lowHpShare) return;
   const inRegion = vowedTrainers(run).filter((p) => p.battles[0]?.where.region === where.region);
-  if (inRegion.length >= rule.effect.perRegion || inRegion.filter((p) => p.battles[0]?.where.stage === where.stage).length >= rule.effect.perStage) return;
+  if (inRegion.length >= scaledCap(rule.effect.perRegion, run) || inRegion.filter((p) => p.battles[0]?.where.stage === where.stage).length >= scaledCap(rule.effect.perStage, run)) return;
   const profile = createEnemyProfile(content, run, {
     id: `trainer-${where.region}-${where.stage ?? 0}-${battleIndex(run)}`,
     name: trainer.name,

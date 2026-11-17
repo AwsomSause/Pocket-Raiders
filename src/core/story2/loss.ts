@@ -4,7 +4,6 @@
 import { gainCharge } from './feats';
 import type { Content } from '../contentSchema';
 import { emit } from '../story/record';
-import { getMode } from '../rules';
 import type { BattleState, RunState } from '../state';
 
 export const storyLossFlag = (rivalId: string): string => `sv2:loss:${rivalId}`;
@@ -14,12 +13,18 @@ export const storyLossFlag = (rivalId: string): string => `sv2:loss:${rivalId}`;
  * a rival or story loss never wipes a run: rivals, nemesis, Pokémon rivals, and event fights against a rival, an evil team or a ghost), except Adventure (checkpoints) and Death-Block, which keep their own wipe rules.
  * (Story event fights join this test when the event slices add them.)
  */
-export function storyLossApplies(run: Pick<RunState, 'story' | 'rules'>, battle: Pick<BattleState, 'rivalId' | 'rival' | 'firstRival' | 'nemesis' | 'monRival'> & { trainer?: { classId: string } | null }, content?: Pick<Content, 'balance'>, storyEvent = false): boolean {
+export function storyLossApplies(run: Pick<RunState, 'story' | 'rules'>, battle: Pick<BattleState, 'rivalId' | 'rival' | 'firstRival' | 'nemesis' | 'monRival'> & { trainer?: { classId: string; name?: string } | null }, content?: Pick<Content, 'balance'>, storyEvent = false): boolean {
   // A trainer of the "rival" class is a rival fight even when it carries no rival flag (the Story Run cast turns up as ordinary route trainers).
-  if (!(battle.rivalId || battle.rival || battle.firstRival || battle.nemesis || battle.monRival || battle.trainer?.classId === 'rival' || storyEvent)) return false;
+  if (!(battle.rivalId || battle.rival || battle.firstRival || battle.nemesis || battle.monRival || battle.trainer?.classId === 'rival' || isRivalName(run, battle.trainer) || storyEvent)) return false;
   if (run.story.v2?.mode === 'story_run') return true;
   if (content && !content.balance.rival.softLoss) return false;
-  return !run.rules?.deathBlock && getMode(run.rules?.modeId ?? '')?.checkpoints !== true;
+  // Kice 2026-11-17: a rival loss NEVER ends a run, in every mode (Adventure and Death-Block included).
+  return true;
+}
+
+/** A trainer carrying the name of one of the run's rivals is that rival, even when the fight carries no rival flag. */
+function isRivalName(run: Pick<RunState, 'story'>, trainer: { name?: string } | null | undefined): boolean {
+  return Boolean(trainer?.name && run.story.rivals.some((r) => r.name === trainer.name));
 }
 
 /** Records the loss once per fight: a flag per rival, a count in the run's facts, and a story moment (a memory and a chronicle line). */
