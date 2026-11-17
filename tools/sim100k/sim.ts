@@ -33,6 +33,7 @@ function fastClone<T>(v: T): T {
 // SIM_VERIFY=1 freezes the shared entries, so any code that did change one would crash and show up in the results.
 const SHARE = ['events', 'chronicle', 'replays'];
 const VERIFY = !!process.env.SIM_VERIFY;
+const TRACE = !!process.env.SIM_TRACE;
 const deepFreeze = (o: unknown): void => { if (o && typeof o === 'object' && !Object.isFrozen(o)) { Object.freeze(o); for (const v of Object.values(o)) deepFreeze(v); } };
 function cloneRun<T>(v: T): T {
   const r = v as unknown as Record<string, unknown>;
@@ -126,7 +127,7 @@ function playOne(n: number): Record<string, unknown> {
   const stepFn = ((cc: typeof content, rr: RunState) => A.step(cc, rr, true, p.skill === 'strong')) as typeof A.step;
   let maxParty = 0; let steps = 0, turns = 0, maxMoney = 0, stuck = 0, lastSig = '', lastSeq = 0, tlKey = '', siKey = '', longBattles = 0, maxBattleTurns = 0, dmgDealt = 0, dmgTaken = 0;
   let cur: null | { kind: string; classId: string; name: string; named: boolean; turns: number; lv: number; myLv: number; res: string | null; lead: string } = null;
-  const tried = new Set<string>();
+  const tried = new Set<string>(); const trace: string[] = []; let lastEx = '';
   let exploreNode = '', exploreCount = 0;
   let run: RunState;
   try {
@@ -270,7 +271,7 @@ function playOne(n: number): Record<string, unknown> {
         else if (side.kind === 'fish') { const offer = R.fishingOffer(content, next, sideId); if (!offer.length) continue; out = R.fish(content, next, sideId, Math.floor(bot() * offer.length)); }
         else { bump(c('exSkip'), side.kind); continue; }
         if ((out.phase as string) === 'minigame' || (out.phase as string) === 'expedition') { bump(c('exSkip'), `${side.kind}->${out.phase}`); continue; }
-        bump(c('ex'), label);
+        bump(c('ex'), label); lastEx = `${steps}:${label}`;
         return out;
       } catch (e) {
         bump(c('exErr'), `${label.split('|').slice(0, 2).join('|')}: ${norm((e as Error).message).slice(0, 110)}`);
@@ -313,6 +314,7 @@ function playOne(n: number): Record<string, unknown> {
       if (run.phase === 'decision' && run.pending[0]) bump(c('pend'), run.pending[0].kind);
       bump(c('ph'), run.phase);
       const before = run;
+      if (TRACE) { trace.push(`${steps} ${where(run)} hp=${run.party.map((m) => `${m.speciesId}:${m.hp}/${maxHp(content, m)}`).join(',')} cur=${run.stage?.current} lastEx=${lastEx}`); if (trace.length > 14) trace.shift(); }
       let out: { run: RunState; turn: R.TurnResult | null } | null = null;
       try {
         if (run.phase === 'map') { const ex = explore(run); if (ex) out = { run: ex, turn: null }; }
@@ -322,6 +324,8 @@ function playOne(n: number): Record<string, unknown> {
         row.error = norm(err.message).slice(0, 220);
         row.errorWhere = where(run);
         row.errorStack = stackOf(err);
+        row.errorSides = (run.stage?.map.nodes.find((x) => x.id === run.stage!.current)?.sides ?? []).filter((x) => !x.used).map((x) => `${x.kind}:${x.eventId ?? x.id}`).slice(0, 8);
+        if (TRACE) process.stdout.write(`SIDES ${JSON.stringify(row.errorSides)}\n`);
         break;
       }
       run = out.run; steps++;
@@ -352,6 +356,7 @@ function playOne(n: number): Record<string, unknown> {
       for (const [id, q] of Object.entries(run.inventory)) if (q < 0 || !Number.isFinite(q)) bugs.push(`bad item count ${id} ${q}`);
       if (new Set(run.party.map((m) => m.uid)).size !== run.party.length) bugs.push('duplicate party uid');
       if (run.party.length > R.partyCapacity(content, run)) bump(c('misc'), 'partyOverCap');
+      if (TRACE && bugs.length && !row.traced) { row.traced = 1; process.stdout.write(`FIRST BUG ${bugs[0]}\n${trace.join('\n')}\nlast turn events: ${JSON.stringify(out.turn?.events ?? []).slice(0, 1500)}\nmon: ${JSON.stringify(run.party.find((m) => m.hp > maxHp(content, m)) ?? null).slice(0, 900)}\n`); }
       if (bugs.length > 6) break;
       const sig = `${run.phase}|${run.encountersCompleted}|${run.money}|${run.party.map((m) => m.hp + ':' + m.xp).join(',')}|${run.battle?.turn ?? ''}|${run.pending.length}|${run.draft?.length ?? ''}|${run.stage?.current ?? ''}|${run.story.seq}`;
       if (sig === lastSig && before !== run) { if (++stuck >= 80) { bugs.push(`stalled @${where(run)}`); row.stalled = where(run); break; } } else stuck = 0;
@@ -360,6 +365,7 @@ function playOne(n: number): Record<string, unknown> {
   } catch (e) { row.error = `loop: ${norm((e as Error).message).slice(0, 200)}`; row.errorStack = stackOf(e); }
   if (cur) { if (run.phase !== 'over') { bump(c('misc'), 'battleOpenAtEnd'); cur = null; } else closeBattle(run); }
 
+  if (TRACE && (row.error || bugs.length)) process.stdout.write(`TRACE n=${n} err=${row.error ?? ''} bugs=${bugs.join(';')}\n${trace.join('\n')}\n`);
   if (process.env.SIM_DUMP) { const sz = (o: unknown): number => (o === null || typeof o !== 'object' ? 0 : 1 + Object.values(o as object).reduce((a: number, v) => a + sz(v) + 1, 0)); const top = Object.entries(run).map(([k, v]) => [k, sz(v)] as const).sort((a, b) => b[1] - a[1]).slice(0, 12); const sk = Object.entries(run.story).map(([k, v]) => [k, sz(v)] as const).sort((a, b) => b[1] - a[1]).slice(0, 10); process.stdout.write(`SIZES ${JSON.stringify(top)}\nSTORY ${JSON.stringify(sk)} events=${run.story.events.length}\n`); }
   const l = run.log; const mon = run.party; const x = (run.expansion ?? {}) as Record<string, any>; const st = run.story as unknown as Record<string, any>;
   const tr: Cnt = {};
