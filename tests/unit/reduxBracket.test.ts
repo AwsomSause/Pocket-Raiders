@@ -30,7 +30,8 @@ describe('New UI tournament bracket', () => {
   it('the four group pages together list all 32 entrants once, with the player in group A', () => {
     const view = at(1);
     const names = [0, 1, 2, 3].flatMap((p) => tourneyPage(view, file, p, 'T').columns[0]!.slots.map((s) => s?.name));
-    expect(names).toEqual(view.entrants.map((e) => e.name));
+    // The finalist stays hidden ("?") until the final (Kice 2026-11-16).
+    expect(names).toEqual(view.entrants.map((e) => (e.name === view.opponents[4]?.name ? '?' : e.name)));
     expect(tourneyPage(view, file, 0, 'T').columns[0]!.slots[0]?.you).toBe(true);
     expect(tourneyHome(view)).toBe(0);
   });

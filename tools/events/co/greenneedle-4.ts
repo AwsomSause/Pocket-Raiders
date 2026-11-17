@@ -105,7 +105,7 @@ const gn16: Json[] = [
     '**Fane:** "It\'s better than it pretends, Hector. They always are."',
   ), [ch('Step into the ring.', fight('The Hawlucha bows to the stands, not to you.', bout('Hawlucha', 'hawlucha', { gn: 'hawlucha' }, [item('black-belt'), room('gn-16-gap4')]), FOOTWORK,
     when('mankey-fifth-joined', { min: 1 }, crowd(2), 'When the Hawlucha taunts the front row, your Mankey steps between it and them, arms out. The fifth. It always will. Crowd +2.')))]),
-  room16('gn-16-gap4', 'Tournament: The Corridor', ring(4, { pokemon: 'primeape' }), say(
+  room16('gn-16-gap4', 'Tournament: The Corridor', ring(4), say(
     'Against the corridor wall, the rival\'s fighter is sitting with a thin trainer who\'s wrapping its hands.',
     '**The rival\'s trainer, a kid called Pax:** "It\'s from Route 25 too. Different troop. Same thieves. We didn\'t have anyone who brought the food back."',
     '**Pax:** "The prize money\'s for them. That\'s all. No hard feelings, whatever happens."',
@@ -116,7 +116,7 @@ const gn16: Json[] = [
   ), [ch('Step into the ring.', fight('The bell goes.', { ...trainer('Pax', { size: 1, types: ['fighting'], mirror: true, friendly: true, rule: { gn: 'final', evolveMid: true, noItems: true }, win: [
     when('tc-last-exchange', { min: 1 }, [room('gn-16-last')]),
     when('tc-last-exchange', { min: 0, max: 0 }, CHAMPION),
-  ], lose: FINAL_LOSS }), levelBonus: -1 }, FOOTWORK, setTo('tc-last-exchange', 0),
+  ], lose: FINAL_LOSS }), levelBonus: 0 }, FOOTWORK, setTo('tc-last-exchange', 0),
   when('tournament-bowed', { min: 1 }, [], 'In the front row, the Throh is bowing at every hit.'),
   when('tournament-crowd', { min: 5 }, [], 'The hall chants your Mankey\'s name. Its first move will go first.')))]),
   room16('gn-16-last', 'Tournament: The Last Exchange', ring(5, { pokemon: 'primeape' }), say(

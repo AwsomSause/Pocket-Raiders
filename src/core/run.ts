@@ -16,7 +16,8 @@ import { noteReleased } from './co/familiesA';
 import { regionGifts, regionInterest } from './flagPerks';
 import { noteBattle } from './expansion/fieldNotes';
 import { settleSky } from './sky/story';
-import { finishSpectate } from './sky/spectate';
+import { endOwnWatch, finishSpectate, ownWatching } from './sky/spectate';
+import { settleRivalRecruits } from './rivals/eventRecruit';
 import { battleEnded as formatBattleEnded } from './formats/registry';
 import { rescueFightEnded } from './evil/rescueFights';
 import { pondAfterTurn, pondShape } from './episodes/poliPond';
@@ -2369,6 +2370,8 @@ function startEncounterBase(content: Content, run: RunState, node: MapNode, rema
         const members = [...keep, { speciesId: mr.speciesId, level: mr.level, moves: mr.moves }];
         ret.plan = { ...ret.plan, members, levelInfo: members.map((_, i) => ret.plan.levelInfo[Math.min(i, ret.plan.levelInfo.length - 1)]!) };
       }
+      // Pidgey's Resolve / Poli-Pond: a Fearow or Poliwhirl owed to the main rival since before it was met joins now.
+      settleRivalRecruits(content, run);
       // Rival step-in: everything this rival caught before you stays on its team (the ace still goes last).
       if ((rivalBack.caught ?? []).length > 0) {
         const members = withCaughtMembers(content, rivalBack, ret.plan.members, Math.max(...ret.plan.members.map((m) => m.level)));
@@ -3563,6 +3566,15 @@ export function takeTurn(content: Content, current: RunState, action: PlayerActi
     run.phase = 'map';
     recordChanges(content, current, run, 'battle');
     return { run, events, end: null, defeated: false, cues, drama, spectated: { kind: battle.spectate.kind, lines: [`${winner === 1 ? mainRival(run)?.name : secondRival(run)?.name} wins.`, ...lines] } };
+  }
+  if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose') && ownWatching(run)) {
+    // Pidgey's Resolve, the spar and the rematch: watched, not played. The real team comes back untouched; the scene's own outcome applies.
+    endOwnWatch(run);
+    const lines = battle.event ? (battle.outcome === 'win' ? eventBattleWon(content, run, battle.event, battle.turn - 1) : eventBattleLost(content, run, battle.event)) : [];
+    run.battle = null;
+    run.phase = 'map';
+    recordChanges(content, current, run, 'battle');
+    return { run, events, end: null, defeated: false, cues, drama, spectated: { kind: battle.spectate.kind, lines } };
   }
   if (battle.spectate && (battle.outcome === 'win' || battle.outcome === 'lose')) {
     const lines = finishSpectate(content, run, battle.outcome);

@@ -108,6 +108,7 @@ import { auditEncounter, auditSpecies, directSpecies, type EncounterSource } fro
 import { hashSeed, Rng } from './rng';
 import { continueAfterDecisions, healParty, newMon, partyCapacity, startRaidBattle } from './run';
 import { prepareSpectate } from './sky/spectate';
+import { rivalMayRecruit } from './rivals/eventRecruit';
 import { applySky, shapeSkyFoe, skyCondition, skyConditionText } from './sky/story';
 import { NATURE_IDS } from './natures';
 
@@ -1663,8 +1664,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       discover(run, gotId, true);
       return `Traded ${given?.name ?? mon.speciesId} for ${got.name}`;
     }
-    case 'pond':
-      return applyPondEffect(content, run, e);
+    case 'pond': {
+      const said = applyPondEffect(content, run, e);
+      // You own the Poliwag now: Burl the Poliwhirl may go to your rival.
+      return e.action === 'keep' ? [said, rivalMayRecruit(content, run, 'poliwhirl', 'pond')].filter(Boolean).join('\n\n') : said;
+    }
     case 'gn':
       return applyGnEffect(content, run, e, { float: () => rng.float(), apply: (x) => applyEffect(content, run, x as EventEffect, rng, tradeUid), stage: stageNumber(content, run), region: currentRegion(content, run).id, met: (c) => conditionMet(content, run, c as EventCondition), picked: pickedUid });
     case 'stashParty':
@@ -1975,8 +1979,11 @@ export function applyEffect(content: Content, run: RunState, e: EventEffect, rng
       if (first) applyEffect(content, run, { kind: 'addEvent', eventId: first }, rng);
       return words;
     }
-    case 'sky':
-      return applySky(content, run, e);
+    case 'sky': {
+      const said = applySky(content, run, e);
+      // You own the Pidgeot now: the Fearow may go to your rival.
+      return e.act === 'joinBird' && (e.bird ?? 'pidgeot') === 'pidgeot' && said ? [said, rivalMayRecruit(content, run, 'fearow', 'sky')].filter(Boolean).join('\n\n') : said;
+    }
     case 'laterEvent':
       queueLaterEvent(run, e.eventId, e.nodes);
       return '';
@@ -2290,9 +2297,27 @@ function raidFlagMods(content: Content, run: RunState, mods: Extract<EventBattle
   if (battle.raid) battle.raid.pendingShields = battle.raid.pendingShields.filter((at) => at < share);
 }
 
+const STAND_IN_SPECIES = 'unown';
+const STAND_IN_FLAG = 'ev:stand-in-uid';
+/** The stand-in of a "no Pokémon of your own" fight leaves the party (called when that fight ends, won or lost). */
+function dropStandIn(run: RunState): void {
+  const uid = run.story.flags[STAND_IN_FLAG];
+  if (typeof uid !== 'string') return;
+  run.party = run.party.filter((m) => m.uid !== uid);
+  delete run.story.flags[STAND_IN_FLAG];
+}
+
 export function startEventBattle(content: Content, run: RunState, node: MapNode, b: EventBattle, rng: Rng, event: EventBattleRef): void {
   // Pidgey's Resolve: the two watched CPU fights set the player's team aside first.
   prepareSpectate(content, run, event.eventId);
+  // Sabrina's Labyrinth, the first fight (Kice 2026-11-16): you have no Pokémon of your own, and the companion has not been met yet.
+  // The engine needs someone on your side, so a level 1 Unown stands there for this one fight and is gone when it ends.
+  if (b.kind === 'trainer' && b.rule?.noPokemon && content.species.has(STAND_IN_SPECIES) && typeof run.story.flags[STAND_IN_FLAG] !== 'string') {
+    const standIn = newMon(content, run, STAND_IN_SPECIES, 1, 'p');
+    standIn.hp = maxHp(content, standIn);
+    run.story.flags[STAND_IN_FLAG] = standIn.uid;
+    run.party = [standIn, ...run.party];
+  }
   // Greenneedle gn.28: at full Alert every Grunt has one more Pokémon.
   if (b.kind === 'trainer' && b.moreIf && Number(run.story.flags[`ev:${b.moreIf.key}`] ?? 0) >= b.moreIf.at) b = { ...b, size: Math.min(7, b.size + 1) };
   const lastAlive = b.kind === 'trainer' && b.rule?.reversed ? run.party.map((p) => p.hp > 0).lastIndexOf(true) : -1;
@@ -2302,7 +2327,9 @@ export function startEventBattle(content: Content, run: RunState, node: MapNode,
   const activeIndex = dueler >= 0 ? dueler : lastAlive >= 0 ? lastAlive : run.party.findIndex((p) => p.hp > 0);
   const base = (b.kind !== 'raid' ? b.level : undefined) ?? (b.kind === 'trainer' && b.rule?.matchLead ? run.party[activeIndex]!.level + b.levelBonus : eventLevel(content, run, node, rng, content.coPlacement?.get(event.eventId)?.level ?? 0) + b.levelBonus);
   // Event foes stay under the region's level cap like every ordinary enemy (Balancing Phase 7).
-  const cap = levelCap(content, run.regionIndex);
+  // A foe that is matched to your fighter (the Fighting Tournament) is exactly its level, even above the region's cap.
+  const exact = b.kind === 'trainer' && (b.rule?.matchLead || b.mirror) ? run.party[activeIndex]!.level : 0;
+  const cap = Math.max(levelCap(content, run.regionIndex), exact);
   if (b.kind === 'raid') {
     const def = content.raids.raids.find((r) => r.id === b.raidId);
     if (!def) throw new Error(`Event raid ${b.raidId} does not exist`);
@@ -2635,6 +2662,7 @@ export function startClubBattle(content: Content, run: RunState, b: EventBattle,
 
 /** After an event battle you won: its `win` effects (mutates `run`). Returns the changes in words. */
 export function eventBattleWon(content: Content, run: RunState, event: EventBattleRef, turns = 0, calmedFight = false): string[] {
+  dropStandIn(run);
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
   if (!battle) return [];
@@ -2661,6 +2689,7 @@ export function eventBattleCaught(content: Content, run: RunState, event: EventB
 
 /** The consolation prize of a lost pseudo-stage fight (`lose` effects of the battle that was lost). */
 export function eventBattleLost(content: Content, run: RunState, event: EventBattleRef): string[] {
+  dropStandIn(run);
   restoreMachine(content, run);
   const choice = choiceAt(content.events.get(event.eventId), event.choiceIndex);
   const battle = (event.success ? choice?.success : choice?.failure)?.battle;
