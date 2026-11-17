@@ -11,7 +11,7 @@ import { pickRescue, secondChanceOpen, secondChanceRolls } from '../../src/core/
 import { createPokemon, maxHp } from '../../src/core/pokemon';
 import { beginMinigame, leaveMinigame } from '../../src/core/minigame/flow';
 import { wonderFollowUp } from '../../src/core/instrumentality/wonders';
-import { chooseReward, shayminReturn } from '../../src/core/run';
+import { chooseReward, resolveDecision, shayminReturn } from '../../src/core/run';
 import { chooseStarter, createRun, takeTurn, useDraftItem, wishCandidates, wishRedraw } from '../../src/core/run';
 import type { RunState } from '../../src/core/state';
 import { content, toBattle } from './helpers';
@@ -687,6 +687,37 @@ describe('Mythical Promises stage 2 (Shaymin, Celebi)', () => {
     expect(wonderActions(content, run)[0]!.problem).toContain('Already');
     expect(onWildKo(content, run, ['normal'])).toEqual([]);
     expect(onWildKo(content, run, ['bug', 'flying'])[0]).toContain('forgives');
+  });
+});
+
+describe('Celebi revisit', () => {
+  it('fights an earlier Gym Leader again, once a run, with no new badge', () => {
+    const run = start({ mythicalPromises: true });
+    run.expansion = { ...run.expansion, promise: { tellings: {}, visited: 'celebi', guest: { id: 'celebi', forgiven: false }, kept: [], left: [] } };
+    const now = run.stage!.index;
+    run.stage!.index = 2; // pretend two Gyms are behind us
+    const old = run.stage!.leaderId;
+    run.itemCounters = { ...run.itemCounters, [`stage-leader:${run.regionIndex}:1:${old}`]: 1 };
+    const action = wonderActions(content, run).find((a) => a.id === 'revisit')!;
+    expect(action.problem).toBeNull();
+    const { decision } = startWonder(content, run, 'revisit');
+    expect(decision!.options).toHaveLength(2); // stage 0 (real) and the one added here
+    const picked = decision!.options[0]!.value.split('|')[1]!;
+    run.pending = [decision!];
+    run.phase = 'decision';
+    const badges = run.badges.length;
+    const out = resolveDecision(content, run, { kind: 'circuit', optionIndex: 0 });
+    expect(out.run.phase).toBe('battle');
+    expect(out.run.battle!.revisit).toBe(true);
+    expect(out.run.battle!.trainer!.leaderId).toBe(picked);
+    expect(out.run.stage!.index).toBe(2);
+    expect(out.run.stage!.leaderId).toBe(old);
+    expect(out.run.battle!.trainer!.classId).toBeTruthy();
+    expect(wonderActions(content, out.run).find((a) => a.id === 'revisit')!.problem).toContain('Already');
+    let res = { run: out.run } as { run: RunState };
+    for (let i = 0; i < 80 && res.run.phase === 'battle'; i++) res = takeTurn(content, res.run, { kind: 'move', index: 0 }) as never;
+    expect(res.run.badges.length).toBe(badges);
+    void now;
   });
 });
 

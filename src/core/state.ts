@@ -918,6 +918,8 @@ export const BattleStateSchema = z.object({
   mapItems: z.object({ freeTurns: z.number().int().min(0), thrown: z.number().int().min(0) }).optional(),
   /** Beta 0.6 B9: an evolution stone this wild Pokémon stands beside; win or catch the fight to take it. */
   evoStone: z.string().optional(),
+  /** Celebi's trip back to an earlier Gym: the leader is fought again, but no badge is won. */
+  revisit: z.boolean().optional(),
   /** A VS Seeker rematch: double prize money. */
   rematch: z.boolean().optional(),
   /** "This Trainer Will Return": the enemy profile id of a trainer back for its rematch. */

@@ -796,6 +796,26 @@ export function shayminReturn(content: Content, run: RunState): string[] {
   return [`Shaymin's flowers open: ${names.join(' and ')} comes back, and there is one more card to choose from.`];
 }
 
+/** Celebi: the Gym Leader of an earlier stage is fought again on this map. Same team rules, no new badge (battle.revisit). */
+function celebiRevisit(content: Content, run: RunState, stageIndex: number, leaderId: string): void {
+  const stage = run.stage!;
+  const gym = stage.map.nodes.find((n) => n.kind === 'gym');
+  if (!gym || !run.party.some((m) => m.hp > 0)) {
+    run.phase = 'map';
+    return;
+  }
+  const saved = { index: stage.index, leaderId: stage.leaderId };
+  stage.index = stageIndex;
+  stage.leaderId = leaderId;
+  try {
+    startEncounter(content, run, gym, new Rng(hashSeed(`${run.seed}::celebi-revisit::${run.regionIndex}::${stageIndex}`)));
+  } finally {
+    stage.index = saved.index;
+    stage.leaderId = saved.leaderId;
+  }
+  if (run.battle) run.battle.revisit = true;
+}
+
 function enterStage(content: Content, run: RunState, index: number): void {
   const leftBehind = run.stage ? (() => {
     const sides = run.stage.map.nodes.flatMap((n) => n.sides);
@@ -833,6 +853,7 @@ function enterStage(content: Content, run: RunState, index: number): void {
   noteJournal(content, run);
   run.usedThemes.push(theme.id);
   run.usedLeaders.push(leader.id);
+  run.itemCounters = { ...run.itemCounters, [`stage-leader:${run.regionIndex}:${index}:${leader.id}`]: 1 };
   run.stage = { kind: 'stage', index, themeId: theme.id, leaderId: leader.id, eliteFour: [], map, current: null, visited: [], scoutedTo: 0, foresight: 0, extraFronts: [], roamers: [], convoy: null };
   expireStageMods(run);
   ultraStageTick(content, run, run.regionIndex * campaign.stagesPerRegion + index + 1, false);
@@ -4284,8 +4305,8 @@ function finishBattle(content: Content, run: RunState): BattleEndResult {
     materialsGained = gainBattleMaterials(run, getSpecies(content, foe.speciesId).types, kind, battle.raid ? getRaid(content, battle.raid.id).tier : 0, battle.raid?.id ?? 'b');
   }
   const won = outcome === 'win' && battle.trainer?.leaderId ? battle.trainer.leaderId : null;
-  const badge = won && classId === GYM_LEADER_CLASS ? won : null;
-  if (won) recordAftermath(run, won);
+  const badge = won && classId === GYM_LEADER_CLASS && !battle.revisit ? won : null;
+  if (won && !battle.revisit) recordAftermath(run, won);
   if (badge) {
     run.badges.push(badge);
     noteGymWin(content, run, badge);
@@ -4691,6 +4712,11 @@ function resolveDecisionCore(content: Content, current: RunState, choice: Decisi
     run.pending.shift();
     const at = choice.kind === 'circuit' ? choice.optionIndex : 0;
     const message = resolveWonder(content, run, decision, at);
+    if (decision.wonderId === 'revisit' && promiseGuest(run) === 'celebi') {
+      const [idx, leader] = (decision.options[at] ?? decision.options[0]!).value.split('|');
+      celebiRevisit(content, run, Number(idx), leader!);
+      return { run, message };
+    }
     const next = wonderFollowUp(content, run, decision, at);
     if (next) {
       run.pending.unshift(next);

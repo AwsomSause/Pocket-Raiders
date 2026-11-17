@@ -44,6 +44,9 @@ export function wonderActions(_content: Content, run: RunState): WonderAction[] 
   if (id === 'celebi') {
     out.push({ id: 'recover', title: 'Celebi: bring back a lost chance', text: 'An event you failed or refused on this stage returns (once a region).', problem: trackOf(run, 'recoverRegion') === run.regionIndex + 1 ? 'Already used this region.' : lostHere(run).length === 0 ? 'Nothing was lost on this stage.' : null });
   }
+  if (id === 'celebi') {
+    out.push({ id: 'revisit', title: 'Celebi: go back to an earlier Gym', text: 'Fight a Gym Leader you already beat, again. No new badge (once a run).', problem: trackOf(run, 'revisitUsed') > 0 ? 'Already used this run.' : run.stage?.kind !== 'stage' ? 'Only on a Gym stage.' : earlierLeaders(run).length === 0 ? 'No earlier Gym in this region.' : !run.party.some((m) => m.hp > 0) ? 'No healthy Pokémon.' : null });
+  }
   if (id === 'meloetta') {
     out.push({ id: 'retune', title: 'Meloetta: retune a Pokémon', text: "Change one Pokémon's nature to one of six she offers (once a region).", problem: trackOf(run, 'retuneRegion') === run.regionIndex + 1 ? 'Already used this region.' : run.party.length === 0 ? 'No one to retune.' : null });
   }
@@ -85,6 +88,9 @@ export function startWonder(_content: Content, run: RunState, wonderId: string):
       return { label: (side?.eventId && _content.events.get(side.eventId)?.name) || 'An event', description: 'It can be played again.', value: k };
     }) }, message: '' };
   }
+  if (wonderId === 'revisit' && guest === 'celebi') {
+    return { decision: { kind: 'wonderChoice', mythicalId: 'celebi', wonderId, title: 'Celebi: which Gym do you walk back to?', options: earlierLeaders(run).map(([i, leader]) => ({ label: _content.archetypes.get(leader)?.name ?? leader, description: `Stage ${i + 1} of this region. No new badge.`, value: `${i}|${leader}` })) }, message: '' };
+  }
   if (wonderId === 'retune' && guest === 'meloetta') {
     return { decision: { kind: 'wonderChoice', mythicalId: 'meloetta', wonderId, title: 'Meloetta: who will she retune?', options: run.party.map((m) => ({ label: _content.species.get(m.speciesId)?.name ?? m.speciesId, description: `Lv${m.level}, ${natureName(effectiveNature(m) ?? 'hardy')}`, value: m.uid })) }, message: '' };
   }
@@ -104,6 +110,16 @@ export function startWonder(_content: Content, run: RunState, wonderId: string):
     return { decision: null, message: `Melmetal forges your ${_content.items.get(top)?.name ?? top} into something new. It is gone. (Forge; do not hoard.)` };
   }
   throw new Error('That Wonder is not available');
+}
+
+/** Celebi: the Gym Leaders of the earlier stages of this region, [stage index, leader id], recorded as each stage began. */
+export function earlierLeaders(run: RunState): [number, string][] {
+  const here = run.stage?.index ?? 0;
+  const prefix = `stage-leader:${run.regionIndex}:`;
+  return Object.keys(run.itemCounters ?? {}).filter((k) => k.startsWith(prefix)).map((k): [number, string] => {
+    const [, , i, ...rest] = k.split(':');
+    return [Number(i), rest.join(':')];
+  }).filter(([i]) => i < here).sort((a, b) => a[0] - b[0]);
 }
 
 /** Applies the pick. Never throws on a stale choice. */
@@ -128,6 +144,10 @@ export function resolveWonder(_content: Content, run: RunState, decision: Wonder
     run.itemCounters = left;
     bumpTrack(run, 'recoverRegion', run.regionIndex + 1);
     return `Celebi turns back a moment: ${pick.label} can be played again.`;
+  }
+  if (decision.wonderId === 'revisit' && guestId(run) === 'celebi') {
+    bumpTrack(run, 'revisitUsed', 1);
+    return `Celebi carries you back to ${pick.label}'s Gym. The leader remembers you. There is no new badge to win, only the fight.`;
   }
   if (decision.wonderId === 'retune' && guestId(run) === 'meloetta') return `Meloetta hums to ${pick.label}…`;
   if (decision.wonderId === 'retune2' && guestId(run) === 'meloetta') {
